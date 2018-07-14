@@ -1,6 +1,7 @@
 package com.ts.app.web.rest.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 public class SettingsDTO extends BaseDTO implements Serializable {
@@ -18,9 +19,13 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     
     private String projectName; 
     
-    private long attendanceEmailAlertId;
+    private long shiftWiseAttendanceEmailAlertId;
     
-    private boolean attendanceEmailAlert;
+    private boolean shiftWiseAttendanceEmailAlert;
+
+    private long dayWiseAttendanceEmailAlertId;
+    
+    private boolean dayWiseAttendanceEmailAlert;
 
     private long overdueEmailAlertId;
     
@@ -42,9 +47,21 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     
     private boolean ticketEmailAlert;
 
-    private long attendanceEmailsId;
+    private long shiftWiseAttendanceEmailsId;
     
-    private List<String> attendanceEmailIds;
+    private List<String> shiftWiseAttendanceEmailIds;
+    
+    private long dayWiseAttendanceAlterTimeId;
+    
+    private Date dayWiseAttendanceAlterTime;
+	
+    private long lateAttendanceGraceTimeId;
+	
+    private int lateAttendanceGraceTime;
+
+    private long dayWiseAttendanceEmailsId;
+    
+    private List<String> dayWiseAttendanceEmailIds;
 
     private long overdueEmailsId;
     
@@ -194,38 +211,6 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 		this.feedbackEmailIds = feedbackEmailIds;
 	}
 
-	public long getAttendanceEmailAlertId() {
-		return attendanceEmailAlertId;
-	}
-
-	public void setAttendanceEmailAlertId(long attendanceEmailAlertId) {
-		this.attendanceEmailAlertId = attendanceEmailAlertId;
-	}
-
-	public boolean isAttendanceEmailAlert() {
-		return attendanceEmailAlert;
-	}
-
-	public void setAttendanceEmailAlert(boolean attendanceEmailAlert) {
-		this.attendanceEmailAlert = attendanceEmailAlert;
-	}
-
-	public long getAttendanceEmailsId() {
-		return attendanceEmailsId;
-	}
-
-	public void setAttendanceEmailsId(long attendanceEmailsId) {
-		this.attendanceEmailsId = attendanceEmailsId;
-	}
-
-	public List<String> getAttendanceEmailIds() {
-		return attendanceEmailIds;
-	}
-
-	public void setAttendanceEmailIds(List<String> attendanceEmailIds) {
-		this.attendanceEmailIds = attendanceEmailIds;
-	}
-
 	public long getQuotationEmailAlertId() {
 		return quotationEmailAlertId;
 	}
@@ -290,4 +275,101 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 		this.ticketEmailIds = ticketEmailIds;
 	}
 
+	public long getShiftWiseAttendanceEmailAlertId() {
+		return shiftWiseAttendanceEmailAlertId;
+	}
+
+	public void setShiftWiseAttendanceEmailAlertId(long shiftWiseAttendanceEmailAlertId) {
+		this.shiftWiseAttendanceEmailAlertId = shiftWiseAttendanceEmailAlertId;
+	}
+
+	public boolean isShiftWiseAttendanceEmailAlert() {
+		return shiftWiseAttendanceEmailAlert;
+	}
+
+	public void setShiftWiseAttendanceEmailAlert(boolean shiftWiseAttendanceEmailAlert) {
+		this.shiftWiseAttendanceEmailAlert = shiftWiseAttendanceEmailAlert;
+	}
+
+	public long getDayWiseAttendanceEmailAlertId() {
+		return dayWiseAttendanceEmailAlertId;
+	}
+
+	public void setDayWiseAttendanceEmailAlertId(long dayWiseAttendanceEmailAlertId) {
+		this.dayWiseAttendanceEmailAlertId = dayWiseAttendanceEmailAlertId;
+	}
+
+	public boolean isDayWiseAttendanceEmailAlert() {
+		return dayWiseAttendanceEmailAlert;
+	}
+
+	public void setDayWiseAttendanceEmailAlert(boolean dayWiseAttendanceEmailAlert) {
+		this.dayWiseAttendanceEmailAlert = dayWiseAttendanceEmailAlert;
+	}
+
+	public long getShiftWiseAttendanceEmailsId() {
+		return shiftWiseAttendanceEmailsId;
+	}
+
+	public void setShiftWiseAttendanceEmailsId(long shiftWiseAttendanceEmailsId) {
+		this.shiftWiseAttendanceEmailsId = shiftWiseAttendanceEmailsId;
+	}
+
+	public List<String> getShiftWiseAttendanceEmailIds() {
+		return shiftWiseAttendanceEmailIds;
+	}
+
+	public void setShiftWiseAttendanceEmailIds(List<String> shiftWiseAttendanceEmailIds) {
+		this.shiftWiseAttendanceEmailIds = shiftWiseAttendanceEmailIds;
+	}
+
+	public long getDayWiseAttendanceEmailsId() {
+		return dayWiseAttendanceEmailsId;
+	}
+
+	public void setDayWiseAttendanceEmailsId(long dayWiseAttendanceEmailsId) {
+		this.dayWiseAttendanceEmailsId = dayWiseAttendanceEmailsId;
+	}
+
+	public List<String> getDayWiseAttendanceEmailIds() {
+		return dayWiseAttendanceEmailIds;
+	}
+
+	public void setDayWiseAttendanceEmailIds(List<String> dayWiseAttendanceEmailIds) {
+		this.dayWiseAttendanceEmailIds = dayWiseAttendanceEmailIds;
+	}
+
+	public Date getDayWiseAttendanceAlterTime() {
+		return dayWiseAttendanceAlterTime;
+	}
+
+	public void setDayWiseAttendanceAlterTime(Date dayWiseAttendanceAlterTime) {
+		this.dayWiseAttendanceAlterTime = dayWiseAttendanceAlterTime;
+	}
+
+	public int getLateAttendanceGraceTime() {
+		return lateAttendanceGraceTime;
+	}
+
+	public void setLateAttendanceGraceTime(int lateAttendanceGraceTime) {
+		this.lateAttendanceGraceTime = lateAttendanceGraceTime;
+	}
+
+	public long getDayWiseAttendanceAlterTimeId() {
+		return dayWiseAttendanceAlterTimeId;
+	}
+
+	public void setDayWiseAttendanceAlterTimeId(long dayWiseAttendanceAlterTimeId) {
+		this.dayWiseAttendanceAlterTimeId = dayWiseAttendanceAlterTimeId;
+	}
+
+	public long getLateAttendanceGraceTimeId() {
+		return lateAttendanceGraceTimeId;
+	}
+
+	public void setLateAttendanceGraceTimeId(long lateAttendanceGraceTimeId) {
+		this.lateAttendanceGraceTimeId = lateAttendanceGraceTimeId;
+	}
+
+	
 }

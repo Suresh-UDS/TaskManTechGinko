@@ -61,8 +61,10 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
 	private boolean notCheckedOut;
 
 	private boolean offline;
-	
+
 	private long continuedAttendanceId;
+
+	private boolean late;
 
 	public Long getId() {
 		return id;
@@ -250,6 +252,13 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
 	public void setContinuedAttendanceId(long continuedAttendanceId) {
 		this.continuedAttendanceId = continuedAttendanceId;
 	}
-    
-    
+
+
+    public boolean isLate() {
+        return late;
+    }
+
+    public void setLate(boolean late) {
+        this.late = late;
+    }
 }

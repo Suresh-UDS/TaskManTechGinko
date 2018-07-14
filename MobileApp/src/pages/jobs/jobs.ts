@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Events, Item, ItemSliding, LoadingController, NavController} from 'ionic-angular';
+import {Events, Item, ItemSliding, LoadingController, NavController, NavParams} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {ViewJobPage} from "./view-job";
 import {componentService} from "../service/componentService";
@@ -7,6 +7,7 @@ import {CreateJobPage} from "./add-job";
 import { ActionSheetController } from 'ionic-angular'
 import {CompleteJobPage} from "./completeJob";
 import {JobService} from "../service/jobService";
+import {ScanQR} from "./scanQR";
 
 
 @Component({
@@ -30,13 +31,13 @@ export class JobsPage {
     todaysPage:1;
     todaysTotalPages:0;
     pageSort:15;
-
-    constructor(public navCtrl: NavController,public component:componentService, public authService: authService,
+    scannedLocationId:any;
+    scannedSiteId:any;
+    constructor(public navCtrl: NavController, public navParams:NavParams,public component:componentService, public authService: authService,
                     private loadingCtrl:LoadingController, private actionSheetCtrl: ActionSheetController, private jobService: JobService, public events:Events) {
         this.allJobs = [];
         this.todaysJobs =[];
         this.categories = 'today';
-        this.loadTodaysJobs();
 
         this.events.subscribe('userType',(type)=>{
             console.log("User type event");
@@ -44,9 +45,13 @@ export class JobsPage {
             this.userType = type;
         });
 
+        this.scannedLocationId = this.navParams.get('locationId');
+        console.log("Location Id from scanned",this.navParams.get('locationId'));
+        this.scannedSiteId = this.navParams.get('siteId');
     }
 
     ionViewDidLoad() {
+            this.loadTodaysJobs();
     }
 
     doRefresh(refresher,segment)
@@ -106,8 +111,24 @@ export class JobsPage {
     }
 
     loadTodaysJobs(){
-        var searchCriteria = {
-            checkInDateTimeFrom:new Date()
+
+        var searchCriteria = {};
+        var msg='';
+        if(this.scannedLocationId){
+            searchCriteria = {
+                checkInDateTimeFrom:new Date(),
+                locationId:this.scannedLocationId,
+                siteId:this.scannedSiteId
+            };
+            msg='Unable to fetch jobs of the location '+this.scannedLocationId+' in site '+this.scannedSiteId;
+        }else{
+            searchCriteria = {
+                checkInDateTimeFrom:new Date(),
+                locationId:this.scannedLocationId,
+                siteId:this.scannedSiteId
+            };
+            msg='Unable to fetch today\'s jobs ';
+
         }
         this.component.showLoader('Getting Today\'s Jobs');
         this.jobService.getJobs(searchCriteria).subscribe(response=>{
@@ -117,9 +138,10 @@ export class JobsPage {
                 this.todaysPage= response.currPage;
                 this.todaysTotalPages = response.totalPages;
             this.component.closeLoader();
+
         },err=>{
             this.component.closeLoader();
-            this.component.showToastMessage('Unable to fetch todays jobs','bottom');
+            this.component.showToastMessage(msg,'bottom');
         }
         )
     }
@@ -306,5 +328,9 @@ export class JobsPage {
         }
 
 
+    }
+
+    scanQR(){
+        this.navCtrl.push(ScanQR);
     }
 }

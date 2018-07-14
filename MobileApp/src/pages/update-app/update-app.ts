@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {NavController,NavParams,ViewController} from "ionic-angular";
+import {MenuController, NavController, NavParams, ViewController} from "ionic-angular";
 import {SplashScreen} from "@ionic-native/splash-screen";
 import {AppVersion} from "@ionic-native/app-version";
 import {Market} from "@ionic-native/market";
@@ -19,11 +19,13 @@ export class UpdateApp {
 
     appPackageName:any;
     appVersionNumber:any;
-  constructor(public viewCtrl: ViewController, public splashScreen: SplashScreen, private appVersion:AppVersion, private market:Market) {
+  constructor(public viewCtrl: ViewController, public splashScreen: SplashScreen, private appVersion:AppVersion, private market:Market, private menuCtrl:MenuController) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad update app');
+      this.menuCtrl.swipeEnable(false);
+
 
       // this.splashScreen.hide();
       //

@@ -130,12 +130,13 @@ export class EmployeeList {
               });
           }else{
               this.component.showToastMessage('GPS Available','bottom');
+              this.getEmployees();
+
           }
       }).catch((e)=>{
           demo.showSwal('warning-message-and-confirmation-ok','GPS Not available','Please turn GPS on');
           this.navCtrl.pop();
       });
-      this.getEmployees();
   }
 
   isEmployeeCheckedIn(employeeId){
@@ -309,7 +310,7 @@ export class EmployeeList {
 
               }else{
                   console.log("error in detecting face");
-                  this.closeLoader();
+                  this.closeAll();
                   var msg = "Face not Detected, please try again..";
                   this.showSuccessToast(msg);
               }
@@ -317,12 +318,12 @@ export class EmployeeList {
 
           },error=>{
               console.log("errors");
-          this.closeLoader();
+          this.closeAll();
           console.log(error.json());
               if(error.json().status == "false"){
                   var msg= "Face not detected, please try again..";
                   this.showSuccessToast(msg);
-                  this.closeLoader();
+                  this.closeAll();
               }
           }
       )
@@ -366,8 +367,9 @@ export class EmployeeList {
   }
 
   getEmployees(){
-      this.siteService.searchSiteEmployee(this.site.id).subscribe(response=>{
-          console.log(response.json());
+      this.component.showLoader('Loading Employees');
+      this.attendanceService.searchEmpAttendances(this.site.id).subscribe(response=>{
+          this.component.closeAll();
           this.employeeList = response.json();
           this.userGroup = window.localStorage.getItem('userGroup');
           this.employeeId = window.localStorage.getItem('employeeId');

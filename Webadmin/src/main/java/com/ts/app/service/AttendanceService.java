@@ -2,8 +2,8 @@ package com.ts.app.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -24,6 +24,7 @@ import com.ts.app.domain.Attendance;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.Setting;
 import com.ts.app.domain.Shift;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
@@ -32,6 +33,7 @@ import com.ts.app.domain.UserRoleEnum;
 import com.ts.app.ext.api.FaceRecognitionService;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.DateUtil;
@@ -84,6 +86,9 @@ public class AttendanceService extends AbstractService {
 
 	@Inject
 	private ReportUtil reportUtil;
+	
+	@Inject
+	private SettingsRepository settingRepository;
 
     @Inject
     private Environment env;
@@ -281,6 +286,25 @@ public class AttendanceService extends AbstractService {
     				attn.setContinuedAttendance(null);
     			}
 
+    			List<Setting> settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_GRACE_TIME, attnDto.getSiteId());
+    			if(CollectionUtils.isNotEmpty(settings)) {
+    				Setting setting = settings.get(0);
+    				int graceTime = Integer.parseInt(setting.getSettingValue());
+    				String shiftStartTime = attn.getShiftStartTime();
+    				if(org.apache.commons.lang3.StringUtils.isNotEmpty(shiftStartTime)) {
+    					String[] startTimeUnits = shiftStartTime.split(":");
+    					Calendar shiftGraceTimeCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+    					shiftGraceTimeCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
+    					shiftGraceTimeCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
+    					shiftGraceTimeCal.set(Calendar.SECOND, 0);
+    					shiftGraceTimeCal.set(Calendar.MILLISECOND, 0);
+    					shiftGraceTimeCal.add(Calendar.MINUTE, graceTime);
+    					if(shiftGraceTimeCal.before(now)) {
+    						attn.setLate(true); //mark late attendance if the checkin time is 
+    					}
+    				}
+    			}
+    			
 			attn = attendanceRepository.save(attn);
 			log.debug("Attendance marked: {}", attn);
 			attnDto = mapperUtil.toModel(attn, AttendanceDTO.class);
@@ -621,7 +645,7 @@ public class AttendanceService extends AbstractService {
 		if (CollectionUtils.isNotEmpty(transactions)) {
 			for (AttendanceDTO attn : transactions) {
 				EmployeeAttendanceReport reportData = new EmployeeAttendanceReport(attn.getEmployeeId(), attn.getEmployeeEmpId(), attn.getEmployeeFullName(), null,
-						attn.getSiteName(), null, attn.getCheckInTime(), attn.getCheckOutTime(), attn.getShiftStartTime(), attn.getShiftEndTime(), attn.getContinuedAttendanceId());
+						attn.getSiteName(), null, attn.getCheckInTime(), attn.getCheckOutTime(), attn.getShiftStartTime(), attn.getShiftEndTime(), attn.getContinuedAttendanceId(), attn.isLate());
 				attendanceReportList.add(reportData);
 			}
 		}

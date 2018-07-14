@@ -2,16 +2,18 @@
 
 angular.module('timeSheetApp')
     .controller('SettingsController', function ($rootScope, $scope, $state, $timeout, $http, $stateParams,
-     $location, ProjectComponent, SettingsComponent) {
+     $location, ProjectComponent, SettingsComponent,$filter) {
             $rootScope.loadingStop();
             $rootScope.loginView = false;
     		$scope.selectedProject =null;
-    		
+        $scope.selectedDayWiseAttnEmailTime =  new Date();
+
     		$scope.selectedSite =null;
             $scope.pager = {};
     		
     		$scope.settings = {
-    			attendanceEmailIds : [],	
+    			shiftWiseAttendanceEmailIds : [],
+    			dayWiseAttendanceEmailIds : [],
     			overdueEmailIds : [],
     			eodJobEmailIds : [],
     			quotationEmailIds : [],
@@ -24,6 +26,26 @@ angular.module('timeSheetApp')
     			$scope.loadProjects();
     			//$scope.loadSettings();
     		}
+    		
+    		$scope.initCalender = function(){
+
+            demo.initFormExtendedDatetimepickers();
+
+        };
+
+        $('input#dayWiseAttendanceAlterTime').on('dp.change', function(e){
+            console.log(e.date);
+            console.log(e.date._d);
+            
+            $.notifyClose();
+             
+            //$scope.selectedDayWiseAttnEmailTime= $filter('date')(e.date._d, 'yyyy-MM-dd HH:mm:ss');
+            $scope.selectedDayWiseAttnEmailTime = e.date._d;
+            $scope.settings.dayWiseAttendanceAlterTime = $scope.selectedDayWiseAttnEmailTime;
+
+        });
+        
+        $scope.initCalender();
     		
     		$scope.addTicketEmail = function() {
 	        	var email = $scope.ticketEmail;
@@ -51,18 +73,31 @@ angular.module('timeSheetApp')
         		$scope.settings.quotationEmailIds.splice(ind,1);
         }
         
-        $scope.addAttendanceEmail = function() {
-	        	var email = $scope.attendanceEmail;
-	        	if(!$scope.settings.attendanceEmailIds) {
-	        		$scope.settings.attendanceEmailIds = [];
+        $scope.addShiftWiseAttendanceEmail = function() {
+	        	var email = $scope.shiftWiseAttendanceEmail;
+	        	if(!$scope.settings.shiftWiseAttendanceEmailIds) {
+	        		$scope.settings.shiftWiseAttendanceEmailIds = [];
 	        	}
-	        	$scope.settings.attendanceEmailIds.push(email);
-	        	$scope.attendanceEmail = '';
+	        	$scope.settings.shiftWiseAttendanceEmailIds.push(email);
+	        	$scope.shiftWiseAttendanceEmail = '';
         }
         
-        $scope.removeAttendanceEmail = function(ind) {
-        		$scope.settings.attendanceEmailIds.splice(ind,1);
+        $scope.removeShiftWiseAttendanceEmail = function(ind) {
+        		$scope.settings.shiftWiseAttendanceEmailIds.splice(ind,1);
         }
+        
+        $scope.addDayWiseAttendanceEmail = function() {
+	        	var email = $scope.dayWiseAttendanceEmail;
+	        	if(!$scope.settings.dayWiseAttendanceEmailIds) {
+	        		$scope.settings.dayWiseAttendanceEmailIds = [];
+	        	}
+	        	$scope.settings.dayWiseAttendanceEmailIds.push(email);
+	        	$scope.dayWiseAttendanceEmail = '';
+	    }
+	    
+	    $scope.removeDayWiseAttendanceEmail = function(ind) {
+	    		$scope.settings.dayWiseAttendanceEmailIds.splice(ind,1);
+	    }
 
         $scope.addOverdueEmail = function() {
 	        	var email = $scope.overdueEmail;
@@ -153,6 +188,7 @@ angular.module('timeSheetApp')
             		$scope.settings.siteId = $scope.selectedSite.id;
             		$scope.settings.siteName = $scope.selectedSite.name;
         		}
+        		console.log('settings - ' + JSON.stringify($scope.settings));
         		SettingsComponent.saveSettings($scope.settings).then(function() {
         			$scope.hideLoader();  
         			$scope.showNotifications('top','center','success','Settings updated successfully');

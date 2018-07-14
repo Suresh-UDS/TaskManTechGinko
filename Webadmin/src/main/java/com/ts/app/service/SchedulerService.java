@@ -328,13 +328,13 @@ public class SchedulerService extends AbstractService {
 				Iterator<Site> siteItr = sites.iterator();
 				while (siteItr.hasNext()) {
 					Site site = siteItr.next();
-					List<Setting> settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE, site.getId(), proj.getId());
+					List<Setting> settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_SHIFTWISE_ATTENDANCE, site.getId(), proj.getId());
 					Setting attendanceReports = null;
 					if (CollectionUtils.isNotEmpty(settings)) {
 						attendanceReports = settings.get(0);
 					}
 					if (attendanceReports != null && attendanceReports.getSettingValue().equalsIgnoreCase("true")) {
-						settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, site.getId(), proj.getId());
+						settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_SHIFTWISE_ATTENDANCE_EMAILS, site.getId(), proj.getId());
 						Setting attendanceReportEmails = null;
 						if (CollectionUtils.isNotEmpty(settings)) {
 							attendanceReportEmails = settings.get(0);
@@ -422,7 +422,7 @@ public class SchedulerService extends AbstractService {
 	}
 
 
-	@Scheduled(cron = "0 0 7 1/1 * ?") // send detailed attendance report
+	@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
 	public void attendanceDetailReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_YEAR, -1);

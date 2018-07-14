@@ -22,7 +22,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 public class JobChecklist extends AbstractAuditingEntity implements Serializable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -36,19 +36,31 @@ public class JobChecklist extends AbstractAuditingEntity implements Serializable
 
 	@Column(name = "checklist_name")
 	private String checklistName;
-	
+
 	@Column(name = "checklist_item_id")
 	private String checklistItemId;
 
 	@Column(name = "checklist_item_name")
 	private String checklistItemName;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "job_id")
 	private Job job;
-	
+
 	@Column(name = "is_completed")
 	private boolean completed;
+
+	@Column(name = "image_1")
+    private String image1;
+
+    @Column(name = "image_2")
+    private String image2;
+
+    @Column(name = "image_3")
+    private String image3;
+
+    @Column(name = "remarks")
+    private String remarks;
 
 
 	public long getId() {
@@ -107,5 +119,36 @@ public class JobChecklist extends AbstractAuditingEntity implements Serializable
 		this.job = job;
 	}
 
-	
+
+    public String getImage1() {
+        return image1;
+    }
+
+    public void setImage1(String image1) {
+        this.image1 = image1;
+    }
+
+    public String getImage2() {
+        return image2;
+    }
+
+    public void setImage2(String image2) {
+        this.image2 = image2;
+    }
+
+    public String getImage3() {
+        return image3;
+    }
+
+    public void setImage3(String image3) {
+        this.image3 = image3;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
 }
