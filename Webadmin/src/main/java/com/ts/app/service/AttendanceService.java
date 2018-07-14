@@ -9,6 +9,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Hibernate;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Attendance;
 import com.ts.app.domain.Employee;
@@ -581,6 +583,40 @@ public class AttendanceService extends AbstractService {
 	public byte[] getExportFile(String empId, String fileName) {
 		// return exportUtil.readExportFile(empId, fileName);
 		return exportUtil.readAttendanceExportFile(empId, fileName);
+	}
+
+	public String uploadExistingCheckInImage() {
+		// TODO Auto-generated method stub
+		List<Attendance> attendanceEntity = attendanceRepository.findAll();
+		List<AttendanceDTO> attendanceModel = mapperUtil.toModelList(attendanceEntity, AttendanceDTO.class);
+		for(AttendanceDTO attendance : attendanceModel) { 
+			boolean isBase64 = Base64.isBase64(attendance.getCheckInImage());
+			Attendance attendEntity = mapperUtil.toEntity(attendance, Attendance.class);
+			if(isBase64) { 
+				long dateTime = new Date().getTime();
+				attendance = s3ServiceUtils.uploadCheckInImage(attendance.getCheckInImage(), attendance, dateTime);
+				attendEntity.setCheckInImage(attendance.getCheckInImage());
+				attendanceRepository.save(attendEntity);
+			} 
+		} 
+		return "Upload attendance checkInImage successfully";
+	}
+
+	public String uploadExistingCheckOutImage() {
+		// TODO Auto-generated method stub
+		List<Attendance> attendanceEntity = attendanceRepository.findAll();
+		List<AttendanceDTO> attendanceModel = mapperUtil.toModelList(attendanceEntity, AttendanceDTO.class);
+		for(AttendanceDTO attendance : attendanceModel) { 
+			boolean isBase64 = Base64.isBase64(attendance.getCheckInImage());
+			Attendance attendEntity = mapperUtil.toEntity(attendance, Attendance.class);
+			if(isBase64) { 
+				long dateTime = new Date().getTime();
+				attendance = s3ServiceUtils.uploadCheckoutImage(attendance.getCheckOutImage(), attendance, dateTime);
+				attendEntity.setCheckOutImage(attendance.getCheckOutImage());
+				attendanceRepository.save(attendEntity);
+			} 
+		} 
+		return "Upload attendance checkOutImage successfully";
 	}
 
 }
