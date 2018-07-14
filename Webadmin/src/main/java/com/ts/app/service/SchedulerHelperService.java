@@ -12,6 +12,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -263,7 +264,12 @@ public class SchedulerHelperService extends AbstractService {
 				Hibernate.initialize(proj.getSite());
 				Set<Site> sites = proj.getSite();
 				Iterator<Site> siteItr = sites.iterator();
-				List<Setting> settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE, proj.getId());
+				List<Setting> settings = null;
+				if(shiftAlert) {
+					settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_SHIFTWISE_ATTENDANCE, proj.getId());
+				}else if(dayReport) {
+					settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE, proj.getId());
+				}
 				Setting attendanceReports = null;
 				if (CollectionUtils.isNotEmpty(settings)) {
 					attendanceReports = settings.get(0);
@@ -441,11 +447,21 @@ public class SchedulerHelperService extends AbstractService {
 						log.debug("send detailed report");
 						empAttnList.addAll(siteAttnList);
 					}
+					List<Setting> emailAlertTimeSettings = null;
 					// summary map
-					settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, proj.getId());
+					if(shiftAlert) {
+						settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_SHIFTWISE_ATTENDANCE_EMAILS, proj.getId());
+					}else if(dayReport) {
+						settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_EMAILS, proj.getId());
+						emailAlertTimeSettings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_ALERT_TIME, proj.getId());
+					}
 					Setting attendanceReportEmails = null;
 					if (CollectionUtils.isNotEmpty(settings)) {
 						attendanceReportEmails = settings.get(0);
+					}
+					Setting attnDayWiseAlertTime = null;
+					if (CollectionUtils.isNotEmpty(emailAlertTimeSettings)) {
+						attnDayWiseAlertTime = emailAlertTimeSettings.get(0);
 					}
 
 					Map<String, String> summaryMap = new HashMap<String, String>();
@@ -464,9 +480,28 @@ public class SchedulerHelperService extends AbstractService {
 					// send reports in email.
 					if (attendanceReportEmails != null && projEmployees > 0 && ((shiftAlert && siteShiftConsolidatedData.size() > 0) || dayReport)) {
 						ExportResult exportResult = null;
-						exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, consolidatedData, summaryMap, shiftWiseSummary, null, exportResult);
-						mailService.sendAttendanceDetailedReportEmail(proj.getName(), attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(), null,
-								cal.getTime(), summaryMap, shiftWiseSummary, siteWiseConsolidatedMap);
+						String alertTime = attnDayWiseAlertTime.getSettingValue();
+						Calendar alertTimeCal = Calendar.getInstance();
+						if(StringUtils.isNotEmpty(alertTime)) {
+							Date alertDateTime = DateUtil.parseToDateTime(alertTime);
+							alertTimeCal.setTime(alertDateTime);
+							alertTimeCal.set(Calendar.SECOND, 0);
+							alertTimeCal.set(Calendar.MILLISECOND, 0);
+						}
+						Calendar now = Calendar.getInstance();
+						now.set(Calendar.SECOND,  0);
+						now.set(Calendar.MILLISECOND, 0);
+						
+						if(dayReport && (attnDayWiseAlertTime == null ||  alertTimeCal.equals(now))) {
+							exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, consolidatedData, summaryMap, shiftWiseSummary, null, exportResult);
+							mailService.sendAttendanceDetailedReportEmail(proj.getName(), attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(), null,
+									cal.getTime(), summaryMap, shiftWiseSummary, siteWiseConsolidatedMap);
+						}else if(shiftAlert) {
+							exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, consolidatedData, summaryMap, shiftWiseSummary, null, exportResult);
+							mailService.sendAttendanceDetailedReportEmail(proj.getName(), attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(), null,
+									cal.getTime(), summaryMap, shiftWiseSummary, siteWiseConsolidatedMap);
+							
+						}
 					}
 				}
 			}

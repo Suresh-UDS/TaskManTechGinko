@@ -119,4 +119,18 @@ public class DateUtil {
 		}
 		return StringUtils.EMPTY;
 	}
+	
+	public static Date parseToDateTime(String time) {
+		if(org.apache.commons.lang3.StringUtils.isNotEmpty(time)) {
+	        DateFormat dtFormat = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
+	        Date date = null;
+			try {
+				date = dtFormat.parse(time);
+			} catch (ParseException e) {
+				log.error("Error while parsing the time", e);
+			}
+	        return date;
+		}
+		return null;
+	}
 }

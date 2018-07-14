@@ -6,20 +6,19 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
-import com.ts.app.Application;
-import com.ts.app.domain.ApplicationVersionControl;
-import com.ts.app.repository.ApplicationVersionControlRepository;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.ts.app.domain.ApplicationVersionControl;
 import com.ts.app.domain.Setting;
+import com.ts.app.repository.ApplicationVersionControlRepository;
 import com.ts.app.repository.SettingsRepository;
 import com.ts.app.service.util.CommonUtil;
+import com.ts.app.service.util.DateUtil;
 import com.ts.app.web.rest.dto.SettingsDTO;
-import com.ts.app.web.rest.dto.ApplicationVersionControlDTO;
 
 
 /**
@@ -31,9 +30,17 @@ public class SettingsService extends AbstractService {
 
 	private final Logger log = LoggerFactory.getLogger(SettingsService.class);
 
-	public static final String EMAIL_NOTIFICATION_ATTENDANCE = "email.notification.attendance";
+	public static final String EMAIL_NOTIFICATION_SHIFTWISE_ATTENDANCE = "email.notification.shiftwise.attendance";
 
-	public static final String EMAIL_NOTIFICATION_ATTENDANCE_EMAILS = "email.notification.attendance.emails";
+	public static final String EMAIL_NOTIFICATION_SHIFTWISE_ATTENDANCE_EMAILS = "email.notification.shiftwise.attendance.emails";
+
+	public static final String EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE = "email.notification.daywise.attendance";
+
+	public static final String EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_EMAILS = "email.notification.daywise.attendance.emails";
+	
+	public static final String EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_ALERT_TIME = "email.notification.daywise.attendance.alert.time";
+	
+	public static final String EMAIL_NOTIFICATION_ATTENDANCE_GRACE_TIME = "email.notification.attendance.grace.time";
 
 	public static final String EMAIL_NOTIFICATION_OVERDUE = "email.notification.overdue";
 
@@ -62,36 +69,97 @@ public class SettingsService extends AbstractService {
     private ApplicationVersionControlRepository applicationVersionControlRepository;
 
 	public SettingsDTO saveSettings(SettingsDTO settingsDto) {
-		Setting attendanceAlertSetting = null;
-		if(settingsDto.getAttendanceEmailAlertId() > 0) {
-			attendanceAlertSetting = settingsRepository.findOne(settingsDto.getAttendanceEmailAlertId());
+		Setting shiftWiseAttendanceAlertSetting = null;
+		if(settingsDto.getShiftWiseAttendanceEmailAlertId() > 0) {
+			shiftWiseAttendanceAlertSetting = settingsRepository.findOne(settingsDto.getShiftWiseAttendanceEmailAlertId());
 		}else {
-			attendanceAlertSetting = new Setting();
+			shiftWiseAttendanceAlertSetting = new Setting();
 		}
-		attendanceAlertSetting.setSettingKey(EMAIL_NOTIFICATION_ATTENDANCE);
-		attendanceAlertSetting.setSettingValue(String.valueOf(settingsDto.isAttendanceEmailAlert()));
-		attendanceAlertSetting.setProjectId(settingsDto.getProjectId());
-		attendanceAlertSetting.setProjectName(settingsDto.getProjectName());
-		attendanceAlertSetting.setSiteId(settingsDto.getSiteId());
-		attendanceAlertSetting.setSiteName(settingsDto.getSiteName());
-		attendanceAlertSetting.setActive("Y");
+		shiftWiseAttendanceAlertSetting.setSettingKey(EMAIL_NOTIFICATION_SHIFTWISE_ATTENDANCE);
+		shiftWiseAttendanceAlertSetting.setSettingValue(String.valueOf(settingsDto.isShiftWiseAttendanceEmailAlert()));
+		shiftWiseAttendanceAlertSetting.setProjectId(settingsDto.getProjectId());
+		shiftWiseAttendanceAlertSetting.setProjectName(settingsDto.getProjectName());
+		shiftWiseAttendanceAlertSetting.setSiteId(settingsDto.getSiteId());
+		shiftWiseAttendanceAlertSetting.setSiteName(settingsDto.getSiteName());
+		shiftWiseAttendanceAlertSetting.setActive("Y");
 
-		Setting attendanceEmailsSetting = null;
-		if(settingsDto.getAttendanceEmailsId() > 0) {
-			attendanceEmailsSetting = settingsRepository.findOne(settingsDto.getAttendanceEmailsId());
+		Setting shiftWiseAttendanceEmailsSetting = null;
+		if(settingsDto.getShiftWiseAttendanceEmailsId() > 0) {
+			shiftWiseAttendanceEmailsSetting = settingsRepository.findOne(settingsDto.getShiftWiseAttendanceEmailsId());
 		}else {
-			attendanceEmailsSetting = new Setting();
+			shiftWiseAttendanceEmailsSetting = new Setting();
 		}
-		attendanceEmailsSetting.setSettingKey(EMAIL_NOTIFICATION_ATTENDANCE_EMAILS);
-		if(CollectionUtils.isNotEmpty(settingsDto.getAttendanceEmailIds())) {
-			attendanceEmailsSetting.setSettingValue(CommonUtil.convertToString(settingsDto.getAttendanceEmailIds()));
+		shiftWiseAttendanceEmailsSetting.setSettingKey(EMAIL_NOTIFICATION_SHIFTWISE_ATTENDANCE_EMAILS);
+		if(CollectionUtils.isNotEmpty(settingsDto.getShiftWiseAttendanceEmailIds())) {
+			shiftWiseAttendanceEmailsSetting.setSettingValue(CommonUtil.convertToString(settingsDto.getShiftWiseAttendanceEmailIds()));
 		}
-		attendanceEmailsSetting.setProjectId(settingsDto.getProjectId());
-		attendanceEmailsSetting.setProjectName(settingsDto.getProjectName());
-		attendanceEmailsSetting.setSiteId(settingsDto.getSiteId());
-		attendanceEmailsSetting.setSiteName(settingsDto.getSiteName());
-		attendanceEmailsSetting.setActive("Y");
+		shiftWiseAttendanceEmailsSetting.setProjectId(settingsDto.getProjectId());
+		shiftWiseAttendanceEmailsSetting.setProjectName(settingsDto.getProjectName());
+		shiftWiseAttendanceEmailsSetting.setSiteId(settingsDto.getSiteId());
+		shiftWiseAttendanceEmailsSetting.setSiteName(settingsDto.getSiteName());
+		shiftWiseAttendanceEmailsSetting.setActive("Y");
+		
+		Setting dayWiseAttendanceAlertSetting = null;
+		if(settingsDto.getDayWiseAttendanceEmailAlertId() > 0) {
+			dayWiseAttendanceAlertSetting = settingsRepository.findOne(settingsDto.getDayWiseAttendanceEmailAlertId());
+		}else {
+			dayWiseAttendanceAlertSetting = new Setting();
+		}
+		dayWiseAttendanceAlertSetting.setSettingKey(EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE);
+		dayWiseAttendanceAlertSetting.setSettingValue(String.valueOf(settingsDto.isDayWiseAttendanceEmailAlert()));
+		dayWiseAttendanceAlertSetting.setProjectId(settingsDto.getProjectId());
+		dayWiseAttendanceAlertSetting.setProjectName(settingsDto.getProjectName());
+		dayWiseAttendanceAlertSetting.setSiteId(settingsDto.getSiteId());
+		dayWiseAttendanceAlertSetting.setSiteName(settingsDto.getSiteName());
+		dayWiseAttendanceAlertSetting.setActive("Y");
 
+		Setting dayWiseAttendanceEmailsSetting = null;
+		if(settingsDto.getDayWiseAttendanceEmailsId() > 0) {
+			dayWiseAttendanceEmailsSetting = settingsRepository.findOne(settingsDto.getDayWiseAttendanceEmailsId());
+		}else {
+			dayWiseAttendanceEmailsSetting = new Setting();
+		}
+		dayWiseAttendanceEmailsSetting.setSettingKey(EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_EMAILS);
+		if(CollectionUtils.isNotEmpty(settingsDto.getDayWiseAttendanceEmailIds())) {
+			dayWiseAttendanceEmailsSetting.setSettingValue(CommonUtil.convertToString(settingsDto.getDayWiseAttendanceEmailIds()));
+		}
+		dayWiseAttendanceEmailsSetting.setProjectId(settingsDto.getProjectId());
+		dayWiseAttendanceEmailsSetting.setProjectName(settingsDto.getProjectName());
+		dayWiseAttendanceEmailsSetting.setSiteId(settingsDto.getSiteId());
+		dayWiseAttendanceEmailsSetting.setSiteName(settingsDto.getSiteName());
+		dayWiseAttendanceEmailsSetting.setActive("Y");
+		
+		Setting attendanceGraceTimeSetting = null;
+		if(settingsDto.getLateAttendanceGraceTimeId() > 0) {
+			attendanceGraceTimeSetting = settingsRepository.findOne(settingsDto.getLateAttendanceGraceTimeId());
+		}else {
+			attendanceGraceTimeSetting = new Setting();
+		}
+		attendanceGraceTimeSetting.setSettingKey(EMAIL_NOTIFICATION_ATTENDANCE_GRACE_TIME);
+		if(settingsDto.getLateAttendanceGraceTime() > 0) {
+			attendanceGraceTimeSetting.setSettingValue(String.valueOf(settingsDto.getLateAttendanceGraceTime()));
+		}
+		attendanceGraceTimeSetting.setProjectId(settingsDto.getProjectId());
+		attendanceGraceTimeSetting.setProjectName(settingsDto.getProjectName());
+		attendanceGraceTimeSetting.setSiteId(settingsDto.getSiteId());
+		attendanceGraceTimeSetting.setSiteName(settingsDto.getSiteName());
+		attendanceGraceTimeSetting.setActive("Y");
+
+		Setting dayWiseAttendanceAlertTimeSetting = null;
+		if(settingsDto.getDayWiseAttendanceEmailAlertId() > 0) {
+			dayWiseAttendanceAlertTimeSetting = settingsRepository.findOne(settingsDto.getDayWiseAttendanceAlterTimeId());
+		}else {
+			dayWiseAttendanceAlertTimeSetting = new Setting();
+		}
+		dayWiseAttendanceAlertTimeSetting.setSettingKey(EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_ALERT_TIME);
+		if(settingsDto.getDayWiseAttendanceAlterTime() != null) {
+			dayWiseAttendanceAlertTimeSetting.setSettingValue(String.valueOf(settingsDto.getDayWiseAttendanceAlterTime()));
+		}
+		dayWiseAttendanceAlertTimeSetting.setProjectId(settingsDto.getProjectId());
+		dayWiseAttendanceAlertTimeSetting.setProjectName(settingsDto.getProjectName());
+		dayWiseAttendanceAlertTimeSetting.setSiteId(settingsDto.getSiteId());
+		dayWiseAttendanceAlertTimeSetting.setSiteName(settingsDto.getSiteName());
+		dayWiseAttendanceAlertTimeSetting.setActive("Y");
 
 
 		Setting overdueAlertSetting = null;
@@ -248,11 +316,23 @@ public class SettingsService extends AbstractService {
 		ticketEmailsSetting.setActive("Y");
 
 		List<Setting> settingList = new ArrayList<Setting>();
-		if(StringUtils.isNotEmpty(attendanceAlertSetting.getSettingValue())) {
-			settingList.add(attendanceAlertSetting);
+		if(StringUtils.isNotEmpty(shiftWiseAttendanceAlertSetting.getSettingValue())) {
+			settingList.add(shiftWiseAttendanceAlertSetting);
 		}
-		if(StringUtils.isNotEmpty(attendanceEmailsSetting.getSettingValue())) {
-			settingList.add(attendanceEmailsSetting);
+		if(StringUtils.isNotEmpty(dayWiseAttendanceAlertSetting.getSettingValue())) {
+			settingList.add(dayWiseAttendanceAlertSetting);
+		}
+		if(StringUtils.isNotEmpty(shiftWiseAttendanceEmailsSetting.getSettingValue())) {
+			settingList.add(shiftWiseAttendanceEmailsSetting);
+		}
+		if(StringUtils.isNotEmpty(dayWiseAttendanceEmailsSetting.getSettingValue())) {
+			settingList.add(dayWiseAttendanceEmailsSetting);
+		}
+		if(StringUtils.isNotEmpty(dayWiseAttendanceAlertTimeSetting.getSettingValue())) {
+			settingList.add(dayWiseAttendanceAlertTimeSetting);
+		}
+		if(StringUtils.isNotEmpty(attendanceGraceTimeSetting.getSettingValue())) {
+			settingList.add(attendanceGraceTimeSetting);
 		}
 		if(StringUtils.isNotEmpty(overdueAlertSetting.getSettingValue())) {
 			settingList.add(overdueAlertSetting);
@@ -306,12 +386,24 @@ public class SettingsService extends AbstractService {
 		settingDto.setSiteId(siteId);
 		if(CollectionUtils.isNotEmpty(entities)) {
 			for(Setting setting : entities) {
-				if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_ATTENDANCE)) {
-					settingDto.setAttendanceEmailAlertId(setting.getId());
-					settingDto.setAttendanceEmailAlert(Boolean.valueOf(setting.getSettingValue()));
-				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_ATTENDANCE_EMAILS)) {
-					settingDto.setAttendanceEmailsId(setting.getId());
-					settingDto.setAttendanceEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
+				if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_SHIFTWISE_ATTENDANCE)) {
+					settingDto.setShiftWiseAttendanceEmailAlertId(setting.getId());
+					settingDto.setShiftWiseAttendanceEmailAlert(Boolean.valueOf(setting.getSettingValue()));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_SHIFTWISE_ATTENDANCE_EMAILS)) {
+					settingDto.setShiftWiseAttendanceEmailsId(setting.getId());
+					settingDto.setShiftWiseAttendanceEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE)) {
+					settingDto.setDayWiseAttendanceEmailAlertId(setting.getId());
+					settingDto.setDayWiseAttendanceEmailAlert(Boolean.valueOf(setting.getSettingValue()));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_EMAILS)) {
+					settingDto.setDayWiseAttendanceEmailsId(setting.getId());
+					settingDto.setDayWiseAttendanceEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_ALERT_TIME)) {
+					settingDto.setDayWiseAttendanceAlterTimeId(setting.getId());
+					settingDto.setDayWiseAttendanceAlterTime(StringUtils.isNotEmpty(setting.getSettingValue()) ? DateUtil.parseToDateTime(setting.getSettingValue()) : null);
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_ATTENDANCE_GRACE_TIME)) {
+					settingDto.setLateAttendanceGraceTimeId(setting.getId());
+					settingDto.setLateAttendanceGraceTime(Integer.parseInt(setting.getSettingValue()));
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_OVERDUE)) {
 					settingDto.setOverdueEmailAlertId(setting.getId());
 					settingDto.setOverdueEmailAlert(Boolean.valueOf(setting.getSettingValue()));

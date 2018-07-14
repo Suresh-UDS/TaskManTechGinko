@@ -94,7 +94,7 @@
 
 					<div class="checkbox">
                         <label>
-                            Send attendance Email  <input type="checkbox" name="terms" ng-model="settings.attendanceEmailAlert">
+                            Send ShiftWise Attendance Email  <input type="checkbox" name="terms" ng-model="settings.shiftWiseAttendanceEmailAlert">
                         </label>
                     </div>
 
@@ -104,14 +104,14 @@
                             <div class="col-md-9">
 
                                 <div class="form-group pdng-top15">
-                                    <label class="control-label">Attendance Report Email List</label>
-                                    <input type="text" class="form-control" ng-model="attendanceEmail">
+                                    <label class="control-label">Shift Wise Attendance Report Email List</label>
+                                    <input type="text" class="form-control" ng-model="shiftWiseAttendanceEmail">
                                 </div>
 
                             </div>
                             <div class="col-md-3">
 
-                                <button class="btn btn-success margn-top30" ng-click="addAttendanceEmail()">
+                                <button class="btn btn-success margn-top30" ng-click="addShiftWiseAttendanceEmail()">
                                 <span class="btn-label">
                                     <i class="material-icons">add</i>
                                 </span>
@@ -131,15 +131,95 @@
 
                                     <ul class="listOfActions list-group">
                                     
-                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.attendanceEmailIds" ng-bind-html-unsafe="emailId">
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.shiftWiseAttendanceEmailIds" ng-bind-html-unsafe="emailId">
 		                                    {{emailId}}
-		                                    <span class="badge badge-default badge-pill" ng-click="removeAttendanceEmail($index)"><i class="material-icons">remove_circle</i></span>
+		                                    <span class="badge badge-default badge-pill" ng-click="removeShiftWiseAttendanceEmail($index)"><i class="material-icons">remove_circle</i></span>
 		                                </li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                     </div> 
+                    
+                    <div class="checkbox">
+                        <label>
+                            Send DayWise Attendance Email  <input type="checkbox" name="terms" ng-model="settings.dayWiseAttendanceEmailAlert">
+                        </label>
+                    </div>
+					
+					<div class="row">
+
+                        <div class="col-md-9">
+
+                            <div class="form-group pdng-top15">
+                                <label class="control-label">Attendance DayWise Report Time</label>
+                                <input  type="text" class="form-control timepicker" id="dayWiseAttendanceAlterTime" ng-model="settings.dayWiseAttendanceAlterTime" />
+                            </div>
+
+                        </div>
+                        
+
+                    </div>	
+                    
+                    <div class="row">
+
+                        <div class="col-md-9">
+
+                            <div class="form-group pdng-top15">
+                                <label class="control-label">Late Attendance Grace Time (Mins)</label>
+                                <input  type="text" class="form-control" id="lateAttendanceGraceTime" ng-model="settings.lateAttendanceGraceTime" />
+                            </div>
+
+                        </div>
+                        
+
+                    </div>	
+
+
+                    <div class="MailList">
+                        <div class="row">
+
+                            <div class="col-md-9">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Attendance Report Email List</label>
+                                    <input type="text" class="form-control" ng-model="dayWiseAttendanceEmail">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addDayWiseAttendanceEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">Email ids</label>
+
+                                    <ul class="listOfActions list-group">
+                                    
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.dayWiseAttendanceEmailIds" ng-bind-html-unsafe="emailId">
+		                                    {{emailId}}
+		                                    <span class="badge badge-default badge-pill" ng-click="removeDayWiseAttendanceEmail($index)"><i class="material-icons">remove_circle</i></span>
+		                                </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    
+
 
                     <div class="checkbox">
                         <label>
