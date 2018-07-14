@@ -36,18 +36,19 @@ export class Checklist {
   }
 
   viewCamera(i) {
-
+        console.log(i);
         const options: CameraOptions = {
             quality: 50,
-            destinationType: this.camera.DestinationType.NATIVE_URI,
+            destinationType: this.camera.DestinationType.DATA_URL,
             encodingType: this.camera.EncodingType.JPEG,
             mediaType: this.camera.MediaType.PICTURE
         };
 
         this.camera.getPicture(options).then((imageData) => {
 
-            console.log('imageData -' +imageData);
-            imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
+            // console.log('imageData -' +imageData);
+            imageData = 'data:image/jpeg;base64,' + imageData;
+            // imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/");
 
             this.takenImages.push(imageData);
             this.checkListItems[i].image_1 = this.takenImages[0];
@@ -57,6 +58,14 @@ export class Checklist {
 
         })
 
+  }
+
+  resetRemarks(i,completed){
+      console.log(i);
+      console.log(completed);
+      if(completed){
+          this.checkListItems[i].remarks=null;
+      }
   }
 
 
