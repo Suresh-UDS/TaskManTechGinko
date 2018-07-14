@@ -32,6 +32,8 @@ export class DBService {
     selectConfig:any;
     selectPreviousReading:any;
     selectViewReading:any;
+    selectReading:any;
+    selectImage:any;
 
     constructor(private sqlite: SQLite,private componentService:componentService,private jobService:JobService,private siteService:SiteService,public employeeService:EmployeeService, public assetService:AssetService) {
 
@@ -42,9 +44,10 @@ export class DBService {
         this.selectAMC = [];
         this.selectPPM = [];
         this.selectConfig = [];
-        this.selectPreviousReading=[];
-        this.selectViewReading=[];
-
+        this.selectPreviousReading = [];
+        this.selectViewReading = [];
+        this.selectReading = []
+        this.selectImage = [];
         this.sqlite.create({
             name: 'data.db',
             location: 'default'
@@ -73,49 +76,60 @@ export class DBService {
         console.log(this.db);
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                this.db.executeSql("DROP TABLE assetList", {})
-                console.log("Set AssetList Data");
-                var assetList;
-                var param = [];
-                var assetDetails;
-                this.assetService.findAllAssets().subscribe(
-                    response => {
-                        console.log("Get asset response");
-                        assetList = response;
-                        console.log(assetList)
-                        for (var i = 0; i < assetList.length; i++) {
-                            var asset = assetList[i];
-                            this.assetService.getAssetById(asset.id).subscribe(
-                                response => {
-                                    // console.log("Get assetbyId response");//
-                                    assetDetails = response;
-                                    // console.log(assetDetails)//
-                                    // console.log("@"+assetDetails.title)
-                                    param.push([assetDetails.id, assetDetails.active, assetDetails.title, assetDetails.code, assetDetails.assetType, assetDetails.assetGroup, assetDetails.siteId, assetDetails.siteName, assetDetails.block, assetDetails.floor, assetDetails.zone, assetDetails.manufacturerName, assetDetails.modelNumber, assetDetails.serialNumber, assetDetails.acquiredDate, assetDetails.purchasePrice, assetDetails.currentPrice, assetDetails.estimatedDisposePrice]);
-                                },
-                                error => {
-                                    console.log("Get assetbyId error");//
-                                })
-                        }
-                    },
-                    error => {
-                        console.log("Get asset error");
-                    })
+                this.sqlite.create({
+                    name: 'data.db',
+                    location: 'default'
+                }).then((db: SQLiteObject) => {
+                    this.db = db;
+                    console.log("Database connection")
+                    console.log(this.db)
+
+                    this.db.executeSql("DROP TABLE assetList", {})
+                    console.log("Set AssetList Data");
+                    var assetList;
+                    var param = [];
+                    var assetDetails;
+                    this.assetService.findAllAssets().subscribe(
+                        response => {
+                            console.log("Get asset response");
+                            assetList = response;
+                            console.log(assetList)
+                            for (var i = 0; i < assetList.length; i++) {
+                                var asset = assetList[i];
+                                this.assetService.getAssetById(asset.id).subscribe(
+                                    response => {
+                                        // console.log("Get assetbyId response");//
+                                        assetDetails = response;
+                                        // console.log(assetDetails)//
+                                        // console.log("@"+assetDetails.title)
+                                        param.push([assetDetails.id, assetDetails.active, assetDetails.title, assetDetails.code, assetDetails.assetType, assetDetails.assetGroup, assetDetails.siteId, assetDetails.siteName, assetDetails.block, assetDetails.floor, assetDetails.zone, assetDetails.manufacturerName, assetDetails.modelNumber, assetDetails.serialNumber, assetDetails.acquiredDate, assetDetails.purchasePrice, assetDetails.currentPrice, assetDetails.estimatedDisposePrice]);
+                                    },
+                                    error => {
+                                        console.log("Get assetbyId error");//
+                                    })
+                            }
+                        },
+                        error => {
+                            console.log("Get asset error");
+                        })
 
 
-                var tablename = 'assetList'
-                var createQuery = "create table IF NOT EXISTS assetList(id INT,active TEXT,title TEXT,code TEXT,assettype TEXT,assetGroup TEXT,siteId INT,siteName TEXT,block TEXT,floor TEXT,zone TEXT,manufacturerName TEXT,modelNumber TEXT,serialNumber TEXT,acquiredDate TEXT,purchasePrice TEXT,currentPrice TEXT,estimatedDisposePrice TEXT)";
-                var insertQuery = "INSERT INTO assetList (id,active,title,code,assettype,assetGroup,siteId,siteName,block,floor,zone,manufacturerName,modelNumber,serialNumber,acquiredDate,purchasePrice,currentPrice,estimatedDisposePrice) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-                var updateQuery = "update assetList set active=?,title=?,code=?,assettype=?,assetGroup=?,siteId=?,siteName=?,block=?,floor=?,zone=?,manufacturerName=?,modelNumber=?,serialNumber=?,acquiredDate=?,purchasePrice=?,currentPrice=?,estimatedDisposePrice=? where id=? "
+                    var tablename = 'assetList'
+                    var createQuery = "create table IF NOT EXISTS assetList(id INT,active TEXT,title TEXT,code TEXT,assettype TEXT,assetGroup TEXT,siteId INT,siteName TEXT,block TEXT,floor TEXT,zone TEXT,manufacturerName TEXT,modelNumber TEXT,serialNumber TEXT,acquiredDate TEXT,purchasePrice TEXT,currentPrice TEXT,estimatedDisposePrice TEXT)";
+                    var insertQuery = "INSERT INTO assetList (id,active,title,code,assettype,assetGroup,siteId,siteName,block,floor,zone,manufacturerName,modelNumber,serialNumber,acquiredDate,purchasePrice,currentPrice,estimatedDisposePrice) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    var updateQuery = "update assetList set active=?,title=?,code=?,assettype=?,assetGroup=?,siteId=?,siteName=?,block=?,floor=?,zone=?,manufacturerName=?,modelNumber=?,serialNumber=?,acquiredDate=?,purchasePrice=?,currentPrice=?,estimatedDisposePrice=? where id=? "
 
-                setTimeout(() => {
-                    this.create(tablename, createQuery, insertQuery, updateQuery, param).then(
-                        response=>{
-                            resolve(response)
+                    setTimeout(() => {
+                        this.create(tablename, createQuery, insertQuery, updateQuery, param).then(
+                            response=>{
+                                resolve(response)
 
-                        }
-                    )
-                }, 15000)
+                            }
+                        )
+                    }, 15000)
+                })
+
+
 
             }, 3000)
         })
@@ -417,7 +431,62 @@ export class DBService {
 
 
 
-    //view
+   //Asset Image
+    setImage(assetId,title,imageData)
+    {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                console.log("Asset Reading Data");
+
+                var param = [assetId,title,imageData]
+
+                var tablename = 'image';
+                var createQuery = "create table if not exists image (id INTEGER  PRIMARY KEY  AUTOINCREMENT,assetId,title,assetImage)";
+                var insertQuery = "INSERT INTO image(assetId,title,assetImage) VALUES (?,?,?)"
+                var updateQuery = "update image set assetId=?,title=?,assetImage=? where assetId=? ";
+
+                this.db.executeSql("SELECT tbl_name FROM sqlite_master WHERE tbl_name=?", [tablename]).then((data) => {
+                    //testing
+                    console.log("Search Table");
+                    console.log(data);
+                    if (data.rows.length > 0) {
+                        console.log("Table exists");
+                        console.log("Table Name:" + data.rows.item(0).tbl_name);
+                        console.log("Create table " + tablename);
+
+                        this.db.executeSql(insertQuery, param).then((data) => {
+                            console.log(data)//
+                            resolve("s")
+                        }, (error) => {
+                            console.log("ERROR: " + JSON.stringify(error))
+                        })
+
+
+                    }
+                    else {
+                        console.log("No table");
+                        console.log("Create table " + tablename);
+                        this.db.executeSql(createQuery, {}).then((data) => {
+                            console.log(data)
+                            this.db.executeSql(insertQuery, param).then((data) => {
+                                // console.log(data)//
+
+                            }, (error) => {
+                                console.log("ERROR: " + JSON.stringify(error))
+                            })
+                            resolve("s")
+                        }, (error) => {
+                            console.log("ERROR: " + JSON.stringify(error))
+                        })
+
+
+                    }
+                })
+
+            }, 3000)
+        })
+
+    }
 
 
 
@@ -473,39 +542,86 @@ export class DBService {
     }
 
 
-    setReadings(asset)
+    dropReadingTable()
+    {
+        return new Promise((resolve,reject)=>{
+            setTimeout(()=>{
+                this.db.executeSql("DROP TABLE readings", {}).then((data) => {
+                    console.log(data)
+                    resolve("drop reading table")
+                }, (error) => {
+                    console.log("ERROR: " + JSON.stringify(error))
+                })
+            },1000)
+        })
+    }
+
+    dropImageTable()
+    {
+        return new Promise((resolve,reject)=>{
+            setTimeout(()=>{
+                this.db.executeSql("DROP TABLE image", {}).then((data) => {
+                    console.log(data)
+                    resolve("drop Image table")
+                }, (error) => {
+                    console.log("ERROR: " + JSON.stringify(error))
+                })
+            },1000)
+        })
+    }
+
+    //k
+    setReadings(readings)
     {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                this.db.executeSql("DROP TABLE readings", {})
                 console.log("Asset Reading Data");
-                var readings;
-                var param = [];
-                    var search = {assetId: asset.id}
-                    this.assetService.saveReading(search).subscribe(
-                        response => {
-                            readings= response.transactions;
-                            if (readings.length > 0) {
-                                for (var i = 0; i < readings; i++) {
-                                    param.push([readings[i].name, readings[i].uom, readings[i].initialValue, readings[i].finalValue, readings[i].consumption, readings[i].assetId,readings[i].assetParameterConfigId])
-                                }
-                            }
-                        },
-                        error => {
-                            console.log("Get asset readings error");
-                        })
+
+                var param = [readings.name, readings.uom, readings.initialValue, readings.finalValue, readings.consumption, readings.assetId,readings.assetParameterConfigId]
 
                 var tablename = 'readings';
                 var createQuery = "create table if not exists readings (name VARCHAR,uom VARCHAR,initialValue INT,finalValue INT,consumption VARCHAR,assetId INT,assetParameterConfigId INT)";
                 var insertQuery = "INSERT INTO readings(name,uom,initialValue,finalValue,consumption,assetId,assetParameterConfigId) VALUES (?,?,?,?,?,?,?)"
                 var updateQuery = "update readings set name=?,uom=?,initialValue=?,finalValue=?,consumption=?,assetParameterConfigId where assetId=? ";
-                setTimeout(() => {
-                    this.create(tablename, createQuery, insertQuery, updateQuery, param).then(
-                        response=>{
-                            resolve(response)
-                        }
-                    )
-                }, 15000)
+
+                this.db.executeSql("SELECT tbl_name FROM sqlite_master WHERE tbl_name=?", [tablename]).then((data) => {
+                    //testing
+                    console.log("Search Table");
+                    console.log(data);
+                    if (data.rows.length > 0) {
+                        console.log("Table exists");
+                        console.log("Table Name:" + data.rows.item(0).tbl_name);
+                        console.log("Create table " + tablename);
+
+                            this.db.executeSql(insertQuery, param).then((data) => {
+                                console.log(data)//
+                                resolve("s")
+                            }, (error) => {
+                                console.log("ERROR: " + JSON.stringify(error))
+                            })
+
+
+                    }
+                    else {
+                        console.log("No table");
+                        console.log("Create table " + tablename);
+                        this.db.executeSql(createQuery, {}).then((data) => {
+                            console.log(data)
+                                this.db.executeSql(insertQuery, param).then((data) => {
+                                    // console.log(data)//
+
+                                }, (error) => {
+                                    console.log("ERROR: " + JSON.stringify(error))
+                                })
+                            resolve("s")
+                        }, (error) => {
+                            console.log("ERROR: " + JSON.stringify(error))
+                        })
+
+
+                    }
+                })
+
             }, 3000)
         })
 
@@ -552,7 +668,7 @@ export class DBService {
 
     }
 
-
+//k
     setViewReading()
     {
         return new Promise((resolve, reject) => {
@@ -600,7 +716,7 @@ export class DBService {
 
 
 
-
+//k
     setAssetPreviousReading()
     {
         return new Promise((resolve, reject) => {
@@ -981,6 +1097,76 @@ export class DBService {
                     resolve(test);
                 }, (error) => {
                     console.log("ERROR: " + JSON.stringify(error))
+                })
+            }, 3000)
+        })
+    }
+
+    //getReading
+    getReading()
+    {
+        this.selectReading.splice(0,this.selectReading.length)
+        var test = [];
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+
+                this.sqlite.create({
+                    name: 'data.db',
+                    location: 'default'
+                }).then((db: SQLiteObject) => {
+                    this.db = db;
+                    console.log("Database connection")
+                    console.log(this.db)
+                    console.log("**************")
+                    console.log(this.db);
+                    console.log("Select Reading Table");
+                    var addQuery = "select * from readings";
+                    //and active = ?  order by title"
+                    this.db.executeSql(addQuery, {}).then((data) => {
+                        console.log(data);
+                        console.log(data.rows.item)
+                        if (data.rows.length > 0) {
+                            for (var i = 0; i < data.rows.length; i++) {
+                                this.selectReading.push(data.rows.item(i))
+                            }
+                        }
+                        console.log(this.selectReading)
+                        resolve(this.selectReading);
+                    }, (error) => {
+                        console.log("ERROR: " + JSON.stringify(error))
+                        reject(error)
+                    })
+                })
+            }, 3000)
+        })
+    }
+
+    //getAssetimage
+    //getReading
+    getassetImage()
+    {
+        this.selectImage.splice(0,this.selectImage.length)
+        var test = [];
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                console.log("**************")
+                console.log(this.db);
+                console.log("Select asset image Table");
+                var addQuery = "select * from image";
+                //and active = ?  order by title"
+                this.db.executeSql(addQuery, {}).then((data) => {
+                    console.log(data);
+                    console.log(data.rows.item)
+                    if (data.rows.length > 0) {
+                        for (var i = 0; i < data.rows.length; i++) {
+                            this.selectImage.push(data.rows.item(i))
+                        }
+                    }
+                    console.log(this.selectImage)
+                    resolve(this.selectImage);
+                }, (error) => {
+                    console.log("ERROR: " + JSON.stringify(error))
+                    reject(error)
                 })
             }, 3000)
         })

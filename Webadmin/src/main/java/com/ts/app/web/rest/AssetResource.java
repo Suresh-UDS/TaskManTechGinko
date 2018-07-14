@@ -209,6 +209,7 @@ public class AssetResource {
 		}
 		
 		try {
+			assetDTO.setUserId(SecurityUtils.getCurrentUserId());
 			assetDTO = assetService.updateAsset(assetDTO);
 			}catch(Exception e) {
 			throw new TimesheetException(e, assetDTO);

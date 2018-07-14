@@ -64,7 +64,6 @@ ppmSchedule:any;
   }
     loadCalendar() {
         const $calendar = $('#fullCalendar');
-
         const today = new Date();
         const y = today.getFullYear();
         const m = today.getMonth();

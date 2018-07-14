@@ -47,7 +47,7 @@ export class AssetService {
     }
 
     getAssetConfig(assetType,assetId):Observable<any>{
-        var data={assetType: assetType, assetId: assetId}
+        var data={assetType: assetType, assetId: assetId};
         return this.http.post(this.config.Url+'api/assets/config',data).map(
             response=>{
                 console.log("Get asset config");
@@ -100,7 +100,7 @@ export class AssetService {
         return this.http.post(this.config.Url+'api/assets/viewAssetReadings',searchCriteria).map(
             response=>{
                 console.log("View Reading");
-                console.log(response);
+                console.log(response.json());
                 return response.json();
             }
         )

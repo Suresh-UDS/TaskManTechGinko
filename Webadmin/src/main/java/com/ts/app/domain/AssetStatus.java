@@ -14,6 +14,7 @@ public enum AssetStatus {
 	MISSING("MISSING"), 
 	DE_COMMISSIONED("DE_COMMISSIONED"),
 	DISPOSED("DISPOSED"),
+	BREAKDOWN("BREAKDOWN"),
 	RETIRED("RETIRED");
  
     private String status;

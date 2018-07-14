@@ -2153,9 +2153,9 @@
 
                                                                 <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadPhoto in uploadAssetPhotos">
                                                                     <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadPhoto.id,'photo')"  onClick="$('#deleteModal').modal()" data-target="#myModal">
-                                                                        
+
                                                                          <i class="material-icons">close</i>
-                                                                         
+
                                                                      </div>
                                                                     <div class="DownloadBtn">
                                                                         <a href="{{uploadPhoto.url}}" id="loop2">
@@ -2726,7 +2726,7 @@
 
 <div class="row">
 
-    <div id="siteChangeModalConfig" data-backdrop="false" class="modal fade"
+    <div id="siteChangeModalConfig" data-backdrop="false" class="modal fade deleteModal"
         tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
         <div class="delete-dialog">
@@ -2736,7 +2736,7 @@
                 </div>
                 <div class="delete-footer">
                     <button type="button" ng-click="siteChangeAssetConfig()"
-                        class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>
+                        class="btn btn-success text-danger" data-dismiss="modal">Confirm</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
                 </div>
