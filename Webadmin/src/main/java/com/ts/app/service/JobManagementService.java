@@ -854,9 +854,9 @@ public class JobManagementService extends AbstractService {
 			List<JobChecklist> checklistItems = new ArrayList<JobChecklist>();
 			for(JobChecklistDTO jobclDto : jobclDtoList) {
 			    log.debug("Job checklist remarks"+jobclDto.getRemarks());
-			    log.debug("Job checklist remarks"+jobclDto.getImage_1());
 				JobChecklist checklist = mapperUtil.toEntity(jobclDto, JobChecklist.class);
-				checklist.setJob(job);
+                log.debug("Job checklist remarks"+checklist.getImage_1());
+                checklist.setJob(job);
 				checklistItems.add(checklist);
 			}
 			if(job.getChecklistItems() != null) {
@@ -1105,6 +1105,24 @@ public class JobManagementService extends AbstractService {
         job = jobRepository.save(job);
         return mapperUtil.toModel(job, JobDTO.class);
     }
+
+//    @Transactional
+//    public JobChecklistDTO uploadCheckListImage(JobChecklistDTO jobChecklistDTO) {
+//        log.debug("JOb checklist dto - "+jobChecklistDTO.getImage_1());
+//        log.debug("Employee list from check in out images"+jobChecklistDTO.getJobId());
+//        String fileName = fileUploadHelper.uploadFile(jobChecklistDTO.getJobId(),jobChecklistDTO.getImage_1(), System.currentTimeMillis());
+//        jobChecklistDTO.setImage_1(fileName);
+//        CheckInOutImage checkInOutImage = new CheckInOutImage();
+//        checkInOutImage.setPhotoOut(fileName);
+//        checkInOutImage.setCheckInOut(checkInOutRepository.findOne(checkInOutImageDto.getCheckInOutId()));
+//        checkInOutImage.setProject(projectRepository.findOne(checkInOutImageDto.getProjectId()));
+//        checkInOutImage.setEmployee(employeeRepository.findOne(checkInOutImageDto.getEmployeeId()));
+//        checkInOutImage.setSite(siteRepository.findOne(checkInOutImageDto.getSiteId()));
+//        checkInOutImage.setJob(jobRepository.findOne((checkInOutImageDto.getJobId())));
+//        log.debug("Before save image::::::"+checkInOutImage);
+//        checkInOutImage = checkInOutImageRepository.save(checkInOutImage);
+//        return checkInOutImageDto;
+//    }
 
 	public JobDTO onlyCompleteJob(Long id) {
 		Job job = findJob(id);
