@@ -17,7 +17,8 @@ angular.module('timeSheetApp')
     			quotationEmailIds : [],
     			feedbackEmailIds : [],
     			ticketEmailIds : [],
-    			readingEmailIds : []
+    			readingEmailIds : [],
+    			assetEmailIds : []
     		};
     		
     	
@@ -116,6 +117,19 @@ angular.module('timeSheetApp')
     
 	    $scope.removeReadingEmail = function(index) {
     		$scope.settings.readingEmailIds.splice(index,1);
+	    }
+	    
+	    $scope.addAssetBreakdownEmail = function() {
+        	var email = $scope.assetEmail;
+        	if(!$scope.settings.assetEmailIds) {
+        		$scope.settings.assetEmailIds = [];
+        	}
+        	$scope.settings.assetEmailIds.push(email);
+        	$scope.assetEmail = '';
+	    }
+    
+	    $scope.removeAssetEmail = function(index) {
+    		$scope.settings.assetEmailIds.splice(index,1);
 	    }
     		
         $scope.loadProjects = function () {

@@ -243,6 +243,10 @@ public class AssetManagementService extends AbstractService {
 	
 	public static final String EMAIL_NOTIFICATION_READING_EMAILS = "email.notification.reading.emails";
 	
+	public static final String EMAIL_NOTIFICATION_ASSET = "email.notification.asset";
+	
+	public static final String EMAIL_NOTIFICATION_ASSET_EMAILS = "email.notification.asset.emails";
+	
 	@Value("${AWS.s3-cloudfront-url}")
 	private String cloudFrontUrl;
 	
@@ -567,6 +571,40 @@ public class AssetManagementService extends AbstractService {
 			asset.setStartTime(DateUtil.convertToSQLDate(assetDTO.getStartTime()));
 		}
 		asset.setUdsAsset(assetDTO.isUdsAsset());
+		
+		if(assetDTO.getStatus().equalsIgnoreCase(AssetStatus.BREAKDOWN.getStatus())) {
+			
+			Date date = new Date();
+			
+			Asset assetEntity = assetRepository.findOne(assetDTO.getId());
+			String assetCode = assetEntity.getCode();
+			Site site = siteRepository.findOne(assetEntity.getSite().getId());
+			
+			String siteName = site.getName();
+			
+			User user = userRepository.findOne(assetDTO.getUserId());
+			log.debug(">>> user <<<"+ user.getFirstName() +" and "+user.getId());
+//			Employee employee = user.getEmployee();
+			
+			Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_ASSET);
+			
+			if(setting.getSettingValue().equalsIgnoreCase("true") ) { 
+				
+				Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_ASSET_EMAILS);
+				
+				if(settingEntity.getSettingValue().length() > 0) {
+					
+					List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+					for(String email : emailLists) { 
+						mailService.sendAssetBreakdownAlert(email, assetEntity.getTitle(), siteName, assetCode, user.getFirstName(), date);
+					}
+					
+				} else {
+					
+					log.info("There is no email ids registered");
+				}
+			}
+		}
 	}
 
 	public AssetDTO updateAsset(AssetDTO assetDTO) {
