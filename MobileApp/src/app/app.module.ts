@@ -99,6 +99,7 @@ import {QRScanner} from "@ionic-native/qr-scanner";
 import {ScanQR} from "../pages/jobs/scanQR";
 import {DBService} from "../pages/service/dbService";
 import {OfflineAttendanceSites} from "../pages/employee/offline-attendance-sites";
+import{Checklist} from "../pages/checklist/checklist";
 
 @NgModule({
   declarations: [
@@ -163,7 +164,8 @@ import {OfflineAttendanceSites} from "../pages/employee/offline-attendance-sites
     SplashLogo,
     UpdateApp,
     ScanQR,
-    OfflineAttendanceSites
+    OfflineAttendanceSites,
+      Checklist
   ],
   imports: [
     BrowserModule,
@@ -239,7 +241,8 @@ import {OfflineAttendanceSites} from "../pages/employee/offline-attendance-sites
     SplashLogo,
     UpdateApp,
     ScanQR,
-    OfflineAttendanceSites
+    OfflineAttendanceSites,
+      Checklist
   ],
   providers: [
     StatusBar,
