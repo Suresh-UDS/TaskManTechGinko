@@ -134,15 +134,11 @@ public class AmazonS3Utils {
 		return fileName;
 	}    
 	
-	public EmployeeDTO uploadEnrollImage(String qrCodeImage, EmployeeDTO employeeDTO, long dateTime) { 
+	public EmployeeDTO uploadEnrollImage(String enrollImg, EmployeeDTO employeeDTO, long dateTime) { 
     	String filename = "enrollImage_"+ dateTime +".png";
     	String fileUrl = "";
-    	String imageDataString = "data:image/png;base64,";
     	try {
-	        // Converting Image byte array into Base64 String
-	        imageDataString += qrCodeImage;
-	        log.debug("base64 string" +imageDataString);
-	        fileUrl = amazonS3Service.uploadEnrollImageToS3(filename, imageDataString);
+	        fileUrl = amazonS3Service.uploadEnrollImageToS3(filename, enrollImg);
 	        employeeDTO.setEnrolled_face(filename);
 	        employeeDTO.setUrl(fileUrl);
     	} catch(Exception e) { 
@@ -156,12 +152,8 @@ public class AmazonS3Utils {
 		// TODO Auto-generated method stub
 		String filename = "checkOutImage_"+ dateTime +".png";
     	String fileUrl = "";
-    	String imageDataString = "data:image/png;base64,";
     	try {
-	        // Converting Image byte array into Base64 String
-	        imageDataString += checkOutImage;
-	        log.debug("base64 string" + imageDataString);
-	        fileUrl = amazonS3Service.uploadCheckOutImageToS3(filename, imageDataString);
+	        fileUrl = amazonS3Service.uploadCheckOutImageToS3(filename, checkOutImage);
 	        attnDto.setCheckOutImage(filename);
 	        attnDto.setUrl(fileUrl);
     	} catch(Exception e) { 
@@ -175,12 +167,8 @@ public class AmazonS3Utils {
 		// TODO Auto-generated method stub
 		String filename = "checkInImage_"+ dateTime +".png";
     	String fileUrl = "";
-    	String imageDataString = "data:image/png;base64,";
     	try {
-	        // Converting Image byte array into Base64 String
-	        imageDataString += checkInImage;
-	        log.debug("base64 string" + imageDataString);
-	        fileUrl = amazonS3Service.uploadCheckInImageToS3(filename, imageDataString);
+	        fileUrl = amazonS3Service.uploadCheckInImageToS3(filename, checkInImage);
 	        attnDto.setCheckInImage(filename);
 	        attnDto.setUrl(fileUrl);
     	} catch(Exception e) { 
