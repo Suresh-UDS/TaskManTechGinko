@@ -71,7 +71,8 @@ public class GoogleSheetsUtil {
 				clientSecrets, SCOPES)
 						.setDataStoreFactory(new FileDataStoreFactory(new java.io.File(CREDENTIALS_FOLDER)))
 						.setAccessType("offline").build();
-		return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
+		LocalServerReceiver localReceiver = new LocalServerReceiver.Builder().setPort(8080).build();		
+		return new AuthorizationCodeInstalledApp(flow, localReceiver).authorize("user");
 	}
 
 	public static String[] upload(String name, String fileName)  {
