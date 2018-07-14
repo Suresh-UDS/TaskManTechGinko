@@ -29,6 +29,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.CheckInOut;
 import com.ts.app.domain.CheckInOutImage;
@@ -1011,5 +1012,23 @@ public class    EmployeeService extends AbstractService {
     		empDto.setClient(employee.isClient());
     		return empDto;
     }
+
+	public String uploadEmpExistingImage() {
+		// TODO Auto-generated method stub
+		List<Employee> empEntity = employeeRepository.findAll();
+		List<EmployeeDTO> empModel = mapperUtil.toModelList(empEntity, EmployeeDTO.class);
+		for(EmployeeDTO employee : empModel) { 
+			long dateTime = new Date().getTime();
+			boolean isBase64 = Base64.isBase64(employee.getEnrolled_face());
+			Employee emp = mapperUtil.toEntity(employee, Employee.class);
+			if(isBase64){ 
+				employee = amazonS3utils.uploadEnrollImage(employee.getEnrolled_face(), employee, dateTime);
+				emp.setEnrolled_face(employee.getEnrolled_face());
+				employeeRepository.save(emp);
+			}
+			
+		}
+		return "Upload Employee enroll image successfully";
+	}
 
 }
