@@ -70,20 +70,30 @@ export class CompleteJobPage {
         )
         */
 
+
+
+    }
+
+    ionViewDidLoad() {
+        this.component.showLoader('Loading Job Details');
         this.jobService.getJobDetails(this.jobDetails.id).subscribe(
             response=>{
+                this.component.closeLoader();
                 console.log("Response on job details");
                 console.log(response);
                 this.jobDetails = response;
                 if(response.images.length>0){
+                    this.component.showLoader('Getting saved images');
                     console.log("Images available");
                     this.completedImages=[];
                     for(let image of response.images){
                         this.jobService.getCompletedImage(image.employeeEmpId,image.photoOut).subscribe(
                             imageData=>{
+                                this.component.closeLoader();
                                 console.log(imageData);
                                 this.completedImages.push(imageData._body);
                             },err=>{
+                                this.component.closeLoader();
                                 console.log("Error in getting images");
                                 console.log(err);
                             }
@@ -92,17 +102,12 @@ export class CompleteJobPage {
 
                 }
             },error=>{
+                this.component.closeLoader();
                 console.log("Error in getting job details");
                 console.log(error);
                 this.component.showToastMessage("Errror in getting job details","bottom");
             }
         )
-
-    }
-
-    ionViewDidLoad() {
-        console.log(this.jobDetails);
-        console.log(this.jobDetails.checklistItems);
     }
     viewImage(index,img)
     {
