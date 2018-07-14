@@ -79,7 +79,7 @@ public class GoogleSheetsUtil {
 						.setAccessType("online").build();
 		String host = env.getProperty("google.drive.api.callback.host");
 		int port = Integer.parseInt(env.getProperty("google.drive.api.callback.port"));
-		LocalServerReceiver localReceiver = new LocalServerReceiver.Builder().setHost(host).build();		
+		LocalServerReceiver localReceiver = new LocalServerReceiver.Builder().setHost(host).setPort(port).build();		
 		return new AuthorizationCodeInstalledApp(flow, localReceiver).authorize("user");
 	}
 
