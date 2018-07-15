@@ -344,34 +344,41 @@ public class RateCardService extends AbstractService {
 
             log.debug("quotation save  end point"+quotationSvcEndPoint);
             String url = quotationSvcEndPoint+"/quotation/create";
-            if(quotationDto.getMode().equalsIgnoreCase("create")) {
-            		quotationDto.setCreatedByUserId(currUserId);
+            
+	    		Setting quotationAlertSetting = null;
+			List<Setting> settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_QUOTATION, quotationDto.getSiteId());
+			if(CollectionUtils.isNotEmpty(settings)) {
+				quotationAlertSetting = settings.get(0);
+			}
+			Setting overdueEmails = null;
+			settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_QUOTATION_EMAILS, quotationDto.getSiteId());
+			if(CollectionUtils.isNotEmpty(settings)) {
+				overdueEmails = settings.get(0);
+			}
+			String alertEmailIds =  "";
+			if(overdueEmails != null) {
+			    log.debug("Overdue email ids found"+overdueEmails.getSettingValue());
+				alertEmailIds = overdueEmails.getSettingValue();
+			}else{
+			    log.debug("Overdue email ids not found");
+	        }
+			if(quotationDto.getMode().equalsIgnoreCase("create")) {
+	        		quotationDto.setCreatedByUserId(currUserId);
 	        		quotationDto.setCreateByUserName(currUser.getLogin());
-                request.put("createdByUserId", quotationDto.getCreatedByUserId());
-                request.put("createdByUserName", quotationDto.getCreateByUserName());
-            }
+	            request.put("createdByUserId", quotationDto.getCreatedByUserId());
+	            request.put("createdByUserName", quotationDto.getCreateByUserName());
+	        }
             if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("edit")) {
             		url = quotationSvcEndPoint+"/quotation/edit";
-            }else if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("submit")) {
-            		Setting quotationAlertSetting = null;
-				List<Setting> settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_QUOTATION, quotationDto.getSiteId());
-				if(CollectionUtils.isNotEmpty(settings)) {
-					quotationAlertSetting = settings.get(0);
-				}
-				Setting overdueEmails = null;
-				settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_QUOTATION_EMAILS, quotationDto.getSiteId());
-				if(CollectionUtils.isNotEmpty(settings)) {
-					overdueEmails = settings.get(0);
-				}
-				String alertEmailIds =  "";
-				if(overdueEmails != null) {
-				    log.debug("Overdue email ids found"+overdueEmails.getSettingValue());
-					alertEmailIds = overdueEmails.getSettingValue();
-				}else{
-				    log.debug("Overdue email ids not found");
-                }
-
-            		url = quotationSvcEndPoint+"/quotation/send";
+            }else if(quotationDto.getMode().equalsIgnoreCase("submit")) {
+            		if(!StringUtils.isEmpty(quotationDto.get_id())) { 
+            			url = quotationSvcEndPoint+"/quotation/send";
+            		}else {
+	    	        		quotationDto.setCreatedByUserId(currUserId);
+	    	        		quotationDto.setCreateByUserName(currUser.getLogin());
+        	            request.put("createdByUserId", quotationDto.getCreatedByUserId());
+        	            request.put("createdByUserName", quotationDto.getCreateByUserName());
+            		}
             		quotationDto.setDrafted(false);
             		quotationDto.setSubmitted(true);
             		quotationDto.setSentByUserId(currUserId);
@@ -386,20 +393,6 @@ public class RateCardService extends AbstractService {
                 }
 
             }else if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("approve")) {
-            		Setting quotationAlertSetting = null; 
-            		List<Setting> settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_QUOTATION, quotationDto.getSiteId());
-            		if(CollectionUtils.isNotEmpty(settings)) {
-            			quotationAlertSetting = settings.get(0);
-            		}
-            		Setting overdueEmails = null;
-				settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_QUOTATION_EMAILS, quotationDto.getSiteId());
-	        		if(CollectionUtils.isNotEmpty(settings)) {
-	        			overdueEmails = settings.get(0);
-	        		}
-				String alertEmailIds =  "";
-				if(overdueEmails != null) {
-					alertEmailIds = overdueEmails.getSettingValue();
-				}
 
             		url = quotationSvcEndPoint+"/quotation/approve";
             		quotationDto.setSubmitted(false);

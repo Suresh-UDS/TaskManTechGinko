@@ -237,7 +237,11 @@
                                 <td>{{attendance.employeeEmpId}}</td>
                                 <td>{{attendance.employeeFullName}}</td>
                                 <td>{{attendance.siteName}}</td>
-                                <td>{{attendance.checkInTime | date:'dd/MM/yyyy @ h:mma'}}</td>
+                                <td>
+                                {{attendance.checkInTime | date:'dd/MM/yyyy @ h:mma'}}
+                                <br/>
+                                <label ng-show="{{attendance.late}}">Late</label>
+                                </td>
                                 <td ng-if="attendance.checkInImage">
                                     <a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkInImage,attendance.employeeId)">
                                         <img src={{attendance.checkInImage}} width="30px" height="30px"/>

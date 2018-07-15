@@ -33,18 +33,18 @@
                                                     <td>{{job.description}}</td>
 
                                                 </tr>
-                                                <tr>
-                                                    <td>Checklist</td>
-                                                    <td>
-                                                        <ul class="listOfActions list-group">
-                                                            <li class="list-group-item justify-content-between" ng-repeat="checklist in job.checklistItems">
-                                                                <span ng-if="!checklist.completed" style="color:red">{{checklist.checklistItemName}}</span>
-                                                                <span ng-if="checklist.completed" style="color:green">{{checklist.checklistItemName}}</span>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
+                                                <!--<tr>-->
+                                                    <!--<td>Checklist</td>-->
+                                                    <!--<td>-->
+                                                        <!--<ul class="listOfActions list-group">-->
+                                                            <!--<li class="list-group-item justify-content-between" ng-repeat="checklist in job.checklistItems">-->
+                                                                <!--<span ng-if="!checklist.completed" style="color:red">{{checklist.checklistItemName}}</span>-->
+                                                                <!--<span ng-if="checklist.completed" style="color:green">{{checklist.checklistItemName}}</span>-->
+                                                            <!--</li>-->
+                                                        <!--</ul>-->
+                                                    <!--</td>-->
 
-                                                </tr>
+                                                <!--</tr>-->
                                                 <tr>
 
                                                     <td>Site </td>
@@ -114,6 +114,24 @@
                                                     <td>Status </td>
                                                     <td>
                                                        {{job.jobStatus}}
+                                                    </td>
+
+                                                </tr>
+
+                                                <tr ng-if="job.pendingAtUDS && job.status !='COMPLETED'">
+
+                                                    <td>Job Pending Status </td>
+                                                    <td>
+                                                        Job Pending at UDS
+                                                    </td>
+
+                                                </tr>
+
+                                                <tr ng-if="job.pendingAtClient && job.status !='COMPLETED'">
+
+                                                    <td>Job Pending Status </td>
+                                                    <td>
+                                                        Job Pending at {{job.siteProjectName}}
                                                     </td>
 
                                                 </tr>
@@ -236,10 +254,53 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Check List</div>
+                                <div class="panel-body">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr>
+                                            <th>Checklist Item </th>
+                                            <th>Remarks</th>
+                                            <th>Images</th>
+                                        </tr>
+                                        <tr ng-repeat="checklist in job.checklistItems">
+                                            <td><span ng-if="!checklist.completed" style="color:red">{{checklist.checklistItemName}}</span>
+                                                <span ng-if="checklist.completed" style="color:green">{{checklist.checklistItemName}}</span>
+                                            </td>
+                                            <td>
+                                                <span ng-if="!checklist.completed && checklist.remarks">{{checklist.remarks}}</span>
+                                                <span ng-if="checklist.completed">Completed</span>
+                                                <span ng-if="!checklist.remarks && !checklist.completed">No remarks added</span>
+                                            </td>
+                                            <td>
+                                                <span ng-if="!checklist.image_1">No Image added</span>
+                                                <a ng-if="checklist.image_1" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.image_1)" >
+                                                    <img src="{{checklist.image_1}}" width="80px" height="80px">
+                                                </a>
+                                                <a ng-if="checklist.image_2" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.image_2)" >
+                                                    <img src="{{checklist.image_2}}" width="80px" height="80px">
+                                                </a>
+                                                <a ng-if="checklist.image_3" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.image_3)" >
+                                                    <img src="{{checklist.image_3}}" width="80px" height="80px">
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                    </table>
+                    <div></div>
+                    <div></div>
+
+                </div>
+
+            </div>
+
+        </div>
 
 
 
-                        <!--<div class="titleCon">-->
+        <!--<div class="titleCon">-->
                             <!--<h5>Actual Start and End</h5>-->
                         <!--</div>-->
 

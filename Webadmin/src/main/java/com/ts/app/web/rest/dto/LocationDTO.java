@@ -9,13 +9,13 @@ public class LocationDTO  extends BaseDTO implements Serializable{
 
     private long id;
     private String name;
-    
+
     private long siteId;
 
     private String siteName;
-    
+
     private long projectId;
-    
+
     private String projectName;
 
     private String block;
@@ -23,6 +23,8 @@ public class LocationDTO  extends BaseDTO implements Serializable{
     private String floor;
 
     private String zone;
+
+    private String qrCodeImage;
 
     public String getName() {
         return name;
@@ -95,6 +97,13 @@ public class LocationDTO  extends BaseDTO implements Serializable{
 	public void setZone(String zone) {
 		this.zone = zone;
 	}
-    
-    
+
+
+    public String getQrCodeImage() {
+        return qrCodeImage;
+    }
+
+    public void setQrCodeImage(String qrCodeImage) {
+        this.qrCodeImage = qrCodeImage;
+    }
 }

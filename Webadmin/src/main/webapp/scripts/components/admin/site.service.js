@@ -25,8 +25,9 @@ angular.module('timeSheetApp')
 					  return response.data;
 				  });
 			},
-			findShifts: function(id) {
-				  return $http.get('api/site/'+id +'/shifts').then(function (response) {
+			
+			findShifts: function(id,date){
+				  return $http.get('api/site/'+id + '/shifts/' + date).then(function (response) {
 					  return response.data;
 				  });
 			},

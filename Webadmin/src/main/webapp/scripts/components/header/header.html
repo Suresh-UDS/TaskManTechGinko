@@ -63,6 +63,14 @@
 			                    <span class="sidebar-normal">Login</span>
 			                </a>
 			            </li>
+                        <li ng-switch-when="true">
+                            <a ui-sref="changePassword">
+                                <!--<span class="sidebar-mini">L</span>-->
+                                <i class="material-icons">lock</i>
+                                <span class="sidebar-normal" >Change Password</span>
+                            </a>
+
+                        </li>
 			             <li ng-switch-when="true">
 	                      <a ng-click="logout()">
 	                        <!--<span class="sidebar-mini">L</span>-->

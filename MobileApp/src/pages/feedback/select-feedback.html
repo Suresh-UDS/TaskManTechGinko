@@ -1,8 +1,14 @@
 <ion-header no-border="" class="bg-white" padding-top="">
-  <ion-navbar transparent >
-    <button ion-button menuToggle>
-      <ion-icon name="menu" class="fnt-18"></ion-icon>
-    </button>
+  <ion-navbar transparent hideBackButton>
+      <ion-buttons left="">
+          <button (click)="goBack()" ion-button clear="" color="primary">
+              <i class="material-icons">keyboard_arrow_left</i>
+          </button>
+      </ion-buttons>
+
+    <!--<button ion-button menuToggle>-->
+      <!--<ion-icon name="menu" class="fnt-18"></ion-icon>-->
+    <!--</button>-->
     <ion-title text-center="">
         <img src="img/logo.png"  alt="feedback image" width="10%">
     </ion-title>

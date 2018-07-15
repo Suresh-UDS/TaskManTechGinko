@@ -58,10 +58,15 @@ import {FeedbackQuestionPage} from "../pages/feedback/feedback-questions";
 import {InitFeedbackPage} from "../pages/feedback/init-feedback";
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
+<<<<<<< HEAD
 import{TicketFilter} from "../pages/ticket/ticket-filter/ticket-filter";
 
 import {SQLitePorter} from "@ionic-native/sqlite-porter";
 
+=======
+import {ForgotPassword} from "../pages/forgot-password/forgot-password";
+import { Network } from '@ionic-native/network';
+>>>>>>> Release-1.0
 import {CreateEmployeePage} from "../pages/employee-list/create-employee";
 import {OneSignal} from "@ionic-native/onesignal";
 // import {GoogleMaps} from "@ionic-native/google-maps";
@@ -82,8 +87,11 @@ import { BackgroundMode } from '@ionic-native/background-mode';
 import { NativeAudio } from '@ionic-native/native-audio';
 import {SelectFeedbackPage} from "../pages/feedback/select-feedback";
 import {FeedbackZone} from "../pages/feedback/feedbackZone";
+<<<<<<< HEAD
 import {Splash} from "../pages/splash/splash";
 import {SplashLogo} from "../pages/splash-logo/splash-logo";
+=======
+>>>>>>> Release-1.0
 import {InitFeedbackZone} from "../pages/feedback/init-feedback-zone";
 import {WizardFeedbackEntry} from "../pages/feedback/wizard-feedback-entry";
 import {FeedbackQuestionsForm} from "../pages/feedback/feedback-questions-form";
@@ -93,6 +101,7 @@ import {ViewTicket} from "../pages/ticket/view-ticket";
 import {FeedbackGridPage} from "../pages/feedback/feedback-grid";
 import {AppVersion} from "@ionic-native/app-version";
 import {HasPermission} from "../components/has-permission/has-permission";
+<<<<<<< HEAD
 import {AssetList} from "../pages/asset-list/asset-list";
 import {AssetFilter} from "../pages/asset-list/asset-filter";
 import {AssetView} from "../pages/asset-view/asset-view";
@@ -111,6 +120,20 @@ import {DBService} from "../pages/service/dbService";
 import {Network} from "@ionic-native/network";
 import {Diagnostic} from "@ionic-native/diagnostic";
 
+=======
+import {OfflineAttendance} from "../pages/employee/offline-attendance";
+import {SQLite} from "@ionic-native/sqlite";
+import {Diagnostic} from "@ionic-native/diagnostic";
+import {LocationAccuracy} from "@ionic-native/location-accuracy";
+import {SplashLogo} from "../pages/splash-logo/splash-logo";
+import {Market} from "@ionic-native/market";
+import {UpdateApp} from "../pages/update-app/update-app";
+import {QRScanner} from "@ionic-native/qr-scanner";
+import {ScanQR} from "../pages/jobs/scanQR";
+import {DBService} from "../pages/service/dbService";
+import {OfflineAttendanceSites} from "../pages/employee/offline-attendance-sites";
+import{Checklist} from "../pages/checklist/checklist";
+>>>>>>> Release-1.0
 
 @NgModule({
   declarations: [
@@ -134,12 +157,12 @@ import {Diagnostic} from "@ionic-native/diagnostic";
     QuotationViewPage,
     QuotationImagePopoverPage,
     CreateQuotationPage,
-      CreateQuotationPage2,
-      ApprovedQuotationPage,
-      DraftedQuotationPage,
-      SubmittedQuotationPage,
-      ArchivedQuotationPage,
-      ViewQuotationPage,
+    CreateQuotationPage2,
+    ApprovedQuotationPage,
+    DraftedQuotationPage,
+    SubmittedQuotationPage,
+    ArchivedQuotationPage,
+    ViewQuotationPage,
     AttendancePage,
     AttendancePopoverPage,
     EmployeeDetailPage,
@@ -151,8 +174,8 @@ import {Diagnostic} from "@ionic-native/diagnostic";
     CreateRateCardPage,
     CreateJobPage,
     CompleteJobPage,
-      IonSimpleWizardStep,
-      IonSimpleWizard,
+    IonSimpleWizardStep,
+    IonSimpleWizard,
     CreateQuotationPage3,
     CreateEmployeePage,
     FeedbackPage,
@@ -160,6 +183,7 @@ import {Diagnostic} from "@ionic-native/diagnostic";
     FeedbackQuestionPage,
     InitFeedbackPage,
     FeedbackDashboardPage,
+<<<<<<< HEAD
       FeedbackZone,
       SelectFeedbackPage,
       InitFeedbackZone,
@@ -182,6 +206,25 @@ import {Diagnostic} from "@ionic-native/diagnostic";
       GetAssetReading,
       GetAssetReadings,
       CalenderPage,
+=======
+    FeedbackZone,
+    SelectFeedbackPage,
+    InitFeedbackZone,
+    FeedbackQuestionsForm,
+    FeedbackGridPage,
+    WizardFeedbackEntry,
+    Ticket,
+    CreateTicket,
+    ViewTicket,
+    HasPermission,
+    ForgotPassword,
+    OfflineAttendance,
+    SplashLogo,
+    UpdateApp,
+    ScanQR,
+    OfflineAttendanceSites,
+      Checklist
+>>>>>>> Release-1.0
   ],
   imports: [
     BrowserModule,
@@ -218,12 +261,12 @@ import {Diagnostic} from "@ionic-native/diagnostic";
     QuotationImagePopoverPage,
     QuotationViewPage,
     CreateQuotationPage,
-      CreateQuotationPage2,
-      ApprovedQuotationPage,
-      DraftedQuotationPage,
-      SubmittedQuotationPage,
-      ArchivedQuotationPage,
-      ViewQuotationPage,
+    CreateQuotationPage2,
+    ApprovedQuotationPage,
+    DraftedQuotationPage,
+    SubmittedQuotationPage,
+    ArchivedQuotationPage,
+    ViewQuotationPage,
     AttendancePage,
     AttendancePopoverPage,
     EmployeeDetailPage,
@@ -234,9 +277,9 @@ import {Diagnostic} from "@ionic-native/diagnostic";
     RateCardPage,
     CreateRateCardPage,
     CreateJobPage,
-      CompleteJobPage,
-      IonSimpleWizardStep,
-      IonSimpleWizard,
+    CompleteJobPage,
+    IonSimpleWizardStep,
+    IonSimpleWizard,
     CreateQuotationPage3,
     CreateEmployeePage,
     FeedbackPage,
@@ -244,8 +287,9 @@ import {Diagnostic} from "@ionic-native/diagnostic";
     InitFeedbackPage,
     FeedbackGridPage,
     JobPopoverPage,
-      FeedbackZone,
+    FeedbackZone,
     FeedbackDashboardPage,
+<<<<<<< HEAD
       SelectFeedbackPage,
       InitFeedbackZone,
       FeedbackQuestionsForm,
@@ -268,11 +312,28 @@ import {Diagnostic} from "@ionic-native/diagnostic";
 
 
 
+=======
+    SelectFeedbackPage,
+    InitFeedbackZone,
+    FeedbackQuestionsForm,
+    WizardFeedbackEntry,
+    Ticket,
+    CreateTicket,
+    ViewTicket,
+    ForgotPassword,
+    OfflineAttendance,
+    SplashLogo,
+    UpdateApp,
+    ScanQR,
+    OfflineAttendanceSites,
+      Checklist
+>>>>>>> Release-1.0
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Camera,
+<<<<<<< HEAD
       NativeAudio,
       AttendanceService,
       EmployeeService,
@@ -282,26 +343,45 @@ import {Diagnostic} from "@ionic-native/diagnostic";
       SiteService,
       AssetService,
       DBService,
+=======
+    NativeAudio,
+    AttendanceService,
+    EmployeeService,
+    FeedbackService,
+    JobService,
+    QuotationService,
+    SiteService,
+>>>>>>> Release-1.0
     authService,
     HttpClient,
     Geolocation,
-      BackgroundMode,
+    BackgroundMode,
     Geofence,
-      // GoogleMaps,
-      Toast,
-      OneSignal,
+    // GoogleMaps,
+    Toast,
+    OneSignal,
     componentService,
-      OneSignal,
-      BatteryStatus,
+    BatteryStatus,
     Toast,
     FileTransfer,
     File,
+<<<<<<< HEAD
       DatePicker,
       AppVersion,
       QRScanner,
       FabContainer,
       Diagnostic,
       SQLite,
+=======
+    AppVersion,
+    Network,
+    SQLite,
+    Diagnostic,
+    LocationAccuracy,
+    Market,
+    QRScanner,
+    DBService,
+>>>>>>> Release-1.0
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]

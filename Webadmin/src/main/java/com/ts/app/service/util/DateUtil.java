@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,20 +105,39 @@ public class DateUtil {
 	}
 	
 	public static String formatToDateString(Date date) {
-        DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy");
-        String strDate = dtFormat.format(date);
-        return strDate;
-
+		if(date != null) {
+	        DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy");
+	        String strDate = dtFormat.format(date);
+	        return strDate;
+		}
+		return StringUtils.EMPTY;
 	}
 	
 	public static String formatToDateTimeString(Date date) {
-        DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy hh:mm a");
-        String strDate = dtFormat.format(date);
-        return strDate;
+		if(date != null) {
+	        DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy hh:mm a");
+	        String strDate = dtFormat.format(date);
+	        return strDate;
+		}
+		return StringUtils.EMPTY;
 	}
 	
 	public static ZonedDateTime convertToZDT(Date date) {
 		ZonedDateTime zdt = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.of("Asia/Kolkata"));
 		return zdt;
+	}
+	
+	public static Date parseToDateTime(String time) {
+		if(org.apache.commons.lang3.StringUtils.isNotEmpty(time)) {
+	        DateFormat dtFormat = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
+	        Date date = null;
+			try {
+				date = dtFormat.parse(time);
+			} catch (ParseException e) {
+				log.error("Error while parsing the time", e);
+			}
+	        return date;
+		}
+		return null;
 	}
 }

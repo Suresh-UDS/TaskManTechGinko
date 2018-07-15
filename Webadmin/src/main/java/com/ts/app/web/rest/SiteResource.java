@@ -1,6 +1,7 @@
 package com.ts.app.web.rest;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -9,6 +10,7 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -114,9 +116,9 @@ public class SiteResource {
 		// .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 	
-	@RequestMapping(value = "/site/{id}/shifts", method = RequestMethod.GET)
-	public List<ShiftDTO> getShifts(@PathVariable long id) {
-		return siteService.findSiteShifts(id);
+	@RequestMapping(value = "/site/{id}/shifts/{date}", method = RequestMethod.GET)
+	public List<ShiftDTO> getShifts(@PathVariable("id") long id, @PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd") Date date) {
+		return siteService.findShifts(id, date);
 	}
 
 	@RequestMapping(value = "/site/search",method = RequestMethod.POST)

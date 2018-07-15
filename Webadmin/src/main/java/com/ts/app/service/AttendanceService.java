@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -26,6 +27,7 @@ import com.ts.app.domain.Attendance;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.Setting;
 import com.ts.app.domain.Shift;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
@@ -34,9 +36,11 @@ import com.ts.app.domain.UserRoleEnum;
 import com.ts.app.ext.api.FaceRecognitionService;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.AmazonS3Utils;
+import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.MapperUtil;
@@ -86,6 +90,9 @@ public class AttendanceService extends AbstractService {
 
 	@Inject
 	private ReportUtil reportUtil;
+	
+	@Inject
+	private SettingsRepository settingRepository;
 
     @Inject
     private Environment env;
@@ -113,7 +120,10 @@ public class AttendanceService extends AbstractService {
         }
         dbAttn.setLatitudeOut(attn.getLatitudeOut());
         dbAttn.setLongitudeOut(attn.getLongitudeOut());
-
+        dbAttn.setOffline(attnDto.isOffline());
+        if(dbAttn.isOffline()){
+            dbAttn.setCheckOutTime(DateUtil.convertToTimestamp(attnDto.getCheckOutTime()));
+        }
         findShiftTiming(false, attnDto, dbAttn);
 
         dbAttn = attendanceRepository.save(dbAttn);
@@ -247,7 +257,7 @@ public class AttendanceService extends AbstractService {
 		sc.setCheckInDateTimeTo(endCal.getTime());
 		log.debug("seach criteria"+" - " +sc.getEmployeeEmpId()+" - " +sc.getSiteId()+" - " +sc.getCheckInDateTimeFrom()+" - " +sc.getCheckInDateTimeTo());
 		SearchResult<AttendanceDTO> result = findBySearchCrieria(sc);
-		if(result == null || CollectionUtils.isEmpty(result.getTransactions())) {
+		//if(result == null || CollectionUtils.isEmpty(result.getTransactions())) {
 		    log.debug("no transactions" + attnDto.getEmployeeEmpId());
 			Employee emp = employeeRepository.findByEmpId(attnDto.getEmployeeEmpId());
 			Site site = siteRepository.findOne(attnDto.getSiteId());
@@ -255,6 +265,10 @@ public class AttendanceService extends AbstractService {
 			attn.setEmployee(emp);
 			attn.setLatitudeIn(attnDto.getLatitudeIn());
 			attn.setLongitudeIn(attnDto.getLongitudeIn());
+			attn.setOffline(attnDto.isOffline());
+			if(attn.isOffline()){
+			    attn.setCheckInTime(DateUtil.convertToTimestamp(attnDto.getCheckInTime()));
+            }
 			log.debug("attendance employee details"+attn.getEmployee().getId());
 			Calendar now = Calendar.getInstance();
 			attn.setCheckInTime(new java.sql.Timestamp(now.getTimeInMillis()));
@@ -270,10 +284,43 @@ public class AttendanceService extends AbstractService {
             }
             //mark the shift timings
             findShiftTiming(true,attnDto, attn);
+    			if(result != null && !CollectionUtils.isEmpty(result.getTransactions())) {
+    				List<AttendanceDTO> attns =  result.getTransactions();
+    	            if(CollectionUtils.isNotEmpty(attns)) {
+    	                AttendanceDTO prevAttnDto = attns.get(0);
+    	                Attendance prevAttn = attendanceRepository.findOne(prevAttnDto.getId());
+    	                Hibernate.initialize(prevAttn.getSite());
+    	                Hibernate.initialize(prevAttn.getEmployee());
+    	                attn.setContinuedAttendance(prevAttn);
+    	            }
+    	            
+    			}else {
+    				attn.setContinuedAttendance(null);
+    			}
 
+    			List<Setting> settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_GRACE_TIME, attnDto.getSiteId());
+    			if(CollectionUtils.isNotEmpty(settings)) {
+    				Setting setting = settings.get(0);
+    				int graceTime = Integer.parseInt(setting.getSettingValue());
+    				String shiftStartTime = attn.getShiftStartTime();
+    				if(org.apache.commons.lang3.StringUtils.isNotEmpty(shiftStartTime)) {
+    					String[] startTimeUnits = shiftStartTime.split(":");
+    					Calendar shiftGraceTimeCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+    					shiftGraceTimeCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
+    					shiftGraceTimeCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
+    					shiftGraceTimeCal.set(Calendar.SECOND, 0);
+    					shiftGraceTimeCal.set(Calendar.MILLISECOND, 0);
+    					shiftGraceTimeCal.add(Calendar.MINUTE, graceTime);
+    					if(shiftGraceTimeCal.before(now)) {
+    						attn.setLate(true); //mark late attendance if the checkin time is 
+    					}
+    				}
+    			}
+    			
 			attn = attendanceRepository.save(attn);
 			log.debug("Attendance marked: {}", attn);
 			attnDto = mapperUtil.toModel(attn, AttendanceDTO.class);
+		/*
 		}else {
             List<AttendanceDTO> attns =  result.getTransactions();
             if(CollectionUtils.isNotEmpty(attns)) {
@@ -282,6 +329,7 @@ public class AttendanceService extends AbstractService {
             log.debug("Attendance already marked: {}", attnDto);
 
 		}
+		*/
 		return attnDto;
 	}
 
@@ -377,6 +425,42 @@ public class AttendanceService extends AbstractService {
 		return mapperUtil.toModelList(transactions, AttendanceDTO.class);
 	}
 
+	public List<AttendanceDTO> findEmpCheckInInfo(SearchCriteria searchCriteria) {
+		log.debug("search Criteria", searchCriteria);
+		List<AttendanceDTO> attnDtos = new ArrayList<AttendanceDTO>();
+		List<Attendance> transactions = null;
+		if (searchCriteria != null) {
+
+			Calendar startCal = Calendar.getInstance();
+			startCal.set(Calendar.HOUR_OF_DAY, 0);
+			startCal.set(Calendar.MINUTE, 0);
+			startCal.set(Calendar.SECOND, 0);
+			Calendar endCal = Calendar.getInstance();
+			endCal.set(Calendar.HOUR_OF_DAY, 23);
+			endCal.set(Calendar.MINUTE, 59);
+			endCal.set(Calendar.SECOND, 0);
+			searchCriteria.setCheckInDateTimeFrom(startCal.getTime());
+			searchCriteria.setCheckInDateTimeTo(endCal.getTime());
+			Long employeeId = searchCriteria.getEmployeeId();
+			java.sql.Date startDate = new java.sql.Date(searchCriteria.getCheckInDateTimeFrom().getTime());
+			java.sql.Date toDate = new java.sql.Date(searchCriteria.getCheckInDateTimeTo().getTime());
+			transactions = attendanceRepository.findBySiteIdEmpId(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getEmployeeEmpId());
+		}
+		if(CollectionUtils.isNotEmpty(transactions)) {
+			for(Attendance attn : transactions) {
+				AttendanceDTO attnDto = new AttendanceDTO();
+				attnDto.setNotCheckedOut(attn.isNotCheckedOut());
+				attnDto.setId(attn.getId());
+				Site site = attn.getSite();
+				attnDto.setSiteId(site.getId());
+				attnDto.setSiteName(site.getName());
+				attnDtos.add(attnDto);
+			}
+		}
+		//return mapperUtil.toModelList(transactions, AttendanceDTO.class);
+		return attnDtos;
+	}
+
 	public String getAttendanceImage(long id, String empId) {
 		String attendanceBase64 = null;
 		Attendance attendance = attendanceRepository.findOne(id);
@@ -387,6 +471,23 @@ public class AttendanceService extends AbstractService {
 
 	}
 
+	public AttendanceDTO findCurrentCheckInByEmpId(long empId) {
+		AttendanceDTO attnDto = null;
+		Calendar startCal = Calendar.getInstance();
+		startCal.set(Calendar.HOUR_OF_DAY, 0);
+		startCal.set(Calendar.MINUTE, 0);
+		startCal.set(Calendar.SECOND, 0);
+		Calendar endCal = Calendar.getInstance();
+		endCal.set(Calendar.HOUR_OF_DAY, 23);
+		endCal.set(Calendar.MINUTE, 59);
+		endCal.set(Calendar.SECOND, 0);
+		Attendance attn = attendanceRepository.findCurrentCheckIn(empId, DateUtil.convertToSQLDate(startCal.getTime()), DateUtil.convertToSQLDate(endCal.getTime()));
+		if(attn != null) {
+			attnDto = mapperUtil.toModel(attn, AttendanceDTO.class);
+		}
+		return attnDto;
+	}
+	
 	public AttendanceDTO findOne(Long attnId) {
 		Attendance entity = attendanceRepository.findOne(attnId);
 		return mapperUtil.toModel(entity, AttendanceDTO.class);
@@ -557,7 +658,7 @@ public class AttendanceService extends AbstractService {
 		if (CollectionUtils.isNotEmpty(transactions)) {
 			for (AttendanceDTO attn : transactions) {
 				EmployeeAttendanceReport reportData = new EmployeeAttendanceReport(attn.getEmployeeId(), attn.getEmployeeEmpId(), attn.getEmployeeFullName(), null,
-						attn.getSiteName(), null, attn.getCheckInTime(), attn.getCheckOutTime(), attn.getShiftStartTime(), attn.getShiftEndTime());
+						attn.getSiteName(), null, attn.getCheckInTime(), attn.getCheckOutTime(), attn.getShiftStartTime(), attn.getShiftEndTime(), attn.getContinuedAttendanceId(), attn.isLate());
 				attendanceReportList.add(reportData);
 			}
 		}

@@ -12,9 +12,9 @@ public class FeedbackMappingDTO extends BaseDTO implements Serializable {
     private long siteId;
 
     private String siteName;
-    
+
     private long projectId;
-    
+
     private String projectName;
 
     private FeedbackDTO feedback;

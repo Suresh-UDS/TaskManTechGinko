@@ -23,6 +23,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ts.app.config.Constants;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
@@ -102,7 +103,7 @@ public class TicketManagementService extends AbstractService {
 
 	@Inject
 	private ExportUtil exportUtil;
-	
+
 	@Inject
 	private FileUploadHelper fileUploadHelper;
 	
@@ -118,7 +119,6 @@ public class TicketManagementService extends AbstractService {
 	@Value("${AWS.s3-ticket-path}")
 	private String ticketFilePath;
 	
-
     public TicketDTO saveTicket(TicketDTO ticketDTO){
     		User user = userRepository.findOne(ticketDTO.getUserId());
         Ticket ticket = mapperUtil.toEntity(ticketDTO,Ticket.class);
@@ -159,7 +159,7 @@ public class TicketManagementService extends AbstractService {
         if(employee == null) {
         		employee = user.getEmployee();
         }
-        
+
         if(employee != null) {
         		sendNotifications(employee, ticket, site, true);
         }
@@ -167,6 +167,24 @@ public class TicketManagementService extends AbstractService {
         return ticketDTO;
 
     }
+
+    public void updateTicketPendingStatus(TicketDTO ticketDTO){
+
+        Ticket ticket = ticketRepository.findOne(ticketDTO.getId());
+        if(ticketDTO.isPendingAtUDS()){
+            ticket.setPendingAtUDS(true);
+            ticket.setPendingAtClient(false);
+        }else if(ticketDTO.isPendingAtClient()){
+            ticket.setPendingAtClient(true);
+            ticket.setPendingAtUDS(false);
+        }else{
+            ticket.setPendingAtUDS(false);
+            ticket.setPendingAtClient(false);
+        }
+        ticketRepository.saveAndFlush(ticket);
+
+    }
+
 
     public TicketDTO updateTicket(TicketDTO ticketDTO){
     		User user = userRepository.findOne(ticketDTO.getUserId());
@@ -205,9 +223,17 @@ public class TicketManagementService extends AbstractService {
         		ticket.setClosedBy(user.getEmployee());
         		ticket.setClosedOn(new java.sql.Date(currCal.getTimeInMillis()));
         }
-        
-        if(StringUtils.isNotEmpty(ticketDTO.getStatus()) && (ticketDTO.getStatus().equalsIgnoreCase("Reopen"))) { 
+
+        if(StringUtils.isNotEmpty(ticketDTO.getStatus()) && (ticketDTO.getStatus().equalsIgnoreCase("Reopen"))) {
         		ticket.setStatus(TicketStatus.OPEN.toValue());
+        }
+
+        if(ticketDTO.isPendingAtUDS()){
+            ticket.setPendingAtUDS(ticketDTO.isPendingAtUDS());
+        }
+
+        if(ticketDTO.isPendingAtClient()){
+            ticket.setPendingAtClient(ticketDTO.isPendingAtClient());
         }
 
         ticket = ticketRepository.saveAndFlush(ticket);
@@ -343,7 +369,7 @@ public class TicketManagementService extends AbstractService {
 	        				}
 	        			}
 	        		}
-            	
+
             		Employee employee = user.getEmployee();
             		List<EmployeeProjectSite> sites = employee.getProjectSites();
             		List<Long> siteIds = new ArrayList<Long>();
@@ -362,7 +388,7 @@ public class TicketManagementService extends AbstractService {
                 if(searchCriteria.getSiteId() > 0) {
                 		if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
                 			if(hasViewAll) {
-                				page = ticketRepository.findBySiteIdAndStatus(searchCriteria.getSiteId(), searchCriteria.getTicketStatus(), startDate, endDate,pageRequest);	
+                				page = ticketRepository.findBySiteIdAndStatus(searchCriteria.getSiteId(), searchCriteria.getTicketStatus(), startDate, endDate,pageRequest);
                 			}else {
                 				page = ticketRepository.findBySiteIdStatusAndEmpId(searchCriteria.getSiteId(), searchCriteria.getTicketStatus(),searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
                 			}
@@ -383,7 +409,7 @@ public class TicketManagementService extends AbstractService {
 	            		}else {
 	            			if(hasViewAll) {
 	            				page = ticketRepository.findByProjectId(searchCriteria.getProjectId(), startDate, endDate, pageRequest);
-	            			} else {	
+	            			} else {
 	            				page = ticketRepository.findByProjectIdAndEmpId(searchCriteria.getProjectId(), searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
 	            			}
 	            		}
@@ -431,7 +457,7 @@ public class TicketManagementService extends AbstractService {
 		User user = employee.getUser();
 		String ticketUrl = env.getProperty("url.ticket-view");
 		ticketUrl +=  ticket.getId();
-		Setting ticketReports = null; 
+		Setting ticketReports = null;
 		List<Setting> settings = settingsRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_TICKET, site.getId(), site.getProject().getId());
 		if(CollectionUtils.isNotEmpty(settings)) {
 			ticketReports = settings.get(0);
@@ -440,10 +466,13 @@ public class TicketManagementService extends AbstractService {
 		if(ticketReports != null && ticketReports.getSettingValue().equalsIgnoreCase("true")) {
 			settings = settingsRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_TICKET_EMAILS, site.getId(), site.getProject().getId());
 			if(CollectionUtils.isNotEmpty(settings)) {
-				ticketReports = settings.get(0);
+				ticketReportEmails = settings.get(0);
 			}
 		}
 	    String ticketEmails = (user != null ? user.getEmail() : "");
+	    if(StringUtils.isNotEmpty(ticketEmails)) {
+	    		ticketEmails += Constants.COMMA_SEPARATOR;
+	    }
 	    ticketEmails += ticketReportEmails != null ? ticketReportEmails.getSettingValue() : "";
 	    if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Open") || ticket.getStatus().equalsIgnoreCase("Assigned"))) {
 	    		if(isNew) {
@@ -504,7 +533,7 @@ public class TicketManagementService extends AbstractService {
         ticketDTO.setUrl(ticketDTO.getUrl());
 		return ticketDTO;
 	}
-	
+
 	public String getTicketImage(long ticketId, String imageId) {
         String fileUrl = null;
         log.debug("Ticket Image service"+ticketId+" "+imageId);

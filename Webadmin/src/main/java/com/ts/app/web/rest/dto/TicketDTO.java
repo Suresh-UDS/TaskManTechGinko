@@ -32,34 +32,39 @@ public class TicketDTO extends BaseDTO {
     private String zone;
 
     private long jobId;
-    
+
     private String quotationId;
 
     private String jobName;
 
     private String severity;
-    
+
     private long assignedToId;
-    
+
     private String assignedToName;
-    
+
     private Date assignedOn;
-    
+
     private long closedById;
-    
+
     private String closedByName;
-    
+
     private Date closedOn;
-    
+
     private String comments;
-    
+
     private String category;
-    
+
     private String image;
-    
+
     private MultipartFile imageFile;
     
     private String url;
+
+    private boolean pendingAtUDS;
+
+    private boolean pendingAtClient;
+
 
     public long getId() {
         return id;
@@ -285,6 +290,19 @@ public class TicketDTO extends BaseDTO {
 		this.url = url;
 	}
 
-	
-    
+    public boolean isPendingAtClient() {
+        return pendingAtClient;
+    }
+
+    public void setPendingAtClient(boolean pendingAtClient) {
+        this.pendingAtClient = pendingAtClient;
+    }
+
+    public boolean isPendingAtUDS() {
+        return pendingAtUDS;
+    }
+
+    public void setPendingAtUDS(boolean pendingAtUDS) {
+        this.pendingAtUDS = pendingAtUDS;
+    }
 }

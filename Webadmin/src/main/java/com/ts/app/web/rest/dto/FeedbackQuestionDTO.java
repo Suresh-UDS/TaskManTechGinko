@@ -15,9 +15,13 @@ public class FeedbackQuestionDTO extends BaseDTO implements Serializable {
 
     private FeedbackAnswerType answerType;
 
+    private boolean remarksRequired;
+
     private String scoreType;
-    
+
     private String image;
+
+    private String remarks;
 
     public long getId() {
         return id;
@@ -61,4 +65,19 @@ public class FeedbackQuestionDTO extends BaseDTO implements Serializable {
 	}
 
 
+    public boolean isRemarksRequired() {
+        return remarksRequired;
+    }
+
+    public void setRemarksRequired(boolean remarksRequired) {
+        this.remarksRequired = remarksRequired;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
 }

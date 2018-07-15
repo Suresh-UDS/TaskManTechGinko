@@ -11,6 +11,9 @@ import {componentService} from "../service/componentService";
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
 import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
+import{ModalController} from "ionic-angular";
+import{Checklist} from "../checklist/checklist";
+
 @Component({
     selector: 'page-complete-job',
     templateUrl: 'completeJob.html'
@@ -43,7 +46,7 @@ export class CompleteJobPage {
 
     constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService, @Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
                 private loadingCtrl:LoadingController, public camera: Camera,private geolocation:Geolocation, private jobService: JobService,
-                private attendanceService: AttendanceService,public popoverCtrl: PopoverController, private component:componentService,private transfer: FileTransfer, private file: File) {
+                private attendanceService: AttendanceService,public popoverCtrl: PopoverController, private component:componentService,private transfer: FileTransfer, private file: File,private modalCtrl:ModalController) {
         this.jobDetails=this.navParams.get('job');
         this.takenImages = [];
         this.checkOutDetails={
@@ -67,20 +70,30 @@ export class CompleteJobPage {
         )
         */
 
+
+
+    }
+
+    ionViewDidLoad() {
+        this.component.showLoader('Loading Job Details');
         this.jobService.getJobDetails(this.jobDetails.id).subscribe(
             response=>{
+                this.component.closeLoader();
                 console.log("Response on job details");
                 console.log(response);
                 this.jobDetails = response;
                 if(response.images.length>0){
+                    this.component.showLoader('Getting saved images');
                     console.log("Images available");
                     this.completedImages=[];
                     for(let image of response.images){
                         this.jobService.getCompletedImage(image.employeeEmpId,image.photoOut).subscribe(
                             imageData=>{
+                                this.component.closeLoader();
                                 console.log(imageData);
                                 this.completedImages.push(imageData._body);
                             },err=>{
+                                this.component.closeLoader();
                                 console.log("Error in getting images");
                                 console.log(err);
                             }
@@ -89,17 +102,12 @@ export class CompleteJobPage {
 
                 }
             },error=>{
+                this.component.closeLoader();
                 console.log("Error in getting job details");
                 console.log(error);
                 this.component.showToastMessage("Errror in getting job details","bottom");
             }
         )
-
-    }
-
-    ionViewDidLoad() {
-        console.log(this.jobDetails);
-        console.log(this.jobDetails.checklistItems);
     }
     viewImage(index,img)
     {
@@ -158,7 +166,7 @@ export class CompleteJobPage {
                 console.log("Save Job response");
                 this.component.closeLoader();
                 this.component.showToastMessage('Job Saved Successfully','bottom');
-                console.log(response)
+                console.log(response);
                 console.log(job.checkInOutId);
                 if(this.takenImages.length>0){
                     this.component.showLoader('Uploading Images');
@@ -170,11 +178,11 @@ export class CompleteJobPage {
                     this.checkOutDetails.id=job.checkInOutId;
                     this.jobService.updateJobImages(this.checkOutDetails).subscribe(
                         response=>{
-                            this.component.closeLoader();
+                            // this.component.closeLoader();
                             console.log("complete job response");
                             console.log(response);
                             console.log(job);
-                            this.component.showToastMessage('Job Completed Successfully','bottom');
+                            // this.component.showToastMessage('Job Completed Successfully','bottom');
                             // this.component.showLoader('Uploading Images');
                             //TODO
                             //File Upload after successful checkout
@@ -235,8 +243,12 @@ export class CompleteJobPage {
 
                         },err=>{
                             this.component.closeLoader();
+                            // this.navCtrl.pop();
                         }
                     )
+                }else{
+                    this.component.closeAll();
+                    this.navCtrl.pop();
                 }
             },err=>{
                 console.log("Error in saving response");
@@ -363,5 +375,15 @@ export class CompleteJobPage {
     call()
     {
 
+    }
+
+
+    presentCheckListModal(checkListItems) {
+        let profileModal = this.modalCtrl.create(Checklist, {checkListItems:checkListItems});
+        profileModal.onDidDismiss(data => {
+            console.log(data);
+            this.jobDetails.checkListItems = data;
+        });
+        profileModal.present();
     }
 }

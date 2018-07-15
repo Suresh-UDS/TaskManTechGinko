@@ -42,6 +42,12 @@ public class FeedbackTransactionResult extends AbstractAuditingEntity implements
     @Column(name = "score_type")
     private String scoreType;
 
+    @Column(name="remarks_required")
+    private boolean remarksRequired;
+
+    @Column(name = "remarks")
+    private String remarks;
+
     @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "feedback_transaction_id", referencedColumnName = "id")
     private FeedbackTransaction feedbackTransaction;
@@ -94,5 +100,21 @@ public class FeedbackTransactionResult extends AbstractAuditingEntity implements
 
     public void setScoreType(String scoreType) {
         this.scoreType = scoreType;
+    }
+
+    public boolean isRemarksRequired() {
+        return remarksRequired;
+    }
+
+    public void setRemarksRequired(boolean remarksRequired) {
+        this.remarksRequired = remarksRequired;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 }
