@@ -229,7 +229,7 @@
                                 <td>
                                 {{attendance.checkInTime | date:'dd/MM/yyyy @ h:mma'}}
                                 <br/>
-                                <label ng-show="{{attendance.late}}">Late</label>
+                                <label ng-show="attendance.late">Late</label>
                                 </td>
                                 <td ng-if="attendance.checkInImage">
                                     <a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkInImage,attendance.employeeId)">
@@ -251,7 +251,7 @@
                                     <img src="assets/img/user.png" width="30px" height="30px"/>
                                 </td>
 
-                                <td>{{attendance.shift}}</td>
+                                <td>{{attendance.shiftStartTime}} - {{attendance.shiftEndTime}}</td>
                                 <td align="center">
                                     <a id="maps" href="#" ng-click="newInitMap('mapIn',attendance.latitudeIn, attendance.longitudeIn, 'mapOut', attendance.latitudeOut, attendance.longitudeOut)" onClick="$('#mapModal').modal()" data-target="#mapModal" >
                                         <img src="assets/img/map-icon-2-1.jpg" width="30px" height="30px" />
