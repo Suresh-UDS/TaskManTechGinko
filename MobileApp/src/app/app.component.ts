@@ -35,8 +35,6 @@ import{JobFilter} from "../pages/jobs/job-filter/job-filter";
 import{TicketFilter} from "../pages/ticket/ticket-filter/ticket-filter";
 import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-filter";
 import {authService} from "../pages/service/authService";
-import {ForgotPassword} from "../pages/forgot-password/forgot-password";
-import {Network} from "@ionic-native/network";
 
 @Component({
   templateUrl: 'app.html'
@@ -52,7 +50,7 @@ export class MyApp {
 
   pages: Array<{title: string, component: any,active:any,icon:any,permission:any}>;
 
-  constructor(private ionicApp: IonicApp,public menuCtrl:MenuController,public platform: Platform,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion, private authService:authService,private network:Network) {
+  constructor(public platform: Platform,private ionicApp: IonicApp,public menuCtrl:MenuController,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion, private authService:authService) {
     this.initializeApp();
       this.events.subscribe('permissions:set',(permission)=>{
           console.log("Event permission in component");
@@ -69,24 +67,41 @@ export class MyApp {
       );
 
 
-      // platform.registerBackButtonAction(() => {
-      //     let view = this.nav.getActive();
-      //     console.log("Back button event");
-      //     console.log(view);
-      //     console.log(this.nav.canGoBack());
-      //     if(this.nav.canGoBack())
-      //     {
-      //           this.nav.pop();
-      //     }
-      //     else if (this.counter == 0) {
-      //         this.counter++;
-      //         this.component.showToastMessage('Press again to exit','center');
-      //         setTimeout(() => { this.counter = 0 }, 3000)
-      //     } else {
-      //         // console.log("exitapp");
-      //         platform.exitApp();
-      //     }
-      // }, 0);
+          this.oneSignal.startInit('be468c76-586a-4de1-bd19-fc6d9512e5ca','1088177211637');
+          this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);
+          this.oneSignal.handleNotificationReceived().subscribe(response=>{
+              console.log("Notification received");
+              console.log(JSON.stringify(response))
+
+
+          });
+          this.oneSignal.handleNotificationOpened().subscribe(response=> {
+              console.log("Notification Opened")
+              console.log(JSON.stringify(response))
+              this.pushEvent=response.notification.payload.additionalData.event;
+              if(this.pushEvent=='assign_driver')
+              {
+                  this.nav.setRoot(TabsPage,{event:this.pushEvent})
+              }
+              else if(this.pushEvent=='cancel_booking')
+              {
+                  this.nav.setRoot(TabsPage,{event:this.pushEvent})
+              }
+          });
+
+          this.oneSignal.getIds().then(
+              response=>{
+                  console.log("Push Subscription response - get Ids");
+                  console.log(response);
+                      this.registerForPush("android",response.pushToken,response.userId);
+              }
+          );
+
+
+          this.oneSignal.endInit();
+
+
+
 
 
       platform.registerBackButtonAction(() => {
@@ -108,14 +123,6 @@ export class MyApp {
           }
           else if(this.ionicApp._modalPortal.getActive())
           {
-              this.nav.pop();
-          }
-          else if(this.menuCtrl.isOpen())
-          {
-              this.menuCtrl.close();
-          }
-          else if(this.ionicApp._modalPortal.getActive())
-          {
               this.ionicApp._modalPortal.getActive().dismiss();
           }
           else if (this.counter == 0) {
@@ -127,7 +134,6 @@ export class MyApp {
               platform.exitApp();
           }
       }, 0);
-
 
     // used for an example of ngFor and navigation
     this.pages = [
@@ -144,7 +150,6 @@ export class MyApp {
        { title: 'Feedback', component: InitFeedbackPage,active:false,icon:'feedback',permission:'FeedbackList'},
         {title:'Splash page', component:Splash,active:false,icon:'feedback',permission:'DashboardList'},
         {title:'Splash logo', component:SplashLogo,active:false,icon:'feedback',permission:'DashboardList'},
-       // { title: 'Forgot Password', component: ForgotPassword,active:false,icon:'feedback',permission:'FeedbackList'},
       // { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},
       // { title: 'Logout', component: LogoutPage,active:false,icon:'power_settings_new'}
     ];
@@ -173,59 +178,17 @@ export class MyApp {
      // this.statusBar.overlaysWebView(true);
      // this.statusBar.backgroundColorByHexString("#25312C");
 
-
-        this.oneSignal.startInit('be468c76-586a-4de1-bd19-fc6d9512e5ca','1088177211637');
+        this.oneSignal.startInit('647127c6-f890-4aad-b4e2-52379805f26c','1015991031299');
         this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);
-        this.oneSignal.handleNotificationReceived().subscribe(response=>{
-            console.log("Notification received");
-            console.log(JSON.stringify(response))
+        this.oneSignal.handleNotificationReceived().subscribe(response =>{
+            console.log(response);
+        })
 
-
-        });
-        this.oneSignal.handleNotificationOpened().subscribe(response=> {
-            console.log("Notification Opened")
-            console.log(JSON.stringify(response))
-            this.pushEvent=response.notification.payload.additionalData.event;
-            if(this.pushEvent=='assign_driver')
-            {
-                this.nav.setRoot(TabsPage,{event:this.pushEvent})
-            }
-            else if(this.pushEvent=='cancel_booking')
-            {
-                this.nav.setRoot(TabsPage,{event:this.pushEvent})
-            }
-        });
-
-        this.oneSignal.getIds().then(
-            response=>{
-                console.log("Push Subscription response - get Ids");
-                console.log(response);
-                this.registerForPush("android",response.pushToken,response.userId);
-            }
-        );
-
+        this.oneSignal.handleNotificationOpened().subscribe(response=>{
+            console.log(response);
+        })
 
         this.oneSignal.endInit();
-
-
-        let disconnectSubscription  = this.network.onDisconnect().subscribe(
-            ()=>{
-                console.log('Network Disconnected:-(');
-                this.events.publish('isOnline','no');
-
-            }
-        );
-
-
-        let connectSubscription = this.network.onConnect().subscribe(
-            ()=>{
-                console.log('Network connected :-)');
-                this.events.publish('isOnline','yes');
-            }
-        );
-
-
-
     });
   }
 

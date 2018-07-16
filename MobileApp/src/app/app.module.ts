@@ -61,8 +61,7 @@ import { File } from '@ionic-native/file';
 import{TicketFilter} from "../pages/ticket/ticket-filter/ticket-filter";
 
 import {SQLitePorter} from "@ionic-native/sqlite-porter";
-import {ForgotPassword} from "../pages/forgot-password/forgot-password";
-import { Network } from '@ionic-native/network';
+
 import {CreateEmployeePage} from "../pages/employee-list/create-employee";
 import {OneSignal} from "@ionic-native/onesignal";
 // import {GoogleMaps} from "@ionic-native/google-maps";
@@ -99,6 +98,7 @@ import {AssetFilter} from "../pages/asset-list/asset-filter";
 import {AssetView} from "../pages/asset-view/asset-view";
 import {QRScanner} from "@ionic-native/qr-scanner";
 import {ScanQRAsset} from "../pages/asset-list/scanQR-asset";
+import {ScanQR} from "../pages/jobs/scanQR";
 import {IonicImageViewerModule} from "ionic-img-viewer";
 import {DatePicker} from "@ionic-native/date-picker";
 import{GetAssetReading} from "../pages/asset-view/get-asset-reading";
@@ -108,15 +108,11 @@ import{CalenderPage} from "../pages/calender-page/calender-page";
 import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-filter";
 import {JobFilter} from "../pages/jobs/job-filter/job-filter";
 import{SQLite,SQLiteObject} from "@ionic-native/sqlite";
-import {OfflineAttendance} from "../pages/employee/offline-attendance";
-import {Diagnostic} from "@ionic-native/diagnostic";
-import {LocationAccuracy} from "@ionic-native/location-accuracy";
-import {Market} from "@ionic-native/market";
-import {UpdateApp} from "../pages/update-app/update-app";
-import {ScanQR} from "../pages/jobs/scanQR";
 import {DBService} from "../pages/service/dbService";
-import {OfflineAttendanceSites} from "../pages/employee/offline-attendance-sites";
-import{Checklist} from "../pages/checklist/checklist";
+import {Network} from "@ionic-native/network";
+import {Diagnostic} from "@ionic-native/diagnostic";
+import {Market} from "@ionic-native/market";
+
 
 @NgModule({
   declarations: [
@@ -140,12 +136,12 @@ import{Checklist} from "../pages/checklist/checklist";
     QuotationViewPage,
     QuotationImagePopoverPage,
     CreateQuotationPage,
-    CreateQuotationPage2,
-    ApprovedQuotationPage,
-    DraftedQuotationPage,
-    SubmittedQuotationPage,
-    ArchivedQuotationPage,
-    ViewQuotationPage,
+      CreateQuotationPage2,
+      ApprovedQuotationPage,
+      DraftedQuotationPage,
+      SubmittedQuotationPage,
+      ArchivedQuotationPage,
+      ViewQuotationPage,
     AttendancePage,
     AttendancePopoverPage,
     EmployeeDetailPage,
@@ -157,8 +153,8 @@ import{Checklist} from "../pages/checklist/checklist";
     CreateRateCardPage,
     CreateJobPage,
     CompleteJobPage,
-    IonSimpleWizardStep,
-    IonSimpleWizard,
+      IonSimpleWizardStep,
+      IonSimpleWizard,
     CreateQuotationPage3,
     CreateEmployeePage,
     FeedbackPage,
@@ -179,7 +175,9 @@ import{Checklist} from "../pages/checklist/checklist";
       AssetList,
       AssetView,
       AssetFilter,
+      ScanQRAsset,
       ScanQR,
+      ScanQRAsset,
       JobFilter,
       TicketFilter,
       Splash,
@@ -188,14 +186,6 @@ import{Checklist} from "../pages/checklist/checklist";
       GetAssetReading,
       GetAssetReadings,
       CalenderPage,
-    ForgotPassword,
-    OfflineAttendance,
-    SplashLogo,
-    UpdateApp,
-    ScanQR,
-      ScanQRAsset,
-    OfflineAttendanceSites,
-      Checklist
   ],
   imports: [
     BrowserModule,
@@ -232,12 +222,12 @@ import{Checklist} from "../pages/checklist/checklist";
     QuotationImagePopoverPage,
     QuotationViewPage,
     CreateQuotationPage,
-    CreateQuotationPage2,
-    ApprovedQuotationPage,
-    DraftedQuotationPage,
-    SubmittedQuotationPage,
-    ArchivedQuotationPage,
-    ViewQuotationPage,
+      CreateQuotationPage2,
+      ApprovedQuotationPage,
+      DraftedQuotationPage,
+      SubmittedQuotationPage,
+      ArchivedQuotationPage,
+      ViewQuotationPage,
     AttendancePage,
     AttendancePopoverPage,
     EmployeeDetailPage,
@@ -248,9 +238,9 @@ import{Checklist} from "../pages/checklist/checklist";
     RateCardPage,
     CreateRateCardPage,
     CreateJobPage,
-    CompleteJobPage,
-    IonSimpleWizardStep,
-    IonSimpleWizard,
+      CompleteJobPage,
+      IonSimpleWizardStep,
+      IonSimpleWizard,
     CreateQuotationPage3,
     CreateEmployeePage,
     FeedbackPage,
@@ -258,8 +248,15 @@ import{Checklist} from "../pages/checklist/checklist";
     InitFeedbackPage,
     FeedbackGridPage,
     JobPopoverPage,
-    FeedbackZone,
+      FeedbackZone,
     FeedbackDashboardPage,
+      SelectFeedbackPage,
+      InitFeedbackZone,
+      FeedbackQuestionsForm,
+      WizardFeedbackEntry,
+      Ticket,
+      CreateTicket,
+      ViewTicket,
       AssetView,
       AssetList,
       AssetFilter,
@@ -273,21 +270,9 @@ import{Checklist} from "../pages/checklist/checklist";
       ScanQRAsset,
       GetAssetReadings,
       CalenderPage,
-    SelectFeedbackPage,
-    InitFeedbackZone,
-    FeedbackQuestionsForm,
-    WizardFeedbackEntry,
-    Ticket,
-    CreateTicket,
-    ViewTicket,
-    ForgotPassword,
-    OfflineAttendance,
-    SplashLogo,
-    UpdateApp,
-    ScanQR,
-      ScanQRAsset,
-    OfflineAttendanceSites,
-      Checklist
+
+
+
   ],
   providers: [
     StatusBar,
@@ -305,13 +290,14 @@ import{Checklist} from "../pages/checklist/checklist";
     authService,
     HttpClient,
     Geolocation,
-    BackgroundMode,
+      BackgroundMode,
     Geofence,
-    // GoogleMaps,
-    Toast,
-    OneSignal,
+      // GoogleMaps,
+      Toast,
+      OneSignal,
     componentService,
-    BatteryStatus,
+      OneSignal,
+      BatteryStatus,
     Toast,
     FileTransfer,
     File,
@@ -321,14 +307,8 @@ import{Checklist} from "../pages/checklist/checklist";
       FabContainer,
       Diagnostic,
       SQLite,
-    AppVersion,
-    Network,
-    SQLite,
-    Diagnostic,
-    LocationAccuracy,
-    Market,
-    QRScanner,
-    DBService,
+      Network,
+      Market,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]
