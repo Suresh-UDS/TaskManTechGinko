@@ -244,8 +244,9 @@
                                         </span>
                                     </span>
                                 </th> -->
-
-                                <th class="disabled-sorting text-right">Actions</th>
+                                <th class="disabled-sorting">Category</th>
+                                <th class="disabled-sorting">Schedule</th>
+                                <th class="disabled-sorting">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -257,7 +258,9 @@
                                 <td><label ng-bind="job.plannedStartTime | date:'dd-MMM-yyyy hh:mm a'"/></td>
                                 <td><label ng-bind="job.actualEndTime | date:'dd-MMM-yyyy hh:mm a'"/></td>
                                 <td>{{job.status}}</td>
-
+                                <td>{{job.jobType}}</td>
+								<td>{{job.schedule}}</td>
+                                <td class="text-right">
 
                                 <td class="text-right hoverMe">
 

@@ -11,6 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import com.ts.app.domain.util.StringUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -45,6 +46,11 @@ public class JobSpecification implements Specification<Job> {
             log.debug("JobSpecification toPredicate - searchCriteria siteId -"+ searchCriteria.getSiteId());
             if(searchCriteria.getSiteId()!=0){
                     predicates.add(builder.equal(root.get("site").get("id"),  searchCriteria.getSiteId()));
+            }
+
+            log.debug("JobSpecification toPredicate - searchCriteria locationId -"+ searchCriteria.getLocationId());
+            if(searchCriteria.getLocationId()!=0){
+                predicates.add(builder.equal(root.get("location").get("id"),  searchCriteria.getLocationId()));
             }
             log.debug("JobSpecification toPredicate - searchCriteria jobstatus -"+ searchCriteria.getJobStatus());
             if(searchCriteria.getJobStatus()!=null){
@@ -95,7 +101,7 @@ public class JobSpecification implements Specification<Job> {
 		            	Date fromDt = DateUtil.convertUTCToIST(checkInDateFrom);
 		            	//String fromDt = DateUtil.formatUTCToIST(checkInDateFrom);
 		            	Calendar checkInDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
-			        	if(searchCriteria.getCheckInDateTimeTo() != null) {
+		            	if(searchCriteria.getCheckInDateTimeTo() != null) {
 			        		checkInDateTo.setTime(searchCriteria.getCheckInDateTimeTo());
 			        	}else {
 			        		checkInDateTo.setTime(checkInDate);

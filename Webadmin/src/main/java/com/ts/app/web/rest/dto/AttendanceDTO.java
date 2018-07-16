@@ -1,13 +1,13 @@
 package com.ts.app.web.rest.dto;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import org.springframework.web.multipart.MultipartFile;
 
 public class AttendanceDTO extends BaseDTO implements Serializable{
 
@@ -20,9 +20,9 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	private Timestamp checkInTime;
+	private Date checkInTime;
 
-	private Timestamp checkOutTime;
+	private Date checkOutTime;
 
 	private String checkInImage;
 
@@ -53,15 +53,21 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
     private String attendanceIn;
 
     private String attendanceOut;
-    
+
 	private String shiftStartTime;
-	
+
 	private String shiftEndTime;
 
 	private boolean notCheckedOut;
 	
 	private String url;
 	
+	private boolean offline;
+
+	private long continuedAttendanceId;
+
+	private boolean late;
+
 	public Long getId() {
 		return id;
 	}
@@ -70,13 +76,6 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
 		this.id = id;
 	}
 
-	public Timestamp getCheckInTime() {
-		return checkInTime;
-	}
-
-	public void setCheckInTime(Timestamp checkInTime) {
-		this.checkInTime = checkInTime;
-	}
 
 	public long getEmployeeId() {
 		return employeeId;
@@ -199,14 +198,6 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
         this.latitudeOut = latitudeOut;
     }
 
-    public Timestamp getCheckOutTime() {
-        return checkOutTime;
-    }
-
-    public void setCheckOutTime(Timestamp checkOutTime) {
-        this.checkOutTime = checkOutTime;
-    }
-
 	public String getShiftStartTime() {
 		return shiftStartTime;
 	}
@@ -239,5 +230,44 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
 		this.url = url;
 	}
     
-    
+    public boolean isOffline() {
+        return offline;
+    }
+
+    public void setOffline(boolean offline) {
+        this.offline = offline;
+    }
+
+	public Date getCheckInTime() {
+		return checkInTime;
+	}
+
+	public void setCheckInTime(Date checkInTime) {
+		this.checkInTime = checkInTime;
+	}
+
+	public Date getCheckOutTime() {
+		return checkOutTime;
+	}
+
+	public void setCheckOutTime(Date checkOutTime) {
+		this.checkOutTime = checkOutTime;
+	}
+
+	public long getContinuedAttendanceId() {
+		return continuedAttendanceId;
+	}
+
+	public void setContinuedAttendanceId(long continuedAttendanceId) {
+		this.continuedAttendanceId = continuedAttendanceId;
+	}
+
+
+    public boolean isLate() {
+        return late;
+    }
+
+    public void setLate(boolean late) {
+        this.late = late;
+    }
 }

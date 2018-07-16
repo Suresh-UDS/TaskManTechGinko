@@ -51,10 +51,28 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 </a>
             </li>
             <li ui-sref-active="active" has-permission="Employee:List">
-                <a ui-sref="employees">
-                    <i class="material-icons">people</i>
-                    <p>Employee</p>
-                </a>
+				<a data-toggle="collapse" data-target="#formsExamples" href="#">
+                    <i class="material-icons">content_paste</i>
+                    <p> Employee
+                        <b class="caret"></b>
+                    </p>
+                </a>            
+                <div class="collapse" id="formsExamples">
+                    <ul class="nav SubNav">
+                        <li ui-sref-active="active" has-permission="Employee:List">
+                            <a ui-sref="employees">
+			                    <i class="material-icons">people</i>
+			                    <p>Master</p>
+			                </a>
+                        </li>
+                        <li ui-sref-active="active" has-permission="Employee:List">
+                            <a ui-sref="employeeShifts">
+			                    <i class="material-icons">alarm</i>
+			                    <p>Shift Details</p>
+			                </a>
+                        </li>
+                    </ul>
+                </div>        
             </li>
             <li ui-sref-active="active" has-permission="Assets:List">
                 <a ui-sref="#" data-toggle="collapse" data-target="#AssetSubMenus">
@@ -161,13 +179,13 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 </a>
             </li>
             <li has-permission="Reports:List" ng-class="{active: $state.includes('reports')}">
-                <a data-toggle="collapse" data-target="#formsExamples" href="#">
+                <a data-toggle="collapse" data-target="#formsExamplesReport" href="#">
                     <i class="material-icons">content_paste</i>
                     <p> Reports
                         <b class="caret"></b>
                     </p>
                 </a>
-                <div class="collapse" id="formsExamples">
+                <div class="collapse" id="formsExamplesReport">
                     <ul class="nav SubNav">
                         <li ui-sref-active="active" has-permission="EmployeeReports:List">
                             <a ui-sref="employeeReports">

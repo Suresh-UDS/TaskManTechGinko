@@ -119,7 +119,12 @@ public class AttendanceResource {
 		return attendanceService.findOne(id);
 	}
 
-    @RequestMapping(value = "/attendance/search",method = RequestMethod.POST)
+	@RequestMapping(value = "/attendance/employee/{empId}", method = RequestMethod.GET)
+	public AttendanceDTO getEmployeeCurrentAttendance(@PathVariable("empId") Long empId) {
+		return attendanceService.findCurrentCheckInByEmpId(empId);
+	}
+
+	@RequestMapping(value = "/attendance/search",method = RequestMethod.POST)
     public SearchResult<AttendanceDTO> searchAttendance(@RequestBody SearchCriteria searchCriteria) {
         SearchResult<AttendanceDTO> result = null;
         log.debug("Search Attendance- "+searchCriteria.getCheckInDateTimeFrom());
@@ -216,6 +221,30 @@ public class AttendanceResource {
 		response.setHeader("Content-Transfer-Encoding", "binary");
 		response.setHeader("Content-Disposition","attachment; filename=\"" + fileId + ".xlsx\"");
 		return content;
+	}
+	
+	@RequestMapping(value = "/attendance/uploadExistingCheckInImages", method = RequestMethod.POST)
+	public ResponseEntity<?> uploadExistingCheckInImage() { 
+		log.debug("Upload Existing Img to AWS s3");
+		String result = "";
+		try { 
+			result = attendanceService.uploadExistingCheckInImage();
+		} catch(Exception e) { 
+			throw new TimesheetException("Error while uploading checkInImage to S3" +e);
+		}
+		return new ResponseEntity<>(result, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(value = "/attendance/uploadExistingCheckOutImages", method = RequestMethod.POST)
+	public ResponseEntity<?> uploadExistingCheckOutImage() { 
+		log.debug("Upload Existing Img to AWS s3");
+		String result = "";
+		try { 
+			result = attendanceService.uploadExistingCheckOutImage();
+		} catch(Exception e) { 
+			throw new TimesheetException("Error while uploading checkOutImage to S3" +e);
+		}
+		return new ResponseEntity<>(result, HttpStatus.CREATED);
 	}
 
 }

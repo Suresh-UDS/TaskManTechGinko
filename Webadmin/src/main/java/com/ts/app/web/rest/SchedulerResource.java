@@ -49,7 +49,7 @@ public class SchedulerResource {
 			currCal.set(Calendar.MINUTE,0);
 			attnDate = currCal.getTime();
 		}		
-		schedulerService.schedulerHelperService.generateDetailedAttendanceReport(schedulerService, attnDate, false, true);
+		schedulerService.schedulerHelperService.generateDetailedAttendanceReport(attnDate, false, true);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
@@ -91,5 +91,11 @@ public class SchedulerResource {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	
+	@RequestMapping(value = "/scheduler/job/daily", method = RequestMethod.GET)
+	public ResponseEntity<?> runDailyJobSchedule() {
+		schedulerService.createDailyTask();
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 	
 }

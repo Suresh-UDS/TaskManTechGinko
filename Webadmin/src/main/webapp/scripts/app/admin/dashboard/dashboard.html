@@ -2,8 +2,14 @@
 
 <div ng-cloak ng-init="loadPageTop()">
 
-    <div class="DashboardCardsCon">
+    <!--Print option at top of the page-->
+    <!--<div class="txt-align-rgt margn-btm-8">-->
+        <!--<button class="btn btn-success add-btn margn-tb0" ng-click="printDiv('printable')" >-->
+            <!--<i class="material-icons">print</i> Print-->
+        <!--</button>-->
+    <!--</div>-->
 
+    <div class="DashboardCardsCon">
 
         <div class="panel panel-default">
             <!--<div class="panel-heading">Panel Heading</div>-->
@@ -61,225 +67,408 @@
             </div>
         </div>
 
+          <div  id="printable">
 
-        <div class="panel panel-default">
-            <div class="panel-body">
+              <div class="panel panel-default">
+                  <div class="panel-body">
 
-                <div class="row">
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="card card-stats">
-                            <div class="card-header" data-background-color="orange">
-                                <i class="material-icons">domain</i>
-                            </div>
-                            <div class="card-content">
-                                <p class="category">Clients</p>
-                                <h3 class="card-title">{{projectCount ? projectCount : 0}}</h3>
-                            </div>
-                            <div class="card-footer">
-                                <div class="stats">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="card card-stats">
-                            <div class="card-header" data-background-color="rose">
-                                <i class="material-icons">location_city</i>
-                            </div>
-                            <div class="card-content">
-                                <p class="category">Sites</p>
-                                <h3 class="card-title">{{siteCount ? siteCount : 0}}</h3>
-                            </div>
-                            <div class="card-footer">
-                                <div class="stats">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="card card-stats">
-                            <div class="card-header" data-background-color="green">
-                                <i class="material-icons">people</i>
-                            </div>
-                            <div class="card-content">
-                                <p class="category">Employees</p>
-                                <h3 class="card-title">{{totalEmployeeCount ? totalEmployeeCount : 0}}</h3>
-                            </div>
-                            <div class="card-footer">
-                                <div class="stats">
-                                    <!-- <i class="material-icons">local_offer</i> Tracked from Google Analytics -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="card card-stats">
-                            <div class="card-header" data-background-color="blue">
-                                <i class="material-icons">content_copy</i>
-                            </div>
-                            <div class="card-content">
-                                <p class="category">Quotations</p>
-                                <h3 class="card-title">{{quotationCount}}</h3>
-                            </div>
-                            <div class="card-footer">
-                                <div class="stats">
-                                    <!-- <i class="material-icons">date_range</i> Last 24 Hours -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                      <div class="row">
+                          <div class="col-lg-3 col-md-6 col-sm-6">
+                              <div class="card card-stats">
+                                  <div class="card-header" data-background-color="orange">
+                                      <i class="material-icons">domain</i>
+                                  </div>
+                                  <div class="card-content">
+                                      <p class="category">Clients</p>
+                                      <h3 class="card-title">{{projectCount ? projectCount : 0}}</h3>
+                                  </div>
+                                  <div class="card-footer">
+                                      <div class="stats">
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-lg-3 col-md-6 col-sm-6">
+                              <div class="card card-stats">
+                                  <div class="card-header" data-background-color="rose">
+                                      <i class="material-icons">location_city</i>
+                                  </div>
+                                  <div class="card-content">
+                                      <p class="category">Sites</p>
+                                      <h3 class="card-title">{{siteCount ? siteCount : 0}}</h3>
+                                  </div>
+                                  <div class="card-footer">
+                                      <div class="stats">
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-lg-3 col-md-6 col-sm-6">
+                              <div class="card card-stats">
+                                  <div class="card-header" data-background-color="green">
+                                      <i class="material-icons">people</i>
+                                  </div>
+                                  <div class="card-content">
+                                      <p class="category">Employees</p>
+                                      <h3 class="card-title">{{totalEmployeeCount ? totalEmployeeCount : 0}}</h3>
+                                  </div>
+                                  <div class="card-footer">
+                                      <div class="stats">
+                                          <!-- <i class="material-icons">local_offer</i> Tracked from Google Analytics -->
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-lg-3 col-md-6 col-sm-6">
+                              <div class="card card-stats">
+                                  <div class="card-header" data-background-color="blue">
+                                      <i class="material-icons">content_copy</i>
+                                  </div>
+                                  <div class="card-content">
+                                      <p class="category">Quotations</p>
+                                      <h3 class="card-title">{{quotationCount}}</h3>
+                                  </div>
+                                  <div class="card-footer">
+                                      <div class="stats">
+                                          <!-- <i class="material-icons">date_range</i> Last 24 Hours -->
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
 
-            </div>
-        </div>
+                  </div>
+              </div>
+              <div class="panel panel-default" has-permission="Jobs:List">
+                  <div class="panel-heading">Jobs</div>
+                  <div class="panel-body">
 
-        <div class="panel panel-default">
-            <div class="panel-heading">Jobs</div>
-            <div class="panel-body">
+                      <div class="row">
 
-                <div class="row">
+                          <div class="col-lg-3 col-md-6 col-sm-6">
+                              <div class="card card-stats">
+                                  <div class="card-header" data-background-color="orange">
+                                      <i class="material-icons">work</i>
+                                  </div>
+                                  <div class="card-content">
+                                      <p class="category">Total Jobs</p>
+                                      <h3 class="card-title">{{result.totalJobCount ? result.totalJobCount : 0}}</h3>
+                                  </div>
+                                  <div class="card-footer">
+                                      <div class="stats">
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-lg-3 col-md-6 col-sm-6">
+                              <div class="card card-stats">
+                                  <div class="card-header" data-background-color="blue">
+                                      <i class="material-icons">work</i>
+                                  </div>
+                                  <div class="card-content">
+                                      <p class="category">Assigned</p>
+                                      <h3 class="card-title">{{result.assignedJobCount ? result.assignedJobCount : 0}}</h3>
+                                  </div>
+                                  <div class="card-footer">
+                                      <div class="stats">
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-lg-3 col-md-6 col-sm-6">
+                              <div class="card card-stats">
+                                  <div class="card-header" data-background-color="green">
+                                      <i class="material-icons">work</i>
+                                  </div>
+                                  <div class="card-content">
+                                      <p class="category">Completed</p>
+                                      <h3 class="card-title">{{result.completedJobCount}}</h3>
+                                  </div>
+                                  <div class="card-footer">
+                                      <div class="stats">
+                                          <!-- <i class="material-icons">local_offer</i> Tracked from Google Analytics -->
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-lg-3 col-md-6 col-sm-6">
+                              <div class="card card-stats">
+                                  <div class="card-header" data-background-color="rose">
+                                      <i class="material-icons">work</i>
+                                  </div>
+                                  <div class="card-content">
+                                      <p class="category">Overdue</p>
+                                      <h3 class="card-title">{{result.overdueJobCount}}</h3>
+                                  </div>
+                                  <div class="card-footer">
+                                      <div class="stats">
+                                          <!-- <i class="material-icons">date_range</i> Last 24 Hours -->
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
 
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="card card-stats">
-                            <div class="card-header" data-background-color="orange">
-                                <i class="material-icons">work</i>
-                            </div>
-                            <div class="card-content">
-                                <p class="category">Total Jobs</p>
-                                <h3 class="card-title">{{result.totalJobCount ? result.totalJobCount : 0}}</h3>
-                            </div>
-                            <div class="card-footer">
-                                <div class="stats">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="card card-stats">
-                            <div class="card-header" data-background-color="blue">
-                                <i class="material-icons">work</i>
-                            </div>
-                            <div class="card-content">
-                                <p class="category">Assigned</p>
-                                <h3 class="card-title">{{result.assignedJobCount ? result.assignedJobCount : 0}}</h3>
-                            </div>
-                            <div class="card-footer">
-                                <div class="stats">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="card card-stats">
-                            <div class="card-header" data-background-color="green">
-                                <i class="material-icons">work</i>
-                            </div>
-                            <div class="card-content">
-                                <p class="category">Completed</p>
-                                <h3 class="card-title">{{result.completedJobCount}}</h3>
-                            </div>
-                            <div class="card-footer">
-                                <div class="stats">
-                                    <!-- <i class="material-icons">local_offer</i> Tracked from Google Analytics -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="card card-stats">
-                            <div class="card-header" data-background-color="rose">
-                                <i class="material-icons">work</i>
-                            </div>
-                            <div class="card-content">
-                                <p class="category">Overdue</p>
-                                <h3 class="card-title">{{result.overdueJobCount}}</h3>
-                            </div>
-                            <div class="card-footer">
-                                <div class="stats">
-                                    <!-- <i class="material-icons">date_range</i> Last 24 Hours -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                  </div>
+              </div>
 
-            </div>
-        </div>
+              <div class="panel panel-default" has-permission="Attendance:List">
+                  <div class="panel-heading">Attendance</div>
+                  <div class="panel-body">
 
-        <div class="panel panel-default">
-            <div class="panel-heading">Attendance</div>
-            <div class="panel-body">
+                      <div class="row">
 
-                <div class="row">
+                          <div class="col-lg-3 col-md-6 col-sm-6">
+                              <div class="card card-stats">
+                                  <div class="card-header" data-background-color="orange">
+                                      <i class="material-icons">schedule</i>
+                                  </div>
+                                  <div class="card-content">
+                                      <p class="category">Total Employees</p>
+                                      <h3 class="card-title">{{employeeCount}}</h3>
+                                  </div>
+                                  <div class="card-footer">
+                                      <div class="stats">
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-lg-3 col-md-6 col-sm-6">
+                              <div class="card card-stats">
+                                  <div class="card-header" data-background-color="green">
+                                      <i class="material-icons">schedule</i>
+                                  </div>
+                                  <div class="card-content">
+                                      <p class="category">Present</p>
+                                      <h3 class="card-title">{{presentCount}}</h3>
+                                  </div>
+                                  <div class="card-footer">
+                                      <div class="stats">
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-lg-3 col-md-6 col-sm-6">
+                              <div class="card card-stats">
+                                  <div class="card-header" data-background-color="rose">
+                                      <i class="material-icons">schedule</i>
+                                  </div>
+                                  <div class="card-content">
+                                      <p class="category">Absent</p>
+                                      <h3 class="card-title">{{absentCount}}</h3>
+                                  </div>
+                                  <div class="card-footer">
+                                      <div class="stats">
+                                          <!-- <i class="material-icons">local_offer</i> Tracked from Google Analytics -->
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-lg-3 col-md-6 col-sm-6">
+                              <div class="card card-stats">
+                                  <div class="card-header" data-background-color="blue">
+                                      <i class="material-icons">schedule</i>
+                                  </div>
+                                  <div class="card-content">
+                                      <p class="category">Left</p>
+                                      <h3 class="card-title">{{leftCount ? leftCount : 0}}</h3>
+                                  </div>
+                                  <div class="card-footer">
+                                      <div class="stats">
+                                          <!-- <i class="material-icons">date_range</i> Last 24 Hours -->
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
 
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="card card-stats">
-                            <div class="card-header" data-background-color="orange">
-                                <i class="material-icons">schedule</i>
-                            </div>
-                            <div class="card-content">
-                                <p class="category">Total Employees</p>
-                                <h3 class="card-title">{{employeeCount}}</h3>
-                            </div>
-                            <div class="card-footer">
-                                <div class="stats">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="card card-stats">
-                            <div class="card-header" data-background-color="green">
-                                <i class="material-icons">schedule</i>
-                            </div>
-                            <div class="card-content">
-                                <p class="category">Present</p>
-                                <h3 class="card-title">{{presentCount}}</h3>
-                            </div>
-                            <div class="card-footer">
-                                <div class="stats">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="card card-stats">
-                            <div class="card-header" data-background-color="rose">
-                                <i class="material-icons">schedule</i>
-                            </div>
-                            <div class="card-content">
-                                <p class="category">Absent</p>
-                                <h3 class="card-title">{{absentCount}}</h3>
-                            </div>
-                            <div class="card-footer">
-                                <div class="stats">
-                                    <!-- <i class="material-icons">local_offer</i> Tracked from Google Analytics -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="card card-stats">
-                            <div class="card-header" data-background-color="blue">
-                                <i class="material-icons">schedule</i>
-                            </div>
-                            <div class="card-content">
-                                <p class="category">Left</p>
-                                <h3 class="card-title">{{leftCount ? leftCount : 0}}</h3>
-                            </div>
-                            <div class="card-footer">
-                                <div class="stats">
-                                    <!-- <i class="material-icons">date_range</i> Last 24 Hours -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                  </div>
+              </div>
 
-            </div>
-        </div>
+              <div class="panel panel-default" has-permission="TicketCharts:View">
+                  <div class="panel-heading">Open Call Tickets</div>
+                  <div class="panel-body">
+                      <div class="row">
+                          <div class="col-md-8">
+                              <canvas id="bar" class="chart chart-bar">
+                              </canvas>
+                          </div>
+
+                          <div class="col-md-4">
+                              <div class="card-content">
+                                  <div class="table-responsive">
+                                      <table class="table">
+                                          <thead>
+                                          <tr>
+                                              <th>Range</th>
+                                              <th>Count</th>
+                                          </tr>
+                                          </thead>
+                                          <tbody>
+                                          <tr>
+                                              <td>{{openTicketsLabels[0]}}</td>
+                                              <td class="">{{openTicketsCountArray[0]}}</td>
+
+                                          </tr>
+                                          <tr>
+                                              <td>{{openTicketsLabels[1]}}</td>
+                                              <td class="">{{openTicketsCountArray[1]}}</td>
 
 
+                                          </tr>
+                                          <tr>
+                                              <td>{{openTicketsLabels[2]}}</td>
+                                              <td class="">{{openTicketsCountArray[2]}}</td>
+
+
+                                          </tr>
+                                          <tr>
+                                              <td>{{openTicketsLabels[3]}}</td>
+                                              <td class="">{{openTicketsCountArray[3]}}</td>
+
+
+                                          </tr>
+                                          <tr>
+                                              <td>{{openTicketsLabels[4]}}</td>
+                                              <td class="">{{openTicketsCountArray[4]}}</td>
+                                          </tr>
+
+                                          </tbody>
+                                      </table>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="panel panel-default" has-permission="TicketCharts:View">
+                  <div class="panel-heading"> Closed Call Tickets</div>
+                  <div class="panel-body">
+                      <div class="row">
+
+
+                          <div class="col-md-4">
+                              <div class="card-content">
+                                  <div class="table-responsive">
+                                      <table class="table">
+                                          <thead>
+                                          <tr>
+                                              <th>Range</th>
+                                              <th>Count</th>
+                                          </tr>
+                                          </thead>
+                                          <tbody>
+                                          <tr>
+                                              <td>{{closedTicketsLabels[0]}}</td>
+                                              <td class="">{{closedTicketsCountArray[0]}}</td>
+
+                                          </tr>
+                                          <tr>
+                                              <td>{{closedTicketsLabels[1]}}</td>
+                                              <td class="">{{closedTicketsCountArray[1]}}</td>
+
+
+                                          </tr>
+                                          <tr>
+                                              <td>{{closedTicketsLabels[2]}}</td>
+                                              <td class="">{{closedTicketsCountArray[2]}}</td>
+
+
+                                          </tr>
+                                          <tr>
+                                              <td>{{closedTicketsLabels[3]}}</td>
+                                              <td class="">{{closedTicketsCountArray[3]}}</td>
+
+
+                                          </tr>
+                                          <tr>
+                                              <td>{{closedTicketsLabels[4]}}</td>
+                                              <td class="">{{closedTicketsCountArray[4]}}</td>
+                                          </tr>
+
+                                          </tbody>
+                                      </table>
+                                  </div>
+                              </div>
+                          </div>
+
+                          <div class="col-md-8">
+                              <canvas id="bar2" class="chart chart-bar"
+                                      chart-data="closedTicketsData" chart-labels="closedTicketsLabels" chart-series="closedTicketsSeries">
+                              </canvas>
+                          </div>
+
+                      </div>
+                  </div>
+              </div>
+              <div class="panel panel-default" has-permission="TicketCharts:View">
+                  <div class="panel-heading">Overall Tickets</div>
+                  <div class="panel-body">
+                      <div class="row">
+                          <div class="col-md-8">
+                              <canvas id="bar3" class="chart chart-bar"
+                                      chart-data="overallTicketData" chart-labels="overallTicketLabels" chart-series="overallTicketSeries">
+                              </canvas>
+                          </div>
+
+                          <div class="col-md-4">
+                              <div class="card-content">
+                                  <div class="table-responsive">
+                                      <table class="table">
+                                          <thead>
+                                          <tr>
+                                              <th>Range</th>
+                                              <th>Count</th>
+                                          </tr>
+                                          </thead>
+                                          <tbody>
+                                          <tr>
+                                              <td>Total New Tickets</td>
+                                              <td class="">{{chartsDataResponse.totalNewTicketCount}}</td>
+
+                                          </tr>
+                                          <tr>
+                                              <td>Total Tickets Closed</td>
+                                              <td class="">{{chartsDataResponse.totalClosedTicketCount}}</td>
+
+
+                                          </tr>
+                                          <tr>
+                                              <td>Total tickets Pending</td>
+                                              <td class="">{{chartsDataResponse.totalPendingTicketCount}}</td>
+
+
+                                          </tr>
+                                          <tr>
+                                              <td>Total Tickets pending Due to {{chartsDataResponse.projectName}}</td>
+                                              <td class="">{{chartsDataResponse.totalPendingDueToClientTicketCount}}</td>
+
+
+                                          </tr>
+                                          <tr>
+                                              <td>Total Tickets pending due to UDS</td>
+                                              <td class="">{{chartsDataResponse.totalPendingDueToCompanyTicketCount}}</td>
+                                          </tr>
+
+                                          </tbody>
+                                      </table>
+                                  </div>
+                              </div>
+
+
+                          </div>
+                      </div>
+
+                  </div>
+              </div>
+
+          </div>
+
+
+
+
+
+     </div>
 
 
 

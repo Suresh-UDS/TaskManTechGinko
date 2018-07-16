@@ -10,7 +10,7 @@
             <div class="cardsCon editTicketCon" ng-init="loadTicket()">
                 <form ng-show="!success" name="form" role="form" novalidate
                       ng-submit="updatedTicket()"  >
-                    
+
 					<div class="row">
 
                        <div class="col-md-6">
@@ -35,7 +35,7 @@
                                                           ng-show="form.title.$error.required">
                                                            Title is required.
                                                        </p>
-                                                       
+
                                                    </div>
                                                </div>
 
@@ -54,7 +54,7 @@
                                                           ng-show="form.description.$error.required">
                                                            Description is required.
                                                        </p>
-                                                       
+
                                                    </div>
                                                </div>
                                            </div>
@@ -71,11 +71,14 @@
                                                    <option value=''>Select Category</option>
                                                    <option>HOUSEKEEPING</option>
                                                    <option>ELECTRICAL</option>
-                                                   <option>AC</option>
+                                                   <option>HVAC</option>
                                                    <option>CARPENTRY</option>
-                                                   <option>PEST</option>
+                                                   <option>PESTCONTROL</option>
                                                    <option>PLUMBING</option>
                                                    <option>MAINTENANCE</option>
+                                                   <option>CIVIL</option>
+                                                   <option>GENERAL</option>
+                                                   <option>PANTRYSERVICES</option>
                                                    <option>ADMIN</option>
                                                </select>
                                                <div ng-show="form.$submitted || form.category.$touched">
@@ -103,9 +106,9 @@
                                                 <option value='Low' selected>Low</option>
                                                 <option value='Medium'>Medium</option>
                                                 <option value='High'>High</option>
-                                             
+
                                             </select>
-                                        
+
                                             <div ng-show="form.$submitted || form.severity.$touched">
                                                 <div
                                                     ng-show="form.severity.$dirty || form.severity.$invalid">
@@ -120,8 +123,26 @@
                                         </div>
 
                                    </div>
-                                   
-                                   
+
+                                   <div class="row">
+                                       <div class="col-md-4">
+                                           <div class="radio">
+                                               <label>
+                                                   <input type="radio" name="optionsRadios" ng-model="tickets.pendingStatus" value="pendingAtUDS" ng-checked="tickets.pendingAtUDS" > Pending At UDS
+                                               </label>
+                                           </div>
+                                       </div>
+
+                                       <div class="col-md-4">
+                                           <div class="radio">
+                                               <label>
+                                                   <input type="radio" name="optionsRadios" ng-model="tickets.pendingStatus" value="pendingAtClient" > Pending At {{tickets.siteProjectName}}
+                                               </label>
+                                           </div>
+                                       </div>
+                                   </div>
+
+
 
                                </div>
                            </div>
@@ -144,10 +165,10 @@
                                             ng-change="loadEmployees()"
                                             class="form-control searchable-input floatL" ng-options="site as site.name for site in sites track by site.id">
                                             <option value="">Select Site</option>
-                       
-                                       
+
+
                                         </select>
-                                    
+
                                         <div ng-show="form.$submitted || form.site.$touched">
                                             <div
                                                 ng-show="form.site.$dirty || form.site.$invalid">
@@ -169,9 +190,9 @@
                                             ng-model="selectedEmployee"
                                             class="form-control searchable-input floatL" ng-options="emp as emp.fullName group by emp.designation for emp in employees track by emp.name">
                                             <option value="">Select Employee</option>
-                                         
+
                                         </select>
-                                    
+
                                         <div ng-show="form.$submitted || form.employee.$touched">
                                             <div
                                                 ng-show="form.employee.$dirty || form.employee.$invalid">
@@ -190,14 +211,14 @@
                        </div>
                    </div>
                    <div class="row">
-                     
+
                      <div class="col-md-6">
                         <div class="panel panel-default">
-                              
+
                           <div class="panel-heading">Comments</div>
                           <div class="panel-body">
                             <div class="row">
-                              
+
                              <div class="col-md-6">
                                  <div class="form-group">
                                      <label class="control-label">Comments</label>
@@ -209,14 +230,14 @@
                          </div>
                         </div>
                      </div>
-                     
+
                      <div class="col-md-6">
                         <div class="panel panel-default">
-                              
+
                           <div class="panel-heading">Upload Image</div>
                           <div class="panel-body">
                             <div class="row">
-                     
+
 			                     <div class="col-md-6">
 			                      <div class="form-group label-floating" >
 			                      	<div class="pdng-top13" >
@@ -225,20 +246,20 @@
 			                                 ng-model="selectedImageFile"
 			                                 name="ImageFile"
 			                          />
-			                          
-                                      
+
+
               							<a id="images" href="#" onClick="$('#myModalNew').modal()" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="loadTicketImage(ticketImage,tickets.id)">
                  							<img  src={{ticketImage}} width="100px" height="100px" />
              							</a>
-                              
-			                          
-			                          
+
+
+
 			                      	</div>
 			                       </div>
 			                     </div>
 			                </div>
 						</div>
-					</div>					                     
+					</div>
                    </div>
                    </div>
                     <div class="row">

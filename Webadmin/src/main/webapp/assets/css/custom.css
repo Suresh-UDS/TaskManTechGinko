@@ -181,6 +181,10 @@ ul.checkList li
 {
    margin:0 !important;
 }
+.margn-btm-8
+{
+    margin-bottom: 8px;
+}
 .pdng-top13
 {
   padding-top:13px;
@@ -776,6 +780,16 @@ span.red-star
 {
     background: #EEEEEE;
 }
+.blocksListCon li.active
+{
+   background: #EEEEEE;
+   border: 1px solid #333;
+}
+
+.blocksListCon li a
+{
+  color:#333;
+}
 .clear
 {
     clear: both;
@@ -811,7 +825,7 @@ ul.blocksListCon
     float: left;
     border: 1px solid #dfdfdf;
     margin: 3px;
-    padding: 15px;
+    padding: 30px 15px 15px 15px;
     text-align: center;
     cursor: pointer;
 }

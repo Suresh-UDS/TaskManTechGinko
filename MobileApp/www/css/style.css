@@ -43,6 +43,14 @@
 {
     background-color: #FFFFFF !important;
 }
+.orange-clr{
+    color:orange !important;
+}
+.bg-none
+{
+    background:none !important;
+    box-shadow:none !important;
+}
 /*
 .segmnt
 {
@@ -1001,9 +1009,24 @@ a:hover, a:focus
 {
   border-bottom: 1px solid #eeeeee;
 }
+
 .border-btm-blk
 {
     border-bottom:1px solid #c1bcbc !important;
+}
+
+
+.border-inp
+{
+    border:1px solid #eeeeee;
+}
+.margin-top10
+{
+    margin-top:10px !important;
+}
+.margin-top25
+{
+    margin-top:25px !important;
 }
 
 p.titleTxt

@@ -6,27 +6,27 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
+import com.ts.app.domain.*;
+import com.ts.app.service.util.FileUploadHelper;
+import com.ts.app.service.util.QRCodeUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.EmployeeLocation;
-import com.ts.app.domain.Feedback;
-import com.ts.app.domain.Location;
-import com.ts.app.domain.Project;
-import com.ts.app.domain.Site;
 import com.ts.app.repository.LocationRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
+import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmployeeLocationDTO;
+import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.LocationDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
@@ -49,8 +49,17 @@ public class LocationService extends AbstractService {
 	@Inject
 	private LocationRepository locationRepository;
 
+    @Inject
+    private Environment env;
+
+    @Inject
+    private FileUploadHelper fileUploadHelper;
+
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+
+	@Inject
+	private ImportUtil importUtil;
 
 	public LocationDTO saveLocation(LocationDTO locationDto) {
 
@@ -99,6 +108,12 @@ public class LocationService extends AbstractService {
 		return mapperUtil.toModel(entity, LocationDTO.class);
 	}
 
+    public LocationDTO findId(Long siteId, String block, String floor, String zone) {
+        List<Location> entity = locationRepository.findByAll(siteId,block,floor,zone);
+        Location locationEntity = entity.get(0);
+        return mapperUtil.toModel(locationEntity, LocationDTO.class);
+    }
+
 	public List<String> findBlocks(long projectId, long siteId) {
 		if(projectId > 0) {
 			return locationRepository.findBlocks(projectId, siteId);
@@ -123,7 +138,7 @@ public class LocationService extends AbstractService {
 		}
 	}
 
-	public SearchResult<LocationDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
+	public SearchResult<LocationDTO>  findBySearchCrieria(SearchCriteria searchCriteria) {
 		SearchResult<LocationDTO> result = new SearchResult<LocationDTO>();
 		if(searchCriteria != null) {
 
@@ -220,4 +235,57 @@ public class LocationService extends AbstractService {
 		result.setTransactions(transactions);
 		return;
 	}
+
+	public ImportResult getImportStatus(String fileId) {
+		ImportResult er = new ImportResult();
+		//fileId += ".csv";
+		if(!StringUtils.isEmpty(fileId)) {
+			String status = importUtil.getImportStatus(fileId);
+			er.setFile(fileId);
+			er.setStatus(status);
+		}
+		return er;
+	}
+
+    public String generateLocationQRCode(long location, long siteId) {
+        Location loc = locationRepository.findOne(location);
+//        long siteId = asset.getSite().getId();
+        log.debug("Selected location"+loc.getId());
+
+        byte[] qrCodeImage = null;
+        String qrCodeBase64 = null;
+        if (loc != null) {
+            String codeName = String.valueOf(location);
+            codeName = siteId+"_"+codeName;
+            qrCodeImage = QRCodeUtil.generateQRCode(codeName);
+            String qrCodePath = env.getProperty("locationQRCode.file.path");
+            String imageFileName = null;
+            if (org.apache.commons.lang3.StringUtils.isNotEmpty(qrCodePath)) {
+                imageFileName = fileUploadHelper.uploadQrCodeFile(codeName, qrCodeImage);
+                loc.setQrCodeImage(imageFileName);
+                locationRepository.save(loc);
+            }
+            if (qrCodeImage != null && org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
+                qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
+            }
+        }
+        log.debug("*****************"+loc.getId());
+        return getQRCode(loc.getId());
+    }
+
+    public String getQRCode(long locationId) {
+        log.debug(">>> get QR Code <<<");
+        Location loc = locationRepository.findOne(locationId);
+        log.debug(loc.getQrCodeImage());
+        String qrCodeBase64 = null;
+        String imageFileName = null;
+        if (loc != null) {
+            imageFileName = loc.getQrCodeImage();
+            if (org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
+                qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
+            }
+        }
+        qrCodeBase64 = qrCodeBase64 + "." + loc.getId();
+        return qrCodeBase64;
+    }
 }

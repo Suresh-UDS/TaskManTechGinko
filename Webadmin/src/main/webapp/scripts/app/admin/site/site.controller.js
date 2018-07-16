@@ -204,7 +204,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.deleteConfirm = function (site){
-        	$scope.confirmSite = site;
+        		$scope.confirmSite = site;
         }
 
         $scope.deleteSite = function (site) {

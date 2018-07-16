@@ -83,6 +83,38 @@
                 </div>
             </div>
         </div>
+        
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Locations</div>
+                <div class="panel-body">
+
+                    <form name="importLocationForm" ng-submit="importLocations()">
+                        <div class="row">
+
+                            <div class="form-group label-floating" >
+                                <div class="col-md-6 pdng-top13">
+                                    <input type="file"
+                                           class="form-control" style="opacity:100;position:relative"
+                                           file-model ng-model="selectedLocationFile"
+                                           name="locationFile"
+                                    />
+
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-success" ng-click="uploadLocationsFile()" >
+                                        <span class="btn-label">
+                                       		<i class="material-icons">file_upload</i>
+                                   		</span>Import Locations
+                                    </button>
+                                    <span ng-hide="!locationImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
 
 

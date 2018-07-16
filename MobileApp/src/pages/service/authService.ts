@@ -89,8 +89,32 @@ export class authService
             })
     }
 
+    resetPassword(changePassword):Observable<any>{
+        return this.http.post(this.config.Url+'api/user/change_password',changePassword).map(
+            response=>{
+                console.log("Reset password response");
+                console.log(response);
+                return response;
+            },err=>{
+                console.log(err);
+                return err
+            }
+        )
+    }
 
-
-
+    getCurrentVersion(applicationType):Observable<any>{
+        console.log("Application type version control");
+        console.log(applicationType);
+        return this.http.get(this.config.Url+'api/version/application').map(
+            response=>{
+                console.log("application version response");
+                console.log(response);
+                return response;
+            },err=>{
+                console.log(err);
+                return err;
+            }
+        )
+    }
 
 }

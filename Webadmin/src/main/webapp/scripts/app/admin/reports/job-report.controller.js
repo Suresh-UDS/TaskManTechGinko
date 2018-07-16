@@ -8,7 +8,7 @@ angular.module('timeSheetApp')
                          $http, $stateParams,
 						$location,$interval,PaginationComponent,$filter) {
         $rootScope.loadingStop();
-        $rootScope.loginView = false;           
+        $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;
@@ -25,14 +25,14 @@ angular.module('timeSheetApp')
         $scope.selectedChecklist;
         $scope.jobChecklistItems =[];
         $scope.pageSort = 10;
-        $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy'); 
+        $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
         $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
         var d = new Date();
         d.setFullYear(2018, 0, 1);
         $scope.selectedDateFromSer= d;
         $scope.selectedDateToSer= new Date();
         $scope.pager = {};
-       
+
 
         $scope.initCalender = function(){
 
@@ -43,10 +43,10 @@ angular.module('timeSheetApp')
         $('input#dateFilterFrom').on('dp.change', function(e){
             console.log(e.date);
             console.log(e.date._d);
-            $scope.selectedDateFromSer= e.date._d; 
-            
+            $scope.selectedDateFromSer= e.date._d;
+
             $.notifyClose();
-             
+
             if($scope.selectedDateFromSer > $scope.selectedDateToSer) {
 
                     $scope.showNotifications('top','center','danger','From date cannot be greater than To date');
@@ -56,8 +56,8 @@ angular.module('timeSheetApp')
                $scope.selectedDateFrom= $filter('date')(e.date._d, 'dd/MM/yyyy');
                // $scope.refreshReport();
             }
-            
-            
+
+
 
         });
         $('input#dateFilterTo').on('dp.change', function(e){
@@ -66,7 +66,7 @@ angular.module('timeSheetApp')
             $scope.selectedDateToSer= e.date._d;
 
             $.notifyClose();
-            
+
             if($scope.selectedDateFromSer > $scope.selectedDateToSer) {
                     $scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
                     $scope.selectedDateTo=$filter('date')(new Date(), 'dd/MM/yyyy');
@@ -283,7 +283,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.refreshPage = function(){
-               
+
                 $scope.loadJobs();
         }
 
@@ -332,18 +332,19 @@ angular.module('timeSheetApp')
         	var reportUid = $stateParams.uid;
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         		var searchCriteria = {
-            			currPage : currPageVal
+            			currPage : currPageVal,
+                        isReport:true
             	}
             	$scope.searchCriteria = searchCriteria;
         	//}
 
                 $scope.searchCriteria.currPage = currPageVal;
                 $scope.searchCriteria.findAll = false;
-       
+
                 if(!$scope.selectedProject && !$scope.selectedSite && !$scope.selectedStatus && !$scope.selectedJob){
                     $scope.searchCriteria.findAll = true;
                 }
-                
+
 
                 if($scope.selectedDateFrom) {
                     $scope.searchCriteria.checkInDateTimeFrom = $scope.selectedDateFromSer;
@@ -375,11 +376,11 @@ angular.module('timeSheetApp')
                 }
               }
 
-                
+
             if($scope.pageSort){
                 $scope.searchCriteria.sort = $scope.pageSort;
             }
-            
+
 
             if($scope.selectedColumn){
 
@@ -388,11 +389,11 @@ angular.module('timeSheetApp')
 
             }
             else{
-                $scope.searchCriteria.columnName ="id";
-                $scope.searchCriteria.sortByAsc = true;
+                // $scope.searchCriteria.columnName ="id";
+                // $scope.searchCriteria.sortByAsc = true;
             }
-                    
-                   
+
+
                      console.log("search criteria",$scope.searchCriteria);
                      $scope.jobs = '';
                      $scope.jobsLoader = false;
@@ -415,28 +416,28 @@ angular.module('timeSheetApp')
 
                     $scope.pages.currPage = $scope.pages.currPage;
                     $scope.pages.totalPages = data.totalPages;
-               
+
                     if($scope.jobs && $scope.jobs.length > 0 ){
                         $scope.showCurrPage = data.currPage;
                         $scope.pageEntries = $scope.jobs.length;
                         $scope.totalCountPages = data.totalCount;
                         $scope.pageSort = 10;
 
-                       
+
                     }
 
 
         	});
         }
 
-        	
+
 
         $scope.clearFilter = function() {
             $rootScope.exportStatusObj.exportMsg = '';
             $scope.downloader=false;
             $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy'); 
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-            $scope.selectedDateFromSer = d; 
+            $scope.selectedDateFromSer = d;
             $scope.selectedDateToSer = new Date();
             $scope.selectedProject = null;
             $scope.searchCriteria = {};

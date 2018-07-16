@@ -196,7 +196,12 @@ public class JobManagementService extends AbstractService {
                 pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
 
             }else{
-                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+                log.debug("Sorting object not found",searchCriteria.isReport());
+                if (searchCriteria.isReport()) {
+                    pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+                } else {
+                    pageRequest = createPageRequest(searchCriteria.getCurrPage());
+                }
             }
 
 
@@ -479,6 +484,7 @@ public class JobManagementService extends AbstractService {
             log.debug("JobManagementService toPredicate - searchCriteria jobstatus -"+ searchCriteria.getJobStatus());
             log.debug("JobManagementService toPredicate - searchCriteria jobTitle -"+ searchCriteria.getJobTitle());
             log.debug("JobManagementService toPredicate - searchCriteria scheduled -"+ searchCriteria.isScheduled());
+            log.debug("JobManagementService toPredicate - searchCriteria scheduled -"+ searchCriteria.getLocationId());
             log.debug("JobSpecification toPredicate - searchCriteria get assigned status -"+ searchCriteria.isAssignedStatus());
             log.debug("JobSpecification toPredicate - searchCriteria get completed status -"+ searchCriteria.isCompletedStatus());
             log.debug("JobSpecification toPredicate - searchCriteria get overdue status -"+ searchCriteria.isOverdueStatus());
@@ -659,6 +665,7 @@ public class JobManagementService extends AbstractService {
 			job.setStatus(JobStatus.ASSIGNED);
 		}
 
+		/*
 		Calendar calStart = Calendar.getInstance();
 		calStart.set(Calendar.HOUR_OF_DAY, 0);
 		calStart.set(Calendar.MINUTE,0);
@@ -670,32 +677,33 @@ public class JobManagementService extends AbstractService {
 
 		java.sql.Date startDate = new java.sql.Date(calStart.getTimeInMillis());
 		java.sql.Date endDate = new java.sql.Date(calEnd.getTimeInMillis());
+		*/
 		log.debug("Before saving new job -"+ job);
-		log.debug("start Date  -"+ startDate + ", end date -" + endDate);
-		//List<Job> existingJobs = jobRepository.findJobByTitleSiteAndDate(jobDTO.getTitle(), jobDTO.getSiteId(), startDate, endDate);
-		//log.debug("Existing job -"+ existingJobs);
-		//if(CollectionUtils.isEmpty(existingJobs)) {
-		//if job is created against a ticket
-		if(jobDTO.getTicketId() > 0) {
-			Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
-			job.setTicket(ticket);
-			ticket.setStatus(TicketStatus.ASSIGNED.toValue());
-			ticketRepository.save(ticket);
+
+		//log.debug("start Date  -"+ startDate + ", end date -" + endDate);
+		List<Job> existingJobs = jobRepository.findJobByTitleSiteAndDate(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()));
+		log.debug("Existing job -"+ existingJobs);
+		if(CollectionUtils.isEmpty(existingJobs)) {
+			//if job is created against a ticket
+			if(jobDTO.getTicketId() > 0) {
+				Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
+				job.setTicket(ticket);
+				ticket.setStatus(TicketStatus.ASSIGNED.toValue());
+				ticketRepository.save(ticket);
+			}
+
+			if(jobDTO.getParentJobId()>0){
+			    Job parentJob = jobRepository.findOne(jobDTO.getParentJobId());
+			    job.setParentJob(parentJob);
+	        }
+			job = jobRepository.saveAndFlush(job);
+
+			if(jobDTO.getTicketId() > 0) {
+				Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
+				ticket.setJob(job);
+				ticketRepository.saveAndFlush(ticket);
+	        }
 		}
-	
-		
-		job = jobRepository.saveAndFlush(job);
-
-		if(jobDTO.getTicketId() > 0) {
-			Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
-			ticket.setJob(job);
-			ticketRepository.saveAndFlush(ticket);
-        }
-		
-				
-
-
-		//}
 
 		//if the job is scheduled for recurrence create a scheduled task
 		if(!StringUtils.isEmpty(jobDTO.getSchedule()) && !jobDTO.getSchedule().equalsIgnoreCase("ONCE")) {
@@ -708,14 +716,15 @@ public class JobManagementService extends AbstractService {
 			data.append("&siteId="+jobDTO.getSiteId());
 			data.append("&empId="+jobDTO.getEmployeeId());
 			data.append("&plannedStartTime="+jobDTO.getPlannedStartTime());
-			data.append("&plannedEndTime="+jobDTO.getPlannedEndTime());
+			data.append("&plannedEndTime="+job.getPlannedEndTime());
 			data.append("&plannedHours="+jobDTO.getPlannedHours());
 			data.append("&location="+jobDTO.getLocationId());
 			data.append("&frequency="+jobDTO.getFrequency());
 			data.append("&duration="+jobDTO.getDuration());
 			schConfDto.setData(data.toString());
+			log.debug("Saving data to scheduler config ==== "+job.getPlannedEndTime());
 			schConfDto.setStartDate(jobDTO.getPlannedStartTime());
-			schConfDto.setEndDate(jobDTO.getPlannedEndTime());
+			schConfDto.setEndDate(job.getPlannedEndTime());
 			schConfDto.setScheduleEndDate(jobDTO.getScheduleEndDate());
 			schConfDto.setScheduleDailyExcludeWeekend(jobDTO.isScheduleDailyExcludeWeekend());
 			schConfDto.setScheduleWeeklySunday(jobDTO.isScheduleWeeklySunday());
@@ -851,6 +860,14 @@ public class JobManagementService extends AbstractService {
 		dto.setActualHours(job.getActualHours());
 		dto.setActualMinutes(job.getActualMinutes());
 		dto.setMaintenanceType(job.getMaintenanceType());
+		dto.setSchedule(job.getSchedule());
+		dto.setScheduled(job.isScheduled());
+		dto.setJobType(job.getType());
+		Ticket ticket = job.getTicket();
+		if(ticket != null) {
+			dto.setTicketId(ticket.getId());
+			dto.setTicketName(ticket.getTitle());
+		}
 		return dto;
 	}
 
@@ -916,6 +933,13 @@ public class JobManagementService extends AbstractService {
 		job.setZone(jobDTO.getZone());
 		//maintenance type PPM or AMC
 		job.setMaintenanceType(jobDTO.getMaintenanceType());
+		if(jobDTO.isPendingAtClient()){
+            job.setPendingAtClient(jobDTO.isPendingAtClient());
+        }
+
+        if(jobDTO.isPendingAtUDS()){
+		    job.setPendingAtUDS(jobDTO.isPendingAtUDS());
+        }
 		//add the job checklist items
 		if(CollectionUtils.isNotEmpty(job.getChecklistItems())) {
 			job.getChecklistItems().clear();
@@ -924,8 +948,10 @@ public class JobManagementService extends AbstractService {
 			List<JobChecklistDTO> jobclDtoList = jobDTO.getChecklistItems();
 			List<JobChecklist> checklistItems = new ArrayList<JobChecklist>();
 			for(JobChecklistDTO jobclDto : jobclDtoList) {
+			    log.debug("Job checklist remarks"+jobclDto.getRemarks());
 				JobChecklist checklist = mapperUtil.toEntity(jobclDto, JobChecklist.class);
-				checklist.setJob(job);
+                log.debug("Job checklist remarks"+checklist.getImage_1());
+                checklist.setJob(job);
 				checklistItems.add(checklist);
 			}
 			if(job.getChecklistItems() != null) {
@@ -1052,6 +1078,25 @@ public class JobManagementService extends AbstractService {
 	public JobDTO updateJob(JobDTO jobDTO) {
 		Job job = findJob(jobDTO.getId());
 		mapToEntity(jobDTO, job);
+        log.debug("Ticket in job update ----"+jobDTO.getTicketId());
+		if(jobDTO.getTicketId()>0){
+		    log.debug("ticket is pressent");
+		    log.debug("ticket is pressent----"+jobDTO.isPendingAtUDS());
+		    log.debug("ticket is pressent----"+jobDTO.isPendingAtClient());
+		    Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
+            TicketDTO ticketDTO = mapperUtil.toModel(ticket,TicketDTO.class);
+            if(jobDTO.getJobStatus().equals(JobStatus.COMPLETED)) {
+                ticketDTO.setPendingAtClient(false);
+                ticketDTO.setPendingAtUDS(false);
+            }else if(jobDTO.isPendingAtUDS()){
+                ticketDTO.setPendingAtUDS(true);
+                ticketDTO.setPendingAtClient(false);
+            }else{
+                ticketDTO.setPendingAtClient(true);
+                ticketDTO.setPendingAtUDS(false);
+            }
+            ticketManagementService.updateTicketPendingStatus(ticketDTO);
+        }
 		if(jobDTO.getJobStatus().equals(JobStatus.COMPLETED)) {
 			onlyCompleteJob(job);
 		}else {
@@ -1151,6 +1196,24 @@ public class JobManagementService extends AbstractService {
         job = jobRepository.save(job);
         return mapperUtil.toModel(job, JobDTO.class);
     }
+
+//    @Transactional
+//    public JobChecklistDTO uploadCheckListImage(JobChecklistDTO jobChecklistDTO) {
+//        log.debug("JOb checklist dto - "+jobChecklistDTO.getImage_1());
+//        log.debug("Employee list from check in out images"+jobChecklistDTO.getJobId());
+//        String fileName = fileUploadHelper.uploadFile(jobChecklistDTO.getJobId(),jobChecklistDTO.getImage_1(), System.currentTimeMillis());
+//        jobChecklistDTO.setImage_1(fileName);
+//        CheckInOutImage checkInOutImage = new CheckInOutImage();
+//        checkInOutImage.setPhotoOut(fileName);
+//        checkInOutImage.setCheckInOut(checkInOutRepository.findOne(checkInOutImageDto.getCheckInOutId()));
+//        checkInOutImage.setProject(projectRepository.findOne(checkInOutImageDto.getProjectId()));
+//        checkInOutImage.setEmployee(employeeRepository.findOne(checkInOutImageDto.getEmployeeId()));
+//        checkInOutImage.setSite(siteRepository.findOne(checkInOutImageDto.getSiteId()));
+//        checkInOutImage.setJob(jobRepository.findOne((checkInOutImageDto.getJobId())));
+//        log.debug("Before save image::::::"+checkInOutImage);
+//        checkInOutImage = checkInOutImageRepository.save(checkInOutImage);
+//        return checkInOutImageDto;
+//    }
 
 	public JobDTO onlyCompleteJob(Long id) {
 		Job job = findJob(id);

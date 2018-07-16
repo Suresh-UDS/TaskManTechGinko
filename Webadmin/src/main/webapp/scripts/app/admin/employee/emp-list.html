@@ -391,8 +391,8 @@
                                         <td>{{projSite.siteId}}</td>
                                         <td>{{projSite.siteName}}</td>
                                         <td>
-                                            <button ng-click="checkIn(projSite.siteId,employee.empId,employee.id)" data-dismiss="modal"  class="btn btn-success btn-sm btn-round">check-In</button>
-                                            <button ng-click="checkOut(projSite.siteId,employee.empId,employee.id)" data-dismiss="modal"  class="btn btn-success btn-sm btn-round">check-Out</button>
+                                            <button ng-disabled="isCheckedIn" ng-click="checkIn(projSite.siteId,employee.empId,employee.id)" data-dismiss="modal"  class="btn btn-success btn-sm btn-round">check-In</button>
+                                            <button ng-disabled="!isCheckedIn" ng-click="checkOut(projSite.siteId,employee.empId,employee.id)" data-dismiss="modal"  class="btn btn-success btn-sm btn-round">check-Out</button>
                                         </td>
 
                                     </tr>
