@@ -8,21 +8,16 @@ import {LoadingController, ToastController} from "ionic-angular";
 import {AppConfig, ApplicationConfig, MY_CONFIG_TOKEN} from "./app-config";
 import {SQLite, SQLiteObject} from "@ionic-native/sqlite";
 import {SiteService} from "./siteService";
-<<<<<<< HEAD
 import {AssetService} from "./assetService";
-=======
->>>>>>> Release-1.0
 import {EmployeeService} from "./employeeService";
 import {ObjectUnsubscribedError} from "rxjs/Rx";
 import {JobService} from "./jobService";
 import {componentService} from "./componentService";
-<<<<<<< HEAD
-=======
 import {AttendanceService} from "./attendanceService";
->>>>>>> Release-1.0
 
 @Injectable()
 export class DBService {
+    selectAttendance: any[];
 
     db:any;
     sites:any;
@@ -37,19 +32,13 @@ export class DBService {
     selectAMC:any;
     selectPPM:any;
     selectConfig:any;
-<<<<<<< HEAD
     selectPreviousReading:any;
     selectViewReading:any;
     selectReading:any;
     selectImage:any;
 
-    constructor(private sqlite: SQLite,private componentService:componentService,private jobService:JobService,private siteService:SiteService,public employeeService:EmployeeService, public assetService:AssetService) {
-=======
-    selectAttendance:any;
-
-    constructor(private sqlite: SQLite,private componentService:componentService,private jobService:JobService,
+    constructor(private sqlite: SQLite,private componentService:componentService,private jobService:JobService, private assetService:AssetService,
                 private siteService:SiteService,public employeeService:EmployeeService,public attendanceService:AttendanceService) {
->>>>>>> Release-1.0
 
         this.selectSite = [];
         this.selectEmployee = [];
@@ -58,7 +47,6 @@ export class DBService {
         this.selectAMC = [];
         this.selectPPM = [];
         this.selectConfig = [];
-<<<<<<< HEAD
         this.selectPreviousReading = [];
         this.selectViewReading = [];
         this.selectReading = []
@@ -79,17 +67,14 @@ export class DBService {
         // this.assetList()
         // this.setAsset();
         // this.setPPM()
-=======
         this.selectAttendance = []
 
 
->>>>>>> Release-1.0
     }
 
 
     //***create table from api response***/
 
-<<<<<<< HEAD
     //Asset table
     setAsset()
     {

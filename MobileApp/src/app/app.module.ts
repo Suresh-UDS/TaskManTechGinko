@@ -58,15 +58,11 @@ import {FeedbackQuestionPage} from "../pages/feedback/feedback-questions";
 import {InitFeedbackPage} from "../pages/feedback/init-feedback";
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
-<<<<<<< HEAD
 import{TicketFilter} from "../pages/ticket/ticket-filter/ticket-filter";
 
 import {SQLitePorter} from "@ionic-native/sqlite-porter";
-
-=======
 import {ForgotPassword} from "../pages/forgot-password/forgot-password";
 import { Network } from '@ionic-native/network';
->>>>>>> Release-1.0
 import {CreateEmployeePage} from "../pages/employee-list/create-employee";
 import {OneSignal} from "@ionic-native/onesignal";
 // import {GoogleMaps} from "@ionic-native/google-maps";
@@ -87,11 +83,8 @@ import { BackgroundMode } from '@ionic-native/background-mode';
 import { NativeAudio } from '@ionic-native/native-audio';
 import {SelectFeedbackPage} from "../pages/feedback/select-feedback";
 import {FeedbackZone} from "../pages/feedback/feedbackZone";
-<<<<<<< HEAD
 import {Splash} from "../pages/splash/splash";
 import {SplashLogo} from "../pages/splash-logo/splash-logo";
-=======
->>>>>>> Release-1.0
 import {InitFeedbackZone} from "../pages/feedback/init-feedback-zone";
 import {WizardFeedbackEntry} from "../pages/feedback/wizard-feedback-entry";
 import {FeedbackQuestionsForm} from "../pages/feedback/feedback-questions-form";
@@ -101,12 +94,11 @@ import {ViewTicket} from "../pages/ticket/view-ticket";
 import {FeedbackGridPage} from "../pages/feedback/feedback-grid";
 import {AppVersion} from "@ionic-native/app-version";
 import {HasPermission} from "../components/has-permission/has-permission";
-<<<<<<< HEAD
 import {AssetList} from "../pages/asset-list/asset-list";
 import {AssetFilter} from "../pages/asset-list/asset-filter";
 import {AssetView} from "../pages/asset-view/asset-view";
 import {QRScanner} from "@ionic-native/qr-scanner";
-import {ScanQR} from "../pages/asset-list/scanQR";
+import {ScanQRAsset} from "../pages/asset-list/scanQR-asset";
 import {IonicImageViewerModule} from "ionic-img-viewer";
 import {DatePicker} from "@ionic-native/date-picker";
 import{GetAssetReading} from "../pages/asset-view/get-asset-reading";
@@ -116,24 +108,15 @@ import{CalenderPage} from "../pages/calender-page/calender-page";
 import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-filter";
 import {JobFilter} from "../pages/jobs/job-filter/job-filter";
 import{SQLite,SQLiteObject} from "@ionic-native/sqlite";
-import {DBService} from "../pages/service/dbService";
-import {Network} from "@ionic-native/network";
-import {Diagnostic} from "@ionic-native/diagnostic";
-
-=======
 import {OfflineAttendance} from "../pages/employee/offline-attendance";
-import {SQLite} from "@ionic-native/sqlite";
 import {Diagnostic} from "@ionic-native/diagnostic";
 import {LocationAccuracy} from "@ionic-native/location-accuracy";
-import {SplashLogo} from "../pages/splash-logo/splash-logo";
 import {Market} from "@ionic-native/market";
 import {UpdateApp} from "../pages/update-app/update-app";
-import {QRScanner} from "@ionic-native/qr-scanner";
 import {ScanQR} from "../pages/jobs/scanQR";
 import {DBService} from "../pages/service/dbService";
 import {OfflineAttendanceSites} from "../pages/employee/offline-attendance-sites";
 import{Checklist} from "../pages/checklist/checklist";
->>>>>>> Release-1.0
 
 @NgModule({
   declarations: [
@@ -183,7 +166,6 @@ import{Checklist} from "../pages/checklist/checklist";
     FeedbackQuestionPage,
     InitFeedbackPage,
     FeedbackDashboardPage,
-<<<<<<< HEAD
       FeedbackZone,
       SelectFeedbackPage,
       InitFeedbackZone,
@@ -206,25 +188,14 @@ import{Checklist} from "../pages/checklist/checklist";
       GetAssetReading,
       GetAssetReadings,
       CalenderPage,
-=======
-    FeedbackZone,
-    SelectFeedbackPage,
-    InitFeedbackZone,
-    FeedbackQuestionsForm,
-    FeedbackGridPage,
-    WizardFeedbackEntry,
-    Ticket,
-    CreateTicket,
-    ViewTicket,
-    HasPermission,
     ForgotPassword,
     OfflineAttendance,
     SplashLogo,
     UpdateApp,
     ScanQR,
+      ScanQRAsset,
     OfflineAttendanceSites,
       Checklist
->>>>>>> Release-1.0
   ],
   imports: [
     BrowserModule,
@@ -289,14 +260,6 @@ import{Checklist} from "../pages/checklist/checklist";
     JobPopoverPage,
     FeedbackZone,
     FeedbackDashboardPage,
-<<<<<<< HEAD
-      SelectFeedbackPage,
-      InitFeedbackZone,
-      FeedbackQuestionsForm,
-      WizardFeedbackEntry,
-      Ticket,
-      CreateTicket,
-      ViewTicket,
       AssetView,
       AssetList,
       AssetFilter,
@@ -307,12 +270,9 @@ import{Checklist} from "../pages/checklist/checklist";
       Splash,
       SplashLogo,
     ScanQR,
+      ScanQRAsset,
       GetAssetReadings,
       CalenderPage,
-
-
-
-=======
     SelectFeedbackPage,
     InitFeedbackZone,
     FeedbackQuestionsForm,
@@ -325,15 +285,14 @@ import{Checklist} from "../pages/checklist/checklist";
     SplashLogo,
     UpdateApp,
     ScanQR,
+      ScanQRAsset,
     OfflineAttendanceSites,
       Checklist
->>>>>>> Release-1.0
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Camera,
-<<<<<<< HEAD
       NativeAudio,
       AttendanceService,
       EmployeeService,
@@ -343,15 +302,6 @@ import{Checklist} from "../pages/checklist/checklist";
       SiteService,
       AssetService,
       DBService,
-=======
-    NativeAudio,
-    AttendanceService,
-    EmployeeService,
-    FeedbackService,
-    JobService,
-    QuotationService,
-    SiteService,
->>>>>>> Release-1.0
     authService,
     HttpClient,
     Geolocation,
@@ -365,14 +315,12 @@ import{Checklist} from "../pages/checklist/checklist";
     Toast,
     FileTransfer,
     File,
-<<<<<<< HEAD
       DatePicker,
       AppVersion,
       QRScanner,
       FabContainer,
       Diagnostic,
       SQLite,
-=======
     AppVersion,
     Network,
     SQLite,
@@ -381,7 +329,6 @@ import{Checklist} from "../pages/checklist/checklist";
     Market,
     QRScanner,
     DBService,
->>>>>>> Release-1.0
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]

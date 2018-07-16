@@ -52,11 +52,7 @@ export class MyApp {
 
   pages: Array<{title: string, component: any,active:any,icon:any,permission:any}>;
 
-<<<<<<< HEAD
-  constructor(public platform: Platform,private ionicApp: IonicApp,public menuCtrl:MenuController,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion, private authService:authService) {
-=======
   constructor(private ionicApp: IonicApp,public menuCtrl:MenuController,public platform: Platform,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion, private authService:authService,private network:Network) {
->>>>>>> Release-1.0
     this.initializeApp();
       this.events.subscribe('permissions:set',(permission)=>{
           console.log("Event permission in component");
@@ -103,7 +99,6 @@ export class MyApp {
               this.ionicApp._overlayPortal.getActive().dismiss();
           }
           else if(this.nav.canGoBack())
-<<<<<<< HEAD
           {
               this.nav.pop();
           }
@@ -113,8 +108,6 @@ export class MyApp {
           }
           else if(this.ionicApp._modalPortal.getActive())
           {
-=======
-          {
               this.nav.pop();
           }
           else if(this.menuCtrl.isOpen())
@@ -123,7 +116,6 @@ export class MyApp {
           }
           else if(this.ionicApp._modalPortal.getActive())
           {
->>>>>>> Release-1.0
               this.ionicApp._modalPortal.getActive().dismiss();
           }
           else if (this.counter == 0) {
@@ -135,12 +127,6 @@ export class MyApp {
               platform.exitApp();
           }
       }, 0);
-
-
-
-
-
-
 
 
     // used for an example of ngFor and navigation
@@ -156,12 +142,9 @@ export class MyApp {
         { title: 'Rate Card', component: RateCardPage,active:false,icon:'description',permission:'RateCardList'},
       { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt',permission:'QuotationList'},
        { title: 'Feedback', component: InitFeedbackPage,active:false,icon:'feedback',permission:'FeedbackList'},
-<<<<<<< HEAD
         {title:'Splash page', component:Splash,active:false,icon:'feedback',permission:'DashboardList'},
         {title:'Splash logo', component:SplashLogo,active:false,icon:'feedback',permission:'DashboardList'},
-=======
        // { title: 'Forgot Password', component: ForgotPassword,active:false,icon:'feedback',permission:'FeedbackList'},
->>>>>>> Release-1.0
       // { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},
       // { title: 'Logout', component: LogoutPage,active:false,icon:'power_settings_new'}
     ];
