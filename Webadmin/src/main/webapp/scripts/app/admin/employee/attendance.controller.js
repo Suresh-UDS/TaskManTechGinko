@@ -17,6 +17,7 @@ angular.module('timeSheetApp')
         $scope.selectedDateToSer= new Date();
         $scope.pageSort = 10;
         $scope.pager = {};
+        $scope.noData = false;
 
         $scope.employeeDesignations = ["MD","Operations Manger","Supervisor"]
 
@@ -41,6 +42,10 @@ angular.module('timeSheetApp')
         $scope.selectedAttendance = null;
 
         $scope.searchCriteriaAttendance = null;
+
+        $scope.searchProject = null;
+
+        $scope.searchSite = null;
 
         $scope.searchCriteria = {};
         $scope.pages = { currPage : 1};
@@ -325,7 +330,11 @@ angular.module('timeSheetApp')
                     $scope.pageEntries = $scope.projects.length;
                     $scope.totalCountPages = data.totalCount;
                     $scope.pageSort = 10;
-                }
+                    $scope.noData = false;
+
+                    }else{
+                         $scope.noData = true;
+                    }
 
             });
     
@@ -435,6 +444,8 @@ angular.module('timeSheetApp')
             $scope.selectedEmployee = null;
             $scope.selectedProject = null;
             $scope.selectedSite = null;
+            $scope.searchProject = null;
+            $scope.searchSite = null;
             $scope.searchCriteria = {};
             $rootScope.searchCriteriaAttendances   = null;
             $scope.pages = {
