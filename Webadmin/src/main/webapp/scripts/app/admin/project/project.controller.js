@@ -10,6 +10,7 @@ angular.module('timeSheetApp')
         $scope.doNotMatch = null;
         $scope.errorProjectExists = null;
         $scope.selectedProject = null;
+        $scope.searchProject = null;
         $scope.searchCriteria = {};
         $scope.pages = { currPage : 1};
         $scope.pager = {};
@@ -157,24 +158,24 @@ angular.module('timeSheetApp')
         	}
 
         	$scope.searchCriteria.currPage = currPageVal;
-        	console.log('Selected  project -' + $scope.selectedProject);
+        	console.log('Selected  project -' + $scope.searchProject);
         	console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaProject));
 
-        	if(!$scope.selectedProject) {
+        	if(!$scope.searchProject) {
         		if($rootScope.searchCriteriaProject) {
             		$scope.searchCriteria = $rootScope.searchCriteriaProject;
         		}else {
         			$scope.searchCriteria.findAll = true;
         		}
-        	}else if($scope.selectedProject) {
+        	}else if($scope.searchProject) {
         		$scope.searchCriteria.findAll = false;
-	        	if($scope.selectedProject) {
-		        	$scope.searchCriteria.projectId = $scope.selectedProject.id;
+	        	if($scope.searchProject) {
+		        	$scope.searchCriteria.projectId = $scope.searchProject.id;
 		        	if(!$scope.searchCriteria.projectId) {
-		        		$scope.searchCriteria.projectName = $scope.selectedProject;
-		        		console.log('selected project name ='+ $scope.selectedProject + ', ' +$scope.searchCriteria.projectName);
+		        		$scope.searchCriteria.projectName = $scope.searchProject.name;
+		        		console.log('selected project name ='+ $scope.searchProject.name + ', ' +$scope.searchCriteria.projectName);
 		        	}else {
-			        	$scope.searchCriteria.projectName = $scope.selectedProject.name;
+			        	$scope.searchCriteria.projectName = $scope.searchProject.name;
 		        	}
 	        	}else {
 	        		$scope.searchCriteria.projectId = 0;
@@ -239,6 +240,7 @@ angular.module('timeSheetApp')
 
         $scope.clearFilter = function() {
             $scope.selectedProject = null;
+            $scope.searchProject = null;
             $scope.searchCriteria = {};
             $rootScope.searchCriteriaProject = null;
             $scope.pages = {

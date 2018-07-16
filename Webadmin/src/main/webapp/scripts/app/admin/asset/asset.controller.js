@@ -81,6 +81,7 @@ angular.module('timeSheetApp')
         $scope.amcJobStartTime = null;
         $scope.noData = false;
         $scope.assetQrList ={};
+        $scope.selectedEmployee ={};
 
         //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.searchAcquiredDate = "";
@@ -542,8 +543,8 @@ angular.module('timeSheetApp')
 
         $scope.loadSiteShifts = function() {
         		console.log('selected site - ' + JSON.stringify($scope.selectedSites));
-        		if($scope.selectedSites) {
-            		SiteComponent.findShifts($scope.selectedSites.id).then(function(data){
+        		if($scope.selectedSites && $scope.assetPPM.jobStartTime) {
+            		SiteComponent.findShifts($scope.selectedSites.id,$scope.assetPPM.jobStartTime).then(function(data){
             			$scope.shifts = data;
                         console.log('selected shifts - ' + JSON.stringify($scope.shifts));
                         //$scope.loadingStop();
@@ -911,7 +912,7 @@ angular.module('timeSheetApp')
 
                 $scope.assetConfigs.assetId = $stateParams.id;
             }
-            else if($scope.assetval.id){
+            else if($scope.assetVal.id){
 
                 $scope.assetConfigs.assetType = $scope.selectedAssetType.name;
                 $scope.assetConfigs.assetId = $scope.assetVal.id;
