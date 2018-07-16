@@ -16,13 +16,9 @@ import {CreateEmployeePage} from "../employee-list/create-employee";
 import {CompleteJobPage} from "../jobs/completeJob";
 import {ViewJobPage} from "../jobs/view-job";
 import {LoginPage} from "../login/login";
-<<<<<<< HEAD
 import{SiteListPage} from "../site-list/site-list";
-
-=======
 import {DBService} from "../service/dbService";
 import {AttendanceService} from "../service/attendanceService";
->>>>>>> Release-1.0
 declare var demo;
 @Component({
   selector: 'page-dashboard',
