@@ -1255,18 +1255,18 @@
                                                                 <div class="row">
                                                                     <div class="col-md-4" >
                                                                         <div class="form-group">
-                                                                            <label class="control-label">Employee<span class="red-star">*</span> </label>
+                                                                            <label class="control-label">Employee<!-- <span class="red-star">*</span> --> </label>
                                                                             <div class="dropdown">
 
                                                                                 <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                                <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" ng-required="true">
+                                                                                <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" >
 
 
                                                                                     <option value="">Select Employees...</option>
                                                                                 </select>
 
-                                                                                <div ng-show="form3.$submitted || form3.employeeName.$touched">
+                                                                                <!-- <div ng-show="form3.$submitted || form3.employeeName.$touched">
                                                                                     <div
                                                                                         ng-show="form3.employeeName.$dirty || form3.employeeName.$invalid">
                                                                                         <p class="help-block" style="color:maroon"
@@ -1276,7 +1276,7 @@
 
                                                                                     </div>
 
-                                                                                </div>
+                                                                                </div> -->
                                                                             </div>
 
                                                                         </div>
