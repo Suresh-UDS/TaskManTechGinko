@@ -4,7 +4,6 @@ import {ModalController} from "ionic-angular";
 import {AssetFilter} from "./asset-filter";
 import {QRScanner, QRScannerStatus} from "@ionic-native/qr-scanner";
 import {AssetView} from "../asset-view/asset-view";
-import {ScanQR} from "./scanQR";
 import {AssetService} from "../service/assetService";
 import {componentService} from "../service/componentService";
 import {SQLitePorter} from "@ionic-native/sqlite-porter";
@@ -17,6 +16,7 @@ import { Diagnostic } from '@ionic-native/diagnostic';
 import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
 import {FileTransferObject, FileUploadOptions, FileTransfer} from "@ionic-native/file-transfer";
 import set = Reflect.set;
+import {ScanQR} from "../jobs/scanQR";
 /**
  * Generated class for the AssetList page.
  *
