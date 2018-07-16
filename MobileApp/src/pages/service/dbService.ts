@@ -14,14 +14,10 @@ import {ObjectUnsubscribedError} from "rxjs/Rx";
 import {JobService} from "./jobService";
 import {componentService} from "./componentService";
 import {AttendanceService} from "./attendanceService";
-<<<<<<< HEAD
 
-=======
->>>>>>> bb90f98125bfb45c3930d9ced884a5c504ff3555
 
 @Injectable()
 export class DBService {
-    selectAttendance: any[];
 
     db:any;
     sites:any;
@@ -40,16 +36,10 @@ export class DBService {
     selectViewReading:any;
     selectReading:any;
     selectImage:any;
-<<<<<<< HEAD
     selectAttendance:any;
 
     constructor(private sqlite: SQLite,private componentService:componentService,private jobService:JobService,
                 private siteService:SiteService,public employeeService:EmployeeService,public attendanceService:AttendanceService,public assetService:AssetService) {
-=======
-
-    constructor(private sqlite: SQLite,private componentService:componentService,private jobService:JobService, private assetService:AssetService,
-                private siteService:SiteService,public employeeService:EmployeeService,public attendanceService:AttendanceService) {
->>>>>>> bb90f98125bfb45c3930d9ced884a5c504ff3555
 
         this.selectSite = [];
         this.selectEmployee = [];
@@ -71,20 +61,6 @@ export class DBService {
                 console.log("Database connection")
                 console.log(this.db)
             })
-<<<<<<< HEAD
-=======
-
-
-        // this.siteList();
-        // this.employeeList()
-        // this.job();
-        // this.assetList()
-        // this.setAsset();
-        // this.setPPM()
-        this.selectAttendance = []
-
-
->>>>>>> bb90f98125bfb45c3930d9ced884a5c504ff3555
     }
 
 
