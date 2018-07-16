@@ -30,6 +30,12 @@ angular.module('timeSheetApp')
                 return $http.get('api/site').then(function (response) {
                     return response.data;
                 })
+            },
+
+            loadTicketChartData: function(siteId,fromDate,toDate){
+                return $http.get('api/reports/ticket/site/'+siteId+'/fromDate/'+fromDate+'/toDate/'+toDate).then(function (response) {
+                    return response.data;
+                })
             }
         }
     })

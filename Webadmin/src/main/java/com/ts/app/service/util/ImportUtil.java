@@ -73,6 +73,7 @@ import com.ts.app.web.rest.dto.ChecklistItemDTO;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.JobChecklistDTO;
 import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.LocationDTO;
 import com.ts.app.web.rest.dto.ProjectDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
@@ -95,6 +96,7 @@ public class ImportUtil {
 	private static final String EMP_SHIFT_FOLDER = "empshift";
 	private static final String CLIENT_FOLDER = "client";
 	private static final String SITE_FOLDER = "site";
+	private static final String LOCATION_FOLDER = "location";
 	private static final String COMPLETED_IMPORT_FOLDER = "import.file.path.completed";
 	private static final String SEPARATOR = System.getProperty("file.separator");
 
@@ -198,6 +200,25 @@ public class ImportUtil {
 			statusMap.put(fileKey, "PROCESSING");
 		}
 		importNewFiles("site",filePath, fileName, targetFilePath);
+		ImportResult result = new ImportResult();
+		result.setFile(fileKey);
+		result.setStatus("PROCESSING");
+		return result;
+	}
+	
+	public ImportResult importLocationData(MultipartFile file, long dateTime) {
+        String fileName = dateTime + ".xlsx";
+		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  LOCATION_FOLDER;
+		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
+		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  LOCATION_FOLDER;
+		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
+		if(statusMap.containsKey(fileKey)) {
+			String status = statusMap.get(fileKey);
+			log.debug("Current status for filename -"+fileKey+", status -" + status);
+		}else {
+			statusMap.put(fileKey, "PROCESSING");
+		}
+		importNewFiles("location",filePath, fileName, targetFilePath);
 		ImportResult result = new ImportResult();
 		result.setFile(fileKey);
 		result.setStatus("PROCESSING");
@@ -314,6 +335,9 @@ public class ImportUtil {
 						break;
 					case "site" :
 						importSiteFromFile(fileObj.getPath());
+						break;
+					case "location" :
+						importLocationFromFile(fileObj.getPath());
 						break;
 					case "checklist" :
 						importChecklistFromFile(fileObj.getPath());
@@ -553,6 +577,37 @@ public class ImportUtil {
 			log.error("Error while reading the job data file for import", e);
 		} catch (IOException e) {
 			log.error("Error while reading the job data file for import", e);
+		}
+	}
+	
+	private void importLocationFromFile(String path) {
+		try {
+
+			FileInputStream excelFile = new FileInputStream(new File(path));
+			Workbook workbook = new XSSFWorkbook(excelFile);
+			Sheet datatypeSheet = workbook.getSheetAt(0);
+			Iterator<Row> iterator = datatypeSheet.iterator();
+			int lastRow = datatypeSheet.getLastRowNum();
+			int r = 1;
+			for (; r < lastRow; r++) {
+				log.debug("Current Row number -" + r+"Last Row : "+lastRow);
+				Row currentRow = datatypeSheet.getRow(r);
+				LocationDTO locationDTO = new LocationDTO();
+				locationDTO.setProjectId(Long.valueOf(getCellValue(currentRow.getCell(1))));
+				locationDTO.setSiteId(Long.valueOf(getCellValue(currentRow.getCell(3))));
+				locationDTO.setBlock(currentRow.getCell(5).getStringCellValue());
+				locationDTO.setFloor(currentRow.getCell(6).getStringCellValue());
+				locationDTO.setZone(currentRow.getCell(8).getStringCellValue());
+				Location loc = mapperUtil.toEntity(locationDTO, Location.class);
+		        loc.setActive(Site.ACTIVE_YES);
+				loc = locationRepo.save(loc);
+				log.debug("Created Information for Location: {}", loc);
+			}
+			
+		} catch (FileNotFoundException e) {
+			log.error("Error while reading the location data file for import", e);
+		} catch (IOException e) {
+			log.error("Error while reading the location data file for import", e);
 		}
 	}
 	

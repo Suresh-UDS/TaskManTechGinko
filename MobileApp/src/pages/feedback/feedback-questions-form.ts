@@ -53,6 +53,19 @@ export class FeedbackQuestionsForm {
         this.questions = this.feedback.questions;
         console.log("questions");
         console.log(this.questions);
+
+
+
+
+    }
+
+    ionViewDidLoad()
+    {
+
+        for(let q of this.questions)
+        {
+            q.answer = false;
+        }
     }
 
     markAnswer(i,answer,mode){

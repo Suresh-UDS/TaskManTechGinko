@@ -7,9 +7,13 @@ import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -29,13 +33,12 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.Drive.Files.Create;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
-import com.google.api.services.drive.model.File.Capabilities;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.Permission;
 
+@Component
 public class GoogleSheetsUtil {
 	
 	private static final Logger log = LoggerFactory.getLogger(GoogleSheetsUtil.class);
@@ -49,8 +52,11 @@ public class GoogleSheetsUtil {
 	 * scopes, delete your previously saved credentials/ folder.
 	 */
 	private static final List<String> SCOPES = Collections.singletonList(DriveScopes.DRIVE_FILE);
-	private static final String CLIENT_SECRET_DIR = "client_secret_872397104992-ilhar6nqjp1l4cdat5n82i25ncn82s87.apps.googleusercontent.com.json";
+	private static final String CLIENT_SECRET_DIR = "client_secret_872397104992-2auumih3ono1ig5dt5k3cg1c1ctfuvgr.apps.googleusercontent.com.json";
 
+	@Inject
+	private Environment env;
+	
 	/**
 	 * Creates an authorized Credential object.
 	 * 
@@ -60,7 +66,7 @@ public class GoogleSheetsUtil {
 	 * @throws IOException
 	 *             If there is no client_secret.
 	 */
-	private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
+	private Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
 		// Load client secrets.
 		//InputStream in = GoogleSheetsUtil.class.getResourceAsStream("src/main/resources/" + CLIENT_SECRET_DIR);
 		InputStream in = new FileInputStream(CLIENT_SECRET_DIR);
@@ -70,11 +76,16 @@ public class GoogleSheetsUtil {
 		GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY,
 				clientSecrets, SCOPES)
 						.setDataStoreFactory(new FileDataStoreFactory(new java.io.File(CREDENTIALS_FOLDER)))
-						.setAccessType("offline").build();
-		return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
+						.setAccessType("offline")
+						.setApprovalPrompt("force").build();
+		String host = env.getProperty("google.drive.api.callback.host");
+		//int port = Integer.parseInt(env.getProperty("google.drive.api.callback.port"));
+		LocalServerReceiver localReceiver = new LocalServerReceiver.Builder().setHost(host).build();
+		
+		return new AuthorizationCodeInstalledApp(flow, localReceiver).authorize("user");
 	}
 
-	public static String[] upload(String name, String fileName)  {
+	public String[] upload(String name, String fileName)  {
 		String webFileLink = null;
 		String webContentLink = null;
         // Build a new authorized API client service.

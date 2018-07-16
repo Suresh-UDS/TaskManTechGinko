@@ -1,4 +1,4 @@
-<div class="gc-container" ng-init="initLoad()">
+<div class="gc-container" ng-init="loadPageTop();qrListLoad();">
     <div class="success-message hidden"></div>
 
 
@@ -8,14 +8,7 @@
             <div class="card tablecard">
                 <div class="card-content">
 
-                    <!-- <div class="bouncing-container asset" ng-show="!assets">
-                        <div class="message-container">
-                            <span>Let's create your<br>first Asset!</span>
-                        </div>
-                        <div class="arrow-down"></div>
-                    </div> -->
-
-                    <div class="row" ng-init="loadProjects();loadAssetType();loadAssetGroup();">
+                    <div class="row">
                         <div class="col-md-12 txt-align-rgt">
                             <button class="btn btn-success add-btn margn-tb0" ng-click="printDiv('printable')" tabindex="0">
                                 <i class="material-icons">print</i> Print
@@ -26,39 +19,45 @@
 
                     <div id="printable">
 
-                        <div class="row qrcodeList" ng-repeat="asset in assets">
-
+                        <div class="row qrcodeList" ng-repeat="qr in assetQrList">
+                            
                             <div class="col-md-4">
                                 <div class="QrcodeCon">
 
-                                    <img src="assets/img/qr-code.png">
-                                    <h4><span class="txtBold">Asset Code :</span> {{asset.code}}</h4>
+                                    <img ng-src="{{qr.url}}">
+                                    <h4><span class="txtBold">Asset Code :</span> {{qr.code}}</h4>
 
                                 </div>
                             </div>
                             <div class="col-md-4">
 
-                                <p><span class="txtBold">Asset</span>  : {{asset.title}}</p>
-                                <p><span class="txtBold">Type </span> : {{asset.assetType}}</p>
-                                <p><span class="txtBold">Group</span>  : {{asset.assetGroup}}</p>
+                                <p><span class="txtBold">Asset</span>  : {{qr.title}}</p>
+                                <p><span class="txtBold">Type </span> : {{qr.assetType}}</p>
+                                <p><span class="txtBold">Group</span>  : {{qr.assetGroup}}</p>
 
 
                             </div>
                             <div class="col-md-4">
 
-                                <p><span class="txtBold">Site</span> : {{asset.siteName}}</p>
-                                <p><span class="txtBold">Manufacturer</span>  : {{asset.manufacturerName}}</p>
-                                <p><span class="txtBold">Vendor</span>  : {{asset.amcVendorName}}</p>
+                                <p><span class="txtBold">Site</span> : {{qr.siteName}}</p>
+                                <p><span class="txtBold">Manufacturer</span>  : {{qr.manufacturerName}}</p>
+                                <p><span class="txtBold">Vendor</span>  : {{qr.amcVendorName}}</p>
 
                             </div>
 
                         </div>
+                        <div class="row">
+                           <div class="col-md-12 txt-align-rgt">
+                               <div class="form-group">
+                                   <button class="btn" type="button"
+                                           ui-sref="assets" id="cancel-button">
+                                        Back
+                                   </button>
+                               </div>
+                           </div>
+                        </div>
 
                     </div>
-
-
-
-
 
                 </div>
                 <!-- end content-->
@@ -78,47 +77,4 @@
         </div>
 
     </div> -->
-
-    <div class="card margin-TB-5 txt-align-center" ng-hide="assets">
-
-        <div class="card-content">
-            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="assetsLoader">
-                <div loader-css="ball-pulse"></div>
-            </div>
-
-            <h3>No data Found</h3>
-
-        </div>
-
-    </div>
-
-    <!-- Pagination directive start -->
-
-    <pagination-new></pagination-new>
-
-    <!-- Pagination directive end -->
-
-
-    <div class="row">
-
-
-        <div id="deleteModal" data-backdrop="false" class="modal fade"
-             tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-             aria-hidden="true">
-            <div class="delete-dialog">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        Are you sure to delete the asset?<br>
-                    </div>
-                    <div class="delete-footer">
-                        <button type="button" ng-click="deleteAsset()"
-                                class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
 </div>

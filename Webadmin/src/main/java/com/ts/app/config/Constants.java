@@ -15,6 +15,8 @@ public final class Constants {
     public static final String SPRING_PROFILE_HEROKU = "heroku";
 
     public static final String SYSTEM_ACCOUNT = "system";
+    
+    public static final String COMMA_SEPARATOR = ",";
 
     private Constants() {
     }

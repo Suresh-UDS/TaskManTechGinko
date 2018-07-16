@@ -120,7 +120,7 @@
 
                                             </div>
 
-                                           
+
 
                                         </div>
                                         <div class="row">
@@ -152,7 +152,24 @@
 
                                             </div>
 
+                                        </div>
 
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" name="optionsRadios" ng-model="job.pendingStatus" value="pendingAtUDS" ng-checked="job.pendingAtUDS" > Pending At UDS
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" name="optionsRadios" ng-model="job.pendingStatus" value="pendingAtClient" > Pending At {{job.siteProjectName}}
+                                                    </label>
+                                                </div>
+                                            </div>
                                         </div>
                                         <!-- <div class="row">
 
@@ -186,9 +203,9 @@
 
 
                             </div>
-                            
+
                             <div class="col-md-6">
-                            
+
                             		<div class="panel panel-default">
                             			<div class="panel-heading">Location</div>
                             			<div class="panel-body">
@@ -220,7 +237,7 @@
                                                 </div>
 
                                             </div>
-                            					
+
                             				</div>
                             				<div class="row">
                             				<div class="col-md-4">
@@ -228,7 +245,7 @@
                                                     <label class="control-label">Block </label>
                                                     <div class="dropdown">
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                       <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in blocks track by block.id">
+                                                       <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in blocks track by block">
                                                         	<option value="">Select Block...</option>
                                                     	  </select>
                                                         <div ng-show="form.$submitted || form.block.$touched">
@@ -242,13 +259,13 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="col-md-4">
                                                 <div class="form-group ">
                                                     <label class="control-label">Floor </label>
                                                     <div class="dropdown">
-                                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>       
-													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors track by floor.id">
+                                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors track by floor">
                                                         <option value="">Select Floor...</option>
                                                     	</select>
                                                    	 <div ng-show="form.$submitted || form.floor.$touched">
@@ -262,13 +279,13 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="col-md-4">
                                                 <div class="form-group ">
                                                     <label class="control-label">Zone </label>
                                                     <div class="dropdown">
                                                      <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-													<select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones track by zone.id">
+													<select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones track by zone">
                                                         <option value="">Select Zone...</option>
                                                     </select>
                                                    	 <div ng-show="form.$submitted || form.floor.$touched">
@@ -283,12 +300,12 @@
                                                 </div>
                                             </div>
                             				</div>
-                            			
+
                             			</div>
                             		</div>
                             </div>
-                            
-                            
+
+
 
 
                         </div>
@@ -326,7 +343,7 @@
                                                         name='plannedHours'
                                                         type="number"
                                                         value="1"
-                                                     	   min="1"   
+                                                     	   min="1"
                                                         required
                                                     >
 
@@ -361,7 +378,7 @@
                                                         <option>INPROGRESS</option>
                                                         <option>COMPLETED</option>
                                                     </select>
-                                                    
+
                                                     <div ng-show="form.$submitted || form.jobStatus.$touched">
                                                         <div
                                                             ng-show="form.jobStatus.$dirty || form.jobStatus.$invalid">
@@ -388,11 +405,14 @@
                                                         <option value="">Select Type...</option>
                                                         <option>HOUSEKEEPING</option>
                                                         <option>ELECTRICAL</option>
-                                                        <option>AC</option>
+                                                        <option>HVAC</option>
                                                         <option>CARPENTRY</option>
-                                                        <option>PEST</option>
+                                                        <option>PESTCONTROL</option>
                                                         <option>PLUMBING</option>
                                                         <option>MAINTENANCE</option>
+                                                        <option>CIVIL</option>
+                                                        <option>GENERAL</option>
+                                                        <option>PANTRYSERVICES</option>
                                                         <option>ADMIN</option>
                                                     </select>
                                                     <!-- <input type="text"
@@ -543,12 +563,12 @@
                                                             </label>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="" ng-show="job.schedule == 'MONTHLY'">
                                                     		<select class="form-control " ng-model="job.scheduleMonthlyDay"  ng-options="day as day for day in monthDays">
                                                             <option value="">Please select the day of month...</option>
                                                          </select>
-                                                    
+
                                                     </div>
 
                                                     <div ng-show="(form.$submitted || form.schedule.$touched) && (form.schedule == 'DAILY' || form.schedule == 'WEEKLY')">

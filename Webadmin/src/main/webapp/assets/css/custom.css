@@ -87,7 +87,10 @@ ul.checkList li
     box-shadow: 0px 2px 10px #ccc;
     width: 98%;
 }
-
+.ErrorCon
+{
+    z-index: 100000;
+}
 .RightAddBtn
 {
     padding:20px 5px 5px 5px;
@@ -177,6 +180,10 @@ ul.checkList li
 .margin0
 {
    margin:0 !important;
+}
+.margn-btm-8
+{
+    margin-bottom: 8px;
 }
 .pdng-top13
 {
@@ -773,6 +780,16 @@ span.red-star
 {
     background: #EEEEEE;
 }
+.blocksListCon li.active
+{
+   background: #EEEEEE;
+   border: 1px solid #333;
+}
+
+.blocksListCon li a
+{
+  color:#333;
+}
 .clear
 {
     clear: both;
@@ -808,7 +825,7 @@ ul.blocksListCon
     float: left;
     border: 1px solid #dfdfdf;
     margin: 3px;
-    padding: 15px;
+    padding: 30px 15px 15px 15px;
     text-align: center;
     cursor: pointer;
 }
@@ -1375,6 +1392,79 @@ a.cal-btn i
   .navbar .navbar-brand{
     line-height: 43px !important;
   }
+
+  .LoginPageCon
+  {
+      position: relative;
+  }
+.LoginPageCon .flotingIcons
+{
+    position: absolute;
+    z-index: 1000;
+}
+.LoginPageCon .flotingIcons.icon-1
+{
+    top: 36%;
+    left: 20%;
+}
+span.flotingIcons.icon-10 {
+    top: 38%;
+    right: 21%;
+}
+span.flotingIcons.icon-2 {
+    top: 52%;
+    left: 12%;
+}
+span.flotingIcons.icon-2 img,span.flotingIcons.icon-12 img,span.flotingIcons.icon-7 img
+{
+    width: 80%;
+}
+span.flotingIcons.icon-3 {
+    top: 33%;
+    left: 10%;
+}
+span.flotingIcons.icon-4 {
+    bottom: 33%;
+    right: 15%;
+}
+span.flotingIcons.icon-5 {
+    top: 28%;
+    left: 17%;
+}
+span.flotingIcons.icon-6 {
+    top: 18%;
+    left: 22%;
+}
+span.flotingIcons.icon-7 {
+    top: 10%;
+    right: 34%;
+}
+span.flotingIcons.icon-8 {
+    top: 32%;
+    right: 13%;
+}
+span.flotingIcons.icon-9 {
+    top: 18%;
+    right: 19%;
+}
+span.flotingIcons.icon-9 img,span.flotingIcons.icon-5 img
+{
+    width: 70%;
+}
+span.flotingIcons.icon-11 {
+    bottom: 25%;
+    left: 25%;
+}
+span.flotingIcons.icon-12 {
+    top: 6%;
+    right: 44%;
+}
+span.flotingIcons.icon-13 {
+    top: 10%;
+    left: 33%;
+}
+
+
   .pad0px
   {
     padding:0px !important;
@@ -1409,6 +1499,10 @@ a.cal-btn i
 .padng-right30
 {
     padding-right: 30px;
+}
+.form-group.pad-btm0
+{
+    padding-bottom: 0 !important;
 }
 .modal-content .modal-header
 {

@@ -40,7 +40,7 @@ public class Location  extends AbstractAuditingEntity implements Serializable {
     @Size(min = 1, max = 250)
     @Column(length = 250, nullable = true)
     private String name;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "siteId", nullable = true)
     private Site site;
@@ -56,7 +56,10 @@ public class Location  extends AbstractAuditingEntity implements Serializable {
     private String floor;
 
     @Column(name = "zone")
-    private String zone;    
+    private String zone;
+
+    @Column(name="qr_code_image")
+    private String qrCodeImage;
 
     public Long getId() {
         return id;
@@ -103,6 +106,13 @@ public class Location  extends AbstractAuditingEntity implements Serializable {
 	public void setZone(String zone) {
 		this.zone = zone;
 	}
-    
-    
+
+
+    public String getQrCodeImage() {
+        return qrCodeImage;
+    }
+
+    public void setQrCodeImage(String qrCodeImage) {
+        this.qrCodeImage = qrCodeImage;
+    }
 }

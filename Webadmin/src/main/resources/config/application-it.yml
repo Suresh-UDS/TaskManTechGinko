@@ -167,6 +167,7 @@ job:
       enabled: true
    monthlyJob:
       enabled: true
+      creation: monthly
    quarterlyJob:
       enabled: true   
    yearlyJob:

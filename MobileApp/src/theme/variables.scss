@@ -234,6 +234,7 @@ ion-app.md
 
 }
 
+<<<<<<< HEAD
 .card-calendar
 {
   .fc-view-container
@@ -271,12 +272,36 @@ ion-app.md
 
 .border-btm-blk{
   border-bottom:1px solid #a7a1a1 !important
+=======
+scanqr
+{
+  ion-content.content-md
+  {
+    background: transparent !important;
+  }
+  ion-content
+  {
+    background: transparent !important;
+
+    .fixed-content
+    {
+      background: transparent !important;
+    }
+  }
+
+}
+
+ion-app.md
+{
+  background: transparent !important;
+>>>>>>> Release-1.0
 }
 
 .form-group label.control-label{
   color: #000;
 }
 
+<<<<<<< HEAD
 image-viewer ion-header
 {
   display: none !important;
@@ -290,6 +315,17 @@ image-viewer ion-header
 {
   margin:0px !important;
 }
+=======
+.bg-white .LogoTop {
+  text-align: center;
+  padding-top: 20%;
+}
+
+//.bg-white .SplashLoader {
+//  text-align: center;
+//  padding-top: 20px;
+//}
+>>>>>>> Release-1.0
 
 ion-input
 {

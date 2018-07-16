@@ -14,7 +14,8 @@ angular.module('timeSheetApp')
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/admin/feedback/feedback-list.html',
-                        controller: 'FeedbackController'
+                        controller: 'FeedbackController',
+                        controllerAs:'vm'
                     }
                 },
                 resolve: {

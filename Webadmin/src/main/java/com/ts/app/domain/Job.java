@@ -98,6 +98,10 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	private String frequency;
 	private String duration;
 
+	private boolean pendingAtUDS;
+
+	private boolean pendingAtClient;
+
     @OneToMany(mappedBy ="job", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<JobChecklist> checklistItems;
 
@@ -385,6 +389,7 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	public void setActualMinutes(int actualMinutes) {
 		this.actualMinutes = actualMinutes;
 	}
+
 	public String getMaintenanceType() {
 		return maintenanceType;
 	}
@@ -392,5 +397,19 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 		this.maintenanceType = maintenanceType;
 	}
     
-    
+    public boolean isPendingAtClient() {
+        return pendingAtClient;
+    }
+
+    public void setPendingAtClient(boolean pendingAtClient) {
+        this.pendingAtClient = pendingAtClient;
+    }
+
+    public boolean isPendingAtUDS() {
+        return pendingAtUDS;
+    }
+
+    public void setPendingAtUDS(boolean pendingAtUDS) {
+        this.pendingAtUDS = pendingAtUDS;
+    }
 }

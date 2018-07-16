@@ -7,15 +7,15 @@ angular.module('timeSheetApp')
         $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.averageRating ='0';
+        $scope.feedbackCount ='0';
         $scope.readOnly = true;
         $scope.colors = ['#45b7cd', '#ff6384', '#ff8e72'];
-        $scope.labels = [];
         $scope.series = ['Series A'];
         $scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.pager = {};
-        $scope.data = [
-        ];
+
+
         $scope.onClick = function (points, evt) {
             console.log(points, evt);
         };
@@ -32,10 +32,6 @@ angular.module('timeSheetApp')
                 ]
             }
         };
-
-
-        $scope.label = [];
-        $scope.datas = [];
 
 
         var vm = this;
@@ -57,25 +53,25 @@ angular.module('timeSheetApp')
 
 
 
-    		$scope.pages = { currPage : 1};
+        $scope.pages = { currPage : 1};
 
-        $scope.searchCriteria = {
+        $scope.searchCriteria = {};
 
-        }
+        $scope.selectedProject = {};
 
-        $scope.feedbackList;
+        $scope.selectedSite = {};
 
-        $scope.selectedProject;
+        $scope.selectedBlock = null;
 
-        $scope.selectedSite;
+        $scope.selectedFloor = null;
 
-        $scope.selectedBlock;
+        $scope.selectedZone  = null;
 
-        $scope.selectedFloor;
+        $scope.clientId = null;
 
-        $scope.selectedZone;
+        $scope.siteId = null;
 
-        $scope.feedbackReport;
+        $scope.feedbackReport = {};
 
         $scope.now = new Date()
 
@@ -101,89 +97,98 @@ angular.module('timeSheetApp')
 
 
         $scope.init = function(){
-	        $scope.loading = true;
-	        $scope.loadProjects();
+            $scope.loading = true;
+            $scope.loadProjects();
         };
 
         $scope.loadProjects = function () {
-	    		ProjectComponent.findAll().then(function (data) {
-	            $scope.projects = data;
-	        });
-	    };
+                ProjectComponent.findAll().then(function (data) {
+                $scope.projects = data;
+            });
+        };
 
-	    $scope.loadSites = function () {
-	    		ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
-	    			$scope.selectedSite = null;
-	            $scope.sites = data;
-	        });
-	    };
+        $scope.loadSites = function () {
+                ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
+                    $scope.selectedSite = null;
+                $scope.sites = data;
+            });
+        };
 
-	    $scope.searchLocations = function () {
-	    		console.log('searchLocations- '+ $scope.selectedSite.id);
-	    		$scope.searchCriteria.siteId = $scope.selectedSite.id;
-	    		LocationComponent.search($scope.searchCriteria).then(function (data) {
-	    			$scope.filteredLocations = data.transactions;
-	        });
-	    };
+        $scope.searchLocations = function () {
+                
+                $scope.searchCriteria.siteId = $scope.selectedSite.id;
+                LocationComponent.search($scope.searchCriteria).then(function (data) {
+                    $scope.filteredLocations = data.transactions;
+                    console.log('searchLocations- ', $scope.filteredLocations);
+
+            });
+        };
 
 
-	    $scope.loadBlocks = function () {
-	    		console.log('selected project -' + $scope.selectedProject.id + ', site -' + $scope.selectedSite.id)
-	    		LocationComponent.findBlocks($scope.selectedProject.id,$scope.selectedSite.id).then(function (data) {
-	    			$scope.selectedBlock = null;
-	            $scope.blocks = data;
-	        });
-	    };
+        $scope.loadBlocks = function () {
+                console.log('selected project -' + $scope.selectedProject.id + ', site -' + $scope.selectedSite.id)
+                LocationComponent.findBlocks($scope.selectedProject.id,$scope.selectedSite.id).then(function (data) {
+                    $scope.selectedBlock = null;
+                $scope.blocks = data;
+            });
+        };
 
-	    $scope.loadFloors = function () {
-	    		LocationComponent.findFloors($scope.selectedProject.id,$scope.selectedSite.id,$scope.selectedBlock).then(function (data) {
-	    			$scope.selectedFloor = null;
-	            $scope.floors = data;
-	        });
-	    };
+        $scope.loadFloors = function () {
+                LocationComponent.findFloors($scope.selectedProject.id,$scope.selectedSite.id,$scope.selectedBlock).then(function (data) {
+                    $scope.selectedFloor = null;
+                $scope.floors = data;
+            });
+        };
 
-	    $scope.loadZones = function () {
-	    		console.log('load zones - ' + $scope.selectedProject.id +',' +$scope.selectedSite.id +',' +$scope.selectedBlock +','+$scope.selectedFloor);
-	    		LocationComponent.findZones($scope.selectedProject.id,$scope.selectedSite.id,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
-	    			$scope.selectedZone = null;
-	            $scope.zones = data;
-	        });
-	    };
+        $scope.loadZones = function () {
+                console.log('load zones - ' + $scope.selectedProject.id +',' +$scope.selectedSite.id +',' +$scope.selectedBlock +','+$scope.selectedFloor);
+                LocationComponent.findZones($scope.selectedProject.id,$scope.selectedSite.id,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
+                    $scope.selectedZone = null;
+                $scope.zones = data;
+            });
+        };
 
-	    $scope.refreshPage = function() {
-			$scope.clearFilter();
-			$scope.loadFeedbacks();
-	    }
+        $scope.refreshPage = function() {
+            $scope.clearFilter();
+            $scope.loadFeedbacks();
+        }
 
-	    $scope.loadFeedbacks = function () {
-	    		console.log('called loadFeedbacks');
-	    		$scope.search();
-	    };
+        $scope.loadFeedbacks = function () {
+                console.log('called loadFeedbacks');
+                $scope.search();
+        };
 
-	    $scope.genZoneReport = function(block, floor, zone, $form) {
-	    		$scope.selectedBlock = block;
-	    		$scope.selectedFloor = floor;
-	    		$scope.selectedZone = zone;
-	    		//document.getElementById('searchForm').submit()
+        $scope.genZoneReport = function(client,site,block, floor, zone, $form) {
 
-	    		//$scope.search();
-	    };
+                $scope.clientId = client;
+                $scope.siteId = site;
+                $scope.selectedBlock = block;
+                $scope.selectedFloor = floor;
+                $scope.selectedZone = zone;
+                
+                //document.getElementById('searchForm').submit();
+               
+                $scope.search();
+        };
 
-	    $scope.search = function () {
+        $scope.feedbackListLoader = true;
+
+        $scope.search = function () {
+             
             var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
-            if(!$scope.searchCriteria) {
+            //if(!$scope.searchCriteria) {
                 var searchCriteria = {
                     currPage : currPageVal
                 }
                 $scope.searchCriteria = searchCriteria;
-            }
+           // }
 
             $scope.searchCriteria.currPage = currPageVal;
+             $scope.searchCriteria.findAll = false;
             console.log('Selected feedback' + $scope.selectedLocation);
 
             if($scope.selectedDateFrom){
                 $scope.searchCriteria.checkInDateTimeFrom = $scope.selectedDateFrom;
-                $scope.searchCriteria.findAll = false;
                 console.log("From date found");
                 console.log($scope.searchCriteria.checkInDateTimeFrom)
 
@@ -197,7 +202,6 @@ angular.module('timeSheetApp')
 
             if($scope.selectedDateTo){
                 $scope.searchCriteria.checkInDateTimeTo = $scope.selectedDateTo;
-                $scope.searchCriteria.findAll = false;
                 console.log("To date found")
                 console.log($scope.searchCriteria.checkInDateTimeTo)
 
@@ -209,147 +213,167 @@ angular.module('timeSheetApp')
 
 
             if(!$scope.selectedProject) {
-                if($rootScope.searchCriteriaFeedback) {
+                /*if($rootScope.searchCriteriaFeedback) {
                     $scope.searchCriteria = $rootScope.searchCriteriaFeedback;
-                }else {
+                }else {*/
                     $scope.searchCriteria.findAll = true;
-                }
+                /*}*/
 
             }else {
-                if($scope.selectedProject) {
-                    $scope.searchCriteria.findAll = false;
+                if($scope.selectedProject.id) {
+                    
                     $scope.searchCriteria.projectId = $scope.selectedProject.id;
-                    $scope.searchCriteria.siteId = $scope.selectedSite.id;
-                    $scope.searchCriteria.block = $scope.selectedBlock;
-                    $scope.searchCriteria.floor = $scope.selectedFloor;
-                    $scope.searchCriteria.zone = $scope.selectedZone;
-                }else {
+                }
+                else if($scope.clientId){
+                    
+                  $scope.searchCriteria.projectId = $scope.clientId;
+                }
+                else {
                     $scope.searchCriteria.projectId = 0;
                 }
+                if($scope.selectedSite.id) {
+                     $scope.searchCriteria.siteId = $scope.selectedSite.id;
+                }
+                else if($scope.siteId){
+                     $scope.searchCriteria.siteId = $scope.siteId ;
+                }
+                else {
+                    $scope.searchCriteria.siteId = 0;
+                }
+                if($scope.selectedBlock) {
+                     $scope.searchCriteria.block = $scope.selectedBlock;
+                }
+                else {
+                    $scope.searchCriteria.block = "";
+                }
+                if($scope.selectedFloor) {
+                    $scope.searchCriteria.floor = $scope.selectedFloor;
+                }
+                else {
+                    $scope.searchCriteria.floor = "";
+                }
+                if($scope.selectedZone) {
+                     $scope.searchCriteria.zone = $scope.selectedZone;
+                }
+                else {
+                    $scope.searchCriteria.zone = "";
+                }
+                   
             }
-            console.log("Search Criteria : "+$scope.searchCriteria);
-            FeedbackComponent.reports($scope.searchCriteria).then(function (data) {
-                $scope.feedbackList = data.transactions;
-            		$scope.feedbackReport = data;
-            		$scope.feedbackListLoader = true;
-            		console.log('feedback report - ' + JSON.stringify($scope.feedbackReport));
-                    $scope.averageRating = $scope.feedbackReport.overallRating;
 
-//                $scope.pages.currPage = data.currPage;
-//                $scope.pages.totalPages = data.totalPages;
-//                $scope.loading = false;
-//                if($scope.feedbackList == null){
-//                    $scope.pages.startInd = 0;
-//                }else{
-//                    $scope.pages.startInd = (data.currPage - 1) * 10 + 1;
-//                }
-//
-//                $scope.pages.endInd = data.totalCount > 10  ? (data.currPage) * 10 : data.totalCount ;
-//                $scope.pages.totalCnt = data.totalCount;
+
+              $scope.feedbackReport = {};
+              $scope.feedbackListLoader = false;
+              $scope.feedbackListData = false;
+              $rootScope.loadingStart();
+            console.log('Search Criteria : ', $scope.searchCriteria);
+            FeedbackComponent.reports($scope.searchCriteria).then(function (data) {
+                    $scope.feedbackReport = data;
+                    $scope.feedbackListLoader = true;
+                    $rootScope.loadingStop();
+                    var qLength = ($scope.feedbackReport.questionRatings).length;
+                    if(qLength > 0){
+                        
+                        $scope.feedbackListData = true;
+                    }
+                    
+                    console.log('feedback report - ' + JSON.stringify($scope.feedbackReport));
+                    $scope.averageRating = $scope.feedbackReport.overallRating;
+                    $scope.feedbackCount = $scope.feedbackReport.feedbackCount;
+                   
+
+
                 $scope.hide = true;
-                console.log('weeklyZone data - ' + $scope.feedbackReport.weeklyZone.length);
+                //console.log('weeklyZone data - ' + $scope.feedbackReport.weeklyZone.length);
                 $scope.labels = [];
                 $scope.data = [];
                 $scope.label = [];
                 $scope.datas = [];
-//                $scope.options = {}
-//                $scope.options.legend = { "display" : true}
-//                $scope.option = {}
-//                $scope.option.legend = { "display" : true}
-                if($scope.feedbackReport.weeklyZone && $scope.feedbackReport.weeklyZone.length > 0) {
-                    var zoneDateWiseRating = $scope.feedbackReport.weeklyZone;
-                    var zoneDateWiseDataArr = [];
-                    for(var i =0;i<zoneDateWiseRating.length; i++) {
-                    		$scope.labels.push(zoneDateWiseRating[i].date);
-                    		zoneDateWiseDataArr.push(zoneDateWiseRating[i].rating);
-                    }
-                    $scope.data.push(zoneDateWiseDataArr);
+    
 
-                    console.log('labels - ' + JSON.stringify($scope.labels));
-                    console.log('data - ' + JSON.stringify($scope.data));
-                    var zoneOverallRating = $scope.feedbackReport.weeklyZone;
-                    for(var i =0;i<zoneOverallRating.length; i++) {
-                    		$scope.label.push(zoneOverallRating[i].date);
-                    		$scope.datas.push(zoneOverallRating[i].rating);
+                if($scope.feedbackReport.weeklyZone && $scope.feedbackReport.weeklyZone.length > 0) {
+
+                    // Line chart data
+                    
+                    var lineZoneDateWiseRating = $scope.feedbackReport.weeklyZone;
+                    //var chartZoneDateWiseDataArr = [];
+                    for(var i =0;i<lineZoneDateWiseRating.length; i++) {
+                            $scope.labels.push(lineZoneDateWiseRating[i].date);
+                            $scope.data.push(lineZoneDateWiseRating[i].rating);
                     }
-                    console.log('doughnut labels - ' + JSON.stringify($scope.label));
-                    console.log('doughnut data - ' + JSON.stringify($scope.datas));
+
+                    //$scope.data.push(chartZoneDateWiseDataArr);
+                    //$scope.data = chartZoneDateWiseDataArr;
+
+                    console.log('Line chart labels - ' + JSON.stringify($scope.labels));
+                    console.log('Line chart data - ' + JSON.stringify($scope.data));
+
+                     // Doughnut chart data
+
+                    var doughnutZoneDateWiseRating = $scope.feedbackReport.weeklyZone;
+                    for(var i =0;i<doughnutZoneDateWiseRating.length; i++) {
+                            $scope.label.push(doughnutZoneDateWiseRating[i].date);
+                            $scope.datas.push(doughnutZoneDateWiseRating[i].rating);
+                    }
+                    
+                    $scope.chartOptions = { legend: { display: true } };
+
+
+
+                    console.log('Doughnut chart labels - ' + JSON.stringify($scope.label));
+                    console.log('Doughnut chart data - ' + JSON.stringify($scope.datas));
+                
 
                 }else {
-                    var zoneWiseRating = $scope.feedbackReport.weeklySite;
-                    var zoneWiseDataArr = [];
-                    for(var i =0;i<zoneWiseRating.length; i++) {
-                    		$scope.labels.push(zoneWiseRating[i].zoneName);
-                    		zoneWiseDataArr.push(zoneWiseRating[i].rating);
+
+                    // Line chart data
+
+                    var lineZoneWiseRating = $scope.feedbackReport.weeklySite;
+                    //var chartZoneWiseDataArr = [];
+
+                    for(var i =0;i<lineZoneWiseRating.length; i++) {
+                            $scope.labels.push(lineZoneWiseRating[i].zoneName);
+                            $scope.data.push(lineZoneWiseRating[i].rating);
                     }
-                    $scope.data.push(zoneWiseDataArr);
-                    var zoneDateWiseRating = $scope.feedbackReport.weeklySite;
-                    var zoneDateWiseDataArr = [];
-                    for(var i =0;i<zoneDateWiseRating.length; i++) {
-                    		$scope.label.push(zoneDateWiseRating[i].zoneName);
-                    		$scope.datas.push(zoneDateWiseRating[i].rating);
+
+                    //$scope.data.push(chartZoneWiseDataArr);
+                    //$scope.data = chartZoneWiseDataArr;
+
+                    console.log('Line chart labels - ' + JSON.stringify($scope.labels));
+                    console.log('Line chart data - ' + JSON.stringify($scope.data));
+
+                     // Doughnut chart data
+
+                    var doughnutZoneWiseRating = $scope.feedbackReport.weeklySite;
+                    //var doughnutZoneWiseDataArr = [];
+                    for(var i =0;i<doughnutZoneWiseRating.length; i++) {
+                            $scope.label.push(doughnutZoneWiseRating[i].zoneName);
+                            $scope.datas.push(doughnutZoneWiseRating[i].rating);
                     }
+
                     //$scope.datas.push(zoneDateWiseDataArr);
 
+                     $scope.chartOptions = { legend: { display: true } };
+
+                    console.log('Doughnut chart labels - ' + JSON.stringify($scope.label));
+                    console.log('Doughnut chart data - ' + JSON.stringify($scope.datas));
+                    
+
+                    
+
                 }
+            }).catch(function(res){
+                $rootScope.loadingStop();
+                $scope.feedbackListLoader = true;
+                $scope.showNotifications('top','center','danger','Cannot Load Feedback');
             });
-            $rootScope.searchCriteriaFeedback = $scope.searchCriteria;
-            if($scope.pages.currPage == 1) {
-                $scope.firstStyle();
-            }
+          
         };
 
-
-
-        $scope.first = function() {
-            if($scope.pages.currPage > 1) {
-                $scope.pages.currPage = 1;
-                $scope.firstStyle();
-                $scope.search();
-            }
-        };
-
-        $scope.firstStyle = function() {
-            var first = document.getElementById('#first');
-            var ele = angular.element(first);
-            ele.addClass('disabledLink');
-            var previous = document.getElementById('#previous');
-            ele = angular.element(previous);
-            ele.addClass('disabledLink');
-            if($scope.pages.totalPages > 1) {
-                var nextSitePage = document.getElementById('#next');
-                var ele = angular.element(next);
-                ele.removeClass('disabledLink');
-                var lastSitePage = document.getElementById('#lastSitePage');
-                ele = angular.element(lastSitePage);
-                ele.removeClass('disabledLink');
-            }
-
-        }
-
-        $scope.previous = function() {
-            console.log("Calling previous")
-
-            if($scope.pages.currPage > 1) {
-                $scope.pages.currPage = $scope.pages.currPage - 1;
-                if($scope.pages.currPage == 1) {
-                    var first = document.getElementById('#first');
-                    var ele = angular.element(first);
-                    ele.addClass('disabled');
-                    var previous = document.getElementById('#previous');
-                    ele = angular.element(previous);
-                    ele.addClass('disabled');
+        $scope.showNotifications= function(position,alignment,color,msg){
+                    demo.showNotification(position,alignment,color,msg);
                 }
-                var next = document.getElementById('#next');
-                var ele = angular.element(next);
-                ele.removeClass('disabled');
-                var lastSitePage = document.getElementById('#last');
-                ele = angular.element(last);
-                ele.removeClass('disabled');
-                $scope.search();
-            }
 
-        };
 
         $scope.printDiv = function(printable) {
             var printContents = document.getElementById(printable).innerHTML;
@@ -372,58 +396,22 @@ angular.module('timeSheetApp')
             popupWinindow.document.close();
         }
 
-        $scope.next = function() {
-            console.log("Calling next")
-
-            if($scope.pages.currPage < $scope.pages.totalPages) {
-                $scope.pages.currPage = $scope.pages.currPage + 1;
-                if($scope.pages.currPage == $scope.pages.totalPages) {
-                    var next = document.getElementById('#next');
-                    var ele = angular.element(next);
-                    ele.addClass('disabled');
-                    var last = document.getElementById('#last');
-                    ele = angular.element(last);
-                    ele.addClass('disabled');
-                }
-                var first = document.getElementById('#first')
-                var ele = angular.element(first);
-                ele.removeClass('disabled');
-                var previous = document.getElementById('#previous')
-                ele = angular.element(previous);
-                ele.removeClass('disabled');
-                $scope.search();
-            }
-
-        };
-
-        $scope.last = function() {
-            console.log("Calling last")
-            if($scope.pages.currPage < $scope.pages.totalPages) {
-                $scope.pages.currPage = $scope.pages.totalPages;
-                if($scope.pages.currPage == $scope.pages.totalPages) {
-                    var next = document.getElementById('#next');
-                    var ele = angular.element(next);
-                    ele.addClass('disabled');
-                    var last = document.getElementById('#last');
-                    ele = angular.element(last);
-                    ele.addClass('disabled');
-                }
-                var first = document.getElementById('#first');
-                var ele = angular.element(first);
-                ele.removeClass('disabled');
-                var previous = document.getElementById('#previous');
-                ele = angular.element(previous);
-                ele.removeClass('disabled');
-                $scope.search();
-            }
-
-        };
+      
 
         $scope.clearFilter = function() {
-            $scope.selectedSite = null;
-            $scope.selectedProject = null;
+            $scope.selectedSite = {};
+            $scope.selectedProject = {};
             $scope.searchCriteria = {};
-            $rootScope.searchCriteriaSite = null;
+            //$rootScope.searchCriteriaSite = null;
+            $scope.averageRating = '0';
+            $scope.feedbackCount ='0';
+            $scope.selectedBlock = null;
+            $scope.selectedFloor = null;
+            $scope.selectedZone  = null;
+            $scope.labels = [];
+            $scope.data = [];
+            $scope.label = [];
+            $scope.datas = [];
             $scope.pages = {
                 currPage: 1,
                 totalPages: 0
@@ -432,7 +420,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.cancelFeedback = function () {
-        		$location.path('/feedback');
+                $location.path('/feedback');
         };
 
         $scope.initCalender();

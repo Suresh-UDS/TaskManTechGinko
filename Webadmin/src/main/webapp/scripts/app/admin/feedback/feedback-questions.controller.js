@@ -33,8 +33,10 @@ angular.module('timeSheetApp')
 
         $scope.init = function(){
             $scope.feedbackItem = {};
+            $scope.newFeedbackItem = {};
             $scope.feedbackItem.displayType = 'form';
             $scope.loading = true;
+            $scope.newFeedbackItem.remarksRequired=false;
           $scope.loadProjects();
           $scope.search();
           $scope.qType();
@@ -367,7 +369,14 @@ angular.module('timeSheetApp')
             $scope.search();
         };
 
+        $scope.remarksAdded = function(remarks){
+            if(remarks){
+                console.log(remarks)
+            }else{
+                $scope.newFeedbackItem.remarksRequired=false;
+                console.log($scope.newFeedbackItem.remarksRequired);
+            }
+        }
+
 
     });
-
-

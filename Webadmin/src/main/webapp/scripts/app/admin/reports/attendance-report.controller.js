@@ -11,7 +11,7 @@ angular.module('timeSheetApp')
         $scope.errorMessage = null;
         $scope.doNotMatch = null;
         $scope.errorEmployeeExists = null;
-        $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy'); 
+        $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
         $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
         var d = new Date();
         d.setFullYear(2018, 0, 1);
@@ -43,9 +43,9 @@ angular.module('timeSheetApp')
 
         $scope.searchCriteria = {};
 
-         $scope.pageSort = 10; 
 
          $rootScope.exportStatusObj  ={}; 
+         $scope.pageSort = 10;
 
         $scope.initCalender = function(){
 
@@ -60,10 +60,10 @@ angular.module('timeSheetApp')
          $('input#dateFilterFrom').on('dp.change', function(e){
             console.log(e.date);
             console.log(e.date._d);
-            $scope.selectedDateFromSer= e.date._d; 
-            
+            $scope.selectedDateFromSer= e.date._d;
+
             $.notifyClose();
-             
+
             if($scope.selectedDateFromSer > $scope.selectedDateToSer) {
 
                     $scope.showNotifications('top','center','danger','From date cannot be greater than To date');
@@ -73,8 +73,8 @@ angular.module('timeSheetApp')
                $scope.selectedDateFrom= $filter('date')(e.date._d, 'dd/MM/yyyy');
                // $scope.refreshReport();
             }
-            
-            
+
+
 
         });
         $('input#dateFilterTo').on('dp.change', function(e){
@@ -83,7 +83,7 @@ angular.module('timeSheetApp')
             $scope.selectedDateToSer= e.date._d;
 
             $.notifyClose();
-            
+
             if($scope.selectedDateFromSer > $scope.selectedDateToSer) {
                     $scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
                     $scope.selectedDateTo=$filter('date')(new Date(), 'dd/MM/yyyy');
@@ -209,6 +209,7 @@ angular.module('timeSheetApp')
             	}
             	$scope.searchCriteria = searchCriteria;
         	}
+        	$scope.searchCriteria.isList = true;
     		console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaAttendances));
     		console.log('criteria in scope -'+JSON.stringify($scope.searchCriteria));
 
@@ -223,7 +224,7 @@ angular.module('timeSheetApp')
                 if($scope.selectedDateTo) {
                     $scope.searchCriteria.checkInDateTimeTo = $scope.selectedDateToSer;
                 }
-            
+
 
 //          if($scope.selectedEmployee){
 //              console.log($scope.selectedEmployee);
@@ -254,14 +255,14 @@ angular.module('timeSheetApp')
                 if($scope.selectedSite) {
                     $scope.searchCriteria.siteId = $scope.selectedSite.id;
                     }
-                    
+
 
                 if($scope.selectedProject) {
                     $scope.searchCriteria.projectId = $scope.selectedProject.id;
-                
+
                 }
-                
-            
+
+
             console.log('search criterias - ',JSON.stringify($scope.searchCriteria));
             //-------
             if($scope.pageSort){
@@ -274,8 +275,8 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
 
             }else{
-                $scope.searchCriteria.columnName ="id";
-                $scope.searchCriteria.sortByAsc = true;
+                // $scope.searchCriteria.columnName ="id";
+                // $scope.searchCriteria.sortByAsc = true;
             }
 
                console.log("search criteria",$scope.searchCriteria);
@@ -291,7 +292,7 @@ angular.module('timeSheetApp')
                 console.log('Attendance search result list -' + JSON.stringify($scope.attendancesData));
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
-               
+
                /*
                     ** Call pagination  main function **
                 */
@@ -303,10 +304,10 @@ angular.module('timeSheetApp')
                         $scope.showCurrPage = data.currPage;
                         $scope.pageEntries = $scope.attendancesData.length;
                         $scope.totalCountPages = data.totalCount;
-                        $scope.pageSort = 10;  
+                        $scope.pageSort = 10;
                     }
             });
-        
+
         };
 
 
@@ -391,7 +392,7 @@ angular.module('timeSheetApp')
             )
         }
 
-       
+
 
         $scope.clearFilter = function() {
             $rootScope.exportStatusObj.exportMsg = '';

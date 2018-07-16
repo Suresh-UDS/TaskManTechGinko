@@ -80,6 +80,8 @@ angular.module('timeSheetApp')
         $scope.ppmJobStartTime = null;
         $scope.amcJobStartTime = null;
         $scope.noData = false;
+        $scope.assetQrList ={};
+        $scope.selectedEmployee ={};
 
         //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.searchAcquiredDate = "";
@@ -541,8 +543,8 @@ angular.module('timeSheetApp')
 
         $scope.loadSiteShifts = function() {
         		console.log('selected site - ' + JSON.stringify($scope.selectedSites));
-        		if($scope.selectedSites) {
-            		SiteComponent.findShifts($scope.selectedSites.id).then(function(data){
+        		if($scope.selectedSites && $scope.assetPPM.jobStartTime) {
+            		SiteComponent.findShifts($scope.selectedSites.id,$scope.assetPPM.jobStartTime).then(function(data){
             			$scope.shifts = data;
                         console.log('selected shifts - ' + JSON.stringify($scope.shifts));
                         //$scope.loadingStop();
@@ -910,7 +912,7 @@ angular.module('timeSheetApp')
 
                 $scope.assetConfigs.assetId = $stateParams.id;
             }
-            else if($scope.assetval.id){
+            else if($scope.assetVal.id){
 
                 $scope.assetConfigs.assetType = $scope.selectedAssetType.name;
                 $scope.assetConfigs.assetId = $scope.assetVal.id;
@@ -2797,12 +2799,11 @@ angular.module('timeSheetApp')
     
             // This executes when entity in table is checked
 
-            $scope.checkboxSel=[];
+            $scope.checkboxSel= [];
+
+            
 
             $scope.selectEntity = function (id) {
-
-
-                var newArr =new Array(); 
 
                 if($scope.checkboxSel.indexOf(id) <= -1){
                 
@@ -2815,7 +2816,8 @@ angular.module('timeSheetApp')
                    $scope.checkboxSel.splice(remId, 1);   
                 }
 
-                 //alert($scope.checkboxSel);
+                
+
 
                 // If any entity is not checked, then uncheck the "allItemsSelected" checkbox
 
@@ -2839,11 +2841,12 @@ angular.module('timeSheetApp')
 
                 $scope.checkboxSel=[]; 
 
+
                 // Loop through all the entities and set their isChecked property
                 for (var i = 0; i < $scope.assets.length; i++) {
 
                     $scope.checkboxSel.push($scope.assets[i].id); 
-                    
+
                     $scope.assets[i].isChecked = $scope.allItemsSelected;
                 }
 
@@ -2851,6 +2854,7 @@ angular.module('timeSheetApp')
 
                     $scope.checkboxSel=[]; 
                 }
+                 
 
                  //alert($scope.checkboxSel);
 
@@ -2858,6 +2862,23 @@ angular.module('timeSheetApp')
             };
 
              /* Multiple check box select(Multiple qr printing) End */
+
+             $scope.qrListLoad= function(ids){
+                $scope.loadingStart();
+                if($stateParams.ids){
+                        $scope.assetQrList ={}
+                        AssetComponent.multipleQr($stateParams.ids).then(function(data){
+                        $scope.loadingStop();
+                        $scope.assetQrList = data;
+                        //$location.path('/qr-code-list');
+                        console.log('Qr List',$scope.assetQrList);
+                    });
+                }else{
+                   
+                    $scope.loadingStop();
+                }
+
+            }
 
 
 

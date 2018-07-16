@@ -143,6 +143,7 @@ public class JobManagementResource {
 	public ResponseEntity<?> updateJob(@Valid @RequestBody JobDTO jobDTO, HttpServletRequest request, @PathVariable("id") Long id) {
 		if(jobDTO.getId() == 0) jobDTO.setId(id);
 		log.debug("Job Details in updateJob = "+ jobDTO);
+
 		JobDTO response = jobService.updateJob(jobDTO);
         if(response != null) {
 
@@ -307,11 +308,21 @@ public class JobManagementResource {
 	public SearchResult<JobDTO> searchJobsForEmployee(@RequestBody SearchCriteria searchCriteria) {
 		SearchResult<JobDTO> result = null;
 		if(searchCriteria != null) {
-			jobService.updateJobStatus(searchCriteria.getSiteId(), searchCriteria   .getJobStatus());
+			jobService.updateJobStatus(searchCriteria.getSiteId(), searchCriteria.getJobStatus());
 			result = jobService.findBySearchCrieria(searchCriteria,false);
 		}
 		return result;
 	}
+
+    @RequestMapping(value = "/location/jobs/search",method = RequestMethod.POST)
+    public SearchResult<JobDTO> searchJobsByLocation(@RequestBody SearchCriteria searchCriteria) {
+        SearchResult<JobDTO> result = null;
+        if(searchCriteria != null) {
+            jobService.updateJobStatus(searchCriteria.getSiteId(), searchCriteria   .getJobStatus());
+            result = jobService.findBySearchCrieria(searchCriteria,false);
+        }
+        return result;
+    }
 
     @RequestMapping(value = "/employee/jobs/search/selectedDate",method = RequestMethod.POST)
     public SearchResult<JobDTO> findByDateSelected(@RequestBody SearchCriteria searchCriteria) {
@@ -382,10 +393,11 @@ public class JobManagementResource {
 
     @RequestMapping(value = "/job/export",method = RequestMethod.POST)
     public ExportResponse exportJob(@RequestBody SearchCriteria searchCriteria) {
-	    //log.debug("JOB EXPORT STARTS HERE **********");
+	    log.debug("JOB EXPORT STARTS HERE **********"+searchCriteria.isReport());
         ExportResponse resp = new ExportResponse();
         if(searchCriteria != null) {
             searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+            searchCriteria.setReport(true);
             SearchResult<JobDTO> result = jobService.findBySearchCrieria(searchCriteria, true);
             List<JobDTO> results = result.getTransactions();
             resp.addResult(jobService.generateReport(results, searchCriteria));
@@ -441,5 +453,8 @@ public class JobManagementResource {
         log.info("--Invoked findCheckInOut By JobId--"+jobId);
         return jobService.findCheckInOutByJob(jobId);
     }
+
+
+
 
 }
