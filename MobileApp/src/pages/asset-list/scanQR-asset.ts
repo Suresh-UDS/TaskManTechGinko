@@ -15,10 +15,10 @@ import {AssetList} from "./asset-list";
  * Ionic pages and navigation.
  */
 @Component({
-    selector: 'scanQR',
-    templateUrl: 'scanQR.html',
+    selector: 'scanQR-Asset',
+    templateUrl: 'scanQR-asset.html',
 })
-export class ScanQR {
+export class ScanQRAsset {
 
     assetList: any;
     data:any;

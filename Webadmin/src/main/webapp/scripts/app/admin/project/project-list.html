@@ -1,4 +1,4 @@
-<div ng-init="initLoad()">
+<div ng-init="initLoad();loadProjectsList();">
 
     <!--<div class="row TopButtonsCon">-->
         <!--<div class="col-md-12 txt-align-rgt">-->
@@ -7,7 +7,7 @@
         <!--</div>-->
     <!--</div>-->
 
-    <div class="row"  ng-init="loadProjectsList();">
+    <div class="row">
 
 
         <div class="col-md-6 txt-align-lft">
@@ -197,12 +197,22 @@
     </div>
     <!-- end row -->
 
-    <div class="card margin-TB-5 txt-align-center" ng-hide="projects">
+    <div class="card margin-TB-5 txt-align-center" ng-hide="projectsLoader">
 
         <div class="card-content">
-            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="projectsLoader">
+            <div class="" style="text-align:center;padding: 10px 0;" >
                 <div loader-css="ball-pulse"></div>
             </div>
+
+            <h3 >Loading, please wait...</h3>
+
+        </div>
+
+    </div>
+
+    <div class="card margin-TB-5 txt-align-center" ng-show="noData">
+
+        <div class="card-content">
 
             <h3>No data Found</h3>
 
@@ -273,7 +283,7 @@
 <div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm"   novalidate >
+            <form name="searchForm"  ng-submit="searchFilter();"  novalidate >
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         <i class="material-icons">clear</i>
@@ -289,7 +299,8 @@
                                 <div class="dropdown">
                                     <label class="label-control">Client</label>
                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects" ng-pattern="Select Client" >
+                                    <!-- ng-change="loadDepSites()" -->
+                                    <select class="form-control " ng-model="searchProject"  ng-options="project as project.name for project in projectsList" ng-pattern="Select Client" >
                                         <option value="">Select Client...</option>
                                     </select>
                                 </div>

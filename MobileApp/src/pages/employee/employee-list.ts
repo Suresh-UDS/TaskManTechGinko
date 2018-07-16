@@ -11,10 +11,6 @@ import {SiteService} from "../service/siteService";
 import {AttendanceService} from "../service/attendanceService";
 import {componentService} from "../service/componentService";
 import {AttendanceViewPage} from "../attendance-view/attendance-view";
-import {Diagnostic} from "@ionic-native/diagnostic";
-import {LocationAccuracy} from "@ionic-native/location-accuracy";
-
-declare  var demo ;
 
 /**
  * Generated class for the EmployeeList page.
@@ -41,8 +37,8 @@ export class EmployeeList {
   attendanceId:any;
   loader:any;
   constructor(public navCtrl: NavController,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
-              private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController, private locationAccuracy:LocationAccuracy,
-              private geoFence:Geofence, private employeeService: EmployeeService, private jobService: JobService, private siteService:SiteService, private attendanceService:AttendanceService, private diagonistic:Diagnostic) {
+              private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,
+              private geoFence:Geofence, private employeeService: EmployeeService, private jobService: JobService, private siteService:SiteService, private attendanceService:AttendanceService) {
 
         this.lattitude = 0;
         this.longitude = 0;
@@ -97,7 +93,6 @@ export class EmployeeList {
           this.lattitude = 0;
           this.longitude = 0;
       });
-
   }
 
   getEmployeeAttendance(employeeId){
@@ -111,32 +106,8 @@ export class EmployeeList {
 
 
   ionViewWillEnter(){
-      console.log("Attendnace page location availability");
-      this.diagonistic.getLocationMode().then((isAvailable)=>{
-          console.log(isAvailable);
-          if(isAvailable == 'location_off'){
-              this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+      this.getEmployees();
 
-                  if (canRequest) {
-                      // the accuracy option will be ignored by iOS
-                      this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
-                          () => console.log('Request successful'),
-                          error => {console.log('Error requesting location permissions', error);
-                              demo.showSwal('warning-message-and-confirmation-ok','GPS Not available','Please turn GPS on');
-                              this.navCtrl.pop();
-                          }
-                      );
-                  }
-              });
-          }else{
-              this.component.showToastMessage('GPS Available','bottom');
-              this.getEmployees();
-
-          }
-      }).catch((e)=>{
-          demo.showSwal('warning-message-and-confirmation-ok','GPS Not available','Please turn GPS on');
-          this.navCtrl.pop();
-      });
   }
 
   isEmployeeCheckedIn(employeeId){
@@ -310,7 +281,7 @@ export class EmployeeList {
 
               }else{
                   console.log("error in detecting face");
-                  this.closeAll();
+                  this.closeLoader();
                   var msg = "Face not Detected, please try again..";
                   this.showSuccessToast(msg);
               }
@@ -318,12 +289,12 @@ export class EmployeeList {
 
           },error=>{
               console.log("errors");
-          this.closeAll();
+          this.closeLoader();
           console.log(error.json());
               if(error.json().status == "false"){
                   var msg= "Face not detected, please try again..";
                   this.showSuccessToast(msg);
-                  this.closeAll();
+                  this.closeLoader();
               }
           }
       )
@@ -336,8 +307,6 @@ export class EmployeeList {
           if(response && response.status === 200){
               var msg='Face Verified and Attendance marked Successfully';
               this.showSuccessToast(msg);
-              this.getEmployees();
-
           }
       },error=>{
           var msg = 'Attendance Not Marked';
@@ -355,8 +324,6 @@ export class EmployeeList {
           if(response && response.status === 200){
               var msg='Face Verified and Attendance marked Successfully';
               this.showSuccessToast(msg);
-              this.getEmployees();
-
           }
       },error=>{
           var msg = 'Attendance Not Marked';
@@ -367,9 +334,8 @@ export class EmployeeList {
   }
 
   getEmployees(){
-      this.component.showLoader('Loading Employees');
-      this.attendanceService.searchEmpAttendances(this.site.id).subscribe(response=>{
-          this.component.closeAll();
+      this.siteService.searchSiteEmployee(this.site.id).subscribe(response=>{
+          console.log(response.json());
           this.employeeList = response.json();
           this.userGroup = window.localStorage.getItem('userGroup');
           this.employeeId = window.localStorage.getItem('employeeId');
