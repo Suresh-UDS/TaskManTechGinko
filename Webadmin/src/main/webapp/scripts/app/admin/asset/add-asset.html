@@ -1321,14 +1321,14 @@
 						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
 						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
 
-						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="ppmJobStartTime"  ng-model="ppmJobStartTime" placeholder="{{ppmJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" autocomplete="off" required/>
+						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="ppmJobStartTime"  ng-model="ppmJobStartTime" placeholder="{{ppmJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" autocomplete="off" name="ppmJobStartTime" required/>
 
 																		   <div ng-show="form3.$submitted || form3.ppmJobStartTime.$touched">
                                                                                 <div
                                                                                     ng-show="form3.ppmJobStartTime.$dirty || form3.ppmJobStartTime.$invalid">
                                                                                     <p class="help-block" style="color:maroon"
                                                                                        ng-show="form3.ppmJobStartTime.$error.required">
-                                                                                        Start date required
+                                                                                        Start date is required
                                                                                     </p>
 
 
@@ -1350,12 +1350,12 @@
 						                                                        required
 						                                                    />
 
-						                                                    <div ng-show="form.$submitted || form.plannedHours.$touched">
+						                                                    <div ng-show="form3.$submitted || form3.plannedHours.$touched">
 						                                                        <div
-						                                                            ng-show="form.plannedHours.$dirty || form.plannedHours.$invalid">
+						                                                            ng-show="form3.plannedHours.$dirty || form3.plannedHours.$invalid">
 						                                                            <p class="help-block" style="color:maroon"
-						                                                               ng-show="form.plannedHours.$error.required">
-						                                                               Hours required
+						                                                               ng-show="form3.plannedHours.$error.required">
+						                                                               Hours is required
 						                                                            </p>
 						                                                        </div>
 						                                                    </div>
@@ -1628,14 +1628,14 @@
 						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
 						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
 
-						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="amcJobStartTime"  ng-model="amcJobStartTime" placeholder="{{amcJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" autocomplete="off" required/>
+						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="amcJobStartTime"  ng-model="amcJobStartTime" name="amcJobStartTime" placeholder="{{amcJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" autocomplete="off" required/>
 
-																		   <div ng-show="form3.$submitted || form3.amcJobStartTime.$touched">
+																		   <div ng-show="form4.$submitted || form4.amcJobStartTime.$touched">
                                                                                 <div
-                                                                                    ng-show="form3.amcJobStartTime.$dirty || form3.amcJobStartTime.$invalid">
+                                                                                    ng-show="form4.amcJobStartTime.$dirty || form4.amcJobStartTime.$invalid">
                                                                                     <p class="help-block" style="color:maroon"
-                                                                                       ng-show="form3.amcJobStartTime.$error.required">
-                                                                                        Required
+                                                                                       ng-show="form4.amcJobStartTime.$error.required">
+                                                                                        Start date is required
                                                                                     </p>
 
 
@@ -1657,12 +1657,12 @@
 						                                                        required
 						                                                    />
 
-						                                                    <div ng-show="form.$submitted || form.plannedHours.$touched">
+						                                                    <div ng-show="form4.$submitted || form4.plannedHours.$touched">
 						                                                        <div
-						                                                            ng-show="form.plannedHours.$dirty || form.plannedHours.$invalid">
+						                                                            ng-show="form4.plannedHours.$dirty || form4.plannedHours.$invalid">
 						                                                            <p class="help-block" style="color:maroon"
-						                                                               ng-show="form.plannedHours.$error.required">
-						                                                                Required
+						                                                               ng-show="form4.plannedHours.$error.required">
+						                                                               Hours is required
 						                                                            </p>
 						                                                        </div>
 						                                                    </div>
