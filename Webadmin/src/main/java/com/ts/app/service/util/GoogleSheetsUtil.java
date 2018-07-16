@@ -52,7 +52,7 @@ public class GoogleSheetsUtil {
 	 * scopes, delete your previously saved credentials/ folder.
 	 */
 	private static final List<String> SCOPES = Collections.singletonList(DriveScopes.DRIVE_FILE);
-	private static final String CLIENT_SECRET_DIR = "client_secret_872397104992-ilhar6nqjp1l4cdat5n82i25ncn82s87.apps.googleusercontent.com.json";
+	private static final String CLIENT_SECRET_DIR = "client_secret_872397104992-2auumih3ono1ig5dt5k3cg1c1ctfuvgr.apps.googleusercontent.com.json";
 
 	@Inject
 	private Environment env;
