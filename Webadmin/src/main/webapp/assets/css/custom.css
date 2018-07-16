@@ -359,10 +359,16 @@ span.calender-big-icon
 {
   padding-top: 38px;
 }
-.dateFilterCon span.calender-big-icon
+.FilterModalCon span.calender-big-icon
 {
     padding-top: 30px;
 }
+
+.FilterModalCon span.calender-mid-icon
+{
+    padding-top: 7px;
+}
+
 span.d-sm-arrow-icon
 {
   padding-top: 7px;
@@ -531,6 +537,14 @@ textarea.form-control {
 .FilterModalCon .modal-footer .btn-simple
 {
     border: 1px solid;
+}
+.FilterModalCon span.d-big-arrow-icon
+{
+    padding-top: 32px;
+}
+.FilterModalCon span.d-arrow-icon
+{
+    padding-top: 30px;
 }
 .btn-group.open>.dropdown-toggle.btn.btn-primary, .btn-group-vertical.open>.dropdown-toggle.btn.btn-primary
 {
