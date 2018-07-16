@@ -49,11 +49,14 @@ angular.module('timeSheetApp')
          $scope.loadDepSites = function () {
 
             if(jQuery.isEmptyObject($scope.selectedProject) == false) {
-                   var depSite=$scope.selectedProject.id;
+                   var depProj=$scope.selectedProject.id;
+            }else if(jQuery.isEmptyObject($scope.searchProject) == false){
+                    var depProj=$scope.searchProject.id;
             }else{
-                    var depSite=$scope.searchProject.id;
-                }
-            ProjectComponent.findSites(depSite).then(function (data) {
+                    var depProj=0;
+            }
+            
+            ProjectComponent.findSites(depProj).then(function (data) {
                 $scope.selectedSite = null;
                 $scope.sitesList = data;
             });

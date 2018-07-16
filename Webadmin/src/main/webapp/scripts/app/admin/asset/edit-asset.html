@@ -1092,18 +1092,18 @@
                                                                 <div class="row">
                                                                     <div class="col-md-4" >
                                                                             <div class="form-group">
-                                                                                <label class="control-label">Employee<!-- <span class="red-star">*</span> --> </label>
+                                                                                <label class="control-label">Employee<span class="red-star">*</span> </label>
                                                                                 <div class="dropdown">
 
                                                                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                                    <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" >
+                                                                                    <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" ng-required="true">
 
 
                                                                                         <option value="">Select Employees...</option>
                                                                                     </select>
 
-                                                                                    <!-- <div ng-show="form3.$submitted || form3.employeeName.$touched">
+                                                                                    <div ng-show="form3.$submitted || form3.employeeName.$touched">
                                                                                         <div
                                                                                             ng-show="form3.employeeName.$dirty || form3.employeeName.$invalid">
                                                                                             <p class="help-block" style="color:maroon"
@@ -1113,7 +1113,7 @@
 
                                                                                         </div>
 
-                                                                                    </div> -->
+                                                                                    </div>
                                                                                 </div>
 
                                                                             </div>
@@ -1158,14 +1158,14 @@
 						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
 						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
 
-						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="ppmJobStartTime"  ng-model="ppmJobStartTime" autocomplete="off" ng-required="true" placeholder="{{ppmJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" />
+						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="ppmJobStartTime"  ng-model="ppmJobStartTime" autocomplete="off" name="ppmJobStartTime" ng-required="true" placeholder="{{ppmJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" />
 
 																		   <div ng-show="form3.$submitted || form3.ppmJobStartTime.$touched">
                                                                                 <div
                                                                                     ng-show="form3.ppmJobStartTime.$dirty || form3.ppmJobStartTime.$invalid">
                                                                                     <p class="help-block" style="color:maroon"
                                                                                        ng-show="form3.ppmJobStartTime.$error.required">
-                                                                                        Start date required
+                                                                                        Start date is required
                                                                                     </p>
 
 
@@ -1187,12 +1187,12 @@
 						                                                        ng-required="true"
 						                                                    />
 
-						                                                    <div ng-show="form.$submitted || form.plannedHours.$touched">
+						                                                    <div ng-show="form3.$submitted || form3.plannedHours.$touched">
 						                                                        <div
-						                                                            ng-show="form.plannedHours.$dirty || form.plannedHours.$invalid">
+						                                                            ng-show="form3.plannedHours.$dirty || form3.plannedHours.$invalid">
 						                                                            <p class="help-block" style="color:maroon"
-						                                                               ng-show="form.plannedHours.$error.required">
-						                                                               Hours required
+						                                                               ng-show="form3.plannedHours.$error.required">
+						                                                               Hours is required
 						                                                            </p>
 						                                                        </div>
 						                                                    </div>
@@ -1416,18 +1416,18 @@
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
-                                                                        <label class="control-label">Employee<!-- <span class="red-star">*</span> --> </label>
+                                                                        <label class="control-label">Employee<span class="red-star">*</span> </label>
                                                                         <div class="dropdown">
 
                                                                             <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                            <select class="form-control "  ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" >
+                                                                            <select class="form-control "  ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" ng-required="true">
 
 
                                                                                 <option value="">Select Employees...</option>
                                                                             </select>
 
-                                                                            <!--  <div ng-show="form4.$submitted || form4.employeeName.$touched">
+                                                                             <div ng-show="form4.$submitted || form4.employeeName.$touched">
                                                                                  <div
                                                                                      ng-show="form4.employeeName.$dirty || form4.employeeName.$invalid">
                                                                                      <p class="help-block" style="color:maroon"
@@ -1437,7 +1437,7 @@
 
                                                                                  </div>
 
-                                                                             </div> -->
+                                                                             </div>
                                                                         </div>
 
                                                                     </div>
@@ -1479,14 +1479,14 @@
 						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
 						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
 
-						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="amcJobStartTime"  ng-model="amcJobStartTime" placeholder="{{amcJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" autocomplete="off" required/>
+						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="amcJobStartTime" name="amcJobStartTime"  ng-model="amcJobStartTime" placeholder="{{amcJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" autocomplete="off" required/>
 
 																		   <div ng-show="form3.$submitted || form3.amcJobStartTime.$touched">
                                                                                 <div
                                                                                     ng-show="form3.amcJobStartTime.$dirty || form3.amcJobStartTime.$invalid">
                                                                                     <p class="help-block" style="color:maroon"
                                                                                        ng-show="form3.amcJobStartTime.$error.required">
-                                                                                        Required
+                                                                                        Start date is required
                                                                                     </p>
 
 
@@ -1508,12 +1508,12 @@
 						                                                        required
 						                                                    />
 
-						                                                    <div ng-show="form.$submitted || form.plannedHours.$touched">
+						                                                    <div ng-show="form3.$submitted || form3.plannedHours.$touched">
 						                                                        <div
-						                                                            ng-show="form.plannedHours.$dirty || form.plannedHours.$invalid">
+						                                                            ng-show="form3.plannedHours.$dirty || form3.plannedHours.$invalid">
 						                                                            <p class="help-block" style="color:maroon"
-						                                                               ng-show="form.plannedHours.$error.required">
-						                                                                Required
+						                                                               ng-show="form3.plannedHours.$error.required">
+						                                                                Hours is required
 						                                                            </p>
 						                                                        </div>
 						                                                    </div>

@@ -1,9 +1,9 @@
 
-<div class="" ng-controller="LocationController" ng-init="initLoad()">
+<div class="" ng-controller="LocationController" ng-init="initLoad();">
 	<div class="success-message hidden"></div>
 
 
-    <div class="row" ng-init="loadProjectsList();">
+    <div class="row" >
         <div class="col-md-6 txt-align-lft">
 
             <button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
@@ -220,12 +220,22 @@
         </div>
     </div>
 
-     <div class="card margin-TB-5 txt-align-center" ng-hide="locations">
+    <div class="card margin-TB-5 txt-align-center" ng-hide="locationsLoader">
 
         <div class="card-content">
-            <div class="" style="text-align:center;padding: 10px 0;"  ng-hide="locationsLoader">
+            <div class="" style="text-align:center;padding: 10px 0;" >
                 <div loader-css="ball-pulse"></div>
             </div>
+
+            <h3 >Loading, please wait...</h3>
+
+        </div>
+
+    </div>
+
+    <div class="card margin-TB-5 txt-align-center" ng-show="noData">
+
+        <div class="card-content">
 
             <h3>No data Found</h3>
 
@@ -340,14 +350,14 @@
                 </div>
                 <div class="modal-body">
 
-                    <div class="row">
+                    <div class="row" ng-init="loadProjectsList();loadSitesList();">
 
                         <div class="col-xs-12 col-md-4">
                             <div class="form-group" >
                                 <div class="dropdown">
                                     <label class="label-control">Client</label>
                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects" ng-pattern="Select Client" >
+                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projectsList" ng-pattern="Select Client" >
                                         <option value="">Select Client...</option>
                                     </select>
                                 </div>
@@ -358,7 +368,7 @@
                                 <div class="form-group">
                                     <label class="label-control">Site</label>
                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites" ng-pattern="Select Site">
+                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sitesList" ng-pattern="Select Site" ng-change="loadDepBlocks();">
                                         <option value="">Select Site...</option>
                                     </select>
                                 </div>
@@ -371,7 +381,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <button type="submit" class="btn btn-success btn-simple" ng-click ="searchFilter1()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>
@@ -384,7 +394,7 @@
 <div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm"   novalidate >
+            <form name="searchForm1"   novalidate >
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -401,7 +411,7 @@
                             <div class="form-group">
                                 <label class="control-label">Block </label>
                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                <select class="form-control " ng-model="selectedBlock" ng-change="loadDepFloors()"  ng-options="block as block for  block in  blocksList">
+                                <select class="form-control " ng-model="searchBlock" ng-change="loadDepFloors()"  ng-options="block as block for  block in  blocksList">
                                     <option value="">Select Block...</option>
                                 </select>
                             </div>
@@ -410,7 +420,7 @@
                             <div class="form-group">
                                 <label class="control-label">Select Floor</label>
                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                <select class="form-control " ng-model="selectedFloor" ng-change="loadDepZones()"  ng-options="floor as floor for floor in floorsList">
+                                <select class="form-control " ng-model="searchFloor" ng-change="loadDepZones()"  ng-options="floor as floor for floor in floorsList">
                                     <option value="">Select Floor...</option>
                                 </select>
 
@@ -422,7 +432,7 @@
                             <div class="form-group">
                                 <label class="control-label">Select Zone</label>
                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                <select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zonesList">
+                                <select class="form-control " ng-model="searchZone"  ng-options="zone as zone for zone in zonesList">
                                     <option value="">Select Zone...</option>
                                 </select>
 
@@ -435,7 +445,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <button type="submit" class="btn btn-success btn-simple" ng-click ="searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>

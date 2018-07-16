@@ -245,12 +245,23 @@
     </div>
     <!-- end row -->
 
-    <div class="card margin-TB-5 txt-align-center" ng-hide="employees">
+
+    <div class="card margin-TB-5 txt-align-center" ng-hide="employeesLoader">
 
         <div class="card-content">
-            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="employeesLoader">
+            <div class="" style="text-align:center;padding: 10px 0;" >
                 <div loader-css="ball-pulse"></div>
             </div>
+
+            <h3 >Loading, please wait...</h3>
+
+        </div>
+
+    </div>
+
+    <div class="card margin-TB-5 txt-align-center" ng-show="noData">
+
+        <div class="card-content">
 
             <h3>No data Found</h3>
 
@@ -1010,7 +1021,7 @@
                                 <div class="dropdown">
                                     <label class="label-control">Client</label>
                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects" ng-pattern="Select Client" >
+                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites();" ng-options="project as project.name for project in projects" ng-pattern="Select Client" >
                                         <option value="">Select Client...</option>
                                     </select>
                                 </div>
@@ -1034,7 +1045,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter1()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>
@@ -1066,7 +1077,7 @@
                                 <input type="text"
                                        class="form-control border-bottom-input"
                                        placeholder="Employee Id"
-                                       ng-model="selectedEmployeeId"
+                                       ng-model="searchEmployeeId"
                                 />
 
                             </div>
@@ -1078,7 +1089,7 @@
                                     <input type="text"
                                            class="form-control border-bottom-input"
                                            placeholder="Employee Name"
-                                           ng-model="selectedEmployeeName"
+                                           ng-model="searchEmployeeName"
                                     />
                                 </div>
                             </div>
