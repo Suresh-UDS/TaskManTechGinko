@@ -72,6 +72,15 @@ angular
 
 					$scope.pager = {};
 
+					$scope.noData = false;
+					$scope.searchProject = null;
+					$scope.searchSite = null;
+					$scope.searchId = null;
+					$scope.searchTitle = null;
+					$scope.searchCreatedBy = null;
+					$scope.searchApprovedBy = null;
+					$scope.searchStatus = null;
+
 			        $scope.selectedSubmittedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
 			        $scope.selectedApprovedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
 
@@ -190,7 +199,8 @@ angular
 						ProjectComponent.findAll().then(function(data) {
 							console.log("Loading all projects")
 							$scope.projects = data;
-				        		$scope.selectedProject = $scope.projects[0];
+				        		//$scope.selectedProject = $scope.projects[0];
+				        		$scope.selectedProject = null;
 				        		$scope.loadSites();
 						});
 					};
@@ -221,6 +231,22 @@ angular
 				                });
 				        	}
 			        };
+
+			        $scope.loadDepSites = function () {
+
+					    if(jQuery.isEmptyObject($scope.selectedProject) == false) {
+					           var depProj=$scope.selectedProject.id;
+					    }else if(jQuery.isEmptyObject($scope.searchProject) == false){
+					            var depProj=$scope.searchProject.id;
+					    }else{
+					            var depProj=0;
+					    }
+
+					    ProjectComponent.findSites(depProj).then(function (data) {
+					        $scope.searchSite = null;
+					        $scope.sitesList = data;
+					    });
+					};
 
 					$scope.loadAllQuotations = function() {
 						$scope.clearFilter();
@@ -498,6 +524,13 @@ angular
 			            $scope.selectedCreatedBy = null;
 			            $scope.selectedSentBy = null;
 			            $scope.selectedApprovedBy = null;
+			            $scope.searchProject = null;
+						$scope.searchSite = null;
+						$scope.searchId = null;
+						$scope.searchTitle = null;
+						$scope.searchCreatedBy = null;
+						$scope.searchApprovedBy = null;
+						$scope.searchStatus = null;
 			            $scope.searchCriteria = {};
 			            $scope.pages = {
 			                currPage: 1,
@@ -531,6 +564,21 @@ angular
 			            $scope.search();
 			         }
 
+			          $scope.searchFilter1 = function () {
+			            $scope.searchId = null;
+						$scope.searchTitle = null;
+						$scope.searchCreatedBy = null;
+						$scope.searchApprovedBy = null;
+						$scope.searchStatus = null;
+			            $scope.searchCriteria.id =null;
+			            $scope.searchCriteria.quotationTitle =null;
+			            $scope.searchCriteria.quotationCreatedBy =null;
+			            $scope.searchCriteria.quotationApprovedBy =null;
+			            $scope.searchCriteria.quotationStatus =null;
+			            $scope.setPage(1);
+			            $scope.search();
+			         }
+
 
 			        $scope.search = function () {
 		        	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
@@ -544,44 +592,64 @@ angular
 		        	$scope.searchCriteria.currPage = currPageVal;
 		        	 $scope.searchCriteria.findAll = false;
 
-			        	if(!$scope.selectedId && !$scope.selectedTitle  && !$scope.selectedProject && !$scope.selectedSite
-			        		&& !$scope.selectedCreatedBy && !$scope.selectedSentBy && !$scope.selectedApprovedBy && !$scope.selectedStatus){
+			        	if(!$scope.searchId && !$scope.searchTitle  && !$scope.searchProject && !$scope.searchSite
+			        		&& !$scope.searchCreatedBy && !$scope.searchSentBy && !$scope.searchApprovedBy && !$scope.searchStatus){
 			        		$scope.searchCriteria.findAll = true;
 			        	}
 
-			        	if($scope.selectedProject) {
-			        		$scope.searchCriteria.projectId = $scope.selectedProject.id;
+			        	if($scope.searchProject) {
+			        		$scope.searchCriteria.projectId = $scope.searchProject.id;
+			        	}else{
+			        		$scope.searchCriteria.projectId = null;
 			        	}
 
-			        	if($scope.selectedSite) {
-			        		$scope.searchCriteria.siteId = $scope.selectedSite.id;
-				    }else if($scope.sites) {
+			        	if($scope.searchSite) {
+			        		$scope.searchCriteria.siteId = $scope.searchSite.id;
+				    }/*else if($scope.sites) {
 				    		$scope.searchCriteria.siteId = $scope.sites[0].id;
+				    }*/
+				    else{
+				    	$scope.searchCriteria.siteId =null;
 				    }
-			        	if($scope.selectedStatus){
-			        		$scope.searchCriteria.quotationStatus = $scope.selectedStatus;
+
+			        	if($scope.searchStatus){
+			        		$scope.searchCriteria.quotationStatus = $scope.searchStatus;
+			        }else{
+			        	$scope.searchCriteria.quotationStatus = null;
 			        }
 
-			        	if($scope.selectedId){
-			        		$scope.searchCriteria.id = $scope.selectedId;
-			        	}
-	                if($scope.selectedTitle){
-	                    $scope.searchCriteria.quotationTitle = $scope.selectedTitle;
+			        if($scope.searchId){
+			        		$scope.searchCriteria.id = $scope.searchId;
+			        }else{
+			        	   $scope.searchCriteria.id = null;
+			        }
+	                if($scope.searchTitle){
+	                    $scope.searchCriteria.quotationTitle = $scope.searchTitle;
+	                }else{
+	                	 $scope.searchCriteria.quotationTitle = null;
 	                }
 
-			        	if($scope.selectedCreatedBy) {
-			        		$scope.searchCriteria.quotationCreatedBy = $scope.selectedCreatedBy;
-			        	}
-			        	if($scope.selectedApprovedBy) {
-			        		$scope.searchCriteria.quotationApprovedBy = $scope.selectedApprovedBy;
-			        	}
+			        if($scope.searchCreatedBy) {
+			        		$scope.searchCriteria.quotationCreatedBy = $scope.searchCreatedBy;
+			        }else{
+			        	$scope.searchCriteria.quotationCreatedBy = null;
+			        }
+			        if($scope.searchApprovedBy) {
+			        		$scope.searchCriteria.quotationApprovedBy = $scope.searchApprovedBy;
+			        }else{
+			        	$scope.searchCriteria.quotationApprovedBy = null;
+			        }
 
-			        	if($scope.selectedSubmittedDateSer) {
-			        		$scope.searchCriteria.quotationSubmittedDate = $scope.selectedSubmittedDateSer;
-			        	}
-			        	if($scope.selectedApprovedDateSer) {
-			        		$scope.searchCriteria.quotationApprovedDate = $scope.selectedApprovedDateSer;
-			        	}
+			        if($scope.searchSubmittedDateSer) {
+			        		$scope.searchCriteria.quotationSubmittedDate = $scope.searchSubmittedDateSer;
+			        }/*else{
+			        	$scope.searchCriteria.quotationSubmittedDate = null;
+			        }*/
+			        if($scope.searchApprovedDateSer) {
+			        		$scope.searchCriteria.quotationApprovedDate = $scope.searchApprovedDateSer;
+			        }/*else{
+			        	$scope.searchCriteria.quotationApprovedDate = null;
+			        }*/
 
 
 		            if($scope.pageSort){
@@ -628,7 +696,10 @@ angular
 			                    $scope.totalCountPages = data.totalCount;
 		                        $scope.pageSort = 10;
 
+								$scope.noData = false;
 
+			                }else{
+			                     $scope.noData = true;
 			                }
 		            });
 

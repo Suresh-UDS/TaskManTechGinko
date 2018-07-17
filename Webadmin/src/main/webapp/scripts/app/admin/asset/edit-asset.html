@@ -1155,10 +1155,10 @@
 
                                                                     <div class="col-md-3" >
                                                                     		<div class="form-group">
-						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
+						                                                    <label class="control-label">Start Time<span class="red-star">*</span></label>
 						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
 
-						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="ppmJobStartTime"  ng-model="ppmJobStartTime" autocomplete="off" name="ppmJobStartTime" ng-required="true" placeholder="{{ppmJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" />
+						                                                    <input type="text" class="form-control timepicker padng-right10"  id="ppmJobStartTime"  ng-model="ppmJobStartTime" autocomplete="off" name="ppmJobStartTime" ng-required="true" placeholder="{{ppmJobStartTime | date:'hh:mm a'}}" />
 
 																		   <div ng-show="form3.$submitted || form3.ppmJobStartTime.$touched">
                                                                                 <div
@@ -1479,7 +1479,7 @@
 						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
 						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
 
-						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="amcJobStartTime" name="amcJobStartTime"  ng-model="amcJobStartTime" placeholder="{{amcJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" autocomplete="off" required/>
+						                                                    <input type="text" class="form-control timepicker padng-right10"  id="amcJobStartTime"  name="amcJobStartTime" ng-model="amcJobStartTime" placeholder="{{amcJobStartTime | date:'hh:mm a'}}" autocomplete="off" required/>
 
 																		   <div ng-show="form3.$submitted || form3.amcJobStartTime.$touched">
                                                                                 <div
