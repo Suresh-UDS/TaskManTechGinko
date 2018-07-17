@@ -243,8 +243,8 @@
                                 <label ng-show="{{attendance.late}}">Late</label>
                                 </td>
                                 <td ng-if="attendance.checkInImage">
-                                    <a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkInImage,attendance.employeeId)">
-                                        <img src={{attendance.checkInImage}} width="30px" height="30px"/>
+                                    <a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkInImgUrl, attendance.enrollImgUrl)">
+                                        <img src={{attendance.checkInImgUrl}} width="30px" height="30px"/>
                                     </a>
                                 </td>
                                 <td ng-if="!attendance.checkInImage">
@@ -254,8 +254,8 @@
 
                                 <td>{{attendance.checkOutTime | date:'dd/MM/yyyy @ h:mma'}}</td>
 
-                                <td ng-if="attendance.checkOutImage"><a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkOutImage)" >
-                                    <img src={{attendance.checkOutImage}} width="30px" height="30px"/>
+                                <td ng-if="attendance.checkOutImage"><a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkOutImgUrl, attendance.enrollImgUrl)" >
+                                    <img src={{attendance.checkOutImgUrl}} width="30px" height="30px"/>
                                 </a>
                                 </td>
                                 <td ng-if="!attendance.checkOutImage">
