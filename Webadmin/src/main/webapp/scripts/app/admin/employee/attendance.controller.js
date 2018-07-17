@@ -17,6 +17,9 @@ angular.module('timeSheetApp')
         $scope.selectedDateToSer= new Date();
         $scope.pageSort = 10;
         $scope.pager = {};
+        $scope.noData = false;
+        $scope.SearchEmployeeId = null;
+        $scope.SearchEmployeeName = null;
 
         $scope.employeeDesignations = ["MD","Operations Manger","Supervisor"]
 
@@ -41,6 +44,10 @@ angular.module('timeSheetApp')
         $scope.selectedAttendance = null;
 
         $scope.searchCriteriaAttendance = null;
+
+        $scope.searchProject = null;
+
+        $scope.searchSite = null;
 
         $scope.searchCriteria = {};
         $scope.pages = { currPage : 1};
@@ -143,6 +150,22 @@ angular.module('timeSheetApp')
 	        	}
         };
 
+        $scope.loadDepSites = function () {
+
+            if(jQuery.isEmptyObject($scope.selectedProject) == false) {
+                   var depProj=$scope.selectedProject.id;
+            }else if(jQuery.isEmptyObject($scope.searchProject) == false){
+                    var depProj=$scope.searchProject.id;
+            }else{
+                    var depProj=0;
+            }
+
+            ProjectComponent.findSites(depProj).then(function (data) {
+                $scope.searchSite = null;
+                $scope.sites = data;
+            });
+        };
+
         $scope.employeeSearch = function () {
             if(!$scope.allEmployees) {
                 EmployeeComponent.findAll().then(function (data) {
@@ -213,6 +236,15 @@ angular.module('timeSheetApp')
             $scope.search();
          }
 
+          $scope.searchFilter1 = function () {
+            $scope.SearchEmployeeId = null;
+            $scope.SearchEmployeeName = null;
+            $scope.searchCriteria.employeeEmpId =null;
+            $scope.searchCriteria.name =null;
+            $scope.setPage(1);
+            $scope.search();
+         }
+
 
         $scope.search = function () {
             console.log($scope.datePickerDate);
@@ -226,7 +258,7 @@ angular.module('timeSheetApp')
     		console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaAttendances));
     		console.log('criteria in scope -'+JSON.stringify($scope.searchCriteria));
 
-        	console.log('Selected  project -' + $scope.selectedEmployee + ", " + $scope.selectedProject +" , "+ $scope.selectedSite);
+        	console.log('Selected  project -' + $scope.searchEmployee + ", " + $scope.searchProject +" , "+ $scope.searchSite);
         	console.log('Selected  date range -' + $scope.checkInDateTimeFrom + ", " + $scope.checkInDateTimeTo);
         	$scope.searchCriteria.currPage = currPageVal;
         	$scope.searchCriteria.findAll = false;
@@ -249,39 +281,41 @@ angular.module('timeSheetApp')
 //                $scope.searchCriteria.findAll = false;
 //            }
 
-            	if(!$scope.selectedEmployeeId && !$scope.selectedEmployeeName && !$scope.selectedSite && !$scope.selectedProject) {
+            	if(!$scope.searchEmployeeId && !$scope.searchEmployeeName && !$scope.searchSite && !$scope.searchProject) {
                     $scope.searchCriteria.findAll = true;
                 }
 
-        		if($scope.selectedEmployeeId)
+        		if($scope.searchEmployeeId)
 	        	{
-	        		$scope.searchCriteria.employeeEmpId = $scope.selectedEmployeeId;
+	        		$scope.searchCriteria.employeeEmpId = $scope.searchEmployeeId;
 		        	console.log('selected emp id ='+ $scope.searchCriteria.employeeEmpId);
 	        	}
                 else{
-                    $scope.searchCriteria.employeeEmpId = null;
+                    $scope.searchCriteria.employeeEmpId = "";
                 }
-                if($scope.selectedEmployeeName)
+                if($scope.searchEmployeeName)
 	        	{
-	        		$scope.searchCriteria.name = $scope.selectedEmployeeName;
+	        		$scope.searchCriteria.name = $scope.searchEmployeeName;
 		        	console.log('selected emp name ='+ $scope.searchCriteria.name);
 	        	}
                 else{
-                    $scope.searchCriteria.name = null;
+                    $scope.searchCriteria.name = "";
                 }
 
+                if(jQuery.isEmptyObject($scope.searchProject) == false) {
+                  console.log('selected project -' + $scope.searchProject.id);
+                   $scope.searchCriteria.projectId = $scope.searchProject.id;
+                }else{
+                        $scope.searchCriteria.projectId = null;
+                }
 
-	        	if($scope.selectedSite) {
-		        	$scope.searchCriteria.siteId = $scope.selectedSite.id;
-		        	}
-		        	
+                if(jQuery.isEmptyObject($scope.searchSite) == false) {
+                  console.log('selected site -' + $scope.searchSite.id);
+                   $scope.searchCriteria.siteId = $scope.searchSite.id;
+                }else{
+                        $scope.searchCriteria.siteId = null;
+                }
 
-	        	if($scope.selectedProject) {
-		        	$scope.searchCriteria.projectId = $scope.selectedProject.id;
-		        
-	        	}
-                
-        	
         	console.log('search criterias - ',JSON.stringify($scope.searchCriteria));
             //-------
             if($scope.pageSort){
@@ -325,7 +359,11 @@ angular.module('timeSheetApp')
                     $scope.pageEntries = $scope.projects.length;
                     $scope.totalCountPages = data.totalCount;
                     $scope.pageSort = 10;
-                }
+                    $scope.noData = false;
+
+                    }else{
+                         $scope.noData = true;
+                    }
 
             });
     
@@ -441,6 +479,10 @@ angular.module('timeSheetApp')
             $scope.selectedEmployee = null;
             $scope.selectedProject = null;
             $scope.selectedSite = null;
+            $scope.searchProject = null;
+            $scope.searchSite = null;
+            $scope.SearchEmployeeId = null;
+            $scope.SearchEmployeeName = null;
             $scope.searchCriteria = {};
             $rootScope.searchCriteriaAttendances   = null;
             $scope.pages = {
