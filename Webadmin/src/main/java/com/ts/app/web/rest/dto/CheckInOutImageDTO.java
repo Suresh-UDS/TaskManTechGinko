@@ -26,6 +26,8 @@ public class CheckInOutImageDTO extends BaseDTO {
     private MultipartFile photoOutFile;
 
     private String photoOut;
+    
+    private String url;
 
     public CheckInOutImageDTO() {
     }
@@ -105,4 +107,12 @@ public class CheckInOutImageDTO extends BaseDTO {
     public long getCheckInOutId(){return checkInOutId;}
 
     public void setCheckInOutId(long checkInOutId) {this.checkInOutId = checkInOutId;}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
 }

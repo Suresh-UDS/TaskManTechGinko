@@ -551,10 +551,10 @@ public class    EmployeeService extends AbstractService {
     public CheckInOutImageDTO uploadFile(CheckInOutImageDTO checkInOutImageDto) {
         log.debug("EmployeeService.uploadFile - action - "+checkInOutImageDto.getAction());
         log.debug("Employee list from check in out images"+checkInOutImageDto.getEmployeeEmpId());
-        String fileName = fileUploadHelper.uploadFile(checkInOutImageDto.getEmployeeEmpId(), checkInOutImageDto.getAction(), checkInOutImageDto.getPhotoOutFile(), System.currentTimeMillis());
-        checkInOutImageDto.setPhotoOut(fileName);
+        checkInOutImageDto = amazonS3utils.uploadEmployeeFile(checkInOutImageDto.getEmployeeEmpId(), checkInOutImageDto, checkInOutImageDto.getAction(), checkInOutImageDto.getPhotoOutFile(), System.currentTimeMillis());
+        checkInOutImageDto.setPhotoOut(checkInOutImageDto.getPhotoOut());
         CheckInOutImage checkInOutImage = new CheckInOutImage();
-        checkInOutImage.setPhotoOut(fileName);
+        checkInOutImage.setPhotoOut(checkInOutImageDto.getPhotoOut());
         checkInOutImage.setCheckInOut(checkInOutRepository.findOne(checkInOutImageDto.getCheckInOutId()));
         checkInOutImage.setProject(projectRepository.findOne(checkInOutImageDto.getProjectId()));
         checkInOutImage.setEmployee(employeeRepository.findOne(checkInOutImageDto.getEmployeeId()));
