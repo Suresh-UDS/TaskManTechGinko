@@ -179,8 +179,10 @@ AWS:
    s3-ticket-path : tickets/
    s3-quotation-path : quotations/
    s3-enroll-path : employeeEnroll/
-   s3-checkin-path : attendanceCheckIn/
-   s3-checkout-path : attendanceCheckOut/
+   s3-checkin-path : attendanceCheckIns/
+   s3-checkout-path : attendanceCheckOuts/
+   s3-checkinout-path : checkInOutImages/
+   s3-checklist-path : checkListImages/
 
 scheduler:
    job:

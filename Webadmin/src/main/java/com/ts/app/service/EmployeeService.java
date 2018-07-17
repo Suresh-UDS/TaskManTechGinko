@@ -551,10 +551,10 @@ public class    EmployeeService extends AbstractService {
     public CheckInOutImageDTO uploadFile(CheckInOutImageDTO checkInOutImageDto) {
         log.debug("EmployeeService.uploadFile - action - "+checkInOutImageDto.getAction());
         log.debug("Employee list from check in out images"+checkInOutImageDto.getEmployeeEmpId());
-        String fileName = fileUploadHelper.uploadFile(checkInOutImageDto.getEmployeeEmpId(), checkInOutImageDto.getAction(), checkInOutImageDto.getPhotoOutFile(), System.currentTimeMillis());
-        checkInOutImageDto.setPhotoOut(fileName);
+        checkInOutImageDto = amazonS3utils.uploadEmployeeFile(checkInOutImageDto.getEmployeeEmpId(), checkInOutImageDto, checkInOutImageDto.getAction(), checkInOutImageDto.getPhotoOutFile(), System.currentTimeMillis());
+        checkInOutImageDto.setPhotoOut(checkInOutImageDto.getPhotoOut());
         CheckInOutImage checkInOutImage = new CheckInOutImage();
-        checkInOutImage.setPhotoOut(fileName);
+        checkInOutImage.setPhotoOut(checkInOutImageDto.getPhotoOut());
         checkInOutImage.setCheckInOut(checkInOutRepository.findOne(checkInOutImageDto.getCheckInOutId()));
         checkInOutImage.setProject(projectRepository.findOne(checkInOutImageDto.getProjectId()));
         checkInOutImage.setEmployee(employeeRepository.findOne(checkInOutImageDto.getEmployeeId()));
@@ -1146,17 +1146,20 @@ public class    EmployeeService extends AbstractService {
 	public String uploadEmpExistingImage() {
 		// TODO Auto-generated method stub
 		List<Employee> empEntity = employeeRepository.findAll();
-		List<EmployeeDTO> empModel = mapperUtil.toModelList(empEntity, EmployeeDTO.class);
-		for(EmployeeDTO employee : empModel) { 
-			long dateTime = new Date().getTime();
-			boolean isBase64 = Base64.isBase64(employee.getEnrolled_face());
-			Employee emp = mapperUtil.toEntity(employee, Employee.class);
-			if(isBase64){ 
-				employee = amazonS3utils.uploadEnrollImage(employee.getEnrolled_face(), employee, dateTime);
-				emp.setEnrolled_face(employee.getEnrolled_face());
-				employeeRepository.save(emp);
+		for(Employee employee : empEntity) { 
+			if(employee.getEnrolled_face() != null) {
+				if(employee.getEnrolled_face().indexOf("data:image") == 0) { 
+					String base64String = employee.getEnrolled_face().split(",")[1];
+					long dateTime = new Date().getTime();
+					boolean isBase64 = Base64.isBase64(base64String);
+					EmployeeDTO emp = mapperUtil.toModel(employee, EmployeeDTO.class);
+					if(isBase64){ 
+						emp = amazonS3utils.uploadEnrollImage(emp.getEnrolled_face(), emp, dateTime);
+						employee.setEnrolled_face(emp.getEnrolled_face());
+						employeeRepository.save(employee);
+					}
+				}	
 			}
-			
 		}
 		return "Upload Employee enroll image successfully";
 	}

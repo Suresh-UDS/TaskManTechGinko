@@ -223,12 +223,12 @@ export class AssetList {
                                                                             this.dbService.setTickets().then(
                                                                                 response=> {
                                                                                     console.log(response)
-                                                                                    this.dbService.setSites().then(
-                                                                                        response=> {
-                                                                                            console.log(response)
-                                                                                            this.dbService.setEmployee().then(
-                                                                                                response=> {
-                                                                                                    console.log(response)
+                                                                                    // this.dbService.setSites().then(
+                                                                                    //     response=> {
+                                                                                    //         console.log(response)
+                                                                                            // this.dbService.setEmployee().then(
+                                                                                            //     response=> {
+                                                                                            //         console.log(response)
                                                                                                         this.dbService.setViewReading().then(
                                                                                                             response=>{
                                                                                                                 console.log(response)
@@ -239,8 +239,8 @@ export class AssetList {
                                                                                                                         this.componentService.closeLoader();
                                                                                                                     })
                                                                                                             })
-                                                                                                })
-                                                                                        })
+                                                                                                // })
+                                                                                        // })
                                                                                 })
                                                                         })
                                                                 })
