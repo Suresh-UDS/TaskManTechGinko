@@ -17,6 +17,8 @@ import com.ts.app.service.AmazonS3Service;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
 import com.ts.app.web.rest.dto.AttendanceDTO;
+import com.ts.app.web.rest.dto.CheckInOutDTO;
+import com.ts.app.web.rest.dto.CheckInOutImageDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.QuotationDTO;
 import com.ts.app.web.rest.dto.TicketDTO;
@@ -176,6 +178,35 @@ public class AmazonS3Utils {
     	}
     	
 		return attnDto;
+	}
+	
+	public CheckInOutImageDTO uploadEmployeeFile(String empId, CheckInOutImageDTO checkInOutImageDto, String action, MultipartFile multipartFile, long dateTime) {
+    	String nameOfFile = empId + "_" + action + "_" + dateTime + ".jpg";
+    	String fileUrl = "";
+    	try{
+    		File file = convertMultiPartToFile(multipartFile);
+            String fileName = nameOfFile;
+            fileUrl = amazonS3Service.uploadEmployeeFileToS3bucket(fileName, file);
+            checkInOutImageDto.setUrl(fileUrl);
+            checkInOutImageDto.setPhotoOut(fileName);
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}
+    	
+		return checkInOutImageDto;
+    	
+    }
+
+	public String uploadCheckListImage(String checkListImg, String checklistItemName, long jobId, String img) {
+		log.debug("Upload checklist in-out image to s3 bucket");
+		String filename = jobId +"_"+ checklistItemName +"_"+ img +".png";
+    	try {
+    		String fileUrl = amazonS3Service.uploadCheckListImageToS3(filename, checkListImg);
+    	} catch(Exception e) { 
+    		e.printStackTrace();
+    	}
+    	
+		return filename;
 	}
     
   

@@ -13,6 +13,7 @@ import org.hibernate.Hibernate;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -99,6 +100,21 @@ public class AttendanceService extends AbstractService {
     
     @Inject
 	private AmazonS3Utils s3ServiceUtils;
+    
+    @Value("${AWS.s3-cloudfront-url}")
+	private String cloudFrontUrl;
+	
+	@Value("${AWS.s3-bucketEnv}")
+	private String bucketEnv;
+	
+	@Value("${AWS.s3-enroll-path}")
+	private String enrollPath;
+	
+	@Value("${AWS.s3-checkin-path}")
+	private String checkinPath;
+	
+	@Value("${AWS.s3-checkout-path}")
+	private String checkoutPath;
 
 	public AttendanceDTO saveCheckOutAttendance(AttendanceDTO attnDto){
         Attendance attn = mapperUtil.toEntity(attnDto, Attendance.class);
@@ -621,6 +637,26 @@ public class AttendanceService extends AbstractService {
 			if (page != null) {
 				transactions = mapperUtil.toModelList(page.getContent(), AttendanceDTO.class);
 				if (CollectionUtils.isNotEmpty(transactions)) {
+					for(AttendanceDTO transaction : transactions) { 
+						if(transaction.getEmployeeId() > 0) { 
+							Employee emply = employeeRepository.findOne(transaction.getEmployeeId());
+							if(emply.getEnrolled_face() != null) { 
+								String enrollImgUrl = cloudFrontUrl + bucketEnv + enrollPath + emply.getEnrolled_face();
+								transaction.setEnrollImgUrl(enrollImgUrl);
+							}
+						}
+						
+						if(transaction.getCheckInImage() != null) { 
+							String checkInImgUrl = cloudFrontUrl + bucketEnv + checkinPath + transaction.getCheckInImage();
+							transaction.setCheckInImgUrl(checkInImgUrl);
+						}
+						
+						if(transaction.getCheckOutImage() != null) { 
+							String checkOutImgUrl = cloudFrontUrl + bucketEnv + checkoutPath + transaction.getCheckOutImage();
+							transaction.setCheckOutImgUrl(checkOutImgUrl);
+						}
+					}
+					
 					buildSearchResult(searchCriteria, page, transactions, result);
 				}
 			}
@@ -689,16 +725,21 @@ public class AttendanceService extends AbstractService {
 	public String uploadExistingCheckInImage() {
 		// TODO Auto-generated method stub
 		List<Attendance> attendanceEntity = attendanceRepository.findAll();
-		List<AttendanceDTO> attendanceModel = mapperUtil.toModelList(attendanceEntity, AttendanceDTO.class);
-		for(AttendanceDTO attendance : attendanceModel) { 
-			boolean isBase64 = Base64.isBase64(attendance.getCheckInImage());
-			Attendance attendEntity = mapperUtil.toEntity(attendance, Attendance.class);
-			if(isBase64) { 
-				long dateTime = new Date().getTime();
-				attendance = s3ServiceUtils.uploadCheckInImage(attendance.getCheckInImage(), attendance, dateTime);
-				attendEntity.setCheckInImage(attendance.getCheckInImage());
-				attendanceRepository.save(attendEntity);
-			} 
+		log.debug("Length of attendance List" +attendanceEntity.size());
+		for(Attendance attendance : attendanceEntity) { 
+			if(attendance.getCheckInImage() != null) {
+				if(attendance.getCheckInImage().indexOf("data:image") == 0) { 
+					String base64String = attendance.getCheckInImage().split(",")[1];
+					boolean isBase64 = Base64.isBase64(base64String);
+					AttendanceDTO attendanceModel = mapperUtil.toModel(attendance, AttendanceDTO.class);
+					if(isBase64) { 
+						long dateTime = new Date().getTime();
+						attendanceModel = s3ServiceUtils.uploadCheckInImage(attendanceModel.getCheckInImage(), attendanceModel, dateTime);
+						attendance.setCheckInImage(attendanceModel.getCheckInImage());
+						attendanceRepository.save(attendance);
+					}
+				}
+			}
 		} 
 		return "Upload attendance checkInImage successfully";
 	}
@@ -706,16 +747,20 @@ public class AttendanceService extends AbstractService {
 	public String uploadExistingCheckOutImage() {
 		// TODO Auto-generated method stub
 		List<Attendance> attendanceEntity = attendanceRepository.findAll();
-		List<AttendanceDTO> attendanceModel = mapperUtil.toModelList(attendanceEntity, AttendanceDTO.class);
-		for(AttendanceDTO attendance : attendanceModel) { 
-			boolean isBase64 = Base64.isBase64(attendance.getCheckInImage());
-			Attendance attendEntity = mapperUtil.toEntity(attendance, Attendance.class);
-			if(isBase64) { 
-				long dateTime = new Date().getTime();
-				attendance = s3ServiceUtils.uploadCheckoutImage(attendance.getCheckOutImage(), attendance, dateTime);
-				attendEntity.setCheckOutImage(attendance.getCheckOutImage());
-				attendanceRepository.save(attendEntity);
-			} 
+		for(Attendance attendance : attendanceEntity) { 
+			if(attendance.getCheckOutImage() != null) {
+				if(attendance.getCheckOutImage().indexOf("data:image") == 0) { 
+					String base64String = attendance.getCheckOutImage().split(",")[1];
+					boolean isBase64 = Base64.isBase64(base64String);
+					AttendanceDTO attendanceModel = mapperUtil.toModel(attendance, AttendanceDTO.class);
+					if(isBase64) { 
+						long dateTime = new Date().getTime();
+						attendanceModel = s3ServiceUtils.uploadCheckInImage(attendanceModel.getCheckOutImage(), attendanceModel, dateTime);
+						attendance.setCheckInImage(attendanceModel.getCheckOutImage());
+						attendanceRepository.save(attendance);
+					}
+				}
+			}
 		} 
 		return "Upload attendance checkOutImage successfully";
 	}

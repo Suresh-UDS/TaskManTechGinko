@@ -67,6 +67,12 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
 	private long continuedAttendanceId;
 
 	private boolean late;
+	
+	private String checkInImgUrl;
+	
+	private String checkOutImgUrl;
+	
+	private String enrollImgUrl;
 
 	public Long getId() {
 		return id;
@@ -270,4 +276,28 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
     public void setLate(boolean late) {
         this.late = late;
     }
+
+	public String getCheckInImgUrl() {
+		return checkInImgUrl;
+	}
+
+	public void setCheckInImgUrl(String checkInImgUrl) {
+		this.checkInImgUrl = checkInImgUrl;
+	}
+
+	public String getCheckOutImgUrl() {
+		return checkOutImgUrl;
+	}
+
+	public void setCheckOutImgUrl(String checkOutImgUrl) {
+		this.checkOutImgUrl = checkOutImgUrl;
+	}
+
+	public String getEnrollImgUrl() {
+		return enrollImgUrl;
+	}
+
+	public void setEnrollImgUrl(String enrollImgUrl) {
+		this.enrollImgUrl = enrollImgUrl;
+	}
 }
