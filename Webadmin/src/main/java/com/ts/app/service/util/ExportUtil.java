@@ -76,7 +76,7 @@ public class ExportUtil {
 	private String[] JOB_HEADER = { "SITE", "TITLE", "DESCRIPTION", "TICKET ID", "TICKET TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
 			"STATUS" };
 	private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT",
-			"CHECK OUT IMAGE", "SHIFT CONTINUED", "LATE CHECK IN" };
+			 "SHIFT CONTINUED", "LATE CHECK IN" };
 	private String[] TICKET_HEADER = { "ID", "SITE", "ISSUE", "DESCRIPTION","STATUS", "PENDING STATUS","CATEGORY", "SEVERITY", "INITIATOR",
 			"INITIATED ON", "ASSIGNED TO", "ASSIGNED ON", "CLOSED BY", "CLOSED ON" };
 
@@ -212,7 +212,7 @@ public class ExportUtil {
 	}
 
 	// @Async
-	
+
 	public ExportResult writeJobReportToFile(List<Job> content, ExportResult result) {
 		List<JobDTO> jobs = new ArrayList<JobDTO>();
 		for (Job job : content) {
@@ -433,7 +433,7 @@ public class ExportUtil {
 					dataRow.createCell(4).setCellValue(transaction.getCheckInTime() != null ? String.valueOf(transaction.getCheckInTime()) : "");
 					dataRow.createCell(5).setCellValue(transaction.getCheckOutTime() != null ? String.valueOf(transaction.getCheckOutTime()) : "");
 					dataRow.createCell(6).setCellValue(transaction.isShiftContinued() ?  "SHIFT CONTINUED" : "");
-					//dataRow.getCell(8).setCellValue(transaction.isLate() ? "LATE CHECK IN" : "");
+					dataRow.createCell(7).setCellValue(transaction.isLate() ? "LATE CHECK IN" : "");
 					/*
 					 * Blob blob = null; byte[] img = blob.getBytes(1,(int)blob.length());
 					 * BufferedImage i = null; try { i = ImageIO.read(new
@@ -459,7 +459,7 @@ public class ExportUtil {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
 				}
-				lock.unlock(); 
+				lock.unlock();
 			}
 		});
 
@@ -542,10 +542,10 @@ public class ExportUtil {
 		} catch (IOException e1) {
 			log.error("Error while opening the attendance template file",e1);
 		}
-		
+
 		//create consolidated data sheet
 		XSSFSheet consSheet = xssfWorkbook.getSheetAt(0);
-		
+
 //		Row headerRow = consSheet.createRow(0);
 //
 //		for (int i = 0; i < ATTENDANCE_CONSOLIDATED_REPORT_FILE_HEADER.length; i++) {
@@ -554,10 +554,10 @@ public class ExportUtil {
 //		}
 
 		int rowNum = 2;
-		
+
 		Row projRow = consSheet.getRow(0);
 		projRow.getCell(0).setCellValue(projName);
-		
+
 		for (Map<String,String> data : consolidatedData) {
 			Row dataRow = consSheet.getRow(rowNum++);
 			dataRow.getCell(0).setCellValue(data.get("SiteName") != null ? data.get("SiteName") : "");
@@ -566,15 +566,15 @@ public class ExportUtil {
 			//dataRow.getCell(3).setCellValue(data.get("Present"));
 			//dataRow.getCell(4).setCellValue(data.get("Absent"));
 		}
-		
+
 		rowNum++;
-		
+
 		Row summaryRow = consSheet.getRow(rowNum);
 		summaryRow.getCell(0).setCellValue("Total Mandays Per Day");
 		summaryRow.getCell(2).setCellValue(summary.get("TotalPresent"));
 		//summaryRow.getCell(3).setCellValue(summary.get("TotalPresent"));
 		//summaryRow.getCell(4).setCellValue(summary.get("TotalAbsent"));
-		
+
 		rowNum++;
 		if(shiftWiseSummary != null && shiftWiseSummary.size() > 0) {
 			Row shiftWiseTitleRow = consSheet.getRow(rowNum);
@@ -591,17 +591,17 @@ public class ExportUtil {
 				rowNum++;
 			}
 		}
-		
-		
+
+
 		//summaryRow.getCell(2).setCellValue(summary.get("TotalEmployees"));
 		//summaryRow.getCell(3).setCellValue(summary.get("TotalPresent"));
 		//summaryRow.getCell(4).setCellValue(summary.get("TotalAbsent"));
-		
-		
-		
+
+
+
 		// create worksheet with title
 		//XSSFSheet xssfSheet = xssfWorkbook.createSheet("ATTENDANCE_DETAILED_REPORT");
-		
+
 //		headerRow = xssfSheet.createRow(0);
 //
 //		for (int i = 0; i < ATTENDANCE_DETAIL_REPORT_FILE_HEADER.length; i++) {

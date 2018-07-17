@@ -295,10 +295,10 @@ public class EmployeeResource {
         return employeeService.findBySiteId(SecurityUtils.getCurrentUserId(),siteId);
     }
 
-    @RequestMapping(value = "/empAttendance/site/{siteId}", method = RequestMethod.GET)
-    public List<EmployeeDTO> findWithAttendanceBySiteId(@PathVariable Long siteId) {
+    @RequestMapping(value = "/empAttendance/site/", method = RequestMethod.POST)
+    public SearchResult<EmployeeDTO> findWithAttendanceBySiteId(@RequestBody SearchCriteria searchCriteria) {
         log.info("--Invoked EmployeeResource.findAll --");
-        return employeeService.findWithAttendanceBySiteId(SecurityUtils.getCurrentUserId(),siteId);
+        return employeeService.findWithAttendanceBySiteId(searchCriteria);
     }
 
 	@RequestMapping(value = "/employee/{id}/managers", method = RequestMethod.GET)
