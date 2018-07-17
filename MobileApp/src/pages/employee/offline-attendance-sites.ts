@@ -32,8 +32,11 @@ export class OfflineAttendanceSites {
     lattitude:any;
     longitude:any;
     checkedIn:any;
-    constructor(public navCtrl: NavController,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
-                private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController, private attendanceService: AttendanceService, private siteService: SiteService, private dbService:DBService) {
+    constructor(public navCtrl: NavController,public component:componentService, public navParams: NavParams,
+                private  authService: authService, public camera: Camera,
+                private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,
+                private attendanceService: AttendanceService, private siteService: SiteService,
+                private dbService:DBService) {
 
         this.geolocation.getCurrentPosition().then((response)=>{
             console.log("Current location");
@@ -100,7 +103,7 @@ export class OfflineAttendanceSites {
     }
 
     gotoEmployeeList(site){
-        this.component.showLoader("")
+        this.component.showLoader("");
 
         this.navCtrl.push(OfflineAttendance,{siteId:site.id})
 
