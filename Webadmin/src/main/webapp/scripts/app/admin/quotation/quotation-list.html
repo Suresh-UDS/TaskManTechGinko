@@ -325,18 +325,29 @@
     </div>
 </div>
 
-<div class="card margin-TB-5 txt-align-center" ng-hide="quotations">
 
-    <div class="card-content" ng-hide="quotations">
-        <div class="" style="text-align:center;padding: 10px 0;" ng-hide="quotationsLoader">
-            <div loader-css="ball-pulse"></div>
+ <div class="card margin-TB-5 txt-align-center" ng-hide="quotationsLoader">
+
+        <div class="card-content">
+            <div class="" style="text-align:center;padding: 10px 0;" >
+                <div loader-css="ball-pulse"></div>
+            </div>
+
+            <h3 >Loading, please wait...</h3>
+
         </div>
-
-        <h3>No data Found</h3>
 
     </div>
 
-</div>
+    <div class="card margin-TB-5 txt-align-center" ng-show="noData">
+
+        <div class="card-content">
+
+            <h3>No data Found</h3>
+
+        </div>
+
+    </div>
 
 <div class="modal fade" id="approveQuotationModal" tabindex="-1" role="dialog" aria-labelledby="approveQuotationModal" aria-hidden="true">
     <div class="modal-dialog modal-notice">
@@ -408,7 +419,7 @@
                                 <div class="form-group">
                                     <label class="label-control">Site</label>
                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites" ng-pattern="Select Site">
+                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sitesList" ng-pattern="Select Site">
                                         <option value="">Select Site...</option>
                                     </select>
                                 </div>
@@ -421,7 +432,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter1()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>
@@ -434,7 +445,7 @@
 <div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm"   novalidate >
+            <form name="searchForm1"   novalidate >
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -451,10 +462,22 @@
                                 <div class="dropdown">
                                     <input type="text"
                                            class="form-control border-bottom-input"
+                                           name="searchId"
                                            placeholder="Id"
-                                           ng-model="selectedId"
+                                           ng-pattern="/^[0-9]*$/"
+                                           ng-model="searchId"
 
                                     />
+
+                                    <div ng-show="searchForm1.$submitted || searchForm1.searchId.$touched">
+                                        <div ng-show="searchForm1.searchId.$dirty || searchForm1.searchId.$invalid">
+                                           
+                                            <p class="help-block" style="color:maroon;"
+                                               ng-show="searchForm1.searchId.$error.pattern">
+                                                Quotation id only contain numbers.
+                                            </p>
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>
@@ -465,7 +488,7 @@
                                     <input type="text"
                                            class="form-control border-bottom-input"
                                            placeholder="Title"
-                                           ng-model="selectedTitle"
+                                           ng-model="searchTitle"
 
                                     />
                                 </div>
@@ -477,7 +500,7 @@
                                     <input type="text"
                                            class="form-control searchable-input floatL border-bottom-input"
                                            placeholder="Created By"
-                                           ng-model="selectedCreatedBy"
+                                           ng-model="searchCreatedBy"
                                     />
                                 </div>
                             </div>
@@ -492,7 +515,7 @@
                                     <input type="text"
                                            class="form-control searchable-input floatL border-bottom-input"
                                            placeholder="Approved By"
-                                           ng-model="selectedApprovedBy"
+                                           ng-model="searchApprovedBy"
 
                                     />
                                 </div>
@@ -504,7 +527,7 @@
                                     <input type="text"
                                            class="form-control searchable-input floatL border-bottom-input"
                                            placeholder="Status"
-                                           ng-model="selectedStatus"
+                                           ng-model="searchStatus"
                                     />
                                 </div>
                             </div>
@@ -514,7 +537,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm1.$invalid">Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>

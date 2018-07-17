@@ -289,18 +289,30 @@
     </div>
     <!-- end row -->
 
-     <div class="card margin-TB-5 txt-align-center" ng-hide="tickets">
+    <div class="card margin-TB-5 txt-align-center" ng-hide="ticketsLoader">
 
         <div class="card-content">
-            <div class="" style="text-align:center;padding: 10px 0;"  ng-hide="ticketsLoader">
+            <div class="" style="text-align:center;padding: 10px 0;" >
                 <div loader-css="ball-pulse"></div>
             </div>
+
+            <h3 >Loading, please wait...</h3>
+
+        </div>
+
+    </div>
+
+    <div class="card margin-TB-5 txt-align-center" ng-show="noData">
+
+        <div class="card-content">
 
             <h3>No data Found</h3>
 
         </div>
 
     </div>
+
+
 
 
     <!-- Pagination directive start -->
@@ -636,7 +648,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter1()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>
@@ -649,7 +661,7 @@
 <div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm"   novalidate >
+            <form name="searchForm1"   novalidate >
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -689,7 +701,7 @@
                                 <div class="form-group">
                                     <label class="label-control">Select Employee</label>
                                     <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.fullName for emp in employees track by emp.id">
+                                    <select class="form-control " ng-model="searchEmployee"  ng-options="emp as emp.fullName for emp in employees track by emp.id">
                                         <option value="">Select Employee...</option>
                                     </select>
                                 </div>
@@ -704,7 +716,7 @@
                                 <div class="form-group">
                                     <input type="text"
                                            class="form-control searchable-input floatL border-bottom-input"
-                                           placeholder="Search ticket title" ng-model="selectedTitle"
+                                           placeholder="Search ticket title" ng-model="searchTitle"
 
                                            name="ticketId"
                                            uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5" />
@@ -717,7 +729,7 @@
                                     <input type="text"
                                            class="form-control searchable-input floatL border-bottom-input"
                                            placeholder="Search ticket description"
-                                           ng-model="selectedDescription"
+                                           ng-model="searchDescription"
                                            ng-value="searchCriteria.ticketName"
                                            uib-typeahead="ticket as ticket.name for ticket in allTickets | filter:$viewValue | limitTo:5"/>
                                 </div>
@@ -728,7 +740,7 @@
                                 <div class="form-group">
                                     <label class="label-control">Status</label>
                                     <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="selectedStatus" ng-change="refreshReport()" ng-options="status as status for status in ticketStatuses">
+                                    <select class="form-control " ng-model="searchStatus" ng-change="refreshReport()" ng-options="status as status for status in ticketStatuses">
                                         <option value="">Select status...</option>
                                     </select>
                                 </div>
