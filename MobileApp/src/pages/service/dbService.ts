@@ -1063,13 +1063,16 @@ export class DBService {
             console.log("Select Site Table");
             var addQuery = "select * from site";
             this.db.executeSql(addQuery,{}).then((data)=>{
-                if(data.row.length > 0)
+                if(data.rows.length > 0)
                 {
                     for(var i = 0;i<data.rows.length;i++)
                     {
                         this.selectSite.push(data.rows.item(i))
                     }
                 }
+
+
+
                 console.log(this.selectSite)
                 resolve(this.selectJobs);
             }, (error) => {
