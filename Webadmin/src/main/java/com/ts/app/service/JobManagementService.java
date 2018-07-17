@@ -681,7 +681,7 @@ public class JobManagementService extends AbstractService {
 		log.debug("Before saving new job -"+ job);
 
 		//log.debug("start Date  -"+ startDate + ", end date -" + endDate);
-		List<Job> existingJobs = jobRepository.findJobByTitleSiteAndDate(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()));
+		List<Job> existingJobs = jobRepository.findScheduledJobByTitleSiteAndDate(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()));
 		log.debug("Existing job -"+ existingJobs);
 		if(CollectionUtils.isEmpty(existingJobs)) {
 			//if job is created against a ticket
@@ -790,7 +790,7 @@ public class JobManagementService extends AbstractService {
 		
 		Calendar scheduleEndDateTime = Calendar.getInstance();
 		scheduleEndDateTime.setTime(assetPpmScheduleDTO.getEndDate());
-		scheduleEndDateTime.set(Calendar.HOUR_OF_DAY, 11);
+		scheduleEndDateTime.set(Calendar.HOUR_OF_DAY, 23);
 		scheduleEndDateTime.set(Calendar.MINUTE, 59);
 		scheduleEndDateTime.getTime();
 		
@@ -820,7 +820,7 @@ public class JobManagementService extends AbstractService {
 			data.append("&empId="+employee.getId());
 			//data.append("&empId="+assetPpmScheduleDTO.getEmployeeId());
 			data.append("&plannedStartTime="+startTime.getTime());
-			data.append("&plannedEndTime="+scheduleEndDateTime.getTime());
+			data.append("&plannedEndTime="+plannedEndTime.getTime());
 			data.append("&plannedHours="+assetPpmScheduleDTO.getFrequencyDuration());
 			//data.append("&location="+assetPpmScheduleDTO.getLocationId());
 			data.append("&frequency="+assetPpmScheduleDTO.getFrequency());

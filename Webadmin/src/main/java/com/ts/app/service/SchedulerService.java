@@ -635,7 +635,8 @@ public class SchedulerService extends AbstractService {
 			if (creationPolicy.equalsIgnoreCase("monthly")) { // if the creation policy is set to monthly, create jobs for the rest of the
 																// month
 				DateTime currDate = DateTime.now();
-				DateTime lastDate = currDate.dayOfMonth().withMaximumValue();
+				DateTime lastDate = currDate.dayOfMonth().withMaximumValue().withHourOfDay(23).withMinuteOfHour(59);
+				
 				if(CollectionUtils.isNotEmpty(prevJobs)) {
 					Job prevJob = prevJobs.get(0);
 					currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
@@ -650,7 +651,7 @@ public class SchedulerService extends AbstractService {
 				}else {
 					currDate = new DateTime(parentJob.getPlannedStartTime().getTime());
 					while ((currDate.isBefore(lastDate) || currDate.isEqual(lastDate))) { // create task for future dates.
-						if(currDate.isAfter(today)) {
+						if(currDate.isAfter(today) || currDate.isEqual(today)) {
 							jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate());
 						}
 						currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
@@ -668,7 +669,7 @@ public class SchedulerService extends AbstractService {
 					}
 				}else {
 					currDate = new DateTime(parentJob.getPlannedStartTime().getTime());
-					if(currDate.isAfter(today)) {
+					if(currDate.isAfter(today) || currDate.isEqual(today)) {
 						jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate());
 					}
 				}

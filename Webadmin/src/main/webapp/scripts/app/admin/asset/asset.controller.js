@@ -244,7 +244,8 @@ angular.module('timeSheetApp')
         
         $('input#ppmJobStartTime').on('dp.change', function(e){
             $scope.assetPPM.jobStartTime = e.date._d;
-            $scope.ppmJobStartTime =$filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
+            $scope.ppmJobStartTime =$filter('date')(e.date._d, 'hh:mm a');
+            $scope.ppmJobStartTimeTmp =$filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
         });
         
 
@@ -543,8 +544,10 @@ angular.module('timeSheetApp')
 
         $scope.loadSiteShifts = function() {
         		console.log('selected site - ' + JSON.stringify($scope.selectedSites));
-        		if($scope.selectedSites && $scope.assetPPM.jobStartTime) {
-            		SiteComponent.findShifts($scope.selectedSites.id,$scope.assetPPM.jobStartTime).then(function(data){
+        		var now = new Date();
+        		now = now.toISOString().split('T')[0] 
+        		if($scope.selectedSites) {
+            		SiteComponent.findShifts($scope.selectedSites.id,now).then(function(data){
             			$scope.shifts = data;
                         console.log('selected shifts - ' + JSON.stringify($scope.shifts));
                         //$scope.loadingStop();
@@ -2191,7 +2194,8 @@ angular.module('timeSheetApp')
         
         $('input#amcJobStartTime').on('dp.change', function(e){  
             $scope.amcSchedule.jobStartTime = e.date._d;
-             $scope.amcJobStartTime = $filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
+             $scope.amcJobStartTimeTmp = $filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
+             $scope.amcJobStartTime = $filter('date')(e.date._d, 'hh:mm a');
         });
 
 	    $scope.loadCheckList = function() {
