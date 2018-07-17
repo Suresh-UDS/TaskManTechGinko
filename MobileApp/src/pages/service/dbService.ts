@@ -141,7 +141,7 @@ export class DBService {
     {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                this.db.executeSql("DROP TABLE site", {})
+                // this.db.executeSql("DROP TABLE site", {})
                 console.log("Set Site Data");
                 var sites;
                 var param = [];
@@ -182,7 +182,7 @@ export class DBService {
     {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                this.db.executeSql("DROP TABLE ppm", {})
+                // this.db.executeSql("DROP TABLE ppm", {})
                 console.log("Set PPM Data");
                 console.log(this.selectAsset)
                 var ppms;
@@ -224,7 +224,7 @@ export class DBService {
     {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                this.db.executeSql("DROP TABLE amc", {})
+                // this.db.executeSql("DROP TABLE amc", {})
                 console.log("Set AMC Data");
                 console.log(this.selectAsset)
                 var amcs;
@@ -265,7 +265,7 @@ export class DBService {
     {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                this.db.executeSql("DROP TABLE config", {})
+                // this.db.executeSql("DROP TABLE config", {})
                 console.log("Set Config Data");
                 console.log(this.selectAsset)
                 var config;
@@ -307,7 +307,7 @@ export class DBService {
     {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                this.db.executeSql("DROP TABLE job", {})
+                // this.db.executeSql("DROP TABLE job", {})
                 console.log("Set Job Data");
                 console.log(this.selectAsset)
                 var jobs;
@@ -350,7 +350,7 @@ export class DBService {
     {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                this.db.executeSql("DROP TABLE ticket", {})
+                // this.db.executeSql("DROP TABLE ticket", {})
                 console.log("Set Ticket Data");
                 console.log(this.selectAsset)
                 var tickets;
@@ -537,7 +537,7 @@ export class DBService {
             {
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
-                        this.db.executeSql("DROP TABLE readingsList", {})
+                        // this.db.executeSql("DROP TABLE readingsList", {})
                         console.log("Asset Reading Data Local");
                         var readingsList;
                         var param = [];
@@ -578,7 +578,7 @@ export class DBService {
             {
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
-                        this.db.executeSql("DROP TABLE viewReading", {})
+                        // this.db.executeSql("DROP TABLE viewReading", {})
                         console.log("Asset View Reading Data");
                         var viewReading;
                         var param = [];
@@ -626,7 +626,7 @@ export class DBService {
             {
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
-                        this.db.executeSql("DROP TABLE PreviousReading", {})
+                        // this.db.executeSql("DROP TABLE PreviousReading", {})
                         console.log("Asset Previous Reading Data");
                         var assetPreviousReading;
                         var param = [];
@@ -797,17 +797,43 @@ export class DBService {
                 this.db.executeSql("SELECT tbl_name FROM sqlite_master WHERE tbl_name=?", [tbl]).then((data) => {
                     //testing
                     console.log("Search Table");
-                    console.log(data);
+                    console.log(data)
                     if (data.rows.length > 0) {
                         console.log("Table exists");
                         console.log("Table Name:" + data.rows.item(0).tbl_name);
-                        console.log("Update table");
-                        for (var i = 0; i < param.length; i++) {
-                            this.db.executeSql(update, param[i]).then((data) => {
-                            }, (error) => {
-                                console.log("ERROR: " + JSON.stringify(error))
-                            })
-                        }
+                        console.log("Drop Table")
+                        var table = data.rows.item(0).tbl_name
+                        this.db.executeSql('DROP TABLE '+table+'',{}).then((data) => {
+                            console.log(data);
+                        })
+                        // console.log("Update table");
+                        // for (var i = 0; i < param.length; i++) {
+                        //     this.db.executeSql(update, param[i]).then((data) => {
+                        //     }, (error) => {
+                        //         console.log("ERROR: " + JSON.stringify(error))
+                        //     })
+                        // }
+
+                        console.log("Create table " + tbl);
+                        console.log(create);
+                        console.log(param);
+                        console.log(param.length);
+                        this.db.executeSql(create, {}).then((data) => {
+                            console.log(data);
+                            for (var i = 0; i < param.length; i++) {
+                                var query = insert;
+                                this.db.executeSql(insert, param[i]).then((data) => {
+                                    console.log(data)//
+
+                                }, (error) => {
+                                    console.log("ERROR: " + JSON.stringify(error))
+                                })
+                            }
+
+                            resolve("s")
+                        }, (error) => {
+                            console.log("ERROR: " + JSON.stringify(error))
+                        })
                     }
                     else {
                         console.log("No table");
@@ -821,14 +847,17 @@ export class DBService {
                                 var query = insert;
                                 this.db.executeSql(insert, param[i]).then((data) => {
                                     console.log(data)//
+
                                 }, (error) => {
                                     console.log("ERROR: " + JSON.stringify(error))
                                 })
                             }
+
                             resolve("s")
                         }, (error) => {
                             console.log("ERROR: " + JSON.stringify(error))
                         })
+
 
                     }
                 })
