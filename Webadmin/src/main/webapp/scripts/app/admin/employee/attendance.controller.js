@@ -345,13 +345,19 @@ angular.module('timeSheetApp')
         }
 
 
-        $scope.loadImagesNew = function(image,enrollId) {
+        $scope.loadImagesNew = function(imageUrl, enrollUrl) {
 
-            $scope.loadEnrImage(enrollId);
+//            $scope.loadEnrImage(enrollId);
             //Attendance Image
             var eleId = 'photoOutImg';
             var ele = document.getElementById(eleId);
-            ele.setAttribute('src',image);
+            ele.setAttribute('src',imageUrl);
+            
+//            var enrollImg = enrollUrl;
+            
+            var eleId1 = 'photoEnrolled';
+            var ele1 = document.getElementById(eleId1);
+            ele1.setAttribute('src',enrollUrl);
         };
 
         $scope.initMap = function(container, latIn, lngIn, containerOut, latOut, lngOut) {
