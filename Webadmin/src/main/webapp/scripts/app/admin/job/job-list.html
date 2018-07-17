@@ -298,12 +298,23 @@
     </div>
     <!-- end row -->
 
-    <div class="card margin-TB-5 txt-align-center" ng-hide="jobs">
+
+    <div class="card margin-TB-5 txt-align-center" ng-hide="jobsLoader">
 
         <div class="card-content">
-            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="jobsLoader">
+            <div class="" style="text-align:center;padding: 10px 0;" >
                 <div loader-css="ball-pulse"></div>
             </div>
+
+            <h3 >Loading, please wait...</h3>
+
+        </div>
+
+    </div>
+
+    <div class="card margin-TB-5 txt-align-center" ng-show="noData">
+
+        <div class="card-content">
 
             <h3>No data Found</h3>
 
@@ -357,7 +368,7 @@
                 </div>
                 <div class="modal-body">
 
-                    <div class="row">
+                    <div class="row" ng-init="loadProjects();loadAssets()">
 
                         <div class="col-xs-12 col-md-4">
                             <div class="form-group" >
@@ -375,7 +386,7 @@
                                 <div class="form-group">
                                     <label class="label-control">Site</label>
                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites" ng-pattern="Select Site">
+                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sitesList" ng-pattern="Select Site" ng-change="loadEmployees()" >
                                         <option value="">Select Site...</option>
                                     </select>
                                 </div>
@@ -388,7 +399,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter1()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>
@@ -401,7 +412,7 @@
 <div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm"   novalidate >
+            <form name="searchForm1"   novalidate >
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -415,11 +426,11 @@
                     <div class="row">
 
                         <div class="col-xs-12 col-md-4">
-                            <div class="form-group no-padding" ng-init="loadProjects();loadAllSites();loadAssets()">
+                            <div class="form-group no-padding" >
                                 <div class="dropdown">
                                     <label class="label-control">Job date</label>
                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                    <input type="text" class="form-control datepicker"  id="selectedJobDate"  ng-model="selectedJobDate"/>
+                                    <input type="text" class="form-control datepicker"  id="selectedJobDate"  ng-model="selectedJobDate" autocomplete="off" />
                                 </div>
                             </div>
                         </div>
@@ -429,7 +440,7 @@
                                 <div class="dropdown">
                                     <label class="label-control">Select Employee</label>
                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.fullName for emp in employees">
+                                    <select class="form-control " ng-model="searchEmployee"  ng-options="emp as emp.fullName for emp in employees">
                                         <option value="">Select Employee...</option>
                                     </select>
                                 </div>
@@ -440,7 +451,7 @@
                                 <div class="dropdown ">
                                     <label class="label-control">Select Status</label>
                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="selectedStatus"  ng-options="status as status for status in statuses">
+                                    <select class="form-control " ng-model="searchStatus"  ng-options="status as status for status in statuses">
                                         <option value="">Select Status...</option>
                                     </select>
                                 </div>
