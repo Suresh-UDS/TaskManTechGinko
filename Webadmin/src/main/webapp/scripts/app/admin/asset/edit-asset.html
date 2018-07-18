@@ -1236,10 +1236,10 @@
                                                                 <tbody>
                                                                 <tr ng-repeat="ppmSchedules in ppmScheduleList">
                                                                     <td>{{ppmSchedules.title}}</td>
-                                                                    <td class="hiddenCheckList" ng-mouseover="loadCheckList(ppmSchedules.checklistId)">{{ppmSchedules.checklistName}}
+                                                                    <td class="hiddenCheckList" >{{ppmSchedules.checklistName}}
 
                                                                        <div class="CheckListBx">
-                                                                           <div class="bootstrap-tagsinput" ng-repeat="checkListItem in ppmSchedules.items">
+                                                                           <div class="bootstrap-tagsinput" ng-repeat="checkListItem in ppmSchedules.checkListItems">
                                                                                <span class="tag label label-info">{{checkListItem.name}}<span data-role="remove"></span></span>
 
                                                                            </div>
@@ -1569,7 +1569,7 @@
                                                                 <td class="hiddenCheckList">{{amcSchedule.checklistName}}
 
                                                                    <div class="CheckListBx">
-                                                                       <div class="bootstrap-tagsinput" ng-repeat="checkListItemAmc in amcSchedule.items">
+                                                                       <div class="bootstrap-tagsinput" ng-repeat="checkListItemAmc in amcSchedule.checkListItems">
                                                                            <span class="tag label label-info">{{checkListItemAmc.name}}<span data-role="remove"></span></span>
 
                                                                        </div>

@@ -1551,44 +1551,45 @@ angular.module('timeSheetApp')
             
                 $scope.ppmScheduleList = data;
 
-                for(var i = 0;i < $scope.ppmScheduleList.length;i++){
+                console.log('ppm schedule data--',$scope.ppmScheduleList);
+
+               /* for(var i = 0;i < $scope.ppmScheduleList.length;i++){
 
 
-                    var ppmId = $scope.ppmScheduleList[i].checklistId;
-
-
-
-
-                    ChecklistComponent.findOne(ppmId).then(function(response){
+                    var checklistId = $scope.ppmScheduleList[i].checklistId;
 
 
 
-                       item_ar.push(response.items);
+                    ChecklistComponent.findOne(checklistId).then(function(response){
 
+                     
 
+                        item_ar.push(response.items);
+
+                     
 
                         console.log("array", item_ar);
 
 
-                        if (i == item_ar.length) {
+                        //if (i == item_ar.length) {
 
                              for(var j= 0;j < $scope.ppmScheduleList.length;j++){
 
-                                // alert(j);
+                                 alert(item_ar[j]);
 
 
                               $scope.ppmScheduleList[j].items = item_ar[j];
 
                             }
 
-                       }
+                       //}
 
                    });
 
 
                 }
 
-                console.log("PPM List" , $scope.ppmScheduleList);
+                console.log("PPM List" , $scope.ppmScheduleList);*/
                 $scope.loadingStop();
             }).catch(function(){
                  $scope.loadingStop();
