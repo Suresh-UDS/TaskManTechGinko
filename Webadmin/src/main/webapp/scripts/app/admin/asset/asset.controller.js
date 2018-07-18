@@ -2394,13 +2394,21 @@ angular.module('timeSheetApp')
 
         }
 
-        $scope.printDiv = function(printable) {
+        /*$scope.printDiv = function(printable) {
             var printContents = document.getElementById(printable).innerHTML;
             var originalContents = document.body.innerHTML;
             document.body.innerHTML = printContents;
             window.print();
             document.body.innerHTML = originalContents;
-        }
+        }*/
+
+        $scope.printDiv = function(printable) {
+              var printContents = document.getElementById(printable).innerHTML;
+              var popupWin = window.open('', '_blank', 'width=1400,height=600');
+              popupWin.document.open();
+              popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="../assets/css/custom.css" /></head><body onload="window.print()">' + printContents + '</body></html>');
+              popupWin.document.close();
+         } 
 
 		/**
 		 * View Readings*/
@@ -2870,7 +2878,9 @@ angular.module('timeSheetApp')
 
              $scope.qrListLoad= function(ids){
                 $scope.loadingStart();
+                $scope.qrStatus = false;
                 if($stateParams.ids){
+                        $scope.qrStatus = true;
                         $scope.assetQrList ={}
                         AssetComponent.multipleQr($stateParams.ids).then(function(data){
                         $scope.loadingStop();

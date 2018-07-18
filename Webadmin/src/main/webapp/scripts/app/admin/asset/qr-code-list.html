@@ -6,7 +6,7 @@
 
         <div class="col-md-12">
             <div class="card tablecard">
-                <div class="card-content">
+                <div class="card-content" ng-show="qrStatus">
 
                     <div class="row">
                         <div class="col-md-12 txt-align-rgt">
@@ -46,21 +46,27 @@
                             </div>
 
                         </div>
-                        <div class="row">
-                           <div class="col-md-12 txt-align-rgt">
-                               <div class="form-group">
-                                   <button class="btn" type="button"
-                                           ui-sref="assets" id="cancel-button">
-                                        Back
-                                   </button>
-                               </div>
-                           </div>
-                        </div>
+                        
 
                     </div>
 
+
+
+                </div>
+                <div class="card-content" ng-show="!qrStatus">
+                    <h3 class="txt-align-center">No Asset Qr Selected</h3>
                 </div>
                 <!-- end content-->
+                 <div class="row">
+                   <div class="col-md-12 txt-align-rgt">
+                       <div class="form-group">
+                           <button class="btn" type="button"
+                                   ui-sref="assets" id="cancel-button">
+                                Back
+                           </button>
+                       </div>
+                   </div>
+                </div>
             </div>
             <!--  end card  -->
         </div>
