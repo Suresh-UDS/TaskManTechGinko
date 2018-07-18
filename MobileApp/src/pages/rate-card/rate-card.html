@@ -2,7 +2,7 @@
   <ion-navbar>
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
-    </button>
+      </button>
     <ion-title>Rate Cards</ion-title>
   </ion-navbar>
 </ion-header>
@@ -18,19 +18,19 @@
         <table class="table">
             <thead>
                <tr>
-                   <th>Type</th>
-                   <th>Name</th>
-                   <th>UOM </th>
-                   <th>Price</th>
+                   <th class="clr-orange">TYPE</th>
+                   <th class="clr-orange">NAME</th>
+                   <th class="clr-orange">UOM </th>
+                   <th class="clr-orange">PRICE</th>
                </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let rate of rateCards">
-                <td>{{rate.type}}</td>
-                <td>{{rate.title}}</td>
-                <td>{{rate.uom}}</td>
-                <td>{{rate.cost}}</td>
-            </tr>
+                <tr *ngFor="let rate of rateCards">
+                    <td>{{rate.type}}</td>
+                    <td>{{rate.title}}</td>
+                    <td>{{rate.uom}}</td>
+                    <td>{{rate.cost}}</td>
+                </tr>
             </tbody>
         </table>
 

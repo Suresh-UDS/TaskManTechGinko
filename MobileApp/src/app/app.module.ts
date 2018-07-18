@@ -112,6 +112,7 @@ import {DBService} from "../pages/service/dbService";
 import {Network} from "@ionic-native/network";
 import {Diagnostic} from "@ionic-native/diagnostic";
 import {Market} from "@ionic-native/market";
+import {Checklist} from "../pages/checklist/checklist";
 
 
 @NgModule({
@@ -186,6 +187,7 @@ import {Market} from "@ionic-native/market";
       GetAssetReading,
       GetAssetReadings,
       CalenderPage,
+      Checklist
   ],
   imports: [
     BrowserModule,
@@ -270,6 +272,7 @@ import {Market} from "@ionic-native/market";
       ScanQRAsset,
       GetAssetReadings,
       CalenderPage,
+      Checklist,
 
 
 
