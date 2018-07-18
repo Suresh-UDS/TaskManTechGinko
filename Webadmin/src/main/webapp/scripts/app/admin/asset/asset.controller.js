@@ -2406,9 +2406,9 @@ angular.module('timeSheetApp')
               var printContents = document.getElementById(printable).innerHTML;
               var popupWin = window.open('', '_blank', 'width=1400,height=600');
               popupWin.document.open();
-              popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="../assets/css/custom.css" /></head><body onload="window.print()">' + printContents + '</body></html>');
+              popupWin.document.write('<html><head><link href="../assets/css/bootstrap.min.css" type="text/css" rel="stylesheet" /><link rel="stylesheet" type="text/css" href="../assets/css/custom.css" /></head><body onload="window.print()">' + printContents + '</body></html>');
               popupWin.document.close();
-         } 
+         }
 
 		/**
 		 * View Readings*/
