@@ -623,6 +623,11 @@ textarea.form-control {
     cursor:pointer;
 }
 
+input.InputTxtCaps
+{
+    text-transform: capitalize;
+}
+
 /*End Checklist css */
 
 
