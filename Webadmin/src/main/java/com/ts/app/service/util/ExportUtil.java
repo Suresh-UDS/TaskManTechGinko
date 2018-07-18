@@ -576,6 +576,8 @@ public class ExportUtil {
 		//summaryRow.getCell(4).setCellValue(summary.get("TotalAbsent"));
 
 		rowNum++;
+		/* ShiftWise Summary report is temporarily commented out as per request from FLEXTRONICS
+		 
 		if(shiftWiseSummary != null && shiftWiseSummary.size() > 0) {
 			Row shiftWiseTitleRow = consSheet.getRow(rowNum);
 			rowNum++;
@@ -591,6 +593,7 @@ public class ExportUtil {
 				rowNum++;
 			}
 		}
+		*/
 
 
 		//summaryRow.getCell(2).setCellValue(summary.get("TotalEmployees"));
