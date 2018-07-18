@@ -389,166 +389,166 @@ export class GetAssetReading {
     assetSaveReading(assetReading)
     {
         //offline
-
-        this.dbService.setReadings(assetReading).then(
-            response=>{
-                console.log(response)
-                this.componentService.showToastMessage('Reading Saved','bottom');
-                this.viewCtrl.dismiss();
-            },
-            error=>{
-                console.log(error)
-            }
-        )
+        //
+        // this.dbService.setReadings(assetReading).then(
+        //     response=>{
+        //         console.log(response)
+        //         this.componentService.showToastMessage('Reading Saved','bottom');
+        //         this.viewCtrl.dismiss();
+        //     },
+        //     error=>{
+        //         console.log(error)
+        //     }
+        // )
 
         //online
-        // this.assetService.saveReading(assetReading).subscribe(
-        //     response=>{
-        //         console.log("Save Reading Response");
-        //         console.log(response);
-        //         if(response.errorStatus){
-        //             this.componentService.showToastMessage('Invalid Entry','bottom');
-        //         }else{
-        //             console.log("Error status false");
-        //             this.componentService.showToastMessage('Reading Saved','bottom');
-        //             let data = { 'foo': 'bar' };
-        //             this.viewCtrl.dismiss(data);
-        //         }
-        //     },
-        //     error=>
-        //     {
-        //         console.log("Save Reading Error");
-        //         console.log(error);
-        //         this.componentService.showToastMessage('Save Reading Error','bottom');
-        //     }
-        //
-        // )
+        this.assetService.saveReading(assetReading).subscribe(
+            response=>{
+                console.log("Save Reading Response");
+                console.log(response);
+                if(response.errorStatus){
+                    this.componentService.showToastMessage('Invalid Entry','bottom');
+                }else{
+                    console.log("Error status false");
+                    this.componentService.showToastMessage('Reading Saved','bottom');
+                    let data = { 'foo': 'bar' };
+                    this.viewCtrl.dismiss(data);
+                }
+            },
+            error=>
+            {
+                console.log("Save Reading Error");
+                console.log(error);
+                this.componentService.showToastMessage('Save Reading Error','bottom');
+            }
+
+        )
     }
 
 
     // save reading in local
 
-    assetSaveReadingLocal(asset){
-        this.dbService.setReadings(asset).then(
-            response=>{
-                console.log(response)
+    // assetSaveReadingLocal(asset){
+    //     this.dbService.setReadings(asset).then(
+    //         response=>{
+    //             console.log(response)
+    //
+    //         }
+    //     )
+    //
+    //
+    //     // this.sqlite.create({
+    //     //     name:'data.db',
+    //     //     location:'default',
+    //     // })
+    //     //     .then((db:SQLiteObject)=>{
+    //     //     db.executeSql('DROP TABLE  readingList',{});
+    //     //
+    //     //     db.executeSql('create TABLE IF NOT EXISTS readingList (name VARCHAR,uom VARCHAR,initialValue INT,finalValue INT,consumption VARCHAR,assetId INT,assetParameterConfigId) ',{})
+    //     //         .then(()=> {
+    //     //             console.log('Executed SQL');
+    //     //             console.log("Asset");
+    //     //             console.log(asset);
+    //     //
+    //     //             // for(var i=0; i< asset.length;i++){
+    //     //                 console.log("asset save to local",asset);
+    //     //                 var query= "INSERT INTO readingList (name,uom,initialValue,finalValue,consumption,assetId,assetParameterConfigId) VALUES (?,?,?,?,?,?,?)";
+    //     //                 // db.executeSql(query,[8,'Test',100,true,new Date(),66,8,new Date(),40,'watt'])
+    //     //                 db.executeSql(query,[asset.name, asset.uom,asset.initialValue,asset.finalValue,asset.consumption,asset.assetId,asset.assetParameterConfigId])
+    //     //                     .then((data)=>
+    //     //                     {
+    //     //                         console.log('Executed SQL');
+    //     //                         console.log('Table Will Be Created');
+    //     //                         console.log(data);
+    //     //                     })
+    //     //
+    //     //                     .catch(e=>console.log(e));
+    //     //             // }
+    //     //         })
+    //     //         .catch(e=>console.log(e));
+    //     //
+    //     //     setTimeout(()=>{
+    //     //     var query= "select * from readingList";
+    //     //         db.executeSql(query,{}).then((data)=>{
+    //     //             console.log(data);
+    //     //             if(data.rows.length >0){
+    //     //                 for(var i=0; i< data.rows.length; i++){
+    //     //                     this.offlineReading.push(data.rows.item(i));
+    //     //                     console.log(data.rows.item(i));
+    //     //                 }
+    //     //
+    //     //             }
+    //     //
+    //     //         },(error)=>{
+    //     //             console.log("ERROR" + JSON.stringify(error));
+    //     //         })
+    //     //     },3000)
+    //     //
+    //     //     })
+    //     //
+    //
+    // }
 
-            }
-        )
 
-
-        // this.sqlite.create({
-        //     name:'data.db',
-        //     location:'default',
-        // })
-        //     .then((db:SQLiteObject)=>{
-        //     db.executeSql('DROP TABLE  readingList',{});
-        //
-        //     db.executeSql('create TABLE IF NOT EXISTS readingList (name VARCHAR,uom VARCHAR,initialValue INT,finalValue INT,consumption VARCHAR,assetId INT,assetParameterConfigId) ',{})
-        //         .then(()=> {
-        //             console.log('Executed SQL');
-        //             console.log("Asset");
-        //             console.log(asset);
-        //
-        //             // for(var i=0; i< asset.length;i++){
-        //                 console.log("asset save to local",asset);
-        //                 var query= "INSERT INTO readingList (name,uom,initialValue,finalValue,consumption,assetId,assetParameterConfigId) VALUES (?,?,?,?,?,?,?)";
-        //                 // db.executeSql(query,[8,'Test',100,true,new Date(),66,8,new Date(),40,'watt'])
-        //                 db.executeSql(query,[asset.name, asset.uom,asset.initialValue,asset.finalValue,asset.consumption,asset.assetId,asset.assetParameterConfigId])
-        //                     .then((data)=>
-        //                     {
-        //                         console.log('Executed SQL');
-        //                         console.log('Table Will Be Created');
-        //                         console.log(data);
-        //                     })
-        //
-        //                     .catch(e=>console.log(e));
-        //             // }
-        //         })
-        //         .catch(e=>console.log(e));
-        //
-        //     setTimeout(()=>{
-        //     var query= "select * from readingList";
-        //         db.executeSql(query,{}).then((data)=>{
-        //             console.log(data);
-        //             if(data.rows.length >0){
-        //                 for(var i=0; i< data.rows.length; i++){
-        //                     this.offlineReading.push(data.rows.item(i));
-        //                     console.log(data.rows.item(i));
-        //                 }
-        //
-        //             }
-        //
-        //         },(error)=>{
-        //             console.log("ERROR" + JSON.stringify(error));
-        //         })
-        //     },3000)
-        //
-        //     })
-        //
-
-    }
-
-
-    saveReadingLocal(asset){
-
-        this.dbService.setReadingsList(asset).then(
-            response=>{
-                console.log(response)
-            }
-        )
-        // this.sqlite.create({
-        //     name:'data.db',
-        //     location:'default'
-        // })
-        //
-        //
-        //     .then((db:SQLiteObject)=>{
-        //         db.executeSql('DROP TABLE  readingsList',{});
-        //
-        //         db.executeSql('create TABLE IF NOT EXISTS readingsList (name VARCHAR,uom VARCHAR,value INT,assetId INT,assetParameterConfigId INT,consumptionMonitoringRequired) ',{})
-        //             .then(()=> {
-        //                 console.log('Executed SQL');
-        //                 console.log("Asset");
-        //                 console.log(asset);
-        //
-        //                 // for(var i=0; i< asset.length;i++){
-        //                 console.log("asset save to local",asset);
-        //                 var query= "INSERT INTO readingList (name,uom,value,assetId,assetParameterConfigId,consumptionMonitoringRequired) VALUES (?,?,?,?,?,?)";
-        //                 // db.executeSql(query,[8,'Test',100,true,new Date(),66,8,new Date(),40,'watt'])
-        //                 db.executeSql(query,[asset.name, asset.uom,asset.value,asset.assetId,asset.assetParameterConfigId,asset.consumptionMonitoringRequired])
-        //                     .then((data)=>
-        //                     {
-        //                         console.log('Executed SQL');
-        //                         console.log('Table Will Be Created');
-        //                         console.log(data);
-        //                     })
-        //
-        //                     .catch(e=>console.log(e));
-        //                 // }
-        //             })
-        //             .catch(e=>console.log(e));
-        //
-        //         setTimeout(()=>{
-        //             var query= "select * from readingsList";
-        //             db.executeSql(query,{}).then((data)=>{
-        //                 console.log(data);
-        //                 if(data.rows.length >0){
-        //                     for(var i=0; i< data.rows.length; i++){
-        //                         this.offlineReading.push(data.rows.item(i));
-        //                         console.log(data.rows.item(i));
-        //                     }
-        //
-        //                 }
-        //
-        //             },(error)=>{
-        //                 console.log("ERROR" + JSON.stringify(error));
-        //             })
-        //         },3000)
-        //
-        //     })
-
-    }
+    // saveReadingLocal(asset){
+    //
+    //     this.dbService.setReadingsList(asset).then(
+    //         response=>{
+    //             console.log(response)
+    //         }
+    //     )
+    //     // this.sqlite.create({
+    //     //     name:'data.db',
+    //     //     location:'default'
+    //     // })
+    //     //
+    //     //
+    //     //     .then((db:SQLiteObject)=>{
+    //     //         db.executeSql('DROP TABLE  readingsList',{});
+    //     //
+    //     //         db.executeSql('create TABLE IF NOT EXISTS readingsList (name VARCHAR,uom VARCHAR,value INT,assetId INT,assetParameterConfigId INT,consumptionMonitoringRequired) ',{})
+    //     //             .then(()=> {
+    //     //                 console.log('Executed SQL');
+    //     //                 console.log("Asset");
+    //     //                 console.log(asset);
+    //     //
+    //     //                 // for(var i=0; i< asset.length;i++){
+    //     //                 console.log("asset save to local",asset);
+    //     //                 var query= "INSERT INTO readingList (name,uom,value,assetId,assetParameterConfigId,consumptionMonitoringRequired) VALUES (?,?,?,?,?,?)";
+    //     //                 // db.executeSql(query,[8,'Test',100,true,new Date(),66,8,new Date(),40,'watt'])
+    //     //                 db.executeSql(query,[asset.name, asset.uom,asset.value,asset.assetId,asset.assetParameterConfigId,asset.consumptionMonitoringRequired])
+    //     //                     .then((data)=>
+    //     //                     {
+    //     //                         console.log('Executed SQL');
+    //     //                         console.log('Table Will Be Created');
+    //     //                         console.log(data);
+    //     //                     })
+    //     //
+    //     //                     .catch(e=>console.log(e));
+    //     //                 // }
+    //     //             })
+    //     //             .catch(e=>console.log(e));
+    //     //
+    //     //         setTimeout(()=>{
+    //     //             var query= "select * from readingsList";
+    //     //             db.executeSql(query,{}).then((data)=>{
+    //     //                 console.log(data);
+    //     //                 if(data.rows.length >0){
+    //     //                     for(var i=0; i< data.rows.length; i++){
+    //     //                         this.offlineReading.push(data.rows.item(i));
+    //     //                         console.log(data.rows.item(i));
+    //     //                     }
+    //     //
+    //     //                 }
+    //     //
+    //     //             },(error)=>{
+    //     //                 console.log("ERROR" + JSON.stringify(error));
+    //     //             })
+    //     //         },3000)
+    //     //
+    //     //     })
+    //
+    // }
 
 
 

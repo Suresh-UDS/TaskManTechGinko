@@ -99,6 +99,9 @@ public class AmazonS3Service {
     @Value("${AWS.s3-checklist-path}")
     private String checkListPath;
     
+    @Value("${AWS.s3-locationqr-path}")
+    private String locationQrCodePath;
+    
     @PostConstruct
     private void initializeAmazon() {
        log.info("Amazon S3 credentials accessKey -" + this.accessKey + ", secretKey -" + this.secretKey);
@@ -418,6 +421,34 @@ public class AmazonS3Service {
 		}
 		 return prefixUrl;
 	}
+	
+	public String uploadLocationQrToS3bucket(String filename, String qrCodeImage) {
+		// TODO Auto-generated method stub
+		String key = bucketEnv + locationQrCodePath + filename;
+		String prefixUrl = "";
+		try {
+			
+			byte[] bI = org.apache.commons.codec.binary.Base64.decodeBase64((qrCodeImage.substring(qrCodeImage.indexOf(",")+1)).getBytes());
+			log.debug("Image Strings -" +bI);
+			InputStream fis = new ByteArrayInputStream(bI);
+			
+			ObjectMetadata metadata = new ObjectMetadata();
+			metadata.setContentLength(bI.length);
+			metadata.setContentType("image/png");
+			metadata.setCacheControl("public, max-age=31536000");
+		
+			PutObjectResult result = s3client.putObject(bucketName, key, fis, metadata);
+			s3client.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
+			log.debug("result of object request -" + result);
+			prefixUrl = cloudFrontUrl + key;
+			
+		} catch(AmazonS3Exception e) {
+			log.info("Error while upload a Location QRcode -" +e);
+			e.printStackTrace();
+		}
+		 return prefixUrl;
+	}
+
 
     
 	

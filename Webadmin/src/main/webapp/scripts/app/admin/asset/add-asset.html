@@ -1318,8 +1318,8 @@
                                                                 <div class="row">
                                                                     <div class="col-md-3" >
                                                                     		<div class="form-group">
-						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
-						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+						                                                    <label class="control-label">Start Time<span class="red-star">*</span></label>
+						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
 
 						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="ppmJobStartTime"  ng-model="ppmJobStartTime" placeholder="{{ppmJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" autocomplete="off" name="ppmJobStartTime" required/>
 
@@ -1328,7 +1328,7 @@
                                                                                     ng-show="form3.ppmJobStartTime.$dirty || form3.ppmJobStartTime.$invalid">
                                                                                     <p class="help-block" style="color:maroon"
                                                                                        ng-show="form3.ppmJobStartTime.$error.required">
-                                                                                        Start date is required
+                                                                                        Start time is required
                                                                                     </p>
 
 
@@ -1398,14 +1398,14 @@
                                                                 <tbody>
                                                                 <tr ng-repeat="ppmSchedules in ppmScheduleList">
                                                                     <td>{{ppmSchedules.title}}</td>
-                                                                    <td class="hiddenCheckList">{{ppmSchedules.checklistName}}
+                                                                    <td class="hiddenCheckList" >{{ppmSchedules.checklistName}}
 
-                                                                       <div class="CheckListBx">
-                                                                           <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
-                                                                               <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
-                                                                               <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
-                                                                               <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
-                                                                       </div>
+                                                                         <div class="CheckListBx">
+                                                                             <div class="bootstrap-tagsinput" ng-repeat="checkListItem in ppmSchedules.checkListItems">
+                                                                                 <span class="tag label label-info">{{checkListItem.name}}<span data-role="remove"></span></span>
+
+                                                                             </div>
+                                                                         </div>
 
                                                                     </td>
                                                                     <!-- <td>
@@ -1537,6 +1537,10 @@
                                                                                     </p>
 
                                                                                 </div>
+                                                                                <p class="help-block" style="color:maroon"
+                                                                                   ng-show="amcFromMsg">
+                                                                                    Fromdate cannot be greater than To date.
+                                                                                </p>
 
                                                                             </div>
 
@@ -1558,6 +1562,10 @@
                                                                                     </p>
 
                                                                                 </div>
+                                                                                <p class="help-block" style="color:maroon"
+                                                                                   ng-show="amcToMsg">
+                                                                                    Todate cannot be lesser than From date.
+                                                                                </p>
 
                                                                             </div>
 
@@ -1625,8 +1633,8 @@
                                                                 <div class="row">
                                                                     <div class="col-md-3" >
                                                                     		<div class="form-group">
-						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
-						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+						                                                    <label class="control-label">Start Time<span class="red-star">*</span></label>
+						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
 
 						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="amcJobStartTime"  ng-model="amcJobStartTime" name="amcJobStartTime" placeholder="{{amcJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" autocomplete="off" required/>
 
@@ -1635,7 +1643,7 @@
                                                                                     ng-show="form4.amcJobStartTime.$dirty || form4.amcJobStartTime.$invalid">
                                                                                     <p class="help-block" style="color:maroon"
                                                                                        ng-show="form4.amcJobStartTime.$error.required">
-                                                                                        Start date is required
+                                                                                        Start time is required
                                                                                     </p>
 
 
@@ -1706,13 +1714,16 @@
 
                                                                 <tr ng-repeat="amcSchedule in amcScheduleList">
                                                                     <td>{{amcSchedule.title}}</td>
-                                                                    <td>{{amcSchedule.checklistName}}</td>
-                                                                    <!-- <td>
-                                                                        <div class="bootstrap-tagsinput">
-                                                                            <span class="tag label label-info" ng-repeat="checkList in checklistItms">{{checkList.name}}<span data-role="remove"></span></span>
-                                                                            <input type="text" placeholder="">
-                                                                        </div>
-                                                                    </td> -->
+                                                                    <td class="hiddenCheckList">{{amcSchedule.checklistName}}
+
+                                                                       <div class="CheckListBx">
+                                                                           <div class="bootstrap-tagsinput" ng-repeat="checkListItemAmc in amcSchedule.checkListItems">
+                                                                               <span class="tag label label-info">{{checkListItemAmc.name}}<span data-role="remove"></span></span>
+
+                                                                           </div>
+                                                                       </div>
+
+                                                                    </td>
                                                                     <td>{{amcSchedule.startDate}}</td>
                                                                     <td>{{amcSchedule.endDate}}</td>
                                                                     <td>{{amcSchedule.frequencyPrefix}}&nbsp; {{amcSchedule.frequencyDuration}}&nbsp; {{amcSchedule.frequency}}</td>

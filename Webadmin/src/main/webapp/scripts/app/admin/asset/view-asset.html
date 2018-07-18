@@ -570,13 +570,13 @@
                                                   <tbody>
                                                   <tr ng-repeat="ppmSchedules in ppmScheduleList">
                                                       <td>{{ppmSchedules.title}}</td>
-                                                      <td class="hiddenCheckList">{{ppmSchedules.checklistName}}
+                                                      <td class="hiddenCheckList" >{{ppmSchedules.checklistName}}
 
                                                          <div class="CheckListBx">
-                                                             <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
-                                                                 <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
-                                                                 <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
-                                                                 <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                             <div class="bootstrap-tagsinput" ng-repeat="checkListItem in ppmSchedules.checkListItems">
+                                                                 <span class="tag label label-info">{{checkListItem.name}}<span data-role="remove"></span></span>
+
+                                                             </div>
                                                          </div>
 
                                                       </td>
@@ -670,13 +670,16 @@
                                                             <tr ng-repeat="amcSchedule in amcScheduleList">
                                                                 <td>{{amcSchedule.title}}</td>
                                                                 <td>{{amcSchedule.maintenanceType}}</td>
-                                                                <td>{{amcSchedule.checklistName}}</td>
-                                                                <!-- <td>
-                                                                    <div class="bootstrap-tagsinput">
-                                                                        <span class="tag label label-info" ng-repeat="checkList in checklistItms">{{checkList.name}}<span data-role="remove"></span></span>
-                                                                        <input type="text" placeholder="">
-                                                                    </div>
-                                                                </td> -->
+                                                                <td class="hiddenCheckList">{{amcSchedule.checklistName}}
+
+                                                                   <div class="CheckListBx">
+                                                                       <div class="bootstrap-tagsinput" ng-repeat="checkListItemAmc in amcSchedule.checkListItems">
+                                                                           <span class="tag label label-info">{{checkListItemAmc.name}}<span data-role="remove"></span></span>
+
+                                                                       </div>
+                                                                   </div>
+
+                                                                </td>
                                                                 <td>{{amcSchedule.startDate}}</td>
                                                                 <td>{{amcSchedule.endDate}}</td>
                                                                 <td>{{amcSchedule.frequencyPrefix}}&nbsp; {{amcSchedule.frequencyDuration}}&nbsp; {{amcSchedule.frequency}}</td>

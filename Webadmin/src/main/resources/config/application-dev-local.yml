@@ -180,6 +180,7 @@ AWS:
    s3-checkout-path : attendanceCheckOuts/
    s3-checkinout-path : checkInOutImages/
    s3-checklist-path : checkListImages/
+   s3-locationqr-path : locationQrCodes/
 
 scheduler:
    job:

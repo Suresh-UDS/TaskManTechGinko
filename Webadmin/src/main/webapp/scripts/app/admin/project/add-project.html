@@ -3,7 +3,7 @@
 	<div class="">
 
 		<div class="row">
-            <div class="col-mod-12">
+            <!-- <div class="col-mod-12">
                 <div class="alert alert-success" ng-show="success">
                     <strong>Project saved!</strong>
                 </div>
@@ -14,7 +14,7 @@
                 <div class="alert alert-danger" ng-show="errorProjectExists">
                     <strong>Project already registered!</strong> Please choose another one.
                 </div>
-            </div>
+            </div> -->
 			<div class="col-md-12">
 				<div class="form-container table-container cardsCon">
 					<form ng-show="!success" name="form" role="form" novalidate
@@ -33,7 +33,7 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Name<span class="red-star">*</span></label>
                                                     <input id='projectName' ng-model="project.name"
-                                                           class='form-control' name='projectName' type='text' value=""
+                                                           class='form-control InputTxtCapsAll' name='projectName' type='text' value=""
                                                            ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
                                                     <div ng-show="form.$submitted || form.projectName.$touched">
                                                         <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
@@ -61,13 +61,17 @@
                                         <div class="row">
                                             <div class="col-md-10">
                                                 <div class="form-group">
-                                                    <label class="control-label">Address</label>
-                                                    <input id='address' ng-model="project.address" class='form-control'
+                                                    <label class="control-label">Address <span class="red-star">*</span></label>
+                                                    <input id='address' ng-model="project.address" class='form-control InputTxtCaps'
                                                            name='address' type='text' value=""
                                                            ng-maxlength=100
-                                                           ng-pattern="/^[A-Za-z0-9\s&-/]*$/"/>
+                                                           ng-pattern="/^[A-Za-z0-9\s&-/]*$/" required/>
                                                     <div ng-show="form.$submitted || form.address.$touched">
                                                         <div ng-show="form.address.$dirty || form.address.$invalid">
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="form.projectName.$error.required">
+                                                                Address is required.
+                                                            </p>
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.address.$error.maxlength">
                                                                 Address cannot be longer than 50 characters.
@@ -101,7 +105,7 @@
                                                 <div class="form-group">
                                                     <label class="control-label">First Name</label>
                                                     <input id='projectContactFirstName' ng-model="project.contactFirstName"
-                                                           class='form-control' name='projectContactFirstName' type='text' value=""
+                                                           class='form-control InputTxtCaps' name='projectContactFirstName' type='text' value=""
                                                            ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
                                                     <div ng-show="form.$submitted || form.projectContactFirstName.$touched">
                                                         <div ng-show="form.projectContactFirstName.$dirty || form.projectContactFirstName.$invalid">
@@ -131,7 +135,7 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Last Name</label>
                                                     <input id='projectContactLastName' ng-model="project.contactLastName"
-                                                           class='form-control' name='projectContactLastName' type='text' value=""
+                                                           class='form-control InputTxtCaps' name='projectContactLastName' type='text' value=""
                                                            ng-minlength='1' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
                                                     <div ng-show="form.$submitted || form.projectContactLastName.$touched">
                                                         <div ng-show="form.projectContactLastName.$dirty || form.projectContactLastName.$invalid">

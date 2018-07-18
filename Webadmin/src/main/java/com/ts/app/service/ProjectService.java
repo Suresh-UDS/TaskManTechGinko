@@ -171,7 +171,7 @@ public class ProjectService extends AbstractService {
 			}
 			entities = projectRepository.findAll(subEmpIds);
 		}else {
-			entities = projectRepository.findAll();
+			entities = projectRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
 		}
 		List<ProjectDTO> values = new ArrayList<ProjectDTO>();
 		if(CollectionUtils.isNotEmpty(entities)) {

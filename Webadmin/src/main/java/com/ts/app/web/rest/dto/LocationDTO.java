@@ -25,6 +25,8 @@ public class LocationDTO  extends BaseDTO implements Serializable{
     private String zone;
 
     private String qrCodeImage;
+    
+    private String url;
 
     public String getName() {
         return name;
@@ -106,4 +108,12 @@ public class LocationDTO  extends BaseDTO implements Serializable{
     public void setQrCodeImage(String qrCodeImage) {
         this.qrCodeImage = qrCodeImage;
     }
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
 }

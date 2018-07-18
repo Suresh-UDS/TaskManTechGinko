@@ -23,7 +23,7 @@ angular.module('timeSheetApp')
             })       
         .state('edit-project', {
             parent: 'manage',
-            url: '/edit-project:id',
+            url: '/edit-project/:id',
             controller: 'ProjectController',
             data: {
                 authorities: [],
@@ -41,7 +41,7 @@ angular.module('timeSheetApp')
             }
         }).state('view-project', {
             parent: 'manage',
-            url: '/view-project:id',
+            url: '/view-project/:id',
             controller: 'ProjectController',
             data: {
                 authorities: [],
