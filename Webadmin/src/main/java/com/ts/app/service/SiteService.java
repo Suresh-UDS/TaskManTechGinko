@@ -203,7 +203,7 @@ public class SiteService extends AbstractService {
 			}
 			entities = siteRepository.findAll(subEmpIds);
 		}else {
-			entities = siteRepository.findAll();
+			entities = siteRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
 		}
 		List<SiteDTO> values = new ArrayList<SiteDTO>();
 		if(CollectionUtils.isNotEmpty(entities)) {
