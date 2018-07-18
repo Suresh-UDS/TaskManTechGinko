@@ -20,6 +20,7 @@ import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.CheckInOutDTO;
 import com.ts.app.web.rest.dto.CheckInOutImageDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
+import com.ts.app.web.rest.dto.LocationDTO;
 import com.ts.app.web.rest.dto.QuotationDTO;
 import com.ts.app.web.rest.dto.TicketDTO;
 
@@ -207,6 +208,24 @@ public class AmazonS3Utils {
     	}
     	
 		return filename;
+	}
+
+	public LocationDTO uploadLocationQrCodeFile(String codeName, byte[] qrCodeImage, LocationDTO locDTO) {
+		String filename = codeName +".png";
+    	String fileUrl = "";
+    	String imageDataString = "data:image/png;base64,";
+    	try {
+	        // Converting Image byte array into Base64 String
+	        imageDataString += Base64.getEncoder().encodeToString(qrCodeImage);
+	        log.debug("base64 string" +imageDataString);
+	        fileUrl = amazonS3Service.uploadLocationQrToS3bucket(filename, imageDataString);
+	        locDTO.setQrCodeImage(filename);
+	        locDTO.setUrl(fileUrl);
+    	} catch(Exception e) { 
+    		e.printStackTrace();
+    	}
+    	
+		return locDTO;
 	}
     
   
