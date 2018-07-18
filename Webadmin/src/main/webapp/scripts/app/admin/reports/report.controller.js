@@ -19,6 +19,8 @@ angular.module('timeSheetApp')
         $scope.selectedDateFromSer= d;
         $scope.selectedDateToSer= new Date();
         $scope.pager = {};
+        $scope.noData = false;
+
 
         $scope.employeeDesignations = ["MD","Operations Manger","Supervisor"]
 
@@ -39,6 +41,8 @@ angular.module('timeSheetApp')
         $scope.projectSiteList = [];
 
         $scope.pageSort = 10;
+        $scope.searchProject = null;
+        $scope.selectedSite = null;
 
         $scope.initCalender = function(){
 
@@ -124,6 +128,22 @@ angular.module('timeSheetApp')
                     $scope.sites = data;
                 });
         	}
+        };
+
+         $scope.loadDepSites = function () {
+
+            if(jQuery.isEmptyObject($scope.selectedProject) == false) {
+                   var depProj=$scope.selectedProject.id;
+            }else if(jQuery.isEmptyObject($scope.searchProject) == false){
+                    var depProj=$scope.searchProject.id;
+            }else{
+                    var depProj=0;
+            }
+
+            ProjectComponent.findSites(depProj).then(function (data) {
+                $scope.searchSite = null;
+                $scope.sites = data;
+            });
         };
 
         $scope.loadAllEmployees = function () {
@@ -449,8 +469,10 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.currPage = currPageVal;
             $scope.searchCriteria.findAll = false;
 
-             if( !$scope.selectedProject && !$scope.selectedSite
-                && !$scope.selectedEmployee) {
+              //&& !$scope.selectedEmployee
+
+             if( !$scope.searchProject && !$scope.searchSite
+                ) {
                 $scope.searchCriteria.findAll = true;
             }
 
@@ -461,16 +483,20 @@ angular.module('timeSheetApp')
                     $scope.searchCriteria.toDate = $scope.selectedDateToSer;
                 }
 
-                if($scope.selectedProject) {
-                    $scope.searchCriteria.projectId = $scope.selectedProject.id;
+                if($scope.searchProject) {
+                    $scope.searchCriteria.projectId = $scope.searchProject.id;
                     //$scope.searchCriteria.projectName = $scope.selectedProject.name;
                     console.log('selected project id ='+ $scope.searchCriteria.projectId);
+                }else{
+                    $scope.searchCriteria.projectId = null;
                 }
 
-                if($scope.selectedSite) {
-                    $scope.searchCriteria.siteId = $scope.selectedSite.id;
+                if($scope.searchSite) {
+                    $scope.searchCriteria.siteId = $scope.searchSite.id;
                    // $scope.searchCriteria.siteName = $scope.selectedSite.name;
                     console.log('selected site id ='+ $scope.searchCriteria.siteId);
+                }else{
+                    $scope.searchCriteria.siteId = null;
                 }
 
         		/*if($scope.selectedEmployee)
@@ -494,8 +520,8 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
 
             }else{
-                // $scope.searchCriteria.columnName ="id";
-                // $scope.searchCriteria.sortByAsc = true;
+                $scope.searchCriteria.columnName ="id";
+                $scope.searchCriteria.sortByAsc = true;
             }
 
              console.log("search criteria",$scope.searchCriteria);
@@ -523,6 +549,10 @@ angular.module('timeSheetApp')
                         $scope.pageEntries = $scope.employees.length;
                         $scope.totalCountPages = data.totalCount;
                         $scope.pageSort = 10;
+                        $scope.noData = false;
+
+                    }else{
+                         $scope.noData = true;
                     }
 
             });
@@ -734,6 +764,8 @@ angular.module('timeSheetApp')
             $scope.selectedDateToSer = d;
             $scope.selectedSite = null;
             $scope.selectedProject = null;
+            $scope.searchProject = null;
+            $scope.searchSite = null;
             $scope.searchCriteria = {};
             $rootScope.searchCriteriaSite = null;
             $scope.pages = {
