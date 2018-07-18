@@ -1,6 +1,7 @@
 package com.ts.app.repository;
 
 import java.sql.Date;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -84,10 +85,10 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	Page<Employee> findBySiteIdAndProjectId(@Param("projectId") long projectId, @Param("siteId") long siteId, @Param("isClient") boolean isClient, Pageable pageRequest);
 
     @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE ((e.id = :employeeId and ps.project.id = :projectId) or ps.site.id = :siteId) and e.active='Y' and e.isLeft = FALSE and e.createdDate between :startDate and :endDate and (client = :isClient or client = FALSE) order by e.empId")
-	Page<Employee> findEmployeesByIdAndProjectIdOrSiteId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("isClient") boolean isClient, Pageable pageRequest);
+	Page<Employee> findEmployeesByIdAndProjectIdOrSiteId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate, @Param("isClient") boolean isClient, Pageable pageRequest);
 
     @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE ((e.id = :employeeId and ps.site.id = :siteId) or ps.project.id = :projectId) and e.active='Y' and e.isLeft = FALSE and e.createdDate between :startDate and :endDate and (client =:isClient or client = FALSE) order by e.empId")
-	Page<Employee> findEmployeesByIdAndSiteIdOrProjectId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("isClient") boolean isClient, Pageable pageRequest);
+	Page<Employee> findEmployeesByIdAndSiteIdOrProjectId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate, @Param("isClient") boolean isClient, Pageable pageRequest);
 
     @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE (e.id = :employeeId or (ps.site.id = :siteId and ps.project.id = :projectId)) and e.active='Y' and e.isLeft = FALSE and e.createdDate between :startDate and :endDate order by e.empId")
 	Page<Employee> findEmployeesByIdOrSiteIdAndProjectId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate,Pageable pageRequest);
@@ -96,7 +97,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	Page<Employee> findEmployeesByIdAndSiteIdAndProjectId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate,Pageable pageRequest);
 
     @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE (ps.site.id = :siteId and ps.project.id = :projectId) and e.active='Y' and e.isLeft = FALSE and e.createdDate between :startDate and :endDate and (client = :isClient or client = FALSE) order by e.empId")
-	Page<Employee> findBySiteIdAndProjectId(@Param("projectId") long projectId, @Param("siteId") long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("isClient") boolean isClient, Pageable pageRequest);
+	Page<Employee> findBySiteIdAndProjectId(@Param("projectId") long projectId, @Param("siteId") long siteId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate, @Param("isClient") boolean isClient, Pageable pageRequest);
 
     @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE ps.site.name like '%' || :siteName || '%' and e.id in (:empIds) and e.active='Y' and e.isLeft = FALSE and (client = :isClient or client = FALSE) order by e.empId")
 	Page<Employee> findBySiteName(@Param("siteName") String siteId, @Param("empIds") List<Long> empIds, @Param("isClient") boolean isClient, Pageable pageRequest);
