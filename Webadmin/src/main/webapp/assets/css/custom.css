@@ -627,6 +627,10 @@ input.InputTxtCaps
 {
     text-transform: capitalize;
 }
+input.InputTxtCapsAll
+{
+    text-transform: uppercase;
+}
 
 /*End Checklist css */
 
