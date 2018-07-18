@@ -12,10 +12,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
@@ -41,6 +39,7 @@ import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.Ticket;
+import com.ts.app.domain.util.StringUtil;
 import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
@@ -621,7 +620,7 @@ public class ExportUtil {
 			dataRow.getCell(0).setCellValue(transaction.getEmployeeIds());
 			dataRow.getCell(1).setCellValue(transaction.getName() + " " + transaction.getLastName());
 			dataRow.getCell(2).setCellValue(transaction.getSiteName());
-			dataRow.getCell(3).setCellValue((transaction.getShiftStartTime() != null ? String.valueOf(transaction.getShiftStartTime()) : "") + "-" + (transaction.getShiftEndTime() != null ? String.valueOf(transaction.getShiftEndTime()) : ""));
+			dataRow.getCell(3).setCellValue((StringUtils.isNotEmpty(transaction.getShiftStartTime()) ? StringUtil.formatShiftTime(transaction.getShiftStartTime()) : "") + "-" + (StringUtils.isNotEmpty(transaction.getShiftEndTime()) ? StringUtil.formatShiftTime(transaction.getShiftEndTime()) : ""));
 			dataRow.getCell(4).setCellValue(transaction.getCheckInTime() != null ? String.valueOf(transaction.getCheckInTime()) : "");
 			dataRow.getCell(5).setCellValue(transaction.getCheckOutTime() != null ? String.valueOf(transaction.getCheckOutTime()) : "");
 			dataRow.getCell(6).setCellValue(transaction.getStatus());
