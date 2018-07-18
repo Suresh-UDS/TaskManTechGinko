@@ -36,20 +36,25 @@ angular.module('timeSheetApp')
         $scope.saveProject = function () {
         	console.log("-------")
         	console.log($scope.map)
-
+            $scope.loadingStart();
         	$scope.error = null;
         	$scope.success =null;
         	$scope.errorProjectExists = null;
         	ProjectComponent.createProject($scope.project).then(function () {
                 $scope.success = 'OK';
+                $scope.showNotifications('top','center','success','Client has been added successfully!!');
+                $scope.loadingStop();
             	//$scope.loadProjects();
             	$location.path('/projects');
             }).catch(function (response) {
+                $scope.loadingStop();
                 $scope.success = null;
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                     $scope.errorProjectExists = 'ERROR';
+                    $scope.showNotifications('top','center','danger','Client already exists');
                 } else {
+                    $scope.showNotifications('top','center','danger','Unable to add client, please try again later..');
                     $scope.error = 'ERROR';
                 }
             });;
@@ -86,17 +91,23 @@ angular.module('timeSheetApp')
         };
 
         $scope.updateProject = function () {
+            $scope.loadingStart();
         	ProjectComponent.updateProject($scope.project).then(function () {
                 $scope.success = 'OK';
+                $scope.showNotifications('top','center','success','Client has been updated successfully!!');
+                $scope.loadingStop();
             	//$scope.loadProjects();
             	$location.path('/projects');
             }).catch(function (response) {
                 $scope.success = null;
+                $scope.loadingStop();
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                     $scope.errorProjectExists = 'ERROR';
+                    $scope.showNotifications('top','center','danger','Client already exists');
                 } else {
                     $scope.error = 'ERROR';
+                    $scope.showNotifications('top','center','danger','Unable to update client, please try again later..');
                 }
             });;
         };
@@ -146,8 +157,6 @@ angular.module('timeSheetApp')
             $scope.setPage(1);
             $scope.search();
          }
-
-
 
         $scope.search = function () {
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
@@ -280,5 +289,9 @@ angular.module('timeSheetApp')
             $scope.pages.currPage = page;
             $scope.search();
         };
+
+        $scope.showNotifications= function(position,alignment,color,msg){
+                        demo.showNotification(position,alignment,color,msg);
+                    }
 
     });

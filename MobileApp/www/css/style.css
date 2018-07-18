@@ -735,7 +735,8 @@ span.EmpNameTxt
 .select-box
 {
   max-width:100%;
-  border-bottom: 1px solid #dedede;
+  border-bottom: 1px solid #dedede !important;
+
 }
 .camera-btn
 {
@@ -758,6 +759,11 @@ span.EmpNameTxt
 .margin-bottom5
 {
   margin-bottom: 5px;
+}
+.border-none
+{
+    max-width:100% !important;
+    border-bottom:none !important;
 }
 .content-md
 {
@@ -927,6 +933,14 @@ a:hover, a:focus
 .form-group.is-focused .form-control
 {
   background-image: linear-gradient(#ff9800, #ff9800), linear-gradient(#D2D2D2, #D2D2D2) !important;
+}
+.width42
+{
+    width:42% !important;
+}
+.width38
+{
+    width:38% !important;
 }
 .form-control,
 .form-group .form-control
