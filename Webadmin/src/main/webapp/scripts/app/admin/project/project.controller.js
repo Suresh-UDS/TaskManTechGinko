@@ -52,7 +52,7 @@ angular.module('timeSheetApp')
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                     $scope.errorProjectExists = 'ERROR';
-                    $scope.showNotifications('top','center','danger','Client Already Exists');
+                    $scope.showNotifications('top','center','danger','Client already exists');
                 } else {
                     $scope.showNotifications('top','center','danger','Unable to add client, please try again later..');
                     $scope.error = 'ERROR';
@@ -104,7 +104,7 @@ angular.module('timeSheetApp')
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                     $scope.errorProjectExists = 'ERROR';
-                    $scope.showNotifications('top','center','danger','Client Already Exists');
+                    $scope.showNotifications('top','center','danger','Client already exists');
                 } else {
                     $scope.error = 'ERROR';
                     $scope.showNotifications('top','center','danger','Unable to update client, please try again later..');
