@@ -26,6 +26,7 @@ angular.module('timeSheetApp')
         $scope.selectedDateFromSer= d;
         $scope.selectedDateToSer= new Date();
         $scope.pager = {};
+        $scope.noData = false;
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -546,7 +547,11 @@ angular.module('timeSheetApp')
                     $scope.pageEntries = $scope.tickets.length;
                     $scope.totalCountPages = data.totalCount;
                     $scope.pageSort = 10;
-                }
+                    $scope.noData = false;
+
+                    }else{
+                         $scope.noData = true;
+                    }
 
             });
 

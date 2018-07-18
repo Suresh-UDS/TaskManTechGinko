@@ -40,11 +40,13 @@ import com.ts.app.domain.AssetStatus;
 import com.ts.app.domain.AssetStatusHistory;
 import com.ts.app.domain.AssetType;
 import com.ts.app.domain.Checklist;
+import com.ts.app.domain.ChecklistItem;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Frequency;
 import com.ts.app.domain.FrequencyPrefix;
 import com.ts.app.domain.Job;
+import com.ts.app.domain.JobChecklist;
 import com.ts.app.domain.MaintenanceType;
 import com.ts.app.domain.Manufacturer;
 import com.ts.app.domain.ParameterConfig;
@@ -69,6 +71,7 @@ import com.ts.app.repository.AssetStatusHistoryRepository;
 import com.ts.app.repository.AssetTypeRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.CheckInOutRepository;
+import com.ts.app.repository.ChecklistItemRepository;
 import com.ts.app.repository.ChecklistRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
@@ -104,6 +107,7 @@ import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ChecklistItemDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
@@ -238,6 +242,9 @@ public class AssetManagementService extends AbstractService {
 	
 	@Inject
 	private SchedulerConfigRepository schedulerConfigRepository;
+	
+	@Inject
+	private ChecklistItemRepository checklistRespository;
 	
 	public static final String EMAIL_NOTIFICATION_READING = "email.notification.reading";
 	
@@ -751,6 +758,13 @@ public class AssetManagementService extends AbstractService {
 		List<AssetAMCSchedule> assetAMCSchedules = assetAMCRepository.findAssetAMCScheduleByAssetId(assetId);
 		if (CollectionUtils.isNotEmpty(assetAMCSchedules)) {
 			assetAMCScheduleDTOs = mapperUtil.toModelList(assetAMCSchedules, AssetAMCScheduleDTO.class);
+			for(AssetAMCScheduleDTO assetAMC : assetAMCScheduleDTOs) { 
+				if(assetAMC.getChecklistId() > 0) { 
+					List<ChecklistItem> checkList = checklistRespository.findByChecklistId(assetAMC.getChecklistId());
+					List<ChecklistItemDTO> cheklistItemDTO = mapperUtil.toModelList(checkList, ChecklistItemDTO.class);
+					assetAMC.setCheckListItems(cheklistItemDTO);
+				}
+			}
 		}
 		return assetAMCScheduleDTOs;
 	}
@@ -767,6 +781,13 @@ public class AssetManagementService extends AbstractService {
 		List<AssetPPMSchedule> assetPpmSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByAssetId(assetId, type);
 		if (CollectionUtils.isNotEmpty(assetPpmSchedules)) {
 			assetPpmScheduleDTOs = mapperUtil.toModelList(assetPpmSchedules, AssetPpmScheduleDTO.class);
+			for(AssetPpmScheduleDTO assetPPM : assetPpmScheduleDTOs) { 
+				if(assetPPM.getChecklistId() > 0) { 
+					List<ChecklistItem> checkList = checklistRespository.findByChecklistId(assetPPM.getChecklistId());
+					List<ChecklistItemDTO> cheklistItemDTO = mapperUtil.toModelList(checkList, ChecklistItemDTO.class);
+					assetPPM.setCheckListItems(cheklistItemDTO);
+				}
+			}
 		}
 		return assetPpmScheduleDTOs;
 	}

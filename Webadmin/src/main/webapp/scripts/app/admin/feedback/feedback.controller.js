@@ -115,7 +115,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.searchLocations = function () {
-                
+
                 $scope.searchCriteria.siteId = $scope.selectedSite.id;
                 LocationComponent.search($scope.searchCriteria).then(function (data) {
                     $scope.filteredLocations = data.transactions;
@@ -165,16 +165,16 @@ angular.module('timeSheetApp')
                 $scope.selectedBlock = block;
                 $scope.selectedFloor = floor;
                 $scope.selectedZone = zone;
-                
+
                 //document.getElementById('searchForm').submit();
-               
+
                 $scope.search();
         };
 
         $scope.feedbackListLoader = true;
 
         $scope.search = function () {
-             
+
             var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
             //if(!$scope.searchCriteria) {
                 var searchCriteria = {
@@ -221,11 +221,11 @@ angular.module('timeSheetApp')
 
             }else {
                 if($scope.selectedProject.id) {
-                    
+
                     $scope.searchCriteria.projectId = $scope.selectedProject.id;
                 }
                 else if($scope.clientId){
-                    
+
                   $scope.searchCriteria.projectId = $scope.clientId;
                 }
                 else {
@@ -258,7 +258,7 @@ angular.module('timeSheetApp')
                 else {
                     $scope.searchCriteria.zone = "";
                 }
-                   
+
             }
 
 
@@ -273,14 +273,14 @@ angular.module('timeSheetApp')
                     $rootScope.loadingStop();
                     var qLength = ($scope.feedbackReport.questionRatings).length;
                     if(qLength > 0){
-                        
+
                         $scope.feedbackListData = true;
                     }
-                    
+
                     console.log('feedback report - ' + JSON.stringify($scope.feedbackReport));
                     $scope.averageRating = $scope.feedbackReport.overallRating;
                     $scope.feedbackCount = $scope.feedbackReport.feedbackCount;
-                   
+
 
 
                 $scope.hide = true;
@@ -289,12 +289,12 @@ angular.module('timeSheetApp')
                 $scope.data = [];
                 $scope.label = [];
                 $scope.datas = [];
-    
+
 
                 if($scope.feedbackReport.weeklyZone && $scope.feedbackReport.weeklyZone.length > 0) {
 
                     // Line chart data
-                    
+
                     var lineZoneDateWiseRating = $scope.feedbackReport.weeklyZone;
                     //var chartZoneDateWiseDataArr = [];
                     for(var i =0;i<lineZoneDateWiseRating.length; i++) {
@@ -315,14 +315,14 @@ angular.module('timeSheetApp')
                             $scope.label.push(doughnutZoneDateWiseRating[i].date);
                             $scope.datas.push(doughnutZoneDateWiseRating[i].rating);
                     }
-                    
+
                     $scope.chartOptions = { legend: { display: true } };
 
 
 
                     console.log('Doughnut chart labels - ' + JSON.stringify($scope.label));
                     console.log('Doughnut chart data - ' + JSON.stringify($scope.datas));
-                
+
 
                 }else {
 
@@ -357,9 +357,9 @@ angular.module('timeSheetApp')
 
                     console.log('Doughnut chart labels - ' + JSON.stringify($scope.label));
                     console.log('Doughnut chart data - ' + JSON.stringify($scope.datas));
-                    
 
-                    
+
+
 
                 }
             }).catch(function(res){
@@ -367,7 +367,7 @@ angular.module('timeSheetApp')
                 $scope.feedbackListLoader = true;
                 $scope.showNotifications('top','center','danger','Cannot Load Feedback');
             });
-          
+
         };
 
         $scope.showNotifications= function(position,alignment,color,msg){
@@ -377,10 +377,10 @@ angular.module('timeSheetApp')
 
         $scope.printDiv = function(printable) {
             var printContents = document.getElementById(printable).innerHTML;
-            var originalContents = document.body.innerHTML;
-            document.body.innerHTML = printContents;
-            window.print();
-            document.body.innerHTML = originalContents;
+            var popupWin = window.open('', '_blank', 'width=1400,height=600');
+            popupWin.document.open();
+            popupWin.document.write('<html><head><link href="../assets/css/bootstrap.min.css" type="text/css" rel="stylesheet" /><link rel="stylesheet" type="text/css" href="../assets/css/custom.css" /></head><body onload="window.print()">' + printContents + '</body></html>');
+            popupWin.document.close();
         }
 
         $scope.printPage = function () {
@@ -396,7 +396,7 @@ angular.module('timeSheetApp')
             popupWinindow.document.close();
         }
 
-      
+
 
         $scope.clearFilter = function() {
             $scope.selectedSite = {};
