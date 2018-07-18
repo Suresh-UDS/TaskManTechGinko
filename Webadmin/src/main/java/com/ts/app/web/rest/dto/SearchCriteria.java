@@ -175,6 +175,8 @@ public class SearchCriteria extends Paginator {
 	private ZonedDateTime readingToDate;
 	
 	private String paramName;
+	
+	private Date assetCreatedDate;
 
 	public String getWarrantyTypeName() {
 		return warrantyTypeName;
@@ -920,4 +922,14 @@ public class SearchCriteria extends Paginator {
 	public void setParamName(String paramName) {
 		this.paramName = paramName;
 	}
+
+	public Date getAssetCreatedDate() {
+		return assetCreatedDate;
+	}
+
+	public void setAssetCreatedDate(Date assetCreatedDate) {
+		this.assetCreatedDate = assetCreatedDate;
+	}
+
+	
 }
