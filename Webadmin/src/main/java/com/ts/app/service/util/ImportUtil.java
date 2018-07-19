@@ -464,10 +464,13 @@ public class ImportUtil {
                         log.debug("site id - "+jobDto.getSiteId());
 
                         List<Location> loc = locationRepo.findByAll(jobDto.getSiteId(),block,floor,zone);
-                        log.debug("location details - "+loc.get(0).getId());
+                        log.debug("location details - "+loc.isEmpty());
+                        if(loc.isEmpty()){
 
-                        long locationId = loc.get(0).getId();
-                        jobDto.setLocationId(locationId);
+                        }else{
+                            long locationId = loc.get(0).getId();
+                            jobDto.setLocationId(locationId);
+                        }
 
                     }
 					jobService.saveJob(jobDto);
