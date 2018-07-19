@@ -16,6 +16,7 @@ export class JobService {
     getJobs(searchCriteria): Observable<any>{
         return this.http.post(this.config.Url+'api/jobs/search',searchCriteria).map(
             response=>{
+                console.log(response.status);
                 var allJobs = response.json();
                 return allJobs;
             }

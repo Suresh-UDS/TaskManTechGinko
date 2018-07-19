@@ -1,12 +1,15 @@
 package com.ts.app.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 import com.ts.app.domain.*;
+import com.ts.app.service.util.AmazonS3Utils;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.QRCodeUtil;
 import org.apache.commons.collections.CollectionUtils;
@@ -60,6 +63,9 @@ public class LocationService extends AbstractService {
 
 	@Inject
 	private ImportUtil importUtil;
+	
+	@Inject
+	private AmazonS3Utils s3ServiceUtils;
 
 	public LocationDTO saveLocation(LocationDTO locationDto) {
 
@@ -247,30 +253,38 @@ public class LocationService extends AbstractService {
 		return er;
 	}
 
-    public String generateLocationQRCode(long location, long siteId) {
+    public Map<String, Object> generateLocationQRCode(long location, long siteId) {
         Location loc = locationRepository.findOne(location);
 //        long siteId = asset.getSite().getId();
         log.debug("Selected location"+loc.getId());
-
+        LocationDTO locDTO = new LocationDTO();
         byte[] qrCodeImage = null;
-        String qrCodeBase64 = null;
+//        String qrCodeBase64 = null;
+        Map<String, Object> qrCodeObject = new HashMap<>();
         if (loc != null) {
             String codeName = String.valueOf(location);
             codeName = siteId+"_"+codeName;
             qrCodeImage = QRCodeUtil.generateQRCode(codeName);
-            String qrCodePath = env.getProperty("locationQRCode.file.path");
-            String imageFileName = null;
+            String qrCodePath = env.getProperty("AWS.s3-locationqr-path");
+//            String imageFileName = null;
             if (org.apache.commons.lang3.StringUtils.isNotEmpty(qrCodePath)) {
-                imageFileName = fileUploadHelper.uploadQrCodeFile(codeName, qrCodeImage);
-                loc.setQrCodeImage(imageFileName);
-                locationRepository.save(loc);
+            	
+//                imageFileName = fileUploadHelper.uploadQrCodeFile(codeName, qrCodeImage);
+//                loc.setQrCodeImage(imageFileName);
+//                locationRepository.save(loc);
+            	locDTO = s3ServiceUtils.uploadLocationQrCodeFile(codeName, qrCodeImage, locDTO);
+				qrCodeObject.put("code", codeName);
+				qrCodeObject.put("url", locDTO.getUrl());
+				qrCodeObject.put("imageName", locDTO.getQrCodeImage());
+				loc.setQrCodeImage(locDTO.getQrCodeImage());
+				locationRepository.save(loc);
             }
-            if (qrCodeImage != null && org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
-                qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
-            }
+//            if (qrCodeImage != null && org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
+//                qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
+//            }
         }
         log.debug("*****************"+loc.getId());
-        return getQRCode(loc.getId());
+        return qrCodeObject;
     }
 
     public String getQRCode(long locationId) {

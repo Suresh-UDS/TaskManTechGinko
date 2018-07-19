@@ -7,6 +7,7 @@ import {AssetView} from "../asset-view/asset-view";
 import {AssetService} from "../service/assetService";
 import {componentService} from "../service/componentService";
 import {SQLitePorter} from "@ionic-native/sqlite-porter";
+import{OfflineAttendanceSites} from "../employee/offline-attendance-sites";
 // import {win} from "@angular/platform-browser/src/browser/tools/browser";
 import {SQLite, SQLiteObject} from "@ionic-native/sqlite";
 import {SiteService} from "../service/siteService";
@@ -17,6 +18,7 @@ import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
 import {FileTransferObject, FileUploadOptions, FileTransfer} from "@ionic-native/file-transfer";
 import set = Reflect.set;
 import {ScanQR} from "../jobs/scanQR";
+import {OfflineAsset} from "../offline-asset/offline-asset";
 /**
  * Generated class for the AssetList page.
  *
@@ -44,7 +46,11 @@ export class AssetList {
     db:any;
     fileTransfer: FileTransferObject = this.transfer.create();
 
-    constructor(@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,private transfer: FileTransfer,public modalCtrl:ModalController,private diagnostic: Diagnostic,private sqlite: SQLite,public componentService:componentService, public navCtrl: NavController, public navParams: NavParams, public modalController:ModalController, public qrScanner:QRScanner, public assetService:AssetService,public dbService:DBService) {
+    constructor(@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,private transfer: FileTransfer,
+                public modalCtrl:ModalController,private diagnostic: Diagnostic,private sqlite: SQLite,
+                public componentService:componentService, public navCtrl: NavController, public navParams: NavParams,
+                public modalController:ModalController, public qrScanner:QRScanner, public assetService:AssetService,
+                public dbService:DBService,private network:Network) {
     this.assetList = [];
     this.test = [];
     this.searchCriteria = {};
@@ -55,51 +61,54 @@ export class AssetList {
 
   ionViewWillEnter()
   {
+      console.log("Check Network Connection");
+      if(this.network.type!='none'){
+
+          // //online
+          this.assetService.findAllAssets().subscribe(
+              response=>{
+                  // this.componentService.closeLoader()
+                  console.log(response);
+                  this.assetList = response;
+              },
+              error=>{
+                  console.log("");
+              }
+          );
+
+      }else{
+
+          //     //offline
+          // setTimeout(() => {
+          //     this.dbService.getAsset().then(
+          //         (res)=>{
+          //             this.componentService.closeLoader();
+          //             console.log(res);
+          //             this.assetList = res;
+          //         },
+          //         (err)=>{
+          //             this.assetList = [];
+          //             this.componentService.closeLoader()
+          //         })
+          // },3000);
+
+      }
 
   }
 
   ionViewDidLoad() {
 
       console.log('ionViewDidLoad AssetList');
-      this.componentService.showLoader("Loading Assets")
-
-
-
-
-    this.open = true;
+      // this.componentService.showLoader("Loading Assets");
+         this.open = true;
       // After Set Pagination
       // var searchCriteria={}
       // this.getAsset(searchCriteria)
 
 
 
-      //     //offline
-      setTimeout(() => {
-          this.dbService.getAsset().then(
-              (res)=>{
-                  this.componentService.closeLoader()
-                  console.log(res)
-                  this.assetList = res;
-              },
-              (err)=>{
-                  this.assetList = [];
-                  this.componentService.closeLoader()
-              })
-      },3000)
 
 
-
-              //online
-              // this.assetService.findAllAssets().subscribe(
-              //     response=>{
-              //         this.componentService.closeLoader()
-              //         console.log(response);
-              //         this.assetList = response;
-              //     },
-              //     error=>{
-              //         console.log("")
-              //     }
-              // );
 
 
       if(this.navParams.get('text'))
@@ -142,7 +151,7 @@ export class AssetList {
                 this.assetService.saveReading({name:readings[i].name,uom:readings[i].uom,initialValue:readings[i].initialValue,finalValue:readings[i].finalValue,consumption:readings[i].consumption,assetId:readings[i].assetId,assetParameterConfigId:readings[i].assetParameterConfigId}).subscribe(
                     response => {
                         console.log("save reading sync to server");
-                        console.log(response)
+                        console.log(response);
                         resolve("s")
                     },
                     error => {
@@ -336,7 +345,9 @@ export class AssetList {
   }
 
     viewAsset(asset){
-      this.navCtrl.push(AssetView,{assetDetails:asset});
+      console.log("asset");
+      console.log(asset);
+      this.navCtrl.push(OfflineAsset,{assetDetails:asset});
     }
 
     // Pull to refresh

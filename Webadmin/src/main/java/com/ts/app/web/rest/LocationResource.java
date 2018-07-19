@@ -2,6 +2,7 @@ package com.ts.app.web.rest;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -106,10 +107,22 @@ public class LocationResource {
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
 
-    @RequestMapping(value = "/location/{id}/qrcode/{siteId}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
-    public String generateAssetQRCode(@PathVariable("id") long locationId, @PathVariable("siteId") long siteId) {
-        return locationService.generateLocationQRCode(locationId, siteId);
-    }
+//    @RequestMapping(value = "/location/{id}/qrcode/{siteId}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+//    public String generateAssetQRCode(@PathVariable("id") long locationId, @PathVariable("siteId") long siteId) {
+//        return locationService.generateLocationQRCode(locationId, siteId);
+//    }
+    
+    @RequestMapping(value = "/location/{id}/qrcode/{siteId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> generateLocationQRCode(@PathVariable("id") long locationId, @PathVariable("siteId") long siteId) {
+		Map<String, Object> result = null;
+		try { 
+			result = locationService.generateLocationQRCode(locationId, siteId);
+		} catch(Exception e) {
+			throw new TimesheetException("Error while generating Location QR-Code" + e);
+		}
+		
+		return result;
+	}
 
     @RequestMapping(value = "/location/import/{fileId}/status",method = RequestMethod.GET)
 	public ImportResult importStatus(@PathVariable("fileId") String fileId) {

@@ -308,13 +308,19 @@
                                                                 <div class="panel-heading">Manufacturer Details</div>
                                                                 <div class="panel-body">
 
-                                                                    <div class="row">
-                                                                        <div class="col-md-6">
-                                                                            <div class="form-group selectcon">
+                                                                    <div class="row" >
+                                                                        <div class="col-md-6" ng-init="loadManufacturer()">
 
-                                                                                <div class="row"  ng-init="loadManufacturer()">
+                                                                            <div class="form-group selectcon">
+                                                                                <label class="control-label">Manufacturer </label>
+                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedManufacturer" ng-options="manufacturer as manufacturer.name for manufacturer in manufacturers track by manufacturer.name">
+                                                                                    <option value="">Select Manufacturer ..</option>
+                                                                                </select>
+
+                                                                                <!-- <div class="row"  ng-init="loadManufacturer()">
                                                                                     <div class="col-md-12">
-                                                                                    <!-- <div class="col-md-10 pad-r-0px"> -->
+                                                                                    <div class="col-md-10 pad-r-0px">
                                                                                         <label class="control-label">Manufacturer </label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                         <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedManufacturer" ng-options="manufacturer as manufacturer.name for manufacturer in manufacturers track by manufacturer.name">
@@ -322,13 +328,13 @@
                                                                                         </select>
 
                                                                                     </div>
-                                                                                    <!-- <div class="col-md-2 pdng-top25"> -->
-                                                                                        <!-- <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addManufacturer" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                    <div class="col-md-2 pdng-top25">
+                                                                                        <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addManufacturer" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
                                                                                             <i class="material-icons">add</i>
-                                                                                        </a> -->
-                                                                                       <!--  <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addManufacturer').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
-                                                                                    </div> -->
-                                                                                </div>
+                                                                                        </a>
+                                                                                        <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addManufacturer').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                                                    </div>
+                                                                                </div> -->
 
                                                                                 <!-- <div class="collapse" id="addManufactururer">
                                                                                     <div class="">
@@ -517,16 +523,23 @@
                                                         <div class="col-md-12">
 
                                                             <div class="panel panel-default">
-                                                                <div class="panel-heading">AMC Vendor Details</div>
+                                                                <div class="panel-heading">Vendor Details</div>
                                                                    <div class="panel-body">
 
                                                                        <div class="row">
-                                                                            <div class="col-md-6">
+                                                                            <div class="col-md-6" ng-init="loadVendor()">
+
                                                                                 <div class="form-group selectcon is-empty">
 
-                                                                                 <div class="row" ng-init="loadVendor()">
+                                                                                    <label class="control-label">Vendor </label>
+                                                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedVendor" ng-options="vendor as vendor.name for vendor in vendors track by vendor.id">
+                                                                                        <option value="">Select Vendor ..</option>
+                                                                                    </select>
+                                                                                 </div>
+                                                                                 <!-- <div class="row" ng-init="loadVendor()">
                                                                                     <div class="col-md-12">
-                                                                                    <!-- <div class="col-md-10 pad-r-0px"> -->
+                                                                                    <div class="col-md-10 pad-r-0px">
                                                                                         <label class="control-label">Vendor </label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                         <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedVendor" ng-options="vendor as vendor.name for vendor in vendors track by vendor.id">
@@ -534,15 +547,15 @@
                                                                                         </select>
 
                                                                                     </div>
-                                                                                     <!--  <div class="col-md-2 pdng-top25"> -->
-                                                                                        <!-- <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addVendor" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                      <div class="col-md-2 pdng-top25">
+                                                                                        <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addVendor" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
                                                                                             <i class="material-icons">add</i>
-                                                                                        </a> -->
-                                                                                       <!--  <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addVendor').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
-                                                                                    </div> -->
+                                                                                        </a>
+                                                                                        <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addVendor').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                                                    </div>
                                                                                 </div>
 
-                                                                                </div>
+                                                                                </div> -->
                                                                                 <!-- <div class="collapse" id="addVendor">
                                                                                     <div class="">
                                                                                         <input class="input-desc" id='assetVendorName' ng-model="vendor"
@@ -550,6 +563,7 @@
                                                                                         <a class="btn btn-success margn-top0"  ng-click="addVendor()">Add</a>
                                                                                     </div>
                                                                                 </div> -->
+                                                                           
                                                                             </div>
                                                                             <!-- <div class="col-md-6">
                                                                                 <div class="form-group">
@@ -1092,7 +1106,7 @@
                                                                 <div class="row">
                                                                     <div class="col-md-4" >
                                                                             <div class="form-group">
-                                                                                <label class="control-label">Employee<span class="red-star">*</span> </label>
+                                                                                <label class="control-label">Employee <span class="red-star">*</span> </label>
                                                                                 <div class="dropdown">
 
                                                                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
@@ -1155,17 +1169,17 @@
 
                                                                     <div class="col-md-3" >
                                                                     		<div class="form-group">
-						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
-						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+						                                                    <label class="control-label">Start Time<span class="red-star">*</span></label>
+						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
 
-						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="ppmJobStartTime"  ng-model="ppmJobStartTime" autocomplete="off" name="ppmJobStartTime" ng-required="true" placeholder="{{ppmJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" />
+						                                                    <input type="text" class="form-control timepicker padng-right10"  id="ppmJobStartTime"  ng-model="ppmJobStartTime" autocomplete="off" name="ppmJobStartTime" ng-required="true" placeholder="{{ppmJobStartTime | date:'hh:mm a'}}" />
 
 																		   <div ng-show="form3.$submitted || form3.ppmJobStartTime.$touched">
                                                                                 <div
                                                                                     ng-show="form3.ppmJobStartTime.$dirty || form3.ppmJobStartTime.$invalid">
                                                                                     <p class="help-block" style="color:maroon"
                                                                                        ng-show="form3.ppmJobStartTime.$error.required">
-                                                                                        Start date is required
+                                                                                        Start time is required
                                                                                     </p>
 
 
@@ -1236,10 +1250,10 @@
                                                                 <tbody>
                                                                 <tr ng-repeat="ppmSchedules in ppmScheduleList">
                                                                     <td>{{ppmSchedules.title}}</td>
-                                                                    <td class="hiddenCheckList" ng-mouseover="loadCheckList(ppmSchedules.checklistId)">{{ppmSchedules.checklistName}}
+                                                                    <td class="hiddenCheckList" >{{ppmSchedules.checklistName}}
 
                                                                        <div class="CheckListBx">
-                                                                           <div class="bootstrap-tagsinput" ng-repeat="checkListItem in ppmSchedules.items">
+                                                                           <div class="bootstrap-tagsinput" ng-repeat="checkListItem in ppmSchedules.checkListItems">
                                                                                <span class="tag label label-info">{{checkListItem.name}}<span data-role="remove"></span></span>
 
                                                                            </div>
@@ -1476,17 +1490,17 @@
                                                             <div class="row">
                                                                 <div class="col-md-3" >
                                                                     		<div class="form-group">
-						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
-						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+						                                                    <label class="control-label">Start Time<span class="red-star">*</span></label>
+						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
 
-						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="amcJobStartTime" name="amcJobStartTime"  ng-model="amcJobStartTime" placeholder="{{amcJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" autocomplete="off" required/>
+						                                                    <input type="text" class="form-control timepicker padng-right10"  id="amcJobStartTime"  name="amcJobStartTime" ng-model="amcJobStartTime" placeholder="{{amcJobStartTime | date:'hh:mm a'}}" autocomplete="off" required/>
 
 																		   <div ng-show="form3.$submitted || form3.amcJobStartTime.$touched">
                                                                                 <div
                                                                                     ng-show="form3.amcJobStartTime.$dirty || form3.amcJobStartTime.$invalid">
                                                                                     <p class="help-block" style="color:maroon"
                                                                                        ng-show="form3.amcJobStartTime.$error.required">
-                                                                                        Start date is required
+                                                                                        Start time is required
                                                                                     </p>
 
 
@@ -1569,7 +1583,7 @@
                                                                 <td class="hiddenCheckList">{{amcSchedule.checklistName}}
 
                                                                    <div class="CheckListBx">
-                                                                       <div class="bootstrap-tagsinput" ng-repeat="checkListItemAmc in amcSchedule.items">
+                                                                       <div class="bootstrap-tagsinput" ng-repeat="checkListItemAmc in amcSchedule.checkListItems">
                                                                            <span class="tag label label-info">{{checkListItemAmc.name}}<span data-role="remove"></span></span>
 
                                                                        </div>

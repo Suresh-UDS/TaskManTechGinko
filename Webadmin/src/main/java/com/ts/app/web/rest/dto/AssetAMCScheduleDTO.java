@@ -2,6 +2,7 @@ package com.ts.app.web.rest.dto;
 
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.List;
 
 public class AssetAMCScheduleDTO extends BaseDTO {
 
@@ -34,6 +35,8 @@ public class AssetAMCScheduleDTO extends BaseDTO {
 	private int plannedHours;
 
 	private String[] shiftTimings;
+	
+	private List<ChecklistItemDTO> checkListItems;
 	
 	public long getId() {
 		return id;
@@ -161,6 +164,14 @@ public class AssetAMCScheduleDTO extends BaseDTO {
 
 	public void setShiftTimings(String[] shiftTimings) {
 		this.shiftTimings = shiftTimings;
+	}
+
+	public List<ChecklistItemDTO> getCheckListItems() {
+		return checkListItems;
+	}
+
+	public void setCheckListItems(List<ChecklistItemDTO> checkListItems) {
+		this.checkListItems = checkListItems;
 	}
 	
 	

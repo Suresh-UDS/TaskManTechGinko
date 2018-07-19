@@ -183,7 +183,7 @@
                                         </span>
                                     </span>
                                 </th>
-                                <th>Project
+                                <th>Client
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('project.name')" ng-class="isActiveAsc == 'project.name' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
@@ -251,13 +251,22 @@
     </div>
     <!-- end row -->
 
-    <div class="card margin-TB-5 txt-align-center" ng-hide="jobs">
+    <div class="card margin-TB-5 txt-align-center" ng-hide="jobsLoader">
 
         <div class="card-content">
-
-            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="jobsLoader">
+            <div class="" style="text-align:center;padding: 10px 0;" >
                 <div loader-css="ball-pulse"></div>
             </div>
+
+            <h3 >Loading, please wait...</h3>
+
+        </div>
+
+    </div>
+
+    <div class="card margin-TB-5 txt-align-center" ng-show="noData">
+
+        <div class="card-content">
 
             <h3>No data Found</h3>
 
@@ -341,7 +350,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter1()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>
@@ -354,7 +363,7 @@
 <div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm"   novalidate >
+            <form name="searchForm1"   novalidate >
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -372,7 +381,7 @@
                                 <div class="form-group dateFilterCon">
                                     <label class="label-control">From date</label>
                                     <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
-                                    <input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedDateFrom" />
+                                    <input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedDateFrom" autocomplete="off" />
 
                                 </div>
                             </div>
@@ -384,13 +393,24 @@
                                 <div class="form-group dateFilterCon">
                                     <label class="label-control">To date</label>
                                     <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
-                                    <input type="text" class="form-control datepicker"  id="dateFilterTo"   ng-model="selectedDateTo"/>
+                                    <input type="text" class="form-control datepicker"  id="dateFilterTo"   ng-model="selectedDateTo" autocomplete="off" />
 
                                 </div>
 
                             </div>
                         </div>
                         <div class="col-xs-12 col-md-4">
+                            <div class="form-group">
+                                <div class="dropdown ">
+                                    <label class="label-control">Select Status</label>
+                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <select class="form-control " ng-model="searchStatus"  ng-options="status as status for status in statuses">
+                                        <option value="">Select Status...</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="col-xs-12 col-md-4">
                             <div class="dropdown">
                                 <div class="form-group">
                                     <label class="label-control">Select Client</label>
@@ -400,10 +420,10 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                     </div>
-                    <div class="row">
+                   <!--  <div class="row">
 
                         <div class="col-xs-12 col-md-4">
                             <div class="dropdown" >
@@ -428,7 +448,7 @@
                             </div>
                         </div>
 
-                    </div>
+                    </div> -->
 
                 </div>
                 <div class="modal-footer">

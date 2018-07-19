@@ -121,7 +121,9 @@ export class EmployeeDetailPage {
     this.jobService.getJobs(search).subscribe(response=>{
       console.log("Job Refresher");
       console.log(response);
-      this.jobs = response;
+      this.jobs = response.transactions;
+        console.log(this.jobs);
+        console.log(this.jobs.length);
       this.component.closeLoader();
     })
   }

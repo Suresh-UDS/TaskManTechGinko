@@ -28,9 +28,9 @@
         <button ion-fab color="primary" (click)="presentModal()"><ion-icon name="funnel"></ion-icon></button>
     </ion-fab>
 
-    <ion-fab top right edge >
-        <button has-permission="JobsCreate" (click)="addJob()" ion-fab><ion-icon name="add"></ion-icon></button>
-    </ion-fab>
+    <!--<ion-fab top right edge >-->
+        <!--<button has-permission="JobsCreate" (click)="addJob()" ion-fab><ion-icon name="add"></ion-icon></button>-->
+    <!--</ion-fab>-->
 
     <div [ngSwitch]="categories">
         <ion-list *ngSwitchCase="'today'">
@@ -170,8 +170,7 @@
                     -->
 
                 </ion-row>
-                </div>
-            <ion-item-sliding #slidingItem *ngIf="job.schedule == 'ONCE' || job.schedule==null ">
+            <ion-item-sliding #slidingItem>
 
                 <ion-item #item class="item-fnt padding-left0" >
                     <!--<div class="padding-left16">-->
@@ -215,6 +214,7 @@
                 </ion-item-options>
             </ion-item-sliding>
 
+            </div>
         </div>
             <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="doInfiniteAllJobs($event)">
                 <ion-infinite-scroll-content></ion-infinite-scroll-content>

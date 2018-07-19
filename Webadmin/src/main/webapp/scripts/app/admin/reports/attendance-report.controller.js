@@ -18,6 +18,7 @@ angular.module('timeSheetApp')
         $scope.selectedDateFromSer= d;
         $scope.selectedDateToSer =  new Date();
         $scope.pager = {};
+        $scope.noData = false;
 
         $scope.employeeDesignations = ["MD","Operations Manger","Supervisor"]
 
@@ -139,6 +140,23 @@ angular.module('timeSheetApp')
                 });
             }
         };
+
+        $scope.loadDepSites = function () {
+
+            if(jQuery.isEmptyObject($scope.selectedProject) == false) {
+                   var depProj=$scope.selectedProject.id;
+            }else if(jQuery.isEmptyObject($scope.searchProject) == false){
+                    var depProj=$scope.searchProject.id;
+            }else{
+                    var depProj=0;
+            }
+
+            ProjectComponent.findSites(depProj).then(function (data) {
+                $scope.searchSite = null;
+                $scope.sites = data;
+            });
+        };
+
         $scope.attendanceSites = function () {
             SiteComponent.findAll().then(function (data) {
                 console.log("site attendances");
@@ -198,8 +216,14 @@ angular.module('timeSheetApp')
             $scope.search();
          };
 
-        $scope.search = function () {
+         $scope.searchFilter1 = function () {
+       
+            $scope.setPage(1);
+            $scope.search();
+         }
 
+        $scope.search = function () {
+            $scope.noData = false;
         	var reportUid = $stateParams.uid;
             console.log($scope.datePickerDate);
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
@@ -236,30 +260,34 @@ angular.module('timeSheetApp')
 //                $scope.searchCriteria.findAll = false;
 //            }
 
-                if(!$scope.selectedSite && !$scope.selectedProject) {
+                if(!$scope.searchSite && !$scope.searchProject) {
                     $scope.searchCriteria.findAll = true;
                 }
 
-                if($scope.selectedEmployeeId)
+                if($scope.searchEmployeeId)
                 {
-                    $scope.searchCriteria.employeeEmpId = $scope.selectedEmployeeId;
+                    $scope.searchCriteria.employeeEmpId = $scope.searchEmployeeId;
                     console.log('selected emp id ='+ $scope.searchCriteria.employeeEmpId);
                 }
-                if($scope.selectedEmployeeName)
+                if($scope.searchEmployeeName)
                 {
-                    $scope.searchCriteria.name = $scope.selectedEmployeeName;
+                    $scope.searchCriteria.name = $scope.searchEmployeeName;
                     console.log('selected emp name ='+ $scope.searchCriteria.name);
                 }
 
 
-                if($scope.selectedSite) {
-                    $scope.searchCriteria.siteId = $scope.selectedSite.id;
+                if($scope.searchSite) {
+                    $scope.searchCriteria.siteId = $scope.searchSite.id;
+                    }else{
+                       $scope.searchCriteria.siteId = null; 
                     }
 
 
-                if($scope.selectedProject) {
-                    $scope.searchCriteria.projectId = $scope.selectedProject.id;
+                if($scope.searchProject) {
+                    $scope.searchCriteria.projectId = $scope.searchProject.id;
 
+                }else{
+                     $scope.searchCriteria.projectId = null;
                 }
 
 
@@ -275,8 +303,8 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
 
             }else{
-                // $scope.searchCriteria.columnName ="id";
-                // $scope.searchCriteria.sortByAsc = true;
+                $scope.searchCriteria.columnName ="id";
+                $scope.searchCriteria.sortByAsc = true;
             }
 
                console.log("search criteria",$scope.searchCriteria);
@@ -305,6 +333,10 @@ angular.module('timeSheetApp')
                         $scope.pageEntries = $scope.attendancesData.length;
                         $scope.totalCountPages = data.totalCount;
                         $scope.pageSort = 10;
+                        $scope.noData = false;
+
+                    }else{
+                         $scope.noData = true;
                     }
             });
 

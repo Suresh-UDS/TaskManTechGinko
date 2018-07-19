@@ -5,7 +5,7 @@ angular.module('timeSheetApp')
         $stateProvider
             .state('add-job', {
                 parent: 'manage',
-                url: '/add-job:ticketId',
+                url: '/add-job/:ticketId',
                 controller: 'JobController',
                 data: {
                     authorities: [],
@@ -23,7 +23,7 @@ angular.module('timeSheetApp')
             })
         .state('edit-job', {
             parent: 'manage',
-            url: '/edit-job:id',
+            url: '/edit-job/:id',
             controller: 'JobController',
             data: {
                 authorities: [],
@@ -41,7 +41,7 @@ angular.module('timeSheetApp')
             }
         }).state('view-job', {
             parent: 'manage',
-            url: '/view-job:id',
+            url: '/view-job/:id',
             controller: 'JobController',
             data: {
                 authorities: [],

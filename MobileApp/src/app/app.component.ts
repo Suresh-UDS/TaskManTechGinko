@@ -26,6 +26,9 @@ import {InitFeedbackPage} from "../pages/feedback/init-feedback";
 import {AppVersion} from "@ionic-native/app-version";
 import {Splash} from "../pages/splash/splash";
 import {SplashLogo} from "../pages/splash-logo/splash-logo";
+import{OfflinePage} from "../pages/offline-page/offline-page";
+import{OfflineAssetList} from "../pages/offline-assetlist/offline-assetlist";
+import{OfflineGetassetreadings} from "../pages/offline-getassetreadings/offline-getassetreadings";
 
 import{OneSignal} from "@ionic-native/onesignal";
 import {componentService} from "../pages/service/componentService";

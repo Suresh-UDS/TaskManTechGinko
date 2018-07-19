@@ -22,6 +22,7 @@ import org.joda.time.Minutes;
 import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -46,6 +47,7 @@ import com.ts.app.repository.NotificationRepository;
 import com.ts.app.repository.PricingRepository;
 import com.ts.app.repository.ManufacturerRepository;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.AmazonS3Utils;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
@@ -127,6 +129,21 @@ public class JobManagementService extends AbstractService {
     
     @Inject
     private AssetRepository assetRepository;
+    
+    @Inject
+    private AmazonS3Utils amazonS3utils;
+    
+    @Value("${AWS.s3-cloudfront-url}")
+    private String cloudFrontUrl;
+    
+    @Value("${AWS.s3-bucketEnv}")
+    private String bucketEnv;
+    
+    @Value("${AWS.s3-checklist-path}")
+    private String checkListpath;
+    
+    @Value("${AWS.s3-checkinout-path}")
+    private String checkInOutImagePath;
 
     public void updateJobStatus(long siteId, JobStatus toBeJobStatus) {
 		//UPDATE ALL OVERDUE JOB STATUS
@@ -681,7 +698,7 @@ public class JobManagementService extends AbstractService {
 		log.debug("Before saving new job -"+ job);
 
 		//log.debug("start Date  -"+ startDate + ", end date -" + endDate);
-		List<Job> existingJobs = jobRepository.findJobByTitleSiteAndDate(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()));
+		List<Job> existingJobs = jobRepository.findScheduledJobByTitleSiteAndDate(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()));
 		log.debug("Existing job -"+ existingJobs);
 		if(CollectionUtils.isEmpty(existingJobs)) {
 			//if job is created against a ticket
@@ -790,7 +807,7 @@ public class JobManagementService extends AbstractService {
 		
 		Calendar scheduleEndDateTime = Calendar.getInstance();
 		scheduleEndDateTime.setTime(assetPpmScheduleDTO.getEndDate());
-		scheduleEndDateTime.set(Calendar.HOUR_OF_DAY, 11);
+		scheduleEndDateTime.set(Calendar.HOUR_OF_DAY, 23);
 		scheduleEndDateTime.set(Calendar.MINUTE, 59);
 		scheduleEndDateTime.getTime();
 		
@@ -820,7 +837,7 @@ public class JobManagementService extends AbstractService {
 			data.append("&empId="+employee.getId());
 			//data.append("&empId="+assetPpmScheduleDTO.getEmployeeId());
 			data.append("&plannedStartTime="+startTime.getTime());
-			data.append("&plannedEndTime="+scheduleEndDateTime.getTime());
+			data.append("&plannedEndTime="+plannedEndTime.getTime());
 			data.append("&plannedHours="+assetPpmScheduleDTO.getFrequencyDuration());
 			//data.append("&location="+assetPpmScheduleDTO.getLocationId());
 			data.append("&frequency="+assetPpmScheduleDTO.getFrequency());
@@ -950,6 +967,28 @@ public class JobManagementService extends AbstractService {
 			for(JobChecklistDTO jobclDto : jobclDtoList) {
 			    log.debug("Job checklist remarks"+jobclDto.getRemarks());
 				JobChecklist checklist = mapperUtil.toEntity(jobclDto, JobChecklist.class);
+				if(checklist.getImage_1() != null) { 
+					long jobId = checklist.getJob().getId();
+					String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_1(), checklist.getChecklistItemName(), jobId, "image_1");
+					String Imageurl_1 = cloudFrontUrl + bucketEnv + checkListpath + fileName; 
+					checklist.setImage_1(fileName);
+					jobclDto.setImageUrl_1(Imageurl_1);
+				}
+				if(checklist.getImage_2() != null) { 
+					long jobId = checklist.getJob().getId();
+					String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_2(), checklist.getChecklistItemName(), jobId, "image_2");
+					String Imageurl_2 = cloudFrontUrl + bucketEnv + checkListpath + fileName;
+					checklist.setImage_2(fileName);
+					jobclDto.setImageUrl_2(Imageurl_2);
+				}
+				if(checklist.getImage_3() != null) { 
+					long jobId = checklist.getJob().getId();
+					String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_3(), checklist.getChecklistItemName(), jobId, "image_3");
+					String Imageurl_3 = cloudFrontUrl + bucketEnv + checkListpath + fileName;
+					checklist.setImage_3(fileName);
+					jobclDto.setImageUrl_3(Imageurl_3);
+					
+				}
                 log.debug("Job checklist remarks"+checklist.getImage_1());
                 checklist.setJob(job);
 				checklistItems.add(checklist);
@@ -1020,11 +1059,30 @@ public class JobManagementService extends AbstractService {
 			jobDto.setTicketId(job.getTicket().getId());
 			jobDto.setTicketName(job.getTicket().getTitle());
 		}
+		if(jobDto.getChecklistItems() != null) { 
+			List<JobChecklistDTO> jobChecklists = jobDto.getChecklistItems();
+			for(JobChecklistDTO jobChecklist : jobChecklists) { 
+				if(jobChecklist.getImage_1() != null) { 
+					String imageUrl_1 =  cloudFrontUrl + bucketEnv + checkListpath + jobChecklist.getImage_1();
+					jobChecklist.setImageUrl_1(imageUrl_1);
+				}
+				if(jobChecklist.getImage_2() != null) { 
+					String imageUrl_2 =  cloudFrontUrl + bucketEnv + checkListpath + jobChecklist.getImage_2();
+					jobChecklist.setImageUrl_2(imageUrl_2);
+				}
+				if(jobChecklist.getImage_3() != null) { 
+					String imageUrl_3 =  cloudFrontUrl + bucketEnv + checkListpath + jobChecklist.getImage_3();
+					jobChecklist.setImageUrl_3(imageUrl_3);
+				}
+			}
+		}
 		List<CheckInOutImage> images = checkInOutImageRepository.findAll(job.getId());
 		List<CheckInOutImageDTO> imageDtos = new ArrayList<CheckInOutImageDTO>();
 		if(CollectionUtils.isNotEmpty(images)) {
 			for(CheckInOutImage image : images) {
-				imageDtos.add(mapperUtil.toModel(image, CheckInOutImageDTO.class));
+				CheckInOutImageDTO imageDTO = mapperUtil.toModel(image, CheckInOutImageDTO.class);
+				imageDTO.setUrl(cloudFrontUrl + bucketEnv + checkInOutImagePath + image.getPhotoOut());
+				imageDtos.add(imageDTO);
 			}
 		}
 		jobDto.setImages(imageDtos);
@@ -1194,7 +1252,7 @@ public class JobManagementService extends AbstractService {
 
         mapToEntity(jobDTO, job);
         job = jobRepository.save(job);
-        return mapperUtil.toModel(job, JobDTO.class);
+        return jobDTO;
     }
 
 //    @Transactional

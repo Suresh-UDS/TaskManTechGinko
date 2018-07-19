@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
@@ -91,6 +92,15 @@ public class AmazonS3Service {
     
     @Value("${AWS.s3-checkout-path}")
     private String checkOutPath;
+    
+    @Value("${AWS.s3-checkinout-path}") 
+    private String checkInOutPath;
+    
+    @Value("${AWS.s3-checklist-path}")
+    private String checkListPath;
+    
+    @Value("${AWS.s3-locationqr-path}")
+    private String locationQrCodePath;
     
     @PostConstruct
     private void initializeAmazon() {
@@ -356,6 +366,89 @@ public class AmazonS3Service {
 		}
 		 return prefixUrl;
 	}
+
+	public String uploadEmployeeFileToS3bucket(String fileName, File multipartFile) {
+		log.debug("upload employee checkInOut image to S3 bucket");
+    	String prefixUrl = "";
+    	try {
+    		
+    		String folder = bucketEnv + checkInOutPath + fileName;
+    		String ext = FilenameUtils.getExtension(fileName);
+    		
+    		ObjectMetadata metadata = new ObjectMetadata();
+    		metadata.setContentType("application/"+ ext);
+    		
+    		PutObjectResult result = s3client.putObject(new PutObjectRequest(bucketName, folder, multipartFile)
+    				.withMetadata(metadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+    		log.info("===================== Upload File - Done! =====================");
+    		URL url = s3client.getUrl(bucketName, folder);
+    		log.debug("S3 uploaded url" +url);
+    		prefixUrl = cloudFrontUrl + folder;
+    		log.debug("Result from S3 -" +result);
+    		
+    	}catch(AmazonS3Exception e) {
+    		log.debug("Error while upload employee checkInOut to S3 bucket " + e.getMessage());
+    		log.debug("Error Status code " + e.getErrorCode());
+    		e.printStackTrace();
+    	}
+    	
+    	return prefixUrl;
+	}
+
+	public String uploadCheckListImageToS3(String filename, String checkListImg) {
+		String key = bucketEnv + checkListPath + filename;
+		String prefixUrl = "";
+		try {
+			
+			byte[] bI = org.apache.commons.codec.binary.Base64.decodeBase64((checkListImg.substring(checkListImg.indexOf(",")+1)).getBytes());
+			log.debug("Image Strings -" +bI);
+			InputStream fis = new ByteArrayInputStream(bI);
+			
+			ObjectMetadata metadata = new ObjectMetadata();
+			metadata.setContentLength(bI.length);
+			metadata.setContentType("image/png");
+			metadata.setCacheControl("public, max-age=31536000");
+		
+			PutObjectResult result = s3client.putObject(bucketName, key, fis, metadata);
+			s3client.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
+			log.debug("result of CheckListImage object request -" + result);
+			prefixUrl = cloudFrontUrl + key;
+			
+		} catch(AmazonS3Exception e) {
+			log.info("Error while upload a CheckListImage image -" + e);
+			e.printStackTrace();
+		}
+		 return prefixUrl;
+	}
+	
+	public String uploadLocationQrToS3bucket(String filename, String qrCodeImage) {
+		// TODO Auto-generated method stub
+		String key = bucketEnv + locationQrCodePath + filename;
+		String prefixUrl = "";
+		try {
+			
+			byte[] bI = org.apache.commons.codec.binary.Base64.decodeBase64((qrCodeImage.substring(qrCodeImage.indexOf(",")+1)).getBytes());
+			log.debug("Image Strings -" +bI);
+			InputStream fis = new ByteArrayInputStream(bI);
+			
+			ObjectMetadata metadata = new ObjectMetadata();
+			metadata.setContentLength(bI.length);
+			metadata.setContentType("image/png");
+			metadata.setCacheControl("public, max-age=31536000");
+		
+			PutObjectResult result = s3client.putObject(bucketName, key, fis, metadata);
+			s3client.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
+			log.debug("result of object request -" + result);
+			prefixUrl = cloudFrontUrl + key;
+			
+		} catch(AmazonS3Exception e) {
+			log.info("Error while upload a Location QRcode -" +e);
+			e.printStackTrace();
+		}
+		 return prefixUrl;
+	}
+
 
     
 	

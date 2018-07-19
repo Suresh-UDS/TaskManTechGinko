@@ -55,7 +55,7 @@ angular.module('timeSheetApp')
             }else{
                     var depProj=0;
             }
-            
+
             ProjectComponent.findSites(depProj).then(function (data) {
                 $scope.selectedSite = null;
                 $scope.sitesList = data;
@@ -105,7 +105,7 @@ angular.module('timeSheetApp')
 	        		$scope.site.shifts = $scope.shiftItems;
 	            	SiteComponent.createSite($scope.site).then(function() {
 	                    $scope.success = 'OK';
-	                    $scope.showNotifications('top','center','success','Site Added');
+	                    $scope.showNotifications('top','center','success','Site has been added successfully!!');
 	                    $scope.selectedProject = null;
 	                	$scope.loadSites();
 	                	$location.path('/sites');
@@ -115,11 +115,11 @@ angular.module('timeSheetApp')
 	                    console.log('status - '+ response.status + ' , message - ' + response.data.message);
 	                    if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
 	                            $scope.errorSitesExists = 'ERROR';
-	                        $scope.showNotifications('top','center','danger','Site Already Exists');
+	                        $scope.showNotifications('top','center','danger','Site already exists');
 
 	                        console.log($scope.errorSitesExists);
 	                    } else {
-	                        $scope.showNotifications('top','center','danger','Error in creating Site. Please try again later..');
+	                        $scope.showNotifications('top','center','danger','Unable to add site. Please try again later..');
 	                        $scope.error = 'ERROR';
 	                    }
 	                });
@@ -193,7 +193,7 @@ angular.module('timeSheetApp')
         		$scope.site.shifts = $scope.shiftItems;
 	        	SiteComponent.updateSite($scope.site).then(function() {
 	                $scope.success = 'OK';
-	                $scope.showNotifications('top','center','success','Site updated');
+	                $scope.showNotifications('top','center','success','Site has been updated successfully!!');
                     $scope.loadSites();
                     $location.path('/sites');
 	            }).catch(function (response) {
@@ -205,11 +205,12 @@ angular.module('timeSheetApp')
 	                	$scope.$apply(function() {
 	                        $scope.errorSitesExists = 'ERROR';
 	                		$scope.success = 'OK';
-                            $scope.showNotifications('top','center','danger','Site Already Exists');
+                            $scope.showNotifications('top','center','danger','Site already exists');
 	                	})
 	                    console.log($scope.errorSitesExists);
 	                } else {
 	                    $scope.error = 'ERROR';
+                        $scope.showNotifications('top','center','danger','Unable to update site,please try again later.');
 	                }
 	            });;
         	}
@@ -262,6 +263,7 @@ angular.module('timeSheetApp')
 
 
         $scope.search = function () {
+            $scope.noData = false;
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         	if(!$scope.searchCriteria) {
             	var searchCriteria = {
