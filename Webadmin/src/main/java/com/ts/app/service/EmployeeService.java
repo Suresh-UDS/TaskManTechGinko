@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -161,6 +162,15 @@ public class    EmployeeService extends AbstractService {
 	
 	@Inject
 	private AmazonS3Utils amazonS3utils;
+	
+	@Value("${AWS.s3-cloudfront-url}")
+	private String cloudFrontUrl;
+	
+	@Value("${AWS.s3-bucketEnv}")
+	private String bucketEnv;
+	
+	@Value("${AWS.s3-enroll-path}")
+	private String enrollImagePath;
 
 	public EmployeeDTO findByEmpId(String empId) {
         Employee employee = employeeRepository.findByEmpId(empId);
@@ -1134,6 +1144,7 @@ public class    EmployeeService extends AbstractService {
     		empDto.setFaceIdEnrolled(employee.isFaceIdEnrolled());
     		empDto.setDesignation(employee.getDesignation());
     		empDto.setEnrolled_face(employee.getEnrolled_face());
+    		empDto.setUrl(cloudFrontUrl + bucketEnv + enrollImagePath + employee.getEnrolled_face());
     		empDto.setLeft(employee.isLeft());
     		empDto.setReliever(employee.isReliever());
     		empDto.setRelieved(employee.isRelieved());
