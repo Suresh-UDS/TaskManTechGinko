@@ -185,7 +185,7 @@ angular.module('timeSheetApp')
          }
 
         $scope.search = function () {
-
+            $scope.noData = false;
             var reportUid = $stateParams.uid;
             console.log($scope.datePickerDate);
             var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);

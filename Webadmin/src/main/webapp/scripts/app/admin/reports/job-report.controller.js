@@ -357,6 +357,7 @@ angular.module('timeSheetApp')
 
 
         $scope.search = function () {
+            $scope.noData = false;
         	var reportUid = $stateParams.uid;
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         		var searchCriteria = {

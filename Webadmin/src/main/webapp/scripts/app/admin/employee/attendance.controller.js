@@ -247,6 +247,7 @@ angular.module('timeSheetApp')
 
 
         $scope.search = function () {
+            $scope.noData = false;
             console.log($scope.datePickerDate);
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         	if(!$scope.searchCriteria) {
@@ -354,7 +355,7 @@ angular.module('timeSheetApp')
 
                 
 
-                if($scope.jobs && $scope.projects.length > 0 ){
+                if($scope.attendancesData && $scope.attendancesData.length > 0 ){
                     $scope.showCurrPage = data.currPage;
                     $scope.pageEntries = $scope.projects.length;
                     $scope.totalCountPages = data.totalCount;

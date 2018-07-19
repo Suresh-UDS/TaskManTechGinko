@@ -142,6 +142,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.search = function () {
+            $scope.noData = false;
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         	if(!$scope.searchCriteria) {
             	var searchCriteria = {

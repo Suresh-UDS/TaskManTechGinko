@@ -688,7 +688,7 @@ angular.module('timeSheetApp')
          /* Asset listing and searching function */
 
         $scope.search = function () {
-
+            $scope.noData = false;
             $scope.loadingStop();
 
            var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
