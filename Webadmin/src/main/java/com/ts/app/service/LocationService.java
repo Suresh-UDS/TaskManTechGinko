@@ -265,7 +265,7 @@ public class LocationService extends AbstractService {
             String codeName = String.valueOf(location);
             codeName = siteId+"_"+codeName;
             qrCodeImage = QRCodeUtil.generateQRCode(codeName);
-            String qrCodePath = env.getProperty("locationQRCode.file.path");
+            String qrCodePath = env.getProperty("AWS.s3-locationqr-path");
 //            String imageFileName = null;
             if (org.apache.commons.lang3.StringUtils.isNotEmpty(qrCodePath)) {
             	

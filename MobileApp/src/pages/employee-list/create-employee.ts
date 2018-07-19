@@ -213,7 +213,11 @@ export class CreateEmployeePage {
     }
     else
     {
-      if(!this.firstname)
+      if(!this.eId)
+      {
+          this.eMsg = "eId";
+      }
+       else if(!this.firstname)
       {
         this.eMsg = "firstname";
       }
@@ -221,36 +225,25 @@ export class CreateEmployeePage {
       {
         this.eMsg = "lastname";
       }
+      else if(!this.designation){
+          this.eMsg ="designation";
+      }
       else if(!this.number)
       {
         this.eMsg = "number";
       }
-      else if(!this.mail)
-      {
-        this.eMsg = "mail";
-      }
-      else if(!this.eId)
-      {
-        this.eMsg = "eId";
-      }
-      else if(!this.address)
-      {
-        this.eMsg = "address";
-      }
-      else if(!this.designation){
-          this.eMsg ="Designation";
-      }else if(!this.selectedProject){
-          this.eMsg ="Project";
+      else if(!this.selectedProject){
+          this.eMsg ="project";
       }else if(!this.selectedSite){
-          this.eMsg ="Site";
-      }else if(!this.manager){
-          this.eMsg ="Manager";
+          this.eMsg ="site";
+      }else if(!this.selectedManager){
+          this.eMsg ="manager";
       }
       else
       {
         this.eMsg = "all";
       }
-      this.component.showToastMessage(this.msg,'bottom');
+      this.component.showToastMessage("Enter "+this.eMsg,'bottom');
     }
   }
 

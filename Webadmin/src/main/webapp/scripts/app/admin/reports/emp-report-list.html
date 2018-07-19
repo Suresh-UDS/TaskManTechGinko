@@ -193,10 +193,11 @@
                                 <td>{{employee.fullName}}</td>
 							   <td>{{employee.designation}}</td>
 							   <td>{{employee.managerName}}</td>
-							   <td>{{employee.projectSites[0].projectName}}</td>
-							   <td>{{employee.projectSites[0].siteName}}</td>
+							   <td>{{employee.projectName}}</td>
+							   <td>{{employee.siteName}}</td>
 							   <td>{{employee.createdDate}}</td>
-							   <td>{{employee.active}}</td>
+							   <td><span ng-if='employee.active == y' class="label label-success">Yes</span>
+                                <span ng-if='employee.active == N' class="label label-danger">No</span></td>
                             </tr>
 
 
@@ -215,13 +216,23 @@
     </div>
     <!-- end row -->
 
-    <div class="card margin-TB-5 txt-align-center" ng-hide="employees">
+
+    <div class="card margin-TB-5 txt-align-center" ng-hide="employeesLoader">
 
         <div class="card-content">
-
-            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="employeesLoader">
+            <div class="" style="text-align:center;padding: 10px 0;" >
                 <div loader-css="ball-pulse"></div>
             </div>
+
+            <h3 >Loading, please wait...</h3>
+
+        </div>
+
+    </div>
+
+    <div class="card margin-TB-5 txt-align-center" ng-show="noData">
+
+        <div class="card-content">
 
             <h3>No data Found</h3>
 
@@ -738,7 +749,7 @@
                                 <div class="form-group">
                                     <label class="label-control">From date</label>
                                     <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
-                                    <input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedDateFrom" />
+                                    <input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedDateFrom" autocomplete="off" />
 
                                 </div>
                             </div>
@@ -750,7 +761,7 @@
                                 <div class="form-group">
                                     <label class="label-control">To date</label>
                                     <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
-                                    <input type="text" class="form-control datepicker"  id="dateFilterTo"   ng-model="selectedDateTo"/>
+                                    <input type="text" class="form-control datepicker"  id="dateFilterTo"   ng-model="selectedDateTo" autocomplete="off" />
 
                                 </div>
 
