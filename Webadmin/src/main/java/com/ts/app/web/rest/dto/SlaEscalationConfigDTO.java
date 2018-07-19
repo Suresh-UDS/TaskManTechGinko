@@ -51,8 +51,5 @@ public class SlaEscalationConfigDTO extends BaseDTO{
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	
-	
-	
+
 }

@@ -4,9 +4,12 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -17,7 +20,6 @@ public class SlaEscalationConfig extends AbstractAuditingEntity implements Seria
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "SlaEscId")
 	private long id;
 	
 	@Column(nullable = false)
@@ -31,6 +33,10 @@ public class SlaEscalationConfig extends AbstractAuditingEntity implements Seria
 	
 	@Column(nullable = false)
 	private String email;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "SlaId")
+	private SlaConfig sla;
 
 	public long getId() {
 		return id;
@@ -70,6 +76,14 @@ public class SlaEscalationConfig extends AbstractAuditingEntity implements Seria
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public SlaConfig getSla() {
+		return sla;
+	}
+
+	public void setSla(SlaConfig sla) {
+		this.sla = sla;
 	}
 	
 }
