@@ -344,13 +344,12 @@ angular.module('timeSheetApp')
             LocationComponent.createQr(qr).then(function(response){
 
                 console.log('response qr---',response);
-                $scope.qrInfoBlock = block;
                 var qrAry  = response.split('.');
                 $scope.qr_img = qrAry[0];
                 $scope.assetCode = qrAry[1];
-                // var eleId = 'qrImage';
-                // var ele = document.getElementById(eleId);
-                //     ele.setAttribute('src',$scope.qr_img);
+                var eleId = 'qrImage';
+                var ele = document.getElementById(eleId);
+                    ele.setAttribute('src',$scope.qr_img);
                 // console.log('create qr---',$scope.qr_img);
 
             });
