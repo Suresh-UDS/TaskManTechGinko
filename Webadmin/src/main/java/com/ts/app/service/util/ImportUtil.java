@@ -429,7 +429,9 @@ public class ImportUtil {
 					jobDto.setPlannedStartTime(DateUtil.convertToDateTime(startDate, startTime));
 					jobDto.setPlannedEndTime(DateUtil.convertToDateTime(startDate, endTime));
 					jobDto.setScheduleEndDate(DateUtil.convertToDateTime(endDate, endTime));
-					jobDto.setFrequency(currentRow.getCell(11).getStringCellValue());
+					if(currentRow.getCell(11)!=null){
+                        jobDto.setFrequency(currentRow.getCell(11).getStringCellValue());
+                    }
 					jobDto.setActive("Y");
 					if(currentRow.getCell(12) != null) {
 						String checkListName = currentRow.getCell(12).getStringCellValue();
