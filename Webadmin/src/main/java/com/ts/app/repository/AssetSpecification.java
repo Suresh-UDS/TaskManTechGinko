@@ -1,5 +1,6 @@
 package com.ts.app.repository;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -96,6 +97,13 @@ public class AssetSpecification implements Specification<Asset> {
         		predicates.add(builder.between(root.get("acquiredDate"), fromDt,toDt));
         	}
     	}
+		
+		if(searchCriteria.getAssetCreatedDate() != null) { 
+			log.debug("Asset created date -" + searchCriteria.getAssetCreatedDate());
+			ZonedDateTime createdDate = DateUtil.convertToZDT(searchCriteria.getAssetCreatedDate());
+			log.debug("ZonedDate time" + createdDate);
+			predicates.add(builder.equal(root.get("createdDate"), createdDate));
+		}
 		
 		predicates.add(builder.equal(root.get("active"), "Y"));
 
