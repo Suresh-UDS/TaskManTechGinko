@@ -141,6 +141,9 @@ public class JobManagementService extends AbstractService {
     
     @Value("${AWS.s3-checklist-path}")
     private String checkListpath;
+    
+    @Value("${AWS.s3-checkinout-path}")
+    private String checkInOutImagePath;
 
     public void updateJobStatus(long siteId, JobStatus toBeJobStatus) {
 		//UPDATE ALL OVERDUE JOB STATUS
@@ -1060,7 +1063,9 @@ public class JobManagementService extends AbstractService {
 		List<CheckInOutImageDTO> imageDtos = new ArrayList<CheckInOutImageDTO>();
 		if(CollectionUtils.isNotEmpty(images)) {
 			for(CheckInOutImage image : images) {
-				imageDtos.add(mapperUtil.toModel(image, CheckInOutImageDTO.class));
+				CheckInOutImageDTO imageDTO = mapperUtil.toModel(image, CheckInOutImageDTO.class);
+				imageDTO.setUrl(cloudFrontUrl + bucketEnv + checkInOutImagePath + image.getPhotoOut());
+				imageDtos.add(imageDTO);
 			}
 		}
 		jobDto.setImages(imageDtos);
