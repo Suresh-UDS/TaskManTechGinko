@@ -59,6 +59,8 @@ ul.checkList li
 {
     width: 250px !important;
     height: 250px !important;
+    margin: 0 auto !important;
+    border-radius: 0 !important;
 }
 
 .p-l-3, .p-x-3 {
