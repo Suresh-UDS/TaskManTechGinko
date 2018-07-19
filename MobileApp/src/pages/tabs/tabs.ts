@@ -24,6 +24,7 @@ import {UpdateApp} from "../update-app/update-app";
 import {OfflineAttendanceSites} from "../employee/offline-attendance-sites";
 import {AlertController} from "ionic-angular";
 import {DBService} from "../service/dbService";
+import {OfflinePage} from "../offline-page/offline-page";
 
 declare  var demo ;
 
@@ -93,12 +94,6 @@ export class TabsPage {
       if(window.localStorage.getItem('session')){
           console.log("Session available");
 
-          if(this.network.type!='none'){
-
-          }else{
-              this.navCtrl.setRoot(OfflineAttendanceSites);
-          }
-
           // this.createLocalDB();
           // this.component.showToastMessage('Previous Login Detected, Login automatically','bottom');
       }else{
@@ -109,7 +104,13 @@ export class TabsPage {
 
   }
 
-  ionViewEnter(){
+  ionViewWillEnter(){
+    console.log("Check Network Connection");
+      if(this.network.type!='none'){
+
+      }else{
+          this.navCtrl.setRoot(OfflinePage);
+      }
 
   }
 

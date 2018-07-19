@@ -18,6 +18,7 @@ import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
 import {FileTransferObject, FileUploadOptions, FileTransfer} from "@ionic-native/file-transfer";
 import set = Reflect.set;
 import {ScanQR} from "../jobs/scanQR";
+import {OfflineAsset} from "../offline-asset/offline-asset";
 /**
  * Generated class for the AssetList page.
  *
@@ -63,7 +64,7 @@ export class AssetList {
       console.log("Check Network Connection");
       if(this.network.type!='none'){
 
-          //online
+          // //online
           this.assetService.findAllAssets().subscribe(
               response=>{
                   // this.componentService.closeLoader()
@@ -78,18 +79,18 @@ export class AssetList {
       }else{
 
           //     //offline
-          setTimeout(() => {
-              this.dbService.getAsset().then(
-                  (res)=>{
-                      this.componentService.closeLoader();
-                      console.log(res);
-                      this.assetList = res;
-                  },
-                  (err)=>{
-                      this.assetList = [];
-                      this.componentService.closeLoader()
-                  })
-          },3000);
+          // setTimeout(() => {
+          //     this.dbService.getAsset().then(
+          //         (res)=>{
+          //             this.componentService.closeLoader();
+          //             console.log(res);
+          //             this.assetList = res;
+          //         },
+          //         (err)=>{
+          //             this.assetList = [];
+          //             this.componentService.closeLoader()
+          //         })
+          // },3000);
 
       }
 
@@ -344,7 +345,9 @@ export class AssetList {
   }
 
     viewAsset(asset){
-      this.navCtrl.push(AssetView,{assetDetails:asset});
+      console.log("asset");
+      console.log(asset);
+      this.navCtrl.push(OfflineAsset,{assetDetails:asset});
     }
 
     // Pull to refresh

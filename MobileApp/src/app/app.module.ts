@@ -113,6 +113,11 @@ import {Network} from "@ionic-native/network";
 import {Diagnostic} from "@ionic-native/diagnostic";
 import {Market} from "@ionic-native/market";
 import {Checklist} from "../pages/checklist/checklist";
+import {OfflinePage} from "../pages/offline-page/offline-page";
+import {OfflineAttendanceSites} from "../pages/employee/offline-attendance-sites";
+import{OfflineAssetList} from "../pages/offline-assetlist/offline-assetlist";
+import{OfflineAsset} from "../pages/offline-asset/offline-asset";
+import{OfflineGetassetreadings} from "../pages/offline-getassetreadings/offline-getassetreadings";
 
 
 @NgModule({
@@ -187,7 +192,13 @@ import {Checklist} from "../pages/checklist/checklist";
       GetAssetReading,
       GetAssetReadings,
       CalenderPage,
-      Checklist
+      Checklist,
+      OfflinePage,
+      OfflineAttendanceSites,
+      OfflineAsset,
+      OfflineAssetList,
+      OfflineGetassetreadings
+
   ],
   imports: [
     BrowserModule,
@@ -273,6 +284,11 @@ import {Checklist} from "../pages/checklist/checklist";
       GetAssetReadings,
       CalenderPage,
       Checklist,
+      OfflinePage,
+      OfflineAttendanceSites,
+      OfflineAssetList,
+      OfflineAsset,
+      OfflineGetassetreadings
 
 
 

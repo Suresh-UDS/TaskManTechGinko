@@ -3,7 +3,8 @@ import {NavController, NavParams} from "ionic-angular";
 import{OfflineAttendance} from "../employee/offline-attendance";
 import{OfflineAttendanceSites} from "../employee/offline-attendance-sites";
 import {OfflineAsset} from "../offline-asset/offline-asset";
-
+import{AssetList} from "../asset-list/asset-list";
+import {OfflineAssetList} from "../offline-assetlist/offline-assetlist";
 
 
 /**
@@ -30,7 +31,8 @@ export class OfflinePage {
     this.navCtrl.push(OfflineAttendanceSites);
   }
   offlineAsset(){
-    this.navCtrl.push(OfflineAsset);
+    // this.navCtrl.push(OfflineAsset);
+      this.navCtrl.push(OfflineAssetList);
   }
 
 }

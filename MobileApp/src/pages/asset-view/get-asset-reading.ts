@@ -34,7 +34,8 @@ export class GetAssetReading {
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public modalController: ModalController,
                 public componentService:componentService, public popoverCtrl:PopoverController, public camera:Camera,
-                public assetService:AssetService,public viewCtrl:ViewController,private sqlite:SQLite,private dbService:DBService) {
+                public assetService:AssetService,public viewCtrl:ViewController,private sqlite:SQLite,
+                private dbService:DBService) {
         this.assetDetails = this.navParams.get('assetDetails');
         console.log(this.navParams.get('assetDetails'));
         this.dateTime = new Date();
