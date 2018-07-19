@@ -50,7 +50,10 @@ export class AssetView {
     fileTransfer: FileTransferObject = this.transfer.create();
 
 
-    constructor(public dbService:DBService,public camera: Camera,@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,private transfer: FileTransfer,private modalCtrl:ModalController,private datePicker: DatePicker,private componentService:componentService,public navCtrl: NavController, public navParams: NavParams, public jobService:JobService, public assetService:AssetService) {
+    constructor(public dbService:DBService,public camera: Camera,@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
+                private transfer: FileTransfer,private modalCtrl:ModalController,private datePicker: DatePicker,
+                private componentService:componentService,public navCtrl: NavController, public navParams: NavParams,
+                public jobService:JobService, public assetService:AssetService) {
 
     this.assetDetails = this.navParams.data.assetDetails;
     this.categories = 'details';
@@ -115,62 +118,62 @@ export class AssetView {
     }
     //
 
-    addAssetImage() {
-
-        const options: CameraOptions = {
-            quality: 50,
-            destinationType: this.camera.DestinationType.NATIVE_URI,
-            encodingType: this.camera.EncodingType.JPEG,
-            mediaType: this.camera.MediaType.PICTURE
-        };
-
-        this.camera.getPicture(options).then((imageData) => {
-
-            imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
-            console.log('imageData -' +imageData);
-
-            //offline
-            // this.dbService.setImage(this.assetDetails.id,this.assetDetails.title,imageData).then(
-            //     response=>{
-            //         console.log(response)
-            //
-            //     },error=>{
-            //         console.log(error)
-            //     })
-
-
-            //online
-            let token_header=window.localStorage.getItem('session');
-            let options: FileUploadOptions = {
-                fileKey: 'uploadFile',
-                fileName:'uploadFile.png',
-                headers:{
-                    'X-Auth-Token':token_header
-                },
-                params:{
-                    title : this.assetDetails.title,
-                    assetId : this.assetDetails.id,
-                    type : "image"
-                }
-            };
-
-            this.fileTransfer.upload(imageData, this.config.Url+'api/assets/uploadAssetPhoto', options)
-                .then((data) => {
-                    console.log(data.response);
-                    console.log("image upload");
-                    this.componentService.closeLoader();
-                    this.navCtrl.pop();
-                }, (err) => {
-                    console.log(err);
-                    console.log("image upload fail");
-                    this.componentService.closeLoader();
-                })
-
-
-
-        })
-
-    }
+    // addAssetImage() {
+    //
+    //     const options: CameraOptions = {
+    //         quality: 50,
+    //         destinationType: this.camera.DestinationType.NATIVE_URI,
+    //         encodingType: this.camera.EncodingType.JPEG,
+    //         mediaType: this.camera.MediaType.PICTURE
+    //     };
+    //
+    //     this.camera.getPicture(options).then((imageData) => {
+    //
+    //         imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
+    //         console.log('imageData -' +imageData);
+    //
+    //         //offline
+    //         // this.dbService.setImage(this.assetDetails.id,this.assetDetails.title,imageData).then(
+    //         //     response=>{
+    //         //         console.log(response)
+    //         //
+    //         //     },error=>{
+    //         //         console.log(error)
+    //         //     })
+    //
+    //
+    //         //online
+    //         // let token_header=window.localStorage.getItem('session');
+    //         // let options: FileUploadOptions = {
+    //         //     fileKey: 'uploadFile',
+    //         //     fileName:'uploadFile.png',
+    //         //     headers:{
+    //         //         'X-Auth-Token':token_header
+    //         //     },
+    //         //     params:{
+    //         //         title : this.assetDetails.title,
+    //         //         assetId : this.assetDetails.id,
+    //         //         type : "image"
+    //         //     }
+    //         // };
+    //
+    //         this.fileTransfer.upload(imageData, this.config.Url+'api/assets/uploadAssetPhoto', options)
+    //             .then((data) => {
+    //                 console.log(data.response);
+    //                 console.log("image upload");
+    //                 this.componentService.closeLoader();
+    //                 this.navCtrl.pop();
+    //             }, (err) => {
+    //                 console.log(err);
+    //                 console.log("image upload fail");
+    //                 this.componentService.closeLoader();
+    //             })
+    //
+    //
+    //
+    //     })
+    //
+    // }
 
 
     // Pullto refresh
@@ -200,36 +203,36 @@ export class AssetView {
         // }
         this.spinner = true;
         //offline
-        // this.dbService.getJobs(this.assetDetails.id).then(
-        //     (res)=>{
-        //         this.componentService.closeLoader()
-        //         console.log(res)
-        //         this.assetDetails.jobs = res;
-        //     },
-        //     (err)=>{
-        //
-        //     }
-        // )
+        this.dbService.getJobs(this.assetDetails.id).then(
+            (res)=>{
+                this.componentService.closeLoader()
+                console.log(res)
+                this.assetDetails.jobs = res;
+            },
+            (err)=>{
+
+            }
+        )
 
 
         //Online
-        this.jobService.getJobs(searchCriteria).subscribe(
-            response=>{
-                this.spinner = false;
-                this.componentService.closeLoader();
-                console.log("Getting Jobs response");
-                console.log(response);
-                this.assetDetails.jobs = response.transactions;
-                this.page = response.currPage;
-                this.totalPages = response.totalPages;
-                console.log(this.assetDetails.jobs)
-            },
-            error=>{
-                this.spinner = false;
-                this.componentService.closeLoader();
-                console.log(error)
-                console.log("Getting Jobs errors")
-            })
+        // this.jobService.getJobs(searchCriteria).subscribe(
+        //     response=>{
+        //         this.spinner = false;
+        //         this.componentService.closeLoader();
+        //         console.log("Getting Jobs response");
+        //         console.log(response);
+        //         this.assetDetails.jobs = response.transactions;
+        //         this.page = response.currPage;
+        //         this.totalPages = response.totalPages;
+        //         console.log(this.assetDetails.jobs)
+        //     },
+        //     error=>{
+        //         this.spinner = false;
+        //         this.componentService.closeLoader();
+        //         console.log(error)
+        //         console.log("Getting Jobs errors")
+        //     })
     }
 
     jobScroll(infiniteScroll) {
@@ -457,7 +460,7 @@ export class AssetView {
 
     getAssetById(){
         this.componentService.closeLoader();
-        //Online
+        // Online
         this.assetService.getAssetById(this.assetDetails.id).subscribe(
             response=>{
                 this.componentService.closeLoader();
@@ -580,18 +583,18 @@ export class AssetView {
     }
 
     // Reading
-    getReading(searchCriteria){
+    getReading(readingSearchCriteria){
         this.assetDetails.reading=null;
         this.spinner=true;
-        // this.assetService.viewReading(searchCriteria).subscribe(
-        this.dbService.getViewReading(searchCriteria).then(
+        this.assetService.viewReading(readingSearchCriteria).subscribe(
+        // this.dbService.getViewReading(searchCriteria).then(
             response=>
             {
                 console.log("View Reading Response");
                 console.log(response);
                 this.spinner=false;
-                // this.assetDetails.reading = response.transactions;
-                this.assetDetails.reading = response;
+                this.assetDetails.reading = response.transactions;
+                // this.assetDetails.reading = response;
             },error=>
             {
                 console.log("Error in View Reading");
