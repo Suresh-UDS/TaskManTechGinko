@@ -386,7 +386,7 @@ public class ImportUtil {
 				jobDto.setTitle(currentRow.getCell(1).getStringCellValue());
 				jobDto.setDesc(currentRow.getCell(1).getStringCellValue());
 				jobDto.setSiteId(siteId);
-				long location = (long)currentRow.getCell(2).getNumericCellValue();
+//				long location = (long)currentRow.getCell(2).getNumericCellValue();
 //				Location loc = locationRepo.findByName(location);
 //				if (loc == null) {
 //					loc = new Location();
@@ -400,7 +400,7 @@ public class ImportUtil {
 				log.debug("cell type =" + currentRow.getCell(5).getCellType());
 				if (currentRow.getCell(5).getCellType() == CellFormatType.NUMBER.ordinal()) {
 					try {
-						empId = String.valueOf(currentRow.getCell(5).getNumericCellValue());
+						empId = String.valueOf((long)currentRow.getCell(5).getNumericCellValue());
 					} catch (IllegalStateException ise) {
 						empId = currentRow.getCell(5).getStringCellValue();
 					}
@@ -408,7 +408,7 @@ public class ImportUtil {
 					try {
 						empId = currentRow.getCell(5).getStringCellValue();
 					} catch (IllegalStateException ise) {
-						empId = String.valueOf(currentRow.getCell(5).getNumericCellValue());
+						empId = String.valueOf((long)currentRow.getCell(5).getNumericCellValue());
 					}
 
 				}
