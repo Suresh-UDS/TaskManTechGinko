@@ -32,6 +32,7 @@ angular.module('timeSheetApp')
         $scope.selectedDateFromSer= d;
         $scope.selectedDateToSer= new Date();
         $scope.pager = {};
+        $scope.noData = false;
 
 
         $scope.initCalender = function(){
@@ -101,6 +102,23 @@ angular.module('timeSheetApp')
         $scope.loadSites = function () {
         	ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
         		$scope.selectedSite = null;
+                $scope.sites = data;
+            });
+        };
+
+
+        $scope.loadDepSites = function () {
+
+            if(jQuery.isEmptyObject($scope.selectedProject) == false) {
+                   var depProj=$scope.selectedProject.id;
+            }else if(jQuery.isEmptyObject($scope.searchProject) == false){
+                    var depProj=$scope.searchProject.id;
+            }else{
+                    var depProj=0;
+            }
+
+            ProjectComponent.findSites(depProj).then(function (data) {
+                $scope.searchSite = null;
                 $scope.sites = data;
             });
         };
@@ -326,6 +344,15 @@ angular.module('timeSheetApp')
             $scope.search();
          }
 
+         $scope.searchFilter1 = function () {
+            $scope.SearchEmployeeId = null;
+            $scope.SearchEmployeeName = null;
+            $scope.searchCriteria.employeeEmpId =null;
+            $scope.searchCriteria.name =null;
+            $scope.setPage(1);
+            $scope.search();
+         }
+
 
 
         $scope.search = function () {
@@ -423,7 +450,10 @@ angular.module('timeSheetApp')
                         $scope.totalCountPages = data.totalCount;
                         $scope.pageSort = 10;
 
+                        $scope.noData = false;
 
+                    }else{
+                         $scope.noData = true;
                     }
 
 
