@@ -358,6 +358,20 @@ angular.module('timeSheetApp')
             ele.setAttribute('src',image);
         };
 
+        $scope.printDiv = function(printable) {
+            var printContents = document.getElementById(printable).innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }
+
+        $scope.printPage = function () {
+            window.print();
+        }
+
     });
+
+
 
 

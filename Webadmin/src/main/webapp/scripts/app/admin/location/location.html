@@ -281,7 +281,7 @@
      aria-labelledby="myModalLabel" aria-hidden="true" >
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-body">
+            <div class="modal-body" id="printable">
                 <table >
                     <thead>
                     <tr >
@@ -300,6 +300,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" ng-click="printDiv('printable')" >
+                    <i class="material-icons">print</i>Print
+                </button>
             </div>
         </div>
     </div>
