@@ -1,15 +1,27 @@
 <div class="" ng-controller="LocationController" ng-init="qrcodePage()">
 
-    <div class="row">
-        <div class="col-md-12 txt-align-center">
-            <h3>Qr Code Image</h3>
 
-            <img id="qrImage" width="250" height="250" src="#"
-                 class="img-responsive">
+    <div class="card">
+        <div class="card-content">
+            <div class="row">
+                <div class="col-md-12 txt-align-rgt">
+                    <button type="button" class="btn btn-success" ng-click="printDiv('printable')" >
+                        <i class="material-icons">print</i>Print
+                    </button>
+                </div>
+                <div class="col-md-12 txt-align-center" id="printable">
+                    <h3>Qr Code Image</h3>
 
-            <div class="QrcodeInfo">
-                <p>{{qrInfoDetails.siteName}} - {{qrInfoDetails.block}} - {{qrInfoDetails.floor}} - {{qrInfoDetails.zone}}</p>
+                    <img id="qrImage" width="250" height="250" src="#"
+                         class="img-responsive">
+
+                    <div class="QrcodeInfo">
+                        <p>{{qrInfoDetails.siteName}} - {{qrInfoDetails.block}} - {{qrInfoDetails.floor}} - {{qrInfoDetails.zone}}</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+
 </div>
