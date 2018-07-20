@@ -1,18 +1,20 @@
 package com.ts.app.web.rest.dto;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 public class SlaConfigDTO extends BaseDTO{
 
 	
 	private long id;
 	
+	private long projectId;
+	
+	private String projectName;
+	
 	private long siteId;
 	
 	private String siteName;
-	
-	private String projectName;
 	
 	private String processType;
 	
@@ -22,7 +24,7 @@ public class SlaConfigDTO extends BaseDTO{
 	
 	private int hours;
 	
-	private List<SlaEscalationConfigDTO> slaesc;
+	private Set<SlaEscalationConfigDTO> slaesc;
 	
 	public long getId() {
 		return id;
@@ -30,6 +32,22 @@ public class SlaConfigDTO extends BaseDTO{
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public long getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(long projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
 	}
 
 	public long getSiteId() {
@@ -48,14 +66,6 @@ public class SlaConfigDTO extends BaseDTO{
 		this.siteName = siteName;
 	}
 
-	public String getProjectName() {
-		return projectName;
-	}
-
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
-
 	public String getProcessType() {
 		return processType;
 	}
@@ -71,7 +81,7 @@ public class SlaConfigDTO extends BaseDTO{
 	public void setCategory(ArrayList<String> category) {
 		this.category = category;
 	}
-	
+
 	public String getSeverity() {
 		return severity;
 	}
@@ -88,13 +98,12 @@ public class SlaConfigDTO extends BaseDTO{
 		this.hours = hours;
 	}
 
-	public List<SlaEscalationConfigDTO> getSlaesc() {
+	public Set<SlaEscalationConfigDTO> getSlaesc() {
 		return slaesc;
 	}
 
-	public void setSlaesc(List<SlaEscalationConfigDTO> slaesc) {
+	public void setSlaesc(Set<SlaEscalationConfigDTO> slaesc) {
 		this.slaesc = slaesc;
 	}
-
 
 }

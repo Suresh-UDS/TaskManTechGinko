@@ -17,6 +17,67 @@
 
 <ion-content padding>
 
+    <!--<ion-list>-->
+        <!--<ion-item no-padding="">-->
+            <!--<ion-grid>-->
+                <!--<ion-row>-->
+                    <!--<ion-col col-2 class="ver-center">-->
+                        <!--<ion-item no-padding="">-->
+                            <!--<ion-checkbox [(ngModel)]="s"></ion-checkbox>-->
+                        <!--</ion-item>-->
+                    <!--</ion-col>-->
+                    <!--<ion-col col-7>-->
+                        <!--<p text-left="">Name</p>-->
+                    <!--</ion-col>-->
+                    <!--<ion-col col-3>-->
+                        <!--<ion-row class="border-radius5">-->
+                            <!--<ion-col col-6 >-->
+                                <!--<p>5</p>-->
+                            <!--</ion-col>-->
+                            <!--<ion-col col-6>-->
+                                <!--<button class="ion-button" round (click)="viewCamera(i)" class="camera-btn"><ion-icon name="ios-camera"></ion-icon></button>-->
+                            <!--</ion-col>-->
+                        <!--</ion-row>-->
+                    <!--</ion-col>-->
+                <!--</ion-row>-->
+                <!--<ion-row class="no-margin" >-->
+                    <!--&lt;!&ndash;<ion-col col-4  class="margin-top25" *ngIf="list.imageUrl_1 ; else image1">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<img [src]="list.imageUrl_1" class="job-img margin-bottom25" >&ndash;&gt;-->
+                    <!--&lt;!&ndash;</ion-col>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<ng-template #image1>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<ion-col col-4  class="margin-top25" *ngIf="list.image_1">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<img [src]="list.image_1" class="job-img margin-bottom25" >&ndash;&gt;-->
+                        <!--&lt;!&ndash;</ion-col>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</ng-template>&ndash;&gt;-->
+
+                    <!--&lt;!&ndash;<ion-col col-4  class="margin-top25" *ngIf="list.imageUrl_2 ; else image2">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<img [src]="list.imageUrl_1" class="job-img margin-bottom25" >&ndash;&gt;-->
+                    <!--&lt;!&ndash;</ion-col>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<ng-template #image2>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<ion-col col-4  class="margin-top25" *ngIf="list.image_2">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<img [src]="list.image_2" class="job-img margin-bottom25" >&ndash;&gt;-->
+                        <!--&lt;!&ndash;</ion-col>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</ng-template>&ndash;&gt;-->
+
+                    <!--&lt;!&ndash;<ion-col col-4  class="margin-top25"  *ngIf="list.imageUrl_3 ; else image3">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<img [src]="list.imageUrl_3" class="job-img margin-bottom25" >&ndash;&gt;-->
+                    <!--&lt;!&ndash;</ion-col>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<ng-template #image3>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<ion-col col-4  class="margin-top25" *ngIf="list.image_3">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<img [src]="list.image_3" class="job-img margin-bottom25" >&ndash;&gt;-->
+                        <!--&lt;!&ndash;</ion-col>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</ng-template>&ndash;&gt;-->
+                <!--</ion-row>-->
+
+                <!--<ion-row>-->
+                    <!--<ion-item class="text-item" no-padding="" text-center="">-->
+                        <!--<ion-textarea placeholder="Enter Comments" margin-top="" class="text-border"></ion-textarea>-->
+                    <!--</ion-item>-->
+                <!--</ion-row>-->
+            <!--</ion-grid>-->
+        <!--</ion-item>-->
+
+    <!--</ion-list>-->
 
     <ion-list>
 
@@ -47,15 +108,46 @@
                 </ion-row>
 
                 <ion-row class="no-margin" >
-                    <ion-col col-4  class="margin-top25" *ngIf="list.image_1">
-                        <img [src]="list.image_1" class="job-img margin-bottom25" >
+                    <!--<ion-col col-4  class="margin-top25" *ngIf="list.image_1">-->
+                        <!--<img [src]="list.image_1" class="job-img margin-bottom25" >-->
+                    <!--</ion-col>-->
+                    <!--<ion-col col-4  class="margin-top25" *ngIf="list.image_2">-->
+                        <!--<img [src]="list.image_2" class="job-img margin-bottom25" >-->
+                    <!--</ion-col>-->
+                    <!--<ion-col col-4  class="margin-top25" *ngIf="list.image_3">-->
+                        <!--<img [src]="list.image_3" class="job-img margin-bottom25" >-->
+                    <!--</ion-col>-->
+
+
+                    <ion-col col-4  class="margin-top25" *ngIf="list.imageUrl_1 ; else image1">
+                        <img [src]="list.imageUrl_1" class="job-img margin-bottom25" >
                     </ion-col>
-                    <ion-col col-4  class="margin-top25" *ngIf="list.image_2">
-                        <img [src]="list.image_2" class="job-img margin-bottom25" >
+                    <ng-template #image1>
+                        <ion-col col-4  class="margin-top25" *ngIf="list.image_1">
+                            <img [src]="list.image_1" class="job-img margin-bottom25" >
+                        </ion-col>
+                    </ng-template>
+
+                    <ion-col col-4  class="margin-top25" *ngIf="list.imageUrl_2 ; else image2">
+                        <img [src]="list.imageUrl_1" class="job-img margin-bottom25" >
                     </ion-col>
-                    <ion-col col-4  class="margin-top25" *ngIf="list.image_3">
-                        <img [src]="list.image_3" class="job-img margin-bottom25" >
+                    <ng-template #image2>
+                        <ion-col col-4  class="margin-top25" *ngIf="list.image_2">
+                            <img [src]="list.image_2" class="job-img margin-bottom25" >
+                        </ion-col>
+                    </ng-template>
+
+                    <ion-col col-4  class="margin-top25"  *ngIf="list.imageUrl_3 ; else image3">
+                        <img [src]="list.imageUrl_3" class="job-img margin-bottom25" >
                     </ion-col>
+                    <ng-template #image3>
+                        <ion-col col-4  class="margin-top25" *ngIf="list.image_3">
+                            <img [src]="list.image_3" class="job-img margin-bottom25" >
+                        </ion-col>
+                    </ng-template>
+
+
+
                 </ion-row>
 
             </div>

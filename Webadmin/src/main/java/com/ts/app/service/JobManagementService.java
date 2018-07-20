@@ -1059,6 +1059,23 @@ public class JobManagementService extends AbstractService {
 			jobDto.setTicketId(job.getTicket().getId());
 			jobDto.setTicketName(job.getTicket().getTitle());
 		}
+		if(jobDto.getChecklistItems() != null) { 
+			List<JobChecklistDTO> jobChecklists = jobDto.getChecklistItems();
+			for(JobChecklistDTO jobChecklist : jobChecklists) { 
+				if(jobChecklist.getImage_1() != null) { 
+					String imageUrl_1 =  cloudFrontUrl + bucketEnv + checkListpath + jobChecklist.getImage_1();
+					jobChecklist.setImageUrl_1(imageUrl_1);
+				}
+				if(jobChecklist.getImage_2() != null) { 
+					String imageUrl_2 =  cloudFrontUrl + bucketEnv + checkListpath + jobChecklist.getImage_2();
+					jobChecklist.setImageUrl_2(imageUrl_2);
+				}
+				if(jobChecklist.getImage_3() != null) { 
+					String imageUrl_3 =  cloudFrontUrl + bucketEnv + checkListpath + jobChecklist.getImage_3();
+					jobChecklist.setImageUrl_3(imageUrl_3);
+				}
+			}
+		}
 		List<CheckInOutImage> images = checkInOutImageRepository.findAll(job.getId());
 		List<CheckInOutImageDTO> imageDtos = new ArrayList<CheckInOutImageDTO>();
 		if(CollectionUtils.isNotEmpty(images)) {

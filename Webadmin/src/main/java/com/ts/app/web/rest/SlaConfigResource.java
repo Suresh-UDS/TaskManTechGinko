@@ -41,11 +41,10 @@ public class SlaConfigResource {
 	}
 	
 	@RequestMapping(value = "/sla", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	public String updateSla(@Valid @RequestBody SlaConfigDTO slaconfigdto, HttpServletRequest request)
+	public void updateSla(@Valid @RequestBody SlaConfigDTO slaconfigdto, HttpServletRequest request)
 	{
 		log.debug("********SLAConfig update******** " + slaconfigdto.getId());
-		String status = slaservice.updateSLA(slaconfigdto);
-		return status +(HttpStatus.OK);
+		slaservice.updateSLA(slaconfigdto);
 	}
 	@RequestMapping(value = "/sla/delete/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> deleteSla(@PathVariable Long id)
@@ -58,7 +57,7 @@ public class SlaConfigResource {
 	@RequestMapping(value = "/sla/search", method = RequestMethod.POST)
 	public List<SlaConfigDTO> SlaList(HttpServletRequest request) {
 		log.info("********** SLAConfig findAll *********");
-		return slaservice.findAllSla();
+		return slaservice.findAll();
 	}
 	
 	}
