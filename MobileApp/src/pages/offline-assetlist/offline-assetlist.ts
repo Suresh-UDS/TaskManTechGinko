@@ -1,0 +1,251 @@
+import {Component, Inject} from '@angular/core';
+import {NavController, NavParams} from "ionic-angular";
+// import {Component, Inject} from '@angular/core';
+// import {NavController, NavParams} from "ionic-angular";
+import {ModalController} from "ionic-angular";
+// import {AssetFilter} from "./asset-filter";
+import {QRScanner, QRScannerStatus} from "@ionic-native/qr-scanner";
+import {AssetView} from "../asset-view/asset-view";
+import {AssetService} from "../service/assetService";
+import {componentService} from "../service/componentService";
+import {SQLitePorter} from "@ionic-native/sqlite-porter";
+import{OfflineAttendanceSites} from "../employee/offline-attendance-sites";
+// import {win} from "@angular/platform-browser/src/browser/tools/browser";
+import {SQLite, SQLiteObject} from "@ionic-native/sqlite";
+import {SiteService} from "../service/siteService";
+import {DBService} from "../service/dbService";
+import {Network} from "@ionic-native/network";
+import { Diagnostic } from '@ionic-native/diagnostic';
+import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
+import {FileTransferObject, FileUploadOptions, FileTransfer} from "@ionic-native/file-transfer";
+import set = Reflect.set;
+import {ScanQR} from "../jobs/scanQR";
+import{OfflineAsset} from "../offline-asset/offline-asset";
+
+/**
+ * Generated class for the OfflineAssetlist page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+@Component({
+  selector: 'page-offline-assetList',
+  templateUrl: 'offline-assetList.html',
+})
+export class OfflineAssetList {
+    assetList:any;
+    searchCriteria:any;
+    page:1;
+    totalPages:0;
+    open:any;
+    qr:any;
+    assetDetails:any;
+
+    sites:any;
+    test:any;
+    database:any;
+    asset:any;
+    db:any;
+    fileTransfer: FileTransferObject = this.transfer.create();
+
+  constructor(@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,private transfer: FileTransfer,
+              public modalCtrl:ModalController,private diagnostic: Diagnostic,private sqlite: SQLite,
+              public componentService:componentService, public navCtrl: NavController, public navParams: NavParams,
+              public modalController:ModalController, public qrScanner:QRScanner, public assetService:AssetService,
+              public dbService:DBService,private network:Network) {
+      this.assetList = [];
+      this.test = [];
+      this.searchCriteria = {};
+  }
+
+    ionViewWillEnter()
+    {
+        this.componentService.showLoader("Asset List")
+        console.log("Check Network Connection");
+        if(this.network.type!='none'){
+
+        }else{
+
+            //     //offline
+            setTimeout(() => {
+                this.dbService.getAsset().then(
+                    (res)=>{
+                        this.componentService.closeLoader();
+                        console.log(res);
+                        this.assetList = res;
+                    },
+                    (err)=>{
+                        this.assetList = [];
+                        this.componentService.closeLoader()
+                    })
+            },3000);
+
+        }
+
+    }
+
+    ionViewDidLoad() {
+
+        console.log('ionViewDidLoad Offline AssetList');
+        // this.componentService.showLoader("Loading Assets");
+        this.open = true;
+        // After Set Pagination
+        // var searchCriteria={}
+        // this.getAsset(searchCriteria)
+
+
+
+
+        if(this.navParams.get('text'))
+        {
+            this.componentService.closeLoader();
+            var text = this.navParams.get('text');
+
+
+            this.dbService.getAssetByCode(text).then(
+                // this.assetService.getAssetByCode(text).subscribe(
+                response=>{
+                    this.componentService.showToastMessage('Asset found, navigating..','bottom')
+                    console.log("Search by asset code response");
+                    console.log(response);
+                    window.document.querySelector('ion-app').classList.add('transparentBody')
+                    // this.navCtrl.setRoot(AssetList,{assetDetails:response,qr:true});
+                    // this.navCtrl.push(AssetView,{assetDetails:response}); //online
+                    this.navCtrl.push(AssetView,{assetDetails:response[0]}); //offline
+
+                },
+                err=>{
+                    console.log("Error in getting asset by code");
+                    console.log(err);
+                    this.componentService.showToastMessage('Asset not found, please try again','bottom')
+                }
+            )
+
+
+
+        }
+
+    }
+
+    viewAsset(asset){
+        console.log("asset");
+        console.log(asset);
+        this.navCtrl.push(OfflineAsset,{assetDetails:asset});
+    }
+
+
+    saveReadingToServer(readings)
+    {
+        return new Promise((resolve,reject)=>{
+            for(var i=0;i<readings.length;i++)
+            {
+                this.assetService.saveReading({name:readings[i].name,uom:readings[i].uom,initialValue:readings[i].initialValue,finalValue:readings[i].finalValue,consumption:readings[i].consumption,assetId:readings[i].assetId,assetParameterConfigId:readings[i].assetParameterConfigId}).subscribe(
+                    response => {
+                        console.log("save reading sync to server");
+                        console.log(response);
+                        resolve("s")
+                    },
+                    error => {
+                        console.log("save readings error sync to server");
+                        reject("no")
+                    })
+            }
+
+        })
+    }
+
+
+    setDataSync()
+    {
+        this.componentService.showLoader("Data Sync");
+        this.dbService.getReading().then(
+            response=> {
+                console.log(response)
+                this.saveReadingToServer(response).then(
+                    response=>{
+                        this.dbService.dropReadingTable().then(
+                            response=>{
+                                console.log(response)
+                                this.setData().then(
+                                    response=>{
+                                        console.log(response);
+                                    },
+                                    error=>{
+                                        console.log(error)
+                                    })
+                            })
+                    },
+                    error=>{
+                        this.componentService.closeLoader();
+                        this.componentService.showToastMessage("Error server sync","bottom")
+                    })
+            },error=>{
+                this.setData().then(
+                    response=>{
+                        console.log(response);
+                    },
+                    error=>{
+                        console.log(error)
+                    })
+            })
+    }
+
+
+    setData()
+    {
+        return new Promise((resolve,reject)=>{
+            setTimeout(()=>{
+                this.dbService.setAsset().then(
+                    response=>{
+                        console.log(response)
+                        this.dbService.getAsset().then(
+                            response=>{
+                                console.log(response)
+                                this.dbService.setPPM().then(
+                                    response=>{
+                                        console.log(response)
+                                        this.dbService.setAMC().then(
+                                            response=>{
+                                                console.log(response)
+                                                this.dbService.setConfig().then(
+                                                    response=>{
+                                                        console.log(response)
+                                                        this.dbService.setJobs().then(
+                                                            response=>{
+                                                                console.log(response)
+                                                                this.dbService.setTickets().then(
+                                                                    response=> {
+                                                                        console.log(response)
+                                                                        // this.dbService.setSites().then(
+                                                                        //     response=> {
+                                                                        //         console.log(response)
+                                                                        // this.dbService.setEmployee().then(
+                                                                        //     response=> {
+                                                                        //         console.log(response)
+                                                                        this.dbService.setViewReading().then(
+                                                                            response=>{
+                                                                                console.log(response)
+                                                                                this.dbService.setAssetPreviousReading().then(
+                                                                                    response=> {
+                                                                                        console.log(response)
+                                                                                        resolve("data s")
+                                                                                        this.componentService.closeLoader();
+                                                                                    })
+                                                                            })
+                                                                        // })
+                                                                        // })
+                                                                    })
+                                                            })
+                                                    })
+                                            })
+                                    })
+                            })
+                    })
+
+            },3000)
+        })
+    }
+
+
+
+}
