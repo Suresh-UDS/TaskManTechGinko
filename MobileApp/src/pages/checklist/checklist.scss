@@ -105,17 +105,36 @@ page-checklist {
     width: 25px;
     height: 25px;
     border-color: red;
-    background: url(../img/close.png) no-repeat center;
+    //background: url(../img/close.png) no-repeat center;
 
   }
   .text-border
   {
-    border: 1px solid rgb(105, 105, 105);
+    border: 1px solid #dedede;
+    border-radius: 5px;
     background-color: rgb(238, 238, 238);
   }
   .text-item .item-inner
   {
     padding-right: 0 !important;
+  }
+
+  .camera-btn1
+  {
+    background-color: orange;
+    color: #FFFFFF;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-size: 15px;
+  }
+  .border-bottom1
+  {
+    border-bottom: 1px solid #ccc;
+  }
+  .list-md .item-input:last-child,.list-md .item-block .item-inner,.item-md.item-block .item-inner
+  {
+    border-bottom: none !important;
   }
   }
 

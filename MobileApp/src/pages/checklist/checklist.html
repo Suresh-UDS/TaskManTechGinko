@@ -15,110 +15,30 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-
-    <!--<ion-list>-->
-        <!--<ion-item no-padding="">-->
-            <!--<ion-grid>-->
-                <!--<ion-row>-->
-                    <!--<ion-col col-2 class="ver-center">-->
-                        <!--<ion-item no-padding="">-->
-                            <!--<ion-checkbox [(ngModel)]="s"></ion-checkbox>-->
-                        <!--</ion-item>-->
-                    <!--</ion-col>-->
-                    <!--<ion-col col-7>-->
-                        <!--<p text-left="">Name</p>-->
-                    <!--</ion-col>-->
-                    <!--<ion-col col-3>-->
-                        <!--<ion-row class="border-radius5">-->
-                            <!--<ion-col col-6 >-->
-                                <!--<p>5</p>-->
-                            <!--</ion-col>-->
-                            <!--<ion-col col-6>-->
-                                <!--<button class="ion-button" round (click)="viewCamera(i)" class="camera-btn"><ion-icon name="ios-camera"></ion-icon></button>-->
-                            <!--</ion-col>-->
-                        <!--</ion-row>-->
-                    <!--</ion-col>-->
-                <!--</ion-row>-->
-                <!--<ion-row class="no-margin" >-->
-                    <!--&lt;!&ndash;<ion-col col-4  class="margin-top25" *ngIf="list.imageUrl_1 ; else image1">&ndash;&gt;-->
-                        <!--&lt;!&ndash;<img [src]="list.imageUrl_1" class="job-img margin-bottom25" >&ndash;&gt;-->
-                    <!--&lt;!&ndash;</ion-col>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<ng-template #image1>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<ion-col col-4  class="margin-top25" *ngIf="list.image_1">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<img [src]="list.image_1" class="job-img margin-bottom25" >&ndash;&gt;-->
-                        <!--&lt;!&ndash;</ion-col>&ndash;&gt;-->
-                    <!--&lt;!&ndash;</ng-template>&ndash;&gt;-->
-
-                    <!--&lt;!&ndash;<ion-col col-4  class="margin-top25" *ngIf="list.imageUrl_2 ; else image2">&ndash;&gt;-->
-                        <!--&lt;!&ndash;<img [src]="list.imageUrl_1" class="job-img margin-bottom25" >&ndash;&gt;-->
-                    <!--&lt;!&ndash;</ion-col>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<ng-template #image2>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<ion-col col-4  class="margin-top25" *ngIf="list.image_2">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<img [src]="list.image_2" class="job-img margin-bottom25" >&ndash;&gt;-->
-                        <!--&lt;!&ndash;</ion-col>&ndash;&gt;-->
-                    <!--&lt;!&ndash;</ng-template>&ndash;&gt;-->
-
-                    <!--&lt;!&ndash;<ion-col col-4  class="margin-top25"  *ngIf="list.imageUrl_3 ; else image3">&ndash;&gt;-->
-                        <!--&lt;!&ndash;<img [src]="list.imageUrl_3" class="job-img margin-bottom25" >&ndash;&gt;-->
-                    <!--&lt;!&ndash;</ion-col>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<ng-template #image3>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<ion-col col-4  class="margin-top25" *ngIf="list.image_3">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<img [src]="list.image_3" class="job-img margin-bottom25" >&ndash;&gt;-->
-                        <!--&lt;!&ndash;</ion-col>&ndash;&gt;-->
-                    <!--&lt;!&ndash;</ng-template>&ndash;&gt;-->
-                <!--</ion-row>-->
-
-                <!--<ion-row>-->
-                    <!--<ion-item class="text-item" no-padding="" text-center="">-->
-                        <!--<ion-textarea placeholder="Enter Comments" margin-top="" class="text-border"></ion-textarea>-->
-                    <!--</ion-item>-->
-                <!--</ion-row>-->
-            <!--</ion-grid>-->
-        <!--</ion-item>-->
-
-    <!--</ion-list>-->
+<ion-content>
 
     <ion-list>
-
-            <div  *ngFor="let list of checkListItems;let i = index" class="margin-tp25 white-bg padding10">
-                <ion-row class="margin0">
-                    <ion-col col-8 class="margin-top10">
-                        <ion-label style="color: black">{{list.checklistItemName}}</ion-label>
-                    </ion-col>
-                    <!--<ion-col col-2>-->
-                        <!--<ion-checkbox [(ngModel)]="list.completed"   checked="list.completed"></ion-checkbox>-->
-                        <!--<label style="color:black">Done</label>-->
-                    <!--</ion-col>-->
+        <div  class="white-bg border-bottom1" padding-left="" *ngFor="let list of checkListItems;let i = index">
+            <ion-grid class="padding-left0">
+                <ion-row padding-right="">
                     <ion-col col-2>
-                        <!--<ion-checkbox [(ngModel)]="list.notCompleted"   checked="list.notCompleted" ></ion-checkbox>-->
-                        <!--<label *ngIf="checked:before">Done</label>-->
-                        <input type="checkbox" class="le-checkbox thisonetocheck" (change)="resetRemarks(i,list.completed)" [(ngModel)]="list.completed"/>
-                        <!--<label style="color: black">Not Done</label>-->
+                        <ion-item no-padding="">
+                            <ion-checkbox (change)="resetRemarks(i,list.completed)" [(ngModel)]="list.completed"></ion-checkbox>
+                        </ion-item>
                     </ion-col>
-                    <ion-col col-2 *ngIf="list.image_3 == null">
-                        <button class="ion-button" round (click)="viewCamera(i)" class="camera-btn"><ion-icon name="ios-camera"></ion-icon></button>
-                        <!--<label style="color: black">Photo</label>-->
+                    <ion-col col-7 class="ver-center">
+                        <p text-left="" no-margin="">{{list.checklistItemName}}</p>
+                    </ion-col>
+                    <ion-col col-3 class="ver-center" >
+                        <div *ngIf="list.image_1 != null" float-right="">
+                            <button class="ion-button" round  class="camera-btn1" (click)="show(showIcon,i)"><ion-icon name="images"></ion-icon></button>
+                        </div>
+                        <div *ngIf="list.image_3 == null" class="margin-left15" float-right="">
+                            <button class="ion-button" round (click)="viewCamera(i)" class="camera-btn1"><ion-icon name="ios-camera"></ion-icon></button>
+                        </div>
                     </ion-col>
                 </ion-row>
-                <ion-row class="margin0" *ngIf="!list.completed">
-                    <ion-col col-12>
-                        <ion-input type="text" value="" [(ngModel)]="list.remarks" placeholder="Enter Remarks Here..." class="border-inp"></ion-input>
-                    </ion-col>
-                </ion-row>
-
-                <ion-row class="no-margin" >
-                    <!--<ion-col col-4  class="margin-top25" *ngIf="list.image_1">-->
-                        <!--<img [src]="list.image_1" class="job-img margin-bottom25" >-->
-                    <!--</ion-col>-->
-                    <!--<ion-col col-4  class="margin-top25" *ngIf="list.image_2">-->
-                        <!--<img [src]="list.image_2" class="job-img margin-bottom25" >-->
-                    <!--</ion-col>-->
-                    <!--<ion-col col-4  class="margin-top25" *ngIf="list.image_3">-->
-                        <!--<img [src]="list.image_3" class="job-img margin-bottom25" >-->
-                    <!--</ion-col>-->
-
-
+                <ion-row class="no-margin width80 margin-auto" *ngIf="showIcon && i==index" padding="">
                     <ion-col col-4  class="margin-top25" *ngIf="list.imageUrl_1 ; else image1">
                         <img [src]="list.imageUrl_1" class="job-img margin-bottom25" >
                     </ion-col>
@@ -129,7 +49,7 @@
                     </ng-template>
 
                     <ion-col col-4  class="margin-top25" *ngIf="list.imageUrl_2 ; else image2">
-                        <img [src]="list.imageUrl_1" class="job-img margin-bottom25" >
+                        <img [src]="list.imageUrl_2" class="job-img margin-bottom25" >
                     </ion-col>
                     <ng-template #image2>
                         <ion-col col-4  class="margin-top25" *ngIf="list.image_2">
@@ -145,15 +65,92 @@
                             <img [src]="list.image_3" class="job-img margin-bottom25" >
                         </ion-col>
                     </ng-template>
-
-
-
                 </ion-row>
-
-            </div>
-
+                <ion-row *ngIf="!list.completed">
+                    <ion-item class="text-item width80 margin-auto" no-padding="" text-center="">
+                        <ion-textarea placeholder="Enter Remarks here.." class="text-border padding5"  [(ngModel)]="list.remarks"></ion-textarea>
+                    </ion-item>
+                </ion-row>
+            </ion-grid>
+        </div>
 
     </ion-list>
+
+    <!--<ion-list>-->
+
+            <!--<div  *ngFor="let list of checkListItems;let i = index" class="margin-tp25 white-bg padding10">-->
+                <!--<ion-row class="margin0">-->
+                    <!--<ion-col col-8 class="margin-top10">-->
+                        <!--<ion-label style="color: black">{{list.checklistItemName}}</ion-label>-->
+                    <!--</ion-col>-->
+                    <!--&lt;!&ndash;<ion-col col-2>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<ion-checkbox [(ngModel)]="list.completed"   checked="list.completed"></ion-checkbox>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<label style="color:black">Done</label>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</ion-col>&ndash;&gt;-->
+                    <!--<ion-col col-2>-->
+                        <!--&lt;!&ndash;<ion-checkbox [(ngModel)]="list.notCompleted"   checked="list.notCompleted" ></ion-checkbox>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<label *ngIf="checked:before">Done</label>&ndash;&gt;-->
+                        <!--<input type="checkbox" class="le-checkbox thisonetocheck" (change)="resetRemarks(i,list.completed)" [(ngModel)]="list.completed"/>-->
+                        <!--&lt;!&ndash;<label style="color: black">Not Done</label>&ndash;&gt;-->
+                    <!--</ion-col>-->
+                    <!--<ion-col col-2 *ngIf="list.image_3 == null">-->
+                        <!--<button class="ion-button" round (click)="viewCamera(i)" class="camera-btn"><ion-icon name="ios-camera"></ion-icon></button>-->
+                        <!--&lt;!&ndash;<label style="color: black">Photo</label>&ndash;&gt;-->
+                    <!--</ion-col>-->
+                <!--</ion-row>-->
+                <!--<ion-row class="margin0" *ngIf="!list.completed">-->
+                    <!--<ion-col col-12>-->
+                        <!--<ion-input type="text" value="" [(ngModel)]="list.remarks" placeholder="Enter Remarks Here..." class="border-inp"></ion-input>-->
+                    <!--</ion-col>-->
+                <!--</ion-row>-->
+
+                <!--<ion-row class="no-margin" >-->
+                    <!--&lt;!&ndash;<ion-col col-4  class="margin-top25" *ngIf="list.image_1">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<img [src]="list.image_1" class="job-img margin-bottom25" >&ndash;&gt;-->
+                    <!--&lt;!&ndash;</ion-col>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<ion-col col-4  class="margin-top25" *ngIf="list.image_2">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<img [src]="list.image_2" class="job-img margin-bottom25" >&ndash;&gt;-->
+                    <!--&lt;!&ndash;</ion-col>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<ion-col col-4  class="margin-top25" *ngIf="list.image_3">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<img [src]="list.image_3" class="job-img margin-bottom25" >&ndash;&gt;-->
+                    <!--&lt;!&ndash;</ion-col>&ndash;&gt;-->
+
+
+                    <!--<ion-col col-4  class="margin-top25" *ngIf="list.imageUrl_1 ; else image1">-->
+                        <!--<img [src]="list.imageUrl_1" class="job-img margin-bottom25" >-->
+                    <!--</ion-col>-->
+                    <!--<ng-template #image1>-->
+                        <!--<ion-col col-4  class="margin-top25" *ngIf="list.image_1">-->
+                            <!--<img [src]="list.image_1" class="job-img margin-bottom25" >-->
+                        <!--</ion-col>-->
+                    <!--</ng-template>-->
+
+                    <!--<ion-col col-4  class="margin-top25" *ngIf="list.imageUrl_2 ; else image2">-->
+                        <!--<img [src]="list.imageUrl_1" class="job-img margin-bottom25" >-->
+                    <!--</ion-col>-->
+                    <!--<ng-template #image2>-->
+                        <!--<ion-col col-4  class="margin-top25" *ngIf="list.image_2">-->
+                            <!--<img [src]="list.image_2" class="job-img margin-bottom25" >-->
+                        <!--</ion-col>-->
+                    <!--</ng-template>-->
+
+                    <!--<ion-col col-4  class="margin-top25"  *ngIf="list.imageUrl_3 ; else image3">-->
+                        <!--<img [src]="list.imageUrl_3" class="job-img margin-bottom25" >-->
+                    <!--</ion-col>-->
+                    <!--<ng-template #image3>-->
+                        <!--<ion-col col-4  class="margin-top25" *ngIf="list.image_3">-->
+                            <!--<img [src]="list.image_3" class="job-img margin-bottom25" >-->
+                        <!--</ion-col>-->
+                    <!--</ng-template>-->
+
+
+
+                <!--</ion-row>-->
+
+            <!--</div>-->
+
+
+    <!--</ion-list>-->
 
 
 
