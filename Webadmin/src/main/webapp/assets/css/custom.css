@@ -55,6 +55,13 @@ ul.checkList li
 .box-cell, .box-row {
     float: none;
 }
+.card.PrintQrcodecard #printable img
+{
+    width: 250px !important;
+    height: 250px !important;
+    margin: 0 auto !important;
+    border-radius: 0 !important;
+}
 
 .p-l-3, .p-x-3 {
     padding-left: 20px!important;
