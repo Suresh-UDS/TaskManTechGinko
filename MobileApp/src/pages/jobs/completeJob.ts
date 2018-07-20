@@ -161,6 +161,7 @@ export class CompleteJobPage {
 
     saveJob(job){
         this.component.showLoader('Saving Job');
+        console.log(job)
         this.jobService.saveJob(job).subscribe(
             response=>{
                 console.log("Save Job response");
@@ -378,8 +379,8 @@ export class CompleteJobPage {
     }
 
 
-    presentCheckListModal(checkListItems) {
-        let profileModal = this.modalCtrl.create(Checklist, {checkListItems:checkListItems});
+    presentCheckListModal(jobDetails) {
+        let profileModal = this.modalCtrl.create(Checklist, {jobDetails:jobDetails});
         profileModal.onDidDismiss(data => {
             console.log(data);
             this.jobDetails.checkListItems = data;
