@@ -481,16 +481,19 @@ public class SchedulerHelperService extends AbstractService {
 					if (attendanceReportEmails != null && projEmployees > 0 && ((shiftAlert && siteShiftConsolidatedData.size() > 0) || dayReport)) {
 						ExportResult exportResult = null;
 						String alertTime = attnDayWiseAlertTime.getSettingValue();
+						Calendar now = Calendar.getInstance();
+						now.set(Calendar.SECOND,  0);
+						now.set(Calendar.MILLISECOND, 0);
 						Calendar alertTimeCal = Calendar.getInstance();
 						if(StringUtils.isNotEmpty(alertTime)) {
 							Date alertDateTime = DateUtil.parseToDateTime(alertTime);
 							alertTimeCal.setTime(alertDateTime);
+							alertTimeCal.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH));
+							alertTimeCal.set(Calendar.MONTH, now.get(Calendar.MONTH));
+							alertTimeCal.set(Calendar.YEAR, now.get(Calendar.YEAR));
 							alertTimeCal.set(Calendar.SECOND, 0);
 							alertTimeCal.set(Calendar.MILLISECOND, 0);
 						}
-						Calendar now = Calendar.getInstance();
-						now.set(Calendar.SECOND,  0);
-						now.set(Calendar.MILLISECOND, 0);
 						
 						if(dayReport && (attnDayWiseAlertTime == null ||  alertTimeCal.equals(now))) {
 							exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, consolidatedData, summaryMap, shiftWiseSummary, null, exportResult);
