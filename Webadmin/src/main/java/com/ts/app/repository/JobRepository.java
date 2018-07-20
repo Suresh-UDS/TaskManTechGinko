@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.access.method.P;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Temporal;
@@ -105,6 +106,10 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.employee.id = :empId")
     Page<Job> findByStartDateAndEmployee(@Param("empId")Long empId,@Param("startDate") Date startDate, @Param("endDate") Date endDate,Pageable pageRequest);
 
+    @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.employee.id = :empId and j.location.id=:locationId")
+    Page<Job> findByStartDateAndEmployeeAndLocation(@Param("empId")Long empId,@Param("locationId") long locationId,@Param("startDate") Date startDate, @Param("endDate") Date endDate,Pageable pageRequest);
+
+
     @Query("SELECT j from Job j where  (j.plannedStartTime >= :startDate) and j.employee.id = :empId")
     Page<Job> findByStartDateAndEmployee(@Param("empId")Long empId,@Param("startDate") Date startDate,Pageable pageRequest);
 
@@ -114,11 +119,21 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.employee.id = :empId and j.site.id = :siteId")
     Page<Job> findByStartDateSiteAndEmployee(@Param("siteId") long siteId, @Param("empId") long empId,@Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
 
+    @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.location.id=:locationId and j.employee.id = :empId and j.site.id = :siteId")
+    Page<Job> findByStartDateSiteAndEmployeeAndLocation(@Param("siteId") long siteId, @Param("empId") long empId, @Param("locationId") long locationId,@Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
+
     @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.site.id = :siteId")
     Page<Job> findByStartDateAndSite(@Param("siteId") long siteId,  @Param("startDate") Date startDate, @Param("endDate") Date endDate,Pageable pageRequest);
 
+    @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.site.id = :siteId and j.location.id=:locationId")
+    Page<Job> findByStartDateAndSiteAndLocation(@Param("siteId") long siteId, @Param("locationId") long locationId,  @Param("startDate") Date startDate, @Param("endDate") Date endDate,Pageable pageRequest);
+
     @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.site.id = :siteId and j.type = :type")
     Page<Job> findByStartDateAndSiteAndJobType(@Param("siteId") long siteId, @Param("type") String type, @Param("startDate") Date startDate, @Param("endDate") Date endDate,Pageable pageRequest);
+
+    @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.site.id = :siteId and j.type = :type and j.location.id=:locationId")
+    Page<Job> findByStartDateAndSiteAndJobTypeAndLocation(@Param("siteId") long siteId, @Param("locationId") long locationId, @Param("type") String type, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
+
 
     @Query("SELECT j from Job j where  j.site.id IN (:siteIds) order by j.plannedStartTime desc")
     Page<Job> findByStartDateAndSites(@Param("siteIds") List<Long> siteIds, Pageable pageRequest);
@@ -132,7 +147,7 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
 
     @Query("SELECT j from Job j where j.parentJob.id = :parentJobId order by j.plannedStartTime desc")
     List<Job> findLastJobByParentJobId(@Param("parentJobId") long parentJobId, Pageable pageRequest);
-    
+
     @Query("DELETE from Job j where j.parentJob.id = :parentJobId and j.plannedStartTime between :startDate and :endDate ")
     void deleteScheduledJobs(@Param("parentJobId") long parentJobId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
@@ -149,7 +164,7 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
 
     @Query("SELECT j from Job j where  (j.site.project.id = :projectId and j.plannedStartTime between :startDate and :endDate) and (j.employee.user.id = :userId or j.employee.id in (:subEmpIds)) and j.status = :currentJobStatus")
     Page<Job> findByProjectIdAndStatusAndDateRange(@Param("projectId") Long projectId, @Param("userId") long userId, @Param("subEmpIds") List<Long> subEmpIds, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("currentJobStatus") JobStatus currentJobStatus, Pageable pageRequest);
-    
+
     @Query("SELECT j from Job j where  j.ticket.id=:ticketId")
     Job findByTicketId(@Param("ticketId")Long ticketId);
 

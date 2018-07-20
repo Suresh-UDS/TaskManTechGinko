@@ -165,10 +165,6 @@ public class JobManagementService extends AbstractService {
 		if(searchCriteria != null) {
 			log.debug("findBYSearchCriteria search criteria -"+ (searchCriteria.getJobStatus() != null && searchCriteria.getJobStatus().equals(JobStatus.OVERDUE)));
 
-			//-----
-
-
-
 			User user = userRepository.findOne(searchCriteria.getUserId());
 			Employee employee = user.getEmployee();
 
@@ -227,6 +223,7 @@ public class JobManagementService extends AbstractService {
 
             log.debug("JobManagementService toPredicate - searchCriteria projectid -"+ searchCriteria.getProjectId());
             log.debug("JobManagementService toPredicate - searchCriteria siteId -"+ searchCriteria.getSiteId());
+            log.debug("JobManagementService toPredicate - searchCriteria siteId -"+ searchCriteria.getLocationId());
             log.debug("JobManagementService toPredicate - searchCriteria jobstatus -"+ searchCriteria.getJobStatus());
             log.debug("JobManagementService toPredicate - searchCriteria jobTitle -"+ searchCriteria.getJobTitle());
             log.debug("JobManagementService toPredicate - searchCriteria scheduled -"+ searchCriteria.isScheduled());
@@ -327,14 +324,33 @@ public class JobManagementService extends AbstractService {
 		        			allJobsList.addAll(page.getContent());
 		        		}
 		            	if(employee.getUser().getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
-		            		if(searchCriteria.getSiteId() > 0 && searchCriteria.getEmployeeId() >0) {
-		            			page = jobRepository.findByStartDateSiteAndEmployee(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+		            		if(searchCriteria.getSiteId() > 0 && searchCriteria.getEmployeeId() >0 ) {
+		            		    if(searchCriteria.getLocationId()>0){
+                                    page = jobRepository.findByStartDateSiteAndEmployeeAndLocation(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
+
+                                }else{
+                                    page = jobRepository.findByStartDateSiteAndEmployee(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+
+                                }
 		            		}else if(searchCriteria.getSiteId() > 0 && searchCriteria.getEmployeeId() == 0) {
-		            			page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
+		            		    if(searchCriteria.getLocationId()>0){
+                                    page = jobRepository.findByStartDateAndSiteAndLocation(searchCriteria.getSiteId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
+
+                                }else{
+                                    page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
+                                }
 		            		}else if(searchCriteria.getSiteId() == 0 && searchCriteria.getEmployeeId() > 0) {
-		            			page = jobRepository.findByStartDateAndEmployee(searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+		            		    if(searchCriteria.getLocationId()>0){
+                                    page = jobRepository.findByStartDateAndEmployeeAndLocation(searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
+                                }else{
+                                    page = jobRepository.findByStartDateAndEmployee(searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+                                }
 		            		}else if(searchCriteria.getSiteId() > 0 && !StringUtils.isEmpty(searchCriteria.getJobTypeName())) {
-		            			page = jobRepository.findByStartDateAndSiteAndJobType(searchCriteria.getSiteId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
+		            		    if(searchCriteria.getLocationId()>0){
+                                    page = jobRepository.findByStartDateAndSiteAndJobTypeAndLocation(searchCriteria.getSiteId(), searchCriteria.getLocationId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
+                                }else{
+                                    page = jobRepository.findByStartDateAndSiteAndJobType(searchCriteria.getSiteId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
+                                }
 		            		}else {
 			        			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
 		            		}
@@ -342,13 +358,32 @@ public class JobManagementService extends AbstractService {
 
 		            	}else {
 		            		if(searchCriteria.getSiteId() > 0 && searchCriteria.getEmployeeId() >0) {
-		            			page = jobRepository.findByStartDateSiteAndEmployee(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+                                if(searchCriteria.getLocationId()>0){
+                                    page = jobRepository.findByStartDateSiteAndEmployeeAndLocation(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
+
+                                }else{
+                                    page = jobRepository.findByStartDateSiteAndEmployee(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+
+                                }
 		            		}else if(searchCriteria.getSiteId() > 0 && searchCriteria.getEmployeeId() == 0) {
-		            			page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
+                                if(searchCriteria.getLocationId()>0){
+                                    page = jobRepository.findByStartDateAndSiteAndLocation(searchCriteria.getSiteId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
+
+                                }else{
+                                    page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
+                                }
 		            		}else if(searchCriteria.getSiteId() == 0 && searchCriteria.getEmployeeId() > 0) {
-		            			page = jobRepository.findByStartDateAndEmployee(searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+                                if(searchCriteria.getLocationId()>0){
+                                    page = jobRepository.findByStartDateAndEmployeeAndLocation(searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
+                                }else{
+                                    page = jobRepository.findByStartDateAndEmployee(searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+                                }
 		            		}else if(searchCriteria.getSiteId() > 0 && !StringUtils.isEmpty(searchCriteria.getJobTypeName())) {
-		            			page = jobRepository.findByStartDateAndSiteAndJobType(searchCriteria.getSiteId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
+                                if(searchCriteria.getLocationId()>0){
+                                    page = jobRepository.findByStartDateAndSiteAndJobTypeAndLocation(searchCriteria.getSiteId(), searchCriteria.getLocationId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
+                                }else{
+                                    page = jobRepository.findByStartDateAndSiteAndJobType(searchCriteria.getSiteId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
+                                }
 		            		}else if(!StringUtils.isEmpty(searchCriteria.getJobTypeName())) {
 			        			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
 		            		}else {
