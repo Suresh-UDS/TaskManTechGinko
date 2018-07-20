@@ -328,7 +328,10 @@ public class SchedulerHelperService extends AbstractService {
 								// attendanceRepository.findBySiteId(site.getId(),
 								// DateUtil.convertToSQLDate(cal.getTime()),
 								// DateUtil.convertToSQLDate(cal.getTime()));
-								long absentCount = empCntInShift - attendanceCount;
+								long absentCount = 0;
+								if(empCntInShift >= attendanceCount) {
+									absentCount = empCntInShift - attendanceCount;
+								}
 
 								// ExportResult exportResult = new ExportResult();
 								// exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(),
