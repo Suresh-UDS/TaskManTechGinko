@@ -870,7 +870,7 @@ span.EmpNameTxt
 }
 .width90
 {
-  width: 90%;
+  width: 90% !important;
 }
 .padding-top25
 {

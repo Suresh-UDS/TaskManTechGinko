@@ -63,7 +63,6 @@ export class EmployeeDetailPage {
     this.approvedQuotationsCount=0;
     this.submittedQuotationsCount=0;
     this.archivedQuotationsCount=0;
-    this.getQuotations();
     this.draftedQuotations=[];
     this.approvedQuotations=[];
     this.submittedQuotations=[];
