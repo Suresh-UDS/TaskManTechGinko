@@ -621,8 +621,8 @@ public class ExportUtil {
 			dataRow.getCell(1).setCellValue(transaction.getName() + " " + transaction.getLastName());
 			dataRow.getCell(2).setCellValue(transaction.getSiteName());
 			dataRow.getCell(3).setCellValue((StringUtils.isNotEmpty(transaction.getShiftStartTime()) ? StringUtil.formatShiftTime(transaction.getShiftStartTime()) : "") + "-" + (StringUtils.isNotEmpty(transaction.getShiftEndTime()) ? StringUtil.formatShiftTime(transaction.getShiftEndTime()) : ""));
-			dataRow.getCell(4).setCellValue(transaction.getCheckInTime() != null ? String.valueOf(transaction.getCheckInTime()) : "");
-			dataRow.getCell(5).setCellValue(transaction.getCheckOutTime() != null ? String.valueOf(transaction.getCheckOutTime()) : "");
+			dataRow.getCell(4).setCellValue(transaction.getCheckInTime() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getCheckInTime()) : "");
+			dataRow.getCell(5).setCellValue(transaction.getCheckOutTime() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getCheckOutTime()) : "");
 			dataRow.getCell(6).setCellValue(transaction.getStatus());
 			dataRow.getCell(7).setCellValue(transaction.isShiftContinued() ? "SHIFT CONTINUED" : "");
 			dataRow.getCell(8).setCellValue(transaction.isLate() ? "LATE CHECK IN" : "");

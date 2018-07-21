@@ -32,6 +32,7 @@ import com.ts.app.domain.Project;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Shift;
 import com.ts.app.domain.Site;
+import com.ts.app.domain.util.StringUtil;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.EmployeeShiftRepository;
@@ -234,7 +235,7 @@ public class SchedulerHelperService extends AbstractService {
 
 
 	@Transactional
-	public void generateDetailedAttendanceReport(Date date, boolean shiftAlert, boolean dayReport) {
+	public void generateDetailedAttendanceReport(Date date, boolean shiftAlert, boolean dayReport, boolean onDemand) {
 		if (env.getProperty("scheduler.attendanceDetailReport.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(date);
@@ -322,12 +323,9 @@ public class SchedulerHelperService extends AbstractService {
 									empCntInShift = employeeRepository.findCountBySiteId(site.getId());
 								}
 
-								long attendanceCount = attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(startCal.getTime()),
-										DateUtil.convertToSQLDate(endCal.getTime()));
-								// List<EmployeeAttendanceReport> empAttnList =
-								// attendanceRepository.findBySiteId(site.getId(),
-								// DateUtil.convertToSQLDate(cal.getTime()),
-								// DateUtil.convertToSQLDate(cal.getTime()));
+								//long attendanceCount = attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(startCal.getTime()),
+								//		DateUtil.convertToSQLDate(endCal.getTime()));
+								long attendanceCount = attendanceRepository.findCountBySiteAndShiftInTime(site.getId(), DateUtil.convertToSQLDate(startCal.getTime()), DateUtil.convertToSQLDate(endCal.getTime()), startTime, endTime);
 								long absentCount = 0;
 								if(empCntInShift >= attendanceCount) {
 									absentCount = empCntInShift - attendanceCount;
@@ -343,8 +341,8 @@ public class SchedulerHelperService extends AbstractService {
 								//content.append("Absent - " + absentCount + LINE_SEPARATOR);
 								Map<String, String> data = new HashMap<String, String>();
 								data.put("SiteName", site.getName());
-								data.put("ShiftStartTime", shift.getStartTime());
-								data.put("ShiftEndTime", shift.getEndTime());
+								data.put("ShiftStartTime",  StringUtil.formatShiftTime(shift.getStartTime()));
+								data.put("ShiftEndTime", StringUtil.formatShiftTime(shift.getEndTime()));
 								data.put("TotalEmployees", String.valueOf(empCntInShift));
 								data.put("Present", String.valueOf(attendanceCount));
 								data.put("Absent", String.valueOf(absentCount));
@@ -498,11 +496,11 @@ public class SchedulerHelperService extends AbstractService {
 							alertTimeCal.set(Calendar.MILLISECOND, 0);
 						}
 						
-						if(dayReport && (attnDayWiseAlertTime == null ||  alertTimeCal.equals(now))) {
+						if(dayReport && (attnDayWiseAlertTime == null ||  alertTimeCal.equals(now) || onDemand)) {
 							exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, consolidatedData, summaryMap, shiftWiseSummary, null, exportResult);
 							mailService.sendAttendanceDetailedReportEmail(proj.getName(), attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(), null,
 									cal.getTime(), summaryMap, shiftWiseSummary, siteWiseConsolidatedMap);
-						}else if(shiftAlert) {
+						}else if(shiftAlert || onDemand) {
 							exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, consolidatedData, summaryMap, shiftWiseSummary, null, exportResult);
 							mailService.sendAttendanceDetailedReportEmail(proj.getName(), attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(), null,
 									cal.getTime(), summaryMap, shiftWiseSummary, siteWiseConsolidatedMap);
