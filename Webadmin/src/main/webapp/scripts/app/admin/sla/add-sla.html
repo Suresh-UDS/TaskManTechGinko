@@ -31,7 +31,7 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Select Client <span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select ng-options = "project as prj.name for prj in projects" ng-model = "selectedProject" ng-change = "loadSites()" class="form-control">
+                                                    <select ng-options = "prj.name for prj in projects" ng-model = "selectedProject" ng-change = "loadSites()" class="form-control">
                                                         <option value="">Select Client...</option>
                                                     </select>
                                                 </div>
@@ -44,7 +44,7 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Select Site <span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select ng-options = "site as site.name for site in sites" ng-model = "selectedSite" class="form-control">
+                                                    <select ng-options = "site.name for site in sites" ng-model = "selectedSite" class="form-control">
                                                         <option value="">Select Site...</option>
                                                     </select>
                                                 </div>
@@ -58,7 +58,7 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Select Process Type  <span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select ng-model = "sla.processtype" class="form-control">
+                                                    <select ng-model = "sla.processType" class="form-control">
                                                         <option value="Tickets">Tickets</option>
                                                         <option value="Jobs">Jobs</option>
 
@@ -113,7 +113,7 @@
 
                                         <div class="form-group no-padding">
                                             <label class="control-label">Hours</label>
-                                            <input type="number" class="form-control ng-valid ng-dirty ng-touched" ng-model="sla.hrs" tabindex="0" aria-invalid="false" autocomplete="off">
+                                            <input type="number" class="form-control ng-valid ng-dirty ng-touched" ng-model="sla.hours" tabindex="0" aria-invalid="false" autocomplete="off">
                                             <span class="material-input"></span></div>
 
                                     </div>
@@ -126,14 +126,13 @@
                                             <div class="ripple-container"></div>
                                         </button>
                                     </div>
-
                                 </div>
-
+								
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="table-responsive tablecard">
                                             <table class="table table-hover">
-                                                <thead>
+                                                <thead >
                                                 <tr>
                                                     <th>Process Type</th>
                                                     <th>Severity </th>
@@ -145,9 +144,9 @@
                                                 </thead>
                                                 <tbody>
                                                 <tr>
-                                                    <td>Jobs</td>
-                                                    <td>Low</td>
-                                                    <td>48</td>
+                                                    <td>{{slass.processtype}}</td>
+                                                    <td>{{slass.severity}}</td>
+                                                    <td>{{slass.hrs}}</td>
                                                     <td><span class="tag label label-info">Cleaning<span data-role="remove"></span></span>
                                                         <span class="tag label label-info">Electrical<span data-role="remove"></span></span>
                                                     </td>
@@ -169,8 +168,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
@@ -187,7 +184,7 @@
                         <button type="submit" ng-click="cancelsla()"
                                 id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
-                        <button type="submit" ng-click = "addSla(sla)"
+                        <button type="submit" ng-click = "addSla()"
                                 id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
                                             <i class="material-icons">check</i>
                                         </span>Create SLA</button>
@@ -235,7 +232,7 @@
 <div class="modal fade AdvancedFilterModal FilterModalCon" id="AddEscalationLevel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm"   novalidate >
+            <form name="searchForm"   novalidate ">
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -254,11 +251,11 @@
                                     <div class="form-group">
                                         <label class="control-label">Select Level  <span class="red-star">*</span></label>
                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                        <select ng-model = "sla.processtype" class="form-control">
-                                            <option value="level1">Level 1</option>
-                                            <option value="level2">Level 2</option>
-                                            <option value="level3">Level 3</option>
-                                            <option value="level4">Level 4</option>
+                                        <select ng-model = "escalation.level" class="form-control">
+                                            <option value="1">Level 1</option>
+                                            <option value="2">Level 2</option>
+                                            <option value="3">Level 3</option>
+                                            <option value="4">Level 4</option>
                                         </select>
                                     </div>
                                 </div>
@@ -269,26 +266,26 @@
                         <div class="col-md-1">
                             <div class="form-group no-padding">
                                 <label class="control-label">Hours</label>
-                                <input type="number" ng-model = "sla.ehrs4" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
+                                <input type="number" ng-model = "escalation.hours" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
                                 <span class="material-input"></span>
                             </div>
                         </div>
                         <div class="col-md-1">
                             <div class="form-group no-padding">
                                 <label class="control-label">Mins</label>
-                                <input type="number" ng-model = "sla.emins4" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
+                                <input type="number" ng-model = "escalation.minutes" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
                                 <span class="material-input"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group no-padding">
                                 <label class="control-label">Email</label>
-                                <input type="text" ng-model = "sla.email4" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
+                                <input type="text" ng-model = "escalation.email" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
                                 <span class="material-input"></span>
                             </div>
                         </div>
                         <div class="col-md-2 txt-align-rgt">
-                            <button class="btn btn-success margn-top15"  tabindex="0">Add</button>
+                            <button ng-click = "addSlaEscalations()" class="btn btn-success margn-top15"  tabindex="0">Add</button>
                         </div>
 
                     </div>
@@ -357,8 +354,9 @@
                     </div>
 
                 </div>
+                <div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success btn-simple"  data-dismiss="modal" ng-disabled="searchForm.$invalid">Save</button>
+                    <button ng-click = "addSlas()" ng-model = "slass" type="submit" class="btn btn-success btn-simple"  data-dismiss="modal" ng-disabled="searchForm.$invalid">Save</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>

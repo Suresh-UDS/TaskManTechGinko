@@ -4,11 +4,13 @@ angular.module('timeSheetApp')
     .controller('SlaController', function ($rootScope, $scope, $state, $timeout,
     		ProjectComponent, SiteComponent, SlaComponent, $http,$stateParams,$location) {
 
-
     	$scope.sla = {};
+    	$scope.escalation = {};
+    	var slas =new Array();
+    	var escalations = new Array();
+    	var slaList = [];
     	$scope.selectedProject = {};
     	$scope.selectedSite = {};
-    	$scope.sevCat = {};
     	$rootScope.loginView = false;
     	
 			//init load
@@ -58,17 +60,21 @@ angular.module('timeSheetApp')
                 
                 $scope.addSla = function() {
 //					if(jQuery.isEmptyObject($scope.searchProject) == false)
-                	console.log($scope.sla);
-                	console.log('selected project - ' + JSON.stringify($scope.selectedSite));
-                	console.log($scope.selectedSite.id);
-                	$scope.sla.siteId = $scope.selectedSite.id;
-                	console.log($scope.sla);
-                	SlaComponent.createSla($scope.sla).then(function (data) {
+                	for(var i = 0; i < slaList.length; i++){
+                	console.log("SlaList add " + JSON.stringify(slaList));
+                	$scope.sla = slaList[i];
+                	var objString = JSON.stringify($scope.sla); 
+                	objString = objString.substr(1);
+                	objString = objString.slice(0, -1);
+                	console.log("Sla add " + JSON.stringify(objString));
+                	console.log("Sla add " + JSON.stringify($scope.sla));
+                	SlaComponent.createSla(objString).then(function (data) {
                 		$scope.saveSla = data;
                 		console.log("SLA saving");
                 		console.log(data);
                 		$scope.loadingStop();
                 	});
+                	}
                 };
                 
                 $scope.loadProjects = function() {
@@ -82,7 +88,7 @@ angular.module('timeSheetApp')
                 };
                 
                 $scope.loadSites = function () {
-                	console.log('selected project - ' + JSON.stringify($scope.selectedProject));
+                	console.log("selected project - " + JSON.stringify($scope.selectedProject));
                 	if($scope.selectedProject) {
                     	ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
                             $scope.sites = data;
@@ -95,9 +101,30 @@ angular.module('timeSheetApp')
                 	}
                 };
                 
-                $scope.addSeverityCategory = function () {
-                	console.log("SEVCAT *** " + $scope.sla.severity	)
-                	$scope.sevCat.severity = $scope.sla.severity;
-                	$scope.sevCat.hrs = $scope.sla.hrs;
+                $scope.addSlaEscalations = function(){
+                	console.log("Sla " + JSON.stringify($scope.sla));
+                	console.log("Escaltion " + JSON.stringify($scope.escalation));
+                	$scope.sla.projectId = $scope.selectedProject.id;
+                	$scope.sla.siteId = $scope.selectedSite.id;
+                	escalations.push($scope.escalation);
+                	$scope.escalation = {};
+                	$scope.sla.slaesc = escalations;
+                	
+                	console.log("Escaltion " + JSON.stringify($scope.sla));
+                	
+                };
+                
+                $scope.addSlas = function(){
+                	console.log("SLAa " + JSON.stringify($scope.sla));
+                	escalations = [];
+                	//$scope.addSla();
+                	slas.push($scope.sla);
+                	$scope.sla = {};
+                	console.log("SlaEscaltions " + JSON.stringify(slas));
+                	slaList.push(slas);
+                	slas = [];
+                	
+                	console.log("SlaList " + JSON.stringify(slaList));
                 }
+              
     });
