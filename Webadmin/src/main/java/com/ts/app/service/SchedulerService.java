@@ -146,7 +146,7 @@ public class SchedulerService extends AbstractService {
 
 	}
 
-	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
+	//@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
 //	 @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
 	public void runDailyTask() {
 	    log.debug("Run Daily Tasks");
@@ -204,7 +204,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
+	//@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
 	// @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
 	public void runWeeklyTask() {
 		if (env.getProperty("scheduler.weeklyJob.enabled").equalsIgnoreCase("true")) {
@@ -259,7 +259,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
+	//@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
 	// @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
 	public void runMonthlyTask() {
 		if (env.getProperty("scheduler.monthlyJob.enabled").equalsIgnoreCase("true")) {
@@ -288,7 +288,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(initialDelay = 60000, fixedRate = 900000) // Runs every 15 mins
+	//@Scheduled(initialDelay = 60000, fixedRate = 900000) // Runs every 15 mins
 	public void overDueTaskCheck() {
 		schedulerHelperService.overdueJobReport();
 	}
@@ -415,21 +415,21 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(cron = "0 */30 * * * ?")
+	//@Scheduled(cron = "0 */30 * * * ?")
 	public void attendanceShiftReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		schedulerHelperService.generateDetailedAttendanceReport(cal.getTime(), true, false, false);
 	}
 
 
-	@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
+	//@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
 	public void attendanceDetailReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_YEAR, -1);
 		schedulerHelperService.generateDetailedAttendanceReport(cal.getTime(), false, true, false);
 	}
 
-	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
+	//@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
 	public void attendanceCheckOutTask() {
 		schedulerHelperService.autoCheckOutAttendance(this);
 	}
