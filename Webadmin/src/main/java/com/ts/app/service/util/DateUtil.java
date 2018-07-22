@@ -120,6 +120,15 @@ public class DateUtil {
 		return StringUtils.EMPTY;
 	}
 	
+	public static String formatTo24HourDateTimeString(Date date) {
+		if(date != null) {
+	        DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+	        String strDate = dtFormat.format(date);
+	        return strDate;
+		}
+		return StringUtils.EMPTY;
+	}
+	
 	public static Date parseToDateTime(String time) {
 		if(org.apache.commons.lang3.StringUtils.isNotEmpty(time)) {
 	        DateFormat dtFormat = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");

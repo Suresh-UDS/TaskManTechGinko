@@ -200,7 +200,7 @@ public class AttendanceService extends AbstractService {
 						dbAttn.setShiftStartTime(startTime);  //2 PM considered as shift starts
 						dbAttn.setShiftEndTime(endTime);
 						//break;
-					}else if(startCal.before(checkInCal)) {
+					}else if(checkInCal.before(endCalLeadTime) && startCal.before(checkInCal)) {
 						dbAttn.setShiftStartTime(startTime);
 						dbAttn.setShiftEndTime(endTime);
 					}
@@ -249,6 +249,17 @@ public class AttendanceService extends AbstractService {
 		log.debug("seach criteria"+" - " +sc.getEmployeeEmpId()+" - " +sc.getSiteId()+" - " +sc.getCheckInDateTimeFrom()+" - " +sc.getCheckInDateTimeTo());
 		SearchResult<AttendanceDTO> result = findBySearchCrieria(sc);
 		//if(result == null || CollectionUtils.isEmpty(result.getTransactions())) {
+		boolean isCheckInAllowed = true;
+		if(result != null && !CollectionUtils.isEmpty(result.getTransactions())) {
+			List<AttendanceDTO> attns = result.getTransactions();
+			for(AttendanceDTO attnd : attns) {
+				if(attnd.getCheckOutTime() == null) {
+					isCheckInAllowed = false;
+					break;
+				}
+			}
+		}
+		if(isCheckInAllowed) {
 		    log.debug("no transactions" + attnDto.getEmployeeEmpId());
 			Employee emp = employeeRepository.findByEmpId(attnDto.getEmployeeEmpId());
 			Site site = siteRepository.findOne(attnDto.getSiteId());
@@ -318,6 +329,7 @@ public class AttendanceService extends AbstractService {
 
 		}
 		*/
+		}
 		return attnDto;
 	}
 
