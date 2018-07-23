@@ -297,7 +297,7 @@ public class AttendanceService extends AbstractService {
                 long dateTime = new Date().getTime();
                 attnDto = s3ServiceUtils.uploadCheckInImage(attn.getCheckInImage(), attnDto, dateTime);
                 attnDto.setUrl(attnDto.getUrl());
-                attn.setCheckInImage(attn.getCheckInImage());
+                attn.setCheckInImage(attnDto.getCheckInImage());
             }
             //mark the shift timings
             findShiftTiming(true,attnDto, attn);
