@@ -35,7 +35,7 @@
 
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label">Title<span class="red-star">*</span></label> 
+													<label class="control-label">Title<span class="red-star">*</span></label>
 													   <input
 														id='quotationTitle' ng-model="quotation.title"
 														class='form-control' name='quotationTitle' type='text'
@@ -98,9 +98,9 @@
                                                                <!--uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"-->
                                                                <!--ng-blur="loadSites()"-->
                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
-                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span> 
-                                                        <select class=" form-control " ng-model="selectedProject" ng-change="loadSites()" 
-                                                        name="projects" 
+                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <select class=" form-control " ng-model="selectedProject" ng-change="loadSites()"
+                                                        name="projects"
                                                        ng-options="project as project.name for project in projects track by project.id" required>
                                                             <option value="">Please select Client...</option>
                                                         </select>
@@ -135,7 +135,7 @@
                                                         <!--<input ng-focus="loadSites()" type="text" class="form-control"  ng-model="selectedSite" name="siteName" ng-value="selectedSite.name"-->
                                                                <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
-                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span> 
+                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <select class="form-control " ng-model="selectedSite" name="sites"
                                                         ng-init="selectedSite = selected" ng-options="site as site.name for site in sites track by site.id" required>
                                                             <option value="">Please select Site...</option>
@@ -164,12 +164,12 @@
                                                     </div>
                                                 </div>
                                             </div>
-									
+
 									</div>
 									</div>
 								</div>
-								
-								
+
+
 							</div>
 							<div class="col-md-12">
 
@@ -194,13 +194,13 @@
 												>Summary</a></li>
 										</ul>
 										<div class="tab-content TabsContent" style="">
-											
+
 											<div class="tab-pane fade in active pill2" id="pill2">
 												<div class="row">
 
 													<div class="col-md-5">
 														<div class="form-group">
-															<label class="control-label">Service Name</label> 
+															<label class="control-label">Service Name</label>
 															<input ng-model="serviceName"
 																class='form-control' name='serviceName' type='text' value=""
 																ng-minlength='1' ng-maxlength='100'
@@ -219,7 +219,7 @@
 													</div>
 													<div class="col-md-2">
 														<div class="form-group">
-															<label class="control-label">Cost(Fixed)</label> 
+															<label class="control-label">Cost(Fixed)</label>
 															<input ng-model="serviceUnitPrice"
 																class='form-control' name='serviceUnitPrice' type='text' value=""
 																ng-minlength='1' ng-maxlength='5'
@@ -260,7 +260,7 @@
 																<td>{{rcDetail.cost}}</td>
 																<td class="text-right"><a
 																	ng-class="{active: $state.includes('admin')}"
-																	has-authority="ROLE_ADMIN"
+																	has-permission="Quotation:Edit"
 																	ng-click="removeService($index)"
 																	onClick="$('#deleteModal').modal()"
 																	data-target="#myModal"
@@ -287,7 +287,7 @@
 
 													<div class="col-md-5">
 														<div class="form-group">
-															<label class="control-label">Labour Category</label> 
+															<label class="control-label">Labour Category</label>
 															<input ng-model="labourCategory"
 																class='form-control' name='labourCategory' type='text' value=""
 																ng-minlength='1' ng-maxlength='100'
@@ -306,7 +306,7 @@
 													</div>
 													<div class="col-md-2">
 														<div class="form-group">
-															<label class="control-label">Cost(Per Hr)</label> 
+															<label class="control-label">Cost(Per Hr)</label>
 															<input ng-model="labourUnitPrice"
 																class='form-control' name='labourUnitPrice' type='text' value=""
 																ng-minlength='1' ng-maxlength='5'
@@ -348,7 +348,7 @@
 																<td>{{rcDetail.cost}}</td>
 																<td class="text-right"><a
 																	ng-class="{active: $state.includes('admin')}"
-																	has-authority="ROLE_ADMIN"
+
 																	ng-click="removeLabour($index)"
 																	onClick="$('#deleteModal').modal()"
 																	data-target="#myModal"
@@ -374,7 +374,7 @@
 
 													<div class="col-md-5">
 														<div class="form-group">
-															<label class="control-label">Material Name</label> 
+															<label class="control-label">Material Name</label>
 															<input ng-model="materialName"
 																class='form-control' name='materialName' type='text' value=""
 																ng-minlength='1' ng-maxlength='100'
@@ -393,7 +393,7 @@
 													</div>
 													<div class="col-md-2">
 														<div class="form-group">
-															<label class="control-label">Cost</label> 
+															<label class="control-label">Cost</label>
 															<input ng-model="materialUnitPrice"
 																class='form-control' name='materialUnitPrice' type='text' value=""
 																ng-minlength='1' ng-maxlength='5'
@@ -435,7 +435,7 @@
 																<td>{{rcDetail.cost}}</td>
 																<td class="text-right"><a
 																	ng-class="{active: $state.includes('admin')}"
-																	has-authority="ROLE_ADMIN"
+
 																	ng-click="removeMaterial($index)"
 																	onClick="$('#deleteModal').modal()"
 																	data-target="#myModal"
@@ -456,7 +456,7 @@
 
 													</table>
 												</div>
-											</div>											
+											</div>
 											<div class="tab-pane fade pill4" id="pill4">
 
 												<div class="table-responsive tablecard SummaryCard">

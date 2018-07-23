@@ -179,17 +179,17 @@
                                 <td>{{asset.siteName}}</td>
                                 <td class="text-right hoverMe">
 
-                                    <a   has-authority="ROLE_ADMIN"  title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
+                                    <a has-permission="Asset:View"  title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
 
 
 
                                     <div class="HoverBx">
 
-                                        <a   has-authority="ROLE_ADMIN" ui-sref="view-asset({ id: asset.id })"  has-permission="Asset:View"  title="View Asset"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
+                                        <a   has-permission="Asset:View" ui-sref="view-asset({ id: asset.id })"  has-permission="Asset:View"  title="View Asset"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
 
-                                        <a  ng-class="{active: $state.includes('admin')}" has-permission="Asset:Edit" has-authority="ROLE_ADMIN" title="Edit Asset" ui-sref="edit-asset({ id: asset.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                        <a  ng-class="{active: $state.includes('admin')}" has-permission="Asset:Edit" title="Edit Asset" ui-sref="edit-asset({ id: asset.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                                        <a ng-class="{active: $state.includes('admin')}" has-permission="Asset:Delete" has-authority="ROLE_ADMIN" title="Delete Asset"  ng-click="deleteConfirm(asset.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                        <a ng-class="{active: $state.includes('admin')}" has-permission="Asset:Delete" title="Delete Asset"  ng-click="deleteConfirm(asset.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
 
                                     </div>
 
