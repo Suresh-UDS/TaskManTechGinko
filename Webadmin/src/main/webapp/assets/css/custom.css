@@ -1753,3 +1753,23 @@ div.bouncing-container .arrow-down {
 #loop2:hover img {
     opacity: .5;
 }
+
+
+@media (max-width: 768px)
+{
+    .LoginPageCon .flotingIcons
+    {
+        display: none;
+    }
+
+
+}
+@media (max-width: 425px)
+{
+    .LoginPageCon .flotingIcons
+    {
+        display: none;
+    }
+
+
+}
