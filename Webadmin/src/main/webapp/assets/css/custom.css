@@ -1423,10 +1423,16 @@ a.cal-btn i
   .navbar .navbar-brand{
     line-height: 43px !important;
   }
-
+.LoginPageView
+{
+    height: 100% !important;
+}
   .LoginPageCon
   {
       position: relative;
+      background: url("../img/login-bg.jpg") no-repeat;
+      background-size: 100% 100%;
+      min-height: 100% !important;
   }
 .LoginPageCon .flotingIcons
 {
