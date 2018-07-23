@@ -1754,6 +1754,23 @@ div.bouncing-container .arrow-down {
     opacity: .5;
 }
 
+@media (max-width: 1024px) {
+
+
+    .flotingIcons.icon-13 img,.flotingIcons.icon-1 img
+    {
+        width: 85%;
+    }
+    span.flotingIcons.icon-10
+    {
+        right: 20%;
+    }
+    .flotingIcons.icon-10 img
+    {
+        width: 90%;
+    }
+
+}
 
 @media (max-width: 768px)
 {
