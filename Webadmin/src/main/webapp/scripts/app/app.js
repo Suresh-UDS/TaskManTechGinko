@@ -13,6 +13,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
         $rootScope.ENV = ENV;
         $rootScope.VERSION = VERSION;
         $rootScope.stateValue ="";
+        $rootScope.resLoader=false;
 
        /* Principal.identity().then(function(response)
              {
@@ -22,6 +23,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
         $rootScope.logout = function () {
             Auth.logout();
             $state.go('login');
+            $rootScope.resLoader=false;
         };
         $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
             $rootScope.toState = toState;
@@ -174,6 +176,11 @@ angular.module('timeSheetApp', ['LocalStorageModule',
         $stateProvider.state('site', {
             'abstract': true,
             views: {
+
+                'login@': {
+                    templateUrl: 'scripts/app/account/login/login.html',
+                    controller: 'LoginController'
+                },
                 'header@': {
                     templateUrl: 'scripts/components/header/header.html',
                     controller: 'HeaderController'

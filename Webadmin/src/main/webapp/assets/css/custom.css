@@ -1423,10 +1423,16 @@ a.cal-btn i
   .navbar .navbar-brand{
     line-height: 43px !important;
   }
-
+.LoginPageView
+{
+    height: 100% !important;
+}
   .LoginPageCon
   {
       position: relative;
+      background: url("../img/login-bg.jpg") no-repeat;
+      background-size: 100% 100%;
+      min-height: 100% !important;
   }
 .LoginPageCon .flotingIcons
 {
@@ -1530,6 +1536,10 @@ span.flotingIcons.icon-13 {
 .padng-right30
 {
     padding-right: 30px;
+}
+.pad-TB-30
+{
+    padding: 30px 0;
 }
 .form-group.pad-btm0
 {
@@ -1742,4 +1752,41 @@ div.bouncing-container .arrow-down {
 
 #loop2:hover img {
     opacity: .5;
+}
+
+@media (max-width: 1024px) {
+
+
+    .flotingIcons.icon-13 img,.flotingIcons.icon-1 img
+    {
+        width: 85%;
+    }
+    span.flotingIcons.icon-10
+    {
+        right: 20%;
+    }
+    .flotingIcons.icon-10 img
+    {
+        width: 90%;
+    }
+
+}
+
+@media (max-width: 768px)
+{
+    .LoginPageCon .flotingIcons
+    {
+        display: none;
+    }
+
+
+}
+@media (max-width: 425px)
+{
+    .LoginPageCon .flotingIcons
+    {
+        display: none;
+    }
+
+
 }
