@@ -111,6 +111,18 @@ public class AssetSpecification implements Specification<Asset> {
 
 		List<Predicate> orPredicates = new ArrayList<>();
 		log.debug("AssetSpecification toPredicate - searchCriteria userId -" + searchCriteria.getUserId());
+		
+		if(searchCriteria.getSiteId() == 0 && !searchCriteria.isAdmin()){
+    		orPredicates.add(builder.equal(root.get("site").get("user").get("id"),  searchCriteria.getUserId()));
+		}else if(searchCriteria.getSiteId() > 0) {
+    		if(!searchCriteria.isAdmin()) {
+    			orPredicates.add(builder.equal(root.get("site").get("user").get("id"),  searchCriteria.getUserId()));
+    		}
+		}
+		if(CollectionUtils.isNotEmpty(searchCriteria.getSiteIds())){
+    		Predicate path = root.get("site").get("id").in(searchCriteria.getSiteIds());
+			orPredicates.add(path);
+		}
 
 		Predicate finalExp = null;
 		if (orPredicates.size() > 0) {

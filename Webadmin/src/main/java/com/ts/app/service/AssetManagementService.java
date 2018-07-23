@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -999,12 +1000,19 @@ public class AssetManagementService extends AbstractService {
 		Employee employee = user.getEmployee();
 		log.debug(">>> user <<<"+ employee.getFullName() +" and "+employee.getId());
 		List<EmployeeProjectSite> sites = employee.getProjectSites();
-		List<Long> siteIds = new ArrayList<Long>();
-		for (EmployeeProjectSite site : sites) {
-			siteIds.add(site.getSite().getId());
-		}
 		
 		if (searchCriteria != null) {
+			
+			List<Long> siteIds = new ArrayList<Long>();
+			if(employee != null && !user.isAdmin()) {
+				for (EmployeeProjectSite site : sites) {
+					siteIds.add(site.getSite().getId());
+					searchCriteria.setSiteIds(siteIds);
+				}
+			}else if(user.isAdmin()){
+				searchCriteria.setAdmin(true);
+			}
+			
 			Pageable pageRequest = null;
 			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
 				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
@@ -1024,115 +1032,12 @@ public class AssetManagementService extends AbstractService {
 			
             log.debug("AssetSpecification toPredicate - searchCriteria get consolidated status -"+ searchCriteria.isConsolidated());
             
-/*			if (!searchCriteria.isFindAll()) {
-				log.debug(">>> inside search findall <<<");
-				
-				if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName()) && !StringUtils.isEmpty(searchCriteria.getAssetName()) && searchCriteria.getProjectId() > 0
-						&& searchCriteria.getSiteId() > 0) {
-					page = assetRepository.findByAllCriteria(searchCriteria.getAssetTypeName(), searchCriteria.getAssetName(), searchCriteria.getProjectId(),
-							searchCriteria.getSiteId(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && !StringUtils.isEmpty(searchCriteria.getAssetCode())) {
-					page = assetRepository.findAssetByTitleAndCode(searchCriteria.getAssetTitle(), searchCriteria.getAssetCode(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && !StringUtils.isEmpty(searchCriteria.getAssetTypeName())) {
-					page = assetRepository.findAssetByTitleAndType(searchCriteria.getAssetTitle(), searchCriteria.getAssetTypeName(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && !StringUtils.isEmpty(searchCriteria.getAssetGroupName())) {
-					page = assetRepository.findAssetByTitleAndGroup(searchCriteria.getAssetTitle(), searchCriteria.getAssetGroupName(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && searchCriteria.getSiteId() > 0) {
-					page = assetRepository.findAssetByTitleAndSiteId(searchCriteria.getAssetTitle(), searchCriteria.getSiteId(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && searchCriteria.getProjectId() > 0) {
-					page = assetRepository.findAssetByTitleAndProjectId(searchCriteria.getAssetTitle(), searchCriteria.getProjectId(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && !StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
-					page = assetRepository.findAssetByTitleAndAcquiredDate(searchCriteria.getAssetTitle(), DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
-				} 
-				
-				else if (!StringUtils.isEmpty(searchCriteria.getAssetCode()) && !StringUtils.isEmpty(searchCriteria.getAssetTypeName())) {
-					page = assetRepository.findAssetByCodeAndType(searchCriteria.getAssetCode(), searchCriteria.getAssetTypeName(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetCode()) && !StringUtils.isEmpty(searchCriteria.getAssetGroupName())) {
-					page = assetRepository.findAssetByCodeAndGroup(searchCriteria.getAssetCode(), searchCriteria.getAssetGroupName(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetCode()) && searchCriteria.getSiteId() > 0) {
-					page = assetRepository.findAssetByCodeAndSiteId(searchCriteria.getAssetCode(), searchCriteria.getSiteId(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetCode()) && searchCriteria.getProjectId() > 0) {
-					page = assetRepository.findAssetByCodeAndProjectId(searchCriteria.getAssetCode(), searchCriteria.getProjectId(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetCode()) && !StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
-					page = assetRepository.findAssetByCodeAndAcquiredDate(searchCriteria.getAssetCode(), DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
-				}
-				
-				else if (!StringUtils.isEmpty(searchCriteria.getAssetGroupName()) && !StringUtils.isEmpty(searchCriteria.getAssetTypeName())) {
-					page = assetRepository.findAssetByGroupAndType(searchCriteria.getAssetGroupName(), searchCriteria.getAssetTypeName(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetGroupName()) && searchCriteria.getSiteId() > 0) {
-					page = assetRepository.findAssetByGroupAndSiteId(searchCriteria.getAssetGroupName(), searchCriteria.getSiteId(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetGroupName()) && searchCriteria.getProjectId() > 0) {
-					page = assetRepository.findAssetByGroupAndProjectId(searchCriteria.getAssetGroupName(), searchCriteria.getProjectId(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetGroupName()) && !StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
-					page = assetRepository.findAssetByGroupAndAcquiredDate(searchCriteria.getAssetGroupName(), DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
-				}
-				
-				else if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName()) && searchCriteria.getSiteId() > 0) {
-					page = assetRepository.findAssetByTypeAndSiteId(searchCriteria.getAssetTypeName(), searchCriteria.getSiteId(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName()) && searchCriteria.getProjectId() > 0) {
-					page = assetRepository.findAssetByTypeAndProjectId(searchCriteria.getAssetTypeName(), searchCriteria.getProjectId(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName()) && !StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
-					page = assetRepository.findAssetByTypeAndAcquiredDate(searchCriteria.getAssetTypeName(), DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
-				}
-				
-				 else if (!StringUtils.isEmpty(searchCriteria.getSiteId() > 0) && searchCriteria.getProjectId() > 0) {
-					page = assetRepository.findAssetBySiteAndProjectId(searchCriteria.getSiteId(), searchCriteria.getProjectId(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getSiteId() > 0) && !StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
-					page = assetRepository.findAssetBySiteAndAcquiredDate(searchCriteria.getSiteId(), DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
-				}
-								
-				else if (!StringUtils.isEmpty(searchCriteria.getProjectId() > 0) && !StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
-					page = assetRepository.findAssetByProjectAndAcquiredDate(searchCriteria.getProjectId(), DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
-				}
-				
-				else if (!StringUtils.isEmpty(searchCriteria.getAssetCode())) {
-					page = assetRepository.findByAssetCode(searchCriteria.getAssetCode(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle())) {
-					page = assetRepository.findByAssetTitle(searchCriteria.getAssetTitle(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName())) {
-					page = assetRepository.findAssetByTypeName(searchCriteria.getAssetTypeName(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetGroupName())) {
-					page = assetRepository.findAssetByGroupName(searchCriteria.getAssetGroupName(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
-					page = assetRepository.findAssetByAcquireDate(DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetName())) {
-					page = assetRepository.findByName(siteIds, searchCriteria.getAssetName(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName())) {
-					page = assetRepository.findByAssetType(siteIds, searchCriteria.getAssetTypeName(), pageRequest);
-				} else if (searchCriteria.getSiteId() > 0) {
-					page = assetRepository.findBySiteId(searchCriteria.getSiteId(), pageRequest);
-				} else if (searchCriteria.getProjectId() > 0) {
-					page = assetRepository.findByProjectId(searchCriteria.getProjectId(), pageRequest);
-				}
-			} else {
-				log.debug(">>> inside search findall else part <<<");
-				if (CollectionUtils.isNotEmpty(siteIds)) {
-					page = assetRepository.findAll(siteIds, pageRequest);
-				} else {
-					page = assetRepository.findAllAsset(pageRequest);
-				}
-			}*/
 			if(!searchCriteria.isConsolidated()) {
 				log.debug(">>> inside search consolidate <<<");
     			page = assetRepository.findAll(new AssetSpecification(searchCriteria,true),pageRequest);
     			allAssetsList.addAll(page.getContent());
     		}
 			
-			/*if (page != null) {
-				if (transactions == null) {
-					transactions = new ArrayList<AssetDTO>();
-				}
-				List<Asset> assetList = page.getContent();
-				if (CollectionUtils.isNotEmpty(assetList)) {
-					for (Asset asset : assetList) {
-						transactions.add(mapToModel(asset, false));
-					}
-				}
-				if (CollectionUtils.isNotEmpty(transactions)) {
-					buildSearchResult(searchCriteria, page, transactions, result);
-				}
-				
-			}*/
 			if(CollectionUtils.isNotEmpty(allAssetsList)) {
 				if(transactions == null) {
 					transactions = new ArrayList<AssetDTO>();
