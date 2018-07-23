@@ -193,10 +193,11 @@
                                 <td>{{employee.fullName}}</td>
 							   <td>{{employee.designation}}</td>
 							   <td>{{employee.managerName}}</td>
-							   <td>{{employee.projectSites[0].projectName}}</td>
-							   <td>{{employee.projectSites[0].siteName}}</td>
+							   <td>{{employee.projectName}}</td>
+							   <td>{{employee.siteName}}</td>
 							   <td>{{employee.createdDate}}</td>
-							   <td>{{employee.active}}</td>
+							   <td><span ng-if='employee.active == y' class="label label-success">Yes</span>
+                                <span ng-if='employee.active == N' class="label label-danger">No</span></td>
                             </tr>
 
 

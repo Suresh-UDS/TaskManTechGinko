@@ -345,10 +345,11 @@ angular.module('timeSheetApp')
          }
 
          $scope.searchFilter1 = function () {
-            $scope.SearchEmployeeId = null;
-            $scope.SearchEmployeeName = null;
-            $scope.searchCriteria.employeeEmpId =null;
-            $scope.searchCriteria.name =null;
+            $scope.searchStatus = null;
+            $scope.searchCriteria.jobStatus =null;
+            $scope.searchCriteria.assignedStatus =null;
+            $scope.searchCriteria.completedStatus =null;
+            $scope.searchCriteria.overdueStatus =null;
             $scope.setPage(1);
             $scope.search();
          }
@@ -356,6 +357,7 @@ angular.module('timeSheetApp')
 
 
         $scope.search = function () {
+            $scope.noData = false;
         	var reportUid = $stateParams.uid;
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         		var searchCriteria = {
@@ -368,7 +370,9 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.currPage = currPageVal;
                 $scope.searchCriteria.findAll = false;
 
-                if(!$scope.selectedProject && !$scope.selectedSite && !$scope.selectedStatus && !$scope.selectedJob){
+               /* && !$scope.selectedJob*/
+
+                if(!$scope.searchProject && !$scope.searchSite && !$scope.searchStatus){
                     $scope.searchCriteria.findAll = true;
                 }
 
@@ -380,27 +384,36 @@ angular.module('timeSheetApp')
                     $scope.searchCriteria.checkInDateTimeTo = $scope.selectedDateToSer;
                 }
 
-                if($scope.selectedProject) {
-                    $scope.searchCriteria.projectId = $scope.selectedProject.id;
+                if($scope.searchProject) {
+                    $scope.searchCriteria.projectId = $scope.searchProject.id;
+                }else{
+                    $scope.searchCriteria.projectId = null;
                 }
 
-                if($scope.selectedSite) {
-                    $scope.searchCriteria.siteId = $scope.selectedSite.id;
+                if($scope.searchSite) {
+                    $scope.searchCriteria.siteId = $scope.searchSite.id;
+                }else{
+                     $scope.searchCriteria.siteId = null;
                 }
-                console.log('selected status - '+ JSON.stringify($scope.selectedStatus));
-                if($scope.selectedStatus){
-                $scope.searchCriteria.jobStatus = $scope.selectedStatus;
-                if($scope.selectedStatus.name == 'ASSIGNED'){
+                console.log('selected status - '+ JSON.stringify($scope.searchStatus));
+                if($scope.searchStatus){
+                $scope.searchCriteria.jobStatus = $scope.searchStatus;
+                if($scope.searchStatus.name == 'ASSIGNED'){
                     $scope.searchCriteria.assignedStatus = true;
-                }else if($scope.selectedStatus.name == 'OPEN'){
+                }else if($scope.searchStatus.name == 'OPEN'){
 
-                }else if($scope.selectedStatus.name == 'INPROGRESS'){
+                }else if($scope.searchStatus.name == 'INPROGRESS'){
 
-                }else if($scope.selectedStatus.name == 'COMPLETED'){
+                }else if($scope.searchStatus.name == 'COMPLETED'){
                     $scope.searchCriteria.completedStatus = true;
-                }else if($scope.selectedStatus.name == 'OVERDUE'){
+                }else if($scope.searchStatus.name == 'OVERDUE'){
                     $scope.searchCriteria.overdueStatus = true;
                 }
+              }else{
+                    $scope.searchCriteria.jobStatus =null;
+                    $scope.searchCriteria.assignedStatus =null;
+                    $scope.searchCriteria.completedStatus =null;
+                    $scope.searchCriteria.overdueStatus =null;
               }
 
 
@@ -416,8 +429,8 @@ angular.module('timeSheetApp')
 
             }
             else{
-                // $scope.searchCriteria.columnName ="id";
-                // $scope.searchCriteria.sortByAsc = true;
+                $scope.searchCriteria.columnName ="title";
+                $scope.searchCriteria.sortByAsc = true;
             }
 
 

@@ -48,8 +48,9 @@
                 </ion-col>
             </ion-row>
             <ion-row>
-                <ion-col col-3 *ngFor="let image of completedImages;let i of index" class="">
-                    <img [src]="image" class="job-img margin-bottom25" (click)="viewOnlyImage(i,image)">
+                <!--<ion-col col-3 *ngFor="let image of completedImages;let i of index" class="">-->
+                <ion-col col-3 *ngFor="let image of jobDetails.images;let i of index" class="">
+                <img [src]="image.url" class="job-img margin-bottom25" (click)="viewOnlyImage(i,image)">
                 </ion-col>
             </ion-row>
         </div>
@@ -70,8 +71,8 @@
                 <!--<p text-center>No Checklist Found</p>-->
             <!--</div>-->
         <!--</ion-row>-->
-        <div text-right>
-            <button class="btn btn-warning center" (click)="presentCheckListModal(jobDetails.checklistItems)">
+        <div text-right *ngIf="jobDetails.checklistItems?.length > 0">
+            <button class="btn btn-warning center" (click)="presentCheckListModal(jobDetails)">
                 Checklist
             </button>
         </div>

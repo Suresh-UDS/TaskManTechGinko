@@ -458,6 +458,7 @@ angular.module('timeSheetApp')
 
 
         $scope.search = function () {
+            $scope.noData = false;
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         	if(!$scope.searchCriteria) {
             	var searchCriteria = {
@@ -533,7 +534,7 @@ angular.module('timeSheetApp')
                 $scope.employees = data.transactions;
                 $scope.employeesLoader = true;
 
-                console.log('Employee search result list -' + $scope.employees);
+                console.log("Employee search result list -", $scope.employees);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
 

@@ -683,18 +683,18 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr *ngFor="let readings of assetDetails.reading">
-                            <td class="text-center">{{readings.createdDate| date : 'dd/ MM /yy'}}
-                            <p>{{readings.createdDate|date : 'hh:mm a'}}</p></td>
-                            <td class="text-center">{{readings.name}}</td>
-                            <td class="text-center" *ngIf="readings.consumption">{{readings.consumption}}
-                                <p class="clr-orange">Initial Value:<span class="clr-black">{{readings.initialValue}}</span></p>
-                                <p class="clr-orange">Final Value:<span class="clr-black">{{readings.finalValue}}</span></p>
-                            </td>
-                            <td class="text-center" *ngIf="readings.value>0">NA</td>
-                            <td text-center>{{readings.value}}</td>
-                            <td class="text-center">{{readings.uom}}</td>
-                        </tr>
+                            <tr *ngFor="let readings of assetDetails.reading">
+                                <td class="text-center">{{readings.createdDate| date : 'dd/ MM /yy'}}
+                                <p>{{readings.createdDate|date : 'hh:mm a'}}</p></td>
+                                <td class="text-center">{{readings.name}}</td>
+                                <td class="text-center" *ngIf="readings.consumption">{{readings.consumption}}
+                                    <p class="clr-orange">Initial Value:<span class="clr-black">{{readings.initialValue}}</span></p>
+                                    <p class="clr-orange">Final Value:<span class="clr-black">{{readings.finalValue}}</span></p>
+                                </td>
+                                <td class="text-center" *ngIf="readings.value>0">NA</td>
+                                <td text-center>{{readings.value}}</td>
+                                <td class="text-center">{{readings.uom}}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

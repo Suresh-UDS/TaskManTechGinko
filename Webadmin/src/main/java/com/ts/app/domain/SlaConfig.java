@@ -2,7 +2,7 @@ package com.ts.app.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,7 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -25,8 +24,11 @@ public class SlaConfig extends AbstractAuditingEntity implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy =GenerationType.AUTO)
-	@Column(name = "SlaId")
 	private long id;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "projectId", nullable = false)
+	private Project project;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "siteId", nullable = false)
@@ -35,7 +37,7 @@ public class SlaConfig extends AbstractAuditingEntity implements Serializable{
 	private String processType;
 	
 	@Column(nullable = false)
-	private ArrayList<String> category = new ArrayList<String>();
+	private ArrayList<String> category;
 	
 	@Column(nullable = false)
 	private String severity;
@@ -43,16 +45,23 @@ public class SlaConfig extends AbstractAuditingEntity implements Serializable{
 	@Column(nullable = false)
 	private int hours;
 	
-//	@OneToMany(cascade = CascadeType.ALL)
-//	@JoinTable(name = "sla_config_esc_config", joinColumns = { @JoinColumn(name = "SlaId") }, inverseJoinColumns = { @JoinColumn(name = "SlaEscId") })
-//	private List<SlaEscalationConfig> slaesc = new ArrayList<SlaEscalationConfig>();
-//	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "sla", fetch = FetchType.LAZY)
+	private Set<SlaEscalationConfig> slaesc;
+	
 	public long getId() {
 		return id;
 	}
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
 	}
 
 	public Site getSite() {
@@ -78,7 +87,7 @@ public class SlaConfig extends AbstractAuditingEntity implements Serializable{
 	public void setCategory(ArrayList<String> category) {
 		this.category = category;
 	}
-	
+
 	public String getSeverity() {
 		return severity;
 	}
@@ -95,12 +104,13 @@ public class SlaConfig extends AbstractAuditingEntity implements Serializable{
 		this.hours = hours;
 	}
 
-//	public List<SlaEscalationConfig> getSlaesc() {
-//		return slaesc;
-//	}
-//
-//	public void setSlaesc(List<SlaEscalationConfig> slaesc) {
-//		this.slaesc = slaesc;
-//	}
+	public Set<SlaEscalationConfig> getSlaesc() {
+		return slaesc;
+	}
+
+	public void setSlaesc(Set<SlaEscalationConfig> slaesc) {
+		this.slaesc = slaesc;
+	}
+
 
 }

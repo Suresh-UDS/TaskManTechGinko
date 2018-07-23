@@ -781,6 +781,7 @@ angular.module('timeSheetApp')
          }
 
         $scope.search = function () {
+                $scope.noData = false;
 	        	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
 	        	if(!$scope.searchCriteria) {
 	            	var searchCriteria = {
@@ -814,13 +815,13 @@ angular.module('timeSheetApp')
 	            if($scope.searchEmployeeId){
 	                   $scope.searchCriteria.employeeEmpId = $scope.searchEmployeeId;
 	            }else{
-                       $scope.searchCriteria.employeeEmpId = "";
+                       $scope.searchCriteria.employeeEmpId = null;
                 }
 	
 	            if($scope.searchEmployeeName){
 	                   $scope.searchCriteria.name = $scope.searchEmployeeName;
 	            }else{
-                       $scope.searchCriteria.name = "";
+                       $scope.searchCriteria.name = null;
                 }
 	
 	            //-------

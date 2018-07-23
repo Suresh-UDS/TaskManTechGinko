@@ -141,6 +141,9 @@ public class JobManagementService extends AbstractService {
     
     @Value("${AWS.s3-checklist-path}")
     private String checkListpath;
+    
+    @Value("${AWS.s3-checkinout-path}")
+    private String checkInOutImagePath;
 
     public void updateJobStatus(long siteId, JobStatus toBeJobStatus) {
 		//UPDATE ALL OVERDUE JOB STATUS
@@ -1056,11 +1059,30 @@ public class JobManagementService extends AbstractService {
 			jobDto.setTicketId(job.getTicket().getId());
 			jobDto.setTicketName(job.getTicket().getTitle());
 		}
+		if(jobDto.getChecklistItems() != null) { 
+			List<JobChecklistDTO> jobChecklists = jobDto.getChecklistItems();
+			for(JobChecklistDTO jobChecklist : jobChecklists) { 
+				if(jobChecklist.getImage_1() != null) { 
+					String imageUrl_1 =  cloudFrontUrl + bucketEnv + checkListpath + jobChecklist.getImage_1();
+					jobChecklist.setImageUrl_1(imageUrl_1);
+				}
+				if(jobChecklist.getImage_2() != null) { 
+					String imageUrl_2 =  cloudFrontUrl + bucketEnv + checkListpath + jobChecklist.getImage_2();
+					jobChecklist.setImageUrl_2(imageUrl_2);
+				}
+				if(jobChecklist.getImage_3() != null) { 
+					String imageUrl_3 =  cloudFrontUrl + bucketEnv + checkListpath + jobChecklist.getImage_3();
+					jobChecklist.setImageUrl_3(imageUrl_3);
+				}
+			}
+		}
 		List<CheckInOutImage> images = checkInOutImageRepository.findAll(job.getId());
 		List<CheckInOutImageDTO> imageDtos = new ArrayList<CheckInOutImageDTO>();
 		if(CollectionUtils.isNotEmpty(images)) {
 			for(CheckInOutImage image : images) {
-				imageDtos.add(mapperUtil.toModel(image, CheckInOutImageDTO.class));
+				CheckInOutImageDTO imageDTO = mapperUtil.toModel(image, CheckInOutImageDTO.class);
+				imageDTO.setUrl(cloudFrontUrl + bucketEnv + checkInOutImagePath + image.getPhotoOut());
+				imageDtos.add(imageDTO);
 			}
 		}
 		jobDto.setImages(imageDtos);

@@ -183,7 +183,7 @@
                                         </span>
                                     </span>
                                 </th>
-                                <th>Project
+                                <th>Client
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('project.name')" ng-class="isActiveAsc == 'project.name' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
@@ -381,7 +381,7 @@
                                 <div class="form-group dateFilterCon">
                                     <label class="label-control">From date</label>
                                     <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
-                                    <input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedDateFrom" />
+                                    <input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedDateFrom" autocomplete="off" />
 
                                 </div>
                             </div>
@@ -393,13 +393,24 @@
                                 <div class="form-group dateFilterCon">
                                     <label class="label-control">To date</label>
                                     <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
-                                    <input type="text" class="form-control datepicker"  id="dateFilterTo"   ng-model="selectedDateTo"/>
+                                    <input type="text" class="form-control datepicker"  id="dateFilterTo"   ng-model="selectedDateTo" autocomplete="off" />
 
                                 </div>
 
                             </div>
                         </div>
                         <div class="col-xs-12 col-md-4">
+                            <div class="form-group">
+                                <div class="dropdown ">
+                                    <label class="label-control">Select Status</label>
+                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <select class="form-control " ng-model="searchStatus"  ng-options="status as status for status in statuses">
+                                        <option value="">Select Status...</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="col-xs-12 col-md-4">
                             <div class="dropdown">
                                 <div class="form-group">
                                     <label class="label-control">Select Client</label>
@@ -409,10 +420,10 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                     </div>
-                    <div class="row">
+                   <!--  <div class="row">
 
                         <div class="col-xs-12 col-md-4">
                             <div class="dropdown" >
@@ -437,7 +448,7 @@
                             </div>
                         </div>
 
-                    </div>
+                    </div> -->
 
                 </div>
                 <div class="modal-footer">

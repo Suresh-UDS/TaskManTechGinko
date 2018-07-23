@@ -28,11 +28,11 @@
       <ion-item #item  class="bottom-border emp padding-left0"  >
         <ion-row class="margin0">
           <ion-col col-2>
-            <ion-avatar item-start *ngIf="emp.enrolled_face" >
-              <img  [src]="emp.enrolled_face" >
+            <ion-avatar item-start *ngIf="emp.url" >
+              <img  [src]="emp.url" >
             </ion-avatar>
-            <p *ngIf="!emp.enrolled_face && first(emp.name)"></p>
-            <ion-avatar item-start *ngIf="!emp.enrolled_face" class="emp-round">
+            <p *ngIf="!emp.url && first(emp.name)"></p>
+            <ion-avatar item-start *ngIf="!emp.url" class="emp-round">
               <p class="margin-auto">{{firstLetter}}</p>
             </ion-avatar>
           </ion-col>

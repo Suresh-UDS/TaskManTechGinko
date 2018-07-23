@@ -18,6 +18,8 @@ import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
 import {FileTransferObject, FileUploadOptions, FileTransfer} from "@ionic-native/file-transfer";
 import set = Reflect.set;
 import {ScanQR} from "../jobs/scanQR";
+import {OfflineAsset} from "../offline-asset/offline-asset";
+import {ScanQRAsset} from "./scanQR-asset";
 /**
  * Generated class for the AssetList page.
  *
@@ -61,16 +63,19 @@ export class AssetList {
   ionViewWillEnter()
   {
       console.log("Check Network Connection");
+      this.componentService.showLoader("Loading Assets");
+
       if(this.network.type!='none'){
 
-          //online
+          // //online
           this.assetService.findAllAssets().subscribe(
               response=>{
-                  // this.componentService.closeLoader()
+                  this.componentService.closeAll();
                   console.log(response);
                   this.assetList = response;
               },
               error=>{
+                  this.componentService.closeAll();
                   console.log("");
               }
           );
@@ -78,18 +83,18 @@ export class AssetList {
       }else{
 
           //     //offline
-          setTimeout(() => {
-              this.dbService.getAsset().then(
-                  (res)=>{
-                      this.componentService.closeLoader();
-                      console.log(res);
-                      this.assetList = res;
-                  },
-                  (err)=>{
-                      this.assetList = [];
-                      this.componentService.closeLoader()
-                  })
-          },3000);
+          // setTimeout(() => {
+          //     this.dbService.getAsset().then(
+          //         (res)=>{
+          //             this.componentService.closeLoader();
+          //             console.log(res);
+          //             this.assetList = res;
+          //         },
+          //         (err)=>{
+          //             this.assetList = [];
+          //             this.componentService.closeLoader()
+          //         })
+          // },3000);
 
       }
 
@@ -103,29 +108,19 @@ export class AssetList {
       // After Set Pagination
       // var searchCriteria={}
       // this.getAsset(searchCriteria)
-
-
-
-
-
-
-
       if(this.navParams.get('text'))
       {
           this.componentService.closeLoader();
           var text = this.navParams.get('text');
-
-
-          this.dbService.getAssetByCode(text).then(
-          // this.assetService.getAssetByCode(text).subscribe(
+          this.assetService.getAssetByCode(text).subscribe(
               response=>{
                   this.componentService.showToastMessage('Asset found, navigating..','bottom')
                   console.log("Search by asset code response");
                   console.log(response);
                   window.document.querySelector('ion-app').classList.add('transparentBody')
                   // this.navCtrl.setRoot(AssetList,{assetDetails:response,qr:true});
-                  // this.navCtrl.push(AssetView,{assetDetails:response}); //online
-                  this.navCtrl.push(AssetView,{assetDetails:response[0]}); //offline
+                  this.navCtrl.push(AssetView,{assetDetails:response}); //online
+                  // this.navCtrl.push(AssetView,{assetDetails:response[0]}); //offline
 
               },
               err=>{
@@ -328,7 +323,7 @@ export class AssetList {
   }
 
   scanQR(){
-      this.navCtrl.push(ScanQR)
+      this.navCtrl.push(ScanQRAsset);
 
 
       // let modal = this.modalCtrl.create(ScanQR);
@@ -344,7 +339,9 @@ export class AssetList {
   }
 
     viewAsset(asset){
-      this.navCtrl.push(AssetView,{assetDetails:asset});
+      console.log("asset");
+      console.log(asset);
+      this.navCtrl.push(OfflineAsset,{assetDetails:asset});
     }
 
     // Pull to refresh

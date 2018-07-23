@@ -1,4 +1,4 @@
-<div ng-init="initLoad()">
+<div ng-init="loadSlaList()">
 
     <div class="row">
 
@@ -71,11 +71,11 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>UDS</td>
-                                <td>HDFC kodambakkam</td>
-                                <td>Job</td>
-                                <td>yes</td>
+                            <tr ng-repeat = "slalist in slaList">
+                                <td>{{slalist.projectName}}</td>
+                                <td>{{slalist.siteName}}</td>
+                                <td>{{slalist.processType}}</td>
+                                <td>{{slalist.active}}</td>
                                 <td class="text-right hoverMe">
 
                                     <a   has-authority="ROLE_ADMIN"  title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
