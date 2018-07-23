@@ -188,8 +188,8 @@
                                 <td>{{employee.name}} {{employee.lastName}}</td>
 							   <td>{{employee.projectName}}</td>
                                 <td ng-if="employee.enrolled_face">
-                                    <a id="images" href="#" onClick="$('#enrollImageModal').modal()" data-target="#enrollImageModal" data-dismiss="#enrollImageModal" ng-click="loadEnrolledImage(employee.enrolled_face)">
-                                        <img src={{employee.enrolled_face}} width="30px" height="30px"/>
+                                    <a id="images" href="#" onClick="$('#enrollImageModal').modal()" data-target="#enrollImageModal" data-dismiss="#enrollImageModal" ng-click="loadEnrolledImage(employee.url)">
+                                        <img src={{employee.url}} width="30px" height="30px"/>
                                     </a>
                                 </td>
                                 <td ng-if="!employee.enrolled_face">
