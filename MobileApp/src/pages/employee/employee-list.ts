@@ -149,7 +149,7 @@ export class EmployeeList {
     this.camera.getPicture(options).then((imageData) => {
       let base64Image = 'data:image/jpeg;base64,' + imageData;
       var employeeName = employee.fullName+employee.empId;
-        this.checkProximity(this.site.id,this.lattitude,this.longitude,imageData,mode,attendanceMode,employee);
+        this.checkProximity(this.site.id,this.lattitude,this.longitude,base64Image,mode,attendanceMode,employee);
       // this.navCtrl.push(AttendanceViewPage,imageData)
     }, (err) => {
       console.log("Location error");
