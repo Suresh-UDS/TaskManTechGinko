@@ -131,8 +131,9 @@ public class AttendanceService extends AbstractService {
             log.debug("check in image available");
             long dateTime = new Date().getTime(); 
             attnDto = s3ServiceUtils.uploadCheckoutImage(attn.getCheckOutImage(), attnDto, dateTime);
+            log.debug("S3 image url and name- "+attnDto.getUrl()+" - "+attnDto.getCheckOutImage());
             attnDto.setUrl(attnDto.getUrl());
-            dbAttn.setCheckOutImage(attn.getCheckOutImage());
+            dbAttn.setCheckOutImage(attnDto.getCheckOutImage());
         }
         dbAttn.setLatitudeOut(attn.getLatitudeOut());
         dbAttn.setLongitudeOut(attn.getLongitudeOut());
