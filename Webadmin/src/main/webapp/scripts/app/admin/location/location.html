@@ -122,7 +122,11 @@
                                 <td>{{location.zone}}</td>
                                 <td>
                                     <!--<button  title="Generate QR"   data-toggle="modal" data-target="#qrcodeModal" data-dismiss="#qrcodeModal" class="btn btn-simple btn-info btn-icon like" ng-click="generateQR(location.siteId,location.id)"> <i style="font-size: 20px !important; " class="fa fa-qrcode"></i></button>-->
-                                    <a id="images" href="#" onClick="$('#myModalNew').modal()" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="generateQR(location.siteId,location.id)">
+                                    <!--<a id="images" href="#" onClick="$('#myModalNew').modal()" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="generateQR(location.siteId,location.id)">-->
+                                        <!--<i style="font-size: 20px !important; color: #942a25" class="fa fa-qrcode"></i>-->
+                                    <!--</a>-->
+
+                                    <a ui-sref="location-qr-print({ location: location.id})">
                                         <i style="font-size: 20px !important; color: #942a25" class="fa fa-qrcode"></i>
                                     </a>
 
