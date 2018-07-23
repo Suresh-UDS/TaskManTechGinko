@@ -71,13 +71,16 @@ export class OfflineAttendanceSites {
     // }
 
     ionViewDidLoad() {
+        this.component.showLoader("Load Sites")
         console.log('ionViewDidLoad offline SiteListPage');
         this.dbService.getSite().then(data=>{
             console.log("Loading site list from sqLite");
+            this.component.closeLoader()
             console.log(data);
             this.siteList = data;
         },err=>{
             console.log("Error in loading data from Sqlite");
+            this.component.closeLoader()
             console.log(err);
         })
     }

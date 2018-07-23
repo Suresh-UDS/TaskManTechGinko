@@ -1103,7 +1103,7 @@ export class DBService {
 
 
                 console.log(this.selectSite)
-                resolve(this.selectJobs);
+                resolve(this.selectSite);
             }, (error) => {
                 console.log("ERROR: " + JSON.stringify(error))
             })
