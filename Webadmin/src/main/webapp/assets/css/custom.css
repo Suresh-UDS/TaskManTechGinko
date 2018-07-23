@@ -1531,6 +1531,10 @@ span.flotingIcons.icon-13 {
 {
     padding-right: 30px;
 }
+.pad-TB-30
+{
+    padding: 30px 0;
+}
 .form-group.pad-btm0
 {
     padding-bottom: 0 !important;
