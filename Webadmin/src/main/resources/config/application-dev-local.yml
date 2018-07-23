@@ -26,7 +26,7 @@ spring:
         #url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
         name:
         username: root
-        password: root
+        password: admin
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
@@ -236,3 +236,7 @@ jhipster:
             host: localhost
             port: 2003
             prefix: TimeSheet
+    datasource:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048            

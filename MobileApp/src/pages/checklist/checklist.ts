@@ -20,6 +20,8 @@ export class Checklist {
     checkListItems:any;
     takenImages:any;
     jobDetails:any;
+    showIcon:any;
+    index:any;
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,
                 private camera:Camera,private component:componentService, private jobService: JobService) {
         this.checkListItems=[];
@@ -47,6 +49,8 @@ export class Checklist {
 
       this.checkListItems = this.jobDetails.checklistItems;
       console.log(this.checkListItems);
+
+      this.showIcon = false;
   }
 
   dismiss(){
@@ -121,5 +125,10 @@ export class Checklist {
             })
 
 
+    }
+    show(show,i)
+    {
+        this.showIcon = !show;
+        this.index = i;
     }
 }
