@@ -17,6 +17,10 @@ import {CreateJobPage} from "../jobs/add-job";
 import {DBService} from "../service/dbService";
 import {FileTransferObject, FileUploadOptions, FileTransfer} from "@ionic-native/file-transfer";
 import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
+import{AlertController} from "ionic-angular";
+
+
+declare var demo ;
 
 /**
  * Generated class for the AssetView page.
@@ -53,7 +57,7 @@ export class AssetView {
     constructor(public dbService:DBService,public camera: Camera,@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
                 private transfer: FileTransfer,private modalCtrl:ModalController,private datePicker: DatePicker,
                 private componentService:componentService,public navCtrl: NavController, public navParams: NavParams,
-                public jobService:JobService, public assetService:AssetService) {
+                public jobService:JobService, public assetService:AssetService,public alertCtrl: AlertController) {
 
     this.assetDetails = this.navParams.data.assetDetails;
     this.categories = 'details';
@@ -517,33 +521,33 @@ export class AssetView {
         this.spinner = true;
 
         //offline
-        this.dbService.getAMC(this.assetDetails.id).then(
-            (res)=>{
-                this.componentService.closeLoader();
-                console.log(res);
-                this.assetDetails.amcs = res;
-            },
-            (err)=>{
-
-            }
-        )
+        // this.dbService.getAMC(this.assetDetails.id).then(
+        //     (res)=>{
+        //         this.componentService.closeLoader();
+        //         console.log(res);
+        //         this.assetDetails.amcs = res;
+        //     },
+        //     (err)=>{
+        //
+        //     }
+        // )
 
 
         //Online
-        // this.assetService.getAssetAMCSchedule(this.assetDetails.id).subscribe(
-        //     response=>{
-        //         this.spinner = false;
-        //         this.componentService.closeLoader()
-        //         console.log("Get asset AMC response");
-        //         this.assetDetails.amcs = response;
-        //         console.log(this.assetDetails.amcs);
-        //     },
-        //     error=>{
-        //         this.spinner = false;
-        //         this.componentService.closeLoader()
-        //         console.log("Get asset AMC error");
-        //         console.log(error);
-        //     })
+        this.assetService.getAssetAMCSchedule(this.assetDetails.id).subscribe(
+            response=>{
+                this.spinner = false;
+                this.componentService.closeLoader()
+                console.log("Get asset AMC response");
+                this.assetDetails.amcs = response;
+                console.log(this.assetDetails.amcs);
+            },
+            error=>{
+                this.spinner = false;
+                this.componentService.closeLoader()
+                console.log("Get asset AMC error");
+                console.log(error);
+            })
     }
 
     // Config
@@ -551,35 +555,35 @@ export class AssetView {
         this.spinner=true;
 
         //offline
-        this.dbService.getConfig(this.assetDetails.assetType,this.assetDetails.id).then(
-            (res)=>{
-                this.componentService.closeLoader()
-                this.spinner = false;
-                console.log(res)
-                this.assetDetails.config = res;
-                console.log(this.assetDetails.config)
-            },
-            (err)=>{
-
-            }
-        )
+        // this.dbService.getConfig(this.assetDetails.assetType,this.assetDetails.id).then(
+        //     (res)=>{
+        //         this.componentService.closeLoader()
+        //         this.spinner = false;
+        //         console.log(res)
+        //         this.assetDetails.config = res;
+        //         console.log(this.assetDetails.config)
+        //     },
+        //     (err)=>{
+        //
+        //     }
+        // )
 
 
         // online
-        // console.log(this.assetDetails.config);
-        // this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
-        //     response=>{
-        //         this.spinner = false;
-        //         this.componentService.closeLoader()
-        //         console.log("Asset config");
-        //         console.log(response);
-        //         this.assetDetails.config = response;
-        //     },err=>{
-        //         this.spinner = false;
-        //         this.componentService.closeLoader();
-        //         console.log("Error in getting asset config");
-        //         console.log(err);
-        //     })
+        console.log(this.assetDetails.config);
+        this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
+            response=>{
+                this.spinner = false;
+                this.componentService.closeLoader()
+                console.log("Asset config");
+                console.log(response);
+                this.assetDetails.config = response;
+            },err=>{
+                this.spinner = false;
+                this.componentService.closeLoader();
+                console.log("Error in getting asset config");
+                console.log(err);
+            })
     }
 
     // Reading
@@ -631,5 +635,39 @@ export class AssetView {
     {
         this.navCtrl.push(CreateTicket,{assetDetails : this.assetDetails});
     }
+
+
+    markBreakDown(asset) {
+        const confirm = this.alertCtrl.create({
+            title:"<h5>Is The Asset Broke Down?</h5>" ,
+            buttons: [
+                {
+                    text: 'No',
+                    handler: () => {
+                        console.log('No clicked');
+
+                    }
+                },
+                {
+                    text: 'Yes',
+                    handler: () => {
+                        this.assetService.markBreakDown(asset).subscribe(
+                            response=>{
+                                console.log("Updated successfully");
+                                console.log(response);
+                                // demo.showSwal('success-message-and-confirmation-ok','Asset Marked Broke Down');
+                                this.componentService.showToastMessage('Asset Marked Broke Down','center');
+                            }
+                        )
+                    }
+                }
+            ]
+        });
+        confirm.present();
+    }
+
+
+
+
 
 }

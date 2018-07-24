@@ -20,6 +20,8 @@ import set = Reflect.set;
 import {ScanQR} from "../jobs/scanQR";
 import {OfflineAsset} from "../offline-asset/offline-asset";
 import {ScanQRAsset} from "./scanQR-asset";
+import{AlertController} from "ionic-angular";
+
 /**
  * Generated class for the AssetList page.
  *
@@ -47,11 +49,12 @@ export class AssetList {
     db:any;
     fileTransfer: FileTransferObject = this.transfer.create();
 
+
     constructor(@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,private transfer: FileTransfer,
                 public modalCtrl:ModalController,private diagnostic: Diagnostic,private sqlite: SQLite,
                 public componentService:componentService, public navCtrl: NavController, public navParams: NavParams,
                 public modalController:ModalController, public qrScanner:QRScanner, public assetService:AssetService,
-                public dbService:DBService,private network:Network) {
+                public dbService:DBService,private network:Network,private alertCtrl:AlertController) {
     this.assetList = [];
     this.test = [];
     this.searchCriteria = {};
@@ -341,7 +344,7 @@ export class AssetList {
     viewAsset(asset){
       console.log("asset");
       console.log(asset);
-      this.navCtrl.push(OfflineAsset,{assetDetails:asset});
+      this.navCtrl.push(AssetView,{assetDetails:asset});
     }
 
     // Pull to refresh
@@ -349,7 +352,7 @@ export class AssetList {
     {
         this.componentService.showLoader("");
         var searchCriteria={};
-        this.getAsset(searchCriteria)
+        this.getAsset(searchCriteria);
         refresher.complete()
     }
 
@@ -394,6 +397,9 @@ export class AssetList {
 
 
     }
+
+
+
 
 
 
