@@ -862,12 +862,17 @@ public class    EmployeeService extends AbstractService {
 		SearchResult<EmployeeDTO> result = new SearchResult<EmployeeDTO>();
 		if(searchCriteria != null) {
 			Pageable pageRequest = null;
-			if(searchCriteria.isList()) {
-				pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
-			}else {
-				pageRequest = createPageRequest(searchCriteria.getCurrPage());
+			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
+				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+				log.debug("Sorting object" + sort);
+				pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+			} else {
+				if(searchCriteria.isList()) {
+					pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+				}else {
+					pageRequest = createPageRequest(searchCriteria.getCurrPage());
+				}
 			}
-
 			Page<Employee> page = null;
 			List<EmployeeDTO> transactions = null;
 

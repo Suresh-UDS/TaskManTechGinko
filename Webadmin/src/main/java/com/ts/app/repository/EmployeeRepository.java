@@ -51,8 +51,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query("SELECT e FROM Employee e WHERE e.empId = :employeeId and e.active='Y' and (client = :isClient or client = FALSE)")
     Page<Employee> findEmployeeId(@Param("employeeId") String employeeId, @Param("isClient") boolean isClient, Pageable pageRequest);
 
-	@Query("SELECT e FROM Employee e WHERE e.active='Y' and e.isLeft = FALSE order by e.name")
-    Page<Employee> findAll(Pageable pageRequest);
+//	@Query("SELECT e FROM Employee e WHERE e.active='Y' and e.isLeft = FALSE order by e.name")
+//    Page<Employee> findAll(Pageable pageRequest);
 
 	@Query("SELECT distinct e FROM Employee e WHERE e.id IN :empIds and e.active='Y' and e.isLeft = FALSE order by e.name")
     List<Employee> findAllByIds(@Param("empIds") List<Long> empIds);
