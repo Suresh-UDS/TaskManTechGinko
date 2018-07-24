@@ -164,12 +164,12 @@ export class OfflineAsset {
         // offline
         this.dbService.getPPM(this.assetDetails.id).then(
             (res) => {
-                this.componentService.closeLoader();
+                this.spinner = false;
                 console.log(res);
                 this.assetDetails.ppms = res;
             },
             (err) => {
-
+                this.spinner = false;
             }
         )
 
@@ -181,12 +181,13 @@ export class OfflineAsset {
         //offline
         this.dbService.getAMC(this.assetDetails.id).then(
             (res) => {
+                this.spinner = false;
                 this.componentService.closeLoader();
                 console.log(res);
                 this.assetDetails.amcs = res;
             },
             (err) => {
-
+                this.spinner = false;
             }
         )
 
@@ -229,7 +230,6 @@ export class OfflineAsset {
     getReading(readingSearchCriteria){
         this.assetDetails.reading=null;
         this.spinner=true;
-        // this.assetService.viewReading(readingSearchCriteria).subscribe(
             this.dbService.getViewReading(readingSearchCriteria).then(
             response=>
             {

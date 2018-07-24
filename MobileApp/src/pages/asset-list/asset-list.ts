@@ -65,20 +65,12 @@ export class AssetList {
       console.log("Check Network Connection");
       this.componentService.showLoader("Loading Assets");
 
+      var searchCriteria ={
+          currPage:this.page+1
+      };
       if(this.network.type!='none'){
 
-          // //online
-          this.assetService.findAllAssets().subscribe(
-              response=>{
-                  this.componentService.closeAll();
-                  console.log(response);
-                  this.assetList = response;
-              },
-              error=>{
-                  this.componentService.closeAll();
-                  console.log("");
-              }
-          );
+          this.getAsset(searchCriteria)
 
       }else{
 
@@ -110,7 +102,7 @@ export class AssetList {
       // this.getAsset(searchCriteria)
       if(this.navParams.get('text'))
       {
-          this.componentService.closeLoader();
+          // this.componentService.closeLoader();
           var text = this.navParams.get('text');
           this.assetService.getAssetByCode(text).subscribe(
               response=>{
@@ -258,7 +250,7 @@ export class AssetList {
               this.componentService.closeLoader()
               console.log("Asset search filters response");
               console.log(response)
-              // this.assetList=response.transactions
+              this.assetList=response.transactions
           },err=>{
               this.componentService.closeLoader();
               console.log("Error in filtering assets");
@@ -341,7 +333,7 @@ export class AssetList {
     viewAsset(asset){
       console.log("asset");
       console.log(asset);
-      this.navCtrl.push(OfflineAsset,{assetDetails:asset});
+      this.navCtrl.push(AssetView,{assetDetails:asset});
     }
 
     // Pull to refresh

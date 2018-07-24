@@ -21,6 +21,7 @@ import {FileTransferObject, FileUploadOptions, FileTransfer} from "@ionic-native
 import set = Reflect.set;
 import {ScanQR} from "../jobs/scanQR";
 import{OfflineAsset} from "../offline-asset/offline-asset";
+import {ScanQRAsset} from "../asset-list/scanQR-asset";
 
 /**
  * Generated class for the OfflineAssetlist page.
@@ -98,20 +99,17 @@ export class OfflineAssetList {
 
         if(this.navParams.get('text'))
         {
-            this.componentService.closeLoader();
+            // this.componentService.closeLoader();
             var text = this.navParams.get('text');
 
 
             this.dbService.getAssetByCode(text).then(
-                // this.assetService.getAssetByCode(text).subscribe(
                 response=>{
                     this.componentService.showToastMessage('Asset found, navigating..','bottom')
                     console.log("Search by asset code response");
                     console.log(response);
                     window.document.querySelector('ion-app').classList.add('transparentBody')
-                    // this.navCtrl.setRoot(AssetList,{assetDetails:response,qr:true});
-                    // this.navCtrl.push(AssetView,{assetDetails:response}); //online
-                    this.navCtrl.push(AssetView,{assetDetails:response[0]}); //offline
+                    this.navCtrl.push(OfflineAsset,{assetDetails:response[0]}); //offline
 
                 },
                 err=>{
@@ -155,7 +153,10 @@ export class OfflineAssetList {
     }
 
 
+    scanQR(){
+        this.navCtrl.push(ScanQRAsset,{offline:true});
 
+    }
 
 
 

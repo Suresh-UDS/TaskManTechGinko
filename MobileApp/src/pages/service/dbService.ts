@@ -24,7 +24,7 @@ export class DBService {
     employee:any;
     jobs:any;
     asset:any;
-
+    page:1;
     selectSite:any;
     selectEmployee:any;
     selectJobs:any;
@@ -85,10 +85,13 @@ export class DBService {
                     var assetList;
                     var param = [];
                     var assetDetails;
-                    this.assetService.findAllAssets().subscribe(
+                    var searchCriteria ={
+                        currPage:this.page+1
+                    };
+                    this.assetService.searchAssets(searchCriteria).subscribe(
                         response => {
                             console.log("Get asset response");
-                            assetList = response;
+                            assetList = response.transactions;
                             console.log(assetList)
                             for (var i = 0; i < assetList.length; i++) {
                                 var asset = assetList[i];
@@ -1160,11 +1163,13 @@ export class DBService {
                         for (var i = 0; i < data.rows.length; i++) {
                             test.push(data.rows.item(i))
                         }
+                        console.log(test)
+                        resolve(test);
                     }
-                    console.log(test)
-                    resolve(test);
+
                 }, (error) => {
                     console.log("ERROR: " + JSON.stringify(error))
+                    reject(error)
                 })
             }, 3000)
         })
