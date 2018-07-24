@@ -24,7 +24,7 @@ export class DBService {
     employee:any;
     jobs:any;
     asset:any;
-
+    page:1;
     selectSite:any;
     selectEmployee:any;
     selectJobs:any;
@@ -85,10 +85,13 @@ export class DBService {
                     var assetList;
                     var param = [];
                     var assetDetails;
-                    this.assetService.findAllAssets().subscribe(
+                    var searchCriteria ={
+                        currPage:this.page+1
+                    };
+                    this.assetService.searchAssets(searchCriteria).subscribe(
                         response => {
                             console.log("Get asset response");
-                            assetList = response;
+                            assetList = response.transactions;
                             console.log(assetList)
                             for (var i = 0; i < assetList.length; i++) {
                                 var asset = assetList[i];
@@ -500,6 +503,14 @@ export class DBService {
 
                                 this.db.executeSql(insertQuery, param).then((data) => {
                                     console.log(data)//
+                                    var param1 = [readings.name, readings.uom, readings.initialValue, readings.initialValueTime,readings.finalValue, readings.consumption, readings.assetId,readings.assetParameterConfigId,readings.consumptionMonitoringRequired,readings.assetType]
+
+                                    this.db.executeSql("INSERT INTO viewReading(name,uom,initialValue,initialValueTime,finalValue,consumption,assetId,assetParameterConfigId,consumptionMonitoringRequired,assetType) VALUES (?,?,?,?,?,?,?,?,?,?)", param1).then((data) => {
+                                        console.log(data)//
+
+                                    }, (error) => {
+                                        console.log("ERROR: " + JSON.stringify(error))
+                                    })
                                     resolve("s")
                                 }, (error) => {
                                     console.log("ERROR: " + JSON.stringify(error))
@@ -514,7 +525,19 @@ export class DBService {
                                     console.log(data)
                                     this.db.executeSql(insertQuery, param).then((data) => {
                                         // console.log(data)//
+                                        this.db.executeSql("INSERT INTO viewReading(name,uom,initialValue,initialValueTime,finalValue,FinalValueTime,consumption,assetId,assetParameterConfigId,consumptionMonitoringRequired,assetType) VALUES (?,?,?,?,?,?,?,?,?,?,?)", param).then((data) => {
+                                            console.log(data)//
+                                            var param1 = [readings.name, readings.uom, readings.initialValue, readings.initialValueTime,readings.finalValue, readings.consumption, readings.assetId,readings.assetParameterConfigId,readings.consumptionMonitoringRequired,readings.assetType]
 
+                                            this.db.executeSql("INSERT INTO viewReading(name,uom,initialValue,initialValueTime,finalValue,consumption,assetId,assetParameterConfigId,consumptionMonitoringRequired,assetType) VALUES (?,?,?,?,?,?,?,?,?,?)", param1).then((data) => {
+                                                console.log(data)//
+
+                                            }, (error) => {
+                                                console.log("ERROR: " + JSON.stringify(error))
+                                            })
+                                        }, (error) => {
+                                            console.log("ERROR: " + JSON.stringify(error))
+                                        })
                                     }, (error) => {
                                         console.log("ERROR: " + JSON.stringify(error))
                                     })
@@ -1160,11 +1183,13 @@ export class DBService {
                         for (var i = 0; i < data.rows.length; i++) {
                             test.push(data.rows.item(i))
                         }
+                        console.log(test)
+                        resolve(test);
                     }
-                    console.log(test)
-                    resolve(test);
+
                 }, (error) => {
                     console.log("ERROR: " + JSON.stringify(error))
+                    reject(error)
                 })
             }, 3000)
         })
