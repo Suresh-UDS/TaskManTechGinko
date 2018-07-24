@@ -116,12 +116,13 @@ public class TicketManagementService extends AbstractService {
         Site site = siteRepository.findOne(ticketDTO.getSiteId());
         ticket.setSite(site);
 
-        ticket.setEmployee(user.getEmployee());
-        Employee employee = null;
+        Employee ticketOwner = user.getEmployee();
+        ticket.setEmployee(ticketOwner);
+        Employee assignedTo = null;
         if(ticketDTO.getEmployeeId() > 0) {
-	        employee = employeeRepository.findOne(ticketDTO.getEmployeeId());
-	        if(employee != null) {
-		        ticket.setAssignedTo(employee);
+	        assignedTo = employeeRepository.findOne(ticketDTO.getEmployeeId());
+	        if(assignedTo != null) {
+		        ticket.setAssignedTo(assignedTo);
 		        Calendar assignedCal = Calendar.getInstance();
 		        ticket.setAssignedOn(new java.sql.Date(assignedCal.getTimeInMillis()));
 	        }
@@ -146,12 +147,12 @@ public class TicketManagementService extends AbstractService {
 
         ticketDTO = mapperUtil.toModel(ticket, TicketDTO.class);
 
-        if(employee == null) {
-        		employee = user.getEmployee();
+        if(assignedTo == null) {
+        		assignedTo = user.getEmployee();
         }
 
-        if(employee != null) {
-        		sendNotifications(employee, ticket, site, true);
+        if(assignedTo != null) {
+        		sendNotifications(ticketOwner, assignedTo, ticket, site, true);
         }
 
         return ticketDTO;
@@ -184,16 +185,19 @@ public class TicketManagementService extends AbstractService {
             ticket.setSite(site);
         }
         Calendar currCal = Calendar.getInstance();
-        Employee employee = null;
+        Employee ticketOwner = employeeRepository.findOne(ticket.getEmployee().getId());
+        Employee assignedTo = null;
         if(ticketDTO.getEmployeeId()!=0) {
             if (ticket.getEmployee().getId() != ticketDTO.getEmployeeId()) {
-                employee = employeeRepository.findOne(ticketDTO.getEmployeeId());
+                assignedTo = employeeRepository.findOne(ticketDTO.getEmployeeId());
                 ticket.setStatus("Assigned");
-                ticket.setAssignedTo(employee);
+                ticket.setAssignedTo(assignedTo);
                 ticket.setAssignedOn(new java.sql.Date(currCal.getTimeInMillis()));
-            } else {
-                employee = employeeRepository.findOne(ticket.getEmployee().getId());
+            }else {
+            		assignedTo = ticket.getEmployee();
             }
+        }else {
+        		assignedTo = ticket.getEmployee();
         }
         ticket.setStatus(ticketDTO.getStatus());
         if (StringUtils.isNotEmpty(ticketDTO.getTitle())) {
@@ -229,9 +233,9 @@ public class TicketManagementService extends AbstractService {
         ticket = ticketRepository.saveAndFlush(ticket);
 
         ticketDTO = mapperUtil.toModel(ticket, TicketDTO.class);
-        if(employee != null) {
-        		sendNotifications(employee, ticket, site, false);
-        }
+        //if(assignedTo != null) {
+        		sendNotifications(ticketOwner, assignedTo, ticket, site, false);
+        //}
 
         return ticketDTO;
     }
@@ -430,9 +434,12 @@ public class TicketManagementService extends AbstractService {
 		return;
 	}
 
-	private void sendNotifications(Employee employee, Ticket ticket, Site site, boolean isNew) {
-		Hibernate.initialize(employee.getUser());
-		User user = employee.getUser();
+	private void sendNotifications(Employee ticketOwner, Employee assignedTo, Ticket ticket, Site site, boolean isNew) {
+		Hibernate.initialize(assignedTo.getUser());
+		User assignedToUser = assignedTo.getUser();
+		Hibernate.initialize(ticketOwner.getUser());
+		User ticketOwnerUser = ticketOwner.getUser();
+		
 		String ticketUrl = env.getProperty("url.ticket-view");
 		ticketUrl +=  ticket.getId();
 		Setting ticketReports = null;
@@ -447,22 +454,23 @@ public class TicketManagementService extends AbstractService {
 				ticketReportEmails = settings.get(0);
 			}
 		}
-	    String ticketEmails = (user != null ? user.getEmail() : "");
+	    String ticketEmails = (assignedToUser != null ? (StringUtils.isNotEmpty(assignedToUser.getEmail()) ? assignedToUser.getEmail() : "") : "");
+	    ticketEmails += (ticketOwnerUser != null ? "," + (StringUtils.isNotEmpty(ticketOwnerUser.getEmail()) ? ticketOwnerUser.getEmail() : "") : "");
 	    if(StringUtils.isNotEmpty(ticketEmails)) {
 	    		ticketEmails += Constants.COMMA_SEPARATOR;
 	    }
 	    ticketEmails += ticketReportEmails != null ? ticketReportEmails.getSettingValue() : "";
 	    if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Open") || ticket.getStatus().equalsIgnoreCase("Assigned"))) {
 	    		if(isNew) {
-		    		mailService.sendTicketCreatedMail(ticketUrl,employee.getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
-	        				user.getFirstName(), employee.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus(), ticket.getSeverity());
+		    		mailService.sendTicketCreatedMail(ticketUrl,assignedTo.getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
+	        				assignedToUser.getFirstName(), assignedTo.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus(), ticket.getSeverity());
 	    		}else {
-		    		mailService.sendTicketUpdatedMail(ticketUrl,employee.getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
-			        				user.getFirstName(), employee.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
+		    		mailService.sendTicketUpdatedMail(ticketUrl,assignedTo.getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
+			        				assignedToUser.getFirstName(), assignedTo.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
 	    		}
     		}else if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Closed"))) {
 		    mailService.sendTicketClosedMail(ticketUrl,ticket.getEmployee().getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
-        				user.getFirstName(), employee.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
+        				assignedToUser.getFirstName(), assignedTo.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
     		}
 	}
 

@@ -3,22 +3,19 @@ package com.ts.app.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
 import javax.inject.Inject;
 
-import com.ts.app.domain.*;
-import com.ts.app.repository.*;
-import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Hibernate;
 import org.joda.time.DateTime;
-import org.joda.time.DurationFieldType;
 import org.joda.time.Hours;
 import org.joda.time.Minutes;
-import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -32,8 +29,28 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Asset;
+import com.ts.app.domain.CheckInOut;
+import com.ts.app.domain.CheckInOutImage;
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.Job;
+import com.ts.app.domain.JobChecklist;
+import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.Location;
+import com.ts.app.domain.NotificationLog;
+import com.ts.app.domain.Price;
+import com.ts.app.domain.Site;
+import com.ts.app.domain.Ticket;
+import com.ts.app.domain.TicketStatus;
+import com.ts.app.domain.User;
+import com.ts.app.domain.UserRole;
+import com.ts.app.domain.UserRoleEnum;
+import com.ts.app.domain.UserRolePermission;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
+import com.ts.app.repository.CheckInOutRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.JobSpecification;
@@ -41,6 +58,7 @@ import com.ts.app.repository.LocationRepository;
 import com.ts.app.repository.NotificationRepository;
 import com.ts.app.repository.PricingRepository;
 import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
@@ -66,6 +84,7 @@ import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.SchedulerConfigDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
+import com.ts.app.web.rest.dto.TicketDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
 
 /**
@@ -139,6 +158,9 @@ public class JobManagementService extends AbstractService {
 
     @Inject
     private TicketManagementService ticketManagementService;
+    
+    @Inject
+    private PushService pushService;
 
     public void updateJobStatus(long siteId, JobStatus toBeJobStatus) {
 		//UPDATE ALL OVERDUE JOB STATUS
@@ -780,6 +802,21 @@ public class JobManagementService extends AbstractService {
 
 			schedulerService.save(schConfDto,job);
 		}
+		
+		//send push notification to the employee assigned for the job
+		if(!StringUtils.isEmpty(jobDTO.getSchedule()) && jobDTO.getSchedule().equalsIgnoreCase("ONCE")) {
+			Employee assignedTo = job.getEmployee();
+			if(assignedTo != null) {
+				Map<String, Object> values = new HashMap<String, Object>();
+				values.put("jobId", job.getId());
+				values.put("jobDateTime", DateUtil.formatToDateTimeString(job.getPlannedStartTime()));
+				values.put("site", job.getSite().getName());
+				long userId = assignedTo.getUser().getId();
+				long[] userIds = new long[1];
+				userIds[0] = userId;
+				pushService.sendAttendanceCheckoutAlert(userIds, values);
+			}
+		}
 
 		return mapperUtil.toModel(job, JobDTO.class);
 	}
@@ -1022,11 +1059,12 @@ public class JobManagementService extends AbstractService {
 		Job job = findJob(jobDTO.getId());
 		mapToEntity(jobDTO, job);
         log.debug("Ticket in job update ----"+jobDTO.getTicketId());
+        Ticket ticket = null;
 		if(jobDTO.getTicketId()>0){
 		    log.debug("ticket is pressent");
 		    log.debug("ticket is pressent----"+jobDTO.isPendingAtUDS());
 		    log.debug("ticket is pressent----"+jobDTO.isPendingAtClient());
-		    Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
+		    ticket = ticketRepository.findOne(jobDTO.getTicketId());
             TicketDTO ticketDTO = mapperUtil.toModel(ticket,TicketDTO.class);
             if(jobDTO.getJobStatus().equals(JobStatus.COMPLETED)) {
                 ticketDTO.setPendingAtClient(false);
@@ -1042,6 +1080,13 @@ public class JobManagementService extends AbstractService {
         }
 		if(jobDTO.getJobStatus().equals(JobStatus.COMPLETED)) {
 			onlyCompleteJob(job);
+			//send notifications if a ticket is raised
+			if(jobDTO.getTicketId() > 0) {
+				Map<String, String> data = new HashMap<String, String>();
+				String ticketUrl = env.getProperty("url.ticket-view");
+				data.put("url.ticket-view", ticketUrl);
+				sendTicketNotifications(ticket.getEmployee(), ticket.getAssignedTo(), ticket, job.getSite(), false, data);
+			}
 		}else {
 			job = jobRepository.save(job);
 		}

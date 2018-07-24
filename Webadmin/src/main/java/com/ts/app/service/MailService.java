@@ -77,6 +77,17 @@ public class MailService {
         		log.debug(key + ", "+ props.getProperty(key));
         }
         //split the to address if more than 1
+        //trim leading and traling ','
+        StringBuilder sb = new StringBuilder(to);
+        if(to.startsWith(",")) {
+        		sb = sb.replace(0, 1, "");
+        		to = sb.toString();
+        }
+        if(to.endsWith(",")) {
+        		int ind = to.lastIndexOf(",");
+        		sb.replace(ind, ind+1, "");
+        }
+        to = sb.toString();
         String[] toEmails = null;
         if(!StringUtils.isEmpty(to)) {
         		toEmails = to.split(",");
@@ -179,7 +190,7 @@ public class MailService {
         context.setVariable("url", ticketUrl);
         String content = templateEngine.process("ticketCreation", context);
         String subject = messageSource.getMessage("email.ticket.alert.title", null, locale);
-        sendEmail(user.getEmail(), subject, content, false, true,null);
+        sendEmail(emailIds, subject, content, false, true,null);
     }
     
     @Async
@@ -195,7 +206,7 @@ public class MailService {
         context.setVariable("url", ticketUrl);
         String content = templateEngine.process("ticketUpdated", context);
         String subject = messageSource.getMessage("email.ticket.updated.alert.title", null, locale);
-        sendEmail(user.getEmail(), subject, content, false, true,null);
+        sendEmail(emailIds, subject, content, false, true,null);
     }
     
     @Async
@@ -209,9 +220,9 @@ public class MailService {
         context.setVariable("ticketDescription", ticketDescription);
         context.setVariable("status", status);
         context.setVariable("url", ticketUrl);
-        String content = templateEngine.process("ticketApproved", context);
-        String subject = messageSource.getMessage("email.ticket.approved.alert.title", null, locale);
-        sendEmail(user.getEmail(), subject, content, false, true,null);
+        String content = templateEngine.process("ticketClosed", context);
+        String subject = messageSource.getMessage("email.ticket.closed.alert.title", null, locale);
+        sendEmail(emailIds, subject, content, false, true,null);
     }
 
     public void sendAttendanceConsolidatedReportEmail(String siteName, String emailIds, String reportData,  String baseUrl, Date currDate) {
