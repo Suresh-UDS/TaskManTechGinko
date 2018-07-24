@@ -91,7 +91,7 @@ export class DBService {
                     this.assetService.searchAssets(searchCriteria).subscribe(
                         response => {
                             console.log("Get asset response");
-                            assetList = response;
+                            assetList = response.transactions;
                             console.log(assetList)
                             for (var i = 0; i < assetList.length; i++) {
                                 var asset = assetList[i];
