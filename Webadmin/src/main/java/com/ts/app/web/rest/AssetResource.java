@@ -770,12 +770,12 @@ public class AssetResource {
 		return qrList;
 	}
 	
-	@RequestMapping(value= "/list/qrcodes/findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Object> findAllAssetQrCodes() {
+	@RequestMapping(value= "/list/qrcodes/findAll", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Object> findAllAssetQrCodes(@RequestBody SearchCriteria search) {
 		log.info("Get List of All Asset QR Codes");
 		List<Object> qrLists = null;
 		try { 
-			qrLists = assetService.findAllQrcodes();
+			qrLists = assetService.findAllQrcodes(search.getSiteId());
 		} catch(Exception e) { 
 			throw new TimesheetException("Error while get listing QR codes" + e);
 		}
