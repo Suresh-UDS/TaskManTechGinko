@@ -198,16 +198,16 @@ export class OfflineAsset {
         this.spinner=true;
 
         //offline
-        this.dbService.getConfig(this.assetDetails.assetType,this.assetDetails.id).then(
+        this.dbService.getConfig(this.assetDetails.assettype,this.assetDetails.id).then(
             (res)=>{
-                this.componentService.closeLoader();
                 this.spinner = false;
                 console.log(res);
                 this.assetDetails.config = res;
                 console.log(this.assetDetails.config);
             },
             (err)=>{
-
+                this.spinner = false;
+                console.log(err);
             }
         )
 
