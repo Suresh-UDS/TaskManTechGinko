@@ -183,6 +183,7 @@ public class AssetResource {
 
 	@RequestMapping(path = "/asset/breakDown" , method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> markBreakDown(@Valid @RequestBody AssetDTO assetDTO){
+		log.debug("Asset details in breakdown - "+assetDTO.getId()+" - "+assetDTO.getSiteId());
 	    if(assetDTO.getId() >0){
             assetDTO.setUserId(SecurityUtils.getCurrentUserId());
             assetDTO.setStatus("BREAKDOWN");
