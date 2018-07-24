@@ -1438,6 +1438,12 @@ a.cal-btn i
 {
     position: absolute;
     z-index: 1000;
+
+}
+.LoginPageCon .flotingIcons img
+{
+    animation: example 3s;
+    animation-iteration-count: 6;
 }
 .LoginPageCon .flotingIcons.icon-1
 {
@@ -1487,6 +1493,7 @@ span.flotingIcons.icon-9 {
 span.flotingIcons.icon-9 img,span.flotingIcons.icon-5 img
 {
     width: 70%;
+
 }
 span.flotingIcons.icon-11 {
     bottom: 25%;
@@ -1501,6 +1508,12 @@ span.flotingIcons.icon-13 {
     left: 33%;
 }
 
+
+/* Standard syntax */
+@keyframes example {
+    from {width: 70%}
+    to {width: 90%}
+}
 
   .pad0px
   {
