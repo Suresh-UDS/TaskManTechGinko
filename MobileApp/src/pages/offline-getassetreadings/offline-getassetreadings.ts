@@ -46,6 +46,7 @@ export class OfflineGetassetreadings {
 
 
     ionViewWillEnter() {
+        this.componentService.showLoader("Readings")
         this.getAssetConfigsReading();
     }
 
@@ -78,6 +79,7 @@ export class OfflineGetassetreadings {
                 for (let config of this.assetConfig) {
                     this.dbService.getPreviousReading(config.assetId, config.id).then(
                         response => {
+                            this.componentService.closeLoader()
                             console.log("Get Asset Previous readings");
                             console.log(response[0]);
                             if (response[0].consumptionMonitoringRequired) {
@@ -116,6 +118,7 @@ export class OfflineGetassetreadings {
                     )
                 }
             }, err => {
+                this.componentService.closeLoader()
                 console.log("Error in getting asset config");
                 console.log(err);
             }
