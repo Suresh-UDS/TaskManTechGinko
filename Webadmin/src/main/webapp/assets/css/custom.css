@@ -1406,14 +1406,14 @@ a.cal-btn i
   .timeline:before {
   background:none !important;
   }
-  .remove-mr{
-    padding: 0px !important;
-    margin: 0px !important;
-  }
-  .remove-hght{
-    height:auto !important;
-    max-height:inherit; !important;
-  }
+  /*.remove-mr{*/
+    /*padding: 0px !important;*/
+    /*margin: 0px !important;*/
+  /*}*/
+  /*.remove-hght{*/
+    /*height:auto !important;*/
+    /*max-height:inherit; !important;*/
+  /*}*/
   .navbar{
     padding: 0px !important;
   }
