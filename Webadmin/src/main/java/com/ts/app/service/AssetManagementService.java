@@ -1939,10 +1939,10 @@ public class AssetManagementService extends AbstractService {
 		return collect;
 	}
 
-	public List<Object> findAllQrcodes() {
+	public List<Object> findAllQrcodes(long siteId) {
 		// TODO Auto-generated method stub
 		List<Object> collect = new ArrayList<>();
-		List<Asset> assetEntities = assetRepository.findAll();
+		List<Asset> assetEntities = assetRepository.findAssetBySiteId(siteId);
 		List<AssetDTO> assetModel = mapperUtil.toModelList(assetEntities, AssetDTO.class);
 		for(AssetDTO assetEntity : assetModel) {
 			Map<String, Object> qrCodeLists = new HashMap<>();

@@ -76,7 +76,7 @@ public class AssetResource {
 
 	@Inject
 	private WarrantyTypeService warrantyTypeService;
-	
+
 	@Inject
 	private FileUploadHelper fileUploaderUtils;
 
@@ -85,7 +85,7 @@ public class AssetResource {
 
 	@Inject
 	private ImportUtil importUtil;
-	
+
 	@Inject
 	private Environment env;
 
@@ -94,7 +94,7 @@ public class AssetResource {
 	@Timed
 	public ResponseEntity<?> saveAsset(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request) {
 		log.debug(">>> Asset DTO save request <<<");
-		
+
 		if (!StringUtils.isEmpty(assetDTO.getWarrantyFromDate()) && !StringUtils.isEmpty(assetDTO.getWarrantyToDate())) {
 			try{
 				SimpleDateFormat sdf=new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy");
@@ -103,7 +103,7 @@ public class AssetResource {
 		        SimpleDateFormat sdf2=new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");
 		        log.debug("<<< From Date "+sdf2.format(fromdate));
 		        log.debug("<<< To Date "+sdf2.format(todate));
-	
+
 		        if(fromdate.after(todate)){
 	                log.debug("<<< Warranty From Date is after Warranty To Date");
 	                assetDTO.setMessage("Warranty From Date is after Warranty To Date");
@@ -111,10 +111,10 @@ public class AssetResource {
 	            }
 	        }
 	        catch(Exception e){
-	        	throw new TimesheetException(e, assetDTO);	
+	        	throw new TimesheetException(e, assetDTO);
 	        }
 		}
-		
+
 		try {
 			assetDTO = assetService.saveAsset(assetDTO);
 		} catch (Exception e) {
@@ -181,6 +181,18 @@ public class AssetResource {
 		return assetService.getAssetByCode(code);
 	}
 
+	@RequestMapping(path = "/asset/breakDown" , method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> markBreakDown(@Valid @RequestBody AssetDTO assetDTO){
+		log.debug("Asset details in breakdown - "+assetDTO.getId()+" - "+assetDTO.getSiteId());
+	    if(assetDTO.getId() >0){
+            assetDTO.setUserId(SecurityUtils.getCurrentUserId());
+            assetDTO.setStatus("BREAKDOWN");
+            assetDTO = assetService.updateAsset(assetDTO);
+
+        }
+        return new ResponseEntity<>(assetDTO, HttpStatus.CREATED);
+    }
+
 	@RequestMapping(path = "/asset/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity<?> updateAsset(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request,
@@ -196,7 +208,7 @@ public class AssetResource {
 		        SimpleDateFormat sdf2=new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");
 		        log.debug("<<< From Date "+sdf2.format(fromdate));
 		        log.debug("<<< To Date "+sdf2.format(todate));
-	
+
 		        if(fromdate.after(todate)){
 	                log.debug("<<< Warranty From Date is after Warranty To Date");
 	                assetDTO.setMessage("Warranty From Date is after Warranty To Date");
@@ -204,10 +216,10 @@ public class AssetResource {
 	            }
 	        }
 	        catch(Exception e){
-	        	throw new TimesheetException(e, assetDTO);	
+	        	throw new TimesheetException(e, assetDTO);
 	        }
 		}
-		
+
 		try {
 			assetDTO.setUserId(SecurityUtils.getCurrentUserId());
 			assetDTO = assetService.updateAsset(assetDTO);
@@ -229,12 +241,12 @@ public class AssetResource {
 	@RequestMapping(value = "/asset/{id}/qrcode/{code}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> generateAssetQRCode(@PathVariable("id") long assetId, @PathVariable("code") String assetCode) {
 		Map<String, Object> result = null;
-		try { 
+		try {
 			result = assetService.generateAssetQRCode(assetId, assetCode);
 		} catch(Exception e) {
 			throw new TimesheetException("Error while generating QR-Code" +e);
 		}
-		
+
 		return result;
 	}
 
@@ -242,9 +254,9 @@ public class AssetResource {
 	public Map<String, Object> getQRCode(@PathVariable("id") Long id) {
 		log.debug(">>> get QR Code! <<<");
 		Map<String, Object> result = null;
-		try { 
+		try {
 			result = assetService.getQRCode(id);
-		} catch(Exception e) { 
+		} catch(Exception e) {
 			throw new TimesheetException("Error while get a QR-Code" +e);
 		}
 		return result;
@@ -291,13 +303,13 @@ public class AssetResource {
 		log.info("--Invoked AssetResource.findAllWarrantyTypes --");
 		return warrantyTypeService.findAll();
 	}
-	
+
 	@RequestMapping(value = "/assets/type", method = RequestMethod.GET)
 	public List<AssetTypeDTO> findAllAssetType() {
 		log.info("Get All Asset Type");
 		return assetService.findAllAssetType();
 	}
-	
+
 //	Asset Status
 	@RequestMapping(value = "/assets/assetstatus", method = RequestMethod.GET)
 	public AssetStatus[]  getAssetStatus() {
@@ -306,7 +318,7 @@ public class AssetResource {
 		assetStatus = assetService.getAssetStatus();
 		return assetStatus;
 	}
-//	
+//
 
 	@RequestMapping(value = "/assets/config", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<AssetParameterConfigDTO>> getAssetConfig(
@@ -376,8 +388,8 @@ public class AssetResource {
 		String ext = env.getProperty("extensionImg");
 		log.debug("********** validation extension : "+ ext);
 		String[] arrExt = ext.split(",");
-		for (String exten : arrExt) 
-		{	
+		for (String exten : arrExt)
+		{
 			log.debug("**********file extension read : " + exten);
 			if (extension.equalsIgnoreCase(exten)) {
 				assetDocumentDTO = assetService.uploadFile(assetDocumentDTO, file);
@@ -389,23 +401,23 @@ public class AssetResource {
 	/*
 	 * @RequestMapping(path = "/assets/ppmschedule", method =
 	 * RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	 * 
+	 *
 	 * @Timed public ResponseEntity<?> saveAssetPPMSchedule(@Valid @RequestBody
 	 * AssetPpmScheduleDTO assetPpmScheduleDTO, HttpServletRequest request) {
 	 * log.debug(">>> Asset DTO saveAssetPPMSchedule request <<<"); log.debug(
 	 * "Title <<<" + assetPpmScheduleDTO.getTitle());
-	 * 
+	 *
 	 * try { if(!assetService.isDuplicatePPMSchedule(assetPpmScheduleDTO)) {
 	 * log.debug(">>> going to create <<<"); assetPpmScheduleDTO =
 	 * assetService.createAssetPpmSchedule(assetPpmScheduleDTO); }else {
 	 * log.debug(">>> duplicate <<<");
 	 * assetPpmScheduleDTO.setMessage("error.duplicateRecordError"); return new
 	 * ResponseEntity<>(assetPpmScheduleDTO,HttpStatus.BAD_REQUEST); }
-	 * 
-	 * 
+	 *
+	 *
 	 * }catch(Exception e) { throw new TimesheetException(e,
 	 * assetPpmScheduleDTO); }
-	 * 
+	 *
 	 * log.debug("Asset PPM Schedule new id - " + assetPpmScheduleDTO.getId());
 	 * return new ResponseEntity<>(assetPpmScheduleDTO, HttpStatus.CREATED); }
 	 */
@@ -757,31 +769,31 @@ public class AssetResource {
 		result = assetService.getAssetConfig(id);
 		return result;
 	}
-	
+
 	@RequestMapping(value= "/list/qrcodes/[{assetIds}]", method = RequestMethod.GET)
 	public List<Object> findAllAssetQrCodes(@PathVariable long[] assetIds) {
 		log.info("Get List of Asset qr codes");
 		List<Object> qrList = null;
-		try { 
+		try {
 			qrList = assetService.findAllAssetQrcode(assetIds);
-		} catch(Exception e) { 
+		} catch(Exception e) {
 			throw new TimesheetException("Error while get listing QR codes" + e);
 		}
 		return qrList;
 	}
 	
-	@RequestMapping(value= "/list/qrcodes/findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Object> findAllAssetQrCodes() {
+	@RequestMapping(value= "/list/qrcodes/findAll", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Object> findAllAssetQrCodes(@RequestBody SearchCriteria search) {
 		log.info("Get List of All Asset QR Codes");
 		List<Object> qrLists = null;
 		try { 
-			qrLists = assetService.findAllQrcodes();
+			qrLists = assetService.findAllQrcodes(search.getSiteId());
 		} catch(Exception e) { 
 			throw new TimesheetException("Error while get listing QR codes" + e);
 		}
 		return qrLists;
 	}
-	
-	
+
+
 
 }
