@@ -337,19 +337,6 @@ export class GetAssetReading {
 
     assetSaveReading(assetReading)
     {
-        //offline
-        //
-        // this.dbService.setReadings(assetReading).then(
-        //     response=>{
-        //         console.log(response)
-        //         this.componentService.showToastMessage('Reading Saved','bottom');
-        //         this.viewCtrl.dismiss();
-        //     },
-        //     error=>{
-        //         console.log(error)
-        //     }
-        // )
-
         //online
         this.assetService.saveReading(assetReading).subscribe(
             response=>{
