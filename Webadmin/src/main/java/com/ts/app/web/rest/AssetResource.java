@@ -36,6 +36,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.domain.AssetReadingRule;
 import com.ts.app.domain.AssetStatus;
+import com.ts.app.domain.AssetStatusHistory;
+import com.ts.app.domain.AssetStatusHistoryDTO;
 import com.ts.app.domain.Frequency;
 import com.ts.app.domain.FrequencyPrefix;
 import com.ts.app.security.SecurityUtils;
@@ -792,6 +794,17 @@ public class AssetResource {
 			throw new TimesheetException("Error while get listing QR codes" + e);
 		}
 		return qrLists;
+	}
+	
+	@RequestMapping(value = "/assets/statusHistory", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public SearchResult<AssetStatusHistoryDTO> viewStatusHistory(@RequestBody SearchCriteria searchCriteria) {
+		SearchResult<AssetStatusHistoryDTO> result = null;
+		try { 
+			result = assetService.viewAssetStatusHistory(searchCriteria);
+		} catch(Exception e) {
+			throw new TimesheetException("Error while get asset status history" +e);
+		}
+		return result;
 	}
 
 
