@@ -1443,7 +1443,7 @@ a.cal-btn i
 .LoginPageCon .flotingIcons img
 {
     animation: example 3s;
-    animation-iteration-count: 2;
+    /*animation-iteration-count: 2;*/
 }
 .LoginPageCon .flotingIcons.icon-1
 {
