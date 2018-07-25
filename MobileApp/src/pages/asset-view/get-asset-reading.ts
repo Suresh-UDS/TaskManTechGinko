@@ -45,6 +45,7 @@ export class GetAssetReading {
 
     }
     ionViewWillEnter(){
+        this.componentService.showLoader("Readings")
        this.getAssetConfigsReading();
     }
 
@@ -79,6 +80,7 @@ export class GetAssetReading {
                         response=>{
                             console.log("Get Asset Previous readings");
                             console.log(response);
+                            this.componentService.closeLoader()
                             if(response.consumptionMonitoringRequired){
                                 if(response.initialValue>0){
                                     config.previousValue = response.initialValue;
@@ -115,6 +117,7 @@ export class GetAssetReading {
                     )
                 }
             },err=>{
+                this.componentService.closeLoader()
                 console.log("Error in getting asset config");
                 console.log(err);
             }

@@ -119,6 +119,7 @@ import{OfflineAssetList} from "../pages/offline-assetlist/offline-assetlist";
 import{OfflineAsset} from "../pages/offline-asset/offline-asset";
 import{OfflineGetassetreadings} from "../pages/offline-getassetreadings/offline-getassetreadings";
 import {OfflineAttendance} from "../pages/employee/offline-attendance";
+import{ForgotPassword} from "../pages/forgot-password/forgot-password";
 
 
 @NgModule({
@@ -199,7 +200,8 @@ import {OfflineAttendance} from "../pages/employee/offline-attendance";
       OfflineAsset,
       OfflineAssetList,
       OfflineGetassetreadings,
-      OfflineAttendance
+      OfflineAttendance,
+      ForgotPassword,
 
   ],
   imports: [
@@ -291,7 +293,8 @@ import {OfflineAttendance} from "../pages/employee/offline-attendance";
       OfflineAssetList,
       OfflineAsset,
       OfflineGetassetreadings,
-      OfflineAttendance
+      OfflineAttendance,
+      ForgotPassword,
 
 
 

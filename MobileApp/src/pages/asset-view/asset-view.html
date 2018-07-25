@@ -72,30 +72,46 @@
         <button ion-fab color="dark">
             <ion-icon name="md-add" class="clr-orange"></ion-icon>
         </button>
-        <ion-fab-list side="top" fab-list-margin class="margin-left-right0" [ngSwitch]="categories">
+        <ion-fab-list side="top" fab-list-margin class="margin-left-right" [ngSwitch]="categories">
 
-            <ion-label color="dark" class="margin0 bg-orange"  >Reading</ion-label>
-            <button ion-fab color="primary" (click)="getReadings()" >
-                <ion-icon name="speedometer" class="fnt-35"></ion-icon>
+
+                <ion-label class="margin0 bg-orange" color="dark" *ngSwitchCase =" 'details' ">Mark Breakdown</ion-label>
+                <button ion-fab color="primary" (click)="markBreakDown(assetDetails)">
+                    <ion-icon name="close-circle" class="fnt-28  clr-white" ></ion-icon>
+                </button>
+
+            <ion-label class="margin0 bg-orange" color="dark">Reading</ion-label>
+            <button ion-fab color="primary" (click)="getReadings()">
+                <ion-icon name="speedometer" class="fnt-28  clr-white" ></ion-icon>
             </button>
+
 
             <!--<ion-label color="dark" class="margin0 bg-orange"  *ngSwitchCase =" 'jobs' ">Job</ion-label>-->
             <!--<button ion-fab color="primary" (click)="createJob()" *ngSwitchCase =" 'jobs' ">-->
                 <!--<ion-icon name="ios-construct-outline" class="fnt-35"></ion-icon>-->
             <!--</button>-->
 
-            <ion-label color="dark" class="margin0 bg-orange"  *ngSwitchCase =" 'details' ">Image</ion-label>
+            <ion-label class="margin0 bg-orange"  color="dark"  *ngSwitchCase =" 'details' ">Image</ion-label>
             <button ion-fab color="primary" (click)="addAssetImage()" *ngSwitchCase =" 'details'" >
-                <ion-icon name="camera" class="fnt-24"></ion-icon>
+                <ion-icon name="camera" class="fnt-28  clr-white"></ion-icon>
             </button>
 
             <ion-label color="dark" class="margin0 bg-orange"  *ngSwitchCase =" 'tickets' ">Ticket</ion-label>
             <button ion-fab color="primary" (click)="createTicket()" *ngSwitchCase =" 'tickets' ">
-                <ion-icon name="ios-construct-outline" class="fnt-35"></ion-icon>
+                <ion-icon name="ios-construct-outline" class="fnt-28 clr-white"></ion-icon>
             </button>
 
         </ion-fab-list>
     </ion-fab>
+
+    <!--<ion-fab top right edge mini>-->
+        <!--<button ion-fab color="dark">-->
+            <!--<ion-icon name="md-add" class="clr-orange"></ion-icon>-->
+        <!--</button>-->
+
+    <!--</ion-fab>-->
+
+
 
 
 
@@ -706,18 +722,19 @@
         </ion-infinite-scroll>
     </ion-list>
 
-    <ion-list *ngSwitchCase="'history'">
-            <div class="col-md-6 p-l-30 p-r-30">
+    <ion-list *ngSwitchCase="'history'" style="margin-top:18px">
+            <div class="col-md-4 p-l-30 p-r-30">
 
                     <div class="white-bg">
                         <div class="padding-left16 padding-top5" >
                             <ion-row class="margin0 margin-top40 border-btm">
                                 <ion-col col-4 class="ver-center">
-                                    <button ion-button clear color="primary" class="">
-                                        <ion-icon name="md-clock" class="green fnt-24"></ion-icon>
-                                    </button>
+                                        <!--<ion-icon name="md-clock" class="green fnt-24"></ion-icon>-->
+                                        <button ion-button icon-only clear class="green">
+                                            <i class="fa fa-history fnt-24" aria-hidden="true"></i>
+                                        </button>
                                 </ion-col>
-                                <ion-col col-8 class="padding-left5">
+                                <ion-col col-8  text-left>
                                     <div class=" padding-bottom5 ln-ght20" text-capitalize>
                                         <p text-left class="margin0">Asset title</p>
                                         <p text-left class="margin0">site name</p>

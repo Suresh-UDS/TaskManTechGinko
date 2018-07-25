@@ -91,7 +91,7 @@ export class DBService {
                     this.assetService.searchAssets(searchCriteria).subscribe(
                         response => {
                             console.log("Get asset response");
-                            assetList = response;
+                            assetList = response.transactions;
                             console.log(assetList)
                             for (var i = 0; i < assetList.length; i++) {
                                 var asset = assetList[i];
@@ -506,7 +506,7 @@ export class DBService {
                                     var param1 = [readings.name, readings.uom, readings.initialValue, readings.initialValueTime,readings.finalValue, readings.consumption, readings.assetId,readings.assetParameterConfigId,readings.consumptionMonitoringRequired,readings.assetType]
 
                                     this.db.executeSql("INSERT INTO viewReading(name,uom,initialValue,initialValueTime,finalValue,consumption,assetId,assetParameterConfigId,consumptionMonitoringRequired,assetType) VALUES (?,?,?,?,?,?,?,?,?,?)", param1).then((data) => {
-                                        // console.log(data)//
+                                        console.log(data)//
 
                                     }, (error) => {
                                         console.log("ERROR: " + JSON.stringify(error))
@@ -526,8 +526,15 @@ export class DBService {
                                     this.db.executeSql(insertQuery, param).then((data) => {
                                         // console.log(data)//
                                         this.db.executeSql("INSERT INTO viewReading(name,uom,initialValue,initialValueTime,finalValue,FinalValueTime,consumption,assetId,assetParameterConfigId,consumptionMonitoringRequired,assetType) VALUES (?,?,?,?,?,?,?,?,?,?,?)", param).then((data) => {
-                                            // console.log(data)//
+                                            console.log(data)//
+                                            var param1 = [readings.name, readings.uom, readings.initialValue, readings.initialValueTime,readings.finalValue, readings.consumption, readings.assetId,readings.assetParameterConfigId,readings.consumptionMonitoringRequired,readings.assetType]
 
+                                            this.db.executeSql("INSERT INTO viewReading(name,uom,initialValue,initialValueTime,finalValue,consumption,assetId,assetParameterConfigId,consumptionMonitoringRequired,assetType) VALUES (?,?,?,?,?,?,?,?,?,?)", param1).then((data) => {
+                                                console.log(data)//
+
+                                            }, (error) => {
+                                                console.log("ERROR: " + JSON.stringify(error))
+                                            })
                                         }, (error) => {
                                             console.log("ERROR: " + JSON.stringify(error))
                                         })

@@ -17,6 +17,10 @@ import {CreateJobPage} from "../jobs/add-job";
 import {DBService} from "../service/dbService";
 import {FileTransferObject, FileUploadOptions, FileTransfer} from "@ionic-native/file-transfer";
 import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
+import{AlertController} from "ionic-angular";
+
+
+declare var demo ;
 
 /**
  * Generated class for the AssetView page.
@@ -53,7 +57,7 @@ export class AssetView {
     constructor(public dbService:DBService,public camera: Camera,@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
                 private transfer: FileTransfer,private modalCtrl:ModalController,private datePicker: DatePicker,
                 private componentService:componentService,public navCtrl: NavController, public navParams: NavParams,
-                public jobService:JobService, public assetService:AssetService) {
+                public jobService:JobService, public assetService:AssetService,public alertCtrl: AlertController) {
 
     this.assetDetails = this.navParams.data.assetDetails;
     this.categories = 'details';
@@ -68,7 +72,6 @@ export class AssetView {
     }
 
   ionViewDidLoad() {
-        this.componentService.closeLoader()
     console.log('ionViewDidLoad AssetView');
     console.log(this.assetDetails);
     this.componentService.showLoader("");
@@ -117,54 +120,64 @@ export class AssetView {
             assetId:this.assetDetails.id
         }
     }
+    //
 
-
-    addAssetImage() {
-
-        const options: CameraOptions = {
-            quality: 50,
-            destinationType: this.camera.DestinationType.NATIVE_URI,
-            encodingType: this.camera.EncodingType.JPEG,
-            mediaType: this.camera.MediaType.PICTURE
-        };
-
-        this.camera.getPicture(options).then((imageData) => {
-
-            imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
-            console.log('imageData -' +imageData);
-
-            //online
-            let token_header=window.localStorage.getItem('session');
-            let options: FileUploadOptions = {
-                fileKey: 'uploadFile',
-                fileName:'uploadFile.png',
-                headers:{
-                    'X-Auth-Token':token_header
-                },
-                params:{
-                    title : this.assetDetails.title,
-                    assetId : this.assetDetails.id,
-                    type : "image"
-                }
-            };
-
-            this.fileTransfer.upload(imageData, this.config.Url+'api/assets/uploadAssetPhoto', options)
-                .then((data) => {
-                    console.log(data.response);
-                    console.log("image upload");
-                    this.componentService.closeLoader();
-                    this.navCtrl.pop();
-                }, (err) => {
-                    console.log(err);
-                    console.log("image upload fail");
-                    this.componentService.closeLoader();
-                })
-
-
-
-        })
-
-    }
+    // addAssetImage() {
+    //
+    //     const options: CameraOptions = {
+    //         quality: 50,
+    //         destinationType: this.camera.DestinationType.NATIVE_URI,
+    //         encodingType: this.camera.EncodingType.JPEG,
+    //         mediaType: this.camera.MediaType.PICTURE
+    //     };
+    //
+    //     this.camera.getPicture(options).then((imageData) => {
+    //
+    //         imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
+    //         console.log('imageData -' +imageData);
+    //
+    //         //offline
+    //         // this.dbService.setImage(this.assetDetails.id,this.assetDetails.title,imageData).then(
+    //         //     response=>{
+    //         //         console.log(response)
+    //         //
+    //         //     },error=>{
+    //         //         console.log(error)
+    //         //     })
+    //
+    //
+    //         //online
+    //         // let token_header=window.localStorage.getItem('session');
+    //         // let options: FileUploadOptions = {
+    //         //     fileKey: 'uploadFile',
+    //         //     fileName:'uploadFile.png',
+    //         //     headers:{
+    //         //         'X-Auth-Token':token_header
+    //         //     },
+    //         //     params:{
+    //         //         title : this.assetDetails.title,
+    //         //         assetId : this.assetDetails.id,
+    //         //         type : "image"
+    //         //     }
+    //         // };
+    //
+    //         this.fileTransfer.upload(imageData, this.config.Url+'api/assets/uploadAssetPhoto', options)
+    //             .then((data) => {
+    //                 console.log(data.response);
+    //                 console.log("image upload");
+    //                 this.componentService.closeLoader();
+    //                 this.navCtrl.pop();
+    //             }, (err) => {
+    //                 console.log(err);
+    //                 console.log("image upload fail");
+    //                 this.componentService.closeLoader();
+    //             })
+    //
+    //
+    //
+    //     })
+    //
+    // }
 
 
     // Pullto refresh
@@ -193,6 +206,18 @@ export class AssetView {
         //     assetId:this.assetDetails.id
         // }
         this.spinner = true;
+        //offline
+        // this.dbService.getJobs(this.assetDetails.id).then(
+        //     (res)=>{
+        //         this.componentService.closeLoader()
+        //         console.log(res)
+        //         this.assetDetails.jobs = res;
+        //     },
+        //     (err)=>{
+        //
+        //     }
+        // )
+
 
         //Online
         this.jobService.getJobs(searchCriteria).subscribe(
@@ -438,6 +463,7 @@ export class AssetView {
 
 
     getAssetById(){
+        this.componentService.closeLoader();
         // Online
         this.assetService.getAssetById(this.assetDetails.id).subscribe(
             response=>{
@@ -459,22 +485,33 @@ export class AssetView {
     getAssetPPMSchedule()
     {
         this.spinner = true;
+        // offline
+        this.dbService.getPPM(this.assetDetails.id).then(
+            (res)=>{
+                this.componentService.closeLoader();
+                console.log(res);
+                this.assetDetails.ppms = res;
+            },
+            (err)=>{
+
+            }
+        )
 
         //Online
-        this.assetService.getAssetPPMSchedule(this.assetDetails.id).subscribe(
-            response=>{
-                this.spinner = false;
-                this.componentService.closeLoader();
-                console.log("Get asset PPM response");
-                console.log(response);
-                this.assetDetails.ppms = response;
-            },
-            error=>{
-                this.spinner = false;
-                this.componentService.closeLoader();
-                console.log("Get asset PPM error");
-                console.log(error);
-            })
+        // this.assetService.getAssetPPMSchedule(this.assetDetails.id).subscribe(
+        //     response=>{
+        //         this.spinner = false;
+        //         this.componentService.closeLoader();
+        //         console.log("Get asset PPM response");
+        //         console.log(response);
+        //         this.assetDetails.ppms = response;
+        //     },
+        //     error=>{
+        //         this.spinner = false;
+        //         this.componentService.closeLoader();
+        //         console.log("Get asset PPM error");
+        //         console.log(error);
+        //     })
     }
 
 
@@ -483,6 +520,17 @@ export class AssetView {
     {
         this.spinner = true;
 
+        //offline
+        // this.dbService.getAMC(this.assetDetails.id).then(
+        //     (res)=>{
+        //         this.componentService.closeLoader();
+        //         console.log(res);
+        //         this.assetDetails.amcs = res;
+        //     },
+        //     (err)=>{
+        //
+        //     }
+        // )
 
 
         //Online
@@ -506,6 +554,19 @@ export class AssetView {
     getAssetConfig(){
         this.spinner=true;
 
+        //offline
+        // this.dbService.getConfig(this.assetDetails.assetType,this.assetDetails.id).then(
+        //     (res)=>{
+        //         this.componentService.closeLoader()
+        //         this.spinner = false;
+        //         console.log(res)
+        //         this.assetDetails.config = res;
+        //         console.log(this.assetDetails.config)
+        //     },
+        //     (err)=>{
+        //
+        //     }
+        // )
 
 
         // online
@@ -530,6 +591,7 @@ export class AssetView {
         this.assetDetails.reading=null;
         this.spinner=true;
         this.assetService.viewReading(readingSearchCriteria).subscribe(
+        // this.dbService.getViewReading(searchCriteria).then(
             response=>
             {
                 console.log("View Reading Response");
@@ -573,5 +635,39 @@ export class AssetView {
     {
         this.navCtrl.push(CreateTicket,{assetDetails : this.assetDetails});
     }
+
+
+    markBreakDown(asset) {
+        const confirm = this.alertCtrl.create({
+            title:"<h5>Is The Asset Broke Down?</h5>" ,
+            buttons: [
+                {
+                    text: 'No',
+                    handler: () => {
+                        console.log('No clicked');
+
+                    }
+                },
+                {
+                    text: 'Yes',
+                    handler: () => {
+                        this.assetService.markBreakDown(asset).subscribe(
+                            response=>{
+                                console.log("Updated successfully");
+                                console.log(response);
+                                // demo.showSwal('success-message-and-confirmation-ok','Asset Marked Broke Down');
+                                this.componentService.showToastMessage('Asset Marked Broke Down','center');
+                            }
+                        )
+                    }
+                }
+            ]
+        });
+        confirm.present();
+    }
+
+
+
+
 
 }
