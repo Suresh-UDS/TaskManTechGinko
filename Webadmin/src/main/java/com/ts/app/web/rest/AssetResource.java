@@ -52,6 +52,7 @@ import com.ts.app.web.rest.dto.AssetPPMScheduleEventDTO;
 import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
 import com.ts.app.web.rest.dto.AssetParameterReadingDTO;
 import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
+import com.ts.app.web.rest.dto.AssetSiteHistoryDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.ExportResponse;
@@ -803,6 +804,17 @@ public class AssetResource {
 			result = assetService.viewAssetStatusHistory(searchCriteria);
 		} catch(Exception e) {
 			throw new TimesheetException("Error while get asset status history" +e);
+		}
+		return result;
+	}
+	
+	@RequestMapping(value = "/assets/siteHistory", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public SearchResult<AssetSiteHistoryDTO> viewSiteHistory(@RequestBody SearchCriteria searchCriteria) {
+		SearchResult<AssetSiteHistoryDTO> result = null;
+		try { 
+			result = assetService.viewAssetSiteHistory(searchCriteria);
+		} catch(Exception e) {
+			throw new TimesheetException("Error while get asset site history" +e);
 		}
 		return result;
 	}

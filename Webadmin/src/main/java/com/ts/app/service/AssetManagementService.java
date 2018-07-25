@@ -68,6 +68,7 @@ import com.ts.app.repository.AssetParameterConfigRepository;
 import com.ts.app.repository.AssetPpmScheduleRepository;
 import com.ts.app.repository.AssetReadingRuleRepository;
 import com.ts.app.repository.AssetRepository;
+import com.ts.app.repository.AssetSiteHistoryRepository;
 import com.ts.app.repository.AssetSpecification;
 import com.ts.app.repository.AssetStatusHistoryRepository;
 import com.ts.app.repository.AssetTypeRepository;
@@ -106,6 +107,7 @@ import com.ts.app.web.rest.dto.AssetPPMScheduleEventDTO;
 import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
 import com.ts.app.web.rest.dto.AssetParameterReadingDTO;
 import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
+import com.ts.app.web.rest.dto.AssetSiteHistoryDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
@@ -247,6 +249,9 @@ public class AssetManagementService extends AbstractService {
 	
 	@Inject
 	private ChecklistItemRepository checklistRespository;
+	
+	@Inject
+	private AssetSiteHistoryRepository assetSiteHistoryRepository;
 	
 	public static final String EMAIL_NOTIFICATION_READING = "email.notification.reading";
 	
@@ -2008,6 +2013,54 @@ public class AssetManagementService extends AbstractService {
 	
 			result.setTransactions(transactions);
 			return;
+	}
+
+	public SearchResult<AssetSiteHistoryDTO> viewAssetSiteHistory(SearchCriteria searchCriteria) {
+		// TODO Auto-generated method stub
+		SearchResult<AssetSiteHistoryDTO> result = new SearchResult<AssetSiteHistoryDTO>();
+
+		Pageable pageRequest = null;
+		if(searchCriteria != null) {
+
+			Page<AssetSiteHistory> page = null;
+			List<AssetSiteHistory> allSitesList = new ArrayList<AssetSiteHistory>();
+			List<AssetSiteHistoryDTO> transactions = null;
+			
+			if(searchCriteria.getAssetId() > 0 && searchCriteria.getSiteId() > 0) { 
+				page = assetSiteHistoryRepository.findBySiteId(searchCriteria.getSiteId(), pageRequest);
+			}else {
+				page = assetSiteHistoryRepository.findByAssetId(searchCriteria.getAssetId(), pageRequest);
+			}
+			
+			allSitesList.addAll(page.getContent());
+		
+			if(CollectionUtils.isNotEmpty(allSitesList)) {
+				if(transactions == null) {
+					transactions = new ArrayList<AssetSiteHistoryDTO>();
+				}
+	        		for(AssetSiteHistory assetSites : allSitesList) {
+	        			transactions.add(mapperUtil.toModel(assetSites, AssetSiteHistoryDTO.class));
+	        		}
+				buildResultAssetSite(searchCriteria, page, transactions,result);
+			}
+		}
+		
+		return result;
+	}
+
+	private void buildResultAssetSite(SearchCriteria searchCriteria, Page<AssetSiteHistory> page,
+			List<AssetSiteHistoryDTO> transactions, SearchResult<AssetSiteHistoryDTO> result) {
+		// TODO Auto-generated method stub
+		if (page != null) {
+			result.setTotalPages(page.getTotalPages());
+		}
+		result.setCurrPage(page.getNumber() + 1);
+		result.setTotalCount(page.getTotalElements());
+		result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
+		result.setEndInd((result.getTotalCount() > 10 ? (result.getCurrPage()) * 10 : result.getTotalCount()));
+
+		result.setTransactions(transactions);
+		return;
 	}
 	
 
