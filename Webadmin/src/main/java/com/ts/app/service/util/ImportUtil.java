@@ -383,7 +383,7 @@ public class ImportUtil {
 				log.debug("Current Row number -" + r);
 				Row currentRow = datatypeSheet.getRow(r);
 				JobDTO jobDto = new JobDTO();
-				jobDto.setTitle(currentRow.getCell(1).getStringCellValue());
+				jobDto.setTitle(currentRow.getCell(0).getStringCellValue());
 				jobDto.setDesc(currentRow.getCell(1).getStringCellValue());
 				jobDto.setSiteId(siteId);
 //				long location = (long)currentRow.getCell(2).getNumericCellValue();
