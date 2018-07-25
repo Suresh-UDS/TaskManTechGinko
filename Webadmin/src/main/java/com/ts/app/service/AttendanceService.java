@@ -101,8 +101,8 @@ public class AttendanceService extends AbstractService {
         log.debug("attendance id"+dbAttn.getId());
         log.debug("latitude out"+attn.getLatitudeOut());
         log.debug("longitude out"+attn.getLongitudeOut());
-        now.add(Calendar.DAY_OF_MONTH, 1);
-        now.set(Calendar.HOUR_OF_DAY,6);
+        //now.add(Calendar.DAY_OF_MONTH, 1); // added for checking nigth shift next day check out
+        //now.set(Calendar.HOUR_OF_DAY,6);
         dbAttn.setCheckOutTime(new java.sql.Timestamp(now.getTimeInMillis()));
         if(StringUtils.isEmpty(attn.getCheckOutImage())){
             log.debug("check in image not available");
@@ -285,7 +285,7 @@ public class AttendanceService extends AbstractService {
             }
 			log.debug("attendance employee details"+attn.getEmployee().getId());
 			Calendar now = Calendar.getInstance();
-			now.set(Calendar.HOUR_OF_DAY, 22);
+			//now.set(Calendar.HOUR_OF_DAY, 22); //added for testing night shift
 			attn.setCheckInTime(new java.sql.Timestamp(now.getTimeInMillis()));
 //			attn.setDate(attn.getCheckInTime());
             if(StringUtils.isEmpty(attn.getCheckInImage())){
