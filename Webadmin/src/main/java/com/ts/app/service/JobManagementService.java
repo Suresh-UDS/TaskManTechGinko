@@ -749,6 +749,7 @@ public class JobManagementService extends AbstractService {
 		//log.debug("start Date  -"+ startDate + ", end date -" + endDate);
 		List<Job> existingJobs = jobRepository.findJobByTitleSiteAndDate(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()));
 		log.debug("Existing job -"+ existingJobs);
+		Job newScheduledJob = null;
 		if(CollectionUtils.isEmpty(existingJobs)) {
 			//if job is created against a ticket
 			if(jobDTO.getTicketId() > 0) {
@@ -762,7 +763,7 @@ public class JobManagementService extends AbstractService {
 			    Job parentJob = jobRepository.findOne(jobDTO.getParentJobId());
 			    job.setParentJob(parentJob);
 	        }
-			job = jobRepository.saveAndFlush(job);
+			newScheduledJob = jobRepository.saveAndFlush(job);
 
 			if(jobDTO.getTicketId() > 0) {
 				Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
@@ -772,7 +773,7 @@ public class JobManagementService extends AbstractService {
 		}
 
 		//if the job is scheduled for recurrence create a scheduled task
-		if(!StringUtils.isEmpty(jobDTO.getSchedule()) && !jobDTO.getSchedule().equalsIgnoreCase("ONCE")) {
+		if(newScheduledJob != null && !StringUtils.isEmpty(jobDTO.getSchedule()) && !jobDTO.getSchedule().equalsIgnoreCase("ONCE")) {
 			SchedulerConfigDTO schConfDto = new SchedulerConfigDTO();
 			schConfDto.setSchedule(jobDTO.getSchedule());
 			schConfDto.setType("CREATE_JOB");
@@ -800,7 +801,7 @@ public class JobManagementService extends AbstractService {
 			schConfDto.setScheduleWeeklyFriday(jobDTO.isScheduleWeeklyFriday());
 			schConfDto.setScheduleWeeklySaturday(jobDTO.isScheduleWeeklySaturday());
 
-			schedulerService.save(schConfDto,job);
+			schedulerService.save(schConfDto,newScheduledJob);
 		}
 		
 		//send push notification to the employee assigned for the job

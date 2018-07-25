@@ -1,6 +1,5 @@
 package com.ts.app.service;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,8 +11,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import com.ts.app.domain.*;
-import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -24,10 +21,18 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Splitter;
-import com.google.common.primitives.Longs;
+import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Job;
+import com.ts.app.domain.JobChecklist;
+import com.ts.app.domain.Project;
+import com.ts.app.domain.SchedulerConfig;
+import com.ts.app.domain.Setting;
+import com.ts.app.domain.Shift;
+import com.ts.app.domain.Site;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.EmployeeShiftRepository;
@@ -39,6 +44,12 @@ import com.ts.app.repository.SiteRepository;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.JobChecklistDTO;
+import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.SchedulerConfigDTO;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
 
 /**
@@ -139,9 +150,9 @@ public class SchedulerService extends AbstractService {
 			entity = schedulerConfigRepository.save(entity);
 			// create jobs based on the creation policy
 			//createJobs(entity);
-			runDailyTask();
-			runWeeklyTask();
-			runMonthlyTask();
+			createDailyTasks();
+			createWeeklyTasks();
+			createMonthlyTasks();
 		}
 
 	}
@@ -150,6 +161,10 @@ public class SchedulerService extends AbstractService {
 //	 @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
 	public void runDailyTask() {
 	    log.debug("Run Daily Tasks");
+		createDailyTasks();
+	}
+
+	public void createDailyTasks() {
 		if (env.getProperty("scheduler.dailyJob.enabled").equalsIgnoreCase("true")) {
             log.debug("Daily jobs enabled");
             Calendar cal = Calendar.getInstance();
@@ -207,6 +222,11 @@ public class SchedulerService extends AbstractService {
 	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
 	// @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
 	public void runWeeklyTask() {
+		createWeeklyTasks();
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public void createWeeklyTasks() {
 		if (env.getProperty("scheduler.weeklyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
 			cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -262,6 +282,11 @@ public class SchedulerService extends AbstractService {
 	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
 	// @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
 	public void runMonthlyTask() {
+		createMonthlyTasks();
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public void createMonthlyTasks() {
 		if (env.getProperty("scheduler.monthlyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
 			cal.set(Calendar.HOUR_OF_DAY, 0);
