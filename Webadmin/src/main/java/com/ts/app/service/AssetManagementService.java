@@ -39,6 +39,7 @@ import com.ts.app.domain.AssetReadingRule;
 import com.ts.app.domain.AssetSiteHistory;
 import com.ts.app.domain.AssetStatus;
 import com.ts.app.domain.AssetStatusHistory;
+import com.ts.app.domain.AssetStatusHistoryDTO;
 import com.ts.app.domain.AssetType;
 import com.ts.app.domain.Checklist;
 import com.ts.app.domain.ChecklistItem;
@@ -1959,6 +1960,54 @@ public class AssetManagementService extends AbstractService {
 			collect.add(qrCodeLists);
 		}
 		return collect;
+	}
+
+	public SearchResult<AssetStatusHistoryDTO> viewAssetStatusHistory(SearchCriteria searchCriteria) {
+		// TODO Auto-generated method stub
+
+		SearchResult<AssetStatusHistoryDTO> result = new SearchResult<AssetStatusHistoryDTO>();
+
+		Pageable pageRequest = null;
+		if(searchCriteria != null) {
+
+			Page<AssetStatusHistory> page = null;
+			List<AssetStatusHistory> allStatusList = new ArrayList<AssetStatusHistory>();
+			List<AssetStatusHistoryDTO> transactions = null;
+			
+			if(searchCriteria.getAssetId() > 0) { 
+				page = assetStatusHistoryRepository.findByAssetId(searchCriteria.getAssetId(), pageRequest);
+			}
+			
+			allStatusList.addAll(page.getContent());
+		
+			if(CollectionUtils.isNotEmpty(allStatusList)) {
+				if(transactions == null) {
+					transactions = new ArrayList<AssetStatusHistoryDTO>();
+				}
+	        		for(AssetStatusHistory assetStatus : allStatusList) {
+	        			transactions.add(mapperUtil.toModel(assetStatus, AssetStatusHistoryDTO.class));
+	        		}
+				buildSearchResultStatus(searchCriteria, page, transactions,result);
+			}
+		}
+		
+		return result;
+	
+	}
+	
+	private void buildSearchResultStatus(SearchCriteria searchCriteria, Page<AssetStatusHistory> page,
+			List<AssetStatusHistoryDTO> transactions, SearchResult<AssetStatusHistoryDTO> result) {
+		// TODO Auto-generated method stub
+			if (page != null) {
+				result.setTotalPages(page.getTotalPages());
+			}
+			result.setCurrPage(page.getNumber() + 1);
+			result.setTotalCount(page.getTotalElements());
+			result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
+			result.setEndInd((result.getTotalCount() > 10 ? (result.getCurrPage()) * 10 : result.getTotalCount()));
+	
+			result.setTransactions(transactions);
+			return;
 	}
 	
 
