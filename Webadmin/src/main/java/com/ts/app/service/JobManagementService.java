@@ -879,6 +879,7 @@ public class JobManagementService extends AbstractService {
 		dto.setMaintenanceType(job.getMaintenanceType());
 		dto.setSchedule(job.getSchedule());
 		dto.setScheduled(job.isScheduled());
+		dto.setScheduleEndDate(job.getScheduleEndDate());
 		dto.setJobType(job.getType());
 		Ticket ticket = job.getTicket();
 		if(ticket != null) {
@@ -1634,6 +1635,9 @@ public class JobManagementService extends AbstractService {
 		
 		
 		job.setEmployee(employee);
+		if(employee != null) {
+			job.setStatus(JobStatus.ASSIGNED);
+		}
 		job.setSite(site);
 		job.setTitle(assetAMCScheduleDTO.getTitle());
 		job.setDescription(assetAMCScheduleDTO.getTitle() +" "+ assetAMCScheduleDTO.getFrequencyPrefix()+" "+assetAMCScheduleDTO.getFrequencyDuration()+" "+assetAMCScheduleDTO.getFrequency());

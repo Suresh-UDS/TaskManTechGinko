@@ -461,11 +461,13 @@
 
                                                    <thead>
                                                    <tr>
+                                                   	  <th>Title</th>
                                                        <th>Schedule Type</th>
-                                                       <th>Schedule Date</th>
+                                                       <th>Schedule Start Date</th>
+                                                       <th>Schedule End Date</th>
                                                        <th>Job ID</th>
-                                                       <th>Start Date</th>
-                                                       <th>End Date</th>
+                                                       <th>Start Time</th>
+                                                       <th>End Time</th>
                                                        <th>Assigned</th>
                                                        <th>Status</th>
                                                    </tr>
@@ -474,11 +476,13 @@
 
                                                    <tbody>
                                                    <tr ng-repeat="amcList in amcJobLists">
+                                                       <td>{{amcList.title}}</td>
                                                        <td>{{amcList.description}}</td>
                                                        <td>{{amcList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
+                                                       <td>{{amcList.scheduleEndDate | date:'dd-MMM-yyyy'}}</td>
                                                        <td><a class="job-txt" ui-sref="view-job({ id: amcList.id })">{{amcList.id}}</a></td>
-                                                       <td>{{amcList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
-                                                       <td>{{amcList.plannedEndTime | date:'dd-MMM-yyyy'}}</td>
+                                                       <td>{{amcList.plannedStartTime | date:'dd-MMM-yyyy @ hh:mm a'}}</td>
+                                                       <td>{{amcList.plannedEndTime | date:'dd-MMM-yyyy @ hh:mm a'}}</td>
                                                        <td>{{amcList.employeeName}}</td>
                                                        <td>{{amcList.jobStatus}}</td>
                                                    </tr>
