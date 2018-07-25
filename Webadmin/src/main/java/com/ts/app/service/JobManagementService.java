@@ -811,10 +811,12 @@ public class JobManagementService extends AbstractService {
 				values.put("jobId", job.getId());
 				values.put("jobDateTime", DateUtil.formatToDateTimeString(job.getPlannedStartTime()));
 				values.put("site", job.getSite().getName());
-				long userId = assignedTo.getUser().getId();
-				long[] userIds = new long[1];
-				userIds[0] = userId;
-				pushService.sendAttendanceCheckoutAlert(userIds, values);
+				if(assignedTo.getUser() != null) {
+					long userId = assignedTo.getUser().getId();
+					long[] userIds = new long[1];
+					userIds[0] = userId;
+					pushService.sendAttendanceCheckoutAlert(userIds, values);
+				}
 			}
 		}
 
