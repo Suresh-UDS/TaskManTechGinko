@@ -264,7 +264,7 @@ angular.module('timeSheetApp')
                 $scope.updateSlaEscalations = function(){
                 	console.log("Escaltions " + JSON.stringify($scope.escalation));
                 	$scope.slaEscalationList.push($scope.escalation);
-                	//$scope.escalation = {};
+                	$scope.escalation = {};
                 	console.log("Escaltion List " + JSON.stringify($scope.slaEscalationList));
                 };
                 
