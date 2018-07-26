@@ -17,7 +17,8 @@ var path = require('path');
 function startup(){
 
   // Bootstrap mongoose and load dummy data
-    mongoose.connect('mongodb://admin:Tgadmin123#@localhost:27017/quotation_svc', function(err) {
+    //mongoose.connect('mongodb://admin:Tgadmin123#@localhost:27017/quotation_svc', function(err) {
+    mongoose.connect('mongodb://10.1.2.132:27017,10.1.2.187:27017/location_svc?replicaSet=rs0', function(err) {
     if (err) throw err;
 
     /*

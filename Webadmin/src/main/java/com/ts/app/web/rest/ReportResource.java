@@ -77,14 +77,14 @@ public class ReportResource {
 	}
 	
 	@RequestMapping(value = "/reports/attendance/detailed", method = RequestMethod.GET)
-	public ResponseEntity<?> sendDetailedAttendanceReport(@RequestParam(value = "date", required = false) Date attnDate) {
+	public ResponseEntity<?> sendDetailedAttendanceReport(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date attnDate, @RequestParam(value = "onDemand", required = false) boolean onDemand) {
 		if(attnDate == null) {
 			Calendar currCal = Calendar.getInstance();
 			currCal.set(Calendar.HOUR_OF_DAY, 0);
 			currCal.set(Calendar.MINUTE,0);
 			attnDate = currCal.getTime();
 		}		
-		schedulerHelperService.generateDetailedAttendanceReport(attnDate, false, true);
+		schedulerHelperService.generateDetailedAttendanceReport(attnDate, false, true, onDemand);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
