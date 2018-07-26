@@ -784,40 +784,51 @@ public class AssetResource {
 		}
 		return qrList;
 	}
-	
+
 	@RequestMapping(value= "/list/qrcodes/findAll", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Object> findAllAssetQrCodes(@RequestBody SearchCriteria search) {
 		log.info("Get List of All Asset QR Codes");
 		List<Object> qrLists = null;
-		try { 
+		try {
 			qrLists = assetService.findAllQrcodes(search.getSiteId());
-		} catch(Exception e) { 
+		} catch(Exception e) {
 			throw new TimesheetException("Error while get listing QR codes" + e);
 		}
 		return qrLists;
 	}
-	
+
 	@RequestMapping(value = "/assets/statusHistory", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public SearchResult<AssetStatusHistoryDTO> viewStatusHistory(@RequestBody SearchCriteria searchCriteria) {
 		SearchResult<AssetStatusHistoryDTO> result = null;
-		try { 
+		try {
 			result = assetService.viewAssetStatusHistory(searchCriteria);
 		} catch(Exception e) {
 			throw new TimesheetException("Error while get asset status history" +e);
 		}
 		return result;
 	}
-	
+
 	@RequestMapping(value = "/assets/siteHistory", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public SearchResult<AssetSiteHistoryDTO> viewSiteHistory(@RequestBody SearchCriteria searchCriteria) {
 		SearchResult<AssetSiteHistoryDTO> result = null;
-		try { 
+		try {
 			result = assetService.viewAssetSiteHistory(searchCriteria);
 		} catch(Exception e) {
 			throw new TimesheetException("Error while get asset site history" +e);
 		}
 		return result;
 	}
+
+	@RequestMapping(value = "/assets/tickets", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public SearchResult<TicketDTO> getAssetTickets(@RequestBody SearchCriteria searchCriteria) {
+	    SearchResult<TicketDTO> result = null;
+	    try{
+	        result = assetService.getAssetTickets(searchCriteria);
+        } catch (Exception e){
+	        throw new TimesheetException("Error while get Asset Tickets" +e);
+        }
+	    return result;
+    }
 
 
 
