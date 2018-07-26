@@ -131,7 +131,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="table-responsive tablecard">
-                                            <table class="table table-hover">
+                                            <table class="table table-hover" >
                                                 <thead >
                                                 <tr>
                                                     <th>Process Type</th>
@@ -143,22 +143,18 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <tr>
-                                                    <td>{{slass.processtype}}</td>
-                                                    <td>{{slass.severity}}</td>
-                                                    <td>{{slass.hrs}}</td>
-                                                    <td><span class="tag label label-info">Cleaning<span data-role="remove"></span></span>
-                                                        <span class="tag label label-info">Electrical<span data-role="remove"></span></span>
+                                                <tr ng-repeat = "slas in slaList" >
+                                                    <td>{{slas.processType}}</td>
+                                                    <td>{{slas.severity}}</td>
+                                                    <td>{{slas.hours}}</td>
+                                                    <td><span class="tag label label-info" ng-repeat="cat in slas.category">{{cat}}</span>
                                                     </td>
                                                     <td>
-                                                        <span class="tag label label-default">Level 1</span>
-                                                        <span class="tag label label-default">Level 2</span>
-                                                        <span class="tag label label-default">Level 3</span>
-                                                        <span class="tag label label-default">Level 4</span>
+                                                        <span class="tag label label-default" ng-repeat="slaEsc in slas.slaesc">Level {{slaEsc.level}}</span>
                                                     </td>
                                                     <td class="text-right">
                                                         <!--<a  ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>-->
-                                                        <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                                        <a ng-click = "removeSla($index)" ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                                                     </td>
                                                 </tr>
 
@@ -304,46 +300,16 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                     <tr>
-                                    <td>Level 1</td>
-                                    <td>2</td>
-                                    <td>30</td>
-                                    <td>
-                                        <span class="tag label label-default">admin@uds.in</span>
-                                        <span class="tag label label-default">support@uds.in</span>
-                                        <span class="tag label label-default">info@uds.in</span>
-                                    </td>
-                                    <td class="text-right">
-                                        <a  ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                        <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                    </td>
-                                </tr>
-                                     <tr>
-                                         <td>Level 1</td>
-                                         <td>2</td>
-                                         <td>30</td>
+                                     <tr ng-repeat = "esc in slaEscalationList">
+                                         <td>Level {{esc.level}}</td>
+                                         <td>{{esc.hours}}</td>
+                                         <td>{{esc.minutes}}</td>
                                          <td>
-                                             <span class="tag label label-default">admin@uds.in</span>
-                                             <span class="tag label label-default">support@uds.in</span>
-                                             <span class="tag label label-default">info@uds.in</span>
+                                             <span class="tag label label-default">{{esc.email}}</span>
                                          </td>
                                          <td class="text-right">
                                              <a  ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                             <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                         </td>
-                                     </tr>
-                                     <tr>
-                                         <td>Level 1</td>
-                                         <td>2</td>
-                                         <td>30</td>
-                                         <td>
-                                             <span class="tag label label-default">admin@uds.in</span>
-                                             <span class="tag label label-default">support@uds.in</span>
-                                             <span class="tag label label-default">info@uds.in</span>
-                                         </td>
-                                         <td class="text-right">
-                                             <a  ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                             <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                             <a ng-click = "removeEscalation($index)" ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                                          </td>
                                      </tr>
                                 </tbody>

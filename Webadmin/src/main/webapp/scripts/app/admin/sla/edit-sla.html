@@ -1,6 +1,6 @@
 <div class="crud-form"
      data-unique-hash="a2ad475d60b22954085c657a73309b8f">
-    <div  ng-init="initLoad();loadingAuto();">
+    <div  ng-init="loadSla(); loadProjects(); loadingAuto();">
 
 
         <div class="col-md-8">
@@ -31,7 +31,7 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Select Client <span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select ng-options = "project as prj.name for prj in projects" ng-model = "selectedProject" ng-change = "loadSites()" class="form-control">
+                                                    <select ng-options = "prj.name for prj in projects" ng-model = "selectedProject" ng-change = "loadSites()" class="form-control">
                                                         <option value="">Select Client...</option>
                                                     </select>
                                                 </div>
@@ -58,7 +58,7 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Select Process Type  <span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select ng-model = "sla.processtype" class="form-control">
+                                                    <select ng-model = "sla.processType" ng-change = "editSla()" class="form-control">
                                                         <option value="Tickets">Tickets</option>
                                                         <option value="Jobs">Jobs</option>
 
@@ -74,7 +74,7 @@
                                             <div class="dropdown">
                                                 <div class="form-group">
                                                     <label class="control-label">Select Category <span class="red-star">*</span></label>
-                                                    <select ng-model = "sla.category" multiple class="form-control">
+                                                    <select ng-model = "sla.category" ng-change = "editSla()"multiple class="form-control">
                                                         <option value="Electrical">Electrical</option>
                                                         <option value="Cleaning">Cleaning</option>
                                                         <option value="Beauty">Beauty</option>
@@ -113,11 +113,11 @@
 
                                         <div class="form-group no-padding">
                                             <label class="control-label">Hours</label>
-                                            <input type="number" class="form-control ng-valid ng-dirty ng-touched" ng-model="sla.hrs" tabindex="0" aria-invalid="false" autocomplete="off">
+                                            <input type="number" class="form-control ng-valid ng-dirty ng-touched" ng-model="sla.hours" tabindex="0" aria-invalid="false" autocomplete="off">
                                             <span class="material-input"></span></div>
 
                                     </div>
-                                    <div class="col-md-7 txt-align-rgt">
+                                    <!-- <div class="col-md-7 txt-align-rgt">
                                         <button class="btn btn-success margn-top15"  data-toggle="modal" data-target="#AddEscalationLevel" tabindex="0">
                                             <span class="btn-label">
                                                 <i class="material-icons">add</i>
@@ -127,7 +127,7 @@
                                         </button>
                                     </div>
 
-                                </div>
+                                </div>-->
 
                                 <div class="row">
                                     <div class="col-md-12">
@@ -143,23 +143,23 @@
                                                     <th class="text-right">Actions</th>
                                                 </tr>
                                                 </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td>Jobs</td>
-                                                    <td>Low</td>
-                                                    <td>48</td>
-                                                    <td><span class="tag label label-info">Cleaning<span data-role="remove"></span></span>
-                                                        <span class="tag label label-info">Electrical<span data-role="remove"></span></span>
+                                                <tbody >
+                                                <!-- <li class="list-group-item justify-content-between" ng-repeat = "slas in slaList" ng-bind-html-unsafe = "sla.text"> 
+                                					{{slas.processType}} - {{slas.category}} - {{slas.severity}} - {{slas.hours}} - {{slas.slaesc.level}} - {{slas.slaesc.hours}} - {{slas.slaesc.minutes}} - {{slas.slaesc.email}}
+                                					<span class="badge badge-default badge-pill" ng-click="removeSla($index)"><i class="material-icons">remove_circle</i></span>
+                                				</li> -->
+                                                <tr ng-repeat = "slas in slaList">
+                                                    <td>{{slas.processType}}</td>
+                                                    <td>{{slas.severity}}</td>
+                                                    <td>{{slas.hours}}</td>
+                                                    <td><span class="tag label label-info" ng-repeat = "cat in slas.category">{{cat}}<span data-role="remove"></span></span>
                                                     </td>
                                                     <td>
-                                                        <span class="tag label label-default">Level 1</span>
-                                                        <span class="tag label label-default">Level 2</span>
-                                                        <span class="tag label label-default">Level 3</span>
-                                                        <span class="tag label label-default">Level 4</span>
+                                                        <span ng-click="editEscalation()" class="tag label label-default" data-toggle="modal" data-target="#AddEscalationLevel" ng-repeat = "slaEsc in slas.slaesc">Level {{slaEsc.level}}</span>
                                                     </td>
                                                     <td class="text-right">
-                                                        <!--<a  ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>-->
-                                                        <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                                        <a ng-click = "editEscalation()" ng-class="{active: $state.includes('admin')}" data-toggle="modal" data-target="#AddEscalationLevel" class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                                        <a ng-click = "removeSla($index)" ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                                                     </td>
                                                 </tr>
 
@@ -186,7 +186,7 @@
                         <button type="submit" ng-click="cancelsla()"
                                 id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
-                        <button type="submit" type="submit"
+                        <button type="submit" ng-click = "updateSla()"
                                 id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
                                             <i class="material-icons">check</i>
                                         </span>Update SLA</button>
@@ -254,11 +254,11 @@
                                     <div class="form-group">
                                         <label class="control-label">Select Level  <span class="red-star">*</span></label>
                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                        <select ng-model = "sla.processtype" class="form-control">
-                                            <option value="level1">Level 1</option>
-                                            <option value="level2">Level 2</option>
-                                            <option value="level3">Level 3</option>
-                                            <option value="level4">Level 4</option>
+                                        <select ng-model = "escalation.level" class="form-control">
+                                            <option value="1">Level 1</option>
+                                            <option value="2">Level 2</option>
+                                            <option value="3">Level 3</option>
+                                            <option value="4">Level 4</option>
                                         </select>
                                     </div>
                                 </div>
@@ -269,26 +269,26 @@
                         <div class="col-md-1">
                             <div class="form-group no-padding">
                                 <label class="control-label">Hours</label>
-                                <input type="number" ng-model = "sla.ehrs4" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
+                                <input type="number" ng-model = "escalation.hours" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
                                 <span class="material-input"></span>
                             </div>
                         </div>
                         <div class="col-md-1">
                             <div class="form-group no-padding">
                                 <label class="control-label">Mins</label>
-                                <input type="number" ng-model = "sla.emins4" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
+                                <input type="number" ng-model = "escalation.minutes" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
                                 <span class="material-input"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group no-padding">
                                 <label class="control-label">Email</label>
-                                <input type="text" ng-model = "sla.email4" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
+                                <input type="text" ng-model = "escalation.email" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
                                 <span class="material-input"></span>
                             </div>
                         </div>
                         <div class="col-md-2 txt-align-rgt">
-                            <button class="btn btn-success margn-top15"  tabindex="0">Add</button>
+                            <button ng-click = "addSlaEscalations()" class="btn btn-success margn-top15"  tabindex="0">Add</button>
                         </div>
 
                     </div>
@@ -307,47 +307,17 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>Level 1</td>
-                                    <td>2</td>
-                                    <td>30</td>
-                                    <td>
-                                        <span class="tag label label-default">admin@uds.in</span>
-                                        <span class="tag label label-default">support@uds.in</span>
-                                        <span class="tag label label-default">info@uds.in</span>
-                                    </td>
-                                    <td class="text-right">
-                                        <a  ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                        <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Level 1</td>
-                                    <td>2</td>
-                                    <td>30</td>
-                                    <td>
-                                        <span class="tag label label-default">admin@uds.in</span>
-                                        <span class="tag label label-default">support@uds.in</span>
-                                        <span class="tag label label-default">info@uds.in</span>
-                                    </td>
-                                    <td class="text-right">
-                                        <a  ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                        <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Level 1</td>
-                                    <td>2</td>
-                                    <td>30</td>
-                                    <td>
-                                        <span class="tag label label-default">admin@uds.in</span>
-                                        <span class="tag label label-default">support@uds.in</span>
-                                        <span class="tag label label-default">info@uds.in</span>
-                                    </td>
-                                    <td class="text-right">
-                                        <a  ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                        <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                    </td>
+                                <tr ng-repeat = "esc in slaEscalationList">
+                                    <td>Level {{esc.level}}</td>
+                                         <td>{{esc.hours}}</td>
+                                         <td>{{esc.minutes}}</td>
+                                         <td>
+                                             <span class="tag label label-default">{{esc.email}}</span>
+                                         </td>
+                                         <td class="text-right">
+                                             <a  ng-click = "" ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                             <a ng-click = "removeEscalation($index)" ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                         </td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -358,7 +328,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success btn-simple"  data-dismiss="modal" ng-disabled="searchForm.$invalid">Save</button>
+                    <button ng-click = "updateEscalation()" ng-model = "slass" type="submit" class="btn btn-success btn-simple"  data-dismiss="modal" ng-disabled="searchForm.$invalid">Save</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>

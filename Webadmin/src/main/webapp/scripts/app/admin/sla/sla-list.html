@@ -1,4 +1,4 @@
-<div ng-init="loadSlaList()">
+<div ng-init="initLoad()">
 
     <div class="row">
 
@@ -71,7 +71,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat = "slalist in slaList">
+                            <tr ng-repeat = "slalist in slas">
                                 <td>{{slalist.projectName}}</td>
                                 <td>{{slalist.siteName}}</td>
                                 <td>{{slalist.processType}}</td>
@@ -82,45 +82,7 @@
 
                                     <div class="HoverBx">
                                         <button  title="View" has-authority="ROLE_ADMIN"  ui-sref="view-sla"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                        <a  ng-class="{active: $state.includes('admin')}" ui-sref="edit-sla"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
-                                        <a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                    </div>
-
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>UDS</td>
-                                <td>HDFC kodambakkam</td>
-                                <td>Job</td>
-                                <td>yes</td>
-                                <td class="text-right hoverMe">
-
-                                    <a   has-authority="ROLE_ADMIN"  title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
-
-                                    <div class="HoverBx">
-                                        <button  title="View" has-authority="ROLE_ADMIN"  ui-sref="view-sla"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                        <a  ng-class="{active: $state.includes('admin')}" ui-sref="edit-sla"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
-                                        <a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                    </div>
-
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>UDS</td>
-                                <td>HDFC kodambakkam</td>
-                                <td>Job</td>
-                                <td>yes</td>
-                                <td class="text-right hoverMe">
-
-                                    <a   has-authority="ROLE_ADMIN"  title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
-
-                                    <div class="HoverBx">
-                                        <button  title="View" has-authority="ROLE_ADMIN"  ui-sref="view-sla"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                        <a  ng-class="{active: $state.includes('admin')}" ui-sref="edit-sla"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                        <a ng-model = "selectedSla" ng-class="{active: $state.includes('admin')}" ui-sref="edit-sla({ id: slalist.id })"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
                                         <a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                                     </div>
@@ -243,7 +205,7 @@
                                 <div class="dropdown">
                                     <label class="label-control">Client</label>
                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects" ng-pattern="Select Client" >
+                                    <select class="form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="prj.name for prj in projects" ng-pattern="Select Client" >
                                         <option value="">Select Client...</option>
                                     </select>
                                 </div>
@@ -254,7 +216,7 @@
                                 <div class="form-group">
                                     <label class="label-control">Site</label>
                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites" ng-pattern="Select Site">
+                                    <select class="form-control " ng-model="selectedSite"  ng-options="site.name for site in sites" ng-pattern="Select Site">
                                         <option value="">Select Site...</option>
                                     </select>
                                 </div>
