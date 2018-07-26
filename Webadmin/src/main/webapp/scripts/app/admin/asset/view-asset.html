@@ -39,10 +39,16 @@
                                        ng-click="loadAMCJobs();">AMC Jobs</a></li>
                                        <li class="">
                                            <a href=".Tickets" data-toggle="tab"
-                                           > Tickets</a>
+                                           ng-click="loadTicketHistory()"> Tickets</a>
                                        </li>
                                        <li class=""><a href=".Readings" data-toggle="tab"
                                        ng-click="loadAssetReadings()">Readings</a></li>
+                                       
+                                        <li class=""><a href=".SiteHistory" data-toggle="tab"
+                                       	ng-click="loadSiteHistory()">SiteHistory</a></li>
+                                       
+                                        <li class=""><a href=".StatusHistory" data-toggle="tab"
+                                       	ng-click="loadStatusHistory()">StatusHistory</a></li>
 
                                    </ul>
                                    <div class="tab-content TabsContent ViewTables" style="">
@@ -348,64 +354,32 @@
 
                                                    <thead>
                                                    <tr>
-                                                       <th>Ticket ID</th>
-                                                       <th>Status</th>
-                                                       <th>Ticket Created  Time</th>
+                                                       <th>TicketID</th>
+                                                       <th>Title</th>
+                                                       <th>Created On</th>
                                                        <th>Site</th>
-                                                       <th>Ticket Mode</th>
-                                                       <th>Requestor Name</th>
-                                                       <th>Requestor Email ID</th>
+                                                       <th>Severity</th>
+                                                       <th>Status</th>
+                                                       <th>Assigned To</th>
+                                                       <th>Assigned On</th>
                                                    </tr>
 
                                                    </thead>
 
                                                    <tbody>
-                                                   <tr>
-                                                       <td>0003</td>
-                                                       <td>Pending</td>
-                                                       <td>9.00PM</td>
-                                                       <td>UDS</td>
-                                                       <td>Online</td>
-                                                       <td>Praveen</td>
-                                                       <td>praveen2491@gmail.com</td>
+                                                   <tr ng-repeat="ticket in tickets">
+                                                       <td><a class="job-txt" ui-sref="view-ticket({ id: ticket.id })">{{ticket.id}}</a></td>
+                                                       <td>{{ticket.title}}</td>
+                                                       <td>{{ticket.createdDate}}</td>
+                                                       <td>{{ticket.siteName}}</td>
+                                                       <td>{{ticket.severity}}</td>
+                                                       <td>{{ticket.status}}</td>
+                                                       <td>{{ticket.assignedToName}}</td>
+                                                       <td>{{ticket.assignedOn}}</td>
                                                    </tr>
-                                                   <tr>
-                                                       <td>0003</td>
-                                                       <td>Pending</td>
-                                                       <td>9.00PM</td>
-                                                       <td>UDS</td>
-                                                       <td>Online</td>
-                                                       <td>Praveen</td>
-                                                       <td>praveen2491@gmail.com</td>
+                                                    <tr>
+                                                   	<td colspan="8" align="center" ng-show="!tickets.length">No Tickets Found</td>
                                                    </tr>
-                                                   <tr>
-                                                       <td>0003</td>
-                                                       <td>Pending</td>
-                                                       <td>9.00PM</td>
-                                                       <td>UDS</td>
-                                                       <td>Online</td>
-                                                       <td>Praveen</td>
-                                                       <td>praveen2491@gmail.com</td>
-                                                   </tr>
-                                                   <tr>
-                                                       <td>0003</td>
-                                                       <td>Pending</td>
-                                                       <td>9.00PM</td>
-                                                       <td>UDS</td>
-                                                       <td>Online</td>
-                                                       <td>Praveen</td>
-                                                       <td>praveen2491@gmail.com</td>
-                                                   </tr>
-                                                   <tr>
-                                                       <td>0003</td>
-                                                       <td>Pending</td>
-                                                       <td>9.00PM</td>
-                                                       <td>UDS</td>
-                                                       <td>Online</td>
-                                                       <td>Praveen</td>
-                                                       <td>praveen2491@gmail.com</td>
-                                                   </tr>
-
                                                    </tbody>
                                                </table>
 
@@ -919,6 +893,89 @@
                                             <pagination-new></pagination-new>
 
                                             <!-- Pagination directive end -->
+
+                                       </div>
+                                       
+                                       <div class="tab-pane fade SiteHistory" id="SiteHistory" >
+
+                                           <div class="table-responsive tablecard">
+                                                        <table class="table table-hover tdWidthAuto">
+
+                                                            <thead>
+                                                            <tr>
+                                                                <th width="15%">Title</th>
+                                                                <th width="15%">Code</th>
+                                                                <th width="30%">Site Name</th>
+                                                                <th>Created Date</th>
+                                                                <!-- <th>To Date</th>
+                                                                <th>Frequency</th> -->
+                                                                <!-- <th align="right">Actions</th> -->
+                                                            </tr>
+
+                                                            </thead>
+
+                                                            <tbody>
+
+                                                            <tr ng-repeat="siteHistory in siteHistories">
+                                                                <td>{{siteHistory.assetTitle}}</td>
+                                                                <td>{{siteHistory.assetCode}}</td>
+                                                                <td>{{siteHistory.siteName}}</td>
+                                                                <td>{{siteHistory.createdDate | date: "dd-MM-yyyy hh:mm:ss"}}</td>
+                                                                <!-- <td>{{amcSchedule.endDate}}</td>
+                                                                <td>{{amcSchedule.frequencyPrefix}}&nbsp; {{amcSchedule.frequencyDuration}}&nbsp; {{amcSchedule.frequency}}</td> -->
+                                                                <!-- <td class="text-right">
+                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
+                                                                </td> -->
+                                                            </tr>
+                                                            <tr>
+                                                               <td colspan="4" align="center" ng-show="!siteHistories">No Site History Found</td>
+                                                            </tr>
+
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+
+                                       </div>
+                                       
+                                         <div class="tab-pane fade StatusHistory" id="StatusHistory" >
+
+                                           <div class="table-responsive tablecard">
+                                                        <table class="table table-hover tdWidthAuto">
+
+                                                            <thead>
+                                                            <tr>
+                                                                <th width="15%">Title</th>
+                                                                <th width="15%">Code</th>
+                                                                <th width="30%">Status</th>
+                                                                <th>Created Date</th>
+                                                                <!-- <th>To Date</th>
+                                                                <th>Frequency</th> -->
+                                                                <!-- <th align="right">Actions</th> -->
+                                                            </tr>
+
+                                                            </thead>
+
+                                                            <tbody>
+
+                                                            <tr ng-repeat="statusHistory in statusHistories">
+                                                                <td>{{statusHistory.assetTitle}}</td>
+                                                                <td>{{statusHistory.assetCode}}</td>
+                                                                <td>{{statusHistory.status}}</td>
+                                                                <td>{{statusHistory.createdDate | date: "dd-MM-yyyy hh:mm:ss"}}</td>
+                                                           
+                                                                <!-- <td class="text-right">
+                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
+                                                                </td> -->
+                                                            </tr>
+                                                            <tr>
+                                                               <td colspan="4" align="center" ng-show="!statusHistories">No Status History Found</td>
+                                                            </tr>
+
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
 
                                        </div>
 
