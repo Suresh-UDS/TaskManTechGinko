@@ -1058,7 +1058,7 @@ public class JobManagementService extends AbstractService {
 
 
 
-	public JobDTO updateJob(JobDTO jobDTO) {
+	public JobDTO updateJob(JobDTO jobDTO, long userId) {
 		Job job = findJob(jobDTO.getId());
 		mapToEntity(jobDTO, job);
         log.debug("Ticket in job update ----"+jobDTO.getTicketId());
@@ -1082,14 +1082,7 @@ public class JobManagementService extends AbstractService {
             ticketManagementService.updateTicketPendingStatus(ticketDTO);
         }
 		if(jobDTO.getJobStatus().equals(JobStatus.COMPLETED)) {
-			onlyCompleteJob(job);
-			//send notifications if a ticket is raised
-			if(jobDTO.getTicketId() > 0) {
-				Map<String, String> data = new HashMap<String, String>();
-				String ticketUrl = env.getProperty("url.ticket-view");
-				data.put("url.ticket-view", ticketUrl);
-				sendTicketNotifications(ticket.getEmployee(), ticket.getAssignedTo(), ticket, job.getSite(), false, data);
-			}
+			onlyCompleteJob(job, userId);
 		}else {
 			job = jobRepository.save(job);
 		}
@@ -1159,7 +1152,10 @@ public class JobManagementService extends AbstractService {
 
 	}
 
-	public JobDTO completeJob(Long id) {
+	public JobDTO completeJob(Long id, long userId) {
+		User currUser = userRepository.findOne(userId);
+		Hibernate.initialize(currUser.getEmployee());
+		Employee currUserEmp = currUser.getEmployee();
 		Job job = findJob(id);
 		job.setActualStartTime(job.getPlannedStartTime());
 		if(job.getStatus() != JobStatus.INPROGRESS){
@@ -1177,15 +1173,34 @@ public class JobManagementService extends AbstractService {
 		job.setActualEndTime(endDate);
 		job.setActualHours(totalHours);
 		jobRepository.save(job);
+		//send notifications if a ticket is raised
+		if(job.getTicket() != null) {
+			Ticket ticket = job.getTicket();
+			Map<String, String> data = new HashMap<String, String>();
+			String ticketUrl = env.getProperty("url.ticket-view");
+			data.put("url.ticket-view", ticketUrl);
+			sendTicketNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, ticket, job.getSite(), false, data);
+		}		
 		return mapperUtil.toModel(job, JobDTO.class);
 
 	}
 
-    public JobDTO saveJobAndCheckList(JobDTO jobDTO) {
+    public JobDTO saveJobAndCheckList(JobDTO jobDTO, long userId) {
         Job job = findJob(jobDTO.getId());
-
         mapToEntity(jobDTO, job);
         job = jobRepository.save(job);
+		User currUser = userRepository.findOne(userId);
+		Hibernate.initialize(currUser.getEmployee());
+		Employee currUserEmp = currUser.getEmployee();
+        
+        //	send notifications if a ticket is raised
+		if(job.getStatus().equals(JobStatus.COMPLETED) && job.getTicket() != null) {
+			Ticket ticket = job.getTicket();
+			Map<String, String> data = new HashMap<String, String>();
+			String ticketUrl = env.getProperty("url.ticket-view");
+			data.put("url.ticket-view", ticketUrl);
+			sendTicketNotifications(ticket.getEmployee(), ticket.getAssignedTo(),  currUserEmp, ticket, job.getSite(), false, data);
+		}        
         return mapperUtil.toModel(job, JobDTO.class);
     }
 
@@ -1207,7 +1222,11 @@ public class JobManagementService extends AbstractService {
 //        return checkInOutImageDto;
 //    }
 
-	public JobDTO onlyCompleteJob(Long id) {
+	public JobDTO onlyCompleteJob(Long id, long userId) {
+		User currUser = userRepository.findOne(userId);
+		Hibernate.initialize(currUser.getEmployee());
+		Employee currUserEmp = currUser.getEmployee();
+		
 		Job job = findJob(id);
 		job.setActualStartTime(job.getPlannedStartTime());
 		Date endDate = new Date();
@@ -1221,11 +1240,23 @@ public class JobManagementService extends AbstractService {
 		job.setActualHours(totalHours);
 		job.setActualMinutes(totalMinutes);
 		jobRepository.save(job);
+		//send notifications if a ticket is raised
+		if(job.getTicket() != null) {
+			Ticket ticket = job.getTicket();
+			Map<String, String> data = new HashMap<String, String>();
+			String ticketUrl = env.getProperty("url.ticket-view");
+			data.put("url.ticket-view", ticketUrl);
+			sendTicketNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, ticket, job.getSite(), false, data);
+		}
 		return mapperUtil.toModel(job, JobDTO.class);
 
 	}
 
-	public JobDTO onlyCompleteJob(Job job) {
+	public JobDTO onlyCompleteJob(Job job, long userId) {
+		User currUser = userRepository.findOne(userId);
+		Hibernate.initialize(currUser.getEmployee());
+		Employee currUserEmp = currUser.getEmployee();
+		
 		job.setActualStartTime(job.getPlannedStartTime());
 		Date endDate = new Date();
 		int totalHours = Hours.hoursBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getHours();
@@ -1238,6 +1269,14 @@ public class JobManagementService extends AbstractService {
 		job.setActualHours(totalHours);
 		job.setActualMinutes(totalMinutes);
 		jobRepository.save(job);
+		//send notifications if a ticket is raised
+		if(job.getTicket() != null) {
+			Ticket ticket = job.getTicket();
+			Map<String, String> data = new HashMap<String, String>();
+			String ticketUrl = env.getProperty("url.ticket-view");
+			data.put("url.ticket-view", ticketUrl);
+			sendTicketNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, ticket, job.getSite(), false, data);
+		}
 		return mapperUtil.toModel(job, JobDTO.class);
 
 	}
