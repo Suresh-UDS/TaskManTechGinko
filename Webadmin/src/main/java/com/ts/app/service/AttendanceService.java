@@ -24,6 +24,7 @@ import com.ts.app.domain.Attendance;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.EmployeeShift;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Shift;
 import com.ts.app.domain.Site;
@@ -33,6 +34,7 @@ import com.ts.app.domain.UserRoleEnum;
 import com.ts.app.ext.api.FaceRecognitionService;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.EmployeeShiftRepository;
 import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
@@ -90,6 +92,9 @@ public class AttendanceService extends AbstractService {
 	@Inject
 	private SettingsRepository settingRepository;
 
+	@Inject
+	private EmployeeShiftRepository empShiftRepo;
+	
     @Inject
     private Environment env;
 
@@ -127,10 +132,13 @@ public class AttendanceService extends AbstractService {
     private void findShiftTiming(boolean isCheckIn, AttendanceDTO attnDto,Attendance dbAttn) {
     		long siteId = attnDto.getSiteId();
         Site site = siteRepository.findOne(siteId);
-        List<Shift> shifts = site.getShifts();
+        List<Shift> shifts = siteRepository.findShiftsBySite(siteId);
+        //List<Shift> shifts = site.getShifts();
         if(log.isDebugEnabled()) {
         		log.debug("shift timings - " + shifts);
         }
+		Employee emp = employeeRepository.findByEmpId(attnDto.getEmployeeEmpId());	
+        
         //load the lead time and grace time properties
         int shiftStartLeadTime = Integer.valueOf(env.getProperty("attendance.shiftStartLeadTime"));
         int shiftEndLeadTime = Integer.valueOf(env.getProperty("attendance.shiftEndLeadTime"));
@@ -147,6 +155,8 @@ public class AttendanceService extends AbstractService {
 				Calendar startCal = Calendar.getInstance();
 				startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
 				startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
+				startCal.set(Calendar.SECOND, 0);
+				startCal.set(Calendar.MILLISECOND, 0);
 
 				Calendar startCalLeadTime = Calendar.getInstance();
 				startCalLeadTime.setTimeInMillis(startCal.getTimeInMillis());
@@ -163,6 +173,8 @@ public class AttendanceService extends AbstractService {
 				Calendar endCal = Calendar.getInstance();
 				endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
 				endCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
+				endCal.set(Calendar.SECOND, 0);
+				endCal.set(Calendar.MILLISECOND, 0);
 
 				Calendar endCalLeadTime = Calendar.getInstance();
 				endCalLeadTime.setTimeInMillis(endCal.getTimeInMillis());
@@ -186,6 +198,8 @@ public class AttendanceService extends AbstractService {
 					endCalGraceTime.add(Calendar.DAY_OF_MONTH, 1);
 				}
 
+				EmployeeShift empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), emp.getId() , DateUtil.convertToTimestamp(startCal.getTime()), DateUtil.convertToTimestamp(endCal.getTime()));
+
 				Calendar checkInCal = Calendar.getInstance();
 				checkInCal.setTimeInMillis(dbAttn.getCheckInTime().getTime());
 
@@ -200,7 +214,9 @@ public class AttendanceService extends AbstractService {
 							|| startCal.equals(checkInCal)) {
 						dbAttn.setShiftStartTime(startTime);  //7 AM considered as shift starts
 						dbAttn.setShiftEndTime(endTime);
-						//break;
+						if(empShift != null) {
+							break;
+						}
 					}
 				}
 
@@ -209,10 +225,15 @@ public class AttendanceService extends AbstractService {
 							|| startCal.equals(checkInCal)) {
 						dbAttn.setShiftStartTime(startTime);  //2 PM considered as shift starts
 						dbAttn.setShiftEndTime(endTime);
-						//break;
+						if(empShift != null) {
+							break;
+						}
 					}else if(checkInCal.before(endCalLeadTime) && startCal.before(checkInCal)) {
 						dbAttn.setShiftStartTime(startTime);
 						dbAttn.setShiftEndTime(endTime);
+						if(empShift != null) {
+							break;
+						}
 					}
 				}
 				
