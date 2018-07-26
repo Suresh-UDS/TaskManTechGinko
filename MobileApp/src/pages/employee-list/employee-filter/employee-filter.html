@@ -66,7 +66,7 @@
           </div>
           <ion-item>
             <ion-label class="clr-blk">Employee</ion-label>
-            <ion-select [(ngModel)]="employ" [disabled]="empSelect" class="select-box padding-left0" interface="popover" >
+            <ion-select [(ngModel)]="employ" [disabled]="empSelect" class="max-w100 padding-left0" interface="popover" >
               <ion-option  *ngFor="let emp of employee" [value]="emp.id" >{{emp.fullName}} - {{emp.designation}}</ion-option>
             </ion-select>
           </ion-item>
