@@ -693,21 +693,34 @@ public class    EmployeeService extends AbstractService {
         return employeeDtos;
     }
 
-    public List<EmployeeDTO> findWithAttendanceBySiteId(long userId,long siteId) {
+    public SearchResult<EmployeeDTO> findWithAttendanceBySiteId(SearchCriteria searchCriteria) {
         List<EmployeeDTO> employeeDtos = null;
+        SearchResult<EmployeeDTO> result1 = new SearchResult<EmployeeDTO>();
+        long userId = searchCriteria.getUserId();
+        long siteId = searchCriteria.getSiteId();
         User user = userRepository.findOne(userId);
         List<Employee> entities = null;
+
+        Pageable pageRequest = null;
+        if(searchCriteria.isList()) {
+            pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+        }else {
+            pageRequest = createPageRequest(searchCriteria.getCurrPage());
+        }
+
+        Page<Employee> page = null;
+        List<EmployeeDTO> transactions = null;
         if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
-            entities = employeeRepository.findBySiteId(siteId);
+            page = employeeRepository.findBySiteId(siteId,pageRequest);
         }else {
             List<Long> subEmpIds = null;
             subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
-            entities = employeeRepository.findBySiteIdAndEmpIds(siteId, subEmpIds);
+            page = employeeRepository.findBySiteIdAndEmpIds(siteId, subEmpIds,pageRequest);
         }
         //return mapperUtil.toModelList(entities, EmployeeDTO.class);
-        if(CollectionUtils.isNotEmpty(entities)) {
+        if(CollectionUtils.isNotEmpty(page.getContent())) {
             employeeDtos = new ArrayList<EmployeeDTO>();
-            for(Employee emp : entities) {
+            for(Employee emp : page.getContent()) {
                 //EmployeeDTO employeeDTO = mapToModel(emp);
           		EmployeeDTO empDto = new EmployeeDTO();
 	        		empDto.setId(emp.getId());
@@ -741,7 +754,16 @@ public class    EmployeeService extends AbstractService {
 
             }
         }
-        return employeeDtos;
+
+        if(page != null) {
+            if(employeeDtos == null) {
+                employeeDtos = new ArrayList<EmployeeDTO>();
+            }
+            if(CollectionUtils.isNotEmpty(employeeDtos)) {
+                buildSearchResult(searchCriteria, page, employeeDtos,result1);
+            }
+        }
+        return result1;
     }
 
 	public List<EmployeeDTO> findAllEligibleManagers(long empId) {
