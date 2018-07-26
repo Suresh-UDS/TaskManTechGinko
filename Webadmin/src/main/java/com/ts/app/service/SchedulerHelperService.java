@@ -1,5 +1,6 @@
 package com.ts.app.service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -286,6 +287,7 @@ public class SchedulerHelperService extends AbstractService {
 					StringBuilder content = new StringBuilder();
 					while (siteItr.hasNext()) {
 						Site site = siteItr.next();
+						//if(site.getId() == 119) {
 						Hibernate.initialize(site.getShifts());
 						if (CollectionUtils.isNotEmpty(site.getShifts())) {
 							List<Shift> shifts = site.getShifts();
@@ -310,6 +312,9 @@ public class SchedulerHelperService extends AbstractService {
 								endCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
 								endCal.set(Calendar.SECOND, 0);
 								endCal.set(Calendar.MILLISECOND, 0);
+								if(endCal.before(startCal)) {
+									endCal.add(Calendar.DAY_OF_MONTH, 1);
+								}
 								Calendar currCal = Calendar.getInstance();
 								//currCal.add(Calendar.HOUR_OF_DAY, 1);
 								long timeDiff = currCal.getTimeInMillis() - startCal.getTimeInMillis();
@@ -431,7 +436,36 @@ public class SchedulerHelperService extends AbstractService {
 							empNotMarkedAttn = employeeRepository.findBySiteId(site.getId());
 						}
 						if (CollectionUtils.isNotEmpty(empNotMarkedAttn)) {
+							List<Shift> shifts = site.getShifts();
 							for (Employee emp : empNotMarkedAttn) {
+								EmployeeShift empShift = null; 
+								for (Shift shift : shifts) {
+									String startTime = shift.getStartTime();
+									String[] startTimeUnits = startTime.split(":");
+									Calendar startCal = Calendar.getInstance();
+									startCal.setTime(date);
+									//startCal.add(Calendar.DAY_OF_MONTH, -1);
+									startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
+									startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
+									startCal.set(Calendar.SECOND, 0);
+									startCal.set(Calendar.MILLISECOND, 0);
+									String endTime = shift.getEndTime();
+									String[] endTimeUnits = endTime.split(":");
+									Calendar endCal = Calendar.getInstance();
+									endCal.setTime(date);
+									//endCal.add(Calendar.DAY_OF_MONTH, -1);
+									endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
+									endCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
+									endCal.set(Calendar.SECOND, 0);
+									endCal.set(Calendar.MILLISECOND, 0);
+									if(endCal.before(startCal)) {
+										endCal.add(Calendar.DAY_OF_MONTH, 1);
+									}
+									empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), emp.getId(), DateUtil.convertToTimestamp(startCal.getTime()), DateUtil.convertToTimestamp(endCal.getTime()));
+									if(empShift != null) {
+										break;
+									}
+								}
 								EmployeeAttendanceReport empAttnRep = new EmployeeAttendanceReport();
 								empAttnRep.setEmpId(emp.getId());
 								empAttnRep.setEmployeeId(emp.getEmpId());
@@ -439,8 +473,19 @@ public class SchedulerHelperService extends AbstractService {
 								empAttnRep.setLastName(emp.getLastName());
 								empAttnRep.setStatus(EmployeeAttendanceReport.ABSENT_STATUS);
 								empAttnRep.setSiteName(site.getName());
-								empAttnRep.setShiftStartTime("");
-								empAttnRep.setShiftEndTime("");
+								if(empShift != null) {
+									Timestamp startTime = empShift.getStartTime();
+									Calendar startCal = Calendar.getInstance();
+									startCal.setTimeInMillis(startTime.getTime());
+									empAttnRep.setShiftStartTime(startCal.get(Calendar.HOUR_OF_DAY) + ":" + startCal.get(Calendar.MINUTE));
+									Timestamp endTime = empShift.getEndTime();
+									Calendar endCal = Calendar.getInstance();
+									endCal.setTimeInMillis(endTime.getTime());
+									empAttnRep.setShiftEndTime(endCal.get(Calendar.HOUR_OF_DAY) + ":" + endCal.get(Calendar.MINUTE));
+								}else {
+									empAttnRep.setShiftStartTime("");
+									empAttnRep.setShiftEndTime("");
+								}
 								empAttnRep.setProjectName(proj.getName());
 								siteAttnList.add(empAttnRep);
 							}
@@ -507,6 +552,7 @@ public class SchedulerHelperService extends AbstractService {
 							
 						}
 					}
+					//}
 				}
 			}
 		}

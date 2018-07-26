@@ -77,7 +77,7 @@ public class ReportResource {
 	}
 	
 	@RequestMapping(value = "/reports/attendance/detailed", method = RequestMethod.GET)
-	public ResponseEntity<?> sendDetailedAttendanceReport(@RequestParam(value = "date", required = false) Date attnDate, @RequestParam(value = "onDemand", required = false) boolean onDemand) {
+	public ResponseEntity<?> sendDetailedAttendanceReport(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date attnDate, @RequestParam(value = "onDemand", required = false) boolean onDemand) {
 		if(attnDate == null) {
 			Calendar currCal = Calendar.getInstance();
 			currCal.set(Calendar.HOUR_OF_DAY, 0);
