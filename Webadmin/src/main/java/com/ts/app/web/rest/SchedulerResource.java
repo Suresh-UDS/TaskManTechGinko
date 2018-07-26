@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,14 +43,14 @@ public class SchedulerResource {
 	}
 	
 	@RequestMapping(value = "/scheduler/attendance/detailed", method = RequestMethod.GET)
-	public ResponseEntity<?> sendDetailedAttendanceReport(@RequestParam(value = "date", required = false) Date attnDate) {
+	public ResponseEntity<?> sendDetailedAttendanceReport(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date attnDate, @RequestParam(value = "onDemand", required = false) boolean onDemand) {
 		if(attnDate == null) {
 			Calendar currCal = Calendar.getInstance();
 			currCal.set(Calendar.HOUR_OF_DAY, 0);
 			currCal.set(Calendar.MINUTE,0);
 			attnDate = currCal.getTime();
 		}		
-		schedulerService.schedulerHelperService.generateDetailedAttendanceReport(attnDate, false, true);
+		schedulerService.schedulerHelperService.generateDetailedAttendanceReport(attnDate, false, true, onDemand);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	

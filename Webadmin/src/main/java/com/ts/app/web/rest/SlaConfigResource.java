@@ -17,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.SlaConfigService;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.SlaConfigDTO;
 
 @RestController
@@ -54,10 +57,27 @@ public class SlaConfigResource {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/sla/search", method = RequestMethod.POST)
-	public List<SlaConfigDTO> SlaList(HttpServletRequest request) {
+	@RequestMapping(value = "/sla", method = RequestMethod.GET)
+	public List<SlaConfigDTO> slaList(HttpServletRequest request) {
 		log.info("********** SLAConfig findAll *********");
 		return slaservice.findAll();
 	}
 	
+	@RequestMapping(value = "/sla/search/{id}", method = RequestMethod.GET)
+	public SlaConfigDTO searchSLA(@PathVariable Long id)
+	{
+		log.debug("*******SLAConfig Selected SLA ********" + id);
+		return slaservice.searchSelectedSLA(id);
+	}
+	
+	@RequestMapping(value = "/sla/search",method = RequestMethod.POST)
+    public SearchResult<SlaConfigDTO> searchSLA(@RequestBody SearchCriteria searchCriteria) {
+		SearchResult<SlaConfigDTO> result = null;
+        if(searchCriteria != null) {
+        	searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+            result = slaservice.findBySlaList(searchCriteria);
+        }
+        return result;
+    }
+
 	}

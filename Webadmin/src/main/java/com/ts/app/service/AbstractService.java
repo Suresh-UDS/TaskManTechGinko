@@ -2,9 +2,11 @@ package com.ts.app.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,12 +14,22 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import com.ts.app.config.Constants;
 import com.ts.app.domain.Employee;
+import com.ts.app.domain.Setting;
+import com.ts.app.domain.Site;
+import com.ts.app.domain.Ticket;
+import com.ts.app.domain.User;
+import com.ts.app.repository.SettingsRepository;
 import com.ts.app.service.util.PagingUtil;
 
 public abstract class AbstractService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(AbstractService.class);
+	
+	private SettingsRepository settingsRepository;
+	
+	private MailService mailService;
 	
 	protected Pageable createPageRequest(int page) {
 		if(page == 0) {
@@ -71,5 +83,46 @@ public abstract class AbstractService {
         }
         return subEmpIds;
     }
+    
+    
+	protected void sendTicketNotifications(Employee ticketOwner, Employee assignedTo, Ticket ticket, Site site, boolean isNew, Map<String, String> env) {
+		Hibernate.initialize(assignedTo.getUser());
+		User assignedToUser = assignedTo.getUser();
+		Hibernate.initialize(ticketOwner.getUser());
+		User ticketOwnerUser = ticketOwner.getUser();
+		
+		String ticketUrl = env.get("url.ticket-view");
+		ticketUrl +=  ticket.getId();
+		Setting ticketReports = null;
+		List<Setting> settings = settingsRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_TICKET, site.getId(), site.getProject().getId());
+		if(CollectionUtils.isNotEmpty(settings)) {
+			ticketReports = settings.get(0);
+		}
+		Setting ticketReportEmails = null;
+		if(ticketReports != null && ticketReports.getSettingValue().equalsIgnoreCase("true")) {
+			settings = settingsRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_TICKET_EMAILS, site.getId(), site.getProject().getId());
+			if(CollectionUtils.isNotEmpty(settings)) {
+				ticketReportEmails = settings.get(0);
+			}
+		}
+	    String ticketEmails = (assignedToUser != null ? (StringUtils.isNotEmpty(assignedToUser.getEmail()) ? assignedToUser.getEmail() : "") : "");
+	    ticketEmails += (ticketOwnerUser != null ? "," + (StringUtils.isNotEmpty(ticketOwnerUser.getEmail()) ? ticketOwnerUser.getEmail() : "") : "");
+	    if(StringUtils.isNotEmpty(ticketEmails)) {
+	    		ticketEmails += Constants.COMMA_SEPARATOR;
+	    }
+	    ticketEmails += ticketReportEmails != null ? ticketReportEmails.getSettingValue() : "";
+	    if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Open") || ticket.getStatus().equalsIgnoreCase("Assigned"))) {
+	    		if(isNew) {
+		    		mailService.sendTicketCreatedMail(ticketUrl,assignedTo.getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
+	        				assignedToUser.getFirstName(), assignedTo.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus(), ticket.getSeverity());
+	    		}else {
+		    		mailService.sendTicketUpdatedMail(ticketUrl,assignedTo.getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
+			        				assignedToUser.getFirstName(), assignedTo.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
+	    		}
+    		}else if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Closed"))) {
+		    mailService.sendTicketClosedMail(ticketUrl,ticket.getEmployee().getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
+        				assignedToUser.getFirstName(), assignedTo.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
+    		}
+	}
 
 }

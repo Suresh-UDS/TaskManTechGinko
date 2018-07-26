@@ -122,13 +122,13 @@
                                 <td>{{location.zone}}</td>
                                 <td>
                                     <!--<button  title="Generate QR"   data-toggle="modal" data-target="#qrcodeModal" data-dismiss="#qrcodeModal" class="btn btn-simple btn-info btn-icon like" ng-click="generateQR(location.siteId,location.id)"> <i style="font-size: 20px !important; " class="fa fa-qrcode"></i></button>-->
-                                    <!--<a id="images" href="#" onClick="$('#myModalNew').modal()" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="generateQR(location.siteId,location.id)">-->
-                                        <!--<i style="font-size: 20px !important; color: #942a25" class="fa fa-qrcode"></i>-->
-                                    <!--</a>-->
 
+                                    <!--<a id="images" href="#" onClick="$('#myModalNew').modal()" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="generateQR(location.siteId,location.id,location.block,location.floor,location.zone)">-->
                                     <a ui-sref="location-qr-print({ location: location.id})">
-                                        <i style="font-size: 20px !important; color: #942a25" class="fa fa-qrcode"></i>
+                                    <i style="font-size: 20px !important; color: #942a25" class="fa fa-qrcode"></i>
                                     </a>
+
+
 
                                 </td>
                                 <!-- <td><a  ng-click="" ui-sref=""   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a></td> -->
@@ -225,20 +225,22 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body" id="printable">
-                <table >
-                    <thead>
-                    <tr >
-                        <th style="text-align: center">Qr Code Image</th>
 
-                    </tr>
-                    </thead>
-                    <tr>
 
-                        <td><img id="qrImage" width="250" height="250" src="#"
-                                 class="img-responsive"></td>
-                    </tr>
+                <div class="row">
+                     <div class="col-md-12 txt-align-center">
+                         <h3>Qr Code Image</h3>
 
-                </table>
+                         <img id="qrImage" width="250" height="250" src="#"
+                              class="img-responsive">
+
+                         <div class="QrcodeInfo">
+                             <p>{{qrInfoBlock}}</p>
+                         </div>
+                     </div>
+                </div>
+
+
 
             </div>
             <div class="modal-footer">

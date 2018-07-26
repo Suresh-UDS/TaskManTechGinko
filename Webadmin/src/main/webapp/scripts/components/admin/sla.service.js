@@ -16,23 +16,31 @@ angular.module('timeSheetApp')
 					}.bind(this)).$promise;
 			},
 			findAll: function () {
-				return $http.post('api/sla/search').then(function (response) {
+				return $http.get('api/sla').then(function (response) {
 					return response.data;
 				});
 			},
 			findOne: function(id){
-				  return $http.get('api/site/'+id).then(function (response) {
+				  return $http.get('api/sla/search/'+id).then(function (response) {
 					  return response.data;
 				  });
 			},
-			updateSite: function (site, callback) {
+			search: function(searchCriteria) {
+				return $http.post('api/sla/search', searchCriteria).then(function (response) {
+
+					//console.log("response is--->>>"+JSON.stringify(response.data));
+					return response.data;
+				});
+			},
+			updateSla: function (sla, callback) {
 				var cb = callback || angular.noop;
 
-				return Site.update(site,
+				return SlaUpdate.update(sla,
 					function () {
-						return cb(site);
+						return cb(sla);
 					},
 					function (err) {
+						console.log(JSON.stringify(err));
 						return cb(err);
 					}.bind(this)).$promise;
 			},

@@ -92,7 +92,13 @@ angular.module('timeSheetApp')
         });
         $scope.initCalender();
 
-        $scope.saveSite = function () {
+        $scope.saveSite = function (validation) {
+
+            if(validation){
+
+                return false;
+            }
+            
 	        	$scope.error = null;
 	        	$scope.success = null;
 	        	$scope.errorSitesExists = null;
@@ -179,7 +185,12 @@ angular.module('timeSheetApp')
         }
 
 
-        $scope.updateSite = function () {
+        $scope.updateSite = function (validation) {
+
+            if(validation){
+             
+                return false;
+            }
 
         	$scope.error = null;
         	$scope.success = null;

@@ -31,6 +31,7 @@ angular.module('timeSheetApp')
         $scope.pager = {};
         $scope.noData = false;
 
+        $scope.qrInfoBlock="";
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -412,6 +413,9 @@ angular.module('timeSheetApp')
              $scope.loading = true;
              $scope.loadLocations();
              $scope.setPage(1);
+             if($stateParams.location){
+                 $scope.qrcodePage($stateParams.location);
+             }
          };
 
 
@@ -455,10 +459,11 @@ angular.module('timeSheetApp')
                 console.log('response qr---',response);
 
                 $scope.qr_img = response.url;
+
                 var eleId = 'qrImage';
                 var ele = document.getElementById(eleId);
-                ele.setAttribute('src',$scope.qr_img);
-                console.log('create qr---',$scope.qr_img);
+                    ele.setAttribute('src',$scope.qr_img);
+                // console.log('create qr---',$scope.qr_img);
 
             });
         }
@@ -491,5 +496,7 @@ angular.module('timeSheetApp')
         }
 
     });
+
+
 
 

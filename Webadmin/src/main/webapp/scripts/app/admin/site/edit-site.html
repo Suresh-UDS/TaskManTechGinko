@@ -9,7 +9,7 @@
     <div ng-controller="SiteController" ng-init="loadProjects()">
             <div class="cardsCon editSiteCon" ng-init="loadSite()">
                 <form ng-show="!success" name="form" role="form" novalidate
-                      ng-submit="updateSite()"  >
+                        >
                     <div class="row">
 
                         <div class="col-md-6">
@@ -242,11 +242,11 @@
 				                    
 				                    <div class="col-md-3">
 
-			                            <button class="btn btn-success margn-top20" ng-click="addShiftItem($event)">
-			                                <span class="btn-label">
+			                            <button class="btn btn-success margn-top20" >
+			                                <span class="btn-label" ng-click="addShiftItem($event)">
 			                                    <i class="material-icons">add</i>
+                                                Add
 			                                </span>
-			                                Add
 			                            </button>
 			
 			                        </div>               
@@ -274,7 +274,7 @@
                             <button type="submit" ng-click="cancelSite()"
                                     id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
-                            <button type="submit" type="submit"
+                            <button type="submit" type="submit" ng-click="updateSite(form.$invalid)"
                                     id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
                                         <i class="material-icons">check</i>
                                     </span>Update site</button>

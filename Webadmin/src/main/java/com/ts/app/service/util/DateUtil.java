@@ -127,6 +127,15 @@ public class DateUtil {
 		return zdt;
 	}
 	
+	public static String formatTo24HourDateTimeString(Date date) {
+		if(date != null) {
+	        DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+	        String strDate = dtFormat.format(date);
+	        return strDate;
+		}
+		return StringUtils.EMPTY;
+	}
+	
 	public static Date parseToDateTime(String time) {
 		if(org.apache.commons.lang3.StringUtils.isNotEmpty(time)) {
 	        DateFormat dtFormat = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
@@ -139,5 +148,22 @@ public class DateUtil {
 	        return date;
 		}
 		return null;
+	}
+	
+	public static void main(String arg[]) {
+		String dateValue = "Thu Jul 19 09:25:00 IST 2018";
+		Date d = parseToDateTime(dateValue);
+		Calendar now = Calendar.getInstance();
+		now.set(Calendar.SECOND,  0);
+		now.set(Calendar.MILLISECOND, 0);
+		Calendar alertTimeCal = Calendar.getInstance();
+		alertTimeCal.setTime(d);
+		alertTimeCal.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH));
+		alertTimeCal.set(Calendar.MONTH, now.get(Calendar.MONTH));
+		alertTimeCal.set(Calendar.YEAR, now.get(Calendar.YEAR));
+		alertTimeCal.set(Calendar.SECOND, 0);
+		alertTimeCal.set(Calendar.MILLISECOND, 0);
+		System.out.println(alertTimeCal.getTime());
+		System.out.println(" date match - " + alertTimeCal.equals(now));
 	}
 }

@@ -1,5 +1,6 @@
 package com.ts.app.service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,6 +33,7 @@ import com.ts.app.domain.Project;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Shift;
 import com.ts.app.domain.Site;
+import com.ts.app.domain.util.StringUtil;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.EmployeeShiftRepository;
@@ -234,7 +236,7 @@ public class SchedulerHelperService extends AbstractService {
 
 
 	@Transactional
-	public void generateDetailedAttendanceReport(Date date, boolean shiftAlert, boolean dayReport) {
+	public void generateDetailedAttendanceReport(Date date, boolean shiftAlert, boolean dayReport, boolean onDemand) {
 		if (env.getProperty("scheduler.attendanceDetailReport.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(date);
@@ -285,6 +287,7 @@ public class SchedulerHelperService extends AbstractService {
 					StringBuilder content = new StringBuilder();
 					while (siteItr.hasNext()) {
 						Site site = siteItr.next();
+						//if(site.getId() == 119) {
 						Hibernate.initialize(site.getShifts());
 						if (CollectionUtils.isNotEmpty(site.getShifts())) {
 							List<Shift> shifts = site.getShifts();
@@ -309,6 +312,9 @@ public class SchedulerHelperService extends AbstractService {
 								endCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
 								endCal.set(Calendar.SECOND, 0);
 								endCal.set(Calendar.MILLISECOND, 0);
+								if(endCal.before(startCal)) {
+									endCal.add(Calendar.DAY_OF_MONTH, 1);
+								}
 								Calendar currCal = Calendar.getInstance();
 								//currCal.add(Calendar.HOUR_OF_DAY, 1);
 								long timeDiff = currCal.getTimeInMillis() - startCal.getTimeInMillis();
@@ -322,13 +328,13 @@ public class SchedulerHelperService extends AbstractService {
 									empCntInShift = employeeRepository.findCountBySiteId(site.getId());
 								}
 
-								long attendanceCount = attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(startCal.getTime()),
-										DateUtil.convertToSQLDate(endCal.getTime()));
-								// List<EmployeeAttendanceReport> empAttnList =
-								// attendanceRepository.findBySiteId(site.getId(),
-								// DateUtil.convertToSQLDate(cal.getTime()),
-								// DateUtil.convertToSQLDate(cal.getTime()));
-								long absentCount = empCntInShift - attendanceCount;
+								//long attendanceCount = attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(startCal.getTime()),
+								//		DateUtil.convertToSQLDate(endCal.getTime()));
+								long attendanceCount = attendanceRepository.findCountBySiteAndShiftInTime(site.getId(), DateUtil.convertToSQLDate(startCal.getTime()), DateUtil.convertToSQLDate(endCal.getTime()), startTime, endTime);
+								long absentCount = 0;
+								if(empCntInShift >= attendanceCount) {
+									absentCount = empCntInShift - attendanceCount;
+								}
 
 								// ExportResult exportResult = new ExportResult();
 								// exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(),
@@ -340,8 +346,8 @@ public class SchedulerHelperService extends AbstractService {
 								//content.append("Absent - " + absentCount + LINE_SEPARATOR);
 								Map<String, String> data = new HashMap<String, String>();
 								data.put("SiteName", site.getName());
-								data.put("ShiftStartTime", shift.getStartTime());
-								data.put("ShiftEndTime", shift.getEndTime());
+								data.put("ShiftStartTime",  StringUtil.formatShiftTime(shift.getStartTime()));
+								data.put("ShiftEndTime", StringUtil.formatShiftTime(shift.getEndTime()));
 								data.put("TotalEmployees", String.valueOf(empCntInShift));
 								data.put("Present", String.valueOf(attendanceCount));
 								data.put("Absent", String.valueOf(absentCount));
@@ -430,7 +436,36 @@ public class SchedulerHelperService extends AbstractService {
 							empNotMarkedAttn = employeeRepository.findBySiteId(site.getId());
 						}
 						if (CollectionUtils.isNotEmpty(empNotMarkedAttn)) {
+							List<Shift> shifts = site.getShifts();
 							for (Employee emp : empNotMarkedAttn) {
+								EmployeeShift empShift = null; 
+								for (Shift shift : shifts) {
+									String startTime = shift.getStartTime();
+									String[] startTimeUnits = startTime.split(":");
+									Calendar startCal = Calendar.getInstance();
+									startCal.setTime(date);
+									//startCal.add(Calendar.DAY_OF_MONTH, -1);
+									startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
+									startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
+									startCal.set(Calendar.SECOND, 0);
+									startCal.set(Calendar.MILLISECOND, 0);
+									String endTime = shift.getEndTime();
+									String[] endTimeUnits = endTime.split(":");
+									Calendar endCal = Calendar.getInstance();
+									endCal.setTime(date);
+									//endCal.add(Calendar.DAY_OF_MONTH, -1);
+									endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
+									endCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
+									endCal.set(Calendar.SECOND, 0);
+									endCal.set(Calendar.MILLISECOND, 0);
+									if(endCal.before(startCal)) {
+										endCal.add(Calendar.DAY_OF_MONTH, 1);
+									}
+									empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), emp.getId(), DateUtil.convertToTimestamp(startCal.getTime()), DateUtil.convertToTimestamp(endCal.getTime()));
+									if(empShift != null) {
+										break;
+									}
+								}
 								EmployeeAttendanceReport empAttnRep = new EmployeeAttendanceReport();
 								empAttnRep.setEmpId(emp.getId());
 								empAttnRep.setEmployeeId(emp.getEmpId());
@@ -438,8 +473,19 @@ public class SchedulerHelperService extends AbstractService {
 								empAttnRep.setLastName(emp.getLastName());
 								empAttnRep.setStatus(EmployeeAttendanceReport.ABSENT_STATUS);
 								empAttnRep.setSiteName(site.getName());
-								empAttnRep.setShiftStartTime("");
-								empAttnRep.setShiftEndTime("");
+								if(empShift != null) {
+									Timestamp startTime = empShift.getStartTime();
+									Calendar startCal = Calendar.getInstance();
+									startCal.setTimeInMillis(startTime.getTime());
+									empAttnRep.setShiftStartTime(startCal.get(Calendar.HOUR_OF_DAY) + ":" + startCal.get(Calendar.MINUTE));
+									Timestamp endTime = empShift.getEndTime();
+									Calendar endCal = Calendar.getInstance();
+									endCal.setTimeInMillis(endTime.getTime());
+									empAttnRep.setShiftEndTime(endCal.get(Calendar.HOUR_OF_DAY) + ":" + endCal.get(Calendar.MINUTE));
+								}else {
+									empAttnRep.setShiftStartTime("");
+									empAttnRep.setShiftEndTime("");
+								}
 								empAttnRep.setProjectName(proj.getName());
 								siteAttnList.add(empAttnRep);
 							}
@@ -481,28 +527,32 @@ public class SchedulerHelperService extends AbstractService {
 					if (attendanceReportEmails != null && projEmployees > 0 && ((shiftAlert && siteShiftConsolidatedData.size() > 0) || dayReport)) {
 						ExportResult exportResult = null;
 						String alertTime = attnDayWiseAlertTime.getSettingValue();
+						Calendar now = Calendar.getInstance();
+						now.set(Calendar.SECOND,  0);
+						now.set(Calendar.MILLISECOND, 0);
 						Calendar alertTimeCal = Calendar.getInstance();
 						if(StringUtils.isNotEmpty(alertTime)) {
 							Date alertDateTime = DateUtil.parseToDateTime(alertTime);
 							alertTimeCal.setTime(alertDateTime);
+							alertTimeCal.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH));
+							alertTimeCal.set(Calendar.MONTH, now.get(Calendar.MONTH));
+							alertTimeCal.set(Calendar.YEAR, now.get(Calendar.YEAR));
 							alertTimeCal.set(Calendar.SECOND, 0);
 							alertTimeCal.set(Calendar.MILLISECOND, 0);
 						}
-						Calendar now = Calendar.getInstance();
-						now.set(Calendar.SECOND,  0);
-						now.set(Calendar.MILLISECOND, 0);
 						
-						if(dayReport && (attnDayWiseAlertTime == null ||  alertTimeCal.equals(now))) {
+						if(dayReport && (attnDayWiseAlertTime == null ||  alertTimeCal.equals(now) || onDemand)) {
 							exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, consolidatedData, summaryMap, shiftWiseSummary, null, exportResult);
 							mailService.sendAttendanceDetailedReportEmail(proj.getName(), attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(), null,
 									cal.getTime(), summaryMap, shiftWiseSummary, siteWiseConsolidatedMap);
-						}else if(shiftAlert) {
+						}else if(shiftAlert || onDemand) {
 							exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, consolidatedData, summaryMap, shiftWiseSummary, null, exportResult);
 							mailService.sendAttendanceDetailedReportEmail(proj.getName(), attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(), null,
 									cal.getTime(), summaryMap, shiftWiseSummary, siteWiseConsolidatedMap);
 							
 						}
 					}
+					//}
 				}
 			}
 		}

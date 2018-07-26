@@ -8,11 +8,11 @@ public class SlaConfigDTO extends BaseDTO{
 	
 	private long id;
 	
-	private long projectId;
+	private Long projectId;
 	
 	private String projectName;
 	
-	private long siteId;
+	private Long siteId;
 	
 	private String siteName;
 	
@@ -34,12 +34,20 @@ public class SlaConfigDTO extends BaseDTO{
 		this.id = id;
 	}
 
-	public long getProjectId() {
+	public Long getProjectId() {
 		return projectId;
 	}
 
-	public void setProjectId(long projectId) {
+	public void setProjectId(Long projectId) {
 		this.projectId = projectId;
+	}
+
+	public Long getSiteId() {
+		return siteId;
+	}
+
+	public void setSiteId(Long siteId) {
+		this.siteId = siteId;
 	}
 
 	public String getProjectName() {
@@ -48,14 +56,6 @@ public class SlaConfigDTO extends BaseDTO{
 
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
-	}
-
-	public long getSiteId() {
-		return siteId;
-	}
-
-	public void setSiteId(long siteId) {
-		this.siteId = siteId;
 	}
 
 	public String getSiteName() {

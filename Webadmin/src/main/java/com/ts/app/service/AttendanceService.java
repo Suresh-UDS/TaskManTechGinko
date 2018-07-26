@@ -124,6 +124,8 @@ public class AttendanceService extends AbstractService {
         log.debug("attendance id"+dbAttn.getId());
         log.debug("latitude out"+attn.getLatitudeOut());
         log.debug("longitude out"+attn.getLongitudeOut());
+        //now.add(Calendar.DAY_OF_MONTH, 1); // added for checking nigth shift next day check out
+        //now.set(Calendar.HOUR_OF_DAY,6);
         dbAttn.setCheckOutTime(new java.sql.Timestamp(now.getTimeInMillis()));
         if(StringUtils.isEmpty(attn.getCheckOutImage())){
             log.debug("check in image not available");
@@ -200,6 +202,14 @@ public class AttendanceService extends AbstractService {
 
 				if(!isCheckIn && endCal.before(startCal)) {
 					startCal.add(Calendar.DAY_OF_MONTH, -1);
+					startCalLeadTime.add(Calendar.DAY_OF_MONTH, -1);
+					startCalGraceTime.add(Calendar.DAY_OF_MONTH, -1);
+				}
+				
+				if(isCheckIn && endCal.before(startCal)) {
+					endCal.add(Calendar.DAY_OF_MONTH, 1);
+					endCalLeadTime.add(Calendar.DAY_OF_MONTH, 1);
+					endCalGraceTime.add(Calendar.DAY_OF_MONTH, 1);
 				}
 
 				Calendar checkInCal = Calendar.getInstance();
@@ -216,7 +226,7 @@ public class AttendanceService extends AbstractService {
 							|| startCal.equals(checkInCal)) {
 						dbAttn.setShiftStartTime(startTime);  //7 AM considered as shift starts
 						dbAttn.setShiftEndTime(endTime);
-						break;
+						//break;
 					}
 				}
 
@@ -225,13 +235,14 @@ public class AttendanceService extends AbstractService {
 							|| startCal.equals(checkInCal)) {
 						dbAttn.setShiftStartTime(startTime);  //2 PM considered as shift starts
 						dbAttn.setShiftEndTime(endTime);
-						break;
-					}else if(startCal.before(checkInCal)) {
+						//break;
+					}else if(checkInCal.before(endCalLeadTime) && startCal.before(checkInCal)) {
 						dbAttn.setShiftStartTime(startTime);
 						dbAttn.setShiftEndTime(endTime);
 					}
 				}
-
+				
+				/*
 				if(checkOutCal != null) { //if checkout done
 					if(checkOutCal.after(startCalGraceTime)) { // 3:30 PM checkout time > 3 PM (2 PM shift start)  + 1 hr grace time
 						if((endCal.after(checkOutCal))  // 10 PM shift ends > 3:30 PM checkout time
@@ -251,6 +262,7 @@ public class AttendanceService extends AbstractService {
 						}
 					}
 				}
+				*/
         		}
         }
     }
@@ -275,6 +287,17 @@ public class AttendanceService extends AbstractService {
 		log.debug("seach criteria"+" - " +sc.getEmployeeEmpId()+" - " +sc.getSiteId()+" - " +sc.getCheckInDateTimeFrom()+" - " +sc.getCheckInDateTimeTo());
 		SearchResult<AttendanceDTO> result = findBySearchCrieria(sc);
 		//if(result == null || CollectionUtils.isEmpty(result.getTransactions())) {
+		boolean isCheckInAllowed = true;
+		if(result != null && !CollectionUtils.isEmpty(result.getTransactions())) {
+			List<AttendanceDTO> attns = result.getTransactions();
+			for(AttendanceDTO attnd : attns) {
+				if(attnd.getCheckOutTime() == null) {
+					isCheckInAllowed = false;
+					break;
+				}
+			}
+		}
+		if(isCheckInAllowed) {
 		    log.debug("no transactions" + attnDto.getEmployeeEmpId());
 			Employee emp = employeeRepository.findByEmpId(attnDto.getEmployeeEmpId());
 			Site site = siteRepository.findOne(attnDto.getSiteId());
@@ -288,6 +311,7 @@ public class AttendanceService extends AbstractService {
             }
 			log.debug("attendance employee details"+attn.getEmployee().getId());
 			Calendar now = Calendar.getInstance();
+			//now.set(Calendar.HOUR_OF_DAY, 22); //added for testing night shift
 			attn.setCheckInTime(new java.sql.Timestamp(now.getTimeInMillis()));
 //			attn.setDate(attn.getCheckInTime());
             if(StringUtils.isEmpty(attn.getCheckInImage())){
@@ -347,6 +371,7 @@ public class AttendanceService extends AbstractService {
 
 		}
 		*/
+		}
 		return attnDto;
 	}
 
