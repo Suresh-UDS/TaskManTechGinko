@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ts.app.config.Constants;
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Asset;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Job;
@@ -36,6 +37,7 @@ import com.ts.app.domain.User;
 import com.ts.app.domain.UserRole;
 import com.ts.app.domain.UserRoleEnum;
 import com.ts.app.domain.UserRolePermission;
+import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.LocationRepository;
@@ -110,6 +112,9 @@ public class TicketManagementService extends AbstractService {
 	@Inject
 	private AmazonS3Utils amazonS3utils;
 	
+	@Inject
+	private AssetRepository assetRepository;
+	
 	@Value("${AWS.s3-cloudfront-url}")
 	private String cloudFrontUrl;
 	
@@ -125,7 +130,14 @@ public class TicketManagementService extends AbstractService {
 
         Site site = siteRepository.findOne(ticketDTO.getSiteId());
         ticket.setSite(site);
-
+        
+        if(ticketDTO.getAssetId() > 0) { 
+        	Asset asset = assetRepository.findOne(ticketDTO.getAssetId());
+            ticket.setAsset(asset);
+        }else { 
+        	 ticket.setAsset(null);
+        }
+        
         Employee ticketOwner = user.getEmployee();
         ticket.setEmployee(ticketOwner);
         Employee assignedTo = null;
