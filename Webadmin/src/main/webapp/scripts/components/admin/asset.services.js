@@ -407,6 +407,24 @@ angular.module('timeSheetApp')
                 return $http.get('api/list/qrcodes/['+MultipleIds +']').then(function (response) {
                     return response.data;
                 });
+            },
+            
+            getStatusHistory : function(search) { 
+            	return $http.post('api/assets/statusHistory', search).then(function(response) { 
+            		return response.data;
+            	});
+            },
+            
+            getSiteHistory : function(search) { 
+            	return $http.post('api/assets/siteHistory', search).then(function(response) { 
+            		return response.data;
+            	});
+            },
+            
+            getTicketHistory : function(search) { 
+            	return $http.post('api/assets/tickets', search).then(function(response) { 
+            		return response.data;
+            	});
             }
             
            
