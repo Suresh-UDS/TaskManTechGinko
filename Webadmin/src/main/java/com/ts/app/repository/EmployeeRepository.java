@@ -27,6 +27,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("SELECT e FROM Employee e join e.projectSites s WHERE s.site.id = :siteId and e.active='Y' and e.isLeft = FALSE order by e.name")
 	List<Employee> findBySiteId(@Param("siteId") long siteId);
 
+    @Query("SELECT e FROM Employee e join e.projectSites s WHERE s.site.id = :siteId and e.active='Y' and e.isLeft = FALSE order by e.name")
+    Page<Employee> findBySiteId(@Param("siteId") long siteId, Pageable pageRequest);
+
 	@Query("SELECT distinct e FROM Employee e join e.projectSites s WHERE s.site.id IN (:siteIds) and e.active='Y' and e.isLeft = FALSE order by e.name")
 	List<Employee> findBySiteIds(@Param("siteIds") List<Long> siteIds);
 
@@ -35,6 +38,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
 	@Query("SELECT distinct e FROM Employee e join e.projectSites s WHERE s.site.id = :siteId and e.id IN (:empIds) and e.active='Y' and e.isLeft = FALSE order by e.name")
 	List<Employee> findBySiteIdAndEmpIds(@Param("siteId") long siteId, @Param("empIds") List<Long> empIds);
+
+    @Query("SELECT distinct e FROM Employee e join e.projectSites s WHERE s.site.id = :siteId and e.id IN (:empIds) and e.active='Y' and e.isLeft = FALSE order by e.name")
+    Page<Employee> findBySiteIdAndEmpIds(@Param("siteId") long siteId, @Param("empIds") List<Long> empIds, Pageable pageRequest);
 
 	@Query("SELECT e FROM Employee e join e.projectSites p WHERE p.project.id = :projectId and e.active='Y' and e.isLeft = FALSE order by e.name")
 	List<Employee> findByProjectId(@Param("projectId") long projectId);
@@ -47,7 +53,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     @Query("SELECT e FROM Employee e WHERE e.id = :employeeId")
     Page<Employee> findByEmployeeId(@Param("employeeId") long employeeId, Pageable pageRequest);
-    
+
     @Query("SELECT e FROM Employee e WHERE e.empId = :employeeId and e.active='Y' and (client = :isClient or client = FALSE)")
     Page<Employee> findEmployeeId(@Param("employeeId") String employeeId, @Param("isClient") boolean isClient, Pageable pageRequest);
 

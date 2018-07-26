@@ -134,7 +134,7 @@ public class EmployeeResource {
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/employee/shift", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity<?> updateEmployeeShift(@Valid @RequestBody EmployeeShiftDTO employeeShift, HttpServletRequest request) {
@@ -146,7 +146,7 @@ public class EmployeeResource {
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/employee/shifts", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity<?> updateEmployeeShifts(@Valid @RequestBody List<EmployeeShiftDTO> employeeShifts, HttpServletRequest request) {
@@ -158,7 +158,7 @@ public class EmployeeResource {
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/employee/shift/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity<?> deleteEmployeeShift(@PathVariable("id") long id, HttpServletRequest request) {
@@ -295,10 +295,12 @@ public class EmployeeResource {
         return employeeService.findBySiteId(SecurityUtils.getCurrentUserId(),siteId);
     }
 
-    @RequestMapping(value = "/empAttendance/site/{siteId}", method = RequestMethod.GET)
-    public List<EmployeeDTO> findWithAttendanceBySiteId(@PathVariable Long siteId) {
+    @RequestMapping(value = "/empAttendance/site/", method = RequestMethod.POST)
+    public SearchResult<EmployeeDTO> findWithAttendanceBySiteId(@RequestBody SearchCriteria searchCriteria) {
         log.info("--Invoked EmployeeResource.findAll --");
-        return employeeService.findWithAttendanceBySiteId(SecurityUtils.getCurrentUserId(),siteId);
+        searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+        log.debug("Search criteria --- "+searchCriteria.getSiteId()+" -- "+searchCriteria.getUserId());
+        return employeeService.findWithAttendanceBySiteId(searchCriteria);
     }
 
 	@RequestMapping(value = "/employee/{id}/managers", method = RequestMethod.GET)
@@ -362,7 +364,7 @@ public class EmployeeResource {
         }
         return result;
     }
-    
+
     @RequestMapping(value = "/employee/shift/search",method = RequestMethod.POST)
     public SearchResult<EmployeeShiftDTO> searchEmployeesShift(@RequestBody SearchCriteria searchCriteria) {
         if(searchCriteria != null) {

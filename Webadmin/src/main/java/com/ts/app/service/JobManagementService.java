@@ -1,25 +1,21 @@
 package com.ts.app.service;
 
-import java.time.temporal.TemporalField;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
 import javax.inject.Inject;
 
-import com.ts.app.domain.*;
-import com.ts.app.repository.*;
-import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Hibernate;
 import org.joda.time.DateTime;
-import org.joda.time.DurationFieldType;
 import org.joda.time.Hours;
 import org.joda.time.Minutes;
-import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,21 +27,42 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Asset;
+import com.ts.app.domain.CheckInOut;
+import com.ts.app.domain.CheckInOutImage;
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.Frequency;
+import com.ts.app.domain.Job;
+import com.ts.app.domain.JobChecklist;
+import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.Location;
+import com.ts.app.domain.NotificationLog;
+import com.ts.app.domain.Price;
+import com.ts.app.domain.Site;
+import com.ts.app.domain.Ticket;
+import com.ts.app.domain.TicketStatus;
+import com.ts.app.domain.User;
+import com.ts.app.domain.UserRole;
+import com.ts.app.domain.UserRoleEnum;
+import com.ts.app.domain.UserRolePermission;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
+import com.ts.app.repository.CheckInOutRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.JobSpecification;
 import com.ts.app.repository.LocationRepository;
 import com.ts.app.repository.NotificationRepository;
 import com.ts.app.repository.PricingRepository;
-import com.ts.app.repository.ManufacturerRepository;
+import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.AmazonS3Utils;
 import com.ts.app.service.util.DateUtil;
@@ -54,8 +71,25 @@ import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.PagingUtil;
-import com.ts.app.service.util.QRCodeUtil;
 import com.ts.app.service.util.ReportUtil;
+import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
+import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
+import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.CheckInOutDTO;
+import com.ts.app.web.rest.dto.CheckInOutImageDTO;
+import com.ts.app.web.rest.dto.EmployeeDTO;
+import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.ImportResult;
+import com.ts.app.web.rest.dto.JobChecklistDTO;
+import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.LocationDTO;
+import com.ts.app.web.rest.dto.NotificationLogDTO;
+import com.ts.app.web.rest.dto.PriceDTO;
+import com.ts.app.web.rest.dto.ReportResult;
+import com.ts.app.web.rest.dto.SchedulerConfigDTO;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
+import com.ts.app.web.rest.dto.TicketDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
 
 /**
@@ -145,6 +179,8 @@ public class JobManagementService extends AbstractService {
     @Value("${AWS.s3-checkinout-path}")
     private String checkInOutImagePath;
 
+    private PushService pushService;
+
     public void updateJobStatus(long siteId, JobStatus toBeJobStatus) {
 		//UPDATE ALL OVERDUE JOB STATUS
 		if(!StringUtils.isEmpty(toBeJobStatus) &&
@@ -169,10 +205,6 @@ public class JobManagementService extends AbstractService {
 		SearchResult<JobDTO> result = new SearchResult<JobDTO>();
 		if(searchCriteria != null) {
 			log.debug("findBYSearchCriteria search criteria -"+ (searchCriteria.getJobStatus() != null && searchCriteria.getJobStatus().equals(JobStatus.OVERDUE)));
-
-			//-----
-
-
 
 			User user = userRepository.findOne(searchCriteria.getUserId());
 			Employee employee = user.getEmployee();
@@ -232,6 +264,7 @@ public class JobManagementService extends AbstractService {
 
             log.debug("JobManagementService toPredicate - searchCriteria projectid -"+ searchCriteria.getProjectId());
             log.debug("JobManagementService toPredicate - searchCriteria siteId -"+ searchCriteria.getSiteId());
+            log.debug("JobManagementService toPredicate - searchCriteria siteId -"+ searchCriteria.getLocationId());
             log.debug("JobManagementService toPredicate - searchCriteria jobstatus -"+ searchCriteria.getJobStatus());
             log.debug("JobManagementService toPredicate - searchCriteria jobTitle -"+ searchCriteria.getJobTitle());
             log.debug("JobManagementService toPredicate - searchCriteria scheduled -"+ searchCriteria.isScheduled());
@@ -332,14 +365,33 @@ public class JobManagementService extends AbstractService {
 		        			allJobsList.addAll(page.getContent());
 		        		}
 		            	if(employee.getUser().getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
-		            		if(searchCriteria.getSiteId() > 0 && searchCriteria.getEmployeeId() >0) {
-		            			page = jobRepository.findByStartDateSiteAndEmployee(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+		            		if(searchCriteria.getSiteId() > 0 && searchCriteria.getEmployeeId() >0 ) {
+		            		    if(searchCriteria.getLocationId()>0){
+                                    page = jobRepository.findByStartDateSiteAndEmployeeAndLocation(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
+
+                                }else{
+                                    page = jobRepository.findByStartDateSiteAndEmployee(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+
+                                }
 		            		}else if(searchCriteria.getSiteId() > 0 && searchCriteria.getEmployeeId() == 0) {
-		            			page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
+		            		    if(searchCriteria.getLocationId()>0){
+                                    page = jobRepository.findByStartDateAndSiteAndLocation(searchCriteria.getSiteId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
+
+                                }else{
+                                    page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
+                                }
 		            		}else if(searchCriteria.getSiteId() == 0 && searchCriteria.getEmployeeId() > 0) {
-		            			page = jobRepository.findByStartDateAndEmployee(searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+		            		    if(searchCriteria.getLocationId()>0){
+                                    page = jobRepository.findByStartDateAndEmployeeAndLocation(searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
+                                }else{
+                                    page = jobRepository.findByStartDateAndEmployee(searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+                                }
 		            		}else if(searchCriteria.getSiteId() > 0 && !StringUtils.isEmpty(searchCriteria.getJobTypeName())) {
-		            			page = jobRepository.findByStartDateAndSiteAndJobType(searchCriteria.getSiteId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
+		            		    if(searchCriteria.getLocationId()>0){
+                                    page = jobRepository.findByStartDateAndSiteAndJobTypeAndLocation(searchCriteria.getSiteId(), searchCriteria.getLocationId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
+                                }else{
+                                    page = jobRepository.findByStartDateAndSiteAndJobType(searchCriteria.getSiteId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
+                                }
 		            		}else {
 			        			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
 		            		}
@@ -347,13 +399,32 @@ public class JobManagementService extends AbstractService {
 
 		            	}else {
 		            		if(searchCriteria.getSiteId() > 0 && searchCriteria.getEmployeeId() >0) {
-		            			page = jobRepository.findByStartDateSiteAndEmployee(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+                                if(searchCriteria.getLocationId()>0){
+                                    page = jobRepository.findByStartDateSiteAndEmployeeAndLocation(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
+
+                                }else{
+                                    page = jobRepository.findByStartDateSiteAndEmployee(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+
+                                }
 		            		}else if(searchCriteria.getSiteId() > 0 && searchCriteria.getEmployeeId() == 0) {
-		            			page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
+                                if(searchCriteria.getLocationId()>0){
+                                    page = jobRepository.findByStartDateAndSiteAndLocation(searchCriteria.getSiteId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
+
+                                }else{
+                                    page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
+                                }
 		            		}else if(searchCriteria.getSiteId() == 0 && searchCriteria.getEmployeeId() > 0) {
-		            			page = jobRepository.findByStartDateAndEmployee(searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+                                if(searchCriteria.getLocationId()>0){
+                                    page = jobRepository.findByStartDateAndEmployeeAndLocation(searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
+                                }else{
+                                    page = jobRepository.findByStartDateAndEmployee(searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+                                }
 		            		}else if(searchCriteria.getSiteId() > 0 && !StringUtils.isEmpty(searchCriteria.getJobTypeName())) {
-		            			page = jobRepository.findByStartDateAndSiteAndJobType(searchCriteria.getSiteId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
+                                if(searchCriteria.getLocationId()>0){
+                                    page = jobRepository.findByStartDateAndSiteAndJobTypeAndLocation(searchCriteria.getSiteId(), searchCriteria.getLocationId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
+                                }else{
+                                    page = jobRepository.findByStartDateAndSiteAndJobType(searchCriteria.getSiteId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
+                                }
 		            		}else if(!StringUtils.isEmpty(searchCriteria.getJobTypeName())) {
 			        			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
 		            		}else {
@@ -700,6 +771,7 @@ public class JobManagementService extends AbstractService {
 		//log.debug("start Date  -"+ startDate + ", end date -" + endDate);
 		List<Job> existingJobs = jobRepository.findScheduledJobByTitleSiteAndDate(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()));
 		log.debug("Existing job -"+ existingJobs);
+		Job newScheduledJob = null;
 		if(CollectionUtils.isEmpty(existingJobs)) {
 			//if job is created against a ticket
 			if(jobDTO.getTicketId() > 0) {
@@ -713,7 +785,7 @@ public class JobManagementService extends AbstractService {
 			    Job parentJob = jobRepository.findOne(jobDTO.getParentJobId());
 			    job.setParentJob(parentJob);
 	        }
-			job = jobRepository.saveAndFlush(job);
+			newScheduledJob = jobRepository.saveAndFlush(job);
 
 			if(jobDTO.getTicketId() > 0) {
 				Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
@@ -723,7 +795,7 @@ public class JobManagementService extends AbstractService {
 		}
 
 		//if the job is scheduled for recurrence create a scheduled task
-		if(!StringUtils.isEmpty(jobDTO.getSchedule()) && !jobDTO.getSchedule().equalsIgnoreCase("ONCE")) {
+		if(newScheduledJob != null && !StringUtils.isEmpty(jobDTO.getSchedule()) && !jobDTO.getSchedule().equalsIgnoreCase("ONCE")) {
 			SchedulerConfigDTO schConfDto = new SchedulerConfigDTO();
 			schConfDto.setSchedule(jobDTO.getSchedule());
 			schConfDto.setType("CREATE_JOB");
@@ -752,7 +824,24 @@ public class JobManagementService extends AbstractService {
 			schConfDto.setScheduleWeeklyFriday(jobDTO.isScheduleWeeklyFriday());
 			schConfDto.setScheduleWeeklySaturday(jobDTO.isScheduleWeeklySaturday());
 
-			schedulerService.save(schConfDto,job);
+			schedulerService.save(schConfDto,newScheduledJob);
+		}
+		
+		//send push notification to the employee assigned for the job
+		if(!StringUtils.isEmpty(jobDTO.getSchedule()) && jobDTO.getSchedule().equalsIgnoreCase("ONCE")) {
+			Employee assignedTo = job.getEmployee();
+			if(assignedTo != null) {
+				Map<String, Object> values = new HashMap<String, Object>();
+				values.put("jobId", job.getId());
+				values.put("jobDateTime", DateUtil.formatToDateTimeString(job.getPlannedStartTime()));
+				values.put("site", job.getSite().getName());
+				if(assignedTo.getUser() != null) {
+					long userId = assignedTo.getUser().getId();
+					long[] userIds = new long[1];
+					userIds[0] = userId;
+					pushService.sendAttendanceCheckoutAlert(userIds, values);
+				}
+			}
 		}
 
 		return mapperUtil.toModel(job, JobDTO.class);
@@ -879,6 +968,7 @@ public class JobManagementService extends AbstractService {
 		dto.setMaintenanceType(job.getMaintenanceType());
 		dto.setSchedule(job.getSchedule());
 		dto.setScheduled(job.isScheduled());
+		dto.setScheduleEndDate(job.getScheduleEndDate());
 		dto.setJobType(job.getType());
 		Ticket ticket = job.getTicket();
 		if(ticket != null) {
@@ -1137,11 +1227,12 @@ public class JobManagementService extends AbstractService {
 		Job job = findJob(jobDTO.getId());
 		mapToEntity(jobDTO, job);
         log.debug("Ticket in job update ----"+jobDTO.getTicketId());
+        Ticket ticket = null;
 		if(jobDTO.getTicketId()>0){
 		    log.debug("ticket is pressent");
 		    log.debug("ticket is pressent----"+jobDTO.isPendingAtUDS());
 		    log.debug("ticket is pressent----"+jobDTO.isPendingAtClient());
-		    Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
+		    ticket = ticketRepository.findOne(jobDTO.getTicketId());
             TicketDTO ticketDTO = mapperUtil.toModel(ticket,TicketDTO.class);
             if(jobDTO.getJobStatus().equals(JobStatus.COMPLETED)) {
                 ticketDTO.setPendingAtClient(false);
@@ -1157,6 +1248,13 @@ public class JobManagementService extends AbstractService {
         }
 		if(jobDTO.getJobStatus().equals(JobStatus.COMPLETED)) {
 			onlyCompleteJob(job);
+			//send notifications if a ticket is raised
+			if(jobDTO.getTicketId() > 0) {
+				Map<String, String> data = new HashMap<String, String>();
+				String ticketUrl = env.getProperty("url.ticket-view");
+				data.put("url.ticket-view", ticketUrl);
+				sendTicketNotifications(ticket.getEmployee(), ticket.getAssignedTo(), ticket, job.getSite(), false, data);
+			}
 		}else {
 			job = jobRepository.save(job);
 		}
@@ -1634,6 +1732,9 @@ public class JobManagementService extends AbstractService {
 		
 		
 		job.setEmployee(employee);
+		if(employee != null) {
+			job.setStatus(JobStatus.ASSIGNED);
+		}
 		job.setSite(site);
 		job.setTitle(assetAMCScheduleDTO.getTitle());
 		job.setDescription(assetAMCScheduleDTO.getTitle() +" "+ assetAMCScheduleDTO.getFrequencyPrefix()+" "+assetAMCScheduleDTO.getFrequencyDuration()+" "+assetAMCScheduleDTO.getFrequency());

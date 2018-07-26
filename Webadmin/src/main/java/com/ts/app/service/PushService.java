@@ -50,6 +50,17 @@ public class PushService {
 		String subject = messageSource.getMessage("email.attendance.checkout.alert.title", null, locale);
 		send(userIds, emailContent);
 	}
+	
+	public void sendNewJobAlert(long userIds[], Map<String,Object> values) {
+		Locale locale = Locale.forLanguageTag("en-US");
+		Context context = new Context(locale);
+		context.setVariable("dateTime", values.get("jobDateTime"));
+		context.setVariable("site", values.get("site"));
+		context.setVariable("jobId", values.get("jobId"));
+		String emailContent = templateEngine.process("newJobAlertPush", context);
+		String subject = messageSource.getMessage("push.newjob.alert.title", null, locale);
+		send(userIds, emailContent);
+	}
 
 
 	public void send(long users[],String message) {
