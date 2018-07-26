@@ -46,6 +46,7 @@ export class OfflineGetassetreadings {
 
 
     ionViewWillEnter() {
+        this.componentService.showLoader("Readings")
         this.getAssetConfigsReading();
     }
 
@@ -70,61 +71,7 @@ export class OfflineGetassetreadings {
         console.log("Get Asset reading page");
         console.log(this.assetDetails);
         console.log(this.assetDetails.config);
-        // online
-        // // this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
-        // // //
-        // //     response=>{
-        // //         console.log("Asset config details");
-        // //         console.log(response);
-        // //         this.assetConfig = response;
-        // //         for(let config of this.assetConfig){
-        // //             this.assetService.getAssetPreviousReadings(config.assetId,config.id).subscribe(
-        // //                 response=>{
-        // //                     console.log("Get Asset Previous readings");
-        // //                     console.log(response);
-        // //                     if(response.consumptionMonitoringRequired){
-        // //                         if(response.initialValue>0){
-        // //                             config.previousValue = response.initialValue;
-        // //                         }else{
-        // //                             config.previousValue = null;
-        // //                         }
-        // //                     }else{
-        // //                         if(response.value>0){
-        // //                             config.previousValue = response.value;
-        // //                         }else{
-        // //                             config.previousValue = null;
-        // //                         }
-        // //                     }
-        //
-        //                     // if(response.initialValue<0){
-        //                     //
-        //                     //     if(response.value>0){
-        //                     //         config.previousValue=response.value;
-        //                     //     }
-        //                     // }
-        //                     // else if(response.finalValue<=0)
-        //                     // {
-        //                     //     config.previousValue=response.initialValue;
-        //                     //     config.reading=response.initialValue;
-        //                     //     console.log(this.assetConfig);
-        //                     //     config.previousReadingId=response.id;
-        //                     // }else{
-        //                     //     config.previousValue=response.finalValue;
-        //                     //     config.reading=response.initialValue;
-        //                     //     console.log(this.assetConfig);
-        //                     //
-        //                     // }
-        //                 }
-        //             )
-        //         }
-        //     },err=>{
-        //         console.log("Error in getting asset config");
-        //         console.log(err);
-        //     }
-        // )
-// offline
-
-        this.dbService.getConfig(this.assetDetails.assetType, this.assetDetails.id).then(
+        this.dbService.getConfig(this.assetDetails.assettype, this.assetDetails.id).then(
             response => {
                 console.log("Asset config details");
                 console.log(response);
@@ -132,6 +79,7 @@ export class OfflineGetassetreadings {
                 for (let config of this.assetConfig) {
                     this.dbService.getPreviousReading(config.assetId, config.id).then(
                         response => {
+                            this.componentService.closeLoader()
                             console.log("Get Asset Previous readings");
                             console.log(response[0]);
                             if (response[0].consumptionMonitoringRequired) {
@@ -170,6 +118,7 @@ export class OfflineGetassetreadings {
                     )
                 }
             }, err => {
+                this.componentService.closeLoader()
                 console.log("Error in getting asset config");
                 console.log(err);
             }
@@ -223,7 +172,6 @@ export class OfflineGetassetreadings {
         console.log(reading.min);
         console.log(reading.max);
 
-
         if (reading.consumptionMonitoringRequired && reading.previousReadingId > 0) {
             console.log(reading.currentValue);
 
@@ -239,12 +187,12 @@ export class OfflineGetassetreadings {
                             assetId: reading.assetId,
                             assetParameterConfigId: reading.id,
                             consumptionMonitoringRequired: reading.consumptionMonitoringRequired,
-                            id: reading.previousReadingId
-
+                            id: reading.previousReadingId,
+                            assetType : reading.assetType
                         };
                         console.log(assetReading);
                         // offline
-                        this.saveReading(assetReading);
+                        this.assetSaveReading(assetReading);
                         // this.assetSaveReading(assetReading); //online
                     } else {
                         var msg = "Asset reading should be greater than " + reading.min + "or less than " + reading.max;
@@ -260,12 +208,13 @@ export class OfflineGetassetreadings {
                         assetId: reading.assetId,
                         assetParameterConfigId: reading.id,
                         consumptionMonitoringRequired: reading.consumptionMonitoringRequired,
-                        id: reading.previousReadingId
+                        id: reading.previousReadingId,
+                        assetType : reading.assetType
 
                     };
                     console.log(assetReading);
                     // offline
-                    this.saveReading(assetReading);
+                    this.assetSaveReading(assetReading);
                     // this.assetSaveReading(assetReading); //online
 
                 }
@@ -281,13 +230,14 @@ export class OfflineGetassetreadings {
                     assetId: reading.assetId,
                     assetParameterConfigId: reading.id,
                     consumptionMonitoringRequired: reading.consumptionMonitoringRequired,
-                    id: reading.previousReadingId
+                    id: reading.previousReadingId,
+                    assetType : reading.assetType
 
                 };
                 console.log(assetReading);
 
                 // offline
-                this.saveReading(assetReading);
+                this.assetSaveReading(assetReading);
                 // this.assetSaveReading(assetReading);//online
 
 
@@ -306,10 +256,11 @@ export class OfflineGetassetreadings {
                             assetId: reading.assetId,
                             assetParameterConfigId: reading.id,
                             consumptionMonitoringRequired: reading.consumptionMonitoringRequired,
+                            assetType : reading.assetType
                         };
                         console.log(assetReading);
                         // offline
-                        this.saveReading(assetReading);
+                        this.assetSaveReading(assetReading);
                         // this.assetSaveReading(assetReading); //online
 
                     } else {
@@ -326,12 +277,13 @@ export class OfflineGetassetreadings {
                         assetId: reading.assetId,
                         assetParameterConfigId: reading.id,
                         consumptionMonitoringRequired: reading.consumptionMonitoringRequired,
-                        id: reading.previousReadingId
+                        id: reading.previousReadingId,
+                        assetType : reading.assetType
 
                     };
                     console.log(assetReading);
                     // offline
-                    this.saveReading(assetReading);
+                    this.assetSaveReading(assetReading);
                     // this.assetSaveReading(assetReading); //online
 
                 }
@@ -345,10 +297,11 @@ export class OfflineGetassetreadings {
                     assetId: reading.assetId,
                     assetParameterConfigId: reading.id,
                     consumptionMonitoringRequired: reading.consumptionMonitoringRequired,
+                    assetType : reading.assetType
                 };
                 console.log(assetReading);
                 // offline
-                this.saveReading(assetReading);
+                this.assetSaveReading(assetReading);
                 // this.assetSaveReading(assetReading); //online
 
             }
@@ -363,10 +316,11 @@ export class OfflineGetassetreadings {
                         assetId: reading.assetId,
                         assetParameterConfigId: reading.id,
                         consumptionMonitoringRequired: reading.consumptionMonitoringRequired,
+                        assetType : reading.assetType
                     };
                     console.log(assetReading);
                     // offline
-                    this.saveReading(assetReading);
+                    this.assetSaveReading(assetReading);
                     // this.assetSaveReading(assetReading); //online
 
 
@@ -382,10 +336,11 @@ export class OfflineGetassetreadings {
                     assetId: reading.assetId,
                     assetParameterConfigId: reading.id,
                     consumptionMonitoringRequired: reading.consumptionMonitoringRequired,
+                    assetType : reading.assetType
                 };
                 console.log(assetReading);
                 // offline
-                this.saveReading(assetReading);
+                this.assetSaveReading(assetReading);
                 // this.assetSaveReading(assetReading); //online?
             }
 
@@ -393,4 +348,21 @@ export class OfflineGetassetreadings {
 
 
     }
-}
+
+
+    assetSaveReading(assetReading) {
+        //offline
+
+        assetReading.initialValueTime = new Date()
+        this.dbService.setReadings(assetReading).then(
+            response=>{
+                console.log(response)
+                this.componentService.showToastMessage('Reading Saved','bottom');
+                this.viewCtrl.dismiss();
+            },
+            error=>{
+                console.log(error)
+            }
+        )
+    }
+    }

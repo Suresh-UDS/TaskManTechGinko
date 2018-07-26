@@ -9,7 +9,6 @@ angular.module('timeSheetApp')
         }
         $scope.user = {};
         $scope.errors = {};
-        $scope.resLoader=false;
         $scope.rememberMe = true;
         $scope.oldPassword='';
         $scope.newPassword='';
@@ -29,14 +28,14 @@ angular.module('timeSheetApp')
                     $rootScope.isLoggedIn = true;
                     $rootScope.back();
                 }
-                $scope.resLoader=true;
+                $rootScope.resLoader=true;
                 $rootScope.inits();
 
             }).catch(function () {
                 $scope.authenticationError = true;
-                $scope.resLoader=false;
+                $rootScope.resLoader=false;
             });
-            $scope.resLoader=true;
+            $rootScope.resLoader=true;
         };
 
          //Loading Page go to top position

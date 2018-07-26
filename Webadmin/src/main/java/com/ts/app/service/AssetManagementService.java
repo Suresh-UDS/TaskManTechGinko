@@ -6,9 +6,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
+import com.ts.app.domain.*;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.hibernate.Hibernate;
@@ -25,38 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Asset;
-import com.ts.app.domain.AssetAMCSchedule;
-import com.ts.app.domain.AssetDocument;
-import com.ts.app.domain.AssetGroup;
-import com.ts.app.domain.AssetPPMSchedule;
-import com.ts.app.domain.AssetParameterConfig;
-import com.ts.app.domain.AssetParameterReading;
-import com.ts.app.domain.AssetParameterReadingRule;
-import com.ts.app.domain.AssetReadingRule;
-import com.ts.app.domain.AssetSiteHistory;
-import com.ts.app.domain.AssetStatus;
-import com.ts.app.domain.AssetStatusHistory;
-import com.ts.app.domain.AssetType;
-import com.ts.app.domain.Checklist;
-import com.ts.app.domain.ChecklistItem;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.EmployeeProjectSite;
-import com.ts.app.domain.Frequency;
-import com.ts.app.domain.FrequencyPrefix;
-import com.ts.app.domain.Job;
-import com.ts.app.domain.JobChecklist;
-import com.ts.app.domain.MaintenanceType;
-import com.ts.app.domain.Manufacturer;
-import com.ts.app.domain.ParameterConfig;
-import com.ts.app.domain.Project;
-import com.ts.app.domain.SchedulerConfig;
-import com.ts.app.domain.Setting;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.User;
-import com.ts.app.domain.Vendor;
-import com.ts.app.domain.WarrantyType;
 import com.ts.app.repository.AssetAMCRepository;
 import com.ts.app.repository.AssetDocumentRepository;
 import com.ts.app.repository.AssetGroupRepository;
@@ -66,6 +37,7 @@ import com.ts.app.repository.AssetParameterConfigRepository;
 import com.ts.app.repository.AssetPpmScheduleRepository;
 import com.ts.app.repository.AssetReadingRuleRepository;
 import com.ts.app.repository.AssetRepository;
+import com.ts.app.repository.AssetSiteHistoryRepository;
 import com.ts.app.repository.AssetSpecification;
 import com.ts.app.repository.AssetStatusHistoryRepository;
 import com.ts.app.repository.AssetTypeRepository;
@@ -97,21 +69,6 @@ import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.QRCodeUtil;
 import com.ts.app.service.util.ReportUtil;
-import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
-import com.ts.app.web.rest.dto.AssetDTO;
-import com.ts.app.web.rest.dto.AssetDocumentDTO;
-import com.ts.app.web.rest.dto.AssetPPMScheduleEventDTO;
-import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
-import com.ts.app.web.rest.dto.AssetParameterReadingDTO;
-import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
-import com.ts.app.web.rest.dto.AssetTypeDTO;
-import com.ts.app.web.rest.dto.AssetgroupDTO;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.ChecklistItemDTO;
-import com.ts.app.web.rest.dto.ExportResult;
-import com.ts.app.web.rest.dto.ImportResult;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
 
 /**
@@ -215,61 +172,64 @@ public class AssetManagementService extends AbstractService {
 
 	@Inject
 	private AssetParamReadingRepository assetParamReadingRepository;
-	
+
 	@Inject
 	private ParameterConfigRepository parameterConfigRepository;
 
 	@Inject
 	private JobManagementService jobManagementService;
-	
+
 	@Inject
 	private AssetReadingRuleRepository assetReadingRuleRepository;
-	
+
 	@Inject
 	private SettingsRepository settingRepository;
-	
+
 	@Inject
 	private AssetParamRuleRepository assetParamRuleRepository;
-	
+
 	@Inject
 	private AmazonS3Utils s3ServiceUtils;
-	
+
 	@Inject
 	private WarrantyTypeRepository warrantyTypeRepository;
-	
+
 	@Inject
 	private AssetStatusHistoryRepository assetStatusHistoryRepository;
-	
+
 	@Inject
 	private SchedulerConfigRepository schedulerConfigRepository;
-	
+
 	@Inject
 	private ChecklistItemRepository checklistRespository;
-	
+
+	@Inject
+	private AssetSiteHistoryRepository assetSiteHistoryRepository;
+
 	public static final String EMAIL_NOTIFICATION_READING = "email.notification.reading";
-	
+
 	public static final String EMAIL_NOTIFICATION_READING_EMAILS = "email.notification.reading.emails";
-	
+
 	public static final String EMAIL_NOTIFICATION_ASSET = "email.notification.asset";
-	
+
 	public static final String EMAIL_NOTIFICATION_ASSET_EMAILS = "email.notification.asset.emails";
-	
+
 	@Value("${AWS.s3-cloudfront-url}")
 	private String cloudFrontUrl;
-	
+
 	@Value("${AWS.s3-bucketEnv}")
 	private String bucketEnv;
-	
+
 	@Value("${AWS.s3-asset-path}")
 	private String assetFilePath;
-	
+
 	@Value("${AWS.s3-qrcode-path}")
 	private String qrcodePath;
 
 	// Asset
 	public AssetDTO saveAsset(AssetDTO assetDTO) {
 		log.debug("assets service with assettype " + assetDTO.getAssetType());
-        
+
 		Asset asset = mapperUtil.toEntity(assetDTO, Asset.class);
 		Site site = getSite(assetDTO.getSiteId());
 		asset.setSite(site);
@@ -290,26 +250,26 @@ public class AssetManagementService extends AbstractService {
 			assetStatusHistoryList.add(assetStatusHistory);
 			asset.setAssetStatusHistory(assetStatusHistoryList);
 		}
-		
+
 		asset.setActive(Asset.ACTIVE_YES);
 
 		/*Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
         checkInDateFrom.setTime(assetDTO.getAcquiredDate());
-        
+
         asset.setAcquiredDate(DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateFrom)));*/
-        
+
 		/*asset.setAcquiredDate(DateUtil.convertToSQLDate(assetDTO.getAcquiredDate()));*/
 		asset = assetRepository.save(asset);
-		 
+
 		//AssetStatusHistory assetStatusHistory = assetStatusHistoryRepository.findOne(asset.getAssetStatusHistory().getId());
 		//assetStatusHistory.setAsset(asset);
 		//assetStatusHistoryRepository.save(assetStatusHistory);
-		
+
 		//generate QR code if qr code is not already generated.
 		if(asset != null && asset.getId() > 0 && !StringUtils.isEmpty(asset.getCode()) && StringUtils.isEmpty(asset.getQrCodeImage())) {
 			generateAssetQRCode(asset.getId(), asset.getCode());
 		}
-		
+
 		//create asset type if does not exist
 		if(!StringUtils.isEmpty(asset.getAssetType())) {
 			AssetType assetType = assetTypeRepository.findByName(asset.getAssetType());
@@ -331,7 +291,7 @@ public class AssetManagementService extends AbstractService {
 				assetGroupRepository.save(assetGroup);
 			}
 		}
-		
+
 		//create asset warranty type if does not exist
 		if(!StringUtils.isEmpty(asset.getWarrantyType())) {
 			WarrantyType warrantyType = warrantyTypeRepository.findByName(asset.getWarrantyType());
@@ -342,7 +302,7 @@ public class AssetManagementService extends AbstractService {
 				warrantyTypeRepository.save(warrantyType);
 			}
 		}
-		
+
 		//create site history
 		if(assetDTO.getSiteId() > 0) {
 			AssetSiteHistory assetSiteHistory = new AssetSiteHistory();
@@ -352,8 +312,8 @@ public class AssetManagementService extends AbstractService {
 			List<AssetSiteHistory> assetSiteHistoryList = new ArrayList<AssetSiteHistory>();
 			assetSiteHistoryList.add(assetSiteHistory);
 			asset.setAssetSiteHistory(assetSiteHistoryList);
-		}		
-				
+		}
+
 		List<ParameterConfig> parameterConfigs = parameterConfigRepository.findAllByAssetType(assetDTO.getAssetType());
 		if(CollectionUtils.isNotEmpty(parameterConfigs)) {
 			List<AssetParameterConfig> assetParamConfigs = new ArrayList<AssetParameterConfig>();
@@ -381,7 +341,7 @@ public class AssetManagementService extends AbstractService {
 		}
 		return false;
 	}
-	
+
 	public boolean isDuplicatePPMSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
 	    log.debug("Asset Title "+assetPpmScheduleDTO.getTitle());
 		List<AssetPPMSchedule> assetPPMSchedule = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(assetPpmScheduleDTO.getAssetId(), assetPpmScheduleDTO.getTitle());
@@ -390,7 +350,7 @@ public class AssetManagementService extends AbstractService {
 		}
 		return false;
 	}
-	
+
 	public List<AssetDTO> findAllAssets() {
 		log.debug(">>> get all assets");
 		List<Asset> assets = assetRepository.findAll();
@@ -456,7 +416,7 @@ public class AssetManagementService extends AbstractService {
 		log.debug(">>> asset Type " + asset.getAssetType());
 		log.debug(">>> Asset Group " + asset.getAssetGroup());
 		AssetDTO assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
-		
+
 		return assetDTO;
 	}
 
@@ -480,7 +440,7 @@ public class AssetManagementService extends AbstractService {
 		asset.setTitle(assetDTO.getTitle());
 		asset.setAssetType(assetDTO.getAssetType());
 		asset.setWarrantyType(assetDTO.getWarrantyType());
-		
+
 		//update status history
 		if(!StringUtils.isEmpty(assetDTO.getStatus())
 				&& assetDTO.getStatus().equalsIgnoreCase(asset.getStatus())) {
@@ -494,7 +454,7 @@ public class AssetManagementService extends AbstractService {
 			}
 			asset.setAssetStatusHistory(assetStatusHistoryList);
 		}
-		
+
 		asset.setAssetGroup(assetDTO.getAssetGroup());
 		asset.setDescription(assetDTO.getDescription());
 		//update site history
@@ -515,7 +475,7 @@ public class AssetManagementService extends AbstractService {
 			}else {
 				assetSiteHistoryList.add(assetSiteHistory);
 			}
-			
+
 			//update asset scheduler config with new site info
 			List<SchedulerConfig> schedules = schedulerConfigRepository.findAssetSchedule(assetDTO.getId());
 			if(CollectionUtils.isNotEmpty(schedules)) {
@@ -530,7 +490,7 @@ public class AssetManagementService extends AbstractService {
 				}
 				schedulerConfigRepository.save(schedules);
 			}
-			
+
 			//update asset jobs
 			Calendar currDate = Calendar.getInstance();
 			List<Job> jobList = jobRepository.findByAssetAndStartDate(assetDTO.getId(), DateUtil.convertToSQLDate(currDate.getTime()));
@@ -543,8 +503,8 @@ public class AssetManagementService extends AbstractService {
 				}
 				jobRepository.save(jobList);
 			}
-			
-			
+
+
 		}
 		if (assetDTO.getManufacturerId() != asset.getManufacturer().getId()) {
 			Manufacturer manufacturer = getManufacturer(assetDTO.getManufacturerId());
@@ -578,36 +538,36 @@ public class AssetManagementService extends AbstractService {
 			asset.setStartTime(DateUtil.convertToSQLDate(assetDTO.getStartTime()));
 		}
 		asset.setUdsAsset(assetDTO.isUdsAsset());
-		
+
 		if(assetDTO.getStatus().equalsIgnoreCase(AssetStatus.BREAKDOWN.getStatus())) {
-			
+
 			Date date = new Date();
-			
+
 			Asset assetEntity = assetRepository.findOne(assetDTO.getId());
 			String assetCode = assetEntity.getCode();
 			Site site = siteRepository.findOne(assetEntity.getSite().getId());
-			
+
 			String siteName = site.getName();
-			
+
 			User user = userRepository.findOne(assetDTO.getUserId());
 			log.debug(">>> user <<<"+ user.getFirstName() +" and "+user.getId());
 //			Employee employee = user.getEmployee();
-			
+
 			Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_ASSET);
-			
-			if(setting.getSettingValue().equalsIgnoreCase("true") ) { 
-				
+
+			if(setting.getSettingValue().equalsIgnoreCase("true") ) {
+
 				Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_ASSET_EMAILS);
-				
+
 				if(settingEntity.getSettingValue().length() > 0) {
-					
+
 					List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
-					for(String email : emailLists) { 
+					for(String email : emailLists) {
 						mailService.sendAssetBreakdownAlert(email, assetEntity.getTitle(), siteName, assetCode, user.getFirstName(), date);
 					}
-					
+
 				} else {
-					
+
 					log.info("There is no email ids registered");
 				}
 			}
@@ -618,17 +578,17 @@ public class AssetManagementService extends AbstractService {
 		Asset asset = assetRepository.findOne(assetDTO.getId());
 		mapToEntityAssets(assetDTO, asset);
 		asset = assetRepository.save(asset);
-				
+
 		return mapperUtil.toModel(asset, AssetDTO.class);
 	}
-	
+
 	public void deleteAsset(Long id) {
 		log.debug(">>> Inside Asset Delete Service");
 		Asset asset = assetRepository.findOne(id);
 		asset.setActive(Asset.ACTIVE_NO);
 		assetRepository.save(asset);
 	}
-	
+
 	public Map<String, Object> generateAssetQRCode(long assetId, String assetCode) {
 		Asset asset = assetRepository.findOne(assetId);
 		long siteId = asset.getSite().getId();
@@ -662,7 +622,7 @@ public class AssetManagementService extends AbstractService {
 	public Map<String, Object> getQRCode(long assetId) {
 		log.debug(">>> get QR Code <<<");
 //		AssetDTO assetDTO = new AssetDTO();
-		Map<String, Object> hm = new HashMap<>();		
+		Map<String, Object> hm = new HashMap<>();
 		Asset asset = assetRepository.findOne(assetId);
 //		String qrCodeBase64 = null;
 		String imageFileUrl = "" ;
@@ -684,7 +644,7 @@ public class AssetManagementService extends AbstractService {
 
 	/**
 	 * Creates the asset AMC schedule information.
-	 * 
+	 *
 	 * @param assetAMCScheduleDTO
 	 * @return
 	 */
@@ -693,7 +653,7 @@ public class AssetManagementService extends AbstractService {
 
 		AssetAMCSchedule assetAMC = mapperUtil.toEntity(assetAMCScheduleDTO, AssetAMCSchedule.class);
 		//assetAMC.setMaintenanceType(MaintenanceType.AMC.getValue());
-		
+
 		if(assetAMCScheduleDTO.getChecklistId() > 0) {
 			Checklist checklist = checklistRepository.findOne(assetAMCScheduleDTO.getChecklistId());
 			assetAMC.setChecklist(checklist);
@@ -709,7 +669,7 @@ public class AssetManagementService extends AbstractService {
 		if (CollectionUtils.isEmpty(existingSchedules)) {
 			assetAMC = assetAMCRepository.save(assetAMC);
 			assetAMCScheduleDTO = mapperUtil.toModel(assetAMC, AssetAMCScheduleDTO.class);
-			if(assetAMC.getId() > 0) { 
+			if(assetAMC.getId() > 0) {
 				jobManagementService.createAMCJobs(assetAMCScheduleDTO);
 			}
 		}
@@ -720,7 +680,7 @@ public class AssetManagementService extends AbstractService {
 
 	/**
 	 * Updates the asset AMC schedule information.
-	 * 
+	 *
 	 * @param assetAMCScheduleDTO
 	 * @return
 	 */
@@ -748,7 +708,7 @@ public class AssetManagementService extends AbstractService {
 
 	/**
 	 * Returns a list of asset AMC schedule information for the given asset Id.
-	 * 
+	 *
 	 * @param assetId
 	 * @return
 	 */
@@ -758,8 +718,8 @@ public class AssetManagementService extends AbstractService {
 		List<AssetAMCSchedule> assetAMCSchedules = assetAMCRepository.findAssetAMCScheduleByAssetId(assetId);
 		if (CollectionUtils.isNotEmpty(assetAMCSchedules)) {
 			assetAMCScheduleDTOs = mapperUtil.toModelList(assetAMCSchedules, AssetAMCScheduleDTO.class);
-			for(AssetAMCScheduleDTO assetAMC : assetAMCScheduleDTOs) { 
-				if(assetAMC.getChecklistId() > 0) { 
+			for(AssetAMCScheduleDTO assetAMC : assetAMCScheduleDTOs) {
+				if(assetAMC.getChecklistId() > 0) {
 					List<ChecklistItem> checkList = checklistRespository.findByChecklistId(assetAMC.getChecklistId());
 					List<ChecklistItemDTO> cheklistItemDTO = mapperUtil.toModelList(checkList, ChecklistItemDTO.class);
 					assetAMC.setCheckListItems(cheklistItemDTO);
@@ -771,7 +731,7 @@ public class AssetManagementService extends AbstractService {
 
 	/**
 	 * Returns a list of asset PPM schedule information for the given asset Id.
-	 * 
+	 *
 	 * @param assetId
 	 * @return
 	 */
@@ -781,8 +741,8 @@ public class AssetManagementService extends AbstractService {
 		List<AssetPPMSchedule> assetPpmSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByAssetId(assetId, type);
 		if (CollectionUtils.isNotEmpty(assetPpmSchedules)) {
 			assetPpmScheduleDTOs = mapperUtil.toModelList(assetPpmSchedules, AssetPpmScheduleDTO.class);
-			for(AssetPpmScheduleDTO assetPPM : assetPpmScheduleDTOs) { 
-				if(assetPPM.getChecklistId() > 0) { 
+			for(AssetPpmScheduleDTO assetPPM : assetPpmScheduleDTOs) {
+				if(assetPPM.getChecklistId() > 0) {
 					List<ChecklistItem> checkList = checklistRespository.findByChecklistId(assetPPM.getChecklistId());
 					List<ChecklistItemDTO> cheklistItemDTO = mapperUtil.toModelList(checkList, ChecklistItemDTO.class);
 					assetPPM.setCheckListItems(cheklistItemDTO);
@@ -791,7 +751,7 @@ public class AssetManagementService extends AbstractService {
 		}
 		return assetPpmScheduleDTOs;
 	}
-	
+
 	/**
 	 * Get the 52 week schedule for the current year in operation for a given asset or all the assets in a site.
 	 * @param siteId
@@ -799,7 +759,7 @@ public class AssetManagementService extends AbstractService {
 	 */
 	public ExportResult generate52WeekSchedule(long siteId, long assetId) {
 		ExportResult result = new ExportResult();
-		
+
 		List<Asset> assets = new ArrayList<Asset>();
 		Site site = null;
 		if(assetId > 0) {
@@ -832,10 +792,10 @@ public class AssetManagementService extends AbstractService {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Returns a list of asset PPM schedule events for the given asset Id and date range.
-	 * 
+	 *
 	 * @param assetId
 	 * @param startDate
 	 * @param endDate
@@ -859,7 +819,7 @@ public class AssetManagementService extends AbstractService {
 			}
 			lastDate.set(Calendar.HOUR_OF_DAY, 23);
 			lastDate.set(Calendar.MINUTE, 59);
-			
+
 			for(AssetPPMSchedule ppmSchedule : assetPpmSchedules) {
 				Date schStartDate = ppmSchedule.getStartDate();
 				Date schEndDate = ppmSchedule.getEndDate();
@@ -888,10 +848,10 @@ public class AssetManagementService extends AbstractService {
 		}
 		return assetPPMScheduleEventDTOs;
 	}
-	
+
 	private void addDays(Calendar dateTime , String scheduleType, int duration) {
 		Frequency frequency = Frequency.valueOf(scheduleType);
-		
+
 		switch(frequency) {
 			case HOUR :
 				dateTime.add(Calendar.HOUR_OF_DAY, 1 * duration);
@@ -901,7 +861,7 @@ public class AssetManagementService extends AbstractService {
 				break;
 			case WEEK :
 				dateTime.add(Calendar.WEEK_OF_YEAR, 1 * duration);
-				break;	
+				break;
 			case FORTNIGHT :
 				dateTime.add(Calendar.DAY_OF_YEAR, 14 * duration);
 				break;
@@ -918,11 +878,11 @@ public class AssetManagementService extends AbstractService {
 				dateTime.add(Calendar.MONTH, 3 * duration);
 				break;
 			default:
-			
+
 		}
 	}
-	
-	
+
+
 	public SearchResult<AssetPpmScheduleDTO> findPPMSearchCriteria(SearchCriteria searchCriteria) {
 
 		log.debug(">>> search ppm schedule 2 <<<");
@@ -953,7 +913,7 @@ public class AssetManagementService extends AbstractService {
 			Page<AssetPPMSchedule> page = null;
 			List<AssetPpmScheduleDTO> transactions = null;
 			log.debug(">>> Asset id in find search 3 =" + searchCriteria.getAssetId());
-			page = assetPpmScheduleRepository.findAllPPMSchedule(searchCriteria.getAssetId(), pageRequest);		
+			page = assetPpmScheduleRepository.findAllPPMSchedule(searchCriteria.getAssetId(), pageRequest);
 			log.debug(">>> PPM Schedule size for this asset "+page.getContent().size());
 			List<AssetPPMSchedule> assetList = page.getContent();
 			log.debug(">>> Inside collection 3 A page content size <<<"+assetList.size());
@@ -980,7 +940,7 @@ public class AssetManagementService extends AbstractService {
 		}
 		return result;
 	}
-	
+
 	public AssetDTO findByAssetCode(String assetCode) {
 		AssetDTO assetDTO = null;
 		Asset asset = assetRepository.findByCode(assetCode);
@@ -999,12 +959,19 @@ public class AssetManagementService extends AbstractService {
 		Employee employee = user.getEmployee();
 		log.debug(">>> user <<<"+ employee.getFullName() +" and "+employee.getId());
 		List<EmployeeProjectSite> sites = employee.getProjectSites();
-		List<Long> siteIds = new ArrayList<Long>();
-		for (EmployeeProjectSite site : sites) {
-			siteIds.add(site.getSite().getId());
-		}
-		
+
 		if (searchCriteria != null) {
+
+			List<Long> siteIds = new ArrayList<Long>();
+			if(employee != null && !user.isAdmin()) {
+				for (EmployeeProjectSite site : sites) {
+					siteIds.add(site.getSite().getId());
+					searchCriteria.setSiteIds(siteIds);
+				}
+			}else if(user.isAdmin()){
+				searchCriteria.setAdmin(true);
+			}
+
 			Pageable pageRequest = null;
 			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
 				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
@@ -1021,118 +988,15 @@ public class AssetManagementService extends AbstractService {
 			List<Asset> allAssetsList = new ArrayList<Asset>();
 			List<AssetDTO> transactions = null;
 			log.debug("name =" + searchCriteria.getAssetName() + " ,  assetType = " + searchCriteria.getAssetTypeName());
-			
+
             log.debug("AssetSpecification toPredicate - searchCriteria get consolidated status -"+ searchCriteria.isConsolidated());
-            
-/*			if (!searchCriteria.isFindAll()) {
-				log.debug(">>> inside search findall <<<");
-				
-				if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName()) && !StringUtils.isEmpty(searchCriteria.getAssetName()) && searchCriteria.getProjectId() > 0
-						&& searchCriteria.getSiteId() > 0) {
-					page = assetRepository.findByAllCriteria(searchCriteria.getAssetTypeName(), searchCriteria.getAssetName(), searchCriteria.getProjectId(),
-							searchCriteria.getSiteId(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && !StringUtils.isEmpty(searchCriteria.getAssetCode())) {
-					page = assetRepository.findAssetByTitleAndCode(searchCriteria.getAssetTitle(), searchCriteria.getAssetCode(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && !StringUtils.isEmpty(searchCriteria.getAssetTypeName())) {
-					page = assetRepository.findAssetByTitleAndType(searchCriteria.getAssetTitle(), searchCriteria.getAssetTypeName(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && !StringUtils.isEmpty(searchCriteria.getAssetGroupName())) {
-					page = assetRepository.findAssetByTitleAndGroup(searchCriteria.getAssetTitle(), searchCriteria.getAssetGroupName(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && searchCriteria.getSiteId() > 0) {
-					page = assetRepository.findAssetByTitleAndSiteId(searchCriteria.getAssetTitle(), searchCriteria.getSiteId(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && searchCriteria.getProjectId() > 0) {
-					page = assetRepository.findAssetByTitleAndProjectId(searchCriteria.getAssetTitle(), searchCriteria.getProjectId(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && !StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
-					page = assetRepository.findAssetByTitleAndAcquiredDate(searchCriteria.getAssetTitle(), DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
-				} 
-				
-				else if (!StringUtils.isEmpty(searchCriteria.getAssetCode()) && !StringUtils.isEmpty(searchCriteria.getAssetTypeName())) {
-					page = assetRepository.findAssetByCodeAndType(searchCriteria.getAssetCode(), searchCriteria.getAssetTypeName(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetCode()) && !StringUtils.isEmpty(searchCriteria.getAssetGroupName())) {
-					page = assetRepository.findAssetByCodeAndGroup(searchCriteria.getAssetCode(), searchCriteria.getAssetGroupName(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetCode()) && searchCriteria.getSiteId() > 0) {
-					page = assetRepository.findAssetByCodeAndSiteId(searchCriteria.getAssetCode(), searchCriteria.getSiteId(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetCode()) && searchCriteria.getProjectId() > 0) {
-					page = assetRepository.findAssetByCodeAndProjectId(searchCriteria.getAssetCode(), searchCriteria.getProjectId(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetCode()) && !StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
-					page = assetRepository.findAssetByCodeAndAcquiredDate(searchCriteria.getAssetCode(), DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
-				}
-				
-				else if (!StringUtils.isEmpty(searchCriteria.getAssetGroupName()) && !StringUtils.isEmpty(searchCriteria.getAssetTypeName())) {
-					page = assetRepository.findAssetByGroupAndType(searchCriteria.getAssetGroupName(), searchCriteria.getAssetTypeName(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetGroupName()) && searchCriteria.getSiteId() > 0) {
-					page = assetRepository.findAssetByGroupAndSiteId(searchCriteria.getAssetGroupName(), searchCriteria.getSiteId(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetGroupName()) && searchCriteria.getProjectId() > 0) {
-					page = assetRepository.findAssetByGroupAndProjectId(searchCriteria.getAssetGroupName(), searchCriteria.getProjectId(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetGroupName()) && !StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
-					page = assetRepository.findAssetByGroupAndAcquiredDate(searchCriteria.getAssetGroupName(), DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
-				}
-				
-				else if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName()) && searchCriteria.getSiteId() > 0) {
-					page = assetRepository.findAssetByTypeAndSiteId(searchCriteria.getAssetTypeName(), searchCriteria.getSiteId(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName()) && searchCriteria.getProjectId() > 0) {
-					page = assetRepository.findAssetByTypeAndProjectId(searchCriteria.getAssetTypeName(), searchCriteria.getProjectId(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName()) && !StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
-					page = assetRepository.findAssetByTypeAndAcquiredDate(searchCriteria.getAssetTypeName(), DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
-				}
-				
-				 else if (!StringUtils.isEmpty(searchCriteria.getSiteId() > 0) && searchCriteria.getProjectId() > 0) {
-					page = assetRepository.findAssetBySiteAndProjectId(searchCriteria.getSiteId(), searchCriteria.getProjectId(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getSiteId() > 0) && !StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
-					page = assetRepository.findAssetBySiteAndAcquiredDate(searchCriteria.getSiteId(), DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
-				}
-								
-				else if (!StringUtils.isEmpty(searchCriteria.getProjectId() > 0) && !StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
-					page = assetRepository.findAssetByProjectAndAcquiredDate(searchCriteria.getProjectId(), DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
-				}
-				
-				else if (!StringUtils.isEmpty(searchCriteria.getAssetCode())) {
-					page = assetRepository.findByAssetCode(searchCriteria.getAssetCode(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle())) {
-					page = assetRepository.findByAssetTitle(searchCriteria.getAssetTitle(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName())) {
-					page = assetRepository.findAssetByTypeName(searchCriteria.getAssetTypeName(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetGroupName())) {
-					page = assetRepository.findAssetByGroupName(searchCriteria.getAssetGroupName(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
-					page = assetRepository.findAssetByAcquireDate(DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetName())) {
-					page = assetRepository.findByName(siteIds, searchCriteria.getAssetName(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName())) {
-					page = assetRepository.findByAssetType(siteIds, searchCriteria.getAssetTypeName(), pageRequest);
-				} else if (searchCriteria.getSiteId() > 0) {
-					page = assetRepository.findBySiteId(searchCriteria.getSiteId(), pageRequest);
-				} else if (searchCriteria.getProjectId() > 0) {
-					page = assetRepository.findByProjectId(searchCriteria.getProjectId(), pageRequest);
-				}
-			} else {
-				log.debug(">>> inside search findall else part <<<");
-				if (CollectionUtils.isNotEmpty(siteIds)) {
-					page = assetRepository.findAll(siteIds, pageRequest);
-				} else {
-					page = assetRepository.findAllAsset(pageRequest);
-				}
-			}*/
+
 			if(!searchCriteria.isConsolidated()) {
 				log.debug(">>> inside search consolidate <<<");
     			page = assetRepository.findAll(new AssetSpecification(searchCriteria,true),pageRequest);
     			allAssetsList.addAll(page.getContent());
     		}
-			
-			/*if (page != null) {
-				if (transactions == null) {
-					transactions = new ArrayList<AssetDTO>();
-				}
-				List<Asset> assetList = page.getContent();
-				if (CollectionUtils.isNotEmpty(assetList)) {
-					for (Asset asset : assetList) {
-						transactions.add(mapToModel(asset, false));
-					}
-				}
-				if (CollectionUtils.isNotEmpty(transactions)) {
-					buildSearchResult(searchCriteria, page, transactions, result);
-				}
-				
-			}*/
+
 			if(CollectionUtils.isNotEmpty(allAssetsList)) {
 				if(transactions == null) {
 					transactions = new ArrayList<AssetDTO>();
@@ -1171,7 +1035,7 @@ public class AssetManagementService extends AbstractService {
 		result.setTransactions(transactions);
 		return;
 	}
-	
+
 	private AssetDTO mapToModel(Asset asset, boolean includeShifts) {
 		AssetDTO assetDTO = new AssetDTO();
 		assetDTO.setId(asset.getId());
@@ -1189,7 +1053,7 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	private AssetPpmScheduleDTO mapToPPMScheduleModel(AssetPPMSchedule asset) {
-		
+
 		log.debug(">>> Inside collection 5 <<<");
 
 		AssetPpmScheduleDTO assetDTO = new AssetPpmScheduleDTO();
@@ -1248,7 +1112,7 @@ public class AssetManagementService extends AbstractService {
 		}
 		return er;
 	}
-	
+
 	public ImportResult importPPMFile(MultipartFile file, long dateTime) {
 		return importUtil.importAssetData(file, dateTime,true, false);
 	}
@@ -1263,7 +1127,7 @@ public class AssetManagementService extends AbstractService {
 		}
 		return er;
 	}
-	
+
 	public ImportResult importAMCFile(MultipartFile file, long dateTime) {
 		return importUtil.importAssetData(file, dateTime, false, true);
 	}
@@ -1324,8 +1188,8 @@ public class AssetManagementService extends AbstractService {
 		AssetStatus[] status = AssetStatus.values();
 		return status;
 	}
-//	
-	
+//
+
 	public List<AssetTypeDTO> findAllAssetType() {
 		List<AssetType> assetType = assetTypeRepository.findAll();
 		return mapperUtil.toModelList(assetType, AssetTypeDTO.class);
@@ -1352,7 +1216,7 @@ public class AssetManagementService extends AbstractService {
 		assetParamConfig.setAsset(asset);
 		assetParamConfig = assetParamConfigRepository.save(assetParamConfig);
 		assetParamConfigDTO = mapperUtil.toModel(assetParamConfig, AssetParameterConfigDTO.class);
-		if(assetParamConfigDTO.getId() > 0 && assetParamConfigDTO.getRule() != null) { 
+		if(assetParamConfigDTO.getId() > 0 && assetParamConfigDTO.getRule() != null) {
 			AssetParameterReadingRule ruleEntity = new AssetParameterReadingRule();
 			ruleEntity.setAlertRequired(assetParamConfigDTO.isAlertRequired());
 			ruleEntity.setRule(assetParamConfigDTO.getRule());
@@ -1386,13 +1250,13 @@ public class AssetManagementService extends AbstractService {
 		jobManagementService.createJob(assetPpmScheduleDTO);
 		log.debug(">> after create job for ppm schedule <<<");
 		}
-		
+
 		return mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
 	}*/
 
 	/**
 	 * Creates the asset AMC schedule information.
-	 * 
+	 *
 	 * @param assetAMCScheduleDTO
 	 * @return
 	 */
@@ -1416,17 +1280,17 @@ public class AssetManagementService extends AbstractService {
 		if (CollectionUtils.isEmpty(assetPPMSchedules)) {
 			assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);
 			assetPpmScheduleDTO = mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
-			if(assetPPMSchedule.getId() > 0) { 
+			if(assetPPMSchedule.getId() > 0) {
 				jobManagementService.createJob(assetPpmScheduleDTO);
 			}
 		}
 		return assetPpmScheduleDTO;
 
 	}
-	
+
 	/**
 	 * Updates the asset PPM schedule information.
-	 * 
+	 *
 	 * @param assetPPMScheduleDTO
 	 * @return
 	 */
@@ -1478,7 +1342,7 @@ public class AssetManagementService extends AbstractService {
 		// TODO Auto-generated method stub
 		List<AssetDocument> assetDocument = assetDocumentRepository.findAllByType(type, assetId);
 		List<AssetDocumentDTO> assetDocumentDTO = mapperUtil.toModelList(assetDocument, AssetDocumentDTO.class);
-		for(AssetDocumentDTO assetDoc : assetDocumentDTO) { 
+		for(AssetDocumentDTO assetDoc : assetDocumentDTO) {
 			String extension = FilenameUtils.getExtension(assetDoc.getFile());
 			assetDoc.setUrl(cloudFrontUrl + bucketEnv + assetFilePath + assetDoc.getFile());
 			assetDoc.setExtension(extension);
@@ -1497,97 +1361,97 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	public AssetParameterReadingDTO saveAssetReadings(AssetParameterReadingDTO assetParamReadingDTO) {
-		
+
 		AssetParameterReading assetParameterReading = mapperUtil.toEntity(assetParamReadingDTO, AssetParameterReading.class);
-		
+
 		AssetParameterReadingDTO prevReading = getLatestParamReading(assetParamReadingDTO.getAssetId(), assetParamReadingDTO.getAssetParameterConfigId());
-		
+
 		List<AssetParameterReadingRule> readingRuleLists = assetReadingRuleRepository.findByAssetConfigId(assetParamReadingDTO.getAssetParameterConfigId());
-		
+
 		Asset asset = assetRepository.findOne(assetParamReadingDTO.getAssetId());
-		
+
 		String assetCode = asset.getCode();
-		
+
 		String assetName = asset.getTitle();
-		
+
 		Site site = siteRepository.findOne(asset.getSite().getId());
-		
+
 		String siteName = site.getName();
-		
+
 		Date date = new Date();
-		
+
 		boolean checkInvalidEntry = false;
-		
-		if(prevReading != null) { 
-			
-			for(AssetParameterReadingRule assetReadingRuleList : readingRuleLists) { 
-				
+
+		if(prevReading != null) {
+
+			for(AssetParameterReadingRule assetReadingRuleList : readingRuleLists) {
+
 				AssetReadingRule rule = AssetReadingRule.valueOf(assetReadingRuleList.getRule());
-				
-				switch(rule) { 
-					
+
+				switch(rule) {
+
 				case CURRENT_READING_GREATER_THAN_PREVIOUS_READING :
-					
-					if(!assetParameterReading.isConsumptionMonitoringRequired()) { 
-						
+
+					if(!assetParameterReading.isConsumptionMonitoringRequired()) {
+
 						String type = "reading";
-						
-						if(assetParamReadingDTO.getValue() > prevReading.getValue()) { 
-																
+
+						if(assetParamReadingDTO.getValue() > prevReading.getValue()) {
+
 							Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
-							
-							if(setting.getSettingValue().equalsIgnoreCase("true") ) { 
-								
+
+							if(setting.getSettingValue().equalsIgnoreCase("true") ) {
+
 								Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
-								
+
 								if(settingEntity.getSettingValue().length() > 0) {
-									
+
 									List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
-									for(String email : emailLists) { 
+									for(String email : emailLists) {
 										mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
 									}
-									
+
 								} else {
-									
+
 									log.info("There is no email ids registered");
 								}
 							}
-								
+
 						}
 					}
-					
-					
+
+
 				case CURRENT_READING_LESS_THAN_PREVIOUS_READING :
-					
-					if(!assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
-						
-						if(assetParamReadingDTO.getValue() < prevReading.getValue()) { 
-							
-							if(assetReadingRuleList.isValidationRequired()) { 
-								
+
+					if(!assetParamReadingDTO.isConsumptionMonitoringRequired()) {
+
+						if(assetParamReadingDTO.getValue() < prevReading.getValue()) {
+
+							if(assetReadingRuleList.isValidationRequired()) {
+
 								checkInvalidEntry = true;
-																											
+
 							}
 						}
-						
+
 					}
-					
+
 				default:
-				
+
 				}
-				
+
 			}
 		}
 
-		
+
 		if(checkInvalidEntry) {
-			
+
 			AssetParameterReadingDTO assetParamEntity = new AssetParameterReadingDTO();
 			assetParamEntity.setErrorStatus(true);
 			return assetParamEntity;
-			
-		} else { 
-			
+
+		} else {
+
 			assetParameterReading.setActive(AssetParameterReading.ACTIVE_YES);
 			assetParamReadingDTO.setErrorStatus(false);
 			Asset assetEntity = assetRepository.findOne(assetParamReadingDTO.getAssetId());
@@ -1595,33 +1459,33 @@ public class AssetManagementService extends AbstractService {
 			if(assetParamReadingDTO.getJobId() > 0) {
 				Job jobEntity = jobRepository.findOne(assetParamReadingDTO.getJobId());
 				assetParameterReading.setJob(jobEntity);
-			}else{ 
+			}else{
 				assetParameterReading.setJob(null);
 			}
-			
+
 			Calendar now = Calendar.getInstance();
-			
-			if(assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
+
+			if(assetParamReadingDTO.isConsumptionMonitoringRequired()) {
 				if(assetParamReadingDTO.getFinalValue() > 0) {
 					assetParameterReading.setFinalReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
-				} 
-				if(assetParamReadingDTO.getInitialValue() > 0) { 
+				}
+				if(assetParamReadingDTO.getInitialValue() > 0) {
 					assetParameterReading.setInitialReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
 				}
-				
-				
+
+
 			} else {
 				assetParameterReading.setInitialReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
 			}
-			
+
 			AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getAssetParameterConfigId());
 			assetParameterReading.setAssetParameterConfig(assetParameterConfig);
 			assetParameterReading = assetParamReadingRepository.save(assetParameterReading);
 			assetParamReadingDTO = mapperUtil.toModel(assetParameterReading, AssetParameterReadingDTO.class);
 			return assetParamReadingDTO;
-			
+
 		}
-		
+
 
 	}
 
@@ -1629,13 +1493,13 @@ public class AssetManagementService extends AbstractService {
 		AssetParameterReading paramReading = assetParamReadingRepository.findOne(id);
 		return mapperUtil.toModel(paramReading, AssetParameterReadingDTO.class);
 	}
-	
-	public Frequency[] getAllType() { 
+
+	public Frequency[] getAllType() {
 		Frequency[] types = Frequency.values();
 		return types;
 	}
-	
-	public FrequencyPrefix[] getAllPrefixs() { 
+
+	public FrequencyPrefix[] getAllPrefixs() {
 		FrequencyPrefix[] prefixs = FrequencyPrefix.values();
 		return prefixs;
 	}
@@ -1660,17 +1524,17 @@ public class AssetManagementService extends AbstractService {
 			Page<AssetParameterReading> page = null;
 			List<AssetParameterReading> allAssetsList = new ArrayList<AssetParameterReading>();
 			List<AssetParameterReadingDTO> transactions = null;
-			
-			if(searchCriteria.getReadingFromDate() != null && searchCriteria.getReadingToDate() != null) { 
+
+			if(searchCriteria.getReadingFromDate() != null && searchCriteria.getReadingToDate() != null) {
 				page = assetRepository.findAssetReadingByDate(searchCriteria.getAssetId(), searchCriteria.getReadingFromDate(), searchCriteria.getReadingToDate(), pageRequest);
 			}else if(searchCriteria.getParamName() != null && searchCriteria.getAssetId() > 0){
 				page = assetRepository.findReadingByName(searchCriteria.getParamName(), searchCriteria.getAssetId(), pageRequest);
 			}else {
 				page = assetRepository.findByAssetReading(searchCriteria.getAssetId(), pageRequest);
 			}
-	
+
 			allAssetsList.addAll(page.getContent());
-		
+
 			if(CollectionUtils.isNotEmpty(allAssetsList)) {
 				if(transactions == null) {
 					transactions = new ArrayList<AssetParameterReadingDTO>();
@@ -1681,7 +1545,7 @@ public class AssetManagementService extends AbstractService {
 				buildSearchResultReading(searchCriteria, page, transactions,result);
 			}
 		}
-		
+
 		return result;
 	}
 
@@ -1695,7 +1559,7 @@ public class AssetManagementService extends AbstractService {
 			result.setTotalCount(page.getTotalElements());
 			result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
 			result.setEndInd((result.getTotalCount() > 10 ? (result.getCurrPage()) * 10 : result.getTotalCount()));
-	
+
 			result.setTransactions(transactions);
 			return;
 	}
@@ -1703,16 +1567,16 @@ public class AssetManagementService extends AbstractService {
 	public AssetParameterReadingDTO getLatestParamReading(long assetId, long assetParamId) {
 		List<AssetParameterReading> assetParamReadings = assetRepository.findAssetReadingById(assetId, assetParamId);
 		AssetParameterReading assetLatestParamReading = null;
-		if(CollectionUtils.isNotEmpty(assetParamReadings)) { 
+		if(CollectionUtils.isNotEmpty(assetParamReadings)) {
 			assetLatestParamReading = assetParamReadings.get(0);
 		}
 		return mapperUtil.toModel(assetLatestParamReading, AssetParameterReadingDTO.class);
 	}
-	
+
 	@Transactional
     public String deleteImages(long id) {
 		AssetDocument assetDocumentEntity = assetDocumentRepository.findOne(id);
-		String file = assetDocumentEntity.getFile(); 
+		String file = assetDocumentEntity.getFile();
 		String keyObject = bucketEnv + assetFilePath;
 		String fileName = s3ServiceUtils.deleteAssetFile(keyObject, file);
 		log.info("The " + fileName + " was deleted successfully.");
@@ -1721,269 +1585,269 @@ public class AssetManagementService extends AbstractService {
     }
 
 	public AssetParameterReadingDTO updateAssetReadings(AssetParameterReadingDTO assetParamReadingDTO) {
-		
+
 			AssetParameterReadingDTO prevReading = getLatestParamReading(assetParamReadingDTO.getAssetId(), assetParamReadingDTO.getAssetParameterConfigId());
 
 			AssetParameterReading assetParamReading = assetParamReadingRepository.findOne(assetParamReadingDTO.getId());
-			
+
 			boolean invalidEntry = false;
-			
-			if(assetParamReadingDTO.getAssetParameterConfigId() > 0 ) { 
-				
+
+			if(assetParamReadingDTO.getAssetParameterConfigId() > 0 ) {
+
 				List<AssetParameterReadingRule> readingRuleLists = assetReadingRuleRepository.findByAssetConfigId(assetParamReadingDTO.getAssetParameterConfigId());
-								
+
 				AssetParameterConfig assetParamConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getId());
-				
+
 				Asset asset = assetRepository.findOne(assetParamReadingDTO.getAssetId());
-				
+
 				String assetCode = asset.getCode();
-				
+
 				String assetName = asset.getTitle();
-				
+
 				Site site = siteRepository.findOne(asset.getSite().getId());
-				
+
 				String siteName = site.getName();
-				
+
 				Date date = new Date();
-				
+
 				for(AssetParameterReadingRule assetReadingRuleList : readingRuleLists) {
-							
+
 					AssetReadingRule rule = AssetReadingRule.valueOf(assetReadingRuleList.getRule());
-					
+
 					switch(rule) {
-					
+
 						case CURRENT_CONSUMPTION_GREATER_THAN_PREVIOUS_CONSUMPTION :
-							
-							if(assetParamReadingDTO.getId() > 0 && assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
-																
+
+							if(assetParamReadingDTO.getId() > 0 && assetParamReadingDTO.isConsumptionMonitoringRequired()) {
+
 								if(assetParamReadingDTO.getConsumption() > prevReading.getConsumption()) {
-									
+
 									String type = "consumption";
-									
+
 									Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
-									
-									if(setting.getSettingValue().equalsIgnoreCase("true") ) { 
+
+									if(setting.getSettingValue().equalsIgnoreCase("true") ) {
 										Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
-										if(settingEntity.getSettingValue().length() > 0) { 
-											List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
-											for(String email : emailLists) { 
-												mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
-											}
-										}
-									}
-								}
-							}
-							
-						break;
-							
-							
-						case CURRENT_CONSUMPTION_GREATER_THAN_THRESHOLD_VALUE :
-							
-							if(assetParamReadingDTO.getId() > 0 && assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
-								
-								String type = "current consumption";
-									
-								double currentThreshold = assetParamReadingDTO.getConsumption() - prevReading.getConsumption();
-								
-								double threshold = assetParamConfig.getThreshold();
-								
-								if(currentThreshold > threshold) {
-								
-									Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
-									
-									if(setting.getSettingValue().equalsIgnoreCase("true") ) { 
-										Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
-										if(settingEntity.getSettingValue().length() > 0) { 
-											List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
-											for(String email : emailLists) { 
-												mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
-											}
-										}
-									}
-								
-								}
-							}
-							
-						break;
-							
-							
-						case CURRENT_READING_GREATER_THAN_PREVIOUS_READING :
-							
-							if(assetParamReadingDTO.getId() > 0 && !assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
-								
-								String type = "reading";
-								
-								if(assetParamReadingDTO.getValue() > prevReading.getValue()) { 
-																		
-									Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
-									
-									if(setting.getSettingValue().equalsIgnoreCase("true") ) { 
-										
-										Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
-										
 										if(settingEntity.getSettingValue().length() > 0) {
-											
 											List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
-											for(String email : emailLists) { 
+											for(String email : emailLists) {
 												mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
 											}
-											
+										}
+									}
+								}
+							}
+
+						break;
+
+
+						case CURRENT_CONSUMPTION_GREATER_THAN_THRESHOLD_VALUE :
+
+							if(assetParamReadingDTO.getId() > 0 && assetParamReadingDTO.isConsumptionMonitoringRequired()) {
+
+								String type = "current consumption";
+
+								double currentThreshold = assetParamReadingDTO.getConsumption() - prevReading.getConsumption();
+
+								double threshold = assetParamConfig.getThreshold();
+
+								if(currentThreshold > threshold) {
+
+									Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
+
+									if(setting.getSettingValue().equalsIgnoreCase("true") ) {
+										Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
+										if(settingEntity.getSettingValue().length() > 0) {
+											List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+											for(String email : emailLists) {
+												mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
+											}
+										}
+									}
+
+								}
+							}
+
+						break;
+
+
+						case CURRENT_READING_GREATER_THAN_PREVIOUS_READING :
+
+							if(assetParamReadingDTO.getId() > 0 && !assetParamReadingDTO.isConsumptionMonitoringRequired()) {
+
+								String type = "reading";
+
+								if(assetParamReadingDTO.getValue() > prevReading.getValue()) {
+
+									Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
+
+									if(setting.getSettingValue().equalsIgnoreCase("true") ) {
+
+										Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
+
+										if(settingEntity.getSettingValue().length() > 0) {
+
+											List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+											for(String email : emailLists) {
+												mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
+											}
+
 										} else {
-											
+
 											log.info("There is no email ids registered");
 										}
 									}
-										
+
 								}
 							}
-							
+
 						break;
-							
-						case CURRENT_READING_GREATER_THAN_THRESHOLD_VALUE : 
-							
+
+						case CURRENT_READING_GREATER_THAN_THRESHOLD_VALUE :
+
 							String type = "current reading";
-						
+
 							double currentThreshold = prevReading.getValue() - assetParamReadingDTO.getValue();
-							
+
 							double threshold = assetParamConfig.getThreshold();
-							
-							if(currentThreshold > threshold) { 
-								
+
+							if(currentThreshold > threshold) {
+
 								Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
-								
-								if(setting.getSettingValue().equalsIgnoreCase("true") ) { 
-									
+
+								if(setting.getSettingValue().equalsIgnoreCase("true") ) {
+
 									Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
-									
+
 									if(settingEntity.getSettingValue().length() > 0) {
-										
+
 										List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
-										for(String email : emailLists) { 
+										for(String email : emailLists) {
 											mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
 										}
-										
+
 									} else {
-										
+
 										log.info("There is no email ids registered");
 									}
 								}
-								
+
 							}
-							
+
 						break;
-						
-						case CURRENT_READING_LESS_THAN_PREVIOUS_READING : 
-							
-							if(!assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
-								
-								if(assetParamReadingDTO.getValue() < prevReading.getValue()) { 
-									
-									if(assetReadingRuleList.isValidationRequired()) { 
-										
+
+						case CURRENT_READING_LESS_THAN_PREVIOUS_READING :
+
+							if(!assetParamReadingDTO.isConsumptionMonitoringRequired()) {
+
+								if(assetParamReadingDTO.getValue() < prevReading.getValue()) {
+
+									if(assetReadingRuleList.isValidationRequired()) {
+
 										invalidEntry = true;
-																													
+
 									}
 								}
-								
+
 							}
-							
-							
+
+
 						break;
-							
-						case CURRENT_RUNHOUR_GREATER_THAN_PREVIOUS_RUNHOUR : 
-							
-							if(assetParamReadingDTO.getId() > 0 && assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
-																	
+
+						case CURRENT_RUNHOUR_GREATER_THAN_PREVIOUS_RUNHOUR :
+
+							if(assetParamReadingDTO.getId() > 0 && assetParamReadingDTO.isConsumptionMonitoringRequired()) {
+
 								long milliseconds = assetParamReadingDTO.getFinalReadingTime().getTime() - assetParamReadingDTO.getInitialReadingTime().getTime();
 								int seconds = (int) milliseconds / 1000;
-								
+
 								// calculate hours minutes and seconds
 							    int hours = seconds / 3600;
 							    int minutes = (seconds % 3600) / 60;
-							    
+
 							    assetParamReading.setRunHours(hours);
 							    assetParamReading.setRunMinutues(minutes);
-							    
-							} else if(assetParamReadingDTO.getId() > 0 && !assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
-								
+
+							} else if(assetParamReadingDTO.getId() > 0 && !assetParamReadingDTO.isConsumptionMonitoringRequired()) {
+
 								long milliseconds = assetParamReadingDTO.getInitialReadingTime().getTime() - prevReading.getInitialReadingTime().getTime();
 								int seconds = (int) milliseconds / 1000;
-								
+
 								// calculate hours minutes and seconds
 							    int hours = seconds / 3600;
 							    int minutes = (seconds % 3600) / 60;
-							    
+
 							    assetParamReading.setRunHours(hours);
 							    assetParamReading.setRunMinutues(minutes);
 							}
-							
+
 						break;
 
 						default:
-						
+
 					}
-					
+
 				}
 			}
-			
-			if(assetParamReadingDTO.getAssetId() > 0){ 
+
+			if(assetParamReadingDTO.getAssetId() > 0){
 				Asset asset = assetRepository.findOne(assetParamReadingDTO.getAssetId());
 				assetParamReading.setAsset(asset);
 			}
-			if(assetParamReadingDTO.getAssetParameterConfigId() > 0){ 
+			if(assetParamReadingDTO.getAssetParameterConfigId() > 0){
 				AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getAssetParameterConfigId());
 				assetParamReading.setAssetParameterConfig(assetParameterConfig);
 			}
-			
-			if(assetParamReadingDTO.getJobId() > 0){ 
+
+			if(assetParamReadingDTO.getJobId() > 0){
 				Job job = jobRepository.findOne(assetParamReadingDTO.getJobId());
 				assetParamReading.setJob(job);
 			} else {
 				assetParamReading.setJob(null);
 			}
-			
+
 			if(assetParamReadingDTO.getInitialValue() > 0 && assetParamReadingDTO.getFinalValue() > 0) {
 				double consumption = assetParamReadingDTO.getFinalValue() - assetParamReadingDTO.getInitialValue();
 				assetParamReading.setConsumption(consumption);
 			}
-			
+
 			Calendar now = Calendar.getInstance();
-			
-			if(assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
+
+			if(assetParamReadingDTO.isConsumptionMonitoringRequired()) {
 				if(assetParamReadingDTO.getFinalValue() > 0) {
 					assetParamReading.setFinalReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
-				} 
-				if(assetParamReadingDTO.getInitialValue() > 0) { 
+				}
+				if(assetParamReadingDTO.getInitialValue() > 0) {
 					assetParamReading.setInitialReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
 				}
 			} else {
 				assetParamReading.setInitialReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
 			}
-			
+
 			assetParamReading.setConsumptionMonitoringRequired(assetParamReadingDTO.isConsumptionMonitoringRequired());
 			assetParamReading.setInitialValue(assetParamReadingDTO.getInitialValue());
 			assetParamReading.setFinalValue(assetParamReadingDTO.getFinalValue());
 			assetParamReading.setName(assetParamReadingDTO.getName());
 			assetParamReading.setUom(assetParamReadingDTO.getUom());
 			assetParamReading.setValue(assetParamReadingDTO.getValue());
-			
+
 			if(invalidEntry) {
-				
+
 				AssetParameterReadingDTO assetReadingDTO = new AssetParameterReadingDTO();
 				assetReadingDTO.setErrorStatus(true);
 				return assetReadingDTO;
-				
+
 			} else {
-				
+
 				assetParamReadingRepository.save(assetParamReading);
 				assetParamReadingDTO = mapperUtil.toModel(assetParamReading, AssetParameterReadingDTO.class);
 				assetParamReadingDTO.setErrorStatus(false);
 				return assetParamReadingDTO;
-				
+
 			}
 	}
-	
-	public AssetReadingRule[] getAllRules() { 
+
+	public AssetReadingRule[] getAllRules() {
 		AssetReadingRule[] types = AssetReadingRule.values();
 		return types;
 	}
@@ -2015,7 +1879,7 @@ public class AssetManagementService extends AbstractService {
 
 	public List<Object> findAllAssetQrcode(long[] qrCodeObj) {
 		List<Object> collect = new ArrayList<>();
-		for(long assetId :  qrCodeObj) { 
+		for(long assetId :  qrCodeObj) {
 			Map<String, Object> qrCodeList = new HashMap<>();
 			Asset assetEntity = assetRepository.findOne(assetId);
 			AssetDTO assetModel = mapperUtil.toModel(assetEntity, AssetDTO.class);
@@ -2034,10 +1898,10 @@ public class AssetManagementService extends AbstractService {
 		return collect;
 	}
 
-	public List<Object> findAllQrcodes() {
+	public List<Object> findAllQrcodes(long siteId) {
 		// TODO Auto-generated method stub
 		List<Object> collect = new ArrayList<>();
-		List<Asset> assetEntities = assetRepository.findAll();
+		List<Asset> assetEntities = assetRepository.findAssetBySiteId(siteId);
 		List<AssetDTO> assetModel = mapperUtil.toModelList(assetEntities, AssetDTO.class);
 		for(AssetDTO assetEntity : assetModel) {
 			Map<String, Object> qrCodeLists = new HashMap<>();
@@ -2055,6 +1919,147 @@ public class AssetManagementService extends AbstractService {
 		}
 		return collect;
 	}
-	
 
+	public SearchResult<AssetStatusHistoryDTO> viewAssetStatusHistory(SearchCriteria searchCriteria) {
+		// TODO Auto-generated method stub
+
+		SearchResult<AssetStatusHistoryDTO> result = new SearchResult<AssetStatusHistoryDTO>();
+
+		Pageable pageRequest = null;
+		if(searchCriteria != null) {
+
+			Page<AssetStatusHistory> page = null;
+			List<AssetStatusHistory> allStatusList = new ArrayList<AssetStatusHistory>();
+			List<AssetStatusHistoryDTO> transactions = null;
+
+			if(searchCriteria.getAssetId() > 0) {
+				page = assetStatusHistoryRepository.findByAssetId(searchCriteria.getAssetId(), pageRequest);
+			}
+
+			allStatusList.addAll(page.getContent());
+
+			if(CollectionUtils.isNotEmpty(allStatusList)) {
+				if(transactions == null) {
+					transactions = new ArrayList<AssetStatusHistoryDTO>();
+				}
+	        		for(AssetStatusHistory assetStatus : allStatusList) {
+	        			transactions.add(mapperUtil.toModel(assetStatus, AssetStatusHistoryDTO.class));
+	        		}
+				buildSearchResultStatus(searchCriteria, page, transactions,result);
+			}
+		}
+
+		return result;
+
+	}
+
+	private void buildSearchResultStatus(SearchCriteria searchCriteria, Page<AssetStatusHistory> page,
+			List<AssetStatusHistoryDTO> transactions, SearchResult<AssetStatusHistoryDTO> result) {
+		// TODO Auto-generated method stub
+			if (page != null) {
+				result.setTotalPages(page.getTotalPages());
+			}
+			result.setCurrPage(page.getNumber() + 1);
+			result.setTotalCount(page.getTotalElements());
+			result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
+			result.setEndInd((result.getTotalCount() > 10 ? (result.getCurrPage()) * 10 : result.getTotalCount()));
+
+			result.setTransactions(transactions);
+			return;
+	}
+
+	public SearchResult<AssetSiteHistoryDTO> viewAssetSiteHistory(SearchCriteria searchCriteria) {
+		// TODO Auto-generated method stub
+		SearchResult<AssetSiteHistoryDTO> result = new SearchResult<AssetSiteHistoryDTO>();
+
+		Pageable pageRequest = null;
+		if(searchCriteria != null) {
+
+			Page<AssetSiteHistory> page = null;
+			List<AssetSiteHistory> allSitesList = new ArrayList<AssetSiteHistory>();
+			List<AssetSiteHistoryDTO> transactions = null;
+
+			if(searchCriteria.getAssetId() > 0 && searchCriteria.getSiteId() > 0) {
+				page = assetSiteHistoryRepository.findBySiteId(searchCriteria.getSiteId(), searchCriteria.getAssetId(), pageRequest);
+			}else {
+				page = assetSiteHistoryRepository.findByAssetId(searchCriteria.getAssetId(), pageRequest);
+			}
+
+			allSitesList.addAll(page.getContent());
+
+			if(CollectionUtils.isNotEmpty(allSitesList)) {
+				if(transactions == null) {
+					transactions = new ArrayList<AssetSiteHistoryDTO>();
+				}
+	        		for(AssetSiteHistory assetSites : allSitesList) {
+	        			transactions.add(mapperUtil.toModel(assetSites, AssetSiteHistoryDTO.class));
+	        		}
+				buildResultAssetSite(searchCriteria, page, transactions,result);
+			}
+		}
+
+		return result;
+	}
+
+	private void buildResultAssetSite(SearchCriteria searchCriteria, Page<AssetSiteHistory> page,
+			List<AssetSiteHistoryDTO> transactions, SearchResult<AssetSiteHistoryDTO> result) {
+		// TODO Auto-generated method stub
+		if (page != null) {
+			result.setTotalPages(page.getTotalPages());
+		}
+		result.setCurrPage(page.getNumber() + 1);
+		result.setTotalCount(page.getTotalElements());
+		result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
+		result.setEndInd((result.getTotalCount() > 10 ? (result.getCurrPage()) * 10 : result.getTotalCount()));
+
+		result.setTransactions(transactions);
+		return;
+	}
+
+
+    public SearchResult<TicketDTO> getAssetTickets(SearchCriteria searchCriteria) {
+        // TODO Auto-generated method stub
+        SearchResult<TicketDTO> result = new SearchResult<TicketDTO>();
+
+        Pageable pageRequest = null;
+        if(searchCriteria != null) {
+
+            Page<Ticket> page = null;
+            List<Ticket> allTicketsList = new ArrayList<Ticket>();
+            List<TicketDTO> transactions = null;
+
+            if(searchCriteria.getAssetId() > 0 && searchCriteria.getSiteId() > 0) {
+                page = ticketRepository.findTicketsBySiteId(searchCriteria.getSiteId(), searchCriteria.getAssetId(), pageRequest);
+            }else {
+                page = ticketRepository.findTicketsByAssetId(searchCriteria.getAssetId(), pageRequest);
+            }
+
+            allTicketsList.addAll(page.getContent());
+
+            if(CollectionUtils.isNotEmpty(allTicketsList)) {
+                if(transactions == null) {
+                    transactions = new ArrayList<TicketDTO>();
+                }
+                for(Ticket assetTicket : allTicketsList) {
+                    transactions.add(mapperUtil.toModel(assetTicket, TicketDTO.class));
+                }
+                buildResultAssetTickets(searchCriteria, page, transactions,result);
+            }
+        }
+
+        return result;
+    }
+
+    private void buildResultAssetTickets(SearchCriteria searchCriteria, Page<Ticket> page, List<TicketDTO> transactions, SearchResult<TicketDTO> result) {
+        if (page != null) {
+            result.setTotalPages(page.getTotalPages());
+        }
+        result.setCurrPage(page.getNumber() + 1);
+        result.setTotalCount(page.getTotalElements());
+        result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
+        result.setEndInd((result.getTotalCount() > 10 ? (result.getCurrPage()) * 10 : result.getTotalCount()));
+
+        result.setTransactions(transactions);
+        return;
+    }
 }

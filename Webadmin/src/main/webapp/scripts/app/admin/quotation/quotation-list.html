@@ -35,158 +35,6 @@
 
             <div class="card-content">
 
-                    <!--<div class="row" >-->
-                        <!--<div class="col-md-12">-->
-                            <!--<div class="card formcard FilterCard">-->
-                                <!--<div class="card-content">-->
-
-                                    <!--<form name="searchForm" ng-submit="searchFilter()">-->
-
-                                    <!--<div class="row" >-->
-
-                                    	<!--<div class="col-xs-12 col-md-3">-->
-                                                <!--<div class="form-group" >-->
-                                                    <!--&lt;!&ndash; <div class="dropdown">-->
-                                                        <!--<input type="text"-->
-                                                               <!--class="form-control border-bottom-input"-->
-                                                               <!--placeholder="Client"-->
-                                                               <!--ng-model="searchCriteria.projectName"-->
-                                                               <!--ng-value="searchCriteria.projectName"-->
-                                                               <!--/>-->
-                                                    <!--</div> &ndash;&gt;-->
-                                                    <!--<div class="dropdown">-->
-                                                        <!--<label class="label-control">Select Client</label>-->
-                                                        <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                        <!--<select class="form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects" >-->
-                                                            <!--<option value="">Select Client...</option>-->
-                                                        <!--</select>-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
-                                        <!--</div>-->
-                                        <!--<div class="col-xs-12 col-md-3">-->
-                                            <!--<div class="form-group" >-->
-                                                <!--&lt;!&ndash; <div class="dropdown">-->
-                                                    <!--<input type="text"-->
-                                                           <!--class="form-control border-bottom-input"-->
-                                                           <!--placeholder="Site"-->
-                                                           <!--ng-model="searchCriteria.siteName"-->
-                                                           <!--ng-value="searchCriteria.siteName"-->
-                                                           <!--/>-->
-                                                <!--</div> &ndash;&gt;-->
-                                                    <!--<div class="dropdown">-->
-                                                        <!--<label class="label-control">Select Site</label>-->
-                                                        <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                        <!--<select class="form-control " ng-model="selectedSite" ng-change="loadEmployees()" ng-options="site as site.name for site in sites">-->
-                                                            <!--<option value="">Select Site...</option>-->
-                                                        <!--</select>-->
-                                                    <!--</div>-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                        <!--<div class="col-xs-12 col-md-3 pdng-top25">-->
-                                            <!--<div class="form-group" >-->
-                                                <!--<div class="dropdown">-->
-                                                    <!--<input type="text"-->
-                                                           <!--class="form-control border-bottom-input"-->
-                                                           <!--placeholder="Id"-->
-                                                           <!--ng-model="selectedId"-->
-
-                                                            <!--/>-->
-
-                                                <!--</div>-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                        <!--<div class="col-xs-12 col-md-3 pdng-top25">-->
-                                                <!--<div class="form-group" >-->
-                                                    <!--<div class="dropdown">-->
-                                                        <!--<input type="text"-->
-                                                               <!--class="form-control border-bottom-input"-->
-                                                               <!--placeholder="Title"-->
-                                                               <!--ng-model="selectedTitle"-->
-
-                                                               <!--/>-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
-                                        <!--</div>-->
-
-
-                                    <!--</div>-->
-                                    <!--<div class="row">-->
-		                                <!--&lt;!&ndash; <div class="col-xs-12 col-md-2">-->
-		                                    	<!--<div class="form-group">-->
-					                            <!--<label class="label-control">Submitted Date</label>-->
-					                            <!--<span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>-->
-					                            <!--<input type="text" class="form-control datepicker"  id="submittedDateFilter"  ng-model="selectedSubmittedDate" />-->
-
-                                            <!--</div>-->
-										<!--</div>-->
-
-										<!--<div class="col-xs-12 col-md-2">-->
-		                                    	<!--<div class="form-group">-->
-					                            <!--<label class="label-control">Approved Date</label>-->
-					                            <!--<span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>-->
-					                            <!--<input type="text" class="form-control datepicker"  id="approvedDateFilter"  ng-model="selectedApprovedDate" />-->
-
-                                            <!--</div>-->
-										<!--</div>	  &ndash;&gt;-->
-										<!--<div class="col-xs-12 col-md-3 pdng-top25">-->
-                                            <!--<div class="form-group" >-->
-                                                <!--<div class="dropdown">-->
-                                                    <!--<input type="text"-->
-                                                           <!--class="form-control searchable-input floatL border-bottom-input"-->
-                                                           <!--placeholder="Created By"-->
-                                                           <!--ng-model="selectedCreatedBy"-->
-                                                           <!--/>-->
-                                                <!--</div>-->
-                                            <!--</div>-->
-                                         <!--</div>-->
-                                        <!--<div class="col-xs-12 col-md-3 pdng-top25">-->
-                                            <!--<div class="form-group" >-->
-                                                <!--<div class="dropdown">-->
-                                                    <!--<input type="text"-->
-                                                           <!--class="form-control searchable-input floatL border-bottom-input"-->
-                                                           <!--placeholder="Approved By"-->
-                                                           <!--ng-model="selectedApprovedBy"-->
-
-                                                           <!--/>-->
-                                                <!--</div>-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                        <!--<div class="col-xs-12 col-md-3 pdng-top25">-->
-                                            <!--<div class="form-group" >-->
-                                                <!--<div class="dropdown">-->
-                                                    <!--<input type="text"-->
-                                                           <!--class="form-control searchable-input floatL border-bottom-input"-->
-                                                           <!--placeholder="Status"-->
-                                                           <!--ng-model="selectedStatus"-->
-                                                           <!--/>-->
-                                                <!--</div>-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-
-                                        <!--<div class="col-xs-12 col-md-3 txt-align-rgt">-->
-                                            <!--<div class="floatR form-group">-->
-
-                                                <!--<button type="submit" class="btn btn-circle blue-clr">-->
-                                                    <!--<i class="material-icons">search</i>-->
-                                                <!--</button>-->
-                                                <!--<button ui-sref="add-quotation" has-permission="Quotation:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">-->
-                                                    <!--<i class="material-icons">add</i>-->
-                                                <!--</button>-->
-                                                <!--<button ng-click="refreshPage()" class="btn btn-circle orange-clr">-->
-                                                    <!--<i class="material-icons">refresh</i>-->
-                                                <!--</button>-->
-
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</form>-->
-
-                            <!--</div>-->
-                        <!--</div>-->
-                     <!--</div>-->
-                    <!--</div>-->
-
-
                 <div class="table-responsive">
                     <table class="table table-hover withSortingIcons">
                         <thead>
@@ -291,7 +139,7 @@
                             <td>{{quotation.grandTotal}} </td>
                             <td class="text-right hoverMe">
 
-                                <a   has-authority="ROLE_ADMIN"  title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
+                                <a   title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
 
                                 <div class="HoverBx">
 
@@ -299,7 +147,7 @@
 
                                     <a name="Edit" ng-if="!quotation.isSubmitted && !quotation.isApproved" has-permission="Quotation:Edit"  ng-class="{active: $state.includes('admin')}"  ui-sref="edit-quotation({ id: quotation._id })"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
 
-                                    <!-- <a name="Approve Quotation" ng-if="quotation.isSubmitted" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ng-click="approveQuotation(quotation)"  class="btn btn-simple btn-success"></a> -->
+                                    <!-- <a name="Approve Quotation" ng-if="quotation.isSubmitted" ng-class="{active: $state.includes('admin')}"  ng-click="approveQuotation(quotation)"  class="btn btn-simple btn-success"></a> -->
                                     <button  title="Approve" ng-if="quotation.isSubmitted && !quotation.isApproved"    data-toggle="modal" data-target="#approveQuotationModal" data-dismiss="#approveQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like"> <i class="material-icons">
                                         offline_pin
                                     </i> </button>
@@ -320,34 +168,27 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div class="txt-align-center LoaderCon"  ng-hide="quotationsLoader">
+
+                    <div class="pad-TB-30">
+                        <div loader-css="ball-pulse"></div>
+                        <h3 >Loading, please wait...</h3>
+                    </div>
+
+                </div>
+
+                <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
+
+                    <h3>No data Found</h3>
+
+                </div>
+
+
             </div>
         </div>
     </div>
 </div>
-
-
- <div class="card margin-TB-5 txt-align-center" ng-hide="quotationsLoader">
-
-        <div class="card-content">
-            <div class="" style="text-align:center;padding: 10px 0;" >
-                <div loader-css="ball-pulse"></div>
-            </div>
-
-            <h3 >Loading, please wait...</h3>
-
-        </div>
-
-    </div>
-
-    <div class="card margin-TB-5 txt-align-center" ng-show="noData">
-
-        <div class="card-content">
-
-            <h3>No data Found</h3>
-
-        </div>
-
-    </div>
 
 <div class="modal fade" id="approveQuotationModal" tabindex="-1" role="dialog" aria-labelledby="approveQuotationModal" aria-hidden="true">
     <div class="modal-dialog modal-notice">
@@ -471,7 +312,7 @@
 
                                     <div ng-show="searchForm1.$submitted || searchForm1.searchId.$touched">
                                         <div ng-show="searchForm1.searchId.$dirty || searchForm1.searchId.$invalid">
-                                           
+
                                             <p class="help-block" style="color:maroon;"
                                                ng-show="searchForm1.searchId.$error.pattern">
                                                 Quotation id only contain numbers.

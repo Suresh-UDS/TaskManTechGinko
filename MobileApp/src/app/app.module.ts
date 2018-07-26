@@ -118,7 +118,8 @@ import {OfflineAttendanceSites} from "../pages/employee/offline-attendance-sites
 import{OfflineAssetList} from "../pages/offline-assetlist/offline-assetlist";
 import{OfflineAsset} from "../pages/offline-asset/offline-asset";
 import{OfflineGetassetreadings} from "../pages/offline-getassetreadings/offline-getassetreadings";
-
+import {OfflineAttendance} from "../pages/employee/offline-attendance";
+import{ChangePassword} from "../pages/change-password/change-password";
 
 @NgModule({
   declarations: [
@@ -197,8 +198,9 @@ import{OfflineGetassetreadings} from "../pages/offline-getassetreadings/offline-
       OfflineAttendanceSites,
       OfflineAsset,
       OfflineAssetList,
-      OfflineGetassetreadings
-
+      OfflineGetassetreadings,
+      OfflineAttendance,
+      ChangePassword,
   ],
   imports: [
     BrowserModule,
@@ -279,7 +281,7 @@ import{OfflineGetassetreadings} from "../pages/offline-getassetreadings/offline-
       GetAssetReading,
       Splash,
       SplashLogo,
-    ScanQR,
+      ScanQR,
       ScanQRAsset,
       GetAssetReadings,
       CalenderPage,
@@ -288,8 +290,9 @@ import{OfflineGetassetreadings} from "../pages/offline-getassetreadings/offline-
       OfflineAttendanceSites,
       OfflineAssetList,
       OfflineAsset,
-      OfflineGetassetreadings
-
+      OfflineGetassetreadings,
+      OfflineAttendance,
+      ChangePassword,
 
 
   ],

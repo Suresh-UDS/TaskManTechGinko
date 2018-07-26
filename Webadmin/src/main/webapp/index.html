@@ -50,14 +50,17 @@
     <!-- <link rel="stylesheet" href="bower_components/fullcalendar/dist/fullcalendar.min.css"> -->
 
 
-
-
-
 </head>
 
 <body ng-app="timeSheetApp" ng-switch="isLoggedIn" class="sidebar-mini">
 
-    <div class="wrapper">
+    <div ng-show="loginView" class="LoginPageView">
+        <!-- Login start -->
+        <div  ui-view="login" ng-cloak="" class="LoginPageView" ></div>
+        <!-- Login end -->
+    </div>
+
+    <div class="wrapper" ng-hide="loginView">
             <!-- Left menu start -->
             <div  ui-view="navbar" ng-cloak="" ></div>
             <!-- Left menu end -->
@@ -68,7 +71,7 @@
             <!-- Header end -->
 
 
-            <div class="content" >
+            <div class="content">
                 <div class="container-fluid">
 
                     <!-- Page Loader gif -->

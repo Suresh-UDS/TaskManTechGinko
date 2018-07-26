@@ -146,9 +146,9 @@ export class OfflineAttendance {
             let base64Image = 'data:image/jpeg;base64,' + imageData;
             var employeeName = employee.fullName+employee.empId;
             if(attendanceMode == 'checkIn'){
-                this.saveAttendanceInLocal(employee,imageData);
+                this.saveAttendanceInLocal(employee,base64Image);
             }else{
-                this.saveAttendanceOutLocal(employee,imageData,employee.attendanceId);
+                this.saveAttendanceOutLocal(employee,base64Image,employee.attendanceId);
             }
             // this.checkProximity(this.site.id,this.lattitude,this.longitude,imageData,mode,attendanceMode,employee);
             // this.navCtrl.push(AttendanceViewPage,imageData)

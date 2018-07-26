@@ -64,6 +64,8 @@ public class TicketDTO extends BaseDTO {
     private boolean pendingAtUDS;
 
     private boolean pendingAtClient;
+    
+    private String assetTitle;
 
 
     public long getId() {
@@ -305,4 +307,12 @@ public class TicketDTO extends BaseDTO {
     public void setPendingAtUDS(boolean pendingAtUDS) {
         this.pendingAtUDS = pendingAtUDS;
     }
+
+	public String getAssetTitle() {
+		return assetTitle;
+	}
+
+	public void setAssetTitle(String assetTitle) {
+		this.assetTitle = assetTitle;
+	}
 }

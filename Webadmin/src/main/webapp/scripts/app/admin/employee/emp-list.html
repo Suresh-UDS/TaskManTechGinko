@@ -166,10 +166,10 @@
                                 </th>
                                 <th>Client
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('project.name')" ng-class="isActiveAsc == 'project.name' ? 'active' : ''" >
+                                        <span ng-click="columnAscOrder('projectSites.project.name')" ng-class="isActiveAsc == 'projectSites.project.name' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
-                                        <span ng-click="columnDescOrder('project.name')" ng-class="isActiveDesc == 'project.name' ? 'active' : ''" >
+                                        <span ng-click="columnDescOrder('projectSites.project.name')" ng-class="isActiveDesc == 'projectSites.project.name' ? 'active' : ''" >
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
@@ -188,8 +188,8 @@
                                 <td>{{employee.name}} {{employee.lastName}}</td>
 							   <td>{{employee.projectName}}</td>
                                 <td ng-if="employee.enrolled_face">
-                                    <a id="images" href="#" onClick="$('#enrollImageModal').modal()" data-target="#enrollImageModal" data-dismiss="#enrollImageModal" ng-click="loadEnrolledImage(employee.enrolled_face)">
-                                        <img src={{employee.enrolled_face}} width="30px" height="30px"/>
+                                    <a id="images" href="#" onClick="$('#enrollImageModal').modal()" data-target="#enrollImageModal" data-dismiss="#enrollImageModal" ng-click="loadEnrolledImage(employee.url)">
+                                        <img src={{employee.url}} width="30px" height="30px"/>
                                     </a>
                                 </td>
                                 <td ng-if="!employee.enrolled_face">
@@ -209,7 +209,7 @@
                                 <td class="text-right hoverMe">
 
 
-                                    <a   has-authority="ROLE_ADMIN"  title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
+                                    <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
 
 
                                     <div class="HoverBx">
@@ -221,7 +221,7 @@
                                             <i class="material-icons">edit</i>
                                         </button>
                                         <button ng-disabled="employee.left" title="Mark Left"   has-permission="Employee:Edit"  data-toggle="modal" data-target="#leftModal" data-dismiss="#leftModal" ng-click="employeeDetails(employee.id)"  class="btn btn-simple btn-info btn-icon like"> <i style="color: #942a25" class="fas fa-user-times"></i></button>
-                                        <!--<button ng-disabled="employee.left" title="Site Transfer"   has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#siteTransferModal" data-dismiss="#siteTransferModal"   class="btn btn-simple btn-info btn-icon like" ng-click="siteTransferDetails(employee);loadSites()" > <i style="font-size: 20px; color: orangered" class="material-icons">transfer_within_a_station</i></button>-->
+                                        <!--<button ng-disabled="employee.left" title="Site Transfer"   data-toggle="modal" data-target="#siteTransferModal" data-dismiss="#siteTransferModal"   class="btn btn-simple btn-info btn-icon like" ng-click="siteTransferDetails(employee);loadSites()" > <i style="font-size: 20px; color: orangered" class="material-icons">transfer_within_a_station</i></button>-->
                                         <button ng-if="!employee.reliever" ng-disabled="employee.left" title="Relieve Employee"   has-permission="Employee:Edit"  data-toggle="modal" data-target="#relieverConfirmation" data-dismiss="#relieverConfirmation" ng-click="getRelievers(employee)"   class="btn btn-simple btn-info btn-icon like"> <i class="material-icons">assignment_ind</i></button>
 
                                     </div>
@@ -236,6 +236,22 @@
                         </table>
 
                     </div>
+
+                    <div class="txt-align-center LoaderCon"  ng-hide="employeesLoader">
+
+                        <div class="pad-TB-30">
+                            <div loader-css="ball-pulse"></div>
+                            <h3 >Loading, please wait...</h3>
+                        </div>
+
+                    </div>
+
+                    <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
+
+                        <h3>No data Found</h3>
+
+                    </div>
+
                 </div>
                 <!-- end content-->
             </div>
@@ -244,30 +260,6 @@
         <!-- end col-md-12 -->
     </div>
     <!-- end row -->
-
-
-    <div class="card margin-TB-5 txt-align-center" ng-hide="employeesLoader">
-
-        <div class="card-content">
-            <div class="" style="text-align:center;padding: 10px 0;" >
-                <div loader-css="ball-pulse"></div>
-            </div>
-
-            <h3 >Loading, please wait...</h3>
-
-        </div>
-
-    </div>
-
-    <div class="card margin-TB-5 txt-align-center" ng-show="noData">
-
-        <div class="card-content">
-
-            <h3>No data Found</h3>
-
-        </div>
-
-    </div>
 
 
 </div>
@@ -624,7 +616,7 @@
                         <!--</div>-->
 
                         <!--<div class="col-md-6 txt-right">-->
-                            <!--<button  ui-sref="add-employee" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-success"><i class="material-icons padng-right5">add_circle</i><a href="AddCustomer.html">Add</a> </button>-->
+                            <!--<button  ui-sref="add-employee" ng-class="{active: $state.includes('admin')}" class="btn btn-success"><i class="material-icons padng-right5">add_circle</i><a href="AddCustomer.html">Add</a> </button>-->
                             <!--<button ng-click="refreshPage()" class="btn btn-warning padng-right10"><i class="material-icons padng-right5">autorenew</i>Reload</button>-->
                             <!--<button ng-click="clearFilter()" class="btn btn-danger padng-right10"><i class="material-icons padng-right5">delete</i>Clear</button>-->
                         <!--</div>-->
@@ -775,7 +767,7 @@
 							<!--</td> &ndash;&gt;-->
 							<!--&lt;!&ndash;<td>&ndash;&gt;-->
 								<!--&lt;!&ndash;<div class="only-desktops" style="white-space: nowrap">&ndash;&gt;-->
-									<!--&lt;!&ndash;<a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-employee({ id: employee.id })" class="btn btn-default"><i&ndash;&gt;-->
+									<!--&lt;!&ndash;<a ng-class="{active: $state.includes('admin')}" ui-sref="edit-employee({ id: employee.id })" class="btn btn-default"><i&ndash;&gt;-->
 										<!--&lt;!&ndash;class="fa fa-pencil"></i> Edit</a>&ndash;&gt;-->
 
 									<!--&lt;!&ndash;<div class="btn-group dropdown">&ndash;&gt;-->
@@ -787,7 +779,7 @@
 										<!--&lt;!&ndash;<ul class="dropdown-menu">&ndash;&gt;-->
 											<!--&lt;!&ndash;<li><a ui-sref="view-employee({ id: employee.id })"><i&ndash;&gt;-->
 													<!--&lt;!&ndash;class="fa fa-eye"></i> View</a></li>&ndash;&gt;-->
-											<!--&lt;!&ndash;<li ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"><a ng-click="deleteConfirm(employee)" onClick="$('#deleteModal').modal()" data-target="#myModal" title="Delete"&ndash;&gt;-->
+											<!--&lt;!&ndash;<li ng-class="{active: $state.includes('admin')}" ><a ng-click="deleteConfirm(employee)" onClick="$('#deleteModal').modal()" data-target="#myModal" title="Delete"&ndash;&gt;-->
 												<!--&lt;!&ndash;class="delete-row"> <i class="fa fa-trash-o text-danger"></i>&ndash;&gt;-->
 													<!--&lt;!&ndash;<span class="text-danger">Delete</span>&ndash;&gt;-->
 											<!--&lt;!&ndash;</a></li>&ndash;&gt;-->
@@ -847,10 +839,10 @@
                                 <!--<button ui-sref="view-employee({ id: employee.id })" type="button" rel="tooltip" title="View Profile" class="btn btn-info btn-simple btn-xs">-->
                                     <!--<i class="material-icons">remove_red_eye</i>-->
                                 <!--</button>-->
-                                <!--<button ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ui-sref="edit-employee({ id: employee.id })" type="button" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">-->
+                                <!--<button ng-class="{active: $state.includes('admin')}" ui-sref="edit-employee({ id: employee.id })" type="button" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">-->
                                     <!--<i class="fa fa-edit"></i>-->
                                 <!--</button>-->
-                                <!--<button ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(employee)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">-->
+                                <!--<button ng-class="{active: $state.includes('admin')}" ng-click="deleteConfirm(employee)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">-->
                                     <!--<i class="fa fa-times"></i>-->
                                 <!--</button>-->
                             <!--</td>-->

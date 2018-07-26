@@ -59,6 +59,13 @@ ul.checkList li
 .box-cell, .box-row {
     float: none;
 }
+.card.PrintQrcodecard #printable img
+{
+    width: 250px !important;
+    height: 250px !important;
+    margin: 0 auto !important;
+    border-radius: 0 !important;
+}
 
 .p-l-3, .p-x-3 {
     padding-left: 20px!important;
@@ -1406,14 +1413,14 @@ a.cal-btn i
   .timeline:before {
   background:none !important;
   }
-  .remove-mr{
-    padding: 0px !important;
-    margin: 0px !important;
-  }
-  .remove-hght{
-    height:auto !important;
-    max-height:inherit; !important;
-  }
+  /*.remove-mr{*/
+    /*padding: 0px !important;*/
+    /*margin: 0px !important;*/
+  /*}*/
+  /*.remove-hght{*/
+    /*height:auto !important;*/
+    /*max-height:inherit; !important;*/
+  /*}*/
   .navbar{
     padding: 0px !important;
   }
@@ -1423,15 +1430,27 @@ a.cal-btn i
   .navbar .navbar-brand{
     line-height: 43px !important;
   }
-
+.LoginPageView
+{
+    height: 100% !important;
+}
   .LoginPageCon
   {
       position: relative;
+      background: url("../img/login-bg.jpg") no-repeat;
+      background-size: 100% 100%;
+      min-height: 100% !important;
   }
 .LoginPageCon .flotingIcons
 {
     position: absolute;
     z-index: 1000;
+
+}
+.LoginPageCon .flotingIcons img
+{
+    animation: example 3s;
+    /*animation-iteration-count: 2;*/
 }
 .LoginPageCon .flotingIcons.icon-1
 {
@@ -1481,6 +1500,7 @@ span.flotingIcons.icon-9 {
 span.flotingIcons.icon-9 img,span.flotingIcons.icon-5 img
 {
     width: 70%;
+
 }
 span.flotingIcons.icon-11 {
     bottom: 25%;
@@ -1495,6 +1515,12 @@ span.flotingIcons.icon-13 {
     left: 33%;
 }
 
+
+/* Standard syntax */
+@keyframes example {
+    from {width: 70%}
+    to {width: 90%}
+}
 
   .pad0px
   {
@@ -1530,6 +1556,10 @@ span.flotingIcons.icon-13 {
 .padng-right30
 {
     padding-right: 30px;
+}
+.pad-TB-30
+{
+    padding: 30px 0;
 }
 .form-group.pad-btm0
 {
@@ -1742,4 +1772,41 @@ div.bouncing-container .arrow-down {
 
 #loop2:hover img {
     opacity: .5;
+}
+
+@media (max-width: 1024px) {
+
+
+    .flotingIcons.icon-13 img,.flotingIcons.icon-1 img
+    {
+        width: 85%;
+    }
+    span.flotingIcons.icon-10
+    {
+        right: 20%;
+    }
+    .flotingIcons.icon-10 img
+    {
+        width: 90%;
+    }
+
+}
+
+@media (max-width: 768px)
+{
+    .LoginPageCon .flotingIcons
+    {
+        display: none;
+    }
+
+
+}
+@media (max-width: 425px)
+{
+    .LoginPageCon .flotingIcons
+    {
+        display: none;
+    }
+
+
 }

@@ -13,4 +13,12 @@ public interface AssetSiteHistoryRepository extends JpaRepository<AssetSiteHisto
 	@Query("SELECT at FROM AssetSiteHistory at WHERE at.asset.id = :assetId order by at.createdDate")
 	Page<AssetSiteHistory> findAllByAsset(@Param("assetId") long assetId, Pageable pageRequest);
 
+	@Query("SELECT at FROM AssetSiteHistory at WHERE at.asset.id = :assetId order by at.createdDate desc")
+	Page<AssetSiteHistory> findByAssetId(@Param("assetId") long assetId, Pageable pageRequest);
+
+	@Query("SELECT at FROM AssetSiteHistory at WHERE at.site.id = :siteId and at.asset.id = :assetId order by at.createdDate desc")
+	Page<AssetSiteHistory> findBySiteId(@Param("siteId") long siteId, @Param("assetId") long assetId, Pageable pageRequest);
+	
+	
+
 }

@@ -19,4 +19,7 @@ public interface AssetStatusHistoryRepository extends JpaRepository<AssetStatusH
 
 	@Query("SELECT at FROM AssetStatusHistory at WHERE at.status= :status")
 	AssetStatusHistory findByName(@Param("status") String name);
+
+	@Query("SELECT at FROM AssetStatusHistory at WHERE at.asset.id = :assetId order by at.createdDate desc")
+	Page<AssetStatusHistory> findByAssetId(@Param("assetId") long assetId, Pageable pageRequest);
 }

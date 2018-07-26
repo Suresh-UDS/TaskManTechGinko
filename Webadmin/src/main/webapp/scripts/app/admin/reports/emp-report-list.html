@@ -155,20 +155,20 @@
                                 </th>
                                 <th>Client
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('project.name')" ng-class="isActiveAsc == 'project.name' ? 'active' : ''" >
+                                        <span ng-click="columnAscOrder('projectSites.project.name')" ng-class="isActiveAsc == 'projectSites.project.name' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
-                                        <span ng-click="columnDescOrder('project.name')" ng-class="isActiveDesc == 'project.name' ? 'active' : ''">
+                                        <span ng-click="columnDescOrder('projectSites.project.name')" ng-class="isActiveDesc == 'projectSites.project.name' ? 'active' : ''">
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
                                 </th>
                                 <th>Site
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('site.name')" ng-class="isActiveAsc == 'site.name' ? 'active' : ''" >
+                                        <span ng-click="columnAscOrder('projectSites.site.name')" ng-class="isActiveAsc == 'projectSites.site.name' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
-                                        <span ng-click="columnDescOrder('site.name')" ng-class="isActiveDesc == 'site.name' ? 'active' : ''">
+                                        <span ng-click="columnDescOrder('projectSites.site.name')" ng-class="isActiveDesc == 'projectSites.site.name' ? 'active' : ''">
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
@@ -322,7 +322,7 @@
                         <!--</div>-->
 
                         <!--<div class="col-md-6 txt-right">-->
-                            <!--<button  ui-sref="add-employee" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-success"><i class="material-icons padng-right5">add_circle</i><a href="AddCustomer.html">Add</a> </button>-->
+                            <!--<button  ui-sref="add-employee" ng-class="{active: $state.includes('admin')}" class="btn btn-success"><i class="material-icons padng-right5">add_circle</i><a href="AddCustomer.html">Add</a> </button>-->
                             <!--<button ng-click="refreshPage()" class="btn btn-warning padng-right10"><i class="material-icons padng-right5">autorenew</i>Reload</button>-->
                             <!--<button ng-click="clearFilter()" class="btn btn-danger padng-right10"><i class="material-icons padng-right5">delete</i>Clear</button>-->
                         <!--</div>-->
@@ -473,7 +473,7 @@
 							<!--</td> &ndash;&gt;-->
 							<!--&lt;!&ndash;<td>&ndash;&gt;-->
 								<!--&lt;!&ndash;<div class="only-desktops" style="white-space: nowrap">&ndash;&gt;-->
-									<!--&lt;!&ndash;<a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-employee({ id: employee.id })" class="btn btn-default"><i&ndash;&gt;-->
+									<!--&lt;!&ndash;<a ng-class="{active: $state.includes('admin')}" ui-sref="edit-employee({ id: employee.id })" class="btn btn-default"><i&ndash;&gt;-->
 										<!--&lt;!&ndash;class="fa fa-pencil"></i> Edit</a>&ndash;&gt;-->
 
 									<!--&lt;!&ndash;<div class="btn-group dropdown">&ndash;&gt;-->
@@ -485,7 +485,7 @@
 										<!--&lt;!&ndash;<ul class="dropdown-menu">&ndash;&gt;-->
 											<!--&lt;!&ndash;<li><a ui-sref="view-employee({ id: employee.id })"><i&ndash;&gt;-->
 													<!--&lt;!&ndash;class="fa fa-eye"></i> View</a></li>&ndash;&gt;-->
-											<!--&lt;!&ndash;<li ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"><a ng-click="deleteConfirm(employee)" onClick="$('#deleteModal').modal()" data-target="#myModal" title="Delete"&ndash;&gt;-->
+											<!--&lt;!&ndash;<li ng-class="{active: $state.includes('admin')}" ><a ng-click="deleteConfirm(employee)" onClick="$('#deleteModal').modal()" data-target="#myModal" title="Delete"&ndash;&gt;-->
 												<!--&lt;!&ndash;class="delete-row"> <i class="fa fa-trash-o text-danger"></i>&ndash;&gt;-->
 													<!--&lt;!&ndash;<span class="text-danger">Delete</span>&ndash;&gt;-->
 											<!--&lt;!&ndash;</a></li>&ndash;&gt;-->
@@ -545,10 +545,10 @@
                                 <!--<button ui-sref="view-employee({ id: employee.id })" type="button" rel="tooltip" title="View Profile" class="btn btn-info btn-simple btn-xs">-->
                                     <!--<i class="material-icons">remove_red_eye</i>-->
                                 <!--</button>-->
-                                <!--<button ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ui-sref="edit-employee({ id: employee.id })" type="button" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">-->
+                                <!--<button ng-class="{active: $state.includes('admin')}" ui-sref="edit-employee({ id: employee.id })" type="button" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">-->
                                     <!--<i class="fa fa-edit"></i>-->
                                 <!--</button>-->
-                                <!--<button ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(employee)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">-->
+                                <!--<button ng-class="{active: $state.includes('admin')}" ng-click="deleteConfirm(employee)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">-->
                                     <!--<i class="fa fa-times"></i>-->
                                 <!--</button>-->
                             <!--</td>-->

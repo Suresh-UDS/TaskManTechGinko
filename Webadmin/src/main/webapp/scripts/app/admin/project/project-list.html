@@ -39,61 +39,8 @@
             <div class="card margin-TB-5 tablecard appModuleCard">
 
                 <div class="card-content">
-                    <!--<div class="row">-->
-                        <!--<div class="col-md-12">-->
-                            <!--<div class="card formcard FilterCard">-->
-                                <!--<div class="card-content">-->
-                                     <!--<form name="searchForm"  ng-submit="searchFilter();" novalidate >-->
 
-                                        <!--<div class="row" >-->
-                                            <!--<div class="col-xs-12 col-md-4">-->
-                                                <!--<div class="form-group no-padding" >-->
-                                                    <!--<div class="dropdown">-->
-                                                        <!--<div class="form-group">-->
-                                                            <!--<label class="control-label">Select Client</label>-->
-                                                             <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                            <!--<select class="form-control " ng-model="selectedProject"  ng-options="project as project.name for project in projectsList">-->
-                                                                <!--<option value="">Select Client...</option>-->
-                                                            <!--</select>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
-                                            <!--</div>-->
-
-                                             <!--<div class="col-xs-12 col-md-8 pad10px">-->
-
-                                                 <!--<div class="bouncing-container" ng-hide="projects">-->
-                                                     <!--<div class="message-container">-->
-                                                         <!--<span>Let's create your<br>first Client!</span>-->
-                                                     <!--</div>-->
-                                                     <!--<div class="arrow-down"></div>-->
-                                                 <!--</div>-->
-
-                                                <!--<div class="floatR form-group pull-right">-->
-                                                    <!--<button type="submit" class="btn btn-circle blue-clr">-->
-                                                        <!--<i class="material-icons">search</i>-->
-                                                    <!--</button>-->
-                                                    <!--<button ui-sref="add-project" has-permission="Client:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">-->
-                                                        <!--<i class="material-icons">add</i>-->
-                                                    <!--</button>-->
-                                                    <!--<button ng-click="refreshPage()" class="btn btn-circle orange-clr">-->
-                                                        <!--<i class="material-icons">refresh</i>-->
-                                                    <!--</button>-->
-                                                    <!--&lt;!&ndash;<button ng-click="printPage();" class="btn btn-circle orange-clr">&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;<i class="material-icons">print</i>&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;</button>&ndash;&gt;-->
-                                                <!--</div>-->
-                                                <!--<div class="clearfix"></div>-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                    <!--</form>-->
-                                <!--</div>-->
-                         <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-
-
-                <div class="table-responsive tablecard">
+                  <div class="table-responsive tablecard">
                         <table class="table table-hover withSortingIcons">
                             <thead>
                             <tr>
@@ -175,7 +122,7 @@
 
                                     <a  ng-class="{active: $state.includes('admin')}"  has-permission="Project:Edit" ui-sref="edit-project({ id: project.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                                    <!-- <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(project)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a> -->
+                                    <!-- <a ng-class="{active: $state.includes('admin')}" ng-click="deleteConfirm(project)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a> -->
 
 
                                 </td>
@@ -188,6 +135,22 @@
                         </table>
 
                     </div>
+
+                    <div class="txt-align-center LoaderCon"  ng-hide="projectsLoader">
+
+                        <div class="pad-TB-30">
+                            <div loader-css="ball-pulse"></div>
+                            <h3 >Loading, please wait...</h3>
+                        </div>
+
+                    </div>
+
+                    <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
+
+                        <h3>No data Found</h3>
+
+                    </div>
+
                 </div>
                 <!-- end content-->
             </div>
@@ -196,29 +159,6 @@
         <!-- end col-md-12 -->
     </div>
     <!-- end row -->
-
-    <div class="card margin-TB-5 txt-align-center" ng-hide="projectsLoader">
-
-        <div class="card-content">
-            <div class="" style="text-align:center;padding: 10px 0;" >
-                <div loader-css="ball-pulse"></div>
-            </div>
-
-            <h3 >Loading, please wait...</h3>
-
-        </div>
-
-    </div>
-
-    <div class="card margin-TB-5 txt-align-center" ng-show="noData">
-
-        <div class="card-content">
-
-            <h3>No data Found</h3>
-
-        </div>
-
-    </div>
 
     <!-- Pagination directive start -->
 

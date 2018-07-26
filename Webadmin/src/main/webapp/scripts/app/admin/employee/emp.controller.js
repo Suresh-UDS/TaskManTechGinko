@@ -1194,10 +1194,10 @@ angular.module('timeSheetApp')
         	}
         };
 
-        $scope.loadEnrolledImage = function( image) {
+        $scope.loadEnrolledImage = function(imageUrl) {
             var eleId = 'enrolledImage';
             var ele = document.getElementById(eleId);
-            ele.setAttribute('src',image);
+            ele.setAttribute('src',imageUrl);
 
         };
 

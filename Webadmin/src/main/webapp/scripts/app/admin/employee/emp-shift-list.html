@@ -1,144 +1,139 @@
 <div ng-init="loadPageTop()">
 
-    <!--<div class="row " >-->
-        <!--<div class="col-md-8" >-->
-            <!--&lt;!&ndash;<h2 class="title">Employee</h2>&ndash;&gt;-->
-        <!--</div>-->
-        <!--<div class="col-md-4 txt-align-rgt">-->
-            <!--<button ui-sref="add-employee"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>-->
-            <!--<button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>-->
-        <!--</div>-->
-    <!--</div>-->
 
+    <div class="row" ng-init="loadProjects();loadSites();">
+        <div class="col-md-6 txt-align-lft">
 
-	<!--<div class="row" style="padding-left:10px">-->
+            <button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
+                <i class="material-icons">filter_list</i> Basic Filter
+                <div class="ripple-container"></div>
+            </button>
 
-	<!--<label>number of entries</label>-->
-
-	<!--</div>-->
+        </div>
+    </div>
 
 
     <div class="row" >
 
-        <div class="col-md-12" ng-init="loadProjects()">
+        <div class="col-md-12">
             <div class="card TableCard">
                 <div class="card-content" >
 
-                    <div class="SearchTable" ng-init="loadSites()">
+                    <!--<div class="SearchTable">-->
 
-                        <form name="searchForm"  ng-submit="searchShiftFilter()" novalidate >
+                        <!--<form name="searchForm"  ng-submit="searchShiftFilter()" novalidate >-->
 
-                            <div class="row">
+                            <!--<div class="row">-->
 
-<!--                                     <td>
-                                        <label>Show</label>
-                                        <select class="siteList margin0" ng-model="sort" ng-change="hasChanged()" ng-options="paging.value for paging in pageSizes" value="{{paging.value}}">
-                                        </select>
-                                    </td>
- -->								  <div class="col-md-2">
-								   			<div class="dropdown">
-                                                <div class="form-group">
-                                                    <label class="control-label">Select Client</label>
-                                                     <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
-                                                        <option value="">Select Client...</option>
-                                                    </select>
-
-
-
-                                                </div>
-                                            </div>
-                                    </div>
-                                    <div class="col-md-2">
-
-                                            <div class="dropdown">
-                                                <div class="form-group">
-                                                    <label class="control-label">Select Site</label>
-                                                    <!--<input type="text" class="form-control"-->
-                                                    <!--ng-model="selectedRole"-->
-                                                    <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
-                                                    <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
-                                                    <!--required >-->
-                                                    <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites">
-                                                        <option value="">Select Site...</option>
-                                                    </select>
+<!--&lt;!&ndash;                                     <td>-->
+                                        <!--<label>Show</label>-->
+                                        <!--<select class="siteList margin0" ng-model="sort" ng-change="hasChanged()" ng-options="paging.value for paging in pageSizes" value="{{paging.value}}">-->
+                                        <!--</select>-->
+                                    <!--</td>-->
+ <!--&ndash;&gt;								  <div class="col-md-2">-->
+								   			<!--<div class="dropdown">-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<label class="control-label">Select Client</label>-->
+                                                     <!--<span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                    <!--<select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">-->
+                                                        <!--<option value="">Select Client...</option>-->
+                                                    <!--</select>-->
 
 
 
-                                                </div>
-                                            </div>
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-2">-->
+
+                                            <!--<div class="dropdown">-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<label class="control-label">Select Site</label>-->
+                                                    <!--&lt;!&ndash;<input type="text" class="form-control"&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;ng-model="selectedRole"&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;required >&ndash;&gt;-->
+                                                    <!--<span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                    <!--<select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites">-->
+                                                        <!--<option value="">Select Site...</option>-->
+                                                    <!--</select>-->
 
 
-								   </div>
-								    <div class="col-xs-12 col-md-4">
-                                         <div class="form-group no-padding" >
-                                             <div class="dropdown">
- 					                            <label class="label-control">Date</label>
- 					                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
- 					                            <input type="text" class="form-control datepicker"  id="selectedDate"  ng-model="selectedDate"/>
-                                             </div>
-                                         </div>
-                                     </div>
-                                   <!--  <div class="col-md-2">                                        
-                                    		<div class="form-group" style="padding-top: 20px;" >
-                                            <div class="dropdown">
-                                                <input type="text"
-                                                       class="form-control border-bottom-input"
-                                                       placeholder="Employee Id"
-                                                       ng-model="selectedEmployeeId"
-												/>
 
-                                            </div>
-                                        </div>
-                                    </div>
+                                                <!--</div>-->
+                                            <!--</div>-->
 
 
-                                    <div class="col-md-2">
-                                        <div class="form-group" style="padding-top: 20px;" >
-                                            <div class="dropdown">
-                                                <input type="text"
-                                                       class="form-control border-bottom-input"
-                                                       placeholder="Employee Name"
-                                                       ng-model="selectedEmployeeName"
-                                                       />
-                                            </div>
-                                        </div>
-                                    </div> -->
+								   <!--</div>-->
+								    <!--<div class="col-xs-12 col-md-4">-->
+                                         <!--<div class="form-group no-padding" >-->
+                                             <!--<div class="dropdown">-->
+ 					                            <!--<label class="label-control">Date</label>-->
+ 					                            <!--<span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>-->
+ 					                            <!--<input type="text" class="form-control datepicker"  id="selectedDate"  ng-model="selectedDate"/>-->
+                                             <!--</div>-->
+                                         <!--</div>-->
+                                     <!--</div>-->
+                                   <!--&lt;!&ndash;  <div class="col-md-2">-->
+                                    		<!--<div class="form-group" style="padding-top: 20px;" >-->
+                                            <!--<div class="dropdown">-->
+                                                <!--<input type="text"-->
+                                                       <!--class="form-control border-bottom-input"-->
+                                                       <!--placeholder="Employee Id"-->
+                                                       <!--ng-model="selectedEmployeeId"-->
+												<!--/>-->
+
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
 
 
-                                    <div class="col-md-4">
-                                        <div class="form-group pull-right" style="padding-top: 10px;">
+                                    <!--<div class="col-md-2">-->
+                                        <!--<div class="form-group" style="padding-top: 20px;" >-->
+                                            <!--<div class="dropdown">-->
+                                                <!--<input type="text"-->
+                                                       <!--class="form-control border-bottom-input"-->
+                                                       <!--placeholder="Employee Name"-->
+                                                       <!--ng-model="selectedEmployeeName"-->
+                                                       <!--/>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div> &ndash;&gt;-->
 
-                                            <button type="submit" class="btn btn-circle blue-clr">
-                                                <i class="material-icons">search</i>
-                                            </button>
-                                            <!-- <button ui-sref="add-employee" has-permission="Employee:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
-                                                <i class="material-icons">add</i>
-                                            </button>
-                                            <button ui-sref="employee-location" class="btn btn-circle orange-clr">
-                                                <i class="material-icons">location_on</i>
-                                            </button>
-                                            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
-                                                <i class="material-icons">refresh</i>
-                                            </button> -->
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
 
-                              </div>
-                        </form>
+                                    <!--<div class="col-md-4">-->
+                                        <!--<div class="form-group pull-right" style="padding-top: 10px;">-->
 
-                    </div>
+                                            <!--<button type="submit" class="btn btn-circle blue-clr">-->
+                                                <!--<i class="material-icons">search</i>-->
+                                            <!--</button>-->
+                                            <!--&lt;!&ndash; <button ui-sref="add-employee" has-permission="Employee:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">-->
+                                                <!--<i class="material-icons">add</i>-->
+                                            <!--</button>-->
+                                            <!--<button ui-sref="employee-location" class="btn btn-circle orange-clr">-->
+                                                <!--<i class="material-icons">location_on</i>-->
+                                            <!--</button>-->
+                                            <!--<button ng-click="refreshPage()" class="btn btn-circle orange-clr">-->
+                                                <!--<i class="material-icons">refresh</i>-->
+                                            <!--</button> &ndash;&gt;-->
+                                        <!--</div>-->
+                                        <!--<div class="clearfix"></div>-->
+                                    <!--</div>-->
+
+                              <!--</div>-->
+                        <!--</form>-->
+
+                    <!--</div>-->
 
 
                     <div class="table-responsive tablecard">
-                        <table id="" class="table table-striped table-hover">
+                        <table id="" class="table table-hover withSortingIcons">
 
                             <thead>
                             <tr>
-                                <th>ID 
-                            
+                                <th>ID
+
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('employeeEmpId')" ng-class="isActiveAsc == 'employeeEmpId' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
@@ -180,7 +175,7 @@
                                 <td>{{employeeShift.employeeEmpId}}</td>
                                 <td>{{employeeShift.employeeFullName}}</td>
 							   <td>
-							   	   {{employeeShift.siteName}}	
+							   	   {{employeeShift.siteName}}
 								   <select class="form-control " ng-model="selectedShiftSite" ng-change="updateEmpShiftSite(employeeShift, selectedShiftSite)"  ng-options="site as site.name for site in sites track by site.id">
 	                                    <option value="">Select Site...</option>
 	                                </select>
@@ -635,7 +630,7 @@
                         <!--</div>-->
 
                         <!--<div class="col-md-6 txt-right">-->
-                            <!--<button  ui-sref="add-employee" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-success"><i class="material-icons padng-right5">add_circle</i><a href="AddCustomer.html">Add</a> </button>-->
+                            <!--<button  ui-sref="add-employee" ng-class="{active: $state.includes('admin')}" class="btn btn-success"><i class="material-icons padng-right5">add_circle</i><a href="AddCustomer.html">Add</a> </button>-->
                             <!--<button ng-click="refreshPage()" class="btn btn-warning padng-right10"><i class="material-icons padng-right5">autorenew</i>Reload</button>-->
                             <!--<button ng-click="clearFilter()" class="btn btn-danger padng-right10"><i class="material-icons padng-right5">delete</i>Clear</button>-->
                         <!--</div>-->
@@ -786,7 +781,7 @@
 							<!--</td> &ndash;&gt;-->
 							<!--&lt;!&ndash;<td>&ndash;&gt;-->
 								<!--&lt;!&ndash;<div class="only-desktops" style="white-space: nowrap">&ndash;&gt;-->
-									<!--&lt;!&ndash;<a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-employee({ id: employee.id })" class="btn btn-default"><i&ndash;&gt;-->
+									<!--&lt;!&ndash;<a ng-class="{active: $state.includes('admin')}" ui-sref="edit-employee({ id: employee.id })" class="btn btn-default"><i&ndash;&gt;-->
 										<!--&lt;!&ndash;class="fa fa-pencil"></i> Edit</a>&ndash;&gt;-->
 
 									<!--&lt;!&ndash;<div class="btn-group dropdown">&ndash;&gt;-->
@@ -798,7 +793,7 @@
 										<!--&lt;!&ndash;<ul class="dropdown-menu">&ndash;&gt;-->
 											<!--&lt;!&ndash;<li><a ui-sref="view-employee({ id: employee.id })"><i&ndash;&gt;-->
 													<!--&lt;!&ndash;class="fa fa-eye"></i> View</a></li>&ndash;&gt;-->
-											<!--&lt;!&ndash;<li ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"><a ng-click="deleteConfirm(employee)" onClick="$('#deleteModal').modal()" data-target="#myModal" title="Delete"&ndash;&gt;-->
+											<!--&lt;!&ndash;<li ng-class="{active: $state.includes('admin')}" ><a ng-click="deleteConfirm(employee)" onClick="$('#deleteModal').modal()" data-target="#myModal" title="Delete"&ndash;&gt;-->
 												<!--&lt;!&ndash;class="delete-row"> <i class="fa fa-trash-o text-danger"></i>&ndash;&gt;-->
 													<!--&lt;!&ndash;<span class="text-danger">Delete</span>&ndash;&gt;-->
 											<!--&lt;!&ndash;</a></li>&ndash;&gt;-->
@@ -858,10 +853,10 @@
                                 <!--<button ui-sref="view-employee({ id: employee.id })" type="button" rel="tooltip" title="View Profile" class="btn btn-info btn-simple btn-xs">-->
                                     <!--<i class="material-icons">remove_red_eye</i>-->
                                 <!--</button>-->
-                                <!--<button ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ui-sref="edit-employee({ id: employee.id })" type="button" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">-->
+                                <!--<button ng-class="{active: $state.includes('admin')}" ui-sref="edit-employee({ id: employee.id })" type="button" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">-->
                                     <!--<i class="fa fa-edit"></i>-->
                                 <!--</button>-->
-                                <!--<button ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(employee)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">-->
+                                <!--<button ng-class="{active: $state.includes('admin')}" ng-click="deleteConfirm(employee)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">-->
                                     <!--<i class="fa fa-times"></i>-->
                                 <!--</button>-->
                             <!--</td>-->
@@ -1011,3 +1006,65 @@
 </div>
 
 
+<!-- BasicFilterModal -->
+<div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="searchForm"   novalidate >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Basic Filter</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+
+                        <div class="col-xs-12 col-md-4">
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <label class="label-control">Client</label>
+                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects" ng-pattern="Select Client" >
+                                        <option value="">Select Client...</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <div class="dropdown">
+                                <div class="form-group">
+                                    <label class="label-control">Site</label>
+                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sitesList" ng-pattern="Select Site" ng-change="loadEmployees()" >
+                                        <option value="">Select Site...</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-md-4">
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <label class="label-control">Date</label>
+                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                    <input type="text" class="form-control datepicker"  id="selectedDate"  ng-model="selectedDate"/>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter1()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--  End Modal -->

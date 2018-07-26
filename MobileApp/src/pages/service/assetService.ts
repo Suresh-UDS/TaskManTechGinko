@@ -147,5 +147,14 @@ export class AssetService {
         )
     }
 
+    markBreakDown(asset):Observable<any>{
+        return this.http.post(this.config.Url+'api/asset/breakDown',asset).map(
+            response=>{
+                console.log(response);
+                return response
+            }
+        )
+    }
+
 
 }

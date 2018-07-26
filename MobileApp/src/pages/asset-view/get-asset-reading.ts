@@ -45,6 +45,7 @@ export class GetAssetReading {
 
     }
     ionViewWillEnter(){
+        this.componentService.showLoader("Readings")
        this.getAssetConfigsReading();
     }
 
@@ -68,79 +69,27 @@ export class GetAssetReading {
         console.log("Get Asset reading page");
         console.log(this.assetDetails);
         console.log(this.assetDetails.config);
-        // online
-        // // this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
-        // // //
-        // //     response=>{
-        // //         console.log("Asset config details");
-        // //         console.log(response);
-        // //         this.assetConfig = response;
-        // //         for(let config of this.assetConfig){
-        // //             this.assetService.getAssetPreviousReadings(config.assetId,config.id).subscribe(
-        // //                 response=>{
-        // //                     console.log("Get Asset Previous readings");
-        // //                     console.log(response);
-        // //                     if(response.consumptionMonitoringRequired){
-        // //                         if(response.initialValue>0){
-        // //                             config.previousValue = response.initialValue;
-        // //                         }else{
-        // //                             config.previousValue = null;
-        // //                         }
-        // //                     }else{
-        // //                         if(response.value>0){
-        // //                             config.previousValue = response.value;
-        // //                         }else{
-        // //                             config.previousValue = null;
-        // //                         }
-        // //                     }
+        this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
         //
-        //                     // if(response.initialValue<0){
-        //                     //
-        //                     //     if(response.value>0){
-        //                     //         config.previousValue=response.value;
-        //                     //     }
-        //                     // }
-        //                     // else if(response.finalValue<=0)
-        //                     // {
-        //                     //     config.previousValue=response.initialValue;
-        //                     //     config.reading=response.initialValue;
-        //                     //     console.log(this.assetConfig);
-        //                     //     config.previousReadingId=response.id;
-        //                     // }else{
-        //                     //     config.previousValue=response.finalValue;
-        //                     //     config.reading=response.initialValue;
-        //                     //     console.log(this.assetConfig);
-        //                     //
-        //                     // }
-        //                 }
-        //             )
-        //         }
-        //     },err=>{
-        //         console.log("Error in getting asset config");
-        //         console.log(err);
-        //     }
-        // )
-// offline
-
-            this.dbService.getConfig(this.assetDetails.assetType,this.assetDetails.id).then(
             response=>{
                 console.log("Asset config details");
                 console.log(response);
                 this.assetConfig = response;
                 for(let config of this.assetConfig){
-                    this.dbService.getPreviousReading(config.assetId,config.id).then(
+                    this.assetService.getAssetPreviousReadings(config.assetId,config.id).subscribe(
                         response=>{
                             console.log("Get Asset Previous readings");
-                            console.log(response[0]);
-                            if(response[0].consumptionMonitoringRequired){
-                                if(response[0].initialValue>0){
-                                    config.previousValue = response[0].initialValue;
+                            console.log(response);
+                            this.componentService.closeLoader()
+                            if(response.consumptionMonitoringRequired){
+                                if(response.initialValue>0){
+                                    config.previousValue = response.initialValue;
                                 }else{
                                     config.previousValue = null;
                                 }
                             }else{
-                                if(response[0].value>0){
-                                    config.previousValue = response[0].value;
+                                if(response.value>0){
+                                    config.previousValue = response.value;
                                 }else{
                                     config.previousValue = null;
                                 }
@@ -168,10 +117,12 @@ export class GetAssetReading {
                     )
                 }
             },err=>{
+                this.componentService.closeLoader()
                 console.log("Error in getting asset config");
                 console.log(err);
             }
         )
+
     }
 
     submitReading(){
@@ -389,19 +340,6 @@ export class GetAssetReading {
 
     assetSaveReading(assetReading)
     {
-        //offline
-        //
-        // this.dbService.setReadings(assetReading).then(
-        //     response=>{
-        //         console.log(response)
-        //         this.componentService.showToastMessage('Reading Saved','bottom');
-        //         this.viewCtrl.dismiss();
-        //     },
-        //     error=>{
-        //         console.log(error)
-        //     }
-        // )
-
         //online
         this.assetService.saveReading(assetReading).subscribe(
             response=>{

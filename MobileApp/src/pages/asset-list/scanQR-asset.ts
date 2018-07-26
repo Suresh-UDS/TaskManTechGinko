@@ -7,6 +7,7 @@ import {AssetView} from "../asset-view/asset-view";
 import {AssetService} from "../service/assetService";
 import {componentService} from "../service/componentService";
 import {AssetList} from "./asset-list";
+import {OfflineAssetList} from "../offline-assetlist/offline-assetlist";
 
 /**
  * Generated class for the AssetList page.
@@ -22,9 +23,11 @@ export class ScanQRAsset {
 
     assetList: any;
     data:any;
+    offline:any;
 
     constructor(public viewCtrl: ViewController,public navCtrl: NavController, public navParams: NavParams, public modalController: ModalController, public qrScanner: QRScanner, public assetService:AssetService, public cs:componentService) {
 
+        this.offline = this.navParams.data.offline;
 
     }
 
@@ -38,7 +41,14 @@ export class ScanQRAsset {
                 if(text!=""){
                     this.qrScanner.hide();
                     scanSub.unsubscribe();
-                    this.navCtrl.setRoot(AssetList,{text:text})
+                    if(this.offline)
+                    {
+                        this.navCtrl.setRoot(OfflineAssetList,{text:text})
+                    }
+                    else {
+                        this.navCtrl.setRoot(AssetList,{text:text})
+                    }
+
                     // this.navCtrl.pop();
                     // this.assetService.getAssetByCode(text).subscribe(
                     //     response=>{

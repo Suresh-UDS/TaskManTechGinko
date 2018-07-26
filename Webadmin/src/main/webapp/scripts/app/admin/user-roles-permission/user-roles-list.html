@@ -13,7 +13,7 @@
         </div>
         <div class="col-md-6 txt-align-rgt">
 
-            <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-user-role"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" tabindex="0">
+            <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-user-role"  ng-class="{active: $state.includes('admin')}"  tabindex="0">
                 <i class="material-icons">add</i> Add
                 <div class="ripple-container"></div>
             </button>
@@ -90,7 +90,7 @@
                                             <!--<button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">-->
                                                 <!--<i class="material-icons">search</i>-->
                                             <!--</button>-->
-                                            <!--<button ui-sref="add-user-role"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-circle green-clr">-->
+                                            <!--<button ui-sref="add-user-role"  ng-class="{active: $state.includes('admin')}" `class="btn btn-circle green-clr">-->
                                                 <!--<i class="material-icons">add</i>-->
                                             <!--</button>-->
                                             <!--<button ng-click="refreshPage()" class="btn btn-circle orange-clr">-->
@@ -174,9 +174,9 @@
                                 <td>{{userRole.createdDate | date:'MM/dd/yyyy @ h:mma'}}</td>
 
                                 <td class="text-right">
-                                    <a   has-authority="ROLE_ADMIN" data-toggle="modal" data-target="#ViewModal"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
-                                    <a   has-authority="ROLE_ADMIN" ui-sref="edit-user-role({ id: userRole.id })"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">edit</i></a>
-                                    <!-- <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a> -->
+                                    <a   data-toggle="modal" data-target="#ViewModal"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
+                                    <a   ui-sref="edit-user-role({ id: userRole.id })"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">edit</i></a>
+                                    <!-- <a ng-class="{active: $state.includes('admin')}" ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a> -->
                                 </td>
                             </tr>
 

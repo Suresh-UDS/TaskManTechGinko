@@ -31,6 +31,7 @@ angular.module('timeSheetApp')
         $scope.pager = {};
         $scope.noData = false;
 
+        $scope.qrInfoBlock="";
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -69,9 +70,9 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadDepBlocks = function () {
-	    		
+
             if(jQuery.isEmptyObject($scope.selectedProject) == false) {
-               
+
                    var depProj=$scope.selectedProject.id;
             }else if(jQuery.isEmptyObject($scope.searchProject) == false){
                     var depProj=$scope.searchProject.id;
@@ -122,7 +123,7 @@ angular.module('timeSheetApp')
 	    };
 
 	    $scope.loadDepZones = function () {
-	    		
+
             if(jQuery.isEmptyObject($scope.selectedProject) == false) {
                    var depProj=$scope.selectedProject.id;
             }else if(jQuery.isEmptyObject($scope.searchProject) == false){
@@ -412,6 +413,9 @@ angular.module('timeSheetApp')
              $scope.loading = true;
              $scope.loadLocations();
              $scope.setPage(1);
+             if($stateParams.location){
+                 $scope.qrcodePage($stateParams.location);
+             }
          };
 
 
@@ -454,13 +458,12 @@ angular.module('timeSheetApp')
 
                 console.log('response qr---',response);
 
-                var qrAry  = response.split('.');
-                $scope.qr_img = qrAry[0];
-                $scope.assetCode = qrAry[1];
+                $scope.qr_img = response.url;
+
                 var eleId = 'qrImage';
                 var ele = document.getElementById(eleId);
-                ele.setAttribute('src',$scope.qr_img);
-                console.log('create qr---',$scope.qr_img);
+                    ele.setAttribute('src',$scope.qr_img);
+                // console.log('create qr---',$scope.qr_img);
 
             });
         }
@@ -471,6 +474,29 @@ angular.module('timeSheetApp')
             ele.setAttribute('src',image);
         };
 
+        $scope.printDiv = function(printable) {
+            var printContents = document.getElementById(printable).innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }
+
+        $scope.printPage = function () {
+            window.print();
+        }
+
+        $scope.qrcodePage = function(){
+            console.log($stateParams.location);
+            LocationComponent.findOne($stateParams.location).then(function (response) {
+                console.log(response);
+                $scope.qrInfoDetails  = response;
+                $scope.generateQR(response.siteId,response.id);
+            })
+        }
+
     });
+
+
 
 

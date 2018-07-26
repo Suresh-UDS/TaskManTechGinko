@@ -154,6 +154,7 @@ public class SchedulerService extends AbstractService {
 			entity = schedulerConfigRepository.save(entity);
 			// create jobs based on the creation policy
 			createJobs(entity);
+			//createJobs(entity);
 		}
 
 	}
@@ -483,8 +484,8 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.overdueJobReport();
 	}
 
-	// @Scheduled(initialDelay = 60000,fixedRate = 900000) //Runs every 15 mins
-	@Scheduled(cron = "0 0 19 1/1 * ?")
+	//@Scheduled(initialDelay = 60000,fixedRate = 900000) //Runs every 15 mins
+	//@Scheduled(cron = "0 0 19 1/1 * ?")
 	public void endOfDayReportSchedule() {
 
 
@@ -608,7 +609,7 @@ public class SchedulerService extends AbstractService {
 	@Scheduled(cron = "0 */30 * * * ?")
 	public void attendanceShiftReportSchedule() {
 		Calendar cal = Calendar.getInstance();
-		schedulerHelperService.generateDetailedAttendanceReport(cal.getTime(), true, false);
+		schedulerHelperService.generateDetailedAttendanceReport(cal.getTime(), true, false, false);
 	}
 
 
@@ -616,7 +617,7 @@ public class SchedulerService extends AbstractService {
 	public void attendanceDetailReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_YEAR, -1);
-		schedulerHelperService.generateDetailedAttendanceReport(cal.getTime(), false, true);
+		schedulerHelperService.generateDetailedAttendanceReport(cal.getTime(), false, true, false);
 	}
 
 	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins

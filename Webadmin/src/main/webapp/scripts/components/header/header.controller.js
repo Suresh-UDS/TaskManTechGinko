@@ -11,6 +11,7 @@ angular.module('timeSheetApp')
 
             Auth.logout();
             $state.go('login');
+            $rootScope.resLoader=false;
         };
 
       // Session timeout

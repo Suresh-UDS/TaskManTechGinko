@@ -563,7 +563,7 @@
                                                                                         <a class="btn btn-success margn-top0"  ng-click="addVendor()">Add</a>
                                                                                     </div>
                                                                                 </div> -->
-                                                                           
+
                                                                             </div>
                                                                             <!-- <div class="col-md-6">
                                                                                 <div class="form-group">
@@ -898,7 +898,7 @@
                                                             <tr ng-repeat="ppmList in ppmJobLists">
                                                                 <td>{{ppmList.description}}</td>
                                                                 <td>{{ppmList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
-                                                                <td><a class="job-txt" has-authority="ROLE_ADMIN" ui-sref="view-job({ id: ppmList.id })">{{ppmList.id}}</a></td>
+                                                                <td><a class="job-txt" ui-sref="view-job({ id: ppmList.id })">{{ppmList.id}}</a></td>
                                                                 <td>{{ppmList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
                                                                 <td>{{ppmList.plannedEndTime | date:'dd-MMM-yyyy'}}</td>
                                                                 <td>{{ppmList.employeeName}}</td>
@@ -935,7 +935,7 @@
                                                             <tr ng-repeat="amcList in amcJobLists">
                                                                 <td>{{amcList.description}}</td>
                                                                 <td>{{amcList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
-                                                                <td><a class="job-txt" has-authority="ROLE_ADMIN" ui-sref="view-job({ id: amcList.id })">{{amcList.id}}</a></td>
+                                                                <td><a class="job-txt" ui-sref="view-job({ id: amcList.id })">{{amcList.id}}</a></td>
                                                                 <td>{{amcList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
                                                                 <td>{{amcList.plannedEndTime | date:'dd-MMM-yyyy'}}</td>
                                                                 <td>{{amcList.employeeName}}</td>

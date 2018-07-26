@@ -47,10 +47,10 @@
       </div>
     <ion-item *ngFor="let asset of assetList" (click)="viewAsset(asset)" class="">
 
-        <ion-thumbnail *ngIf="asset.qrCodeImage" item-start class="">
-            <img [src]=asset.qrCodeImage imageViewer/>
+        <ion-thumbnail *ngIf="asset.url" item-start class="">
+            <img [src]=asset.url imageViewer/>
         </ion-thumbnail>
-        <ion-thumbnail *ngIf="!asset.qrCodeImage" item-start class="">
+        <ion-thumbnail *ngIf="!asset.url" item-start class="">
             <img src="assets/imgs/placeholder.png" imageViewer/>
         </ion-thumbnail>
         <p text-left="" class="padding-bottom5">{{asset.title}}</p>
