@@ -1620,13 +1620,14 @@ angular.module('timeSheetApp')
                 $scope.loadAMCJobs();
             }else if($scope.redSearchCriteria.module == "Readings"){
                 $scope.loadAssetReadings();
-            }else if($scope.siteHistorySearchCriteria.module == "site history"){
+            }else if($scope.siteHistorySearchCriteria.module == "siteHistory"){
                 $scope.loadSiteHistory();
-            }else if($scope.statusHistorySearchCriteria.module == "status history"){
+            }else if($scope.statusHistorySearchCriteria.module == "statusHistory"){
                 $scope.loadStatusHistory();
-            }else if($scope.ticketSearchCriteria.module == "ticket"){
+            }else if($scope.ticketSearchCriteria.module == "Ticket"){
                 $scope.loadTicket();
             }else{
+                alert("Test");
                $scope.search();
             }
 
@@ -2439,9 +2440,9 @@ angular.module('timeSheetApp')
         	AssetComponent.findByAssetReadings($scope.redSearchCriteria).then(function(data){
                 $rootScope.loadingStop();
         		console.log('View Readings - ' +JSON.stringify(data));
-        		if(data.transactions != null) {
+        		/*if(data.transactions != null) {*/
         			$scope.assetReadings = data.transactions;
-            		$scope.viewAssetReading(data.transactions[0].id);
+            		//$scope.viewAssetReading(data.transactions[0].id);
 
 
                  /*
@@ -2450,17 +2451,18 @@ angular.module('timeSheetApp')
 
                 $scope.pager = {};
                 $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+
                 $scope.totalCountPages = data.totalCount;
 
                 console.log("Pagination",$scope.pager);
                 console.log("Readings List - ", data);
 
 
-        		}else{
+        		/*}else{
         			console.log('No readings');
         			$scope.noReading = true;
-        			$scope.assetReadings = [];
-        		}
+        			$scope.assetReadings = "";
+        		}*/
 
         	});
         }
@@ -2916,7 +2918,7 @@ angular.module('timeSheetApp')
                             }
 
                 $scope.siteHistorySearchCriteria.currPage = siteHistoryCurrPageVal;
-                $scope.siteHistorySearchCriteria.module = "Site history";
+                $scope.siteHistorySearchCriteria.module = "siteHistory";
                 $scope.siteHistorySearchCriteria.assetId = $stateParams.id;
                 $scope.siteHistorySearchCriteria.sort = $scope.pageSort;
                 $scope.siteHistories = "";
@@ -2952,7 +2954,7 @@ angular.module('timeSheetApp')
                             }
 
                 $scope.statusHistorySearchCriteria.currPage = statusHistoryCurrPageVal;
-                $scope.statusHistorySearchCriteria.module = "status history";
+                $scope.statusHistorySearchCriteria.module = "statusHistory";
                 $scope.statusHistorySearchCriteria.assetId = $stateParams.id;
                 $scope.statusHistorySearchCriteria.sort = $scope.pageSort;
                 $scope.statusHistories = "";
@@ -2989,7 +2991,7 @@ angular.module('timeSheetApp')
                             }
 
                 $scope.ticketSearchCriteria.currPage = ticketCurrPageVal;
-                $scope.ticketSearchCriteria.module = "ticket";
+                $scope.ticketSearchCriteria.module = "Ticket";
                 $scope.ticketSearchCriteria.assetId = $stateParams.id;
                 $scope.ticketSearchCriteria.sort = $scope.pageSort;
                 $scope.tickets = "";

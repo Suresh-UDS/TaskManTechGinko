@@ -876,14 +876,14 @@
                                                                       </thead>
 
                                                                       <tbody>
-                                                                      <tr ng-hide="noReading" ng-repeat="reading in assetReadings">
+                                                                      <tr ng-show="assetReadings" ng-repeat="reading in assetReadings">
                                                                           <td> <a  ng-click="viewAssetReading(reading.id)"><span class="label label-warning">{{reading.name}}</span></a></td>
                                                                           <td>{{reading.createdDate | date: "dd-MM-yyyy hh:mm:ss"}}</td>
                                                                           <td>{{reading.initialValue}}&nbsp; {{reading.uom}}</td>
                                                                           <td>{{reading.finalValue}}&nbsp; {{reading.uom}}</td>
                                                                           <td>{{reading.consumption}}&nbsp; {{reading.uom}}</td>
                                                                       </tr>
-                                                                      <tr ng-show="noReading">
+                                                                      <tr ng-show="!assetReadings">
                                                                       	<td colspan="5" align="center">No Readings Found</td>
                                                                       </tr>
                                                                       </tbody>
