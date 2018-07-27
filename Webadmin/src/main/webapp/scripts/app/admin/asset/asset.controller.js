@@ -82,6 +82,8 @@ angular.module('timeSheetApp')
         $scope.noData = false;
         $scope.assetQrList ={};
         $scope.selectedEmployee ={};
+        $scope.siteHistorySearchCriteria ={};
+        $scope.statusHistorySearchCriteria ={};
 
         //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.searchAcquiredDate = "";
@@ -1612,15 +1614,15 @@ angular.module('timeSheetApp')
             //alert(page);
             $scope.pages.currPage = page;
             if($scope.ppmSearchCriteria.maintenanceType =='PPM'){
-
                 $scope.loadPPMJobs();
-
             }else if($scope.amcSearchCriteria.maintenanceType =='AMC'){
-
                 $scope.loadAMCJobs();
-
             }else if($scope.redSearchCriteria.module == "Readings"){
                 $scope.loadAssetReadings();
+            }else if($scope.siteHistorySearchCriteria.module == "site history"){
+                $scope.loadSiteHistory();
+            }else if($scope.statusHistorySearchCriteria.module == "status history"){
+                $scope.loadStatusHistory();
             }else{
                $scope.search();
             }
@@ -2897,21 +2899,70 @@ angular.module('timeSheetApp')
              
              
             $scope.loadSiteHistory = function() { 
-            	var search = {};
-            	search.assetId = $stateParams.id;
-            	AssetComponent.getSiteHistory(search).then(function(data) { 
+            	$rootScope.loadingStart();
+                    var siteHistoryCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+                            if(!$scope.siteHistoryCriteria) {
+                                var siteHistorySearchCriteria = {
+                                        currPage : siteHistoryCurrPageVal
+                                };
+                                $scope.siteHistorySearchCriteria = siteHistorySearchCriteria;
+                            }
+
+                $scope.siteHistorySearchCriteria.currPage = siteHistoryCurrPageVal;
+                $scope.siteHistorySearchCriteria.module = "Site history";
+                $scope.siteHistorySearchCriteria.assetId = $stateParams.id;
+                $scope.siteHistories = "";
+            console.log('Site historys search criteria',$scope.siteHistorySearchCriteria);
+            	AssetComponent.getSiteHistory($scope.siteHistorySearchCriteria).then(function(data) { 
+                    $rootScope.loadingStop();
             		console.log(data);
             		$scope.siteHistories = data.transactions;
+
+                /*
+                ** Call pagination  main function **
+                */
+
+                $scope.pager = {};
+                $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+                $scope.totalCountPages = data.totalCount;
+
+                console.log("Pagination",$scope.pager);
+                console.log("Site historys List - ", data);
+
             	});
             	
             }
             
             $scope.loadStatusHistory = function() { 
-            	var search = {};
-            	search.assetId = $stateParams.id;
-            	AssetComponent.getStatusHistory(search).then(function(data) { 
+            	$rootScope.loadingStart();
+                    var statusHistoryCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+                            if(!$scope.statusHistoryCriteria) {
+                                var statusHistorySearchCriteria = {
+                                        currPage : statusHistoryCurrPageVal
+                                };
+                                $scope.statusHistorySearchCriteria = statusHistorySearchCriteria;
+                            }
+
+                $scope.statusHistorySearchCriteria.currPage = statusHistoryCurrPageVal;
+                $scope.statusHistorySearchCriteria.module = "status history";
+                $scope.statusHistorySearchCriteria.assetId = $stateParams.id;
+                $scope.statusHistories = "";
+                console.log('Status historys search criteria',$scope.statusHistorySearchCriteria);
+            	AssetComponent.getStatusHistory($scope.statusHistorySearchCriteria).then(function(data) { 
+                    $rootScope.loadingStop();
             		console.log(data);
             		$scope.statusHistories = data.transactions;
+
+                /*
+                ** Call pagination  main function **
+                */
+
+                $scope.pager = {};
+                $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+                $scope.totalCountPages = data.totalCount;
+
+                console.log("Pagination",$scope.pager);
+                console.log("Status historys List - ", data);
             	});
             	
             }
