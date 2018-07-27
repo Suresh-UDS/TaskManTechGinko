@@ -1176,6 +1176,10 @@ public class JobManagementService extends AbstractService {
 		//send notifications if a ticket is raised
 		if(job.getTicket() != null) {
 			Ticket ticket = job.getTicket();
+			ticket.setStatus("Closed");
+			ticket.setClosedBy(ticket.getAssignedTo());
+			ticket.setClosedOn(DateUtil.convertToSQLDate(new Date()));
+			ticketRepository.save(ticket);
 			Map<String, String> data = new HashMap<String, String>();
 			String ticketUrl = env.getProperty("url.ticket-view");
 			data.put("url.ticket-view", ticketUrl);
@@ -1196,6 +1200,10 @@ public class JobManagementService extends AbstractService {
         //	send notifications if a ticket is raised
 		if(job.getStatus().equals(JobStatus.COMPLETED) && job.getTicket() != null) {
 			Ticket ticket = job.getTicket();
+			ticket.setStatus("Closed");
+			ticket.setClosedBy(ticket.getAssignedTo());
+			ticket.setClosedOn(DateUtil.convertToSQLDate(new Date()));
+			ticketRepository.save(ticket);
 			Map<String, String> data = new HashMap<String, String>();
 			String ticketUrl = env.getProperty("url.ticket-view");
 			data.put("url.ticket-view", ticketUrl);
@@ -1243,6 +1251,10 @@ public class JobManagementService extends AbstractService {
 		//send notifications if a ticket is raised
 		if(job.getTicket() != null) {
 			Ticket ticket = job.getTicket();
+			ticket.setStatus("Closed");
+			ticket.setClosedBy(ticket.getAssignedTo());
+			ticket.setClosedOn(DateUtil.convertToSQLDate(new Date()));
+			ticketRepository.save(ticket);
 			Map<String, String> data = new HashMap<String, String>();
 			String ticketUrl = env.getProperty("url.ticket-view");
 			data.put("url.ticket-view", ticketUrl);
@@ -1272,6 +1284,10 @@ public class JobManagementService extends AbstractService {
 		//send notifications if a ticket is raised
 		if(job.getTicket() != null) {
 			Ticket ticket = job.getTicket();
+			ticket.setStatus("Closed");
+			ticket.setClosedBy(ticket.getAssignedTo());
+			ticket.setClosedOn(DateUtil.convertToSQLDate(new Date()));
+			ticketRepository.save(ticket);
 			Map<String, String> data = new HashMap<String, String>();
 			String ticketUrl = env.getProperty("url.ticket-view");
 			data.put("url.ticket-view", ticketUrl);
