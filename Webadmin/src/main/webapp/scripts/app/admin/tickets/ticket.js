@@ -3,7 +3,7 @@
 angular.module('timeSheetApp').config(function($stateProvider) {
 	$stateProvider.state('create-ticket', {
 		parent : 'manage',
-		url : '/create-ticket',
+		url : '/create-ticket/:assetId',
 		controller : 'TicketController',
 		data : {
 			authorities : [],
