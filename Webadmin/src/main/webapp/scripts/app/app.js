@@ -7,7 +7,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
      'alexjoffroy.angular-loaders','chart.js','jkAngularRatingStars',
      'angular-star-rating-new','paginations'])
 
-    .run(function ($rootScope, $location, $window, $http, $state,  Auth, Principal, ENV, VERSION) {
+    .run(function ($rootScope, $location, $window, $http, $state,  Auth, Principal, ENV, VERSION,$timeout) {
         $rootScope.isAuthenticated = Principal.isAuthenticated;
         $rootScope.loginView = true;
         $rootScope.ENV = ENV;
