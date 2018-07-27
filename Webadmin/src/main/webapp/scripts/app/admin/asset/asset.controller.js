@@ -82,6 +82,9 @@ angular.module('timeSheetApp')
         $scope.noData = false;
         $scope.assetQrList ={};
         $scope.selectedEmployee ={};
+        $scope.siteHistorySearchCriteria ={};
+        $scope.statusHistorySearchCriteria ={};
+        $scope.ticketSearchCriteria ={};
 
         //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.searchAcquiredDate = "";
@@ -1612,15 +1615,17 @@ angular.module('timeSheetApp')
             //alert(page);
             $scope.pages.currPage = page;
             if($scope.ppmSearchCriteria.maintenanceType =='PPM'){
-
                 $scope.loadPPMJobs();
-
             }else if($scope.amcSearchCriteria.maintenanceType =='AMC'){
-
                 $scope.loadAMCJobs();
-
             }else if($scope.redSearchCriteria.module == "Readings"){
                 $scope.loadAssetReadings();
+            }else if($scope.siteHistorySearchCriteria.module == "site history"){
+                $scope.loadSiteHistory();
+            }else if($scope.statusHistorySearchCriteria.module == "status history"){
+                $scope.loadStatusHistory();
+            }else if($scope.ticketSearchCriteria.module == "ticket"){
+                $scope.loadTicket();
             }else{
                $scope.search();
             }
@@ -2428,6 +2433,7 @@ angular.module('timeSheetApp')
                 $scope.redSearchCriteria.currPage = redCurrPageVal;
                 $scope.redSearchCriteria.module = "Readings";
                 $scope.redSearchCriteria.assetId = $stateParams.id;
+                $scope.redSearchCriteria.sort = $scope.pageSort;
             $scope.assetReadings = "";
         	console.log('Readings search criteria',$scope.redSearchCriteria);
         	AssetComponent.findByAssetReadings($scope.redSearchCriteria).then(function(data){
@@ -2507,6 +2513,7 @@ angular.module('timeSheetApp')
 
         	$scope.amcSearchCriteria.maintenanceType = "AMC";
         	$scope.amcSearchCriteria.assetId = $stateParams.id;
+            $scope.amcSearchCriteria.sort = $scope.pageSort;
             $scope.amcJobLists = "";
         	console.log('AMC search criteria',$scope.amcSearchCriteria);
         	JobComponent.search($scope.amcSearchCriteria).then(function(data){
@@ -2540,6 +2547,8 @@ angular.module('timeSheetApp')
                 $scope.ppmSearchCriteria.currPage = ppmCurrPageVal;
 	        	$scope.ppmSearchCriteria.maintenanceType = "PPM";
 	        	$scope.ppmSearchCriteria.assetId = $stateParams.id;
+                $scope.ppmSearchCriteria.sort = $scope.pageSort;
+
 
 	        	console.log('PPM search criteria',$scope.ppmSearchCriteria);
                 $scope.ppmJobLists = "";
@@ -2897,32 +2906,110 @@ angular.module('timeSheetApp')
              
              
             $scope.loadSiteHistory = function() { 
-            	var search = {};
-            	search.assetId = $stateParams.id;
-            	AssetComponent.getSiteHistory(search).then(function(data) { 
+            	$rootScope.loadingStart();
+                    var siteHistoryCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+                            if(!$scope.siteHistoryCriteria) {
+                                var siteHistorySearchCriteria = {
+                                        currPage : siteHistoryCurrPageVal
+                                };
+                                $scope.siteHistorySearchCriteria = siteHistorySearchCriteria;
+                            }
+
+                $scope.siteHistorySearchCriteria.currPage = siteHistoryCurrPageVal;
+                $scope.siteHistorySearchCriteria.module = "Site history";
+                $scope.siteHistorySearchCriteria.assetId = $stateParams.id;
+                $scope.siteHistorySearchCriteria.sort = $scope.pageSort;
+                $scope.siteHistories = "";
+            console.log('Site historys search criteria',$scope.siteHistorySearchCriteria);
+            	AssetComponent.getSiteHistory($scope.siteHistorySearchCriteria).then(function(data) { 
+                    $rootScope.loadingStop();
             		console.log(data);
             		$scope.siteHistories = data.transactions;
+
+                /*
+                ** Call pagination  main function **
+                */
+
+                $scope.pager = {};
+                $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+                $scope.totalCountPages = data.totalCount;
+
+                console.log("Pagination",$scope.pager);
+                console.log("Site historys List - ", data);
+
             	});
             	
             }
             
             $scope.loadStatusHistory = function() { 
-            	var search = {};
-            	search.assetId = $stateParams.id;
-            	AssetComponent.getStatusHistory(search).then(function(data) { 
+            	$rootScope.loadingStart();
+                    var statusHistoryCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+                            if(!$scope.statusHistoryCriteria) {
+                                var statusHistorySearchCriteria = {
+                                        currPage : statusHistoryCurrPageVal
+                                };
+                                $scope.statusHistorySearchCriteria = statusHistorySearchCriteria;
+                            }
+
+                $scope.statusHistorySearchCriteria.currPage = statusHistoryCurrPageVal;
+                $scope.statusHistorySearchCriteria.module = "status history";
+                $scope.statusHistorySearchCriteria.assetId = $stateParams.id;
+                $scope.statusHistorySearchCriteria.sort = $scope.pageSort;
+                $scope.statusHistories = "";
+                console.log('Status historys search criteria',$scope.statusHistorySearchCriteria);
+            	AssetComponent.getStatusHistory($scope.statusHistorySearchCriteria).then(function(data) { 
+                    $rootScope.loadingStop();
             		console.log(data);
             		$scope.statusHistories = data.transactions;
+
+                /*
+                ** Call pagination  main function **
+                */
+
+                $scope.pager = {};
+                $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+                $scope.totalCountPages = data.totalCount;
+
+                console.log("Pagination",$scope.pager);
+                console.log("Status historys List - ", data);
             	});
             	
             }
             
             
-            $scope.loadTicketHistory = function() { 
-            	var search = {};
-            	search.assetId = $stateParams.id;
-            	AssetComponent.getTicketHistory(search).then(function(data) { 
+            $scope.loadTicket = function() { 
+
+                $rootScope.loadingStart();
+                    var ticketCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+                            if(!$scope.ticketCriteria) {
+                                var ticketSearchCriteria = {
+                                        currPage : ticketCurrPageVal
+                                };
+                                $scope.ticketSearchCriteria = ticketSearchCriteria;
+                            }
+
+                $scope.ticketSearchCriteria.currPage = ticketCurrPageVal;
+                $scope.ticketSearchCriteria.module = "ticket";
+                $scope.ticketSearchCriteria.assetId = $stateParams.id;
+                $scope.ticketSearchCriteria.sort = $scope.pageSort;
+                $scope.tickets = "";
+                console.log('Ticket search criteria',$scope.ticketSearchCriteria);
+            	AssetComponent.getTicketHistory($scope.ticketSearchCriteria).then(function(data) {
+                    $rootScope.loadingStop(); 
             		console.log(data);
             		$scope.tickets = data.transactions;
+
+                /*
+                ** Call pagination  main function **
+                */
+
+                $scope.pager = {};
+                $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+                $scope.totalCountPages = data.totalCount;
+
+                console.log("Pagination",$scope.pager);
+                console.log("Asset tickets - ", data);
+
             	});
             	
             }

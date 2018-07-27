@@ -369,7 +369,6 @@ export class EmployeeList {
   }
 
   getEmployees(){
-<<<<<<< HEAD
 
       var searchCriteria = {
           currPage:this.page,
@@ -383,11 +382,6 @@ export class EmployeeList {
           this.employeeList = response.transactions;
           this.page = response.currPage;
           this.totalPages = response.totalPages;
-=======
-      this.siteService.searchSiteEmployee(this.site.id).subscribe(response=>{
-          console.log(response);
-          this.employeeList = response.json().transactions;
->>>>>>> 8bebe5aafe1eb5febaac48536fe11089fc198c3c
           this.userGroup = window.localStorage.getItem('userGroup');
           this.employeeId = window.localStorage.getItem('employeeId');
           this.employeeFullName = window.localStorage.getItem('employeeFullName');

@@ -39,7 +39,7 @@
                                        ng-click="loadAMCJobs();">AMC Jobs</a></li>
                                        <li class="">
                                            <a href=".Tickets" data-toggle="tab"
-                                           ng-click="loadTicketHistory()"> Tickets</a>
+                                           ng-click="loadTicket()"> Tickets</a>
                                        </li>
                                        <li class=""><a href=".Readings" data-toggle="tab"
                                        ng-click="loadAssetReadings()">Readings</a></li>
@@ -384,6 +384,12 @@
                                                </table>
 
                                            </div>
+
+                                           <!-- Pagination directive start -->
+
+                                            <pagination-new></pagination-new>
+
+                                            <!-- Pagination directive end -->
 
                                        </div>
                                        <div class="tab-pane fade ppm-tasks" id="ppm-tasks">
@@ -940,6 +946,12 @@
 
                                                     </div>
 
+                                            <!-- Pagination directive start -->
+
+                                            <pagination-new></pagination-new>
+
+                                            <!-- Pagination directive end -->
+
                                        </div>
                                        
                                          <div class="tab-pane fade StatusHistory" id="StatusHistory" >
@@ -980,6 +992,12 @@
                                                         </table>
 
                                                     </div>
+
+                                            <!-- Pagination directive start -->
+
+                                            <pagination-new></pagination-new>
+
+                                            <!-- Pagination directive end -->
 
                                        </div>
 
