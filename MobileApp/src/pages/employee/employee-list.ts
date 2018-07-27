@@ -138,7 +138,6 @@ export class EmployeeList {
           demo.showSwal('warning-message-and-confirmation-ok','GPS Not available','Please turn GPS on');
           this.navCtrl.pop();
       });
-      // this.getEmployees();
 
   }
 
@@ -367,8 +366,8 @@ export class EmployeeList {
 
   getEmployees(){
       this.siteService.searchSiteEmployee(this.site.id).subscribe(response=>{
-          console.log(response.json());
-          this.employeeList = response.json();
+          console.log(response);
+          this.employeeList = response.json().transactions;
           this.userGroup = window.localStorage.getItem('userGroup');
           this.employeeId = window.localStorage.getItem('employeeId');
           this.employeeFullName = window.localStorage.getItem('employeeFullName');

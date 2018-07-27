@@ -156,5 +156,32 @@ export class AssetService {
         )
     }
 
+    siteHistory(assetId):Observable<any>{
+        return this.http.post(this.config.Url+'api/assets/siteHistory',assetId).map(
+            response=>{
+                console.log(response);
+                return response.json();
+            }
+        )
+    }
+
+    statusHistory(search):Observable<any>{
+        return this.http.post(this.config.Url+'api/assets/statusHistory',search).map(
+            response=>{
+                console.log(response);
+                return response.json();
+            }
+        )
+    }
+
+    assetTicket(search):Observable<any>{
+        return this.http.post(this.config.Url+'api/assets/tickets',search).map(
+            response=>{
+                console.log(response);
+                return response.json();
+            }
+        )
+    }
+
 
 }
