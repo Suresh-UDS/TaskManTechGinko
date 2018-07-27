@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ts.app.domain.Employee;
+import com.ts.app.domain.Shift;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 
@@ -65,5 +65,8 @@ public interface SiteRepository extends JpaRepository<Site, Long> {
 
     @Query("SELECT s FROM Site s WHERE s.name like %:name% and s.active='Y'")
     List<Site> findSitesByName(@Param("name") String name);
+    
+    @Query("SELECT s FROM Shift s where s.site.id = :siteId order by CAST(substring(s.startTime,1,locate(s.startTime,':')-1)  as int)")
+    List<Shift> findShiftsBySite(@Param("siteId") long siteId);
 
 }

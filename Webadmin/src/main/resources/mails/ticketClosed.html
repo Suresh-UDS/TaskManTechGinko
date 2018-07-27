@@ -9,8 +9,7 @@
     Dear
 </p>
 
-
-<p th:text="#{email.ticket.closed.alert.text1(${ticketNumber})}">
+<p th:text="#{email.ticket.closed.alert.text1(${ticketNumber}, ${employeeName}, ${employeeCode})}">
 
 </p>
 <p th:text = "#{email.ticket.closed.alert.text2(${ticketTitle})}">>
