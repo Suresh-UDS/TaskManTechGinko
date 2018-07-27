@@ -38,6 +38,8 @@ export class AssetView {
   tickets:any;
   jobPage=0;
   count:any;
+  site:any;
+  status:any;
 
     totalPages:0;
     page:1;
@@ -610,10 +612,11 @@ export class AssetView {
 
 
     // Tickets
-    getTickets(searchCriteria)
+    getTickets(search)
     {
         this.spinner = true;
-        this.jobService.searchTickets(searchCriteria).subscribe(
+        // this.jobService.searchTickets(searchCriteria).subscribe(
+        this.assetService.assetTicket(search).subscribe(
             response=>{
                 this.spinner = false;
                 this.componentService.closeLoader();
@@ -664,6 +667,33 @@ export class AssetView {
             ]
         });
         confirm.present();
+    }
+
+
+    statusHistory(assetId){
+        var search={
+            assetId:assetId
+        };
+        this.assetService. statusHistory(search).subscribe(
+            response=>{
+                console.log("Status History");
+                console.log(response);
+                this.status=response.transactions;
+            }
+        )
+    }
+
+    siteHistory(assetId){
+        var search={
+            assetId:assetId
+        };
+        this.assetService.siteHistory(search).subscribe(
+            response=>{
+                console.log("Site Transfer History");
+                console.log(response);
+                this.site=response.transactions;
+            }
+        )
     }
 
 

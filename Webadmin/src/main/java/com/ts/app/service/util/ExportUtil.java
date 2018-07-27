@@ -75,7 +75,7 @@ public class ExportUtil {
 
 	private String[] EMP_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "DESIGNATION", "REPORTING TO", "CLIENT", "SITE",
 			"ACTIVE" };
-	private String[] JOB_HEADER = { "SITE", "TITLE", "DESCRIPTION", "TICKET ID", "TICKET TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
+	private String[] JOB_HEADER = { "SITE", "JOB ID", "TITLE", "DESCRIPTION", "TICKET ID", "TICKET TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
 			"STATUS" };
 	private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT",
 			 "SHIFT CONTINUED", "LATE CHECK IN" };
@@ -1391,15 +1391,16 @@ public class ExportUtil {
 					Row dataRow = xssfSheet.createRow(rowNum++);
 
 					dataRow.createCell(0).setCellValue(transaction.getSiteName());
-					dataRow.createCell(1).setCellValue(transaction.getTitle());
-					dataRow.createCell(2).setCellValue(transaction.getDescription());
-					dataRow.createCell(3).setCellValue(transaction.getTicketId() > 0 ? transaction.getTicketId() +"" : "");
-					dataRow.createCell(4).setCellValue(transaction.getTicketName());
-					dataRow.createCell(5).setCellValue(transaction.getEmployeeName());
-					dataRow.createCell(6).setCellValue(String.valueOf(transaction.getJobType()));
-					dataRow.createCell(7).setCellValue(DateUtil.formatToDateTimeString(transaction.getPlannedStartTime()));
-					dataRow.createCell(8).setCellValue(DateUtil.formatToDateTimeString(transaction.getActualEndTime()));
-					dataRow.createCell(9)
+					dataRow.createCell(1).setCellValue(transaction.getId());
+					dataRow.createCell(2).setCellValue(transaction.getTitle());
+					dataRow.createCell(3).setCellValue(transaction.getDescription());
+					dataRow.createCell(4).setCellValue(transaction.getTicketId() > 0 ? transaction.getTicketId() +"" : "");
+					dataRow.createCell(5).setCellValue(transaction.getTicketName());
+					dataRow.createCell(6).setCellValue(transaction.getEmployeeName());
+					dataRow.createCell(7).setCellValue(String.valueOf(transaction.getJobType()));
+					dataRow.createCell(8).setCellValue(DateUtil.formatToDateTimeString(transaction.getPlannedStartTime()));
+					dataRow.createCell(9).setCellValue(DateUtil.formatToDateTimeString(transaction.getActualEndTime()));
+					dataRow.createCell(10)
 							.setCellValue(transaction.getJobStatus() != null ? transaction.getJobStatus().name()
 									: JobStatus.OPEN.name());
 				}

@@ -143,8 +143,8 @@ public class JobManagementResource {
 	public ResponseEntity<?> updateJob(@Valid @RequestBody JobDTO jobDTO, HttpServletRequest request, @PathVariable("id") Long id) {
 		if(jobDTO.getId() == 0) jobDTO.setId(id);
 		log.debug("Job Details in updateJob = "+ jobDTO);
-
-		JobDTO response = jobService.updateJob(jobDTO);
+		long userId = SecurityUtils.getCurrentUserId();
+		JobDTO response = jobService.updateJob(jobDTO, userId);
         if(response != null) {
 
             long siteId = response.getSiteId();
@@ -191,7 +191,8 @@ public class JobManagementResource {
 
 	@RequestMapping(path="/job/{id}/complete", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> completeJob(@PathVariable("id") Long id){
-        JobDTO response = jobService.completeJob(id);
+		long userId = SecurityUtils.getCurrentUserId();
+        JobDTO response = jobService.completeJob(id, userId);
         if(response != null) {
             long siteId = response.getSiteId();
             List<User> users = userService.findUsers(siteId);
@@ -212,7 +213,8 @@ public class JobManagementResource {
 
     @RequestMapping(path="/job/save", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveJobAndCheckList(@RequestBody JobDTO jobDTO, HttpServletRequest request){
-        JobDTO response = jobService.saveJobAndCheckList(jobDTO);
+    		long userId = SecurityUtils.getCurrentUserId();
+        JobDTO response = jobService.saveJobAndCheckList(jobDTO, userId);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 

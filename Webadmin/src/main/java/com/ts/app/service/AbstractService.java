@@ -85,7 +85,7 @@ public abstract class AbstractService {
     }
     
     
-	protected void sendTicketNotifications(Employee ticketOwner, Employee assignedTo, Ticket ticket, Site site, boolean isNew, Map<String, String> env) {
+	protected void sendTicketNotifications(Employee ticketOwner, Employee assignedTo, Employee currentUserEmp, Ticket ticket, Site site, boolean isNew, Map<String, String> env) {
 		Hibernate.initialize(assignedTo.getUser());
 		User assignedToUser = assignedTo.getUser();
 		Hibernate.initialize(ticketOwner.getUser());
@@ -105,23 +105,31 @@ public abstract class AbstractService {
 				ticketReportEmails = settings.get(0);
 			}
 		}
-	    String ticketEmails = (assignedToUser != null ? (StringUtils.isNotEmpty(assignedToUser.getEmail()) ? assignedToUser.getEmail() : "") : "");
-	    ticketEmails += (ticketOwnerUser != null ? "," + (StringUtils.isNotEmpty(ticketOwnerUser.getEmail()) ? ticketOwnerUser.getEmail() : "") : "");
-	    if(StringUtils.isNotEmpty(ticketEmails)) {
-	    		ticketEmails += Constants.COMMA_SEPARATOR;
-	    }
-	    ticketEmails += ticketReportEmails != null ? ticketReportEmails.getSettingValue() : "";
+	    String assignedToEmail = (assignedToUser != null ? (StringUtils.isNotEmpty(assignedToUser.getEmail()) ? assignedToUser.getEmail() : "") : "");
+	    String ticketOwnerEmail = (ticketOwnerUser != null ? "," + (StringUtils.isNotEmpty(ticketOwnerUser.getEmail()) ? ticketOwnerUser.getEmail() : "") : "");
+	    String ticketEmails = ticketReportEmails != null ? ticketReportEmails.getSettingValue() : "";
+		assignedToEmail += Constants.COMMA_SEPARATOR + ticketEmails;
+		ticketOwnerEmail += Constants.COMMA_SEPARATOR + ticketEmails;
 	    if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Open") || ticket.getStatus().equalsIgnoreCase("Assigned"))) {
 	    		if(isNew) {
-		    		mailService.sendTicketCreatedMail(ticketUrl,assignedTo.getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
+		    		mailService.sendTicketCreatedMail(ticketUrl,assignedTo.getUser(),assignedToEmail,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
+	        				assignedToUser.getFirstName(), assignedTo.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus(), ticket.getSeverity());
+		    		mailService.sendTicketCreatedMail(ticketUrl,ticketOwner.getUser(),ticketOwnerEmail,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
 	        				assignedToUser.getFirstName(), assignedTo.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus(), ticket.getSeverity());
 	    		}else {
-		    		mailService.sendTicketUpdatedMail(ticketUrl,assignedTo.getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
+		    		mailService.sendTicketUpdatedMail(ticketUrl,assignedTo.getUser(),assignedToEmail,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
 			        				assignedToUser.getFirstName(), assignedTo.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
+		    		mailService.sendTicketUpdatedMail(ticketUrl,ticketOwner.getUser(),ticketOwnerEmail,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
+	        				assignedToUser.getFirstName(), assignedTo.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
 	    		}
     		}else if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Closed"))) {
-		    mailService.sendTicketClosedMail(ticketUrl,ticket.getEmployee().getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
-        				assignedToUser.getFirstName(), assignedTo.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
+    			if(assignedTo != null) {
+			    mailService.sendTicketClosedMail(ticketUrl,assignedTo.getUser(),assignedToEmail,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
+	        				assignedToUser.getFirstName(), assignedTo.getName(), currentUserEmp.getName(), currentUserEmp.getEmpId(), ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
+    			}
+    			
+		    mailService.sendTicketClosedMail(ticketUrl,ticketOwner.getUser(),ticketOwnerEmail,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
+    				assignedToUser.getFirstName(), assignedTo.getName(), currentUserEmp.getName(), currentUserEmp.getEmpId(), ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
     		}
 	}
 

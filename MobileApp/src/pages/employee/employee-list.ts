@@ -41,6 +41,10 @@ export class EmployeeList {
   site:any;
   attendanceId:any;
   loader:any;
+    page:1;
+    totalPages:0;
+    pageSort:15;
+    count=0;
   constructor(public navCtrl: NavController,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,private locationAccuracy:LocationAccuracy,
               private geoFence:Geofence, private employeeService: EmployeeService, private jobService: JobService, private siteService:SiteService, private attendanceService:AttendanceService, private diagonistic:Diagnostic) {
@@ -138,7 +142,6 @@ export class EmployeeList {
           demo.showSwal('warning-message-and-confirmation-ok','GPS Not available','Please turn GPS on');
           this.navCtrl.pop();
       });
-      // this.getEmployees();
 
   }
 
@@ -366,15 +369,74 @@ export class EmployeeList {
   }
 
   getEmployees(){
-      this.siteService.searchSiteEmployee(this.site.id).subscribe(response=>{
-          console.log(response.json());
+<<<<<<< HEAD
+
+      var searchCriteria = {
+          currPage:this.page,
+          pageSort: this.pageSort,
+          siteId:this.site.id
+      };
+      this.attendanceService.searchEmpAttendances(searchCriteria).subscribe(response=>{
           this.employeeList = response.json();
+          this.component.showLoader('Loading Employees');
+          this.component.closeAll();
+          this.employeeList = response.transactions;
+          this.page = response.currPage;
+          this.totalPages = response.totalPages;
+=======
+      this.siteService.searchSiteEmployee(this.site.id).subscribe(response=>{
+          console.log(response);
+          this.employeeList = response.json().transactions;
+>>>>>>> 8bebe5aafe1eb5febaac48536fe11089fc198c3c
           this.userGroup = window.localStorage.getItem('userGroup');
           this.employeeId = window.localStorage.getItem('employeeId');
           this.employeeFullName = window.localStorage.getItem('employeeFullName');
           this.employeeEmpId = window.localStorage.getItem('employeeEmpId');
       })
   }
+
+    doInfinite(infiniteScroll){
+        console.log('Begin async operation');
+        console.log(infiniteScroll);
+        console.log(this.totalPages);
+        console.log(this.page);
+        var searchCriteria ={
+            currPage:this.page+1,
+            siteId:this.site.id
+        };
+        if(this.page>this.totalPages){
+            console.log("End of all pages");
+            infiniteScroll.complete();
+            this.component.showToastMessage('All Employees Loaded', 'bottom');
+
+        }else{
+            console.log("Getting pages");
+            console.log(this.totalPages);
+            console.log(this.page);
+            setTimeout(()=>{
+                this.attendanceService.searchEmpAttendances(searchCriteria).subscribe(
+                    response=>{
+                        console.log('ionViewDidLoad Employee list:');
+                        console.log(response);
+                        console.log(response.transactions);
+                        for(var i=0;i<response.transactions.length;i++){
+                            this.employeeList.push(response.transactions[i]);
+                        }
+                        this.page = response.currPage;
+                        this.totalPages = response.totalPages;
+                        this.component.closeLoader();
+                    },
+                    error=>{
+                        console.log('ionViewDidLoad Employee Page:'+error);
+                    }
+                )
+
+                infiniteScroll.complete();
+            },1000);
+        }
+
+
+    }
 
 
 }

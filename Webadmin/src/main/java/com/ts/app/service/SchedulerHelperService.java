@@ -40,6 +40,7 @@ import com.ts.app.repository.EmployeeShiftRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SettingsRepository;
+import com.ts.app.repository.SiteRepository;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.web.rest.dto.ExportResult;
@@ -75,6 +76,9 @@ public class SchedulerHelperService extends AbstractService {
 
 	@Inject
 	private EmployeeRepository employeeRepository;
+	
+	@Inject
+	private SiteRepository siteRepository;
 	
 	@Inject
 	private AttendanceRepository attendanceRepository;
@@ -288,9 +292,10 @@ public class SchedulerHelperService extends AbstractService {
 					while (siteItr.hasNext()) {
 						Site site = siteItr.next();
 						//if(site.getId() == 119) {
-						Hibernate.initialize(site.getShifts());
-						if (CollectionUtils.isNotEmpty(site.getShifts())) {
-							List<Shift> shifts = site.getShifts();
+						//Hibernate.initialize(site.getShifts());
+						List<Shift> shifts = siteRepository.findShiftsBySite(site.getId());
+						if (CollectionUtils.isNotEmpty(shifts)) {
+							//List<Shift> shifts = site.getShifts();
 							content = new StringBuilder("Site Name - " + site.getName() + SchedulerService.LINE_SEPARATOR);
 							for (Shift shift : shifts) {
 								empCntInShift = 0;
@@ -436,7 +441,8 @@ public class SchedulerHelperService extends AbstractService {
 							empNotMarkedAttn = employeeRepository.findBySiteId(site.getId());
 						}
 						if (CollectionUtils.isNotEmpty(empNotMarkedAttn)) {
-							List<Shift> shifts = site.getShifts();
+							//List<Shift> shifts = site.getShifts();
+							shifts = siteRepository.findShiftsBySite(site.getId());
 							for (Employee emp : empNotMarkedAttn) {
 								EmployeeShift empShift = null; 
 								for (Shift shift : shifts) {
@@ -591,7 +597,8 @@ public class SchedulerHelperService extends AbstractService {
 						List<EmployeeProjectSite> projSites = emp.getProjectSites();
 						for (EmployeeProjectSite projSite : projSites) {
 							Site site = projSite.getSite();
-							List<Shift> shifts = site.getShifts();
+							//List<Shift> shifts = site.getShifts();
+							List<Shift> shifts = siteRepository.findShiftsBySite(site.getId());
 							boolean empShiftMatch = false; 
 							for (Shift shift : shifts) {
 								String startTime = shift.getStartTime();
