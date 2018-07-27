@@ -84,6 +84,7 @@ angular.module('timeSheetApp')
         $scope.selectedEmployee ={};
         $scope.siteHistorySearchCriteria ={};
         $scope.statusHistorySearchCriteria ={};
+        $scope.ticketSearchCriteria ={};
 
         //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.searchAcquiredDate = "";
@@ -1623,6 +1624,8 @@ angular.module('timeSheetApp')
                 $scope.loadSiteHistory();
             }else if($scope.statusHistorySearchCriteria.module == "status history"){
                 $scope.loadStatusHistory();
+            }else if($scope.ticketSearchCriteria.module == "ticket"){
+                $scope.loadTicket();
             }else{
                $scope.search();
             }
@@ -2968,12 +2971,38 @@ angular.module('timeSheetApp')
             }
             
             
-            $scope.loadTicketHistory = function() { 
-            	var search = {};
-            	search.assetId = $stateParams.id;
-            	AssetComponent.getTicketHistory(search).then(function(data) { 
+            $scope.loadTicket = function() { 
+
+                $rootScope.loadingStart();
+                    var ticketCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+                            if(!$scope.ticketCriteria) {
+                                var ticketSearchCriteria = {
+                                        currPage : ticketCurrPageVal
+                                };
+                                $scope.ticketSearchCriteria = ticketSearchCriteria;
+                            }
+
+                $scope.ticketSearchCriteria.currPage = ticketCurrPageVal;
+                $scope.ticketSearchCriteria.module = "ticket";
+                $scope.ticketSearchCriteria.assetId = $stateParams.id;
+                $scope.tickets = "";
+                console.log('Status historys search criteria',$scope.ticketSearchCriteria);
+            	AssetComponent.getTicketHistory($scope.ticketSearchCriteria).then(function(data) {
+                    $rootScope.loadingStop(); 
             		console.log(data);
             		$scope.tickets = data.transactions;
+
+                /*
+                ** Call pagination  main function **
+                */
+
+                $scope.pager = {};
+                $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+                $scope.totalCountPages = data.totalCount;
+
+                console.log("Pagination",$scope.pager);
+                console.log("Asset tickets - ", data);
+
             	});
             	
             }
