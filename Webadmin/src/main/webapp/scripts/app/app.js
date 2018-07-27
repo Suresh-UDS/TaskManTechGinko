@@ -104,7 +104,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
                 $state.go($rootScope.previousStateName, $rootScope.previousStateParams);
             }
         };
-
+        $rootScope.noscroll = false;
 
         // Page Loader Function
 
@@ -115,7 +115,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
             //console.log("Calling loader stop");
             $('.pageCenter').hide();
             $('.overlay').hide();
-            $('.noScroll').hide();
+
 
         }, 2000);}
 
@@ -123,7 +123,8 @@ angular.module('timeSheetApp', ['LocalStorageModule',
 
          $('.pageCenter').show();
          $('.overlay').show();
-         $('.noScroll').show();
+            $rootScope.noscroll = true;
+
 
         }
         $rootScope.overlayShow = function(){
@@ -143,6 +144,9 @@ angular.module('timeSheetApp', ['LocalStorageModule',
 
             $('.pageCenter').hide();
             $('.overlay').hide();
+            $rootScope.noscroll = false;
+
+
 
         }
 
