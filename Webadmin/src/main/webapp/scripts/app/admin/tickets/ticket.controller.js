@@ -4,7 +4,7 @@ angular.module('timeSheetApp')
     .controller('TicketController', function ($rootScope, $scope,
      $state, $timeout,ProjectComponent, SiteComponent,JobComponent,
      EmployeeComponent,TicketComponent,$http,
-     $stateParams,$location,PaginationComponent,$filter) {
+     $stateParams,$location,PaginationComponent,$filter,AssetComponent) {
         $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
@@ -31,6 +31,7 @@ angular.module('timeSheetApp')
         $scope.searchTitle = null;
         $scope.searchDescription = null;
         $scope.searchStatus = null;
+        $scope.selectedAsset = {};
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -116,6 +117,14 @@ angular.module('timeSheetApp')
                     $scope.tickets.employeeId = $scope.selectedEmployee.id;
                     $scope.tickets.severity = $scope.tickets.severity;
                     $scope.tickets.comments = $scope.tickets.comments;
+                    if($scope.selectedAsset) { 
+                    	$scope.tickets.assetId = $scope.selectedAsset.id;
+                    } 
+                    
+                    if($scope.assetObj) {
+                    	$scope.tickets.assetId = $scope.assetObj.id;
+                    }
+                    
                     console.log('Tickets - ' + JSON.stringify($scope.tickets));
                     JobComponent.createTicket($scope.tickets).then(function(response) {
                     		if($scope.selectedImageFile){
@@ -186,7 +195,16 @@ angular.module('timeSheetApp')
                 $scope.loadingStop();
             });
         };
-
+                
+        if($stateParams.assetId) {
+       	 AssetComponent.findById($stateParams.assetId).then(function(data) { 
+       		 console.log(data);
+       		 if(data != null){
+       			 $scope.assetObj = data;
+       		 };
+       	 });
+        }
+        
         $scope.loadDepSites = function () {
 
             if(jQuery.isEmptyObject($scope.selectedProject) == false) {
@@ -211,7 +229,14 @@ angular.module('timeSheetApp')
                 $scope.employees = data.transactions;
             });
         };
-
+        
+        $scope.loadAssets = function() { 
+        	$scope.searchCriteria.siteId = $scope.selectedSite.id;
+        	AssetComponent.search($scope.searchCriteria).then(function(data) { 
+        		console.log(data);
+        		$scope.assets = data.transactions;
+        	});
+        };
 
 
           $scope.loadselectedSite = function() {

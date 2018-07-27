@@ -10,6 +10,8 @@ public class AssetStatusHistoryDTO extends BaseDTO {
 		
 	private String assetTitle;
 	
+	private String assetCode;
+	
 	public long getId() {
 		return id;
 	}
@@ -32,6 +34,14 @@ public class AssetStatusHistoryDTO extends BaseDTO {
 
 	public void setAssetTitle(String assetTitle) {
 		this.assetTitle = assetTitle;
+	}
+
+	public String getAssetCode() {
+		return assetCode;
+	}
+
+	public void setAssetCode(String assetCode) {
+		this.assetCode = assetCode;
 	}
 	
 	

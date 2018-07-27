@@ -36,6 +36,7 @@ angular.module('timeSheetApp')
         $scope.searchProject = null;
         $scope.searchEmployee = null;
         $scope.searchStatus = null;
+        $scope.disable = false;
 
         /*
         **
@@ -402,6 +403,7 @@ angular.module('timeSheetApp')
         }
 
         $scope.saveJob = function () {
+                $scope.disable = true;
 	        	$scope.error = null;
 	        	$scope.success =null;
 	        	$scope.errorProjectExists = null;
@@ -469,20 +471,25 @@ angular.module('timeSheetApp')
 	        	// $scope.job.jobStatus = $scope.selectedStatus.name;
 	        	console.log('job details to save - ' + JSON.stringify($scope.job));
 	        	var post = $scope.isEdit ? JobComponent.update : JobComponent.create
-	        	var message = 'Job Created Successfully'
+	        	var message = 'Job has been created successfully!!'
 	        	if($scope.job.id) {
-	        		message = 'Job Updated Successfully'
+	        		message = 'Job has been updated successfully!!'
 	        	}
 	        	post($scope.job).then(function () {
 	                $scope.success = 'OK';
 	                $scope.showNotifications('top','center','success',message);
 	            	$location.path('/jobs');
+                    $scope.disable = false;
             }).catch(function (response) {
                 $scope.success = null;
+                $scope.disable = false;
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                     $scope.errorProjectExists = 'ERROR';
+                    $scope.showNotifications('top','center','danger','Job already exists');
+
                 } else {
+                    $scope.showNotifications('top','center','danger','Unable to creating job. Please try again later..');
                     $scope.error = 'ERROR';
                 }
             });

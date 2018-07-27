@@ -15,7 +15,7 @@
 
            <div class="cardsCon addSiteCon">
                <form ng-show="!success" name="form" role="form" novalidate
-                     ng-submit="saveSite()">
+                     >
 
                    <div class="row">
 
@@ -252,11 +252,12 @@
   				                    
   				                    <div class="col-md-3">
 
-  			                            <button class="btn btn-success margn-top20" ng-click="addShiftItem($event)">
-  			                                <span class="btn-label">
+  			                            <button class="btn btn-success margn-top20" >
+  			                                <span class="btn-label" ng-click="addShiftItem($event)">
   			                                    <i class="material-icons">add</i>
+                                            Add
   			                                </span>
-  			                                Add
+  			                                
   			                            </button>
   			
   			                        </div>               
@@ -287,8 +288,8 @@
                            <button type="submit" ng-click="cancelSite()"
                                    id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
-                           <button type="submit" type="submit"
-                                   id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
+                           <button type="submit" type="submit" ng-click="saveSite(form.$invalid)"
+                                   id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label" >
                                             <i class="material-icons">check</i>
                                         </span>Create site</button>
 

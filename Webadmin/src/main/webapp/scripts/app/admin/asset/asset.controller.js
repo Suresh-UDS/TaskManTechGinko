@@ -2894,6 +2894,43 @@ angular.module('timeSheetApp')
                 }
 
             }
+             
+             
+            $scope.loadSiteHistory = function() { 
+            	var search = {};
+            	search.assetId = $stateParams.id;
+            	AssetComponent.getSiteHistory(search).then(function(data) { 
+            		console.log(data);
+            		$scope.siteHistories = data.transactions;
+            	});
+            	
+            }
+            
+            $scope.loadStatusHistory = function() { 
+            	var search = {};
+            	search.assetId = $stateParams.id;
+            	AssetComponent.getStatusHistory(search).then(function(data) { 
+            		console.log(data);
+            		$scope.statusHistories = data.transactions;
+            	});
+            	
+            }
+            
+            
+            $scope.loadTicketHistory = function() { 
+            	var search = {};
+            	search.assetId = $stateParams.id;
+            	AssetComponent.getTicketHistory(search).then(function(data) { 
+            		console.log(data);
+            		$scope.tickets = data.transactions;
+            	});
+            	
+            }
+            
+            
+            
+            
+            
 
 
 

@@ -6,6 +6,8 @@ public class AssetSiteHistoryDTO extends BaseDTO {
 	
 	private String assetTitle;
 	
+	private String assetCode;
+	
 	private String siteName;
 
 	public long getId() {
@@ -30,6 +32,14 @@ public class AssetSiteHistoryDTO extends BaseDTO {
 
 	public void setSiteName(String siteName) {
 		this.siteName = siteName;
+	}
+
+	public String getAssetCode() {
+		return assetCode;
+	}
+
+	public void setAssetCode(String assetCode) {
+		this.assetCode = assetCode;
 	}
 	
 }
