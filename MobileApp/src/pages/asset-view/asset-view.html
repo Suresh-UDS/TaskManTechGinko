@@ -728,7 +728,7 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'statusHistory'" style="margin-top:18px">
-            <div class="col-md-4 p-l-30 p-r-30" *ngFor="let historyStatus of status">
+            <div class="col-md-4 p-l-30 p-r-30" *ngFor="let statusHistory of status">
                     <div class="white-bg">
                         <div class="padding-left16 padding-top5" >
                             <ion-row class="margin0 margin-top40">
@@ -742,7 +742,7 @@
                                     <p text-left class="fnt-bold">Title:</p>
                                 </ion-col>
                                 <ion-col col-6>
-                                    <p text-right>{{historyStatus.assetTitle}}</p>
+                                    <p text-right>{{statusHistory.assetTitle}}</p>
                                 </ion-col>
                             </ion-row>
                             <ion-row class="margin0">
@@ -750,7 +750,7 @@
                                    <p text-left class="fnt-bold">Status:</p>
                                 </ion-col>
                                 <ion-col col-6>
-                                    <p text-right class="margin0" text-lowercase>{{historyStatus.status}}</p>
+                                    <p text-right class="margin0" text-lowercase>{{statusHistory.status}}</p>
                                 </ion-col>
                             </ion-row>
                             <ion-row class="margin0">
@@ -758,7 +758,7 @@
                                     <p text-left class="fnt-bold">On:</p>
                                 </ion-col>
                                 <ion-col col-6>
-                                    <p text-right>{{historyStatus.lastModifiedDate|date : 'MMM d, y, h:mm a'}}</p>
+                                    <p text-right>{{statusHistory.lastModifiedDate|date : 'MMM d, y, h:mm a'}}</p>
                                 </ion-col>
 
                             </ion-row>
