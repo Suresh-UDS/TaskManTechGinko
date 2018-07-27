@@ -437,7 +437,7 @@ public class    EmployeeService extends AbstractService {
         checkInOut.setRemarks(checkInOutDto.getRemarks());
         checkInOut = checkInOutRepository.save(checkInOut);
         checkInOutDto.setId(checkInOut.getId());
-        JobDTO completedJob = jobManagementService.onlyCompleteJob(checkInOutDto.getJobId());
+        JobDTO completedJob = jobManagementService.onlyCompleteJob(checkInOutDto.getJobId(), checkInOutDto.getUserId());
         log.debug("onlyCheckOut - completedJob" + completedJob);
         log.debug("Transaction id "+checkInOutDto.getId());
         if(completedJob != null) {
@@ -506,7 +506,7 @@ public class    EmployeeService extends AbstractService {
         checkInOut = checkInOutRepository.save(checkInOut);
         checkInOutDto.setId(checkInOut.getId());
         if(checkInOutDto.isCompleteJob()){
-            JobDTO completedJob = jobManagementService.onlyCompleteJob(checkInOutDto.getJobId());
+            JobDTO completedJob = jobManagementService.onlyCompleteJob(checkInOutDto.getJobId(), checkInOutDto.getUserId());
             log.debug("onlyCheckOut - completedJob" + completedJob);
             log.debug("Transaction id "+checkInOutDto.getId());
             if(completedJob != null) {
