@@ -41,7 +41,7 @@
                                            <div class="col-md-6">
                                                <div class="form-group">
                                                    <label class="control-label">Role Name <span class="red-star">*</span> </label>
-                                                   <input type="text" class="form-control" ng-model="userRole.name"
+                                                   <input type="text" class="form-control InputTxtCaps" ng-model="userRole.name"
                                                           name="RoleName"  autofocus
                                                           required autocomplete="off">
                                                     <div ng-show="form.$submitted || form.RoleName.$touched">
@@ -50,9 +50,9 @@
                                                                ng-show="form.RoleName.$error.required">
                                                                 Id is required.
                                                             </p>
-                                                           
+
                                                         </div>
-                                                    </div>      
+                                                    </div>
                                                </div>
                                            </div>
 
@@ -62,7 +62,7 @@
                                        		<div class="col-md-12">
                                                <div class="form-group">
                                                    <label class="control-label">Description </label>
-                                                   <input type="text" class="form-control" name="Description" ng-model="userRole.description">
+                                                   <input type="text" class="form-control InputTxtCaps" name="Description" ng-model="userRole.description">
 
                                                </div>
                                            	</div>
@@ -73,7 +73,7 @@
                                            <div class="col-md-6">
                                                <div class="form-group">
                                                    <label class="control-label">Role Level   </label>
-                                                   <input type="number" class="form-control" ng-model="userRole.roleLevel">
+                                                   <input type="number" class="form-control InputTxtCaps" ng-model="userRole.roleLevel">
 
 
                                                </div>

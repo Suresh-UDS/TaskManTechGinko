@@ -32,7 +32,7 @@
                                            <div class="form-group">
                                                <label class="control-label">Issue<span class="red-star">*</span> </label>
 
-                                               <input type="text" class="form-control"   name='title'
+                                               <input type="text" class="form-control InputTxtCaps"   name='title'
                                                       ng-model="tickets.title" ng-minlength=1 ng-maxlength=50
                                                       autofocus  required autocomplete="off"/>
                                                <div ng-show="form.$submitted || form.title.$touched">
@@ -41,7 +41,7 @@
                                                           ng-show="form.title.$error.required">
                                                            Title is required.
                                                        </p>
-                                                       
+
                                                    </div>
                                                </div>
 
@@ -51,7 +51,7 @@
                                        <div class="col-md-12">
                                            <div class="form-group">
                                                <label class="control-label">Description<span class="red-star">*</span> </label>
-                                               <input id='description' ng-model="tickets.description" class='form-control'
+                                               <input id='description' ng-model="tickets.description" class='form-control InputTxtCaps'
                                                       name='description' type='text' value=""
                                                        autofocus required/>
                                                <div ng-show="form.$submitted || form.description.$touched">
@@ -60,7 +60,7 @@
                                                           ng-show="form.description.$error.required">
                                                            Description is required.
                                                        </p>
-                                                       
+
                                                    </div>
                                                </div>
                                            </div>
@@ -112,9 +112,9 @@
                                                 <option value='Low' selected>Low</option>
                                                 <option value='Medium'>Medium</option>
                                                 <option value='High'>High</option>
-                                             
+
                                             </select>
-                                        
+
                                             <div ng-show="form.$submitted || form.severity.$touched">
                                                 <div
                                                     ng-show="form.severity.$dirty || form.severity.$invalid">
@@ -129,8 +129,8 @@
                                         </div>
 
                                    </div>
-                                   
-                                   
+
+
 
                                </div>
                            </div>
@@ -152,12 +152,12 @@
                                             ng-change="loadEmployees();loadAssets()"
                                             class="form-control searchable-input floatL" ng-options="site as site.name for site in sites track by site.id">
                                             <option value="">Select Site</option>
-                                       
+
                                         </select>
                                         <input id='assetId' ng-model="siteObj.name" class='form-control' ng-show="assetObj"
                                                       name='description' type='text' value="siteName"
                                                        readOnly/>
-                                    
+
                                         <div ng-show="form.$submitted || form.site.$touched">
                                             <div
                                                 ng-show="form.site.$dirty || form.site.$invalid">
@@ -180,9 +180,9 @@
                                             ng-model="selectedEmployee"
                                             class="form-control searchable-input floatL" ng-options="emp as emp.fullName group by emp.designation for emp in employees | filter: {designation : '!' + 'Client'} track by emp.id">
                                             <option value="">Select Employee</option>
-                                         
+
                                         </select>
-                                    
+
                                         <div ng-show="form.$submitted || form.employee.$touched">
                                             <div
                                                 ng-show="form.employee.$dirty || form.employee.$invalid">
@@ -199,7 +199,7 @@
                           </div>
                          </div>
                        </div>
-                       
+
                        <div class="col-md-6">
                         <div class="panel panel-default">
                               <div class="panel-heading">Assets</div>
@@ -218,31 +218,31 @@
                                         <input id='assetId' ng-model="assetObj.title" class='form-control' ng-show="assetObj"
                                                       name='description' type='text' value="assetName"
                                                        readOnly/>
-                                    
+
                                     </div>
 
                                 </div>
-                          
+
                            </div>
                           </div>
                          </div>
                        </div>
-                       
+
                    </div>
-                   
+
                    <div class="row">
-                     
+
                      <div class="col-md-6">
                         <div class="panel panel-default">
-                              
+
                           <div class="panel-heading">Comments</div>
                           <div class="panel-body">
                             <div class="row">
-                              
+
                              <div class="col-md-6">
                                  <div class="form-group">
                                      <label class="control-label">Comments</label>
-                                     <textarea ng-model="tickets.comments" class="form-control"></textarea>
+                                     <textarea ng-model="tickets.comments" class="form-control InputTxtCaps"></textarea>
                                  </div>
                              </div>
                            </div>
@@ -252,11 +252,11 @@
                      </div>
                      <div class="col-md-6">
                         <div class="panel panel-default">
-                              
+
                           <div class="panel-heading">Upload Image</div>
                           <div class="panel-body">
                             <div class="row">
-                     
+
 			                     <div class="col-md-6">
 			                      <div class="form-group label-floating" >
 			                      	<div class="pdng-top13" >
@@ -270,9 +270,9 @@
 			                     </div>
 			                </div>
 						</div>
-					</div>					                     
+					</div>
                    </div>
-                  
+
                    <div class="row">
 
                        <div class="col-md-12">
