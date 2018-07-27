@@ -14,6 +14,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
         $rootScope.VERSION = VERSION;
         $rootScope.stateValue ="";
         $rootScope.resLoader=false;
+        $rootScope.searchCriterias={};
 
        /* Principal.identity().then(function(response)
              {
@@ -112,7 +113,9 @@ angular.module('timeSheetApp', ['LocalStorageModule',
             $scope.loadtimeOut = $timeout(function(){
 
             //console.log("Calling loader stop");
-            $('.pageCenter').hide();$('.overlay').hide();
+            $('.pageCenter').hide();
+            $('.overlay').hide();
+            $('.noScroll').hide();
 
         }, 2000);}
 
@@ -120,6 +123,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
 
          $('.pageCenter').show();
          $('.overlay').show();
+         $('.noScroll').show();
 
         }
         $rootScope.overlayShow = function(){

@@ -648,8 +648,8 @@ angular.module('timeSheetApp')
                      $scope.jobs = '';
                      $scope.jobsLoader = false;
                      $scope.loadPageTop();
-
-	        	JobComponent.search($scope.searchCriteria).then(function (data) {
+                     $rootScope.searchCriterias = $scope.searchCriteria;      
+	        	JobComponent.search($rootScope.searchCriterias).then(function (data) {
                     $scope.jobs = data.transactions;
 	        		$scope.jobsLoader = true;
 
