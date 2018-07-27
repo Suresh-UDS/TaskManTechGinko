@@ -91,8 +91,8 @@ angular.module('timeSheetApp', ['LocalStorageModule',
         // Page Loader Function
 
         $rootScope.loadingAuto = function(){
-            $scope.loadingStart();
-            $scope.loadtimeOut = $timeout(function(){
+            $rootScope.loadingStart();
+            $rootScope.loadtimeOut = $timeout(function(){
 
             //console.log("Calling loader stop");
             $('.pageCenter').hide();$('.overlay').hide();
