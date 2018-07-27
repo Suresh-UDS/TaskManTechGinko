@@ -45,7 +45,7 @@ export class GetAssetReading {
 
     }
     ionViewWillEnter(){
-        this.componentService.showLoader("Readings")
+        // this.componentService.showLoader("Readings")
        this.getAssetConfigsReading();
     }
 

@@ -102,6 +102,7 @@ export class AssetView {
         let profileModal = this.modalCtrl.create(GetAssetReading, {assetDetails:this.assetDetails });
         profileModal.onDidDismiss(data => {
             console.log(data);
+            this.componentService.closeLoader();
             // this.getReading(this.readingSearchCriteria);
             this.getReading(this.readingSearchCriteria);
         });
@@ -488,32 +489,32 @@ export class AssetView {
     {
         this.spinner = true;
         // offline
-        this.dbService.getPPM(this.assetDetails.id).then(
-            (res)=>{
-                this.componentService.closeLoader();
-                console.log(res);
-                this.assetDetails.ppms = res;
-            },
-            (err)=>{
-
-            }
-        )
+        // this.dbService.getPPM(this.assetDetails.id).then(
+        //     (res)=>{
+        //         this.componentService.closeLoader();
+        //         console.log(res);
+        //         this.assetDetails.ppms = res;
+        //     },
+        //     (err)=>{
+        //
+        //     }
+        // )
 
         //Online
-        // this.assetService.getAssetPPMSchedule(this.assetDetails.id).subscribe(
-        //     response=>{
-        //         this.spinner = false;
-        //         this.componentService.closeLoader();
-        //         console.log("Get asset PPM response");
-        //         console.log(response);
-        //         this.assetDetails.ppms = response;
-        //     },
-        //     error=>{
-        //         this.spinner = false;
-        //         this.componentService.closeLoader();
-        //         console.log("Get asset PPM error");
-        //         console.log(error);
-        //     })
+        this.assetService.getAssetPPMSchedule(this.assetDetails.id).subscribe(
+            response=>{
+                this.spinner = false;
+                this.componentService.closeLoader();
+                console.log("Get asset PPM response");
+                console.log(response);
+                this.assetDetails.ppms = response;
+            },
+            error=>{
+                this.spinner = false;
+                this.componentService.closeLoader();
+                console.log("Get asset PPM error");
+                console.log(error);
+            })
     }
 
 
@@ -596,6 +597,8 @@ export class AssetView {
         // this.dbService.getViewReading(searchCriteria).then(
             response=>
             {
+                this.spinner=false;
+                this.componentService.closeAll();
                 console.log("View Reading Response");
                 console.log(response);
                 this.spinner=false;
@@ -603,6 +606,8 @@ export class AssetView {
                 // this.assetDetails.reading = response;
             },error=>
             {
+                this.spinner=false;
+                this.componentService.closeAll();
                 console.log("Error in View Reading");
                 console.log(error);
                 this.spinner=false;
