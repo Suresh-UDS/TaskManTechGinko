@@ -206,6 +206,12 @@ public class TicketManagementService extends AbstractService {
         if(site!=null){
             ticket.setSite(site);
         }
+        if(ticketDTO.getAssetId() > 0) {
+        	Asset asset = assetRepository.findOne(ticketDTO.getAssetId());
+        	ticket.setAsset(asset);
+        }else { 
+       	 ticket.setAsset(null);
+        }
         Calendar currCal = Calendar.getInstance();
         Employee ticketOwner = employeeRepository.findOne(ticket.getEmployee().getId());
         Employee assignedTo = null;
