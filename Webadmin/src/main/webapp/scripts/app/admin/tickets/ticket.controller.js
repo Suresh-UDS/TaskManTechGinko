@@ -366,6 +366,7 @@ angular.module('timeSheetApp')
                     $scope.success = 'OK';
                     $scope.showNotifications('top','center','success','Ticket status updated');
                     $(".fade").removeClass("modal-backdrop");
+                    $('#deleteModalNew').modal('hide');
                     $state.reload();
                 });
             }
@@ -381,7 +382,9 @@ angular.module('timeSheetApp')
                     $scope.success = 'OK';
                     $scope.showNotifications('top','center','success','Ticket status updated');
                     $(".fade").removeClass("modal-backdrop");
+                    $('#reopenModalNew').modal('hide');
                     $state.reload();
+
                 });
             }
 
