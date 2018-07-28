@@ -810,13 +810,14 @@ public class JobManagementService extends AbstractService {
 			if(assignedTo != null) {
 				Map<String, Object> values = new HashMap<String, Object>();
 				values.put("jobId", job.getId());
+				values.put("jobTitle", job.getTitle());
 				values.put("jobDateTime", DateUtil.formatToDateTimeString(job.getPlannedStartTime()));
 				values.put("site", job.getSite().getName());
 				if(assignedTo.getUser() != null) {
 					long userId = assignedTo.getUser().getId();
 					long[] userIds = new long[1];
 					userIds[0] = userId;
-					pushService.sendAttendanceCheckoutAlert(userIds, values);
+					pushService.sendNewJobAlert(userIds, values);
 				}
 			}
 		}
@@ -1176,14 +1177,13 @@ public class JobManagementService extends AbstractService {
 		//send notifications if a ticket is raised
 		if(job.getTicket() != null) {
 			Ticket ticket = job.getTicket();
-			ticket.setStatus("Closed");
-			ticket.setClosedBy(ticket.getAssignedTo());
-			ticket.setClosedOn(DateUtil.convertToSQLDate(new Date()));
-			ticketRepository.save(ticket);
 			Map<String, String> data = new HashMap<String, String>();
 			String ticketUrl = env.getProperty("url.ticket-view");
 			data.put("url.ticket-view", ticketUrl);
-			sendTicketNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, ticket, job.getSite(), false, data);
+			String jobUrl = env.getProperty("url.job-view");
+			data.put("url.job-view", jobUrl);
+			
+			sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
 		}		
 		return mapperUtil.toModel(job, JobDTO.class);
 
@@ -1200,14 +1200,13 @@ public class JobManagementService extends AbstractService {
         //	send notifications if a ticket is raised
 		if(job.getStatus().equals(JobStatus.COMPLETED) && job.getTicket() != null) {
 			Ticket ticket = job.getTicket();
-			ticket.setStatus("Closed");
-			ticket.setClosedBy(ticket.getAssignedTo());
-			ticket.setClosedOn(DateUtil.convertToSQLDate(new Date()));
-			ticketRepository.save(ticket);
 			Map<String, String> data = new HashMap<String, String>();
 			String ticketUrl = env.getProperty("url.ticket-view");
 			data.put("url.ticket-view", ticketUrl);
-			sendTicketNotifications(ticket.getEmployee(), ticket.getAssignedTo(),  currUserEmp, ticket, job.getSite(), false, data);
+			String jobUrl = env.getProperty("url.job-view");
+			data.put("url.job-view", jobUrl);
+			
+			sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
 		}        
         return mapperUtil.toModel(job, JobDTO.class);
     }
@@ -1251,14 +1250,13 @@ public class JobManagementService extends AbstractService {
 		//send notifications if a ticket is raised
 		if(job.getTicket() != null) {
 			Ticket ticket = job.getTicket();
-			ticket.setStatus("Closed");
-			ticket.setClosedBy(ticket.getAssignedTo());
-			ticket.setClosedOn(DateUtil.convertToSQLDate(new Date()));
-			ticketRepository.save(ticket);
 			Map<String, String> data = new HashMap<String, String>();
 			String ticketUrl = env.getProperty("url.ticket-view");
 			data.put("url.ticket-view", ticketUrl);
-			sendTicketNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, ticket, job.getSite(), false, data);
+			String jobUrl = env.getProperty("url.job-view");
+			data.put("url.job-view", jobUrl);
+			
+			sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
 		}
 		return mapperUtil.toModel(job, JobDTO.class);
 
@@ -1284,14 +1282,12 @@ public class JobManagementService extends AbstractService {
 		//send notifications if a ticket is raised
 		if(job.getTicket() != null) {
 			Ticket ticket = job.getTicket();
-			ticket.setStatus("Closed");
-			ticket.setClosedBy(ticket.getAssignedTo());
-			ticket.setClosedOn(DateUtil.convertToSQLDate(new Date()));
-			ticketRepository.save(ticket);
 			Map<String, String> data = new HashMap<String, String>();
 			String ticketUrl = env.getProperty("url.ticket-view");
 			data.put("url.ticket-view", ticketUrl);
-			sendTicketNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, ticket, job.getSite(), false, data);
+			String jobUrl = env.getProperty("url.job-view");
+			data.put("url.job-view", jobUrl);
+			sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
 		}
 		return mapperUtil.toModel(job, JobDTO.class);
 

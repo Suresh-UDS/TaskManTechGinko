@@ -57,9 +57,15 @@ public class PushService {
 		context.setVariable("dateTime", values.get("jobDateTime"));
 		context.setVariable("site", values.get("site"));
 		context.setVariable("jobId", values.get("jobId"));
-		String emailContent = templateEngine.process("newJobAlertPush", context);
-		String subject = messageSource.getMessage("push.newjob.alert.title", null, locale);
-		send(userIds, emailContent);
+		context.setVariable("jobTitle", values.get("jobTitle"));
+		//String emailContent = templateEngine.process("newJobAlertPush", context);
+		Object[] data = new Object[4];
+		data[0] = values.get("jobId");
+		data[1] = values.get("jobTitle");
+		data[2] = values.get("jobDateTime");
+		data[3] = values.get("site");
+		String content = messageSource.getMessage("push.newjob.alert.content", data, locale);
+		send(userIds, content);
 	}
 
 

@@ -317,6 +317,27 @@ public class MailService {
         String subject = messageSource.getMessage("email.completed.report.title", null, locale);
         sendEmail(user.getEmail(), subject, content, true, true,fileName);
     }
+    
+    @Async
+    public void sendJobCompletionMail(String ticketUrl,String jobUrl,User user,String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String closedBy, String closedByEmpCode, String ticketTitle, String ticketDescription, String status, long jobId, String jobTitle){
+        Locale locale = Locale.forLanguageTag(user.getLangKey() != null ? user.getLangKey() : "en-US");
+        Context context = new Context(locale);
+        context.setVariable("user", user);
+        context.setVariable("siteName", siteName);
+        context.setVariable("ticketNumber", ticketNumber);
+        context.setVariable("ticketTitle", ticketTitle);
+        context.setVariable("ticketDescription", ticketDescription);
+        context.setVariable("status", status);
+        context.setVariable("url", ticketUrl);
+        context.setVariable("jobUrl", jobUrl);
+        context.setVariable("jobId", jobId);
+        context.setVariable("jobTitle", jobTitle);
+        context.setVariable("employeeName", closedBy);
+        context.setVariable("employeeCode", closedByEmpCode);
+        String content = templateEngine.process("jobCompleted", context);
+        String subject = messageSource.getMessage("email.job.completed.alert.title", null, locale);
+        sendEmail(emailIds, subject, content, false, true,null);
+    }
 
     @Async
     public void sendFeedbackAlert(String emailIds,  String feedbackName, String feedbackLocation, Date feedbackDate, List<String> feedbackItems, String reportUrl) {
