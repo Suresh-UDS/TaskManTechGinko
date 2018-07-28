@@ -197,7 +197,7 @@ public class TicketManagementService extends AbstractService {
             		assignedTo = ticket.getEmployee();
             }
         }else {
-        		assignedTo = ticket.getEmployee();
+        		assignedTo = ticket.getAssignedTo();
         }
         ticket.setStatus(ticketDTO.getStatus());
         if (StringUtils.isNotEmpty(ticketDTO.getTitle())) {
