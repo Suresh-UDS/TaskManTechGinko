@@ -810,6 +810,7 @@ public class JobManagementService extends AbstractService {
 			if(assignedTo != null) {
 				Map<String, Object> values = new HashMap<String, Object>();
 				values.put("jobId", job.getId());
+				values.put("jobTitle", job.getTitle());
 				values.put("jobDateTime", DateUtil.formatToDateTimeString(job.getPlannedStartTime()));
 				values.put("site", job.getSite().getName());
 				if(assignedTo.getUser() != null) {
