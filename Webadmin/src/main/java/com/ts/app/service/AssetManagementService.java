@@ -1927,6 +1927,18 @@ public class AssetManagementService extends AbstractService {
 
 		Pageable pageRequest = null;
 		if(searchCriteria != null) {
+			
+			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
+				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+				log.debug("Sorting object" + sort);
+				pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+			} else {
+				if (searchCriteria.isList()) {
+					pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+				} else {
+					pageRequest = createPageRequest(searchCriteria.getCurrPage());
+				}
+			}
 
 			Page<AssetStatusHistory> page = null;
 			List<AssetStatusHistory> allStatusList = new ArrayList<AssetStatusHistory>();
@@ -1974,6 +1986,18 @@ public class AssetManagementService extends AbstractService {
 
 		Pageable pageRequest = null;
 		if(searchCriteria != null) {
+			
+			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
+				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+				log.debug("Sorting object" + sort);
+				pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+			} else {
+				if (searchCriteria.isList()) {
+					pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+				} else {
+					pageRequest = createPageRequest(searchCriteria.getCurrPage());
+				}
+			}
 
 			Page<AssetSiteHistory> page = null;
 			List<AssetSiteHistory> allSitesList = new ArrayList<AssetSiteHistory>();
@@ -2023,6 +2047,18 @@ public class AssetManagementService extends AbstractService {
 
         Pageable pageRequest = null;
         if(searchCriteria != null) {
+        	
+        	if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
+				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+				log.debug("Sorting object" + sort);
+				pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+			} else {
+				if (searchCriteria.isList()) {
+					pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+				} else {
+					pageRequest = createPageRequest(searchCriteria.getCurrPage());
+				}
+			}
 
             Page<Ticket> page = null;
             List<Ticket> allTicketsList = new ArrayList<Ticket>();

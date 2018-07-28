@@ -32,7 +32,7 @@
                                            <div class="form-group">
                                                <label class="control-label">Issue<span class="red-star">*</span> </label>
 
-                                               <input type="text" class="form-control"   name='title'
+                                               <input type="text" class="form-control InputTxtCaps"   name='title'
                                                       ng-model="tickets.title" ng-minlength=1 ng-maxlength=50
                                                       autofocus  required autocomplete="off" ng-keypress="keyPressHandler($event)"/>
                                                <div ng-show="form.$submitted || form.title.$touched">
@@ -51,7 +51,7 @@
                                        <div class="col-md-12">
                                            <div class="form-group">
                                                <label class="control-label">Description<span class="red-star">*</span> </label>
-                                               <input id='description' ng-model="tickets.description" class='form-control'
+                                               <input id='description' ng-model="tickets.description" class='form-control InputTxtCaps'
                                                       name='description' type='text' value=""
                                                        autofocus required ng-keypress="keyPressHandler($event)"/>
                                                <div ng-show="form.$submitted || form.description.$touched">
@@ -242,7 +242,7 @@
                              <div class="col-md-6">
                                  <div class="form-group">
                                      <label class="control-label">Comments</label>
-                                     <textarea ng-model="tickets.comments" class="form-control"></textarea>
+                                     <textarea ng-model="tickets.comments" class="form-control InputTxtCaps"></textarea>
                                  </div>
                              </div>
                            </div>
