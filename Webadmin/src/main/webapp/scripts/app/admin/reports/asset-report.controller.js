@@ -32,6 +32,7 @@ angular.module('timeSheetApp')
         $scope.pageSort = 10;
         $scope.pager = {};
         $rootScope.exportStatusObj  ={};
+        $scope.noData = false;
 
 
         $scope.initCalender = function(){
@@ -179,7 +180,14 @@ angular.module('timeSheetApp')
             //$scope.loadAssets();
         }
 
-        $scope.searchFilter = function () {
+         $scope.searchFilter = function () {
+            $scope.setPage(1);
+            $scope.search();
+         };
+
+         $scope.searchFilter1 = function () {
+            $scope.selectedDateFrom = new Date();
+            $scope.selectedDateTo = new Date();
             $scope.setPage(1);
             $scope.search();
          }
@@ -198,14 +206,16 @@ angular.module('timeSheetApp')
             console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaAssets));
             console.log('criteria in scope -'+JSON.stringify($scope.searchCriteria));
 
-            console.log('Selected  project -' + $scope.selectedEmployee + ", " + $scope.selectedProject +" , "+ $scope.selectedSite);
+            console.log('Selected  project -' + $scope.searchEmployee + ", " + $scope.searchProject +" , "+ $scope.searchSite);
             console.log('Selected  date range -' + $scope.checkInDateTimeFrom + ", " + $scope.checkInDateTimeTo);
-            $scope.searchCriteria.assetStatus = $scope.selectedStatus;
+            $scope.searchCriteria.assetStatus = $scope.searchStatus;
             $scope.searchCriteria.currPage = currPageVal;
             $scope.searchCriteria.findAll = false;
 
-             if( !$scope.selectedProject && !$scope.selectedSite 
-                &&  !$scope.selectedStatus) {
+             //&&  !$scope.searchStatus
+     
+             if( !$scope.searchProject && !$scope.searchSite 
+               ) {
                 $scope.searchCriteria.findAll = true;
             }
 
@@ -217,35 +227,35 @@ angular.module('timeSheetApp')
                 }
 
            
-                if($scope.selectedTitle)
+                if($scope.searchTitle)
                 {
-                    $scope.searchCriteria.assetTitle = $scope.selectedTitle;
+                    $scope.searchCriteria.assetTitle = $scope.searchTitle;
                     console.log('selected Title ='+ $scope.searchCriteria.assetTitle);
                 }
-                if($scope.selectedDescription)
+                if($scope.searchDescription)
                 {
-                    $scope.searchCriteria.assetDescription = $scope.selectedDescription;
+                    $scope.searchCriteria.assetDescription = $scope.searchDescription;
                     console.log('selected asset Description ='+ $scope.searchCriteria.assetDescription);
                 }
                 
 
-                if($scope.selectedProject) {
-                    $scope.searchCriteria.projectId = $scope.selectedProject.id;
+                if($scope.searchProject) {
+                    $scope.searchCriteria.projectId = $scope.searchProject.id;
                 
                 }
 
-                if($scope.selectedSite) {
-                    $scope.searchCriteria.siteId = $scope.selectedSite.id;
+                if($scope.searchSite) {
+                    $scope.searchCriteria.siteId = $scope.searchSite.id;
                     }
                     
-                if($scope.selectedEmployee)
+                if($scope.searchEmployee)
                 {
-                   $scope.searchCriteria.employeeId = $scope.selectedEmployee.id;
+                   $scope.searchCriteria.employeeId = $scope.searchEmployee.id;
                 }
-                if($scope.selectedStatus)
+                if($scope.searchStatus)
                 {
 
-                   $scope.searchCriteria.assetStatus = $scope.selectedStatus;
+                   $scope.searchCriteria.assetStatus = $scope.searchStatus;
                 }
                 
             if($scope.pageSort){
@@ -290,7 +300,11 @@ angular.module('timeSheetApp')
                     $scope.pageEntries = $scope.assetsData.length;
                     $scope.totalCountPages = data.totalCount;
                     $scope.pageSort = 10;
-                }
+                    $scope.noData = false;
+
+                    }else{
+                         $scope.noData = true;
+                    }
                
             });
         
@@ -390,6 +404,8 @@ angular.module('timeSheetApp')
             $scope.selectedEmployee = null;
             $scope.selectedProject = null;
             $scope.selectedSite = null;
+            $scope.searchProject = null;
+            $scope.searchSite = null;
             $scope.selectedStatus = null;
             $scope.searchCriteria = {};
             $rootScope.searchCriteriaAssets   = null;
