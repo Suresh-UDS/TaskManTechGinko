@@ -1627,7 +1627,6 @@ angular.module('timeSheetApp')
             }else if($scope.ticketSearchCriteria.module == "Ticket"){
                 $scope.loadTicket();
             }else{
-                alert("Test");
                $scope.search();
             }
 
