@@ -34,7 +34,7 @@
 
                                                <input type="text" class="form-control InputTxtCaps"   name='title'
                                                       ng-model="tickets.title" ng-minlength=1 ng-maxlength=50
-                                                      autofocus  required autocomplete="off"/>
+                                                      autofocus  required autocomplete="off" ng-keypress="keyPressHandler($event)"/>
                                                <div ng-show="form.$submitted || form.title.$touched">
                                                    <div ng-show="form.title.$dirty || form.title.$invalid">
                                                        <p class="help-block" style="color:maroon"
@@ -53,7 +53,7 @@
                                                <label class="control-label">Description<span class="red-star">*</span> </label>
                                                <input id='description' ng-model="tickets.description" class='form-control InputTxtCaps'
                                                       name='description' type='text' value=""
-                                                       autofocus required/>
+                                                       autofocus required ng-keypress="keyPressHandler($event)"/>
                                                <div ng-show="form.$submitted || form.description.$touched">
                                                    <div ng-show="form.description.$dirty || form.description.$invalid">
                                                        <p class="help-block" style="color:maroon"
@@ -281,10 +281,10 @@
                            <button type="submit" ng-click="cancelTicket()"
                                    id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
-                           <button type="submit" type="submit"
-                                   id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
-                                            <i class="material-icons">check</i>
-                                        </span>Create ticket</button>
+                           <button type="submit" id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right">
+                               <span class="btn-label">
+                                   <i class="material-icons">check</i>
+                               </span>Create ticket</button>
 
                            <div class="clearfix"></div>
                        </div>
