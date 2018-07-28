@@ -59,7 +59,7 @@ public class PushService {
 		context.setVariable("jobId", values.get("jobId"));
 		context.setVariable("jobTitle", values.get("jobTitle"));
 		//String emailContent = templateEngine.process("newJobAlertPush", context);
-		Object[] data = new Object[3];
+		Object[] data = new Object[4];
 		data[0] = values.get("jobId");
 		data[1] = values.get("jobTitle");
 		data[2] = values.get("jobDateTime");
