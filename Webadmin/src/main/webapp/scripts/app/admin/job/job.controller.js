@@ -19,6 +19,8 @@ angular.module('timeSheetApp')
         $scope.selectedStatus = null;
         $scope.selectedLocation = null;
         $scope.selectedJobDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+        $scope.selectedJobDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+
         $scope.searchCriteria = {};
         $scope.pages = { currPage : 1};
         $scope.status =[{ "name" : "OPEN"},{ "name" : "ASSIGNED"},{ "name" : "INPROGRESS"},{ "name" : "COMPLETED"}];
@@ -86,6 +88,12 @@ angular.module('timeSheetApp')
 
                 $scope.selectedJobDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
                 $scope.selectedJobDateSer = e.date._d;
+        });
+        
+        $('input#selectedJobDateTo').on('dp.change', function(e){
+
+            $scope.selectedJobDateTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.selectedJobDateToSer = e.date._d;
         });
 
         $scope.loadChecklists = function () {
@@ -626,6 +634,10 @@ angular.module('timeSheetApp')
 	        	if($scope.selectedJobDate) {
 	        		$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedJobDateSer;
 	        	}
+	        	
+	        	if($scope.selectedJobDateTo) {
+	        		$scope.searchCriteria.checkInDateTimeTo = $scope.selectedJobDateToSer;
+	        	}
 
 	        	console.log('search criterias - ', JSON.stringify($scope.searchCriteria));
                 //$scope.jobs = '';
@@ -689,6 +701,8 @@ angular.module('timeSheetApp')
         $scope.clearFilter = function() {
             $scope.selectedJobDateSer = new Date();
             $scope.selectedJobDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+            $scope.selectedJobDateToSer = new Date();
+            $scope.selectedJobDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedProject = null;
             $scope.searchCriteria = {};
             $scope.selectedSite = null;
