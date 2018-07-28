@@ -140,6 +140,10 @@ angular.module('timeSheetApp')
 
         $scope.removeProjectSite = function(ind) {
         		$scope.projectSiteList.splice(ind,1);
+//        		alert($scope.projectSiteList.length);
+        		if($scope.projectSiteList.length === 0) {
+        			document.getElementById("form-button-save").disabled = true;
+        		} 
         };
 
         $scope.locationList = [];
