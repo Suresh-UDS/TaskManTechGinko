@@ -29,6 +29,13 @@
                 <i class="material-icons">location_on</i> Map
                 <div class="ripple-container"></div>
             </button>
+            <button class="btn btn-success add-btn margn-tb0"  ng-show="employees.length" ng-click="exportAllData();" tabindex="0">
+                <i class="material-icons">file_download</i> Export
+                <div class="ripple-container"></div>
+            </button>
+
+            <a class="download-btn" href="{{exportFile()}}">{{exportMsg()}}</a>
+            <div class="downloader" ng-show="downloader"></div>
 
         </div>
     </div>

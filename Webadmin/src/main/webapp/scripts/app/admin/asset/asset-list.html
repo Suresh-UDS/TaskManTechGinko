@@ -40,6 +40,19 @@
                 <div class="ripple-container"></div>
             </button>
 
+            <button ng-show="assets.length" class="btn btn-success add-btn margn-tb0"  title="Export HTML"  ng-click=exportAllData('html') tabindex="0">
+                <i class="material-icons">description</i> Export HTML
+                <div class="ripple-container"></div>
+            </button>
+
+            <button ng-show="assets.length" class="btn btn-info add-btn margn-tb0"   title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
+                <i class="material-icons">import_contacts</i> Export Excel
+                <div class="ripple-container"></div>
+            </button>
+
+            <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
+            <div class="downloaderMd" ng-show="downloader"></div>
+
 
         </div>
 
