@@ -7,7 +7,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
      'alexjoffroy.angular-loaders','chart.js','jkAngularRatingStars',
      'angular-star-rating-new','paginations','excelGrid'])
 
-    .run(function ($rootScope, $location, $window, $http, $state,  Auth, Principal, ENV, VERSION) {
+    .run(function ($rootScope, $location, $window, $http, $state,  Auth, Principal, ENV, VERSION,$timeout) {
         $rootScope.isAuthenticated = Principal.isAuthenticated;
         $rootScope.loginView = true;
         $rootScope.ENV = ENV;
@@ -109,8 +109,8 @@ angular.module('timeSheetApp', ['LocalStorageModule',
         // Page Loader Function
 
         $rootScope.loadingAuto = function(){
-            $scope.loadingStart();
-            $scope.loadtimeOut = $timeout(function(){
+            $rootScope.loadingStart();
+            $rootScope.loadtimeOut = $timeout(function(){
 
             //console.log("Calling loader stop");
             $('.pageCenter').hide();

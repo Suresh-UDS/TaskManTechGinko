@@ -59,6 +59,9 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 
 	private String comments;
 	private JobStatus status;
+	
+	private int escalationStatus;
+	
 	private JobType type;
 
 	private boolean relieved;
@@ -412,4 +415,12 @@ public class Job extends AbstractAuditingEntity implements Serializable{
     public void setPendingAtUDS(boolean pendingAtUDS) {
         this.pendingAtUDS = pendingAtUDS;
     }
+    
+	public int getEscalationStatus() {
+		return escalationStatus;
+	}
+	public void setEscalationStatus(int escalationStatus) {
+		this.escalationStatus = escalationStatus;
+	}
+    
 }

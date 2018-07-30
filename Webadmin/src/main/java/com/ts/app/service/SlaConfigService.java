@@ -12,19 +12,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
+import com.ts.app.domain.Job;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.SLANotificationLog;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.SlaConfig;
 import com.ts.app.domain.SlaEscalationConfig;
 import com.ts.app.domain.Ticket;
+import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SLAEscalationConfigRepository;
 import com.ts.app.repository.SLANotificationLogRepository;
@@ -66,11 +67,8 @@ public class SlaConfigService extends AbstractService {
 	private TicketRepository ticketRepository;
 	
 	@Inject
-	private MailService mailService;
-	
-	@Inject
-	private SlaConfigRepository slaConfigRepository;
-	
+	private JobRepository jobRepository;
+		
 	public SlaConfigDTO saveSla(SlaConfigDTO slaconfigdto){
 		
 		log.debug("*********SLA CONFIGURATION***********");
@@ -294,15 +292,21 @@ public class SlaConfigService extends AbstractService {
 	}
 	
 	@Transactional(propagation =  Propagation.REQUIRES_NEW)
-	public SLANotificationLog slaEscalationNotificationSave(SLANotificationLog slaNotificationLog) 
+	public void slaEscalationNotificationSave(SLANotificationLog slaNotificationLog) 
 	{
-		return slaNotificationLogRepository.save(slaNotificationLog);
+		slaNotificationLogRepository.save(slaNotificationLog);
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public Ticket slaTicketEscalationStatusUpdate(Ticket ticket)
+	public void slaTicketEscalationStatusUpdate(Ticket ticket)
 	{
-		return ticketRepository.save(ticket);
+		ticketRepository.save(ticket);
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public void slaJobEscalationStatusUpdate(Job job)
+	{
+		jobRepository.save(job);
 	}
 	
 }
