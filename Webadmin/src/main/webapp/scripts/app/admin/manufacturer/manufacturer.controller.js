@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
 				function($scope, $rootScope, $state, $timeout, ManufacturerComponent,AssetTypeComponent,
 						$http, $stateParams,
 						$location,PaginationComponent) {
-        $rootScope.loadingStop(); 
+        $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
@@ -60,17 +60,17 @@ angular.module('timeSheetApp')
 
 
         $scope.initMaterialWizard();
-        
+
         $scope.loadAllAssetTypes = function() {
                 //$scope.loadingStart();
         		AssetTypeComponent.findAll().then(function (data) {
                 $scope.selectedAssetType = null;
                 $scope.assetTypes = data;
-                console.log('Asset type',$scope.assetTypes); 
+                console.log('Asset type',$scope.assetTypes);
                 $scope.loadingStop();
             });
         }
-        
+
         $scope.getManufacturerDetails = function(id, mode) {
                 $rootScope.loadingStart();
         		$scope.isEdit = (mode == 'edit' ? true : false)
@@ -89,7 +89,7 @@ angular.module('timeSheetApp')
                     $rootScope.loadingStop();
 	        	})
         };
-        
+
         $scope.loadManufacturers = function(){
                 $scope.clearFilter();
         		$scope.search();
@@ -127,7 +127,7 @@ angular.module('timeSheetApp')
         $scope.search = function () {
 
             $scope.loadingStop();
-           
+
             var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
             var searchCriteria = {
                 currPage : currPageVal
@@ -167,7 +167,7 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.sortByAsc = true;
             }
 
-           
+
             console.log("search criteria",$scope.searchCriteria);
                      $scope.manufacturers = '';
                      $scope.manufacturersLoader = false;
@@ -177,7 +177,7 @@ angular.module('timeSheetApp')
                 console.log(data);
                 $scope.manufacturers = data.transactions;
                 $scope.manufacturersLoader = true;
-                
+
 
                 /*
                     ** Call pagination  main function **
@@ -204,8 +204,34 @@ angular.module('timeSheetApp')
 
             });
 
-            
+
         };
+
+            /* Add asset type */
+
+            $scope.addAssetType = function () {
+                console.log($scope.assetType);
+                $scope.loadingStart();
+                if($scope.assetType){
+                    console.log("Asset Type entered");
+                    AssetTypeComponent.create($scope.assetType).then(function (response) {
+                        console.log(response);
+                        $scope.assetType = "";
+                        $scope.showNotifications('top','center','success','Asset type has been added Successfully!!');
+                        $scope.loadAllAssetTypes();
+
+
+                    }).catch(function(){
+                        $scope.loadingStop();
+                        $scope.showNotifications('top','center','danger','Unable to Asset type. Please try again later..');
+                        $scope.error = 'ERROR';
+                    });
+                }else{
+                    console.log("Asset Type not entered");
+                }
+
+
+            }
 
 
 
@@ -228,10 +254,10 @@ angular.module('timeSheetApp')
 
 	        	if($scope.selectedAssetType.name !=""){
 	        	    $scope.manufacturer.assetType = $scope.selectedAssetType.name;
-                          
+
 	            }
 
-            
+
 	        	console.log('manufacturer details ='+ JSON.stringify($scope.manufacturer));
 	        	//var post = $scope.isEdit ? ManufacturerComponent.update : ManufacturerComponent.create
                 //post($scope.manufacturer).then(function () {
@@ -262,8 +288,8 @@ angular.module('timeSheetApp')
 
                 if($scope.selectedAssetType){
                     $scope.manufacturer.assetType = $scope.selectedAssetType.name;
-                   
-                
+
+
                 }
                 console.log('manufacturer details ='+ JSON.stringify($scope.manufacturer));
                 //var post = $scope.isEdit ? ManufacturerComponent.update : ManufacturerComponent.create
@@ -305,9 +331,9 @@ angular.module('timeSheetApp')
 	        	});
         };
 
-       
 
-	  
+
+
 
         $scope.clearFilter = function() {
             $scope.selectedProject = null;
@@ -326,31 +352,31 @@ angular.module('timeSheetApp')
         };
 
         // init load
-        $scope.initLoad = function(){ 
-             $scope.loadPageTop(); 
-             //$scope.initPage(); 
-          
+        $scope.initLoad = function(){
+             $scope.loadPageTop();
+             //$scope.initPage();
+
          }
-        
+
          var nottifShow = true ;
 
         $scope.showNotifications= function(position,alignment,color,msg){
-           
+
             /*if(nottifShow == true){
                nottifShow = false ;*/
                demo.showNotification(position,alignment,color,msg);
-               
+
            /* }else if(nottifShow == false){
                 $timeout(function() {
                   nottifShow = true ;
                 }, 8000);
 
             }*/
-            
+
         }
 
           /*
-    
+
         ** Pagination init function **
         @Param:integer
 
@@ -365,5 +391,5 @@ angular.module('timeSheetApp')
             $scope.pages.currPage = page;
             $scope.search();
         };
-        
+
     });
