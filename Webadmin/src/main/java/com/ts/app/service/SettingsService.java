@@ -69,6 +69,18 @@ public class SettingsService extends AbstractService {
 	public static final String EMAIL_NOTIFICATION_ASSET = "email.notification.asset";
 	
 	public static final String EMAIL_NOTIFICATION_ASSET_EMAILS = "email.notification.asset.emails";
+	
+	public static final String EMAIL_NOTIFICATION_PPM = "email.notification.ppm";
+	
+	public static final String EMAIL_NOTIFICATION_PPM_EMAILS = "email.notification.ppm.emails";
+	
+	public static final String EMAIL_NOTIFICATION_AMC = "email.notification.amc";
+	
+	public static final String EMAIL_NOTIFICATION_AMC_EMAILS = "email.notification.amc.emails";
+	
+	public static final String EMAIL_NOTIFICATION_WARRANTY = "email.notification.warranty";
+	
+	public static final String EMAIL_NOTIFICATION_WARRANTY_EMAILS = "email.notification.warranty.emails";
 
 	@Inject
 	private SettingsRepository settingsRepository;
@@ -338,7 +350,7 @@ public class SettingsService extends AbstractService {
 		readingAlertSetting.setActive("Y");
 
 		Setting readingEmailsSetting = null;
-		if(settingsDto.getOverdueEmailsId() > 0) {
+		if(settingsDto.getReadingEmailsId() > 0) {
 			readingEmailsSetting = settingsRepository.findOne(settingsDto.getReadingEmailsId());
 		}else {
 			readingEmailsSetting = new Setting();
@@ -354,8 +366,8 @@ public class SettingsService extends AbstractService {
 		readingEmailsSetting.setActive("Y");
 		
 		Setting assetAlertSetting = null;
-		if(settingsDto.getReadingEmailAlertId() > 0) {
-			assetAlertSetting = settingsRepository.findOne(settingsDto.getReadingEmailAlertId());
+		if(settingsDto.getAssetEmailAlertId() > 0) {
+			assetAlertSetting = settingsRepository.findOne(settingsDto.getAssetEmailAlertId());
 		}else {
 			assetAlertSetting = new Setting();
 		}
@@ -368,8 +380,8 @@ public class SettingsService extends AbstractService {
 		assetAlertSetting.setActive("Y");
 		
 		Setting assetEmailsSetting = null;
-		if(settingsDto.getOverdueEmailsId() > 0) {
-			assetEmailsSetting = settingsRepository.findOne(settingsDto.getAssetEmailAlertId());
+		if(settingsDto.getAssetEmailsId() > 0) {
+			assetEmailsSetting = settingsRepository.findOne(settingsDto.getAssetEmailsId());
 		}else {
 			assetEmailsSetting = new Setting();
 		}
@@ -382,6 +394,96 @@ public class SettingsService extends AbstractService {
 		assetEmailsSetting.setSiteId(settingsDto.getSiteId());
 		assetEmailsSetting.setSiteName(settingsDto.getSiteName());
 		assetEmailsSetting.setActive("Y");
+		
+		Setting ppmAlertSetting = null;
+		if(settingsDto.getPpmEmailAlertId() > 0) {
+			ppmAlertSetting = settingsRepository.findOne(settingsDto.getPpmEmailAlertId());
+		}else {
+			ppmAlertSetting = new Setting();
+		}
+		ppmAlertSetting.setSettingKey(EMAIL_NOTIFICATION_PPM);
+		ppmAlertSetting.setSettingValue(String.valueOf(settingsDto.isPpmEmailAlert()));
+		ppmAlertSetting.setProjectId(settingsDto.getProjectId());
+		ppmAlertSetting.setProjectName(settingsDto.getProjectName());
+		ppmAlertSetting.setSiteId(settingsDto.getSiteId());
+		ppmAlertSetting.setSiteName(settingsDto.getSiteName());
+		ppmAlertSetting.setActive("Y");
+		
+		Setting ppmEmailsSetting = null;
+		if(settingsDto.getPpmEmailsId() > 0) {
+			ppmEmailsSetting = settingsRepository.findOne(settingsDto.getPpmEmailsId());
+		}else {
+			ppmEmailsSetting = new Setting();
+		}
+		ppmEmailsSetting.setSettingKey(EMAIL_NOTIFICATION_PPM_EMAILS);
+		if(CollectionUtils.isNotEmpty(settingsDto.getPpmEmailIds())) {
+			ppmEmailsSetting.setSettingValue(CommonUtil.convertToString(settingsDto.getPpmEmailIds()));
+		}
+		ppmEmailsSetting.setProjectId(settingsDto.getProjectId());
+		ppmEmailsSetting.setProjectName(settingsDto.getProjectName());
+		ppmEmailsSetting.setSiteId(settingsDto.getSiteId());
+		ppmEmailsSetting.setSiteName(settingsDto.getSiteName());
+		ppmEmailsSetting.setActive("Y");
+		
+		Setting amcAlertSetting = null;
+		if(settingsDto.getAmcEmailAlertId() > 0) {
+			amcAlertSetting = settingsRepository.findOne(settingsDto.getAmcEmailAlertId());
+		}else {
+			amcAlertSetting = new Setting();
+		}
+		amcAlertSetting.setSettingKey(EMAIL_NOTIFICATION_AMC);
+		amcAlertSetting.setSettingValue(String.valueOf(settingsDto.isAmcEmailAlert()));
+		amcAlertSetting.setProjectId(settingsDto.getProjectId());
+		amcAlertSetting.setProjectName(settingsDto.getProjectName());
+		amcAlertSetting.setSiteId(settingsDto.getSiteId());
+		amcAlertSetting.setSiteName(settingsDto.getSiteName());
+		amcAlertSetting.setActive("Y");
+		
+		Setting amcEmailsSetting = null;
+		if(settingsDto.getAmcEmailsId() > 0) {
+			amcEmailsSetting = settingsRepository.findOne(settingsDto.getAmcEmailsId());
+		}else {
+			amcEmailsSetting = new Setting();
+		}
+		amcEmailsSetting.setSettingKey(EMAIL_NOTIFICATION_AMC_EMAILS);
+		if(CollectionUtils.isNotEmpty(settingsDto.getAmcEmailIds())) {
+			amcEmailsSetting.setSettingValue(CommonUtil.convertToString(settingsDto.getAmcEmailIds()));
+		}
+		amcEmailsSetting.setProjectId(settingsDto.getProjectId());
+		amcEmailsSetting.setProjectName(settingsDto.getProjectName());
+		amcEmailsSetting.setSiteId(settingsDto.getSiteId());
+		amcEmailsSetting.setSiteName(settingsDto.getSiteName());
+		amcEmailsSetting.setActive("Y");
+		
+		Setting warrantyAlertSetting = null;
+		if(settingsDto.getWarrantyEmailAlertId() > 0) {
+			warrantyAlertSetting = settingsRepository.findOne(settingsDto.getWarrantyEmailAlertId());
+		}else {
+			warrantyAlertSetting = new Setting();
+		}
+		warrantyAlertSetting.setSettingKey(EMAIL_NOTIFICATION_WARRANTY);
+		warrantyAlertSetting.setSettingValue(String.valueOf(settingsDto.isWarrantyEmailAlert()));
+		warrantyAlertSetting.setProjectId(settingsDto.getProjectId());
+		warrantyAlertSetting.setProjectName(settingsDto.getProjectName());
+		warrantyAlertSetting.setSiteId(settingsDto.getSiteId());
+		warrantyAlertSetting.setSiteName(settingsDto.getSiteName());
+		warrantyAlertSetting.setActive("Y");
+		
+		Setting warrantyEmailsSetting = null;
+		if(settingsDto.getWarrantyEmailsId() > 0) {
+			warrantyEmailsSetting = settingsRepository.findOne(settingsDto.getWarrantyEmailsId());
+		}else {
+			warrantyEmailsSetting = new Setting();
+		}
+		warrantyEmailsSetting.setSettingKey(EMAIL_NOTIFICATION_WARRANTY_EMAILS);
+		if(CollectionUtils.isNotEmpty(settingsDto.getWarrantyEmailIds())) {
+			warrantyEmailsSetting.setSettingValue(CommonUtil.convertToString(settingsDto.getWarrantyEmailIds()));
+		}
+		warrantyEmailsSetting.setProjectId(settingsDto.getProjectId());
+		warrantyEmailsSetting.setProjectName(settingsDto.getProjectName());
+		warrantyEmailsSetting.setSiteId(settingsDto.getSiteId());
+		warrantyEmailsSetting.setSiteName(settingsDto.getSiteName());
+		warrantyEmailsSetting.setActive("Y");
 		
 		List<Setting> settingList = new ArrayList<Setting>();
 		if(StringUtils.isNotEmpty(shiftWiseAttendanceAlertSetting.getSettingValue())) {
@@ -444,6 +546,25 @@ public class SettingsService extends AbstractService {
 		if(StringUtils.isNotEmpty(assetEmailsSetting.getSettingValue())) {
 			settingList.add(assetEmailsSetting);
 		}
+		if(StringUtils.isNotEmpty(ppmAlertSetting.getSettingValue())) {
+			settingList.add(ppmAlertSetting);
+		}
+		if(StringUtils.isNotEmpty(ppmEmailsSetting.getSettingValue())) {
+			settingList.add(ppmEmailsSetting);
+		}
+		if(StringUtils.isNotEmpty(amcAlertSetting.getSettingValue())) {
+			settingList.add(amcAlertSetting);
+		}
+		if(StringUtils.isNotEmpty(amcEmailsSetting.getSettingValue())) {
+			settingList.add(amcEmailsSetting);
+		}
+		if(StringUtils.isNotEmpty(warrantyAlertSetting.getSettingValue())) {
+			settingList.add(assetAlertSetting);
+		}
+		if(StringUtils.isNotEmpty(warrantyEmailsSetting.getSettingValue())) {
+			settingList.add(assetEmailsSetting);
+		}
+		
 		settingsRepository.save(settingList);
 
 		return settingsDto;
@@ -526,6 +647,24 @@ public class SettingsService extends AbstractService {
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_ASSET_EMAILS)) {
 					settingDto.setAssetEmailsId(setting.getId());
 					settingDto.setAssetEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_PPM)) {
+					settingDto.setPpmEmailAlertId(setting.getId());
+					settingDto.setPpmEmailAlert(Boolean.valueOf(setting.getSettingValue()));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_PPM_EMAILS)) {
+					settingDto.setPpmEmailsId(setting.getId());
+					settingDto.setPpmEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_AMC)) {
+					settingDto.setAmcEmailAlertId(setting.getId());
+					settingDto.setAmcEmailAlert(Boolean.valueOf(setting.getSettingValue()));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_AMC_EMAILS)) {
+					settingDto.setAmcEmailsId(setting.getId());
+					settingDto.setAmcEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_WARRANTY)) {
+					settingDto.setWarrantyEmailAlertId(setting.getId());
+					settingDto.setWarrantyEmailAlert(Boolean.valueOf(setting.getSettingValue()));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_WARRANTY_EMAILS)) {
+					settingDto.setWarrantyEmailsId(setting.getId());
+					settingDto.setWarrantyEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
 				}
 
 				//settings.add(settingDto);

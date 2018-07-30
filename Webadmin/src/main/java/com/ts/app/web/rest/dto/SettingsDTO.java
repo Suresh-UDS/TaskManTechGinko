@@ -98,6 +98,30 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     private boolean assetEmailAlert;
     
     private List<String> assetEmailIds;
+    
+    private long ppmEmailsId;
+    
+    private long ppmEmailAlertId;
+    
+    private boolean ppmEmailAlert;
+    
+    private List<String> ppmEmailIds;
+    
+    private long amcEmailsId;
+    
+    private long amcEmailAlertId;
+    
+    private boolean amcEmailAlert;
+    
+    private List<String> amcEmailIds;
+    
+    private long warrantyEmailsId;
+    
+    private long warrantyEmailAlertId;
+    
+    private boolean warrantyEmailAlert;
+    
+    private List<String> warrantyEmailIds;
 
     public long getSiteId() {
 		return siteId;
@@ -449,6 +473,102 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 
 	public void setLateAttendanceGraceTimeId(long lateAttendanceGraceTimeId) {
 		this.lateAttendanceGraceTimeId = lateAttendanceGraceTimeId;
+	}
+
+	public long getPpmEmailsId() {
+		return ppmEmailsId;
+	}
+
+	public void setPpmEmailsId(long ppmEmailsId) {
+		this.ppmEmailsId = ppmEmailsId;
+	}
+
+	public long getPpmEmailAlertId() {
+		return ppmEmailAlertId;
+	}
+
+	public void setPpmEmailAlertId(long ppmEmailAlertId) {
+		this.ppmEmailAlertId = ppmEmailAlertId;
+	}
+
+	public boolean isPpmEmailAlert() {
+		return ppmEmailAlert;
+	}
+
+	public void setPpmEmailAlert(boolean ppmEmailAlert) {
+		this.ppmEmailAlert = ppmEmailAlert;
+	}
+
+	public List<String> getPpmEmailIds() {
+		return ppmEmailIds;
+	}
+
+	public void setPpmEmailIds(List<String> ppmEmailIds) {
+		this.ppmEmailIds = ppmEmailIds;
+	}
+
+	public long getAmcEmailsId() {
+		return amcEmailsId;
+	}
+
+	public void setAmcEmailsId(long amcEmailsId) {
+		this.amcEmailsId = amcEmailsId;
+	}
+
+	public long getAmcEmailAlertId() {
+		return amcEmailAlertId;
+	}
+
+	public void setAmcEmailAlertId(long amcEmailAlertId) {
+		this.amcEmailAlertId = amcEmailAlertId;
+	}
+
+	public boolean isAmcEmailAlert() {
+		return amcEmailAlert;
+	}
+
+	public void setAmcEmailAlert(boolean amcEmailAlert) {
+		this.amcEmailAlert = amcEmailAlert;
+	}
+
+	public List<String> getAmcEmailIds() {
+		return amcEmailIds;
+	}
+
+	public void setAmcEmailIds(List<String> amcEmailIds) {
+		this.amcEmailIds = amcEmailIds;
+	}
+
+	public long getWarrantyEmailsId() {
+		return warrantyEmailsId;
+	}
+
+	public void setWarrantyEmailsId(long warrantyEmailsId) {
+		this.warrantyEmailsId = warrantyEmailsId;
+	}
+
+	public long getWarrantyEmailAlertId() {
+		return warrantyEmailAlertId;
+	}
+
+	public void setWarrantyEmailAlertId(long warrantyEmailAlertId) {
+		this.warrantyEmailAlertId = warrantyEmailAlertId;
+	}
+
+	public boolean isWarrantyEmailAlert() {
+		return warrantyEmailAlert;
+	}
+
+	public void setWarrantyEmailAlert(boolean warrantyEmailAlert) {
+		this.warrantyEmailAlert = warrantyEmailAlert;
+	}
+
+	public List<String> getWarrantyEmailIds() {
+		return warrantyEmailIds;
+	}
+
+	public void setWarrantyEmailIds(List<String> warrantyEmailIds) {
+		this.warrantyEmailIds = warrantyEmailIds;
 	}
 
 	

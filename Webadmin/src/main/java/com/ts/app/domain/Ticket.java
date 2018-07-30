@@ -76,6 +76,8 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     private String comments;
 
     private String status;
+    
+    private int escalationStatus;
 
     private String type;
 
@@ -185,7 +187,15 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
         this.status = status;
     }
 
-    public String getType() {
+	public int getEscalationStatus() {
+		return escalationStatus;
+	}
+
+	public void setEscalationStatus(int escalationStatus) {
+		this.escalationStatus = escalationStatus;
+	}
+
+	public String getType() {
         return type;
     }
 

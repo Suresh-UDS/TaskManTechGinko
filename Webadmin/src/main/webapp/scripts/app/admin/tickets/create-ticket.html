@@ -210,7 +210,6 @@
                                         <label class="control-label">Name of Asset</label>
                                         <span ng-show="!assetObj" class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                         <select ng-show="!assetObj"
-                                            required
                                             ng-model="selectedAsset"
                                             class="form-control searchable-input floatL" ng-options="asset as asset.title for asset in assets | orderBy:'title' track by asset.id">
                                             <option value="">Select Asset</option>

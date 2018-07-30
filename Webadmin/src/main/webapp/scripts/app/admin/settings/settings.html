@@ -607,6 +607,165 @@
 
                         </div>
                     </div>
+                    
+                    <div class="checkbox">
+                        <label>
+                            Send PPM Job Alerts <input type="checkbox" name="terms" ng-model="settings.ppmEmailAlert">
+                        </label>
+                    </div>
+
+                    <div class="MailList">
+                        <div class="row">
+
+                            <div class="col-md-9">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Email List</label>
+                                    <input type="text" class="form-control" ng-model="ppmEmail">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addPPMEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>	
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">Email ids</label>
+
+                                    <ul class="listOfActions list-group">
+                                    
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.ppmEmailIds" ng-bind-html-unsafe="emailId">
+		                                    {{emailId}}
+		                                    <span class="badge badge-default badge-pill" ng-click="removePPMEmail($index)"><i class="material-icons">remove_circle</i></span>
+		                                </li>
+
+
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    
+                   <div class="checkbox">
+                        <label>
+                            Send AMC Job Alerts <input type="checkbox" name="terms" ng-model="settings.amcEmailAlert">
+                        </label>
+                    </div>
+
+                    <div class="MailList">
+                        <div class="row">
+
+                            <div class="col-md-9">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Email List</label>
+                                    <input type="text" class="form-control" ng-model="amcEmail">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addAMCEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>	
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">Email ids</label>
+
+                                    <ul class="listOfActions list-group">
+                                    
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.amcEmailIds" ng-bind-html-unsafe="emailId">
+		                                    {{emailId}}
+		                                    <span class="badge badge-default badge-pill" ng-click="removeAMCEmail($index)"><i class="material-icons">remove_circle</i></span>
+		                                </li>
+
+
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    
+                   	<div class="checkbox">
+                        <label>
+                            Send Warranty Expire Alerts <input type="checkbox" name="terms" ng-model="settings.warrantyEmailAlert">
+                        </label>
+                    </div>
+
+                    <div class="MailList">
+                        <div class="row">
+
+                            <div class="col-md-9">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Email List</label>
+                                    <input type="text" class="form-control" ng-model="warrantyEmail">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addWarrantyEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>	
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">Email ids</label>
+
+                                    <ul class="listOfActions list-group">
+                                    
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.warrantyEmailIds" ng-bind-html-unsafe="emailId">
+		                                    {{emailId}}
+		                                    <span class="badge badge-default badge-pill" ng-click="removeWarrantyEmail($index)"><i class="material-icons">remove_circle</i></span>
+		                                </li>
+
+
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
 
 
                 </div>
