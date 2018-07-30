@@ -22,6 +22,7 @@ import com.ts.app.service.SlaConfigService;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.SlaConfigDTO;
+import com.ts.app.web.rest.dto.TicketDTO;
 
 @RestController
 @RequestMapping("/api")
@@ -58,8 +59,8 @@ public class SlaConfigResource {
 	}
 	
 	@RequestMapping(value = "/sla", method = RequestMethod.GET)
-	public List<SlaConfigDTO> slaList(HttpServletRequest request) {
-		log.info("********** SLAConfig findAll *********");
+	public List<SlaConfigDTO> slaList() {
+		log.info("********** SLAConfig findAll slaEscalationNotification *********");
 		return slaservice.findAll();
 	}
 	
