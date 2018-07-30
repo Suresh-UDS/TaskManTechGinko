@@ -95,29 +95,29 @@ export class GetAssetReading {
                                 }
                             }
 
-                            // if(response.initialValue<0){
-                            //
-                            //     if(response.value>0){
-                            //         config.previousValue=response.value;
-                            //     }
-                            // }
-                            // else if(response.finalValue<=0)
-                            // {
-                            //     config.previousValue=response.initialValue;
-                            //     config.reading=response.initialValue;
-                            //     console.log(this.assetConfig);
-                            //     config.previousReadingId=response.id;
-                            // }else{
-                            //     config.previousValue=response.finalValue;
-                            //     config.reading=response.initialValue;
-                            //     console.log(this.assetConfig);
-                            //
-                            // }
+                            if(response.initialValue<0){
+
+                                if(response.value>0){
+                                    config.previousValue=response.value;
+                                }
+                            }
+                            else if(response.finalValue<=0)
+                            {
+                                config.previousValue=response.initialValue;
+                                config.reading=response.initialValue;
+                                console.log(this.assetConfig);
+                                config.previousReadingId=response.id;
+                            }else{
+                                config.previousValue=response.finalValue;
+                                config.reading=response.initialValue;
+                                console.log(this.assetConfig);
+
+                            }
                         }
                     )
                 }
             },err=>{
-                this.componentService.closeLoader()
+                this.componentService.closeLoader();
                 console.log("Error in getting asset config");
                 console.log(err);
             }

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('SiteController', function ($rootScope, $scope, $state, $timeout,
+    .controller('SiteController', function ($rootScope, $scope, $state, $timeout,$filter,
         ProjectComponent, SiteComponent,$http,$stateParams,$location,PaginationComponent) {
         $rootScope.loadingStop();
         $rootScope.loginView = false;
@@ -69,12 +69,14 @@ angular.module('timeSheetApp')
         $('#shiftFrom').on('dp.change', function(e){
 
             console.log(e.date._d);
+            console.log($filter('date')(e.date._d, 'HH:mm:ss'))
             if(e.date._d > $scope.newShiftItem.endTime) {
             		$scope.showNotifications('top','center','danger','From time cannot be after To time');
             		$scope.shiftFrom = $scope.newShiftItem.startTime;
             		return false;
             }else {
-                $scope.newShiftItem.startTime = e.date._d;
+                $scope.newShiftItem.startTime = e.date._d.getHours() + ':' + e.date._d.getMinutes();
+                $scope.newShiftItem.startTime = $filter('date')(e.date._d, 'HH:mm');
             }
         });
 
@@ -86,7 +88,7 @@ angular.module('timeSheetApp')
             		$scope.shiftTo = $scope.newShiftItem.endTime;
             		return false;
             }else {
-                $scope.newShiftItem.endTime = e.date._d;
+                $scope.newShiftItem.endTime = $filter('date')(e.date._d, 'HH:mm');
             }
 
         });
