@@ -76,7 +76,7 @@
                                              </div>
                                          </div>
                                      </div>
-                                   <!--  <div class="col-md-2">                                        
+                                   <!--  <div class="col-md-2">
                                     		<div class="form-group" style="padding-top: 20px;" >
                                             <div class="dropdown">
                                                 <input type="text"
@@ -88,7 +88,24 @@
                                             </div>
                                         </div>
                                     </div -->
+                                <div class="col-md-4">
+                                    <div class="form-group pull-right" style="padding-top: 10px;">
 
+                                        <button type="submit" class="btn btn-circle blue-clr">
+                                            <i class="material-icons">search</i>
+                                        </button>
+                                        <!-- <button ui-sref="add-employee" has-permission="Employee:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
+                                            <i class="material-icons">add</i>
+                                        </button>
+                                        <button ui-sref="employee-location" class="btn btn-circle orange-clr">
+                                            <i class="material-icons">location_on</i>
+                                        </button>
+                                        <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+                                            <i class="material-icons">refresh</i>
+                                        </button> -->
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
 
                     		</div>
                     </form>
@@ -145,8 +162,8 @@
 							   	   {{employeeShift.siteName}}
 
                                    <div class="dropdown">
-                                        <div class="form-group"> 
-                                           <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>	
+                                        <div class="form-group">
+                                           <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
         								   <select class="form-control " ng-model="selectedShiftSite" ng-change="updateEmpShiftSite(employeeShift, selectedShiftSite)"  ng-options="site as site.name for site in sites track by site.id">
         	                                    <option value="">Select Site...</option>
         	                                </select>
@@ -156,8 +173,8 @@
                                 <td>
                                 	   {{employeeShift.startTime | date:'dd-MM-yyyy HH:mm'}} - {{employeeShift.endTime | date:'dd-MM-yyyy HH:mm'}}
                                    <div class="dropdown">
-                                        <div class="form-group">    
-                                           <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>    
+                                        <div class="form-group">
+                                           <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
         								   <select class="form-control" ng-model="selectedShiftDateTime" ng-change="updateShiftTime(employeeShift,selectedShiftDateTime)" ng-options="shift as (shift.startDateTime | date:'dd-MM-yyyy HH:mm') + '  -  ' + (shift.endDateTime | date:'dd-MM-yyyy HH:mm') for shift in shifts">
         	                                    <option value="">Select Start Time...</option>
         	                                </select>
