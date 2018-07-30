@@ -1069,7 +1069,7 @@ public class SchedulerService extends AbstractService {
 		return schedulerConfigRepository.findScheduledTask(taskDate, schedule);
 	}
 	
-	@Scheduled(cron = "0 30 * * * ?")
+	@Scheduled(cron = "* * * * * ?")
 	public void slaTicketEscalationNotification() 
 	{
 		String mailStatus = "";
@@ -1156,7 +1156,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 	
-	@Scheduled(cron = "0 30 * * * ?")
+	@Scheduled(cron = "* * * * * ?")
 	public void slaJobEscalationNotification() 
 	{
 		String mailStatus = "";
@@ -1184,49 +1184,55 @@ public class SchedulerService extends AbstractService {
 					String email = slaEscalationConfig.getEmail();
 					hours += eschours;
 					for(Job job : jobs)
-					{
-						if(slaEscalationConfig.getLevel() > job.getEscalationStatus())
 						{
-							java.time.ZonedDateTime date = job.getCreatedDate().plusHours(hours).plusMinutes(escmins);
-							if(date.isBefore(currentDate) || date.equals(currentDate))
+						for(String cat : category)
+						{
+							if(cat == job.getType().name())
 							{
-								try 
+								if(slaEscalationConfig.getLevel() > job.getEscalationStatus())
 								{
-									mailStatus = mailService.sendEscalationEmail(email,subject,content,false,false,"empty");
-								} 
-								catch (Exception e) 
-								{
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-								log.debug("Mail Status " + mailStatus);
-								if(mailStatus.equals("success"))
-								{
-									SLANotificationLog slaNotificationLog = new SLANotificationLog();
-									slaNotificationLog.setProcessId(job.getId());
-									slaNotificationLog.setSiteId(slaConfig.getSite().getId());
-									slaNotificationLog.setProcessType(slaConfig.getProcessType());
-									slaNotificationLog.setBeginDate(job.getCreatedDate());
-									slaNotificationLog.setEscalationDate(currentDate);
-									slaNotificationLog.setLevel(slaEscalationConfig.getLevel());
-									slaNotificationLog.setEmails(slaEscalationConfig.getEmail());
-									try
+									java.time.ZonedDateTime date = job.getCreatedDate().plusHours(hours).plusMinutes(escmins);
+									if(date.isBefore(currentDate) || date.equals(currentDate))
 									{
-										slaConfigService.slaEscalationNotificationSave(slaNotificationLog); 
-									}
-									catch(Exception e)
-									{
-										e.printStackTrace();
-									}
-									job.setId(job.getId());
-									job.setEscalationStatus(slaEscalationConfig.getLevel());
-									try
-									{
-										slaConfigService.slaJobEscalationStatusUpdate(job);
-									}
-									catch(Exception e)
-									{
-										e.printStackTrace();
+										try 
+										{
+											mailStatus = mailService.sendEscalationEmail(email,subject,content,false,false,"empty");
+										} 
+										catch (Exception e) 
+										{
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+										log.debug("Mail Status " + mailStatus);
+										if(mailStatus.equals("success"))
+										{
+											SLANotificationLog slaNotificationLog = new SLANotificationLog();
+											slaNotificationLog.setProcessId(job.getId());
+											slaNotificationLog.setSiteId(slaConfig.getSite().getId());
+											slaNotificationLog.setProcessType(slaConfig.getProcessType());
+											slaNotificationLog.setBeginDate(job.getCreatedDate());
+											slaNotificationLog.setEscalationDate(currentDate);
+											slaNotificationLog.setLevel(slaEscalationConfig.getLevel());
+											slaNotificationLog.setEmails(slaEscalationConfig.getEmail());
+											try
+											{
+												slaConfigService.slaEscalationNotificationSave(slaNotificationLog); 
+											}
+											catch(Exception e)
+											{
+												e.printStackTrace();
+											}
+											job.setId(job.getId());
+											job.setEscalationStatus(slaEscalationConfig.getLevel());
+											try
+											{
+												slaConfigService.slaJobEscalationStatusUpdate(job);
+											}
+											catch(Exception e)
+											{
+												e.printStackTrace();
+											}
+										}
 									}
 								}
 							}
