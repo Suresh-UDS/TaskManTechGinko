@@ -143,17 +143,27 @@ angular.module('timeSheetApp')
             }else{
                 $scope.searchCriteria.siteId = null; 
             }
+            
         		
         		$scope.searchCriteria.list = true;
+                $scope.employees = "";
         		EmployeeComponent.search($scope.searchCriteria).then(function (data) {
                     $scope.selectedEmployee = null;
         			$scope.searchEmployee = null;
         			$scope.employees = data.transactions;
+                    console.log('Employee List',$scope.employees);
         			deferred.resolve($scope.employees);
             });
     			return deferred.promise;
 
         };
+
+         $scope.checkSite  = function(){
+            if($scope.searchCriteria.siteId == undefined || $scope.searchCriteria.siteId == 0){
+            $scope.showNotifications('top','center','danger','Please select site before select employee.');
+            }
+            
+        }
 
         $scope.loadLocations = function(){
             JobComponent.loadLocations().then(function(data){
