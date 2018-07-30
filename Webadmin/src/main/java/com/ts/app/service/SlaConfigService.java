@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -15,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
@@ -59,13 +60,16 @@ public class SlaConfigService extends AbstractService {
 	private SLAEscalationConfigRepository slaescalationconfigrepository;
 	
 	@Inject
-	private TicketRepository ticketrepository;
+	private SLANotificationLogRepository slaNotificationLogRepository;
 	
 	@Inject
-	private MailService mailservice;
+	private TicketRepository ticketRepository;
 	
 	@Inject
-	private SLANotificationLogRepository slanotificationlogrepository;
+	private MailService mailService;
+	
+	@Inject
+	private SlaConfigRepository slaConfigRepository;
 	
 	public SlaConfigDTO saveSla(SlaConfigDTO slaconfigdto){
 		
@@ -289,89 +293,16 @@ public class SlaConfigService extends AbstractService {
 		return slaConfigDTO;
 	}
 	
-	@Scheduled(cron = "0 0 2 * * ?")
-	public void slaEscalationNotification() 
+	@Transactional(propagation =  Propagation.REQUIRES_NEW)
+	public SLANotificationLog slaEscalationNotificationSave(SLANotificationLog slaNotificationLog) 
 	{
-		//List<Ticket> tickets = new ArrayList<Ticket>(); 
-		String mailStatus = "";
-		log.debug(">>> get all SLA");
-		List<Ticket> tickets = new ArrayList<Ticket>();
-		List<SlaConfig> slaConfigs = slaconfigrepository.findActiveSlaConfig();
-		java.time.ZonedDateTime currentDate = java.time.ZonedDateTime.now();
-		String subject = "test";
-		String content = "Escalation mail";
-		for(SlaConfig slaConfig : slaConfigs)
-		{
-			if(slaConfig.getProcessType().equals("Tickets"))
-			{
-				 tickets = ticketrepository.findAllActiveUnClosedTicket();
-			}
-			Set<SlaEscalationConfig> slaEscalationConfigs = slaConfig.getSlaesc();
-			int hours  = slaConfig.getHours();
-			for(SlaEscalationConfig slaEscalationConfig : slaEscalationConfigs) 
-			{
-				while(slaEscalationConfig.getLevel() <= 4)
-				{
-					int eschours = slaEscalationConfig.getHours();
-					int escmins = slaEscalationConfig.getMinutes();
-					String email = slaEscalationConfig.getEmail();
-					hours += eschours;
-					for(Ticket ticket : tickets)
-					{
-						if(slaEscalationConfig.getLevel() > ticket.getEscalationStatus())
-						{
-							java.time.ZonedDateTime date = ticket.getCreatedDate().plusHours(hours).plusMinutes(escmins);
-							if(date.isBefore(currentDate) || date.equals(currentDate))
-							{
-								if(slaConfig.getSeverity().equals(ticket.getSeverity()))
-								{
-									try {
-										mailStatus = mailservice.sendEscalationEmail(email,subject,content,false,false,"empty");
-									} catch (Exception e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
-									log.debug("Mail Status " + mailStatus);
-									if(mailStatus.equals("success"))
-									{
-										SLANotificationLog slaNotificationLog = new SLANotificationLog();
-										SLANotificationLog test = new SLANotificationLog();
-										Ticket test1 = new Ticket();
-										slaNotificationLog.setProcessId(ticket.getId());
-										slaNotificationLog.setSiteId(slaConfig.getSite().getId());
-										slaNotificationLog.setProcessType(slaConfig.getProcessType());
-										slaNotificationLog.setBeginDate(ticket.getCreatedDate());
-										slaNotificationLog.setEscalationDate(currentDate);
-										slaNotificationLog.setLevel(slaEscalationConfig.getLevel());
-										slaNotificationLog.setEmails(slaEscalationConfig.getEmail());
-										try
-										{
-											test = slanotificationlogrepository.save(slaNotificationLog);
-										}
-										catch(Exception e)
-										{
-											e.printStackTrace();
-										}
-										ticket.setId(ticket.getId());
-										ticket.setEscalationStatus(slaEscalationConfig.getLevel());
-										try
-										{
-											test1 = ticketrepository.save(ticket);
-										}
-										catch(Exception e)
-										{
-											e.printStackTrace();
-										}
-										
-										log.debug("Notification history" + test.getId()+ test1.getEscalationStatus());
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		
+		return slaNotificationLogRepository.save(slaNotificationLog);
 	}
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public Ticket slaTicketEscalationStatusUpdate(Ticket ticket)
+	{
+		return ticketRepository.save(ticket);
+	}
+	
 }
