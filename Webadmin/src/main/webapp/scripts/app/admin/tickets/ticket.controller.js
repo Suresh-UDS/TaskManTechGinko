@@ -272,6 +272,7 @@ angular.module('timeSheetApp')
                 $scope.listCreatedBy = tlist.createdBy;
                 $scope.listCreatedDate = tlist.createdDate;
                 $scope.listStatus = tlist.status;
+                $scope.listJobId = tlist.jobId;
                 if(tlist.pendingAtUDS){
                     $scope.listPendingStatus = "Pending at UDS"
                 }else if(tlist.pendingAtClient){
