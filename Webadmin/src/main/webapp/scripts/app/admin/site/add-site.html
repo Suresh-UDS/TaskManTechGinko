@@ -255,7 +255,7 @@
   			                            <button class="btn btn-success margn-top20" >
   			                                <span class="btn-label" ng-click="addShiftItem($event)">
   			                                    <i class="material-icons">add</i>
-                                            Add
+                                                Add
   			                                </span>
 
   			                            </button>
@@ -268,7 +268,7 @@
                                     <label class="">Items</label>
                                     <ul class="listOfActions list-group">
                                         <li class="list-group-item justify-content-between" ng-repeat=" item in shiftItems" ng-bind-html-unsafe="item.text">
-                                            {{item.startTime}} - {{item.endTime}}
+                                            {{item.startTime | date:'hh:mm a'}} - {{item.endTime | date:'hh:mm a'}}
                                             <span class="badge badge-default badge-pill" ng-click="removeItem($index)"><i class="material-icons">remove_circle</i></span>
                                         </li>
                                     </ul>

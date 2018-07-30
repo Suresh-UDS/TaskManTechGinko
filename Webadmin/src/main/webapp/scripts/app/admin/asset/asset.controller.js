@@ -6,7 +6,8 @@ angular.module('timeSheetApp')
 				function($scope, $rootScope, $state, $timeout, AssetComponent,
 						ProjectComponent,LocationComponent,SiteComponent,EmployeeComponent, $http, $stateParams,
                      	$location,PaginationComponent,AssetTypeComponent,ParameterConfigComponent,ParameterComponent,
-                        ParameterUOMComponent,VendorComponent,ManufacturerComponent,$sce,ChecklistComponent,$filter,JobComponent) {
+                        ParameterUOMComponent,VendorComponent,ManufacturerComponent,$sce,ChecklistComponent,$filter,
+                        JobComponent,$interval) {
 
         $rootScope.loadingStop();
         $rootScope.loginView = false;
@@ -85,6 +86,9 @@ angular.module('timeSheetApp')
         $scope.siteHistorySearchCriteria ={};
         $scope.statusHistorySearchCriteria ={};
         $scope.ticketSearchCriteria ={};
+        $scope.minError =false;
+        $scope.maxError =false;
+        $rootScope.exportStatusObj  ={};
 
         //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.searchAcquiredDate = "";
@@ -1424,6 +1428,8 @@ angular.module('timeSheetApp')
 
 
         $scope.clearFilter = function() {
+            $rootScope.exportStatusObj.exportMsg = '';
+            $scope.downloader=false;
             $scope.selectedAsset = {};
             $scope.selectedProject = null;
             $scope.searchCriteria = {};
@@ -1620,11 +1626,11 @@ angular.module('timeSheetApp')
                 $scope.loadAMCJobs();
             }else if($scope.redSearchCriteria.module == "Readings"){
                 $scope.loadAssetReadings();
-            }else if($scope.siteHistorySearchCriteria.module == "site history"){
+            }else if($scope.siteHistorySearchCriteria.module == "siteHistory"){
                 $scope.loadSiteHistory();
-            }else if($scope.statusHistorySearchCriteria.module == "status history"){
+            }else if($scope.statusHistorySearchCriteria.module == "statusHistory"){
                 $scope.loadStatusHistory();
-            }else if($scope.ticketSearchCriteria.module == "ticket"){
+            }else if($scope.ticketSearchCriteria.module == "Ticket"){
                 $scope.loadTicket();
             }else{
                $scope.search();
@@ -2439,9 +2445,9 @@ angular.module('timeSheetApp')
         	AssetComponent.findByAssetReadings($scope.redSearchCriteria).then(function(data){
                 $rootScope.loadingStop();
         		console.log('View Readings - ' +JSON.stringify(data));
-        		if(data.transactions != null) {
+        		/*if(data.transactions != null) {*/
         			$scope.assetReadings = data.transactions;
-            		$scope.viewAssetReading(data.transactions[0].id);
+            		//$scope.viewAssetReading(data.transactions[0].id);
 
 
                  /*
@@ -2450,17 +2456,18 @@ angular.module('timeSheetApp')
 
                 $scope.pager = {};
                 $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+
                 $scope.totalCountPages = data.totalCount;
 
                 console.log("Pagination",$scope.pager);
                 console.log("Readings List - ", data);
 
 
-        		}else{
+        		/*}else{
         			console.log('No readings');
         			$scope.noReading = true;
-        			$scope.assetReadings = [];
-        		}
+        			$scope.assetReadings = "";
+        		}*/
 
         	});
         }
@@ -2916,7 +2923,7 @@ angular.module('timeSheetApp')
                             }
 
                 $scope.siteHistorySearchCriteria.currPage = siteHistoryCurrPageVal;
-                $scope.siteHistorySearchCriteria.module = "Site history";
+                $scope.siteHistorySearchCriteria.module = "siteHistory";
                 $scope.siteHistorySearchCriteria.assetId = $stateParams.id;
                 $scope.siteHistorySearchCriteria.sort = $scope.pageSort;
                 $scope.siteHistories = "";
@@ -2952,7 +2959,7 @@ angular.module('timeSheetApp')
                             }
 
                 $scope.statusHistorySearchCriteria.currPage = statusHistoryCurrPageVal;
-                $scope.statusHistorySearchCriteria.module = "status history";
+                $scope.statusHistorySearchCriteria.module = "statusHistory";
                 $scope.statusHistorySearchCriteria.assetId = $stateParams.id;
                 $scope.statusHistorySearchCriteria.sort = $scope.pageSort;
                 $scope.statusHistories = "";
@@ -2989,7 +2996,7 @@ angular.module('timeSheetApp')
                             }
 
                 $scope.ticketSearchCriteria.currPage = ticketCurrPageVal;
-                $scope.ticketSearchCriteria.module = "ticket";
+                $scope.ticketSearchCriteria.module = "Ticket";
                 $scope.ticketSearchCriteria.assetId = $stateParams.id;
                 $scope.ticketSearchCriteria.sort = $scope.pageSort;
                 $scope.tickets = "";
@@ -3014,10 +3021,139 @@ angular.module('timeSheetApp')
             	
             }
             
+            $scope.checkMinMax = function(){
+
+                if(($scope.selectedMinValue != null && $scope.selectedMinValue != "")
+                 && ($scope.selectedMaxValue != null && $scope.selectedMaxValue != "")){
+                if($scope.selectedMinValue > $scope.selectedMaxValue){
+
+                   $scope.minError =true;
+                   $scope.maxError =true;
+                   
+                }else{
+                    $scope.minError =false;
+                    $scope.maxError =false;
+                }
+
+            }else{
+                   $scope.minError =false;
+                   $scope.maxError =false;
+            }
+        }
             
             
-            
-            
+         $scope.exportAllData = function(type){
+                $rootScope.exportStatusObj.exportMsg = '';
+                $scope.downloader=true;
+                $scope.searchCriteria.exportType = type;
+                $scope.searchCriteria.report = true;
+                
+                console.log('calling asset export api');
+                AssetComponent.exportAllData($scope.searchCriteria).then(function(data){
+                    var result = data.results[0];
+                    console.log(result.file + ', ' + result.status + ',' + result.msg);
+                    var exportAllStatus = {
+                            fileName : result.file,
+                            exportMsg : 'Exporting All...',
+                            url: result.url
+                    };
+                    $scope.exportStatusMap[0] = exportAllStatus;
+                    console.log('exportStatusMap size - ' + $scope.exportStatusMap.length);
+                    $scope.start();
+                  },function(err){
+                      console.log('error message for export all ')
+                      console.log(err);
+              });
+        };
+
+     // store the interval promise in this variable
+        var promise;
+
+     // starts the interval
+        $scope.start = function() {
+          // stops any running interval to avoid two intervals running at the same time
+          $scope.stop();
+
+          // store the interval promise
+          promise = $interval($scope.exportStatus, 5000);
+          console.log('promise -'+promise);
+        };
+
+        // stops the interval
+        $scope.stop = function() {
+          $interval.cancel(promise);
+        };
+
+        $scope.exportStatusMap = [];
+
+
+        $scope.exportStatus = function() {
+            //console.log('empId='+$scope.empId);
+            console.log('exportStatusMap length -'+$scope.exportStatusMap.length);
+            angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
+                if(!exportStatusObj.empId) {
+                    exportStatusObj.empId = 0;
+                }
+                AssetComponent.exportStatus(exportStatusObj.fileName).then(function(data) {
+                    if(data) {
+                        exportStatusObj.exportStatus = data.status;
+                        console.log('exportStatus - '+ exportStatusObj);
+                        exportStatusObj.exportMsg = data.msg;
+                        $scope.downloader=false;
+                        console.log('exportMsg - '+ exportStatusObj.exportMsg);
+                        if(exportStatusObj.exportStatus == 'COMPLETED'){
+                            if(exportStatusObj.url) {
+                                exportStatusObj.exportFile = exportStatusObj.url;
+                            }else {
+                                exportStatusObj.exportFile = data.file;
+                            }
+                            console.log('exportFile - '+ exportStatusObj.exportFile);
+                            $scope.stop();
+                        }else if(exportStatusObj.exportStatus == 'FAILED'){
+                            $scope.stop();
+                        }else if(!exportStatusObj.exportStatus){
+                            $scope.stop();
+                        }else {
+                            exportStatuObj.exportFile = '#';
+                        }
+                    }
+
+                });
+            });
+
+        }
+
+        $scope.exportFile = function(empId) {
+            if(empId != 0) {
+                var exportFile = '';
+                angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
+                    if(empId == exportStatusObj.empId){
+                        exportFile = exportStatusObj.exportFile;
+                        return exportFile;
+                    }
+                });
+                return exportFile;
+            }else {
+                return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportFile : '#');
+            }
+        }
+
+
+        $scope.exportMsg = function(empId) {
+                if(empId != 0) {
+                    var exportMsg = '';
+                    angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
+                        if(empId == exportStatusObj.empId){
+                            exportMsg = exportStatusObj.exportMsg;
+                            return exportMsg;
+                        }
+                    });
+                    return exportMsg;
+                }else {
+                    return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportMsg : '');
+                }
+
+        };   
 
 
 

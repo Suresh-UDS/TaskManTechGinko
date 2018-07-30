@@ -20,7 +20,10 @@ angular.module('timeSheetApp')
     			feedbackEmailIds : [],
     			ticketEmailIds : [],
     			readingEmailIds : [],
-    			assetEmailIds : []
+    			assetEmailIds : [],
+    			ppmEmailIds : [],
+    			amcEmailIds : [],
+    			warrantyEmailIds: []
     		};
     		
     	
@@ -166,6 +169,49 @@ angular.module('timeSheetApp')
 	    $scope.removeAssetEmail = function(index) {
     		$scope.settings.assetEmailIds.splice(index,1);
 	    }
+	    
+	    //PPM Job alert
+	    $scope.addPPMEmail = function() {
+        	var email = $scope.ppmEmail;
+        	if(!$scope.settings.ppmEmailIds) {
+        		$scope.settings.ppmEmailIds = [];
+        	}
+        	$scope.settings.ppmEmailIds.push(email);
+        	$scope.ppmEmail = '';
+	    }
+    
+	    $scope.removePPMEmail = function(index) {
+    		$scope.settings.ppmEmailIds.splice(index,1);
+	    }
+	    
+	    //AMC Job alert
+	    $scope.addAMCEmail = function() {
+        	var email = $scope.amcEmail;
+        	if(!$scope.settings.amcEmailIds) {
+        		$scope.settings.amcEmailIds = [];
+        	}
+        	$scope.settings.amcEmailIds.push(email);
+        	$scope.amcEmail = '';
+	    }
+    
+	    $scope.removeAMCEmail = function(index) {
+    		$scope.settings.amcEmailIds.splice(index,1);
+	    }
+	    
+	    //Warranty Expire alert
+	    $scope.addWarrantyEmail = function() {
+        	var email = $scope.warrantyEmail;
+        	if(!$scope.settings.warrantyEmailIds) {
+        		$scope.settings.warrantyEmailIds = [];
+        	}
+        	$scope.settings.warrantyEmailIds.push(email);
+        	$scope.warrantyEmail = '';
+	    }
+    
+	    $scope.removeWarrantyEmail = function(index) {
+    		$scope.settings.warrantyEmailIds.splice(index,1);
+	    }
+	    
     		
         $scope.loadProjects = function () {
 			console.log("Loading all projects")

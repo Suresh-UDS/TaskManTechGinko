@@ -160,6 +160,7 @@ public class TicketManagementService extends AbstractService {
         		ticket.setStatus("Open");
         //}
         ticket.setClosedBy(null);
+        ticket.setEscalationStatus(0);
 
 //        ticket.setJob(null);
 

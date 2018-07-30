@@ -20,6 +20,7 @@ angular.module('timeSheetApp')
         $scope.noData = false;
         $scope.SearchEmployeeId = null;
         $scope.SearchEmployeeName = null;
+        $rootScope.exportStatusObj  ={};
 
         $scope.employeeDesignations = ["MD","Operations Manger","Supervisor"]
 
@@ -473,7 +474,9 @@ angular.module('timeSheetApp')
         }
 
         $scope.clearFilter = function() {
-             $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+            $rootScope.exportStatusObj.exportMsg = '';
+            $scope.downloader=false;
+            $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy'); 
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedDateFromSer =  new Date();
             $scope.selectedDateToSer =  new Date();
@@ -646,6 +649,119 @@ angular.module('timeSheetApp')
             //alert(page);
             $scope.pages.currPage = page;
             $scope.search();
+        };
+
+        $scope.exportAllData = function(type){
+                $scope.searchCriteria.exportType = type;
+                $scope.searchCriteria.report = true;
+                $rootScope.exportStatusObj.exportMsg = '';
+                $scope.downloader=true;
+                AttendanceComponent.exportAllData($scope.searchCriteria).then(function(data){
+                    var result = data.results[0];
+                    console.log(result);
+                    console.log(result.file + ', ' + result.status + ',' + result.msg);
+                    var exportAllStatus = {
+                            fileName : result.file,
+                            exportMsg : 'Exporting All...',
+                            url: result.url
+                    };
+                    $scope.exportStatusMap[0] = exportAllStatus;
+                    console.log('exportStatusMap size - ' + $scope.exportStatusMap.length);
+                    $scope.start();
+                  },function(err){
+                      console.log('error message for export all ')
+                      console.log(err);
+              });
+        };
+
+     // store the interval promise in this variable
+        var promise;
+
+     // starts the interval
+        $scope.start = function() {
+          // stops any running interval to avoid two intervals running at the same time
+          $scope.stop();
+
+          // store the interval promise
+          promise = $interval($scope.exportStatus, 5000);
+          console.log('promise -'+promise);
+        };
+
+        // stops the interval
+        $scope.stop = function() {
+          $interval.cancel(promise);
+        };
+
+        $scope.exportStatusMap = [];
+
+
+        $scope.exportStatus = function() {
+            //console.log('empId='+$scope.empId);
+
+            console.log('exportStatusMap length -'+$scope.exportStatusMap.length);
+            angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
+                if(!exportStatusObj.empId) {
+                    exportStatusObj.empId = 0;
+                }
+                AttendanceComponent.exportStatus(exportStatusObj.empId,exportStatusObj.fileName).then(function(data) {
+                    if(data) {
+                        exportStatusObj.exportStatus = data.status;
+                        console.log('exportStatus - '+ exportStatusObj);
+                        exportStatusObj.exportMsg = data.msg;
+                        $scope.downloader=false;
+                        console.log('exportMsg - '+ exportStatusObj.exportMsg);
+                        if(exportStatusObj.exportStatus == 'COMPLETED'){
+                            if(exportStatusObj.url) {
+                                exportStatusObj.exportFile = exportStatusObj.url;
+                            }else {
+                                exportStatusObj.exportFile = data.file;
+                            }
+                            console.log('exportFile - '+ exportStatusObj.exportFile);
+                            $scope.stop();
+                        }else if(exportStatusObj.exportStatus == 'FAILED'){
+                            $scope.stop();
+                        }else if(!exportStatusObj.exportStatus){
+                            $scope.stop();
+                        }else {
+                            exportStatuObj.exportFile = '#';
+                        }
+                    }
+
+                });
+            });
+
+        }
+
+        $scope.exportFile = function(empId) {
+            if(empId != 0) {
+                var exportFile = '';
+                angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
+                    if(empId == exportStatusObj.empId){
+                        exportFile = exportStatusObj.exportFile;
+                        return exportFile;
+                    }
+                });
+                return exportFile;
+            }else {
+                return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportFile : '#');
+            }
+        }
+
+
+        $scope.exportMsg = function(empId) {
+                if(empId != 0) {
+                    var exportMsg = '';
+                    angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
+                        if(empId == exportStatusObj.empId){
+                            exportMsg = exportStatusObj.exportMsg;
+                            return exportMsg;
+                        }
+                    });
+                    return exportMsg;
+                }else {
+                    return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportMsg : '');
+                }
+
         };
 
     });
