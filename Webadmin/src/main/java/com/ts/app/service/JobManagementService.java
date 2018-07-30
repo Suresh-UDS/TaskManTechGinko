@@ -910,6 +910,7 @@ public class JobManagementService extends AbstractService {
 		job.setMaintenanceType(assetPpmScheduleDTO.getMaintenanceType());
 		job.setSchedule(Frequency.valueOf(assetPpmScheduleDTO.getFrequency()).getValue());
 		job.setActive(AbstractAuditingEntity.ACTIVE_YES);
+		job.setEscalationStatus(0);
 		job = jobRepository.save(job);
 
 		log.debug(">>> After Save Job: <<<"+job.getId());
