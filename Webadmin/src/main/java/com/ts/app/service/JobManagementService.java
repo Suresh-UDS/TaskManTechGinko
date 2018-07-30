@@ -179,6 +179,7 @@ public class JobManagementService extends AbstractService {
     @Value("${AWS.s3-checkinout-path}")
     private String checkInOutImagePath;
 
+    @Inject
     private PushService pushService;
 
     public void updateJobStatus(long siteId, JobStatus toBeJobStatus) {
