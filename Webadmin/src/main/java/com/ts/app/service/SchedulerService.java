@@ -22,7 +22,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Splitter;
@@ -1070,21 +1069,21 @@ public class SchedulerService extends AbstractService {
 		return schedulerConfigRepository.findScheduledTask(taskDate, schedule);
 	}
 	
-	@Scheduled(cron = "* * * * * ?")
-	public void slaEscalationNotificationMethodCall() 
+	@Scheduled(cron = "0 30 * * * ?")
+	public void slaTicketEscalationNotification() 
 	{
 		String mailStatus = "";
 		log.debug(">>> get all SLA");
-		List<Ticket> tickets = new ArrayList<Ticket>();
 		List<SlaConfig> slaConfigs = slaConfigRepository.findActiveSlaConfig();
 		java.time.ZonedDateTime currentDate = java.time.ZonedDateTime.now();
 		String subject = "test";
 		String content = "Escalation mail";
 		for(SlaConfig slaConfig : slaConfigs)
 		{
+			List<Ticket> tickets = new ArrayList<Ticket>();
 			if(slaConfig.getProcessType().equals("Tickets"))
 			{
-				 tickets = ticketRepository.findAllActiveUnClosedTicket();
+				tickets = ticketRepository.findAllActiveUnClosedTicket();
 			}
 			Set<SlaEscalationConfig> slaEscalationConfigs = slaConfig.getSlaesc();
 			int hours  = slaConfig.getHours();
@@ -1120,8 +1119,6 @@ public class SchedulerService extends AbstractService {
 											if(mailStatus.equals("success"))
 											{
 												SLANotificationLog slaNotificationLog = new SLANotificationLog();
-												SLANotificationLog test = new SLANotificationLog();
-												Ticket test1 = new Ticket();
 												slaNotificationLog.setProcessId(ticket.getId());
 												slaNotificationLog.setSiteId(slaConfig.getSite().getId());
 												slaNotificationLog.setProcessType(slaConfig.getProcessType());
@@ -1131,7 +1128,7 @@ public class SchedulerService extends AbstractService {
 												slaNotificationLog.setEmails(slaEscalationConfig.getEmail());
 												try
 												{
-													test = slaConfigService.slaEscalationNotificationSave(slaNotificationLog); 
+													slaConfigService.slaEscalationNotificationSave(slaNotificationLog); 
 												}
 												catch(Exception e)
 												{
@@ -1141,14 +1138,12 @@ public class SchedulerService extends AbstractService {
 												ticket.setEscalationStatus(slaEscalationConfig.getLevel());
 												try
 												{
-													test1 = slaConfigService.slaTicketEscalationStatusUpdate(ticket);
+													slaConfigService.slaTicketEscalationStatusUpdate(ticket);
 												}
 												catch(Exception e)
 												{
 													e.printStackTrace();
 												}
-												
-												log.debug("Notification history" + test.getId()+ test1.getEscalationStatus());
 											}
 										}
 									}
@@ -1158,6 +1153,87 @@ public class SchedulerService extends AbstractService {
 					}
 				}
 			}	
+		}
+	}
+	
+	@Scheduled(cron = "0 30 * * * ?")
+	public void slaJobEscalationNotification() 
+	{
+		String mailStatus = "";
+		log.debug(">>> get all SLA");
+		List<SlaConfig> slaConfigs = slaConfigRepository.findActiveSlaConfig();
+		java.time.ZonedDateTime currentDate = java.time.ZonedDateTime.now();
+		String subject = "test";
+		String content = "Escalation mail";
+		for(SlaConfig slaConfig : slaConfigs)
+		{
+			List<Job> jobs = new ArrayList<Job>();
+			if(slaConfig.getProcessType().equals("Tickets"))
+			{
+				jobs = jobRepository.findAllActiveUnClosedTicket();
+			}
+			Set<SlaEscalationConfig> slaEscalationConfigs = slaConfig.getSlaesc();
+			int hours  = slaConfig.getHours();
+			ArrayList<String> category = slaConfig.getCategory();
+			for(SlaEscalationConfig slaEscalationConfig : slaEscalationConfigs) 
+			{
+				while(slaEscalationConfig.getLevel() <= 4)
+				{
+					int eschours = slaEscalationConfig.getHours();
+					int escmins = slaEscalationConfig.getMinutes();
+					String email = slaEscalationConfig.getEmail();
+					hours += eschours;
+					for(Job job : jobs)
+					{
+						if(slaEscalationConfig.getLevel() > job.getEscalationStatus())
+						{
+							java.time.ZonedDateTime date = job.getCreatedDate().plusHours(hours).plusMinutes(escmins);
+							if(date.isBefore(currentDate) || date.equals(currentDate))
+							{
+								try 
+								{
+									mailStatus = mailService.sendEscalationEmail(email,subject,content,false,false,"empty");
+								} 
+								catch (Exception e) 
+								{
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								log.debug("Mail Status " + mailStatus);
+								if(mailStatus.equals("success"))
+								{
+									SLANotificationLog slaNotificationLog = new SLANotificationLog();
+									slaNotificationLog.setProcessId(job.getId());
+									slaNotificationLog.setSiteId(slaConfig.getSite().getId());
+									slaNotificationLog.setProcessType(slaConfig.getProcessType());
+									slaNotificationLog.setBeginDate(job.getCreatedDate());
+									slaNotificationLog.setEscalationDate(currentDate);
+									slaNotificationLog.setLevel(slaEscalationConfig.getLevel());
+									slaNotificationLog.setEmails(slaEscalationConfig.getEmail());
+									try
+									{
+										slaConfigService.slaEscalationNotificationSave(slaNotificationLog); 
+									}
+									catch(Exception e)
+									{
+										e.printStackTrace();
+									}
+									job.setId(job.getId());
+									job.setEscalationStatus(slaEscalationConfig.getLevel());
+									try
+									{
+										slaConfigService.slaJobEscalationStatusUpdate(job);
+									}
+									catch(Exception e)
+									{
+										e.printStackTrace();
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }
