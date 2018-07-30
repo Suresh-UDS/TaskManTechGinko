@@ -399,11 +399,13 @@
 
                                                    <thead>
                                                    <tr>
+                                                       <th>Title</th>
                                                        <th>Schedule Type</th>
-                                                       <th>Schedule Date</th>
+                                                       <th>Schedule Start Date</th>
+                                                       <th>Schedule End Date</th>
                                                        <th>Job ID</th>
-                                                       <th>Start Date</th>
-                                                       <th>End Date</th>
+                                                       <th>Start Time</th>
+                                                       <th>End Time</th>
                                                        <th>Assigned</th>
                                                        <th>Status</th>
                                                    </tr>
@@ -412,11 +414,13 @@
 
                                                    <tbody>
                                                    <tr ng-repeat="ppmList in ppmJobLists">
+                                                   	  <td>{{ppmList.title}}</td>
                                                        <td>{{ppmList.description}}</td>
                                                        <td>{{ppmList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
+                                                       <td>{{ppmList.scheduleEndDate | date:'dd-MMM-yyyy'}}</td>
                                                        <td><a class="job-txt" ui-sref="view-job({ id: ppmList.id })">{{ppmList.id}}</a></td>
-                                                       <td>{{ppmList.plannedStartTime | date:'dd-MMM-yyyy HH:mm'}}</td>
-                                                       <td>{{ppmList.plannedEndTime | date:'dd-MMM-yyyy HH:mm'}}</td>
+                                                       <td>{{ppmList.plannedStartTime | date:'dd-MMM-yyyy @ hh:mm a'}}</td>
+                                                       <td>{{ppmList.plannedEndTime | date:'dd-MMM-yyyy @ hh:mm a'}}</td>
                                                        <td>{{ppmList.employeeName}}</td>
                                                        <td>{{ppmList.jobStatus}}</td>
                                                    </tr>

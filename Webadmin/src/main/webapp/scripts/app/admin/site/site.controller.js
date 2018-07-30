@@ -74,7 +74,7 @@ angular.module('timeSheetApp')
             		$scope.shiftFrom = $scope.newShiftItem.startTime;
             		return false;
             }else {
-                $scope.newShiftItem.startTime = e.date._d;
+                $scope.newShiftItem.startTime = e.date._d.getHours() + ':' + e.date._d.getMinutes();
             }
         });
 
@@ -86,7 +86,7 @@ angular.module('timeSheetApp')
             		$scope.shiftTo = $scope.newShiftItem.endTime;
             		return false;
             }else {
-                $scope.newShiftItem.endTime = e.date._d;
+                $scope.newShiftItem.endTime = e.date._d.getHours() + ':' + e.date._d.getMinutes();
             }
 
         });
