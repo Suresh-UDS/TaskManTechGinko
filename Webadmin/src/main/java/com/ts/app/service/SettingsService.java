@@ -167,13 +167,13 @@ public class SettingsService extends AbstractService {
 
 		Setting dayWiseAttendanceAlertTimeSetting = null;
 		if(settingsDto.getDayWiseAttendanceEmailAlertId() > 0) {
-			dayWiseAttendanceAlertTimeSetting = settingsRepository.findOne(settingsDto.getDayWiseAttendanceAlterTimeId());
+			dayWiseAttendanceAlertTimeSetting = settingsRepository.findOne(settingsDto.getDayWiseAttendanceEmailAlertId());
 		}else {
 			dayWiseAttendanceAlertTimeSetting = new Setting();
 		}
 		dayWiseAttendanceAlertTimeSetting.setSettingKey(EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_ALERT_TIME);
-		if(settingsDto.getDayWiseAttendanceAlterTime() != null) {
-			dayWiseAttendanceAlertTimeSetting.setSettingValue(String.valueOf(settingsDto.getDayWiseAttendanceAlterTime()));
+		if(settingsDto.getDayWiseAttendanceAlertTime() != null) {
+			dayWiseAttendanceAlertTimeSetting.setSettingValue(String.valueOf(settingsDto.getDayWiseAttendanceAlertTime()));
 		}
 		dayWiseAttendanceAlertTimeSetting.setProjectId(settingsDto.getProjectId());
 		dayWiseAttendanceAlertTimeSetting.setProjectName(settingsDto.getProjectName());
@@ -559,10 +559,10 @@ public class SettingsService extends AbstractService {
 			settingList.add(amcEmailsSetting);
 		}
 		if(StringUtils.isNotEmpty(warrantyAlertSetting.getSettingValue())) {
-			settingList.add(assetAlertSetting);
+			settingList.add(warrantyAlertSetting);
 		}
 		if(StringUtils.isNotEmpty(warrantyEmailsSetting.getSettingValue())) {
-			settingList.add(assetEmailsSetting);
+			settingList.add(warrantyEmailsSetting);
 		}
 		
 		settingsRepository.save(settingList);
@@ -600,8 +600,8 @@ public class SettingsService extends AbstractService {
 					settingDto.setDayWiseAttendanceEmailsId(setting.getId());
 					settingDto.setDayWiseAttendanceEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_ALERT_TIME)) {
-					settingDto.setDayWiseAttendanceAlterTimeId(setting.getId());
-					settingDto.setDayWiseAttendanceAlterTime(StringUtils.isNotEmpty(setting.getSettingValue()) ? DateUtil.parseToDateTime(setting.getSettingValue()) : null);
+					settingDto.setDayWiseAttendanceAlertTimeId(setting.getId());
+					settingDto.setDayWiseAttendanceAlertTime(StringUtils.isNotEmpty(setting.getSettingValue()) ? DateUtil.parseToDateTime(setting.getSettingValue()) : null);
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_ATTENDANCE_GRACE_TIME)) {
 					settingDto.setLateAttendanceGraceTimeId(setting.getId());
 					settingDto.setLateAttendanceGraceTime(Integer.parseInt(setting.getSettingValue()));

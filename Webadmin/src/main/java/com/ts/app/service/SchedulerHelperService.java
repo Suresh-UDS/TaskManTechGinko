@@ -1,6 +1,8 @@
 package com.ts.app.service;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,6 +17,7 @@ import javax.inject.Inject;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -22,6 +25,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.primitives.Longs;
+import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Asset;
 import com.ts.app.domain.Attendance;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeAttendanceReport;
@@ -34,6 +39,7 @@ import com.ts.app.domain.Setting;
 import com.ts.app.domain.Shift;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.util.StringUtil;
+import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.EmployeeShiftRepository;
@@ -41,8 +47,12 @@ import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
+import com.ts.app.service.util.CommonUtil;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
@@ -85,12 +95,22 @@ public class SchedulerHelperService extends AbstractService {
 
 	@Inject
 	private JobManagementService jobManagementService;
+	
+	@Inject
+	private AssetRepository assetRepository;
+	
+	@Inject
+	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 
 	@Inject
 	private ExportUtil exportUtil;
 
 	@Inject
 	private Environment env;
+	
+	public static final String EMAIL_NOTIFICATION_WARRANTY = "email.notification.warranty";
+	
+	public static final String EMAIL_NOTIFICATION_WARRANTY_EMAILS = "email.notification.warranty.emails";
 
 	public void eodJobReport() {
 		if (env.getProperty("scheduler.eodJobReport.enabled").equalsIgnoreCase("true")) {
@@ -693,6 +713,55 @@ public class SchedulerHelperService extends AbstractService {
 		}
 	}
 
+	@Transactional
+	public void sendWarrantyExpireAlert() {
+		// TODO Auto-generated method stub
+		List<Asset> assets = assetRepository.findAll();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Date currDate = calendar.getTime();
+		String cDate = dateFormat.format(currDate);
+		log.debug("Current Date -" +cDate);
+		for(Asset asset : assets) { 
+			AssetDTO assetModel = mapperUtil.toModel(asset, AssetDTO.class);
+			if(asset.getWarrantyToDate() != null) {
+				Calendar calendar1 = Calendar.getInstance();
+		        calendar1.setTime(asset.getWarrantyToDate());
+		        calendar1.add(Calendar.DAY_OF_YEAR, -1);
+		        Date prevDate = calendar1.getTime();
+		        log.debug("Previous Date -" + prevDate);
+		        String fDate = dateFormat.format(prevDate);
+		        String warrantyDate = dateFormat.format(asset.getWarrantyToDate());
+		        log.debug("Formatted date -" +fDate);
+		        log.debug("Validation "+currDate+ "  " + prevDate);
+				if(currDate.equals(prevDate)) { 
+					Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_WARRANTY);
+					if(setting.getSettingValue().equalsIgnoreCase("true") ) {
+						Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_WARRANTY_EMAILS);
+						if(settingEntity.getSettingValue().length() > 0) {
+							List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+							for(String email : emailLists) {
+								mailService.sendAssetWarrantyExpireAlert(email, asset.getTitle(), assetModel.getSiteName(), asset.getCode(), warrantyDate);
+							}
+						} else {
+							log.info("There is no email ids registered");
+						}
+					}
+				}
+				
+			}
+		}
+	}
 
+
+	
+	
+	
 
 }

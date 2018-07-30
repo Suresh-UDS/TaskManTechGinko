@@ -34,6 +34,7 @@ import com.ts.app.domain.SchedulerConfig;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Shift;
 import com.ts.app.domain.Site;
+import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.EmployeeShiftRepository;
@@ -623,6 +624,11 @@ public class SchedulerService extends AbstractService {
 	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
 	public void attendanceCheckOutTask() {
 		schedulerHelperService.autoCheckOutAttendance(this);
+	}
+	
+	@Scheduled(cron="0 0 9 * * ?")
+	public void warrantyExpireAlert() { 
+		schedulerHelperService.sendWarrantyExpireAlert();
 	}
 
 	public void createJobs(SchedulerConfig scheduledTask) {
