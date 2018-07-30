@@ -30,23 +30,63 @@
                                         <div class="row" ng-init="loadAllAssetTypes()">
 
                                             <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label">Asset Type<span class="red-star">*</span></label>
-                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control " ng-model="selectedAssetType"  ng-options="assetType as assetType.name for assetType in assetTypes" name="assetType" required>
-                                                        <option value="">Select Asset Type...</option>
-                                                    </select>
-                                                    <div ng-show="formSave.$submitted || formSave.assetType.$touched">
-                                                        <div ng-show="formSave.assetType.$dirty || formSave.assetType.$invalid">
-                                                            <p class="help-block" style="color:maroon"
-                                                               ng-show="formSave.assetType.$error.required">
-                                                                Asset type is required.
-                                                            </p>
 
+                                                <div class="form-group selectcon is-empty">
+                                                    <div class="row">
+                                                        <div class="col-md-10 pad-r-0px">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Type <span class="red-star">*</span></label>
+                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                <select class="form-control" ng-model="selectedAssetType" ng-options="assetype as assetype.name for assetype in assetTypes" name="assetTypeName"
+                                                                        required>
+                                                                    <option value="">Select Asset Type ..</option>
+                                                                </select>
+
+                                                                <div ng-show="form.$submitted || form.assetTypeName.$touched">
+                                                                    <div ng-show="form.assetTypeName.$dirty || form.assetTypeName.$invalid">
+                                                                        <p class="help-block" style="color:maroon"
+                                                                           ng-show="form.assetTypeName.$error.required">
+                                                                            Asset Type is required.
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2 pdng-top25">
+                                                            <!-- <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addAssetType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                <i class="material-icons">add</i>
+                                                            </a> -->
+                                                            <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addAssetType').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
                                                         </div>
                                                     </div>
 
+                                                    <!-- <div class="collapse" id="addAssetType">
+                                                        <div class="">
+                                                            <input class="input-desc" id="addAssetTypeInput" ng-model="assetType.name"   name="AssetType" type="text" value=""/>
+                                                      <a class="btn btn-success"  ng-click="addAssetType()">Add</a>
+                                                        </div>
+                                                    </div> -->
+
                                                 </div>
+
+
+                                                <!--<div class="form-group">-->
+                                                    <!--<label class="control-label">Asset Type<span class="red-star">*</span></label>-->
+                                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                    <!--<select class="form-control " ng-model="selectedAssetType"  ng-options="assetType as assetType.name for assetType in assetTypes" name="assetType" required>-->
+                                                        <!--<option value="">Select Asset Type...</option>-->
+                                                    <!--</select>-->
+                                                    <!--<div ng-show="formSave.$submitted || formSave.assetType.$touched">-->
+                                                        <!--<div ng-show="formSave.assetType.$dirty || formSave.assetType.$invalid">-->
+                                                            <!--<p class="help-block" style="color:maroon"-->
+                                                               <!--ng-show="formSave.assetType.$error.required">-->
+                                                                <!--Asset type is required.-->
+                                                            <!--</p>-->
+
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+
+                                                <!--</div>-->
                                                 <div class="form-group">
                                                     <label class="control-label">Manufacturer Name<span class="red-star">*</span></label>
                                                     <input id='manufacturerName' ng-model="manufacturer.name" name="manufacturerName"
@@ -201,3 +241,50 @@
 
 </div>
 </div>
+
+<!-- Add asset type dialog -->
+
+<div id="addAssetType" class="add-input-modal modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Asset Type</h4>
+            </div>
+            <div class="modal-body">
+
+                <form name="addAssetTypeForm">
+                    <div class="row">
+                        <div class="col-md-12 txt-align-center">
+                            <input class="" id="addAssetTypeInput" ng-model="assetType.name"   name="AssetType" type="text" value="" ng-required="true" ng-maxlength='250'
+                                   ng-pattern="/^[A-Za-z0-9\s]*$/"
+                            />
+                            <div ng-show="addAssetTypeForm.$submitted || addAssetTypeForm.AssetType.$touched">
+                                <div ng-show="addAssetTypeForm.AssetType.$dirty || addAssetTypeForm.AssetType.$invalid">
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="form.AssetType.$error.required">
+                                        Asset Type is required.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addAssetTypeForm.AssetType.$error.maxlength">
+                                        Asset Type cannot be longer than 250 characters.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addAssetTypeForm.AssetType.$error.pattern">
+                                        Asset Type can only contain letters, digits and space.
+                                    </p>
+                                </div>
+                            </div>
+                            <input type="submit" ng-click="addAssetType()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addAssetTypeForm.$invalid">
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Add asset type dialog -->
