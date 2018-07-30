@@ -70,7 +70,7 @@
                                        <div class="col-md-12">
                                            <div class="form-group">
                                                <label class="control-label">Site Name<span class="red-star">*</span> </label>
-                                               <input id='siteName' ng-model="site.name" class='form-control'
+                                               <input id='siteName' ng-model="site.name" class='form-control InputTxtCaps'
                                                       name='siteName' type='text' value=""
                                                       ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
                                                <div ng-show="form.$submitted || form.siteName.$touched">
@@ -101,7 +101,7 @@
                                        <div class="col-md-12">
                                            <div class="form-group ">
                                                <label class="control-label">Address<span class="red-star">*</span> </label>
-                                               <input id='siteAddress' ng-model="site.address" class='form-control'
+                                               <input id='siteAddress' ng-model="site.address" class='form-control InputTxtCaps'
                                                       name='address' type='text' value=""
                                                       ng-minlength=1 autofocus required/>
                                                <div ng-show="form.$submitted || form.address.$touched">
@@ -127,13 +127,13 @@
                                        <div class="col-md-6">
                                            <div class="form-group">
                                                <label class="control-label">State</label>
-                                               <input type="text" ng-model="site.state" class="form-control">
+                                               <input type="text" ng-model="site.state" class="form-control InputTxtCaps">
                                            </div>
                                        </div>
                                        <div class="col-md-6">
                                            <div class="form-group">
                                                <label class="control-label">Country</label>
-                                               <input type="text" ng-model="site.country" class="form-control">
+                                               <input type="text" ng-model="site.country" class="form-control InputTxtCaps">
                                            </div>
                                        </div>
                                    </div>
@@ -222,45 +222,45 @@
                             <div class="panel-body">
 
                               <div class="row">
-                     
+
   									            <div class="col-md-4">
-  				
+
   				                        <!--<div class="form-group label-floating">-->
   				                        <!--<label class="control-label">Date</label>-->
   				                        <!--<input class="datepicker form-control" type="text" value="03/01/2018"/>-->
-  				
+
   				                        <!--</div>-->
-  				
+
   				                        <div class="form-group">
   				                            <label class="label-control">From Time</label>
   				                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
   				                            <input type="text" class="form-control timepicker"  id="shiftFrom"  placeholder="{{shiftFrom | date:'hh:mm a'}}"/>
-  				
+
   				                        </div>
-  				
+
   				                    </div>
   				                    <div class="col-md-4">
-  				
+
   				                        <div class="form-group">
   				                            <label class="label-control">To Time</label>
   				                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
   				                            <input type="text" class="form-control timepicker"  id="shiftTo"  placeholder="{{shiftTo | date:'hh:mm a'}}"/>
-  				
+
   				                        </div>
-  				
-  				                    </div>    
-  				                    
+
+  				                    </div>
+
   				                    <div class="col-md-3">
 
   			                            <button class="btn btn-success margn-top20" >
   			                                <span class="btn-label" ng-click="addShiftItem($event)">
   			                                    <i class="material-icons">add</i>
-                                            Add
+                                                Add
   			                                </span>
-  			                                
+
   			                            </button>
-  			
-  			                        </div>               
+
+  			                        </div>
                      				</div>
                             <div class="row">
                               <div class="col-md-12">
@@ -268,15 +268,15 @@
                                     <label class="">Items</label>
                                     <ul class="listOfActions list-group">
                                         <li class="list-group-item justify-content-between" ng-repeat=" item in shiftItems" ng-bind-html-unsafe="item.text">
-                                            {{item.startTime}} - {{item.endTime}}
+                                            {{item.startTime | date:'hh:mm a'}} - {{item.endTime | date:'hh:mm a'}}
                                             <span class="badge badge-default badge-pill" ng-click="removeItem($index)"><i class="material-icons">remove_circle</i></span>
                                         </li>
                                     </ul>
                                 </div>
                               </div>
                             </div>
-                   			</div>	   
-                   		</div>		
+                   			</div>
+                   		</div>
                    	</div>
                   </div>
 

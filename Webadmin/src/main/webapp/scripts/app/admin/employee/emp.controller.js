@@ -3,7 +3,7 @@
 angular.module('timeSheetApp')
     .controller('EmployeeController', function ($rootScope,$window, $scope, $state,
      $timeout, ProjectComponent, SiteComponent, EmployeeComponent,LocationComponent,
-      UserRoleComponent, $http,$stateParams,$location,PaginationComponent,$filter) {
+      UserRoleComponent, $http,$stateParams,$location,PaginationComponent,$filter,$interval) {
         $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
@@ -81,6 +81,12 @@ angular.module('timeSheetApp')
         
         $scope.modified = false;
 
+        var absUrl = $location.absUrl();
+        var array = absUrl.split("/");
+        $scope.curUrl = array[4];
+
+        $rootScope.exportStatusObj  ={};
+
         $scope.initCalender = function(){
 
             demo.initFormExtendedDatetimepickers();
@@ -108,6 +114,13 @@ angular.module('timeSheetApp')
             $scope.selectedDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
         });
 
+        $('#searchDate').on('dp.change', function(e){
+            console.log(e.date);
+
+            console.log(e.date._d);
+            $scope.searchDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
+        });
+
         $scope.projectSiteList = [];
 
         $scope.addProjectSite = function() {
@@ -129,6 +142,10 @@ angular.module('timeSheetApp')
 
         $scope.removeProjectSite = function(ind) {
         		$scope.projectSiteList.splice(ind,1);
+//        		alert($scope.projectSiteList.length);
+        		if($scope.projectSiteList.length === 0) {
+        			document.getElementById("form-button-save").disabled = true;
+        		} 
         };
 
         $scope.locationList = [];
@@ -378,6 +395,11 @@ angular.module('timeSheetApp')
         $scope.loadEmployees = function () {
             $scope.clearFilter();
             $scope.search();
+        };
+
+        $scope.loadEmployeesShift = function () {
+            $scope.clearFilter();
+            $scope.searchShiftFilter();
         };
 
         $scope.confirmSave = function() {
@@ -961,17 +983,17 @@ angular.module('timeSheetApp')
 	    		console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaEmployeeShifts));
 	    		console.log('criteria in scope -'+JSON.stringify($scope.searchCriteria));
 	
-	        	console.log('Selected  project -' + $scope.selectedProject +" , "+ $scope.selectedSite);
+	        	console.log('Selected  project -' + $scope.searchProject +" , "+ $scope.searchSite);
 	
 	            $scope.searchCriteria.currPage = currPageVal;
 	            $scope.searchCriteria.findAll = false;
 	
-	            if($scope.selectedProject) {
-	                    $scope.searchCriteria.projectId = $scope.selectedProject.id;
+	            if($scope.searchProject) {
+	                    $scope.searchCriteria.projectId = $scope.searchProject.id;
 	            }
 	
-	            if($scope.selectedSite) {
-	                    $scope.searchCriteria.siteId = $scope.selectedSite.id;
+	            if($scope.searchSite) {
+	                    $scope.searchCriteria.siteId = $scope.searchSite.id;
 	            }
 	                    
 	            //-------
@@ -990,10 +1012,10 @@ angular.module('timeSheetApp')
 	                $scope.searchCriteria.sortByAsc = true;
 	            }
 	            
-	            $scope.searchCriteria.fromDate = $scope.selectedDate;
+	            $scope.searchCriteria.fromDate = $scope.searchDate;
 	
 	            console.log("search criteria",$scope.searchCriteria);
-	             $scope.employees = '';
+	             $scope.employeeShifts = '';
 	             $scope.employeesLoader = false;
 	             $scope.loadPageTop();
 	
@@ -1150,6 +1172,8 @@ angular.module('timeSheetApp')
         };
 
         $scope.clearFilter = function() {
+            $rootScope.exportStatusObj.exportMsg = '';
+            $scope.downloader=false;
             $scope.selectedSite = null;
             $scope.selectedProject = null;
             $scope.selectedEmployeeName = null;
@@ -1237,8 +1261,95 @@ angular.module('timeSheetApp')
             }
             //alert(page);
             $scope.pages.currPage = page;
-            $scope.search();
+            if($scope.curUrl =='employeeShifts'){
+
+                $scope.searchShift();
+
+            }else{
+
+                 $scope.search();
+            }
+           
         };
+
+        $rootScope.exportStatusObj = {};
+
+        $scope.exportAllData = function(){
+               
+                 $rootScope.exportStatusObj.exportMsg = '';
+                  $scope.downloader=true;
+                EmployeeComponent.exportAllData($scope.searchCriteria).then(function(data){
+                    var result = data.results[0];
+                    console.log(result);
+                    console.log(result.file + ', ' + result.status + ',' + result.msg);
+                    var exportAllStatus = {
+                            fileName : result.file,
+                            exportMsg : 'Exporting All...'
+                    };
+                    $rootScope.exportStatusObj = exportAllStatus;
+                    $scope.start();
+
+                  },function(err){
+                      console.log('error message for export all ')
+                      console.log(err);
+                  });
+        };
+
+        // store the interval promise in this variable
+        var promise;
+
+     // starts the interval
+        $scope.start = function() {
+          // stops any running interval to avoid two intervals running at the same time
+          $scope.stop();
+
+          // store the interval promise
+          promise = $interval($scope.exportStatus, 5000);
+          console.log('promise -'+promise);
+        };
+
+        // stops the interval
+        $scope.stop = function() {
+          $interval.cancel(promise);
+        };
+
+
+
+        $scope.exportStatus = function() {
+                console.log('exportStatusObj -'+$rootScope.exportStatusObj);
+                    EmployeeComponent.exportStatus($rootScope.exportStatusObj.fileName).then(function(data) {
+                        if(data) {
+                            $rootScope.exportStatusObj.exportStatus = data.status;
+                            console.log('exportStatus - '+ $rootScope.exportStatusObj);
+                            $rootScope.exportStatusObj.exportMsg = data.msg;
+                            $scope.downloader=false;
+                            console.log('exportMsg - '+ $rootScope.exportStatusObj.exportMsg);
+                            if($rootScope.exportStatusObj.exportStatus == 'COMPLETED'){
+                                $rootScope.exportStatusObj.exportFile = data.file;
+                                console.log('exportFile - '+ $rootScope.exportStatusObj.exportFile);
+                                $scope.stop();
+                            }else if($rootScope.exportStatusObj.exportStatus == 'FAILED'){
+                                $scope.stop();
+                            }else if(!$rootScope.exportStatusObj.exportStatus){
+                                $scope.stop();
+                            }else {
+                                $rootScope.exportStatusObj.exportFile = '#';
+                            }
+                        }
+
+                    });
+
+        }
+
+        $scope.exportFile = function() {
+            return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportFile : '#');
+        }
+
+
+        $scope.exportMsg = function() {
+            return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportMsg : '');
+        };
+
 
 
     });

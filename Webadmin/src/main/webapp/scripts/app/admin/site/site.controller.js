@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('SiteController', function ($rootScope, $scope, $state, $timeout, 
+    .controller('SiteController', function ($rootScope, $scope, $state, $timeout,
         ProjectComponent, SiteComponent,$http,$stateParams,$location,PaginationComponent) {
         $rootScope.loadingStop();
         $rootScope.loginView = false;
@@ -19,9 +19,9 @@ angular.module('timeSheetApp')
         $scope.noData = false;
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
-        
+
         $scope.pageSort = 10;
-     
+
 
         $scope.calendar = {
         		start : false,
@@ -74,7 +74,7 @@ angular.module('timeSheetApp')
             		$scope.shiftFrom = $scope.newShiftItem.startTime;
             		return false;
             }else {
-                $scope.newShiftItem.startTime = e.date._d.getHours() + ':' + e.date._d.getMinutes();
+                $scope.newShiftItem.startTime = e.date._d;
             }
         });
 
@@ -86,7 +86,7 @@ angular.module('timeSheetApp')
             		$scope.shiftTo = $scope.newShiftItem.endTime;
             		return false;
             }else {
-                $scope.newShiftItem.endTime = e.date._d.getHours() + ':' + e.date._d.getMinutes();
+                $scope.newShiftItem.endTime = e.date._d;
             }
 
         });
@@ -98,7 +98,7 @@ angular.module('timeSheetApp')
 
                 return false;
             }
-            
+
 	        	$scope.error = null;
 	        	$scope.success = null;
 	        	$scope.errorSitesExists = null;
@@ -138,6 +138,7 @@ angular.module('timeSheetApp')
         $scope.newshiftItem = {};
 
         $scope.addShiftItem = function(event) {
+            console.log(shiftFrom,shiftTo)
         		event.preventDefault();
         		console.log('new shift item - ' + JSON.stringify($scope.newShiftItem));
         		$scope.shiftItems.push($scope.newShiftItem);
@@ -188,7 +189,7 @@ angular.module('timeSheetApp')
         $scope.updateSite = function (validation) {
 
             if(validation){
-             
+
                 return false;
             }
 
@@ -328,7 +329,7 @@ angular.module('timeSheetApp')
             }
 
             if($scope.selectedColumn){
-              
+
                 $scope.searchCriteria.columnName = $scope.selectedColumn;
                 $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
 
@@ -362,17 +363,17 @@ angular.module('timeSheetApp')
                     $scope.showCurrPage = data.currPage;
                     $scope.pageEntries = $scope.sites.length;
                     $scope.totalCountPages = data.totalCount;
-                    $scope.pageSort = 10; 
+                    $scope.pageSort = 10;
                     $scope.noData = false;
 
                 }else{
                      $scope.noData = true;
                 }
             });
-        	
+
         };
 
-      
+
 
         $scope.clearFilter = function() {
         	$scope.selectedSite = null;
@@ -397,7 +398,7 @@ angular.module('timeSheetApp')
 
          }
 
-       
+
 
        /*
         ** Pagination init function **

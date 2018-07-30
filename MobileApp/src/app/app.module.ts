@@ -120,6 +120,7 @@ import{OfflineAsset} from "../pages/offline-asset/offline-asset";
 import{OfflineGetassetreadings} from "../pages/offline-getassetreadings/offline-getassetreadings";
 import {OfflineAttendance} from "../pages/employee/offline-attendance";
 import{ChangePassword} from "../pages/change-password/change-password";
+import{LocationAccuracy} from "@ionic-native/location-accuracy";
 
 @NgModule({
   declarations: [
@@ -331,6 +332,7 @@ import{ChangePassword} from "../pages/change-password/change-password";
       SQLite,
       Network,
       Market,
+      LocationAccuracy,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]

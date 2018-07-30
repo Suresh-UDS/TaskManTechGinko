@@ -217,7 +217,8 @@ angular.module('timeSheetApp')
          };
 
          $scope.searchFilter1 = function () {
-       
+            $scope.selectedDateFrom = new Date();
+            $scope.selectedDateTo = new Date();
             $scope.setPage(1);
             $scope.search();
          }
@@ -435,6 +436,8 @@ angular.module('timeSheetApp')
             $scope.selectedDateToSer =  new Date();
             $scope.selectedSite = null;
             $scope.selectedProject = null;
+            $scope.searchSite = null;
+            $scope.searchProject = null;
             $scope.selectedEmployee = null;
             $scope.searchCriteria = {};
             $rootScope.searchCriteriaAttendances   = null;

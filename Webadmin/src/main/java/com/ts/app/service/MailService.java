@@ -262,7 +262,7 @@ public class MailService {
     }
     
     @Async
-    public void sendTicketClosedMail(String ticketUrl,User user,String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String ticketTitle, String ticketDescription, String status){
+    public void sendTicketClosedMail(String ticketUrl,User user,String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String closedBy, String closedByEmpCode, String ticketTitle, String ticketDescription, String status){
         Locale locale = Locale.forLanguageTag(user.getLangKey() != null ? user.getLangKey() : "en-US");
         Context context = new Context(locale);
         context.setVariable("user", user);
@@ -272,6 +272,8 @@ public class MailService {
         context.setVariable("ticketDescription", ticketDescription);
         context.setVariable("status", status);
         context.setVariable("url", ticketUrl);
+        context.setVariable("employeeName", closedBy);
+        context.setVariable("employeeCode", closedByEmpCode);
         String content = templateEngine.process("ticketClosed", context);
         String subject = messageSource.getMessage("email.ticket.closed.alert.title", null, locale);
         sendEmail(emailIds, subject, content, false, true,null);

@@ -15,116 +15,83 @@
 
     <div class="row" >
 
-        <div class="col-md-12">
+        <div class="col-md-12" ng-init="loadEmployeesShift();loadProjects()">
             <div class="card TableCard">
-                <div class="card-content" >
-
-                    <!--<div class="SearchTable">-->
-
-                        <!--<form name="searchForm"  ng-submit="searchShiftFilter()" novalidate >-->
-
-                            <!--<div class="row">-->
-
-<!--&lt;!&ndash;                                     <td>-->
-                                        <!--<label>Show</label>-->
-                                        <!--<select class="siteList margin0" ng-model="sort" ng-change="hasChanged()" ng-options="paging.value for paging in pageSizes" value="{{paging.value}}">-->
-                                        <!--</select>-->
-                                    <!--</td>-->
- <!--&ndash;&gt;								  <div class="col-md-2">-->
-								   			<!--<div class="dropdown">-->
-                                                <!--<div class="form-group">-->
-                                                    <!--<label class="control-label">Select Client</label>-->
-                                                     <!--<span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                    <!--<select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">-->
-                                                        <!--<option value="">Select Client...</option>-->
-                                                    <!--</select>-->
+                <div class="card-content">
 
 
+                    <div class="SearchTable" ng-init="loadSites()">
 
-                                                <!--</div>-->
-                                            <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="col-md-2">-->
+                        <form name="searchForm"  ng-submit="searchShiftFilter()" novalidate >
 
-                                            <!--<div class="dropdown">-->
-                                                <!--<div class="form-group">-->
-                                                    <!--<label class="control-label">Select Site</label>-->
-                                                    <!--&lt;!&ndash;<input type="text" class="form-control"&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;ng-model="selectedRole"&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;required >&ndash;&gt;-->
-                                                    <!--<span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                    <!--<select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites">-->
-                                                        <!--<option value="">Select Site...</option>-->
-                                                    <!--</select>-->
+                            <div class="row">
+
+<!--                                     <td>
+                                        <label>Show</label>
+                                        <select class="siteList margin0" ng-model="sort" ng-change="hasChanged()" ng-options="paging.value for paging in pageSizes" value="{{paging.value}}">
+                                        </select>
+                                    </td>
+ -->								  <div class="col-md-2">
+								   			<div class="dropdown">
+                                                <div class="form-group">
+                                                    <label class="control-label">Select Client</label>
+                                                     <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <select class="form-control " ng-model="searchProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
+                                                        <option value="">Select Client...</option>
+                                                    </select>
 
 
 
-                                                <!--</div>-->
-                                            <!--</div>-->
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="col-md-2">
+
+                                            <div class="dropdown">
+                                                <div class="form-group">
+                                                    <label class="control-label">Select Site</label>
+                                                    <!--<input type="text" class="form-control"-->
+                                                    <!--ng-model="selectedRole"-->
+                                                    <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
+                                                    <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
+                                                    <!--required >-->
+                                                    <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites">
+                                                        <option value="">Select Site...</option>
+                                                    </select>
 
 
-								   <!--</div>-->
-								    <!--<div class="col-xs-12 col-md-4">-->
-                                         <!--<div class="form-group no-padding" >-->
-                                             <!--<div class="dropdown">-->
- 					                            <!--<label class="label-control">Date</label>-->
- 					                            <!--<span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>-->
- 					                            <!--<input type="text" class="form-control datepicker"  id="selectedDate"  ng-model="selectedDate"/>-->
-                                             <!--</div>-->
-                                         <!--</div>-->
-                                     <!--</div>-->
-                                   <!--&lt;!&ndash;  <div class="col-md-2">-->
-                                    		<!--<div class="form-group" style="padding-top: 20px;" >-->
-                                            <!--<div class="dropdown">-->
-                                                <!--<input type="text"-->
-                                                       <!--class="form-control border-bottom-input"-->
-                                                       <!--placeholder="Employee Id"-->
-                                                       <!--ng-model="selectedEmployeeId"-->
-												<!--/>-->
 
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
+                                                </div>
+                                            </div>
 
 
-                                    <!--<div class="col-md-2">-->
-                                        <!--<div class="form-group" style="padding-top: 20px;" >-->
-                                            <!--<div class="dropdown">-->
-                                                <!--<input type="text"-->
-                                                       <!--class="form-control border-bottom-input"-->
-                                                       <!--placeholder="Employee Name"-->
-                                                       <!--ng-model="selectedEmployeeName"-->
-                                                       <!--/>-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                    <!--</div> &ndash;&gt;-->
+								   </div>
+								    <div class="col-xs-12 col-md-4">
+                                         <div class="form-group no-padding" >
+                                             <div class="dropdown">
+ 					                            <label class="label-control">Date</label>
+ 					                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+ 					                            <input type="text" class="form-control datepicker"  id="searchDate"  ng-model="searchDate"/>
+                                             </div>
+                                         </div>
+                                     </div>
+                                   <!--  <div class="col-md-2">                                        
+                                    		<div class="form-group" style="padding-top: 20px;" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control border-bottom-input"
+                                                       placeholder="Employee Id"
+                                                       ng-model="selectedEmployeeId"
+												/>
+
+                                            </div>
+                                        </div>
+                                    </div -->
 
 
-                                    <!--<div class="col-md-4">-->
-                                        <!--<div class="form-group pull-right" style="padding-top: 10px;">-->
-
-                                            <!--<button type="submit" class="btn btn-circle blue-clr">-->
-                                                <!--<i class="material-icons">search</i>-->
-                                            <!--</button>-->
-                                            <!--&lt;!&ndash; <button ui-sref="add-employee" has-permission="Employee:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">-->
-                                                <!--<i class="material-icons">add</i>-->
-                                            <!--</button>-->
-                                            <!--<button ui-sref="employee-location" class="btn btn-circle orange-clr">-->
-                                                <!--<i class="material-icons">location_on</i>-->
-                                            <!--</button>-->
-                                            <!--<button ng-click="refreshPage()" class="btn btn-circle orange-clr">-->
-                                                <!--<i class="material-icons">refresh</i>-->
-                                            <!--</button> &ndash;&gt;-->
-                                        <!--</div>-->
-                                        <!--<div class="clearfix"></div>-->
-                                    <!--</div>-->
-
-                              <!--</div>-->
-                        <!--</form>-->
-
-                    <!--</div>-->
+                    		</div>
+                    </form>
 
 
                     <div class="table-responsive tablecard">
@@ -176,15 +143,26 @@
                                 <td>{{employeeShift.employeeFullName}}</td>
 							   <td>
 							   	   {{employeeShift.siteName}}
-								   <select class="form-control " ng-model="selectedShiftSite" ng-change="updateEmpShiftSite(employeeShift, selectedShiftSite)"  ng-options="site as site.name for site in sites track by site.id">
-	                                    <option value="">Select Site...</option>
-	                                </select>
+
+                                   <div class="dropdown">
+                                        <div class="form-group"> 
+                                           <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>	
+        								   <select class="form-control " ng-model="selectedShiftSite" ng-change="updateEmpShiftSite(employeeShift, selectedShiftSite)"  ng-options="site as site.name for site in sites track by site.id">
+        	                                    <option value="">Select Site...</option>
+        	                                </select>
+                                       </div>
+                                   </div>
                                 </td>
                                 <td>
                                 	   {{employeeShift.startTime | date:'dd-MM-yyyy HH:mm'}} - {{employeeShift.endTime | date:'dd-MM-yyyy HH:mm'}}
-								   <select class="form-control" ng-model="selectedShiftDateTime" ng-change="updateShiftTime(employeeShift,selectedShiftDateTime)" ng-options="shift as (shift.startDateTime | date:'dd-MM-yyyy HH:mm') + '  -  ' + (shift.endDateTime | date:'dd-MM-yyyy HH:mm') for shift in shifts">
-	                                    <option value="">Select Start Time...</option>
-	                                </select>
+                                   <div class="dropdown">
+                                        <div class="form-group">    
+                                           <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>    
+        								   <select class="form-control" ng-model="selectedShiftDateTime" ng-change="updateShiftTime(employeeShift,selectedShiftDateTime)" ng-options="shift as (shift.startDateTime | date:'dd-MM-yyyy HH:mm') + '  -  ' + (shift.endDateTime | date:'dd-MM-yyyy HH:mm') for shift in shifts">
+        	                                    <option value="">Select Start Time...</option>
+        	                                </select>
+                                       </div>
+                                   </div>
                                 </td>
                                 <!-- td>
                                 	   {{employeeShift.startTime | date:'dd-MM-yyyy HH:mm'}}

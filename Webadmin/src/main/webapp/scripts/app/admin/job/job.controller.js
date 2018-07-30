@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
 				function($scope, $rootScope, $state, $timeout, JobComponent,AssetComponent,
 						ProjectComponent, SiteComponent,EmployeeComponent,ChecklistComponent,
                         LocationComponent, $http, $stateParams,
-						$location,PaginationComponent,$filter, TicketComponent, $q) {
+						$location,PaginationComponent,$filter, TicketComponent, $q,$interval) {
         $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
@@ -19,6 +19,8 @@ angular.module('timeSheetApp')
         $scope.selectedStatus = null;
         $scope.selectedLocation = null;
         $scope.selectedJobDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+        $scope.selectedJobDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+
         $scope.searchCriteria = {};
         $scope.pages = { currPage : 1};
         $scope.status =[{ "name" : "OPEN"},{ "name" : "ASSIGNED"},{ "name" : "INPROGRESS"},{ "name" : "COMPLETED"}];
@@ -36,6 +38,8 @@ angular.module('timeSheetApp')
         $scope.searchProject = null;
         $scope.searchEmployee = null;
         $scope.searchStatus = null;
+        $scope.disable = false;
+        $rootScope.exportStatusObj  ={};
 
         /*
         **
@@ -86,6 +90,12 @@ angular.module('timeSheetApp')
                 $scope.selectedJobDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
                 $scope.selectedJobDateSer = e.date._d;
         });
+        
+        $('input#selectedJobDateTo').on('dp.change', function(e){
+
+            $scope.selectedJobDateTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.selectedJobDateToSer = e.date._d;
+        });
 
         $scope.loadChecklists = function () {
         		ChecklistComponent.findAll().then(function (data) {
@@ -126,13 +136,13 @@ angular.module('timeSheetApp')
 
         $scope.loadEmployees = function () {
             var deferred = $q.defer();
-                if($scope.searchSite){
-                   $scope.searchCriteria.siteId = $scope.searchSite.id; 
-                }else if($scope.selectedSite){
-                   $scope.searchCriteria.siteId = $scope.selectedSite.id; 
-                }else{
-                    $scope.searchCriteria.siteId = null; 
-                }
+            if($scope.searchSite){
+               $scope.searchCriteria.siteId = $scope.searchSite.id; 
+            }else if($scope.selectedSite){
+               $scope.searchCriteria.siteId = $scope.selectedSite.id; 
+            }else{
+                $scope.searchCriteria.siteId = null; 
+            }
         		
         		$scope.searchCriteria.list = true;
         		EmployeeComponent.search($scope.searchCriteria).then(function (data) {
@@ -154,8 +164,9 @@ angular.module('timeSheetApp')
 
         $scope.loadBlocks = function () {
 	    		console.log('selected project -' + ($scope.selectedProject ? $scope.selectedProject.id : 0) + ', site -' + ($scope.selectedSite ? $scope.selectedSite.id : 0))
-	    		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
-	    		LocationComponent.findBlocks(projectId,$scope.selectedSite.id).then(function (data) {
+                var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
+	    		var siteId = $scope.selectedSite ? $scope.selectedSite.id : 0;
+	    		LocationComponent.findBlocks(projectId,siteId).then(function (data) {
 	    			$scope.selectedBlock = null;
 	            $scope.blocks = data;
 	        });
@@ -164,7 +175,8 @@ angular.module('timeSheetApp')
 
         $scope.loadFloors = function () {
         		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
-	    		LocationComponent.findFloors(projectId,$scope.selectedSite.id,$scope.selectedBlock).then(function (data) {
+                var siteId = $scope.selectedSite ? $scope.selectedSite.id : 0;
+	    		LocationComponent.findFloors(projectId,siteId,$scope.selectedBlock).then(function (data) {
 	    			$scope.selectedFloor = null;
 	            $scope.floors = data;
 	        });
@@ -173,7 +185,8 @@ angular.module('timeSheetApp')
 	    $scope.loadZones = function () {
 	    		console.log('load zones - ' + $scope.selectedSite.id +',' +$scope.selectedBlock +','+$scope.selectedFloor);
 	    		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
-	    		LocationComponent.findZones(projectId,$scope.selectedSite.id,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
+                var siteId = $scope.selectedSite ? $scope.selectedSite.id : 0;
+	    		LocationComponent.findZones(projectId,siteId,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
 	    			$scope.selectedZone = null;
 	            $scope.zones = data;
 	        });
@@ -188,7 +201,7 @@ angular.module('timeSheetApp')
                 floor:floor,
                 zone:zone
             };
-	        LocationComponent.findId($scope.selectedSite.id,block,floor,zone).then(function (data) {
+	        LocationComponent.findId(siteId,block,floor,zone).then(function (data) {
                 console.log(data);
                 $scope.job.locationId = data.id;
             })
@@ -378,6 +391,7 @@ angular.module('timeSheetApp')
                        $scope.selectedBlock = {name:data.block};
                        $scope.selectedFloor = {name:data.floor};
                        $scope.selectedZone = {name:data.zone};
+                       $scope.loadEmployees();
 
 
                 })
@@ -402,6 +416,7 @@ angular.module('timeSheetApp')
         }
 
         $scope.saveJob = function () {
+                $scope.disable = true;
 	        	$scope.error = null;
 	        	$scope.success =null;
 	        	$scope.errorProjectExists = null;
@@ -469,20 +484,25 @@ angular.module('timeSheetApp')
 	        	// $scope.job.jobStatus = $scope.selectedStatus.name;
 	        	console.log('job details to save - ' + JSON.stringify($scope.job));
 	        	var post = $scope.isEdit ? JobComponent.update : JobComponent.create
-	        	var message = 'Job Created Successfully'
+	        	var message = 'Job has been created successfully!!'
 	        	if($scope.job.id) {
-	        		message = 'Job Updated Successfully'
+	        		message = 'Job has been updated successfully!!'
 	        	}
 	        	post($scope.job).then(function () {
 	                $scope.success = 'OK';
 	                $scope.showNotifications('top','center','success',message);
 	            	$location.path('/jobs');
+                    $scope.disable = false;
             }).catch(function (response) {
                 $scope.success = null;
+                $scope.disable = false;
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                     $scope.errorProjectExists = 'ERROR';
+                    $scope.showNotifications('top','center','danger','Job already exists');
+
                 } else {
+                    $scope.showNotifications('top','center','danger','Unable to creating job. Please try again later..');
                     $scope.error = 'ERROR';
                 }
             });
@@ -615,6 +635,10 @@ angular.module('timeSheetApp')
 	        	if($scope.selectedJobDate) {
 	        		$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedJobDateSer;
 	        	}
+	        	
+	        	if($scope.selectedJobDateTo) {
+	        		$scope.searchCriteria.checkInDateTimeTo = $scope.selectedJobDateToSer;
+	        	}
 
 	        	console.log('search criterias - ', JSON.stringify($scope.searchCriteria));
                 //$scope.jobs = '';
@@ -641,8 +665,8 @@ angular.module('timeSheetApp')
                      $scope.jobs = '';
                      $scope.jobsLoader = false;
                      $scope.loadPageTop();
-
-	        	JobComponent.search($scope.searchCriteria).then(function (data) {
+                     $rootScope.searchCriterias = $scope.searchCriteria;      
+	        	JobComponent.search($rootScope.searchCriterias).then(function (data) {
                     $scope.jobs = data.transactions;
 	        		$scope.jobsLoader = true;
 
@@ -676,8 +700,12 @@ angular.module('timeSheetApp')
         };
 
         $scope.clearFilter = function() {
+            $rootScope.exportStatusObj.exportMsg = '';
+            $scope.downloader=false;
             $scope.selectedJobDateSer = new Date();
             $scope.selectedJobDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+            $scope.selectedJobDateToSer = new Date();
+            $scope.selectedJobDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedProject = null;
             $scope.searchCriteria = {};
             $scope.selectedSite = null;
@@ -763,6 +791,93 @@ angular.module('timeSheetApp')
 	                $state.reload();
 	            });
         }
+
+
+        $rootScope.exportStatusObj = {};
+
+
+        $scope.exportAllData = function(type){
+                $scope.searchCriteria.exportType = type;
+                $rootScope.exportStatusObj.exportMsg = '';
+                $scope.downloader=true;
+                JobComponent.exportAllData($scope.searchCriteria).then(function(data){
+                    var result = data.results[0];
+                    console.log(result);
+                    console.log(result.file + ', ' + result.status + ',' + result.msg);
+                    var exportAllStatus = {
+                            fileName : result.file,
+                            exportMsg : 'Exporting All...',
+                            url: result.url
+                    };
+                    $rootScope.exportStatusObj = exportAllStatus;
+                    console.log('exportStatusObj size - ' + $rootScope.exportStatusObj.length);
+                    $scope.start();
+                  },function(err){
+                      console.log('error message for export all ')
+                      console.log(err);
+                  });
+        };
+
+     // store the interval promise in this variable
+        var promise;
+
+     // starts the interval
+        $scope.start = function() {
+          // stops any running interval to avoid two intervals running at the same time
+          $scope.stop();
+
+          // store the interval promise
+          promise = $interval($scope.exportStatus, 5000);
+          console.log('promise -'+promise);
+        };
+
+        // stops the interval
+        $scope.stop = function() {
+          $interval.cancel(promise);
+        };
+
+
+
+        $scope.exportStatus = function() {
+                console.log('$rootScope.exportStatusObj -'+$rootScope.exportStatusObj);
+
+                    JobComponent.exportStatus($rootScope.exportStatusObj.fileName).then(function(data) {
+                        console.log('job export status - data -' + JSON.stringify(data));
+                        if(data) {
+                            $rootScope.exportStatusObj.exportStatus = data.status;
+                            console.log('exportStatus - '+ JSON.stringify($rootScope.exportStatusObj));
+                            $rootScope.exportStatusObj.exportMsg = data.msg;
+                            $scope.downloader=false;
+                            console.log('exportMsg - '+ $rootScope.exportStatusObj.exportMsg);
+                            if($rootScope.exportStatusObj.exportStatus == 'COMPLETED'){
+                                if($rootScope.exportStatusObj.url) {
+                                    $rootScope.exportStatusObj.exportFile = $rootScope.exportStatusObj.url;
+                                }else {
+                                    $rootScope.exportStatusObj.exportFile = data.file;
+                                }
+                                console.log('exportFile - '+ $rootScope.exportStatusObj.exportFile);
+                                $scope.stop();
+                            }else if($rootScope.exportStatusObj.exportStatus == 'FAILED'){
+                                $scope.stop();
+                            }else if(!$rootScope.exportStatusObj.exportStatus){
+                                $scope.stop();
+                            }else {
+                                $rootScope.exportStatusObj.exportFile = '#';
+                            }
+                        }
+
+                    });
+
+        }
+
+        $scope.exportFile = function() {
+            return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportFile : '#');
+        }
+
+
+        $scope.exportMsg = function() {
+            return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportMsg : '');
+        };
 
 
     });

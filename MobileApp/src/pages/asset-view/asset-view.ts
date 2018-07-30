@@ -38,6 +38,8 @@ export class AssetView {
   tickets:any;
   jobPage=0;
   count:any;
+  site:any;
+  status:any;
 
     totalPages:0;
     page:1;
@@ -100,6 +102,7 @@ export class AssetView {
         let profileModal = this.modalCtrl.create(GetAssetReading, {assetDetails:this.assetDetails });
         profileModal.onDidDismiss(data => {
             console.log(data);
+            this.componentService.closeLoader();
             // this.getReading(this.readingSearchCriteria);
             this.getReading(this.readingSearchCriteria);
         });
@@ -486,32 +489,32 @@ export class AssetView {
     {
         this.spinner = true;
         // offline
-        this.dbService.getPPM(this.assetDetails.id).then(
-            (res)=>{
-                this.componentService.closeLoader();
-                console.log(res);
-                this.assetDetails.ppms = res;
-            },
-            (err)=>{
-
-            }
-        )
+        // this.dbService.getPPM(this.assetDetails.id).then(
+        //     (res)=>{
+        //         this.componentService.closeLoader();
+        //         console.log(res);
+        //         this.assetDetails.ppms = res;
+        //     },
+        //     (err)=>{
+        //
+        //     }
+        // )
 
         //Online
-        // this.assetService.getAssetPPMSchedule(this.assetDetails.id).subscribe(
-        //     response=>{
-        //         this.spinner = false;
-        //         this.componentService.closeLoader();
-        //         console.log("Get asset PPM response");
-        //         console.log(response);
-        //         this.assetDetails.ppms = response;
-        //     },
-        //     error=>{
-        //         this.spinner = false;
-        //         this.componentService.closeLoader();
-        //         console.log("Get asset PPM error");
-        //         console.log(error);
-        //     })
+        this.assetService.getAssetPPMSchedule(this.assetDetails.id).subscribe(
+            response=>{
+                this.spinner = false;
+                this.componentService.closeLoader();
+                console.log("Get asset PPM response");
+                console.log(response);
+                this.assetDetails.ppms = response;
+            },
+            error=>{
+                this.spinner = false;
+                this.componentService.closeLoader();
+                console.log("Get asset PPM error");
+                console.log(error);
+            })
     }
 
 
@@ -594,6 +597,8 @@ export class AssetView {
         // this.dbService.getViewReading(searchCriteria).then(
             response=>
             {
+                this.spinner=false;
+                this.componentService.closeAll();
                 console.log("View Reading Response");
                 console.log(response);
                 this.spinner=false;
@@ -601,6 +606,8 @@ export class AssetView {
                 // this.assetDetails.reading = response;
             },error=>
             {
+                this.spinner=false;
+                this.componentService.closeAll();
                 console.log("Error in View Reading");
                 console.log(error);
                 this.spinner=false;
@@ -610,10 +617,11 @@ export class AssetView {
 
 
     // Tickets
-    getTickets(searchCriteria)
+    getTickets(search)
     {
         this.spinner = true;
-        this.jobService.searchTickets(searchCriteria).subscribe(
+        // this.jobService.searchTickets(searchCriteria).subscribe(
+        this.assetService.assetTicket(search).subscribe(
             response=>{
                 this.spinner = false;
                 this.componentService.closeLoader();
@@ -664,6 +672,33 @@ export class AssetView {
             ]
         });
         confirm.present();
+    }
+
+
+    statusHistory(assetId){
+        var search={
+            assetId:assetId
+        };
+        this.assetService. statusHistory(search).subscribe(
+            response=>{
+                console.log("Status History");
+                console.log(response);
+                this.status=response.transactions;
+            }
+        )
+    }
+
+    siteHistory(assetId){
+        var search={
+            assetId:assetId
+        };
+        this.assetService.siteHistory(search).subscribe(
+            response=>{
+                console.log("Site Transfer History");
+                console.log(response);
+                this.site=response.transactions;
+            }
+        )
     }
 
 

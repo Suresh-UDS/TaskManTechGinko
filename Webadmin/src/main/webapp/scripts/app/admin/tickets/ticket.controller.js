@@ -103,7 +103,15 @@ angular.module('timeSheetApp')
 
         $scope.initCalender();
 
+        $scope.keyPressHandler = function(e) {
+            if (e.keyCode === 13) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }
+
         $scope.saveTicket = function () {
+            console.log("Form submited")
                 $scope.error = null;
                 $scope.success = null;
                 $scope.errorTicketsExists = null;
@@ -117,14 +125,16 @@ angular.module('timeSheetApp')
                     $scope.tickets.employeeId = $scope.selectedEmployee.id;
                     $scope.tickets.severity = $scope.tickets.severity;
                     $scope.tickets.comments = $scope.tickets.comments;
-                    if($scope.selectedAsset) { 
+                    if($scope.selectedAsset) {
                     	$scope.tickets.assetId = $scope.selectedAsset.id;
-                    } 
-                    
+                    }
+
                     if($scope.assetObj) {
                     	$scope.tickets.assetId = $scope.assetObj.id;
+                    	$scope.tickets.siteId = $scope.assetObj.siteId;
                     }
-                    
+
+
                     console.log('Tickets - ' + JSON.stringify($scope.tickets));
                     JobComponent.createTicket($scope.tickets).then(function(response) {
                     		if($scope.selectedImageFile){
@@ -195,16 +205,27 @@ angular.module('timeSheetApp')
                 $scope.loadingStop();
             });
         };
-                
+
         if($stateParams.assetId) {
-       	 AssetComponent.findById($stateParams.assetId).then(function(data) { 
+       	 AssetComponent.findById($stateParams.assetId).then(function(data) {
        		 console.log(data);
        		 if(data != null){
        			 $scope.assetObj = data;
+       			 SiteComponent.findOne($scope.assetObj.siteId).then(function (data) {
+                     $scope.siteObj = data;
+                     $scope.selectedSite = $scope.siteObj;
+                     $scope.searchCriteria.siteId = $scope.siteObj.id;
+                     $scope.searchCriteria.list = true;
+                     EmployeeComponent.search($scope.searchCriteria).then(function (data) {
+                         $scope.selectedEmployee = null;
+                     $scope.employees = data.transactions;
+                     });
+
+                 });
        		 };
        	 });
         }
-        
+
         $scope.loadDepSites = function () {
 
             if(jQuery.isEmptyObject($scope.selectedProject) == false) {
@@ -229,10 +250,10 @@ angular.module('timeSheetApp')
                 $scope.employees = data.transactions;
             });
         };
-        
-        $scope.loadAssets = function() { 
+
+        $scope.loadAssets = function() {
         	$scope.searchCriteria.siteId = $scope.selectedSite.id;
-        	AssetComponent.search($scope.searchCriteria).then(function(data) { 
+        	AssetComponent.search($scope.searchCriteria).then(function(data) {
         		console.log(data);
         		$scope.assets = data.transactions;
         	});
@@ -289,6 +310,20 @@ angular.module('timeSheetApp')
                     )
                 }
 
+                if($scope.tickets.assetId) {
+                	AssetComponent.findById($scope.tickets.assetId).then(function(data) {
+                		console.log(data);
+                		$scope.selectedAsset = {id: data.id, title: data.title}
+                	});
+                }else{
+                	var searchObj = {};
+                	searchObj.siteId = $scope.tickets.siteId;
+                	AssetComponent.search(searchObj).then(function(data) {
+                		console.log(data);
+                		$scope.assets = data.transactions;
+                	});
+                }
+
                 if($scope.tickets.image){
                     console.log("image found");
                     TicketComponent.findTicketImage($scope.tickets.id,$scope.tickets.image).
@@ -316,6 +351,7 @@ angular.module('timeSheetApp')
                 $scope.listCreatedBy = tlist.createdBy;
                 $scope.listCreatedDate = tlist.createdDate;
                 $scope.listStatus = tlist.status;
+                $scope.listAssets = tlist.assetTitle;
                 if(tlist.pendingAtUDS){
                     $scope.listPendingStatus = "Pending at UDS"
                 }else if(tlist.pendingAtClient){
@@ -361,6 +397,9 @@ angular.module('timeSheetApp')
                 if($scope.selectedEmployee) {
                     $scope.tickets.employeeId = $scope.selectedEmployee.id;
                     $scope.tickets.employeeName = $scope.selectedEmployee.name;
+                }
+                if($scope.selectedAsset) {
+                	$scope.tickets.assetId = $scope.selectedAsset.id;
                 }
                 $scope.tickets.comments = $scope.tickets.comments;
                 console.log('Tickets - ' + JSON.stringify($scope.tickets));

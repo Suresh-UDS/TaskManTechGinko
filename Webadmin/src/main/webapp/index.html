@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="no-js">
+<html lang="en" ng-app="timeSheetApp" class="no-js" ng-class='{ noScroll: noscroll }'>
 
 <head>
     <meta charset="utf-8" />
@@ -52,7 +52,7 @@
 
 </head>
 
-<body ng-app="timeSheetApp" ng-switch="isLoggedIn" class="sidebar-mini">
+<body  ng-switch="isLoggedIn" class="sidebar-mini">
 
     <div ng-show="loginView" class="LoginPageView">
         <!-- Login start -->
@@ -391,6 +391,9 @@
 
     <script src="scripts/app/admin/reports/ticket-report.controller.js"></script>
     <script src="scripts/app/admin/reports/ticket-report-list.js"></script>
+
+    <!-- <script src="scripts/app/admin/reports/feedback-report.controller.js"></script>
+    <script src="scripts/app/admin/reports/feedback-report.js"></script> -->
 
     <script src="scripts/app/admin/reports/asset-report.controller.js"></script>
     <script src="scripts/app/admin/reports/asset-report-list.js"></script>

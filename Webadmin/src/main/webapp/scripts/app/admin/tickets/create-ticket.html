@@ -32,16 +32,16 @@
                                            <div class="form-group">
                                                <label class="control-label">Issue<span class="red-star">*</span> </label>
 
-                                               <input type="text" class="form-control"   name='title'
+                                               <input type="text" class="form-control InputTxtCaps"   name='title'
                                                       ng-model="tickets.title" ng-minlength=1 ng-maxlength=50
-                                                      autofocus  required autocomplete="off"/>
+                                                      autofocus  required autocomplete="off" ng-keypress="keyPressHandler($event)"/>
                                                <div ng-show="form.$submitted || form.title.$touched">
                                                    <div ng-show="form.title.$dirty || form.title.$invalid">
                                                        <p class="help-block" style="color:maroon"
                                                           ng-show="form.title.$error.required">
                                                            Title is required.
                                                        </p>
-                                                       
+
                                                    </div>
                                                </div>
 
@@ -51,16 +51,16 @@
                                        <div class="col-md-12">
                                            <div class="form-group">
                                                <label class="control-label">Description<span class="red-star">*</span> </label>
-                                               <input id='description' ng-model="tickets.description" class='form-control'
+                                               <input id='description' ng-model="tickets.description" class='form-control InputTxtCaps'
                                                       name='description' type='text' value=""
-                                                       autofocus required/>
+                                                       autofocus required ng-keypress="keyPressHandler($event)"/>
                                                <div ng-show="form.$submitted || form.description.$touched">
                                                    <div ng-show="form.description.$dirty || form.description.$invalid">
                                                        <p class="help-block" style="color:maroon"
                                                           ng-show="form.description.$error.required">
                                                            Description is required.
                                                        </p>
-                                                       
+
                                                    </div>
                                                </div>
                                            </div>
@@ -112,9 +112,9 @@
                                                 <option value='Low' selected>Low</option>
                                                 <option value='Medium'>Medium</option>
                                                 <option value='High'>High</option>
-                                             
+
                                             </select>
-                                        
+
                                             <div ng-show="form.$submitted || form.severity.$touched">
                                                 <div
                                                     ng-show="form.severity.$dirty || form.severity.$invalid">
@@ -129,8 +129,8 @@
                                         </div>
 
                                    </div>
-                                   
-                                   
+
+
 
                                </div>
                            </div>
@@ -145,17 +145,19 @@
                            <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">Site<span class="red-star">*</span> </label>
-                                        <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                        <select
+                                        <span ng-show="!assetObj" class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                        <select ng-show="!assetObj"
                                             required
                                             ng-model="selectedSite"
                                             ng-change="loadEmployees();loadAssets()"
                                             class="form-control searchable-input floatL" ng-options="site as site.name for site in sites track by site.id">
                                             <option value="">Select Site</option>
-                       
-                                       
+
                                         </select>
-                                    
+                                        <input id='assetId' ng-model="siteObj.name" class='form-control' ng-show="assetObj"
+                                                      name='description' type='text' value="siteName"
+                                                       readOnly/>
+
                                         <div ng-show="form.$submitted || form.site.$touched">
                                             <div
                                                 ng-show="form.site.$dirty || form.site.$invalid">
@@ -178,9 +180,9 @@
                                             ng-model="selectedEmployee"
                                             class="form-control searchable-input floatL" ng-options="emp as emp.fullName group by emp.designation for emp in employees | filter: {designation : '!' + 'Client'} track by emp.id">
                                             <option value="">Select Employee</option>
-                                         
+
                                         </select>
-                                    
+
                                         <div ng-show="form.$submitted || form.employee.$touched">
                                             <div
                                                 ng-show="form.employee.$dirty || form.employee.$invalid">
@@ -197,7 +199,7 @@
                           </div>
                          </div>
                        </div>
-                       
+
                        <div class="col-md-6">
                         <div class="panel panel-default">
                               <div class="panel-heading">Assets</div>
@@ -210,37 +212,37 @@
                                         <select ng-show="!assetObj"
                                             required
                                             ng-model="selectedAsset"
-                                            class="form-control searchable-input floatL" ng-options="asset as asset.title for asset in assets track by asset.id">
+                                            class="form-control searchable-input floatL" ng-options="asset as asset.title for asset in assets | orderBy:'title' track by asset.id">
                                             <option value="">Select Asset</option>
                                         </select>
                                         <input id='assetId' ng-model="assetObj.title" class='form-control' ng-show="assetObj"
                                                       name='description' type='text' value="assetName"
                                                        readOnly/>
-                                    
+
                                     </div>
 
                                 </div>
-                          
+
                            </div>
                           </div>
                          </div>
                        </div>
-                       
+
                    </div>
-                   
+
                    <div class="row">
-                     
+
                      <div class="col-md-6">
                         <div class="panel panel-default">
-                              
+
                           <div class="panel-heading">Comments</div>
                           <div class="panel-body">
                             <div class="row">
-                              
+
                              <div class="col-md-6">
                                  <div class="form-group">
                                      <label class="control-label">Comments</label>
-                                     <textarea ng-model="tickets.comments" class="form-control"></textarea>
+                                     <textarea ng-model="tickets.comments" class="form-control InputTxtCaps"></textarea>
                                  </div>
                              </div>
                            </div>
@@ -250,11 +252,11 @@
                      </div>
                      <div class="col-md-6">
                         <div class="panel panel-default">
-                              
+
                           <div class="panel-heading">Upload Image</div>
                           <div class="panel-body">
                             <div class="row">
-                     
+
 			                     <div class="col-md-6">
 			                      <div class="form-group label-floating" >
 			                      	<div class="pdng-top13" >
@@ -268,9 +270,9 @@
 			                     </div>
 			                </div>
 						</div>
-					</div>					                     
+					</div>
                    </div>
-                  
+
                    <div class="row">
 
                        <div class="col-md-12">
@@ -279,10 +281,10 @@
                            <button type="submit" ng-click="cancelTicket()"
                                    id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
-                           <button type="submit" type="submit"
-                                   id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
-                                            <i class="material-icons">check</i>
-                                        </span>Create ticket</button>
+                           <button type="submit" id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right">
+                               <span class="btn-label">
+                                   <i class="material-icons">check</i>
+                               </span>Create ticket</button>
 
                            <div class="clearfix"></div>
                        </div>
