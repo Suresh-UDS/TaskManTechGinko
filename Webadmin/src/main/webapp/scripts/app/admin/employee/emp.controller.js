@@ -973,6 +973,7 @@ angular.module('timeSheetApp')
          }
         
         $scope.searchShift = function () {
+                $scope.noData = false;
 	        	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
 	        	if(!$scope.searchCriteria) {
 	            	var searchCriteria = {
@@ -1040,7 +1041,11 @@ angular.module('timeSheetApp')
 	                    $scope.pageEntries = $scope.employeeShifts.length;
 	                    $scope.totalCountPages = data.totalCount;
 	                    $scope.pageSort = 10;
-	                }
+                        $scope.noData = false;
+
+                    }else{
+                         $scope.noData = true;
+                    }
 	
 	            });
 	             
