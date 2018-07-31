@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('AttendanceController', function ($rootScope, $scope, $state, $timeout, 
+    .controller('AttendanceController', function ($rootScope, $scope, $state, $timeout,
         ProjectComponent, SiteComponent, EmployeeComponent,AttendanceComponent, $http,
         $stateParams,$location,$interval,PaginationComponent,$filter) {
         $rootScope.loadingStop();
@@ -11,7 +11,7 @@ angular.module('timeSheetApp')
         $scope.errorMessage = null;
         $scope.doNotMatch = null;
         $scope.errorEmployeeExists = null;
-        $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+        $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.selectedDateFromSer=  new Date();
         $scope.selectedDateToSer= new Date();
@@ -64,10 +64,10 @@ angular.module('timeSheetApp')
         $('input#dateFilterFrom').on('dp.change', function(e){
             console.log(e.date);
             console.log(e.date._d);
-            $scope.selectedDateFromSer= e.date._d; 
-            
+            $scope.selectedDateFromSer= e.date._d;
+
             $.notifyClose();
-             
+
             if($scope.selectedDateFromSer > $scope.selectedDateToSer) {
 
                     $scope.showNotifications('top','center','danger','From date cannot be greater than To date');
@@ -77,8 +77,8 @@ angular.module('timeSheetApp')
                $scope.selectedDateFrom= $filter('date')(e.date._d, 'dd/MM/yyyy');
                // $scope.refreshReport();
             }
-            
-            
+
+
 
         });
         $('input#dateFilterTo').on('dp.change', function(e){
@@ -87,7 +87,7 @@ angular.module('timeSheetApp')
             $scope.selectedDateToSer= e.date._d;
 
             $.notifyClose();
-            
+
             if($scope.selectedDateFromSer > $scope.selectedDateToSer) {
                     $scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
                     $scope.selectedDateTo=$filter('date')(new Date(), 'dd/MM/yyyy');
@@ -271,7 +271,7 @@ angular.module('timeSheetApp')
                 if($scope.selectedDateTo) {
                     $scope.searchCriteria.checkInDateTimeTo = $scope.selectedDateToSer;
                 }
-        	
+
 
 //        	if($scope.selectedEmployee){
 //        	    console.log($scope.selectedEmployee);
@@ -342,6 +342,98 @@ angular.module('timeSheetApp')
                 $scope.attendancesData = data.transactions;
                 $scope.attendancesDataLoader = true;
 
+
+                // Shift time HH:MM
+                console.log("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=------=-=-=-=-=-=-=-=-=-=-=-=-=");
+                console.log( $scope.attendancesData  );
+                for(var i=0;i<$scope.attendancesData.length;i++) {
+                    var start = $scope.attendancesData[i].shiftStartTime? $scope.attendancesData[i].shiftStartTime.split(':') : ['0','0'];
+                    console.log(start)
+                    if(start[0].length == 1)
+                    {
+                        console.log("Yes");
+                        start[0] = '0'+start[0];
+                        $scope.attendancesData[i].shiftStartTime = start[0] +':'+ start[1];
+                        if(start[1].length == 1)
+                        {
+
+                            if(start[1]==0)
+                            {
+                                start[1] = '00';
+                                $scope.attendancesData[i].shiftStartTime = start[0] +':'+ start[1];
+                            }
+                            else {
+                                start[1] = '0'+start[1];
+                                $scope.attendancesData[i].shiftStartTime = start[0] +':'+ start[1];
+                            }
+
+
+                        }
+                    }
+                    else if(start[1].length == 1)
+                    {
+                        if(start[1]==0)
+                        {
+                            start[1] = '00';
+                            $scope.attendancesData[i].shiftStartTime = start[0] +':'+ start[1];
+                        }
+                        else {
+                            start[1] = '0'+start[1];
+                            $scope.attendancesData[i].shiftStartTime = start[0] +':'+ start[1];
+                        }
+                    }
+                    else
+                    {
+                        $scope.attendancesData = data.transactions;
+                    }
+
+
+                    var end =  $scope.attendancesData[i].shiftEndTime ? $scope.attendancesData[i].shiftEndTime.split(':') : ['0','0'];
+                    console.log(end)
+                    if(end[0].length == 1)
+                    {
+                        end[0] = '0'+end[0];
+                        $scope.attendancesData[i].shiftEndTime = end[0] +':'+ end[1];
+                        if(end[1].length == 1)
+                        {
+                            if(end[1]==0)
+                            {
+                                end[1] = '00';
+                                $scope.attendancesData[i].shiftEndTime = end[0] +':'+ end[1];
+                            }
+                            else {
+                                end[1] = '0'+start[1];
+                                $scope.attendancesData[i].shiftEndTime = end[0] +':'+ end[1];
+                            }
+                        }
+                    }
+                    else if(end[1].length == 1)
+                    {
+                        if(end[1].length == 1)
+                        {
+
+                            if(end[1]==0)
+                            {
+                                end[1] = '00';
+                                $scope.attendancesData[i].shiftEndTime = end[0] +':'+ end[1];
+                            }
+                            else {
+                                end[1] = '0'+start[1];
+                                $scope.attendancesData[i].shiftEndTime = end[0] +':'+ end[1];
+                            }
+                        }
+                    }
+                    else
+                    {
+                        $scope.attendancesData = data.transactions;
+                    }
+
+
+                }
+                //
+
+
+
                 /*
                     ** Call pagination  main function **
                 */
@@ -354,7 +446,7 @@ angular.module('timeSheetApp')
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
 
-                
+
 
                 if($scope.attendancesData && $scope.attendancesData.length > 0 ){
                     $scope.showCurrPage = data.currPage;
@@ -368,7 +460,7 @@ angular.module('timeSheetApp')
                     }
 
             });
-    
+
         };
 
         $scope.loadEnrImage = function(enrollId) {
@@ -377,7 +469,7 @@ angular.module('timeSheetApp')
             EmployeeComponent.findOne(enrollId).then(function (data) {
                 console.log(data);
                 var enrollImg = data.enrolled_face;
-                
+
                 var eleId1 = 'photoEnrolled';
                 var ele1 = document.getElementById(eleId1);
                 ele1.setAttribute('src',enrollImg);
@@ -392,9 +484,9 @@ angular.module('timeSheetApp')
             var eleId = 'photoOutImg';
             var ele = document.getElementById(eleId);
             ele.setAttribute('src',imageUrl);
-            
+
 //            var enrollImg = enrollUrl;
-            
+
             var eleId1 = 'photoEnrolled';
             var ele1 = document.getElementById(eleId1);
             ele1.setAttribute('src',enrollUrl);
@@ -476,7 +568,7 @@ angular.module('timeSheetApp')
         $scope.clearFilter = function() {
             $rootScope.exportStatusObj.exportMsg = '';
             $scope.downloader=false;
-            $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+            $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedDateFromSer =  new Date();
             $scope.selectedDateToSer =  new Date();
