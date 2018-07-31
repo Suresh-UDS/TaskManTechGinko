@@ -1172,6 +1172,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.clearFilter = function() {
+            $scope.noData = false;
             $rootScope.exportStatusObj.exportMsg = '';
             $scope.downloader=false;
             $scope.selectedSite = null;

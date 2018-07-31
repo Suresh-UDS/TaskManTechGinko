@@ -342,7 +342,7 @@ angular.module('timeSheetApp')
                 $scope.attendancesData = data.transactions;
                 $scope.attendancesDataLoader = true;
 
-
+            if($scope.attendancesData != null){
                 // Shift time HH:MM
                 console.log("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=------=-=-=-=-=-=-=-=-=-=-=-=-=");
                 console.log( $scope.attendancesData  );
@@ -430,6 +430,7 @@ angular.module('timeSheetApp')
 
 
                 }
+            }
                 //
 
 
@@ -566,6 +567,7 @@ angular.module('timeSheetApp')
         }
 
         $scope.clearFilter = function() {
+            $scope.noData = false;
             $rootScope.exportStatusObj.exportMsg = '';
             $scope.downloader=false;
             $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
