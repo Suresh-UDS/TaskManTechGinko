@@ -1,7 +1,7 @@
 <div ng-init="loadPageTop()">
 
 
-    <div class="row" ng-init="loadProjects();loadSites();">
+    <!-- <div class="row" ng-init="loadProjects();loadSites();">
         <div class="col-md-6 txt-align-lft">
 
             <button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
@@ -11,7 +11,7 @@
 
         </div>
     </div>
-
+ -->
 
     <div class="row" >
 
@@ -226,6 +226,20 @@
                          </div>
 
                      </div>
+                     <div class="txt-align-center LoaderCon"  ng-hide="employeesLoader">
+
+                    <div class="pad-TB-30">
+                        <div loader-css="ball-pulse"></div>
+                        <h3 >Loading, please wait...</h3>
+                    </div>
+
+                    </div>
+
+                    <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
+
+                    <h3>No data Found</h3>
+
+                    </div>
                 </div>
                 <!-- end content-->
             </div>
@@ -234,19 +248,6 @@
         <!-- end col-md-12 -->
     </div>
     <!-- end row -->
-
-    <div class="card margin-TB-5 txt-align-center" ng-hide="employeeShifts">
-
-        <div class="card-content">
-            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="employeesLoader">
-                <div loader-css="ball-pulse"></div>
-            </div>
-
-            <h3>No data Found</h3>
-
-        </div>
-
-    </div>
 
 
 </div>
