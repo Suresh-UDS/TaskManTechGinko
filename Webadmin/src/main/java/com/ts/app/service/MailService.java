@@ -472,5 +472,19 @@ public class MailService {
         sendEmail(emailIds, subject, content, true, true, null);
 	}
 
+	public void sendAssetWarrantyExpireAlert(String email, String title, String siteName, String code, String warrantyToDate) {
+		// TODO Auto-generated method stub
+		log.debug("Send Asset warranty expiration e-mail alert to '{}'", email);
+		Locale locale = Locale.forLanguageTag("en-US");
+        Context context = new Context(locale);
+        context.setVariable("assetName", title);
+        context.setVariable("assetCode", code);
+        context.setVariable("siteName", siteName);
+        context.setVariable("date", warrantyToDate);
+        String content = templateEngine.process("assetWarrantyExpireAlert", context);
+        String subject = messageSource.getMessage("email.assetWarrantyExpire.title", null, locale);
+        sendEmail(email, subject, content, true, true, null);
+	}
+
 	
 }

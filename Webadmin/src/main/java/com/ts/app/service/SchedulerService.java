@@ -644,6 +644,11 @@ public class SchedulerService extends AbstractService {
 	public void attendanceCheckOutTask() {
 		schedulerHelperService.autoCheckOutAttendance(this);
 	}
+	
+	@Scheduled(cron="0 0 9 * * ?")
+	public void warrantyExpireAlert() { 
+		schedulerHelperService.sendWarrantyExpireAlert();
+	}
 
 	public void createJobs(SchedulerConfig scheduledTask) {
 		if ("CREATE_JOB".equals(scheduledTask.getType())) {
