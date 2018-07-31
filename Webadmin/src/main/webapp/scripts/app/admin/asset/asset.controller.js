@@ -3049,11 +3049,11 @@ angular.module('timeSheetApp')
 
             }
 
-            $scope.checkMinMax = function(){
+        $scope.checkMinMax = function(){
 
-                if(($scope.selectedMinValue != null && $scope.selectedMinValue != "")
-                 && ($scope.selectedMaxValue != null && $scope.selectedMaxValue != "")){
-                if($scope.selectedMinValue > $scope.selectedMaxValue){
+            if($scope.selectedMinValue != null && $scope.selectedMaxValue != null){
+
+                if($scope.selectedMinValue >= $scope.selectedMaxValue){
 
                    $scope.minError =true;
                    $scope.maxError =true;
