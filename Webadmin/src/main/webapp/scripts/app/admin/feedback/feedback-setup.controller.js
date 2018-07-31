@@ -14,6 +14,7 @@ angular.module('timeSheetApp')
         $scope.validationErrorMsg = null;
         $scope.authorities = ["User", "Admin"];
         $scope.pager = {};
+        $scope.noData = false;
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -66,6 +67,7 @@ angular.module('timeSheetApp')
         $scope.loadProjects = function () {
         		ProjectComponent.findAll().then(function (data) {
                 $scope.projects = data;
+                console.log('project list --' ,$scope.projects);
             });
         };
 
@@ -212,7 +214,16 @@ angular.module('timeSheetApp')
             $scope.search();
          }
 
+         $scope.searchFilter1 = function () {
+            $scope.selectedBlock=null;
+            $scope.selectedFloor = null;
+            $scope.selectedZone = null;
+            $scope.setPage(1);
+            $scope.search();
+         }
+
         $scope.search = function () {
+             $scope.noData = false;
             var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
             if(!$scope.searchCriteria) {
                 var searchCriteria = {
@@ -325,6 +336,10 @@ angular.module('timeSheetApp')
                     $scope.pageEntries = $scope.feedbackMappingList.length;
                     $scope.totalCountPages = data.totalCount;
                     $scope.pageSort = 10;
+                    $scope.noData = false;
+
+                }else{
+                     $scope.noData = true;
                 }
 
             
