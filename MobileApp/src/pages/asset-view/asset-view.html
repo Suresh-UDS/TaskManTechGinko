@@ -728,86 +728,57 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'statusHistory'" style="margin-top:18px">
-            <div class="col-md-4 p-l-30 p-r-30" *ngFor="let statusHistory of status">
-                    <div class="white-bg">
-                        <div class="padding-left16 padding-top5" >
-                            <ion-row class="margin0 margin-top40">
-                                <!--<ion-col col-4 class="ver-center">-->
-                                        <!--&lt;!&ndash;<ion-icon name="md-clock" class="green fnt-24"></ion-icon>&ndash;&gt;-->
-                                        <!--<button ion-button icon-only clear class="green">-->
-                                            <!--<i class="fa fa-history fnt-24" aria-hidden="true"></i>-->
-                                        <!--</button>-->
-                                <!--</ion-col>-->
-                                <ion-col col-6>
-                                    <p text-left class="fnt-bold">Title:</p>
-                                </ion-col>
-                                <ion-col col-6>
-                                    <p text-right>{{statusHistory.assetTitle}}</p>
-                                </ion-col>
-                            </ion-row>
-                            <ion-row class="margin0">
-                                <ion-col col-6 class="ver-center">
-                                   <p text-left class="fnt-bold">Status:</p>
-                                </ion-col>
-                                <ion-col col-6>
-                                    <p text-right class="margin0" text-lowercase>{{statusHistory.status}}</p>
-                                </ion-col>
-                            </ion-row>
-                            <ion-row class="margin0">
-                                <ion-col col-6>
-                                    <p text-left class="fnt-bold">On:</p>
-                                </ion-col>
-                                <ion-col col-6>
-                                    <p text-right>{{statusHistory.lastModifiedDate|date : 'MMM d, y, h:mm a'}}</p>
-                                </ion-col>
 
-                            </ion-row>
-                        </div>
-                </div>
-
+        <div class="col-md-8 " *ngFor="let statusHistory of status">
+            <ion-card class="shadow brdr-radius">
+                <ion-card-content>
+                    <ion-row class="margin0 border-btm">
+                        <ion-col col-12>
+                            <p text-capitalize class="margin0" text-center>{{statusHistory.assetTitle}}</p>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row no-margin>
+                        <ion-col col-6>
+                            <p class="margin0" text-center>{{statusHistory.status}}</p>
+                            <p class="margin0 clr-orange fnt-12" text-center>Status</p>
+                        </ion-col>
+                        <ion-col col-6>
+                            <div class="">
+                                <p text-center class="margin0" text-uppercase>{{statusHistory.lastModifiedDate|date : 'MM/dd/yy HH:MM'}}</p>
+                                <p text-center class="margin0 clr-orange fnt-12">On</p>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                </ion-card-content>
+            </ion-card>
         </div>
+
+
     </ion-list>
 
     <ion-list *ngSwitchCase="'siteHistory'" style="margin-top:18px">
-        <div class="col-md-4 p-l-30 p-r-30" *ngFor="let history of site">
-            <div class="white-bg">
-                <div class="padding-left16 padding-top5" >
-                    <ion-row class="margin0 margin-top40">
-                        <!--<ion-col col-4 class="ver-center">-->
-                            <!--<ion-icon name="md-clock" class="green fnt-24"></ion-icon>-->
-                            <!--&lt;!&ndash;<button ion-button icon-only clear class="green">&ndash;&gt;-->
-                                <!--&lt;!&ndash;<i class="fa fa-history fnt-24" aria-hidden="true"></i>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</button>&ndash;&gt;-->
-                        <!--</ion-col>-->
-                        <ion-col col-6 text-left>
-                                <p text-left class="fnt-bold">Title:</p>
+        <div class="col-md-8 " *ngFor="let history of site">
+            <ion-card class="shadow brdr-radius">
+                <ion-card-content>
+                    <ion-row class="margin0 border-btm">
+                        <ion-col col-12>
+                            <p text-capitalize class="margin0" text-center>{{history.assetTitle}}</p>
                         </ion-col>
-                        <ion-col>
-                            <p text-right class="margin0">{{history.assetTitle}}</p>
-                        </ion-col>
-
                     </ion-row>
-                    <ion-row class="margin0">
-                        <ion-col col-6 class="ver-center">
-                            <div class=" padding-bottom5 ln-ght20" text-capitalize>
-                                <p text-left class="fnt-bold">Site name:</p>
+                    <ion-row no-margin>
+                        <ion-col col-6>
+                            <p class="margin0" text-center>{{history.siteName}}</p>
+                            <p class="margin0 clr-orange fnt-12" text-center>Site name</p>
+                        </ion-col>
+                        <ion-col col-6>
+                            <div class="">
+                                <p text-center class="margin0" text-uppercase>{{history.lastModifiedDate|date : 'MM/dd/yy HH:MM'}}</p>
+                                <p text-center class="margin0 clr-orange fnt-12">On</p>
                             </div>
                         </ion-col>
-                        <ion-col col-6>
-                            <p text-right class="margin0">{{history.siteName}}</p>
-                        </ion-col>
                     </ion-row>
-                    <ion-row class="margin0">
-                        <ion-col col-6>
-                                <p text-left class="fnt-bold">On:</p>
-                        </ion-col>
-                        <ion-col col-6>
-                            <p text-right class="margin0">{{history.lastModifiedDate|date : 'MMM d, y, h:mm a'}}</p>
-                        </ion-col>
-                    </ion-row>
-                </div>
-            </div>
-
+                </ion-card-content>
+            </ion-card>
         </div>
     </ion-list>
 </div>
