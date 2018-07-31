@@ -39,6 +39,7 @@ import{TicketFilter} from "../pages/ticket/ticket-filter/ticket-filter";
 import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-filter";
 import {authService} from "../pages/service/authService";
 import{ChangePassword} from "../pages/change-password/change-password";
+import{InventoryMaster} from "../pages/inventory-master/inventory-master";
 
 @Component({
   templateUrl: 'app.html'
@@ -153,6 +154,7 @@ export class MyApp {
       { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt',permission:'QuotationList'},
        { title: 'Feedback', component: InitFeedbackPage,active:false,icon:'feedback',permission:'FeedbackList'},
        { title: 'ChangePassword', component:ChangePassword,active:false,icon:'feedback',permission:'FeedbackList'},
+        {title: 'InventoryMaster', component:InventoryMaster,active:false,icon:'feedback',permission:'FeedbackList'}
         // {title:'Splash page', component:Splash,active:false,icon:'feedback',permission:'DashboardList'},
         // {title:'Splash logo', component:SplashLogo,active:false,icon:'feedback',permission:'DashboardList'},
       // { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},

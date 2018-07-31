@@ -77,5 +77,18 @@ page-asset-view {
   {
     font-weight:bold !important;
   }
+  .shadow
+  {
+    box-shadow: 0 1px 1px 1px #CCD;
+  }
+  .brdr-radius
+  {
+    border-radius:15px !important;
+  }
+  .p-r-l-0
+  {
+    padding-right:0px !important;
+    padding-left:10px !important;
+  }
 
 }

@@ -184,22 +184,26 @@
                         </table>
 
                     </div>
+
+                    <div class="txt-align-center LoaderCon"  ng-hide="userRolesLoader">
+
+                        <div class="pad-TB-30">
+                            <div loader-css="ball-pulse"></div>
+                            <h3 >Loading, please wait...</h3>
+                        </div>
+
+                    </div>
+
+                    <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
+
+                        <h3>No data Found</h3>
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="card margin-TB-5 txt-align-center" ng-hide="userRoles">
-
-        <div class="card-content">
-
-            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="userRolesLoader">
-                <div loader-css="ball-pulse"></div>
-            </div>
-
-            <h3>No data Found</h3>
-
-        </div>
+        
 
     </div>
 
@@ -378,7 +382,7 @@
                             <div class="form-group">
                                 <div class="dropdown">
                                     <input type="text" class="form-control searchable-input floatL border-bottom-input" placeholder="Role ID"
-                                           ng-model="selectedUserRoleId" ng-value="searchCriteria.userRoleId" name="userRoleId" uib-typeahead="userRule as userRole.id for userRole in userRoles | filter:$viewValue | limitTo:5" />
+                                           ng-model="searchUserRoleId" ng-value="" name="userRoleId" uib-typeahead="userRule as userRole.id for userRole in userRoles | filter:$viewValue | limitTo:5" />
 
                                 </div>
                             </div>
@@ -387,7 +391,7 @@
                             <div class="form-group">
                                 <div class="dropdown">
                                     <input type="text" class="form-control searchable-input floatL border-bottom-input" placeholder="Role Name"
-                                           ng-model="selectedUserRoleName" ng-value="searchCriteria.name" name="name" uib-typeahead="userRule as userRole.name for userRole in userRoles | filter:$viewValue | limitTo:5" />
+                                           ng-model="searchUserRoleName" ng-value="" name="name" uib-typeahead="userRule as userRole.name for userRole in userRoles | filter:$viewValue | limitTo:5" />
 
                                 </div>
                             </div>
@@ -396,7 +400,7 @@
                             <div class="form-group">
                                 <div class="dropdown">
                                     <input type="text" class="form-control searchable-input floatL border-bottom-input" placeholder="Role Level"
-                                           ng-model="selectedUserRoleLevel" ng-value="searchCriteria.roleLevel" name="roleLevel" uib-typeahead="userRule as userRole.roleLevel for userRole in userRoles | filter:$viewValue | limitTo:5" />
+                                           ng-model="searchUserRoleLevel" ng-value="" name="roleLevel" uib-typeahead="userRule as userRole.roleLevel for userRole in userRoles | filter:$viewValue | limitTo:5" />
 
                                 </div>
                             </div>
