@@ -51,9 +51,9 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     
     private List<String> shiftWiseAttendanceEmailIds;
     
-    private long dayWiseAttendanceAlterTimeId;
+    private long dayWiseAttendanceAlertTimeId;
     
-    private Date dayWiseAttendanceAlterTime;
+    private Date dayWiseAttendanceAlertTime;
 	
     private long lateAttendanceGraceTimeId;
 	
@@ -442,13 +442,21 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 	public void setDayWiseAttendanceEmailIds(List<String> dayWiseAttendanceEmailIds) {
 		this.dayWiseAttendanceEmailIds = dayWiseAttendanceEmailIds;
 	}
-
-	public Date getDayWiseAttendanceAlterTime() {
-		return dayWiseAttendanceAlterTime;
+	
+	public long getDayWiseAttendanceAlertTimeId() {
+		return dayWiseAttendanceAlertTimeId;
 	}
 
-	public void setDayWiseAttendanceAlterTime(Date dayWiseAttendanceAlterTime) {
-		this.dayWiseAttendanceAlterTime = dayWiseAttendanceAlterTime;
+	public void setDayWiseAttendanceAlertTimeId(long dayWiseAttendanceAlertTimeId) {
+		this.dayWiseAttendanceAlertTimeId = dayWiseAttendanceAlertTimeId;
+	}
+
+	public Date getDayWiseAttendanceAlertTime() {
+		return dayWiseAttendanceAlertTime;
+	}
+
+	public void setDayWiseAttendanceAlertTime(Date dayWiseAttendanceAlertTime) {
+		this.dayWiseAttendanceAlertTime = dayWiseAttendanceAlertTime;
 	}
 
 	public int getLateAttendanceGraceTime() {
@@ -457,14 +465,6 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 
 	public void setLateAttendanceGraceTime(int lateAttendanceGraceTime) {
 		this.lateAttendanceGraceTime = lateAttendanceGraceTime;
-	}
-
-	public long getDayWiseAttendanceAlterTimeId() {
-		return dayWiseAttendanceAlterTimeId;
-	}
-
-	public void setDayWiseAttendanceAlterTimeId(long dayWiseAttendanceAlterTimeId) {
-		this.dayWiseAttendanceAlterTimeId = dayWiseAttendanceAlterTimeId;
 	}
 
 	public long getLateAttendanceGraceTimeId() {

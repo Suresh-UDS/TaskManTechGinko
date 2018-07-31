@@ -632,10 +632,10 @@
 
 
                                                                                         </div> -->
-                                                                                        <p class="help-block" style="color:maroon"
-                                                                                           ng-show="warFromMsg">
-                                                                                            From date cannot be lesser than To date.
-                                                                                        </p>
+                                                                                        <!--<p class="help-block" style="color:maroon"-->
+                                                                                           <!--ng-show="warFromMsg">-->
+                                                                                            <!--From date cannot be lesser than To date.-->
+                                                                                        <!--</p>-->
 
                                                                                     </div>
 
@@ -646,9 +646,9 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">To Date</label>
                                                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                    <input type="text" class="form-control datepicker"  id="warToDate" name="warToDate" ng-model ="warToDate1"  placeholder="{{warToDate | date:'dd/MMM/yyyy'}}"/>
+                                                                                    <input type="text" class="form-control datepicker"  id="warToDate" name="warToDate" ng-model ="warToDate1"  placeholder="{{warToDate | date:'dd/MMM/yyyy'}}" autocomplete="off" required/>
                                                                                     <div ng-show="form.$submitted || form.warToDate.$touched">
-                                                                                        <!-- <div
+                                                                                         <div
                                                                                             ng-show="form.warToDate.$dirty || form.warToDate.$invalid">
                                                                                             <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                                                ng-show="form.warToDate.$error.required">
@@ -656,11 +656,11 @@
                                                                                             </p>
 
 
-                                                                                        </div> -->
-                                                                                        <p class="help-block" style="color:maroon"
-                                                                                           ng-show="warToMsg">
-                                                                                            To date cannot be lesser than From date.
-                                                                                        </p>
+                                                                                        </div>
+                                                                                        <!--<p class="help-block" style="color:maroon"-->
+                                                                                           <!--ng-show="warToMsg">-->
+                                                                                            <!--To date cannot be lesser than From date.-->
+                                                                                        <!--</p>-->
 
                                                                                     </div>
 
@@ -1549,10 +1549,6 @@
                                                                                     </p>
 
                                                                                 </div>
-                                                                                <p class="help-block" style="color:maroon"
-                                                                                   ng-show="amcFromMsg">
-                                                                                    Fromdate cannot be greater than To date.
-                                                                                </p>
 
                                                                             </div>
 
@@ -1574,10 +1570,10 @@
                                                                                     </p>
 
                                                                                 </div>
-                                                                                <p class="help-block" style="color:maroon"
-                                                                                   ng-show="amcToMsg">
-                                                                                    Todate cannot be lesser than From date.
-                                                                                </p>
+                                                                                <!--<p class="help-block" style="color:maroon"-->
+                                                                                   <!--ng-show="amcToMsg">-->
+                                                                                    <!--Todate cannot be lesser than From date.-->
+                                                                                <!--</p>-->
 
                                                                             </div>
 
