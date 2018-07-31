@@ -772,7 +772,7 @@ public class SchedulerHelperService extends AbstractService {
 	}
 
 	@Transactional
-	public void sendScheduleJobsAlert() {
+	public void sendSchedulePPMJobsAlert() {
 		// TODO Auto-generated method stub
 		String ppmType = MaintenanceType.PPM.getValue();
 		List<Job> ppmJobs = jobRepository.findAllPPMJobs(ppmType);
@@ -831,6 +831,73 @@ public class SchedulerHelperService extends AbstractService {
 							}
 						} else {
 							log.info("There is no PPM Jobs email ids registered");
+						}
+					}
+        		}
+	        }
+		}
+	}
+	
+	@Transactional
+	public void sendScheduleAMCJobsAlert() {
+		// TODO Auto-generated method stub
+		String amcType = MaintenanceType.AMC.getValue();
+		List<Job> amcJobs = jobRepository.findAllAMCJobs(amcType);
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Date currDate = calendar.getTime();
+		String cDate = dateFormat.format(currDate);
+		log.debug("Current Date -" +cDate);
+		for(Job amcJob : amcJobs) { 
+			JobDTO jobModel = mapperUtil.toModel(amcJob, JobDTO.class);
+			Calendar calendar1 = Calendar.getInstance();
+	        calendar1.setTime(amcJob.getPlannedStartTime());
+	        calendar1.add(Calendar.DAY_OF_YEAR, -1);
+	        calendar1.set(Calendar.HOUR_OF_DAY, 0);
+	        calendar1.set(Calendar.MINUTE, 0);
+	        calendar1.set(Calendar.SECOND, 0);
+	        calendar1.set(Calendar.MILLISECOND, 0);
+	        Date prevDate = calendar1.getTime();
+	        log.debug("Previous Date -" + prevDate);
+	        String fDate = dateFormat.format(prevDate);
+	        log.debug("Formatted date -" +fDate);
+	        log.debug("Validation "+currDate+ "  " + prevDate);
+	        if(currDate.equals(prevDate)) { 
+	        	if(jobModel.getEmployeeId() > 0) { 
+	        		Employee emp = employeeRepository.findOne(jobModel.getEmployeeId());
+	        		if(emp.getEmail() != null) { 
+	        			mailService.sendPreviousDayJobAlert(emp.getEmail(), emp.getId(), emp.getFullName(), jobModel.getId(), jobModel.getPlannedStartTime());
+	        		}else {
+	        			Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_AMC);
+						if(setting != null && setting.getSettingValue().equalsIgnoreCase("true")) {
+							Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_AMC_EMAILS);
+							if(settingEntity.getSettingValue().length() > 0) {
+								List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+								for(String email : emailLists) {
+									mailService.sendPreviousDayJobAlert(email, emp.getId(), emp.getFullName(), jobModel.getId(), jobModel.getPlannedStartTime());
+								}
+							} else {
+								log.info("There is no AMC Jobs email ids registered");
+							}
+						}
+	        		}
+	        	}else {
+        			Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_AMC);
+					if(setting !=null && setting.getSettingValue().equalsIgnoreCase("true") ) {
+						Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_AMC_EMAILS);
+						if(settingEntity.getSettingValue().length() > 0) {
+							List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+							for(String email : emailLists) {
+								mailService.sendEmployeeAssignAlert(email, jobModel.getId(), jobModel.getPlannedStartTime());
+							}
+						} else {
+							log.info("There is no AMC Jobs email ids registered");
 						}
 					}
         		}

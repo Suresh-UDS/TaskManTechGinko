@@ -95,7 +95,6 @@ angular.module('timeSheetApp')
         $scope.searchAcquiredDate = "";
         $scope.searchCreatedDate = "";
 
-
         $scope.asset = {};
 
         $scope.assetEdit = {};
@@ -521,7 +520,6 @@ angular.module('timeSheetApp')
             });
         }
 
-
         $scope.loadFloors = function () {
                 var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
                 LocationComponent.findFloors(0,$scope.selectedSites.id,$scope.selectedBlock).then(function (data) {
@@ -565,8 +563,93 @@ angular.module('timeSheetApp')
         		now = now.toISOString().split('T')[0]
         		if($scope.selectedSites) {
             		SiteComponent.findShifts($scope.selectedSites.id,now).then(function(data){
-            			$scope.shifts = data;
+            			// $scope.shifts = data;
                         console.log('selected shifts - ' + JSON.stringify($scope.shifts));
+                        console.log("==================================================")
+                        console.log(data);
+                        // Shift time HH:MM View
+                        $scope.shifts = data;
+                        for(var i=0;i<$scope.shifts.length;i++) {
+                            console.log($scope.shifts[i].startTime.length);
+                            var start = $scope.shifts[i].startTime.split(':');
+                            console.log(start)
+                            if(start[0].length == 1)
+                            {
+                                start[0] = '0'+start[0];
+                                $scope.shifts[i].startTime = start[0] +':'+ start[1];
+                                if(start[1].length == 1)
+                                {
+                                    if(start[1]==0)
+                                    {
+                                        start[1] = '00';
+                                        $scope.shifts[i].startTime = start[0] +':'+ start[1];
+                                    }
+                                    else {
+                                        start[1] = '0'+start[1];
+                                        $scope.shifts[i].startTime = start[0] +':'+ start[1];
+                                    }
+                                }
+                            }
+                            else if(start[1].length == 1)
+                            {
+                                if(start[1]==0)
+                                {
+                                    start[1] = '00';
+                                    $scope.shifts[i].startTime = start[0] +':'+ start[1];
+                                }
+                                else {
+                                    start[1] = '0'+start[1];
+                                    $scope.shifts[i].startTime = start[0] +':'+ start[1];
+                                }
+                            }
+                            else
+                            {
+                                $scope.shifts = data
+                            }
+
+
+                            var end =  $scope.shifts[i].endTime.split(':');
+                            console.log(end)
+                            if(end[0].length == 1)
+                            {
+                                end[0] = '0'+end[0];
+                                $scope.shifts[i].endTime = end[0] +':'+ end[1];
+                                if(end[1].length == 1)
+                                {
+                                    if(end[1]==0)
+                                    {
+                                        end[1] = '00';
+                                        $scope.shifts[i].endTime = end[0] +':'+ end[1];
+                                    }
+                                    else {
+                                        end[1] = '0'+start[1];
+                                        $scope.shifts[i].endTime = end[0] +':'+ end[1];
+                                    }
+                                }
+                            }
+                            else if(end[1].length == 1)
+                            {
+                                if(end[1].length == 1)
+                                {
+                                    if(end[1]==0)
+                                    {
+                                        end[1] = '00';
+                                        $scope.shifts[i].endTime = end[0] +':'+ end[1];
+                                    }
+                                    else {
+                                        end[1] = '0'+start[1];
+                                        $scope.shifts[i].endTime = end[0] +':'+ end[1];
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                $scope.shifts = data
+                            }
+
+                        }
+                        //
+
                         //$scope.loadingStop();
             		}).catch(function(){
                         //$scope.loadingStop();
