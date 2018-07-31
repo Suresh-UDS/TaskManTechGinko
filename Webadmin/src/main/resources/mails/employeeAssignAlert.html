@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{email.employeeAssignAlert.title}">Employee Assign Remainder</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="#{email.employeeAssignAlert.greeting}">
+</p>
+
+
+<p th:text="#{email.employeeAssignAlert.content(${jobId}, ${JobStartDate})}">
+
+</p>
+
+<p>
+    <span th:text="#{email.employeeAssignAlert.text}">Regards, </span>
+    <br/>
+    <em th:text="#{email.signature}">.</em>
+</p>
+</body>
+</html>

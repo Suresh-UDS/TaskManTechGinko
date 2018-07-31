@@ -12,6 +12,7 @@ angular.module('timeSheetApp')
         $scope.validationErrorMsg = null;
         $scope.authorities = ["User", "Admin"];
         $scope.pager = {};
+        $scope.noData = false;
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -155,12 +156,20 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadModuleActions = function () {
+            $scope.noData = false;
         	var searchCriteria = {
         		"findAll" : true	
         	}
         	ModuleActionComponent.search(searchCriteria).then(function (data) {
         		$scope.moduleActions = data.transactions;
         		$scope.moduleActionsLoader = true;
+
+                if($scope.moduleActions && $scope.moduleActions.length > 0 ){
+                    $scope.noData = false;
+
+                }else{
+                     $scope.noData = true;
+                }
         	})
         };
 
