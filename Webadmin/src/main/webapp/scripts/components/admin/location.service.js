@@ -62,6 +62,14 @@ angular.module('timeSheetApp')
                 })
             },
 
+            findIds: function(siteId,block,floor,zone){
+                return $http.get('api/location/block/'+block+'/floor/'+floor+'/zone/'+zone+'/siteId/'+siteId).then(function (response) {
+                    return response.data;
+                })
+            },
+
+
+
             search: function(searchCriteria) {
                 return $http.post('api/location/search', searchCriteria).then(function (response) {
                     return response.data;
@@ -88,6 +96,13 @@ angular.module('timeSheetApp')
 			},
             createQr : function(qr) {
                 return $http.get('api/location/'+qr.locationId+'/qrcode/'+qr.siteId).then(function(response){
+                    return response.data;
+
+                });
+            },
+
+            generateQR : function(qr) {
+                return $http.get('api/location/qrCode/'+qr.block+"/"+qr.floor+"/"+qr.zone+"/"+qr.siteId).then(function(response){
                     return response.data;
 
                 });
