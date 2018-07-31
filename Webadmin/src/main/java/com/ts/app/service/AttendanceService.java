@@ -191,13 +191,13 @@ public class AttendanceService extends AbstractService {
 					startCalLeadTime.add(Calendar.DAY_OF_MONTH, -1);
 					startCalGraceTime.add(Calendar.DAY_OF_MONTH, -1);
 				}
-				
+
 				if(isCheckIn && endCal.before(startCal)) {
 					endCal.add(Calendar.DAY_OF_MONTH, 1);
 					endCalLeadTime.add(Calendar.DAY_OF_MONTH, 1);
 					endCalGraceTime.add(Calendar.DAY_OF_MONTH, 1);
 				}
-
+                log.debug("Shift timing "+site.getId()+ " - "+ emp.getId()+" - "+startCal.getTime()+" - "+endCal.getTime());
 				EmployeeShift empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), emp.getId() , DateUtil.convertToTimestamp(startCal.getTime()), DateUtil.convertToTimestamp(endCal.getTime()));
 
 				Calendar checkInCal = Calendar.getInstance();
