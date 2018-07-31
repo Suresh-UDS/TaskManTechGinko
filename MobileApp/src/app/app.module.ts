@@ -59,6 +59,7 @@ import {InitFeedbackPage} from "../pages/feedback/init-feedback";
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
 import{TicketFilter} from "../pages/ticket/ticket-filter/ticket-filter";
+import{InventoryMaster} from "../pages/inventory-master/inventory-master";
 
 import {SQLitePorter} from "@ionic-native/sqlite-porter";
 
@@ -202,6 +203,7 @@ import{LocationAccuracy} from "@ionic-native/location-accuracy";
       OfflineGetassetreadings,
       OfflineAttendance,
       ChangePassword,
+      InventoryMaster
   ],
   imports: [
     BrowserModule,
@@ -294,6 +296,7 @@ import{LocationAccuracy} from "@ionic-native/location-accuracy";
       OfflineGetassetreadings,
       OfflineAttendance,
       ChangePassword,
+      InventoryMaster
 
 
   ],
