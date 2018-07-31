@@ -12,7 +12,7 @@
                 <a ng-click="(pager.currentPage != 1) && setPage(pager.currentPage - 1)"><i id="first" class="fa fa-angle-left"></i></a>
             </li>
             <li class="paging" ng-repeat="page in pager.pages" ng-class="{active:pager.currentPage === page}">
-                <a ng-click="setPage(page)">{{page}}</a>
+                <a ng-click="(pager.currentPage != page) && setPage(page)">{{page}}</a>
             </li>                
             <li class="next" ng-class="{disabled:pager.currentPage === pager.totalPages}" >
                 <a ng-click="(pager.currentPage != pager.totalPages) && setPage(pager.currentPage + 1)"><i id="last" class="fa fa-angle-right"></i></a>
