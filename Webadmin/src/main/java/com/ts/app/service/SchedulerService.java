@@ -648,6 +648,7 @@ public class SchedulerService extends AbstractService {
 	@Scheduled(cron="0 0 9 * * ?")
 	public void warrantyExpireAlert() { 
 		schedulerHelperService.sendWarrantyExpireAlert();
+		schedulerHelperService.sendScheduleJobsAlert();
 	}
 
 	public void createJobs(SchedulerConfig scheduledTask) {

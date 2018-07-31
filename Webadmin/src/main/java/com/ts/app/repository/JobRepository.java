@@ -177,5 +177,11 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
 
     @Query("SELECT j FROM Job j WHERE j.status <> 'Closed' order by j.createdDate asc")
     List<Job> findAllActiveUnClosedTicket();
+
+    @Query("SELECT j FROM Job j WHERE j.maintenanceType = :ppmType")
+	List<Job> findAllPPMJobs(@Param("ppmType") String ppmType);
+    
+    @Query("SELECT j FROM Job j WHERE j.maintenanceType = :amcType")
+	List<Job> findAllAMCJobs(@Param("amcType") String amcType);
     
 }

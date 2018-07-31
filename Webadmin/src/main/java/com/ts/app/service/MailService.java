@@ -486,5 +486,32 @@ public class MailService {
         sendEmail(email, subject, content, true, true, null);
 	}
 
+	public void sendPreviousDayJobAlert(String email, Long empId, String fullName, long jobId, Date plannedStartTime) {
+		// TODO Auto-generated method stub
+		log.debug("Send Asset warranty expiration e-mail alert to '{}'", email);
+		Locale locale = Locale.forLanguageTag("en-US");
+        Context context = new Context(locale);
+        context.setVariable("empName", fullName);
+        context.setVariable("empId", empId);
+        context.setVariable("jobId", jobId);
+        context.setVariable("JobStartDate", plannedStartTime);
+        String content = templateEngine.process("previousDayJobAlert", context);
+        String subject = messageSource.getMessage("email.previousDayJobAlert.title", null, locale);
+        sendEmail(email, subject, content, true, true, null);
+		
+	}
+
+	public void sendEmployeeAssignAlert(String email, long jobId, Date plannedStartTime) {
+		// TODO Auto-generated method stub
+		log.debug("Send Asset warranty expiration e-mail alert to '{}'", email);
+		Locale locale = Locale.forLanguageTag("en-US");
+        Context context = new Context(locale);
+        context.setVariable("jobId", jobId);
+        context.setVariable("JobStartDate", plannedStartTime);
+        String content = templateEngine.process("employeeAssignAlert", context);
+        String subject = messageSource.getMessage("email.employeeAssignAlert.title", null, locale);
+        sendEmail(email, subject, content, true, true, null);
+	}
+
 	
 }
