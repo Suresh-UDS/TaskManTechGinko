@@ -460,6 +460,9 @@ public class ImportUtil {
 					    String block = currentRow.getCell(13).getStringCellValue();
 					    String floor = currentRow.getCell(14).getStringCellValue();
 					    String zone = currentRow.getCell(15).getStringCellValue();
+                        jobDto.setBlock(block);
+                        jobDto.setFloor(floor);
+                        jobDto.setZone(zone);
                         log.debug("location available - " + block+" - "+floor+" - "+zone);
                         log.debug("site id - "+jobDto.getSiteId());
 
