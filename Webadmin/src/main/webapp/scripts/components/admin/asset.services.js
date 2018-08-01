@@ -408,6 +408,15 @@ angular.module('timeSheetApp')
                     return response.data;
                 });
             },
+
+             printAllQr: function(search) {
+              
+                return $http.post('api/list/qrcodes/findAll', search).then(function (response) {
+                    return response.data;
+                });
+            },
+
+            
             
             getStatusHistory : function(search) { 
             	return $http.post('api/assets/statusHistory', search).then(function(response) { 

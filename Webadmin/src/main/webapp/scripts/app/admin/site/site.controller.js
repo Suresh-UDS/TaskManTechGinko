@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('SiteController', function ($rootScope, $scope, $state, $timeout,$filter,
+    .controller('SiteController', function (Name,$rootScope, $scope, $state, $timeout,$filter,
         ProjectComponent, SiteComponent,$http,$stateParams,$location,PaginationComponent) {
         $rootScope.loadingStop();
         $rootScope.loginView = false;
@@ -17,6 +17,10 @@ angular.module('timeSheetApp')
         $scope.pages = { currPage : 1};
         $scope.pager = {};
         $scope.noData = false;
+
+        Name.setName('hello world!');
+         $scope.name = Name.getName();
+         console.log('Stored service name msg' , $scope.name);
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
