@@ -13,6 +13,7 @@ angular.module('timeSheetApp')
         $scope.validationErrorMsg = null;
         $scope.authorities = ["User", "Admin"];
         $scope.pager = {};
+        $scope.noData = false;
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -243,6 +244,7 @@ angular.module('timeSheetApp')
         }
 
         $scope.search = function () {
+            $scope.noData = false;
             var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
             if(!$scope.searchCriteria) {
                 var searchCriteria = {
@@ -307,7 +309,15 @@ angular.module('timeSheetApp')
                     $scope.pageEntries = $scope.feedbackMasterList.length;
                     $scope.totalCountPages = data.totalCount;
                     $scope.pageSort = 10;
+                    $scope.noData = false;
+
+                }else{
+                     $scope.noData = true;
                 }
+            }).catch(function(){
+                $scope.feedbackMasterListLoader = true;
+                $scope.loading = false;
+                $scope.noData = true;
             });
 
         };

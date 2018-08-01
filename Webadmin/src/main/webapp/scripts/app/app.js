@@ -115,7 +115,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
             //console.log("Calling loader stop");
             $('.pageCenter').hide();
             $('.overlay').hide();
-
+            $rootScope.noscroll = false;
 
         }, 2000);}
 

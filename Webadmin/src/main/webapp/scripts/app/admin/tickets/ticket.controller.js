@@ -673,7 +673,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.clearFilter = function() {
-        		
+        	$scope.noData = false;	
             $scope.selectedDateFrom = $filter('date')(fromDate, 'dd/MM/yyyy');
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedDateFromSer = fromDate;

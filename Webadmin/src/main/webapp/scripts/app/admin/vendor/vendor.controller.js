@@ -294,6 +294,7 @@ angular.module('timeSheetApp')
         
 
         $scope.clearFilter = function() {
+            $scope.noData = false;
             $scope.selectedProject = null;
             $scope.searchCriteria = {};
             $scope.selectedName = null;

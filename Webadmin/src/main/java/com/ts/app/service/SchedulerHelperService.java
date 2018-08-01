@@ -34,6 +34,7 @@ import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.EmployeeShift;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.MaintenanceType;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Shift;
@@ -54,6 +55,7 @@ import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
 
@@ -111,6 +113,14 @@ public class SchedulerHelperService extends AbstractService {
 	public static final String EMAIL_NOTIFICATION_WARRANTY = "email.notification.warranty";
 	
 	public static final String EMAIL_NOTIFICATION_WARRANTY_EMAILS = "email.notification.warranty.emails";
+	
+	public static final String EMAIL_NOTIFICATION_PPM = "email.notification.ppm";
+	
+	public static final String EMAIL_NOTIFICATION_PPM_EMAILS = "email.notification.ppm.emails";
+	
+	public static final String EMAIL_NOTIFICATION_AMC = "email.notification.amc";
+	
+	public static final String EMAIL_NOTIFICATION_AMC_EMAILS = "email.notification.amc.emails";
 
 	public void eodJobReport() {
 		if (env.getProperty("scheduler.eodJobReport.enabled").equalsIgnoreCase("true")) {
@@ -742,20 +752,156 @@ public class SchedulerHelperService extends AbstractService {
 		        log.debug("Validation "+currDate+ "  " + prevDate);
 				if(currDate.equals(prevDate)) { 
 					Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_WARRANTY);
-					if(setting.getSettingValue().equalsIgnoreCase("true") ) {
-						Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_WARRANTY_EMAILS);
-						if(settingEntity.getSettingValue().length() > 0) {
-							List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
-							for(String email : emailLists) {
-								mailService.sendAssetWarrantyExpireAlert(email, asset.getTitle(), assetModel.getSiteName(), asset.getCode(), warrantyDate);
+					if(setting != null) {
+						if(setting.getSettingValue().equalsIgnoreCase("true") ) {
+							Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_WARRANTY_EMAILS);
+							if(settingEntity.getSettingValue().length() > 0) {
+								List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+								for(String email : emailLists) {
+									mailService.sendAssetWarrantyExpireAlert(email, asset.getTitle(), assetModel.getSiteName(), asset.getCode(), warrantyDate);
+								}
+							} else {
+								log.info("There is no email ids registered");
 							}
-						} else {
-							log.info("There is no email ids registered");
 						}
 					}
 				}
 				
 			}
+		}
+	}
+
+	@Transactional
+	public void sendSchedulePPMJobsAlert() {
+		// TODO Auto-generated method stub
+		String ppmType = MaintenanceType.PPM.getValue();
+		List<Job> ppmJobs = jobRepository.findAllPPMJobs(ppmType);
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Date currDate = calendar.getTime();
+		String cDate = dateFormat.format(currDate);
+		log.debug("Current Date -" +cDate);
+		for(Job ppmJob : ppmJobs) { 
+			JobDTO jobModel = mapperUtil.toModel(ppmJob, JobDTO.class);
+			Calendar calendar1 = Calendar.getInstance();
+	        calendar1.setTime(ppmJob.getPlannedStartTime());
+	        calendar1.add(Calendar.DAY_OF_YEAR, -1);
+	        calendar1.set(Calendar.HOUR_OF_DAY, 0);
+	        calendar1.set(Calendar.MINUTE, 0);
+	        calendar1.set(Calendar.SECOND, 0);
+	        calendar1.set(Calendar.MILLISECOND, 0);
+	        Date prevDate = calendar1.getTime();
+	        log.debug("Previous Date -" + prevDate);
+	        String fDate = dateFormat.format(prevDate);
+	        log.debug("Formatted date -" +fDate);
+	        log.debug("Validation "+currDate+ "  " + prevDate);
+	        if(currDate.equals(prevDate)) { 
+	        	if(jobModel.getEmployeeId() > 0) { 
+	        		Employee emp = employeeRepository.findOne(jobModel.getEmployeeId());
+	        		if(emp.getEmail() != null) { 
+	        			mailService.sendPreviousDayJobAlert(emp.getEmail(), emp.getId(), emp.getFullName(), jobModel.getId(), jobModel.getPlannedStartTime());
+	        		}else {
+	        			Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PPM);
+						if(setting != null && setting.getSettingValue().equalsIgnoreCase("true")) {
+							Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PPM_EMAILS);
+							if(settingEntity.getSettingValue().length() > 0) {
+								List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+								for(String email : emailLists) {
+									mailService.sendPreviousDayJobAlert(email, emp.getId(), emp.getFullName(), jobModel.getId(), jobModel.getPlannedStartTime());
+								}
+							} else {
+								log.info("There is no PPM Jobs email ids registered");
+							}
+						}
+	        		}
+	        	}else {
+        			Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PPM);
+					if(setting !=null && setting.getSettingValue().equalsIgnoreCase("true") ) {
+						Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PPM_EMAILS);
+						if(settingEntity.getSettingValue().length() > 0) {
+							List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+							for(String email : emailLists) {
+								mailService.sendEmployeeAssignAlert(email, jobModel.getId(), jobModel.getPlannedStartTime());
+							}
+						} else {
+							log.info("There is no PPM Jobs email ids registered");
+						}
+					}
+        		}
+	        }
+		}
+	}
+	
+	@Transactional
+	public void sendScheduleAMCJobsAlert() {
+		// TODO Auto-generated method stub
+		String amcType = MaintenanceType.AMC.getValue();
+		List<Job> amcJobs = jobRepository.findAllAMCJobs(amcType);
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Date currDate = calendar.getTime();
+		String cDate = dateFormat.format(currDate);
+		log.debug("Current Date -" +cDate);
+		for(Job amcJob : amcJobs) { 
+			JobDTO jobModel = mapperUtil.toModel(amcJob, JobDTO.class);
+			Calendar calendar1 = Calendar.getInstance();
+	        calendar1.setTime(amcJob.getPlannedStartTime());
+	        calendar1.add(Calendar.DAY_OF_YEAR, -1);
+	        calendar1.set(Calendar.HOUR_OF_DAY, 0);
+	        calendar1.set(Calendar.MINUTE, 0);
+	        calendar1.set(Calendar.SECOND, 0);
+	        calendar1.set(Calendar.MILLISECOND, 0);
+	        Date prevDate = calendar1.getTime();
+	        log.debug("Previous Date -" + prevDate);
+	        String fDate = dateFormat.format(prevDate);
+	        log.debug("Formatted date -" +fDate);
+	        log.debug("Validation "+currDate+ "  " + prevDate);
+	        if(currDate.equals(prevDate)) { 
+	        	if(jobModel.getEmployeeId() > 0) { 
+	        		Employee emp = employeeRepository.findOne(jobModel.getEmployeeId());
+	        		if(emp.getEmail() != null) { 
+	        			mailService.sendPreviousDayJobAlert(emp.getEmail(), emp.getId(), emp.getFullName(), jobModel.getId(), jobModel.getPlannedStartTime());
+	        		}else {
+	        			Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_AMC);
+						if(setting != null && setting.getSettingValue().equalsIgnoreCase("true")) {
+							Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_AMC_EMAILS);
+							if(settingEntity.getSettingValue().length() > 0) {
+								List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+								for(String email : emailLists) {
+									mailService.sendPreviousDayJobAlert(email, emp.getId(), emp.getFullName(), jobModel.getId(), jobModel.getPlannedStartTime());
+								}
+							} else {
+								log.info("There is no AMC Jobs email ids registered");
+							}
+						}
+	        		}
+	        	}else {
+        			Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_AMC);
+					if(setting !=null && setting.getSettingValue().equalsIgnoreCase("true") ) {
+						Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_AMC_EMAILS);
+						if(settingEntity.getSettingValue().length() > 0) {
+							List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+							for(String email : emailLists) {
+								mailService.sendEmployeeAssignAlert(email, jobModel.getId(), jobModel.getPlannedStartTime());
+							}
+						} else {
+							log.info("There is no AMC Jobs email ids registered");
+						}
+					}
+        		}
+	        }
 		}
 	}
 

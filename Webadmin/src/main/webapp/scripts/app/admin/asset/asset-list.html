@@ -5,7 +5,7 @@
     <div class="row">
 
 
-        <div class="col-md-6 txt-align-lft">
+        <div class="col-md-4 txt-align-lft">
 
             <button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
                 <i class="material-icons">filter_list</i> Basic Filter
@@ -18,15 +18,10 @@
 
         </div>
 
-        <div class="col-md-6 txt-align-rgt">
+        <div class="col-md-8 txt-align-rgt">
 
             <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-asset" has-permission="Site:Create" ng-class="{active: $state.includes('admin')}" tabindex="0">
                 <i class="material-icons">add</i> Add
-                <div class="ripple-container"></div>
-            </button>
-
-            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
-                <i class="material-icons">refresh</i> Reload
                 <div class="ripple-container"></div>
             </button>
 
@@ -47,6 +42,11 @@
 
             <button ng-show="assets.length" class="btn btn-info add-btn margn-tb0"   title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
                 <i class="material-icons">import_contacts</i> Export Excel
+                <div class="ripple-container"></div>
+            </button>
+
+            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i>
                 <div class="ripple-container"></div>
             </button>
 
@@ -197,9 +197,9 @@
 
 
                                     <div class="HoverBx">
-										
+
 										<a ui-sref="create-ticket({ assetId: asset.id })"  has-permission=""  title="Create Ticket"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">receipt</i></a>
-										
+
                                         <a   has-permission="Asset:View" ui-sref="view-asset({ id: asset.id })"  has-permission="Asset:View"  title="View Asset"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
 
                                         <a  ng-class="{active: $state.includes('admin')}" has-permission="Asset:Edit" title="Edit Asset" ui-sref="edit-asset({ id: asset.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
@@ -295,7 +295,7 @@
                                 <div class="dropdown">
                                     <label class="label-control">Client</label>
                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects" ng-pattern="Select Client" >
+                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects" ng-pattern="Select Client" required>
                                         <option value="">Select Client...</option>
                                     </select>
                                 </div>
@@ -353,6 +353,15 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-4">
+                        <div class="form-group">
+                            <div class="dropdown">
+                                <label class="label-control">Created Date</label>
+                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                <input type="text" class="form-control datepicker"  id="searchCreatedDate" placeholder="DD/MM/YYYY"  ng-model="searchCreatedDate"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-4">
 
                         <div class="dropdown">
                             <div class="form-group">
@@ -364,6 +373,9 @@
                             </div>
                         </div>
                     </div>
+
+                </div>
+                <div class="row">
                     <div class="col-xs-12 col-md-4">
 
                         <div class="dropdown">
@@ -377,9 +389,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-
                     <div class="col-xs-12 col-md-4">
                         <div class="form-group" >
                             <div class="dropdown">
