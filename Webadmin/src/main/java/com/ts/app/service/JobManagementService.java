@@ -358,18 +358,24 @@ public class JobManagementService extends AbstractService {
 		            		    if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateAndSiteAndLocation(searchCriteria.getSiteId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
 
+                                }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+		            		        page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
                                 }
 		            		}else if(searchCriteria.getSiteId() == 0 && searchCriteria.getEmployeeId() > 0) {
 		            		    if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateAndEmployeeAndLocation(searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
+                                }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+                                    page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateAndEmployee(searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
                                 }
 		            		}else if(searchCriteria.getSiteId() > 0 && !StringUtils.isEmpty(searchCriteria.getJobTypeName())) {
 		            		    if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateAndSiteAndJobTypeAndLocation(searchCriteria.getSiteId(), searchCriteria.getLocationId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
+                                }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+                                    page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateAndSiteAndJobType(searchCriteria.getSiteId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
                                 }
@@ -383,6 +389,8 @@ public class JobManagementService extends AbstractService {
                                 if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateSiteAndEmployeeAndLocation(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
 
+                                }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+                                    page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateSiteAndEmployee(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
 
@@ -391,18 +399,24 @@ public class JobManagementService extends AbstractService {
                                 if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateAndSiteAndLocation(searchCriteria.getSiteId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
 
+                                }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+                                    page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
                                 }
 		            		}else if(searchCriteria.getSiteId() == 0 && searchCriteria.getEmployeeId() > 0) {
                                 if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateAndEmployeeAndLocation(searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
+                                }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+                                    page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateAndEmployee(searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
                                 }
 		            		}else if(searchCriteria.getSiteId() > 0 && !StringUtils.isEmpty(searchCriteria.getJobTypeName())) {
                                 if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateAndSiteAndJobTypeAndLocation(searchCriteria.getSiteId(), searchCriteria.getLocationId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
+                                }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+                                    page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateAndSiteAndJobType(searchCriteria.getSiteId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
                                 }
@@ -871,15 +885,21 @@ public class JobManagementService extends AbstractService {
 		job.setStatus(jobDTO.getJobStatus());
 		job.setType(jobDTO.getJobType());
 		if(location != null) {
+		    log.debug("Found location in the job");
 			job.setLocation(location);
 		}
 		if(org.apache.commons.lang3.StringUtils.isNotEmpty(jobDTO.getBlock())){
+		    log.debug("Found the block in the job");
 		    job.setBlock(jobDTO.getBlock());
         }
         if(org.apache.commons.lang3.StringUtils.isNotEmpty(jobDTO.getFloor())){
+            log.debug("Found the floor in the job");
+
             job.setBlock(jobDTO.getFloor());
         }
         if(org.apache.commons.lang3.StringUtils.isNotEmpty(jobDTO.getZone())){
+            log.debug("Found the zone in the job");
+
             job.setBlock(jobDTO.getZone());
         }
 		if(asset!=null){
