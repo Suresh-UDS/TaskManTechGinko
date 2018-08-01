@@ -6,9 +6,9 @@
 
         <div class="col-md-12">
             <div class="card tablecard">
-                <div class="card-content" ng-show="qrStatus">
+                <div class="card-content" ng-show="assetQrList">
 
-                    <div class="row">
+                    <div class="row" ng-hide="noData">
                         <div class="col-md-12 txt-align-rgt">
                             <button class="btn btn-success add-btn margn-tb0" ng-click="printDiv('printable')" tabindex="0">
                                 <i class="material-icons">print</i> Print
@@ -53,8 +53,11 @@
 
 
                 </div>
-                <div class="card-content" ng-show="!qrStatus">
+                <div class="card-content" ng-show="!assetQrList">
                     <h3 class="txt-align-center">-- No asset selected --</h3>
+                </div>
+                <div class="card-content" ng-show="noData">
+                    <h3 class="txt-align-center">-- No data --</h3>
                 </div>
                 <!-- end content-->
                  

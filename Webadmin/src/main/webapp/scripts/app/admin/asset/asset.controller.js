@@ -82,7 +82,7 @@ angular.module('timeSheetApp')
         $scope.ppmJobStartTime = null;
         $scope.amcJobStartTime = null;
         $scope.noData = false;
-        $scope.assetQrList ={};
+        $scope.assetQrList =null;
         $scope.selectedEmployee ={};
         $scope.siteHistorySearchCriteria ={};
         $scope.statusHistorySearchCriteria ={};
@@ -2966,6 +2966,8 @@ angular.module('timeSheetApp')
 
             $scope.selectEntity = function (id) {
 
+                $scope.qrAll= "Odd";
+
                 if($scope.checkboxSel.indexOf(id) <= -1){
 
                 $scope.checkboxSel.push(id);
@@ -3000,8 +3002,14 @@ angular.module('timeSheetApp')
             // This executes when checkbox in table header is checked
             $scope.selectAll = function () {
 
-                $scope.checkboxSel=[];
+                if($scope.assetQrSite){
+                    $scope.assetQrSiteVal =$scope.assetQrSite.id;
+                }else{
+                    $scope.assetQrSiteVal =0;
+                }
 
+                $scope.qrAll= "All";
+                $scope.checkboxSel=[];
 
                 // Loop through all the entities and set their isChecked property
                 for (var i = 0; i < $scope.assets.length; i++) {
@@ -3014,6 +3022,7 @@ angular.module('timeSheetApp')
                 if(!$scope.allItemsSelected){
 
                     $scope.checkboxSel=[];
+                    
                 }
 
 
@@ -3026,10 +3035,18 @@ angular.module('timeSheetApp')
 
              $scope.qrListLoad= function(ids){
                 $scope.loadingStart();
-                $scope.qrStatus = false;
-                if($stateParams.ids){
-                        $scope.qrStatus = true;
-                        $scope.assetQrList ={}
+                if($stateParams.qrStatus == 'All'){   
+                        $scope.assetQrList ='';
+                        AssetComponent.printAllQr({siteId:$stateParams.siteId}).then(function(data){
+                        $scope.loadingStop();
+                        $scope.assetQrList = data;
+                        //$location.path('/qr-code-list');
+                        console.log('Qr List',$scope.assetQrList);
+
+                    });
+                }
+                else if ($stateParams.qrStatus == 'Odd'){
+                        $scope.assetQrList ='';
                         AssetComponent.multipleQr($stateParams.ids).then(function(data){
                         $scope.loadingStop();
                         $scope.assetQrList = data;
@@ -3286,6 +3303,16 @@ angular.module('timeSheetApp')
                 }
 
         };
+
+      $scope.mulSel = function(){
+
+        if($scope.allItemsSelected){
+
+            $('#qrModal').modal();
+
+        }
+        
+      }
 
 
 
