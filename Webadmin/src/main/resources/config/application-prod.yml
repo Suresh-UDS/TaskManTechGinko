@@ -131,6 +131,7 @@ reports:
 url:
     ticket-view: https://taskmanadmin.uds.in#/view-ticket
     quotation-view: https://taskmanadmin.uds.in#/view-quotation
+    job-view: https://taskmanadmin.uds.in#/view-job
 
 facedetection:
     api:

@@ -1,0 +1,1 @@
+th:text="#{push.newjob.alert.content(${jobId}, ${dateTime}, ${site})}"

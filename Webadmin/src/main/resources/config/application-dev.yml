@@ -127,6 +127,7 @@ reports:
 url:
     ticket-view: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/view-ticket
     quotation-view: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/view-quotation
+    job-view: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/view-job
 
 facedetection:
     api:

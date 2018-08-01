@@ -19,11 +19,13 @@ angular.module('timeSheetApp')
         $scope.selectedEmployee = null;
         $scope.pages = { currPage : 1};
         $scope.cTicket ={};
-        $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
+        var fromDate = new Date();
+        fromDate.setDate(fromDate.getDate() - 30);
+        $scope.selectedDateFrom = $filter('date')(fromDate, 'dd/MM/yyyy');
         $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-        var d = new Date();
-        d.setFullYear(2018, 0, 1);
-        $scope.selectedDateFromSer= d;
+        //var d = new Date();
+        //d.setFullYear(2018, 0, 1);
+        $scope.selectedDateFromSer= fromDate;
         $scope.selectedDateToSer= new Date();
         $scope.pager = {};
 
@@ -270,6 +272,7 @@ angular.module('timeSheetApp')
                 $scope.listCreatedBy = tlist.createdBy;
                 $scope.listCreatedDate = tlist.createdDate;
                 $scope.listStatus = tlist.status;
+                $scope.listJobId = tlist.jobId;
                 if(tlist.pendingAtUDS){
                     $scope.listPendingStatus = "Pending at UDS"
                 }else if(tlist.pendingAtClient){
@@ -366,6 +369,7 @@ angular.module('timeSheetApp')
                     $scope.success = 'OK';
                     $scope.showNotifications('top','center','success','Ticket status updated');
                     $(".fade").removeClass("modal-backdrop");
+                    $('#deleteModalNew').modal('hide');
                     $state.reload();
                 });
             }
@@ -381,7 +385,9 @@ angular.module('timeSheetApp')
                     $scope.success = 'OK';
                     $scope.showNotifications('top','center','success','Ticket status updated');
                     $(".fade").removeClass("modal-backdrop");
+                    $('#reopenModalNew').modal('hide');
                     $state.reload();
+
                 });
             }
 
@@ -553,9 +559,10 @@ angular.module('timeSheetApp')
         };
 
         $scope.clearFilter = function() {
-            $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
+        		
+            $scope.selectedDateFrom = $filter('date')(fromDate, 'dd/MM/yyyy');
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-            $scope.selectedDateFromSer = d;
+            $scope.selectedDateFromSer = fromDate;
             $scope.selectedDateToSer =  new Date();
             $scope.selectedTicket = null;
             $scope.selectedProject = null;

@@ -111,16 +111,26 @@ angular.module('timeSheetApp')
             }else{
                 $scope.searchCriteria.siteId = 0;
             }
-        		
+
+
         		$scope.searchCriteria.list = true;
+                $scope.employees = "";
         		EmployeeComponent.search($scope.searchCriteria).then(function (data) {
         			$scope.selectedEmployee = null;
         			$scope.employees = data.transactions;
+                    console.log('Employee List',$scope.employees);
         			deferred.resolve($scope.employees);
             });
     			return deferred.promise;
 
         };
+
+         $scope.checkSite  = function(){
+            if($scope.searchCriteria.siteId == undefined || $scope.searchCriteria.siteId == 0){
+            $scope.showNotifications('top','center','danger','Please select site before select employee.');
+            }
+
+        }
 
         $scope.loadLocations = function(){
             JobComponent.loadLocations().then(function(data){
@@ -143,6 +153,7 @@ angular.module('timeSheetApp')
         $scope.loadFloors = function () {
         		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
                 var siteId = $scope.selectedSite ? $scope.selectedSite.id : 0;
+
 	    		LocationComponent.findFloors(projectId,siteId,$scope.selectedBlock).then(function (data) {
 	    			$scope.selectedFloor = null;
 	            $scope.floors = data;
@@ -161,6 +172,9 @@ angular.module('timeSheetApp')
 
 	    $scope.getLocationDetails = function(block,floor,zone){
 	        console.log('Loaded location data');
+	        $scope.selectedBlock = block;
+	        $scope.selectedFloor = floor;
+	        $scope.selectedZone = zone;
 	        var search={
 	            projectId:$scope.selectedSite.projectId,
 	            siteId:$scope.selectedSite.id,
@@ -168,7 +182,7 @@ angular.module('timeSheetApp')
                 floor:floor,
                 zone:zone
             };
-	        LocationComponent.findId(siteId,block,floor,zone).then(function (data) {
+	        LocationComponent.findId($scope.selectedSite.id,block,floor,zone).then(function (data) {
                 console.log(data);
                 $scope.job.locationId = data.id;
             })
@@ -386,6 +400,7 @@ angular.module('timeSheetApp')
 	        	$scope.error = null;
 	        	$scope.success =null;
 	        	$scope.errorProjectExists = null;
+	        	console.log("job details before save job - "+$scope.selectedBlock+" - "+$scope.selectedFloor+" - "+$scope.selectedZone);
 	        	if($scope.isEdit){
 	        	    // $scope.job.ticketId
                 }else{
@@ -433,17 +448,18 @@ angular.module('timeSheetApp')
 	        		$scope.job.employeeId = $scope.selectedEmployee.id
 	        	}
 	        	if($scope.selectedBlock) {
-	        		$scope.job.block = $scope.selectedBlock.name;
+	        	    console.log($scope.selectedBlock);
+	        		$scope.job.block = $scope.selectedBlock;
 	        	}else {
 	        		$scope.job.block = "";
 	        	}
 	        	if($scope.selectedFloor) {
-	        		$scope.job.floor = $scope.selectedFloor.name;
+	        		$scope.job.floor = $scope.selectedFloor;
 	        	}else {
 	        		$scope.job.floor = "";
 	        	}
 	        	if($scope.selectedZone) {
-	        		$scope.job.zone = $scope.selectedZone.name;
+	        		$scope.job.zone = $scope.selectedZone;
 	        	}else {
 	        		$scope.job.zone = "";
 	        	}
