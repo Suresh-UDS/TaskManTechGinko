@@ -3040,6 +3040,12 @@ angular.module('timeSheetApp')
                         AssetComponent.printAllQr({siteId:$stateParams.siteId}).then(function(data){
                         $scope.loadingStop();
                         $scope.assetQrList = data;
+
+                        if($scope.assetQrList.lenght > 0){
+                           $scope.noData = false;
+                        }else{
+                           $scope.noData = true;
+                        }
                         //$location.path('/qr-code-list');
                         console.log('Qr List',$scope.assetQrList);
 
@@ -3050,6 +3056,11 @@ angular.module('timeSheetApp')
                         AssetComponent.multipleQr($stateParams.ids).then(function(data){
                         $scope.loadingStop();
                         $scope.assetQrList = data;
+                        if($scope.assetQrList.lenght > 0){
+                           $scope.noData = false;
+                        }else{
+                           $scope.noData = true;
+                        }
                         //$location.path('/qr-code-list');
                         console.log('Qr List',$scope.assetQrList);
                     });
