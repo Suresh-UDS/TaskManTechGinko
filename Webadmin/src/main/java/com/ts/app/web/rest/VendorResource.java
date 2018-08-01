@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -25,6 +26,9 @@ import com.codahale.metrics.annotation.Timed;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.VendorService;
 import com.ts.app.service.util.ImportUtil;
+import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.ExportResponse;
+import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.VendorDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
@@ -143,6 +147,65 @@ public class VendorResource {
 		}
 		return result;
 	}
+    
+    @RequestMapping(value = "/vendor/export", method = RequestMethod.POST)
+	public ExportResponse exportVendor(@RequestBody SearchCriteria searchCriteria) {
+		// log.debug("JOB EXPORT STARTS HERE **********");
+		ExportResponse resp = new ExportResponse();
+		if (searchCriteria != null) {
+			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+			SearchResult<VendorDTO> result = vendorService.findBySearchCrieria(searchCriteria);
+			List<VendorDTO> results = result.getTransactions();
+			resp.addResult(vendorService.generateReport(results, searchCriteria));
+
+			// log.debug("RESPONSE FOR OBJECT resp *************"+resp);
+		}
+		return resp;
+	}
+    
+    @RequestMapping(value = "/vendor/export/{fileId}/status", method = RequestMethod.GET)
+	public ExportResult exportStatus(@PathVariable("fileId") String fileId) {
+		// log.debug("ExportStatus - fileId -"+ fileId);
+		ExportResult result = vendorService.getExportStatus(fileId);
+
+		// log.debug("RESULT NOW **********"+result);
+		// log.debug("RESULT GET STATUS **********"+result.getStatus());
+
+		if (result != null && result.getStatus() != null) {
+			switch (result.getStatus()) {
+			case "PROCESSING":
+				result.setMsg("Exporting...");
+				break;
+			case "COMPLETED":
+				result.setMsg("Download");
+				// log.debug("DOWNLOAD FILE PROCESSING HERE
+				// ************"+result.getMsg());
+				// log.debug("FILE ID IN API CALLING ************"+fileId);
+				result.setFile("/api/assets/export/" + fileId);
+				// log.debug("DOWNLOADED FILE IS
+				// ************"+result.getFile());
+				break;
+			case "FAILED":
+				result.setMsg("Failed to export. Please try again");
+				break;
+			default:
+				result.setMsg("Failed to export. Please try again");
+				break;
+			}
+		}
+		return result;
+	}
+
+	@RequestMapping(value = "/vendor/export/{fileId}", method = RequestMethod.GET)
+	public byte[] getExportFile(@PathVariable("fileId") String fileId, HttpServletResponse response) {
+		byte[] content = vendorService.getExportFile(fileId);
+		response.setContentType("Application/x-msexcel");
+		response.setContentLength(content.length);
+		response.setHeader("Content-Transfer-Encoding", "binary");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileId + ".xlsx\"");
+		return content;
+	}
+
 
 
 
