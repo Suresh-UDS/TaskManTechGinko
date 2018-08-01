@@ -105,6 +105,7 @@ angular.module('timeSheetApp')
                 return $http.get('api/location/qrCode/'+qr.block+"/"+qr.floor+"/"+qr.zone+"/"+qr.siteId).then(function(response){
                     return response.data;
 
+
                 });
             },
         };
