@@ -3036,7 +3036,7 @@ angular.module('timeSheetApp')
              $scope.qrListLoad= function(ids){
                 $scope.loadingStart();
                 if($stateParams.qrStatus == 'All'){   
-                        $scope.assetQrList ={}
+                        $scope.assetQrList ='';
                         AssetComponent.printAllQr({siteId:$stateParams.siteId}).then(function(data){
                         $scope.loadingStop();
                         $scope.assetQrList = data;
@@ -3046,7 +3046,7 @@ angular.module('timeSheetApp')
                     });
                 }
                 else if ($stateParams.qrStatus == 'Odd'){
-                        $scope.assetQrList ={}
+                        $scope.assetQrList ='';
                         AssetComponent.multipleQr($stateParams.ids).then(function(data){
                         $scope.loadingStop();
                         $scope.assetQrList = data;
