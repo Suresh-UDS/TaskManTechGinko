@@ -17,6 +17,8 @@ export class SiteService {
         return this.http.get(this.config.Url+'api/site').map(
             (response)=>{
                 return response;
+            },err=>{
+                return err
             }
         )
     }

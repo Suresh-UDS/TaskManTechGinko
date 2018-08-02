@@ -224,7 +224,7 @@ public class SchedulerService extends AbstractService {
 	public void runWeeklyTask() {
 		createWeeklyTasks();
 	}
-	
+
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void createWeeklyTasks() {
 		if (env.getProperty("scheduler.weeklyJob.enabled").equalsIgnoreCase("true")) {
@@ -284,7 +284,7 @@ public class SchedulerService extends AbstractService {
 	public void runMonthlyTask() {
 		createMonthlyTasks();
 	}
-	
+
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void createMonthlyTasks() {
 		if (env.getProperty("scheduler.monthlyJob.enabled").equalsIgnoreCase("true")) {
@@ -654,6 +654,9 @@ public class SchedulerService extends AbstractService {
 		job.setParentJobId(parentJob.getId());
 		job.setParentJob(parentJob);
 		job.setJobType(parentJob.getType());
+		job.setZone(parentJob.getZone());
+		job.setFloor(parentJob.getFloor());
+		job.setBlock(parentJob.getBlock());
 		log.debug("Job status in scheduler {}",job.getJobStatus());
         if(CollectionUtils.isNotEmpty(parentJob.getChecklistItems())) {
             List<JobChecklist> jobclList = parentJob.getChecklistItems();

@@ -119,6 +119,7 @@ public class LocationResource {
     @RequestMapping(value = "/location/qrCode/{block}/{floor}/{zone}/{siteId}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
     public String generateQRCode(@PathVariable("block") String block, @PathVariable("floor") String floor, @PathVariable("zone") String zone, @PathVariable("siteId") long siteId) {
         return locationService.generateQRCode(block,floor,zone, siteId);
+
     }
 
     @RequestMapping(value = "/location/import/{fileId}/status",method = RequestMethod.GET)

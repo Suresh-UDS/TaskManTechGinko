@@ -172,7 +172,7 @@ export class OfflineAttendance {
             longitudeIn:this.longitude,
             checkInImage:imageData,
             checkInTime:new Date(),
-            offlineAttendance:true,
+            offline:true,
             id:employee.employeeId,
             offlineCheckin:true
         };
@@ -214,8 +214,9 @@ export class OfflineAttendance {
             checkOutImage:imageData,
             checkOutTime:new Date(),
             id:employee.employeeId,
-            offlineAttendance:true,
-            attendanceId:employee.attendanceId
+            offline:true,
+            attendanceId:employee.attendanceId,
+            offlineCheckOut:true
         };
 
         this.dbService.setAttendance(attendanceData).then(response=>{

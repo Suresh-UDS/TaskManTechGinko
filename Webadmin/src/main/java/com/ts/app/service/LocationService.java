@@ -282,6 +282,7 @@ public class LocationService extends AbstractService {
         byte[] qrCodeImage = null;
         String qrCodeBase64 = null;
             String codeName = siteId+"_"+block+"_"+floor+"_"+zone;
+            
             qrCodeImage = QRCodeUtil.generateQRCode(codeName);
             String qrCodePath = env.getProperty("locationQRCode.file.path");
             String imageFileName = null;

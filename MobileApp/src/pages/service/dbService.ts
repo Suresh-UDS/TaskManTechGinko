@@ -110,9 +110,15 @@ export class DBService {
                     console.log("Set Employee Data");
                     var employee;
                     var param = [];
+
                     for(var j=0;j<this.selectSite.length;j++){
-                        this.attendanceService.searchEmpAttendances(this.selectSite[j].id).subscribe(response=>{
-                            employee = response.json();
+                        var searchCriteria = {
+                            currPage:1,
+                            pageSort: 15,
+                            siteId:this.selectSite[j].id
+                        };
+                        this.attendanceService.searchEmpAttendances(searchCriteria).subscribe(response=>{
+                            employee = response.transactions;
                             console.log(employee);
                             if (employee.length > 0) {
                                 for (var i = 0; i < employee.length; i++) {
@@ -183,8 +189,8 @@ export class DBService {
             if (data.rows.length > 0) {
                 console.log("Table exists");
                 console.log("Table Name:" + data.rows.item(0).tbl_name);
-                console.log("Update Table")
-                var table = data.rows.item(0).tbl_name
+                console.log("Update Table");
+                var table = data.rows.item(0).tbl_name;
 
                 if(attendance.offlineCheckin)
                 {
@@ -192,7 +198,7 @@ export class DBService {
 
                     var insertQuery = "insert into attendance(employeeId,siteId,employeeEmpId,latitudeIn,longitudeIn,checkInImage,checkInTime,offlineAttendance,checkOutImage,checkOutTime,offlineCheckin,attendanceId) values(?,?,?,?,?,?,?,?,?,?,?,?)";
                         this.db.executeSql(insertQuery, param).then((data) => {
-                            console.log(data)//
+                            console.log(data);
                             resolve("s")
                         }, (error) => {
                             console.log("ERROR: " + JSON.stringify(error))
@@ -204,7 +210,7 @@ export class DBService {
                     {
                         var param = [ attendance.id ,attendance.siteId, attendance.employeeEmpId, attendance.latitudeIn,attendance.longitudeIn, attendance.checkInImage, attendance.checkInTime,attendance.offlineAttendance,attendance.checkOutImage,attendance.checkOutTime,attendance.attendanceId];
                         var updateQuery = "update attendance set checkOutImage=?,checkOutTime=? where employeeId=? ";
-                        this.db.executeSql(updateQuery, [attendance.checkOutImage,attendance.checkOutTime,attendance.id]).then((data) => {
+                        this.db.executeSql(updateQuery, [attendance.checkOutImage,attendance.checkOutTime,attendance.employeeEmpId]).then((data) => {
                             console.log(data)
                             resolve("s")
                         }, (error) => {
