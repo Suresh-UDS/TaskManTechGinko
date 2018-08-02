@@ -34,5 +34,8 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
     @Query("SELECT ur FROM UserRole ur WHERE ur.active='Y'")
     Page<UserRole> findUserRoles(Pageable pageRequest);
 
+    @Query("SELECT ur FROM UserRole ur WHERE ur.roleLevel = :roleLevel and ur.active='Y'")
+	Page<UserRole> findRoleByLevel(@Param("roleLevel") int roleLevel, Pageable pageRequest);
+
 
 }

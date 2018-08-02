@@ -177,6 +177,8 @@ public class SearchCriteria extends Paginator {
 	private String paramName;
 	
 	private Date assetCreatedDate;
+	
+	private int roleLevel;
 
 	public String getWarrantyTypeName() {
 		return warrantyTypeName;
@@ -931,5 +933,15 @@ public class SearchCriteria extends Paginator {
 		this.assetCreatedDate = assetCreatedDate;
 	}
 
+	public int getRoleLevel() {
+		return roleLevel;
+	}
+
+	public void setRoleLevel(int roleLevel) {
+		this.roleLevel = roleLevel;
+	}
+
+
+	
 	
 }
