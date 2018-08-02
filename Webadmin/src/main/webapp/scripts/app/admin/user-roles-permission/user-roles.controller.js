@@ -192,14 +192,14 @@ angular.module('timeSheetApp')
             }
 
              if($scope.searchUserRoleName) {
-                    $scope.searchCriteria.name = $scope.searchUserRoleName;
+                    $scope.searchCriteria.role = $scope.searchUserRoleName;
                 
             }else{
                  $scope.searchCriteria.name = null;
             }
 
              if($scope.searchUserRoleLevel) {
-                    $scope.searchCriteria.level = $scope.searchUserRoleLevel;
+                    $scope.searchCriteria.roleLevel= $scope.searchUserRoleLevel;
                 
             }else{
                 $scope.searchCriteria.level = null;
