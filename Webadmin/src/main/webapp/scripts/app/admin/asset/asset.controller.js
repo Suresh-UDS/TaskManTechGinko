@@ -803,7 +803,7 @@ angular.module('timeSheetApp')
 
             console.log('Selected Asset' + $scope.searchAssetName);
 
-            if(!$scope.searchAcquiredDate && !$scope.searchCreatedDate && 
+            if(!$scope.searchAcquiredDate && !$scope.searchCreatedDate &&
                 jQuery.isEmptyObject($scope.searchProject) == true
              && jQuery.isEmptyObject($scope.searchSite) == true &&
             jQuery.isEmptyObject($scope.searchAssetGroup) == true &&
@@ -1093,9 +1093,7 @@ angular.module('timeSheetApp')
         });
 
 
-        $('input#warFromDate').on('dp.show',function () {
-            return $(this).data('DateTimePicker').minDate(new Date());
-        })
+
 
         $('input#warFromDate').on('dp.change', function(e){
 
@@ -1107,10 +1105,6 @@ angular.module('timeSheetApp')
             $scope.warFromDate1 = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $scope.warFromDate = e.date._d;
 
-
-            $('input#warToDate').on('dp.show',function () {
-                return $(this).data('DateTimePicker').minDate(e.date._d);
-            })
 
             // if($scope.warFromDate > $scope.warToDate) {
             //
@@ -3022,7 +3016,7 @@ angular.module('timeSheetApp')
                 if(!$scope.allItemsSelected){
 
                     $scope.checkboxSel=[];
-                    
+
                 }
 
 
@@ -3035,7 +3029,7 @@ angular.module('timeSheetApp')
 
              $scope.qrListLoad= function(ids){
                 $scope.loadingStart();
-                if($stateParams.qrStatus == 'All'){   
+                if($stateParams.qrStatus == 'All'){
                         $scope.assetQrList ={}
                         AssetComponent.printAllQr({siteId:$stateParams.siteId}).then(function(data){
                         $scope.loadingStop();
@@ -3311,7 +3305,7 @@ angular.module('timeSheetApp')
             $('#qrModal').modal();
 
         }
-        
+
       }
 
 
