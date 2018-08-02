@@ -297,6 +297,7 @@ public class SchedulerHelperService extends AbstractService {
 						if (CollectionUtils.isNotEmpty(shifts)) {
 							//List<Shift> shifts = site.getShifts();
 							content = new StringBuilder("Site Name - " + site.getName() + SchedulerService.LINE_SEPARATOR);
+                            int shiftStartLeadTime = Integer.valueOf(env.getProperty("attendance.shiftStartLeadTime"));
 							for (Shift shift : shifts) {
 								empCntInShift = 0;
 								String startTime = shift.getStartTime();
@@ -304,7 +305,9 @@ public class SchedulerHelperService extends AbstractService {
 								Calendar startCal = Calendar.getInstance();
 								startCal.setTime(date);
 								//startCal.add(Calendar.DAY_OF_MONTH, -1);
-								startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
+//								startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
+//								Subtracting shift lead time with the shift start time  -- Karthick..
+								startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0])-shiftStartLeadTime);
 								startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
 								startCal.set(Calendar.SECOND, 0);
 								startCal.set(Calendar.MILLISECOND, 0);
