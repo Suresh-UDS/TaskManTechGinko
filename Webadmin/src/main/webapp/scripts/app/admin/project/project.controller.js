@@ -15,7 +15,8 @@ angular.module('timeSheetApp')
         $scope.pages = { currPage : 1};
         $scope.pager = {};
         $scope.noData = false;
-
+        $scope.saveLoad = false;
+        $rootScope.conformText = null;
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -32,22 +33,36 @@ angular.module('timeSheetApp')
             window.print();
         }
 
+        $scope.conform = function(text)
+        {
+            $rootScope.conformText = text;
+           $('#conformationModal').modal();
+
+
+        }
+
 
         $scope.saveProject = function () {
         	console.log("-------")
+            $rootScope.conformText = "";
+            $scope.saveLoad = true;
         	console.log($scope.map)
-            $scope.loadingStart();
+            // $scope.loadingStart();
         	$scope.error = null;
         	$scope.success =null;
         	$scope.errorProjectExists = null;
-        	ProjectComponent.createProject($scope.project).then(function () {
+
+
+            ProjectComponent.createProject($scope.project).then(function () {
                 $scope.success = 'OK';
                 $scope.showNotifications('top','center','success','Client has been added successfully!!');
                 $scope.loadingStop();
             	//$scope.loadProjects();
+                $scope.saveLoad = false;
             	$location.path('/projects');
             }).catch(function (response) {
                 $scope.loadingStop();
+                $scope.saveLoad = false;
                 $scope.success = null;
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
@@ -57,11 +72,27 @@ angular.module('timeSheetApp')
                     $scope.showNotifications('top','center','danger','Unable to add client, please try again later..');
                     $scope.error = 'ERROR';
                 }
-            });;
+            });
 
         };
 
+        $rootScope.back = function (text) {
+            if(text == 'cancel')
+            {
+                $scope.cancelProject();
+            }
+            else if(text == 'save')
+            {
+                $scope.saveProject();
+            }
+            else if( text== 'update')
+            {
+                $scope.updateProject()
+            }
+        };
+
         $scope.cancelProject = function () {
+            $rootScope.conformText = "";
         	$location.path('/projects');
         };
 
@@ -91,16 +122,20 @@ angular.module('timeSheetApp')
         };
 
         $scope.updateProject = function () {
+            $scope.saveLoad = true;
+            $rootScope.conformText = "";
             $scope.loadingStart();
         	ProjectComponent.updateProject($scope.project).then(function () {
                 $scope.success = 'OK';
                 $scope.showNotifications('top','center','success','Client has been updated successfully!!');
                 $scope.loadingStop();
+                $scope.saveLoad = false;
             	//$scope.loadProjects();
             	$location.path('/projects');
             }).catch(function (response) {
                 $scope.success = null;
                 $scope.loadingStop();
+                $scope.saveLoad = false;
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                     $scope.errorProjectExists = 'ERROR';
