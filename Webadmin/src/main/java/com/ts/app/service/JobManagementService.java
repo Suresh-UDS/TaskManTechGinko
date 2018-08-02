@@ -761,7 +761,7 @@ public class JobManagementService extends AbstractService {
 		*/
 		log.debug("Before saving new job -"+ job);
 		//log.debug("start Date  -"+ startDate + ", end date -" + endDate);
-		List<Job> existingJobs = jobRepository.findJobByTitleSiteAndDate(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()));
+		List<Job> existingJobs = jobRepository.findJobByTitleSiteDateAndLocation(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()), job.getBlock(), job.getFloor(), job.getZone());
 		log.debug("Existing job -"+ existingJobs);
 		Job newScheduledJob = null;
 		if(CollectionUtils.isEmpty(existingJobs)) {
@@ -919,6 +919,11 @@ public class JobManagementService extends AbstractService {
 			Calendar endTimeCal = Calendar.getInstance();
 			endTimeCal.setTime(jobDTO.getPlannedStartTime());
 			endTimeCal.add(Calendar.HOUR_OF_DAY, jobDTO.getPlannedHours());
+			Calendar startTimeCal = Calendar.getInstance();
+			startTimeCal.setTime(jobDTO.getPlannedStartTime());
+			if(endTimeCal.before(startTimeCal)) {
+				endTimeCal.add(Calendar.DAY_OF_MONTH, 1);
+			}
 			job.setPlannedEndTime(endTimeCal.getTime());
 		}else {
 			job.setPlannedEndTime(jobDTO.getPlannedEndTime());
