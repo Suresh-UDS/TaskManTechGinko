@@ -156,6 +156,7 @@ public class VendorResource {
 			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
 			SearchResult<VendorDTO> result = vendorService.findBySearchCrieria(searchCriteria);
 			List<VendorDTO> results = result.getTransactions();
+			log.debug("Results length" +results.size());
 			resp.addResult(vendorService.generateReport(results, searchCriteria));
 
 			// log.debug("RESPONSE FOR OBJECT resp *************"+resp);
