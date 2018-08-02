@@ -22,7 +22,7 @@
 
                 <div class="form-container table-container cardsCon" ng-init="loadProject()">
                     <form ng-show="!success" name="form" role="form" novalidate
-                          ng-submit="updateProject()"
+                          ng-submit="conform('update')"
                           class="form-horizontal">
 
 
@@ -238,12 +238,15 @@
                               <div class="col-md-4 col-md-offset-8 txt-align-rgt">
                                   <div class="form-group">
 
-                                      <button class="btn btn-success" type="submit"
-                                              id="form-button-save" ng-disabled="form.$invalid">
+                                      <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" type="submit"
+                                              id="form-button-save" ng-disabled="form.$invalid ">
                                           <span class="btn-label"><i class="material-icons">check</i></span> Update
+                                          <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                       </button>
+
+
                                       <button class="btn btn-danger" type="button"
-                                              ng-click="cancelProject()" id="cancel-button">
+                                              ng-click="conform('cancel')" id="cancel-button">
                                           <i class="material-icons">close</i> Cancel
                                       </button>
 
