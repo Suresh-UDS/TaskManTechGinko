@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('SiteController', function (Name,$rootScope, $scope, $state, $timeout,$filter,
+    .controller('SiteController', function ($rootScope, $scope, $state, $timeout,$filter,
         ProjectComponent, SiteComponent,$http,$stateParams,$location,PaginationComponent) {
         $rootScope.loadingStop();
         $rootScope.loginView = false;
@@ -18,10 +18,6 @@ angular.module('timeSheetApp')
         $scope.pager = {};
         $scope.noData = false;
 
-        Name.setName('hello world!');
-         $scope.name = Name.getName();
-         console.log('Stored service name msg' , $scope.name);
-
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
         $scope.pageSort = 10;
@@ -36,6 +32,12 @@ angular.module('timeSheetApp')
 
         $scope.shiftFrom = new Date();
         $scope.shiftTo = new Date();
+
+          $scope.stateNames = ["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Chandigarh",
+        "Dadra and Nagar Haveli","Daman and Diu","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh",
+        "Jammu and Kashmir","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra",
+        "Manipur","Meghalaya","Mizoram","Nagaland","Orissa","Punjab","Pondicherry","Rajasthan",
+        "Sikkim","Tamil Nadu","Tripura","Uttar Pradesh","Uttarakhand","West Bengal"];
 
 
         $scope.loadProjectsList = function () {
@@ -513,5 +515,7 @@ angular.module('timeSheetApp')
             $scope.pages.currPage = page;
             $scope.search();
         };
+
+
 
     });
