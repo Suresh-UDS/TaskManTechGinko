@@ -118,4 +118,12 @@ export class JobService {
         )
     }
 
+    getLocationId(block,floor,zone,siteId):Observable<any>{
+        return this.http.get(this.config.Url+'api/location/block/'+block+'/floor/'+floor+'/zone/'+zone+'/siteId/'+siteId).map(
+            response=>{
+                return response.json();
+            }
+        )
+    }
+
 }

@@ -15,6 +15,9 @@ import {ScanQR} from "./scanQR";
   templateUrl: 'jobs.html'
 })
 export class JobsPage {
+    scannedZone: any;
+    scannedFloor: any;
+    scannedBlock: any;
 
     todaysJobs: any;
     allJobs:any;
@@ -44,10 +47,15 @@ export class JobsPage {
             console.log(type);
             this.userType = type;
         });
-
+        console.log("Location Id from scanned",this.navParams.get('locationId'));
         this.scannedLocationId = this.navParams.get('locationId');
         console.log("Location Id from scanned",this.navParams.get('locationId'));
         this.scannedSiteId = this.navParams.get('siteId');
+
+        this.scannedBlock = this.navParams.get('block');
+        this.scannedFloor = this.navParams.get('floor');
+        this.scannedZone = this.navParams.get('zone');
+
     }
 
     ionViewDidLoad() {
@@ -115,12 +123,23 @@ export class JobsPage {
         var searchCriteria = {};
         var msg='';
         if(this.scannedLocationId){
+            console.log("Location Id in job search ");
+            console.log(this.scannedLocationId)
             searchCriteria = {
                 checkInDateTimeFrom:new Date(),
                 locationId:this.scannedLocationId,
                 siteId:this.scannedSiteId
             };
             msg='Unable to fetch jobs of the location '+this.scannedLocationId+' in site '+this.scannedSiteId;
+        }else if(this.scannedBlock && this.scannedFloor && this.scannedZone){
+            searchCriteria={
+                checkInDateTimeFrom:new Date(),
+                siteId:this.scannedSiteId,
+                block:this.scannedBlock,
+                floor:this.scannedFloor,
+                zone:this.scannedZone
+            };
+            msg = 'Unable to fetch jobs for the location '+this.scannedBlock+' - '+this.scannedFloor+' - '+this.scannedZone;
         }else{
             searchCriteria = {
                 checkInDateTimeFrom:new Date(),
