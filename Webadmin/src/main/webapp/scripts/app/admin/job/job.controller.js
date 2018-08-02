@@ -40,6 +40,7 @@ angular.module('timeSheetApp')
         $scope.searchStatus = null;
         $scope.disable = false;
         $rootScope.exportStatusObj  ={};
+        $scope.status = 0;
 
         /*
         **
@@ -402,6 +403,7 @@ angular.module('timeSheetApp')
                        $scope.selectedFloor = {name:data.floor};
                        $scope.selectedZone = {name:data.zone};
                        $scope.loadEmployees();
+                       $scope.status = 1;
 
 
                 })
@@ -887,6 +889,20 @@ angular.module('timeSheetApp')
 
         $scope.exportMsg = function() {
             return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportMsg : '');
+        };
+
+        $scope.cancel = function () {
+                            
+             if($scope.status == 1){
+
+                 $location.path('/tickets');
+
+             }else{
+
+                $location.path('/jobs');
+             }
+
+            
         };
 
 
