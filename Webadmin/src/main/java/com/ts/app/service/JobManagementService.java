@@ -802,7 +802,6 @@ public class JobManagementService extends AbstractService {
 			data.append("&location="+jobDTO.getLocationId());
 			data.append("&frequency="+jobDTO.getFrequency());
 			schConfDto.setData(data.toString());
-			log.debug("Saving data to scheduler config ==== "+job.getPlannedEndTime());
 			schConfDto.setStartDate(jobDTO.getPlannedStartTime());
 			schConfDto.setEndDate(job.getPlannedEndTime());
 			schConfDto.setScheduleEndDate(jobDTO.getScheduleEndDate());
@@ -885,20 +884,16 @@ public class JobManagementService extends AbstractService {
 		job.setStatus(jobDTO.getJobStatus());
 		job.setType(jobDTO.getJobType());
 		if(location != null) {
-		    log.debug("Found location in the job");
 			job.setLocation(location);
 		}
 		if(org.apache.commons.lang3.StringUtils.isNotEmpty(jobDTO.getBlock())){
-		    log.debug("Found the block in the job");
 		    job.setBlock(jobDTO.getBlock());
         }
         if(org.apache.commons.lang3.StringUtils.isNotEmpty(jobDTO.getFloor())){
-            log.debug("Found the floor in the job");
 
             job.setBlock(jobDTO.getFloor());
         }
         if(org.apache.commons.lang3.StringUtils.isNotEmpty(jobDTO.getZone())){
-            log.debug("Found the zone in the job");
 
             job.setBlock(jobDTO.getZone());
         }
@@ -963,9 +958,7 @@ public class JobManagementService extends AbstractService {
 			List<JobChecklistDTO> jobclDtoList = jobDTO.getChecklistItems();
 			List<JobChecklist> checklistItems = new ArrayList<JobChecklist>();
 			for(JobChecklistDTO jobclDto : jobclDtoList) {
-			    log.debug("Job checklist remarks"+jobclDto.getRemarks());
 				JobChecklist checklist = mapperUtil.toEntity(jobclDto, JobChecklist.class);
-                log.debug("Job checklist remarks"+checklist.getImage_1());
                 checklist.setJob(job);
 				checklistItems.add(checklist);
 			}
