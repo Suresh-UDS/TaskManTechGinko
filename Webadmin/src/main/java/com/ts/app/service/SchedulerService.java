@@ -1076,7 +1076,7 @@ public class SchedulerService extends AbstractService {
 		return schedulerConfigRepository.findScheduledTask(taskDate, schedule);
 	}
 	
-	@Scheduled(cron = "0 /5 * * * ?")
+	@Scheduled(cron = "0 5 * * * ?")
 	public void slaTicketEscalationNotification() 
 	{
 		String mailStatus = "";
@@ -1117,7 +1117,7 @@ public class SchedulerService extends AbstractService {
 													mailStatus = mailService.sendEscalationEmail(email,subject,content,false,false,"empty");
 												} catch (Exception e) {
 													// TODO Auto-generated catch block
-													mailStatus = mailService.sendEscalationEmail(email,subject,content,false,false,"empty");
+													e.printStackTrace();
 												}
 												log.debug("Mail Status " + mailStatus);
 												if(mailStatus.equals("success"))
@@ -1161,7 +1161,7 @@ public class SchedulerService extends AbstractService {
 			}	
 		}
 	
-	@Scheduled(cron = "0 0 /2 * * ?")
+	@Scheduled(cron = "0 0 2 * * ?")
 	public void slaJobEscalationNotification() 
 	{
 		String mailStatus = "";
@@ -1205,7 +1205,7 @@ public class SchedulerService extends AbstractService {
 											catch (Exception e) 
 											{
 												// TODO Auto-generated catch block
-												mailStatus = mailService.sendEscalationEmail(email,subject,content,false,false,"empty");
+												e.printStackTrace();
 											}
 											log.debug("Mail Status " + mailStatus);
 											if(mailStatus.equals("success"))
