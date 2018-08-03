@@ -122,6 +122,8 @@ import{OfflineGetassetreadings} from "../pages/offline-getassetreadings/offline-
 import {OfflineAttendance} from "../pages/employee/offline-attendance";
 import{ChangePassword} from "../pages/change-password/change-password";
 import{LocationAccuracy} from "@ionic-native/location-accuracy";
+import{UpdateApp} from "../pages/update-app/update-app";
+import{ForgotPassword} from "../pages/forgot-password/forgot-password";
 
 @NgModule({
   declarations: [
@@ -203,7 +205,9 @@ import{LocationAccuracy} from "@ionic-native/location-accuracy";
       OfflineGetassetreadings,
       OfflineAttendance,
       ChangePassword,
-      InventoryMaster
+      InventoryMaster,
+      UpdateApp,
+      ForgotPassword
   ],
   imports: [
     BrowserModule,
@@ -296,7 +300,9 @@ import{LocationAccuracy} from "@ionic-native/location-accuracy";
       OfflineGetassetreadings,
       OfflineAttendance,
       ChangePassword,
-      InventoryMaster
+      InventoryMaster,
+      UpdateApp,
+      ForgotPassword
 
 
   ],

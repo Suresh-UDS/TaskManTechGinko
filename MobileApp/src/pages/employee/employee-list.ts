@@ -45,6 +45,8 @@ export class EmployeeList {
     totalPages:0;
     pageSort:15;
     count=0;
+
+    fakeEmployeeList: Array<any> = new Array(12);
   constructor(public navCtrl: NavController,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,private locationAccuracy:LocationAccuracy,
               private geoFence:Geofence, private employeeService: EmployeeService, private jobService: JobService, private siteService:SiteService, private attendanceService:AttendanceService, private diagonistic:Diagnostic) {
