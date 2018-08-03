@@ -75,6 +75,11 @@ public class LocationResource {
         return locationService.findId(siteId,block,floor,zone);
     }
 
+//    @RequestMapping(value = "/location/block/{block}/floor/{floor}/zone/{zone}/siteId/{siteId}", method = RequestMethod.GET)
+//    public List<LocationDTO> getLocationIds(@PathVariable String block, @PathVariable String floor, @PathVariable String zone, @PathVariable long siteId) {
+//        return locationService.findIds(siteId,block,floor,zone);
+//    }
+
     @RequestMapping(value = "/location/project/{projectId}/site/{siteId}/block", method = RequestMethod.GET)
     public List<String> getBlocks(@PathVariable("projectId") long projectId,@PathVariable("siteId") long siteId) {
         return locationService.findBlocks(projectId, siteId);
@@ -123,6 +128,12 @@ public class LocationResource {
 		
 		return result;
 	}
+
+    @RequestMapping(value = "/location/qrCode/{block}/{floor}/{zone}/{siteId}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+    public String generateQRCode(@PathVariable("block") String block, @PathVariable("floor") String floor, @PathVariable("zone") String zone, @PathVariable("siteId") long siteId) {
+        return locationService.generateQRCode(block,floor,zone, siteId);
+
+    }
 
     @RequestMapping(value = "/location/import/{fileId}/status",method = RequestMethod.GET)
 	public ImportResult importStatus(@PathVariable("fileId") String fileId) {

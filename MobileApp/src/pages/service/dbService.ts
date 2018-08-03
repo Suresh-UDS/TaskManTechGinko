@@ -184,6 +184,7 @@ export class DBService {
     setPPM()
     {
         return new Promise((resolve, reject) => {
+<<<<<<< HEAD
             setTimeout(() => {
                 // this.db.executeSql("DROP TABLE ppm", {})
                 console.log("Set PPM Data");
@@ -199,6 +200,26 @@ export class DBService {
                             if (ppms.length > 0) {
                                 for (var i = 0; i < ppms.length; i++) {
                                     param.push([ppms[i].id, ppms[i].title, ppms[i].status, ppms[i].frequency, ppms[i].frequencyPrefix, ppms[i].assetId, ppms[i].startDate, ppms[i].endDate])
+=======
+
+                setTimeout(() => {
+                    console.log("Set Employee Data");
+                    var employee;
+                    var param = [];
+
+                    for(var j=0;j<this.selectSite.length;j++){
+                        var searchCriteria = {
+                            currPage:1,
+                            pageSort: 15,
+                            siteId:this.selectSite[j].id
+                        };
+                        this.attendanceService.searchEmpAttendances(searchCriteria).subscribe(response=>{
+                            employee = response.transactions;
+                            console.log(employee);
+                            if (employee.length > 0) {
+                                for (var i = 0; i < employee.length; i++) {
+                                    param.push([employee[i].id,employee[i].empId, employee[i].id, employee[i].fullName,employee[i].active,employee[i].faceAuthorised,employee[i].checkedIn,false,employee[i].siteId,employee[i].siteName,employee[i].attendanceId]);
+>>>>>>> Release-1.0
                                 }
                             }
                         },
@@ -445,8 +466,22 @@ export class DBService {
 
 
 
+<<<<<<< HEAD
+=======
+        console.log(attendance)
+        this.db.executeSql("SELECT tbl_name FROM sqlite_master WHERE tbl_name=?", ['attendance']).then((data) => {
+            //testing
+            console.log("Search Table");
+            console.log(data)
+            if (data.rows.length > 0) {
+                console.log("Table exists");
+                console.log("Table Name:" + data.rows.item(0).tbl_name);
+                console.log("Update Table");
+                var table = data.rows.item(0).tbl_name;
+>>>>>>> Release-1.0
 
 
+<<<<<<< HEAD
 
 
 
@@ -457,6 +492,12 @@ export class DBService {
                         this.db.executeSql("DROP TABLE readings", {}).then((data) => {
                             console.log(data)
                             resolve("drop reading table")
+=======
+                    var insertQuery = "insert into attendance(employeeId,siteId,employeeEmpId,latitudeIn,longitudeIn,checkInImage,checkInTime,offlineAttendance,checkOutImage,checkOutTime,offlineCheckin,attendanceId) values(?,?,?,?,?,?,?,?,?,?,?,?)";
+                        this.db.executeSql(insertQuery, param).then((data) => {
+                            console.log(data);
+                            resolve("s")
+>>>>>>> Release-1.0
                         }, (error) => {
                             console.log("ERROR: " + JSON.stringify(error))
                         })
@@ -464,11 +505,19 @@ export class DBService {
                 })
             }
 
+<<<<<<< HEAD
             dropImageTable()
             {
                 return new Promise((resolve,reject)=>{
                     setTimeout(()=>{
                         this.db.executeSql("DROP TABLE image", {}).then((data) => {
+=======
+                    if(attendance.attendanceId == 0)
+                    {
+                        var param = [ attendance.id ,attendance.siteId, attendance.employeeEmpId, attendance.latitudeIn,attendance.longitudeIn, attendance.checkInImage, attendance.checkInTime,attendance.offlineAttendance,attendance.checkOutImage,attendance.checkOutTime,attendance.attendanceId];
+                        var updateQuery = "update attendance set checkOutImage=?,checkOutTime=? where employeeId=? ";
+                        this.db.executeSql(updateQuery, [attendance.checkOutImage,attendance.checkOutTime,attendance.employeeEmpId]).then((data) => {
+>>>>>>> Release-1.0
                             console.log(data)
                             resolve("drop Image table")
                         }, (error) => {

@@ -160,7 +160,7 @@ public class JobManagementService extends AbstractService {
 
     @Inject
     private TicketManagementService ticketManagementService;
-    
+
     @Inject
     private AssetRepository assetRepository;
     
@@ -378,18 +378,24 @@ public class JobManagementService extends AbstractService {
 		            		    if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateAndSiteAndLocation(searchCriteria.getSiteId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
 
+                                }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+		            		        page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
                                 }
 		            		}else if(searchCriteria.getSiteId() == 0 && searchCriteria.getEmployeeId() > 0) {
 		            		    if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateAndEmployeeAndLocation(searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
+                                }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+                                    page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateAndEmployee(searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
                                 }
 		            		}else if(searchCriteria.getSiteId() > 0 && !StringUtils.isEmpty(searchCriteria.getJobTypeName())) {
 		            		    if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateAndSiteAndJobTypeAndLocation(searchCriteria.getSiteId(), searchCriteria.getLocationId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
+                                }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+                                    page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateAndSiteAndJobType(searchCriteria.getSiteId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
                                 }
@@ -403,6 +409,8 @@ public class JobManagementService extends AbstractService {
                                 if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateSiteAndEmployeeAndLocation(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
 
+                                }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+                                    page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateSiteAndEmployee(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
 
@@ -411,18 +419,24 @@ public class JobManagementService extends AbstractService {
                                 if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateAndSiteAndLocation(searchCriteria.getSiteId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
 
+                                }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+                                    page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
                                 }
 		            		}else if(searchCriteria.getSiteId() == 0 && searchCriteria.getEmployeeId() > 0) {
                                 if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateAndEmployeeAndLocation(searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
+                                }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+                                    page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateAndEmployee(searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
                                 }
 		            		}else if(searchCriteria.getSiteId() > 0 && !StringUtils.isEmpty(searchCriteria.getJobTypeName())) {
                                 if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateAndSiteAndJobTypeAndLocation(searchCriteria.getSiteId(), searchCriteria.getLocationId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
+                                }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+                                    page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateAndSiteAndJobType(searchCriteria.getSiteId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
                                 }
@@ -770,7 +784,8 @@ public class JobManagementService extends AbstractService {
 		log.debug("Before saving new job -"+ job);
 
 		//log.debug("start Date  -"+ startDate + ", end date -" + endDate);
-		List<Job> existingJobs = jobRepository.findScheduledJobByTitleSiteAndDate(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()));
+//		List<Job> existingJobs = jobRepository.findScheduledJobByTitleSiteAndDate(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()));
+		List<Job> existingJobs = jobRepository.findJobByTitleSiteDateAndLocation(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()), job.getBlock(), job.getFloor(), job.getZone());
 		log.debug("Existing job -"+ existingJobs);
 		Job newScheduledJob = null;
 		if(CollectionUtils.isEmpty(existingJobs)) {
@@ -812,7 +827,6 @@ public class JobManagementService extends AbstractService {
 			data.append("&frequency="+jobDTO.getFrequency());
 			data.append("&duration="+jobDTO.getDuration());
 			schConfDto.setData(data.toString());
-			log.debug("Saving data to scheduler config ==== "+job.getPlannedEndTime());
 			schConfDto.setStartDate(jobDTO.getPlannedStartTime());
 			schConfDto.setEndDate(job.getPlannedEndTime());
 			schConfDto.setScheduleEndDate(jobDTO.getScheduleEndDate());
@@ -827,7 +841,7 @@ public class JobManagementService extends AbstractService {
 
 			schedulerService.save(schConfDto,newScheduledJob);
 		}
-		
+
 		//send push notification to the employee assigned for the job
 		if(!StringUtils.isEmpty(jobDTO.getSchedule()) && jobDTO.getSchedule().equalsIgnoreCase("ONCE")) {
 			Employee assignedTo = job.getEmployee();
@@ -1002,6 +1016,17 @@ public class JobManagementService extends AbstractService {
 		if(location != null) {
 			job.setLocation(location);
 		}
+		if(org.apache.commons.lang3.StringUtils.isNotEmpty(jobDTO.getBlock())){
+		    job.setBlock(jobDTO.getBlock());
+        }
+        if(org.apache.commons.lang3.StringUtils.isNotEmpty(jobDTO.getFloor())){
+
+            job.setBlock(jobDTO.getFloor());
+        }
+        if(org.apache.commons.lang3.StringUtils.isNotEmpty(jobDTO.getZone())){
+
+            job.setBlock(jobDTO.getZone());
+        }
 		if(asset!=null){
 		    job.setAsset(asset);
         }
@@ -1019,6 +1044,11 @@ public class JobManagementService extends AbstractService {
 			Calendar endTimeCal = Calendar.getInstance();
 			endTimeCal.setTime(jobDTO.getPlannedStartTime());
 			endTimeCal.add(Calendar.HOUR_OF_DAY, jobDTO.getPlannedHours());
+			Calendar startTimeCal = Calendar.getInstance();
+			startTimeCal.setTime(jobDTO.getPlannedStartTime());
+			if(endTimeCal.before(startTimeCal)) {
+				endTimeCal.add(Calendar.DAY_OF_MONTH, 1);
+			}
 			job.setPlannedEndTime(endTimeCal.getTime());
 		}else {
 			job.setPlannedEndTime(jobDTO.getPlannedEndTime());
@@ -1060,7 +1090,6 @@ public class JobManagementService extends AbstractService {
 			List<JobChecklistDTO> jobclDtoList = jobDTO.getChecklistItems();
 			List<JobChecklist> checklistItems = new ArrayList<JobChecklist>();
 			for(JobChecklistDTO jobclDto : jobclDtoList) {
-			    log.debug("Job checklist remarks"+jobclDto.getRemarks());
 				JobChecklist checklist = mapperUtil.toEntity(jobclDto, JobChecklist.class);
 				if(checklist.getImage_1() != null) { 
 					long jobId = checklist.getJob().getId();
@@ -1350,9 +1379,9 @@ public class JobManagementService extends AbstractService {
 			data.put("url.ticket-view", ticketUrl);
 			String jobUrl = env.getProperty("url.job-view");
 			data.put("url.job-view", jobUrl);
-			
+
 			sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
-		}		
+		}
 		return mapperUtil.toModel(job, JobDTO.class);
 
 	}
@@ -1364,7 +1393,7 @@ public class JobManagementService extends AbstractService {
 		User currUser = userRepository.findOne(userId);
 		Hibernate.initialize(currUser.getEmployee());
 		Employee currUserEmp = currUser.getEmployee();
-        
+
         //	send notifications if a ticket is raised
 		if(job.getStatus().equals(JobStatus.COMPLETED) && job.getTicket() != null) {
 			Ticket ticket = job.getTicket();
@@ -1373,9 +1402,9 @@ public class JobManagementService extends AbstractService {
 			data.put("url.ticket-view", ticketUrl);
 			String jobUrl = env.getProperty("url.job-view");
 			data.put("url.job-view", jobUrl);
-			
+
 			sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
-		}        
+		}
         return mapperUtil.toModel(job, JobDTO.class);
     }
 
@@ -1401,7 +1430,7 @@ public class JobManagementService extends AbstractService {
 		User currUser = userRepository.findOne(userId);
 		Hibernate.initialize(currUser.getEmployee());
 		Employee currUserEmp = currUser.getEmployee();
-		
+
 		Job job = findJob(id);
 		job.setActualStartTime(job.getPlannedStartTime());
 		Date endDate = new Date();
@@ -1423,7 +1452,7 @@ public class JobManagementService extends AbstractService {
 			data.put("url.ticket-view", ticketUrl);
 			String jobUrl = env.getProperty("url.job-view");
 			data.put("url.job-view", jobUrl);
-			
+
 			sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
 		}
 		return mapperUtil.toModel(job, JobDTO.class);
@@ -1434,7 +1463,7 @@ public class JobManagementService extends AbstractService {
 		User currUser = userRepository.findOne(userId);
 		Hibernate.initialize(currUser.getEmployee());
 		Employee currUserEmp = currUser.getEmployee();
-		
+
 		job.setActualStartTime(job.getPlannedStartTime());
 		Date endDate = new Date();
 		int totalHours = Hours.hoursBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getHours();

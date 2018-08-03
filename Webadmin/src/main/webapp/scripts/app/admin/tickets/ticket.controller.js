@@ -4,7 +4,7 @@ angular.module('timeSheetApp')
     .controller('TicketController', function ($rootScope, $scope,
      $state, $timeout,ProjectComponent, SiteComponent,JobComponent,
      EmployeeComponent,TicketComponent,$http,
-     $stateParams,$location,PaginationComponent,$filter,AssetComponent) {
+     $stateParams,$location,PaginationComponent,$filter,AssetComponent,getLocalLocation) {
         $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
@@ -47,7 +47,15 @@ angular.module('timeSheetApp')
         $scope.calendar = {
                 start : false,
                 end : false,
-        }
+        };
+
+        $scope.status = 0;
+
+
+         //getLocalLocation.updateLocation($scope.searchCriteria); 
+
+         //Read the Local locations from LocalStorage    
+         //$scope.localSearch = getLocalStorage.getLocation();
 
 
         $scope.loadTickets = function(){
@@ -173,10 +181,18 @@ angular.module('timeSheetApp')
         };
 
 
-
-
         $scope.cancelTicket = function () {
+                            
+             if($scope.status == 1){
+
+                 $location.path('/assets');
+
+             }else{
+
                 $location.path('/tickets');
+             }
+
+            
         };
 
         $scope.loadAllSites = function () {
@@ -226,6 +242,7 @@ angular.module('timeSheetApp')
                  });
        		 };
        	 });
+         $scope.status = 1;
         }
 
         $scope.loadDepSites = function () {

@@ -2,7 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('SiteController', function ($rootScope, $scope, $state, $timeout,$filter,
-        ProjectComponent, SiteComponent,$http,$stateParams,$location,PaginationComponent) {
+        ProjectComponent, SiteComponent,$http,$stateParams,$location,PaginationComponent,getLocalStorage) {
         $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
@@ -17,6 +17,7 @@ angular.module('timeSheetApp')
         $scope.pages = { currPage : 1};
         $scope.pager = {};
         $scope.noData = false;
+        $scope.localStorage = null;
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -220,6 +221,8 @@ angular.module('timeSheetApp')
 
 
         $scope.cancelSite = function () {
+                /** @reatin - retaining scope value.**/ 
+                $rootScope.retain=1;
         		$location.path('/sites');
         };
 
@@ -501,10 +504,38 @@ angular.module('timeSheetApp')
                 $scope.sites = '';
                 $scope.sitesLoader = false;
                 $scope.loadPageTop();
-            SiteComponent.search($scope.searchCriteria).then(function (data) {
+
+                 /* Localstorage (Retain old values while edit page to list) start */
+
+                 if($rootScope.retain == 1){
+
+                    $scope.localStorage = getLocalStorage.getSearch(); 
+                    console.log('Local storage---',$scope.localStorage);  
+                
+                    if($scope.localStorage){
+                        $scope.pages.currPage = $scope.localStorage.currPage;
+                        $scope.searchProject = {id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
+                        $scope.searchSite = {id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
+                    }
+
+                    $rootScope.retain = 0;
+
+                    var searchCriteras  = $scope.localStorage;
+                 }else{
+                    var searchCriteras  = $scope.searchCriteria;   
+                 }
+                 
+                 /* Localstorage (Retain old values while edit page to list) end */
+                
+            SiteComponent.search(searchCriteras).then(function (data) {
                 $scope.sites = data.transactions;
                 $scope.sitesLoader = true;
 
+                 
+                 /** retaining list search value.**/  
+                getLocalStorage.updateSearch(searchCriteras);
+
+                
                  /*
                     ** Call pagination  main function **
                 */
@@ -551,12 +582,10 @@ angular.module('timeSheetApp')
 
       //init load
         $scope.initLoad = function(){
-             $scope.loadPageTop();
-             $scope.loadSites();
-             $scope.setPage(1);
-
+           $scope.loadPageTop();
+           //$scope.loadSites();
+           $scope.setPage(1); 
          }
-
 
 
        /*
@@ -572,8 +601,11 @@ angular.module('timeSheetApp')
             }
 
             //alert(page);
-            $scope.pages.currPage = page;
-            $scope.search();
+            
+               $scope.pages.currPage = page;
+               $scope.search(); 
+            
+            
         };
 
 
