@@ -311,7 +311,6 @@ public class SchedulerHelperService extends AbstractService {
 								startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
 								startCal.set(Calendar.SECOND, 0);
 								startCal.set(Calendar.MILLISECOND, 0);
-								startCal.add(Calendar.HOUR_OF_DAY, -shiftStartLeadTime);
 								String endTime = shift.getEndTime();
 								String[] endTimeUnits = endTime.split(":");
 								Calendar endCal = Calendar.getInstance();
@@ -333,9 +332,10 @@ public class SchedulerHelperService extends AbstractService {
 								// shift.getStartTime(), shift.getEndTime());
 								empCntInShift = empShiftRepo.findEmployeeCountBySiteAndShift(site.getId(), DateUtil.convertToSQLDate(startCal.getTime()),
 										DateUtil.convertToSQLDate(endCal.getTime()));
-								if (empCntInShift == 0) {
-									empCntInShift = employeeRepository.findCountBySiteId(site.getId());
-								}
+//								if (empCntInShift == 0) {
+//									empCntInShift = employeeRepository.findCountBySiteId(site.getId());
+//								}
+								startCal.add(Calendar.HOUR_OF_DAY, -shiftStartLeadTime);
 
 								//long attendanceCount = attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(startCal.getTime()),
 								//		DateUtil.convertToSQLDate(endCal.getTime()));
