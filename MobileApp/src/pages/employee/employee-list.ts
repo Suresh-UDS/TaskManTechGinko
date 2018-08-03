@@ -213,6 +213,7 @@ export class EmployeeList {
       let base64Image = 'data:image/jpeg;base64,' + imageData;
       var employeeName = employee.fullName+employee.empId;
       this.showLoader('Detecting Face');
+
       this.authService.detectFace(this.employeeFullName,imageData).subscribe(response=>{
               console.log("response in site list");
               console.log(response.json());
@@ -229,6 +230,7 @@ export class EmployeeList {
                               this.closeLoader();
                               var msg='Face Id enrolled Successfully';
                               this.showSuccessToast(msg);
+                              this.navCtrl.pop();
                           },error=>{
                               this.closeLoader();
                               var msg='Error in enrolling Face Id..';
@@ -291,8 +293,26 @@ export class EmployeeList {
                                       console.log(this.lattitude);
                                       console.log(this.longitude);
                                       this.closeLoader();
-                                      this.showLoader('Marking Attendance');
-                                      this.markAttendanceCheckOut(employee,imageData);
+                                      var options={
+                                          timeout:3000
+                                      }
+                                      this.showLoader('Getting location');
+                                      this.geolocation.getCurrentPosition(options).then((response)=>{
+                                          console.log("Current location");
+                                          console.log(response);
+                                          this.lattitude = response.coords.latitude;
+                                          this.longitude = response.coords.longitude;
+                                          this.closeAll();
+                                          this.showLoader('Marking Attendance');
+                                          this.markAttendanceCheckOut(employee,imageData);
+                                      }).catch((error)=>{
+                                          this.closeAll();
+                                          this.showSuccessToast('Error in getting location');
+                                          console.log("error in getting current location");
+                                          this.lattitude = 0;
+                                          this.longitude = 0;
+                                      });
+
                                   }else{
                                       this.closeLoader();
                                       this.showLoader('Marking Attendance');
@@ -336,6 +356,7 @@ export class EmployeeList {
   }
 
   markAttendance(employee,imageData){
+
       this.attendanceService.markAttendanceCheckIn(this.site.id,employee.empId,this.lattitude,this.longitude,imageData).subscribe(response=>{
           console.log(response.json());
           this.closeAll();

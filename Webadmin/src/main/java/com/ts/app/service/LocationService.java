@@ -120,6 +120,11 @@ public class LocationService extends AbstractService {
         return mapperUtil.toModel(locationEntity, LocationDTO.class);
     }
 
+    public List<LocationDTO> findIds(Long siteId, String block, String floor, String zone) {
+        List<Location> entity = locationRepository.findByAll(siteId,block,floor,zone);
+        return mapperUtil.toModelList(entity, LocationDTO.class);
+    }
+
 	public List<String> findBlocks(long projectId, long siteId) {
 		if(projectId > 0) {
 			return locationRepository.findBlocks(projectId, siteId);
@@ -285,6 +290,27 @@ public class LocationService extends AbstractService {
         }
         log.debug("*****************"+loc.getId());
         return qrCodeObject;
+    }
+
+    public String generateQRCode(String block, String floor, String zone, long siteId) {
+        byte[] qrCodeImage = null;
+        String qrCodeBase64 = null;
+            String codeName = siteId+"_"+block+"_"+floor+"_"+zone;
+            
+            qrCodeImage = QRCodeUtil.generateQRCode(codeName);
+            String qrCodePath = env.getProperty("locationQRCode.file.path");
+            String imageFileName = null;
+            if (org.apache.commons.lang3.StringUtils.isNotEmpty(qrCodePath)) {
+                imageFileName = fileUploadHelper.uploadQrCodeFile(codeName, qrCodeImage);
+//                loc.setQrCodeImage(imageFileName);
+//                locationRepository.save(loc);
+            }
+            if (qrCodeImage != null && org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
+                qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
+            }
+//        log.debug("*****************"+loc.getId());
+//        return getQRCode(loc.getId());
+        return  qrCodeBase64;
     }
 
     public String getQRCode(long locationId) {

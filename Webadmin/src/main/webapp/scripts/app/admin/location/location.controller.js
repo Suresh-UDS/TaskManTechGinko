@@ -447,14 +447,15 @@ angular.module('timeSheetApp')
             $scope.search();
         };
 
-            $scope.generateQR = function(siteId,locationId){
-            var qr = {
-                siteId:siteId,
-                locationId:locationId
-            };
-            console.log(qr.siteId);
-            console.log(qr.locationId);
-            LocationComponent.createQr(qr).then(function(response){
+            $scope.generateQR = function(qrDetails){
+            // var qr = {
+            //     siteId:siteId,
+            //     locationId:locationId
+            // };
+            // console.log(qr.siteId);
+            // console.log(qr.locationId);
+            // LocationComponent.createQr(qr).then(function(response){
+            LocationComponent.generateQR(qrDetails).then(function(response){
 
                 console.log('response qr---',response);
 
@@ -491,7 +492,8 @@ angular.module('timeSheetApp')
             LocationComponent.findOne($stateParams.location).then(function (response) {
                 console.log(response);
                 $scope.qrInfoDetails  = response;
-                $scope.generateQR(response.siteId,response.id);
+                // $scope.generateQR(response.siteId,response.id);
+                $scope.generateQR(response);
             })
         }
 
