@@ -33,6 +33,12 @@ angular.module('timeSheetApp')
         $scope.shiftFrom = new Date();
         $scope.shiftTo = new Date();
 
+          $scope.stateNames = ["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Chandigarh",
+        "Dadra and Nagar Haveli","Daman and Diu","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh",
+        "Jammu and Kashmir","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra",
+        "Manipur","Meghalaya","Mizoram","Nagaland","Orissa","Punjab","Pondicherry","Rajasthan",
+        "Sikkim","Tamil Nadu","Tripura","Uttar Pradesh","Uttarakhand","West Bengal"];
+
 
         $scope.loadProjectsList = function () {
         	ProjectComponent.findAll().then(function (data) {
@@ -172,6 +178,97 @@ angular.module('timeSheetApp')
                 $scope.site = data;
                 console.log('$scope.site.shifts - '+$scope.site.shifts);
                 $scope.shiftItems = $scope.site.shifts;
+
+
+                // Shift time HH:MM
+                console.log(data);
+                for(var i=0;i<$scope.shiftItems.length;i++) {
+                    console.log($scope.shiftItems[i].startTime.length);
+                    var start = $scope.shiftItems[i].startTime.split(':');
+                    console.log(start)
+                    if(start[0].length == 1)
+                    {
+                        console.log("Yes");
+                        start[0] = '0'+start[0];
+                        $scope.shiftItems[i].startTime = start[0] +':'+ start[1];
+                        if(start[1].length == 1)
+                        {
+
+                            if(start[1]==0)
+                            {
+                                start[1] = '00';
+                                $scope.shiftItems[i].startTime = start[0] +':'+ start[1];
+                            }
+                            else {
+                                start[1] = '0'+start[1];
+                                $scope.shiftItems[i].startTime = start[0] +':'+ start[1];
+                            }
+
+
+                        }
+                    }
+                    else if(start[1].length == 1)
+                    {
+                        if(start[1]==0)
+                        {
+                            start[1] = '00';
+                            $scope.shiftItems[i].startTime = start[0] +':'+ start[1];
+                        }
+                        else {
+                            start[1] = '0'+start[1];
+                            $scope.shiftItems[i].startTime = start[0] +':'+ start[1];
+                        }
+                    }
+                    else
+                    {
+                        $scope.shiftItems =$scope.site.shifts;
+                    }
+
+
+                    var end =  $scope.shiftItems[i].endTime.split(':');
+                    console.log(end)
+                    if(end[0].length == 1)
+                    {
+                        end[0] = '0'+end[0];
+                        $scope.shiftItems[i].endTime = end[0] +':'+ end[1];
+                        if(end[1].length == 1)
+                        {
+                            if(end[1]==0)
+                            {
+                                end[1] = '00';
+                                $scope.shiftItems[i].endTime = end[0] +':'+ end[1];
+                            }
+                            else {
+                                end[1] = '0'+start[1];
+                                $scope.shiftItems[i].endTime = end[0] +':'+ end[1];
+                            }
+                        }
+                    }
+                    else if(end[1].length == 1)
+                    {
+                        if(end[1].length == 1)
+                        {
+
+                            if(end[1]==0)
+                            {
+                                end[1] = '00';
+                                $scope.shiftItems[i].endTime = end[0] +':'+ end[1];
+                            }
+                            else {
+                                end[1] = '0'+start[1];
+                                $scope.shiftItems[i].endTime = end[0] +':'+ end[1];
+                            }
+                        }
+                    }
+                    else
+                    {
+                        $scope.shiftItems = $scope.site.shifts;
+                    }
+
+
+                }
+                //
+
                 $scope.loadSelectedProject($scope.site.projectId);
             });
         };
@@ -418,5 +515,7 @@ angular.module('timeSheetApp')
             $scope.pages.currPage = page;
             $scope.search();
         };
+
+
 
     });

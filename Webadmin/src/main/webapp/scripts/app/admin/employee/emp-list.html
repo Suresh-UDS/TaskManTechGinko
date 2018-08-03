@@ -1004,7 +1004,7 @@
 <div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm"   novalidate >
+            <form name="searchForm"   novalidate>
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         <i class="material-icons">clear</i>
@@ -1020,7 +1020,7 @@
                                 <div class="dropdown">
                                     <label class="label-control">Client</label>
                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites();" ng-options="project as project.name for project in projects" ng-pattern="Select Client" >
+                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites();" ng-options="project as project.name for project in projects" ng-pattern="Select Client" required>
                                         <option value="">Select Client...</option>
                                     </select>
                                 </div>

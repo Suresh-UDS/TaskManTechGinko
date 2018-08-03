@@ -72,6 +72,8 @@ angular
 
 					$scope.pager = {};
 
+					$scope.status = 0;
+
 					$scope.noData = false;
 					$scope.searchProject = null;
 					$scope.searchSite = null;
@@ -118,7 +120,6 @@ angular
 
 			        $scope.initCalender();
 
-
 					$scope.init = function() {
 
                         console.log("State parameters");
@@ -132,7 +133,7 @@ angular
                                 $scope.quotation.ticketId = data.id;
                                 //$scope.selectedProject = {id:data.employeeId};
                                 $scope.selectedSite = {id:data.siteId};
-
+                                $scope.status = 1;
 
                                 /*if(data.siteId){
                                     SiteComponent.findOne(data.siteID).then(function (data) {
@@ -507,7 +508,17 @@ angular
 			        }
 
 			        $scope.cancelQuotation = function () {
-			        		$location.path('/quotation-list');
+			        		
+					 if($scope.status == 1){
+
+			        	 $location.path('/tickets');
+
+			         }else{
+
+			         	$location.path('/quotation-list');
+			         }
+
+						
 			        };
 
 			        $scope.refreshPage = function() {
@@ -564,6 +575,8 @@ angular
 			            $scope.search();
 			         }
 
+
+
 			          $scope.searchFilter1 = function () {
 			            $scope.searchId = null;
 						$scope.searchTitle = null;
@@ -581,6 +594,7 @@ angular
 
 
 			        $scope.search = function () {
+			        $scope.noData = false;
 		        	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
 		        	if(!$scope.searchCriteria) {
 		            	var searchCriteria = {

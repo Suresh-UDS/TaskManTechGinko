@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{email.previousDayJobAlert.title}">Previous Day Job Alert</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="#{email.previousDayJobAlert.greeting}">
+</p>
+
+
+<p th:text="#{email.previousDayJobAlert.content(${empName}, ${empId}, ${jobId}, ${JobStartDate})}">
+
+</p>
+
+<p>
+    <span th:text="#{email.previousDayJobAlert.text}">Regards, </span>
+    <br/>
+    <em th:text="#{email.signature}">.</em>
+</p>
+</body>
+</html>

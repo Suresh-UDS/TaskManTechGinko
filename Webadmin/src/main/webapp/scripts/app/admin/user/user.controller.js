@@ -15,6 +15,7 @@ angular.module('timeSheetApp')
         $scope.authorities = ["User", "Admin"];
         $scope.pageSort = 10;
         $scope.pager = {};
+        $scope.noData = false;
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -196,6 +197,7 @@ angular.module('timeSheetApp')
 
 
         $scope.search = function () {
+                $scope.noData = false;
 	        	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
 	        	if(!$scope.searchCriteria) {
 	            	var searchCriteria = {
@@ -287,9 +289,11 @@ angular.module('timeSheetApp')
                         $scope.pageEntries = $scope.users.length;
                         $scope.totalCountPages = data.totalCount;
                         $scope.pageSort = 10;
+                        $scope.noData = false;
 
-                       
-                    }
+                }else{
+                     $scope.noData = true;
+                }
 
 	            
 	            });

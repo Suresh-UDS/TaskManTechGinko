@@ -10,6 +10,7 @@ angular.module('timeSheetApp')
         $scope.validationError = null;
         $scope.validationErrorMsg = null;
         $scope.authorities = ["User", "Admin"];
+        $scope.noData = false;
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -152,6 +153,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.search = function () {
+            $scope.noData = false;
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         	if(!$scope.searchCriteria) {
             	var searchCriteria = {
@@ -181,6 +183,7 @@ angular.module('timeSheetApp')
 	        		$scope.searchCriteria.checklistId = 0;
 	        	}
         	}
+
         	console.log($scope.searchCriteria);
         	ChecklistComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.checklists = data.transactions;
@@ -190,8 +193,10 @@ angular.module('timeSheetApp')
                 $scope.pages.totalPages = data.totalPages;
                 if($scope.checklists == null){
                     $scope.pages.startInd = 0;
+                    $scope.noData = true;
                 }else{
                     $scope.pages.startInd = (data.currPage - 1) * 10 + 1;
+                    $scope.noData = false;
                 }
 
                 $scope.pages.endInd = data.totalCount > 10  ? (data.currPage) * 10 : data.totalCount ;

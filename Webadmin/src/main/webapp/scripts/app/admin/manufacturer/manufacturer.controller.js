@@ -336,6 +336,7 @@ angular.module('timeSheetApp')
 
 
         $scope.clearFilter = function() {
+            $scope.noData = false;
             $scope.selectedProject = null;
             $scope.selectedAssetType = null;
             $scope.selectedName = null;

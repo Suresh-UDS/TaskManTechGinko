@@ -26,6 +26,12 @@
     <link href="/assets/css/demo.css" rel="stylesheet" />
     <!--     Fonts and icons     -->
 
+
+    <!-- Loading CSS-->
+    <link rel="stylesheet" type="text/css" href="/assets/css/loading.css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/css/loading-btn.css"/>
+
+
     <!--  Feedback rating css    -->
     <link href="bower_components/angular-jk-rating-stars/dist/jk-rating-stars.css" rel="stylesheet" />
     <link href="scripts/components/angular-js-star-rating-directive/css/style.css" rel="stylesheet" />
@@ -97,6 +103,8 @@
     <!--<script src="bower_components/jquery/dist/jquery.js"></script>-->
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-aria/angular-aria.js"></script>
+    <!-- Local storage start -->
+    <script src="scripts/components/storage-service/storage-service.js"></script>
     <!--<script src="bower_components/angular-animate/angular-animate.js"></script>-->
     <!--<script src="bower_components/angular-messages/angular-messages.js"></script>-->
     <!--<script src="bower_components/angular-material/angular-material.js"></script>-->
@@ -518,6 +526,28 @@
             </div>
         </div>
     </div>
+<!--confirmation-->
+<div id="conformationModal" class="delete-confirmation modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">{{conformText}}</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to {{conformText}}?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success delete-confirmation-button" data-dismiss="modal" ng-click="back(conformText)">Conform</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--confirmation-->
 
 
 </body>
@@ -564,7 +594,6 @@
 <script src="/assets/js/material-dashboard.js?v=1.2.1"></script>
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
 <script src="/assets/js/demo.js"></script>
-
 
 
 

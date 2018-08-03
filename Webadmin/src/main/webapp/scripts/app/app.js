@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('timeSheetApp', ['LocalStorageModule',
+angular.module('timeSheetApp', ['LocalStorageModule','storageService',
                'ui.bootstrap', 'ui.bootstrap.datetimepicker', // for modal dialogs
     'ngResource', 'ui.router', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload',
      'infinite-scroll', 'App.filters','uiGmapgoogle-maps','checklist-model',
@@ -115,7 +115,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
             //console.log("Calling loader stop");
             $('.pageCenter').hide();
             $('.overlay').hide();
-
+            $rootScope.noscroll = false;
 
         }, 2000);}
 

@@ -1,6 +1,8 @@
 package com.ts.app.repository;
 
+import java.time.Instant;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -100,9 +102,13 @@ public class AssetSpecification implements Specification<Asset> {
 		
 		if(searchCriteria.getAssetCreatedDate() != null) { 
 			log.debug("Asset created date -" + searchCriteria.getAssetCreatedDate());
-			ZonedDateTime createdDate = DateUtil.convertToZDT(searchCriteria.getAssetCreatedDate());
-			log.debug("ZonedDate time" + createdDate);
-			predicates.add(builder.equal(root.get("createdDate"), createdDate));
+			Calendar createdDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+			createdDateTo.setTime(searchCriteria.getAssetCreatedDate());
+			createdDateTo.set(Calendar.HOUR_OF_DAY, 23);
+			createdDateTo.set(Calendar.MINUTE,59);
+			createdDateTo.set(Calendar.SECOND,0);
+			
+			predicates.add(builder.between(root.get("createdDate"), DateUtil.convertToZDT(searchCriteria.getAssetCreatedDate()), DateUtil.convertToZDT(createdDateTo.getTime())));
 		}
 		
 		predicates.add(builder.equal(root.get("active"), "Y"));

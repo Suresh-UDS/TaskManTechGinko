@@ -16,6 +16,14 @@
                 <i class="material-icons">add</i> Add
                 <div class="ripple-container"></div>
             </button>
+            
+            <button class="btn btn-info add-btn margn-tb0"   title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
+                <i class="material-icons">import_contacts</i> Export Excel
+                <div class="ripple-container"></div>
+            </button>
+
+            <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
+            <div class="downloaderMd" ng-show="downloader"></div>
 
             <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
                 <i class="material-icons">refresh</i> Reload
@@ -624,7 +632,7 @@
                                                name='name'
                                                ng-model="searchName"
                                                type='text' value=""
-
+                                               required
                                         />
                                     </div>
                                 </div>

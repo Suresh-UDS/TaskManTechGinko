@@ -19,6 +19,10 @@ angular.module('timeSheetApp')
         $scope.selectedUserRoleId = null;
         $scope.selectedUserRoleName = null;
         $scope.selectedUserRoleLevel = null;
+        $scope.searchUserRoleId = null;
+        $scope.searchUserRoleName = null;
+        $scope.searchUserRoleLevel = null;
+        $scope.noData = false;
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -164,6 +168,7 @@ angular.module('timeSheetApp')
 
 
         $scope.search = function () {
+            $scope.noData = false;
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         	if(!$scope.searchCriteria) {
             	var searchCriteria = {
@@ -175,21 +180,29 @@ angular.module('timeSheetApp')
              $scope.searchCriteria.currPage = currPageVal;
             $scope.searchCriteria.findAll = false;
 
-             if( !$scope.selectedUserRoleId && !$scope.selectedUserRoleName
-                && !$scope.selectedUserRoleLevel) {
+             if( !$scope.searchUserRoleId && !$scope.searchUserRoleName
+                && !$scope.searchUserRoleLevel) {
                 $scope.searchCriteria.findAll = true;
             }
-            if($scope.selectedUserRoleId) {
-                    $scope.searchCriteria.userRoleId = $scope.selectedUserRoleId;
+            if($scope.searchUserRoleId) {
+                    $scope.searchCriteria.userRoleId = $scope.searchUserRoleId;
                 
+            }else{
+                 $scope.searchCriteria.userRoleId = null;
             }
-             if($scope.selectedUserRoleName) {
-                    $scope.searchCriteria.name = $scope.selectedUserRoleName;
+
+             if($scope.searchUserRoleName) {
+                    $scope.searchCriteria.role = $scope.searchUserRoleName;
                 
+            }else{
+                 $scope.searchCriteria.name = null;
             }
-             if($scope.selectedUserLevel) {
-                    $scope.searchCriteria.activeFlag = $scope.selectedUserLevel;
+
+             if($scope.searchUserRoleLevel) {
+                    $scope.searchCriteria.roleLevel= $scope.searchUserRoleLevel;
                 
+            }else{
+                $scope.searchCriteria.level = null;
             }
 
         	 //-------
@@ -235,6 +248,10 @@ angular.module('timeSheetApp')
                     $scope.pageEntries = $scope.userRoles.length;
                     $scope.totalCountPages = data.totalCount;
                     $scope.pageSort = 10;
+                    $scope.noData = false;
+
+                }else{
+                     $scope.noData = true;
                 }
 
                 
@@ -246,6 +263,9 @@ angular.module('timeSheetApp')
             $scope.selectedUserRoleId = null;
             $scope.selectedUserRoleName = null;
             $scope.selectedUserRoleLevel = null;
+            $scope.searchUserRoleId = null;
+            $scope.searchUserRoleName = null;
+            $scope.searchUserRoleLevel = null;
             $scope.searchCriteria = {};
             $rootScope.searchCriteriaSite = null;
             $scope.pages = {
