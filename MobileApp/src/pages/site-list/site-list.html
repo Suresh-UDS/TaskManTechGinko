@@ -15,13 +15,20 @@
 
 <ion-content>
 
-  <ion-list class="emp-list">
+  <ion-list class="emp-list" *ngIf="siteList">
     <ion-item *ngFor="let site of siteList;let i of index" class="bottom-border emp" >
       <ion-icon name="podium" item-start class="icon-color"></ion-icon>
       <p (click)="gotoEmployeeList(site)" text-left class="fnt-wt" text-capitalize>{{site.name}}</p>
 
     </ion-item>
   </ion-list>
+
+    <ion-list *ngIf="!siteList">
+        <ion-item *ngFor="let fake of fakeSiteList" class="fakeList">
+            <ion-icon item-start></ion-icon>
+            <p></p>
+        </ion-item>
+    </ion-list>
 
   <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>

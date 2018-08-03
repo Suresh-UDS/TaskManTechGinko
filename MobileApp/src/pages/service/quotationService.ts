@@ -52,7 +52,7 @@ export class QuotationService {
     getRateCards(): Observable<any>{
         return this.http.get(this.config.Url+'api/rateCard').map(
             response=>{
-                console.log(response.json());
+                console.log(response);
                 return response.json();
             }
         )
@@ -61,7 +61,7 @@ export class QuotationService {
     searchQuotations(search):Observable<any>{
         return this.http.post(this.config.Url+'api/rateCard/quotation/search',search).map(
             response=>{
-                console.log(response.json());
+                console.log(response);
                 return response.json();
             }
         )
@@ -70,8 +70,8 @@ export class QuotationService {
     getQuotations(): Observable<any>{
         return this.http.get(this.config.Url+'api/rateCard/quotation').map(
             response=>{
-                console.log(response);
-                return response.json();
+                console.log(response.json());
+                return response.jso();
             }
         )
     }
