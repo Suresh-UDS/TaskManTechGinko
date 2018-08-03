@@ -1730,7 +1730,14 @@ ion-grid .row:before
 .p-r-30{
     padding-right:30px !important;
 }
-
+.mrgn-auto
+{
+    margin:auto !important;
+}
+.width30
+{
+    width:30% !important;
+}
 }
 
 

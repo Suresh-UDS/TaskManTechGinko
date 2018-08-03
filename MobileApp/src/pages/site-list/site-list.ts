@@ -30,7 +30,10 @@ export class SiteListPage {
   lattitude:any;
   longitude:any;
   checkedIn:any;
-  constructor(public navCtrl: NavController,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
+
+    fakeSiteList: Array<any> = new Array(12);
+
+    constructor(public navCtrl: NavController,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController, private attendanceService: AttendanceService, private siteService: SiteService) {
 
     this.geolocation.getCurrentPosition().then((response)=>{
