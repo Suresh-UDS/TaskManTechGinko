@@ -44,6 +44,8 @@ angular.module('timeSheetApp')
         	ProjectComponent.findAll().then(function (data) {
                 $scope.projectsList = data;
                  $scope.loadingStop();
+                $scope.uiClient =  $scope.projectsList;
+                $scope.clientDisable = false;
             });
         };
 
@@ -52,7 +54,32 @@ angular.module('timeSheetApp')
                 $scope.sitesList = data;
             });
         };
-         $scope.loadDepSites = function () {
+
+
+        // Load Clients for selectbox //
+        $scope.clienteDisable = true;
+        $scope.uiClient = [];
+
+        $scope.$watch('selectedProject', function(newVal, oldVal) {
+            if (newVal !== oldVal) {
+                if ($scope.uiClient.indexOf(newVal) === -1) {
+                    $scope.uiClient.unshift(newVal);
+                }
+            }
+        });
+        $scope.getClient = function (search) {
+            var newSupes = $scope.uiClient.slice();
+            if (search && newSupes.indexOf(search) === -1) {
+                newSupes.unshift(search);
+            }
+
+            return newSupes;
+        }
+
+        //
+
+
+        $scope.loadDepSites = function () {
 
             if(jQuery.isEmptyObject($scope.selectedProject) == false) {
                    var depProj=$scope.selectedProject.id;
@@ -67,6 +94,10 @@ angular.module('timeSheetApp')
                 $scope.sitesList = data;
             });
         };
+
+
+
+
 
         $scope.initCalender = function(){
             demo.initFormExtendedDatetimepickers();
@@ -100,8 +131,35 @@ angular.module('timeSheetApp')
         });
         $scope.initCalender();
 
-        $scope.saveSite = function (validation) {
 
+        //
+        $scope.valid= null;
+        $scope.conform = function(text,validation)
+        {
+            console.log($scope.selectedProject)
+            $rootScope.conformText = text;
+            $scope.valid = validation;
+            $('#conformationModal').modal();
+
+        }
+        $rootScope.back = function (text) {
+            if(text == 'cancel')
+            {
+                $scope.cancelSite();
+            }
+            else if(text == 'save')
+            {
+                $scope.saveSite($scope.valid);
+            }
+        };
+
+        //
+        $scope.saveLoad = false;
+        $scope.addProject = function (selectedProject) {
+            $scope.selectedProject = selectedProject;
+        }
+        $scope.saveSite = function (validation) {
+            $scope.saveLoad = true;
             if(validation){
 
                 return false;
@@ -117,14 +175,16 @@ angular.module('timeSheetApp')
 	        		$scope.site.projectId = $scope.selectedProject.id;
 	        		console.log('shifts - ' + JSON.stringify($scope.shiftItems));
 	        		$scope.site.shifts = $scope.shiftItems;
-	            	SiteComponent.createSite($scope.site).then(function() {
+                    SiteComponent.createSite($scope.site).then(function() {
 	                    $scope.success = 'OK';
+                        $scope.saveLoad = false;
 	                    $scope.showNotifications('top','center','success','Site has been added successfully!!');
 	                    $scope.selectedProject = null;
 	                	$scope.loadSites();
 	                	$location.path('/sites');
 	                }).catch(function (response) {
 	                    $scope.success = null;
+                        $scope.saveLoad = false;
 	                    console.log('Error - '+ response.data);
 	                    console.log('status - '+ response.status + ' , message - ' + response.data.message);
 	                    if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
