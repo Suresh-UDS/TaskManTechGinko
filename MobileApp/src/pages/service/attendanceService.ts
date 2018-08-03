@@ -98,12 +98,11 @@ export class AttendanceService
         )
     }
 
-    searchEmpAttendances(siteId):Observable<any>{
-        return this.http.get(this.config.Url+'api/empAttendance/site/'+siteId)
+    searchEmpAttendances(searchCriteria):Observable<any>{
+        return this.http.post(this.config.Url+'api/empAttendance/site/',searchCriteria)
             .map(
                 (response)=>{
-                    console.log(response)
-                    return response
+                    return response.json();
                 },error=>{
                     return error
                 }

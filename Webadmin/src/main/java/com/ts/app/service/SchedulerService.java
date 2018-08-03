@@ -1029,6 +1029,9 @@ public class SchedulerService extends AbstractService {
 		job.setParentJobId(parentJob.getId());
 		job.setParentJob(parentJob);
 		job.setJobType(parentJob.getType());
+		job.setZone(parentJob.getZone());
+		job.setFloor(parentJob.getFloor());
+		job.setBlock(parentJob.getBlock());
 		log.debug("Job status in scheduler {}",job.getJobStatus());
         if(CollectionUtils.isNotEmpty(parentJob.getChecklistItems())) {
             List<JobChecklist> jobclList = parentJob.getChecklistItems();
@@ -1076,7 +1079,7 @@ public class SchedulerService extends AbstractService {
 		return schedulerConfigRepository.findScheduledTask(taskDate, schedule);
 	}
 	
-	@Scheduled(cron = "0 30 * * * ?")
+	@Scheduled(cron = "0 5 * * * ?")
 	public void slaTicketEscalationNotification() 
 	{
 		String mailStatus = "";
@@ -1161,7 +1164,7 @@ public class SchedulerService extends AbstractService {
 			}	
 		}
 	
-	@Scheduled(cron = "0 45 * * * ?")
+	@Scheduled(cron = "0 0 2 * * ?")
 	public void slaJobEscalationNotification() 
 	{
 		String mailStatus = "";
@@ -1189,7 +1192,9 @@ public class SchedulerService extends AbstractService {
 							{
 							for(String cat : category)
 							{
-								if(cat == job.getType().name())
+								if(job.getType() !=  null)
+								{
+								if(cat.equalsIgnoreCase(job.getType().name()))
 								{
 									if(slaEscalationConfig.getLevel() > job.getEscalationStatus())
 									{
@@ -1237,6 +1242,7 @@ public class SchedulerService extends AbstractService {
 											}
 										}
 									}
+								}
 								}
 							}
 						}
