@@ -175,7 +175,7 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     @Query("SELECT j from Job j where j.asset.id = :assetId and j.plannedStartTime >= :startDate ")
     List<Job> findByAssetAndStartDate(@Param("assetId") long assetId, @Param("startDate") Date startDate);
 
-    @Query("SELECT j FROM Job j WHERE j.status <> 'Closed' order by j.createdDate asc")
+    @Query("SELECT j FROM Job j WHERE (j.status < 3) order by j.createdDate asc")
     List<Job> findAllActiveUnClosedTicket();
     
 }
