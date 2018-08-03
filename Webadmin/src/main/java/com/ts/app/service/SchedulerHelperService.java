@@ -307,10 +307,11 @@ public class SchedulerHelperService extends AbstractService {
 								//startCal.add(Calendar.DAY_OF_MONTH, -1);
 //								startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
 //								Subtracting shift lead time with the shift start time  -- Karthick..
-								startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0])-shiftStartLeadTime);
+								startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
 								startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
 								startCal.set(Calendar.SECOND, 0);
 								startCal.set(Calendar.MILLISECOND, 0);
+								startCal.add(Calendar.HOUR_OF_DAY, -shiftStartLeadTime);
 								String endTime = shift.getEndTime();
 								String[] endTimeUnits = endTime.split(":");
 								Calendar endCal = Calendar.getInstance();
