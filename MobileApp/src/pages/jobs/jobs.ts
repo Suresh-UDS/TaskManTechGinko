@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Events, Item, ItemSliding, LoadingController, NavController} from 'ionic-angular';
+import {Events, Item, ItemSliding, LoadingController, NavController, NavParams} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {ViewJobPage} from "./view-job";
 import {componentService} from "../service/componentService";
@@ -15,6 +15,7 @@ import{JobFilter} from "./job-filter/job-filter";
   templateUrl: 'jobs.html'
 })
 export class JobsPage {
+    scannedSiteId: any;
     scannedZone: any;
     scannedFloor: any;
     scannedBlock: any;
@@ -34,8 +35,9 @@ export class JobsPage {
     todaysPage:1;
     todaysTotalPages:0;
     pageSort:15;
+    private scannedLocationId: any;
 
-    constructor(public navCtrl: NavController,public component:componentService, public authService: authService,
+    constructor(public navCtrl: NavController, public navParams:NavParams,public component:componentService, public authService: authService,
                     private loadingCtrl:LoadingController, private actionSheetCtrl: ActionSheetController, private jobService: JobService, public events:Events,public modalCtrl:ModalController) {
         this.allJobs = [];
         this.todaysJobs =[];
@@ -47,8 +49,7 @@ export class JobsPage {
             console.log(type);
             this.userType = type;
         });
-<<<<<<< HEAD
-=======
+
         console.log("Location Id from scanned",this.navParams.get('locationId'));
         this.scannedLocationId = this.navParams.get('locationId');
         console.log("Location Id from scanned",this.navParams.get('locationId'));
@@ -57,7 +58,6 @@ export class JobsPage {
         this.scannedBlock = this.navParams.get('block');
         this.scannedFloor = this.navParams.get('floor');
         this.scannedZone = this.navParams.get('zone');
->>>>>>> Release-1.0
 
     }
 
@@ -121,10 +121,6 @@ export class JobsPage {
     }
 
     loadTodaysJobs(){
-<<<<<<< HEAD
-        var searchCriteria = {
-            checkInDateTimeFrom:new Date()
-=======
 
         var searchCriteria = {};
         var msg='';
@@ -153,8 +149,6 @@ export class JobsPage {
                 siteId:this.scannedSiteId
             };
             msg='Unable to fetch today\'s jobs ';
-
->>>>>>> Release-1.0
         }
         this.component.showLoader('Getting Today\'s Jobs');
         this.jobService.getJobs(searchCriteria).subscribe(response=>{
