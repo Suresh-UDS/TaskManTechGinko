@@ -71,18 +71,10 @@
                 <!--<p text-center>No Checklist Found</p>-->
             <!--</div>-->
         <!--</ion-row>-->
-<<<<<<< HEAD
-        <div text-right *ngIf="jobDetails.checklistItems?.length > 0">
-            <button class="btn btn-warning center" (click)="presentCheckListModal(jobDetails)">
-                Checklist
-            </button>
-        </div>
 
-=======
         <button *ngIf="jobDetails.checklistItems?.length"  class="btn btn-warning center" (click)="presentCheckListModal(jobDetails.checklistItems)">
             Checklist
         </button>
->>>>>>> Release-1.0
 
 
     </ion-list>
