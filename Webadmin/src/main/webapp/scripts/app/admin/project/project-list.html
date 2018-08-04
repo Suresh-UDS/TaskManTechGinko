@@ -240,9 +240,18 @@
                                     <label class="label-control">Client</label>
                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                     <!-- ng-change="loadDepSites()" -->
-                                    <select class="form-control " ng-model="searchProject"  ng-options="project as project.name for project in projectsList" ng-pattern="Select Client" required>
-                                        <option value="">Select Client...</option>
-                                    </select>
+
+                                    <!--<select class="form-control " ng-model="searchProject"  ng-options="project as project.name for project in projectsList" ng-pattern="Select Client" required>-->
+                                        <!--<option value="">Select Client...</option>-->
+                                    <!--</select>-->
+
+                                    <span class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <ui-select ng-model="searchProject" ng-change="selectProject(searchProject)">
+                                        <ui-select-match placeholder="Select clients...">{{searchProject}}</ui-select-match>
+                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
+                                            <div ng-bind="client"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
                                 </div>
                             </div>
                         </div>
