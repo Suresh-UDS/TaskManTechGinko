@@ -23,12 +23,19 @@
     </ion-item>
   </ion-list>
 
-    <ion-list *ngIf="!siteList">
+    <ion-list *ngIf="!siteList && isLoading">
         <ion-item *ngFor="let fake of fakeSiteList" class="fakeList">
-            <ion-icon item-start></ion-icon>
-            <p></p>
+            <ion-icon item-start class="header-right"></ion-icon>
+            <p class="header-right"></p>
         </ion-item>
     </ion-list>
+
+    <ion-card *ngIf="!siteList && !isLoading">
+        <ion-card-content>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
+        </ion-card-content>
+    </ion-card>
 
   <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>

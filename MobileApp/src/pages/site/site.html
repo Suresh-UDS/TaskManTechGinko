@@ -15,11 +15,18 @@
     </ion-item>
   </ion-list>
 
-  <ion-list *ngIf="!sites">
+  <ion-list *ngIf="!sites  && isLoading">
     <ion-item *ngFor="let fake of fakeUsers" class="fakeItem">
       <ion-icon item-start></ion-icon>
       <p></p>
     </ion-item>
   </ion-list>
+
+    <ion-card *ngIf="!sites && !isLoading">
+        <ion-card-content>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
+        </ion-card-content>
+    </ion-card>
 
 </ion-content>

@@ -29,18 +29,18 @@ declare  var demo ;
   templateUrl: 'employee-list.html',
 })
 export class EmployeeList {
-
-  employeeList:any;
-  userGroup:any;
-  employeeId:any;
-  employeeFullName: any;
-  employeeEmpId:any;
-  lattitude:any;
-  longitude:any;
-  checkedIn:any;
-  site:any;
-  attendanceId:any;
-  loader:any;
+    isLoading:boolean;
+    employeeList:any;
+    userGroup:any;
+    employeeId:any;
+    employeeFullName: any;
+    employeeEmpId:any;
+    lattitude:any;
+    longitude:any;
+    checkedIn:any;
+    site:any;
+    attendanceId:any;
+    loader:any;
     page:1;
     totalPages:0;
     pageSort:15;
@@ -371,6 +371,7 @@ export class EmployeeList {
   }
 
   getEmployees(){
+      this.isLoading=true;
 
       var searchCriteria = {
           currPage:this.page,
@@ -378,6 +379,7 @@ export class EmployeeList {
           siteId:this.site.id
       };
       this.attendanceService.searchEmpAttendances(searchCriteria).subscribe(response=>{
+          this.isLoading=false;
           this.employeeList = response.json();
           this.component.showLoader('Loading Employees');
           this.component.closeAll();

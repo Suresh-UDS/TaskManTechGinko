@@ -11,6 +11,8 @@ import {SiteService} from "../service/siteService";
 })
 export class SitePage {
 
+    isLoading:boolean;
+
   userId:any;
   employeeId: any;
   sites:any;
@@ -23,11 +25,13 @@ export class SitePage {
   }
 
   ionViewDidLoad() {
+      this.isLoading=true;
     this.employeeId=window.localStorage.getItem('employeeId');
     console.log('ionViewDidLoad SitePage');
     // this.component.showLoader('Getting All Sites');
     this.siteService.searchSite().subscribe(
       response=>{
+          this.isLoading=false;
         console.log('ionViewDidLoad SitePage:');
 
         console.log(response.json()
