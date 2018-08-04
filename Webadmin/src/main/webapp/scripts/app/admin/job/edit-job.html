@@ -245,7 +245,7 @@
                                                     <label class="control-label">Block </label>
                                                     <div class="dropdown">
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                       <select class="form-control " ng-model="selectedBlock"   ng-options="block for  block in blocks track by block" ng-change="loadFloors()">
+                                                       <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block for  block in blocks track by block">
                                                         	<option value="">Select Block...</option>
                                                     	  </select>
                                                         <div ng-show="form.$submitted || form.block.$touched">
@@ -265,7 +265,7 @@
                                                     <label class="control-label">Floor </label>
                                                     <div class="dropdown">
                                                      <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-													<select class="form-control " ng-model="selectedFloor"  ng-options="floor for floor in floors track by floor" ng-change="loadZones()" >
+													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor for floor in floors track by floor">
                                                         <option value="">Select Floor...</option>
                                                     	</select>
                                                    	 <div ng-show="form.$submitted || form.floor.$touched">
@@ -285,7 +285,7 @@
                                                     <label class="control-label">Zone </label>
                                                     <div class="dropdown">
                                                      <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-													<select class="form-control " ng-model="selectedZone"  ng-options="zone for zone in zones track by zone">
+													<select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones track by zone">
                                                         <option value="">Select Zone...</option>
                                                     </select>
                                                    	 <div ng-show="form.$submitted || form.floor.$touched">
@@ -324,7 +324,7 @@
                                                 <div class="form-group">
                                                     <label class="label-control">Start date<span class="red-star">*</span> </label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text"  ng-model="job.plannedStartTime"  class="form-control datetimepicker"  id="jobStartDate" ng-bind="job.plannedStartTime | date:'dd/MM/yyyy HH:mm'" required/>
+                                                    <input type="text"  ng-model="selectPlannedStartTime"  class="form-control datetimepicker"  id="jobStartDate" required/>
 
                                                 </div>
 
@@ -589,9 +589,9 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="control-label">Schedule End Date </label>
-                                                    <p class="input-group">
+                                                    <!-- <p class="input-group">
                                                         <input
-                                                            ng-model="job.scheduleEndDate"
+                                                            ng-model="selectScheduleEndDate"
                                                             class='form-control'
                                                             name='scheduleEndDate'
                                                             datetime-picker="dd-MMM-yyyy HH:mm"
@@ -602,8 +602,10 @@
 											<i class="fa fa-calendar"></i>
 										</button>
 									</span>
-                                                    </p>
-
+                                                    </p> -->
+                                                     
+                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                    <input type="text" class="form-control datetimepicker" ng-model="selectScheduleEndDate" name='scheduleEndDate' id="scheduleEndDate"  />
 
                                                     <div ng-show="form.$submitted || form.scheduleEndDate.$touched">
                                                         <div ng-show="form.scheduleEndDate.$dirty || form.scheduleEndDate.$invalid">

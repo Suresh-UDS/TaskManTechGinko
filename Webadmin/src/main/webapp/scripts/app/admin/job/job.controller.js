@@ -41,6 +41,7 @@ angular.module('timeSheetApp')
         $scope.disable = false;
         $rootScope.exportStatusObj  ={};
         $scope.status = 0;
+        $scope.selectPlannedStartTime;
 
         /*
         **
@@ -71,19 +72,32 @@ angular.module('timeSheetApp')
 
             });
         };
-
+        /*$(document).ready(function(){
+           $('#jobStartDate').datetimepicker({ dateFormat: 'dd/MM/yyyy hh:mm a' }).val(); 
+        });*/
+         
+        
 
         $('input#jobStartDate').on('dp.change', function(e){
-
         		$scope.job.plannedStartTime = e.date._d;
+                $scope.selectPlannedStartTime = $filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
         		console.log('job start time - ' + $scope.job.plannedStartTime);
+        });
+
+        $('#jobStartDate').datetimepicker({
+        format: 'DD/MM/YYYY HH:MM A'
         });
 
         $('input#scheduleEndDate').on('dp.change', function(e){
 
 	    		$scope.job.scheduleEndDate = e.date._d;
+                $scope.selectScheduleEndDate = $filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
 	    		console.log('job schedule end date - ' + $scope.job.scheduleEndDate);
 	    });
+
+        $('#scheduleEndDate').datetimepicker({
+        format: 'DD/MM/YYYY HH:MM A'
+        });
 
 
         $('input#selectedJobDate').on('dp.change', function(e){
@@ -278,6 +292,10 @@ angular.module('timeSheetApp')
         		$scope.job.pendingStatus='pendingAtUDS';
         		$scope.job.pendingAtUDS=true;
         		$scope.selectedSite = {id : data.siteId,name : data.siteName};
+                $scope.job.plannedStartTime = data.plannedStartTime;
+                $scope.selectPlannedStartTime = $filter('date')(data.plannedStartTime, 'dd/MM/yyyy hh:mm a');
+                $scope.job.scheduleEndDate = data.plannedEndTime;
+                $scope.selectScheduleEndDate = $filter('date')(data.plannedEndTime, 'dd/MM/yyyy hh:mm a');
         		$scope.loadEmployees().then(function(employees){
         			console.log('load employees ');
             		$scope.selectedEmployee = {id : data.employeeId,name : data.employeeName};
@@ -384,7 +402,8 @@ angular.module('timeSheetApp')
 	            	$scope.job.schedule = 'ONCE';
 	            	$scope.job.active = 'Y';
 	            	$scope.job.plannedHours = 1;
-                    $scope.job.plannedStartTime = $filter('date')(new Date(), 'EEE, dd MMM yyyy HH:mm:ss Z');
+                    $scope.job.plannedStartTime =new Date();
+                    $scope.selectPlannedStartTime = $filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
 
 	        	
     	        	if($stateParams.ticketId){
