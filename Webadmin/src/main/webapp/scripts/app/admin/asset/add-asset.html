@@ -632,10 +632,10 @@
 
 
                                                                                         </div> -->
-                                                                                        <!--<p class="help-block" style="color:maroon"-->
-                                                                                           <!--ng-show="warFromMsg">-->
-                                                                                            <!--From date cannot be lesser than To date.-->
-                                                                                        <!--</p>-->
+                                                                                        <p class="help-block" style="color:maroon"
+                                                                                           ng-show="warFromMsg">
+                                                                                            From date cannot be lesser than To date.
+                                                                                        </p>
 
                                                                                     </div>
 
@@ -648,7 +648,7 @@
                                                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
                                                                                     <input type="text" class="form-control datepicker"  id="warToDate" name="warToDate" ng-model ="warToDate1"  placeholder="{{warToDate | date:'dd/MMM/yyyy'}}" autocomplete="off" required/>
                                                                                     <div ng-show="form.$submitted || form.warToDate.$touched">
-                                                                                         <div
+                                                                                         <!-- <div
                                                                                             ng-show="form.warToDate.$dirty || form.warToDate.$invalid">
                                                                                             <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                                                ng-show="form.warToDate.$error.required">
@@ -656,11 +656,11 @@
                                                                                             </p>
 
 
-                                                                                        </div>
-                                                                                        <!--<p class="help-block" style="color:maroon"-->
-                                                                                           <!--ng-show="warToMsg">-->
-                                                                                            <!--To date cannot be lesser than From date.-->
-                                                                                        <!--</p>-->
+                                                                                        </div> -->
+                                                                                        <p class="help-block" style="color:maroon"
+                                                                                           ng-show="warToMsg">
+                                                                                            To date cannot be lesser than From date.
+                                                                                        </p>
 
                                                                                     </div>
 
@@ -1374,7 +1374,7 @@
 						                                                </div>
 
                                                                     </div>
-                                                                    <div class="col-md-3" ng-init="loadSiteShifts()">
+                                                                    <!-- <div class="col-md-3" ng-init="loadSiteShifts()">
                                                                         <div class="form-group">
                                                                             <label class="control-label">Shift</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
@@ -1382,7 +1382,7 @@
                                                                                 <option value="">Select Shift..</option>
                                                                             </select>
                                                                         </div>
-                                                                    </div>
+                                                                    </div> -->
                                                                     <div class="col-md-5 txt-align-rgt" style="padding-top: 25px;">
                                                                         <button  type="submit" class="btn btn-success add-btn margn-top0"   ng-disabled="form3.$invalid|| ppmFromMsg || ppmToMsg"">Add</button>
                                                                     </div>
@@ -1685,7 +1685,7 @@
 						                                                </div>
 
                                                                     </div>
-                                                                    <div class="col-md-3" ng-init="loadSiteShifts()">
+                                                                    <!-- <div class="col-md-3" ng-init="loadSiteShifts()">
                                                                         <div class="form-group">
                                                                             <label class="control-label">Shift</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
@@ -1693,7 +1693,7 @@
                                                                                 <option value="">Select Shift..</option>
                                                                             </select>
                                                                         </div>
-                                                                    </div>
+                                                                    </div> -->
                                                                     <div class="col-md-4 txt-align-rgt" style="padding-top: 25px;">
                                                                         <button  type="submit" class="btn btn-success add-btn margn-top0"    ng-disabled="form4.$invalid|| amcFromMsg || amcToMsg">Add</button>
                                                                     </div>
