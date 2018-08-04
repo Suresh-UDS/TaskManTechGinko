@@ -1271,6 +1271,7 @@ public class AssetManagementService extends AbstractService {
 
 		AssetPPMSchedule assetPPMSchedule = mapperUtil.toEntity(assetPpmScheduleDTO, AssetPPMSchedule.class);
 		assetPPMSchedule.setMaintenanceType(MaintenanceType.PPM.getValue());
+		log.debug("asset ppm schedule checklist Id - "+assetPpmScheduleDTO.getChecklistId());
 		if(assetPpmScheduleDTO.getChecklistId() > 0) {
 			Checklist checklist = checklistRepository.findOne(assetPpmScheduleDTO.getChecklistId());
 			assetPPMSchedule.setChecklist(checklist);
@@ -1933,7 +1934,7 @@ public class AssetManagementService extends AbstractService {
 
 		Pageable pageRequest = null;
 		if(searchCriteria != null) {
-			
+
 			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
 				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
 				log.debug("Sorting object" + sort);
@@ -1992,7 +1993,7 @@ public class AssetManagementService extends AbstractService {
 
 		Pageable pageRequest = null;
 		if(searchCriteria != null) {
-			
+
 			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
 				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
 				log.debug("Sorting object" + sort);
@@ -2053,7 +2054,7 @@ public class AssetManagementService extends AbstractService {
 
         Pageable pageRequest = null;
         if(searchCriteria != null) {
-        	
+
         	if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
 				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
 				log.debug("Sorting object" + sort);
