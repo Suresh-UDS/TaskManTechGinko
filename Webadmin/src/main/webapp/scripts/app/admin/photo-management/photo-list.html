@@ -1,0 +1,237 @@
+<style>a{cursor: pointer;}</style>
+<div class="container gc-container">
+	<div class="success-message hidden"></div>
+
+	<div class="row">
+		<div class="col-md-12 table-section" style="border: 1px solid #ddd;padding: 0px;">
+			<div class="table-label">
+				<div class="floatL l5">
+					<a ui-sref="managePhoto"><i class="glyphicon glyphicon-arrow-left"></i>Back
+					</a>
+		Photo Management</div>
+				<div class="floatR r5 minimize-maximize-container minimize-maximize">
+					<i class="fa fa-caret-up"></i>
+				</div>
+				<div class="floatR r5 gc-full-width">
+					<i class="fa fa-expand"></i>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="table-container" ng-init="loadEmployeesCheckInOut()">
+			<div style="text-align:center" ng-show="details.transactions.length==0" ><h2>No Images Available</h2></div>
+				<table class="table table-bordered grocery-crud-table table-hover"  ng-show="details.transactions.length>0" >
+					<thead>
+						<tr>
+							<th class="column-with-ordering" data-order-by="date">
+								<label>
+								Select All 
+								<input type="checkbox" ng-click="selectAll()" ng-model="isAllSelected"/>
+								</label>
+								<br/>
+								<a ng-click="checkSelected()" onClick="$('#deleteModal').modal()" data-target="#myModal" class="btn btn-default ">
+								<i class="fa fa-trash-o text-danger" ></i>
+								<span class="text-danger">Delete Selected</span>
+								</a>
+								<div  id="deleteModal" data-backdrop="false" class="modal fade" tabindex="-1" role="dialog"
+										aria-labelledby="myModalLabel" aria-hidden="true" >
+										<div class="delete-dialog">
+									<div  class="modal-content">
+										<div ng-show="notSelected" class="modal-body">
+												Are you sure to delete the Photo?
+										</div>
+										<div ng-show="!notSelected" class="modal-body">
+												NO IMAGES OR TRANSACTIONS SELECTED
+										</div>
+										<div ng-show="notAvail" class="modal-body">
+												(No Images Available to delete)
+										</div>
+										<div class="delete-footer">
+												<button ng-show="notSelected" type="button" ng-click="deleteSelected()" class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>	
+										<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+										
+										</div>
+									</div>
+								</div>
+								</div>
+								
+
+							</th>
+
+							<th class="column-with-ordering" data-order-by="date">DATE</th>
+							<th class="column-with-ordering" data-order-by="in">IN</th>
+							<th class="column-with-ordering" data-order-by="out">OUT</th>
+							<th class="column-with-ordering" data-order-by="site">SITE</th>
+							<th class="column-with-ordering" data-order-by="photoIn">PHOTO</th>
+						</tr>
+
+					</thead>
+
+					<tbody>
+
+						<tr ng-repeat="trans in details.transactions">
+						<td><input type="checkbox" ng-model="trans.canDelete"/></td>
+							<td>{{trans.checkInDateTimeDisplay}}</td>
+							<td>{{trans.checkInTimeDisplay}}</td>
+							<td>{{trans.checkOutTimeDisplay}}</td>
+							<td>{{trans.siteName}}</td>
+							<td ng-show=" trans.photoIn || trans.photoOut">
+								<a 	id="images"
+									onClick="$('#myModal').modal()"
+									data-target="#myModal"
+									ng-click="loadImages(trans.employeeEmpId,trans.photoIn,trans.photoOut)">
+									<img src="assets/images/image_placeholder.png" width="30px" height="30px"/>
+								</a>
+								&nbsp;&nbsp;&nbsp;&nbsp;
+								<a ng-click="deleteConfirm(trans)" onClick="$('#deleteModalInd').modal()" data-target="#myModal" class="btn btn-default">
+								<i class="fa fa-trash-o text-danger"></i>
+								<span class="text-danger">Delete </span>
+								</a>
+								<div id="deleteModalInd" data-backdrop="false" class="modal fade" tabindex="-1" role="dialog"
+										aria-labelledby="myModalLabel" aria-hidden="true" >
+										<div class="delete-dialog">
+									<div class="modal-content">
+										<div class="modal-body">
+												Are you sure you want to delete the Photos?
+										</div>
+										<div class="delete-footer">
+												<button type="button" ng-click="deleteTransImage()" class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>	
+										<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+										
+										</div>
+									</div>
+								</div>
+								</div>
+								
+							</td>
+							<td ng-hide=" trans.photoIn || trans.photoOut">
+								No Images
+							</td>
+						</tr>	
+					</tbody>
+
+					<!-- Table Footer -->
+					<tfoot>
+						<tr >
+							<td colspan="10">
+								<!-- <div class="floatL t20 l5">
+									<div class="floatL t10">Show</div>
+									<div class="floatL r5 l5 t3">
+										<select name="per_page" class="per_page form-control">
+											<option value="10" selected="selected">
+												10&nbsp;&nbsp;</option>
+											<option value="25">25&nbsp;&nbsp;</option>
+											<option value="50">50&nbsp;&nbsp;</option>
+											<option value="100">100&nbsp;&nbsp;</option>
+										</select>
+									</div>
+									<div class="floatL t10">entries</div>
+									<div class="clear"></div>
+								</div> End of "Show 10/25/50/100 entries" (dropdown per-page)
+								 -->
+
+								<div class="floatR r5">
+
+									<!-- Buttons - First,Previous,Next,Last Page -->
+									<ul class="pagination">
+										<li class="paging-first {{page ==1 ? 'disabled' : ''}}">
+											<a  id="first"
+												ng-click="first()">
+												<i class="fa fa-step-backward"></i>
+											</a>
+										</li>
+										<li class="prev paging-previous {{page ==1 ?'disabled' : ''}}" >
+											<a
+											id="previous" ng-click="previous()"
+											class="">
+												<i
+												class="fa fa-chevron-left"></i>
+											</a>
+										</li>
+										<li>
+											<span class="page-number-input-container"> <input
+												type="number" ng-model="page"
+												class="form-control page-number-input" disabled />
+										</span>
+										</li>
+										<li class="next paging-next {{page ==totalPages ? 'disabled' : ''}}">
+											<a id="next"
+
+												ng-click="next()"
+												class="">
+												<i class="fa fa-chevron-right"></i>
+											</a>
+										</li>
+										<li class="paging-last {{page ==totalPages? 'disabled' : ''}}">
+											<a id="last"
+												ng-click="last()" class="">
+												<i class="fa fa-step-forward"></i>
+											</a>
+										</li>
+									</ul>
+
+									<input type="hidden" name="page_number"
+										class="page-number-hidden" value="1" />
+
+								</div>
+								<div class="floatR r10 t30">
+									Displaying <span class="paging-starts">{{((page-1)*ITEM_PER_PAGE)+1}}</span>
+									to <span class="paging-ends">{{(page)*ITEM_PER_PAGE < details.totalCount ?(page)*ITEM_PER_PAGE :details.totalCount  }}</span> of <span
+										class="current-total-results">{{details.totalCount}}</span> items
+								</div>
+
+								<div class="clear"></div>
+							</td>
+						</tr>
+					</tfoot>
+					<!-- End of: Table Footer -->
+				</table>
+				<!-- <div class="col-xs-3 im" ng-repeat="transaction in details.transactions" style="text-align:center">
+					Checkin : {{transaction.checkInDateTimeDisplay}} {{transaction.checkInTimeDisplay}}
+					<i class="glyphicon glyphicon-picture" ng-click="showImage(transaction.photoIn)"></i>
+					Checkout : {{transaction.checkOutDateTimeDisplay}} {{transaction.checkOutTimeDisplay}}
+					<i class="glyphicon glyphicon-picture" ng-click="showImage(transaction.photoOut)"></i>
+
+
+				<img id="{{transaction.photoIn}}" data-ng-src="{{getImageUrl(this,transaction.photoIn)}}"  style="display:block;width:100%;height:100%"/>
+						{{transaction.checkOutDateTimeDisplay}} {{transaction.checkOutTimeDisplay}}
+							<img id="{{transaction.photoOut}}" data-ng-src="{{getImageUrl(this,transaction.photoOut)}}"  style="display:block;width:100%;height:100%"/>
+
+				</div>
+				 -->
+			</div>
+
+			<!-- <div id="myModal" class="modal" tabindex="-1" role="dialog"
+											aria-labelledby="myModalLabel" aria-hidden="true" >
+								<div class="modal-dialog">
+									<div class="modal-content  ">
+										<div class="modal-body">
+											<table >
+													<thead>
+														<tr >
+															<th style="text-align: center">IN</th>
+															<td>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+															<th style="text-align: center">OUT</th>
+														</tr>
+
+													</thead>
+													<tr>
+														<td><br/></td>
+													</tr>
+													<tr>
+														<td><img id="photoInImg" src="//placehold.it/250x250"
+															class="img-responsive"></td>
+														<td>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+														<td><img id="photoOutImg" src="//placehold.it/250x250"
+															class="img-responsive"></td>
+													</tr>
+											</table>
+
+										</div>
+									</div>
+								</div>
+							</div> -->
+
+		</div>
+
+	</div>
+</div>

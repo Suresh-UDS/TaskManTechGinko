@@ -1,0 +1,388 @@
+
+
+<div class="row" ng-init="initLoad();loadProjectsList();">
+    <div class="col-md-6 txt-align-lft">
+
+        <button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
+            <i class="material-icons">filter_list</i> Basic Filter
+            <div class="ripple-container"></div>
+        </button>
+        <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#advancedFilter" tabindex="0">
+            <i class="material-icons">filter_list</i> Advanced Filter
+            <div class="ripple-container"></div>
+        </button>
+
+    </div>
+    <div class="col-md-6 txt-align-rgt">
+
+        <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-quotation" has-permission="Quotation:Create" ng-class="{active: $state.includes('admin')}" tabindex="0">
+            <i class="material-icons">add</i> Add
+            <div class="ripple-container"></div>
+        </button>
+
+        <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+            <i class="material-icons">refresh</i> Reload
+            <div class="ripple-container"></div>
+        </button>
+
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="card margin-TB-5 tablecard appModuleCard">
+
+            <div class="card-content">
+
+                <div class="table-responsive">
+                    <table class="table table-hover withSortingIcons">
+                        <thead>
+                        <tr>
+                            <th>Id
+                                <span class="sortingIcons">
+                                    <span ng-click="columnAscOrder('id')" ng-class="isActiveAsc == 'id' ? 'active' : ''" >
+                                        <i  class="fa fa-caret-up"></i>
+                                    </span>
+                                    <span ng-click="columnDescOrder('id')" ng-class="isActiveDesc == 'id' ? 'active' : ''">
+                                         <i  ng-class="class" class="fa fa-caret-down"></i>
+                                    </span>
+                                </span>
+                            </th>
+                            <th>Title
+                                <span class="sortingIcons">
+                                    <span ng-click="columnAscOrder('title')" ng-class="isActiveAsc == 'title' ? 'active' : ''" >
+                                        <i  class="fa fa-caret-up"></i>
+                                    </span>
+                                    <span ng-click="columnDescOrder('title')" ng-class="isActiveDesc == 'title' ? 'active' : ''">
+                                         <i  ng-class="class" class="fa fa-caret-down"></i>
+                                    </span>
+                                </span>
+                            </th>
+                            <th>Client
+                               <span class="sortingIcons">
+                                    <span ng-click="columnAscOrder('client')" ng-class="isActiveAsc == 'client' ? 'active' : ''" >
+                                        <i  class="fa fa-caret-up"></i>
+                                    </span>
+                                    <span ng-click="columnDescOrder('client')" ng-class="isActiveDesc == 'client' ? 'active' : ''">
+                                         <i  ng-class="class" class="fa fa-caret-down"></i>
+                                    </span>
+                                </span>
+                            </th>
+                            <th>Site
+                                 <span class="sortingIcons">
+                                    <span ng-click="columnAscOrder('site')" ng-class="isActiveAsc == 'site' ? 'active' : ''" >
+                                        <i  class="fa fa-caret-up"></i>
+                                    </span>
+                                    <span ng-click="columnDescOrder('site')" ng-class="isActiveDesc == 'site' ? 'active' : ''">
+                                         <i  ng-class="class" class="fa fa-caret-down"></i>
+                                    </span>
+                                </span>
+                            </th>
+                            <th>Created By
+                                <span class="sortingIcons">
+                                    <span ng-click="columnAscOrder('createdBy')" ng-class="isActiveAsc == 'createdBy' ? 'active' : ''" >
+                                        <i  class="fa fa-caret-up"></i>
+                                    </span>
+                                    <span ng-click="columnDescOrder('createdBy')" ng-class="isActiveDesc == 'createdBy' ? 'active' : ''">
+                                         <i  ng-class="class" class="fa fa-caret-down"></i>
+                                    </span>
+                                </span>
+                            </th>
+                            <!-- <th>Submitted By</th>
+                            <th>Approved By</th> -->
+                            <th>Created On
+                              <span class="sortingIcons">
+                                    <span ng-click="columnAscOrder('createdOn')" ng-class="isActiveAsc == 'createdOn' ? 'active' : ''" >
+                                        <i  class="fa fa-caret-up"></i>
+                                    </span>
+                                    <span ng-click="columnDescOrder('createdOn')" ng-class="isActiveDesc == 'createdOn' ? 'active' : ''">
+                                         <i  ng-class="class" class="fa fa-caret-down"></i>
+                                    </span>
+                                </span>
+                            </th>
+                            <!-- <th>Submitted On</th>
+                            <th>Approved On</th> -->
+                            <th>Status
+                                <span class="sortingIcons">
+                                    <span ng-click="columnAscOrder('status')" ng-class="isActiveAsc == 'status' ? 'active' : ''" >
+                                        <i  class="fa fa-caret-up"></i>
+                                    </span>
+                                    <span ng-click="columnDescOrder('status')" ng-class="isActiveDesc == 'status' ? 'active' : ''">
+                                         <i  ng-class="class" class="fa fa-caret-down"></i>
+                                    </span>
+                                </span>
+                            </th>
+                            <th>Amount</th>
+                            <th class="text-right">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="quotation in quotations">
+                            <td>{{quotation.serialId}}</td>
+                            <td>{{quotation.title}}</td>
+                            <td>{{quotation.projectName}}</td>
+                            <td>{{quotation.siteName}}</td>
+                            <td>{{quotation.createdByUserName}}</td>
+                            <!-- <td>{{quotation.sentByUserName}}</td>
+                            <td>{{quotation.approvedByUserName}}</td> -->
+                            <td><label ng-bind="quotation.createdDate | date:'dd-MMM-yyyy hh:mm a'"/></td>
+                            <!-- <td><label ng-bind="quotation.submittedDate | date:'dd-MMM-yyyy hh:mm a'"/></td>
+                            <td><label ng-bind="quotation.approvedDate | date:'dd-MMM-yyyy hh:mm a'"/></td> -->
+                            <td >
+                            <button class="btn btn-success" ng-if="quotation.isApproved">Approved</button>
+                            <button class="btn btn-success" ng-if="quotation.isRejected">Rejected</button>
+
+                            <button class="btn btn-label"  ng-if="quotation.isArchived">Archived</button>
+                            <button class="btn btn-info" ng-if="quotation.isDrafted">Pending</button>
+                            <button class="btn btn-warning" ng-if="quotation.isSubmitted">Waiting for approval</button></td>
+                            <td>{{quotation.grandTotal}} </td>
+                            <td class="text-right hoverMe">
+
+                                <a   title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
+
+                                <div class="HoverBx">
+
+                                    <a name="View" ng-class="{active: $state.includes('admin')}"  ui-sref="view-quotation({ id: quotation._id })"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+
+                                    <a name="Edit" ng-if="!quotation.isSubmitted && !quotation.isApproved" has-permission="Quotation:Edit"  ng-class="{active: $state.includes('admin')}"  ui-sref="edit-quotation({ id: quotation._id })"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
+
+                                    <!-- <a name="Approve Quotation" ng-if="quotation.isSubmitted" ng-class="{active: $state.includes('admin')}"  ng-click="approveQuotation(quotation)"  class="btn btn-simple btn-success"></a> -->
+                                    <button  title="Approve" ng-if="quotation.isSubmitted && !quotation.isApproved"    data-toggle="modal" data-target="#approveQuotationModal" data-dismiss="#approveQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like"> <i class="material-icons">
+                                        offline_pin
+                                    </i> </button>
+                                    <button  title="Reject" ng-if="quotation.isSubmitted && !quotation.isApproved && !quotation.isRejected"    data-toggle="modal" data-target="#rejectQuotationModal" data-dismiss="#rejectQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like">
+                                        <i class="material-icons">highlight_off</i> </button>
+
+                                    <a name="Delete" ng-if="quotation.isApproved || quotation.isDrafted" ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+
+                                </div>
+
+                             </td>
+
+
+                        </tr>
+
+
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="txt-align-center LoaderCon"  ng-hide="quotationsLoader">
+
+                    <div class="pad-TB-30">
+                        <div loader-css="ball-pulse"></div>
+                        <h3 >Loading, please wait...</h3>
+                    </div>
+
+                </div>
+
+                <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
+
+                    <h3>No data Found</h3>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="approveQuotationModal" tabindex="-1" role="dialog" aria-labelledby="approveQuotationModal" aria-hidden="true">
+    <div class="modal-dialog modal-notice">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+                <h5 class="modal-title" id="isLeftModal">Approve Quotation ?</h5>
+            </div>
+            <div class="modal-footer ">
+                <button type="button" class="btn btn-info btn-round" data-dismiss="modal" ng-click="approveQuotation(quotation)">Yes</button>
+                <button type="button" class="btn btn-info btn-round" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="rejectQuotationModal" tabindex="-1" role="dialog" aria-labelledby="rejectQuotationModal" aria-hidden="true">
+    <div class="modal-dialog modal-notice">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+                <h5 class="modal-title" id="isLeftModal">Reject Quotation ?</h5>
+            </div>
+            <div class="modal-footer ">
+                <button type="button" class="btn btn-info btn-round" data-dismiss="modal" ng-click="rejectQuotation(quotation)">Yes</button>
+                <button type="button" class="btn btn-info btn-round" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+   <!-- Pagination directive start -->
+
+    <pagination-new></pagination-new>
+
+    <!-- Pagination directive end -->
+
+
+<!-- BasicFilterModal -->
+<div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="searchForm"   novalidate >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Basic Filter</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+
+                        <div class="col-xs-12 col-md-4">
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <label class="label-control">Client</label>
+                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects" ng-pattern="Select Client" >
+                                        <option value="">Select Client...</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <div class="dropdown">
+                                <div class="form-group">
+                                    <label class="label-control">Site</label>
+                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sitesList" ng-pattern="Select Site">
+                                        <option value="">Select Site...</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter1()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--  End Modal -->
+
+<!-- AdvancedFilterModal -->
+<div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="searchForm1"   novalidate >
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Advanced Filter</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+
+                        <div class="col-xs-12 col-md-4">
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <input type="text"
+                                           class="form-control border-bottom-input"
+                                           name="searchId"
+                                           placeholder="Id"
+                                           ng-pattern="/^[0-9]*$/"
+                                           ng-model="searchId"
+
+                                    />
+
+                                    <div ng-show="searchForm1.$submitted || searchForm1.searchId.$touched">
+                                        <div ng-show="searchForm1.searchId.$dirty || searchForm1.searchId.$invalid">
+
+                                            <p class="help-block" style="color:maroon;"
+                                               ng-show="searchForm1.searchId.$error.pattern">
+                                                Quotation id only contain numbers.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <input type="text"
+                                           class="form-control border-bottom-input"
+                                           placeholder="Title"
+                                           ng-model="searchTitle"
+
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <input type="text"
+                                           class="form-control searchable-input floatL border-bottom-input"
+                                           placeholder="Created By"
+                                           ng-model="searchCreatedBy"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-xs-12 col-md-4">
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <input type="text"
+                                           class="form-control searchable-input floatL border-bottom-input"
+                                           placeholder="Approved By"
+                                           ng-model="searchApprovedBy"
+
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <input type="text"
+                                           class="form-control searchable-input floatL border-bottom-input"
+                                           placeholder="Status"
+                                           ng-model="searchStatus"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm1.$invalid">Apply Filter</button>
+                    <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--  End Modal -->

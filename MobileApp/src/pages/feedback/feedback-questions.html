@@ -1,0 +1,83 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Your Feedback</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="FeedbackQuesCon" id="scrollDiv">
+
+    <ion-slides #slides class="slide-height">
+        <ion-slide *ngFor="let q of questions;let i=index">
+            <h2 text-center="" class="clr-white">{{q.question}}</h2>
+            <ion-row class="margin0">
+            <ion-col col-1 class="ver-center">
+                <button float-left ion-button clear color="primary" class="btnPrev padding0" (click)="prev()" *ngIf="i!=0">
+                    <i class="material-icons q-arrow">keyboard_arrow_left</i>
+                </button>
+            </ion-col>
+            <ion-col col-10>
+                <ion-item class="bg-trans QuesContent" no-lines>
+                    <ion-list radio-group [(ngModel)]="q.answer" class="margin-auto q-type1" *ngIf="q.answerType!='RATING'">
+                        <ion-row>
+                            <ion-col col-6>
+                                <ion-item class="padding-left0 inline-block align-right" no-lines >
+                                    <ion-radio  value="true" class="q-radio" (ionSelect)=" q.remarksRequired? '' : questions?.length-1!=i?next():submitFeedback()">Yes</ion-radio>
+                                    <label item-right class="" >Yes</label>
+                                </ion-item>
+                            </ion-col>
+                            <ion-col col-6>
+                                <ion-item class="padding-left0 inline-block align-left" no-lines>
+                                    <ion-radio value="false" class="q-radio" (ionSelect)="  q.remarksRequired? '' : questions?.length-1!=i?next():submitFeedback()">No</ion-radio>
+                                    <label item-right class="">No&nbsp;</label>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                    </ion-list>
+                    <ion-list radio-group [(ngModel)]="q.answer" class="margin-auto width-full q-type2 padding-left10"  *ngIf="q.answerType=='RATING'">
+                        <ion-item class="inline-block width18" align-center no-lines >
+                            <ion-radio  value="1" class="true a" (ionSelect)=" q.remarksRequired? '' : questions?.length-1!=i?next():submitFeedback()">1</ion-radio>
+                        </ion-item>
+                        <ion-item class="inline-block width18" align-center no-lines>
+                            <ion-radio value="2" class="true b" (ionSelect)=" q.remarksRequired? '' : questions?.length-1!=i?next():submitFeedback()">2</ion-radio>
+                        </ion-item>
+                        <ion-item class="inline-block width18 " align-center no-lines>
+                            <ion-radio  value="3" class="true c" (ionSelect)=" q.remarksRequired? '' : questions?.length-1!=i?next():submitFeedback()">3</ion-radio>
+                        </ion-item>
+                        <ion-item class="inline-block width18" align-center no-lines>
+                            <ion-radio value="4" class="true d" (ionSelect)=" q.remarksRequired? '' : questions?.length-1!=i?next():submitFeedback()">4</ion-radio>
+                        </ion-item>
+                        <ion-item class="inline-block width18" align-center no-lines>
+                            <ion-radio value="5" class="true e" (ionSelect)=" q.remarksRequired? '' : questions?.length-1!=i?next():submitFeedback()">5</ion-radio>
+                        </ion-item>
+                    </ion-list>
+                    <ion-list *ngIf=" q.remarksRequired ">
+                        <ion-item class="text-item">
+                            <ion-textarea placeholder="Enter Comments" margin-top="" [(ngModel)]=" q.remarks " class="text-border"></ion-textarea>
+                        </ion-item>
+                        <button class="btn btn-warning btn-wd btn-lg" (click)="questions?.length-1!=i?next():submitFeedback()">
+                            <span *ngIf="questions?.length-1!=i">Next</span>
+                            <span *ngIf="questions?.length-1==i">Submit</span>
+                        </button>
+                    </ion-list>
+                </ion-item>
+            </ion-col>
+            <ion-col col-1 class="ver-center" *ngIf=" !q.remarksRequired ">
+                <button float-right ion-button clear color="primary" class="btnNext padding0" (click)="questions?.length-1!=i?next():submitFeedback()" >
+                    <i class="material-icons q-arrow">keyboard_arrow_right</i>
+                </button>
+            </ion-col>
+            </ion-row>
+            <!--<ion-toolbar position="bottom" transparent class="txt-center" *ngIf="questions?.length-1==i">-->
+                <!--<button class="btn btn-warning" style="width:40%;" ion-button (click)="submitFeedback()">Submit</button>-->
+            <!--</ion-toolbar>-->
+        </ion-slide>
+
+    </ion-slides>
+
+
+
+</ion-content>
+

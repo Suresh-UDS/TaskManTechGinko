@@ -1,0 +1,1113 @@
+<div class="crud-form"
+	data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="viewAsset();">
+	<div class="">
+		<div class="row">
+        	<div class="col-md-12">
+
+
+				<div class="form-container table-container">
+					<form ng-show="!success" name="form" role="form" novalidate
+						ng-submit="saveAsset()"  class="form-horizontal">
+
+                       <div class="TabsCon ">
+
+                           <div class="panel panel-default TabsContainer assetsTabs">
+                               <!--<div class="panel-heading">Panel Heading</div>-->
+                               <div class="panel-body">
+
+
+                                   <ul class="nav nav-pills nav-pills-warning">
+                                       <li class="active">
+                                           <a href=".General" data-toggle="tab" > General</a>
+                                       </li>
+                                       <li class="">
+                                           <a href=".qr-code" data-toggle="tab"
+                                                      ng-click="genQrCodes()" > QR Code</a>
+                                       </li>
+                                       <li class=""><a href=".ppm-schedule" data-toggle="tab"
+                                                       ng-click="loadPPMSchedule()">PPM Schedule</a></li>
+                                       <li class=""><a href=".amc-schedule" data-toggle="tab" ng-click="loadAmcSchedule()"
+                                                       >Vendor Management</a></li>
+                                       <li class=""><a href=".Config" data-toggle="tab"
+                                       ng-click="assetConfig()">Config</a></li>
+
+                                       <li class=""><a href=".Documents" data-toggle="tab"
+                                                     ng-click="getAllUploadedFiles();getAllUploadedPhotos();" >Documents</a></li>
+                                       <li class=""><a href=".ppm-tasks" data-toggle="tab"
+                                       ng-click="loadPPMJobs();">PPM Jobs</a></li>
+                                       <li class=""><a href=".amc-tasks" data-toggle="tab"
+                                       ng-click="loadAMCJobs();">AMC Jobs</a></li>
+                                       <li class="">
+                                           <a href=".Tickets" data-toggle="tab"
+                                           ng-click="loadTicket()"> Tickets</a>
+                                       </li>
+                                       <li class=""><a href=".Readings" data-toggle="tab"
+                                       ng-click="loadAssetReadings()">Readings</a></li>
+                                       
+                                        <li class=""><a href=".SiteHistory" data-toggle="tab"
+                                       	ng-click="loadSiteHistory()">SiteHistory</a></li>
+                                       
+                                        <li class=""><a href=".StatusHistory" data-toggle="tab"
+                                       	ng-click="loadStatusHistory()">StatusHistory</a></li>
+
+                                   </ul>
+                                   <div class="tab-content TabsContent ViewTables" style="">
+
+                                       <div class="tab-pane fade in active General" id="General">
+                                           <div class="row">
+
+                                               <div class="col-md-6">
+
+                                                   <div class="panel panel-default">
+                                                       <div class="panel-heading">Asset Details</div>
+                                                       <div class="panel-body">
+
+
+                                                           <div class="table-responsive">
+                                                               <table class="table">
+                                                                   <tbody>
+                                                                   <tr>
+                                                                       <td>Name</td>
+                                                                       <td>{{assetDetail.title}}</td>
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Asset Type</td>
+                                                                       <td>{{assetDetail.assetType}}</td>
+
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Asset Group</td>
+                                                                       <td>{{assetDetail.assetGroup}}</td>
+
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Status </td>
+                                                                       <td>{{assetDetail.status}}                                               </td>
+
+                                                                   </tr>
+
+
+
+                                                                   </tbody>
+                                                               </table>
+                                                           </div>
+
+
+
+                                                       </div>
+                                                   </div>
+
+
+                                               </div>
+                                               <div class="col-md-6">
+
+                                                   <div class="panel panel-default">
+                                                       <div class="panel-heading">Asset Location</div>
+                                                       <div class="panel-body">
+
+
+                                                           <div class="table-responsive">
+                                                               <table class="table">
+                                                                   <tbody>
+                                                                   <!-- <tr>
+                                                                       <td>Client </td>
+                                                                       <td>{{assetDetail.projectName}}</td>
+                                                                   </tr> -->
+                                                                   <tr>
+                                                                       <td>Site</td>
+                                                                       <td>{{assetDetail.siteName}}</td>
+
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Block</td>
+                                                                       <td>{{assetDetail.block}} </td>
+
+                                                                   </tr>
+                                                                   <tr>
+
+                                                                       <td>Floor  </td>
+                                                                       <td>{{assetDetail.floor}} </td>
+
+                                                                   </tr>
+                                                                   <tr>
+
+                                                                       <td>Zone  </td>
+                                                                       <td>{{assetDetail.zone}}  </td>
+
+                                                                   </tr>
+
+
+
+
+                                                                   </tbody>
+                                                               </table>
+                                                           </div>
+
+                                                       </div>
+                                                   </div>
+
+
+                                               </div>
+                                               <div class="col-md-6">
+
+                                                   <div class="panel panel-default">
+                                                       <div class="panel-heading">Manufacturer Details </div>
+                                                       <div class="panel-body">
+
+                                                           <div class="table-responsive">
+                                                               <table class="table">
+                                                                   <tbody>
+                                                                   <tr>
+                                                                       <td>Manufacturer </td>
+                                                                       <td>{{assetDetail.manufacturerName}}</td>
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Model Number</td>
+                                                                       <td>{{assetDetail.modelNumber}}</td>
+
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Serial Number</td>
+                                                                       <td>{{assetDetail.serialNumber}}  </td>
+
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Acquired Date</td>
+                                                                       <td>{{assetDetail.acquiredDate}} </td>
+
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Purchase price</td>
+                                                                       <td>{{assetDetail.purchasePrice}} </td>
+
+                                                                   </tr>
+
+                                                                   <tr>
+                                                                       <td>Current Price</td>
+                                                                       <td>{{assetDetail.currentPrice}}   </td>
+
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Estimated dispose price</td>
+                                                                       <td>{{assetDetail.estimatedDisposePrice}}</td>
+
+                                                                   </tr>
+                                                                   <!-- <tr>
+                                                                       <td>
+                                                                           Service Provider</td>
+                                                                       <td></td>
+
+                                                                   </tr> -->
+
+
+
+                                                                   </tbody>
+                                                               </table>
+                                                           </div>
+
+                                                       </div>
+                                                   </div>
+
+
+                                               </div>
+                                               <div class="col-md-6">
+
+                                                   <div class="panel panel-default">
+                                                       <div class="panel-heading">Vendor Details </div>
+                                                       <div class="panel-body">
+
+                                                           <div class="table-responsive">
+                                                               <table class="table">
+                                                                   <tbody>
+
+                                                                   <tr>
+                                                                       <td>Name</td>
+                                                                       <td>
+                                                                           {{assetDetail.amcVendorName}}
+                                                                       </td>
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Warranty Type</td>
+                                                                       <td> {{assetDetail.warrantyType}}</td>
+
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>From Date</td>
+                                                                       <td> {{assetDetail.warrantyFromDate}}</td>
+
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>To Date</td>
+                                                                       <td> {{assetDetail.warrantyToDate}}</td>
+
+                                                                   </tr>
+                                                                   <!-- <tr>
+                                                                       <td>Warranty date</td>
+                                                                       <td>{{assetDetail.warrentyExpiryDate}} </td>
+
+                                                                   </tr> -->
+                                                                   <!-- <tr>
+                                                                       <td>Phone Number</td>
+                                                                       <td>
+
+                                                                       </td>
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Email</td>
+                                                                       <td>
+
+                                                                       </td>
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Address</td>
+                                                                       <td>
+                                                                          Thooraipakkam
+                                                                       </td>
+                                                                   </tr> -->
+
+                                                                   </tbody>
+                                                               </table>
+                                                           </div>
+
+                                                       </div>
+                                                   </div>
+
+
+                                               </div>
+
+                                           </div>
+                                       </div>
+                                       <div class="tab-pane fade qr-code" id="qr-code">
+
+                                           <div class="panel panel-default" style="">
+                                               <div class="panel-heading">
+
+                                                   <div class="row">
+
+                                                       <div class="col-md-8">
+
+                                                       </div>
+                                                       <div class="col-md-4" style="text-align: right">
+                                                           <button class="btn btn-success add-btn margn-tb0" ng-click="printDiv('printable')" >
+                                                               <i class="material-icons">print</i> Print
+                                                           </button>
+                                                       </div>
+
+                                                   </div>
+
+                                               </div>
+                                               <div class="panel-body" id="printable">
+
+                                                   <div class="row">
+
+                                                       <div class="col-md-6 col-md-offset-3" style="text-align: center;">
+
+                                                           <h4><span class="txtBold">Asset Code :</span> {{assetCode}}</h4>
+
+
+                                                            <div class="QrcodeCon" ng-show="qr_img">
+
+                                                                <img src="{{qr_img}}" width="50%">
+
+                                                            </div>
+
+                                                       </div>
+
+                                                   </div>
+
+                                                    <div class="row">
+
+                                                       <div class="col-md-8 col-md-offset-3" style="text-align: left;">
+                                                          <div class="row">
+                                                             <div class="col-md-7">
+
+                                                             <p><span class="txtBold">Asset</span>  : {{assetDetail.title}}</p>
+                                                             <p><span class="txtBold">Type </span> : {{assetDetail.assetType}}</p>
+                                                             <p><span class="txtBold">Group</span>  : {{assetDetail.assetGroup}}</p>
+
+
+                                                             </div>
+                                                             <div class="col-md-5">
+
+                                                             <p><span class="txtBold">Site</span> : {{assetDetail.siteName}}</p>
+                                                             <p><span class="txtBold">Manufacturer</span>  : {{assetDetail.manufacturerName}}</p>
+                                                             <p><span class="txtBold">Vendor</span>  : {{assetDetail.amcVendorName}}</p>
+
+
+                                                             </div>
+                                                         </div>
+                                                       </div>
+
+                                                   </div>
+
+
+
+
+                                               </div>
+                                           </div>
+
+                                       </div>
+                                       <div class="tab-pane fade Tickets" id="Tickets">
+
+                                           <div class="table-responsive tablecard">
+                                               <table class="table table-hover tdWidthAuto">
+
+                                                   <thead>
+                                                   <tr>
+                                                       <th>TicketID</th>
+                                                       <th>Title</th>
+                                                       <th>Created On</th>
+                                                       <th>Site</th>
+                                                       <th>Severity</th>
+                                                       <th>Status</th>
+                                                       <th>Assigned To</th>
+                                                       <th>Assigned On</th>
+                                                   </tr>
+
+                                                   </thead>
+
+                                                   <tbody>
+                                                   <tr ng-repeat="ticket in tickets">
+                                                       <td><a class="job-txt" ui-sref="view-ticket({ id: ticket.id })">{{ticket.id}}</a></td>
+                                                       <td>{{ticket.title}}</td>
+                                                       <td>{{ticket.createdDate}}</td>
+                                                       <td>{{ticket.siteName}}</td>
+                                                       <td>{{ticket.severity}}</td>
+                                                       <td>{{ticket.status}}</td>
+                                                       <td>{{ticket.assignedToName}}</td>
+                                                       <td>{{ticket.assignedOn}}</td>
+                                                   </tr>
+                                                    <tr>
+                                                   	<td colspan="8" align="center" ng-show="!tickets.length">No Tickets Found</td>
+                                                   </tr>
+                                                   </tbody>
+                                               </table>
+
+                                           </div>
+
+                                           <!-- Pagination directive start -->
+
+                                            <pagination-new></pagination-new>
+
+                                            <!-- Pagination directive end -->
+
+                                       </div>
+                                       <div class="tab-pane fade ppm-tasks" id="ppm-tasks">
+
+                                           <div class="table-responsive tablecard">
+                                               <table class="table table-hover tdWidthAuto">
+
+                                                   <thead>
+                                                   <tr>
+                                                       <th>Title</th>
+                                                       <th>Schedule Type</th>
+                                                       <th>Schedule Start Date</th>
+                                                       <th>Schedule End Date</th>
+                                                       <th>Job ID</th>
+                                                       <th>Start Time</th>
+                                                       <th>End Time</th>
+                                                       <th>Assigned</th>
+                                                       <th>Status</th>
+                                                   </tr>
+
+                                                   </thead>
+
+                                                   <tbody>
+                                                   <tr ng-repeat="ppmList in ppmJobLists">
+                                                   	  <td>{{ppmList.title}}</td>
+                                                       <td>{{ppmList.description}}</td>
+                                                       <td>{{ppmList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
+                                                       <td>{{ppmList.scheduleEndDate | date:'dd-MMM-yyyy'}}</td>
+                                                       <td><a class="job-txt" ui-sref="view-job({ id: ppmList.id })">{{ppmList.id}}</a></td>
+                                                       <td>{{ppmList.plannedStartTime | date:'dd-MMM-yyyy @ hh:mm a'}}</td>
+                                                       <td>{{ppmList.plannedEndTime | date:'dd-MMM-yyyy @ hh:mm a'}}</td>
+                                                       <td>{{ppmList.employeeName}}</td>
+                                                       <td>{{ppmList.jobStatus}}</td>
+                                                   </tr>
+                                                   <tr>
+                                                   	<td colspan="7" align="center" ng-show="!ppmJobLists.length">No PPM Jobs Found</td>
+                                                   </tr>
+                                                   </tbody>
+                                               </table>
+
+                                           </div>
+                                            <!-- Pagination directive start -->
+
+                                            <pagination-new></pagination-new>
+
+                                            <!-- Pagination directive end -->
+
+                                       </div>
+                                       <div class="tab-pane in amc-tasks" id="amc-tasks">
+
+                                           <div class="table-responsive tablecard">
+                                               <table class="table table-hover tdWidthAuto">
+
+                                                   <thead>
+                                                   <tr>
+                                                   	  <th>Title</th>
+                                                       <th>Schedule Type</th>
+                                                       <th>Schedule Start Date</th>
+                                                       <th>Schedule End Date</th>
+                                                       <th>Job ID</th>
+                                                       <th>Start Time</th>
+                                                       <th>End Time</th>
+                                                       <th>Assigned</th>
+                                                       <th>Status</th>
+                                                   </tr>
+
+                                                   </thead>
+
+                                                   <tbody>
+                                                   <tr ng-repeat="amcList in amcJobLists">
+                                                       <td>{{amcList.title}}</td>
+                                                       <td>{{amcList.description}}</td>
+                                                       <td>{{amcList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
+                                                       <td>{{amcList.scheduleEndDate | date:'dd-MMM-yyyy'}}</td>
+                                                       <td><a class="job-txt" ui-sref="view-job({ id: amcList.id })">{{amcList.id}}</a></td>
+                                                       <td>{{amcList.plannedStartTime | date:'dd-MMM-yyyy @ hh:mm a'}}</td>
+                                                       <td>{{amcList.plannedEndTime | date:'dd-MMM-yyyy @ hh:mm a'}}</td>
+                                                       <td>{{amcList.employeeName}}</td>
+                                                       <td>{{amcList.jobStatus}}</td>
+                                                   </tr>
+                                                   <tr>
+                                                   	<td colspan="7" align="center" ng-show="!amcJobLists.length">No AMC Jobs Found</td>
+                                                   </tr>
+                                                   </tbody>
+                                               </table>
+
+                                           </div>
+
+                                            <!-- Pagination directive start -->
+
+                                            <pagination-new></pagination-new>
+
+                                            <!-- Pagination directive end -->
+
+                                       </div>
+                                       <div class="tab-pane in ppm-schedule" id="ppm-schedule" >
+
+                                           <div class="row">
+                                               <div class="col-md-12 text-right">
+
+                                                   <!--<a  class="btn btn-simple btn-warning cal-btn" data-toggle="modal" data-target="#RightModal-View" title="Calender" ><i class="material-icons">date_range</i></a> -->
+                                                   <a  class="btn btn-simple btn-warning cal-btn"  ui-sref="view-calendar({ id: assetDetail.id})" title="Calender" ><i class="material-icons">date_range</i></a>
+
+                                               </div>
+                                           </div>
+
+<!--                                            <div class="panel panel-default">
+                                               <div class="panel-heading">Schedule Filter</div>
+                                               <div class="panel-body">
+
+                                                   <div class="row">
+
+                                                       <div class="col-md-4">
+                                                           <div class="form-group">
+                                                               <label class="control-label">Title</label>
+                                                               <input id='ppmTitle'
+                                                                      ng-model="asset.title"
+                                                                      class='form-control'
+                                                                      name='ppmTitle'
+                                                                      type='text' value=""
+                                                                      ng-minlength='5'
+                                                                      ng-maxlength='250'
+                                                                      ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                               />
+                                                           </div>
+                                                       </div>
+                                                       <div class="col-md-4">
+                                                           <div class="form-group">
+                                                               <label class="control-label">From Date</label>
+                                                               <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                               <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+
+                                                           </div>
+                                                       </div>
+                                                       <div class="col-md-4">
+                                                           <div class="form-group">
+                                                               <label class="control-label">To Date</label>
+                                                               <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                               <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+
+                                                           </div>
+                                                       </div>
+
+
+
+                                                   </div>
+
+                                               </div>
+                                           </div> -->
+
+                                           <div class="table-responsive tablecard">
+                                              <table class="table table-hover tdWidthAuto">
+
+                                                  <thead>
+                                                  <tr  >
+                                                      <th width="15%">Title</th>
+                                                      <th width="40%">Checklist</th>
+                                                      <th width="15%">From Date</th>
+                                                      <th width="15%">To Date</th>
+                                                      <th width="15%">Frequency</th>
+                                                      <!-- <th width="5%" align="right">Actions</th> -->
+                                                  </tr>
+
+                                                  </thead>
+
+                                                  <tbody>
+                                                  <tr ng-repeat="ppmSchedules in ppmScheduleList">
+                                                      <td>{{ppmSchedules.title}}</td>
+                                                      <td class="hiddenCheckList" >{{ppmSchedules.checklistName}}
+
+                                                         <div class="CheckListBx">
+                                                             <div class="bootstrap-tagsinput" ng-repeat="checkListItem in ppmSchedules.checkListItems">
+                                                                 <span class="tag label label-info">{{checkListItem.name}}<span data-role="remove"></span></span>
+
+                                                             </div>
+                                                         </div>
+
+                                                      </td>
+                                                      <!-- <td>
+                                                          <div class="bootstrap-tagsinput">
+                                                              <span class="tag label label-info" ng-repeat="checkList in checklistItms">{{checkList.name}}<span data-role="remove"></span></span>
+                                                              <input type="text" placeholder="">
+                                                          </div>
+                                                      </td> -->
+                                                      <td>{{ppmSchedules.startDate}}</td>
+                                                      <td>{{ppmSchedules.endDate}}</td>
+                                                      <td>{{ppmSchedules.frequencyPrefix}}&nbsp; {{ppmSchedules.frequencyDuration}}&nbsp; {{ppmSchedules.frequency}}</td>
+                                                      <!-- <td class="text-right">
+                                                          <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
+                                                      </td> -->
+                                                  </tr>
+                                                  <tr>
+                                                     <td colspan="7" align="center" ng-show="!ppmScheduleList">No PPM Schedules Found</td>
+                                                  </tr>
+
+                                                  </tbody>
+                                              </table>
+
+                                          </div>
+
+                                       </div>
+                                       <div class="tab-pane fade amc-schedule" id="amc-schedule" >
+
+<!--                                            <div class="panel panel-default">
+                                               <div class="panel-heading">Schedule Filter</div>
+                                               <div class="panel-body">
+
+                                                   <div class="row">
+
+                                                       <div class="col-md-4">
+                                                           <div class="form-group">
+                                                               <label class="control-label">Title</label>
+                                                               <input id='ppmTitle'
+                                                                      ng-model="asset.title"
+                                                                      class='form-control'
+                                                                      name='ppmTitle'
+                                                                      type='text' value=""
+                                                                      ng-minlength='5'
+                                                                      ng-maxlength='250'
+                                                                      ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                               />
+                                                           </div>
+                                                       </div>
+                                                       <div class="col-md-4">
+                                                           <div class="form-group">
+                                                               <label class="control-label">From Date</label>
+                                                               <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                               <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+
+                                                           </div>
+                                                       </div>
+                                                       <div class="col-md-4">
+                                                           <div class="form-group">
+                                                               <label class="control-label">To Date</label>
+                                                               <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                               <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+
+                                                           </div>
+                                                       </div>
+
+
+
+                                                   </div>
+
+                                               </div>
+                                           </div> -->
+
+                                           <div class="table-responsive tablecard">
+                                                        <table class="table table-hover tdWidthAuto">
+
+                                                            <thead>
+                                                            <tr>
+                                                                <th width="15%">Title</th>
+                                                                <th width="15%">Maintenance Type</th>
+                                                                <th width="30%">Checklist</th>
+                                                                <th>From Date</th>
+                                                                <th>To Date</th>
+                                                                <th>Frequency</th>
+                                                                <!-- <th align="right">Actions</th> -->
+                                                            </tr>
+
+                                                            </thead>
+
+                                                            <tbody>
+
+                                                            <tr ng-repeat="amcSchedule in amcScheduleList">
+                                                                <td>{{amcSchedule.title}}</td>
+                                                                <td>{{amcSchedule.maintenanceType}}</td>
+                                                                <td class="hiddenCheckList">{{amcSchedule.checklistName}}
+
+                                                                   <div class="CheckListBx">
+                                                                       <div class="bootstrap-tagsinput" ng-repeat="checkListItemAmc in amcSchedule.checkListItems">
+                                                                           <span class="tag label label-info">{{checkListItemAmc.name}}<span data-role="remove"></span></span>
+
+                                                                       </div>
+                                                                   </div>
+
+                                                                </td>
+                                                                <td>{{amcSchedule.startDate}}</td>
+                                                                <td>{{amcSchedule.endDate}}</td>
+                                                                <td>{{amcSchedule.frequencyPrefix}}&nbsp; {{amcSchedule.frequencyDuration}}&nbsp; {{amcSchedule.frequency}}</td>
+                                                                <!-- <td class="text-right">
+                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
+                                                                </td> -->
+                                                            </tr>
+                                                            <tr>
+                                                               <td colspan="7" align="center" ng-show="!amcScheduleList">No PPM Schedules Found</td>
+                                                            </tr>
+
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+
+                                       </div>
+                                       <div class="tab-pane fade Documents" id="Documents">
+
+                                           <div class="panel panel-default" style="min-height: 200px;">
+
+                                               <div class="panel-heading">
+                                                   Documents
+                                               </div>
+                                               <div class="panel-body" >
+
+                                                   <div class="row docsRow" ng-if="fileCount" >
+
+                                                       <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadFile in uploadFiles">
+                                                          <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
+                                                             <i class="material-icons">close</i>
+                                                           </div>
+                                                           <div class="DownloadBtn">
+                                                             <a href="{{uploadFile.url}}" id="loop">
+                                                               <i class="material-icons">cloud_download</i>
+                                                             </a>
+                                                           </div>
+
+                                                           <a href="#"  ng-click="">
+                                                               <img src="assets/img/{{uploadFile.extension}}.png" alt="docs"/>
+                                                           </a>
+                                                           <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadFile.title}}</p>
+                                                           <div  ng-if="uploadFile.id == download">
+                                                            <a href="{{content}}" download>download</a>
+                                                           </div>
+                                                       </div>
+
+                                                   </div>
+                                                    <div class="row docsRow txt-align-center" ng-if="!fileCount"  >
+
+                                                         <h4>No Documents</h4>
+
+                                                     </div>
+
+                                               </div>
+
+                                           </div>
+
+                                           <div class="panel panel-default" style="min-height: 200px;">
+
+                                               <div class="panel-heading">
+                                                   Photos
+                                               </div>
+                                               <div class="panel-body" >
+
+                                                   <div class="row docsRow" ng-if="photoCount" >
+
+                                                        <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadPhoto in uploadAssetPhotos">
+                                                            <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadPhoto.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
+                                                               <i class="material-icons">close</i>
+                                                             </div>
+                                                            <div class="DownloadBtn">
+                                                              <a href="{{uploadPhoto.url}}" id="loop">
+                                                                <i class="material-icons">cloud_download</i>
+                                                              </a>
+                                                            </div>
+                                                            <a href="#" ng-click="">
+                                                                <!-- <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" /> -->
+                                                                <img src="assets/img/{{uploadPhoto.extension}}.png" alt="docs" />
+                                                            </a>
+                                                            <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadPhoto.title}}</p>
+                                                            <div ng-if="uploadPhoto.id == download">
+                                                            <a href="{{content}}" download>download</a>
+                                                           </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="row docsRow txt-align-center" ng-if="!photoCount" >
+
+                                                       <h4>No Images</h4>
+
+                                                   </div>
+
+                                               </div>
+
+                                           </div>
+
+
+                                       </div>
+                                       <div class="tab-pane fade Config" id="Config">
+                                           <div class="row">
+
+
+                                               <div class="col-md-12">
+                                                    <div class="panel panel-default" style="min-height: 200px;">
+
+                                                       <div class="panel-heading">
+                                                           Parameter Config
+                                                       </div>
+                                                       <div class="panel-body">
+                                                           <div class="table-responsive tablecard">
+                                                               <table class="table table-hover tdWidthAuto">
+
+                                                                   <thead>
+                                                                       <tr>
+                                                                           <th>Type</th>
+                                                                           <th>Units</th>
+                                                                           <th>Rule</th>
+                                                                           <th>Threshold</th>
+                                                                           <th>Min Value</th>
+                                                                           <th>Max value</th>
+                                                                           <th>Consumption</th>
+                                                                           <th>Alert</th>
+                                                                           <th>Validation</th>
+                                                                           <!-- <th>Actions</th> -->
+                                                                       </tr>
+                                                                   </thead>
+
+                                                                   <tbody>
+
+                                                                      <tr ng-repeat="assetParam in assetParameters">
+                                                                       <td>{{assetParam.assetType}}</td>
+                                                                       <td>{{assetParam.uom}}</td>
+                                                                       <td>{{assetParam.rule}}</td>
+                                                                       <td>{{assetParam.threshold}}</td>
+                                                                       <td>{{assetParam.min}}</td>
+                                                                       <td>{{assetParam.max}}</td>
+                                                                       <td>
+                                                                           <div class="checkbox">
+                                                                               <label>
+                                                                                   <input type="checkbox" name="Consumption" ng-model="assetParam.consumptionMonitoringRequired" disabled >
+                                                                               </label>
+                                                                           </div>
+                                                                       </td>
+                                                                        <td>
+                                                                          <div class="checkbox">
+                                                                                <label>
+                                                                                    <input type="checkbox" name="Consumption" ng-model="assetParam.alertRequired" disabled >
+                                                                                </label>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="checkbox">
+                                                                                <label>
+                                                                                    <input type="checkbox" name="Consumption" ng-model="assetParam.validationRequired" disabled >
+                                                                                </label>
+                                                                            </div>
+                                                                        </td>
+                                                                       <!-- <td class="text-right">
+                                                                           <a  has-permission="" ui-sref="" class="btn btn-simple btn-danger" disabled><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
+                                                                       </td> -->
+
+                                                                   </tr>
+                                                                   <tr>
+                                                                     <td colspan="7" align="center" ng-show="!assetParameters">No asset param Found</td>
+                                                                   </tr>
+
+                                                                   </tbody>
+                                                               </table>
+
+                                                           </div>
+                                                       </div>
+
+                                                   </div>
+                                               </div>
+
+                                           </div>
+
+                                       </div>
+                                       <div class="tab-pane fade Readings" id="Readings" >
+
+                                          <div class="">
+
+                                              <!-- <ul class="nav nav-pills nav-pills-warning">
+                                                  <li ng-class="reading.id == viewRead ? 'active' : ''" ng-repeat="reading in assetReadings">
+                                                      <a href=".Fuel" data-toggle="tab" ng-click="viewAssetReading(reading.id)">{{reading.name}}</a>
+                                                  </li>
+                                                  <li class="active" ng-show="!assetReadings.length">
+                                                      <a href=".Fuel" data-toggle="tab">No_Readings</a>
+                                                  </li>
+                                              </ul> -->
+
+                                              <div class="tab-content TabsContent ViewTables" style="">
+
+                                                  <div class="tab-pane fade Fuel active in" id="Fuel">
+                                                      <div class="row">
+                                                          <div class="col-md-8 col-md-offset-2">
+                                                              <div class="table-responsive tablecard">
+                                                                  <table class="table table-hover">
+
+                                                                      <thead>
+                                                                      <tr>
+                                                                          <th width="25%">Name</th>
+                                                                          <th width="25%">Date</th>
+                                                                          <th width="25%">Initial Value</th>
+                                                                          <th width="25%">Final Value</th>
+                                                                          <th width="25%">Consumption</th>
+                                                                      </tr>
+                                                                      </thead>
+
+                                                                      <tbody>
+                                                                      <tr ng-show="assetReadings" ng-repeat="reading in assetReadings">
+                                                                          <td> <a  ng-click="viewAssetReading(reading.id)"><span class="label label-warning">{{reading.name}}</span></a></td>
+                                                                          <td>{{reading.createdDate | date: "dd-MM-yyyy hh:mm:ss"}}</td>
+                                                                          <td>{{reading.initialValue}}&nbsp; {{reading.uom}}</td>
+                                                                          <td>{{reading.finalValue}}&nbsp; {{reading.uom}}</td>
+                                                                          <td>{{reading.consumption}}&nbsp; {{reading.uom}}</td>
+                                                                      </tr>
+                                                                      <tr ng-show="!assetReadings">
+                                                                      	<td colspan="5" align="center">No Readings Found</td>
+                                                                      </tr>
+                                                                      </tbody>
+                                                                  </table>
+
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+
+                                              </div>
+
+                                          </div>
+
+                                           <!-- Pagination directive start -->
+
+                                            <pagination-new></pagination-new>
+
+                                            <!-- Pagination directive end -->
+
+                                       </div>
+                                       
+                                       <div class="tab-pane fade SiteHistory" id="SiteHistory" >
+
+                                           <div class="table-responsive tablecard">
+                                                        <table class="table table-hover tdWidthAuto">
+
+                                                            <thead>
+                                                            <tr>
+                                                                <th width="15%">Title</th>
+                                                                <th width="15%">Code</th>
+                                                                <th width="30%">Site Name</th>
+                                                                <th>Created Date</th>
+                                                                <!-- <th>To Date</th>
+                                                                <th>Frequency</th> -->
+                                                                <!-- <th align="right">Actions</th> -->
+                                                            </tr>
+
+                                                            </thead>
+
+                                                            <tbody>
+
+                                                            <tr ng-repeat="siteHistory in siteHistories">
+                                                                <td>{{siteHistory.assetTitle}}</td>
+                                                                <td>{{siteHistory.assetCode}}</td>
+                                                                <td>{{siteHistory.siteName}}</td>
+                                                                <td>{{siteHistory.createdDate | date: "dd-MM-yyyy hh:mm:ss"}}</td>
+                                                                <!-- <td>{{amcSchedule.endDate}}</td>
+                                                                <td>{{amcSchedule.frequencyPrefix}}&nbsp; {{amcSchedule.frequencyDuration}}&nbsp; {{amcSchedule.frequency}}</td> -->
+                                                                <!-- <td class="text-right">
+                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
+                                                                </td> -->
+                                                            </tr>
+                                                            <tr>
+                                                               <td colspan="4" align="center" ng-show="!siteHistories">No Site History Found</td>
+                                                            </tr>
+
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+
+                                            <!-- Pagination directive start -->
+
+                                            <pagination-new></pagination-new>
+
+                                            <!-- Pagination directive end -->
+
+                                       </div>
+                                       
+                                         <div class="tab-pane fade StatusHistory" id="StatusHistory" >
+
+                                           <div class="table-responsive tablecard">
+                                                        <table class="table table-hover tdWidthAuto">
+
+                                                            <thead>
+                                                            <tr>
+                                                                <th width="15%">Title</th>
+                                                                <th width="15%">Code</th>
+                                                                <th width="30%">Status</th>
+                                                                <th>Created Date</th>
+                                                                <!-- <th>To Date</th>
+                                                                <th>Frequency</th> -->
+                                                                <!-- <th align="right">Actions</th> -->
+                                                            </tr>
+
+                                                            </thead>
+
+                                                            <tbody>
+
+                                                            <tr ng-repeat="statusHistory in statusHistories">
+                                                                <td>{{statusHistory.assetTitle}}</td>
+                                                                <td>{{statusHistory.assetCode}}</td>
+                                                                <td>{{statusHistory.status}}</td>
+                                                                <td>{{statusHistory.createdDate | date: "dd-MM-yyyy hh:mm:ss"}}</td>
+                                                           
+                                                                <!-- <td class="text-right">
+                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
+                                                                </td> -->
+                                                            </tr>
+                                                            <tr>
+                                                               <td colspan="4" align="center" ng-show="!statusHistories">No Status History Found</td>
+                                                            </tr>
+
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+
+                                            <!-- Pagination directive start -->
+
+                                            <pagination-new></pagination-new>
+
+                                            <!-- Pagination directive end -->
+
+                                       </div>
+
+                                   </div>
+
+
+                                   <div class="">
+
+                                       <div class="row">
+
+                                           <div class="col-md-12 txt-align-rgt">
+                                               <div class="form-group">
+
+
+                                                   <button class="btn" type="button"
+                                                           ui-sref="assets" id="cancel-button">
+                                                        Back
+                                                   </button>
+
+                                               </div>
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+
+
+                           </div>
+
+                       </div>
+
+
+
+
+
+                        <!-- Start of hidden inputs -->
+						<!-- End of hidden inputs -->
+
+						<div class='small-loading hidden' id='FormLoading'>Loading,
+							saving data...</div>
+
+						<div class="form-group">
+							<div id='report-error' class='report-div error bg-danger'
+								style="display: none"></div>
+							<div id='report-success' class='report-div success bg-success'
+								style="display: none"></div>
+						</div>
+
+					</form>
+					<script type="text/javascript">
+					$('.form-control').attr('readonly',true)
+					</script>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<div class="modal right fade" id="RightModal-View" tabindex="-1" role="dialog" aria-labelledby="RightModal">
+    <div class="modal-dialogNew" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="">Calender</h4>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-calendar">
+                            <div class="card-content" class="ps-child">
+                                <div id="fullCalendar"></div>
+                                <!-- <div id="calendar"></div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div><!--End View modal -->
+
+<!-- Add Document/Image delete  dialog -->
+
+<div class="row">
+        <div id="deleteModal" data-backdrop="false" class="modal fade"
+            tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+            <div class="delete-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        Are you sure to delete the Document / Image?<br>
+                    </div>
+                    <div class="delete-footer">
+                        <button type="button" ng-click="deleteDoc()"
+                            class="btn btn-danger text-danger" data-dismiss="modal">Confirm</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+<!-- Add Document/Image delete  dialog -->

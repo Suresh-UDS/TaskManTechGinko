@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{email.attendance.detailed.report.title}">TaskMan Attendance Detailed Report</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="#{email.report.greeting}">
+    Dear
+</p>
+
+
+<p th:text="#{email.attendance.detailed.report.text1(${date})}">
+
+</p>
+<!-- <p th:text="#{email.attendance.detailed.report.content(${reportData})}">
+</p>
+ -->
+<!-- <table border="1" cellpadding="5"  style="border-collapse:collapse;marging-bottom:10px">
+	<tr>
+		<th>SHIFT</th>
+		<th>TOTAL MANDAYS</th>
+		<th>PRESENT</th>
+		<th>ABSENT</th>
+	</tr>
+	<tr th:each="element : ${siteWiseSummary}">
+	    <td th:text="${element.key}">keyvalue</td>
+        <td th:text="${element.value.get('TotalEmployees')}" >
+	           
+	    </td>        
+        <td th:text="${element.value.get('Present')}" >
+	           
+	    </td>        
+        <td th:text="${element.value.get('Absent')}" >
+	           
+	    </td>        
+	    
+	</tr>
+</table> -->
+
+<br/>
+<br/>
+<br/>
+
+<table th:each="element : ${consolidatedData}" border="1" cellpadding="5"  style="border-collapse:collapse;margin-bottom:20px;">
+	<tr>
+		<th>SITE</th>
+		<th>SHIFT</th>
+		<th>TOTAL MANDAYS</th>
+		<th>PRESENT</th>
+		<th>ABSENT</th>
+	</tr>
+	<tr th:each="shiftItems : ${element.value}">
+          <td th:text="${shiftItems.get('SiteName')}"></td>
+          <td th:text="${shiftItems.get('ShiftStartTime')} + '-' + ${shiftItems.get('ShiftEndTime')}"></td>
+          <td th:text="${shiftItems.get('TotalEmployees')}"></td>
+          <td th:text="${shiftItems.get('Present')}"></td>
+          <td th:text="${shiftItems.get('Absent')}"></td>
+	</tr>
+</table>
+
+<p>
+    <span th:text="#{email.attendance.detailed.report.text2}">Regards,</span>
+    <br/>
+    <em th:text="#{email.signature}">UDS.</em>
+</p>
+</body>
+</html>

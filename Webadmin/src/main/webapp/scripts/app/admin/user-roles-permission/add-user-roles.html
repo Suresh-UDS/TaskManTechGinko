@@ -1,0 +1,152 @@
+
+<div class="crud-form"
+	data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="loadingAuto();">
+	<div class="" ng-controller="UserRolesController">
+		<div class="row" >
+			<!-- <div class="col-md-12">
+
+				<div class="alert alert-success" ng-show="success">
+					<strong>User Role saved!</strong>
+				</div>
+
+				<div class="alert alert-danger" ng-show="error">
+					<strong>User Role Not Saved!</strong> Please try again later.
+				</div>
+				<div class="alert alert-danger" ng-show="validationError">
+					<strong>User Role Not Saved! {{validationErrorMsg}}.</strong>
+				</div>
+				<div class="alert alert-danger" ng-show="errorUserExists">
+					<strong>User Role already exists!</strong> Please choose another
+					one.
+				</div>
+
+			</div> -->
+            <div class="col-md-8">
+                <!--<h2 class="title">Add User Role</h2>-->
+            </div>
+			<div class="col-md-12">
+
+				<div class="form-container table-container">
+					<label>* Mantatory Field</label>
+					<form ng-show="!success" name="form" role="form" novalidate
+						ng-submit="saveUserRole()" show-validation class="form-horizontal">
+
+                       <div class="row">
+                           <div class="col-md-8 col-md-offset-2">
+                               <div class="card formcard">
+                                   <div class="card-content">
+
+                                       <div class="row">
+
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label">Role Name <span class="red-star">*</span> </label>
+                                                   <input type="text" class="form-control InputTxtCaps" ng-model="userRole.name"
+                                                          name="RoleName"  autofocus
+                                                          required autocomplete="off">
+                                                    <div ng-show="form.$submitted || form.RoleName.$touched">
+                                                        <div ng-show="form.RoleName.$dirty || form.RoleName.$invalid">
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="form.RoleName.$error.required">
+                                                                Id is required.
+                                                            </p>
+
+                                                        </div>
+                                                    </div>
+                                               </div>
+                                           </div>
+
+
+                                       </div>
+                                       <div class="row">
+                                       		<div class="col-md-12">
+                                               <div class="form-group">
+                                                   <label class="control-label">Description </label>
+                                                   <input type="text" class="form-control InputTxtCaps" name="Description" ng-model="userRole.description">
+
+                                               </div>
+                                           	</div>
+
+                                       </div>
+                                       <div class="row">
+
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label">Role Level   </label>
+                                                   <input type="number" class="form-control InputTxtCaps" ng-model="userRole.roleLevel">
+
+
+                                               </div>
+                                           </div>
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label font-size15">
+                                                       Active
+                                                   </label>
+
+                                                   <div>
+                                                       <div class="radio radio-inline">
+                                                           <label>
+                                                               <input type="radio"id="active" name="active" ng-model="userRole.active" value="Y" checked="checked" required>Yes
+                                                           </label>
+                                                       </div>
+                                                       <div class="radio radio-inline">
+                                                           <label>
+                                                               <input type="radio"id="active" name="active" ng-model="userRole.active" value="N" required >No
+                                                           </label>
+                                                       </div>
+                                                   </div>
+
+
+                                               </div>
+                                           </div>
+
+                                       </div>
+
+
+                                       <div class="row">
+
+                                           <div class="col-md-12 txt-align-rgt">
+                                               <div class="form-group">
+                                                   <button class="btn btn-success" type="submit"
+                                                           id="form-button-save" ng-disabled="form.RoleName.$invalid">
+                                                      <span class="btn-label">
+                                            <i class="material-icons">check</i>
+                                        </span> Save
+                                                   </button>
+                                                   <button class="btn btn-danger" type="button"
+                                                           ng-click="cancelUserRole()" id="cancel-button">
+                                                       <i class="material-icons">close</i>Cancel
+                                                   </button>
+                                               </div>
+                                           </div>
+
+                                       </div>
+
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+
+
+
+						<!-- Start of hidden inputs -->
+						<!-- End of hidden inputs -->
+
+						<div class='small-loading hidden' id='FormLoading'>Loading,
+							saving data...</div>
+
+						<div class="form-group">
+							<div id='report-error' class='report-div error bg-danger'
+								style="display: none"></div>
+							<div id='report-success' class='report-div success bg-success'
+								style="display: none"></div>
+						</div>
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

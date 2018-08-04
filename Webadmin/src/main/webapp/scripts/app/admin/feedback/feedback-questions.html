@@ -1,0 +1,360 @@
+
+<div class="" ng-controller="FeedbackQueController" ng-init="initLoad()">
+	<div class="success-message hidden"></div>
+
+    <div class="row">
+
+        <div class="col-md-8">
+            <!--<h2 class="title">Checklist</h2>-->
+        </div>
+
+        <div class="col-md-4 txt-align-rgt">
+
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card margin-TB-5" >
+
+                <div class="card-content">
+
+					<div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Client<span class="red-star">*</span> </label>
+                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects track by project.id">
+                                    <option value="">Please select Client...</option>
+                                </select>
+
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Site<span class="red-star">*</span> </label>
+                                <!--<input type="text" class="form-control"-->
+                                <!--ng-model="selectedRole"-->
+                                <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
+                                <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
+                                <!--required >-->
+                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                <select class="form-control " ng-model="selectedSite"   ng-options="site as site.name for site in sites track by site.id">
+                                    <option value="">Please select Site...</option>
+                                </select>
+
+
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group pdng-top15">
+                                <label class="control-label">Display Type</label>
+                                <div>
+                                    <div class="radio radio-inline">
+                                        <label>
+                                            <input type="radio" name="displayType" id="displayType" ng-model="feedbackItem.displayType" ng-click="qType()" value="form" required ng-checked="true" > Form
+                                        </label>
+                                    </div>
+                                    <div class="radio radio-inline">
+                                        <label>
+                                            <input type="radio" name="displayType" id="displayType"  ng-model="feedbackItem.displayType" ng-click="qType()"  value="wizard" required > Wizard/Slider
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-4">
+
+                            <div class="form-group pdng-top15">
+                                <label class="control-label">Title</label>
+                                <input type="text" class="form-control InputTxtCaps" ng-model="feedbackItem.name">
+                            </div>
+
+                        </div>
+                        <div class="col-md-8">
+
+                            <div class="form-group pdng-top15">
+                                <label class="control-label">Question</label>
+                                <input type="text" class="form-control InputTxtCaps" ng-model="newFeedbackItem.question">
+                            </div>
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="form-group pdng-top15">
+                                <label class="control-label">Answer Type</label>
+                                <div>
+                                    <div class="radio radio-inline"  data-toggle="collapse" data-target="#YesOrNo">
+                                        <label>
+                                            <input type="radio" id="answerType1" name="answerType"  ng-model="newFeedbackItem.answerType" value="YESNO"  required  ng-checked="feedbackItem.displayType"> Yes/No
+                                            <b class="caret"></b>
+                                        </label>
+
+                                    </div>
+                                    <div class="radio radio-inline" ng-if="feedbackItem.displayType == 'wizard' ">
+                                        <label>
+                                            <input type="radio" id="answerType2" name="answerType"  ng-model="newFeedbackItem.answerType" ng-click ='ratRadio()'  value="RATING"  > Rating
+                                        </label>
+
+                                    </div>
+                                    <div  id="YesOrNo" class="collapse">
+
+	                                       <div class="radio radio-inline">
+	                                           <label>Yes</label>
+	                                           <label>
+	                                               <input type="radio" id="yesMarkP" ng-click="yesMarkP()"  ng-model="newFeedbackItem.scoreType" name="yes" value="yes:1" ng-checked="true"> +ve
+	                                           </label>
+	                                           <label><input type="radio" id="yesMarkN" ng-click="yesMarkN()" ng-model="newFeedbackItem.scoreType" name="yes" value="yes:-1" > -ve</label>
+	                                       </div>
+
+	                                        <div class="radio radio-inline">
+	                                            <label>No</label>
+	                                            <label>
+	                                                <input type="radio" id="noMarkP" name="no" ng-click="noMarkP()" ng-model="newFeedbackItem.scoreType" value="no:1"  > +ve
+	                                            </label>
+	                                            <label>
+	                                                <input type="radio" id="noMarkN" name="no" ng-click="noMarkN()"  ng-model="newFeedbackItem.scoreType" ng-checked="true" value="no:-1"> -ve
+	                                            </label>
+	                                        </div>
+
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-4" ng-if="feedbackItem.displayType == 'wizard' " >
+                            <div class="form-group pdng-top15">
+                                <input type="checkbox"  name="remarks" ng-change="remarksAdded(newFeedbackItem.remarksRequired)"  ng-model="newFeedbackItem.remarksRequired" value=true  required  ng-checked="feedbackItem.remarksRequired"> Remarks Required
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-2" style="text-align: right">
+
+                            <button class="btn btn-success margn-top30" ng-click="addFeedbackItem(newFeedbackItem)">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                Add
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+
+
+                    <div class="row col-md-5 addedActionList pdng-top15" ng-hide="!(feedbackItems.length > 0)">
+
+
+                        <div class="form-group">
+
+                            <label class="">Items</label>
+
+                            <ul class="listOfActions list-group">
+
+                                <li class="list-group-item justify-content-between" ng-repeat=" item in feedbackItems" ng-bind-html-unsafe="item.text">
+                                    {{item.question}}
+                                    <span class="badge badge-default badge-pill" ng-click="removeItem($index)"><i class="material-icons">remove_circle</i></span>
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+
+						<div class="row">
+
+	                       <div class="col-md-10">
+	                           <div class="form-group">
+	                               <button class="btn btn-success" type="submit" ng-click="saveFeedback()"
+	                                       id="form-button-save">
+	                                  <span class="btn-label">
+	                        <i class="material-icons">check</i>
+	                   		 </span> Save
+	                               </button>
+	                               <button class="btn btn-danger" type="button"
+	                                       ng-click="cancelFeedbackQuestions()" id="cancel-button">
+	                                   <i class="material-icons">close</i>Cancel
+	                               </button>
+	                           </div>
+	                       </div>
+
+	                   </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row" ng-init="loadFeedbackItems()">
+
+        <div class="col-md-12">
+            <div class="card margin-TB-5 tablecard appModuleCard">
+
+                <div class="card-content">
+
+                    <div class="table-responsive">
+                        <table class="table table-hover withSortingIcons">
+                            <thead>
+                            <tr>
+                                <th>ID
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('id')" ng-class="isActiveAsc == 'id' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('id')" ng-class="isActiveDesc == 'id' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th>Client
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('project.name')" ng-class="isActiveAsc == 'project.name' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('project.name')" ng-class="isActiveDesc == 'project.name' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th>Site
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('site.name')" ng-class="isActiveAsc == 'site.name' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('site.name')" ng-class="isActiveDesc == 'site.name' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th>Title
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('name')" ng-class="isActiveAsc == 'name' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('name')" ng-class="isActiveDesc == 'name' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th>Questions</th>
+                                <th>Edit</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat=" feedbackMaster in feedbackMasterList">
+                               <td>{{feedbackMaster.id}}</td>
+                               <td>{{feedbackMaster.projectName}}</td>
+                               <td>{{feedbackMaster.siteName}}</td>
+                                <td>{{feedbackMaster.name}}</td>
+                                <td>
+                                	<label  ng-repeat=" item in feedbackMaster.questions">{{item.question}}</label>
+
+                                </td>
+                                <td>
+                                    <a  ng-class="{active: $state.includes('admin')}"  ng-click="loadFeedback(feedbackMaster.id)"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                </td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="txt-align-center LoaderCon"  ng-hide="feedbackMasterListLoader">
+
+                        <div class="pad-TB-30">
+                            <div loader-css="ball-pulse"></div>
+                            <h3 >Loading, please wait...</h3>
+                        </div>
+
+                    </div>
+
+                    <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
+
+                        <h3>No data Found</h3>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+     <!-- Pagination directive start -->
+
+    <pagination-new></pagination-new>
+
+    <!-- Pagination directive end -->
+
+
+
+    <div class="row">
+
+		<!-- Delete confirmation dialog -->
+		<div class="delete-confirmation modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+						<h4 class="modal-title">Delete</h4>
+					</div>
+					<div class="modal-body">
+						<p>Are you sure that you want to delete this record?</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+						<button type="button"
+							class="btn btn-danger delete-confirmation-button">Delete</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End of Delete confirmation dialog -->
+
+		<!-- Delete Multiple confirmation dialog -->
+		<div class="delete-multiple-confirmation modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+						<h4 class="modal-title">Delete</h4>
+					</div>
+					<div class="modal-body">
+						<p>Are you sure that you want to delete this record?</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">
+							Cancel</button>
+						<button type="button"
+							class="btn btn-danger delete-multiple-confirmation-button"
+							data-target="http://localhost:81/grocery_crud/index.php/examples/customers_management/delete_multiple">
+							Delete</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End of Delete Multiple confirmation dialog -->
+
+	</div>
+</div>

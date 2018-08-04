@@ -1,0 +1,27 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Initiate Feedback</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <div class="InitFeedbackCon">
+        <div class="InputCon">
+            <div class="TailsCon" >
+            <ion-grid>
+                <ion-row>
+                    <ion-col col-4 class="BlocksList" *ngFor="let z of zones;let i of index">
+                        <button ion-button clear class="BlockBtns" (click)="getZoneFeedbacks(z,i)">
+                            <p class="SiteListTails">{{z}}</p>
+                        </button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+            </div>
+        </div>
+    </div>
+
+</ion-content>

@@ -1,0 +1,97 @@
+<div class="crud-form">
+	<div class="">
+		<div class="row">
+			<div class="col-md-12">
+
+				<div class="form-container table-container" ng-init="loadUser()">
+					<form ng-show="!success" name="form" role="form" class="form-horizontal">
+                        <div class="col-md-6 col-md-offset-3" >
+                            <div class="panel panel-default">
+                                <div class="panel-heading">User Details</div>
+                                <div class="panel-body">
+
+                                    <div class="table-responsive">
+                                        <table class="table">
+
+                                            <tbody>
+                                            <tr>
+                                                <td>Id</td>
+                                                <td>{{user.id}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>User Group</td>
+                                                <td>{{user.userGroupName}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Login </td>
+                                                <td>{{user.login}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>FirstName </td>
+                                                <td>{{user.firstName}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>LastName </td>
+                                                <td>{{user.lastName}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Email</td>
+                                                <td>{{user.email}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Employee</td>
+                                                <td>{{user.employeeName}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Activated</td>
+                                                <td><input type="checkbox" id="activated" ng-model="user.activated" disabled="disabled"></td>
+                                            </tr>
+                                            <tr>
+
+                                                <td>Profiles</td>
+                                                <td>
+                                                    <ul>
+                                                        <li ng-repeat="authority in authorities">
+                                                            {{user.authorities}}
+                                                        </li>
+
+                                                    </ul>
+                                                </td>
+
+                                            </tr>
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="col-md-12 txt-align-rgt">
+                                            <button class="btn btn-default close-button-right b10" type="button"
+                                                    ng-click="cancelUser()" id="close-button-right">
+                                                <i class="material-icons">chevron_left</i> Back
+                                            </button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+
+						<!-- Start of hidden inputs -->
+						<!-- End of hidden inputs -->
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

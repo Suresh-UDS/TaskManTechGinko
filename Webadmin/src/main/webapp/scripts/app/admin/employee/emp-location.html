@@ -1,0 +1,126 @@
+<div>
+
+
+    <div class="row" ng-init="loadEmployees()">
+
+        <div class="col-md-12" ng-init="loadProjects()">
+            <div class="card TableCard">
+                <div class="card-content" ng-init="loadAllEmployees()">
+
+                    <div class="SearchTable" ng-init="loadSites()">
+
+                        <form name="searchForm"  ng-submit="search()" novalidate >
+
+                            <table class="table no-padding-tblCon" border="0">
+                                <tr class="filter-row gc-search-row">
+
+<!--                                     <td>
+                                        <label>Show</label>
+                                        <select class="siteList margin0" ng-model="sort" ng-change="hasChanged()" ng-options="paging.value for paging in pageSizes" value="{{paging.value}}">
+                                        </select>
+                                    </td>
+ -->								   <td>
+								   			<div class="dropdown">
+                                                <div class="form-group">
+                                                    <label class="control-label">Select Client</label>
+
+                                                    <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
+                                                        <option value="">Select Client...</option>
+                                                    </select>
+
+
+
+                                                </div>
+                                            </div>
+                                    </td>
+                                    <td>
+
+                                            <div class="dropdown">
+                                                <div class="form-group">
+                                                    <label class="control-label">Select Site</label>
+                                                    <!--<input type="text" class="form-control"-->
+                                                    <!--ng-model="selectedRole"-->
+                                                    <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
+                                                    <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
+                                                    <!--required >-->
+                                                    <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites">
+                                                        <option value="">Select Site...</option>
+                                                    </select>
+
+
+
+                                                </div>
+                                            </div>
+
+
+								   </td>
+                                    <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control border-bottom-input"
+                                                       placeholder="Search Employee Id"
+                                                       ng-model="selectedEmployeeId"
+												/>
+
+                                            </div>
+                                        </div>
+                                    </td>
+
+
+                                    <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control border-bottom-input"
+                                                       placeholder="Search Employee Name"
+                                                       ng-model="selectedEmployeeName"
+                                                       />
+                                            </div>
+                                        </div>
+                                    </td>
+
+
+                                    <td align="right">
+                                        <div class="floatR form-group">
+
+                                            <button type="submit" class="btn btn-circle blue-clr">
+                                                <i class="material-icons">search</i>
+                                            </button>
+                                            <button ui-sref="add-employee" has-permission="Employee:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
+                                                <i class="material-icons">add</i>
+                                            </button>
+                                            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+                                                <i class="material-icons">refresh</i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+
+                    </div>
+
+                    <div class="EmpMapCon" style="padding-top: 20px;">
+
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d248755.7802110999!2d80.0689235274698!3d13.047822273618783!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5265ea4f7d3361%3A0x6e61a70b6863d433!2sChennai%2C+Tamil+Nadu!5e0!3m2!1sen!2sin!4v1521697093114" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+
+                    </div>
+
+
+
+                </div>
+                <!-- end content-->
+            </div>
+            <!--  end card  -->
+        </div>
+        <!-- end col-md-12 -->
+    </div>
+    <!-- end row -->
+
+
+
+</div>
+
+
+

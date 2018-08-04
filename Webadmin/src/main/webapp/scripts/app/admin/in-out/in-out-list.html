@@ -1,0 +1,335 @@
+
+<script language="javascript">
+	function centerModal() {
+		$(this).css('display', 'block');
+		var $dialog = $(this).find(".modal-dialog");
+		var offset = ($(window).height() - $dialog.height()) / 2;
+		// Center modal vertically in window
+		$dialog.css("margin-top", offset);
+	}
+
+	//$('.modal').on('show.bs.modal', centerModal);
+	$(window).on("resize", function() {
+		$('.modal:visible').each(centerModal);
+	});
+
+</script>
+<div class="container gc-container" ng-controller="CheckInOutController as ctrl" >
+	<div class="success-message hidden"></div>
+
+	<div class="row ">
+		<div class="col-md-12 table-section">
+			<div class="table-label ">
+				<div class="floatL l5">Check In/Out</div>
+<!-- 				<div class="floatR r5 minimize-maximize-container minimize-maximize">
+					<i class="fa fa-caret-up"></i>
+				</div>
+				<div class="floatR r5 gc-full-width">
+					<i class="fa fa-expand"></i>
+				</div> -->
+				<div class="clear"></div>
+			</div>
+
+			<div class="table-container  table-bordered" ng-init="search(null)">
+
+				<div class="header-tools" >
+                    <div class="floatR r2 ">
+                    	<a href="#" ng-click="clearFilter()" class="clear-filtering btn btn-default ">
+                            <i class="fa fa-eraser"></i> Clear filtering
+                        </a>
+                    </div>
+
+					<form name="searchForm"  ng-submit="search(null)" novalidate >
+
+					<table class="table" border="0">
+						<tr class="filter-row gc-search-row">
+							<td>
+							<div class="form-group" >
+
+								<input type="text"
+									class="form-control searchable-input floatL"
+									placeholder="From date" name="checkInDateTimeFrom"
+									ng-model="searchCriteria.checkInDateTimeFrom"
+									datetime-picker="dd MMM yyyy" enable-time="false"
+									is-open="isOpenFromDate" ng-focus="openCheckInFromDate()"
+									datepicker-append-to-body="true" max-date="end" required/>
+							</div>
+								</td>
+							<td>
+							<div class="form-group" >
+							<input type="text"
+								class="form-control searchable-input floatL"
+								placeholder="To date" name="checkInDateTimeTo"
+								ng-model="searchCriteria.checkInDateTimeTo"
+								datetime-picker="dd MMM yyyy" enable-time="false"
+								is-open="isOpenToDate" ng-focus="openCheckInToDate()"
+								datepicker-append-to-body="true" datepicker-date-text="To date" max-date="end" required/>
+							</div>
+							</td>
+							<td>
+							<div class="form-group" >
+							<div class="dropdown" >
+							<input ng-focus="loadEmployees()" type="text" class="form-control searchable-input floatL" placeholder="Search ID"
+							ng-model="selectedEmployee" uib-typeahead="employee as employee.empId for employee in employees | filter:$viewValue | limitTo:5" autocomplete="off" />
+							    </div>
+								</div>
+								</td>
+							<td>
+							<div class="form-group" ng-init="loadEmployees()">
+							<div class="dropdown">
+							<input type="text"
+								class="form-control searchable-input floatL"
+								placeholder="Search Name"
+								ng-model="selectedEmployee"
+								uib-typeahead="employee as employee.name for employee in employees | filter:$viewValue | limitTo:5"  autocomplete="off"/>
+							</div>
+							</div>
+								</td>
+							<td>
+							<div class="form-group" ng-init="loadEmployees()" >
+							<div class="dropdown">
+							<input type="text"
+								class="form-control searchable-input floatL"
+								placeholder="Search Full Name"
+								ng-model="selectedEmployee"
+								uib-typeahead="employee as employee.fullName for employee in employees | filter:$viewValue | limitTo:5" autocomplete="off" />
+							</div>
+							</div>
+							</td>
+							<td>
+							<div class="form-group" ng-init="loadProjects()">
+							<div class="dropdown">
+							<input type="text"
+								class="form-control searchable-input floatL"
+								placeholder="Search Project"
+								ng-model="selectedProject"
+								uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5" autocomplete="off" />
+							</div>
+							</div>
+							</td>
+							<td>
+							<div class="form-group" ng-init="loadSites()">
+							<div class="dropdown">
+							<input type="text"
+								class="form-control searchable-input floatL"
+								placeholder="Search Site"
+								ng-model="selectedSite"
+								uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5" autocomplete="off"/>
+							</div>
+							</div>
+							</td>
+
+							<td>
+								<div class="floatR form-group">
+									<button type="submit" class="btn btn-primary search-button t4"  ng-disabled="searchForm.$invalid">
+										<i class="fa fa-search"></i>
+									</button>
+								</div>
+
+							</td>
+						</tr>
+						<tr >
+							<td colspan="9">
+								 <div role="alert">
+							      <span class="error" ng-show="searchForm.checkInDateTimeFrom.$error.required">
+							       From date is Required!</span>
+							    </div>
+								<div role="alert">
+							      <span class="error" ng-show="searchForm.checkInDateTimeTo.$error.required">
+							       To date is Required!</span>
+							    </div>
+							</td>
+						</tr>
+					</table>
+					</form>
+					<div ng-show="!results.length" style="font-weight:bold;color:red; font-size:14px; margin-bottom:10px">&nbsp;&nbsp;{{invalidDate}}</div>
+					<div class="clear"></div>
+					<div ng-show="results.length" class="floatR">
+						<div class="floatR" style="margin-bottom:10px;margin-right:4px"><a href="{{exportFile(0)}}">{{exportMsg(0)}}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-primary" ng-click=exportAllData()>Export All</button></div>
+					</div>
+					<div ng-show="hide" >
+						<div style="font-weight:bold">&nbsp;&nbsp;QUERY PERIOD: {{checkInDateFrom | date : 'dd-MMM-yyyy' }} TO {{checkInDateTo | date : 'dd-MMM-yyyy'}}  </div><br/>
+						<!-- <div style="font-weight:bold">&nbsp;&nbsp;GRAND TOTAL HOURS: {{totalHours}}</div> -->
+					</div>
+				</div>
+				<div class="clear"><br/></div>
+				<div class="clear"><br/></div>
+				<div ng-show="!results.length" style="font-weight:bold;color:red">&nbsp;&nbsp;&nbsp;NO RESULTS FOUND.</div>
+				<div ng-repeat="result in results" >
+				<div ng-show="hide">
+					<div style="font-weight:bold;" class="floatL">&nbsp;&nbsp;&nbsp;ID: {{result.employeeEmpId}} &nbsp;&nbsp;&nbsp;</div><div style="font-weight:bold;" class="floatL">&nbsp;&nbsp;&nbsp;Name: {{result.employeeFullName}} </div>
+					<div class="floatR" style="margin-bottom:10px;margin-right:10px"><a href="{{exportFile(result.employeeEmpId)}}">{{exportMsg(result.employeeEmpId)}}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-primary" ng-click=exportData(result.employeeEmpId)>Export</button>
+					</div>
+				</div>
+				<table class="table table-bordered grocery-crud-table table-hover">
+					<thead>
+						<tr>
+
+							<th class="column-with-ordering" data-order-by="id">Job ID</th>
+							<th class="column-with-ordering" data-order-by="title">TITLE</th>
+							<th class="column-with-ordering" data-order-by="date">DATE</th>
+							<th class="column-with-ordering" data-order-by="completedTime">COMPLETED TIME</th>
+							<th class="column-with-ordering" data-order-by="site">SITE</th>
+							<th class="column-with-ordering" data-order-by="photoIn">PHOTO</th>
+							<th class="column-with-ordering" data-order-by="photoOut">LOCATION</th>
+							<!-- <th class="column-with-ordering" data-order-by="creditLimit">Device Id</th> -->
+						</tr>
+
+					</thead>
+					<tbody>
+
+						<tr ng-repeat="trans in result.transactions">
+							<td>{{trans.jobId}}</td>
+							<td>{{trans.jobTitle}}</td>
+							<td>{{trans.checkInDateTimeDisplay}}</td>
+							<td>{{trans.checkOutTimeDisplay}}</td>
+							<td>{{trans.siteName}}</td>
+							<td>
+							<a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(trans.employeeEmpId,trans.checkInOutImages)">
+								<img src="assets/images/image_placeholder.png" width="30px" height="30px"/>
+							</a>
+							<!-- <button type="button" class="btn btn-primary"
+									onClick="$('#myModal').modal()" data-target="#myModal" ng-click="loadImages(trans.employeeEmpId,trans.photoIn,trans.photoOut)">Photo</button> -->
+
+
+									</td>
+							<td>
+
+								<a id="maps" href="#" ng-click="initMap('mapIn',trans.latitudeIn, trans.longitudeIn, 'mapOut', trans.latitudeOut, trans.longitudeOut)" onClick="$('#mapModal').modal()" data-target="#mapModal" >
+									<img src="assets/images/maps_placeholder.jpeg" width="30px" height="30px" />
+								</a>
+								<div id="mapModal" data-backdrop="false" class="modal fade" tabindex="-1" role="dialog"
+											aria-labelledby="myModalLabel" aria-hidden="true" >
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-body">
+											<table >
+													<thead>
+														<tr >
+															<th style="text-align: center">IN</th>
+															<td>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+															<th style="text-align: center">OUT</th>
+														</tr>
+
+													</thead>
+													<tr>
+														<td><br/></td>
+													</tr>
+													<tr>
+														<td>
+														  <div id="mapIn" style="width:250px;height:250px">
+														  </div>
+														</td>
+														<td>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+														<td>
+														<div id="mapOut" style="width:250px;height:250px"></div>
+														</td>
+													</tr>
+											</table>
+
+										</div>
+										<div class="modal-footer">
+							                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							            </div>
+									</div>
+								</div>
+							</div>
+							</td>
+
+
+						</tr>
+
+
+
+					</tbody>
+
+					<!-- Table Footer -->
+					<tfoot>
+						<tr>
+							<td colspan="10">
+								<!-- "Show 10/25/50/100 entries" (dropdown per-page) -->
+								<!--<div class="floatL t20 l5">-->
+									<!--<div class="floatL t10">Show</div>-->
+									<!--<div class="floatL r5 l5 t3">-->
+										<!--<select name="per_page" class="per_page form-control">-->
+											<!--<option value="10" selected="selected">-->
+												<!--10&nbsp;&nbsp;</option>-->
+											<!--&lt;!&ndash; <option value="25">25&nbsp;&nbsp;</option>-->
+											<!--<option value="50">50&nbsp;&nbsp;</option>-->
+											<!--<option value="100">100&nbsp;&nbsp;</option> &ndash;&gt;-->
+										<!--</select>-->
+									<!--</div>-->
+									<!--<div class="floatL t10">entries</div>-->
+									<!--<div class="clear"></div>-->
+								<!--</div> &lt;!&ndash; End of "Show 10/25/50/100 entries" (dropdown per-page) &ndash;&gt;-->
+
+
+								<div class="floatR r5">
+
+									<!-- Buttons - First,Previous,Next,Last Page -->
+									<ul class="pagination">
+										<li class=" paging-first" id="first"><a href="#" id="first"
+											ng-click="first(result.employeeEmpId)"><i
+												class=" fa fa-step-backward" id="first"></i></a></li>
+										<li class="prev paging-previous" id="previous"><a
+											id="previous" href="#" ng-click="previous(result.employeeEmpId)"
+											><i id="previous"
+												class="fa fa-chevron-left"></i></a></li>
+										<li><span class="page-number-input-container"> <input
+												type="number" ng-model="pages[result.employeeEmpId].currPage"
+												class="form-control page-number-input" disabled />
+										</span></li>
+										<li class=" next paging-next" id="next"><a id="next"
+											href="#" ng-click="next(result.employeeEmpId)" class="disabledLink"><i id="next"
+												class="fa fa-chevron-right"></i></a></li>
+										<li class="paging-last" id="last"><a id="last" href="#"
+											ng-click="last(result.employeeEmpId)" ><i id="last"
+												class="fa fa-step-forward"></i></a></li>
+									</ul>
+									<!-- End of Buttons - First,Previous,Next,Last Page -->
+
+									<input type="hidden" name="page_number"
+										class="page-number-hidden" value="1" />
+
+									<!-- Start of: Settings button -->
+									<div class="btn-group floatR t20 l10 settings-button-container">
+										<button type="button"
+											class="btn btn-default dropdown-toggle settings-button"
+											data-toggle="dropdown">
+											<i class="fa fa-cog r5"></i> <span class="caret"></span>
+										</button>
+
+										<ul class="dropdown-menu dropdown-menu-right">
+											<li><a href="#" ng-click="clearFilter(result.employeeEmpId)"
+												class="clear-filtering"> <i class="fa fa-eraser"></i>
+													Clear filtering
+											</a></li>
+										</ul>
+									</div>
+									<!-- End of: Settings button -->
+
+								</div>
+								<div class="floatR r10 t30">
+									Displaying <span class="paging-starts">{{pages[result.employeeEmpId].startInd}}</span>
+									to <span class="paging-ends">{{pages[result.employeeEmpId].endInd}}</span> of <span
+										class="current-total-results">{{pages[result.employeeEmpId].totalCnt}}</span> items
+									<span class="full-total-container hidden"> (filtered
+										from <span class='full-total'>{{pages[result.employeeEmpId].totalCnt}}</span> total
+										entries)
+									</span>
+								</div>
+
+								<div class="clear"></div>
+							</td>
+						</tr>
+					</tfoot>
+					<!-- End of: Table Footer -->
+				</table>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+</div>

@@ -1,0 +1,29 @@
+
+<div class="container gc-container">
+	<div class="success-message hidden"></div>
+
+	<div class="row">
+		<div class="col-md-12 table-section" style="border: 1px solid #ddd;padding: 0px;">
+			<div class="table-label">
+				<div class="floatL l5">Photo Management</div>
+				<div class="floatR r5 minimize-maximize-container minimize-maximize">
+					<i class="fa fa-caret-up"></i>
+				</div>
+				<div class="floatR r5 gc-full-width">
+					<i class="fa fa-expand"></i>
+				</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="table-container" ng-init="loadEmployees()">
+				<div class="col-xs-1" ng-repeat="employee in employees" style="text-align:center">
+					<a ui-sref="manageEmployeePhoto({'empId':employee.id,'empCode':employee.code})"><img src="assets/images/folder_icon.png"  style="display:block;width: 70%;height: 70%;margin-left: 15%;"/>
+					{{employee.code | zpad:4}}	</a>
+				</div>
+				
+			</div>
+
+		</div>
+
+	</div>
+</div>

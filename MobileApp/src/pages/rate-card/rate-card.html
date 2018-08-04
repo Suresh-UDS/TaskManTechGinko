@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+      </button>
+    <ion-title>Rate Cards</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+    <ion-fab bottom right>
+        <button mini has-permission="RateCardCreate" (click)="createRate()"  ion-fab><ion-icon name="add"></ion-icon></button>
+    </ion-fab>
+
+    <div class="table-responsive">
+
+        <table class="table">
+            <thead>
+               <tr>
+                   <th class="clr-orange">TYPE</th>
+                   <th class="clr-orange">NAME</th>
+                   <th class="clr-orange">UOM </th>
+                   <th class="clr-orange">PRICE</th>
+               </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let rate of rateCards">
+                    <td>{{rate.type}}</td>
+                    <td>{{rate.title}}</td>
+                    <td>{{rate.uom}}</td>
+                    <td>{{rate.cost}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <!--<button class="btn btn-fill" onclick="demo.showSwal('success-message','Welcome','You clicked Button')">Try me!</button>-->
+
+    <!--<button class="btn btn-rose btn-fill" onclick="demo.showSwal('warning-message-and-confirmation','Are you sure?','You wont be able to revert this!')">with cancel</button>-->
+
+</ion-content>

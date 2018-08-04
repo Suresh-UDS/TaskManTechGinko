@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{email.completed.report.title}">TaskMan Job Completion Alert</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="#{email.completed.report.greeting(${user.login})}">
+    Dear
+</p>
+
+<p th:text="#{email.completed.report.text1(${jobId},${jobName})}">
+
+</p>
+
+<p th:text="#{email.completed.report.text2(${siteName})}">
+
+</p>
+<p>
+</p>
+<p>
+    <span th:text="#{email.completed.report.text3}">Regards, </span>
+    <br/>
+    <em th:text="#{email.signature}">UDS.</em>
+</p>
+</body>
+</html>

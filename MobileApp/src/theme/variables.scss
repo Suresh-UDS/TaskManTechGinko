@@ -1,0 +1,362 @@
+// Ionic Variables and Theming. For more info, please see:
+// http://ionicframework.com/docs/theming/
+
+// Font path is used to include ionicons,
+// roboto, and noto sans fonts
+$font-path: "../assets/fonts";
+
+
+// The app direction is used to include
+// rtl styles in your app. For more info, please see:
+// http://ionicframework.com/docs/theming/rtl-support/
+$app-direction: ltr;
+
+
+@import "ionic.globals";
+
+
+// Shared Variables
+// --------------------------------------------------
+// To customize the look and feel of this app, you can override
+// the Sass variables found in Ionic's source scss files.
+// To view all the possible Ionic variables, see:
+// http://ionicframework.com/docs/theming/overriding-ionic-variables/
+
+
+
+
+// Named Color Variables
+// --------------------------------------------------
+// Named colors makes it easy to reuse colors on various components.
+// It's highly recommended to change the default colors
+// to match your app's branding. Ionic uses a Sass map of
+// colors so you can add, rename and remove colors as needed.
+// The "primary" color is the only required color in the map.
+
+$colors: (
+  primary:    orange,
+  secondary:  #4caf50,
+  danger:     #f44336,
+  light:      #f4f4f4,
+  dark:       #222,
+  clr-blue:#00bcd4,
+  grey:#EEEEEE,
+  clr-orange:#ff9800,
+  green:green
+);
+
+$clr-white:#ffffff;
+$clr-black:#191919;
+$margn5:5px;
+$fontSize10:10px;
+$font0:0px;
+$size:10%;
+
+
+$text-input-md-highlight-color-invalid: transparent;
+$text-input-md-highlight-color-valid: transparent;
+$text-input-md-show-invalid-highlight: transparent;
+$text-input-md-highlight-color: transparent;
+$text-input-md-show-valid-highlight: transparent;
+ion-label
+{
+  color:color($colors,dark) !important;
+}
+.red
+{
+  color: color($colors, danger);
+}
+.green
+{
+  color: color($colors, green);
+}
+.font-size12 p
+{
+  font-size:$fontSize10 + 2;
+}
+.clr-orange
+{
+  color: color($colors, clr-orange) !important;
+}
+.bg-grey
+{
+  background-color:color($colors, grey) !important;
+}
+.white-bg
+{
+  background-color: $clr-white;
+}
+ion-segment .segment-button.segment-activated
+{
+  color: $clr-white !important;
+  background-color: $clr-black !important;
+}
+ion-segment .segment-button
+{
+  color: color($colors, primary) !important;
+}
+
+
+button.button-md-primary,button.button-ios-primary
+{
+  border: 1px solid color($colors, primary) !important;
+  background: color($colors, primary) !important;
+}
+button.button-md-primary p.siteName
+{
+  color: $clr-white !important;
+}
+.InitFeedbackCon
+{
+  background: $clr-white;
+}
+.bg-white
+{
+
+  .scroll-content
+  {
+    background: $clr-white !important;
+
+    ion-label
+    {
+      color: $clr-black !important;
+    }
+
+
+  }
+
+}
+
+.bg-orange
+{
+
+  .scroll-content
+  {
+    background: color($colors, primary) !important;
+
+    .SplashLoader
+    {
+      height: 100%;
+      display: flex;
+      img
+      {
+        margin:0 auto;
+      }
+    }
+
+  }
+
+}
+.bg-white
+{
+  .LogoTop
+  {
+    text-align: center;
+    padding-top: 70px;
+  }
+  .SplashLoader
+  {
+    text-align: center;
+    padding-top: 20px;
+  }
+}
+
+// Margin Adjus
+
+.margin-top5
+{
+  margin-top:$margn5 !important;
+}
+.margin-top3
+{
+  margin-top:$margn5 - 2  !important;
+}
+.margin-left-0{
+  margin-left:$font0 !important;
+}
+.margin-right-0
+{
+  margin-right:$font0 !important;
+}
+.width100
+{
+  width:$size+90 !important;
+}
+
+
+scanqr
+{
+  ion-content.content-md
+  {
+    background: transparent !important;
+  }
+  ion-content
+  {
+    background: transparent !important;
+
+    .fixed-content
+    {
+      background: transparent !important;
+    }
+  }
+
+}
+
+scanQR-Asset{
+
+  ion-content.content-md
+  {
+    background: transparent !important;
+  }
+  ion-content
+  {
+    background: transparent !important;
+
+    .fixed-content
+    {
+      background: transparent !important;
+    }
+  }
+
+}
+
+ion-app.md
+{
+  background: transparent !important;
+}
+.FeedBackContainer
+{
+
+  .CheckboxList
+  {
+    ion-item
+    {
+      ion-label
+      {
+        text-align: left;
+        line-height: 16px;
+      }
+      ion-checkbox
+      {
+        margin-right: 5px !important;
+      }
+
+    }
+
+
+
+
+
+  }
+
+
+}
+
+.card-calendar
+{
+  .fc-view-container
+  {
+    .fc-widget-content
+    {
+      .fc-scroller.fc-day-grid-container
+      {
+        height: auto !important;
+      }
+    }
+  }
+
+
+  //.card-calendar .fc-toolbar {
+  //  text-align: center !important;
+  //  paddig-top:0px !important;
+  //  padding-left:0px !important;
+  //  padding-right:0px !important;
+  //}
+  //.card-calendar .fc .fc-toolbar > * > * {
+  //  float: left;
+  //  margin-left: 73px !important;
+  //  margin-top:5px !important;
+  //}
+  //.fc .fc-toolbar>*> :first-child {
+  //  margin-left: 0px !important;
+  //  margin-right: 135px !important;
+  //}
+  //.fc-toolbar .fc-left {
+  //  margin-bottom:0px !important;
+  //}
+
+}
+
+.border-btm-blk{
+  border-bottom:1px solid #a7a1a1 !important
+}
+
+.form-group label.control-label{
+  color: #000;
+}
+
+image-viewer ion-header
+{
+  display: none !important;
+}
+
+.sidebar .nav li:hover>a
+{
+  background-color: transparent !important;
+}
+.text-input-md
+{
+  margin:0px !important;
+}
+
+ion-input
+{
+  border-bottom:1px solid #ccc !important;
+}
+
+// App iOS Variables
+// --------------------------------------------------
+// iOS only Sass variables can go here
+
+
+
+
+// App Material Design Variables
+// --------------------------------------------------
+// Material Design only Sass variables can go here
+
+
+
+
+// App Windows Variables
+// --------------------------------------------------
+// Windows only Sass variables can go here
+
+
+
+
+// App Theme
+// --------------------------------------------------
+// Ionic apps can have different themes applied, which can
+// then be future customized. This import comes last
+// so that the above variables are used and Ionic's
+// default are overridden.
+
+@import "ionic.theme.default";
+
+
+// Ionicons
+// --------------------------------------------------
+// The premium icon font for Ionic. For more info, please see:
+// http://ionicframework.com/docs/ionicons/
+
+@import "ionic.ionicons";
+
+
+// Fonts
+// --------------------------------------------------
+
+@import "roboto";
+@import "noto-sans";
+
+

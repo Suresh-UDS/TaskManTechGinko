@@ -1,0 +1,88 @@
+<div class="crud-form" ng-init="initLoad();loadingStart();">
+	<div class="">
+		<div class="row">
+			<div class="col-md-12">
+
+				<div class="form-container table-container" ng-init="loadUserRole()">
+					<form ng-show="!success" name="form" role="form" class="form-horizontal">
+
+                        <div class="col-md-6 col-md-offset-3" >
+
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">User Role Details</div>
+                                <div class="panel-body">
+
+                                    <div class="table-responsive">
+                                        <table class="table">
+
+                                            <tbody>
+                                            <tr>
+
+
+                                                <td>Id</td>
+                                                <td>{{userRole.id}}</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>Name</td>
+                                                <td>{{userRole.name}}</td>
+
+
+                                            </tr>
+                                            <tr>
+                                                <td>Description </td>
+
+                                                <td>{{userRole.description}}</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>Level </td>
+                                                <td>{{userRole.roleLevel}}</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>Active </td>
+                                                <td>{{userRole.active}}</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>Created Date </td>
+                                                <td>{{userRole.createdDate}}</td>
+
+                                            </tr>
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="col-md-12 txt-align-rgt">
+                                            <button class="btn btn-default close-button-right b10" type="button"
+                                                    ng-click="cancelUserRole()" id="close-button-right">
+                                                <i class="material-icons">chevron_left</i> Back
+                                            </button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                    </form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

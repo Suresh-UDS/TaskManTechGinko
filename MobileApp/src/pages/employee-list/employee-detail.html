@@ -1,0 +1,364 @@
+<!--
+  Generated template for the SiteListPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header no-border>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Employee Detail</ion-title>
+  </ion-navbar>
+
+
+    <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="clr-blue">
+      <ion-segment-button value="detail">
+        Detail
+      </ion-segment-button>
+      <ion-segment-button value="jobs" (click)="getJobs(false)">
+        Jobs
+      </ion-segment-button>
+      <ion-segment-button value="quotation" (click)="getQuotations()">
+        Quotation
+      </ion-segment-button>
+      <ion-segment-button value="attendance" (click)="getAttendance(false)">
+        Attendance
+      </ion-segment-button>
+    </ion-segment>
+
+
+</ion-header>
+
+<ion-content>
+
+
+
+  <div [ngSwitch]="categories">
+
+    <ion-list *ngSwitchCase="'detail'">
+
+      <!--
+      <div class="padding10">
+        <ion-row class="margin0 white-bg padding5">
+          <ion-col col-12>
+            <p text-center class="margin-bottom0 fnt-20 label-on-left">Employee</p>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="margin-left-right0 margin-top3 white-bg padding5">
+
+          <ion-col col-8>
+            <p text-left class="margin-bottom0 fnt-12 clr-orange">Name</p>
+            <p text-left class="margin-bottom0">{{empDetail.fullName}}</p>
+          </ion-col>
+          <ion-col col-4>
+            <p text-right class="margin-bottom0 fnt-12 clr-orange">Id</p>
+            <p text-right class="margin-bottom0">{{empDetail.empId}}</p>
+          </ion-col>
+          <ion-col col-12>
+            <p text-left class="margin-bottom0 fnt-12 clr-orange">Designation</p>
+            <p text-left class="margin-bottom0">{{empDetail.designation}}</p>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <div class="padding10">
+        <ion-row class="margin0 white-bg padding5">
+          <ion-col col-12>
+            <p text-center class="margin-bottom0 fnt-20 label-on-left">Manager</p>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="margin-left-right0 margin-top3 white-bg padding5">
+          <ion-col col-8>
+            <p text-left class="margin-bottom0 fnt-12 clr-orange">Name</p>
+            <p text-left class="margin-bottom0">{{empDetail.manager.fullName}}</p>
+          </ion-col>
+          <ion-col col-4>
+            <p text-right class="margin-bottom0 fnt-12 clr-orange">Id</p>
+            <p text-right class="margin-bottom0">{{empDetail.manager.id}}</p>
+          </ion-col>
+          <ion-col col-12>
+            <p text-left class="margin-bottom0 fnt-12 clr-orange">Designation</p>
+            <p text-left class="margin-bottom0">{{empDetail.manager.designation}}</p>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <div class="padding10">
+        <ion-row class="margin0 white-bg padding5">
+          <ion-col col-12>
+            <p text-center class="margin-bottom0 fnt-20 label-on-left">Sites</p>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="margin-left-right0 margin-top3 white-bg padding5">
+          <ion-col col-8 *ngFor="let site of empDetail.sites">
+            <p text-left class="margin-bottom0">{{site.name}}</p>
+          </ion-col>
+        </ion-row>
+      </div>
+-->
+
+
+      <ion-row class="margin0 white-bg padding10">
+        <ion-col col-6 class="label-on-left">Employee ID</ion-col>
+        <ion-col col-6>
+          <p text-right>{{empDetail.empId}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Name</ion-col>
+        <ion-col col-6>
+          <p text-right>{{empDetail.fullName}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Designation</ion-col>
+        <ion-col col-6>
+          <p text-right>{{empDetail.designation}}</p>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="margin0 white-bg padding10" *ngIf="empDetail.manager">
+        <ion-col col-6 class="label-on-left">Manager Name</ion-col>
+        <ion-col col-6>
+          <p text-right>{{empDetail.manager.fullName}}</p>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="margin-tp25 white-bg padding10">
+        <ion-col col-6 class="label-on-left">Sites</ion-col>
+        <ion-col col-6>
+          <p *ngFor="let site of empDetail.projectSites" text-right>{{site.name}}</p>
+        </ion-col>
+
+      </ion-row>
+
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'jobs'" >
+      <ion-refresher (ionRefresh)="doRefresh($event,job)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
+      <div *ngIf="jobs?.length==0" text-center="">
+        <ion-card text-center="">
+          <ion-card-content>
+            No Jobs
+          </ion-card-content>
+        </ion-card>
+      </div>
+      <div  class="white-bg" *ngFor="let job of jobs" >
+        <div class="padding-left16 padding-top5">
+          <ion-row class="margin0">
+
+            <ion-col col-2 class="ver-center">
+              <button ion-button clear color="primary" class="icon-round ion-circle-icons"
+                      [ngClass]="{'icon-round-red' : (job.status == 'OVERDUE'),
+                                                          'icon-round-green' : (job.status == 'COMPLETED'),
+                                                          'icon-round-blue' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}">
+                <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>
+              </button>
+            </ion-col>
+            <ion-col col-8 class="padding-left5">
+              <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>
+                <p text-left class="margin0">{{job.title}}</p>
+                <p text-left class="margin0">{{job.employeeName}}</p>
+                <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>
+              </div>
+            </ion-col>
+            <ion-col col-2 class="padding-left0 ver-center">
+              <div class="padding-bottom5">
+                <button ion-button clear color="primary" (click)="open(slidingItem, item ,count)">
+                  <i class="material-icons">more_horiz</i>
+                </button>
+              </div>
+            </ion-col>
+            <!--
+            <ion-col col-1>
+                <p (click)="open(ItemSliding,Item)">f</p>
+            </ion-col>
+            -->
+
+          </ion-row>
+        </div>
+        <ion-item-sliding #slidingItem>
+
+          <ion-item #item class="item-fnt padding-left0" >
+            <!--<div class="padding-left16">-->
+
+            <div text-capitalize >
+              <ion-row class="margin0">
+                <ion-col col-6 class="padding-right5">
+                  <div *ngIf="job.status =='COMPLETED'">
+                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:'MMM d, y, h:mm a' }} </p>
+                  </div>
+                  <div *ngIf="job.status !='COMPLETED'">
+                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:'MMM d, y, h:mm a' }} </p>
+                  </div>
+                </ion-col>
+                <ion-col col-6>
+                  <div *ngIf="job.status =='COMPLETED'">
+                    <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:'MMM d, y, h:mm a' }} </p>
+                  </div>
+                  <div *ngIf="job.status !='COMPLETED'">
+                    <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:'MMM d, y, h:mm a' }} </p>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </div>
+            <!--</div>-->
+          </ion-item>
+
+          <ion-item-options (click)="close(slidingItem)">
+            <div>
+              <button ion-button clear color="primary"><ion-icon name="md-eye" class="fnt-24"></ion-icon></button>
+            </div>
+            <div>
+              <button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>
+            </div>
+            <div>
+              <button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24"></ion-icon></button>
+            </div>
+            <div>
+              <button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>
+            </div>
+          </ion-item-options>
+        </ion-item-sliding>
+
+      </div>
+    </ion-list>
+    <ion-list *ngSwitchCase="'quotation'">
+
+      <ion-row class="margin0 white-bg border-btm padding10 paddding-top20" (click)="gotoDraftedQuotation()">
+        <ion-col col-2 class="ver-center">
+          <div class="q-round ver-center">
+            <button ion-button clear color="primary" class="q-round icon-round-orange">
+              <ion-icon name="mail" class="fnt-24"></ion-icon>
+            </button>
+          </div>
+        </ion-col>
+        <ion-col col-9 class="padding-left10">
+          <div>
+            <p text-left class="fnt-18 margin-bottom5">Drafted</p>
+          </div>
+          <div>
+            <span class="clr-green padding-right2">(</span><span class="clr-orange">{{draftedQuotationsCount}}</span><span class="clr-green padding-left2">)</span>
+          </div>
+        </ion-col>
+        <ion-col col-1 class="ver-center">
+          <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>
+        </ion-col>
+      </ion-row>
+      <ion-row class="margin0 white-bg border-btm padding10" (click)="gotoSubmittedQuotation()">
+        <ion-col col-2 class="ver-center">
+          <div class="q-round ver-center">
+            <button ion-button clear color="primary" class="q-round icon-round-blue">
+              <ion-icon name="arrow-round-forward" class="fnt-24"></ion-icon>
+            </button>
+          </div>
+        </ion-col>
+        <ion-col col-9 class="padding-left10">
+          <div>
+            <p text-left class="fnt-18 margin-bottom5">Submitted</p>
+          </div>
+          <div>
+            <span class="clr-green padding-right2">(</span><span class="clr-blue">{{submittedQuotationsCount}}</span><span class="clr-green padding-left2">)</span>
+          </div>
+        </ion-col>
+        <ion-col col-1 class="ver-center">
+          <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>
+        </ion-col>
+      </ion-row>
+      <ion-row class="margin0 white-bg border-btm padding10" (click)="gotoApprovedQuotation()">
+        <ion-col col-2 class="ver-center">
+          <div class="q-round ver-center">
+            <button ion-button clear color="primary" class="q-round icon-round-green">
+              <ion-icon name="checkmark" class="fnt-24"></ion-icon>
+            </button>
+          </div>
+        </ion-col>
+        <ion-col col-9 class="padding-left10">
+          <div>
+            <p text-left class="fnt-18 margin-bottom5">Approved</p>
+          </div>
+          <div>
+            <span class="clr-green padding-right2">(</span><span class="green">{{approvedQuotationsCount}}</span><span class="clr-green padding-left2">)</span>
+          </div>
+        </ion-col>
+        <ion-col col-1 class="ver-center">
+          <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>
+        </ion-col>
+      </ion-row>
+      <ion-row class="margin0 white-bg border-btm padding10" (click)="gotoArchivedQuotation()">
+        <ion-col col-2 class="ver-center">
+          <div class="q-round ver-center">
+            <button ion-button clear color="primary" class="q-round icon-round-red">
+              <i class="material-icons">archive</i>
+            </button>
+          </div>
+        </ion-col>
+        <ion-col col-9 class="padding-left10">
+          <div>
+            <p text-left class="fnt-18 margin-bottom5">Archieved</p>
+          </div>
+          <div>
+            <span class="clr-green padding-right2">(</span><span class="clr-red">{{archivedQuotationsCount}}</span><span class="padding-left2">)</span>
+          </div>
+        </ion-col>
+        <ion-col col-1 class="ver-center">
+          <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>
+        </ion-col>
+      </ion-row>
+    </ion-list>
+    <ion-list *ngSwitchCase="'attendance'">
+      <ion-refresher (ionRefresh)="doRefresh($event,attendance)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
+
+      <div *ngIf="attendances?.length==0" text-center="">
+        <ion-card text-center="">
+          <ion-card-content>
+            No data found
+          </ion-card-content>
+        </ion-card>
+      </div>
+      <ion-row class="margin0 white-bg padding10 margin-bottom25 width98 margin-side-auto" *ngFor="let a of attendances">
+
+        <ion-col col-6 class="label-on-left">Name</ion-col>
+        <ion-col col-6>
+          <p text-left class="margin0">{{a.employeeFullName}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Site</ion-col>
+        <ion-col col-6>
+          <p text-left class="margin0">{{a.siteName}}</p>
+        </ion-col>
+        <ion-col col-6>
+          <p text-left class="margin0" class="display-inline">{{a.checkInTime |date:'MM/dd/yyyy @ h:mma'}}</p>
+        </ion-col>
+        <ion-col col-6>
+          <p text-right class="margin0" class="display-inline">{{a.checkOutTime |date:'MM/dd/yyyy @ h:mma'}}</p>
+        </ion-col>
+        <ion-col col-6 class="align-center">
+          <ion-item no-lines class="item-label">
+            <ion-avatar *ngIf="a.checkInImage">
+              <img  [src]="a.checkInImage" >
+            </ion-avatar>
+            <ion-avatar *ngIf="!a.checkInImage">
+              <img  src="img/user.png" width="10%">
+            </ion-avatar>
+          </ion-item>
+        </ion-col>
+        <ion-col col-6 class="align-center">
+          <ion-item no-lines class="item-label">
+            <ion-avatar *ngIf="a.checkOutImage">
+              <img  [src]="a.checkOutImage" >
+            </ion-avatar>
+            <ion-avatar *ngIf="!a.checkOutImage">
+              <img  src="img/user.png" >
+            </ion-avatar>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-list>
+  </div>
+
+</ion-content>

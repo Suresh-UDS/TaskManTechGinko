@@ -1,0 +1,140 @@
+<!--<ion-header>-->
+  <!--<ion-navbar>-->
+    <!--<button ion-button menuToggle>-->
+      <!--<ion-icon name="menu"></ion-icon>-->
+    <!--</button>-->
+    <!--<ion-title>Feedback</ion-title>-->
+  <!--</ion-navbar>-->
+<!--</ion-header>-->
+
+<ion-content>
+
+   <div class="FeedbackCon">
+
+        <!--<div class="TopImageCon">-->
+
+          <!--<img src="img/feedback.png"  alt="feedback image">-->
+
+        <!--</div>-->
+
+        <div class="InputCon" style="padding-top: 30px;">
+
+            <div class="input-group width-full" margin-top="">
+
+                <div class="input-group" margin-top="">
+                    <span class="input-group-addon">
+                        <i class="material-icons">face</i>
+                    </span>
+                    <div class="form-group label-floating">
+                        <label class="control-label">User Name</label>
+                        <input class="form-control" type="text" [(ngModel)]="userName" name="username">
+                    </div>
+                </div>
+                <div class="input-group" margin-top="">
+                    <span class="input-group-addon">
+                        <i class="material-icons">person</i>
+                    </span>
+                    <div class="form-group label-floating">
+                        <label class="control-label">Code</label>
+                        <input class="form-control" [(ngModel)]="userCode" type="text" name="">
+                    </div>
+                </div>
+                <div class="input-group" margin-top="">
+                    <span class="input-group-addon">
+                        <i class="material-icons">feedback</i>
+                    </span>
+                    <div class="form-group label-floating">
+                        <label class="control-label">Remarks</label>
+                        <input class="form-control" [(ngModel)]="remarks" type="text" name="">
+                    </div>
+                </div>
+
+                <!--<ion-row>-->
+                    <!--<ion-col col-2 col-md-2 col-lg-2 class="paddding-top20">-->
+                        <!--<span class="input-group-addon">-->
+                            <!--<i class="material-icons">face</i>-->
+                        <!--</span>-->
+                    <!--</ion-col>-->
+                    <!--<ion-col col-10 col-md-10 col-lg-10>-->
+                        <!--<div class="form-group label-floating">-->
+                            <!--<label class="control-label">Name</label>-->
+                            <!--<input class="form-control" type="text" [(ngModel)]="userName" name="username" >-->
+                        <!--</div>-->
+                    <!--</ion-col>-->
+                <!--</ion-row>-->
+
+
+
+                <!--<div class="form-group label-floating">-->
+                    <!--<label class="control-label">Name</label>-->
+                    <!--<input class="form-control" [(ngModel)]="userName" type="text" id="" name="" >-->
+                <!--</div>-->
+
+
+            </div>
+            <!--<div class="input-group width-full">-->
+
+            <!--<ion-row>-->
+                <!--<ion-col col-2 class="paddding-top20">-->
+                        <!--<span class="input-group-addon">-->
+                            <!--<i class="material-icons">person</i>-->
+                        <!--</span>-->
+                <!--</ion-col>-->
+                <!--<ion-col col-10>-->
+                    <!--<div class="form-group label-floating">-->
+                        <!--<label class="control-label">Code</label>-->
+                        <!--<input class="form-control" [(ngModel)]="userCode" type="text" name="" >-->
+                        <!--<div class="error-height">-->
+
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</ion-col>-->
+            <!--</ion-row>-->
+
+
+            <!--</div>-->
+
+            <!--<div class="input-group width-full">-->
+
+                <!--<ion-row>-->
+                    <!--<ion-col col-2 class="paddding-top20">-->
+                        <!--<span class="input-group-addon">-->
+                          <!--<i class="material-icons">feedback</i>-->
+                        <!--</span>-->
+                    <!--</ion-col>-->
+                    <!--<ion-col col-10>-->
+                        <!--<div class="form-group label-floating">-->
+                            <!--<label class="control-label">Remarks</label>-->
+                            <!--<input class="form-control" [(ngModel)]="remarks" type="text" name="" >-->
+                            <!--<div class="error-height">-->
+
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</ion-col>-->
+                <!--</ion-row>-->
+
+
+            <!--</div>-->
+
+
+            <button class="btn btn-warning btn-wd btn-lg" text-center (click)="start(userName,userCode)" style="margin-top: 80px;">
+                Submit
+            </button>
+
+            <!--<button ion-button  text-center clear  class="orange-clr" >-->
+                <!---->
+            <!--</button>-->
+
+
+            <button type="button" class="btn btn-link orange-clr bg-none" text-capitalize (click)="start(userName,userCode)">
+                Skip & Submit</button>
+        </div>
+
+
+
+
+   </div>
+
+
+
+</ion-content>

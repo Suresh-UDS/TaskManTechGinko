@@ -1,0 +1,28 @@
+package com.ts.app.domain;
+
+import java.util.Arrays;
+import java.util.stream.Stream;
+
+public enum AssetReadingRule {
+	
+	CURRENT_READING_GREATER_THAN_PREVIOUS_READING("CURRENT_READING_GREATER_THAN_PREVIOUS_READING"),
+	CURRENT_CONSUMPTION_GREATER_THAN_PREVIOUS_CONSUMPTION("CURRENT_CONSUMPTION_GREATER_THAN_PREVIOUS_CONSUMPTION"),
+	CURRENT_READING_GREATER_THAN_THRESHOLD_VALUE("CURRENT_READING_GREATER_THAN_THRESHOLD_VALUE"),
+	CURRENT_CONSUMPTION_GREATER_THAN_THRESHOLD_VALUE("CURRENT_CONSUMPTION_GREATER_THAN_THRESHOLD_VALUE"),
+	CURRENT_RUNHOUR_GREATER_THAN_PREVIOUS_RUNHOUR("CURRENT_RUNHOUR_GREATER_THAN_PREVIOUS_RUNHOUR"),
+	CURRENT_READING_LESS_THAN_PREVIOUS_READING("CURRENT_READING_LESS_THAN_PREVIOUS_READING");
+	
+	private String rule;
+	 
+    private AssetReadingRule(String rule) {
+        this.rule = rule;
+    }
+    
+    public String getRule() {
+		return rule;
+	}
+    
+    public static Stream<AssetReadingRule> stream() {
+        return Arrays.stream(AssetReadingRule.values()); 
+    }
+}

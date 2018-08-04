@@ -1,0 +1,41 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Initiate Feedback</ion-title>
+        <ion-buttons right>
+            <button *ngIf="selectedSite" ion-button color="primary" icon-only (click)="goDashboard(selectedSite)">
+                <i class="material-icons">dashboard</i>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+    <div class="InitFeedbackCon">
+
+        <div class="InputCon">
+
+
+            <div class="SiteAndBlockCOn" >
+
+                <ion-item class="TailsCon">
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col col-4 class="BlocksList"  *ngFor="let z of zones;let i=index" [ngStyle]="{'background-color':bgClr[i%10]}">
+                                <button ion-button clear class="BlockBtns" (click)="loadFeedbackMappings(z)">
+                                    <p class="SiteListTails"> {{z}} </p>
+                                </button>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </ion-item>
+
+
+            </div>
+        </div>
+    </div>
+</ion-content>
+

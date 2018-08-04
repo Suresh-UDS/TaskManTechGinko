@@ -1,0 +1,53 @@
+<div class="crud-form">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="table-label">
+					<!--<div class="floatL l5">View UserGroup</div>-->
+					<div
+						class="floatR r5 minimize-maximize-container minimize-maximize">
+						<i class="fa fa-caret-up"></i>
+					</div>
+					<div class="floatR r5 gc-full-width">
+						<i class="fa fa-expand"></i>
+					</div>
+					<div class="clear"></div>
+
+
+				</div>
+				<div class="form-container table-container" ng-init="loadUserGroup()">
+					<form ng-show="!success" name="form" role="form" class="form-horizontal">
+						<div class="form-group ">
+							<label class="col-sm-3 control-label"> ID </label>
+							<div class="col-sm-9">
+								<input id='userGroupID' ng-model="userGroup.id" class='form-control'
+									name='userGroupID' type='text' maxlength='50' readonly />
+							</div>
+						</div>
+
+						<div class="form-group ">
+							<label class="col-sm-3 control-label"> Name </label>
+							<div class="col-sm-9">
+								<input id='userGroupName' ng-model="userGroup.name" class='form-control'
+									name='userGroupName' type='text' maxlength='50' readonly/>
+							</div>
+						</div>
+
+						<!-- Start of hidden inputs -->
+						<!-- End of hidden inputs -->
+
+						<div class="form-group">
+							<div class="col-sm-offset-3 col-sm-7">
+								<button class="btn btn-default close-button-right b10" type="button"
+									ng-click="cancelUserGroup()" id="close-button-right">
+									<i class="fa fa-warning"></i> Back
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

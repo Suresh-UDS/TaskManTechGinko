@@ -1,0 +1,92 @@
+// http://ionicframework.com/docs/theming/
+
+
+// App Global Sass
+// --------------------------------------------------
+// Put style rules here that you want to apply globally. These
+// styles are for the entire app and not just one component.
+// Additionally, this file can be also used as an entry point
+// to import other Sass files to be included in the output CSS.
+//
+// Shared Sass variables, which can be used to adjust Ionic's
+// default Sass variables, belong in "theme/variables.scss".
+//
+// To declare rules for a specific mode, create a child rule
+// for the .md, .ios, or .wp mode classes. The mode class is
+// automatically applied to the <body> element in the app.
+
+$padding-top10:10px;
+$margin-top:30%;
+$margin-auto:'margin-auto';
+$width70:70%;
+$width80:80%;
+$fnt-20:20px;
+$margin9:9px;
+
+.fixed-content
+{
+
+  background-color:#EEEEEE !important;
+}
+.padding-top10
+{
+  padding-top:$padding-top10 !important;
+}
+.margin-top
+{
+  margin-top: $margin-top;
+}
+
+.#{margin-auto}
+{
+  margin: auto;
+}
+.round
+{
+  width: $width70;
+  border: 1px solid #cfcfcf;
+  border-top-left-radius: 18px;
+  border-bottom-left-radius: 18px;
+  border-top-right-radius: 18px;
+  border-bottom-right-radius: 18px;
+}
+.width80
+{
+  width: $width80 !important;
+}
+
+
+.bottom-border
+{
+  border-bottom: 1px solid #cfcfcf;
+}
+.fnt-20
+{
+  font-size:$fnt-20 !important;
+}
+.fnt-30
+{
+  font-size: $fnt-20+10 !important;
+
+}
+.margin9
+{
+  margin:$margin9;
+}
+.icon-color
+{
+  color:orange !important;
+}
+.align-center
+{
+  text-align: center;
+}
+
+.back-button-icon-md
+{
+  color: orange !important;
+}
+ion-backdrop
+{
+  opacity: 0.4 !important;
+}

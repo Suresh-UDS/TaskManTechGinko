@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Attendance</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-fab bottom right>
+    <button (click)="markAttendance()" ion-fab><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
+
+    <div *ngIf="!attendances"  class="align-center">
+        <ion-card>
+            <ion-card-content>
+                <p class="clr-orange">No Attendance Marked Yet</p>
+            </ion-card-content>
+        </ion-card>
+    </div>
+
+
+    <div class="row">
+
+
+      <ion-row class="margin0 white-bg padding10 margin-bottom25 width98 margin-side-auto" *ngFor="let a of attendances">
+          <ion-col col-6 >
+              <p text-left class="margin0">{{a.employeeFullName}}</p>
+              <p text-left class="margin0 label-on-left">{{a.siteName}}</p>
+          </ion-col>
+          <ion-col col-6>
+
+          </ion-col>
+
+          <ion-col col-6 class="align-center">
+              <ion-item no-lines class="item-label" >
+                  <ion-avatar *ngIf="a.checkInImage">
+                      <img  [src]="a.checkInImage" (click)="viewImage(a.checkInImage)">
+                  </ion-avatar>
+                  <ion-avatar *ngIf="!a.checkInImage">
+                      <img  src="img/user.png" width="10%">
+                  </ion-avatar>
+              </ion-item>
+          </ion-col>
+          <ion-col col-6 class="align-center">
+              <ion-item no-lines class="item-label">
+                  <ion-avatar *ngIf="a.checkOutImage" (click)="viewImage(a.checkOutImage)">
+                      <img  [src]="a.checkOutImage" >
+                  </ion-avatar>
+                  <ion-avatar *ngIf="!a.checkOutImage">
+                      <img  src="img/user.png" >
+                  </ion-avatar>
+              </ion-item>
+          </ion-col>
+          <ion-col col-6>
+              <p text-left class="fnt-12">
+                  <ion-icon ios="ios-calendar" md="md-calendar" class="green  padding-right10"></ion-icon>
+                  {{a.checkInTime | date:'MMM d, y, h:mm a' }}
+              </p>
+          </ion-col>
+          <ion-col col-6>
+              <p text-left class="fnt-12">
+                  <ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>
+                  {{a.checkOutTime | date:'MMM d, y, h:mm a' }}
+              </p>
+          </ion-col>
+      </ion-row>
+  </div>
+</ion-content>

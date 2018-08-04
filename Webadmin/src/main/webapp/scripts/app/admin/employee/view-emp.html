@@ -1,0 +1,144 @@
+<div class="crud-form"  ng-init="initLoad();loadingStart();">
+	<div class="">
+		<div class="row">
+			<div class="col-md-12">
+
+                <!--<div class="titleCon">-->
+                    <!--<h3>View Employee</h3>-->
+                <!--</div>-->
+
+
+                <div class="row" ng-init="loadEmployee()">
+                    <div class="col-md-12">
+
+                        <div class="col-md-6 col-md-offset-3 margn-top30">
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Employee Details</div>
+                                <div class="panel-body">
+
+                                    <div class="table-responsive">
+                                        <table class="table">
+
+                                            <tbody>
+                                            <tr>
+
+                                                <td>ID</td>
+                                                <td>{{employee.id}}</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>Employee ID</td>
+                                                <td>{{employee.empId}}</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>Firstname</td>
+                                                <td>{{employee.name}}</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>Lastname</td>
+                                                <td>{{employee.lastName}}</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>Site</td>
+                                                <td><a data-toggle="modal" data-target="#noticeModal" href="#">List Of Sites</a></td>
+
+                                            </tr>
+                                            <tr>
+                                                <td>User Account Linked</td>
+                                                <td><a href="#/view-user/{{employee.userId}}">View User Account</a></td>
+                                            </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="txt-align-rgt">
+
+                                        <button class="btn btn-default close-button-right b10" type="button"
+                                                ng-click="cancelEmployee()" id="close-button-right">
+                                            <!-- <i class="fa fa-warning"></i> --> Back
+                                        </button>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- notice modal -->
+                <div class="modal fade" id="noticeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-notice">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+                                <h5 class="modal-title" id="myModalLabel">Site List</h5>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="col-md-12">
+                                    <div class="card">
+
+                                        <div class="card-content">
+
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <thead>
+                                                    <tr>
+
+                                                        <th>Client</th>
+                                                        <th>Site</th>
+                                                        <th>Check In/Out</th>
+
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr ng-repeat="projSite in projectSiteList">
+
+                                                        <td>{{projSite.projectName}}</td>
+                                                        <td>{{projSite.siteName}}</td>
+                                                        <td>
+                                                            <button ng-click="checkIn(site.id,employee.empId,employee.id)" data-dismiss="modal"  class="btn btn-success">check-In</button>
+                                                            <button ng-click="checkOut(site.id,employee.empId,employee.id)" data-dismiss="modal"  class="btn btn-success">check-Out</button>
+                                                        </td>
+
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            <div class="modal-footer text-center">
+                                <button type="button" class="btn btn-info btn-round" data-dismiss="modal">close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end notice modal -->
+
+
+				</div>
+		</div>
+	</div>
+
+</div>

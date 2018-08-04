@@ -1,0 +1,173 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Quotation</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-fab bottom right>
+    <button has-permission="QuotationCreate" (click)="createQuotation()" ion-fab color="dark"><ion-icon name="add" class="clr-orange"></ion-icon></button>
+  </ion-fab>
+
+
+    <ion-card class="width100">
+        <ion-row class="margin-left-0 margin-right-0">
+            <ion-col col-12>
+                <div class="form-group label-floating">
+                    <label class="control-label" >Client</label>
+                    <ion-select [(ngModel)]="selectedProject" class="select-box padding-left0" placeholder="Choose Client" name="projectName" #site="ngModel" required interface="popover">
+                        <ion-option *ngFor="let p of allProjects" [value]="p.name" (ionSelect)="getSites(p.id)">{{p.name}}</ion-option>
+                    </ion-select>
+                </div>
+            </ion-col>
+        </ion-row>
+        <ion-row class="margin-left-0 margin-right-0">
+            <ion-col col-12>
+                <div class="form-group label-floating">
+                    <label class="control-label" >Site</label>
+                    <ion-select [(ngModel)]="selectedSite" class="select-box padding-left0" id="siteName" placeholder="Choose Site" name="siteName" #site="ngModel" required interface="popover">
+                        <ion-option *ngFor="let site of sites" [value]="site.name" (ionSelect)="searchQuotations(site.id)">{{site.name}}</ion-option>
+                    </ion-select>
+                </div>
+
+            </ion-col>
+        </ion-row>
+
+    </ion-card>
+
+  <ion-row class="margin0 white-bg border-btm padding10 paddding-top20" (click)="gotoDraftedQuotation()">
+        <ion-col col-2 class="ver-center">
+          <div class="q-round ver-center">
+                <button ion-button clear color="primary" class="q-round icon-round-orange">
+                  <ion-icon name="mail" class="fnt-24"></ion-icon>
+                </button>
+          </div>
+        </ion-col>
+        <ion-col col-9 class="padding-left10">
+                <div>
+                  <p text-left class="fnt-18 margin-bottom5">Drafted</p>
+                </div>
+                <div>
+                  <span class="clr-green padding-right2">(</span><span class="clr-orange">{{draftedQuotationsCount}}</span><span class="clr-green padding-left2">)</span>
+                </div>
+        </ion-col>
+        <ion-col col-1 class="ver-center">
+                <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>
+        </ion-col>
+    </ion-row>
+    <ion-row class="margin0 white-bg border-btm padding10" (click)="gotoSubmittedQuotation()">
+        <ion-col col-2 class="ver-center">
+            <div class="q-round ver-center">
+                <button ion-button clear color="primary" class="q-round icon-round-blue">
+                    <ion-icon name="arrow-round-forward" class="fnt-24"></ion-icon>
+                </button>
+            </div>
+        </ion-col>
+        <ion-col col-9 class="padding-left10">
+            <div>
+                <p text-left class="fnt-18 margin-bottom5">Submitted</p>
+            </div>
+            <div>
+                <span class="clr-green padding-right2">(</span><span class="clr-blue">{{submittedQuotationsCount}}</span><span class="clr-green padding-left2">)</span>
+            </div>
+        </ion-col>
+        <ion-col col-1 class="ver-center">
+            <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>
+        </ion-col>
+    </ion-row>
+  <ion-row class="margin0 white-bg border-btm padding10" (click)="gotoApprovedQuotation()">
+    <ion-col col-2 class="ver-center">
+      <div class="q-round ver-center">
+        <button ion-button clear color="primary" class="q-round icon-round-green">
+          <ion-icon name="checkmark" class="fnt-24"></ion-icon>
+        </button>
+      </div>
+    </ion-col>
+    <ion-col col-9 class="padding-left10">
+      <div>
+        <p text-left class="fnt-18 margin-bottom5">Approved</p>
+      </div>
+      <div>
+        <span class="clr-green padding-right2">(</span><span class="green">{{approvedQuotationsCount}}</span><span class="clr-green padding-left2">)</span>
+      </div>
+    </ion-col>
+    <ion-col col-1 class="ver-center">
+      <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>
+    </ion-col>
+  </ion-row>
+  <ion-row class="margin0 white-bg border-btm padding10" (click)="gotoArchivedQuotation()">
+    <ion-col col-2 class="ver-center">
+      <div class="q-round ver-center">
+        <button ion-button clear color="primary" class="q-round icon-round-red">
+            <i class="material-icons">archive</i>
+        </button>
+      </div>
+    </ion-col>
+    <ion-col col-9 class="padding-left10">
+      <div>
+        <p text-left class="fnt-18 margin-bottom5">Archieved</p>
+      </div>
+      <div>
+        <span class="clr-green padding-right2">(</span><span class="clr-red">{{archivedQuotationsCount}}</span><span class="padding-left2">)</span>
+      </div>
+    </ion-col>
+    <ion-col col-1 class="ver-center">
+      <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>
+    </ion-col>
+  </ion-row>
+
+
+
+    <!--<button class="btn btn-warning btn-simple btn-wd btn-lg" (click)="createPDF()">PDF</button>-->
+<!--
+            <ion-col col-12 class="padding-top0">
+
+              <div class="table-responsive table-sales">
+
+                <table class="table fnt-18">
+                  <tbody>
+                  <tr (click)="gotoDraftedQuotation()">
+                    <td>Drafted</td>
+                    <td class="text-right">
+                      <span class="clr-orange padding-right2">(</span>{{draftedQuotationsCount}}<span class="clr-orange padding-left2">)</span>
+                    </td>
+                    <td class="text-right">
+                      <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
+                    </td>
+                  </tr>
+                  <tr (click)="gotoSubmittedQuotation()">
+                    <td>Submitted</td>
+                    <td class="text-right">
+                      <span class="clr-orange padding-right2">(</span>{{submittedQuotationsCount}}<span class="clr-orange padding-left2">)</span>
+                    </td>
+                    <td class="text-right">
+                      <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
+                    </td>
+                  </tr>
+                  <tr (click)="gotoApprovedQuotation()">
+                    <td>Approved</td>
+                    <td class="text-right">
+                      <span class="clr-orange padding-right2">(</span>{{approvedQuotationsCount}}<span class="clr-orange padding-left2">)</span>
+                    </td>
+                    <td class="text-right">
+                      <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
+                    </td>
+                  </tr>
+                  <tr (click)="gotoArchivedQuotation()">
+                    <td>Archieved</td>
+                    <td class="text-right">
+                      <span class="clr-orange padding-right2">(</span>{{archivedQuotationsCount}}<span class="clr-orange padding-left2">)</span>
+                    </td>
+                    <td class="text-right">
+                      <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ion-col>
+-->
+</ion-content>

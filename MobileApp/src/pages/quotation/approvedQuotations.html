@@ -1,0 +1,25 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Approved </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+    <ion-list class="IonList">
+        <div *ngIf="quotations?.length==0" class="align-center margin-top20">
+            <ion-card>
+                <ion-card-content>
+                    <p class="clr-orange">No Data Found</p>
+                </ion-card-content>
+            </ion-card>
+        </div>
+        <ion-item *ngFor="let quotation of quotations;let i of index" class="bottom-border emp QuotationListContent" (click)="viewQuotation(quotation)">
+            <ion-icon name="checkmark" class="green" item-start></ion-icon>
+           {{quotation.title}}
+        </ion-item>
+    </ion-list>
+</ion-content>

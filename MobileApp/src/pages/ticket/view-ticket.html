@@ -1,0 +1,102 @@
+<!--
+  Generated template for the ViewTicket page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Ticket Details</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-row class="margin0 white-bg padding10">
+    <ion-col col-6 class="label-on-left">Ticket ID</ion-col>
+    <ion-col col-6>
+      <p text-right>{{ticketDetails.id}}</p>
+    </ion-col>
+    <ion-col col-6 class="label-on-left">Ticket Title</ion-col>
+    <ion-col col-6>
+      <p text-right>{{ticketDetails.title}}</p>
+    </ion-col>
+    <ion-col col-6 class="label-on-left">Description</ion-col>
+    <ion-col col-6>
+      <p text-right>{{ticketDetails.description}}</p>
+    </ion-col>
+    <ion-col col-6 class="label-on-left">Status</ion-col>
+    <ion-col col-6>
+      <p text-right>{{ticketDetails.status}}</p>
+    </ion-col>
+      <ion-col col-6 class="label-on-left">Severity</ion-col>
+    <ion-col col-6>
+      <p text-right>{{ticketDetails.severity}}</p>
+    </ion-col>
+  </ion-row>
+
+    <br>
+
+    <ion-row class="margin0 white-bg padding10">
+        <ion-col col-6 class="label-on-left">Site Name</ion-col>
+        <ion-col col-6>
+            <p text-right>{{ticketDetails.siteName}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Assigned To</ion-col>
+        <ion-col col-6>
+            <p text-right>{{ticketDetails.employeeName}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Assigned By</ion-col>
+        <ion-col col-6>
+            <p text-right>{{ticketDetails.createdBy}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Created At</ion-col>
+        <ion-col col-6>
+            <p text-right>{{ticketDetails.createdDate | date:"longDate"}}</p>
+        </ion-col>
+    </ion-row>
+
+    <br>
+
+    <ion-row class="margin0 white-bg padding10"  *ngIf="ticketDetails.status == 'Closed'">
+        <ion-col col-6 class="label-on-left">Completed By</ion-col>
+        <ion-col col-6>
+            <p text-right>{{ticketDetails.lastModifiedBy}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Completed At</ion-col>
+        <ion-col col-6>
+            <p text-right>{{ticketDetails.lastModifiedDate}}</p>
+        </ion-col>
+    </ion-row>
+
+    <br>
+
+    <ion-row class="margin0 white-bg padding10" >
+        <ion-col col-12>
+            <ion-row>
+                <ion-col col-3 >
+                    <img [src]="ticketImage" class="job-img margin-bottom25" >
+                </ion-col>
+            </ion-row>
+        </ion-col>
+    </ion-row>
+
+</ion-content>
+
+
+<ion-footer *ngIf="ticketDetails.status != 'Closed'" >
+    <ion-toolbar class="align-right" padding-left padding-right  >
+        <button class="btn btn-warning center pull-left" (click)="createJob()">
+            Create Job
+        </button>
+        <button class="btn btn-success center pull-right" (click)="closeTicket()">
+            Close Ticket <ion-icon name="ios-arrow-forward-outline"></ion-icon>
+        </button>
+    </ion-toolbar>
+</ion-footer>

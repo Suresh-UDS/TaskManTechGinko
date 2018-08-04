@@ -1,0 +1,58 @@
+<ion-content >
+    <ion-list >
+        <ion-row class="margin0 white-bg">
+
+            <ion-col col-12>
+                <div class="form-group">
+                        <ion-select style="color: black" interface="action-sheet" [(ngModel)]="type" class="select-box" placeholder="Choose Type" id="type" name="type" #ctype="ngModel" required [ngClass]="{'select-error': eMsg=='type'}">
+                            <ion-option style="color: black" *ngFor="let type of rateCardTypes" [value]="type.name" (ionSelect)="selectUOMType(type)" >{{type.name}}</ion-option>
+                        </ion-select>
+                    <div *ngIf="ctype.errors && (ctype.dirty || ctype.touched)" class="error-msg">
+
+                    </div>
+
+                    <div *ngIf="ctype.errors && (ctype.untouched )" class="error-msg">
+
+                    </div>
+                </div>
+            </ion-col>
+
+            <ion-col col-12>
+
+                <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='name'}">
+                    <label class="control-label">Name</label>
+                    <input class="form-control" type="text" [(ngModel)]="name" id="name" name="name" #nme="ngModel" required [ngClass]="{'has-error': nme.errors || eMsg=='all'|| eMsg=='title'}">
+                    <div *ngIf="nme.errors && (nme.dirty || nme.touched)" class="error-msg">
+
+                    </div>
+
+                    <div *ngIf="nme.errors && (nme.untouched )" class="error-msg">
+
+                    </div>
+                </div>
+
+
+            </ion-col>
+
+            <ion-col col-12>
+                <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='cost'}">
+                    <label class="control-label">Cost</label>
+                    <input class="form-control" type="number" [(ngModel)]="cost" id="cost" name="cost" #cst="ngModel" required [ngClass]="{'has-error': cst.errors || eMsg=='all'|| eMsg=='cost'}">
+                    <div *ngIf="cst.errors && (cst.dirty || cst.touched)" class="error-msg">
+
+                    </div>
+
+                    <div *ngIf="cst.errors && (cst.untouched )" class="error-msg">
+
+                    </div>
+                </div>
+            </ion-col>
+            <ion-col col-5 >
+                <button ion-button color="secondary" class="align-right" (click)="addRates()">Ok</button>
+            </ion-col>
+            <ion-col col-7 >
+                <button ion-button color="danger" class="align-left" (click)="close()">Cancel</button>
+            </ion-col>
+        </ion-row>
+    </ion-list>
+</ion-content>
