@@ -1,7 +1,9 @@
 package com.ts.app.domain;
 
 import java.sql.Timestamp;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,11 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "site_expense")
-public class SiteExpense {
+public class SiteExpense extends AbstractAuditingEntity {
 
 	/**
 	 *
@@ -30,15 +33,13 @@ public class SiteExpense {
 	
 	private String description;
 
-	private double amount;
+	private double totalAmount;
 	
 	private String currency;
 	
 	private Timestamp expenseDate;
 	
 	private String receiptNumber;
-	
-	private ExpenseType expenseType;
 	
 	private boolean billable;
 	
@@ -51,6 +52,9 @@ public class SiteExpense {
 	private String billImage2;
 	
 	private String billImage3;
+	
+	@OneToMany(mappedBy = "siteExpense", cascade = {CascadeType.ALL}, orphanRemoval=true)
+	private Set<SiteExpenseItem> items;
 
 	public long getId() {
 		return id;
@@ -77,11 +81,11 @@ public class SiteExpense {
 	}
 
 	public double getAmount() {
-		return amount;
+		return totalAmount;
 	}
 
 	public void setAmount(double amount) {
-		this.amount = amount;
+		this.totalAmount = amount;
 	}
 
 	public String getCurrency() {
@@ -106,14 +110,6 @@ public class SiteExpense {
 
 	public void setReceiptNumber(String receiptNumber) {
 		this.receiptNumber = receiptNumber;
-	}
-
-	public ExpenseType getExpenseType() {
-		return expenseType;
-	}
-
-	public void setExpenseType(ExpenseType expenseType) {
-		this.expenseType = expenseType;
 	}
 
 	public boolean isBillable() {
@@ -162,6 +158,22 @@ public class SiteExpense {
 
 	public void setBillImage3(String billImage3) {
 		this.billImage3 = billImage3;
+	}
+
+	public double getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(double totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public Set<SiteExpenseItem> getItems() {
+		return items;
+	}
+
+	public void setItems(Set<SiteExpenseItem> items) {
+		this.items = items;
 	}
 
 	
