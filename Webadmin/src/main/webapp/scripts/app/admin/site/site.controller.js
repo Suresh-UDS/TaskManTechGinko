@@ -113,9 +113,14 @@ angular.module('timeSheetApp')
             		$scope.shiftFrom = $scope.newShiftItem.startTime;
             		return false;
             }else {
-                $scope.newShiftItem.startTime = e.date._d.getHours() + ':' + e.date._d.getMinutes();
+                // $scope.newShiftItem.startTime = e.date._d.getHours() + ':' + e.date._d.getMinutes();
                 $scope.newShiftItem.startTime = $filter('date')(e.date._d, 'HH:mm');
             }
+
+            $('#shiftTo').on('dp.show', function(){
+                return $(this).data('DateTimePicker').minDate(e.date._d);
+            });
+
         });
 
         $('#shiftTo').on('dp.change', function(e){
@@ -151,6 +156,10 @@ angular.module('timeSheetApp')
             else if(text == 'save')
             {
                 $scope.saveSite($scope.valid);
+            }
+            else if(text == 'update')
+            {
+                $scope.updateSite($scope.valid);
             }
         };
 
@@ -221,7 +230,7 @@ angular.module('timeSheetApp')
 
 
         $scope.cancelSite = function () {
-                /** @reatin - retaining scope value.**/ 
+                /** @reatin - retaining scope value.**/
                 $rootScope.retain=1;
         		$location.path('/sites');
         };
@@ -509,9 +518,9 @@ angular.module('timeSheetApp')
 
                  if($rootScope.retain == 1){
 
-                    $scope.localStorage = getLocalStorage.getSearch(); 
-                    console.log('Local storage---',$scope.localStorage);  
-                
+                    $scope.localStorage = getLocalStorage.getSearch();
+                    console.log('Local storage---',$scope.localStorage);
+
                     if($scope.localStorage){
                         $scope.pages.currPage = $scope.localStorage.currPage;
                         $scope.searchProject = {id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
@@ -522,20 +531,20 @@ angular.module('timeSheetApp')
 
                     var searchCriteras  = $scope.localStorage;
                  }else{
-                    var searchCriteras  = $scope.searchCriteria;   
+                    var searchCriteras  = $scope.searchCriteria;
                  }
-                 
+
                  /* Localstorage (Retain old values while edit page to list) end */
-                
+
             SiteComponent.search(searchCriteras).then(function (data) {
                 $scope.sites = data.transactions;
                 $scope.sitesLoader = true;
 
-                 
-                 /** retaining list search value.**/  
+
+                 /** retaining list search value.**/
                 getLocalStorage.updateSearch(searchCriteras);
 
-                
+
                  /*
                     ** Call pagination  main function **
                 */
@@ -584,7 +593,7 @@ angular.module('timeSheetApp')
         $scope.initLoad = function(){
            $scope.loadPageTop();
            //$scope.loadSites();
-           $scope.setPage(1); 
+           $scope.setPage(1);
          }
 
 
@@ -601,11 +610,11 @@ angular.module('timeSheetApp')
             }
 
             //alert(page);
-            
+
                $scope.pages.currPage = page;
-               $scope.search(); 
-            
-            
+               $scope.search();
+
+
         };
 
 
