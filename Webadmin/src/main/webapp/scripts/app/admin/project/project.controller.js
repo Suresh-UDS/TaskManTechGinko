@@ -99,9 +99,44 @@ angular.module('timeSheetApp')
         $scope.loadProjectsList = function () {
             ProjectComponent.findAll().then(function (data) {
                 $scope.projectsList = data;
-
+                for(var i=0;i<$scope.projectsList.length;i++)
+                {
+                    $scope.uiClient[i] = $scope.projectsList[i].name;
+                }
             });
         };
+
+        // Load Clients for selectbox //
+        $scope.clienteDisable = true;
+        $scope.uiClient = [];
+
+        // $scope.$watch('selectedProject', function(newVal, oldVal) {
+        //     if (newVal !== oldVal) {
+        //         if ($scope.uiClient.indexOf(newVal) === -1) {
+        //             $scope.uiClient.unshift(newVal);
+        //         }
+        //     }
+        // });
+
+
+        $scope.getClient = function (search) {
+
+            var newSupes = $scope.uiClient.slice();
+            if (search && newSupes.indexOf(search) === -1) {
+                newSupes.unshift(search);
+            }
+
+            return newSupes;
+        }
+
+        $scope.selectProject = function(project)
+        {
+            $scope.searchProject = $scope.projectsList[$scope.uiClient.indexOf(project)]
+            console.log($scope.searchProject)
+        }
+
+        //
+
 
         $scope.loadProjects = function () {
             $scope.clearFilter();

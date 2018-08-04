@@ -272,7 +272,7 @@
 	                                    {{item.startTime | date:'hh:mm a'}} - {{item.endTime | date:'hh:mm a'}}
 	                                    <span class="badge badge-default badge-pill" ng-click="removeItem($index)"><i class="material-icons">remove_circle</i></span>
 	                                </li>
-	
+
 	                            </ul>
 
 	                        </div>
@@ -284,13 +284,21 @@
                         <div class="col-md-12">
 
 
-                            <button type="submit" ng-click="cancelSite()"
+                            <button type="submit" ng-click="conform('cancel')"
                                     id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
-                            <button type="submit" type="submit" ng-click="updateSite(form.$invalid)"
-                                    id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
-                                        <i class="material-icons">check</i>
-                                    </span>Update site</button>
+                            <!--<button type="submit" type="submit" ng-click="updateSite(form.$invalid)"-->
+                                    <!--id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">-->
+                                        <!--<i class="material-icons">check</i>-->
+                                    <!--</span>Update site</button>-->
+
+                            <button type="submit" type="submit" ng-click="conform('update',form.$invalid)" id="form-button-save"
+                                    ng-disabled="form.$invalid"  class="btn btn-success ld ld-over-inverse pull-right"
+                                    ng-class="{'running':saveLoad}">
+                                <span class="btn-label"><i class="material-icons">check</i></span> Update site
+                                <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                            </button>
+
 
                             <div class="clearfix"></div>
                         </div>
