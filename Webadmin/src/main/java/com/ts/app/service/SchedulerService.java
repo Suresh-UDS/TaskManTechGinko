@@ -1029,6 +1029,9 @@ public class SchedulerService extends AbstractService {
 		job.setParentJobId(parentJob.getId());
 		job.setParentJob(parentJob);
 		job.setJobType(parentJob.getType());
+		job.setZone(parentJob.getZone());
+		job.setFloor(parentJob.getFloor());
+		job.setBlock(parentJob.getBlock());
 		log.debug("Job status in scheduler {}",job.getJobStatus());
         if(CollectionUtils.isNotEmpty(parentJob.getChecklistItems())) {
             List<JobChecklist> jobclList = parentJob.getChecklistItems();

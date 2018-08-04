@@ -72,23 +72,23 @@ export class TabsPage {
         this.appVersionNumber = response;
     });
 
-    // this.authService.getCurrentVersion('Android').subscribe(
-    //     response=>{
-    //         var currentVersion = response.json()[0];
-    //         console.log(currentVersion.applicationVersion);
-    //         console.log(this.appVersionNumber);
-    //         if(this.appVersionNumber && this.appVersionNumber != currentVersion.applicationVersion ){
-    //             console.log("Application needs to be updated");
-    //             this.navCtrl.push(UpdateApp);
-    //
-    //         }else{
-    //             console.log("Application up to date");
-    //
-    //             // this.market.open(this.appPackageName);
-    //             // this.platform.exitApp();
-    //         }
-    //     }
-    // );
+    this.authService.getCurrentVersion('Android').subscribe(
+        response=>{
+            var currentVersion = response.json()[0];
+            console.log(currentVersion.applicationVersion);
+            console.log(this.appVersionNumber);
+            if(this.appVersionNumber && this.appVersionNumber != currentVersion.applicationVersion ){
+                console.log("Application needs to be updated");
+                this.navCtrl.push(UpdateApp);
+
+            }else{
+                console.log("Application up to date");
+
+                // this.market.open(this.appPackageName);
+                // this.platform.exitApp();
+            }
+        }
+    );
     console.log(this.network.type);
     var session = window.localStorage.getItem('session');
       if(window.localStorage.getItem('session')){
@@ -129,11 +129,11 @@ export class TabsPage {
         })
             .then((db: SQLiteObject) => {
 
-                db.executeSql('DROP TABLE assetList',{})
-
-                db.executeSql('create table IF NOT EXISTS assetList(id INT,name VARCHAR(32))', {})
-                    .then(() => console.log('Executed SQL'))
-                    .catch(e => console.log(e));
+                // db.executeSql('DROP TABLE assetList',{})
+                //
+                // db.executeSql('create table IF NOT EXISTS assetList(id INT,name VARCHAR(32))', {})
+                //     .then(() => console.log('Executed SQL'))
+                //     .catch(e => console.log(e));
 
 
                 for (var i = 0; i < siteList.length; i++) {
@@ -153,11 +153,17 @@ export class TabsPage {
       window.localStorage.removeItem('offlineAttendanceData');
       for(var i of this.sites){
           console.log(i);
-          this.siteService.searchSiteEmployee(i.siteId).subscribe(
+          var searchCriteria = {
+              currPage:1,
+              pageSort: 15,
+              siteId:i.siteId
+          };
+          // this.siteService.searchSiteEmployee(i.siteId).subscribe(
+          this.attendanceService.searchEmpAttendances(searchCriteria).subscribe(
               response=>{
                   console.log("Attendance data in tabs page");
-                  console.log(response.json());
-                  this.offlineAttendanceData.push(response.json());
+                  console.log(response.transactions);
+                  this.offlineAttendanceData.push(response.transactions);
                   window.localStorage.setItem('offlineAttendanceData',JSON.stringify(this.offlineAttendanceData));
               }
           )

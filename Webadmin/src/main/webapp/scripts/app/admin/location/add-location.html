@@ -31,12 +31,19 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="control-label">Client<span class="red-star">*</span> </label>
-                                                    <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control " ng-model="selectedProject"  ng-change="loadDepSites()"  ng-options="project as project.name for project in projectsList">
-                                                        <option value="">Please select Client...</option>
-                                                    </select>
+                                                    <!--<span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                    <!--<select class="form-control " ng-model="selectedProject"  ng-change="loadDepSites()"  ng-options="project as project.name for project in projectsList">-->
+                                                        <!--<option value="">Please select Client...</option>-->
+                                                    <!--</select>-->
+                                                    <span ng-show="clientDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-spinner ld-spin" ></i></span>
+                                                    <span ng-show="!clientDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <ui-select ng-model="selectedProject"  ng-disabled="clientDisable" ng-change="loadDepSites(selectedProject)">
+                                                        <ui-select-match placeholder="Select clients...">{{selectedProject.name}}</ui-select-match>
+                                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
+                                                            <div >{{ client.name || client }}</div>
+                                                        </ui-select-choices>
 
-
+                                                    </ui-select>
 
                                                 </div>
                                             </div>
@@ -46,98 +53,104 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Site<span class="red-star">*</span> </label>
 
-                                                    <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sitesList">
-                                                        <option value="">Select Site...</option>
-                                                    </select>
+                                                    <!--<span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                    <!--<select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sitesList">-->
+                                                        <!--<option value="">Select Site...</option>-->
+                                                    <!--</select>-->
+                                                    <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-spinner ld-spin" ></i></span>
+                                                    <span  ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <ui-select ng-model="selectedSite" ng-disabled="siteDisable" ng-change="loadBloack(selectedSite)" >
+                                                        <ui-select-match placeholder="Select sites...">{{ selectedSite.name}}</ui-select-match>
+                                                        <ui-select-choices   repeat="site in getSites($select.search) | filter: $select.search" >
+                                                            <div >{{site.name || site}}</div>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                    <span ng-if="sitesList.length == 0"><p class="help-block">No sites</p></span>
 
-
-
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label">Block<span class="red-star">*</span> </label>
-                                                    <input type="text" class="form-control InputTxtCaps"
-                                                    ng-model="selectedBlock"
-                                                    name="UserRole" ng-minlength="1" ng-maxlength="50" autofocus
-                                                    required />
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Block<span class="red-star">*</span> </label>
+                                                        <input type="text" class="form-control InputTxtCaps"
+                                                        ng-model="selectedBlock"
+                                                        name="UserRole" ng-minlength="1" ng-maxlength="50" autofocus
+                                                        required />
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label">Floor<span class="red-star">*</span> </label>
-                                                    <input type="text" class="form-control InputTxtCaps"
-                                                    ng-model="selectedFloor"
-                                                    name="UserRole" ng-minlength="1" ng-maxlength="50" autofocus
-                                                    required />
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Floor<span class="red-star">*</span> </label>
+                                                        <input type="text" class="form-control InputTxtCaps"
+                                                        ng-model="selectedFloor"
+                                                        name="UserRole" ng-minlength="1" ng-maxlength="50" autofocus
+                                                        required />
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label">Zone<span class="red-star">*</span> </label>
-                                                    <input type="text" class="form-control InputTxtCaps"
-                                                    ng-model="selectedZone"
-                                                    name="UserRole" ng-minlength="1" ng-maxlength="50" autofocus
-                                                    required />
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Zone<span class="red-star">*</span> </label>
+                                                        <input type="text" class="form-control InputTxtCaps"
+                                                        ng-model="selectedZone"
+                                                        name="UserRole" ng-minlength="1" ng-maxlength="50" autofocus
+                                                        required />
 
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
 
 
-                                        <div class="row">
+                                            <div class="row">
 
-                                            <div class="col-md-12 txt-align-rgt">
-                                                <div class="form-group">
+                                                <div class="col-md-12 txt-align-rgt">
+                                                    <div class="form-group">
 
-                                                    <button class="btn btn-success" type="submit" ng-click="saveLocation()"
-                                                            id="form-button-save" ng-disabled="form.$invalid">
-                                                        <span class="btn-label"><i class="material-icons">check</i></span> Save
-                                                    </button>
-                                                    <button class="btn btn-danger" type="button"
-                                                            ng-click="cancelLocation()" id="cancel-button">
-                                                        <i class="material-icons">close</i> Cancel
-                                                    </button>
+                                                        <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" ng-click="conform('save')"
+                                                                type="submit" id="form-button-save" ng-disabled="form.$invalid ">
+                                                            <span class="btn-label"><i class="material-icons">check</i></span> Save
+                                                            <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                                                        </button>
 
+
+                                                        <button class="btn btn-danger" type="button"
+                                                                ng-click="conform('cancel')" id="cancel-button">
+                                                            <i class="material-icons">close</i> Cancel
+                                                        </button>
+
+                                                    </div>
                                                 </div>
                                             </div>
+
                                         </div>
-
-
-
-
-
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class='small-loading hidden' id='FormLoading'>Loading,
-                            saving data...</div>
+                            <div class='small-loading hidden' id='FormLoading'>Loading,
+                                saving data...</div>
 
-                        <div class="form-group">
-                            <div id='report-error' class='report-div error bg-danger'
-                                 style="display: none"></div>
-                            <div id='report-success' class='report-div success bg-success'
-                                 style="display: none"></div>
-                        </div>
+                            <div class="form-group">
+                                <div id='report-error' class='report-div error bg-danger'
+                                     style="display: none"></div>
+                                <div id='report-success' class='report-div success bg-success'
+                                     style="display: none"></div>
+                            </div>
 
-                    </form>
+                        </form>
+                    </div>
+
                 </div>
 
             </div>
-
         </div>
+
+
     </div>
-
-
-</div>

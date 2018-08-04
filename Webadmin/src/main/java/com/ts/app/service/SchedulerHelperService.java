@@ -327,6 +327,7 @@ public class SchedulerHelperService extends AbstractService {
 						if (CollectionUtils.isNotEmpty(shifts)) {
 							//List<Shift> shifts = site.getShifts();
 							content = new StringBuilder("Site Name - " + site.getName() + SchedulerService.LINE_SEPARATOR);
+                            int shiftStartLeadTime = Integer.valueOf(env.getProperty("attendance.shiftStartLeadTime"));
 							for (Shift shift : shifts) {
 								empCntInShift = 0;
 								String startTime = shift.getStartTime();
@@ -334,6 +335,8 @@ public class SchedulerHelperService extends AbstractService {
 								Calendar startCal = Calendar.getInstance();
 								startCal.setTime(date);
 								//startCal.add(Calendar.DAY_OF_MONTH, -1);
+//								startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
+//								Subtracting shift lead time with the shift start time  -- Karthick..
 								startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
 								startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
 								startCal.set(Calendar.SECOND, 0);
@@ -359,9 +362,10 @@ public class SchedulerHelperService extends AbstractService {
 								// shift.getStartTime(), shift.getEndTime());
 								empCntInShift = empShiftRepo.findEmployeeCountBySiteAndShift(site.getId(), DateUtil.convertToSQLDate(startCal.getTime()),
 										DateUtil.convertToSQLDate(endCal.getTime()));
-								if (empCntInShift == 0) {
-									empCntInShift = employeeRepository.findCountBySiteId(site.getId());
-								}
+//								if (empCntInShift == 0) {
+//									empCntInShift = employeeRepository.findCountBySiteId(site.getId());
+//								}
+								startCal.add(Calendar.HOUR_OF_DAY, -shiftStartLeadTime);
 
 								//long attendanceCount = attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(startCal.getTime()),
 								//		DateUtil.convertToSQLDate(endCal.getTime()));

@@ -1,24 +1,24 @@
 <ion-header no-border>
-  <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Jobs</ion-title>
-      <!--<ion-buttons right>-->
-          <!--<button color="primary" ion-button clear (click)="scanQR()" class="add-btn">-->
-              <!--<i class="fa fa-qrcode clr-orange fnt-24"></i>-->
-          <!--</button>-->
-      <!--</ion-buttons>-->
-  </ion-navbar>
-        <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800">
-            <ion-segment-button value="today" (click)="loadTodaysJobs()">
-                Today's Jobs
-            </ion-segment-button>
-            <ion-segment-button value="jobs" (click)="loadAllJobs()">
-                All Jobs
-            </ion-segment-button>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Jobs</ion-title>
+        <ion-buttons right>
+        <button color="primary" ion-button clear (click)="scanQR()" class="add-btn">
+        <i class="fa fa-qrcode clr-orange fnt-24"></i>
+        </button>
+        </ion-buttons>
+    </ion-navbar>
+    <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800">
+        <ion-segment-button value="today" (click)="loadTodaysJobs()">
+            Today's Jobs
+        </ion-segment-button>
+        <ion-segment-button value="jobs" (click)="loadAllJobs()">
+            All Jobs
+        </ion-segment-button>
 
-        </ion-segment>
+    </ion-segment>
 
 
 </ion-header>
@@ -29,7 +29,7 @@
     </ion-fab>
 
     <!--<ion-fab top right edge >-->
-        <!--<button has-permission="JobsCreate" (click)="addJob()" ion-fab><ion-icon name="add"></ion-icon></button>-->
+    <!--<button has-permission="JobsCreate" (click)="addJob()" ion-fab><ion-icon name="add"></ion-icon></button>-->
     <!--</ion-fab>-->
 
     <div [ngSwitch]="categories">
@@ -112,7 +112,7 @@
                             <button ion-button clear color="primary"><ion-icon name="md-eye" (click)="viewJob(job)" class="fnt-24 act-btn-view"></ion-icon></button>
                         </div>
                         <!--<div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">-->
-                            <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
+                        <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
                         <!--</div>-->
                         <div >
                             <button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>
