@@ -662,7 +662,7 @@ angular.module('timeSheetApp')
         $scope.editAsset = function(){
              //alert($stateParams.id);
              if(!$stateParams.id){
-                
+
                 $location.path('/assets');
              }
             console.log($stateParams.id);

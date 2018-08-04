@@ -771,9 +771,14 @@
 
                                                                     <h4>{{assetCode}}</h4>
 
-                                                                    <div class="QrcodeCon" ng-show="qr_img">
+                                                                    <div class="QrcodeCon" ng-if="qr_img">
 
                                                                         <img ng-src="{{qr_img}}" width="50%">
+
+                                                                    </div>
+                                                                    <div class="QrcodeCon" ng-if="!qr_img">
+
+                                                                        <h4>-- No QR image --</h4>
 
                                                                     </div>
                                                                 </div>
