@@ -178,7 +178,7 @@ angular.module('timeSheetApp')
                 var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
 	    		var siteId = $scope.selectedSite ? $scope.selectedSite.id : 0;
 	    		LocationComponent.findBlocks(projectId,siteId).then(function (data) {
-	    			$scope.selectedBlock = null;
+	    			//$scope.selectedBlock = null;
 	            $scope.blocks = data;
 	        });
 	    };
@@ -189,7 +189,7 @@ angular.module('timeSheetApp')
                 var siteId = $scope.selectedSite ? $scope.selectedSite.id : 0;
 
 	    		LocationComponent.findFloors(projectId,siteId,$scope.selectedBlock).then(function (data) {
-	    			$scope.selectedFloor = null;
+	    			//$scope.selectedFloor = null;
 	            $scope.floors = data;
 	        });
 	    };
@@ -199,7 +199,7 @@ angular.module('timeSheetApp')
 	    		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
                 var siteId = $scope.selectedSite ? $scope.selectedSite.id : 0;
 	    		LocationComponent.findZones(projectId,siteId,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
-	    			$scope.selectedZone = null;
+	    			//$scope.selectedZone = null;
 	            $scope.zones = data;
 	        });
 	    };
@@ -268,6 +268,9 @@ angular.module('timeSheetApp')
 
 
         $scope.editJob = function(){
+            if(!$stateParams.id){
+                $location.path('/jobs');
+            }
         	JobComponent.findById($stateParams.id).then(function(data){
                 $scope.loadingStop();
         	    console.log("Job details",data);
@@ -383,34 +386,35 @@ angular.module('timeSheetApp')
 	            	$scope.job.plannedHours = 1;
                     $scope.job.plannedStartTime = $filter('date')(new Date(), 'EEE, dd MMM yyyy HH:mm:ss Z');
 
-	        	}
-	        	if($stateParams.ticketId){
-                TicketComponent.getTicketDetails($stateParams.ticketId).then(function(data){
-                    console.log("Ticket details");
-                    console.log(data);
-                    $scope.job.title =data.title;
-                    $scope.job.description = data.description;
-                    $scope.job.ticketId = data.id;
+	        	
+    	        	if($stateParams.ticketId){
+                    TicketComponent.getTicketDetails($stateParams.ticketId).then(function(data){
+                        console.log("Ticket details");
+                        console.log(data);
+                        $scope.job.title =data.title;
+                        $scope.job.description = data.description;
+                        $scope.job.ticketId = data.id;
 
-                     /*if(data.siteId){
+                         /*if(data.siteId){
 
-                        SiteComponent.findOne(data.siteID).then(function (data) {
-                            console.log(data);
-                            $scope.selectedSite = null;
-                            $scope.selectedSite = data.name;
-                            alert($scope.selectedSite);
-                        })
-                    }*/
-                       $scope.selectedSite = {id:data.siteId};
-                       $scope.selectedEmployee = {id:data.employeeId};
-                       $scope.selectedBlock = {name:data.block};
-                       $scope.selectedFloor = {name:data.floor};
-                       $scope.selectedZone = {name:data.zone};
-                       $scope.loadEmployees();
-                       $scope.status = 1;
+                            SiteComponent.findOne(data.siteID).then(function (data) {
+                                console.log(data);
+                                $scope.selectedSite = null;
+                                $scope.selectedSite = data.name;
+                                alert($scope.selectedSite);
+                            })
+                        }*/
+                           $scope.selectedSite = {id:data.siteId};
+                           $scope.selectedEmployee = {id:data.employeeId};
+                           $scope.selectedBlock = {name:data.block};
+                           $scope.selectedFloor = {name:data.floor};
+                           $scope.selectedZone = {name:data.zone};
+                           $scope.loadEmployees();
+                           $scope.status = 1;
 
 
-                })
+                    })
+                }
             }
         };
 
