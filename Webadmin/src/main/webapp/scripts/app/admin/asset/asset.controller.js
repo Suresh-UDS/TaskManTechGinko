@@ -661,6 +661,10 @@ angular.module('timeSheetApp')
 
         $scope.editAsset = function(){
              //alert($stateParams.id);
+             if(!$stateParams.id){
+                
+                $location.path('/assets');
+             }
             console.log($stateParams.id);
             $rootScope.loadingStart();
 
@@ -1093,45 +1097,46 @@ angular.module('timeSheetApp')
         });
 
 
-
+        $('#warFromDate').datetimepicker().on('dp.show', function () {
+            return $(this).data('DateTimePicker').minDate(new Date());
+        });
 
         $('input#warFromDate').on('dp.change', function(e){
 
-            $scope.warToDate = "";
-            $scope.warToDate1 = "";
-            console.log($scope.warToDate1);
             $scope.assetGen.warrantyFromDate =  e.date._d;
 
             $scope.warFromDate1 = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $scope.warFromDate = e.date._d;
+            
+            if($scope.warToDate){
 
-
-            // if($scope.warFromDate > $scope.warToDate) {
-            //
-            //         //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
-            //         $scope.warFromMsg = true;
-            //
-            //
-            //         //return false;
-            // }else {
-            //
-            //    $scope.warFromMsg =false;
-            //
-            //
-            // }
-            //
-            // if($scope.warToDate < $scope.warFromDate) {
-            //         //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
-            //         $scope.warToMsg =true;
-            //
-            //
-            //         //return false;
-            // }else {
-            //
-            //      $scope.warToMsg =false;
-            //
-            //
-            // }
+                if($scope.warFromDate > $scope.warToDate) {
+                
+                        //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
+                        $scope.warFromMsg = true;
+                
+                
+                        //return false;
+                }else {
+                
+                   $scope.warFromMsg =false;
+                
+                
+                }
+                
+                if($scope.warToDate < $scope.warFromDate) {
+                        //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+                        $scope.warToMsg =true;
+                
+                
+                        //return false;
+                }else {
+                
+                     $scope.warToMsg =false;
+                
+                
+                }
+            }
         });
 
          $scope.warToMsg =false;
@@ -1141,32 +1146,35 @@ angular.module('timeSheetApp')
             $scope.warToDate1 = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $scope.warToDate = e.date._d;
 
-            // if($scope.warToDate < $scope.warFromDate) {
-            //         //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
-            //         $scope.warToMsg =true;
-            //
-            //
-            //         //return false;
-            // }else {
-            //
-            //      $scope.warToMsg =false;
-            //
-            //
-            // }
-            //
-            // if($scope.warFromDate > $scope.warToDate) {
-            //
-            //         //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
-            //         $scope.warFromMsg = true;
-            //
-            //
-            //         //return false;
-            // }else {
-            //
-            //    $scope.warFromMsg =false;
-            //
-            //
-            // }
+            if($scope.warFromDate){
+
+                if($scope.warToDate < $scope.warFromDate) {
+                        //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+                        $scope.warToMsg =true;
+                
+                
+                        //return false;
+                }else {
+                
+                     $scope.warToMsg =false;
+                
+                
+                }
+                
+                if($scope.warFromDate > $scope.warToDate) {
+                
+                        //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
+                        $scope.warFromMsg = true;
+                
+                
+                        //return false;
+                }else {
+                
+                   $scope.warFromMsg =false;
+                
+                
+                }
+            }
         });
 
         $('input#searchAcquiredDate').on('dp.change', function(e){
