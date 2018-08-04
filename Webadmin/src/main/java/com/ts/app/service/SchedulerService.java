@@ -1076,7 +1076,7 @@ public class SchedulerService extends AbstractService {
 		return schedulerConfigRepository.findScheduledTask(taskDate, schedule);
 	}
 	
-	@Scheduled(cron = "0 5 * * * ?")
+	@Scheduled(cron = "0 */5 * * * ?")
 	public void slaTicketEscalationNotification() 
 	{
 		String mailStatus = "";
