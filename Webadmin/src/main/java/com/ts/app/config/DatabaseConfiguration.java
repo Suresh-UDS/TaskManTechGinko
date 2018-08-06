@@ -28,6 +28,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.codahale.metrics.MetricRegistry;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.security.CustomUserDetailsService;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @EnableJpaRepositories("com.ts.app.repository")
@@ -56,44 +58,44 @@ public class DatabaseConfiguration {
 			throw new ApplicationContextException("Database connection pool is not configured correctly");
 		}
 
+		/*
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
 		dataSource.setDriverClassName(dataSourceProperties.getDriverClassName());
 		dataSource.setUrl(dataSourceProperties.getUrl());
 		dataSource.setUsername(dataSourceProperties.getUsername());
 		dataSource.setPassword(dataSourceProperties.getPassword());
+		*/
 
-		/*
-		 * HikariConfig config = new HikariConfig();
-		 * //config.setDataSourceClassName(dataSourceProperties.
-		 * getDriverClassName());
-		 * config.setDriverClassName(dataSourceProperties.getDriverClassName());
-		 * config.setJdbcUrl(dataSourceProperties.getUrl());
-		 * config.addDataSourceProperty("url", dataSourceProperties.getUrl());
-		 * if (dataSourceProperties.getUsername() != null) {
-		 * config.addDataSourceProperty("user",
-		 * dataSourceProperties.getUsername()); } else {
-		 * config.addDataSourceProperty("user", ""); // HikariCP doesn't allow
-		 * null user } if (dataSourceProperties.getPassword() != null) {
-		 * config.addDataSourceProperty("password",
-		 * dataSourceProperties.getPassword()); } else {
-		 * config.addDataSourceProperty("password", ""); // HikariCP doesn't
-		 * allow null password }
-		 * 
-		 * //MySQL optimizations, see
-		 * https://github.com/brettwooldridge/HikariCP/wiki/MySQL-Configuration
-		 * if ("com.mysql.jdbc.jdbc2.optional.MysqlDataSource".equals(
-		 * dataSourceProperties.getDriverClassName())) {
-		 * config.addDataSourceProperty("cachePrepStmts",
-		 * jHipsterProperties.getDatasource().isCachePrepStmts());
-		 * config.addDataSourceProperty("prepStmtCacheSize",
-		 * jHipsterProperties.getDatasource().getPrepStmtCacheSize());
-		 * config.addDataSourceProperty("prepStmtCacheSqlLimit",
-		 * jHipsterProperties.getDatasource().getPrepStmtCacheSqlLimit()); } if
-		 * (metricRegistry != null) { config.setMetricRegistry(metricRegistry);
-		 * } return new HikariDataSource(config);
-		 */
-		return dataSource;
+		HikariConfig config = new HikariConfig();
+		//config.setDataSourceClassName(dataSourceProperties.getDriverClassName());
+		//config.setDriverClassName(dataSourceProperties.getDriverClassName());
+		config.setJdbcUrl(dataSourceProperties.getUrl());
+		config.addDataSourceProperty("url", dataSourceProperties.getUrl());
+		if (dataSourceProperties.getUsername() != null) {
+			config.addDataSourceProperty("user", dataSourceProperties.getUsername());
+		} else {
+			config.addDataSourceProperty("user", ""); // HikariCP doesn't allow null user
+		}
+		if (dataSourceProperties.getPassword() != null) {
+			config.addDataSourceProperty("password", dataSourceProperties.getPassword());
+		} else {
+			config.addDataSourceProperty("password", ""); // HikariCP doesn't allow null password
+		}
+
+		// MySQL optimizations, see https://github.com/brettwooldridge/HikariCP/wiki/MySQL-Configuration
+		if ("com.mysql.jdbc.Driver".equals(dataSourceProperties.getDriverClassName())) {
+			config.addDataSourceProperty("cachePrepStmts", jHipsterProperties.getDatasource().isCachePrepStmts());
+			config.addDataSourceProperty("prepStmtCacheSize",
+					jHipsterProperties.getDatasource().getPrepStmtCacheSize());
+			config.addDataSourceProperty("prepStmtCacheSqlLimit",
+					jHipsterProperties.getDatasource().getPrepStmtCacheSqlLimit());
+		}
+		if (metricRegistry != null) {
+			config.setMetricRegistry(metricRegistry);
+		}
+		return new HikariDataSource(config);
+		//return dataSource;
 	}
 	/**
 	 * Open the TCP port for the H2 database, so it is available remotely.
