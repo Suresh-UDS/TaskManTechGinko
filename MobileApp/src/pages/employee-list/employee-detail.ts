@@ -31,6 +31,7 @@ import {QuotationService} from "../service/quotationService";
   templateUrl: 'employee-detail.html',
 })
 export class EmployeeDetailPage {
+  isLoading:boolean;
 
   empDetail:any;
   categories:any;
@@ -116,14 +117,16 @@ export class EmployeeDetailPage {
   loadJobs()
   {
     this.component.showLoader('Getting All Jobs');
+    this.isLoading=true;
     var search={empId:this.empDetail.id};
     this.jobService.getJobs(search).subscribe(response=>{
-      console.log("Job Refresher");
+        this.component.closeLoader();
+        this.isLoading=false;
+        console.log("Job Refresher");
       console.log(response);
       this.jobs = response.transactions;
         console.log(this.jobs);
         console.log(this.jobs.length);
-      this.component.closeLoader();
     })
   }
 

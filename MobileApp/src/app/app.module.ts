@@ -108,7 +108,7 @@ import{CalenderPage} from "../pages/calender-page/calender-page";
 
 import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-filter";
 import {JobFilter} from "../pages/jobs/job-filter/job-filter";
-import{SQLite,SQLiteObject} from "@ionic-native/sqlite";
+import{SQLite} from "@ionic-native/sqlite";
 import {DBService} from "../pages/service/dbService";
 import {Network} from "@ionic-native/network";
 import {Diagnostic} from "@ionic-native/diagnostic";
@@ -124,6 +124,7 @@ import{ChangePassword} from "../pages/change-password/change-password";
 import{LocationAccuracy} from "@ionic-native/location-accuracy";
 import{UpdateApp} from "../pages/update-app/update-app";
 import{ForgotPassword} from "../pages/forgot-password/forgot-password";
+import{InventoryFilter} from "../pages/inventory-filter/inventory-filter";
 
 @NgModule({
   declarations: [
@@ -207,7 +208,8 @@ import{ForgotPassword} from "../pages/forgot-password/forgot-password";
       ChangePassword,
       InventoryMaster,
       UpdateApp,
-      ForgotPassword
+      ForgotPassword,
+      InventoryFilter,
   ],
   imports: [
     BrowserModule,
@@ -302,7 +304,8 @@ import{ForgotPassword} from "../pages/forgot-password/forgot-password";
       ChangePassword,
       InventoryMaster,
       UpdateApp,
-      ForgotPassword
+      ForgotPassword,
+      InventoryFilter
 
 
   ],

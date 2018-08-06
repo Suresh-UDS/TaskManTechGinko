@@ -314,11 +314,10 @@
         <ion-refresher-content></ion-refresher-content>
       </ion-refresher>
 
-      <div *ngIf="attendances?.length==0" text-center="">
-        <ion-card text-center="">
-          <ion-card-content>
-            No data found
-          </ion-card-content>
+      <div *ngIf="attendances?.length==0" text-center="" class="attendance">
+        <ion-card>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
         </ion-card>
       </div>
       <ion-row class="margin0 white-bg padding10 margin-bottom25 width98 margin-side-auto" *ngFor="let a of attendances">

@@ -21,7 +21,7 @@ import {componentService} from "../service/componentService";
   templateUrl: 'site-list.html',
 })
 export class SiteListPage {
-
+isLoading:boolean;
   siteList:any;
   userGroup:any;
   employeeId:any;
@@ -69,8 +69,9 @@ export class SiteListPage {
   }
 
   ionViewWillEnter(){
-
+      this.isLoading=true;
       this.siteService.searchSite().subscribe(response=>{
+        this.isLoading=false;
         console.log(response.json());
         this.siteList = response.json();
         this.userGroup = window.localStorage.getItem('userGroup');
