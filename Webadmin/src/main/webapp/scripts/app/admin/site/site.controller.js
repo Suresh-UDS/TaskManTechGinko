@@ -151,6 +151,8 @@ angular.module('timeSheetApp')
         $rootScope.back = function (text) {
             if(text == 'cancel')
             {
+                /** @reatin - retaining scope value.**/
+                $rootScope.retain=1;
                 $scope.cancelSite();
             }
             else if(text == 'save')
@@ -159,6 +161,8 @@ angular.module('timeSheetApp')
             }
             else if(text == 'update')
             {
+                /** @reatin - retaining scope value.**/
+                $rootScope.retain=1;
                 $scope.updateSite($scope.valid);
             }
         };
@@ -230,8 +234,7 @@ angular.module('timeSheetApp')
 
 
         $scope.cancelSite = function () {
-                /** @reatin - retaining scope value.**/
-                $rootScope.retain=1;
+            
         		$location.path('/sites');
         };
 
@@ -465,9 +468,9 @@ angular.module('timeSheetApp')
         		}else {
         			$scope.searchCriteria.findAll = true;
         		}
-        	}else if($scope.searchSite || $scope.searchProject) {
+        	}else if(($scope.searchSite && $scope.searchSite.searchStatus != '0') || ($scope.searchProject && $scope.searchProject.searchStatus != '0')) {
         		$scope.searchCriteria.findAll = false;
-	        	if($scope.searchSite) {
+	        	if($scope.searchSite  && $scope.searchSite.searchStatus != '0') {
 		        	$scope.searchCriteria.siteId = $scope.searchSite.id;
 		        	if(!$scope.searchCriteria.siteId) {
 		        		$scope.searchCriteria.siteName = $scope.searchSite.name;
@@ -476,20 +479,18 @@ angular.module('timeSheetApp')
 		        	}
 		        	console.log('selected site id ='+ $scope.searchCriteria.siteId);
 	        	}else {
-	        		$scope.searchCriteria.siteId = 0;
+	        		$scope.searchCriteria.siteId = null;
 	        	}
 
-	        	if($scope.searchProject) {
+	        	if($scope.searchProject && $scope.searchProject.searchStatus != '0') {
 		        	$scope.searchCriteria.projectId = $scope.searchProject.id;
 		        	if(!$scope.searchCriteria.projectId) {
-		        		$scope.searchCriteria.projectName = $scope.searchProject;
+		        		$scope.searchCriteria.projectName = $scope.searchProject.name;
 		        		console.log('selected project name ='+ $scope.searchProject + ', ' +$scope.searchCriteria.projectName);
-		        	}else {
-			        	$scope.searchCriteria.projectName = $scope.searchProject.name;
 		        	}
 		        	console.log('selected project id ='+ $scope.searchCriteria.projectId);
 	        	}else {
-	        		$scope.searchCriteria.projectId = 0;
+	        		$scope.searchCriteria.projectId = null;
 	        	}
 
         	}
@@ -523,14 +524,15 @@ angular.module('timeSheetApp')
 
                     if($scope.localStorage){
                         $scope.pages.currPage = $scope.localStorage.currPage;
-                        $scope.searchProject = {id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
-                        $scope.searchSite = {id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
+                        $scope.searchProject = {searchStatus:'0',id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
+                        $scope.searchSite = {searchStatus:'0',id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
                     }
 
                     $rootScope.retain = 0;
 
                     var searchCriteras  = $scope.localStorage;
                  }else{
+
                     var searchCriteras  = $scope.searchCriteria;
                  }
 
