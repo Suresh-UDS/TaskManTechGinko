@@ -18,7 +18,7 @@ angular.module('timeSheetApp')
         $scope.isEdit = !!$stateParams.id;
         $scope.selectedAssetType = {};
         $scope.searchAssetType = null;
-            $scope.searchName = null;
+        $scope.searchName = null;
         $scope.manufacturer = {};
         $scope.pager = {};
         $scope.noData = false;
@@ -64,7 +64,7 @@ angular.module('timeSheetApp')
         $scope.loadAllAssetTypes = function() {
                 //$scope.loadingStart();
         		AssetTypeComponent.findAll().then(function (data) {
-                $scope.selectedAssetType = null;
+                //$scope.selectedAssetType = null;
                 $scope.assetTypes = data;
                 console.log('Asset type',$scope.assetTypes);
                 $scope.loadingStop();
