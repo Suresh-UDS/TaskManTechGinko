@@ -139,6 +139,8 @@ reports:
         url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/attendance-reports
     asset-report:
         url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/asset-report
+    vendor-report:
+        url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/vendor-report
 
 url:
     ticket-view: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/view-ticket
