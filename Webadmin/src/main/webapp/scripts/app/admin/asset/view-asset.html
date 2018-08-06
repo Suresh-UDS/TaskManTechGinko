@@ -34,21 +34,21 @@
                                        <li class=""><a href=".Documents" data-toggle="tab"
                                                      ng-click="getAllUploadedFiles();getAllUploadedPhotos();" >Documents</a></li>
                                        <li class=""><a href=".ppm-tasks" data-toggle="tab"
-                                       ng-click="loadPPMJobs();">PPM Jobs</a></li>
+                                       ng-click="loadSubModule(loadPPMJobs);">PPM Jobs</a></li>
                                        <li class=""><a href=".amc-tasks" data-toggle="tab"
-                                       ng-click="loadAMCJobs();">AMC Jobs</a></li>
+                                       ng-click="loadSubModule(loadAMCJobs);">AMC Jobs</a></li>
                                        <li class="">
                                            <a href=".Tickets" data-toggle="tab"
-                                           ng-click="loadTicket()"> Tickets</a>
+                                           ng-click="loadSubModule(loadTicket)"> Tickets</a>
                                        </li>
                                        <li class=""><a href=".Readings" data-toggle="tab"
-                                       ng-click="loadAssetReadings()">Readings</a></li>
+                                       ng-click="loadSubModule(loadAssetReadings)">Readings</a></li>
                                        
                                         <li class=""><a href=".SiteHistory" data-toggle="tab"
-                                       	ng-click="loadSiteHistory()">SiteHistory</a></li>
+                                       	ng-click="loadSubModule(loadSiteHistory)">SiteHistory</a></li>
                                        
                                         <li class=""><a href=".StatusHistory" data-toggle="tab"
-                                       	ng-click="loadStatusHistory()">StatusHistory</a></li>
+                                       	ng-click="loadSubModule(loadStatusHistory)">StatusHistory</a></li>
 
                                    </ul>
                                    <div class="tab-content TabsContent ViewTables" style="">

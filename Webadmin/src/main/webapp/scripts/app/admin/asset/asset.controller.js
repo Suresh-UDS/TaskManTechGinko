@@ -90,6 +90,7 @@ angular.module('timeSheetApp')
         $scope.minError =false;
         $scope.maxError =false;
         $rootScope.exportStatusObj  ={};
+        $scope.searchModule ="";
 
         //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.searchAcquiredDate = "";
@@ -1745,17 +1746,17 @@ angular.module('timeSheetApp')
 
             //alert(page);
             $scope.pages.currPage = page;
-            if($scope.ppmSearchCriteria.maintenanceType =='PPM'){
+            if($scope.searchModule =='PPM'){
                 $scope.loadPPMJobs();
-            }else if($scope.amcSearchCriteria.maintenanceType =='AMC'){
+            }else if($scope.searchModule =='AMC'){
                 $scope.loadAMCJobs();
-            }else if($scope.redSearchCriteria.module == "Readings"){
+            }else if($scope.searchModule == "Readings"){
                 $scope.loadAssetReadings();
-            }else if($scope.siteHistorySearchCriteria.module == "siteHistory"){
+            }else if($scope.searchModule == "siteHistory"){
                 $scope.loadSiteHistory();
-            }else if($scope.statusHistorySearchCriteria.module == "statusHistory"){
+            }else if($scope.searchModule == "statusHistory"){
                 $scope.loadStatusHistory();
-            }else if($scope.ticketSearchCriteria.module == "Ticket"){
+            }else if($scope.searchModule == "Ticket"){
                 $scope.loadTicket();
             }else{
                $scope.search();
@@ -2562,6 +2563,7 @@ angular.module('timeSheetApp')
 
         $scope.loadAssetReadings = function() {
             $rootScope.loadingStart();
+            $rootScope.loadPageTop();
             var redCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
                     if(!$scope.redSearchCriteria) {
                         var redSearchCriteria = {
@@ -2572,6 +2574,7 @@ angular.module('timeSheetApp')
 
                 $scope.redSearchCriteria.currPage = redCurrPageVal;
                 $scope.redSearchCriteria.module = "Readings";
+                $scope.searchModule = "Readings";
                 $scope.redSearchCriteria.assetId = $stateParams.id;
                 $scope.redSearchCriteria.sort = $scope.pageSort;
             $scope.assetReadings = "";
@@ -2642,6 +2645,7 @@ angular.module('timeSheetApp')
 
         $scope.loadAMCJobs = function() {
             $scope.loadingStart();
+            $rootScope.loadPageTop();
             var amcCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
                     if(!$scope.amcSearchCriteria) {
                         var amcSearchCriteria = {
@@ -2652,7 +2656,8 @@ angular.module('timeSheetApp')
 
                 $scope.amcSearchCriteria.currPage = amcCurrPageVal;
 
-        	$scope.amcSearchCriteria.maintenanceType = "AMC";
+            $scope.amcSearchCriteria.maintenanceType = "AMC";
+        	$scope.searchModule = "AMC";
         	$scope.amcSearchCriteria.assetId = $stateParams.id;
             $scope.amcSearchCriteria.sort = $scope.pageSort;
             $scope.amcJobLists = "";
@@ -2677,6 +2682,7 @@ angular.module('timeSheetApp')
 
         $scope.loadPPMJobs = function() {
                 $scope.loadingStart();
+                $scope.loadPageTop();
                  var ppmCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
                     if(!$scope.ppmSearchCriteria) {
                         var ppmSearchCriteria = {
@@ -2686,7 +2692,8 @@ angular.module('timeSheetApp')
                     }
 
                 $scope.ppmSearchCriteria.currPage = ppmCurrPageVal;
-	        	$scope.ppmSearchCriteria.maintenanceType = "PPM";
+                $scope.ppmSearchCriteria.maintenanceType = "PPM";
+	        	$scope.searchModule  = "PPM";
 	        	$scope.ppmSearchCriteria.assetId = $stateParams.id;
                 $scope.ppmSearchCriteria.sort = $scope.pageSort;
 
@@ -3065,6 +3072,7 @@ angular.module('timeSheetApp')
 
             $scope.loadSiteHistory = function() {
             	$rootScope.loadingStart();
+                $rootScope.loadPageTop();
                     var siteHistoryCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
                             if(!$scope.siteHistoryCriteria) {
                                 var siteHistorySearchCriteria = {
@@ -3074,7 +3082,7 @@ angular.module('timeSheetApp')
                             }
 
                 $scope.siteHistorySearchCriteria.currPage = siteHistoryCurrPageVal;
-                $scope.siteHistorySearchCriteria.module = "siteHistory";
+                $scope.searchModule = "siteHistory";
                 $scope.siteHistorySearchCriteria.assetId = $stateParams.id;
                 $scope.siteHistorySearchCriteria.sort = $scope.pageSort;
                 $scope.siteHistories = "";
@@ -3101,6 +3109,7 @@ angular.module('timeSheetApp')
 
             $scope.loadStatusHistory = function() {
             	$rootScope.loadingStart();
+                $rootScope.loadPageTop();
                     var statusHistoryCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
                             if(!$scope.statusHistoryCriteria) {
                                 var statusHistorySearchCriteria = {
@@ -3111,6 +3120,7 @@ angular.module('timeSheetApp')
 
                 $scope.statusHistorySearchCriteria.currPage = statusHistoryCurrPageVal;
                 $scope.statusHistorySearchCriteria.module = "statusHistory";
+                $scope.searchModule = "statusHistory";
                 $scope.statusHistorySearchCriteria.assetId = $stateParams.id;
                 $scope.statusHistorySearchCriteria.sort = $scope.pageSort;
                 $scope.statusHistories = "";
@@ -3138,6 +3148,7 @@ angular.module('timeSheetApp')
             $scope.loadTicket = function() {
 
                 $rootScope.loadingStart();
+                $rootScope.loadPageTop();
                     var ticketCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
                             if(!$scope.ticketCriteria) {
                                 var ticketSearchCriteria = {
@@ -3148,6 +3159,7 @@ angular.module('timeSheetApp')
 
                 $scope.ticketSearchCriteria.currPage = ticketCurrPageVal;
                 $scope.ticketSearchCriteria.module = "Ticket";
+                $scope.searchModule = "Ticket";
                 $scope.ticketSearchCriteria.assetId = $stateParams.id;
                 $scope.ticketSearchCriteria.sort = $scope.pageSort;
                 $scope.tickets = "";
@@ -3314,6 +3326,12 @@ angular.module('timeSheetApp')
 
         }
 
+      }
+
+      $scope.loadSubModule = function(cb){
+        $scope.pages = {};
+        $scope.pager = {};
+        return cb();
       }
 
 
