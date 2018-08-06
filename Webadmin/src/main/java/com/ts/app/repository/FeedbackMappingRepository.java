@@ -32,4 +32,7 @@ public interface FeedbackMappingRepository extends JpaRepository<FeedbackMapping
 	@Query("SELECT ft FROM FeedbackMapping ft WHERE ft.site.id in (:siteIds)")
 	Page<FeedbackMapping> findBySites(@Param("siteIds") List<Long> siteIds, Pageable pageRequest);
 
+	@Query("SELECT ft FROM FeedbackMapping ft WHERE ft.project.id = :projectId and ft.site.id = :siteId")
+	Page<FeedbackMapping> findByClientAndSite(@Param("projectId") long projectId, @Param("siteId") long siteId, Pageable pageRequest);
+
 }
