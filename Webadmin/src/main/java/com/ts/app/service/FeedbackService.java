@@ -22,6 +22,7 @@ import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Feedback;
 import com.ts.app.domain.FeedbackMapping;
 import com.ts.app.domain.FeedbackQuestion;
+import com.ts.app.domain.Job;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
@@ -36,6 +37,7 @@ import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.FeedbackDTO;
 import com.ts.app.web.rest.dto.FeedbackMappingDTO;
 import com.ts.app.web.rest.dto.FeedbackQuestionDTO;
+import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 
@@ -182,7 +184,8 @@ public class FeedbackService extends AbstractService {
 			List<FeedbackDTO> transitems = null;
 			List<Feedback> feedbackList = null;
 			if(searchCriteria.getProjectId() > 0 || searchCriteria.getSiteId() > 0) {
-				feedbackList = feedbackRepository.findBySite(searchCriteria.getProjectId(), searchCriteria.getSiteId());
+				log.debug("SearchCriteria" +searchCriteria.getProjectId()+ "" +searchCriteria.getSiteId());
+				page = feedbackRepository.findBySite(searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
 			}else {
 				if(user.isAdmin()) {
 					page = feedbackRepository.findAll(pageRequest);
@@ -297,10 +300,13 @@ public class FeedbackService extends AbstractService {
 
 			//Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
 			Page<FeedbackMapping> page = null;
-			List<FeedbackMappingDTO> transitems = null;
+			List<FeedbackMapping> allFeedbackList = new ArrayList<FeedbackMapping>();
+			List<FeedbackMappingDTO> transactions = null;
 			if(!searchCriteria.isFindAll()) {
 				if(StringUtils.isNotEmpty(searchCriteria.getZone())) {
 					page = feedbackMappingRepository.findByLocation(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), pageRequest);
+				}else if(searchCriteria.getProjectId() > 0 && searchCriteria.getSiteId() > 0) { 
+					page = feedbackMappingRepository.findByClientAndSite(searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
 				}
 			}else {
 
@@ -320,9 +326,18 @@ public class FeedbackService extends AbstractService {
 
 			}
 			if(page != null) {
-				transitems = mapperUtil.toModelList(page.getContent(), FeedbackMappingDTO.class);
-				if(CollectionUtils.isNotEmpty(transitems)) {
-					buildSearchResultForMapping(searchCriteria, page, transitems,result);
+				log.debug("Size of page" +page.getSize());
+				allFeedbackList.addAll(page.getContent());
+				if(transactions ==  null) { 
+					transactions = new ArrayList<FeedbackMappingDTO>();
+				}
+				for(FeedbackMapping feedbackMapping : allFeedbackList) {
+					log.debug("Feedback mapping list" +feedbackMapping);
+					transactions.add(mapperUtil.toModel(feedbackMapping, FeedbackMappingDTO.class));
+        		}
+//				transitems = mapperUtil.toModelList(page.getContent(), FeedbackMappingDTO.class);
+				if(CollectionUtils.isNotEmpty(transactions)) {
+					buildSearchResultForMapping(searchCriteria, page, transactions, result);
 				}
 			}
 		}
