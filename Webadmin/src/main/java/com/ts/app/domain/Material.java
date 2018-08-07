@@ -28,6 +28,10 @@ public class Material extends AbstractAuditingEntity implements Serializable{
 	@JoinColumn(name = "siteId", nullable = true)
 	private Site site;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "projectId", nullable = true)
+	private Project project;
+	
 	private String itemCode;
 	
 	private String name;
@@ -54,6 +58,14 @@ public class Material extends AbstractAuditingEntity implements Serializable{
 
 	public void setSite(Site site) {
 		this.site = site;
+	}
+
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
 	}
 
 	public String getItemCode() {

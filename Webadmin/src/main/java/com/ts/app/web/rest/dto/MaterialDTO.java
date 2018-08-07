@@ -9,6 +9,8 @@ public class MaterialDTO extends BaseDTO {
 
 	private long siteId;
 	
+	private long projectId;
+	
 	private String itemCode;
 	
 	private String name;
@@ -35,6 +37,14 @@ public class MaterialDTO extends BaseDTO {
 
 	public void setSiteId(long siteId) {
 		this.siteId = siteId;
+	}
+
+	public long getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(long projectId) {
+		this.projectId = projectId;
 	}
 
 	public String getItemCode() {

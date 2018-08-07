@@ -177,7 +177,13 @@ public class SearchCriteria extends Paginator {
 	private String paramName;
 	
 	private Date assetCreatedDate;
-
+	
+	private String materialName;
+	
+	private String itemCode;
+	
+	private Date materialCreatedDate;
+	
 	public String getWarrantyTypeName() {
 		return warrantyTypeName;
 	}
@@ -929,6 +935,30 @@ public class SearchCriteria extends Paginator {
 
 	public void setAssetCreatedDate(Date assetCreatedDate) {
 		this.assetCreatedDate = assetCreatedDate;
+	}
+
+	public String getMaterialName() {
+		return materialName;
+	}
+
+	public void setMaterialName(String materialName) {
+		this.materialName = materialName;
+	}
+
+	public String getItemCode() {
+		return itemCode;
+	}
+
+	public void setItemCode(String itemCode) {
+		this.itemCode = itemCode;
+	}
+
+	public Date getMaterialCreatedDate() {
+		return materialCreatedDate;
+	}
+
+	public void setMaterialCreatedDate(Date materialCreatedDate) {
+		this.materialCreatedDate = materialCreatedDate;
 	}
 
 	
