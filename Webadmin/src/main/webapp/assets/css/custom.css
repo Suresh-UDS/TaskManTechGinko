@@ -88,6 +88,14 @@ ul.checkList li
     font-size: 15px;
     width: 40px !important;
 }
+.modal-body #accordion .panel-heading
+{
+    background-color: #fafafa;
+}
+.modal-body #accordion .panel-heading .panel-title
+{
+    font-weight: 100;
+}
 .LogoCon img.LoginLogo
 {
     border-radius: 5px;
