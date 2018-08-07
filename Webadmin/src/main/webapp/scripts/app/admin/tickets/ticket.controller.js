@@ -467,8 +467,9 @@ angular.module('timeSheetApp')
             }
 
             $scope.closeTicketConfirm =function(cTicket){
-
+            $scope.loadingStart();  
             JobComponent.updateTicket(cTicket).then(function() {
+                    $scope.loadingStop(); 
                     $scope.success = 'OK';
                     $scope.showNotifications('top','center','success','Ticket status has been updated successfuly!!');
                     $(".fade").removeClass("modal-backdrop");
@@ -483,8 +484,9 @@ angular.module('timeSheetApp')
             }
 
             $scope.reopenTicketConfirm =function(cTicket){
-
+                    $scope.loadingStart(); 
             		JobComponent.updateTicket(cTicket).then(function() {
+                    $scope.loadingStop();    
                     $scope.success = 'OK';
                     $scope.showNotifications('top','center','success','Ticket status has been updated successfuly!!');
                     $(".fade").removeClass("modal-backdrop");
