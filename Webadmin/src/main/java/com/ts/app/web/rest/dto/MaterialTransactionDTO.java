@@ -1,33 +1,15 @@
-package com.ts.app.domain;
+package com.ts.app.web.rest.dto;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import com.ts.app.domain.MaterialTransactionType;
+import com.ts.app.domain.MaterialUOMType;
 
-@Entity
-@Table(name = "material_transaction")
-public class MaterialTransaction extends AbstractAuditingEntity implements Serializable {
+public class MaterialTransactionDTO extends BaseDTO {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "siteId", nullable = true)
-	private Site site;
+	private long siteId;
 	
 	private String itemCode;
 	
@@ -42,7 +24,7 @@ public class MaterialTransaction extends AbstractAuditingEntity implements Seria
 	private MaterialTransactionType transactionType;
 	
 	private Timestamp trasactionDate;
-	
+
 	public long getId() {
 		return id;
 	}
@@ -51,12 +33,12 @@ public class MaterialTransaction extends AbstractAuditingEntity implements Seria
 		this.id = id;
 	}
 
-	public Site getSite() {
-		return site;
+	public long getSiteId() {
+		return siteId;
 	}
 
-	public void setSite(Site site) {
-		this.site = site;
+	public void setSiteId(long siteId) {
+		this.siteId = siteId;
 	}
 
 	public String getItemCode() {
@@ -75,6 +57,14 @@ public class MaterialTransaction extends AbstractAuditingEntity implements Seria
 		this.name = name;
 	}
 
+	public long getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(long quantity) {
+		this.quantity = quantity;
+	}
+
 	public long getStoreStock() {
 		return storeStock;
 	}
@@ -89,14 +79,6 @@ public class MaterialTransaction extends AbstractAuditingEntity implements Seria
 
 	public void setUom(MaterialUOMType uom) {
 		this.uom = uom;
-	}
-
-	public long getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(long quantity) {
-		this.quantity = quantity;
 	}
 
 	public MaterialTransactionType getTransactionType() {
@@ -114,7 +96,6 @@ public class MaterialTransaction extends AbstractAuditingEntity implements Seria
 	public void setTrasactionDate(Timestamp trasactionDate) {
 		this.trasactionDate = trasactionDate;
 	}
-
 	
 	
 }

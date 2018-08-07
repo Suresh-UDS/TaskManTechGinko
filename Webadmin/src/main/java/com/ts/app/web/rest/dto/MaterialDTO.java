@@ -1,32 +1,13 @@
-package com.ts.app.domain;
+package com.ts.app.web.rest.dto;
 
-import java.io.Serializable;
+import com.ts.app.domain.MaterialUOMType;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
-@Entity
-@Table(name = "material")
-public class Material extends AbstractAuditingEntity implements Serializable{
+public class MaterialDTO extends BaseDTO {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "siteId", nullable = true)
-	private Site site;
+
+	private long siteId;
 	
 	private String itemCode;
 	
@@ -39,7 +20,7 @@ public class Material extends AbstractAuditingEntity implements Serializable{
 	private long storeStock;
 	
 	private MaterialUOMType uom;
-	
+
 	public long getId() {
 		return id;
 	}
@@ -48,12 +29,12 @@ public class Material extends AbstractAuditingEntity implements Serializable{
 		this.id = id;
 	}
 
-	public Site getSite() {
-		return site;
+	public long getSiteId() {
+		return siteId;
 	}
 
-	public void setSite(Site site) {
-		this.site = site;
+	public void setSiteId(long siteId) {
+		this.siteId = siteId;
 	}
 
 	public String getItemCode() {
@@ -103,7 +84,7 @@ public class Material extends AbstractAuditingEntity implements Serializable{
 	public void setUom(MaterialUOMType uom) {
 		this.uom = uom;
 	}
-
 	
+		
 	
 }
