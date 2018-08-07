@@ -6,12 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ts.app.domain.Site;
 import com.ts.app.domain.SiteLedger;
 
 public interface SiteLedgerRepository extends JpaRepository<SiteLedger, Long> {
 
 	@Query("SELECT sl FROM SiteLedger sl WHERE sl.site.id = :siteId")
-	Page<Site> findSites(@Param("siteId") long siteId, Pageable pageRequest);
+	Page<SiteLedger> findSiteLedgersBySiteId(@Param("siteId") long siteId, Pageable pageRequest);
 
 }

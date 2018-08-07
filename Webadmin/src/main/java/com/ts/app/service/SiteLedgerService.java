@@ -72,29 +72,10 @@ public class SiteLedgerService extends AbstractService {
 		return siteLedgerDto;
 	}
 
-	private SiteDTO mapToModel(Site site, boolean includeShifts) {
-		SiteDTO siteDTO = new SiteDTO();
-		siteDTO.setId(site.getId());
-		siteDTO.setName(site.getName());
-		siteDTO.setAddress(site.getAddress());
-		siteDTO.setCountry(site.getCountry());
-		siteDTO.setState(site.getState());
-		siteDTO.setAddressLat(site.getAddressLat());
-		siteDTO.setAddressLng(site.getAddressLng());
-		siteDTO.setStartDate(site.getStartDate());
-		siteDTO.setEndDate(site.getEndDate());
-		siteDTO.setRadius(site.getRadius());
-		siteDTO.setProjectId(site.getProject().getId());
-		siteDTO.setProjectName(site.getProject().getName());
-		if(includeShifts) {
-			List<ShiftDTO> shifts = siteDTO.getShifts();
-			for(Shift shift : site.getShifts()) {
-				ShiftDTO shiftDto = mapperUtil.toModel(shift, ShiftDTO.class);
-				shifts.add(shiftDto);
-			}
-			siteDTO.setShifts(shifts);
-		}
-		return siteDTO;
+	private SiteLedgerDTO mapToModel(SiteLedger siteLedger, boolean includeShifts) {
+		SiteLedgerDTO siteLedgerDTO = new SiteLedgerDTO();
+		
+		return siteLedgerDTO;
 	}
 
 	public List<SiteLedgerDTO> findAll() {
@@ -119,7 +100,7 @@ public class SiteLedgerService extends AbstractService {
 		}
 
         //-------
-		SearchResult<SiteDTO> result = new SearchResult<SiteDTO>();
+		SearchResult<SiteLedgerDTO> result = new SearchResult<SiteLedgerDTO>();
 		if(searchCriteria != null) {
             Pageable pageRequest = null;
             if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
@@ -130,21 +111,21 @@ public class SiteLedgerService extends AbstractService {
             }else{
                 pageRequest = createPageRequest(searchCriteria.getCurrPage());
             }
-            Page<Site> page = null;
-			List<SiteDTO> transactions = null;
+            Page<SiteLedger> page = null;
+			List<SiteLedgerDTO> transactions = null;
 			log.debug("Site id = "+ searchCriteria.getSiteId());
 			if(searchCriteria.getSiteId() != 0) {
-				page = siteLedgerRepository.findSitesByIdAndProjectId(searchCriteria.getSiteId(), searchCriteria.getProjectId(), searchCriteria.getProjectName(), pageRequest);
+				page = siteLedgerRepository.findSiteLedgersBySiteId(searchCriteria.getSiteId(), pageRequest);
 			}
 			if(page != null) {
 				//transactions = mapperUtil.toModelList(page.getContent(), SiteDTO.class);
 				if(transactions == null) {
-					transactions = new ArrayList<SiteDTO>();
+					transactions = new ArrayList<SiteLedgerDTO>();
 				}
-				List<Site> siteList =  page.getContent();
-				if(CollectionUtils.isNotEmpty(siteList)) {
-					for(Site site : siteList) {
-						transactions.add(mapToModel(site, false));
+				List<SiteLedger> siteLedgerList =  page.getContent();
+				if(CollectionUtils.isNotEmpty(siteLedgerList)) {
+					for(SiteLedger siteLedger : siteLedgerList) {
+						transactions.add(mapToModel(siteLedger, false));
 					}
 				}
 				if(CollectionUtils.isNotEmpty(transactions)) {
@@ -156,7 +137,7 @@ public class SiteLedgerService extends AbstractService {
 		return result;
 	}
 
-	private void buildSearchResult(SearchCriteria searchCriteria, Page<Site> page, List<SiteDTO> transactions, SearchResult<SiteDTO> result) {
+	private void buildSearchResult(SearchCriteria searchCriteria, Page<SiteLedger> page, List<SiteLedgerDTO> transactions, SearchResult<SiteLedgerDTO> result) {
 		if(page != null) {
 			result.setTotalPages(page.getTotalPages());
 		}
