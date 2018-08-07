@@ -21,7 +21,7 @@ public class MaterialDTO extends BaseDTO {
 	
 	private long storeStock;
 	
-	private MaterialUOMType uom;
+	private String uom;
 
 	public long getId() {
 		return id;
@@ -87,14 +87,12 @@ public class MaterialDTO extends BaseDTO {
 		this.storeStock = storeStock;
 	}
 
-	public MaterialUOMType getUom() {
+	public String getUom() {
 		return uom;
 	}
 
-	public void setUom(MaterialUOMType uom) {
+	public void setUom(String uom) {
 		this.uom = uom;
 	}
-	
-		
 	
 }

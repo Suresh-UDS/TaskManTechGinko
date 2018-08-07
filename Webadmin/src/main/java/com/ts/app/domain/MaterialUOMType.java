@@ -17,4 +17,9 @@ public enum MaterialUOMType {
     private MaterialUOMType(String val){
         value = val;
     }
+    
+    public String getValue() { 
+    	return value;
+    }
+
 }

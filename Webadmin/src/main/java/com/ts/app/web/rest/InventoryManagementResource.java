@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.InventoryManagementService;
-import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.MaterialDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;

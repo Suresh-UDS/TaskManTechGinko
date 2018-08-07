@@ -16,12 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Asset;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Material;
+import com.ts.app.domain.MaterialUOMType;
 import com.ts.app.domain.User;
-import com.ts.app.repository.AssetSpecification;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.InventoryRepository;
 import com.ts.app.repository.InventorySpecification;
@@ -29,7 +28,6 @@ import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.MaterialDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
@@ -64,6 +62,7 @@ public class InventoryManagementService extends AbstractService{
 		materialEntity.setSite(siteRepository.findOne(materialDTO.getSiteId()));
 		materialEntity.setProject(projectRepository.findOne(materialDTO.getProjectId()));
 		materialEntity.setActive(Material.ACTIVE_YES);
+		materialEntity.setUom(MaterialUOMType.valueOf(materialDTO.getUom()).getValue());
 		materialEntity = inventRepository.save(materialEntity);
 		log.debug("Save object of Inventory: {}" +materialEntity);
 		materialDTO = mapperUtil.toModel(materialEntity, MaterialDTO.class);
@@ -91,6 +90,7 @@ public class InventoryManagementService extends AbstractService{
 		material.setMinimumStock(materialDTO.getMinimumStock());
 		material.setName(materialDTO.getName());
 		material.setStoreStock(material.getStoreStock());
+		material.setUom(MaterialUOMType.valueOf(materialDTO.getUom()).getValue());
 		material = inventRepository.save(material);
 		materialDTO = mapperUtil.toModel(material, MaterialDTO.class);
 		return materialDTO;
