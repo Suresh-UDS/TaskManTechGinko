@@ -66,6 +66,8 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
 
 	private boolean late;
 
+	private String remarks;
+
 	public Long getId() {
 		return id;
 	}
@@ -260,5 +262,13 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
 
     public void setLate(boolean late) {
         this.late = late;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 }
