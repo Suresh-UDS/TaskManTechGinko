@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,6 +65,7 @@ import com.ts.app.web.rest.dto.SearchCriteria;
  * Service class for managing Device information.
  */
 @Service
+@EnableAsync
 @Transactional
 public class SchedulerHelperService extends AbstractService {
 
