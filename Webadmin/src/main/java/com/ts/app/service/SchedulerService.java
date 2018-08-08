@@ -33,7 +33,6 @@ import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SchedulerConfigRepository;
 import com.ts.app.repository.SettingsRepository;
-import com.ts.app.repository.SiteRepository;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.MapperUtil;
@@ -376,7 +375,7 @@ public class SchedulerService extends AbstractService {
 
 	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
 	public void attendanceCheckOutTask() {
-		schedulerHelperService.autoCheckOutAttendance(this);
+		schedulerHelperService.autoCheckOutAttendance();
 	}
 
 	

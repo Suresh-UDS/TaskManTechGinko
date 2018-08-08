@@ -590,7 +590,7 @@ public class SchedulerHelperService extends AbstractService {
 	}
 
 	@Transactional
-	public void autoCheckOutAttendance(SchedulerService schedulerService) {
+	public void autoCheckOutAttendance() {
 		Calendar currCal = Calendar.getInstance();
 		Calendar startCal = Calendar.getInstance();
 		startCal.set(Calendar.HOUR_OF_DAY, 0);
