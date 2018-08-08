@@ -101,6 +101,11 @@ public class InventoryManagementService extends AbstractService{
 		material.setActive(Material.ACTIVE_NO);
 		inventRepository.save(material);
 	}
+	
+	public MaterialUOMType[] getAllMaterialUom() {
+		MaterialUOMType[] uoms = MaterialUOMType.values(); 
+		return uoms;
+	}
 
 	public SearchResult<MaterialDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 		SearchResult<MaterialDTO> result = new SearchResult<MaterialDTO>();
@@ -171,6 +176,8 @@ public class InventoryManagementService extends AbstractService{
 		result.setTransactions(transactions);
 		return;
 	}
+
+	
 
 	
 	

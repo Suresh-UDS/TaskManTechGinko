@@ -1,5 +1,8 @@
 package com.ts.app.domain;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 /**
  * Created by karth on 7/1/2017.
  */
@@ -22,4 +25,7 @@ public enum MaterialUOMType {
     	return value;
     }
 
+    public static Stream<MaterialUOMType> stream() {
+        return Arrays.stream(MaterialUOMType.values()); 
+    }
 }

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.MaterialUOMType;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.InventoryManagementService;
 import com.ts.app.web.rest.dto.MaterialDTO;
@@ -84,6 +85,13 @@ public class InventoryManagementResource {
 	public ResponseEntity<?> deleteMaterial(@PathVariable("id") long id) { 
 		inventoryService.deleteMaterial(id);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/material/uom", method=RequestMethod.GET)
+	public MaterialUOMType[] getMaterialUOM() { 
+		MaterialUOMType[] list = null;
+		list = inventoryService.getAllMaterialUom();
+		return list;
 	}
 	
 	@RequestMapping(value = "/inventory/search", method = RequestMethod.POST)
