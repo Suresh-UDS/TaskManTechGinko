@@ -196,26 +196,32 @@ angular.module('timeSheetApp')
 
         $scope.loadBlocks = function () {
 	    		console.log('selected project -' + ($scope.selectedProject ? $scope.selectedProject.id : 0) + ', site -' + ($scope.selectedSite ? $scope.selectedSite.id : 0))
-	    		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
-	    		LocationComponent.findBlocks(projectId,$scope.selectedSite.id).then(function (data) {
-	    			$scope.selectedBlock = null;
+                var projectId = jQuery.isEmptyObject($scope.selectedProject) ? 0 : $scope.selectedProject.id;
+	    		var siteId = jQuery.isEmptyObject($scope.selectedSite) ? 0 : $scope.selectedSite.id;
+	    		LocationComponent.findBlocks(projectId,siteId).then(function (data) {
+                    $scope.selectedBlock = null;
+                    $scope.selectedFloor = null;
+                    $scope.selectedZone = null;
 	            $scope.blocks = data;
 	        });
 	    };
 
 
 	    $scope.loadFloors = function () {
-	    		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
-	    		LocationComponent.findFloors(projectId,$scope.selectedSite.id,$scope.selectedBlock).then(function (data) {
+	    		var projectId = jQuery.isEmptyObject($scope.selectedProject) ? 0 : $scope.selectedProject.id;
+                var siteId = jQuery.isEmptyObject($scope.selectedSite) ? 0 : $scope.selectedSite.id;
+	    		LocationComponent.findFloors(projectId,siteId,$scope.selectedBlock).then(function (data) {
 	    			$scope.selectedFloor = null;
+                    $scope.selectedZone = null;
 	            $scope.floors = data;
 	        });
 	    };
 
 	    $scope.loadZones = function () {
 	    		console.log('load zones - ' + $scope.selectedSite.id +',' +$scope.selectedBlock +','+$scope.selectedFloor);
-	    		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
-	    		LocationComponent.findZones(projectId,$scope.selectedSite.id,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
+	    		var projectId = jQuery.isEmptyObject($scope.selectedProject) ? 0 : $scope.selectedProject.id;
+                var siteId = jQuery.isEmptyObject($scope.selectedSite) ? 0 : $scope.selectedSite.id;
+	    		LocationComponent.findZones(projectId,siteId,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
 	    			$scope.selectedZone = null;
 	            $scope.zones = data;
 	        });
@@ -275,6 +281,7 @@ angular.module('timeSheetApp')
             	ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
                     $scope.sites = data;
                     $scope.hideLoader();
+             
 
                 });
         	}else {
