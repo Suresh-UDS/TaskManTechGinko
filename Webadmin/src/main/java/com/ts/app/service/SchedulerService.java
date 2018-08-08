@@ -1038,9 +1038,9 @@ public class SchedulerService extends AbstractService {
             List<JobChecklistDTO> checklistItems = new ArrayList<JobChecklistDTO>();
             for(JobChecklist jobcl : jobclList) {
                 JobChecklistDTO checklist = new JobChecklistDTO();
-                checklist.setChecklistId(jobcl.getChecklistId());
+                checklist.setChecklistId(String.valueOf(jobcl.getChecklistId()));
                 checklist.setChecklistName(jobcl.getChecklistName());
-                checklist.setChecklistItemId(jobcl.getChecklistItemId());
+                checklist.setChecklistItemId(String.valueOf(jobcl.getChecklistItemId()));
                 checklist.setChecklistItemName(jobcl.getChecklistItemName());
                 checklistItems.add(checklist);
 

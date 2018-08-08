@@ -490,7 +490,7 @@ public class ImportUtil {
 									jobChecklistDto.setChecklistId(String.valueOf(checklistDto.getId()));
 									jobChecklistDto.setChecklistName(checklistDto.getName());
 									jobChecklistDto.setChecklistItemId(String.valueOf(checklistItemDto.getId()));
-									jobChecklistDto.setChecklistItemName(checklistItemDto.getName());
+									jobChecklistDto.setChecklistItemName(String.valueOf(checklistItemDto.getName()));
 									jobCheckListItems.add(jobChecklistDto);
 								}
 								jobDto.setChecklistItems(jobCheckListItems);
