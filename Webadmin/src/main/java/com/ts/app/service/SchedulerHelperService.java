@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Splitter;
 import com.google.common.primitives.Longs;
+import com.ts.app.config.Constants;
 import com.ts.app.domain.Attendance;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeAttendanceReport;
@@ -318,7 +319,7 @@ public class SchedulerHelperService extends AbstractService {
 						List<Shift> shifts = siteRepository.findShiftsBySite(site.getId());
 						if (CollectionUtils.isNotEmpty(shifts)) {
 							//List<Shift> shifts = site.getShifts();
-							content = new StringBuilder("Site Name - " + site.getName() + SchedulerService.LINE_SEPARATOR);
+							content = new StringBuilder("Site Name - " + site.getName() + Constants.LINE_SEPARATOR);
                             int shiftStartLeadTime = Integer.valueOf(env.getProperty("attendance.shiftStartLeadTime"));
 							for (Shift shift : shifts) {
 								empCntInShift = 0;
@@ -550,10 +551,10 @@ public class SchedulerHelperService extends AbstractService {
 					summaryMap.put("TotalPresent", String.valueOf(projPresent));
 					summaryMap.put("TotalAbsent", String.valueOf(projEmpCnt - projPresent));
 
-					content = new StringBuilder("Client Name - " + proj.getName() + SchedulerService.LINE_SEPARATOR);
-					content.append("Total employees - " + projEmpCnt + SchedulerService.LINE_SEPARATOR);
-					content.append("Present - " + projPresent + SchedulerService.LINE_SEPARATOR);
-					content.append("Absent - " + (projEmpCnt - projPresent) + SchedulerService.LINE_SEPARATOR);
+					content = new StringBuilder("Client Name - " + proj.getName() + Constants.LINE_SEPARATOR);
+					content.append("Total employees - " + projEmpCnt + Constants.LINE_SEPARATOR);
+					content.append("Present - " + projPresent + Constants.LINE_SEPARATOR);
+					content.append("Absent - " + (projEmpCnt - projPresent) + Constants.LINE_SEPARATOR);
 					log.debug("Project Name  - "+ proj.getName() + ", shift alert -" + shiftAlert + ", dayReport -" + dayReport);
 					// send reports in email.
 					if (attendanceReportEmails != null && projEmployees > 0 && ((shiftAlert && siteShiftConsolidatedData.size() > 0) || dayReport)) {

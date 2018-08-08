@@ -13,12 +13,12 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ts.app.config.Constants;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.Project;
@@ -50,8 +50,6 @@ import com.ts.app.web.rest.errors.TimesheetException;
 public class SchedulerService extends AbstractService {
 
 	final Logger log = LoggerFactory.getLogger(SchedulerService.class);
-
-	static final String LINE_SEPARATOR = "      \n\n";
 
 	@Inject ProjectRepository projectRepository;
 
@@ -326,11 +324,11 @@ public class SchedulerService extends AbstractService {
 									// empAttnList, null, exportResult);
 									// send reports in email.
 									if (attendanceReportEmails != null && empCntInShift > 0) {
-										StringBuilder content = new StringBuilder("Site Name - " + site.getName() + LINE_SEPARATOR);
-										content.append("Shift - " + shift.getStartTime() + " - " + shift.getEndTime() + LINE_SEPARATOR);
-										content.append("Total employees - " + empCntInShift + LINE_SEPARATOR);
-										content.append("Present - " + attendanceCount + LINE_SEPARATOR);
-										content.append("Absent - " + absentCount + LINE_SEPARATOR);
+										StringBuilder content = new StringBuilder("Site Name - " + site.getName() + Constants.LINE_SEPARATOR);
+										content.append("Shift - " + shift.getStartTime() + " - " + shift.getEndTime() + Constants.LINE_SEPARATOR);
+										content.append("Total employees - " + empCntInShift + Constants.LINE_SEPARATOR);
+										content.append("Present - " + attendanceCount + Constants.LINE_SEPARATOR);
+										content.append("Absent - " + absentCount + Constants.LINE_SEPARATOR);
 										// mailService.sendJobReportEmailFile(attendanceReportEmails.getSettingValue(),
 										// exportResult.getFile(), null, cal.getTime());
 										mailService.sendAttendanceConsolidatedReportEmail(site.getName(), attendanceReportEmails.getSettingValue(), content.toString(), null,
@@ -344,11 +342,11 @@ public class SchedulerService extends AbstractService {
 									DateUtil.convertToSQLDate(genShiftEnd.getTime()));
 							long absentCount = empCntInShift - attendanceCount;
 							if (attendanceReportEmails != null && empCntInShift > 0) {
-								StringBuilder content = new StringBuilder("Site Name - " + site.getName() + LINE_SEPARATOR);
-								content.append("Shift - General Shift" + LINE_SEPARATOR);
-								content.append("Total employees - " + empCntInShift + LINE_SEPARATOR);
-								content.append("Present - " + attendanceCount + LINE_SEPARATOR);
-								content.append("Absent - " + absentCount + LINE_SEPARATOR);
+								StringBuilder content = new StringBuilder("Site Name - " + site.getName() + Constants.LINE_SEPARATOR);
+								content.append("Shift - General Shift" + Constants.LINE_SEPARATOR);
+								content.append("Total employees - " + empCntInShift + Constants.LINE_SEPARATOR);
+								content.append("Present - " + attendanceCount + Constants.LINE_SEPARATOR);
+								content.append("Absent - " + absentCount + Constants.LINE_SEPARATOR);
 								mailService.sendAttendanceConsolidatedReportEmail(site.getName(), attendanceReportEmails.getSettingValue(), content.toString(), null, new Date());
 							}
 						}
