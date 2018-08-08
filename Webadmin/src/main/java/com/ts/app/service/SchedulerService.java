@@ -1,33 +1,26 @@
 package com.ts.app.service;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.base.Splitter;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Job;
-import com.ts.app.domain.JobChecklist;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.SchedulerConfig;
 import com.ts.app.domain.Setting;
@@ -45,8 +38,6 @@ import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.JobChecklistDTO;
-import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.SchedulerConfigDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
@@ -124,6 +115,7 @@ public class SchedulerService extends AbstractService {
 
 	}
 
+	@Async
 	public void save(SchedulerConfigDTO dto, Job job) {
 		if (dto.getId() != null && dto.getId() > 0) {
 			SchedulerConfig entity = schedulerConfigRepository.findOne(dto.getId());
