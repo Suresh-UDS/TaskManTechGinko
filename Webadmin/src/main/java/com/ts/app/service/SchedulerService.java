@@ -57,12 +57,6 @@ public class SchedulerService extends AbstractService {
 	@Inject ProjectRepository projectRepository;
 
 	@Inject
-	private SiteRepository siteRepository;
-
-	@Inject
-	private JobManagementService jobManagementService;
-
-	@Inject
 	private JobRepository jobRepository;
 
 	@Inject
@@ -74,12 +68,6 @@ public class SchedulerService extends AbstractService {
 
 	@Inject
 	private SchedulerConfigRepository schedulerConfigRepository;
-
-	@Inject
-	private ReportService reportService;
-
-	@Inject
-	private AttendanceService attendanceService;
 
 	@Inject AttendanceRepository attendanceRepository;
 
