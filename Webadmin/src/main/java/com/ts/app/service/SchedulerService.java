@@ -102,7 +102,6 @@ public class SchedulerService extends AbstractService {
 
 	}
 
-	@Async
 	public void save(SchedulerConfigDTO dto, Job job) {
 		if (dto.getId() != null && dto.getId() > 0) {
 			SchedulerConfig entity = schedulerConfigRepository.findOne(dto.getId());
@@ -123,9 +122,9 @@ public class SchedulerService extends AbstractService {
 			entity = schedulerConfigRepository.save(entity);
 			// create jobs based on the creation policy
 			//createJobs(entity);
-			schedulerHelperService.createDailyTasks();
-			createWeeklyTasks();
-			createMonthlyTasks();
+			schedulerHelperService.createJobs(entity);
+			//createWeeklyTasks();
+			//createMonthlyTasks();
 		}
 
 	}
