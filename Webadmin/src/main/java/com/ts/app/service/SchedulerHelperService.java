@@ -776,26 +776,56 @@ public class SchedulerHelperService extends AbstractService {
 
 	public void createJobs(SchedulerConfig dailyTask) {
 		if ("CREATE_JOB".equals(dailyTask.getType())) {
+			Calendar scheduledEndDate = Calendar.getInstance();
+			PageRequest pageRequest = new PageRequest(1, 1);
+			Job parentJob = dailyTask.getJob();
+			List<Job> prevJobs = jobRepository.findLastJobByParentJobId(parentJob.getId(), pageRequest);
+			scheduledEndDate.setTime(parentJob.getScheduleEndDate());
+			scheduledEndDate.set(Calendar.HOUR_OF_DAY, 23);
+			scheduledEndDate.set(Calendar.MINUTE, 59);
+			DateTime endDate = DateTime.now().withYear(scheduledEndDate.get(Calendar.YEAR)).withMonthOfYear(scheduledEndDate.get(Calendar.MONTH) + 1)
+					.withDayOfMonth(scheduledEndDate.get(Calendar.DAY_OF_MONTH)).withHourOfDay(scheduledEndDate.get(Calendar.HOUR_OF_DAY)).withMinuteOfHour(scheduledEndDate.get(Calendar.MINUTE));
+
 			if (dailyTask.getSchedule().equalsIgnoreCase(DAILY)) {
 				String creationPolicy = env.getProperty("scheduler.dailyJob.creation");
 				if (creationPolicy.equalsIgnoreCase("monthly")) { // if the creation policy is set to monthly, create jobs for the rest of the
 																	// month
 					DateTime currDate = DateTime.now();
-					DateTime lastDate = currDate.dayOfMonth().withMaximumValue();
-					while (currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
-						jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
-						currDate = currDate.plusDays(1);
+					DateTime lastDate = currDate.dayOfMonth().withMaximumValue().withHourOfDay(23).withMinuteOfHour(59);
+					if(endDate.isBefore(lastDate)) {
+						lastDate = lastDate.withMonthOfYear(scheduledEndDate.get(Calendar.MONTH) + 1);
+						lastDate = lastDate.withDayOfMonth(scheduledEndDate.get(Calendar.DAY_OF_MONTH));
+					}
+					if(CollectionUtils.isNotEmpty(prevJobs)) {
+						Job prevJob = prevJobs.get(0);
+						if(prevJob.getPlannedStartTime().before(currDate.toDate())){
+							while (currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
+								jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
+								currDate = currDate.plusDays(1);
+							}
+						}
+					}else {
+						while (currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
+							jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
+							currDate = currDate.plusDays(1);
+						}
 					}
 				} else if (creationPolicy.equalsIgnoreCase("daily")) {
-					jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), new Date());
+					DateTime currDate = DateTime.now();
+					if(CollectionUtils.isNotEmpty(prevJobs)) {
+						Job prevJob = prevJobs.get(0);
+						if(prevJob.getPlannedStartTime().before(currDate.toDate())){
+							jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), new Date());
+						}
+					}else {
+						jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), new Date());
+					}
 				}
 				 dailyTask.setLastRun(new Date());
 			} else if (dailyTask.getSchedule().equalsIgnoreCase(WEEKLY)) {
 				String creationPolicy = env.getProperty("scheduler.weeklyJob.creation");
 				if (creationPolicy.equalsIgnoreCase("monthly")) { // if the creation policy is set to monthly, create jobs for the rest of the
 																	// month
-					PageRequest pageRequest = new PageRequest(1, 1);
-					List<Job> prevJobs = jobRepository.findLastJobByParentJobId(dailyTask.getJob().getId(), pageRequest);
 					DateTime currDate = DateTime.now();
 					if (CollectionUtils.isNotEmpty(prevJobs)) {
 						Job prevJob = prevJobs.get(0);
@@ -814,8 +844,6 @@ public class SchedulerHelperService extends AbstractService {
 				String creationPolicy = env.getProperty("scheduler.monthlyJob.creation");
 				if (creationPolicy.equalsIgnoreCase("yearly")) { // if the creation policy is set to monthly, create jobs for the rest of the
 																	// month
-					PageRequest pageRequest = new PageRequest(1, 1);
-					List<Job> prevJobs = jobRepository.findLastJobByParentJobId(dailyTask.getJob().getId(), pageRequest);
 					DateTime currDate = DateTime.now();
 					if (CollectionUtils.isNotEmpty(prevJobs)) {
 						Job prevJob = prevJobs.get(0);
