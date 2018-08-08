@@ -122,7 +122,14 @@ public class SchedulerService extends AbstractService {
 			entity = schedulerConfigRepository.save(entity);
 			// create jobs based on the creation policy
 			//createJobs(entity);
+			if(log.isDebugEnabled()) {
+				log.debug("Saved parent job and scheduler config " + entity);
+				log.debug("Invoking async scheduler helper to create child jobs ");
+			}
 			schedulerHelperService.createJobs(entity);
+			if(log.isDebugEnabled()) {
+				log.debug("Invoked scheduler helper to create child jobs ");
+			}
 			//createWeeklyTasks();
 			//createMonthlyTasks();
 		}
