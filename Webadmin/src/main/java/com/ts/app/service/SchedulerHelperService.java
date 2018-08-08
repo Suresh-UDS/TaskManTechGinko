@@ -776,7 +776,7 @@ public class SchedulerHelperService extends AbstractService {
 		}
 	}
 
-	@Async
+	
 	public void createJobs(SchedulerConfig dailyTask) {
 		if(log.isDebugEnabled()) 
 			log.debug("createJobs - SchedulerConfig - dailyTask - "+ dailyTask.getId());
