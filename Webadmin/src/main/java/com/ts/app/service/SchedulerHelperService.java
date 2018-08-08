@@ -776,17 +776,24 @@ public class SchedulerHelperService extends AbstractService {
 
 	@Async
 	public void createJobs(SchedulerConfig dailyTask) {
+		if(log.isDebugEnabled()) 
+			log.debug("createJobs - SchedulerConfig - dailyTask - "+ dailyTask.getId());
 		if ("CREATE_JOB".equals(dailyTask.getType())) {
 			Calendar scheduledEndDate = Calendar.getInstance();
 			PageRequest pageRequest = new PageRequest(1, 1);
 			Job parentJob = dailyTask.getJob();
+			if(log.isDebugEnabled())
+				log.debug("createJobs - parentJob - "+ parentJob + ", - " + (parentJob != null ? parentJob.getId() : null));
 			List<Job> prevJobs = jobRepository.findLastJobByParentJobId(parentJob.getId(), pageRequest);
+			if(log.isDebugEnabled())
+				log.debug("createJobs - prevJobs - "+ prevJobs );
 			scheduledEndDate.setTime(parentJob.getScheduleEndDate());
 			scheduledEndDate.set(Calendar.HOUR_OF_DAY, 23);
 			scheduledEndDate.set(Calendar.MINUTE, 59);
 			DateTime endDate = DateTime.now().withYear(scheduledEndDate.get(Calendar.YEAR)).withMonthOfYear(scheduledEndDate.get(Calendar.MONTH) + 1)
 					.withDayOfMonth(scheduledEndDate.get(Calendar.DAY_OF_MONTH)).withHourOfDay(scheduledEndDate.get(Calendar.HOUR_OF_DAY)).withMinuteOfHour(scheduledEndDate.get(Calendar.MINUTE));
-
+			if(log.isDebugEnabled())
+				log.debug("createJobs - endDate - "+ endDate );
 			if (dailyTask.getSchedule().equalsIgnoreCase(DAILY)) {
 				String creationPolicy = env.getProperty("scheduler.dailyJob.creation");
 				if (creationPolicy.equalsIgnoreCase("monthly")) { // if the creation policy is set to monthly, create jobs for the rest of the
@@ -797,16 +804,22 @@ public class SchedulerHelperService extends AbstractService {
 						lastDate = lastDate.withMonthOfYear(scheduledEndDate.get(Calendar.MONTH) + 1);
 						lastDate = lastDate.withDayOfMonth(scheduledEndDate.get(Calendar.DAY_OF_MONTH));
 					}
+					if(log.isDebugEnabled())
+						log.debug("createJobs - lastDate - "+ lastDate );
 					if(CollectionUtils.isNotEmpty(prevJobs)) {
 						Job prevJob = prevJobs.get(0);
 						if(prevJob.getPlannedStartTime().before(currDate.toDate())){
 							while (currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
+								if(log.isDebugEnabled())
+									log.debug("createJobs - currDate - "+ currDate );
 								jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
 								currDate = currDate.plusDays(1);
 							}
 						}
 					}else {
 						while (currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
+							if(log.isDebugEnabled())
+								log.debug("createJobs - currDate - "+ currDate );
 							jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
 							currDate = currDate.plusDays(1);
 						}
