@@ -141,7 +141,6 @@ public class SchedulerService extends AbstractService {
 		createWeeklyTasks();
 	}
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void createWeeklyTasks() {
 		if (env.getProperty("scheduler.weeklyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
