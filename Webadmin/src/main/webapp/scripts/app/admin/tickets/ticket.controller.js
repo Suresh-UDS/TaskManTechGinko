@@ -52,9 +52,9 @@ angular.module('timeSheetApp')
         $scope.status = 0;
 
 
-         //getLocalLocation.updateLocation($scope.searchCriteria); 
+         //getLocalLocation.updateLocation($scope.searchCriteria);
 
-         //Read the Local locations from LocalStorage    
+         //Read the Local locations from LocalStorage
          //$scope.localSearch = getLocalStorage.getLocation();
 
 
@@ -120,8 +120,37 @@ angular.module('timeSheetApp')
             }
         }
 
+
+
+        //Conformation modal
+
+        $scope.conform = function(text)
+        {
+            console.log($scope.selectedProject)
+            $rootScope.conformText = text;
+            $('#conformationModal').modal();
+
+        }
+        $rootScope.back = function (text) {
+            if(text == 'cancel')
+            {
+                $scope.cancelTicket();
+            }
+            else if(text == 'save')
+            {
+                $scope.saveTicket();
+            }
+            else if(text == 'update')
+            {
+                $scope.updatedTicket()
+            }
+        };
+
+        //
+
         $scope.saveTicket = function () {
             console.log("Form submited")
+            $scope.saveLoad = true;
                 $scope.error = null;
                 $scope.success = null;
                 $scope.errorTicketsExists = null;
@@ -158,12 +187,14 @@ angular.module('timeSheetApp')
                     		}
 
                         $scope.success = 'OK';
+                    		$scope.saveLoad = false;
                         $scope.showNotifications('top','center','success','Ticket has been added successfuly!!');
                         $scope.selectedSite = null;
                         //$scope.loadTickets();
                         $location.path('/tickets');
                     }).catch(function (response) {
                         $scope.success = null;
+                        $scope.saveLoad = false;
                         console.log('Error - '+ response.data);
                         console.log('status - '+ response.status + ' , message - ' + response.data.message);
                         if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
@@ -182,7 +213,7 @@ angular.module('timeSheetApp')
 
 
         $scope.cancelTicket = function () {
-                            
+
              if($scope.status == 1){
 
                  $location.path('/assets');
@@ -192,7 +223,7 @@ angular.module('timeSheetApp')
                 $location.path('/tickets');
              }
 
-            
+
         };
 
         $scope.loadAllSites = function () {
@@ -400,6 +431,7 @@ angular.module('timeSheetApp')
 
 
         $scope.updatedTicket = function () {
+            $scope.saveLoad = true;
             $scope.error = null;
             $scope.success = null;
             $scope.errorProject = null;
@@ -436,12 +468,14 @@ angular.module('timeSheetApp')
 						});
 	            		}
                     $scope.success = 'OK';
+                    $scope.saveLoad = false;
                     //$(".fadeInDown").setAttribute("aria-hidden", "false");
                     $scope.showNotifications('top','center','success','Ticket has been updated successfuly!!');
                     //$scope.search();
                     $location.path('/tickets');
                 }).catch(function (response) {
                     $scope.success = null;
+                    $scope.saveLoad = false;
                     // console.log('Error - '+ response.data);
                     // console.log('status - '+ response.status + ' , message -
                     // ' + response.data.message);
@@ -467,9 +501,9 @@ angular.module('timeSheetApp')
             }
 
             $scope.closeTicketConfirm =function(cTicket){
-            $scope.loadingStart();  
+            $scope.loadingStart();
             JobComponent.updateTicket(cTicket).then(function() {
-                    $scope.loadingStop(); 
+                    $scope.loadingStop();
                     $scope.success = 'OK';
                     $scope.showNotifications('top','center','success','Ticket status has been updated successfuly!!');
                     $(".fade").removeClass("modal-backdrop");
@@ -484,9 +518,9 @@ angular.module('timeSheetApp')
             }
 
             $scope.reopenTicketConfirm =function(cTicket){
-                    $scope.loadingStart(); 
+                    $scope.loadingStart();
             		JobComponent.updateTicket(cTicket).then(function() {
-                    $scope.loadingStop();    
+                    $scope.loadingStop();
                     $scope.success = 'OK';
                     $scope.showNotifications('top','center','success','Ticket status has been updated successfuly!!');
                     $(".fade").removeClass("modal-backdrop");
@@ -692,7 +726,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.clearFilter = function() {
-        	$scope.noData = false;	
+        	$scope.noData = false;
             $scope.selectedDateFrom = $filter('date')(fromDate, 'dd/MM/yyyy');
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedDateFromSer = fromDate;

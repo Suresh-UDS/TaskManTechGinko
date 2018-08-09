@@ -9,7 +9,7 @@
     <div ng-controller="TicketController" ng-init="editTicket();loadSites();loadEmployees();">
             <div class="cardsCon editTicketCon" ng-init="loadTicket()">
                 <form ng-show="!success" name="form" role="form" novalidate
-                      ng-submit="updatedTicket()"  >
+                      ng-submit="conform('update')"  >
 
 					<div class="row">
 
@@ -209,7 +209,7 @@
                           </div>
                          </div>
                        </div>
-                       
+
                        <div class="col-md-6">
                         <div class="panel panel-default">
                               <div class="panel-heading">Assets</div>
@@ -219,7 +219,7 @@
                                     <div class="form-group">
                                         <label class="control-label">Name of Asset</label>
                                         <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                        <select 
+                                        <select
                                             required
                                             name="asset"
                                             ng-model="selectedAsset"
@@ -229,11 +229,11 @@
                                        <!--  <input id='assetId' ng-model="assetObj.title" class='form-control' ng-show="assetObj"
                                                       name='description' type='text' value="assetName"
                                                        readOnly/> -->
-                                    
+
                                     </div>
 
                                 </div>
-                          
+
                            </div>
                           </div>
                          </div>
@@ -296,13 +296,20 @@
                         <div class="col-md-12">
 
 
-                            <button type="button" ng-click="cancelTicket()"
-                                    id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
+                            <button type="button" ng-click="conform('cancel')"
+                                    id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Discard</button>
 
-                            <button type="submit" type="submit"
-                                    id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
-                                        <i class="material-icons">check</i>
-                                    </span>Update ticket</button>
+                            <!--<button type="submit" type="submit"-->
+                                    <!--id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">-->
+                                        <!--<i class="material-icons">check</i>-->
+                                    <!--</span>Update ticket</button>-->
+
+                            <button class="btn btn-success ld ld-over-inverse pull-right" ng-class="{'running':saveLoad}"
+                                    type="submit" id="form-button-save" ng-disabled="form.$invalid">
+                                <span class="btn-label"><i class="material-icons">check</i></span> Update ticket
+                                <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                            </button>
+
 
                             <div class="clearfix"></div>
                         </div>
