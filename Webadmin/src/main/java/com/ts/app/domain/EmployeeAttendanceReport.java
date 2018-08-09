@@ -51,6 +51,12 @@ public class EmployeeAttendanceReport implements Serializable {
 
     private long difference;
 
+    private long differenceInHours;
+
+    private long differenceInMinutes;
+
+    private String differenceText;
+
     public EmployeeAttendanceReport() {
 
     }
@@ -71,11 +77,20 @@ public class EmployeeAttendanceReport implements Serializable {
         this.shiftStartTime = shiftStartTime;
         this.shiftEndTime = shiftEndTime;
         if(this.checkOutTime!=null){
-            this.difference = this.checkInTime.getTime()-this.checkOutTime.getTime();
-            this.difference = this.difference/ (60 * 60 * 1000);//Converting duration in hours
-
+            this.difference = this.checkOutTime.getTime() - this.checkInTime.getTime();
+            this.differenceInHours = this.difference/ (60 * 60 * 1000);//Converting duration in hours
+            this.differenceInMinutes = this.difference / (60 * 1000) % 60;//Converting duration in Minutes
+            if(this.differenceInHours>9 && this.differenceInMinutes>9){
+                this.differenceText = '0'+String.valueOf(this.differenceInHours)+':'+'0'+String.valueOf(this.differenceInMinutes);
+            }else if(this.differenceInHours>9 ){
+                this.differenceText = '0'+String.valueOf(this.differenceInHours)+':'+String.valueOf(this.differenceInMinutes);
+            }else if(this.differenceInMinutes>9){
+                this.differenceText = String.valueOf(this.differenceInHours)+':'+'0'+String.valueOf(this.differenceInMinutes);
+            }else{
+                this.differenceText = String.valueOf(this.differenceInHours)+':'+String.valueOf(this.differenceInMinutes);
+            }
         }else{
-            this.difference = 0;
+            this.differenceText = "0";
         }
         if(continuedAttendance != null) {
         		shiftContinued = (continuedAttendance > 0 ? true : false);
@@ -230,5 +245,29 @@ public class EmployeeAttendanceReport implements Serializable {
 
     public void setDifference(long difference) {
         this.difference = difference;
+    }
+
+    public long getDifferenceInHours() {
+        return differenceInHours;
+    }
+
+    public void setDifferenceInHours(long differenceInHours) {
+        this.differenceInHours = differenceInHours;
+    }
+
+    public long getDifferenceInMinutes() {
+        return differenceInMinutes;
+    }
+
+    public void setDifferenceInMinutes(long differenceInMinutes) {
+        this.differenceInMinutes = differenceInMinutes;
+    }
+
+    public String getDifferenceText() {
+        return differenceText;
+    }
+
+    public void setDifferenceText(String differenceText) {
+        this.differenceText = differenceText;
     }
 }

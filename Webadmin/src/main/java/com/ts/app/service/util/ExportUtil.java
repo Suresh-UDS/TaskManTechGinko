@@ -426,12 +426,12 @@ public class ExportUtil {
 					Row dataRow = xssfSheet.createRow(rowNum++);
 
 					dataRow.createCell(0).setCellValue(transaction.getEmployeeIds());
-					dataRow.createCell(1).setCellValue(transaction.getName() + transaction.getLastName());
+					dataRow.createCell(1).setCellValue(transaction.getName() + transaction.getLastName() !=null?transaction.getLastName() :"");
 					dataRow.createCell(2).setCellValue(transaction.getSiteName());
 					dataRow.createCell(3).setCellValue(transaction.getProjectName());
 					dataRow.createCell(4).setCellValue(transaction.getCheckInTime() != null ? String.valueOf(transaction.getCheckInTime()) : "");
 					dataRow.createCell(5).setCellValue(transaction.getCheckOutTime() != null ? String.valueOf(transaction.getCheckOutTime()) : "");
-					dataRow.createCell(6).setCellValue(transaction.getCheckOutTime() != null ? String.valueOf(transaction.getDifference()) : "");
+					dataRow.createCell(6).setCellValue(transaction.getCheckOutTime() != null ? String.valueOf(transaction.getDifferenceText()) : "");
 					dataRow.createCell(7).setCellValue(transaction.isShiftContinued() ?  "SHIFT CONTINUED" : "");
 					dataRow.createCell(8).setCellValue(transaction.isLate() ? "LATE CHECK IN" : "");
 					/*
