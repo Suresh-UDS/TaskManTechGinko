@@ -18,7 +18,7 @@
                 <div class="">
                     <div class="">
                         <form ng-show="!success" name="formEdit" role="form" novalidate
-                        						ng-submit="UpdateManufacturer()"
+                        						ng-submit="conform('update')"
                         						onClick="" class="form-horizontal">
                                         <div class="row">
                                             <div class="col-md-6">
@@ -42,7 +42,7 @@
                                                                                ng-show="formEdit.assetType.$error.required">
                                                                                 Asset type is required.
                                                                             </p>
-                                                                         
+
                                                                         </div>
                                                                     </div>
 
@@ -176,13 +176,18 @@
                             <div class="col-md-12 txt-align-rgt">
                                 <div class="form-group">
 
-                                    <button class="btn btn-success" type="submit"
-                                            id="form-button-update" ng-disabled="formEdit.$invalid">
+                                    <!--<button class="btn btn-success" type="submit"-->
+                                            <!--id="form-button-update" ng-disabled="formEdit.$invalid">-->
+                                        <!--<span class="btn-label"><i class="material-icons">check</i></span> Update-->
+                                    <!--</button>-->
+                                    <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}"
+                                            type="submit" id="form-button-save" ng-disabled="formSave.$invalid ">
                                         <span class="btn-label"><i class="material-icons">check</i></span> Update
+                                        <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                     </button>
                                     <button class="btn btn-danger"  data-dismiss="modal" aria-label="Close" type="button"
-                                            id="cancel-button" ng-click="cancelManufacturer()">
-                                        <i class="material-icons">close</i> Close
+                                            id="cancel-button" ng-click="conform('cancel')">
+                                        <i class="material-icons">close</i> Discard
                                     </button>
 
                                 </div>
@@ -192,7 +197,7 @@
               </div>
 
              </div>
-        
+
          </div>
     </div>
 

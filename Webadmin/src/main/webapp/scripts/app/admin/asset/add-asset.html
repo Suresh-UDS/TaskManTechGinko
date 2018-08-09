@@ -2023,19 +2023,24 @@
                             <div class="row" >
 
                                 <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
-                                    <button class="btn btn-success" type="submit" ng-hide="assetVal.id"
-                                            id="form-button-save" ng-disabled="form.$invalid || btnDisabled || warFromMsg || warToMsg" ng-click="saveAsset()" >
-                                                <span class="btn-label">
-                                        				<i class="material-icons">check</i>
-                                    				</span> Save &amp; Continue
+                                    <!--<button class="btn btn-success" type="submit" ng-hide="assetVal.id"-->
+                                            <!--id="form-button-save" ng-disabled="form.$invalid || btnDisabled || warFromMsg || warToMsg" ng-click="saveAsset()" >-->
+                                                <!--<span class="btn-label">-->
+                                        				<!--<i class="material-icons">check</i>-->
+                                    				<!--</span> Save &amp; Continue-->
+                                    <!--</button>-->
+                                    <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" ng-hide="assetVal.id"
+                                            type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisabled || warFromMsg || warToMsg" ng-click="conform('save')">
+                                        <span class="btn-label"><i class="material-icons">check</i></span>  Save &amp; Continue
+                                        <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                     </button>
                                     <!--<button class="btn btn-info" type="submit"-->
                                     <!--id="save-and-go-back-button" ng-disabled="form.$invalid">-->
                                     <!--<i class="material-icons">rotate_left</i> Save and go back to list-->
                                     <!--</button>-->
                                     <button class="btn btn-danger" type="button"
-                                            ng-click="cancel();" id="cancel-button">
-                                        <i class="material-icons">close</i> Cancel
+                                            ng-click="conform('cancel');" id="cancel-button">
+                                        <i class="material-icons">close</i> Discard
                                     </button>
                                 </div>
 

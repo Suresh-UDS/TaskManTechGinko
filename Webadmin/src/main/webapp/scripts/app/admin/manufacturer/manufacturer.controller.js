@@ -61,6 +61,29 @@ angular.module('timeSheetApp')
 
         $scope.initMaterialWizard();
 
+        $scope.conform = function(text)
+        {
+            console.log($scope.selectedProject)
+            $rootScope.conformText = text;
+            $('#conformationModal').modal();
+        }
+        $rootScope.back = function (text) {
+           if(text == 'cancel')
+           {
+               $scope.cancelManufacturer();
+           }
+           else if(text == 'save')
+           {
+               $scope.saveManufacturer();
+           }
+           else if(text == 'update')
+           {
+               $scope.UpdateManufacturer();
+           }
+        };
+
+
+
         $scope.loadAllAssetTypes = function() {
                 //$scope.loadingStart();
         		AssetTypeComponent.findAll().then(function (data) {
@@ -248,6 +271,7 @@ angular.module('timeSheetApp')
 
 
         $scope.saveManufacturer = function () {
+            $scope.saveLoad = true;
 	        	$scope.error = null;
 	        	$scope.success =null;
                 $scope.loadingStart();
@@ -263,10 +287,12 @@ angular.module('timeSheetApp')
                 //post($scope.manufacturer).then(function () {
 	        	 ManufacturerComponent.create($scope.manufacturer).then(function () {
 	                $scope.success = 'OK';
+                     $scope.saveLoad = false;
                     $scope.loadingStop();
 	                $scope.showNotifications('top','center','success','Manufacturer Saved Successfully');
 	                $location.path('/manufacturer-list');
 	            }).catch(function (response) {
+                     $scope.saveLoad = false;
                     $scope.loadingStop();
 	                $scope.success = null;
 	                console.log('Error - '+ response.data);

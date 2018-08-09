@@ -59,7 +59,28 @@ angular.module('timeSheetApp')
 
 
         $scope.initMaterialWizard();
-        
+
+        $scope.conform = function(text)
+         {
+            console.log($scope.selectedProject)
+            $rootScope.conformText = text;
+            $('#conformationModal').modal();
+         }
+         $rootScope.back = function (text) {
+             if(text == 'cancel')
+             {
+                 $scope.cancelVendor();
+             }
+             else if(text == 'save')
+             {
+                 $scope.saveVendor();
+             }
+             else if(text == 'update')
+             {
+                 $scope.UpdateVendor();
+             }
+         };
+
         $scope.getVendorDetails = function(id, mode) {
         		$scope.isEdit = (mode == 'edit' ? true : false)
             VendorComponent.findById(id).then(function (data) {
@@ -75,7 +96,7 @@ angular.module('timeSheetApp')
 	        		console.log($scope.vendor);
 	        	})
         };
-        
+
         $scope.loadVendors = function(){
                 $scope.clearFilter();
         		$scope.search();
@@ -141,7 +162,7 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.columnName ="name";
                 $scope.searchCriteria.sortByAsc = true;
             }
-               
+
             console.log("search criteria",$scope.searchCriteria);
                      $scope.vendors = '';
                      $scope.vendorsLoader = false;
@@ -175,11 +196,11 @@ angular.module('timeSheetApp')
                 }else{
                      $scope.noData = true;
                 }
-              
+
 
             });
 
-            
+
         };
 
 
@@ -194,10 +215,10 @@ angular.module('timeSheetApp')
         }
 
         // init load
-        $scope.initLoad = function(){ 
-             $scope.loadPageTop(); 
-             //$scope.initPage(); 
-          
+        $scope.initLoad = function(){
+             $scope.loadPageTop();
+             //$scope.initPage();
+
          }
 
          $scope.cancelVendor = function () {
@@ -230,14 +251,16 @@ angular.module('timeSheetApp')
          $scope.saveVendor = function () {
                 $scope.error = null;
                 $scope.success =null;
-
+                $scope.saveLoad = true;
                 console.log('vendor details ='+ JSON.stringify($scope.vendor));
 
                  VendorComponent.create($scope.vendor).then(function () {
                     $scope.success = 'OK';
+                     $scope.saveLoad = false;
                     $scope.showNotifications('top','center','success','vendor Saved Successfully');
                     $location.path('/vendor-list');
                 }).catch(function (response) {
+                     $scope.saveLoad = false;
                     $scope.success = null;
                     console.log('Error - '+ response.data);
                     if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
@@ -252,6 +275,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.UpdateVendor = function () {
+            $scope.saveLoad = true;
                 $scope.error = null;
                 $scope.success =null;
 
@@ -259,10 +283,12 @@ angular.module('timeSheetApp')
 
                  VendorComponent.update($scope.vendor).then(function () {
                     $scope.success = 'OK';
+                     $scope.saveLoad = false;
                     $scope.showNotifications('top','center','success','vendor updated Successfully');
                     $location.path('/vendor-list');
                 }).catch(function (response) {
                     $scope.success = null;
+                     $scope.saveLoad = false;
                     console.log('Error - '+ response.data);
                     if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                         $scope.showNotifications('top','center','danger','vendor already exist!!');
@@ -277,7 +303,7 @@ angular.module('timeSheetApp')
 
 
         $scope.refreshPage = function(){
-            
+
              $scope.loadVendors();
         }
 
@@ -292,7 +318,7 @@ angular.module('timeSheetApp')
 	        	});
         };
 
-        
+
 
         $scope.clearFilter = function() {
             $scope.noData = false;
@@ -310,31 +336,31 @@ angular.module('timeSheetApp')
         };
 
         // init load
-        $scope.initLoad = function(){ 
-             $scope.loadPageTop(); 
-             $scope.initPage(); 
-          
+        $scope.initLoad = function(){
+             $scope.loadPageTop();
+             $scope.initPage();
+
          }
-        
+
          var nottifShow = true ;
 
         $scope.showNotifications= function(position,alignment,color,msg){
-           
+
             /*if(nottifShow == true){
                nottifShow = false ;*/
                demo.showNotification(position,alignment,color,msg);
-               
+
            /* }else if(nottifShow == false){
                 $timeout(function() {
                   nottifShow = true ;
                 }, 8000);
 
             }*/
-            
+
         }
 
            /*
-    
+
         ** Pagination init function **
         @Param:integer
 
@@ -349,7 +375,7 @@ angular.module('timeSheetApp')
             $scope.pages.currPage = page;
             $scope.search();
         };
-        
+
         $scope.exportAllData = function(type){
             $rootScope.exportStatusObj.exportMsg = '';
             $scope.downloader=true;
@@ -463,5 +489,5 @@ angular.module('timeSheetApp')
 
     };
 
-        
+
     });

@@ -369,6 +369,33 @@ angular.module('timeSheetApp')
             }
         }
 
+
+        //Conformation modal
+
+                    $scope.conform = function(text)
+                    {
+                        console.log($scope.selectedProject)
+                        $rootScope.conformText = text;
+                        $('#conformationModal').modal();
+
+                    }
+                    $rootScope.back = function (text) {
+                        if(text == 'cancel')
+                        {
+                            $scope.cancel();
+                        }
+                        else if(text == 'save')
+                        {
+                            $scope.saveAsset();
+                        }
+                        else if(text == 'update')
+                        {
+                            $scope.updateAsset()
+                        }
+                    };
+
+        //
+
         $scope.loadProjects = function () {
             ProjectComponent.findAll().then(function (data) {
                 console.log("Loading all projects")
@@ -1111,34 +1138,34 @@ angular.module('timeSheetApp')
 
             $scope.warFromDate1 = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $scope.warFromDate = e.date._d;
-            
+
             if($scope.warToDate){
 
                 if($scope.warFromDate > $scope.warToDate) {
-                
+
                         //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
                         $scope.warFromMsg = true;
-                
-                
+
+
                         //return false;
                 }else {
-                
+
                    $scope.warFromMsg =false;
-                
-                
+
+
                 }
-                
+
                 if($scope.warToDate < $scope.warFromDate) {
                         //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
                         $scope.warToMsg =true;
-                
-                
+
+
                         //return false;
                 }else {
-                
+
                      $scope.warToMsg =false;
-                
-                
+
+
                 }
             }
         });
@@ -1155,28 +1182,28 @@ angular.module('timeSheetApp')
                 if($scope.warToDate < $scope.warFromDate) {
                         //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
                         $scope.warToMsg =true;
-                
-                
+
+
                         //return false;
                 }else {
-                
+
                      $scope.warToMsg =false;
-                
-                
+
+
                 }
-                
+
                 if($scope.warFromDate > $scope.warToDate) {
-                
+
                         //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
                         $scope.warFromMsg = true;
-                
-                
+
+
                         //return false;
                 }else {
-                
+
                    $scope.warFromMsg =false;
-                
-                
+
+
                 }
             }
         });
@@ -1198,6 +1225,7 @@ angular.module('timeSheetApp')
          /* Create and save asset */
 
         $scope.saveAsset = function () {
+            $scope.saveLoad = true;
                 $scope.loadingStart();
                 $scope.btnDisabled = true;
                 $scope.error = null;
@@ -1229,6 +1257,7 @@ angular.module('timeSheetApp')
                         $scope.assetVal.id=response.id;
                         $scope.assetVal.siteId=response.siteId;
                         $scope.success = 'OK';
+                        $scope.saveLoad = false;
                         $scope.loadingStop();
                         $scope.showNotifications('top','center','success','Asset has been added Successfully!!');
                         $scope.loadEmployees();
@@ -1238,6 +1267,7 @@ angular.module('timeSheetApp')
 
                     }).catch(function (response) {
                         $scope.loadingStop();
+                        $scope.saveLoad = false;
                         $scope.btnDisabled= false;
                         $scope.success = null;
                         console.log('Error - '+ response.data);
@@ -1343,6 +1373,7 @@ angular.module('timeSheetApp')
        /* Update and save asset */
 
         $scope.updateAsset = function () {
+            $scope.saveLoad = true;
             $scope.loadingStart();
         	$scope.error = null;
             $scope.success =null;
@@ -1423,6 +1454,7 @@ angular.module('timeSheetApp')
         	AssetComponent.update($scope.assetEdit).then(function () {
 
                 $scope.success = 'OK';
+                $scope.saveLoad = false;
                 $scope.loadingStop();
                 $scope.btnDisabled =false;
                  $scope.showNotifications('top','center','success','Asset has been updated Successfully!!');
@@ -1431,6 +1463,7 @@ angular.module('timeSheetApp')
             	//$location.path('/assets');
 
             }).catch(function (response) {
+                $scope.saveLoad = false;
                 $rootScope.loadingStop();
                 $scope.success = null;
                 $scope.btnDisabled =false;
