@@ -128,9 +128,9 @@ export class TabsPage {
         })
             .then((db: SQLiteObject) => {
 
-                db.executeSql('DROP TABLE assetList',{})
+                db.executeSql('DROP TABLE assetList',[])
 
-                db.executeSql('create table IF NOT EXISTS assetList(id INT,name VARCHAR(32))', {})
+                db.executeSql('create table IF NOT EXISTS assetList(id INT,name VARCHAR(32))', [])
                     .then(() => console.log('Executed SQL'))
                     .catch(e => console.log(e));
 

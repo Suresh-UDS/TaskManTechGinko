@@ -88,13 +88,13 @@ public class AttendanceService extends AbstractService {
 
 	@Inject
 	private ReportUtil reportUtil;
-	
+
 	@Inject
 	private SettingsRepository settingRepository;
 
 	@Inject
 	private EmployeeShiftRepository empShiftRepo;
-	
+
     @Inject
     private Environment env;
 
@@ -118,6 +118,7 @@ public class AttendanceService extends AbstractService {
         dbAttn.setLatitudeOut(attn.getLatitudeOut());
         dbAttn.setLongitudeOut(attn.getLongitudeOut());
         dbAttn.setOffline(attnDto.isOffline());
+        dbAttn.setRemarks(attnDto.getRemarks());
         if(dbAttn.isOffline()){
             dbAttn.setCheckOutTime(DateUtil.convertToTimestamp(attnDto.getCheckOutTime()));
         }
@@ -137,8 +138,8 @@ public class AttendanceService extends AbstractService {
         if(log.isDebugEnabled()) {
         		log.debug("shift timings - " + shifts);
         }
-		Employee emp = employeeRepository.findByEmpId(attnDto.getEmployeeEmpId());	
-        
+		Employee emp = employeeRepository.findByEmpId(attnDto.getEmployeeEmpId());
+
         //load the lead time and grace time properties
         int shiftStartLeadTime = Integer.valueOf(env.getProperty("attendance.shiftStartLeadTime"));
         int shiftEndLeadTime = Integer.valueOf(env.getProperty("attendance.shiftEndLeadTime"));
@@ -239,7 +240,7 @@ public class AttendanceService extends AbstractService {
 						}
 					}
 				}
-				
+
 				/*
 				if(checkOutCal != null) { //if checkout done
 					if(checkOutCal.after(startCalGraceTime)) { // 3:30 PM checkout time > 3 PM (2 PM shift start)  + 1 hr grace time
@@ -304,6 +305,7 @@ public class AttendanceService extends AbstractService {
 			attn.setLatitudeIn(attnDto.getLatitudeIn());
 			attn.setLongitudeIn(attnDto.getLongitudeIn());
 			attn.setOffline(attnDto.isOffline());
+			attn.setRemarks(attnDto.getRemarks());
 			if(attn.isOffline()){
 			    attn.setCheckInTime(DateUtil.convertToTimestamp(attnDto.getCheckInTime()));
             }
@@ -329,7 +331,7 @@ public class AttendanceService extends AbstractService {
     	                Hibernate.initialize(prevAttn.getEmployee());
     	                attn.setContinuedAttendance(prevAttn);
     	            }
-    	            
+
     			}else {
     				attn.setContinuedAttendance(null);
     			}
@@ -348,11 +350,11 @@ public class AttendanceService extends AbstractService {
     					shiftGraceTimeCal.set(Calendar.MILLISECOND, 0);
     					shiftGraceTimeCal.add(Calendar.MINUTE, graceTime);
     					if(shiftGraceTimeCal.before(now)) {
-    						attn.setLate(true); //mark late attendance if the checkin time is 
+    						attn.setLate(true); //mark late attendance if the checkin time is
     					}
     				}
     			}
-    			
+
 			attn = attendanceRepository.save(attn);
 			log.debug("Attendance marked: {}", attn);
 			attnDto = mapperUtil.toModel(attn, AttendanceDTO.class);
@@ -524,7 +526,7 @@ public class AttendanceService extends AbstractService {
 		}
 		return attnDto;
 	}
-	
+
 	public AttendanceDTO findOne(Long attnId) {
 		Attendance entity = attendanceRepository.findOne(attnId);
 		return mapperUtil.toModel(entity, AttendanceDTO.class);
@@ -694,7 +696,7 @@ public class AttendanceService extends AbstractService {
 		if (CollectionUtils.isNotEmpty(transactions)) {
 			for (AttendanceDTO attn : transactions) {
 				EmployeeAttendanceReport reportData = new EmployeeAttendanceReport(attn.getEmployeeId(), attn.getEmployeeEmpId(), attn.getEmployeeFullName(), null,
-						attn.getSiteName(), null, attn.getCheckInTime(), attn.getCheckOutTime(), attn.getShiftStartTime(), attn.getShiftEndTime(), attn.getContinuedAttendanceId(), attn.isLate());
+						attn.getSiteName(), null, attn.getCheckInTime(), attn.getCheckOutTime(), attn.getShiftStartTime(), attn.getShiftEndTime(), attn.getContinuedAttendanceId(), attn.isLate(), attn.getRemarks());
 				attendanceReportList.add(reportData);
 			}
 		}
@@ -721,5 +723,13 @@ public class AttendanceService extends AbstractService {
 		// return exportUtil.readExportFile(empId, fileName);
 		return exportUtil.readAttendanceExportFile(empId, fileName);
 	}
+
+	public AttendanceDTO addRemarks(long id,String remarks){
+        Attendance attendance = attendanceRepository.findOne(id);
+        attendance.setRemarks(remarks);
+        attendance = attendanceRepository.saveAndFlush(attendance);
+
+        return  mapperUtil.toModel(attendance, AttendanceDTO.class);
+    }
 
 }

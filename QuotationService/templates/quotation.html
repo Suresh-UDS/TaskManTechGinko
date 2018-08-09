@@ -97,20 +97,13 @@
                  <table cellpadding="5" cellspacing="0" border="0">
                      <tr>
                          <td style="border: none;font-weight: bold">Quote</td>
-                         <td style="border: none">0034</td>
+                         <td style="border: none">00{{serialId}}</td>
                      </tr>
                      <tr>
                          <td style="border: none;font-weight: bold">Date</td>
-                         <td style="border: none">01/03/2018</td>
+                         <td style="border: none">{{lastModifiedDate | date:'dd-MMM-yyyy'}}</td>
                      </tr>
-                     <tr>
-                         <td style="border: none;font-weight: bold">P.O.C</td>
-                         <td style="border: none">01/03/2018</td>
-                     </tr>
-                     <tr>
-                         <td style="border: none;font-weight: bold">P.O.C</td>
-                         <td style="border: none">01/03/2018</td>
-                     </tr>
+
                  </table>
 
 
@@ -137,9 +130,9 @@
                   <tr>
                       <td>{{type}}</td>
                       <td>{{title}}</td>
-                      <td>{{cost}}</td>
+                      <td>{{unitPrice}}</td>
                       <td align="right">{{qty}}</td>
-                      <td align="right">{{unitPrice}}</td>
+                      <td align="right">{{cost}}</td>
                   </tr>
                   {{/rateCardDetails}}
 

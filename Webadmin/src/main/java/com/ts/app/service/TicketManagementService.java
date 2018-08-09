@@ -37,8 +37,6 @@ import com.ts.app.domain.UserRoleEnum;
 import com.ts.app.domain.UserRolePermission;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
-import com.ts.app.repository.LocationRepository;
-import com.ts.app.repository.NotificationRepository;
 import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
@@ -67,9 +65,6 @@ public class TicketManagementService extends AbstractService {
     private EmployeeRepository employeeRepository;
 
     @Inject
-    private LocationRepository locationRepository;
-
-    @Inject
     private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 
     @Inject
@@ -82,16 +77,7 @@ public class TicketManagementService extends AbstractService {
     private JobRepository jobRepository;
 
     @Inject
-    private NotificationRepository notificationRepository;
-
-    @Inject
-    private SchedulerService schedulerService;
-
-    @Inject
     private MailService mailService;
-
-    @Inject
-    private ReportService reportService;
 
     @Inject
     private SettingsRepository settingsRepository;

@@ -74,8 +74,12 @@ public class ExportUtil {
 			"ACTIVE" };
 	private String[] JOB_HEADER = { "SITE", "JOB ID", "TITLE", "DESCRIPTION", "TICKET ID", "TICKET TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
 			"STATUS" };
-	private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT",
-			 "SHIFT CONTINUED", "LATE CHECK IN" };
+//	private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT", "DURATION(In Hours) ",
+//			 "SHIFT CONTINUED", "LATE CHECK IN","REMARKS" };
+
+    private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT",
+        "SHIFT CONTINUED", "LATE CHECK IN" };
+
 	private String[] TICKET_HEADER = { "ID", "SITE", "ISSUE", "DESCRIPTION","STATUS", "PENDING STATUS","CATEGORY", "SEVERITY", "INITIATOR",
 			"INITIATED ON", "ASSIGNED TO", "ASSIGNED ON", "CLOSED BY", "CLOSED ON" };
 
@@ -426,13 +430,16 @@ public class ExportUtil {
 					Row dataRow = xssfSheet.createRow(rowNum++);
 
 					dataRow.createCell(0).setCellValue(transaction.getEmployeeIds());
-					dataRow.createCell(1).setCellValue(transaction.getName() + transaction.getLastName());
+//					dataRow.createCell(1).setCellValue(transaction.getName() + transaction.getLastName() !=null?transaction.getLastName() :"");
+					dataRow.createCell(1).setCellValue(transaction.getLastName()!=null? transaction.getName()+transaction.getLastName():transaction.getName() );
 					dataRow.createCell(2).setCellValue(transaction.getSiteName());
 					dataRow.createCell(3).setCellValue(transaction.getProjectName());
 					dataRow.createCell(4).setCellValue(transaction.getCheckInTime() != null ? String.valueOf(transaction.getCheckInTime()) : "");
 					dataRow.createCell(5).setCellValue(transaction.getCheckOutTime() != null ? String.valueOf(transaction.getCheckOutTime()) : "");
+//					dataRow.createCell(6).setCellValue(transaction.getCheckOutTime() != null ? String.valueOf(transaction.getDifferenceText()) : "");
 					dataRow.createCell(6).setCellValue(transaction.isShiftContinued() ?  "SHIFT CONTINUED" : "");
 					dataRow.createCell(7).setCellValue(transaction.isLate() ? "LATE CHECK IN" : "");
+//					dataRow.createCell(9).setCellValue(transaction.getRemarks() !=null ? transaction.getRemarks() : "");
 					/*
 					 * Blob blob = null; byte[] img = blob.getBytes(1,(int)blob.length());
 					 * BufferedImage i = null; try { i = ImageIO.read(new
@@ -576,7 +583,7 @@ public class ExportUtil {
 
 		rowNum++;
 		/* ShiftWise Summary report is temporarily commented out as per request from FLEXTRONICS
-		 
+
 		if(shiftWiseSummary != null && shiftWiseSummary.size() > 0) {
 			Row shiftWiseTitleRow = consSheet.getRow(rowNum);
 			rowNum++;
