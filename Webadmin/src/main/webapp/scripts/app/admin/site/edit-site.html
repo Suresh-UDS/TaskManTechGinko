@@ -31,10 +31,18 @@
                                                        autofocus  required autocomplete="off"/> -->
 
                                                 <label class="control-label">Select Client</label>
-                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                <select class="form-control " ng-model="selectedProject"  ng-options="project as project.name for project in projectsList track by project.name">
-                                                    <option value="">Select Client...</option>
-                                                </select>
+                                                 <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                <!--<select class="form-control " ng-model="selectedProject"  ng-options="project as project.name for project in projectsList track by project.name">-->
+                                                    <!--<option value="">Select Client...</option>-->
+                                                <!--</select>-->
+                                                <span ng-show="!clientDisable" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                                <ui-select ng-model="selectedProject"  ng-disabled="clientDisable"  ng-change="addProject(selectedProject)">
+                                                    <ui-select-match placeholder="Select clients...">{{edit ? selectedProject.name : selectedProject}}</ui-select-match>
+                                                    <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
+                                                        <div >{{ client }}</div>
+                                                    </ui-select-choices>
+
+                                                </ui-select>
                                                 <div ng-show="form.$submitted || form.projectName.$touched">
                                                     <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
                                                         <p class="help-block" style="color:maroon"
@@ -285,7 +293,7 @@
 
 
                             <button type="submit" ng-click="conform('cancel')"
-                                    id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
+                                    id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Discard</button>
 
                             <!--<button type="submit" type="submit" ng-click="updateSite(form.$invalid)"-->
                                     <!--id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">-->
