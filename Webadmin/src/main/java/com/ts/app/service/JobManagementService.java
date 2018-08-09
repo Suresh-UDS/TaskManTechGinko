@@ -44,6 +44,7 @@ import com.ts.app.domain.Frequency;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobChecklist;
 import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.JobType;
 import com.ts.app.domain.Location;
 import com.ts.app.domain.NotificationLog;
 import com.ts.app.domain.Price;
@@ -936,6 +937,7 @@ public class JobManagementService extends AbstractService {
 		job.setSchedule(Frequency.valueOf(assetPpmScheduleDTO.getFrequency()).getValue());
 		job.setActive(AbstractAuditingEntity.ACTIVE_YES);
 		job.setEscalationStatus(0);
+		job.setType(JobType.MAINTENANCE);
 		if(assetPpmScheduleDTO.getChecklistId() > 0)
 		{
 			Checklist checkList = checkListRepository.findOne(assetPpmScheduleDTO.getChecklistId());
@@ -1857,6 +1859,7 @@ public class JobManagementService extends AbstractService {
 		job.setSchedule(Frequency.valueOf(assetAMCScheduleDTO.getFrequency()).getValue());
 		job.setActive(job.ACTIVE_YES);
 		job.setEscalationStatus(0);
+		job.setType(JobType.MAINTENANCE);
 		if(assetAMCScheduleDTO.getChecklistId() > 0)
 		{
 			Checklist checkList = checkListRepository.findOne(assetAMCScheduleDTO.getChecklistId());
