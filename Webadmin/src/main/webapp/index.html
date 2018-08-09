@@ -541,11 +541,11 @@
                 <h4 class="modal-title">{{conformText}}</h4>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to {{conformText}}?</p>
+                <p>Are you sure want to {{conformText == 'cancel' ? "discard changes" : conformText }}?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success delete-confirmation-button" data-dismiss="modal" ng-click="back(conformText)">Confirm</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{conformText == 'cancel' ? "No" : "Cancel" }}</button>
+                <button type="button" class="btn btn-success delete-confirmation-button" data-dismiss="modal" ng-click="back(conformText)">{{conformText == 'cancel' ? "Yes" : "Confirm" }}</button>
             </div>
         </div>
     </div>
