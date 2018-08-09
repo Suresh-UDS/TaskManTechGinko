@@ -36,6 +36,8 @@ import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
 import com.ts.app.domain.CheckInOut;
 import com.ts.app.domain.CheckInOutImage;
+import com.ts.app.domain.Checklist;
+import com.ts.app.domain.ChecklistItem;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Frequency;
@@ -55,6 +57,7 @@ import com.ts.app.domain.UserRolePermission;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.CheckInOutRepository;
+import com.ts.app.repository.ChecklistRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.JobSpecification;
@@ -181,6 +184,10 @@ public class JobManagementService extends AbstractService {
 
     @Inject
     private PushService pushService;
+    
+    @Inject
+    private ChecklistRepository checkListRepository;
+    
 
     public void updateJobStatus(long siteId, JobStatus toBeJobStatus) {
 		//UPDATE ALL OVERDUE JOB STATUS
@@ -895,7 +902,10 @@ public class JobManagementService extends AbstractService {
 
 		job.setEmployee(employee);
 		job.setSite(site);
-		
+		Asset asset = assetRepository.findOne(assetPpmScheduleDTO.getAssetId());
+		job.setBlock(asset.getBlock());
+		job.setFloor(asset.getFloor());
+		job.setZone(asset.getZone());
 		Calendar jobStartTime = Calendar.getInstance();
 		jobStartTime.setTimeInMillis(assetPpmScheduleDTO.getJobStartTime().toInstant().toEpochMilli());
 
@@ -919,12 +929,30 @@ public class JobManagementService extends AbstractService {
 		job.setPlannedStartTime(startTime.getTime());
 		job.setPlannedEndTime(plannedEndTime.getTime());
 		job.setScheduleEndDate(scheduleEndDateTime.getTime());
+		log.debug("**** job dates **** " + startTime.getTime() + " " + plannedEndTime.getTime() + " " + scheduleEndDateTime.getTime());
 		job.setTitle(assetPpmScheduleDTO.getTitle());
 		job.setDescription(assetPpmScheduleDTO.getTitle() +" "+ assetPpmScheduleDTO.getFrequencyPrefix()+" "+assetPpmScheduleDTO.getFrequencyDuration()+" "+assetPpmScheduleDTO.getFrequency());
 		job.setMaintenanceType(assetPpmScheduleDTO.getMaintenanceType());
 		job.setSchedule(Frequency.valueOf(assetPpmScheduleDTO.getFrequency()).getValue());
 		job.setActive(AbstractAuditingEntity.ACTIVE_YES);
 		job.setEscalationStatus(0);
+		if(assetPpmScheduleDTO.getChecklistId() > 0)
+		{
+			Checklist checkList = checkListRepository.findOne(assetPpmScheduleDTO.getChecklistId());
+			Set<ChecklistItem> checkListItemset = checkList.getItems();
+			List<JobChecklist> jobCheckLists = new ArrayList<JobChecklist>();
+			for(ChecklistItem checkListItem : checkListItemset)
+			{
+			JobChecklist jobChecklist = new JobChecklist();
+			jobChecklist.setChecklistId(String.valueOf(checkList.getId()));
+			jobChecklist.setChecklistName(checkList.getName());
+			jobChecklist.setChecklistItemId(String.valueOf(checkListItem.getId()));
+			jobChecklist.setChecklistItemName(checkListItem.getName());
+			jobChecklist.setJob(job);
+			jobCheckLists.add(jobChecklist);
+			}
+			job.setChecklistItems(jobCheckLists);
+		}
 		job = jobRepository.save(job);
 
 		log.debug(">>> After Save Job: <<<"+job.getId());
@@ -1813,7 +1841,10 @@ public class JobManagementService extends AbstractService {
 		job.setPlannedStartTime(startTime.getTime());
 		job.setPlannedEndTime(plannedEndTime.getTime());
 		job.setScheduleEndDate(scheduleEndDateTime.getTime());
-		
+		Asset asset = assetRepository.findOne(assetAMCScheduleDTO.getAssetId());
+		job.setBlock(asset.getBlock());
+		job.setFloor(asset.getFloor());
+		job.setZone(asset.getZone());
 		
 		job.setEmployee(employee);
 		if(employee != null) {
@@ -1825,6 +1856,24 @@ public class JobManagementService extends AbstractService {
 		job.setMaintenanceType(assetAMCScheduleDTO.getMaintenanceType());
 		job.setSchedule(Frequency.valueOf(assetAMCScheduleDTO.getFrequency()).getValue());
 		job.setActive(job.ACTIVE_YES);
+		job.setEscalationStatus(0);
+		if(assetAMCScheduleDTO.getChecklistId() > 0)
+		{
+			Checklist checkList = checkListRepository.findOne(assetAMCScheduleDTO.getChecklistId());
+			Set<ChecklistItem> checkListItemset = checkList.getItems();
+			List<JobChecklist> jobCheckLists = new ArrayList<JobChecklist>();
+			for(ChecklistItem checkListItem : checkListItemset)
+			{
+			JobChecklist jobChecklist = new JobChecklist();
+			jobChecklist.setChecklistId(String.valueOf(checkList.getId()));
+			jobChecklist.setChecklistName(checkList.getName());
+			jobChecklist.setChecklistItemId(String.valueOf(checkListItem.getId()));
+			jobChecklist.setChecklistItemName(checkListItem.getName());
+			jobChecklist.setJob(job);
+			jobCheckLists.add(jobChecklist);
+			}
+			job.setChecklistItems(jobCheckLists);
+		}
 		job = jobRepository.saveAndFlush(job);
 
 		log.debug(">>> After Save Job: <<<"+job.getId());
