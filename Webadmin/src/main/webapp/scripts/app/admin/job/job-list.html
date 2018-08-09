@@ -290,7 +290,7 @@
                                 <div class="dropdown">
                                     <label class="label-control">Client</label>
                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects" ng-pattern="Select Client" >
+                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects"  >
                                         <option value="">Select Client...</option>
                                     </select>
                                 </div>
@@ -301,7 +301,7 @@
                                 <div class="form-group">
                                     <label class="label-control">Site</label>
                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sitesList" ng-pattern="Select Site" ng-change="loadEmployees()">
+                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sitesList"  ng-change="loadEmployees()">
                                         <option value="">Select Site...</option>
                                     </select>
                                 </div>
