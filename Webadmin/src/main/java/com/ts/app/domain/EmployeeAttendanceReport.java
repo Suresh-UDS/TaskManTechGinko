@@ -80,11 +80,11 @@ public class EmployeeAttendanceReport implements Serializable {
             this.difference = this.checkOutTime.getTime() - this.checkInTime.getTime();
             this.differenceInHours = this.difference/ (60 * 60 * 1000);//Converting duration in hours
             this.differenceInMinutes = this.difference / (60 * 1000) % 60;//Converting duration in Minutes
-            if(this.differenceInHours>9 && this.differenceInMinutes>9){
+            if(this.differenceInHours<9 && this.differenceInMinutes<9){
                 this.differenceText = '0'+String.valueOf(this.differenceInHours)+':'+'0'+String.valueOf(this.differenceInMinutes);
-            }else if(this.differenceInHours>9 ){
+            }else if(this.differenceInHours<9 ){
                 this.differenceText = '0'+String.valueOf(this.differenceInHours)+':'+String.valueOf(this.differenceInMinutes);
-            }else if(this.differenceInMinutes>9){
+            }else if(this.differenceInMinutes<9){
                 this.differenceText = String.valueOf(this.differenceInHours)+':'+'0'+String.valueOf(this.differenceInMinutes);
             }else{
                 this.differenceText = String.valueOf(this.differenceInHours)+':'+String.valueOf(this.differenceInMinutes);
