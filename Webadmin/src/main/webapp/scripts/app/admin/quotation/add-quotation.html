@@ -3,7 +3,7 @@
 	<div class="">
 
 		<div class="row">
-			<div class="col-mod-12">
+			<!-- <div class="col-mod-12">
 				<div class="alert alert-success" ng-show="success">
 					<strong>Quotation saved!</strong>
 				</div>
@@ -15,7 +15,7 @@
 					<strong>Quotation already registered!</strong> Please choose
 					another one.
 				</div>
-			</div>
+			</div> -->
 			<div class="col-md-12">
 				<!--<div class="titleCon">-->
 				<!--<h3>Add Quotation</h3>-->
@@ -99,7 +99,7 @@
                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <select class="form-control" ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects track by project.id" required>
-                                                            <option value="">Please select Client...</option>
+                                                            <option value="">Select client...</option>
                                                         </select>
                                                         <div ng-show="form.$submitted || form.projectName.$touched">
                                                             <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
@@ -134,7 +134,7 @@
                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites track by site.id" required>
-                                                            <option value="">Please select Site...</option>
+                                                            <option value="">Select site...</option>
                                                         </select>
 
                                                         <div ng-show="form.$submitted || form.siteName.$touched">
