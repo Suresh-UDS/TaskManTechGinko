@@ -112,7 +112,7 @@ angular.module('timeSheetApp')
         };
 
         // Load Clients for selectbox //
-        $scope.clienteDisable = true;
+        $scope.clientDisable = true;
         $scope.uiClient = [];
 
         $scope.getClient = function (search) {
