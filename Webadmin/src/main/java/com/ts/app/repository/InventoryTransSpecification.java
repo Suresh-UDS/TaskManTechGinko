@@ -1,5 +1,6 @@
 package com.ts.app.repository;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -54,15 +55,13 @@ public class InventoryTransSpecification implements Specification<MaterialTransa
 					"%" + searchCriteria.getItemCode().toLowerCase() + "%"));
 		}
 		
-		if(searchCriteria.getMaterialCreatedDate() != null) { 
-			log.debug("Inventory created date -" + searchCriteria.getMaterialCreatedDate());
-			Calendar createdDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
-			createdDateTo.setTime(searchCriteria.getMaterialCreatedDate());
-			createdDateTo.set(Calendar.HOUR_OF_DAY, 23);
-			createdDateTo.set(Calendar.MINUTE,59);
-			createdDateTo.set(Calendar.SECOND,0);
-			
-			predicates.add(builder.between(root.get("createdDate"), DateUtil.convertToZDT(searchCriteria.getMaterialCreatedDate()), DateUtil.convertToZDT(createdDateTo.getTime())));
+		if(searchCriteria.getTransactionDate() != null) { 
+			log.debug("Inventory transaction created date -" + searchCriteria.getTransactionDate());
+			Calendar endCal = Calendar.getInstance();
+			endCal.set(Calendar.HOUR_OF_DAY, 23);
+			endCal.set(Calendar.MINUTE, 59);
+			endCal.set(Calendar.SECOND, 0);
+			predicates.add(builder.between(root.get("transactionDate"), searchCriteria.getTransactionDate(), DateUtil.convertToTimestamp(endCal.getTime())));
 		}
 		
 		predicates.add(builder.equal(root.get("active"), "Y"));

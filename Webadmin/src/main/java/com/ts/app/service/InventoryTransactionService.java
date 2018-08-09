@@ -1,6 +1,7 @@
 package com.ts.app.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -28,6 +29,7 @@ import com.ts.app.repository.InventoryTransactionRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.MaterialTransactionDTO;
@@ -63,6 +65,7 @@ public class InventoryTransactionService extends AbstractService{
 		materialEntity.setSite(siteRepository.findOne(materialTransDTO.getSiteId()));
 		materialEntity.setProject(projectRepository.findOne(materialTransDTO.getProjectId()));
 		materialEntity.setActive(MaterialTransaction.ACTIVE_YES);
+		materialEntity.setTransactionDate(DateUtil.convertToTimestamp(materialTransDTO.getTransactionDate()));
 		materialEntity.setUom(MaterialUOMType.valueOf(materialTransDTO.getUom()).getValue());
 		materialEntity = inventTransactionRepository.save(materialEntity);
 		log.debug("Save object of Inventory: {}" +materialEntity);
@@ -91,6 +94,9 @@ public class InventoryTransactionService extends AbstractService{
 		materialTrans.setQuantity(materialTransDTO.getQuantity());
 		materialTrans.setName(materialTransDTO.getName());
 		materialTrans.setStoreStock(materialTransDTO.getStoreStock());
+		if(materialTransDTO.getTransactionDate() != null) {
+			materialTrans.setTransactionDate(DateUtil.convertToTimestamp(materialTransDTO.getTransactionDate()));
+		}
 		materialTrans.setUom(MaterialUOMType.valueOf(materialTransDTO.getUom()).getValue());
 		materialTrans = inventTransactionRepository.save(materialTrans);
 		materialTransDTO = mapperUtil.toModel(materialTrans, MaterialTransactionDTO.class);

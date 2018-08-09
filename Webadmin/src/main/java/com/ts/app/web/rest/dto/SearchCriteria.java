@@ -4,6 +4,7 @@ import com.ts.app.domain.AssetStatus;
 import com.ts.app.domain.AssetType;
 import com.ts.app.domain.JobStatus;
 
+import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
@@ -183,6 +184,8 @@ public class SearchCriteria extends Paginator {
 	private String itemCode;
 	
 	private Date materialCreatedDate;
+	
+	private Timestamp transactionDate;
 	
 	public String getWarrantyTypeName() {
 		return warrantyTypeName;
@@ -959,6 +962,14 @@ public class SearchCriteria extends Paginator {
 
 	public void setMaterialCreatedDate(Date materialCreatedDate) {
 		this.materialCreatedDate = materialCreatedDate;
+	}
+
+	public Timestamp getTransactionDate() {
+		return transactionDate;
+	}
+
+	public void setTransactionDate(Timestamp transactionDate) {
+		this.transactionDate = transactionDate;
 	}
 
 	

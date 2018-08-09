@@ -45,7 +45,7 @@ public class MaterialTransaction extends AbstractAuditingEntity implements Seria
 	
 	private MaterialTransactionType transactionType;
 	
-	private Timestamp trasactionDate;
+	private Timestamp transactionDate;
 	
 	public long getId() {
 		return id;
@@ -119,13 +119,15 @@ public class MaterialTransaction extends AbstractAuditingEntity implements Seria
 		this.transactionType = transactionType;
 	}
 
-	public Timestamp getTrasactionDate() {
-		return trasactionDate;
+	public Timestamp getTransactionDate() {
+		return transactionDate;
 	}
 
-	public void setTrasactionDate(Timestamp trasactionDate) {
-		this.trasactionDate = trasactionDate;
+	public void setTransactionDate(Timestamp transactionDate) {
+		this.transactionDate = transactionDate;
 	}
+
+	
 
 	
 	
