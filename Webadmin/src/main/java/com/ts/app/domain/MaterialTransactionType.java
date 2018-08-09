@@ -12,4 +12,8 @@ public enum MaterialTransactionType {
     private MaterialTransactionType(String val){
         value = val;
     }
+    
+    public String getValue() { 
+    	return value;
+    }
 }

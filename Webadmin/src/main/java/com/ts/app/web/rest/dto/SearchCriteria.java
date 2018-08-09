@@ -3,6 +3,7 @@ package com.ts.app.web.rest.dto;
 import com.ts.app.domain.AssetStatus;
 import com.ts.app.domain.AssetType;
 import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.MaterialTransactionType;
 
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
@@ -186,6 +187,8 @@ public class SearchCriteria extends Paginator {
 	private Date materialCreatedDate;
 	
 	private Timestamp transactionDate;
+	
+	private MaterialTransactionType transactionType;
 	
 	public String getWarrantyTypeName() {
 		return warrantyTypeName;
@@ -970,6 +973,14 @@ public class SearchCriteria extends Paginator {
 
 	public void setTransactionDate(Timestamp transactionDate) {
 		this.transactionDate = transactionDate;
+	}
+
+	public MaterialTransactionType getTransactionType() {
+		return transactionType;
+	}
+
+	public void setTransactionType(MaterialTransactionType transactionType) {
+		this.transactionType = transactionType;
 	}
 
 	
