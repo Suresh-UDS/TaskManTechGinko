@@ -36,14 +36,40 @@ angular.module('timeSheetApp')
 
         $scope.selectedUserRole;
 
+        $scope.conform = function(text)
+        {
+            console.log($scope.selectedProject)
+            $rootScope.conformText = text;
+            $('#conformationModal').modal();
+
+        }
+        $rootScope.back = function (text) {
+            if(text == 'cancel')
+            {
+                $scope.cancelUserRole();
+            }
+            else if(text == 'save')
+            {
+                $scope.saveUserRole();
+            }
+            else if(text == 'update')
+            {
+                $scope.updateUserRole()
+            }
+        };
+
+
         $scope.saveUserRole = function () {
+            $scope.saveLoad = true;
         	console.log('userRole -'+ $scope.userRole);
         	UserRoleComponent.createUserRole($scope.userRole).then(function () {
             	$scope.success = 'OK';
+                $scope.saveLoad = false;
             	//$scope.loadUsers();
                 $scope.showNotifications('top','center','success','UserRole Created Successfully');
             	$location.path('/user-roles');
             }).catch(function (response) {
+                $scope.saveLoad = false;
                 $scope.success = null;
                 console.log(response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
@@ -158,7 +184,7 @@ angular.module('timeSheetApp')
             $scope.isActiveDesc = field;
             $scope.isActiveAsc = '';
             $scope.isAscOrder = false;
-            $scope.search(); 
+            $scope.search();
         }
         $scope.searchFilter = function () {
             $scope.setPage(1);
@@ -186,21 +212,21 @@ angular.module('timeSheetApp')
             }
             if($scope.searchUserRoleId) {
                     $scope.searchCriteria.userRoleId = $scope.searchUserRoleId;
-                
+
             }else{
                  $scope.searchCriteria.userRoleId = null;
             }
 
              if($scope.searchUserRoleName) {
                     $scope.searchCriteria.role = $scope.searchUserRoleName;
-                
+
             }else{
                  $scope.searchCriteria.name = null;
             }
 
              if($scope.searchUserRoleLevel) {
                     $scope.searchCriteria.roleLevel= $scope.searchUserRoleLevel;
-                
+
             }else{
                 $scope.searchCriteria.level = null;
             }
@@ -237,7 +263,7 @@ angular.module('timeSheetApp')
                  $scope.pager = {};
                  $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
                  $scope.totalCountPages = data.totalCount;
-               
+
                 console.log("Pagination",$scope.pager);
                 console.log('UserRole list -' + JSON.stringify($scope.userRoles));
                 $scope.pages.currPage = data.currPage;
@@ -254,9 +280,9 @@ angular.module('timeSheetApp')
                      $scope.noData = true;
                 }
 
-                
+
             });
-        	
+
         };
 
         $scope.clearFilter = function() {
@@ -349,7 +375,7 @@ angular.module('timeSheetApp')
          }
 
          /*
-    
+
         ** Pagination init function **
         @Param:integer
 
