@@ -8,6 +8,7 @@ import java.util.TimeZone;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.ts.app.domain.MaterialTransaction;
+import com.ts.app.domain.MaterialTransactionType;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.web.rest.dto.SearchCriteria;
 
@@ -54,7 +56,9 @@ public class InventoryTransSpecification implements Specification<MaterialTransa
 			predicates.add(builder.like(builder.lower(root.get("itemCode")),
 					"%" + searchCriteria.getItemCode().toLowerCase() + "%"));
 		}
-		
+		if (searchCriteria.getTransactionType() != null) {
+			predicates.add(builder.equal(root.get("transactionType"), searchCriteria.getTransactionType()));
+		}
 		if(searchCriteria.getTransactionDate() != null) { 
 			log.debug("Inventory transaction created date -" + searchCriteria.getTransactionDate());
 			Calendar endCal = Calendar.getInstance();
