@@ -17,9 +17,12 @@
             <form ng-show="!success" name="form" role="form" novalidate
                   ng-submit="saveInventory()">
 
+
+
                 <div class="card margin-TB-5 tablecard">
 
                     <div class="card-content">
+
                         <h3 class="HeadingTxt">Location</h3>
                         <div class="row">
                             <div class="col-md-4">
@@ -49,7 +52,7 @@
                                 </div>
                             </div>
                         </div>
-                        <h3 class="HeadingTxt">Expense Info</h3>
+                        <h3 class="HeadingTxt">Budget Info</h3>
                         <div class="row">
 
                             <div class="col-md-2">
@@ -66,14 +69,12 @@
                                 <div class="form-group no-padding" >
                                     <div class="dropdown">
                                         <div class="form-group">
-                                            <label class="control-label">Select Expense Type  <span class="red-star">*</span></label>
+                                            <label class="control-label">Select Transaction type  <span class="red-star">*</span></label>
                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                             <select class="form-control">
-                                                <option value="Material">Material</option>
-                                                <option value="Purchase">Purchase</option>
-                                                <option value="Material">Advance</option>
-                                                <option value="Purchase">Food</option>
-                                                <option value="Purchase">Travel</option>
+                                                <option value="Credit">Credit</option>
+                                                <option value="Debit">Debit</option>
+
                                             </select>
                                         </div>
                                     </div>
@@ -95,102 +96,26 @@
 
                                     <span class="material-input"></span></div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="form-group   is-empty">
-                                    <label class="control-label">Receipt No <span class="red-star">*</span></label>
-                                    <input type="number" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
 
-                                    <span class="material-input"></span></div>
-                            </div>
 
                         </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group  is-empty">
-                                    <label class="control-label">Description  </label>
-                                    <textarea class="form-control" placeholder="Description here...." rows="7"></textarea>
-                                    <span class="material-input"></span></div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group no-padding" >
-                                    <div class="dropdown">
-                                        <div class="form-group">
-                                            <label class="control-label">Select Payment type  <span class="red-star">*</span></label>
-                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select class="form-control">
-                                                <option value="Cash">Cash </option>
-                                                <option value="Card">Card</option>
-                                                <option value="DD">DD</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="checkbox">
-                                    <label style="padding-top: 23px;">
-                                        <input type="checkbox" name="billable"> Billable
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="checkbox">
-                                    <label style="padding-top: 23px;">
-                                        <input type="checkbox" name="reimbursable"> Reimbursable
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <h3 class="HeadingTxt">Upload documents </h3>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="control-label">Photo 1 </label>
-                                    <input type="file"
-                                           class="form-control" style="opacity:100;position:relative"
-                                           name="bill_image"
-                                    />
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group" >
-                                    <label class="control-label">Photo 2 </label>
-                                    <input type="file"
-                                           class="form-control" style="opacity:100;position:relative"
-                                           name="bill_image"
-                                    />
-
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group" >
-                                    <label class="control-label">Photo 3 </label>
-                                    <input type="file"
-                                           class="form-control" style="opacity:100;position:relative"
-                                           name="bill_image"
-                                    />
-
-                                </div>
-                            </div>
-                        </div>
-
 
                     </div>
 
                 </div>
 
+
                 <div class="row">
 
                     <div class="col-md-12">
 
-                        <button type="submit" ng-click="cancelExpense()"
+                        <button type="submit" ng-click="cancelBudget()"
                                 id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
                         <button type="submit"
                                 id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
                                             <i class="material-icons">check</i>
-                                        </span>Update Expense</button>
+                                        </span>Update Budget</button>
 
                         <div class="clearfix"></div>
                     </div>

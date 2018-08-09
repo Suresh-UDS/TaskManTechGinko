@@ -169,10 +169,30 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 </a>
             </li>
             <li ui-sref-active="active">
-                <a ui-sref="expense-list">
+                <a  data-toggle="collapse" data-target="#Expense" href="#">
                     <i class="material-icons">pie_chart</i>
-                    <p>Expense Management</p>
+                    <p>Expense Management  <b class="caret"></b> </p>
                 </a>
+                <div class="collapse" id="Expense" >
+                    <ul class="nav SubNav">
+
+                        <li ui-sref-active="active">
+                            <a ui-sref="budget-list">
+                                <i class="material-icons">pie_chart</i>
+                                <p>Budget Master</p>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active"  >
+                            <a ui-sref="expense-list">
+                                <i class="material-icons">pie_chart</i>
+                                <p>Expense Transaction</p>
+                            </a>
+                        </li>
+
+
+                    </ul>
+                </div>
+
             </li>
             <li has-permission="Reports:List" ng-class="{active: $state.includes('reports')}">
                 <a data-toggle="collapse" data-target="#formsExamplesReport" href="#">
