@@ -403,7 +403,7 @@ angular.module('timeSheetApp')
 	            	$scope.job.active = 'Y';
 	            	$scope.job.plannedHours = 1;
                     $scope.job.plannedStartTime =new Date();
-                    $scope.selectPlannedStartTime = $filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
+                    $scope.selectPlannedStartTime = $filter('date')(new Date(), 'dd/MM/yyyy hh:mm a');
 
 	        	
     	        	if($stateParams.ticketId){
