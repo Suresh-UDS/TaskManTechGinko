@@ -238,7 +238,7 @@
                             <div class="form-group" >
                                 <div class="dropdown">
                                     <label class="label-control">Client</label>
-                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
                                     <!-- ng-change="loadDepSites()" -->
 
                                     <!--<select class="form-control " ng-model="searchProject"  ng-options="project as project.name for project in projectsList" ng-pattern="Select Client" required>-->
@@ -246,8 +246,8 @@
                                     <!--</select>-->
                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-spinner ld-spin" ></i></span>
                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <ui-select ng-model="searchProject" ng-change="selectProject(searchProject)">
-                                        <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name :searchProject}}</ui-select-match>
+                                    <ui-select ng-model="searchProject" ng-change="selectProject(searchProject)" ng-pattern="Select Client" required>
+                                        <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Site' :searchProject}}</ui-select-match>
                                         <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
                                             <div ng-bind="client"></div>
                                         </ui-select-choices>
