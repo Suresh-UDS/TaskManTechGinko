@@ -14,7 +14,7 @@ public class EmployeeAttendanceReport implements Serializable {
      *
      */
     private static final long serialVersionUID = 1L;
-    
+
     public static final String PRESENT_STATUS = "PRESENT";
     public static final String ABSENT_STATUS = "ABSENT";
 
@@ -22,7 +22,7 @@ public class EmployeeAttendanceReport implements Serializable {
     //private final byte[] Image;
 
     private long empId;
-    
+
     private String employeeId;
 
     private String name;
@@ -38,24 +38,26 @@ public class EmployeeAttendanceReport implements Serializable {
     private Date checkOutTime;
 
     private String shiftStartTime;
-    
+
     private String shiftEndTime;
-    
+
     private String status = "PRESENT";
-    
+
     private boolean shiftContinued;
-    
+
     private String continuedShiftTime;
-    
+
     private boolean late;
-    
+
+    private long difference;
+
     public EmployeeAttendanceReport() {
-    	
+
     }
 
 
-    public EmployeeAttendanceReport(long empId, String employeeId, String name, String lastName, String siteName, 
-    								String projectName, Date checkInTime, Date checkOutTime, String shiftStartTime, String shiftEndTime, 
+    public EmployeeAttendanceReport(long empId, String employeeId, String name, String lastName, String siteName,
+    								String projectName, Date checkInTime, Date checkOutTime, String shiftStartTime, String shiftEndTime,
     								Long continuedAttendance, boolean isLate) {
        // this.Image = image;
     		this.empId = empId;
@@ -68,6 +70,13 @@ public class EmployeeAttendanceReport implements Serializable {
         this.checkOutTime = checkOutTime;
         this.shiftStartTime = shiftStartTime;
         this.shiftEndTime = shiftEndTime;
+        if(this.checkOutTime!=null){
+            this.difference = this.checkInTime.getTime()-this.checkOutTime.getTime();
+            this.difference = this.difference/ (60 * 60 * 1000);//Converting duration in hours
+
+        }else{
+            this.difference = 0;
+        }
         if(continuedAttendance != null) {
         		shiftContinued = (continuedAttendance > 0 ? true : false);
         }
@@ -214,5 +223,12 @@ public class EmployeeAttendanceReport implements Serializable {
 		this.late = late;
 	}
 
-    
+
+    public long getDifference() {
+        return difference;
+    }
+
+    public void setDifference(long difference) {
+        this.difference = difference;
+    }
 }
