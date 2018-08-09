@@ -52,7 +52,7 @@
                                                     <label class="control-label">Employee ID<span class="red-star">*</span></label>
                                                     <input id='employeeEmpId' ng-model="employee.empId" class='form-control'
                                                            name='employeeEmpId' type='text' value="" ng-minlength=1 ng-maxlength=10 ng-pattern="/^[A-Za-z0-9]*$/" autofocus required ng-blur="getEmployeeByEmpId()"/>
-                                                    <div ng-show="form.$submitted || form.employeeEmpId.$touched">
+                                                    <div ng-show="form.$submitted || form.employeeEmpId.$touched || form.employeeEmpId.$dirty">
                                                         <div ng-show="form.employeeEmpId.$dirty || form.employeeEmpId.$invalid">
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.employeeEmpId.$error.required">
@@ -84,7 +84,7 @@
                                                             <select class="form-control" name="designations" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations" required>
                                                                 <option value="">Select Designation..</option>
                                                             </select>
-                                                             <div ng-show="form.$submitted || form.designations.$touched">
+                                                             <div ng-show="form.$submitted || form.designations.$touched || form.designations.$dirty">
                                                                 <div ng-show="form.designations.$dirty || form.designations.$invalid">
                                                                     <p class="help-block" style="color:maroon"
                                                                        ng-show="form.designations.$error.required">
@@ -120,7 +120,7 @@
                                                     <input id='employeeName' ng-model="employee.name" class='form-control InputTxtCaps'
                                                            name='employeeName' type='text' value=""
                                                            ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" required />
-                                                    <div ng-show="form.$submitted || form.employeeName.$touched">
+                                                    <div ng-show="form.$submitted || form.employeeName.$touched || form.employeeName.$dirty">
                                                         <div ng-show="form.employeeName.$dirty || form.employeeName.$invalid">
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.employeeName.$error.required">
@@ -148,7 +148,7 @@
                                                     <input id='employeeLastName' ng-model="employee.lastName" class='form-control InputTxtCaps'
                                                            name='employeeLastName' type='text' value=""
                                                            ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" required />
-                                                    <div ng-show="form.$submitted || form.employeeLastName.$touched">
+                                                    <div ng-show="form.$submitted || form.employeeLastName.$touched || form.employeeLastName.$dirty">
                                                         <div ng-show="form.employeeLastName.$dirty || form.employeeLastName.$invalid">
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.employeeLastName.$error.required">
@@ -180,7 +180,7 @@
                                                     <input id='employeePhone' ng-model="employee.phone" class='form-control'
                                                            name='employeePhone' type='text' value=""
                                                            ng-minlength=10 ng-maxlength=13 ng-pattern="/^[0-9\s&-/]*$/"  required/>
-                                                    <div ng-show="form.$submitted || form.employeePhone.$touched">
+                                                    <div ng-show="form.$submitted || form.employeePhone.$touched || form.employeePhone.$dirty">
                                                         <div ng-show="form.employeePhone.$dirty || form.employeePhone.$invalid">
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.employeePhone.$error.required">
@@ -207,20 +207,12 @@
                                                     <label class="control-label">Email<span class="red-star">*</span></label>
                                                     <input id='employeeEmail' ng-model="employee.email" class='form-control'
                                                            name='employeeEmail' type='email' value=""
-                                                           ng-minlength=10 ng-maxlength=100  required />
-                                                    <div ng-show="form.$submitted || form.employeeEmail.$touched">
+                                                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"  required />
+                                                    <div ng-show="form.$submitted || form.employeeEmail.$touched || form.employeeEmail.$dirty">
                                                         <div ng-show="form.employeeEmail.$dirty || form.employeeEmail.$invalid">
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.employeeEmail.$error.required">
                                                                 Employee email is required.
-                                                            </p>
-                                                            <p class="help-block" style="color:maroon"
-                                                               ng-show="form.employeeEmail.$error.minlength">
-                                                                Employee email is required to be at least 10 character.
-                                                            </p>
-                                                            <p class="help-block" style="color:maroon"
-                                                               ng-show="form.employeeEmail.$error.maxlength">
-                                                                Employee email cannot be longer than 100 characters.
                                                             </p>
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.employeeEmail.$error.pattern">
@@ -258,7 +250,7 @@
 			                                         <option value="">Select role...</option>
 			                                     </select>
 
-			                                     <div ng-show="form.$submitted || form.UserRole.$touched">
+			                                     <div ng-show="form.$submitted || form.UserRole.$touched || form.UserRole.$dirty">
 			                                         <div ng-show="form.UserRole.$dirty || form.UserRole.$invalid">
 			                                             <p class="help-block" style="color: maroon"
 			                                                ng-show="form.UserRole.$error.required">User Role is
@@ -306,7 +298,7 @@
                                                         <select class=" form-control " ng-model="selectedProject"  ng-required="true" ng-change="loadSites()" ng-options="project as project.name for project in projects" name="projectName" >
                                                             <option value="">Select Client...</option>
                                                         </select>
-                                                        <div ng-show="form.$submitted || form.projectName.$touched">
+                                                        <div ng-show="form.$submitted || form.projectName.$touched || form.projectName.$dirty">
                                                             <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
                                                                 <p class="help-block" style="color:maroon"
                                                                    ng-show="form.projectName.$error.required">
@@ -341,7 +333,7 @@
                                                             <option value="">Select Site...</option>
                                                         </select>
 
-                                                        <div ng-show="form.$submitted || form.siteName.$touched">
+                                                        <div ng-show="form.$submitted || form.siteName.$touched || form.siteName.$dirty">
                                                             <div ng-show="form.siteName.$dirty || form.siteName.$invalid">
                                                                 <p class="help-block" style="color:maroon"
                                                                    ng-show="form.siteName.$error.required">
@@ -425,7 +417,7 @@
                                                         <select class=" form-control " ng-model="selectedManager"  ng-options="manager as manager.name for manager in allManagers" name="manager" >
                                                             <option value="">Select Manager...</option>
                                                         </select>
-                                                        <div ng-show="form.$submitted || form.manager.$touched">
+                                                        <div ng-show="form.$submitted || form.manager.$touched || form.manager.$dirty">
                                                             <div ng-show="form.manager.$dirty || form.manager.$invalid">
                                                                 <p class="help-block" style="color:maroon"
                                                                    ng-show="form.manager.$error.required">
@@ -515,7 +507,7 @@
                                                        <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in  blocks" name="block" >
                                                         	<option value="">Select Block...</option>
                                                     	  </select>
-                                                        <div ng-show="form.$submitted || form.block.$touched">
+                                                        <div ng-show="form.$submitted || form.block.$touched || form.block.$dirty">
                                                             <div
                                                                 ng-show="form.block.$dirty || form.block.$invalid">
                                                                 <p class="help-block" style="color: maroon"
@@ -535,7 +527,7 @@
 													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors" name="floor" >
                                                         <option value="">Select Floor...</option>
                                                     	</select>
-                                                   	 <div ng-show="form.$submitted || form.floor.$touched">
+                                                   	 <div ng-show="form.$submitted || form.floor.$touched || form.floor.$dirty">
                                                             <div
                                                                 ng-show="form.floor.$dirty || form.floor.$invalid">
                                                                 <p class="help-block" style="color: maroon"
@@ -555,7 +547,7 @@
 													<select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones" name="zone" >
                                                         <option value="">Select Zone...</option>
                                                     </select>
-                                                   	 <div ng-show="form.$submitted || form.floor.$touched">
+                                                   	 <div ng-show="form.$submitted || form.floor.$touched || form.floor.$dirty">
                                                             <div
                                                                 ng-show="form.zone.$dirty || form.zone.$invalid">
                                                                 <p class="help-block" style="color: maroon"
@@ -609,7 +601,7 @@
 
                                <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
                                    <button class="btn btn-success" type="submit"
-                                           id="form-button-save" ng-disabled="form.$invalid" >
+                                           id="form-button-save" ng-model="form.$invalid" >
                                                     <span class="btn-label">
                                             				<i class="material-icons">check</i>
                                         				</span> Save
