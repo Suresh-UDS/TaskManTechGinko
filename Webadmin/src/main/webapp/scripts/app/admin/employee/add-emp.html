@@ -33,7 +33,7 @@
 
 				<div class="form-container table-container">
 					<form ng-show="!success" name="form" role="form" novalidate
-						ng-submit="saveEmployee()"
+						ng-submit="conform('save')"
 						onClick="" class="form-horizontal">
 
 
@@ -598,20 +598,18 @@
                        </div>
 
                        <div class="row">
-
                                <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
-                                   <button class="btn btn-success" type="submit"
-                                           id="form-button-save" ng-model="form.$invalid" >
-                                                    <span class="btn-label">
-                                            				<i class="material-icons">check</i>
-                                        				</span> Save
+                                   <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}"
+                                           type="submit" id="form-button-save" ng-disabled="form.$invalid ">
+                                       <span class="btn-label"><i class="material-icons">check</i></span> Save
+                                       <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                    </button>
                                    <!--<button class="btn btn-info" type="submit"-->
                                    <!--id="save-and-go-back-button" ng-disabled="form.$invalid">-->
                                    <!--<i class="material-icons">rotate_left</i> Save and go back to list-->
                                    <!--</button>-->
                                    <button class="btn btn-danger" type="button"
-                                           ng-click="cancelEmployee()" id="cancel-button">
+                                           ng-click="conform('cancel')" id="cancel-button">
                                        <i class="material-icons">close</i> Cancel
                                    </button>
                                </div>

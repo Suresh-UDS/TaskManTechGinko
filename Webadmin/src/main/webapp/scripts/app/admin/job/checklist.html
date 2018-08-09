@@ -77,14 +77,22 @@
 
 	                       <div class="col-md-10">
 	                           <div class="form-group">
-	                               <button class="btn btn-success" type="submit" ng-click="saveChecklist()"
-	                                       id="form-button-save">
-	                                  <span class="btn-label">
-	                        <i class="material-icons">check</i>
-	                   		 </span> Save
-	                               </button>
+	                               <!--<button class="btn btn-success" type="submit" ng-click="saveChecklist()"-->
+	                                       <!--id="form-button-save">-->
+	                                  <!--<span class="btn-label">-->
+	                        <!--<i class="material-icons">check</i>-->
+	                   		 <!--</span> Save-->
+	                               <!--</button>-->
+
+                                   <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" ng-click="conform('save')"
+                                           type="submit" id="form-button-save" ng-disabled="form.$invalid ">
+                                       <span class="btn-label"><i class="material-icons">check</i></span> Save
+                                       <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                                   </button>
+
+
 	                               <button class="btn btn-danger" type="button"
-	                                       ng-click="cancelChecklist()" id="cancel-button">
+	                                       ng-click="conform('cancel')" id="cancel-button">
 	                                   <i class="material-icons">close</i>Cancel
 	                               </button>
 	                           </div>

@@ -43,7 +43,10 @@ angular.module('timeSheetApp')
         $scope.loadProjectsList = function () {
             ProjectComponent.findAll().then(function (data) {
                 $scope.projectsList = data;
-                $scope.uiClient =  $scope.projectsList;
+                for(var i=0;i<$scope.projectsList.length;i++)
+                {
+                    $scope.uiClient[i] = $scope.projectsList[i].name;
+                }
                 $scope.clientDisable = false;
             });
         };
@@ -59,14 +62,6 @@ angular.module('timeSheetApp')
         // Load Clients for selectbox //
         $scope.clienteDisable = true;
         $scope.uiClient = [];
-
-        $scope.$watch('selectedProject', function(newVal, oldVal) {
-            if (newVal !== oldVal) {
-                if ($scope.uiClient.indexOf(newVal) === -1) {
-                    $scope.uiClient.unshift(newVal);
-                }
-            }
-        });
         $scope.getClient = function (search) {
             var newSupes = $scope.uiClient.slice();
             if (search && newSupes.indexOf(search) === -1) {
@@ -80,11 +75,10 @@ angular.module('timeSheetApp')
 
         $scope.loadBloack = function(selectedSite)
         {
-            $scope.selectedSite = selectedSite;
+            $scope.selectedSite = $scope.sitesList[$scope.uiSite.indexOf(selectedSite)]
             console.log("==========Selected sites ==========");
             console.log($scope.selectedProject);
             console.log($scope.selectedSite);
-
         }
 
 
@@ -93,7 +87,7 @@ angular.module('timeSheetApp')
         //Load sites for selectbox//
 
          $scope.loadDepSites = function (selectedProject) {
-             $scope.selectedProject = selectedProject;
+             $scope.selectedProject = $scope.projectsList[$scope.uiClient.indexOf(selectedProject)]
              $scope.siteSpin = true;
              $scope.siteDisable = true;
              $scope.selectedSite = null;
@@ -108,7 +102,10 @@ angular.module('timeSheetApp')
             ProjectComponent.findSites(depProj).then(function (data) {
                 $scope.selectedSite = null;
                 $scope.sitesList = data;
-                $scope.uiSite = $scope.sitesList;
+                for(var i=0;i<$scope.sitesList.length;i++)
+                {
+                    $scope.uiSite[i] = $scope.sitesList[i].name;
+                }
                 $scope.siteDisable = false;
                 $scope.siteSpin = false;
                 console.log("===========Slected Site ==============")
@@ -118,15 +115,6 @@ angular.module('timeSheetApp')
 
         $scope.siteDisable = true;
         $scope.uiSite = [];
-        $scope.$watch('selectedSite', function(newVal, oldVal) {
-            if (newVal !== oldVal) {
-                console.log()
-                if ($scope.uiSite.indexOf(newVal) === -1) {
-                    $scope.uiSite.unshift(newVal);
-                }
-            }
-
-        });
         $scope.getSites = function (search) {
 
             var newSupes = $scope.uiSite.slice();

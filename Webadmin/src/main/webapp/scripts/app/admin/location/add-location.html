@@ -38,9 +38,9 @@
                                                     <span ng-show="clientDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-spinner ld-spin" ></i></span>
                                                     <span ng-show="!clientDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <ui-select ng-model="selectedProject"  ng-disabled="clientDisable" ng-change="loadDepSites(selectedProject)">
-                                                        <ui-select-match placeholder="Select clients...">{{selectedProject.name}}</ui-select-match>
+                                                        <ui-select-match placeholder="Select clients...">{{selectedProject}}</ui-select-match>
                                                         <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
-                                                            <div >{{ client.name || client }}</div>
+                                                            <div >{{ client }}</div>
                                                         </ui-select-choices>
 
                                                     </ui-select>
@@ -59,10 +59,10 @@
                                                     <!--</select>-->
                                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-spinner ld-spin" ></i></span>
                                                     <span  ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="selectedSite" ng-disabled="siteDisable" ng-change="loadBloack(selectedSite)" >
-                                                        <ui-select-match placeholder="Select sites...">{{ selectedSite.name}}</ui-select-match>
+                                                    <ui-select ng-model="selectedSite" ng-disabled="siteDisable || sitesList.length == 0" ng-change="loadBloack(selectedSite)" >
+                                                        <ui-select-match placeholder="Select sites...">{{ selectedSite }}</ui-select-match>
                                                         <ui-select-choices   repeat="site in getSites($select.search) | filter: $select.search" >
-                                                            <div >{{site.name || site}}</div>
+                                                            <div >{{site}}</div>
                                                         </ui-select-choices>
                                                     </ui-select>
                                                     <span ng-if="sitesList.length == 0"><p class="help-block">No sites</p></span>

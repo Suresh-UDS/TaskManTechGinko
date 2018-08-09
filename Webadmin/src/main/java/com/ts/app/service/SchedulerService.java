@@ -660,10 +660,22 @@ public class SchedulerService extends AbstractService {
 			List<Job> prevJobs = jobRepository.findLastJobByParentJobId(parentJob.getId(), pageRequest);
 			DateTime today = DateTime.now();
 			today = today.withHourOfDay(0); //set today's hour to 0
+			Calendar scheduledEndDate = Calendar.getInstance();
+			scheduledEndDate.setTime(parentJob.getScheduleEndDate());
+			scheduledEndDate.set(Calendar.HOUR_OF_DAY, 23);
+			scheduledEndDate.set(Calendar.MINUTE, 59);
+			DateTime endDate = DateTime.now().withYear(scheduledEndDate.get(Calendar.YEAR)).withMonthOfYear(scheduledEndDate.get(Calendar.MONTH) + 1)
+					.withDayOfMonth(scheduledEndDate.get(Calendar.DAY_OF_MONTH)).withHourOfDay(scheduledEndDate.get(Calendar.HOUR_OF_DAY)).withMinuteOfHour(scheduledEndDate.get(Calendar.MINUTE));
+			
 			if (creationPolicy.equalsIgnoreCase("monthly")) { // if the creation policy is set to monthly, create jobs for the rest of the
 																// month
 				DateTime currDate = DateTime.now();
 				DateTime lastDate = currDate.dayOfMonth().withMaximumValue().withHourOfDay(23).withMinuteOfHour(59);
+				
+				if(endDate.isBefore(lastDate)) {
+					lastDate = lastDate.withMonthOfYear(scheduledEndDate.get(Calendar.MONTH) + 1);
+					lastDate = lastDate.withDayOfMonth(scheduledEndDate.get(Calendar.DAY_OF_MONTH));
+				}
 				
 				if(CollectionUtils.isNotEmpty(prevJobs)) {
 					Job prevJob = prevJobs.get(0);
@@ -691,13 +703,13 @@ public class SchedulerService extends AbstractService {
 					Job prevJob = prevJobs.get(0);
 					currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
 					if(prevJob.getPlannedStartTime().before(currDate.toDate())){
-						if(currDate.isAfter(today)) {
+						if(currDate.isAfter(today) && currDate.isBefore(endDate)) {
 							jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate());
 						}
 					}
 				}else {
 					currDate = new DateTime(parentJob.getPlannedStartTime().getTime());
-					if(currDate.isAfter(today) || currDate.isEqual(today)) {
+					if((currDate.isAfter(today) || currDate.isEqual(today)) && currDate.isBefore(endDate)) {
 						jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate());
 					}
 				}
@@ -1038,9 +1050,9 @@ public class SchedulerService extends AbstractService {
             List<JobChecklistDTO> checklistItems = new ArrayList<JobChecklistDTO>();
             for(JobChecklist jobcl : jobclList) {
                 JobChecklistDTO checklist = new JobChecklistDTO();
-                checklist.setChecklistId(jobcl.getChecklistId());
+                checklist.setChecklistId(String.valueOf(jobcl.getChecklistId()));
                 checklist.setChecklistName(jobcl.getChecklistName());
-                checklist.setChecklistItemId(jobcl.getChecklistItemId());
+                checklist.setChecklistItemId(String.valueOf(jobcl.getChecklistItemId()));
                 checklist.setChecklistItemName(jobcl.getChecklistItemName());
                 checklistItems.add(checklist);
 
