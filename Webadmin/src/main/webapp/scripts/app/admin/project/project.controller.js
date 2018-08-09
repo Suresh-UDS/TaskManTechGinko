@@ -107,21 +107,13 @@ angular.module('timeSheetApp')
                 {
                     $scope.uiClient[i] = $scope.projectsList[i].name;
                 }
+                $scope.clientFilterDisable = false;
             });
         };
 
         // Load Clients for selectbox //
         $scope.clienteDisable = true;
         $scope.uiClient = [];
-
-        // $scope.$watch('selectedProject', function(newVal, oldVal) {
-        //     if (newVal !== oldVal) {
-        //         if ($scope.uiClient.indexOf(newVal) === -1) {
-        //             $scope.uiClient.unshift(newVal);
-        //         }
-        //     }
-        // });
-
 
         $scope.getClient = function (search) {
 
@@ -135,12 +127,17 @@ angular.module('timeSheetApp')
 
         $scope.selectProject = function(project)
         {
+            $scope.filter = false;
             $scope.searchProject = $scope.projectsList[$scope.uiClient.indexOf(project)]
             console.log('Project dropdown list:',$scope.searchProject)
         }
 
         //
 
+        //Filter
+        $scope.clientFilterDisable = true;
+        $scope.filter = false;
+        //
 
         $scope.loadProjects = function () {
             $scope.clearFilter();
@@ -301,7 +298,8 @@ angular.module('timeSheetApp')
                     if($scope.localStorage){
                         $scope.pages.currPage = $scope.localStorage.currPage;
                         //$scope.searchProject = {id:$scope.localStorage.projectId,name:$scope.localStorage.projectName,searchStatus:'0'};
-
+                        $scope.filter = true;
+                        $scope.searchProject ={searchStatus:'0',id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
                     }
 
                     $rootScope.retain = 0;
@@ -330,6 +328,8 @@ angular.module('timeSheetApp')
 
                  console.log("Pagination",$scope.pager);
                  console.log($scope.projects);
+
+
 
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;

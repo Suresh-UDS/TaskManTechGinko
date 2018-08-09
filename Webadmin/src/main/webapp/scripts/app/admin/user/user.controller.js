@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('UserController', function ($rootScope, $scope, $state, $timeout, 
+    .controller('UserController', function ($rootScope, $scope, $state, $timeout,
         UserGroupComponent,EmployeeComponent, UserComponent, UserRoleComponent,
          $http, $stateParams, $location, JobComponent, PaginationComponent) {
         $rootScope.loadingStop();
@@ -40,6 +40,28 @@ angular.module('timeSheetApp')
         //$scope.user = {};
         //$scope.user.emailSubscribed = true;
 
+        $scope.conform = function(text)
+        {
+            console.log($scope.selectedProject)
+            $rootScope.conformText = text;
+            $('#conformationModal').modal();
+
+        }
+        $rootScope.back = function (text) {
+            if(text == 'cancel')
+            {
+                $scope.cancelUser();
+            }
+            else if(text == 'save')
+            {
+                $scope.saveUser();
+            }
+            else if(text == 'update')
+            {
+                $scope.updateUser()
+            }
+        };
+
         $scope.init = function() {
     		$scope.loadUserRoles();
         		$scope.loadUsers();
@@ -70,6 +92,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.saveUser = function () {
+            $scope.saveLoad = true;
         	if($scope.selectedGroup) {
             	$scope.user.userGroupId = $scope.selectedGroup.id;
         	}
@@ -82,11 +105,13 @@ angular.module('timeSheetApp')
         	}
         	UserComponent.createUser($scope.user).then(function () {
             	$scope.success = 'OK';
+                $scope.saveLoad = false;
             	//$scope.loadUsers();
             	$scope.showNotifications('top','center','success','User Created Successfully');
             	$location.path('/users');
             }).catch(function (response) {
                 $scope.success = null;
+                $scope.saveLoad = false;
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                     $scope.errorUserExists = true;
                 } else if(response.status === 400 && response.data.message === 'error.validation'){
@@ -123,6 +148,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.updateUser = function () {
+            $scope.saveLoad = true;
 	        	if($scope.selectedRole) {
 	        		$scope.user.userRoleId = $scope.selectedRole.id;
 	        	}
@@ -136,10 +162,12 @@ angular.module('timeSheetApp')
 
         	UserComponent.updateUser($scope.user).then(function () {
             	$scope.success = 'OK';
+                $scope.saveLoad = false;
             	//$scope.loadUsers();
             	$scope.showNotifications('top','center','success','User Details Updated Successfully');
             	$location.path('/users');
             }).catch(function (response) {
+                $scope.saveLoad = false;
                 $scope.success = null;
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
@@ -164,7 +192,7 @@ angular.module('timeSheetApp')
         	$state.reload();
         };
 
-        
+
 
         $scope.isActiveAsc = 'id';
         $scope.isActiveDesc = '';
@@ -215,36 +243,36 @@ angular.module('timeSheetApp')
 
 	        	if(!$scope.userLogin && !$scope.userFirstName
 	        			&& !$scope.userLastName && !$scope.userEmail && !$scope.selectedRole) {
-	        		
+
 	        			$scope.searchCriteria.findAll = true;
 	        		}
 
                 if($scope.userLogin) {
                     $scope.searchCriteria.userLogin = $scope.userLogin;
-                }  
+                }
 
                 if($scope.userFirstName) {
                     $scope.searchCriteria.userFirstName = $scope.userFirstName;
-                }    
+                }
 
                 if($scope.userLastName) {
                     $scope.searchCriteria.userLastName = $scope.userLastName;
-                } 
+                }
 
                 if($scope.userEmail) {
                     $scope.searchCriteria.userEmail = $scope.userEmail;
                 }
-	        		
+
 	        	if($scope.selectedRole) {
 	        		$scope.searchCriteria.userRoleId = $scope.selectedRole.id;
 	        	}
 
-	        	
+
     	        	//----
                 if($scope.pageSort){
                     $scope.searchCriteria.sort = $scope.pageSort;
                 }
-                
+
 
                 if($scope.selectedColumn){
 
@@ -255,8 +283,8 @@ angular.module('timeSheetApp')
                     $scope.searchCriteria.columnName ="id";
                     $scope.searchCriteria.sortByAsc = true;
                 }
-                    
-                   
+
+
                      console.log("search criteria",$scope.searchCriteria);
                      $scope.users = '';
                      $scope.usersLoader = false;
@@ -283,7 +311,7 @@ angular.module('timeSheetApp')
 
                     $scope.pages.currPage = $scope.pages.currPage;
                     $scope.pages.totalPages = data.totalPages;
-               
+
                     if($scope.users && $scope.users.length > 0 ){
                         $scope.showCurrPage = data.currPage;
                         $scope.pageEntries = $scope.users.length;
@@ -295,9 +323,9 @@ angular.module('timeSheetApp')
                      $scope.noData = true;
                 }
 
-	            
+
 	            });
-	        
+
         };
 
 
