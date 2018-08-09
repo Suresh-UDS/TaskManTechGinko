@@ -2232,20 +2232,27 @@
                                                 <div class="row">
                                                     <div class="col-md-12" style="text-align:right;">
 
-                                                        <button class="btn btn-success" type="submit" ng-hide="upView"
-                                                                id="form-button-save" ng-disabled="form.$invalid || btnDisabled || warFromMsg || warToMsg" ng-click="updateAsset();">
-                                                            <span class="btn-label">
-                                                            <i class="material-icons">check</i>
-                                                        </span> Update
+                                                        <!--<button class="btn btn-success" type="submit" ng-hide="upView"-->
+                                                                <!--id="form-button-save" ng-disabled="form.$invalid || btnDisabled || warFromMsg || warToMsg" ng-click="updateAsset();">-->
+                                                            <!--<span class="btn-label">-->
+                                                            <!--<i class="material-icons">check</i>-->
+                                                        <!--</span> Update-->
+                                                        <!--</button>-->
+
+                                                        <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" ng-hide="upView"
+                                                                type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisabled || warFromMsg || warToMsg" ng-click="conform('update');">
+                                                            <span class="btn-label"><i class="material-icons">check</i></span> Update
+                                                            <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                                         </button>
                                                         <!--    <button class="btn btn-info b10" type="submit"
                                                             id="save-and-go-back-button" ng-disabled="form.$invalid">
                                                             <i class="fa fa-rotate-left" ></i> Save and go back to list
                                                         </button> -->
                                                         <button class="btn btn-danger" type="button"
-                                                                ng-click="cancel();" id="cancel-button">
-                                                            <i class="material-icons">close</i> Cancel
+                                                                ng-click="conform('cancel')" id="cancel-button">
+                                                            <i class="material-icons">close</i> Discard
                                                         </button>
+
 
                                                     </div>
                                                 </div>
