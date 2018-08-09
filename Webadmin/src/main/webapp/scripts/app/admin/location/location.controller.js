@@ -375,25 +375,33 @@ angular.module('timeSheetApp')
                 }
 
             }else {
-                if($scope.searchProject) {
-                    $scope.searchCriteria.findAll = false;
+                $scope.searchCriteria.findAll = false;
+                    if($scope.searchProject) {   
                     $scope.searchCriteria.projectId = $scope.searchProject.id;
+                    }else {
+                    $scope.searchCriteria.projectId = null;
+                    }
                     if($scope.searchSite) {
                         $scope.searchCriteria.siteId = $scope.searchSite.id;
+                    }else{
+                        $scope.searchCriteria.siteId = null;
                     }
                     if($scope.searchBlock) {
                         $scope.searchCriteria.block = $scope.searchBlock;
+                    }else{
+                        $scope.searchCriteria.block = null;
                     }
                     if($scope.searchFloor) {
                         $scope.searchCriteria.floor = $scope.searchFloor;
+                    }else{
+                        $scope.searchCriteria.floor = null; 
                     }
                     if($scope.searchZone) {
                         $scope.searchCriteria.zone = $scope.searchZone;
+                    }else{
+                        $scope.searchCriteria.zone = null;
                     }
-                }else {
-                    $scope.searchCriteria.projectId = 0;
                 }
-            }
             console.log($scope.searchCriteria);
             //----
             if($scope.pageSort){
