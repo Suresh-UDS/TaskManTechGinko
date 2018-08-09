@@ -85,11 +85,21 @@ public class InventoryTransactionService extends AbstractService{
 		return materialTransList;
 	}
 
-	public MaterialTransactionDTO updateMaterialTransaction(MaterialTransactionDTO materialTransDTO) {
+	public void updateMaterialTransaction(MaterialTransactionDTO materialTransDTO) {
 		MaterialTransaction materialTrans = inventTransactionRepository.findOne(materialTransDTO.getId());
+		mapToModel(materialTrans, materialTransDTO);
+		inventTransactionRepository.save(materialTrans);	
+	}
+
+	private void mapToModel(MaterialTransaction materialTrans, MaterialTransactionDTO materialTransDTO) {
+		// TODO Auto-generated method stub
 		materialTrans.setItemCode(materialTransDTO.getItemCode());
-		materialTrans.setSite(siteRepository.findOne(materialTransDTO.getSiteId()));
-		materialTrans.setProject(projectRepository.findOne(materialTransDTO.getProjectId()));
+		if(materialTransDTO.getSiteId() > 0) {
+			materialTrans.setSite(siteRepository.findOne(materialTransDTO.getSiteId()));	
+		}
+		if(materialTransDTO.getProjectId() > 0) {
+			materialTrans.setProject(projectRepository.findOne(materialTransDTO.getProjectId()));	
+		}
 		materialTrans.setStoreStock(materialTransDTO.getStoreStock());
 		materialTrans.setQuantity(materialTransDTO.getQuantity());
 		materialTrans.setName(materialTransDTO.getName());
@@ -97,10 +107,9 @@ public class InventoryTransactionService extends AbstractService{
 		if(materialTransDTO.getTransactionDate() != null) {
 			materialTrans.setTransactionDate(DateUtil.convertToTimestamp(materialTransDTO.getTransactionDate()));
 		}
-		materialTrans.setUom(MaterialUOMType.valueOf(materialTransDTO.getUom()).getValue());
-		materialTrans = inventTransactionRepository.save(materialTrans);
-		materialTransDTO = mapperUtil.toModel(materialTrans, MaterialTransactionDTO.class);
-		return materialTransDTO;
+		if(materialTransDTO.getUom() != null) {
+			materialTrans.setUom(MaterialUOMType.valueOf(materialTransDTO.getUom()).getValue());	
+		}
 	}
 
 	public void deleteMaterialTrans(long id) {
