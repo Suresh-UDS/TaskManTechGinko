@@ -3367,7 +3367,7 @@ angular.module('timeSheetApp')
       }
 
       $scope.loadSubModule = function(cb){
-        $scope.pages = {};
+        $scope.pages = { currPage : 1};
         $scope.pager = {};
         return cb();
       }
