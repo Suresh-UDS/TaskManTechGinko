@@ -696,7 +696,7 @@ public class AttendanceService extends AbstractService {
 		if (CollectionUtils.isNotEmpty(transactions)) {
 			for (AttendanceDTO attn : transactions) {
 				EmployeeAttendanceReport reportData = new EmployeeAttendanceReport(attn.getEmployeeId(), attn.getEmployeeEmpId(), attn.getEmployeeFullName(), null,
-						attn.getSiteName(), null, attn.getCheckInTime(), attn.getCheckOutTime(), attn.getShiftStartTime(), attn.getShiftEndTime(), attn.getContinuedAttendanceId(), attn.isLate());
+						attn.getSiteName(), null, attn.getCheckInTime(), attn.getCheckOutTime(), attn.getShiftStartTime(), attn.getShiftEndTime(), attn.getContinuedAttendanceId(), attn.isLate(), attn.getRemarks());
 				attendanceReportList.add(reportData);
 			}
 		}
