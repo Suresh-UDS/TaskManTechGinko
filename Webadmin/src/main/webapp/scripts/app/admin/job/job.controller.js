@@ -747,12 +747,7 @@ angular.module('timeSheetApp')
             $scope.selectedJobDate = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedJobDateToSer = new Date();
             $scope.selectedJobDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-            $scope.selectedProject = null;
             $scope.searchCriteria = {};
-            $scope.selectedSite = null;
-            $scope.selectedStatus = null;
-            $scope.selectedJob = null;
-            $scope.selectedEmployee = null;
             $scope.searchSite = null;
             $scope.searchEmployee = null;
             $scope.searchStatus = null;
