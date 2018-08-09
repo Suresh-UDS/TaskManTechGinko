@@ -57,6 +57,8 @@ public class EmployeeAttendanceReport implements Serializable {
 
     private String differenceText;
 
+    private String remarks;
+
     public EmployeeAttendanceReport() {
 
     }
@@ -64,7 +66,7 @@ public class EmployeeAttendanceReport implements Serializable {
 
     public EmployeeAttendanceReport(long empId, String employeeId, String name, String lastName, String siteName,
     								String projectName, Date checkInTime, Date checkOutTime, String shiftStartTime, String shiftEndTime,
-    								Long continuedAttendance, boolean isLate) {
+    								Long continuedAttendance, boolean isLate, String remarks) {
        // this.Image = image;
     		this.empId = empId;
         this.employeeId = employeeId;
@@ -76,6 +78,7 @@ public class EmployeeAttendanceReport implements Serializable {
         this.checkOutTime = checkOutTime;
         this.shiftStartTime = shiftStartTime;
         this.shiftEndTime = shiftEndTime;
+        this.remarks = remarks;
         if(this.checkOutTime!=null){
             this.difference = this.checkOutTime.getTime() - this.checkInTime.getTime();
             this.differenceInHours = this.difference/ (60 * 60 * 1000);//Converting duration in hours
@@ -269,5 +272,13 @@ public class EmployeeAttendanceReport implements Serializable {
 
     public void setDifferenceText(String differenceText) {
         this.differenceText = differenceText;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 }
