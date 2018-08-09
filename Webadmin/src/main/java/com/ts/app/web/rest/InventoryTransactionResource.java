@@ -77,11 +77,11 @@ public class InventoryTransactionResource {
 	public ResponseEntity<?> updateMaterialTransaction(@Valid @RequestBody MaterialTransactionDTO materialTransDTO, HttpServletRequest request) {
 		log.debug("Update object: {}" +materialTransDTO);
 		try {
-			materialTransDTO = inventoryTransactionService.updateMaterialTransaction(materialTransDTO);
+			inventoryTransactionService.updateMaterialTransaction(materialTransDTO);
 		} catch(Exception e) { 
 			throw new TimesheetException("Error while updating Inventory" +e);
 		}
-		return new ResponseEntity<>(materialTransDTO, HttpStatus.CREATED);
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
 	@RequestMapping(value="/delete/inventoryTrans", method=RequestMethod.DELETE)

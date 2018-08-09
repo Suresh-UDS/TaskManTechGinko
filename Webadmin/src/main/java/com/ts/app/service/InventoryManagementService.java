@@ -81,19 +81,27 @@ public class InventoryManagementService extends AbstractService{
 		return materialList;
 	}
 
-	public MaterialDTO updateInventory(MaterialDTO materialDTO) {
+	public void updateInventory(MaterialDTO materialDTO) {
 		Material material = inventRepository.findOne(materialDTO.getId());
+		mapToModel(material, materialDTO);
+		inventRepository.saveAndFlush(material);		
+	}
+
+	private void mapToModel(Material material, MaterialDTO materialDTO) {
+		material.setName(materialDTO.getName());
 		material.setItemCode(materialDTO.getItemCode());
-		material.setSite(siteRepository.findOne(materialDTO.getSiteId()));
-		material.setProject(projectRepository.findOne(materialDTO.getProjectId()));
+		if(materialDTO.getSiteId() > 0) { 
+			material.setSite(siteRepository.findOne(materialDTO.getSiteId()));
+		}
+		if(materialDTO.getProjectId() > 0) {
+			material.setProject(projectRepository.findOne(materialDTO.getProjectId()));
+		}
 		material.setMaximumStock(materialDTO.getMaximumStock());
 		material.setMinimumStock(materialDTO.getMinimumStock());
-		material.setName(materialDTO.getName());
-		material.setStoreStock(material.getStoreStock());
-		material.setUom(MaterialUOMType.valueOf(materialDTO.getUom()).getValue());
-		material = inventRepository.save(material);
-		materialDTO = mapperUtil.toModel(material, MaterialDTO.class);
-		return materialDTO;
+		material.setStoreStock(materialDTO.getStoreStock());
+		if(materialDTO.getUom() != null) {
+			material.setUom(MaterialUOMType.valueOf(materialDTO.getUom()).getValue());
+		}
 	}
 
 	public void deleteMaterial(long id) {
