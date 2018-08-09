@@ -637,7 +637,7 @@ demo = {
                 text: txt,
                 buttonsStyling: false,
                 confirmButtonClass: "btn btn-success",
-                type: "success"
+                type: "success",
             }).catch(swal.noop)
 
         }else if (type == 'feedback-success') {
@@ -646,7 +646,8 @@ demo = {
                   text: txt,
                   buttonsStyling: false,
                   confirmButtonClass: "btn btn-success",
-                  type: "success"
+                  type: "success",
+                  timer:3000
               }).catch(swal.noop)
 
          } else if (type == 'warning-message-and-confirmation')
@@ -659,7 +660,8 @@ demo = {
                 confirmButtonClass: 'btn btn-success',
                 cancelButtonClass: 'btn btn-danger',
                 confirmButtonText: 'Yes',
-                buttonsStyling: false
+                buttonsStyling: false,
+                timer:3000
             }).then(function() {
                 swal({
                     title: 'Deleted!',
