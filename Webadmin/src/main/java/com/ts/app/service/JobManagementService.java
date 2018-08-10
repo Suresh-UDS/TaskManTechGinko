@@ -470,6 +470,9 @@ public class JobManagementService extends AbstractService {
 		        	}
 	        	}else {
 	        		if(!searchCriteria.isConsolidated()) {
+	        			if(log.isDebugEnabled()) {
+	        				log.debug("Asset id in job search criteria " + searchCriteria.getAssetId());
+	        			}
 	        			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
 	        			if(CollectionUtils.isEmpty(page.getContent())) {
 		            		List<EmployeeProjectSite> projectSites = employee.getProjectSites();

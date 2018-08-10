@@ -563,6 +563,27 @@ textarea.form-control {
     min-width: 390px;
     /*top: 12px;*/
 }
+.AppliedFilterCon
+{
+    padding: 10px 0 5px 0px;
+}
+span.filterdTxt
+{
+    font-size: 12px;
+    background-color: #e0e0e0;
+    box-shadow: 0 2px 4px 0 rgba(255, 255, 255, .5);
+    border-radius: 3px;
+    margin: 2px;
+    overflow: hidden;
+    transition: background-color 0.1s;
+    max-width: 200px;
+    padding: 5px;
+    border: 1px solid #ccc;
+}
+.applyTitle
+{
+    font-weight: 400;
+}
 .hoverMe:hover .Viewmore
 {
     display: none;
@@ -782,7 +803,15 @@ table.withSortingIcons thead tr th
     font-size: 11px;
     font-weight: 400;
     min-width: 90px;
-    padding: 10px 0px;
+    padding: 10px 5px;
+}
+.EditAssetTabs .assetsTabs ul.nav-pills li a
+{
+    padding: 10px;
+}
+.viewAssetTabs  .assetsTabs ul.nav-pills li a
+{
+    min-width: 80px;
 }
 span.red-star
 {
