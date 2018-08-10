@@ -1942,7 +1942,7 @@
                                                                            </a>
                                                                            </div>
                                                                        <a href="{{uploadFile.url}}" id="loop">
-                                                                           <img src="assets/img/{{uploadFile.extension}}.png" alt="docs" title="Download"/>
+                                                                           <img ng-src="assets/img/{{uploadFile.extension}}.png" alt="docs" title="Download"/>
                                                                            <!-- <img src="assets/img/Docs-icon.png" alt="docs" /> -->
                                                                        </a>
                                                                        <p>{{uploadFile.title}}</p>
@@ -1983,7 +1983,7 @@
                                                                         </div>
                                                                         <a href="{{uploadPhoto.url}}" id="loop2">
                                                                             <!-- <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" /> -->
-                                                                            <img src="assets/img/{{uploadFile.extension}}.png" alt="docs" title="Download"/>
+                                                                            <img ng-src="assets/img/{{uploadPhoto.extension}}.png" alt="photo" title="Download"/>
                                                                         </a>
                                                                         <p>{{uploadPhoto.title}}</p>
                                                                         <div ng-if="uploadPhoto.id == download">
