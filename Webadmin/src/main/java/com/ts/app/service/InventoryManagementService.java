@@ -122,6 +122,7 @@ public class InventoryManagementService extends AbstractService{
 		if(materialDTO.getManufacturerId() > 0) {
 			material.setManufacturer(manufacturerRepository.findOne(materialDTO.getManufacturerId()));
 		}
+		material.setItemGroup(materialDTO.getItemGroup());
 		material.setMaximumStock(materialDTO.getMaximumStock());
 		material.setMinimumStock(materialDTO.getMinimumStock());
 		material.setStoreStock(materialDTO.getStoreStock());
