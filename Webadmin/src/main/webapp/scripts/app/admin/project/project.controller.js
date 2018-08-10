@@ -358,6 +358,7 @@ angular.module('timeSheetApp')
             $scope.selectedProject = null;
             $scope.searchProject = null;
             $scope.searchCriteria = {};
+            $scope.localStorage = null;
             $rootScope.searchCriteriaProject = null;
             $scope.pages = {
                 currPage: 1,
