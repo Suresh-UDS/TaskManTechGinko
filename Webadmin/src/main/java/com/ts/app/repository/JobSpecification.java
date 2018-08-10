@@ -147,9 +147,12 @@ public class JobSpecification implements Specification<Job> {
 	                		orPredicates.add(root.get("employee").get("id").in(searchCriteria.getSubordinateIds()));
 	                }
 	            }
+	            if(!isAdmin)
+	            {
 	            if(CollectionUtils.isNotEmpty(searchCriteria.getSiteIds())){
 	            		Predicate path = root.get("site").get("id").in(searchCriteria.getSiteIds());
 	        			orPredicates.add(path);
+	            }
 	            }
 
             //}
