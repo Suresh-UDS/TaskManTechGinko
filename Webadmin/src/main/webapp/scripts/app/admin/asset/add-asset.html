@@ -1408,7 +1408,7 @@
                                                                     <td>{{ppmSchedules.title}}</td>
                                                                     <td class="hiddenCheckList" >{{ppmSchedules.checklistName}}
 
-                                                                         <div class="CheckListBx">
+                                                                         <div class="CheckListBx" ng-if="ppmSchedules.checkListItems">
                                                                              <div class="bootstrap-tagsinput" ng-repeat="checkListItem in ppmSchedules.checkListItems">
                                                                                  <span class="tag label label-info">{{checkListItem.name}}<span data-role="remove"></span></span>
 
@@ -1720,7 +1720,7 @@
                                                                     <td>{{amcSchedule.title}}</td>
                                                                     <td class="hiddenCheckList">{{amcSchedule.checklistName}}
 
-                                                                       <div class="CheckListBx">
+                                                                       <div class="CheckListBx" ng-if="amcSchedule.checkListItems">
                                                                            <div class="bootstrap-tagsinput" ng-repeat="checkListItemAmc in amcSchedule.checkListItems">
                                                                                <span class="tag label label-info">{{checkListItemAmc.name}}<span data-role="remove"></span></span>
 
