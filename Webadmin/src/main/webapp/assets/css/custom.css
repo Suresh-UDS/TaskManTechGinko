@@ -803,7 +803,15 @@ table.withSortingIcons thead tr th
     font-size: 11px;
     font-weight: 400;
     min-width: 90px;
-    padding: 10px 0px;
+    padding: 10px 5px;
+}
+.EditAssetTabs .assetsTabs ul.nav-pills li a
+{
+    padding: 10px;
+}
+.viewAssetTabs  .assetsTabs ul.nav-pills li a
+{
+    min-width: 80px;
 }
 span.red-star
 {

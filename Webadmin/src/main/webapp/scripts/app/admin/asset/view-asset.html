@@ -9,7 +9,7 @@
 					<form ng-show="!success" name="form" role="form" novalidate
 						ng-submit="saveAsset()"  class="form-horizontal">
 
-                       <div class="TabsCon ">
+                       <div class="TabsCon viewAssetTabs">
 
                            <div class="panel panel-default TabsContainer assetsTabs">
                                <!--<div class="panel-heading">Panel Heading</div>-->
@@ -43,10 +43,10 @@
                                        </li>
                                        <li class=""><a href=".Readings" data-toggle="tab"
                                        ng-click="loadSubModule(loadAssetReadings)">Readings</a></li>
-                                       
+
                                         <li class=""><a href=".SiteHistory" data-toggle="tab"
                                        	ng-click="loadSubModule(loadSiteHistory)">SiteHistory</a></li>
-                                       
+
                                         <li class=""><a href=".StatusHistory" data-toggle="tab"
                                        	ng-click="loadSubModule(loadStatusHistory)">StatusHistory</a></li>
 
@@ -909,7 +909,7 @@
                                             <!-- Pagination directive end -->
 
                                        </div>
-                                       
+
                                        <div class="tab-pane fade SiteHistory" id="SiteHistory" >
 
                                            <div class="table-responsive tablecard">
@@ -957,7 +957,7 @@
                                             <!-- Pagination directive end -->
 
                                        </div>
-                                       
+
                                          <div class="tab-pane fade StatusHistory" id="StatusHistory" >
 
                                            <div class="table-responsive tablecard">
@@ -983,7 +983,7 @@
                                                                 <td>{{statusHistory.assetCode}}</td>
                                                                 <td>{{statusHistory.status}}</td>
                                                                 <td>{{statusHistory.createdDate | date: "dd-MM-yyyy hh:mm:ss"}}</td>
-                                                           
+
                                                                 <!-- <td class="text-right">
                                                                     <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
                                                                 </td> -->
