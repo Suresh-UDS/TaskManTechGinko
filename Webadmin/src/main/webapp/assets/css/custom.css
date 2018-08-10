@@ -647,6 +647,34 @@ span.filterdTxt
     padding: 5px;
     margin: 5px;
 }
+
+h3.HeadingTxt
+{
+    background: #f9f9f9;
+    padding: 5px;
+    font-size: 20px;
+    font-weight: 400;
+}
+.titleCon
+{
+    text-align: center;
+    width: 50%;
+    margin: 0 auto;
+    padding: 5px 0;
+    background: #fff;
+    border: 1px solid #ffeaca;
+    border-radius: 5px;
+    box-shadow: 1px 0px 5px 0px #ffdeae;
+    border-left: 4px solid #ff9800;
+    border-right: 4px solid #ff9800;
+}
+.titleCon h3
+{
+    font-weight: 400;
+    font-size: 19px;
+    margin: 0;
+}
+
  .docsRow
  {
    padding-top:20px;
