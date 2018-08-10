@@ -218,9 +218,9 @@ public class AttendanceService extends AbstractService {
 							|| startCal.equals(checkInCal)) {
 						dbAttn.setShiftStartTime(startTime);  //7 AM considered as shift starts
 						dbAttn.setShiftEndTime(endTime);
-						if(empShift != null) {
+						//if(empShift != null) {
 							break;
-						}
+						//}
 					}
 				}
 
@@ -229,15 +229,15 @@ public class AttendanceService extends AbstractService {
 							|| startCal.equals(checkInCal)) {
 						dbAttn.setShiftStartTime(startTime);  //2 PM considered as shift starts
 						dbAttn.setShiftEndTime(endTime);
-						if(empShift != null) {
+						//if(empShift != null) {
 							break;
-						}
+						//}
 					}else if(checkInCal.before(endCalLeadTime) && startCal.before(checkInCal)) {
 						dbAttn.setShiftStartTime(startTime);
 						dbAttn.setShiftEndTime(endTime);
-						if(empShift != null) {
+						//if(empShift != null) {
 							break;
-						}
+						//}
 					}
 				}
 
