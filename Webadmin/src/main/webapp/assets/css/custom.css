@@ -198,7 +198,11 @@ ul.checkList li
 }
 .margn-btm-8
 {
-    margin-bottom: 8px;
+    margin-bottom: 8px !important;
+}
+.margn-btm-12
+{
+    margin-bottom: 12px !important;
 }
 .pdng-top13
 {
