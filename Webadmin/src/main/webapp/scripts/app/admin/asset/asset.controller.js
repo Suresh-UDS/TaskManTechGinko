@@ -1128,9 +1128,9 @@ angular.module('timeSheetApp')
         });
 
 
-        $('#warFromDate').datetimepicker().on('dp.show', function () {
+        /*$('#warFromDate').datetimepicker().on('dp.show', function () {
             return $(this).data('DateTimePicker').minDate(new Date());
-        });
+        });*/
 
         $('input#warFromDate').on('dp.change', function(e){
 
@@ -1138,6 +1138,10 @@ angular.module('timeSheetApp')
 
             $scope.warFromDate1 = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $scope.warFromDate = e.date._d;
+
+            $('#warToDate').datetimepicker().on('dp.show', function () {
+                     return $(this).data('DateTimePicker').minDate(e.date._d);
+                    });
 
             if($scope.warToDate){
 
