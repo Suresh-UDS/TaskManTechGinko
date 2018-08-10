@@ -2,10 +2,11 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-
 				<div class="titleCon">
-                    <!--<h3>View Project</h3>-->
-                </div>
+			        <h3>{{project.name}} ({{project.id}})</h3>
+			    </div>
+			</div>
+			<div class="col-md-12">
 				<div class="form-container table-container" ng-init="loadProject()">
 					<form ng-show="!success" name="form" role="form"
 						class="form-horizontal">
