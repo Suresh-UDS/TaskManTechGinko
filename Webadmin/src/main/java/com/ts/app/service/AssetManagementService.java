@@ -507,11 +507,11 @@ public class AssetManagementService extends AbstractService {
 
 
 		}
-		if (assetDTO.getManufacturerId() != asset.getManufacturer().getId()) {
+		if (assetDTO.getManufacturerId() > 0) {
 			Manufacturer manufacturer = getManufacturer(assetDTO.getManufacturerId());
 			asset.setManufacturer(manufacturer);
 		}
-		if (assetDTO.getVendorId() != asset.getAmcVendor().getId()) {
+		if (assetDTO.getVendorId() > 0) {
 			Vendor vendor = getVendor(assetDTO.getVendorId());
 			asset.setAmcVendor(vendor);
 		}
@@ -555,6 +555,8 @@ public class AssetManagementService extends AbstractService {
 //			Employee employee = user.getEmployee();
 
 			Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_ASSET);
+			
+			log.debug("Setting Email list -" + setting);
 
 			if(setting.getSettingValue().equalsIgnoreCase("true") ) {
 
