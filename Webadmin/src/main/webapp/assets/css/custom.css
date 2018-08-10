@@ -563,6 +563,10 @@ textarea.form-control {
     min-width: 390px;
     /*top: 12px;*/
 }
+.AppliedFilterCon
+{
+    padding: 10px 0 5px 0px;
+}
 span.filterdTxt
 {
     font-size: 12px;
