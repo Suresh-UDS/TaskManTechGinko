@@ -658,6 +658,7 @@ h3.HeadingTxt
 .titleCon
 {
     text-align: center;
+
     width: 50%;
     margin: 0 auto;
     padding: 5px 0;
@@ -667,6 +668,7 @@ h3.HeadingTxt
     box-shadow: 1px 0px 5px 0px #ffdeae;
     border-left: 4px solid #ff9800;
     border-right: 4px solid #ff9800;
+
 }
 .titleCon h3
 {
@@ -674,6 +676,7 @@ h3.HeadingTxt
     font-size: 19px;
     margin: 0;
 }
+
 
  .docsRow
  {
