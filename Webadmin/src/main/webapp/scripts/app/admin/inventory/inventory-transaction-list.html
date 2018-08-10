@@ -95,32 +95,31 @@
 
                     </div>
                     <div class="table-responsive tablecard">
-                        <table class="table table-striped">
+                        <table class="table table-hover">
                             <thead>
                             <tr>
                                 <th>Client</th>
                                 <th>Site</th>
                                 <th>Name</th>
                                 <th>Item Code</th>
-                                <th>Stock received / Consumed</th>
+                                <th>Stock received / Issued</th>
                                 <th>Store Stock</th>
                                 <th>Unit</th>
-                                <th>Received Date</th>
-                                <th>Consumption Date</th>
+                                <th>Transaction Date</th>
                                 <th class="text-right">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
+
+                                 <tr>
                                 <td>Amazon</td>
                                 <td>HDFC</td>
                                 <td>Name 1</td>
                                 <td>500033</td>
-                                <td>500</td>
+                                <td>Issued</td>
                                 <td>50</td>
                                 <td>50</td>
                                 <td>12/03/2018</td>
-                                <td>15/03/2018</td>
                                 <td class="text-right" width="13%">
                                     <button  title="View"  ui-sref="view-inventory-transaction"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
                                     <a  ng-class="{active: $state.includes('admin')}" ui-sref="edit-inventory-transaction"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
@@ -128,97 +127,54 @@
                                     <a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                                 </td>
                             </tr>
+                                 <tr>
+                                     <td>Amazon</td>
+                                     <td>HDFC</td>
+                                     <td>Name 1</td>
+                                     <td>500033</td>
+                                     <td>Issued</td>
+                                     <td>50</td>
+                                     <td>50</td>
+                                     <td>12/03/2018</td>
+                                     <td class="text-right" width="13%">
+                                         <button  title="View"  ui-sref="view-inventory-transaction"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
+                                         <a  ng-class="{active: $state.includes('admin')}" ui-sref="edit-inventory-transaction"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                            <tr>
-                                <td>Amazon</td>
-                                <td>HDFC</td>
-                                <td>Name 1</td>
-                                <td>500033</td>
-                                <td>500</td>
-                                <td>50</td>
-                                <td>50</td>
-                                <td>12/03/2018</td>
-                                <td>15/03/2018</td>
-                                <td class="text-right" width="13%">
-                                    <button  title="View" ui-sref="view-inventory-transaction"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                    <a  ng-class="{active: $state.includes('admin')}" ui-sref="edit-inventory-transaction"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                         <a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td>Amazon</td>
+                                     <td>HDFC</td>
+                                     <td>Name 1</td>
+                                     <td>500033</td>
+                                     <td>Issued</td>
+                                     <td>50</td>
+                                     <td>50</td>
+                                     <td>12/03/2018</td>
+                                     <td class="text-right" width="13%">
+                                         <button  title="View"  ui-sref="view-inventory-transaction"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
+                                         <a  ng-class="{active: $state.includes('admin')}" ui-sref="edit-inventory-transaction"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                                    <a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                </td>
-                            </tr>
+                                         <a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td>Amazon</td>
+                                     <td>HDFC</td>
+                                     <td>Name 1</td>
+                                     <td>500033</td>
+                                     <td>Issued</td>
+                                     <td>50</td>
+                                     <td>50</td>
+                                     <td>12/03/2018</td>
+                                     <td class="text-right" width="13%">
+                                         <button  title="View"  ui-sref="view-inventory-transaction"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
+                                         <a  ng-class="{active: $state.includes('admin')}" ui-sref="edit-inventory-transaction"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                            <tr>
-                                <td>Amazon</td>
-                                <td>HDFC</td>
-                                <td>Name 1</td>
-                                <td>500033</td>
-                                <td>500</td>
-                                <td>50</td>
-                                <td>50</td>
-                                <td>12/03/2018</td>
-                                <td>15/03/2018</td>
-                                <td class="text-right" width="13%">
-                                    <button  title="View" ui-sref="view-inventory-transaction"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                    <a  ng-class="{active: $state.includes('admin')}" ui-sref="edit-inventory-transaction"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
-                                    <a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>Amazon</td>
-                                <td>HDFC</td>
-                                <td>Name 1</td>
-                                <td>500033</td>
-                                <td>500</td>
-                                <td>50</td>
-                                <td>50</td>
-                                <td>12/03/2018</td>
-                                <td>15/03/2018</td>
-                                <td class="text-right" width="13%">
-                                    <button  title="View" ui-sref="view-inventory-transaction"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                    <a  ng-class="{active: $state.includes('admin')}" ui-sref="edit-inventory-transaction"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
-                                    <a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>Amazon</td>
-                                <td>HDFC</td>
-                                <td>Name 1</td>
-                                <td>500033</td>
-                                <td>500</td>
-                                <td>50</td>
-                                <td>50</td>
-                                <td>12/03/2018</td>
-                                <td>15/03/2018</td>
-                                <td class="text-right" width="13%">
-                                    <button  title="View" ui-sref="view-inventory-transaction"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                    <a  ng-class="{active: $state.includes('admin')}" ui-sref="edit-inventory-transaction"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
-                                    <a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>Amazon</td>
-                                <td>HDFC</td>
-                                <td>Name 1</td>
-                                <td>500033</td>
-                                <td>500</td>
-                                <td>50</td>
-                                <td>50</td>
-                                <td>12/03/2018</td>
-                                <td>15/03/2018</td>
-                                <td class="text-right" width="13%">
-                                    <button  title="View" ui-sref="view-inventory-transaction"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                    <a  ng-class="{active: $state.includes('admin')}" ui-sref="edit-inventory-transaction"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
-                                    <a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                </td>
-                            </tr>
-
+                                         <a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                     </td>
+                                 </tr>
 
 
 

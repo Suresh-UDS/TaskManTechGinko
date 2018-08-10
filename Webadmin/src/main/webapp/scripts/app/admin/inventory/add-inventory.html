@@ -130,18 +130,11 @@
 
                                         <div class="form-group selectcon is-empty">
 
-                                            <div class="row">
-                                                <div class="col-md-10 pad-r-0px">
-                                                    <label class="control-label">Manufacturer</label>
-                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control">
-                                                        <option value="">Select Manufacturer</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-2 RightAddBtn">
-                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple" data-toggle="modal"  data-target="#addManufacturer"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
-                                                </div>
-                                            </div>
+                                            <label class="control-label">Manufacturer</label>
+                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select class="form-control">
+                                                <option value="">Select Manufacturer</option>
+                                            </select>
 
                                         </div>
 
@@ -168,35 +161,16 @@
 
                                         <div class="form-group selectcon is-empty">
 
-                                            <div class="row">
-                                                <div class="col-md-10 pad-r-0px">
-                                                    <label class="control-label">UOM</label>
-                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control">
-                                                        <option value="">Select UOM</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-2 RightAddBtn">
-                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple" data-toggle="modal"  data-target="#addUom"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
-                                                </div>
-                                            </div>
+                                            <label class="control-label">UOM</label>
+                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select class="form-control">
+                                                <option value="">Select UOM</option>
+                                            </select>
 
                                         </div>
 
 
                                     </div>
-
-
-
-                                    <div class="col-md-6">
-                                        <div class="form-group  ">
-                                            <label class="control-label">Min Stock</label>
-                                            <input type="number" class="form-control"   name='minstock'
-                                                   ng-model="inventory.minStock" ng-minlength='2' ng-maxlength='50' required autocomplete="off"/>
-
-                                        </div>
-                                    </div>
-
 
                                     <div class="col-md-6">
                                         <div class="form-group ">
@@ -206,6 +180,26 @@
 
                                         </div>
                                     </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group  ">
+                                            <label class="control-label">Min Stock</label>
+                                            <input type="number" class="form-control"   name='minstock'
+                                                   ng-model="inventory.minStock" ng-minlength='2' ng-maxlength='50' required autocomplete="off"/>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group  ">
+                                            <label class="control-label">Max Stock</label>
+                                            <input type="number" class="form-control"   name='maxStock'
+                                                   ng-model="inventory.maxStock" ng-minlength='2' ng-maxlength='50' required autocomplete="off"/>
+
+                                        </div>
+                                    </div>
+
+
+
                                 </div>
 
                             </div>
