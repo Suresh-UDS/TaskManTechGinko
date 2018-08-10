@@ -1935,6 +1935,11 @@ angular.module('timeSheetApp')
         		$scope.loadEmployees();
         }
 
+         $scope.cancelSiteChange = function() {
+            $scope.selectedSites ={id:$scope.assetList.siteId,name:$scope.assetList.siteName};
+        }
+
+    
         $scope.loadAllParameters = function() {
             //$rootScope.loadingStart();
     		ParameterComponent.findAll().then(function (data) {
@@ -3375,6 +3380,15 @@ angular.module('timeSheetApp')
         $scope.pager = {};
         return cb();
       }
+
+    $scope.siteChange = function(){
+
+        if($scope.assetList.siteId != $scope.selectedSites.id){
+
+            $('#siteChangeModalConfig').modal();
+
+        }
+    }
 
 
 
