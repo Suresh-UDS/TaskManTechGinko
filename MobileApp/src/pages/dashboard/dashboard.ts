@@ -301,12 +301,14 @@ export class DashboardPage {
         };
         this.searchJobs(this.searchCriteria);
         this.empSpinner=true;
-        this.siteService.searchSiteEmployee(id).subscribe(
+        var  searchCriteria={currentPage:1,pageSort:15};
+        // this.siteService.searchSiteEmployee(id).subscribe(
+        this.employeeService.searchEmployees(this.searchCriteria).subscribe(
             response=> {
-                console.log(response.json());
-                if(response.json().length !==0)
+                console.log(response.transactions);
+                if(response.transactions.length !==0)
                 {
-                    this.employee=response.json();
+                    this.employee=response.transactions;
                     this.empSpinner=false;
                     this.empSelect=false;
                     this.selectSite=true;

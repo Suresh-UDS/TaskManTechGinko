@@ -7,7 +7,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title text-center>Inventory Filter</ion-title>
-    <ion-buttons right="">
+    <ion-buttons right>
       <button ion-button color="fnt-black" icon-only (click)="dismiss()" class="padding-right10">
         <ion-icon ios="ios-close" md="md-close" class="fnt-24"></ion-icon>
       </button>
@@ -16,12 +16,8 @@
 </ion-header>
 
 <ion-content class="bg-white">
-  <!--<div class="bg-orange">-->
-  <!--<h5 text-center="" class="clr-white" no-margin="">Asset Filter</h5>-->
-  <!--</div>-->
   <div class="InitFeedbackCon">
     <div class="InputCon">
-
       <ion-item>
         <ion-label text-capitalize class="client-label">Client :</ion-label>
         <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedProject">

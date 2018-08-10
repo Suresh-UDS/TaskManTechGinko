@@ -119,6 +119,13 @@ button.siteBtn
   margin: 0 8px;
   border-top: 3px solid #FFC107;
 }
+
+
+
+.sidebar .nav li>a:hover, .sidebar .nav li>a:focus
+{
+    /*background-color: orange !important;*/
+}
 .sidebar .nav li.active>a, .sidebar .nav li.active>a i
 {
   color: #fff !important;

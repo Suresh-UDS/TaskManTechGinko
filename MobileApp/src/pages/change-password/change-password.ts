@@ -83,5 +83,9 @@ export class ChangePassword {
         this.navCtrl.setRoot(LoginPage);
         window.localStorage.clear();
     }
+    dismiss()
+    {
+        this.navCtrl.pop();
+    }
 
 }

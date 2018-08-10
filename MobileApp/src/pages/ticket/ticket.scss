@@ -1,4 +1,27 @@
 page-ticket {
+  .fakeTicketList {
+   p, ion-icon,ion-row,ion-item,span {
+      background-color: lightgrey;
+      opacity: 0.5;
+      height: 1em;
+      margin-top: 10px;
+    }
+
+   ion-row,ion-item
+   {
+     width:80% !important;
+   }
+
+    p,span {
+      width: 60%;
+    }
+
+    ion-icon{
+      font-size: 2.8rem !important;
+      width:10% !important;
+    }
+
+  }
   ion-card img {
     width: 100% !important;
     height:100px !important;
@@ -12,4 +35,5 @@ page-ticket {
   {
     width:100% !important;
   }
+
 }

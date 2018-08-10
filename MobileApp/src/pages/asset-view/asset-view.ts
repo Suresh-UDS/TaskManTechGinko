@@ -102,7 +102,7 @@ export class AssetView {
         let profileModal = this.modalCtrl.create(GetAssetReading, {assetDetails:this.assetDetails });
         profileModal.onDidDismiss(data => {
             console.log(data);
-            this.componentService.closeLoader();
+            this.componentService.closeAll();
             // this.getReading(this.readingSearchCriteria);
             this.getReading(this.readingSearchCriteria);
         });
@@ -168,12 +168,12 @@ export class AssetView {
     //             .then((data) => {
     //                 console.log(data.response);
     //                 console.log("image upload");
-    //                 this.componentService.closeLoader();
+    //                 this.componentService.closeAll();
     //                 this.navCtrl.pop();
     //             }, (err) => {
     //                 console.log(err);
     //                 console.log("image upload fail");
-    //                 this.componentService.closeLoader();
+    //                 this.componentService.closeAll();
     //             })
     //
     //
@@ -212,7 +212,7 @@ export class AssetView {
         //offline
         // this.dbService.getJobs(this.assetDetails.id).then(
         //     (res)=>{
-        //         this.componentService.closeLoader()
+        //         this.componentService.closeAll()
         //         console.log(res)
         //         this.assetDetails.jobs = res;
         //     },
@@ -226,7 +226,7 @@ export class AssetView {
         this.jobService.getJobs(searchCriteria).subscribe(
             response=>{
                 this.spinner = false;
-                this.componentService.closeLoader();
+                this.componentService.closeAll();
                 console.log("Getting Jobs response");
                 console.log(response);
                 this.assetDetails.jobs = response.transactions;
@@ -236,7 +236,7 @@ export class AssetView {
             },
             error=>{
                 this.spinner = false;
-                this.componentService.closeLoader();
+                this.componentService.closeAll();
                 console.log(error)
                 console.log("Getting Jobs errors")
             })
@@ -271,7 +271,7 @@ export class AssetView {
                         }
                         this.page = response.currPage;
                         this.totalPages = response.totalPages;
-                        this.componentService.closeLoader();
+                        this.componentService.closeAll();
                     },
                     error => {
                         console.log('ionViewDidLoad Jobs Page:' + error);
@@ -311,7 +311,7 @@ export class AssetView {
                         }
                         this.page = response.currPage;
                         this.totalPages = response.totalPages;
-                        this.componentService.closeLoader();
+                        this.componentService.closeAll();
                     },
                     error => {
                         console.log('ionViewDidLoad Readings  Page:' + error);
@@ -457,7 +457,7 @@ export class AssetView {
 
            // this.getReading(this.readingSearchCriteria);
             this.getReading(this.readingSearchCriteria);
-           // this.componentService.closeLoader();
+           // this.componentService.closeAll();
         }
 
     }
@@ -466,16 +466,16 @@ export class AssetView {
 
 
     getAssetById(){
-        this.componentService.closeLoader();
+        this.componentService.closeAll();
         // Online
         this.assetService.getAssetById(this.assetDetails.id).subscribe(
             response=>{
-                this.componentService.closeLoader();
+                this.componentService.closeAll();
                 console.log("Asset by id");
                 console.log(response);
                 this.assetDetails = response;
             },err=>{
-                this.componentService.closeLoader();
+                this.componentService.closeAll();
                 console.log("Error in getting asset by id");
                 console.log(err);
             }
@@ -491,7 +491,7 @@ export class AssetView {
         // offline
         // this.dbService.getPPM(this.assetDetails.id).then(
         //     (res)=>{
-        //         this.componentService.closeLoader();
+        //         this.componentService.closeAll();
         //         console.log(res);
         //         this.assetDetails.ppms = res;
         //     },
@@ -504,14 +504,14 @@ export class AssetView {
         this.assetService.getAssetPPMSchedule(this.assetDetails.id).subscribe(
             response=>{
                 this.spinner = false;
-                this.componentService.closeLoader();
+                this.componentService.closeAll();
                 console.log("Get asset PPM response");
                 console.log(response);
                 this.assetDetails.ppms = response;
             },
             error=>{
                 this.spinner = false;
-                this.componentService.closeLoader();
+                this.componentService.closeAll();
                 console.log("Get asset PPM error");
                 console.log(error);
             })
@@ -526,7 +526,7 @@ export class AssetView {
         //offline
         // this.dbService.getAMC(this.assetDetails.id).then(
         //     (res)=>{
-        //         this.componentService.closeLoader();
+        //         this.componentService.closeAll();
         //         console.log(res);
         //         this.assetDetails.amcs = res;
         //     },
@@ -540,14 +540,14 @@ export class AssetView {
         this.assetService.getAssetAMCSchedule(this.assetDetails.id).subscribe(
             response=>{
                 this.spinner = false;
-                this.componentService.closeLoader()
+                this.componentService.closeAll()
                 console.log("Get asset AMC response");
                 this.assetDetails.amcs = response;
                 console.log(this.assetDetails.amcs);
             },
             error=>{
                 this.spinner = false;
-                this.componentService.closeLoader()
+                this.componentService.closeAll()
                 console.log("Get asset AMC error");
                 console.log(error);
             })
@@ -560,7 +560,7 @@ export class AssetView {
         //offline
         // this.dbService.getConfig(this.assetDetails.assetType,this.assetDetails.id).then(
         //     (res)=>{
-        //         this.componentService.closeLoader()
+        //         this.componentService.closeAll()
         //         this.spinner = false;
         //         console.log(res)
         //         this.assetDetails.config = res;
@@ -577,13 +577,13 @@ export class AssetView {
         this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
             response=>{
                 this.spinner = false;
-                this.componentService.closeLoader()
+                this.componentService.closeAll()
                 console.log("Asset config");
                 console.log(response);
                 this.assetDetails.config = response;
             },err=>{
                 this.spinner = false;
-                this.componentService.closeLoader();
+                this.componentService.closeAll();
                 console.log("Error in getting asset config");
                 console.log(err);
             })
@@ -624,7 +624,7 @@ export class AssetView {
         this.assetService.assetTicket(search).subscribe(
             response=>{
                 this.spinner = false;
-                this.componentService.closeLoader();
+                this.componentService.closeAll();
                 console.log("Getting tickets response");
                 console.log(response);
                 this.assetDetails.tickets = response.transactions;
@@ -632,7 +632,7 @@ export class AssetView {
             },
             error=>{
                 this.spinner = false;
-                this.componentService.closeLoader();
+                this.componentService.closeAll();
                 console.log(error);
                 console.log("Getting Ticket errors")
             })
