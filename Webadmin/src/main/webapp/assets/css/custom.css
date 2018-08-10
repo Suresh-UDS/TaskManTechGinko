@@ -574,6 +574,11 @@ span.filterdTxt
     transition: background-color 0.1s;
     max-width: 200px;
     padding: 5px;
+    border: 1px solid #ccc;
+}
+.applyTitle
+{
+    font-weight: 400;
 }
 .hoverMe:hover .Viewmore
 {
