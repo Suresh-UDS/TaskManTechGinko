@@ -91,10 +91,12 @@ public class JobSpecification implements Specification<Job> {
             	predicates.add(builder.and(builder.equal(root.get("maintenanceType"), searchCriteria.getMaintenanceType()), builder.equal(root.get("asset").get("id"), searchCriteria.getAssetId())));
             }*/
             
+            log.debug("JobSpecification toPredicate - searchCriteria assetId -"+ searchCriteria.getAssetId());
             if(searchCriteria.getAssetId() != 0) { 
-            	predicates.add(builder.equal(root.get("asset").get("id"),  searchCriteria.getAssetId()));
+            		predicates.add(builder.equal(root.get("asset").get("id"),  searchCriteria.getAssetId()));
             }
 
+            log.debug("JobSpecification toPredicate - searchCriteria maintenanceType -"+ searchCriteria.getMaintenanceType());
             if(StringUtils.isNotEmpty(searchCriteria.getMaintenanceType())) { 
             	predicates.add(builder.equal(root.get("maintenanceType"), searchCriteria.getMaintenanceType()));
             }
