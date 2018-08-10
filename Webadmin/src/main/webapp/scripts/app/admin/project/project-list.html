@@ -31,13 +31,13 @@
         </div>
 
     </div>
-    <div class="AppliedFilterCon" ng-show="searchProject">
+    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
             <span class="AppliedFilterTxtCon">
                 <span class="applyTitle">
-                    Applied :
+                    Applied Filter(s):
                 </span>
-                <span class="filterdTxt">
-                    {{searchProject.name}}
+                <span class="filterdTxt" ng-show="searchCriteria.projectName || localStorage.projectName">
+                    {{searchCriteria.projectName || localStorage.projectName}}
                 </span>
 
             </span>
