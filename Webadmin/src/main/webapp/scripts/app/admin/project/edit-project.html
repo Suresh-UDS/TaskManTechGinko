@@ -13,19 +13,15 @@
 <div class="crud-form"
      data-unique-hash="a2ad475d60b22954085c657a73309b8f">
     <div class="">
+        <div class="titleCon">
+            <h3>{{project.name}} ({{project.id}})</h3>
+        </div>
         <div class="row">
             <div class="col-md-12">
-
-                <div class="titleCon">
-                    <!--<h3>Edit Project</h3>-->
-                </div>
-
                 <div class="form-container table-container cardsCon" ng-init="loadProject()">
                     <form ng-show="!success" name="form" role="form" novalidate
                           ng-submit="conform('update')"
                           class="form-horizontal">
-
-
                        <div class="row">
                             <div class="col-md-6">
 

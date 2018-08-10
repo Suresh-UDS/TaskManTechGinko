@@ -7,7 +7,7 @@
 
 				<div class="form-container table-container">
 					<form ng-show="!success" name="form" role="form" novalidate
-						ng-submit="saveAsset()"  class="form-horizontal">
+						  class="form-horizontal">
 
                        <div class="TabsCon viewAssetTabs">
 
@@ -560,7 +560,7 @@
                                                       <td>{{ppmSchedules.title}}</td>
                                                       <td class="hiddenCheckList" >{{ppmSchedules.checklistName}}
 
-                                                         <div class="CheckListBx">
+                                                         <div class="CheckListBx" ng-if="ppmSchedules.checkListItems">
                                                              <div class="bootstrap-tagsinput" ng-repeat="checkListItem in ppmSchedules.checkListItems">
                                                                  <span class="tag label label-info">{{checkListItem.name}}<span data-role="remove"></span></span>
 
@@ -660,7 +660,7 @@
                                                                 <td>{{amcSchedule.maintenanceType}}</td>
                                                                 <td class="hiddenCheckList">{{amcSchedule.checklistName}}
 
-                                                                   <div class="CheckListBx">
+                                                                   <div class="CheckListBx" ng-if="amcSchedule.checkListItems">
                                                                        <div class="bootstrap-tagsinput" ng-repeat="checkListItemAmc in amcSchedule.checkListItems">
                                                                            <span class="tag label label-info">{{checkListItemAmc.name}}<span data-role="remove"></span></span>
 
