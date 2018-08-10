@@ -11,6 +11,8 @@ public class MaterialDTO extends BaseDTO {
 	
 	private long projectId;
 	
+	private long manufacturerId;
+	
 	private String itemCode;
 	
 	private String name;
@@ -22,6 +24,8 @@ public class MaterialDTO extends BaseDTO {
 	private long storeStock;
 	
 	private String uom;
+	
+	private String itemGroup;
 
 	public long getId() {
 		return id;
@@ -45,6 +49,14 @@ public class MaterialDTO extends BaseDTO {
 
 	public void setProjectId(long projectId) {
 		this.projectId = projectId;
+	}
+
+	public long getManufacturerId() {
+		return manufacturerId;
+	}
+
+	public void setManufacturerId(long manufacturerId) {
+		this.manufacturerId = manufacturerId;
 	}
 
 	public String getItemCode() {
@@ -93,6 +105,14 @@ public class MaterialDTO extends BaseDTO {
 
 	public void setUom(String uom) {
 		this.uom = uom;
+	}
+
+	public String getItemGroup() {
+		return itemGroup;
+	}
+
+	public void setItemGroup(String itemGroup) {
+		this.itemGroup = itemGroup;
 	}
 	
 }

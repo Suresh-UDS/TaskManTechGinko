@@ -33,6 +33,14 @@ public class MaterialTransaction extends AbstractAuditingEntity implements Seria
 	@JoinColumn(name = "projectId", nullable = true)
 	private Project project;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "jobId", nullable = true)
+	private Job job;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "assetId", nullable = true)
+	private Asset asset;
+	
 	private String itemCode;
 	
 	private String name;
@@ -69,6 +77,22 @@ public class MaterialTransaction extends AbstractAuditingEntity implements Seria
 
 	public void setProject(Project project) {
 		this.project = project;
+	}
+
+	public Job getJob() {
+		return job;
+	}
+
+	public void setJob(Job job) {
+		this.job = job;
+	}
+
+	public Asset getAsset() {
+		return asset;
+	}
+
+	public void setAsset(Asset asset) {
+		this.asset = asset;
 	}
 
 	public String getItemCode() {

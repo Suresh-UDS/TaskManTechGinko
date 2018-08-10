@@ -16,14 +16,18 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.AssetGroup;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Material;
+import com.ts.app.domain.MaterialItemGroup;
 import com.ts.app.domain.MaterialUOMType;
 import com.ts.app.domain.User;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.InventoryRepository;
 import com.ts.app.repository.InventorySpecification;
+import com.ts.app.repository.ManufacturerRepository;
+import com.ts.app.repository.MaterialItemGroupRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
@@ -55,12 +59,31 @@ public class InventoryManagementService extends AbstractService{
 	private EmployeeRepository employeeRepository;
 	
 	@Inject
+	private ManufacturerRepository manufacturerRepository;
+	
+	@Inject
+	private MaterialItemGroupRepository materialItemRepository;
+	
+	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 	
 	public MaterialDTO createInventory(MaterialDTO materialDTO) { 
 		Material materialEntity = mapperUtil.toEntity(materialDTO, Material.class);
 		materialEntity.setSite(siteRepository.findOne(materialDTO.getSiteId()));
 		materialEntity.setProject(projectRepository.findOne(materialDTO.getProjectId()));
+		materialEntity.setManufacturer(manufacturerRepository.findOne(materialDTO.getManufacturerId()));
+		
+		//create material item group if does not exist
+		if(!StringUtils.isEmpty(materialEntity.getItemGroup())) {
+			MaterialItemGroup itemGroup = materialItemRepository.findByName(materialEntity.getItemGroup());
+			if(itemGroup == null) {
+				itemGroup = new MaterialItemGroup();
+				itemGroup.setItemgroup(materialDTO.getItemGroup());
+				itemGroup.setActive("Y");
+				materialItemRepository.save(itemGroup);
+			}
+		}
+		
 		materialEntity.setActive(Material.ACTIVE_YES);
 		materialEntity.setUom(MaterialUOMType.valueOf(materialDTO.getUom()).getValue());
 		materialEntity = inventRepository.save(materialEntity);
@@ -95,6 +118,9 @@ public class InventoryManagementService extends AbstractService{
 		}
 		if(materialDTO.getProjectId() > 0) {
 			material.setProject(projectRepository.findOne(materialDTO.getProjectId()));
+		}
+		if(materialDTO.getManufacturerId() > 0) {
+			material.setManufacturer(manufacturerRepository.findOne(materialDTO.getManufacturerId()));
 		}
 		material.setMaximumStock(materialDTO.getMaximumStock());
 		material.setMinimumStock(materialDTO.getMinimumStock());
