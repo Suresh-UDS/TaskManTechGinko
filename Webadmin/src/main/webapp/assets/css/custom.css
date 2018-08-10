@@ -583,6 +583,13 @@ textarea.form-control {
     padding: 5px;
     margin: 5px;
 }
+h3.HeadingTxt
+{
+    background: #f9f9f9;
+    padding: 5px;
+    font-size: 20px;
+    font-weight: 400;
+}
  .docsRow
  {
    padding-top:20px;

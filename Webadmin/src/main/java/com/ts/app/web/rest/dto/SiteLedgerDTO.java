@@ -1,4 +1,4 @@
-package com.ts.app.domain;
+package com.ts.app.web.rest.dto;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,22 +9,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "site_ledger")
-public class SiteLedger extends AbstractAuditingEntity {
+public class SiteLedgerDTO extends BaseDTO {
 
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "siteId", nullable = true)
-	private Site site;
+	private long siteId;
+	
+	private String siteName;
 
 	private double debitAmount;
 	
@@ -42,12 +38,20 @@ public class SiteLedger extends AbstractAuditingEntity {
 		this.id = id;
 	}
 
-	public Site getSite() {
-		return site;
+	public long getSiteId() {
+		return siteId;
 	}
 
-	public void setSite(Site site) {
-		this.site = site;
+	public void setSiteId(long siteId) {
+		this.siteId = siteId;
+	}
+
+	public String getSiteName() {
+		return siteName;
+	}
+
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
 	}
 
 	public double getDebitAmount() {

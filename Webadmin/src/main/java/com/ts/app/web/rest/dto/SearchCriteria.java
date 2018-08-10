@@ -3,7 +3,9 @@ package com.ts.app.web.rest.dto;
 import com.ts.app.domain.AssetStatus;
 import com.ts.app.domain.AssetType;
 import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.MaterialTransactionType;
 
+import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
@@ -177,7 +179,17 @@ public class SearchCriteria extends Paginator {
 	private String paramName;
 	
 	private Date assetCreatedDate;
-
+	
+	private String materialName;
+	
+	private String itemCode;
+	
+	private Date materialCreatedDate;
+	
+	private Timestamp transactionDate;
+	
+	private MaterialTransactionType transactionType;
+	
 	public String getWarrantyTypeName() {
 		return warrantyTypeName;
 	}
@@ -929,6 +941,46 @@ public class SearchCriteria extends Paginator {
 
 	public void setAssetCreatedDate(Date assetCreatedDate) {
 		this.assetCreatedDate = assetCreatedDate;
+	}
+
+	public String getMaterialName() {
+		return materialName;
+	}
+
+	public void setMaterialName(String materialName) {
+		this.materialName = materialName;
+	}
+
+	public String getItemCode() {
+		return itemCode;
+	}
+
+	public void setItemCode(String itemCode) {
+		this.itemCode = itemCode;
+	}
+
+	public Date getMaterialCreatedDate() {
+		return materialCreatedDate;
+	}
+
+	public void setMaterialCreatedDate(Date materialCreatedDate) {
+		this.materialCreatedDate = materialCreatedDate;
+	}
+
+	public Timestamp getTransactionDate() {
+		return transactionDate;
+	}
+
+	public void setTransactionDate(Timestamp transactionDate) {
+		this.transactionDate = transactionDate;
+	}
+
+	public MaterialTransactionType getTransactionType() {
+		return transactionType;
+	}
+
+	public void setTransactionType(MaterialTransactionType transactionType) {
+		this.transactionType = transactionType;
 	}
 
 	
