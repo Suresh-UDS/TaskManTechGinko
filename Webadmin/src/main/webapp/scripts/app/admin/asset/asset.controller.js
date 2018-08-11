@@ -1029,9 +1029,9 @@ angular.module('timeSheetApp')
 
             $rootScope.loadingStart();
 
-            var scheduleObj = {assetId:$stateParams.id,checkInDateTimeFrom:startDate,checkInDateTimeTo:endDate};
+            $scope.scheduleObj = {assetId:$stateParams.id,checkInDateTimeFrom:startDate,checkInDateTimeTo:endDate};
 
-            AssetComponent.getPPMScheduleCalendar(scheduleObj.assetId,scheduleObj).then(function(data){
+            AssetComponent.getPPMScheduleCalendar($scope.scheduleObj.assetId,$scope.scheduleObj).then(function(data){
 
                 console.log("Asset Calendar details ==" + JSON.stringify(data));
 
@@ -3388,6 +3388,11 @@ angular.module('timeSheetApp')
             $('#siteChangeModalConfig').modal();
 
         }
+    }
+
+    $scope.backToView = function(){
+  
+        $location.path('view-asset/'+ $scope.scheduleObj.assetId);
     }
 
 
