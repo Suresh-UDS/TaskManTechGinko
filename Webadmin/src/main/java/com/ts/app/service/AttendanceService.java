@@ -146,6 +146,9 @@ public class AttendanceService extends AbstractService {
         int shiftStartGraceTime = Integer.valueOf(env.getProperty("attendance.shiftStartGraceTime"));
         int shiftEndGraceTime = Integer.valueOf(env.getProperty("attendance.shiftEndGraceTime"));
         if(CollectionUtils.isNotEmpty(shifts)) {
+			Calendar prevShiftStartCal = Calendar.getInstance();
+			Calendar prevShiftEndCal = Calendar.getInstance();
+
         		for(Shift shift : shifts) {
         	        if(log.isDebugEnabled()) {
                 		log.debug("shift timing - " + shift.getStartTime() + " - " + shift.getEndTime());
@@ -158,6 +161,7 @@ public class AttendanceService extends AbstractService {
 				startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
 				startCal.set(Calendar.SECOND, 0);
 				startCal.set(Calendar.MILLISECOND, 0);
+				
 
 				Calendar startCalLeadTime = Calendar.getInstance();
 				startCalLeadTime.setTimeInMillis(startCal.getTimeInMillis());
@@ -212,32 +216,33 @@ public class AttendanceService extends AbstractService {
 					checkOutCal = Calendar.getInstance();
 					checkOutCal.setTimeInMillis(dbAttn.getCheckOutTime().getTime());
 				}
+				
 
 				if(checkInCal.before(endCalLeadTime)) { // 12:30 PM checkin time < 1 PM (2PM shift ends) - 1 hr lead time
 					if((startCal.before(checkInCal))  // 7 AM shift starts < 12:30 PM check in
 							|| startCal.equals(checkInCal)) {
 						dbAttn.setShiftStartTime(startTime);  //7 AM considered as shift starts
 						dbAttn.setShiftEndTime(endTime);
-						//if(empShift != null) {
+						if(empShift != null) {
 							break;
-						//}
+						}
 					}
 				}
 
-				if(checkInCal.after(startCalLeadTime)) { // 1:30 PM checkin time > 1 PM (2 PM shift start) - 1 hr lead time
+				if(checkInCal.after(startCalLeadTime) && (prevShiftStartCal.before(startCalLeadTime) || prevShiftStartCal.equals(startCalLeadTime)) ) { // 1:30 PM checkin time > 1 PM (2 PM shift start) - 1 hr lead time
 					if((startCal.after(checkInCal))  // 2:00 PM shift starts > 1:30 PM check in
 							|| startCal.equals(checkInCal)) {
 						dbAttn.setShiftStartTime(startTime);  //2 PM considered as shift starts
 						dbAttn.setShiftEndTime(endTime);
-						//if(empShift != null) {
+						if(empShift != null) {
 							break;
-						//}
+						}
 					}else if(checkInCal.before(endCalLeadTime) && startCal.before(checkInCal)) {
 						dbAttn.setShiftStartTime(startTime);
 						dbAttn.setShiftEndTime(endTime);
-						//if(empShift != null) {
+						if(empShift != null) {
 							break;
-						//}
+						}
 					}
 				}
 
@@ -262,6 +267,11 @@ public class AttendanceService extends AbstractService {
 					}
 				}
 				*/
+				
+				prevShiftStartCal.setTime(startCal.getTime());
+				
+				prevShiftEndCal.setTime(endCal.getTime());
+
         		}
         }
     }
