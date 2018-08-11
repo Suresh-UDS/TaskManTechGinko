@@ -905,6 +905,9 @@ public class JobManagementService extends AbstractService {
 		//log.debug("start Date  -"+ startDate + ", end date -" + endDate);
 
 		job.setEmployee(employee);
+		if(employee != null) {
+			job.setStatus(JobStatus.ASSIGNED);
+		}
 		job.setSite(site);
 		Asset asset = assetRepository.findOne(assetPpmScheduleDTO.getAssetId());
 		job.setBlock(asset.getBlock());

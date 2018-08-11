@@ -1258,7 +1258,7 @@ angular.module('timeSheetApp')
                     console.log("Asset Create List -- ",$scope.assetGen);
                     AssetComponent.create($scope.assetGen).then(function(response) {
                         console.log("Asset response",JSON.stringify(response));
-                        $scope.assetVal.id=response.id;
+                        $scope.assetVal=response;
                         $scope.assetVal.siteId=response.siteId;
                         $scope.success = 'OK';
                         $scope.saveLoad = false;
