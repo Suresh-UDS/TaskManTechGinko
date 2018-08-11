@@ -10,7 +10,7 @@ import com.ts.app.domain.MaterialItemGroup;
 
 public interface MaterialItemGroupRepository extends JpaRepository<MaterialItemGroup, Long>{
 
-	@Query("SELECT mg FROM MaterialItemGroup mg WHERE mg.active='Y' order by mg.name")
+	@Query("SELECT mg FROM MaterialItemGroup mg WHERE mg.active='Y'")
 	List<MaterialItemGroup> findAll();
 	
 	@Query("SELECT mg FROM MaterialItemGroup mg WHERE mg.itemGroup = :itemGroup")

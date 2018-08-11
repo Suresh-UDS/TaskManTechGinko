@@ -78,7 +78,7 @@ public class InventoryManagementService extends AbstractService{
 			MaterialItemGroup itemGroup = materialItemRepository.findByName(materialEntity.getItemGroup());
 			if(itemGroup == null) {
 				itemGroup = new MaterialItemGroup();
-				itemGroup.setItemgroup(materialDTO.getItemGroup());
+				itemGroup.setItemGroup(materialDTO.getItemGroup());
 				itemGroup.setActive("Y");
 				materialItemRepository.save(itemGroup);
 			}

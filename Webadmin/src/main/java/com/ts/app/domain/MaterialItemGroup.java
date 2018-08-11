@@ -23,7 +23,7 @@ public class MaterialItemGroup extends AbstractAuditingEntity implements Seriali
     @NotNull
     @Size(min = 1, max = 250)
     @Column(length = 250, nullable = false)
-    private String itemgroup;
+    private String itemGroup;
 
 	public Long getId() {
 		return id;
@@ -33,14 +33,15 @@ public class MaterialItemGroup extends AbstractAuditingEntity implements Seriali
 		this.id = id;
 	}
 
-	public String getItemgroup() {
-		return itemgroup;
+	public String getItemGroup() {
+		return itemGroup;
 	}
 
-	public void setItemgroup(String itemgroup) {
-		this.itemgroup = itemgroup;
+	public void setItemGroup(String itemGroup) {
+		this.itemGroup = itemGroup;
 	}
 
+	
 	
     
 }
