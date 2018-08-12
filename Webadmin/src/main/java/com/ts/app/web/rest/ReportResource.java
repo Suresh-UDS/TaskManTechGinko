@@ -9,6 +9,7 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.ReportService;
 import com.ts.app.service.SchedulerHelperService;
-import com.ts.app.service.SchedulerService;
 import com.ts.app.web.rest.dto.ReportResult;
 
 
@@ -38,9 +38,7 @@ public class ReportResource {
 	private ReportService reportService;
 	
 	@Inject
-	private SchedulerService schedulerService;
-	
-	@Inject
+	@Lazy
 	private SchedulerHelperService schedulerHelperService;
 
 
@@ -72,7 +70,8 @@ public class ReportResource {
 	
 	@RequestMapping(value = "/reports/attendance/consolidated", method = RequestMethod.GET)
 	public ResponseEntity<?> sendConsolidatedAttendanceReport() {
-		schedulerService.attendanceShiftReportSchedule();
+		Calendar cal = Calendar.getInstance();
+		schedulerHelperService.generateDetailedAttendanceReport(cal.getTime(), true, false, false);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
@@ -90,8 +89,7 @@ public class ReportResource {
 	
 	@RequestMapping(value = "/reports/attendance/checkout", method = RequestMethod.GET)
 	public ResponseEntity<?> autocheckoutAttendance() {
-		
-		schedulerService.attendanceCheckOutTask();
+		schedulerHelperService.autoCheckOutAttendance();
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 

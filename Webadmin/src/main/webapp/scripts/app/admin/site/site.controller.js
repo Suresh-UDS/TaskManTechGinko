@@ -165,10 +165,11 @@ angular.module('timeSheetApp')
                 // $scope.newShiftItem.startTime = e.date._d.getHours() + ':' + e.date._d.getMinutes();
                 $scope.newShiftItem.startTime = $filter('date')(e.date._d, 'HH:mm');
             }
-
+            /*
             $('#shiftTo').on('dp.show', function(){
                 return $(this).data('DateTimePicker').minDate(e.date._d);
             });
+            */
 
         });
 
