@@ -5,7 +5,7 @@ angular.module('timeSheetApp')
 				'VendorController',
 				function($scope, $rootScope, $state, $timeout, VendorComponent,AssetTypeComponent,
 						$http, $stateParams,
-						$location,PaginationComponent,$interval) {
+						$location,PaginationComponent,$interval,getLocalStorage) {
         $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
@@ -69,6 +69,8 @@ angular.module('timeSheetApp')
          $rootScope.back = function (text) {
              if(text == 'cancel')
              {
+                 /** @reatin - retaining scope value.**/
+                 $rootScope.retain=1;
                  $scope.cancelVendor();
              }
              else if(text == 'save')
@@ -77,6 +79,8 @@ angular.module('timeSheetApp')
              }
              else if(text == 'update')
              {
+                 /** @reatin - retaining scope value.**/
+                 $rootScope.retain=1;
                  $scope.UpdateVendor();
              }
          };
@@ -143,7 +147,7 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.findAll = true;
             }
 
-            if($scope.searchName) {
+            if($scope.searchName && $scope.searchName.searchStatus != '0') {
                     $scope.searchCriteria.vendorName = $scope.searchName;
                 }
 
@@ -167,16 +171,46 @@ angular.module('timeSheetApp')
                      $scope.vendors = '';
                      $scope.vendorsLoader = false;
                      $scope.loadPageTop();
-            VendorComponent.search($scope.searchCriteria).then(function (data) {
+
+            /* Localstorage (Retain old values while edit page to list) start */
+
+            if($rootScope.retain == 1){
+                $scope.localStorage = getLocalStorage.getSearch();
+                console.log('Local storage---',$scope.localStorage);
+
+                if($scope.localStorage){
+                    $scope.filter = true;
+                    $scope.pages.currPage = $scope.localStorage.currPage;
+                    $scope.searchName = {searchStatus:'0',vendorName:$scope.localStorage.vendorName};
+                }
+
+                $rootScope.retain = 0;
+
+                var searchCriteras  = $scope.localStorage;
+            }else{
+
+                var searchCriteras  = $scope.searchCriteria;
+            }
+
+            /* Localstorage (Retain old values while edit page to list) end */
+
+
+
+            VendorComponent.search(searchCriteras).then(function (data) {
                 console.log(data);
                 $scope.vendors = data.transactions;
                 $scope.vendorsLoader = true;
                 $scope.loadingStop();
 
+                /** retaining list search value.**/
+                getLocalStorage.updateSearch(searchCriteras);
 
-                 /*
-                    ** Call pagination  main function **
-                */
+
+
+
+                /*
+                   ** Call pagination  main function **
+               */
                  $scope.pager = {};
                  $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
                  $scope.totalCountPages = data.totalCount;
@@ -324,6 +358,7 @@ angular.module('timeSheetApp')
             $scope.noData = false;
             $scope.selectedProject = null;
             $scope.searchCriteria = {};
+            $scope.localStorage = null;
             $scope.selectedName = null;
             $scope.searchName = null;
             $scope.selectedSite = null;
