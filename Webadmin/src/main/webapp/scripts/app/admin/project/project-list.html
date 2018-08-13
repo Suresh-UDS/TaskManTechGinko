@@ -11,7 +11,7 @@
 
 
         <div class="col-md-6 txt-align-lft">
-            <button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
+            <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
                 <i class="material-icons">filter_list</i> Basic Filter
                 <div class="ripple-container"></div>
             </button>
@@ -19,7 +19,7 @@
 
         <div class="col-md-6 txt-align-rgt">
 
-            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+            <button class="btn btn-warning  add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
                 <i class="material-icons">refresh</i>Clear filter
                 <div class="ripple-container"></div>
             </button>
@@ -31,15 +31,11 @@
         </div>
 
     </div>
-    <div class="AppliedFilterCon" ng-show="searchProject">
+    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
             <span class="AppliedFilterTxtCon">
-                <span class="applyTitle">
-                    Applied :
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.projectName || localStorage.projectName">
+                    {{searchCriteria.projectName || localStorage.projectName}}
                 </span>
-                <span class="filterdTxt">
-                    {{searchProject.name}}
-                </span>
-
             </span>
     </div>
 
@@ -255,7 +251,7 @@
                                     <!--</select>-->
                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <ui-select ng-model="searchProject" ng-change="selectProject(searchProject)" ng-pattern="Select Client" required>
+                                    <ui-select ng-model="searchProject" ng-change="selectProject(searchProject)"  required>
                                         <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :searchProject}}</ui-select-match>
                                         <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
                                             <div ng-bind="client"></div>

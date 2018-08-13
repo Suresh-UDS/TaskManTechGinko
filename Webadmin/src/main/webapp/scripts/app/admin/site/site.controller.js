@@ -98,7 +98,8 @@ angular.module('timeSheetApp')
 
         $scope.selectSite = function(site)
         {
-            $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(project)]
+            $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(site)]
+            $scope.hideSite = true;
             console.log('Site dropdown list:',$scope.searchSite)
         }
         $scope.addProject = function (selectedProject) {
@@ -113,6 +114,13 @@ angular.module('timeSheetApp')
         $scope.siteFilterDisable = true;
         $scope.siteSpin = false;
         $scope.loadDepSites = function (searchProject) {
+            $scope.searchSite = null;
+            $scope.hideSite = false;
+            if($scope.localStorage)
+            {
+                $scope.localStorage.siteName = null;
+            }
+            $scope.searchCriteria.siteName = null;
             $scope.siteSpin = true;
             $scope.filter = false;
             $scope.searchProject = $scope.projectsList[$scope.uiClient.indexOf(searchProject)]
@@ -157,10 +165,11 @@ angular.module('timeSheetApp')
                 // $scope.newShiftItem.startTime = e.date._d.getHours() + ':' + e.date._d.getMinutes();
                 $scope.newShiftItem.startTime = $filter('date')(e.date._d, 'HH:mm');
             }
-
+            /*
             $('#shiftTo').on('dp.show', function(){
                 return $(this).data('DateTimePicker').minDate(e.date._d);
             });
+            */
 
         });
 
@@ -402,7 +411,6 @@ angular.module('timeSheetApp')
 
             console.log("=======Update=========")
             if(validation){
-
                 return false;
             }
 
@@ -581,6 +589,8 @@ angular.module('timeSheetApp')
 
                  /* Localstorage (Retain old values while edit page to list) end */
 
+
+
             SiteComponent.search(searchCriteras).then(function (data) {
                 $scope.sites = data.transactions;
                 $scope.sitesLoader = true;
@@ -625,6 +635,7 @@ angular.module('timeSheetApp')
             $scope.searchProject = null;
             $scope.searchSite = null;
         	$scope.searchCriteria = {};
+            $scope.localStorage = null;
         	$rootScope.searchCriteriaSite = null;
         	$scope.pages = {
         		currPage: 1,

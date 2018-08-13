@@ -185,8 +185,8 @@ angular.module('timeSheetApp')
 
         $scope.ppmFromMsg =false;
 
-        $('#dateFilterPpmFrom').datetimepicker().on('dp.show', function () {
-            return $(this).data('DateTimePicker').minDate(new Date());
+        $('#dateFilterPpmFrom').datetimepicker().on('dp.show', function (e) {
+            return $(this).data('DateTimePicker').minDate(e.date);
         });
 
         $('input#dateFilterPpmFrom').on('dp.change', function(e){
@@ -194,7 +194,7 @@ angular.module('timeSheetApp')
             $scope.assetPPM.startDate = e.date._d;
             $scope.ppmFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $('#dateFilterPpmTo').datetimepicker().on('dp.show', function () {
-                return $(this).data('DateTimePicker').minDate(e.date._d);
+                return $(this).data('DateTimePicker').minDate(e.date);
             });
 
             // if($scope.assetPPM.startDate > $scope.assetPPM.endDate) {
@@ -1029,9 +1029,9 @@ angular.module('timeSheetApp')
 
             $rootScope.loadingStart();
 
-            var scheduleObj = {assetId:$stateParams.id,checkInDateTimeFrom:startDate,checkInDateTimeTo:endDate};
+            $scope.scheduleObj = {assetId:$stateParams.id,checkInDateTimeFrom:startDate,checkInDateTimeTo:endDate};
 
-            AssetComponent.getPPMScheduleCalendar(scheduleObj.assetId,scheduleObj).then(function(data){
+            AssetComponent.getPPMScheduleCalendar($scope.scheduleObj.assetId,$scope.scheduleObj).then(function(data){
 
                 console.log("Asset Calendar details ==" + JSON.stringify(data));
 
@@ -1140,7 +1140,7 @@ angular.module('timeSheetApp')
             $scope.warFromDate = e.date._d;
 
             $('#warToDate').datetimepicker().on('dp.show', function () {
-                     return $(this).data('DateTimePicker').minDate(e.date._d);
+                     return $(this).data('DateTimePicker').minDate(e.date);
                     });
 
             if($scope.warToDate){
@@ -1258,7 +1258,7 @@ angular.module('timeSheetApp')
                     console.log("Asset Create List -- ",$scope.assetGen);
                     AssetComponent.create($scope.assetGen).then(function(response) {
                         console.log("Asset response",JSON.stringify(response));
-                        $scope.assetVal.id=response.id;
+                        $scope.assetVal=response;
                         $scope.assetVal.siteId=response.siteId;
                         $scope.success = 'OK';
                         $scope.saveLoad = false;
@@ -1935,6 +1935,11 @@ angular.module('timeSheetApp')
         		$scope.loadEmployees();
         }
 
+         $scope.cancelSiteChange = function() {
+            $scope.selectedSites ={id:$scope.assetList.siteId,name:$scope.assetList.siteName};
+        }
+
+    
         $scope.loadAllParameters = function() {
             //$rootScope.loadingStart();
     		ParameterComponent.findAll().then(function (data) {
@@ -2308,8 +2313,8 @@ angular.module('timeSheetApp')
 
         $scope.amcFromMsg =false;
 
-        $('input#dateFilterAmcFrom').on('dp.show',function () {
-            return $(this).data('DateTimePicker').minDate(new Date());
+        $('input#dateFilterAmcFrom').on('dp.show',function (e) {
+            return $(this).data('DateTimePicker').minDate(e.date);
         })
 
 	    $('input#dateFilterAmcFrom').on('dp.change', function(e){
@@ -2317,7 +2322,7 @@ angular.module('timeSheetApp')
             $scope.amcSchedule.startDate = e.date._d;
             $scope.amcFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $('input#dateFilterAmcTo').on('dp.show',function () {
-                return $(this).data('DateTimePicker').minDate(e.date._d);
+                return $(this).data('DateTimePicker').minDate(e.date);
             })
 
 
@@ -3375,6 +3380,20 @@ angular.module('timeSheetApp')
         $scope.pager = {};
         return cb();
       }
+
+    $scope.siteChange = function(){
+
+        if($scope.assetList.siteId != $scope.selectedSites.id){
+
+            $('#siteChangeModalConfig').modal();
+
+        }
+    }
+
+    $scope.backToView = function(){
+  
+        $location.path('view-asset/'+ $scope.scheduleObj.assetId);
+    }
 
 
 

@@ -444,7 +444,7 @@ public class AssetManagementService extends AbstractService {
 
 		//update status history
 		if(!StringUtils.isEmpty(assetDTO.getStatus())
-				&& assetDTO.getStatus().equalsIgnoreCase(asset.getStatus())) {
+				&& !assetDTO.getStatus().equalsIgnoreCase(asset.getStatus())) {
 			AssetStatusHistory assetStatusHistory = new AssetStatusHistory();
 			assetStatusHistory.setStatus(AssetStatus.valueOf(assetDTO.getStatus()).getStatus());
 			assetStatusHistory.setActive("Y");
@@ -452,8 +452,12 @@ public class AssetManagementService extends AbstractService {
 			List<AssetStatusHistory> assetStatusHistoryList = asset.getAssetStatusHistory();
 			if(CollectionUtils.isEmpty(assetStatusHistoryList)) {
 				assetStatusHistoryList = new ArrayList<AssetStatusHistory>();
+				assetStatusHistoryList.add(assetStatusHistory);
+				asset.setAssetStatusHistory(assetStatusHistoryList);
+			}else { 
+				assetStatusHistoryList.add(assetStatusHistory);
 			}
-			asset.setAssetStatusHistory(assetStatusHistoryList);
+			
 		}
 
 		asset.setAssetGroup(assetDTO.getAssetGroup());
@@ -507,11 +511,11 @@ public class AssetManagementService extends AbstractService {
 
 
 		}
-		if (assetDTO.getManufacturerId() != asset.getManufacturer().getId()) {
+		if (assetDTO.getManufacturerId() > 0) {
 			Manufacturer manufacturer = getManufacturer(assetDTO.getManufacturerId());
 			asset.setManufacturer(manufacturer);
 		}
-		if (assetDTO.getVendorId() != asset.getAmcVendor().getId()) {
+		if (assetDTO.getVendorId() > 0) {
 			Vendor vendor = getVendor(assetDTO.getVendorId());
 			asset.setAmcVendor(vendor);
 		}
@@ -555,6 +559,8 @@ public class AssetManagementService extends AbstractService {
 //			Employee employee = user.getEmployee();
 
 			Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_ASSET);
+			
+			log.debug("Setting Email list -" + setting);
 
 			if(setting.getSettingValue().equalsIgnoreCase("true") ) {
 

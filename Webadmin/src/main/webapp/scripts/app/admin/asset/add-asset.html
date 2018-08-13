@@ -1,6 +1,9 @@
 <div class="crud-form" ng-init="loadPageTop();loadingStart();loadProjects();"
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
 	<div class="" >
+        <div class="titleCon" ng-if="assetVal.id">
+            <h3>{{assetVal.title}} - {{assetVal.id}}</h3>
+        </div>
 		<div class="row">
             <!-- <div class="col-mod-12">
                 <div class="alert alert-success" ng-show="success">
@@ -989,7 +992,9 @@
         						                                                 ng-model="selectedMinValue"
         						                                                 class='form-control'
         						                                                 name='MinValue'
-                                                                                  ng-change="checkMinMax()"
+                                                                     value="1"
+                                                                     min="1"
+                                                                     ng-change="checkMinMax()"
         						                                                 type='number' value=""
         						                                                  autofocus
         						                                                  />
@@ -1225,11 +1230,7 @@
                                                                                     </p>
 
                                                                                 </div>
-                                                                                 <p class="help-block" style="color:maroon"
-                                                                                       ng-show="ppmFromMsg">
-                                                                                        Fromdate cannot be greater than To date.
-                                                                                </p>
-
+                                                                          
                                                                             </div>
 
                                                                         </div>
@@ -1249,11 +1250,7 @@
 
 
                                                                                 </div>
-                                                                                <p class="help-block" style="color:maroon"
-                                                                                       ng-show="ppmToMsg">
-                                                                                        Todate cannot be lesser than Fromdate.
-                                                                                </p>
-
+                                                                               
                                                                             </div>
 
                                                                         </div>
@@ -1380,7 +1377,7 @@
                                                                         </div>
                                                                     </div> -->
                                                                     <div class="col-md-5 txt-align-rgt" style="padding-top: 25px;">
-                                                                        <button  type="submit" class="btn btn-success add-btn margn-top0"   ng-disabled="form3.$invalid|| ppmFromMsg || ppmToMsg"">Add</button>
+                                                                        <button  type="submit" class="btn btn-success add-btn margn-top0"   ng-disabled="form3.$invalid">Add</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1408,7 +1405,7 @@
                                                                     <td>{{ppmSchedules.title}}</td>
                                                                     <td class="hiddenCheckList" >{{ppmSchedules.checklistName}}
 
-                                                                         <div class="CheckListBx">
+                                                                         <div class="CheckListBx" ng-if="ppmSchedules.checkListItems">
                                                                              <div class="bootstrap-tagsinput" ng-repeat="checkListItem in ppmSchedules.checkListItems">
                                                                                  <span class="tag label label-info">{{checkListItem.name}}<span data-role="remove"></span></span>
 
@@ -1566,11 +1563,7 @@
                                                                                     </p>
 
                                                                                 </div>
-                                                                                <!--<p class="help-block" style="color:maroon"-->
-                                                                                   <!--ng-show="amcToMsg">-->
-                                                                                    <!--Todate cannot be lesser than From date.-->
-                                                                                <!--</p>-->
-
+                              
                                                                             </div>
 
                                                                         </div>
@@ -1691,7 +1684,7 @@
                                                                         </div>
                                                                     </div> -->
                                                                     <div class="col-md-4 txt-align-rgt" style="padding-top: 25px;">
-                                                                        <button  type="submit" class="btn btn-success add-btn margn-top0"    ng-disabled="form4.$invalid|| amcFromMsg || amcToMsg">Add</button>
+                                                                        <button  type="submit" class="btn btn-success add-btn margn-top0"    ng-disabled="form4.$invalid">Add</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1720,7 +1713,7 @@
                                                                     <td>{{amcSchedule.title}}</td>
                                                                     <td class="hiddenCheckList">{{amcSchedule.checklistName}}
 
-                                                                       <div class="CheckListBx">
+                                                                       <div class="CheckListBx" ng-if="amcSchedule.checkListItems">
                                                                            <div class="bootstrap-tagsinput" ng-repeat="checkListItemAmc in amcSchedule.checkListItems">
                                                                                <span class="tag label label-info">{{checkListItemAmc.name}}<span data-role="remove"></span></span>
 
@@ -1942,7 +1935,7 @@
                                                                            </a>
                                                                            </div>
                                                                        <a href="{{uploadFile.url}}" id="loop">
-                                                                           <img src="assets/img/{{uploadFile.extension}}.png" alt="docs" title="Download"/>
+                                                                           <img ng-src="assets/img/{{uploadFile.extension}}.png" alt="docs" title="Download"/>
                                                                            <!-- <img src="assets/img/Docs-icon.png" alt="docs" /> -->
                                                                        </a>
                                                                        <p>{{uploadFile.title}}</p>
@@ -1983,7 +1976,7 @@
                                                                         </div>
                                                                         <a href="{{uploadPhoto.url}}" id="loop2">
                                                                             <!-- <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" /> -->
-                                                                            <img src="assets/img/{{uploadFile.extension}}.png" alt="docs" title="Download"/>
+                                                                            <img ng-src="assets/img/{{uploadPhoto.extension}}.png" alt="photo" title="Download"/>
                                                                         </a>
                                                                         <p>{{uploadPhoto.title}}</p>
                                                                         <div ng-if="uploadPhoto.id == download">

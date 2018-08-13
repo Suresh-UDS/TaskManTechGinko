@@ -13,7 +13,7 @@
     <div class="row" >
         <div class="col-md-6 txt-align-lft">
 
-            <button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
+            <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
                 <i class="material-icons">filter_list</i> Basic Filter
                 <div class="ripple-container"></div>
             </button>
@@ -21,18 +21,32 @@
         </div>
         <div class="col-md-6 txt-align-rgt">
 
+            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i> Clear Filter
+                <div class="ripple-container"></div>
+            </button>
+
             <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-site" has-permission="Site:Create" ng-class="{active: $state.includes('admin')}" tabindex="0">
                 <i class="material-icons">add</i> Add
                 <div class="ripple-container"></div>
             </button>
 
-            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
-                <i class="material-icons">refresh</i> Reload
-                <div class="ripple-container"></div>
-            </button>
-
         </div>
     </div>
+
+    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
+            <span class="AppliedFilterTxtCon">
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.projectName || localStorage.projectName">
+                    Client: {{searchCriteria.projectName || localStorage.projectName}}
+                </span>
+
+                <span class="tag label label-info"  ng-show="searchCriteria.siteName || localStorage.siteName">
+                    Site: {{searchCriteria.siteName || localStorage.siteName}}
+                </span>
+
+            </span>
+    </div>
+
 
     <div class="row">
         <div class="col-md-12">
@@ -223,7 +237,7 @@
                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                     <!--<span class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>-->
                                     <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sitesList.length == 0" ng-change="selectSite(searchSite)">
-                                        <ui-select-match placeholder="Select Sites...">{{sitesList.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : searchSite }}</ui-select-match>
+                                        <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?searchSite :'Select Site' }}</ui-select-match>
                                         <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
                                             <div ng-bind="site"></div>
                                         </ui-select-choices>
@@ -232,9 +246,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-
                     </div>
 
                 </div>

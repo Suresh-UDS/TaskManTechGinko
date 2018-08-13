@@ -249,7 +249,7 @@ angular.module('timeSheetApp')
         		}else {
         			$scope.searchCriteria.findAll = true;
         		}
-        	}else if($scope.searchProject) {
+        	}else if($scope.searchProject && $scope.searchProject.searchStatus != '0') {
         		$scope.searchCriteria.findAll = false;
 	        	if($scope.searchProject) {
 		        	$scope.searchCriteria.projectId = $scope.searchProject.id;
@@ -358,6 +358,7 @@ angular.module('timeSheetApp')
             $scope.selectedProject = null;
             $scope.searchProject = null;
             $scope.searchCriteria = {};
+            $scope.localStorage = null;
             $rootScope.searchCriteriaProject = null;
             $scope.pages = {
                 currPage: 1,
