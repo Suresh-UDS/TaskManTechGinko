@@ -104,13 +104,9 @@ export class EmployeeList {
       });
   }
 
-  getEmployeeAttendance(employeeId){
-    this.attendanceService.getAttendances(employeeId,this.site.id).subscribe(
-      response=>{
-        console.log(response);
-        this.navCtrl.push(AttendanceListPage,{'attendances':response.json()});
-      }
-    )
+  getEmployeeAttendance(empId){
+
+      this.navCtrl.push(AttendanceListPage,{siteId:this.site.id,empId:empId});
   }
 
 
