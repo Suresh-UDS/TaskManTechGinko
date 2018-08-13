@@ -20,7 +20,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		}
 	}).state('edit-employee', {
 		parent : 'manage',
-		url : '/edit-employee:id',
+		url : '/edit-employee/:id',
 		controller : 'EmployeeController',
 		data : {
 			authorities : [],
@@ -37,7 +37,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		}
 	}).state('view-employee', {
 		parent : 'manage',
-		url : '/view-employee:id',
+		url : '/view-employee/:id',
 		controller : 'EmployeeController',
 		data : {
 			authorities : [],

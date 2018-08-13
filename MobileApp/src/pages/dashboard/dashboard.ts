@@ -580,11 +580,15 @@ export class DashboardPage {
                     response => {
                         console.log("Offline attendance data synced to server");
                         console.log(response)
-                        this.attendanceOut(data,response.json().id).then(
-                            response=>{
-                                resolve("")
-                            }
-                        )
+                        if(data.offlineCheckOut == 'true') {
+                            this.attendanceOut(data, response.json().id).then(
+                                response => {
+                                    resolve("Attendance checked in and checked out successfully");
+                                }
+                            )
+                        }else{
+                            resolve("Attendance checked in and checked out successfully");
+                        }
 
                     }, error2 => {
                         console.log("Error in syncing attendance to server");

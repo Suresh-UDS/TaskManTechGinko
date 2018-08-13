@@ -2,7 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('ProjectController', function ($scope, $rootScope, $state, $timeout,
-     ProjectComponent,$http,$stateParams,$location,PaginationComponent) {
+     ProjectComponent,$http,$stateParams,$location,PaginationComponent,getLocalStorage) {
         $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
@@ -15,7 +15,8 @@ angular.module('timeSheetApp')
         $scope.pages = { currPage : 1};
         $scope.pager = {};
         $scope.noData = false;
-
+        $scope.saveLoad = false;
+        $rootScope.conformText = null;
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -32,22 +33,36 @@ angular.module('timeSheetApp')
             window.print();
         }
 
+        $scope.conform = function(text)
+        {
+            $rootScope.conformText = text;
+           $('#conformationModal').modal();
+
+
+        }
+
 
         $scope.saveProject = function () {
         	console.log("-------")
+            $rootScope.conformText = "";
+            $scope.saveLoad = true;
         	console.log($scope.map)
-            $scope.loadingStart();
+            // $scope.loadingStart();
         	$scope.error = null;
         	$scope.success =null;
         	$scope.errorProjectExists = null;
-        	ProjectComponent.createProject($scope.project).then(function () {
+
+
+            ProjectComponent.createProject($scope.project).then(function () {
                 $scope.success = 'OK';
                 $scope.showNotifications('top','center','success','Client has been added successfully!!');
                 $scope.loadingStop();
             	//$scope.loadProjects();
+                $scope.saveLoad = false;
             	$location.path('/projects');
             }).catch(function (response) {
                 $scope.loadingStop();
+                $scope.saveLoad = false;
                 $scope.success = null;
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
@@ -57,20 +72,72 @@ angular.module('timeSheetApp')
                     $scope.showNotifications('top','center','danger','Unable to add client, please try again later..');
                     $scope.error = 'ERROR';
                 }
-            });;
+            });
 
         };
 
+        $rootScope.back = function (text) {
+            if(text == 'cancel')
+            {
+                /** @reatin - retaining scope value.**/
+                $rootScope.retain=1;
+                $scope.cancelProject();
+            }
+            else if(text == 'save')
+            {
+                $scope.saveProject();
+            }
+            else if( text== 'update')
+            {
+                /** @reatin - retaining scope value.**/
+                $rootScope.retain=1;
+                $scope.updateProject()
+            }
+        };
+
         $scope.cancelProject = function () {
+            $rootScope.conformText = "";
         	$location.path('/projects');
         };
 
         $scope.loadProjectsList = function () {
             ProjectComponent.findAll().then(function (data) {
                 $scope.projectsList = data;
-
+                for(var i=0;i<$scope.projectsList.length;i++)
+                {
+                    $scope.uiClient[i] = $scope.projectsList[i].name;
+                }
+                $scope.clientFilterDisable = false;
             });
         };
+
+        // Load Clients for selectbox //
+        $scope.clientDisable = true;
+        $scope.uiClient = [];
+
+        $scope.getClient = function (search) {
+
+            var newSupes = $scope.uiClient.slice();
+            if (search && newSupes.indexOf(search) === -1) {
+                newSupes.unshift(search);
+            }
+
+            return newSupes;
+        }
+
+        $scope.selectProject = function(project)
+        {
+            $scope.filter = false;
+            $scope.searchProject = $scope.projectsList[$scope.uiClient.indexOf(project)]
+            console.log('Project dropdown list:',$scope.searchProject)
+        }
+
+        //
+
+        //Filter
+        $scope.clientFilterDisable = true;
+        $scope.filter = false;
+        //
 
         $scope.loadProjects = function () {
             $scope.clearFilter();
@@ -91,16 +158,20 @@ angular.module('timeSheetApp')
         };
 
         $scope.updateProject = function () {
+            $scope.saveLoad = true;
+            $rootScope.conformText = "";
             $scope.loadingStart();
         	ProjectComponent.updateProject($scope.project).then(function () {
                 $scope.success = 'OK';
                 $scope.showNotifications('top','center','success','Client has been updated successfully!!');
                 $scope.loadingStop();
+                $scope.saveLoad = false;
             	//$scope.loadProjects();
             	$location.path('/projects');
             }).catch(function (response) {
                 $scope.success = null;
                 $scope.loadingStop();
+                $scope.saveLoad = false;
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                     $scope.errorProjectExists = 'ERROR';
@@ -178,7 +249,7 @@ angular.module('timeSheetApp')
         		}else {
         			$scope.searchCriteria.findAll = true;
         		}
-        	}else if($scope.searchProject) {
+        	}else if($scope.searchProject && $scope.searchProject.searchStatus != '0') {
         		$scope.searchCriteria.findAll = false;
 	        	if($scope.searchProject) {
 		        	$scope.searchCriteria.projectId = $scope.searchProject.id;
@@ -189,7 +260,7 @@ angular.module('timeSheetApp')
 			        	$scope.searchCriteria.projectName = $scope.searchProject.name;
 		        	}
 	        	}else {
-	        		$scope.searchCriteria.projectId = 0;
+	        		$scope.searchCriteria.projectId = null;
 	        	}
 
 
@@ -216,9 +287,37 @@ angular.module('timeSheetApp')
                 $scope.projects = '';
                 $scope.projectsLoader = false;
                 $scope.loadPageTop();
-            ProjectComponent.search($scope.searchCriteria).then(function (data) {
+
+                /* Localstorage (Retain old values while edit page to list) start */
+
+                 if($rootScope.retain == 1){
+
+                    $scope.localStorage = getLocalStorage.getSearch();
+                    console.log('Local storage---',$scope.localStorage);
+
+                    if($scope.localStorage){
+                        $scope.pages.currPage = $scope.localStorage.currPage;
+                        //$scope.searchProject = {id:$scope.localStorage.projectId,name:$scope.localStorage.projectName,searchStatus:'0'};
+                        $scope.filter = true;
+                        $scope.searchProject ={searchStatus:'0',id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
+                    }
+
+                    $rootScope.retain = 0;
+
+                    var searchCriteras  = $scope.localStorage;
+                 }else{
+
+                    var searchCriteras  = $scope.searchCriteria;
+                 }
+
+                 /* Localstorage (Retain old values while edit page to list) end */
+
+            ProjectComponent.search(searchCriteras).then(function (data) {
                 $scope.projects = data.transactions;
                 $scope.projectsLoader = true;
+
+                /** retaining list search value.**/
+                getLocalStorage.updateSearch(searchCriteras);
 
                 /*
                     ** Call pagination  main function **
@@ -229,6 +328,8 @@ angular.module('timeSheetApp')
 
                  console.log("Pagination",$scope.pager);
                  console.log($scope.projects);
+
+
 
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
@@ -257,6 +358,7 @@ angular.module('timeSheetApp')
             $scope.selectedProject = null;
             $scope.searchProject = null;
             $scope.searchCriteria = {};
+            $scope.localStorage = null;
             $rootScope.searchCriteriaProject = null;
             $scope.pages = {
                 currPage: 1,
@@ -268,7 +370,7 @@ angular.module('timeSheetApp')
         //init load
         $scope.initLoad = function(){
              $scope.loadPageTop();
-             $scope.loadProjects();
+             //$scope.loadProjects();
              $scope.setPage(1);
 
          }

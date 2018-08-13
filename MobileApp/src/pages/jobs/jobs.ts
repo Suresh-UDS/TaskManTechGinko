@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Events, Item, ItemSliding, LoadingController, NavController} from 'ionic-angular';
+import {Events, Item, ItemSliding, LoadingController, NavController, NavParams} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {ViewJobPage} from "./view-job";
 import {componentService} from "../service/componentService";
@@ -15,6 +15,10 @@ import{JobFilter} from "./job-filter/job-filter";
   templateUrl: 'jobs.html'
 })
 export class JobsPage {
+    scannedSiteId: any;
+    scannedZone: any;
+    scannedFloor: any;
+    scannedBlock: any;
 
     todaysJobs: any;
     allJobs:any;
@@ -31,8 +35,9 @@ export class JobsPage {
     todaysPage:1;
     todaysTotalPages:0;
     pageSort:15;
+    private scannedLocationId: any;
 
-    constructor(public navCtrl: NavController,public component:componentService, public authService: authService,
+    constructor(public navCtrl: NavController, public navParams:NavParams,public component:componentService, public authService: authService,
                     private loadingCtrl:LoadingController, private actionSheetCtrl: ActionSheetController, private jobService: JobService, public events:Events,public modalCtrl:ModalController) {
         this.allJobs = [];
         this.todaysJobs =[];
@@ -44,6 +49,15 @@ export class JobsPage {
             console.log(type);
             this.userType = type;
         });
+
+        console.log("Location Id from scanned",this.navParams.get('locationId'));
+        this.scannedLocationId = this.navParams.get('locationId');
+        console.log("Location Id from scanned",this.navParams.get('locationId'));
+        this.scannedSiteId = this.navParams.get('siteId');
+
+        this.scannedBlock = this.navParams.get('block');
+        this.scannedFloor = this.navParams.get('floor');
+        this.scannedZone = this.navParams.get('zone');
 
     }
 
@@ -107,8 +121,34 @@ export class JobsPage {
     }
 
     loadTodaysJobs(){
-        var searchCriteria = {
-            checkInDateTimeFrom:new Date()
+
+        var searchCriteria = {};
+        var msg='';
+        if(this.scannedLocationId){
+            console.log("Location Id in job search ");
+            console.log(this.scannedLocationId)
+            searchCriteria = {
+                checkInDateTimeFrom:new Date(),
+                locationId:this.scannedLocationId,
+                siteId:this.scannedSiteId
+            };
+            msg='Unable to fetch jobs of the location '+this.scannedLocationId+' in site '+this.scannedSiteId;
+        }else if(this.scannedBlock && this.scannedFloor && this.scannedZone){
+            searchCriteria={
+                checkInDateTimeFrom:new Date(),
+                siteId:this.scannedSiteId,
+                block:this.scannedBlock,
+                floor:this.scannedFloor,
+                zone:this.scannedZone
+            };
+            msg = 'Unable to fetch jobs for the location '+this.scannedBlock+' - '+this.scannedFloor+' - '+this.scannedZone;
+        }else{
+            searchCriteria = {
+                checkInDateTimeFrom:new Date(),
+                locationId:this.scannedLocationId,
+                siteId:this.scannedSiteId
+            };
+            msg='Unable to fetch today\'s jobs ';
         }
         this.component.showLoader('Getting Today\'s Jobs');
         this.jobService.getJobs(searchCriteria).subscribe(response=>{

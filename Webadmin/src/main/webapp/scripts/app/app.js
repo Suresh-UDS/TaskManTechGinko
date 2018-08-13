@@ -1,9 +1,9 @@
 'use strict';
 
-angular.module('timeSheetApp', ['LocalStorageModule',
+angular.module('timeSheetApp', ['LocalStorageModule','storageService',
                'ui.bootstrap', 'ui.bootstrap.datetimepicker', // for modal dialogs
     'ngResource', 'ui.router', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload',
-     'infinite-scroll', 'App.filters','uiGmapgoogle-maps','checklist-model',
+     'infinite-scroll', 'App.filters','uiGmapgoogle-maps','checklist-model','ui.select', 'ngSanitize' ,
      'alexjoffroy.angular-loaders','chart.js','jkAngularRatingStars',
      'angular-star-rating-new','paginations','excelGrid'])
 
@@ -15,6 +15,8 @@ angular.module('timeSheetApp', ['LocalStorageModule',
         $rootScope.stateValue ="";
         $rootScope.resLoader=false;
         $rootScope.searchCriterias={};
+        /** @reatin - retaining scope value.**/ 
+        $rootScope.retain=0;
 
        /* Principal.identity().then(function(response)
              {

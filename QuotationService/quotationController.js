@@ -107,13 +107,7 @@ module.exports = {
         var date = new Date();
         quotation.save(function(err,quotation){
             if(!err){
-                if(quotation.isSubmitted) {
-                    quotation.isDrafted = false;
-                    quotation.processHistory.isSubmitted = date;
-                    quotation.submittedDate = date;
-                    quotation.lastModifiedDate = date;
-                    mailerService.submitQuotation(quotation.clientEmailId,quotation)
-                }
+
                 module.exports.createPDF(quotation);
                 res.json(200,quotation)
             }else{
@@ -652,6 +646,15 @@ module.exports = {
                        {
                            console.log('PDF Success!');
                            console.log(success);
+                           if(quotation.isSubmitted) {
+                               console.log("sending mail");
+                               var date = new Date();
+                               quotation.isDrafted = false;
+                               quotation.processHistory.isSubmitted = date;
+                               quotation.submittedDate = date;
+                               quotation.lastModifiedDate = date;
+                               mailerService.submitQuotation(quotation.clientEmailId,quotation);
+                           }
                            // mailerService.submitQuotationDetail('praveens@techginko.com');
                        }
                    }

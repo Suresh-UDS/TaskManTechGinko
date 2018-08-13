@@ -14,6 +14,7 @@ import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.QRCodeUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -25,11 +26,13 @@ import org.springframework.stereotype.Service;
 import com.ts.app.repository.LocationRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmployeeLocationDTO;
 import com.ts.app.web.rest.dto.ImportResult;
+import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.LocationDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
@@ -66,6 +69,9 @@ public class LocationService extends AbstractService {
 	
 	@Inject
 	private AmazonS3Utils s3ServiceUtils;
+	
+	@Inject
+	private UserRepository userRepository;
 
 	public LocationDTO saveLocation(LocationDTO locationDto) {
 
@@ -120,6 +126,11 @@ public class LocationService extends AbstractService {
         return mapperUtil.toModel(locationEntity, LocationDTO.class);
     }
 
+    public List<LocationDTO> findIds(Long siteId, String block, String floor, String zone) {
+        List<Location> entity = locationRepository.findByAll(siteId,block,floor,zone);
+        return mapperUtil.toModelList(entity, LocationDTO.class);
+    }
+
 	public List<String> findBlocks(long projectId, long siteId) {
 		if(projectId > 0) {
 			return locationRepository.findBlocks(projectId, siteId);
@@ -146,6 +157,38 @@ public class LocationService extends AbstractService {
 
 	public SearchResult<LocationDTO>  findBySearchCrieria(SearchCriteria searchCriteria) {
 		SearchResult<LocationDTO> result = new SearchResult<LocationDTO>();
+		if(searchCriteria != null) {
+			log.debug("findBYSearchCriteria search criteria -"+ (searchCriteria.getJobStatus() != null && searchCriteria.getJobStatus().equals(JobStatus.OVERDUE)));
+
+			User user = userRepository.findOne(searchCriteria.getUserId());
+			Employee employee = user.getEmployee();
+
+			//log.debug(""+employee.getEmpId());
+
+			List<Long> subEmpIds = new ArrayList<Long>();
+			if(employee != null && !user.isAdmin()) {
+				searchCriteria.setDesignation(employee.getDesignation());
+				Hibernate.initialize(employee.getSubOrdinates());
+				/*
+				Set<Employee> subs = employee.getSubOrdinates();
+				log.debug("List of subordinates -"+ subs);
+				if(CollectionUtils.isNotEmpty(subs)){
+					subEmpIds = new ArrayList<Long>();
+				}
+				for(Employee sub : subs) {
+					subEmpIds.add(sub.getId());
+				}
+				*/
+				findAllSubordinates(employee, subEmpIds);
+				log.debug("List of subordinate ids -"+ subEmpIds);
+				if(CollectionUtils.isEmpty(subEmpIds)) {
+					subEmpIds.add(employee.getId());
+				}
+				searchCriteria.setSubordinateIds(subEmpIds);
+			}else if(user.isAdmin()){
+				searchCriteria.setAdmin(true);
+			}
+			log.debug("SearchCriteria ="+ searchCriteria);
 		if(searchCriteria != null) {
 
 		    //----
@@ -213,6 +256,7 @@ public class LocationService extends AbstractService {
 				}
 			}
 		}
+	}
 		return result;
 	}
 
@@ -285,6 +329,27 @@ public class LocationService extends AbstractService {
         }
         log.debug("*****************"+loc.getId());
         return qrCodeObject;
+    }
+
+    public String generateQRCode(String block, String floor, String zone, long siteId) {
+        byte[] qrCodeImage = null;
+        String qrCodeBase64 = null;
+            String codeName = siteId+"_"+block+"_"+floor+"_"+zone;
+            
+            qrCodeImage = QRCodeUtil.generateQRCode(codeName);
+            String qrCodePath = env.getProperty("locationQRCode.file.path");
+            String imageFileName = null;
+            if (org.apache.commons.lang3.StringUtils.isNotEmpty(qrCodePath)) {
+                imageFileName = fileUploadHelper.uploadQrCodeFile(codeName, qrCodeImage);
+//                loc.setQrCodeImage(imageFileName);
+//                locationRepository.save(loc);
+            }
+            if (qrCodeImage != null && org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
+                qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
+            }
+//        log.debug("*****************"+loc.getId());
+//        return getQRCode(loc.getId());
+        return  qrCodeBase64;
     }
 
     public String getQRCode(long locationId) {
