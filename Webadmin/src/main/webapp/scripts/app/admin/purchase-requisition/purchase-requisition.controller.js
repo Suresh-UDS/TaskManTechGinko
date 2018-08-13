@@ -95,8 +95,8 @@ angular.module('timeSheetApp')
                     $scope.search();
                  }
 
-                $scope.cancelIndent = function () {
-                    $location.path('/indent-list');
+                $scope.cancelPurchase = function () {
+                    $location.path('/purchase-requisition-list');
                 };
 
                 $scope.setPage = function (page) {
