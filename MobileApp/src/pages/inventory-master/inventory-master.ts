@@ -10,6 +10,7 @@ import {AssetService} from "../service/assetService";
 import {Network} from "@ionic-native/network";
 import {DBService} from "../service/dbService";
 import {Diagnostic} from "@ionic-native/diagnostic";
+import{AddInventoryTransaction} from "../add-inventory-transaction/add-inventory-transaction";
 
 /**
  * Generated class for the InventoryMaster page.
@@ -74,6 +75,14 @@ export class InventoryMaster {
 
         });
         modal.present();
+
+    }
+
+
+    openTransaction()
+    {
+        let modal = this.modalCtrl.create(AddInventoryTransaction, {});
+       modal.present();
 
     }
 

@@ -1,0 +1,63 @@
+<!--
+  Generated template for the AddInventoryTransaction page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Inventory Transaction</ion-title>
+    <ion-buttons right>
+      <button ion-button color="fnt-black" icon-only (click)="dismiss()" class="padding-right10">
+        <ion-icon ios="ios-close" md="md-close" class="fnt-24"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <ion-row no-margin>
+        <ion-col col-9>
+            <ion-item>
+                <ion-select  interface="popover">
+                    <ion-option value="f">Female</ion-option>
+                    <ion-option value="m">Male</ion-option>
+                </ion-select>
+            </ion-item>
+        </ion-col>
+        <ion-col col-3 text-center>
+            <button class="btn btn-warning center">Add</button>
+        </ion-col>
+    </ion-row>
+   <ion-row no-margin class="white-bg">
+        <ion-col col-6>
+            <ion-list>
+                <ion-item>
+                    <ion-input type="text" value="" disabled></ion-input>
+                </ion-item>
+            </ion-list>
+        </ion-col>
+        <ion-col col-2>
+            <ion-list>
+                <ion-item>
+                    <ion-input type="text" value=""></ion-input>
+                </ion-item>
+            </ion-list>
+        </ion-col>
+        <ion-col col-2>
+            <ion-list>
+                <ion-item>
+                    <ion-input type="text" value="" placeholder="uom" disabled></ion-input>
+                </ion-item>
+            </ion-list>
+        </ion-col>
+        <ion-col col-2>
+            <button ion-fab mini color="dark">
+                <ion-icon name="md-checkmark" class="clr-orange"></ion-icon>
+            </button>
+        </ion-col>
+   </ion-row>
+</ion-content>
