@@ -20,9 +20,14 @@ import com.ts.app.domain.Vendor;
 import com.ts.app.repository.VendorRepository;
 import com.ts.app.repository.VendorSpecification;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.service.util.PagingUtil;
+import com.ts.app.service.util.ReportUtil;
+import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.VendorDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
@@ -47,6 +52,12 @@ public class VendorService extends AbstractService {
 
 	@Inject
 	private ImportUtil importUtil;
+	
+	@Inject
+	private ReportUtil reportUtil;
+	
+	@Inject
+	private ExportUtil exportUtil;
 
 	public VendorDTO createVendorInformation(VendorDTO vendorDto) {
 		// log.info("The admin Flag value is " +adminFlag);
@@ -113,6 +124,30 @@ public class VendorService extends AbstractService {
 		Vendor entity = vendorRepository.findOne(id);
 		return mapperUtil.toModel(entity, VendorDTO.class);
 	}
+	
+	public ExportResult generateReport(List<VendorDTO> transactions, SearchCriteria criteria) {
+		// TODO Auto-generated method stub
+			return reportUtil.generateVendorReports(transactions, null, null, criteria);
+	}
+
+	public ExportResult getExportStatus(String fileId) {
+		ExportResult er = new ExportResult();
+
+		fileId += ".xlsx";
+		// log.debug("FILE ID INSIDE OF getExportStatus CALL ***********"+fileId);
+
+		if (!StringUtils.isEmpty(fileId)) {
+			String status = exportUtil.getExportStatus(fileId);
+			er.setFile(fileId);
+			er.setStatus(status);
+		}
+		return er;
+	}
+
+	public byte[] getExportFile(String fileName) {
+		// return exportUtil.readExportFile(fileName);
+		return exportUtil.readExportFile(fileName);
+	}
 
 	public SearchResult<VendorDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 
@@ -124,6 +159,11 @@ public class VendorService extends AbstractService {
                 Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
                 log.debug("Sorting object" +sort);
                 pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+                if (searchCriteria.isReport()) {
+					pageRequest = createPageSort(searchCriteria.getCurrPage(), Integer.MAX_VALUE, sort);
+				} else {
+					pageRequest = createPageSort(searchCriteria.getCurrPage(), PagingUtil.PAGE_SIZE, sort);
+				}
             }else{
             		if(searchCriteria.isList()) {
             			pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
@@ -187,5 +227,6 @@ public class VendorService extends AbstractService {
 		return;
 	}
 
+	
 
 }

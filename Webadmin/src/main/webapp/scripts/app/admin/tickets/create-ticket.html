@@ -15,7 +15,7 @@
 
            <div class="cardsCon addTicketCon">
                <form ng-show="!success" name="form" role="form" novalidate
-                     ng-submit="saveTicket()">
+                     ng-submit="conform('save')">
 
                    <div class="row">
 
@@ -277,13 +277,19 @@
                        <div class="col-md-12">
 
 
-                           <button type="submit" ng-click="cancelTicket()"
-                                   id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
+                           <button  type="button"  ng-click="conform('cancel')"
+                                   id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Discard</button>
 
-                           <button type="submit" id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right">
-                               <span class="btn-label">
-                                   <i class="material-icons">check</i>
-                               </span>Create ticket</button>
+                           <!--<button type="submit" id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right">-->
+                               <!--<span class="btn-label">-->
+                                   <!--<i class="material-icons">check</i>-->
+                               <!--</span>Create ticket</button>-->
+
+                           <button class="btn btn-success ld ld-over-inverse pull-right" ng-class="{'running':saveLoad}"
+                                   type="submit" id="form-button-save" ng-disabled="form.$invalid">
+                               <span class="btn-label"><i class="material-icons">check</i></span>  Create ticket
+                               <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                           </button>
 
                            <div class="clearfix"></div>
                        </div>

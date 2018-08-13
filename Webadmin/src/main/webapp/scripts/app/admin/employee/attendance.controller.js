@@ -245,6 +245,21 @@ angular.module('timeSheetApp')
             $scope.setPage(1);
             $scope.search();
          }
+         $scope.addRemarksId = function(attendanceId,remarks){
+           $scope.attendanceRemarksId = attendanceId;
+           $scope.attendanceRemarks = remarks;
+         };
+
+         $scope.addRemarks = function(remarks){
+            console.log("remarks clicked");
+            console.log($scope.attendanceRemarksId);
+            AttendanceComponent.addRemarks($scope.attendanceRemarksId,remarks).then(function (data) {
+                $scope.showNotifications('top','center','success','Remarks Added to the attendance');
+                console.log(data);
+                // $scope.showNotifications('top','center','danger','Site Already Exists');
+                $scope.search();
+            })
+         };
 
 
         $scope.search = function () {
@@ -317,6 +332,17 @@ angular.module('timeSheetApp')
                 }else{
                         $scope.searchCriteria.siteId = null;
                 }
+
+	        	if($scope.selectedSite) {
+		        	$scope.searchCriteria.siteId = $scope.selectedSite.id;
+		        	}
+
+
+	        	if($scope.selectedProject) {
+		        	$scope.searchCriteria.projectId = $scope.selectedProject.id;
+
+	        	}
+
 
         	console.log('search criterias - ',JSON.stringify($scope.searchCriteria));
             //-------
@@ -446,7 +472,6 @@ angular.module('timeSheetApp')
                 console.log('Attendance search result list -' + JSON.stringify($scope.attendancesData));
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
-
 
 
                 if($scope.attendancesData && $scope.attendancesData.length > 0 ){
@@ -717,6 +742,9 @@ angular.module('timeSheetApp')
             $scope.notLoading=true;
         };
 
+        $scope.showNotifications= function(position,alignment,color,msg){
+            demo.showNotification(position,alignment,color,msg);
+        }
 
         $scope.initCalender();
 

@@ -109,63 +109,53 @@ public class SlaConfigService extends AbstractService {
 	
 	public void updateSLA(SlaConfigDTO slaconfigdto){
 		log.debug("******SlaUpdateService" + slaconfigdto.getId());
-		/*SlaConfig slaConfig = slaconfigrepository.findOne(slaconfigdto.getId());
-		Set<SlaEscalationConfigDTO> slaEscalationConfigDTOs = slaconfigdto.getSlaesc();
-		Set<SlaEscalationConfig> slaEscalationConfig = slaConfig.getSlaesc();
-		Iterator<SlaEscalationConfig> slaItr = slaEscalationConfig.iterator();
-		while(slaItr.hasNext()) {
-			boolean slaFound = false;
-			SlaEscalationConfig slaEntity = slaItr.next();
-			for(SlaEscalationConfigDTO slaEscalationConfigDTO : slaEscalationConfigDTOs) {
-				if(slaEntity.getId() == slaEscalationConfigDTO.getId()) {
-					slaFound = true;
-					break;
-			}
-		}
-			log.debug("slaFound "+slaFound);
-			if(!slaFound) {
-				slaItr.remove();
-			}
-		}
-		for(SlaEscalationConfigDTO slaEscalationConfigDTO : slaEscalationConfigDTOs) {
-			if(slaEscalationConfigDTO.getId() == 0) {
-				SlaEscalationConfig slaEscConfig = mapperUtil.toEntity(slaEscalationConfigDTO, SlaEscalationConfig.class);
-				slaEscConfig.setSla(slaConfig);
-				slaConfig.getSlaesc().add(slaEscConfig);
-			}
-		}	
-		log.debug("before save ="+slaConfig.getSlaesc());
-		slaconfigrepository.save(slaConfig);
-		log.debug("updated SLA: {}", slaConfig);*/
 		SlaConfig slaConfig = slaconfigrepository.findOne(slaconfigdto.getId());
 		log.debug("slaConfig createdby and date " + slaConfig.getCreatedBy() + " " + slaConfig.getCreatedDate());
 		Set<SlaEscalationConfig> slaEscalationConfigs = new HashSet<SlaEscalationConfig>();
 		slaConfig = mapToEntitySla(slaconfigdto,slaConfig);
 		Set<SlaEscalationConfigDTO> slaEscalationConfigDTO = slaconfigdto.getSlaesc();
-		//ZonedDateTime createdDate = ZonedDateTime.now(); 
-		
+		Set<SlaEscalationConfig> deleteSlaEscalationConfigs = slaConfig.getSlaesc();
 		for(SlaEscalationConfigDTO slaEscConfig : slaEscalationConfigDTO) {
-			log.debug("slaConfig createdby and date " + slaEscConfig.getCreatedBy() + " " + slaEscConfig.getCreatedDate());
 			SlaEscalationConfig slaEscalationConfig = new SlaEscalationConfig();
-			if(slaEscConfig.getId() == null) {
-				slaEscalationConfig= mapperUtil.toEntity(slaEscConfig, SlaEscalationConfig.class);
-				slaEscalationConfig.setSla(slaConfig);
-				slaescalationconfigrepository.save(slaEscalationConfig);
+			for(SlaEscalationConfig deleteSlaEscalationConfig : deleteSlaEscalationConfigs)
+			{
+				if(slaEscConfig.getId() != null)
+				{
+					if(slaEscConfig.getId()!= deleteSlaEscalationConfig.getId())
+					{
+						slaescalationconfigrepository.delete(deleteSlaEscalationConfig.getId());
+					}
+				}
 			}
-			else {
-			slaEscalationConfig.setId(slaEscConfig.getId());
-			slaEscalationConfig.setLevel(slaEscConfig.getLevel());
-			slaEscalationConfig.setHours(slaEscConfig.getHours());
-			slaEscalationConfig.setMinutes(slaEscConfig.getMinutes());
-			slaEscalationConfig.setEmail(slaEscConfig.getEmail());
-			slaEscalationConfig.setCreatedBy(slaEscConfig.getCreatedBy());
-			slaEscalationConfig.setCreatedDate(slaEscConfig.getCreatedDate());
-			slaEscalationConfig.setSla(slaConfig);
-			slaEscalationConfigs.add(slaEscalationConfig);
+			if(slaEscConfig.getId() == null) 
+			{
+				boolean status = true; 
+				for(SlaEscalationConfig deleteSlaEscalationConfig : deleteSlaEscalationConfigs)
+				{
+				if(slaEscConfig.getLevel() == deleteSlaEscalationConfig.getLevel())
+					status =false;
+				}
+				if(status == true)
+				{
+					slaEscalationConfig= mapperUtil.toEntity(slaEscConfig, SlaEscalationConfig.class);
+					slaEscalationConfig.setSla(slaConfig);
+					slaescalationconfigrepository.save(slaEscalationConfig);
+				}
+			}
+			else 
+			{
+				slaEscalationConfig.setId(slaEscConfig.getId());
+				slaEscalationConfig.setLevel(slaEscConfig.getLevel());
+				slaEscalationConfig.setHours(slaEscConfig.getHours());
+				slaEscalationConfig.setMinutes(slaEscConfig.getMinutes());
+				slaEscalationConfig.setEmail(slaEscConfig.getEmail());
+				slaEscalationConfig.setCreatedBy(slaEscConfig.getCreatedBy());
+				slaEscalationConfig.setCreatedDate(slaEscConfig.getCreatedDate());
+				slaEscalationConfig.setSla(slaConfig);
+				slaEscalationConfigs.add(slaEscalationConfig);
 			}
 		} 
 		slaConfig.setSlaesc(slaEscalationConfigs);
-		log.debug("slaConfig createdby and date " + slaConfig.getCreatedBy() + " " + slaConfig.getCreatedDate());
 		slaconfigrepository.save(slaConfig);
 	}
 	

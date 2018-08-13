@@ -10,7 +10,6 @@ import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Hibernate;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -93,13 +92,13 @@ public class AttendanceService extends AbstractService {
 
 	@Inject
 	private ReportUtil reportUtil;
-	
+
 	@Inject
 	private SettingsRepository settingRepository;
 
 	@Inject
 	private EmployeeShiftRepository empShiftRepo;
-	
+
     @Inject
     private Environment env;
     
@@ -145,6 +144,7 @@ public class AttendanceService extends AbstractService {
         dbAttn.setLatitudeOut(attn.getLatitudeOut());
         dbAttn.setLongitudeOut(attn.getLongitudeOut());
         dbAttn.setOffline(attnDto.isOffline());
+        dbAttn.setRemarks(attnDto.getRemarks());
         if(dbAttn.isOffline()){
             dbAttn.setCheckOutTime(DateUtil.convertToTimestamp(attnDto.getCheckOutTime()));
         }
@@ -163,14 +163,17 @@ public class AttendanceService extends AbstractService {
         if(log.isDebugEnabled()) {
         		log.debug("shift timings - " + shifts);
         }
-		Employee emp = employeeRepository.findByEmpId(attnDto.getEmployeeEmpId());	
-        
+		Employee emp = employeeRepository.findByEmpId(attnDto.getEmployeeEmpId());
+
         //load the lead time and grace time properties
         int shiftStartLeadTime = Integer.valueOf(env.getProperty("attendance.shiftStartLeadTime"));
         int shiftEndLeadTime = Integer.valueOf(env.getProperty("attendance.shiftEndLeadTime"));
         int shiftStartGraceTime = Integer.valueOf(env.getProperty("attendance.shiftStartGraceTime"));
         int shiftEndGraceTime = Integer.valueOf(env.getProperty("attendance.shiftEndGraceTime"));
         if(CollectionUtils.isNotEmpty(shifts)) {
+			Calendar prevShiftStartCal = Calendar.getInstance();
+			Calendar prevShiftEndCal = Calendar.getInstance();
+
         		for(Shift shift : shifts) {
         	        if(log.isDebugEnabled()) {
                 		log.debug("shift timing - " + shift.getStartTime() + " - " + shift.getEndTime());
@@ -183,6 +186,7 @@ public class AttendanceService extends AbstractService {
 				startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
 				startCal.set(Calendar.SECOND, 0);
 				startCal.set(Calendar.MILLISECOND, 0);
+				
 
 				Calendar startCalLeadTime = Calendar.getInstance();
 				startCalLeadTime.setTimeInMillis(startCal.getTimeInMillis());
@@ -217,13 +221,16 @@ public class AttendanceService extends AbstractService {
 					startCalLeadTime.add(Calendar.DAY_OF_MONTH, -1);
 					startCalGraceTime.add(Calendar.DAY_OF_MONTH, -1);
 				}
-				
+
 				if(isCheckIn && endCal.before(startCal)) {
 					endCal.add(Calendar.DAY_OF_MONTH, 1);
 					endCalLeadTime.add(Calendar.DAY_OF_MONTH, 1);
 					endCalGraceTime.add(Calendar.DAY_OF_MONTH, 1);
 				}
-
+                log.debug("Shift timing "+site.getId());
+                log.debug("Shift timing "+ emp.getId());
+                log.debug("Shift timing "+startCal.getTime());
+                log.debug("Shift timing "+endCal.getTime());
 				EmployeeShift empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), emp.getId() , DateUtil.convertToTimestamp(startCal.getTime()), DateUtil.convertToTimestamp(endCal.getTime()));
 
 				Calendar checkInCal = Calendar.getInstance();
@@ -234,6 +241,7 @@ public class AttendanceService extends AbstractService {
 					checkOutCal = Calendar.getInstance();
 					checkOutCal.setTimeInMillis(dbAttn.getCheckOutTime().getTime());
 				}
+				
 
 				if(checkInCal.before(endCalLeadTime)) { // 12:30 PM checkin time < 1 PM (2PM shift ends) - 1 hr lead time
 					if((startCal.before(checkInCal) && startCalGraceTime.after(checkInCal))  // 7 AM shift starts < 12:30 PM check in
@@ -246,7 +254,7 @@ public class AttendanceService extends AbstractService {
 					}
 				}
 
-				if(checkInCal.after(startCalLeadTime)) { // 1:30 PM checkin time > 1 PM (2 PM shift start) - 1 hr lead time
+				if(checkInCal.after(startCalLeadTime) && (prevShiftStartCal.before(startCalLeadTime) || prevShiftStartCal.equals(startCalLeadTime)) ) { // 1:30 PM checkin time > 1 PM (2 PM shift start) - 1 hr lead time
 					if((startCal.after(checkInCal))  // 2:00 PM shift starts > 1:30 PM check in
 							|| startCal.equals(checkInCal)) {
 						dbAttn.setShiftStartTime(startTime);  //2 PM considered as shift starts
@@ -262,7 +270,7 @@ public class AttendanceService extends AbstractService {
 						}
 					}
 				}
-				
+
 				/*
 				if(checkOutCal != null) { //if checkout done
 					if(checkOutCal.after(startCalGraceTime)) { // 3:30 PM checkout time > 3 PM (2 PM shift start)  + 1 hr grace time
@@ -284,6 +292,11 @@ public class AttendanceService extends AbstractService {
 					}
 				}
 				*/
+				
+				prevShiftStartCal.setTime(startCal.getTime());
+				
+				prevShiftEndCal.setTime(endCal.getTime());
+
         		}
         }
     }
@@ -327,6 +340,7 @@ public class AttendanceService extends AbstractService {
 			attn.setLatitudeIn(attnDto.getLatitudeIn());
 			attn.setLongitudeIn(attnDto.getLongitudeIn());
 			attn.setOffline(attnDto.isOffline());
+			attn.setRemarks(attnDto.getRemarks());
 			if(attn.isOffline()){
 			    attn.setCheckInTime(DateUtil.convertToTimestamp(attnDto.getCheckInTime()));
             }
@@ -355,7 +369,7 @@ public class AttendanceService extends AbstractService {
     	                Hibernate.initialize(prevAttn.getEmployee());
     	                attn.setContinuedAttendance(prevAttn);
     	            }
-    	            
+
     			}else {
     				attn.setContinuedAttendance(null);
     			}
@@ -374,11 +388,11 @@ public class AttendanceService extends AbstractService {
     					shiftGraceTimeCal.set(Calendar.MILLISECOND, 0);
     					shiftGraceTimeCal.add(Calendar.MINUTE, graceTime);
     					if(shiftGraceTimeCal.before(now)) {
-    						attn.setLate(true); //mark late attendance if the checkin time is 
+    						attn.setLate(true); //mark late attendance if the checkin time is
     					}
     				}
     			}
-    			
+
 			attn = attendanceRepository.save(attn);
 			log.debug("Attendance marked: {}", attn);
 			attnDto = mapperUtil.toModel(attn, AttendanceDTO.class);
@@ -550,7 +564,7 @@ public class AttendanceService extends AbstractService {
 		}
 		return attnDto;
 	}
-	
+
 	public AttendanceDTO findOne(Long attnId) {
 		Attendance entity = attendanceRepository.findOne(attnId);
 		return mapperUtil.toModel(entity, AttendanceDTO.class);
@@ -741,7 +755,7 @@ public class AttendanceService extends AbstractService {
 		if (CollectionUtils.isNotEmpty(transactions)) {
 			for (AttendanceDTO attn : transactions) {
 				EmployeeAttendanceReport reportData = new EmployeeAttendanceReport(attn.getEmployeeId(), attn.getEmployeeEmpId(), attn.getEmployeeFullName(), null,
-						attn.getSiteName(), null, attn.getCheckInTime(), attn.getCheckOutTime(), attn.getShiftStartTime(), attn.getShiftEndTime(), attn.getContinuedAttendanceId(), attn.isLate());
+						attn.getSiteName(), null, attn.getCheckInTime(), attn.getCheckOutTime(), attn.getShiftStartTime(), attn.getShiftEndTime(), attn.getContinuedAttendanceId(), attn.isLate(), attn.getRemarks());
 				attendanceReportList.add(reportData);
 			}
 		}
@@ -811,5 +825,13 @@ public class AttendanceService extends AbstractService {
 		} 
 		return "Upload attendance checkOutImage successfully";
 	}
+
+	public AttendanceDTO addRemarks(long id,String remarks){
+        Attendance attendance = attendanceRepository.findOne(id);
+        attendance.setRemarks(remarks);
+        attendance = attendanceRepository.saveAndFlush(attendance);
+
+        return  mapperUtil.toModel(attendance, AttendanceDTO.class);
+    }
 
 }

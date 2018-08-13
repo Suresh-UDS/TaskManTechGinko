@@ -7,10 +7,14 @@ angular.module('timeSheetApp')
           
     	$rootScope.loginView = false;
     	$scope.inventory = {};
+    	$scope.editInventory = {};
     	$scope.client = {};
     	$scope.projectSite = {};
     	$scope.selectedManufacturer = {};
+    	$scope.selectedClient = {};
+    	$scope.selectedSite = {};
     	$scope.selectedUOM;
+    	$scope.selectedUnit = {};
     	$scope.selectedItemGroup = {};
     	$scope.materialItemGroup = {};
     	$scope.pages = { currPage : 1};
@@ -51,6 +55,14 @@ angular.module('timeSheetApp')
                     $scope.sites = data;
                 });
     		}
+        }
+    	
+    	$scope.loadSites = function () {
+            SiteComponent.findAll().then(function (data) {
+                $scope.selectedSite = null;
+                $scope.sites = data;
+                $scope.loadingStop();
+            });
         }
     	
     	$scope.loadManufacturer = function () {
@@ -162,6 +174,80 @@ angular.module('timeSheetApp')
     		});
     	}
     	
+        $scope.deleteConfirm = function (id){
+        	$scope.inventoryId = id;
+        }
+
+        $scope.deleteMaterial = function () {
+        	InventoryComponent.remove($scope.inventoryId).then(function(){
+            	$scope.success = 'OK';
+                $scope.showNotifications('top','center','success','Material has been deleted successfully!!');
+            	$scope.loadMaterials();
+        	});
+        }
+        
+    	$scope.editInventory = function() {
+    		InventoryComponent.findById($stateParams.id).then(function(data) { 
+    			console.log(data);
+    			$scope.editInventory = data;
+    			$scope.editInventory.id = data.id;
+    			$scope.editInventory.name = data.name;
+    			$scope.editInventory.itemCode = data.itemCode;
+    			$scope.selectedSite = {id: data.siteId, name: data.siteName};
+    			$scope.client = {id: data.projectId, name: data.projectName};
+    			$scope.selectedItemGroup = {itemGroup: data.itemGroup};
+    			$scope.selectedManufacturer = {id: data.manufacturerId, name: data.manufacturerName};
+    			$scope.editInventory.minimumStock = data.minimumStock;
+    			$scope.editInventory.maximumStock = data.maximumStock;
+    			$scope.editInventory.storeStock = data.storeStock;
+    			$scope.selectedUnit = {materialUOM: data.uom };
+    		});
+    	}
+    	
+    	$scope.updateInventory = function () {
+            $scope.error = null;
+            $scope.success =null;
+            $scope.loadingStart();
+        	if($scope.client){
+    			$scope.editInventory.projectId = $scope.client.id;
+    		}
+    		
+    		if($scope.selectedSite){
+    			$scope.editInventory.siteId = $scope.selectedSite.id;
+    		}
+    		
+    		if($scope.selectedManufacturer) { 
+    			$scope.editInventory.manufacturerId = $scope.selectedManufacturer.id;
+    		}
+    		
+    		if($scope.selectedItemGroup) {
+    			$scope.editInventory.itemGroup = $scope.selectedItemGroup.itemGroup;
+    		}
+    		
+    		if($scope.selectedUnit){
+    			$scope.editInventory.uom = $scope.selectedUnit;
+    		}
+    		
+            console.log('Inventory details ='+ JSON.stringify($scope.editInventory));
+
+             InventoryComponent.update($scope.editInventory).then(function () {
+                $scope.loadingStop();
+                $scope.showNotifications('top','center','success','Material updated Successfully');
+                $location.path('/inventory-list');
+            }).catch(function (response) {
+                $rootScope.loadingStop();
+                $scope.success = null;
+                console.log('Error - '+ response.data);
+                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+                    $scope.showNotifications('top','center','danger','Material already exist!!');
+                    $scope.errorProjectExists = 'ERROR';
+                } else {
+                    $scope.showNotifications('top','center','danger','Unable to update Material');
+                    $scope.error = 'ERROR';
+                }
+            });;
+
+    	};
     	
     	
     	$scope.search = function () {

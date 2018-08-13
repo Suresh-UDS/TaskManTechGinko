@@ -40,6 +40,8 @@ angular.module('timeSheetApp')
         $scope.searchStatus = null;
         $scope.disable = false;
         $rootScope.exportStatusObj  ={};
+        $scope.status = 0;
+        $scope.selectPlannedStartTime;
 
         /*
         **
@@ -70,19 +72,32 @@ angular.module('timeSheetApp')
 
             });
         };
-
+        /*$(document).ready(function(){
+           $('#jobStartDate').datetimepicker({ dateFormat: 'dd/MM/yyyy hh:mm a' }).val(); 
+        });*/
+         
+        
 
         $('input#jobStartDate').on('dp.change', function(e){
-
         		$scope.job.plannedStartTime = e.date._d;
+                $scope.selectPlannedStartTime = $filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
         		console.log('job start time - ' + $scope.job.plannedStartTime);
+        });
+
+        $('#jobStartDate').datetimepicker({
+        format: 'DD/MM/YYYY HH:MM A'
         });
 
         $('input#scheduleEndDate').on('dp.change', function(e){
 
 	    		$scope.job.scheduleEndDate = e.date._d;
+                $scope.selectScheduleEndDate = $filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
 	    		console.log('job schedule end date - ' + $scope.job.scheduleEndDate);
 	    });
+
+        $('#scheduleEndDate').datetimepicker({
+        format: 'DD/MM/YYYY HH:MM A'
+        });
 
 
         $('input#selectedJobDate').on('dp.change', function(e){
@@ -143,8 +158,8 @@ angular.module('timeSheetApp')
             }else{
                 $scope.searchCriteria.siteId = null; 
             }
-            
-        		
+
+
         		$scope.searchCriteria.list = true;
                 $scope.employees = "";
         		EmployeeComponent.search($scope.searchCriteria).then(function (data) {
@@ -162,7 +177,7 @@ angular.module('timeSheetApp')
             if($scope.searchCriteria.siteId == undefined || $scope.searchCriteria.siteId == 0){
             $scope.showNotifications('top','center','danger','Please select site before select employee.');
             }
-            
+
         }
 
         $scope.loadLocations = function(){
@@ -177,7 +192,7 @@ angular.module('timeSheetApp')
                 var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
 	    		var siteId = $scope.selectedSite ? $scope.selectedSite.id : 0;
 	    		LocationComponent.findBlocks(projectId,siteId).then(function (data) {
-	    			$scope.selectedBlock = null;
+	    			//$scope.selectedBlock = null;
 	            $scope.blocks = data;
 	        });
 	    };
@@ -186,8 +201,9 @@ angular.module('timeSheetApp')
         $scope.loadFloors = function () {
         		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
                 var siteId = $scope.selectedSite ? $scope.selectedSite.id : 0;
+
 	    		LocationComponent.findFloors(projectId,siteId,$scope.selectedBlock).then(function (data) {
-	    			$scope.selectedFloor = null;
+	    			//$scope.selectedFloor = null;
 	            $scope.floors = data;
 	        });
 	    };
@@ -197,13 +213,16 @@ angular.module('timeSheetApp')
 	    		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
                 var siteId = $scope.selectedSite ? $scope.selectedSite.id : 0;
 	    		LocationComponent.findZones(projectId,siteId,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
-	    			$scope.selectedZone = null;
+	    			//$scope.selectedZone = null;
 	            $scope.zones = data;
 	        });
 	    };
 
 	    $scope.getLocationDetails = function(block,floor,zone){
 	        console.log('Loaded location data');
+	        $scope.selectedBlock = block;
+	        $scope.selectedFloor = floor;
+	        $scope.selectedZone = zone;
 	        var search={
 	            projectId:$scope.selectedSite.projectId,
 	            siteId:$scope.selectedSite.id,
@@ -211,7 +230,7 @@ angular.module('timeSheetApp')
                 floor:floor,
                 zone:zone
             };
-	        LocationComponent.findId(siteId,block,floor,zone).then(function (data) {
+	        LocationComponent.findId($scope.selectedSite.id,block,floor,zone).then(function (data) {
                 console.log(data);
                 $scope.job.locationId = data.id;
             })
@@ -263,6 +282,9 @@ angular.module('timeSheetApp')
 
 
         $scope.editJob = function(){
+            if(!$stateParams.id){
+                $location.path('/jobs');
+            }
         	JobComponent.findById($stateParams.id).then(function(data){
                 $scope.loadingStop();
         	    console.log("Job details",data);
@@ -270,6 +292,10 @@ angular.module('timeSheetApp')
         		$scope.job.pendingStatus='pendingAtUDS';
         		$scope.job.pendingAtUDS=true;
         		$scope.selectedSite = {id : data.siteId,name : data.siteName};
+                $scope.job.plannedStartTime = data.plannedStartTime;
+                $scope.selectPlannedStartTime = $filter('date')(data.plannedStartTime, 'dd/MM/yyyy hh:mm a');
+                $scope.job.scheduleEndDate = data.plannedEndTime;
+                $scope.selectScheduleEndDate = $filter('date')(data.plannedEndTime, 'dd/MM/yyyy hh:mm a');
         		$scope.loadEmployees().then(function(employees){
         			console.log('load employees ');
             		$scope.selectedEmployee = {id : data.employeeId,name : data.employeeName};
@@ -376,35 +402,38 @@ angular.module('timeSheetApp')
 	            	$scope.job.schedule = 'ONCE';
 	            	$scope.job.active = 'Y';
 	            	$scope.job.plannedHours = 1;
-                    $scope.job.plannedStartTime = $filter('date')(new Date(), 'EEE, dd MMM yyyy HH:mm:ss Z');
+                    $scope.job.plannedStartTime =new Date();
+                    $scope.selectPlannedStartTime = $filter('date')(new Date(), 'dd/MM/yyyy hh:mm a');
 
-	        	}
-	        	if($stateParams.ticketId){
-                TicketComponent.getTicketDetails($stateParams.ticketId).then(function(data){
-                    console.log("Ticket details");
-                    console.log(data);
-                    $scope.job.title =data.title;
-                    $scope.job.description = data.description;
-                    $scope.job.ticketId = data.id;
+	        	
+    	        	if($stateParams.ticketId){
+                    TicketComponent.getTicketDetails($stateParams.ticketId).then(function(data){
+                        console.log("Ticket details");
+                        console.log(data);
+                        $scope.job.title =data.title;
+                        $scope.job.description = data.description;
+                        $scope.job.ticketId = data.id;
 
-                     /*if(data.siteId){
+                         /*if(data.siteId){
 
-                        SiteComponent.findOne(data.siteID).then(function (data) {
-                            console.log(data);
-                            $scope.selectedSite = null;
-                            $scope.selectedSite = data.name;
-                            alert($scope.selectedSite);
-                        })
-                    }*/
-                       $scope.selectedSite = {id:data.siteId};
-                       $scope.selectedEmployee = {id:data.employeeId};
-                       $scope.selectedBlock = {name:data.block};
-                       $scope.selectedFloor = {name:data.floor};
-                       $scope.selectedZone = {name:data.zone};
-                       $scope.loadEmployees();
+                            SiteComponent.findOne(data.siteID).then(function (data) {
+                                console.log(data);
+                                $scope.selectedSite = null;
+                                $scope.selectedSite = data.name;
+                                alert($scope.selectedSite);
+                            })
+                        }*/
+                           $scope.selectedSite = {id:data.siteId};
+                           $scope.selectedEmployee = {id:data.employeeId};
+                           $scope.selectedBlock = {name:data.block};
+                           $scope.selectedFloor = {name:data.floor};
+                           $scope.selectedZone = {name:data.zone};
+                           $scope.loadEmployees();
+                           $scope.status = 1;
 
 
-                })
+                    })
+                }
             }
         };
 
@@ -430,6 +459,7 @@ angular.module('timeSheetApp')
 	        	$scope.error = null;
 	        	$scope.success =null;
 	        	$scope.errorProjectExists = null;
+	        	console.log("job details before save job - "+$scope.selectedBlock+" - "+$scope.selectedFloor+" - "+$scope.selectedZone);
 	        	if($scope.isEdit){
 	        	    // $scope.job.ticketId
                 }else{
@@ -477,17 +507,18 @@ angular.module('timeSheetApp')
 	        		$scope.job.employeeId = $scope.selectedEmployee.id
 	        	}
 	        	if($scope.selectedBlock) {
-	        		$scope.job.block = $scope.selectedBlock.name;
+	        	    console.log($scope.selectedBlock);
+	        		$scope.job.block = $scope.selectedBlock;
 	        	}else {
 	        		$scope.job.block = "";
 	        	}
 	        	if($scope.selectedFloor) {
-	        		$scope.job.floor = $scope.selectedFloor.name;
+	        		$scope.job.floor = $scope.selectedFloor;
 	        	}else {
 	        		$scope.job.floor = "";
 	        	}
 	        	if($scope.selectedZone) {
-	        		$scope.job.zone = $scope.selectedZone.name;
+	        		$scope.job.zone = $scope.selectedZone;
 	        	}else {
 	        		$scope.job.zone = "";
 	        	}
@@ -636,9 +667,9 @@ angular.module('timeSheetApp')
 	        		$scope.searchCriteria.jobTitle = $scope.selectedJob;
 	        	}*/
                 if($scope.searchEmployee){
-                    $scope.searchCriteria.empId = $scope.searchEmployee.id;
+                    $scope.searchCriteria.employeeId = $scope.searchEmployee.id;
                 }else{
-                    $scope.searchCriteria.empId = null;
+                    $scope.searchCriteria.employeeId = null;
                 }
 
 
@@ -716,12 +747,7 @@ angular.module('timeSheetApp')
             $scope.selectedJobDate = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedJobDateToSer = new Date();
             $scope.selectedJobDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-            $scope.selectedProject = null;
             $scope.searchCriteria = {};
-            $scope.selectedSite = null;
-            $scope.selectedStatus = null;
-            $scope.selectedJob = null;
-            $scope.selectedEmployee = null;
             $scope.searchSite = null;
             $scope.searchEmployee = null;
             $scope.searchStatus = null;
@@ -887,6 +913,20 @@ angular.module('timeSheetApp')
 
         $scope.exportMsg = function() {
             return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportMsg : '');
+        };
+
+        $scope.cancel = function () {
+                            
+             if($scope.status == 1){
+
+                 $location.path('/tickets');
+
+             }else{
+
+                $location.path('/jobs');
+             }
+
+            
         };
 
 

@@ -11,7 +11,7 @@
 
 
         <div class="col-md-6 txt-align-lft">
-            <button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
+            <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
                 <i class="material-icons">filter_list</i> Basic Filter
                 <div class="ripple-container"></div>
             </button>
@@ -19,20 +19,25 @@
 
         <div class="col-md-6 txt-align-rgt">
 
-            <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-project" has-permission="Client:Create"  ng-class="{active: $state.includes('admin')}" tabindex="0">
-                <i class="material-icons">add</i> Add
+            <button class="btn btn-warning  add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i>Clear filter
                 <div class="ripple-container"></div>
             </button>
-
-            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
-                <i class="material-icons">refresh</i> Reload
+            <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-project" has-permission="Client:Create"  ng-class="{active: $state.includes('admin')}" tabindex="0">
+                <i class="material-icons">add</i> Add
                 <div class="ripple-container"></div>
             </button>
 
         </div>
 
     </div>
-
+    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
+            <span class="AppliedFilterTxtCon">
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.projectName || localStorage.projectName">
+                    {{searchCriteria.projectName || localStorage.projectName}}
+                </span>
+            </span>
+    </div>
 
     <div class="row">
         <div class="col-md-12">
@@ -238,11 +243,20 @@
                             <div class="form-group" >
                                 <div class="dropdown">
                                     <label class="label-control">Client</label>
-                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
                                     <!-- ng-change="loadDepSites()" -->
-                                    <select class="form-control " ng-model="searchProject"  ng-options="project as project.name for project in projectsList" ng-pattern="Select Client" required>
-                                        <option value="">Select Client...</option>
-                                    </select>
+
+                                    <!--<select class="form-control " ng-model="searchProject"  ng-options="project as project.name for project in projectsList" ng-pattern="Select Client" required>-->
+                                        <!--<option value="">Select Client...</option>-->
+                                    <!--</select>-->
+                                    <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                    <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <ui-select ng-model="searchProject" ng-change="selectProject(searchProject)"  required>
+                                        <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :searchProject}}</ui-select-match>
+                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
+                                            <div ng-bind="client"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
                                 </div>
                             </div>
                         </div>

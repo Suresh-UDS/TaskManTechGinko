@@ -106,13 +106,9 @@ export class EmployeeList {
       });
   }
 
-  getEmployeeAttendance(employeeId){
-    this.attendanceService.getAttendances(employeeId,this.site.id).subscribe(
-      response=>{
-        console.log(response);
-        this.navCtrl.push(AttendanceListPage,{'attendances':response.json()});
-      }
-    )
+  getEmployeeAttendance(empId){
+
+      this.navCtrl.push(AttendanceListPage,{siteId:this.site.id,empId:empId});
   }
 
 
@@ -215,11 +211,12 @@ export class EmployeeList {
       let base64Image = 'data:image/jpeg;base64,' + imageData;
       var employeeName = employee.fullName+employee.empId;
       this.showLoader('Detecting Face');
+
       this.authService.detectFace(this.employeeFullName,imageData).subscribe(response=>{
               console.log("response in site list");
               console.log(response.json());
               var detectResponse = response.json();
-              this.closeLoader();
+              this.closeAll();
               if(detectResponse.images && detectResponse.images[0].status === 'Complete'){
                   if(mode === 'enroll'){
                       this.showLoader('Enrolling Face Id');
@@ -228,11 +225,12 @@ export class EmployeeList {
                           employee.imageData = imageData;
                           this.employeeService.markEnrolled(employee).subscribe(response=>{
                               console.log("face Id marked to database");
-                              this.closeLoader();
+                              this.closeAll();
                               var msg='Face Id enrolled Successfully';
                               this.showSuccessToast(msg);
+                              this.navCtrl.pop();
                           },error=>{
-                              this.closeLoader();
+                              this.closeAll();
                               var msg='Error in enrolling Face Id..';
                               this.showSuccessToast(msg);
                               console.log("Error in enrolling Face Id..");
@@ -240,7 +238,7 @@ export class EmployeeList {
                           });
 
                       },error=>{
-                          this.closeLoader();
+                          this.closeAll();
                           var msg='Error in Detecting Face..';
                           this.showSuccessToast(msg);
                           console.log("Error");
@@ -254,28 +252,28 @@ export class EmployeeList {
                           this.authService.verifyUser(employeeName,imageData).subscribe(response=>{
                               console.log("Face verification response");
                               console.log(response.json());
-                              this.closeLoader();
+                              this.closeAll();
                               var verificationResponse = response.json();
                               if(verificationResponse && verificationResponse.images){
                                   if(verificationResponse.images[0].transaction.confidence >=0.75){
                                       console.log(this.lattitude);
                                       console.log(this.longitude);
-                                      this.closeLoader();
+                                      this.closeAll();
                                       this.showLoader('Marking Attendance');
                                       this.markAttendance(employee,imageData);
                                   }else{
-                                      this.closeLoader();
+                                      this.closeAll();
                                       this.showLoader('Marking Attendance');
                                       this.markAttendance(employee,imageData);
                                   }
                               }else{
-                                  this.closeLoader();
+                                  this.closeAll();
                                   var msg = "Unable to verify face, Marking Attendance";
                                   this.showSuccessToast(msg);
                                   this.markAttendance(employee,imageData);
                               }
                           },error=>{
-                              this.closeLoader();
+                              this.closeAll();
                               var msg="Unable to verify face, Marking Attendance";
                               this.showSuccessToast(msg);
                               this.markAttendance(employee,imageData);
@@ -292,22 +290,40 @@ export class EmployeeList {
                                   if(verificationResponse.images[0].transaction.confidence >=0.75){
                                       console.log(this.lattitude);
                                       console.log(this.longitude);
-                                      this.closeLoader();
-                                      this.showLoader('Marking Attendance');
-                                      this.markAttendanceCheckOut(employee,imageData);
+                                      this.closeAll();
+                                      var options={
+                                          timeout:3000
+                                      }
+                                      this.showLoader('Getting location');
+                                      this.geolocation.getCurrentPosition(options).then((response)=>{
+                                          console.log("Current location");
+                                          console.log(response);
+                                          this.lattitude = response.coords.latitude;
+                                          this.longitude = response.coords.longitude;
+                                          this.closeAll();
+                                          this.showLoader('Marking Attendance');
+                                          this.markAttendanceCheckOut(employee,imageData);
+                                      }).catch((error)=>{
+                                          this.closeAll();
+                                          this.showSuccessToast('Error in getting location');
+                                          console.log("error in getting current location");
+                                          this.lattitude = 0;
+                                          this.longitude = 0;
+                                      });
+
                                   }else{
-                                      this.closeLoader();
+                                      this.closeAll();
                                       this.showLoader('Marking Attendance');
                                       this.markAttendanceCheckOut(employee,imageData);
                                   }
                               }else{
-                                  this.closeLoader();
+                                  this.closeAll();
                                   var msg = "Unable to verify face, Marking Attendance";
                                   this.showSuccessToast(msg);
                                   this.markAttendanceCheckOut(employee,imageData);
                               }
                           },error=>{
-                              this.closeLoader();
+                              this.closeAll();
                               var msg="Unable to verify face, Marking Attendance";
                               this.showSuccessToast(msg);
                               this.markAttendanceCheckOut(employee,imageData);
@@ -318,7 +334,7 @@ export class EmployeeList {
 
               }else{
                   console.log("error in detecting face");
-                  this.closeLoader();
+                  this.closeAll();
                   var msg = "Face not Detected, please try again..";
                   this.showSuccessToast(msg);
               }
@@ -326,18 +342,19 @@ export class EmployeeList {
 
           },error=>{
               console.log("errors");
-          this.closeLoader();
+          this.closeAll();
           console.log(error.json());
               if(error.json().status == "false"){
                   var msg= "Face not detected, please try again..";
                   this.showSuccessToast(msg);
-                  this.closeLoader();
+                  this.closeAll();
               }
           }
       )
   }
 
   markAttendance(employee,imageData){
+
       this.attendanceService.markAttendanceCheckIn(this.site.id,employee.empId,this.lattitude,this.longitude,imageData).subscribe(response=>{
           console.log(response.json());
           this.closeAll();
@@ -371,16 +388,25 @@ export class EmployeeList {
   }
 
   getEmployees(){
+<<<<<<< HEAD
       this.isLoading=true;
 
+=======
+      this.component.showLoader('Loading Employees');
+>>>>>>> Release-2.0
       var searchCriteria = {
           currPage:this.page,
           pageSort: this.pageSort,
           siteId:this.site.id
       };
       this.attendanceService.searchEmpAttendances(searchCriteria).subscribe(response=>{
+<<<<<<< HEAD
           this.isLoading=false;
           // this.employeeList = response.json();
+=======
+          // this.employeeList = response.json();
+          this.component.closeAll();
+>>>>>>> Release-2.0
           this.employeeList = response.transactions;
           this.page = response.currPage;
           this.totalPages = response.totalPages;
@@ -420,7 +446,7 @@ export class EmployeeList {
                         }
                         this.page = response.currPage;
                         this.totalPages = response.totalPages;
-                        this.component.closeLoader();
+                        this.component.closeAll();
                     },
                     error=>{
                         console.log('ionViewDidLoad Employee Page:'+error);
