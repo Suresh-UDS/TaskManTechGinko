@@ -17,6 +17,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Async;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Splitter;
+import com.ts.app.config.Constants;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Frequency;
 import com.ts.app.domain.Job;
@@ -98,12 +100,6 @@ public class SchedulerService extends AbstractService {
 	@Inject
 	private SchedulerConfigRepository schedulerConfigRepository;
 
-	@Inject
-	private ReportService reportService;
-
-	@Inject
-	private AttendanceService attendanceService;
-
 	@Inject AttendanceRepository attendanceRepository;
 
 	@Inject EmployeeRepository employeeRepository;
@@ -117,6 +113,7 @@ public class SchedulerService extends AbstractService {
 	@Inject Environment env;
 
 	@Inject
+	@Lazy
 	public SchedulerHelperService schedulerHelperService;
 	
 	@Inject
@@ -175,6 +172,16 @@ public class SchedulerService extends AbstractService {
 			// create jobs based on the creation policy
 			createJobs(entity);
 			//createJobs(entity);
+			/*
+			if(log.isDebugEnabled()) {
+				log.debug("Saved parent job and scheduler config " + entity);
+				log.debug("Invoking async scheduler helper to create child jobs ");
+			}
+			schedulerHelperService.createJobs(entity);
+			if(log.isDebugEnabled()) {
+				log.debug("Invoked scheduler helper to create child jobs ");
+			}
+			*/
 		}
 
 	}
@@ -319,6 +326,8 @@ public class SchedulerService extends AbstractService {
 							if (CollectionUtils.isEmpty(job)) {
 								createJobs(weeklyTask);
 							}
+							// processWeeklyTasks(weeklyTask);
+							//schedulerHelperService.createJobs(weeklyTask);
 						}
 					} catch (Exception ex) {
 						log.warn("Failed to create JOB ", ex);
@@ -359,6 +368,10 @@ public class SchedulerService extends AbstractService {
 							if (CollectionUtils.isEmpty(job)) {
 								createJobs(monthlyTask);
 							}
+						}
+						if (today.get(Calendar.DAY_OF_WEEK) == monthlyTask.getScheduleMonthlyDay()) {
+							// processMonthlyTasks(monthlyTask);
+							//schedulerHelperService.createJobs(monthlyTask);
 						}
 					} catch (Exception ex) {
 						log.warn("Failed to create JOB ", ex);
@@ -594,11 +607,11 @@ public class SchedulerService extends AbstractService {
 									// empAttnList, null, exportResult);
 									// send reports in email.
 									if (attendanceReportEmails != null && empCntInShift > 0) {
-										StringBuilder content = new StringBuilder("Site Name - " + site.getName() + LINE_SEPARATOR);
-										content.append("Shift - " + shift.getStartTime() + " - " + shift.getEndTime() + LINE_SEPARATOR);
-										content.append("Total employees - " + empCntInShift + LINE_SEPARATOR);
-										content.append("Present - " + attendanceCount + LINE_SEPARATOR);
-										content.append("Absent - " + absentCount + LINE_SEPARATOR);
+										StringBuilder content = new StringBuilder("Site Name - " + site.getName() + Constants.LINE_SEPARATOR);
+										content.append("Shift - " + shift.getStartTime() + " - " + shift.getEndTime() + Constants.LINE_SEPARATOR);
+										content.append("Total employees - " + empCntInShift + Constants.LINE_SEPARATOR);
+										content.append("Present - " + attendanceCount + Constants.LINE_SEPARATOR);
+										content.append("Absent - " + absentCount + Constants.LINE_SEPARATOR);
 										// mailService.sendJobReportEmailFile(attendanceReportEmails.getSettingValue(),
 										// exportResult.getFile(), null, cal.getTime());
 										mailService.sendAttendanceConsolidatedReportEmail(site.getName(), attendanceReportEmails.getSettingValue(), content.toString(), null,
@@ -612,11 +625,11 @@ public class SchedulerService extends AbstractService {
 									DateUtil.convertToSQLDate(genShiftEnd.getTime()));
 							long absentCount = empCntInShift - attendanceCount;
 							if (attendanceReportEmails != null && empCntInShift > 0) {
-								StringBuilder content = new StringBuilder("Site Name - " + site.getName() + LINE_SEPARATOR);
-								content.append("Shift - General Shift" + LINE_SEPARATOR);
-								content.append("Total employees - " + empCntInShift + LINE_SEPARATOR);
-								content.append("Present - " + attendanceCount + LINE_SEPARATOR);
-								content.append("Absent - " + absentCount + LINE_SEPARATOR);
+								StringBuilder content = new StringBuilder("Site Name - " + site.getName() + Constants.LINE_SEPARATOR);
+								content.append("Shift - General Shift" + Constants.LINE_SEPARATOR);
+								content.append("Total employees - " + empCntInShift + Constants.LINE_SEPARATOR);
+								content.append("Present - " + attendanceCount + Constants.LINE_SEPARATOR);
+								content.append("Absent - " + absentCount + Constants.LINE_SEPARATOR);
 								mailService.sendAttendanceConsolidatedReportEmail(site.getName(), attendanceReportEmails.getSettingValue(), content.toString(), null, new Date());
 							}
 						}
@@ -642,7 +655,7 @@ public class SchedulerService extends AbstractService {
 
 	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
 	public void attendanceCheckOutTask() {
-		schedulerHelperService.autoCheckOutAttendance(this);
+		schedulerHelperService.autoCheckOutAttendance();
 	}
 	
 	@Scheduled(cron="0 0 9 * * ?")
@@ -901,6 +914,7 @@ public class SchedulerService extends AbstractService {
 		return dateTime;
 	}
 
+	
 	public void deleteJobs(SchedulerConfig dailyTask) {
 		if ("CREATE_JOB".equals(dailyTask.getType())) {
 			String creationPolicy = env.getProperty("scheduler.dailyJob.creation");
@@ -921,7 +935,7 @@ public class SchedulerService extends AbstractService {
 
 	private void processDailyTasks(SchedulerConfig dailyTask) {
 		if ("CREATE_JOB".equals(dailyTask.getType())) {
-			jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), new Date());
+			schedulerHelperService.jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), new Date());
 			dailyTask.setLastRun(new Date());
 		} else {
 			log.warn("Unknown scheduler config type job" + dailyTask);
@@ -930,8 +944,7 @@ public class SchedulerService extends AbstractService {
 
 	private void processWeeklyTasks(SchedulerConfig weeklyTask) {
 		if ("CREATE_JOB".equals(weeklyTask.getType())) {
-
-			jobCreationTask(weeklyTask, weeklyTask.getJob(), weeklyTask.getData(), new Date());
+			schedulerHelperService.jobCreationTask(weeklyTask, weeklyTask.getJob(), weeklyTask.getData(), new Date());
 			weeklyTask.setLastRun(new Date());
 		} else {
 			log.warn("Unknown scheduler config type job" + weeklyTask);
@@ -941,7 +954,7 @@ public class SchedulerService extends AbstractService {
 	private void processMonthlyTasks(SchedulerConfig monthlyTask) {
 		if ("CREATE_JOB".equals(monthlyTask.getType())) {
 
-			jobCreationTask(monthlyTask, monthlyTask.getJob(), monthlyTask.getData(), new Date());
+			schedulerHelperService.jobCreationTask(monthlyTask, monthlyTask.getJob(), monthlyTask.getData(), new Date());
 			monthlyTask.setLastRun(new Date());
 		} else {
 			log.warn("Unknown scheduler config type job" + monthlyTask);

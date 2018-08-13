@@ -129,11 +129,19 @@ export class TabsPage {
         })
             .then((db: SQLiteObject) => {
 
+<<<<<<< HEAD
                 // db.executeSql('DROP TABLE assetList',{})
                 //
                 // db.executeSql('create table IF NOT EXISTS assetList(id INT,name VARCHAR(32))', {})
                 //     .then(() => console.log('Executed SQL'))
                 //     .catch(e => console.log(e));
+=======
+                db.executeSql('DROP TABLE assetList',[])
+
+                db.executeSql('create table IF NOT EXISTS assetList(id INT,name VARCHAR(32))', [])
+                    .then(() => console.log('Executed SQL'))
+                    .catch(e => console.log(e));
+>>>>>>> Release-1.0
 
 
                 for (var i = 0; i < siteList.length; i++) {
