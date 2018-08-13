@@ -295,7 +295,7 @@
                                 <div class="dropdown">
                                     <label class="label-control">Client</label>
                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects" ng-pattern="Select Client" required>
+                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects"  required>
                                         <option value="">Select Client...</option>
                                     </select>
                                 </div>
@@ -306,7 +306,7 @@
                                 <div class="form-group">
                                     <label class="label-control">Site</label>
                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites" ng-pattern="Select Site">
+                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites">
                                         <option value="">Select Site...</option>
                                     </select>
                                 </div>
@@ -367,7 +367,7 @@
                             <div class="form-group">
                                 <label class="label-control">Asset Type</label>
                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                <select class="form-control " ng-model="searchAssetType"  ng-options="assetype as assetype.name for assetype in assetTypes track by assetype.name" ng-pattern="Select Asset Type">
+                                <select class="form-control " ng-model="searchAssetType"  ng-options="assetype as assetype.name for assetype in assetTypes track by assetype.name">
                                     <option value="">Select Asset Type...</option>
                                 </select>
                             </div>
@@ -382,7 +382,7 @@
                             <div class="form-group">
                                 <label class="label-control">Asset Group</label>
                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                <select class="form-control" ng-model="searchAssetGroup" ng-options="assetgroup as assetgroup.assetgroup for assetgroup in assetGroups track by assetgroup.assetgroup" ng-pattern="Select Asset Group">
+                                <select class="form-control" ng-model="searchAssetGroup" ng-options="assetgroup as assetgroup.assetgroup for assetgroup in assetGroups track by assetgroup.assetgroup" >
 
                                     <option value="">Select Asset Group...</option>
                                 </select>
@@ -449,7 +449,7 @@
                                 <div class="form-group">
                                     <!-- <label class="label-control">Site</label> -->
                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="assetQrSite"  ng-options="site as site.name for site in sites" ng-pattern="Select Site">
+                                    <select class="form-control " ng-model="assetQrSite"  ng-options="site as site.name for site in sites" >
                                         <option value="">Select Site...</option>
                                     </select>
                                     <div ng-show="assetQrSiteFrom.$submitted || assetQrSiteFrom.assetQrSite.$touched">

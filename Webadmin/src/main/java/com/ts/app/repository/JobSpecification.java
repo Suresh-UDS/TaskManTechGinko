@@ -52,6 +52,18 @@ public class JobSpecification implements Specification<Job> {
             if(searchCriteria.getLocationId()!=0){
                 predicates.add(builder.equal(root.get("location").get("id"),  searchCriteria.getLocationId()));
             }
+            log.debug("JobSpecification toPredicate - searchCriteria block -"+ searchCriteria.getBlock());
+            if(org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+                predicates.add(builder.equal(root.get("block"),  searchCriteria.getBlock()));
+            }
+            log.debug("JobSpecification toPredicate - searchCriteria floor -"+ searchCriteria.getFloor());
+            if(org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getFloor())){
+                predicates.add(builder.equal(root.get("floor"),  searchCriteria.getFloor()));
+            }
+            log.debug("JobSpecification toPredicate - searchCriteria zone -"+ searchCriteria.getZone());
+            if(org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getZone())){
+                predicates.add(builder.equal(root.get("zone"),  searchCriteria.getZone()));
+            }
             log.debug("JobSpecification toPredicate - searchCriteria jobstatus -"+ searchCriteria.getJobStatus());
             if(searchCriteria.getJobStatus()!=null){
                 predicates.add(builder.equal(root.get("status"),  searchCriteria.getJobStatus()));
@@ -79,10 +91,12 @@ public class JobSpecification implements Specification<Job> {
             	predicates.add(builder.and(builder.equal(root.get("maintenanceType"), searchCriteria.getMaintenanceType()), builder.equal(root.get("asset").get("id"), searchCriteria.getAssetId())));
             }*/
             
+            log.debug("JobSpecification toPredicate - searchCriteria assetId -"+ searchCriteria.getAssetId());
             if(searchCriteria.getAssetId() != 0) { 
-            	predicates.add(builder.equal(root.get("asset").get("id"),  searchCriteria.getAssetId()));
+            		predicates.add(builder.equal(root.get("asset").get("id"),  searchCriteria.getAssetId()));
             }
 
+            log.debug("JobSpecification toPredicate - searchCriteria maintenanceType -"+ searchCriteria.getMaintenanceType());
             if(StringUtils.isNotEmpty(searchCriteria.getMaintenanceType())) { 
             	predicates.add(builder.equal(root.get("maintenanceType"), searchCriteria.getMaintenanceType()));
             }
@@ -135,9 +149,12 @@ public class JobSpecification implements Specification<Job> {
 	                		orPredicates.add(root.get("employee").get("id").in(searchCriteria.getSubordinateIds()));
 	                }
 	            }
+	            if(!isAdmin)
+	            {
 	            if(CollectionUtils.isNotEmpty(searchCriteria.getSiteIds())){
 	            		Predicate path = root.get("site").get("id").in(searchCriteria.getSiteIds());
 	        			orPredicates.add(path);
+	            }
 	            }
 
             //}

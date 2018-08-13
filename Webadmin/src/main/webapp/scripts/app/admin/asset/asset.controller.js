@@ -90,6 +90,7 @@ angular.module('timeSheetApp')
         $scope.minError =false;
         $scope.maxError =false;
         $rootScope.exportStatusObj  ={};
+        $scope.searchModule ="";
 
         //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.searchAcquiredDate = "";
@@ -184,8 +185,8 @@ angular.module('timeSheetApp')
 
         $scope.ppmFromMsg =false;
 
-        $('#dateFilterPpmFrom').datetimepicker().on('dp.show', function () {
-            return $(this).data('DateTimePicker').minDate(new Date());
+        $('#dateFilterPpmFrom').datetimepicker().on('dp.show', function (e) {
+            return $(this).data('DateTimePicker').minDate(e.date);
         });
 
         $('input#dateFilterPpmFrom').on('dp.change', function(e){
@@ -193,7 +194,7 @@ angular.module('timeSheetApp')
             $scope.assetPPM.startDate = e.date._d;
             $scope.ppmFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $('#dateFilterPpmTo').datetimepicker().on('dp.show', function () {
-                return $(this).data('DateTimePicker').minDate(e.date._d);
+                return $(this).data('DateTimePicker').minDate(e.date);
             });
 
             // if($scope.assetPPM.startDate > $scope.assetPPM.endDate) {
@@ -368,6 +369,33 @@ angular.module('timeSheetApp')
             }
         }
 
+
+        //Conformation modal
+
+                    $scope.conform = function(text)
+                    {
+                        console.log($scope.selectedProject)
+                        $rootScope.conformText = text;
+                        $('#conformationModal').modal();
+
+                    }
+                    $rootScope.back = function (text) {
+                        if(text == 'cancel')
+                        {
+                            $scope.cancel();
+                        }
+                        else if(text == 'save')
+                        {
+                            $scope.saveAsset();
+                        }
+                        else if(text == 'update')
+                        {
+                            $scope.updateAsset()
+                        }
+                    };
+
+        //
+
         $scope.loadProjects = function () {
             ProjectComponent.findAll().then(function (data) {
                 console.log("Loading all projects")
@@ -515,6 +543,8 @@ angular.module('timeSheetApp')
                 var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
                 LocationComponent.findBlocks(0,$scope.selectedSites.id).then(function (data) {
                     $scope.selectedBlock = null;
+                    $scope.selectedFloor = null;
+                    $scope.selectedZone = null;
                 $scope.blocks = data;
                  console.log("Loading all blocks -- " ,  $scope.blocks);
             });
@@ -524,6 +554,7 @@ angular.module('timeSheetApp')
                 var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
                 LocationComponent.findFloors(0,$scope.selectedSites.id,$scope.selectedBlock).then(function (data) {
                     $scope.selectedFloor = null;
+                    $scope.selectedZone = null;
                 $scope.floors = data;
                 console.log("Loading all floors -- " ,  $scope.floors);
             });
@@ -661,6 +692,10 @@ angular.module('timeSheetApp')
 
         $scope.editAsset = function(){
              //alert($stateParams.id);
+             if(!$stateParams.id){
+
+                $location.path('/assets');
+             }
             console.log($stateParams.id);
             $rootScope.loadingStart();
 
@@ -803,7 +838,7 @@ angular.module('timeSheetApp')
 
             console.log('Selected Asset' + $scope.searchAssetName);
 
-            if(!$scope.searchAcquiredDate && !$scope.searchCreatedDate && 
+            if(!$scope.searchAcquiredDate && !$scope.searchCreatedDate &&
                 jQuery.isEmptyObject($scope.searchProject) == true
              && jQuery.isEmptyObject($scope.searchSite) == true &&
             jQuery.isEmptyObject($scope.searchAssetGroup) == true &&
@@ -994,9 +1029,9 @@ angular.module('timeSheetApp')
 
             $rootScope.loadingStart();
 
-            var scheduleObj = {assetId:$stateParams.id,checkInDateTimeFrom:startDate,checkInDateTimeTo:endDate};
+            $scope.scheduleObj = {assetId:$stateParams.id,checkInDateTimeFrom:startDate,checkInDateTimeTo:endDate};
 
-            AssetComponent.getPPMScheduleCalendar(scheduleObj.assetId,scheduleObj).then(function(data){
+            AssetComponent.getPPMScheduleCalendar($scope.scheduleObj.assetId,$scope.scheduleObj).then(function(data){
 
                 console.log("Asset Calendar details ==" + JSON.stringify(data));
 
@@ -1093,51 +1128,50 @@ angular.module('timeSheetApp')
         });
 
 
-        $('input#warFromDate').on('dp.show',function () {
+        /*$('#warFromDate').datetimepicker().on('dp.show', function () {
             return $(this).data('DateTimePicker').minDate(new Date());
-        })
+        });*/
 
         $('input#warFromDate').on('dp.change', function(e){
 
-            $scope.warToDate = "";
-            $scope.warToDate1 = "";
-            console.log($scope.warToDate1);
             $scope.assetGen.warrantyFromDate =  e.date._d;
 
             $scope.warFromDate1 = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $scope.warFromDate = e.date._d;
 
+            $('#warToDate').datetimepicker().on('dp.show', function () {
+                     return $(this).data('DateTimePicker').minDate(e.date);
+                    });
 
-            $('input#warToDate').on('dp.show',function () {
-                return $(this).data('DateTimePicker').minDate(e.date._d);
-            })
+            if($scope.warToDate){
 
-            // if($scope.warFromDate > $scope.warToDate) {
-            //
-            //         //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
-            //         $scope.warFromMsg = true;
-            //
-            //
-            //         //return false;
-            // }else {
-            //
-            //    $scope.warFromMsg =false;
-            //
-            //
-            // }
-            //
-            // if($scope.warToDate < $scope.warFromDate) {
-            //         //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
-            //         $scope.warToMsg =true;
-            //
-            //
-            //         //return false;
-            // }else {
-            //
-            //      $scope.warToMsg =false;
-            //
-            //
-            // }
+                if($scope.warFromDate > $scope.warToDate) {
+
+                        //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
+                        $scope.warFromMsg = true;
+
+
+                        //return false;
+                }else {
+
+                   $scope.warFromMsg =false;
+
+
+                }
+
+                if($scope.warToDate < $scope.warFromDate) {
+                        //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+                        $scope.warToMsg =true;
+
+
+                        //return false;
+                }else {
+
+                     $scope.warToMsg =false;
+
+
+                }
+            }
         });
 
          $scope.warToMsg =false;
@@ -1147,33 +1181,38 @@ angular.module('timeSheetApp')
             $scope.warToDate1 = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $scope.warToDate = e.date._d;
 
-            // if($scope.warToDate < $scope.warFromDate) {
-            //         //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
-            //         $scope.warToMsg =true;
-            //
-            //
-            //         //return false;
-            // }else {
-            //
-            //      $scope.warToMsg =false;
-            //
-            //
-            // }
-            //
-            // if($scope.warFromDate > $scope.warToDate) {
-            //
-            //         //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
-            //         $scope.warFromMsg = true;
-            //
-            //
-            //         //return false;
-            // }else {
-            //
-            //    $scope.warFromMsg =false;
-            //
-            //
-            // }
+            if($scope.warFromDate){
+
+                if($scope.warToDate < $scope.warFromDate) {
+                        //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+                        $scope.warToMsg =true;
+
+
+                        //return false;
+                }else {
+
+                     $scope.warToMsg =false;
+
+
+                }
+
+                if($scope.warFromDate > $scope.warToDate) {
+
+                        //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
+                        $scope.warFromMsg = true;
+
+
+                        //return false;
+                }else {
+
+                   $scope.warFromMsg =false;
+
+
+                }
+            }
         });
+
+
 
         $('input#searchAcquiredDate').on('dp.change', function(e){
                 $scope.searchAcquiredDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
@@ -1190,6 +1229,7 @@ angular.module('timeSheetApp')
          /* Create and save asset */
 
         $scope.saveAsset = function () {
+            $scope.saveLoad = true;
                 $scope.loadingStart();
                 $scope.btnDisabled = true;
                 $scope.error = null;
@@ -1218,9 +1258,10 @@ angular.module('timeSheetApp')
                     console.log("Asset Create List -- ",$scope.assetGen);
                     AssetComponent.create($scope.assetGen).then(function(response) {
                         console.log("Asset response",JSON.stringify(response));
-                        $scope.assetVal.id=response.id;
+                        $scope.assetVal=response;
                         $scope.assetVal.siteId=response.siteId;
                         $scope.success = 'OK';
+                        $scope.saveLoad = false;
                         $scope.loadingStop();
                         $scope.showNotifications('top','center','success','Asset has been added Successfully!!');
                         $scope.loadEmployees();
@@ -1230,6 +1271,7 @@ angular.module('timeSheetApp')
 
                     }).catch(function (response) {
                         $scope.loadingStop();
+                        $scope.saveLoad = false;
                         $scope.btnDisabled= false;
                         $scope.success = null;
                         console.log('Error - '+ response.data);
@@ -1335,6 +1377,7 @@ angular.module('timeSheetApp')
        /* Update and save asset */
 
         $scope.updateAsset = function () {
+            $scope.saveLoad = true;
             $scope.loadingStart();
         	$scope.error = null;
             $scope.success =null;
@@ -1415,6 +1458,7 @@ angular.module('timeSheetApp')
         	AssetComponent.update($scope.assetEdit).then(function () {
 
                 $scope.success = 'OK';
+                $scope.saveLoad = false;
                 $scope.loadingStop();
                 $scope.btnDisabled =false;
                  $scope.showNotifications('top','center','success','Asset has been updated Successfully!!');
@@ -1423,6 +1467,7 @@ angular.module('timeSheetApp')
             	//$location.path('/assets');
 
             }).catch(function (response) {
+                $scope.saveLoad = false;
                 $rootScope.loadingStop();
                 $scope.success = null;
                 $scope.btnDisabled =false;
@@ -1743,17 +1788,17 @@ angular.module('timeSheetApp')
 
             //alert(page);
             $scope.pages.currPage = page;
-            if($scope.ppmSearchCriteria.maintenanceType =='PPM'){
+            if($scope.searchModule =='PPM'){
                 $scope.loadPPMJobs();
-            }else if($scope.amcSearchCriteria.maintenanceType =='AMC'){
+            }else if($scope.searchModule =='AMC'){
                 $scope.loadAMCJobs();
-            }else if($scope.redSearchCriteria.module == "Readings"){
+            }else if($scope.searchModule == "Readings"){
                 $scope.loadAssetReadings();
-            }else if($scope.siteHistorySearchCriteria.module == "siteHistory"){
+            }else if($scope.searchModule == "siteHistory"){
                 $scope.loadSiteHistory();
-            }else if($scope.statusHistorySearchCriteria.module == "statusHistory"){
+            }else if($scope.searchModule == "statusHistory"){
                 $scope.loadStatusHistory();
-            }else if($scope.ticketSearchCriteria.module == "Ticket"){
+            }else if($scope.searchModule == "Ticket"){
                 $scope.loadTicket();
             }else{
                $scope.search();
@@ -1890,6 +1935,11 @@ angular.module('timeSheetApp')
         		$scope.loadEmployees();
         }
 
+         $scope.cancelSiteChange = function() {
+            $scope.selectedSites ={id:$scope.assetList.siteId,name:$scope.assetList.siteName};
+        }
+
+    
         $scope.loadAllParameters = function() {
             //$rootScope.loadingStart();
     		ParameterComponent.findAll().then(function (data) {
@@ -2263,8 +2313,8 @@ angular.module('timeSheetApp')
 
         $scope.amcFromMsg =false;
 
-        $('input#dateFilterAmcFrom').on('dp.show',function () {
-            return $(this).data('DateTimePicker').minDate(new Date());
+        $('input#dateFilterAmcFrom').on('dp.show',function (e) {
+            return $(this).data('DateTimePicker').minDate(e.date);
         })
 
 	    $('input#dateFilterAmcFrom').on('dp.change', function(e){
@@ -2272,7 +2322,7 @@ angular.module('timeSheetApp')
             $scope.amcSchedule.startDate = e.date._d;
             $scope.amcFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $('input#dateFilterAmcTo').on('dp.show',function () {
-                return $(this).data('DateTimePicker').minDate(e.date._d);
+                return $(this).data('DateTimePicker').minDate(e.date);
             })
 
 
@@ -2560,6 +2610,7 @@ angular.module('timeSheetApp')
 
         $scope.loadAssetReadings = function() {
             $rootScope.loadingStart();
+            $rootScope.loadPageTop();
             var redCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
                     if(!$scope.redSearchCriteria) {
                         var redSearchCriteria = {
@@ -2570,6 +2621,7 @@ angular.module('timeSheetApp')
 
                 $scope.redSearchCriteria.currPage = redCurrPageVal;
                 $scope.redSearchCriteria.module = "Readings";
+                $scope.searchModule = "Readings";
                 $scope.redSearchCriteria.assetId = $stateParams.id;
                 $scope.redSearchCriteria.sort = $scope.pageSort;
             $scope.assetReadings = "";
@@ -2640,6 +2692,7 @@ angular.module('timeSheetApp')
 
         $scope.loadAMCJobs = function() {
             $scope.loadingStart();
+            $rootScope.loadPageTop();
             var amcCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
                     if(!$scope.amcSearchCriteria) {
                         var amcSearchCriteria = {
@@ -2650,7 +2703,8 @@ angular.module('timeSheetApp')
 
                 $scope.amcSearchCriteria.currPage = amcCurrPageVal;
 
-        	$scope.amcSearchCriteria.maintenanceType = "AMC";
+            $scope.amcSearchCriteria.maintenanceType = "AMC";
+        	$scope.searchModule = "AMC";
         	$scope.amcSearchCriteria.assetId = $stateParams.id;
             $scope.amcSearchCriteria.sort = $scope.pageSort;
             $scope.amcJobLists = "";
@@ -2675,6 +2729,7 @@ angular.module('timeSheetApp')
 
         $scope.loadPPMJobs = function() {
                 $scope.loadingStart();
+                $scope.loadPageTop();
                  var ppmCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
                     if(!$scope.ppmSearchCriteria) {
                         var ppmSearchCriteria = {
@@ -2684,7 +2739,8 @@ angular.module('timeSheetApp')
                     }
 
                 $scope.ppmSearchCriteria.currPage = ppmCurrPageVal;
-	        	$scope.ppmSearchCriteria.maintenanceType = "PPM";
+                $scope.ppmSearchCriteria.maintenanceType = "PPM";
+	        	$scope.searchModule  = "PPM";
 	        	$scope.ppmSearchCriteria.assetId = $stateParams.id;
                 $scope.ppmSearchCriteria.sort = $scope.pageSort;
 
@@ -3022,7 +3078,7 @@ angular.module('timeSheetApp')
                 if(!$scope.allItemsSelected){
 
                     $scope.checkboxSel=[];
-                    
+
                 }
 
 
@@ -3035,7 +3091,7 @@ angular.module('timeSheetApp')
 
              $scope.qrListLoad= function(ids){
                 $scope.loadingStart();
-                if($stateParams.qrStatus == 'All'){   
+                if($stateParams.qrStatus == 'All'){
                         $scope.assetQrList ={}
                         AssetComponent.printAllQr({siteId:$stateParams.siteId}).then(function(data){
                         $scope.loadingStop();
@@ -3063,6 +3119,7 @@ angular.module('timeSheetApp')
 
             $scope.loadSiteHistory = function() {
             	$rootScope.loadingStart();
+                $rootScope.loadPageTop();
                     var siteHistoryCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
                             if(!$scope.siteHistoryCriteria) {
                                 var siteHistorySearchCriteria = {
@@ -3072,7 +3129,7 @@ angular.module('timeSheetApp')
                             }
 
                 $scope.siteHistorySearchCriteria.currPage = siteHistoryCurrPageVal;
-                $scope.siteHistorySearchCriteria.module = "siteHistory";
+                $scope.searchModule = "siteHistory";
                 $scope.siteHistorySearchCriteria.assetId = $stateParams.id;
                 $scope.siteHistorySearchCriteria.sort = $scope.pageSort;
                 $scope.siteHistories = "";
@@ -3099,6 +3156,7 @@ angular.module('timeSheetApp')
 
             $scope.loadStatusHistory = function() {
             	$rootScope.loadingStart();
+                $rootScope.loadPageTop();
                     var statusHistoryCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
                             if(!$scope.statusHistoryCriteria) {
                                 var statusHistorySearchCriteria = {
@@ -3109,6 +3167,7 @@ angular.module('timeSheetApp')
 
                 $scope.statusHistorySearchCriteria.currPage = statusHistoryCurrPageVal;
                 $scope.statusHistorySearchCriteria.module = "statusHistory";
+                $scope.searchModule = "statusHistory";
                 $scope.statusHistorySearchCriteria.assetId = $stateParams.id;
                 $scope.statusHistorySearchCriteria.sort = $scope.pageSort;
                 $scope.statusHistories = "";
@@ -3136,6 +3195,7 @@ angular.module('timeSheetApp')
             $scope.loadTicket = function() {
 
                 $rootScope.loadingStart();
+                $rootScope.loadPageTop();
                     var ticketCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
                             if(!$scope.ticketCriteria) {
                                 var ticketSearchCriteria = {
@@ -3146,6 +3206,7 @@ angular.module('timeSheetApp')
 
                 $scope.ticketSearchCriteria.currPage = ticketCurrPageVal;
                 $scope.ticketSearchCriteria.module = "Ticket";
+                $scope.searchModule = "Ticket";
                 $scope.ticketSearchCriteria.assetId = $stateParams.id;
                 $scope.ticketSearchCriteria.sort = $scope.pageSort;
                 $scope.tickets = "";
@@ -3311,8 +3372,28 @@ angular.module('timeSheetApp')
             $('#qrModal').modal();
 
         }
-        
+
       }
+
+      $scope.loadSubModule = function(cb){
+        $scope.pages = { currPage : 1};
+        $scope.pager = {};
+        return cb();
+      }
+
+    $scope.siteChange = function(){
+
+        if($scope.assetList.siteId != $scope.selectedSites.id){
+
+            $('#siteChangeModalConfig').modal();
+
+        }
+    }
+
+    $scope.backToView = function(){
+  
+        $location.path('view-asset/'+ $scope.scheduleObj.assetId);
+    }
 
 
 

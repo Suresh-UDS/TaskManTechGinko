@@ -50,6 +50,7 @@ import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.TicketDTO;
+import com.ts.app.web.rest.dto.VendorDTO;
 
 @Component
 @Transactional
@@ -77,11 +78,17 @@ public class ExportUtil {
 			"ACTIVE" };
 	private String[] JOB_HEADER = { "SITE", "JOB ID", "TITLE", "DESCRIPTION", "TICKET ID", "TICKET TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
 			"STATUS" };
-	private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT",
-			 "SHIFT CONTINUED", "LATE CHECK IN" };
+	private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT", "DURATION(In Hours) ",
+			 "SHIFT CONTINUED", "LATE CHECK IN","REMARKS" };
+
+//    private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT",
+//        "SHIFT CONTINUED", "LATE CHECK IN" };
+
 	private String[] TICKET_HEADER = { "ID", "SITE", "ISSUE", "DESCRIPTION","STATUS", "PENDING STATUS","CATEGORY", "SEVERITY", "INITIATOR",
 			"INITIATED ON", "ASSIGNED TO", "ASSIGNED ON", "CLOSED BY", "CLOSED ON" };
 	private String[] ASSET_HEADER = { "ID", "ASSET CODE", "NAME", "ASSET TYPE", "ASSET GROUP", "CLIENT", "SITE", "BLOCK", "FLOOR", "ZONE", "STATUS"};
+	
+	private String[] VENDOR_HEADER = { "ID", "NAME", "CONTACT FIRSTNAME", "CONTACT LASTNAME", "PHONE", "EMAIL", "ADDRESSLINE1", "ADDRESSLINE2", "CITY", "COUNTRY", "STATE", "PINCODE"};
 
 	@Inject
 	private Environment env;
@@ -433,13 +440,16 @@ public class ExportUtil {
 					Row dataRow = xssfSheet.createRow(rowNum++);
 
 					dataRow.createCell(0).setCellValue(transaction.getEmployeeIds());
-					dataRow.createCell(1).setCellValue(transaction.getName() + transaction.getLastName());
+//					dataRow.createCell(1).setCellValue(transaction.getName() + transaction.getLastName() !=null?transaction.getLastName() :"");
+					dataRow.createCell(1).setCellValue(transaction.getLastName()!=null? transaction.getName()+transaction.getLastName():transaction.getName() );
 					dataRow.createCell(2).setCellValue(transaction.getSiteName());
 					dataRow.createCell(3).setCellValue(transaction.getProjectName());
 					dataRow.createCell(4).setCellValue(transaction.getCheckInTime() != null ? String.valueOf(transaction.getCheckInTime()) : "");
 					dataRow.createCell(5).setCellValue(transaction.getCheckOutTime() != null ? String.valueOf(transaction.getCheckOutTime()) : "");
-					dataRow.createCell(6).setCellValue(transaction.isShiftContinued() ?  "SHIFT CONTINUED" : "");
-					dataRow.createCell(7).setCellValue(transaction.isLate() ? "LATE CHECK IN" : "");
+					dataRow.createCell(6).setCellValue(transaction.getCheckOutTime() != null ? String.valueOf(transaction.getDifferenceText()) : "");
+					dataRow.createCell(7).setCellValue(transaction.isShiftContinued() ?  "SHIFT CONTINUED" : "");
+					dataRow.createCell(8).setCellValue(transaction.isLate() ? "LATE CHECK IN" : "");
+					dataRow.createCell(9).setCellValue(transaction.getRemarks() !=null ? transaction.getRemarks() : "");
 					/*
 					 * Blob blob = null; byte[] img = blob.getBytes(1,(int)blob.length());
 					 * BufferedImage i = null; try { i = ImageIO.read(new
@@ -583,7 +593,7 @@ public class ExportUtil {
 
 		rowNum++;
 		/* ShiftWise Summary report is temporarily commented out as per request from FLEXTRONICS
-		 
+
 		if(shiftWiseSummary != null && shiftWiseSummary.size() > 0) {
 			Row shiftWiseTitleRow = consSheet.getRow(rowNum);
 			rowNum++;
@@ -1706,5 +1716,117 @@ public class ExportUtil {
 
 		return job_excelData;
 
+	}
+
+	public ExportResult writeVendorExcelReportToFile(List<VendorDTO> content, String empId, ExportResult result) {
+		boolean isAppend = (result != null);
+		log.debug("result = " + result + ", isAppend = " + isAppend);
+		if (result == null) {
+			result = new ExportResult();
+		}
+		String file_Name = null;
+		if (StringUtils.isEmpty(result.getFile())) {
+			if (StringUtils.isNotEmpty(empId)) {
+				file_Name = empId + System.currentTimeMillis() + ".xlsx";
+			} else {
+				file_Name = System.currentTimeMillis() + ".xlsx";
+			}
+		} else {
+			file_Name = result.getFile() + ".xlsx";
+		}
+
+		if (statusMap.containsKey((file_Name))) {
+			String status = statusMap.get(file_Name);
+			// log.debug("Current status for filename -" + file_Name + ", status -" +
+			// status);
+		} else {
+			statusMap.put(file_Name, "PROCESSING");
+		}
+
+		final String export_File_Name = file_Name;
+		if (lock == null) {
+			lock = new Lock();
+		}
+		try {
+			lock.lock();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		Thread writer_Thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String file_Path = env.getProperty("export.file.path");
+				FileSystem fileSystem = FileSystems.getDefault();
+				if (StringUtils.isNotEmpty(empId)) {
+					file_Path += "/" + empId;
+				}
+				Path path = fileSystem.getPath(file_Path);
+				if (!Files.exists(path)) {
+					Path newEmpPath = Paths.get(file_Path);
+					try {
+						Files.createDirectory(newEmpPath);
+					} catch (IOException e) {
+						log.error("Error While Creating Path " + newEmpPath);
+					}
+				}
+
+				file_Path += "/" + export_File_Name;
+				// create workbook
+				XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+				// create worksheet with title
+				XSSFSheet xssfSheet = xssfWorkbook.createSheet("VENDOR_REPORT");
+
+				Row headerRow = xssfSheet.createRow(0);
+
+				for (int i = 0; i < VENDOR_HEADER.length; i++) {
+					Cell cell = headerRow.createCell(i);
+					cell.setCellValue(VENDOR_HEADER[i]);
+				}
+
+				int rowNum = 1;
+
+				for (VendorDTO transaction : content) {
+					Row dataRow = xssfSheet.createRow(rowNum++);
+					statusMap.put("length", dataRow.toString());
+					dataRow.createCell(0).setCellValue(transaction.getId());
+					dataRow.createCell(1).setCellValue(transaction.getName());
+					dataRow.createCell(2).setCellValue(transaction.getContactFirstName());
+					dataRow.createCell(3).setCellValue(transaction.getContactLastName());
+					dataRow.createCell(4).setCellValue(transaction.getPhone());
+					dataRow.createCell(5).setCellValue(transaction.getEmail());
+					dataRow.createCell(6).setCellValue(transaction.getAddressLine1());
+					dataRow.createCell(7).setCellValue(transaction.getAddressLine2());
+					dataRow.createCell(8).setCellValue(transaction.getCity());
+					dataRow.createCell(9).setCellValue(transaction.getCountry());
+					dataRow.createCell(10).setCellValue(transaction.getState());
+					dataRow.createCell(11).setCellValue(transaction.getPincode());
+				}
+
+				for (int i = 0; i < VENDOR_HEADER.length; i++) {
+					xssfSheet.autoSizeColumn(i);
+				}
+				log.info(export_File_Name + " Vendor export file was created successfully !!!");
+				statusMap.put(export_File_Name, "COMPLETED");
+
+				FileOutputStream fileOutputStream = null;
+				try {
+					fileOutputStream = new FileOutputStream(file_Path);
+					xssfWorkbook.write(fileOutputStream);
+					fileOutputStream.close();
+				} catch (IOException e) {
+					log.error("Error while flushing/closing  !!!");
+					statusMap.put(export_File_Name, "FAILED");
+				}
+				lock.unlock();
+			}
+		});
+
+		writer_Thread.start();
+
+		result.setEmpId(empId);
+		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
+		result.setStatus(getExportStatus(file_Name));
+		return result;
 	}
 }

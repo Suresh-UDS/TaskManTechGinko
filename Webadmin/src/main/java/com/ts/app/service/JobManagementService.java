@@ -36,12 +36,15 @@ import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
 import com.ts.app.domain.CheckInOut;
 import com.ts.app.domain.CheckInOutImage;
+import com.ts.app.domain.Checklist;
+import com.ts.app.domain.ChecklistItem;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Frequency;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobChecklist;
 import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.JobType;
 import com.ts.app.domain.Location;
 import com.ts.app.domain.NotificationLog;
 import com.ts.app.domain.Price;
@@ -55,6 +58,7 @@ import com.ts.app.domain.UserRolePermission;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.CheckInOutRepository;
+import com.ts.app.repository.ChecklistRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.JobSpecification;
@@ -160,7 +164,7 @@ public class JobManagementService extends AbstractService {
 
     @Inject
     private TicketManagementService ticketManagementService;
-    
+
     @Inject
     private AssetRepository assetRepository;
     
@@ -181,6 +185,10 @@ public class JobManagementService extends AbstractService {
 
     @Inject
     private PushService pushService;
+    
+    @Inject
+    private ChecklistRepository checkListRepository;
+    
 
     public void updateJobStatus(long siteId, JobStatus toBeJobStatus) {
 		//UPDATE ALL OVERDUE JOB STATUS
@@ -378,18 +386,24 @@ public class JobManagementService extends AbstractService {
 		            		    if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateAndSiteAndLocation(searchCriteria.getSiteId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
 
+                                }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+		            		        		page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
                                 }
 		            		}else if(searchCriteria.getSiteId() == 0 && searchCriteria.getEmployeeId() > 0) {
 		            		    if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateAndEmployeeAndLocation(searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
+                                }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+                                    page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateAndEmployee(searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
                                 }
 		            		}else if(searchCriteria.getSiteId() > 0 && !StringUtils.isEmpty(searchCriteria.getJobTypeName())) {
 		            		    if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateAndSiteAndJobTypeAndLocation(searchCriteria.getSiteId(), searchCriteria.getLocationId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
+                                }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+                                    page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateAndSiteAndJobType(searchCriteria.getSiteId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
                                 }
@@ -403,6 +417,8 @@ public class JobManagementService extends AbstractService {
                                 if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateSiteAndEmployeeAndLocation(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
 
+                                }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+                                    page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateSiteAndEmployee(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
 
@@ -411,18 +427,24 @@ public class JobManagementService extends AbstractService {
                                 if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateAndSiteAndLocation(searchCriteria.getSiteId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
 
+                                }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+                                    page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
                                 }
 		            		}else if(searchCriteria.getSiteId() == 0 && searchCriteria.getEmployeeId() > 0) {
                                 if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateAndEmployeeAndLocation(searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
+                                }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+                                    page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateAndEmployee(searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
                                 }
 		            		}else if(searchCriteria.getSiteId() > 0 && !StringUtils.isEmpty(searchCriteria.getJobTypeName())) {
                                 if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateAndSiteAndJobTypeAndLocation(searchCriteria.getSiteId(), searchCriteria.getLocationId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
+                                }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+                                    page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateAndSiteAndJobType(searchCriteria.getSiteId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
                                 }
@@ -448,6 +470,9 @@ public class JobManagementService extends AbstractService {
 		        	}
 	        	}else {
 	        		if(!searchCriteria.isConsolidated()) {
+	        			if(log.isDebugEnabled()) {
+	        				log.debug("Asset id in job search criteria " + searchCriteria.getAssetId());
+	        			}
 	        			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
 	        			if(CollectionUtils.isEmpty(page.getContent())) {
 		            		List<EmployeeProjectSite> projectSites = employee.getProjectSites();
@@ -770,7 +795,8 @@ public class JobManagementService extends AbstractService {
 		log.debug("Before saving new job -"+ job);
 
 		//log.debug("start Date  -"+ startDate + ", end date -" + endDate);
-		List<Job> existingJobs = jobRepository.findScheduledJobByTitleSiteAndDate(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()));
+//		List<Job> existingJobs = jobRepository.findScheduledJobByTitleSiteAndDate(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()));
+		List<Job> existingJobs = jobRepository.findJobByTitleSiteDateAndLocation(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()), job.getBlock(), job.getFloor(), job.getZone());
 		log.debug("Existing job -"+ existingJobs);
 		Job newScheduledJob = null;
 		if(CollectionUtils.isEmpty(existingJobs)) {
@@ -812,7 +838,6 @@ public class JobManagementService extends AbstractService {
 			data.append("&frequency="+jobDTO.getFrequency());
 			data.append("&duration="+jobDTO.getDuration());
 			schConfDto.setData(data.toString());
-			log.debug("Saving data to scheduler config ==== "+job.getPlannedEndTime());
 			schConfDto.setStartDate(jobDTO.getPlannedStartTime());
 			schConfDto.setEndDate(job.getPlannedEndTime());
 			schConfDto.setScheduleEndDate(jobDTO.getScheduleEndDate());
@@ -827,7 +852,7 @@ public class JobManagementService extends AbstractService {
 
 			schedulerService.save(schConfDto,newScheduledJob);
 		}
-		
+
 		//send push notification to the employee assigned for the job
 		if(!StringUtils.isEmpty(jobDTO.getSchedule()) && jobDTO.getSchedule().equalsIgnoreCase("ONCE")) {
 			Employee assignedTo = job.getEmployee();
@@ -880,8 +905,14 @@ public class JobManagementService extends AbstractService {
 		//log.debug("start Date  -"+ startDate + ", end date -" + endDate);
 
 		job.setEmployee(employee);
+		if(employee != null) {
+			job.setStatus(JobStatus.ASSIGNED);
+		}
 		job.setSite(site);
-		
+		Asset asset = assetRepository.findOne(assetPpmScheduleDTO.getAssetId());
+		job.setBlock(asset.getBlock());
+		job.setFloor(asset.getFloor());
+		job.setZone(asset.getZone());
 		Calendar jobStartTime = Calendar.getInstance();
 		jobStartTime.setTimeInMillis(assetPpmScheduleDTO.getJobStartTime().toInstant().toEpochMilli());
 
@@ -905,12 +936,31 @@ public class JobManagementService extends AbstractService {
 		job.setPlannedStartTime(startTime.getTime());
 		job.setPlannedEndTime(plannedEndTime.getTime());
 		job.setScheduleEndDate(scheduleEndDateTime.getTime());
+		log.debug("**** job dates **** " + startTime.getTime() + " " + plannedEndTime.getTime() + " " + scheduleEndDateTime.getTime());
 		job.setTitle(assetPpmScheduleDTO.getTitle());
 		job.setDescription(assetPpmScheduleDTO.getTitle() +" "+ assetPpmScheduleDTO.getFrequencyPrefix()+" "+assetPpmScheduleDTO.getFrequencyDuration()+" "+assetPpmScheduleDTO.getFrequency());
 		job.setMaintenanceType(assetPpmScheduleDTO.getMaintenanceType());
 		job.setSchedule(Frequency.valueOf(assetPpmScheduleDTO.getFrequency()).getValue());
 		job.setActive(AbstractAuditingEntity.ACTIVE_YES);
 		job.setEscalationStatus(0);
+		job.setType(JobType.MAINTENANCE);
+		if(assetPpmScheduleDTO.getChecklistId() > 0)
+		{
+			Checklist checkList = checkListRepository.findOne(assetPpmScheduleDTO.getChecklistId());
+			Set<ChecklistItem> checkListItemset = checkList.getItems();
+			List<JobChecklist> jobCheckLists = new ArrayList<JobChecklist>();
+			for(ChecklistItem checkListItem : checkListItemset)
+			{
+			JobChecklist jobChecklist = new JobChecklist();
+			jobChecklist.setChecklistId(String.valueOf(checkList.getId()));
+			jobChecklist.setChecklistName(checkList.getName());
+			jobChecklist.setChecklistItemId(String.valueOf(checkListItem.getId()));
+			jobChecklist.setChecklistItemName(checkListItem.getName());
+			jobChecklist.setJob(job);
+			jobCheckLists.add(jobChecklist);
+			}
+			job.setChecklistItems(jobCheckLists);
+		}
 		job = jobRepository.save(job);
 
 		log.debug(">>> After Save Job: <<<"+job.getId());
@@ -1002,6 +1052,17 @@ public class JobManagementService extends AbstractService {
 		if(location != null) {
 			job.setLocation(location);
 		}
+		if(org.apache.commons.lang3.StringUtils.isNotEmpty(jobDTO.getBlock())){
+		    job.setBlock(jobDTO.getBlock());
+        }
+        if(org.apache.commons.lang3.StringUtils.isNotEmpty(jobDTO.getFloor())){
+
+            job.setBlock(jobDTO.getFloor());
+        }
+        if(org.apache.commons.lang3.StringUtils.isNotEmpty(jobDTO.getZone())){
+
+            job.setBlock(jobDTO.getZone());
+        }
 		if(asset!=null){
 		    job.setAsset(asset);
         }
@@ -1019,6 +1080,11 @@ public class JobManagementService extends AbstractService {
 			Calendar endTimeCal = Calendar.getInstance();
 			endTimeCal.setTime(jobDTO.getPlannedStartTime());
 			endTimeCal.add(Calendar.HOUR_OF_DAY, jobDTO.getPlannedHours());
+			Calendar startTimeCal = Calendar.getInstance();
+			startTimeCal.setTime(jobDTO.getPlannedStartTime());
+			if(endTimeCal.before(startTimeCal)) {
+				endTimeCal.add(Calendar.DAY_OF_MONTH, 1);
+			}
 			job.setPlannedEndTime(endTimeCal.getTime());
 		}else {
 			job.setPlannedEndTime(jobDTO.getPlannedEndTime());
@@ -1060,7 +1126,6 @@ public class JobManagementService extends AbstractService {
 			List<JobChecklistDTO> jobclDtoList = jobDTO.getChecklistItems();
 			List<JobChecklist> checklistItems = new ArrayList<JobChecklist>();
 			for(JobChecklistDTO jobclDto : jobclDtoList) {
-			    log.debug("Job checklist remarks"+jobclDto.getRemarks());
 				JobChecklist checklist = mapperUtil.toEntity(jobclDto, JobChecklist.class);
 				if(checklist.getImage_1() != null) { 
 					long jobId = checklist.getJob().getId();
@@ -1212,16 +1277,40 @@ public class JobManagementService extends AbstractService {
 		return paginatedJobs;
 	}
 
-	public List<EmployeeDTO> getAsssignableEmployee() {
-		List<Employee> employees =  employeeRepository.findAll();
+	public List<EmployeeDTO> getAsssignableEmployee(long userId) {
+		User user = userRepository.findOne(userId);
+		Employee employee = user.getEmployee();
+
+		//log.debug(""+employee.getEmpId());
+
+		List<Long> subEmpIds = new ArrayList<Long>();
+		if(employee != null && !user.isAdmin()) {
+			Hibernate.initialize(employee.getSubOrdinates());
+			findAllSubordinates(employee, subEmpIds);
+			log.debug("List of subordinate ids -"+ subEmpIds);
+			if(CollectionUtils.isEmpty(subEmpIds)) {
+				subEmpIds.add(employee.getId());
+			}
+		}
+		Sort sort = new Sort(Sort.Direction.ASC , "name");
+		Pageable pageRequest = createPageSort(1, sort);
+		Page<Employee> result = null;
+		if(user.isAdmin()) {
+			result = employeeRepository.findAll(pageRequest);
+		}else {
+			result = employeeRepository.findAllByEmpIds(subEmpIds, false, pageRequest);
+		}
+		List<Employee> employees =  result.getContent();
 		List<EmployeeDTO> empDto = new ArrayList<>();
-		for (Employee emp : employees) {
-			EmployeeDTO dto = new EmployeeDTO();
-			dto.setId(emp.getId());
-			dto.setCode(emp.getCode());
-			dto.setFullName(emp.getFullName());
-			dto.setName(emp.getName());
-			empDto.add(dto);
+		if(CollectionUtils.isNotEmpty(employees)) {
+			for (Employee emp : employees) {
+				EmployeeDTO dto = new EmployeeDTO();
+				dto.setId(emp.getId());
+				dto.setCode(emp.getCode());
+				dto.setFullName(emp.getFullName());
+				dto.setName(emp.getName());
+				empDto.add(dto);
+			}
 		}
 		return empDto;
 	}
@@ -1350,9 +1439,9 @@ public class JobManagementService extends AbstractService {
 			data.put("url.ticket-view", ticketUrl);
 			String jobUrl = env.getProperty("url.job-view");
 			data.put("url.job-view", jobUrl);
-			
+
 			sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
-		}		
+		}
 		return mapperUtil.toModel(job, JobDTO.class);
 
 	}
@@ -1364,7 +1453,7 @@ public class JobManagementService extends AbstractService {
 		User currUser = userRepository.findOne(userId);
 		Hibernate.initialize(currUser.getEmployee());
 		Employee currUserEmp = currUser.getEmployee();
-        
+
         //	send notifications if a ticket is raised
 		if(job.getStatus().equals(JobStatus.COMPLETED) && job.getTicket() != null) {
 			Ticket ticket = job.getTicket();
@@ -1373,9 +1462,9 @@ public class JobManagementService extends AbstractService {
 			data.put("url.ticket-view", ticketUrl);
 			String jobUrl = env.getProperty("url.job-view");
 			data.put("url.job-view", jobUrl);
-			
+
 			sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
-		}        
+		}
         return mapperUtil.toModel(job, JobDTO.class);
     }
 
@@ -1401,7 +1490,7 @@ public class JobManagementService extends AbstractService {
 		User currUser = userRepository.findOne(userId);
 		Hibernate.initialize(currUser.getEmployee());
 		Employee currUserEmp = currUser.getEmployee();
-		
+
 		Job job = findJob(id);
 		job.setActualStartTime(job.getPlannedStartTime());
 		Date endDate = new Date();
@@ -1423,7 +1512,7 @@ public class JobManagementService extends AbstractService {
 			data.put("url.ticket-view", ticketUrl);
 			String jobUrl = env.getProperty("url.job-view");
 			data.put("url.job-view", jobUrl);
-			
+
 			sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
 		}
 		return mapperUtil.toModel(job, JobDTO.class);
@@ -1434,7 +1523,7 @@ public class JobManagementService extends AbstractService {
 		User currUser = userRepository.findOne(userId);
 		Hibernate.initialize(currUser.getEmployee());
 		Employee currUserEmp = currUser.getEmployee();
-		
+
 		job.setActualStartTime(job.getPlannedStartTime());
 		Date endDate = new Date();
 		int totalHours = Hours.hoursBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getHours();
@@ -1784,7 +1873,10 @@ public class JobManagementService extends AbstractService {
 		job.setPlannedStartTime(startTime.getTime());
 		job.setPlannedEndTime(plannedEndTime.getTime());
 		job.setScheduleEndDate(scheduleEndDateTime.getTime());
-		
+		Asset asset = assetRepository.findOne(assetAMCScheduleDTO.getAssetId());
+		job.setBlock(asset.getBlock());
+		job.setFloor(asset.getFloor());
+		job.setZone(asset.getZone());
 		
 		job.setEmployee(employee);
 		if(employee != null) {
@@ -1796,6 +1888,25 @@ public class JobManagementService extends AbstractService {
 		job.setMaintenanceType(assetAMCScheduleDTO.getMaintenanceType());
 		job.setSchedule(Frequency.valueOf(assetAMCScheduleDTO.getFrequency()).getValue());
 		job.setActive(job.ACTIVE_YES);
+		job.setEscalationStatus(0);
+		job.setType(JobType.MAINTENANCE);
+		if(assetAMCScheduleDTO.getChecklistId() > 0)
+		{
+			Checklist checkList = checkListRepository.findOne(assetAMCScheduleDTO.getChecklistId());
+			Set<ChecklistItem> checkListItemset = checkList.getItems();
+			List<JobChecklist> jobCheckLists = new ArrayList<JobChecklist>();
+			for(ChecklistItem checkListItem : checkListItemset)
+			{
+			JobChecklist jobChecklist = new JobChecklist();
+			jobChecklist.setChecklistId(String.valueOf(checkList.getId()));
+			jobChecklist.setChecklistName(checkList.getName());
+			jobChecklist.setChecklistItemId(String.valueOf(checkListItem.getId()));
+			jobChecklist.setChecklistItemName(checkListItem.getName());
+			jobChecklist.setJob(job);
+			jobCheckLists.add(jobChecklist);
+			}
+			job.setChecklistItems(jobCheckLists);
+		}
 		job = jobRepository.saveAndFlush(job);
 
 		log.debug(">>> After Save Job: <<<"+job.getId());

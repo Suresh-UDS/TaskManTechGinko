@@ -199,6 +199,7 @@ export class DBService {
                             if (ppms.length > 0) {
                                 for (var i = 0; i < ppms.length; i++) {
                                     param.push([ppms[i].id, ppms[i].title, ppms[i].status, ppms[i].frequency, ppms[i].frequencyPrefix, ppms[i].assetId, ppms[i].startDate, ppms[i].endDate])
+
                                 }
                             }
                         },

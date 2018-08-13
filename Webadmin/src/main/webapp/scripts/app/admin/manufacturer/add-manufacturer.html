@@ -18,7 +18,7 @@
                 <div class="">
                     <div class="">
                         <form ng-show="!success" name="formSave" role="form" novalidate
-                                ng-submit="saveManufacturer()"
+                                ng-submit="conform('save')"
                                 onClick="" class="form-horizontal">
                         <div class="row">
                             <div class="col-md-6">
@@ -218,13 +218,18 @@
                             <div class="col-md-4 col-md-offset-8 txt-align-rgt">
                                 <div class="form-group">
 
-                                    <button class="btn btn-success" type="submit"
-                                            id="form-button-save" ng-disabled="formSave.$invalid">
+                                    <!--<button class="btn btn-success" type="submit"-->
+                                            <!--id="form-button-save" ng-disabled="formSave.$invalid">-->
+                                        <!--<span class="btn-label"><i class="material-icons">check</i></span> Save-->
+                                    <!--</button>-->
+                                    <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}"
+                                            type="submit" id="form-button-save" ng-disabled="formSave.$invalid ">
                                         <span class="btn-label"><i class="material-icons">check</i></span> Save
+                                        <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                     </button>
                                     <button class="btn btn-danger"  data-dismiss="modal" aria-label="Close" type="button"
-                                            id="cancel-button" ng-click="cancelManufacturer()">
-                                        <i class="material-icons" >close</i> Cancel
+                                            id="cancel-button" ng-click="conform('cancel')">
+                                        <i class="material-icons" >close</i> Discard
                                     </button>
 
                                 </div>

@@ -192,6 +192,8 @@ public class SearchCriteria extends Paginator {
 	
 	private MaterialTransactionType transactionType;
 	
+	private int roleLevel;
+
 	public String getWarrantyTypeName() {
 		return warrantyTypeName;
 	}
@@ -991,6 +993,14 @@ public class SearchCriteria extends Paginator {
 
 	public void setItemGroup(String itemGroup) {
 		this.itemGroup = itemGroup;
+	}
+	
+	public int getRoleLevel() {
+		return roleLevel;
+	}
+
+	public void setRoleLevel(int roleLevel) {
+		this.roleLevel = roleLevel;
 	}
 
 	

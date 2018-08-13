@@ -63,6 +63,8 @@ function sendMailWithAttachments(from,to,subject,template,data,attachments){
 var defaultFrom = config.mailer.from;
 module.exports = {
     submitQuotation: function(emailId, data) {
+        console.log("sending email ids:- ",emailId);
+        console.log("Data:- ",data._id);
         sendMailWithAttachments( config.mailer.from,
             emailId,
             'Quotation Submitted',

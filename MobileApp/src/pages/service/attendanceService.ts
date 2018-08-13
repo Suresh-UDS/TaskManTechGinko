@@ -50,7 +50,7 @@ export class AttendanceService
         return this.http.post(this.config.Url+'api/attendance/site/'+siteId+'/employee/'+employeeId,{employeeId:employeeId}).map(
             (response=>{
                 console.log(response);
-                return response;
+                return response.json();
             })
         )
     }
@@ -105,6 +105,15 @@ export class AttendanceService
                     return response.json();
                 },error=>{
                     return error
+                }
+            )
+    }
+
+    addRemarks(attendanceId,remarks): Observable<any>{
+        return this.http.post(this.config.Url+'api/attendance/'+attendanceId+'/addRemarks',remarks)
+            .map(
+                response=>{
+                    return response.json();
                 }
             )
     }

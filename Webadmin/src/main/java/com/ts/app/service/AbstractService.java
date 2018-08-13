@@ -71,6 +71,14 @@ public abstract class AbstractService {
         return new PageRequest(page, pageSize, s); 
     }
 	
+	public Pageable createPageSort(int page, Sort s) {
+		if(page == 0) {
+			page = 1;
+		}
+		page -= 1;
+        return new PageRequest(page, Integer.MAX_VALUE, s); 
+    }
+	
     public List<Long> findAllSubordinates(Employee employee, List<Long> subEmpIds) {
         Set<Employee> subs = employee.getSubOrdinates();
         if(logger.isDebugEnabled()) {

@@ -67,6 +67,7 @@ import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.service.util.PagingUtil;
 import com.ts.app.service.util.QRCodeUtil;
 import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -443,7 +444,7 @@ public class AssetManagementService extends AbstractService {
 
 		//update status history
 		if(!StringUtils.isEmpty(assetDTO.getStatus())
-				&& assetDTO.getStatus().equalsIgnoreCase(asset.getStatus())) {
+				&& !assetDTO.getStatus().equalsIgnoreCase(asset.getStatus())) {
 			AssetStatusHistory assetStatusHistory = new AssetStatusHistory();
 			assetStatusHistory.setStatus(AssetStatus.valueOf(assetDTO.getStatus()).getStatus());
 			assetStatusHistory.setActive("Y");
@@ -451,8 +452,12 @@ public class AssetManagementService extends AbstractService {
 			List<AssetStatusHistory> assetStatusHistoryList = asset.getAssetStatusHistory();
 			if(CollectionUtils.isEmpty(assetStatusHistoryList)) {
 				assetStatusHistoryList = new ArrayList<AssetStatusHistory>();
+				assetStatusHistoryList.add(assetStatusHistory);
+				asset.setAssetStatusHistory(assetStatusHistoryList);
+			}else { 
+				assetStatusHistoryList.add(assetStatusHistory);
 			}
-			asset.setAssetStatusHistory(assetStatusHistoryList);
+			
 		}
 
 		asset.setAssetGroup(assetDTO.getAssetGroup());
@@ -506,11 +511,11 @@ public class AssetManagementService extends AbstractService {
 
 
 		}
-		if (assetDTO.getManufacturerId() != asset.getManufacturer().getId()) {
+		if (assetDTO.getManufacturerId() > 0) {
 			Manufacturer manufacturer = getManufacturer(assetDTO.getManufacturerId());
 			asset.setManufacturer(manufacturer);
 		}
-		if (assetDTO.getVendorId() != asset.getAmcVendor().getId()) {
+		if (assetDTO.getVendorId() > 0) {
 			Vendor vendor = getVendor(assetDTO.getVendorId());
 			asset.setAmcVendor(vendor);
 		}
@@ -554,6 +559,8 @@ public class AssetManagementService extends AbstractService {
 //			Employee employee = user.getEmployee();
 
 			Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_ASSET);
+			
+			log.debug("Setting Email list -" + setting);
 
 			if(setting.getSettingValue().equalsIgnoreCase("true") ) {
 
@@ -977,6 +984,11 @@ public class AssetManagementService extends AbstractService {
 				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
 				log.debug("Sorting object" + sort);
 				pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+				if (searchCriteria.isReport()) {
+					pageRequest = createPageSort(searchCriteria.getCurrPage(), Integer.MAX_VALUE, sort);
+				} else {
+					pageRequest = createPageSort(searchCriteria.getCurrPage(), PagingUtil.PAGE_SIZE, sort);
+				}
 			} else {
 				if (searchCriteria.isList()) {
 					pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
@@ -1265,6 +1277,7 @@ public class AssetManagementService extends AbstractService {
 
 		AssetPPMSchedule assetPPMSchedule = mapperUtil.toEntity(assetPpmScheduleDTO, AssetPPMSchedule.class);
 		assetPPMSchedule.setMaintenanceType(MaintenanceType.PPM.getValue());
+		log.debug("asset ppm schedule checklist Id - "+assetPpmScheduleDTO.getChecklistId());
 		if(assetPpmScheduleDTO.getChecklistId() > 0) {
 			Checklist checklist = checklistRepository.findOne(assetPpmScheduleDTO.getChecklistId());
 			assetPPMSchedule.setChecklist(checklist);
@@ -1927,7 +1940,7 @@ public class AssetManagementService extends AbstractService {
 
 		Pageable pageRequest = null;
 		if(searchCriteria != null) {
-			
+
 			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
 				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
 				log.debug("Sorting object" + sort);
@@ -1986,7 +1999,7 @@ public class AssetManagementService extends AbstractService {
 
 		Pageable pageRequest = null;
 		if(searchCriteria != null) {
-			
+
 			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
 				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
 				log.debug("Sorting object" + sort);
@@ -2047,7 +2060,7 @@ public class AssetManagementService extends AbstractService {
 
         Pageable pageRequest = null;
         if(searchCriteria != null) {
-        	
+
         	if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
 				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
 				log.debug("Sorting object" + sort);

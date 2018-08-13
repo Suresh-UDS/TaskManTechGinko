@@ -110,6 +110,9 @@ public class UserRoleService extends AbstractService {
 				if(!StringUtils.isEmpty(searchCriteria.getRole())) {
 					page = userRoleRepository.findRoleByName(searchCriteria.getRole(), pageRequest);
 				}
+				if(!StringUtils.isEmpty(searchCriteria.getRoleLevel())) {
+					page = userRoleRepository.findRoleByLevel(searchCriteria.getRoleLevel(), pageRequest);
+				}
 			}else {
 				page = userRoleRepository.findUserRoles(pageRequest);
 			}
