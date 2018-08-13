@@ -194,6 +194,20 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 </div>
 
             </li>
+
+            <li ui-sref-active="active">
+                <a ui-sref="indent-list">
+                    <i class="material-icons">contact_mail</i>
+                    <p>Indent</p>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="purchase-requisition-list">
+                    <i class="material-icons">contact_mail</i>
+                    <p>Purchase Requisition</p>
+                </a>
+            </li>
+
             <li has-permission="Reports:List" ng-class="{active: $state.includes('reports')}">
                 <a data-toggle="collapse" data-target="#formsExamplesReport" href="#">
                     <i class="material-icons">content_paste</i>

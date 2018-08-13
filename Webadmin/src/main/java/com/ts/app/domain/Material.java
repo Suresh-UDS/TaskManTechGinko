@@ -32,6 +32,12 @@ public class Material extends AbstractAuditingEntity implements Serializable{
 	@JoinColumn(name = "projectId", nullable = true)
 	private Project project;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "manufacturerId", nullable = true)
+	private Manufacturer manufacturer;
+	
+	private String itemGroup;
+	
 	private String itemCode;
 	
 	private String name;
@@ -114,6 +120,22 @@ public class Material extends AbstractAuditingEntity implements Serializable{
 
 	public void setUom(String uom) {
 		this.uom = uom;
+	}
+
+	public Manufacturer getManufacturer() {
+		return manufacturer;
+	}
+
+	public void setManufacturer(Manufacturer manufacturer) {
+		this.manufacturer = manufacturer;
+	}
+
+	public String getItemGroup() {
+		return itemGroup;
+	}
+
+	public void setItemGroup(String itemGroup) {
+		this.itemGroup = itemGroup;
 	}
 
 	

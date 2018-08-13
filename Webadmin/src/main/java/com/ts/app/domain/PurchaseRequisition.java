@@ -1,5 +1,9 @@
 package com.ts.app.domain;
 
+import java.sql.Timestamp;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -7,10 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "site_ledger")
+@Table(name = "purchase_requisition")
 public class PurchaseRequisition {
 
 	/**
@@ -26,13 +31,16 @@ public class PurchaseRequisition {
 	@JoinColumn(name = "siteId", nullable = true)
 	private Site site;
 
-	private double debitAmount;
+	private Employee requestedBy;
 	
-	private double creditAmount;
+	private Employee approvedBy;
 	
-	private double currentBalance;
+	private Timestamp requestedDate;
 	
-	private String mode;
+	private Timestamp approvedDate;
+	
+	@OneToMany(mappedBy = "purchaseRequisition", cascade = {CascadeType.ALL}, orphanRemoval=true)
+	private Set<PurchaseRequisitionItem> items;
 
 	public long getId() {
 		return id;
@@ -50,37 +58,45 @@ public class PurchaseRequisition {
 		this.site = site;
 	}
 
-	public double getDebitAmount() {
-		return debitAmount;
+	public Employee getRequestedBy() {
+		return requestedBy;
 	}
 
-	public void setDebitAmount(double debitAmount) {
-		this.debitAmount = debitAmount;
+	public void setRequestedBy(Employee requestedBy) {
+		this.requestedBy = requestedBy;
 	}
 
-	public double getCreditAmount() {
-		return creditAmount;
+	public Employee getApprovedBy() {
+		return approvedBy;
 	}
 
-	public void setCreditAmount(double creditAmount) {
-		this.creditAmount = creditAmount;
+	public void setApprovedBy(Employee approvedBy) {
+		this.approvedBy = approvedBy;
 	}
 
-	public double getCurrentBalance() {
-		return currentBalance;
+	public Timestamp getRequestedDate() {
+		return requestedDate;
 	}
 
-	public void setCurrentBalance(double currentBalance) {
-		this.currentBalance = currentBalance;
+	public void setRequestedDate(Timestamp requestedDate) {
+		this.requestedDate = requestedDate;
 	}
 
-	public String getMode() {
-		return mode;
+	public Timestamp getApprovedDate() {
+		return approvedDate;
 	}
 
-	public void setMode(String mode) {
-		this.mode = mode;
+	public void setApprovedDate(Timestamp approvedDate) {
+		this.approvedDate = approvedDate;
 	}
-	
+
+	public Set<PurchaseRequisitionItem> getItems() {
+		return items;
+	}
+
+	public void setItems(Set<PurchaseRequisitionItem> items) {
+		this.items = items;
+	}
+
 	
 }

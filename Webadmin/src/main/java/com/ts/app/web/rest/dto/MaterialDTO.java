@@ -1,15 +1,20 @@
 package com.ts.app.web.rest.dto;
 
-import com.ts.app.domain.MaterialUOMType;
-
-
 public class MaterialDTO extends BaseDTO {
 
 	private long id;
 
 	private long siteId;
 	
+	private String siteName;
+	
 	private long projectId;
+	
+	private String projectName;
+	
+	private long manufacturerId;
+	
+	private String manufacturerName;
 	
 	private String itemCode;
 	
@@ -22,6 +27,8 @@ public class MaterialDTO extends BaseDTO {
 	private long storeStock;
 	
 	private String uom;
+	
+	private String itemGroup;
 
 	public long getId() {
 		return id;
@@ -45,6 +52,14 @@ public class MaterialDTO extends BaseDTO {
 
 	public void setProjectId(long projectId) {
 		this.projectId = projectId;
+	}
+
+	public long getManufacturerId() {
+		return manufacturerId;
+	}
+
+	public void setManufacturerId(long manufacturerId) {
+		this.manufacturerId = manufacturerId;
 	}
 
 	public String getItemCode() {
@@ -93,6 +108,38 @@ public class MaterialDTO extends BaseDTO {
 
 	public void setUom(String uom) {
 		this.uom = uom;
+	}
+
+	public String getItemGroup() {
+		return itemGroup;
+	}
+
+	public void setItemGroup(String itemGroup) {
+		this.itemGroup = itemGroup;
+	}
+
+	public String getSiteName() {
+		return siteName;
+	}
+
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getManufacturerName() {
+		return manufacturerName;
+	}
+
+	public void setManufacturerName(String manufacturerName) {
+		this.manufacturerName = manufacturerName;
 	}
 	
 }

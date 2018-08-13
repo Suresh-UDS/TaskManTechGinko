@@ -13,6 +13,10 @@ public class MaterialTransactionDTO extends BaseDTO {
 	
 	private long projectId;
 	
+	private long jobId;
+	
+	private long assetId;
+	
 	private String itemCode;
 	
 	private String name;
@@ -49,6 +53,22 @@ public class MaterialTransactionDTO extends BaseDTO {
 
 	public void setProjectId(long projectId) {
 		this.projectId = projectId;
+	}
+
+	public long getJobId() {
+		return jobId;
+	}
+
+	public void setJobId(long jobId) {
+		this.jobId = jobId;
+	}
+
+	public long getAssetId() {
+		return assetId;
+	}
+
+	public void setAssetId(long assetId) {
+		this.assetId = assetId;
 	}
 
 	public String getItemCode() {

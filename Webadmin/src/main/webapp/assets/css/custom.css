@@ -589,6 +589,33 @@ h3.HeadingTxt
     padding: 5px;
     font-size: 20px;
     font-weight: 400;
+    border: 1px solid #efefef;
+    border-left: 4px solid #7b7c7b;
+    border-right: 4px solid #7b7c7b;
+    border-radius: 5px;
+}
+.titleCon
+{
+    text-align: center;
+    width: 50%;
+    margin: 0 auto;
+    padding: 5px 0;
+    background: #fff;
+    border: 1px solid #ffeaca;
+    border-radius: 5px;
+    box-shadow: 1px 0px 5px 0px #ffdeae;
+    border-left: 4px solid #ff9800;
+    border-right: 4px solid #ff9800;
+}
+.disableInput
+{
+    background: #f9f9f9 !important;
+}
+.titleCon h3
+{
+    font-weight: 400;
+    font-size: 19px;
+    margin: 0;
 }
  .docsRow
  {

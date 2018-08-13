@@ -23,7 +23,7 @@
 
 
                         <div class="panel panel-default">
-                            <div class="panel-heading">Inventory Details</div>
+                            <div class="panel-heading">Inventory Details</div>	
                             <div class="panel-body">
 
                                 <div class="row">
@@ -37,13 +37,13 @@
                                     </div>
 
                                     <div class="col-md-12">
-                                        <div class="form-group selectcon is-empty">
+                                        <div class="form-group selectcon is-empty" ng-init="loadMaterialItmGroup()">
 
                                             <div class="row">
                                                 <div class="col-md-10 pad-r-0px">
                                                     <label class="control-label">Group <span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control">
+                                                    <select class="form-control" ng-model="selectedItemGroup" ng-options="materialItmGroup as materialItmGroup.itemGroup for materialItmGroup in materialItmGroups">
                                                         <option value="">Select Item Group ..</option>
                                                     </select>
                                                 </div>
@@ -59,7 +59,7 @@
                                         <div class="form-group ">
                                             <label class="control-label">Item Code <span class="red-star">*</span> </label>
                                             <input type="text" class="form-control"   name='item'
-                                                   ng-model="inventory.item"  required autocomplete="off"/>
+                                                   ng-model="inventory.itemCode"  required autocomplete="off"/>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -91,10 +91,8 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Select Client <span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control">
+                                                    <select class="form-control" ng-model="client" ng-change="loadAllSites()" ng-options="project as project.name for project in projects" required>
                                                         <option value="">Select Client...</option>
-                                                        <option value="uds">UDS</option>
-                                                        <option value="zappy">Zappy</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -106,10 +104,8 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Select Site <span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control">
+                                                    <select class="form-control" ng-model="projectSite"  ng-options="site as site.name for site in sites">
                                                         <option value="">Select Site...</option>
-                                                        <option value="">CMRL</option>
-                                                        <option value="">HDFC</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -123,28 +119,18 @@
 
                         <div class="panel panel-default">
                             <div class="panel-heading">Manufacturer Details </div>
-                            <div class="panel-body">
-
+                            <div class="panel-body" ng-init="$scope.loadManufacturer()">
                                 <div class="row">
                                     <div class="col-md-12">
 
                                         <div class="form-group selectcon is-empty">
 
-                                            <div class="row">
-                                                <div class="col-md-10 pad-r-0px">
-                                                    <label class="control-label">Manufacturer</label>
-                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control">
-                                                        <option value="">Select Manufacturer</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-2 RightAddBtn">
-                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple" data-toggle="modal"  data-target="#addManufacturer"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
-                                                </div>
-                                            </div>
-
+                                            <label class="control-label">Manufacturer</label>
+                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select class="form-control" ng-model="selectedManufacturer" ng-options="manufacturer as manufacturer.name for manufacturer in manufacturers">
+                                                <option value="">Select Manufacturer</option>
+                                            </select>
                                         </div>
-
 
                                     </div>
 
@@ -168,44 +154,45 @@
 
                                         <div class="form-group selectcon is-empty">
 
-                                            <div class="row">
-                                                <div class="col-md-10 pad-r-0px">
-                                                    <label class="control-label">UOM</label>
-                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control">
-                                                        <option value="">Select UOM</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-2 RightAddBtn">
-                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple" data-toggle="modal"  data-target="#addUom"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
-                                                </div>
-                                            </div>
+                                            <label class="control-label">UOM</label>
+                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select class="form-control" ng-model="selectedUOM" ng-options="materialUOM for materialUOM in materialUOMs">
+                                                <option value="">Select UOM</option>
+                                            </select>
 
                                         </div>
 
 
                                     </div>
-
-
-
-                                    <div class="col-md-6">
-                                        <div class="form-group  ">
-                                            <label class="control-label">Min Stock</label>
-                                            <input type="number" class="form-control"   name='minstock'
-                                                   ng-model="inventory.minStock" ng-minlength='2' ng-maxlength='50' required autocomplete="off"/>
-
-                                        </div>
-                                    </div>
-
 
                                     <div class="col-md-6">
                                         <div class="form-group ">
                                             <label class="control-label">Store Stock </label>
                                             <input type="number" class="form-control"   name='storestock'
-                                                   ng-model="inventory.storestock"  required autocomplete="off"/>
+                                                   ng-model="inventory.storeStock"  required autocomplete="off"/>
 
                                         </div>
                                     </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group  ">
+                                            <label class="control-label">Min Stock</label>
+                                            <input type="number" class="form-control"   name='minstock'
+                                                   ng-model="inventory.minimumStock" ng-minlength='2' ng-maxlength='50' required autocomplete="off"/>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group  ">
+                                            <label class="control-label">Max Stock</label>
+                                            <input type="number" class="form-control"   name='maxStock'
+                                                   ng-model="inventory.maximumStock" ng-minlength='2' ng-maxlength='50' required autocomplete="off"/>
+
+                                        </div>
+                                    </div>
+
+
+
                                 </div>
 
                             </div>
@@ -222,7 +209,7 @@
                                 id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
                         <button type="submit" type="submit"
-                                id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
+                                id="form-button-save"  class="btn btn-success pull-right"><span class="btn-label">
                                             <i class="material-icons">check</i>
                                         </span>Create inventory</button>
 
@@ -237,7 +224,7 @@
 
     </div>
 
-    <div class="">
+   <!--  <div class="">
         <div class="row">
             <div class="col-mod-12">
                 <div class="alert alert-success" ng-show="success">
@@ -260,7 +247,7 @@
             </div>
 
         </div>
-    </div>
+    </div> -->
 
 
 </div>
@@ -278,11 +265,27 @@
             </div>
             <div class="modal-body">
 
-                <form name="addGroupForm">
+                <form name="itemGroupForm">
                     <div class="row">
                         <div class="col-md-12 txt-align-center">
-                            <input class="" id="itemgroupName"    name="itemgroupName" type="text" value="" ng-required="true"/>
-                            <input type="submit"  data-dismiss="modal" class="btn btn-success" name="add" value="Add">
+                            <input class="" id="itemgroupName"  ng-model="materialItemGroup.itemGroup"   name="itemgroupName" type="text" value="" ng-pattern="/^[A-Za-z0-9\s]*$/" />
+                            <div ng-show="itemGroupForm.$submitted || itemGroupForm.itemgroupName.$touched">
+                                <div ng-show="itemGroupForm.itemgroupName.$dirty || itemGroupForm.itemgroupName.$invalid">
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="itemGroupForm.itemgroupName.$error.required">
+                                       Item Group is required.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="itemGroupForm.itemgroupName.$error.maxlength">
+                                        Item Group cannot be longer than 250 characters.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="itemGroupForm.itemgroupName.$error.pattern">
+                                       Item Group can only contain letters, digits and space.
+                                    </p>
+                                </div>
+                            </div>
+                            <input type="submit"  ng-click="addMaterialItemGroup()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="itemGroupForm.$invalid">
                         </div>
                     </div>
                 </form>

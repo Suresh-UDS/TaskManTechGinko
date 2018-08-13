@@ -1,6 +1,6 @@
 <div class="crud-form"
      data-unique-hash="a2ad475d60b22954085c657a73309b8f">
-    <div  ng-init="initLoad();loadingAuto();">
+    <div  ng-init="loadSla(); loadProjects(); loadingAuto();">
 
 
         <div class="col-md-8">
@@ -16,6 +16,7 @@
         <div class="cardsCon addSiteCon">
             <form ng-show="!success" name="form" role="form" novalidate
                   ng-submit="saveInventory()">
+
 
 
                 <div class="card margin-TB-5 tablecard">
@@ -51,52 +52,117 @@
                                 </div>
                             </div>
                         </div>
-                        <h3 class="HeadingTxt">Budget Info</h3>
+                        <h3 class="HeadingTxt">Requester Details</h3>
                         <div class="row">
 
-                            <div class="col-md-2">
 
-                                <div class="form-group">
-                                    <label class="control-label">Date</label>
-                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                    <input type="text" class="form-control datepicker"  id="acquiredDate" />
-                                </div>
+                            <div class="col-md-3">
+                                <div class="form-group   is-empty">
+                                    <label class="control-label">Employee Id <span class="red-star">*</span></label>
+                                    <input type="number" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
 
+                                    <span class="material-input"></span></div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group   is-empty">
+                                    <label class="control-label">Employee Name <span class="red-star">*</span></label>
+                                    <input type="text" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
+
+                                    <span class="material-input"></span></div>
+                            </div>
+
+
+
+                        </div>
+                        <h3 class="HeadingTxt">Item Details </h3>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group   is-empty">
+                                    <label class="control-label">Item Code <span class="red-star">*</span></label>
+                                    <input type="number" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
+
+                                    <span class="material-input"></span></div>
                             </div>
                             <div class="col-md-3">
+                                <div class="form-group   is-empty">
+                                    <label class="control-label">Item Name <span class="red-star">*</span></label>
+                                    <input type="text" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
 
-                                <div class="form-group no-padding" >
-                                    <div class="dropdown">
-                                        <div class="form-group">
-                                            <label class="control-label">Select Transaction type  <span class="red-star">*</span></label>
-                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select class="form-control">
-                                                <option value="Credit">Credit</option>
-                                                <option value="Debit">Debit</option>
+                                    <span class="material-input"></span></div>
+                            </div>
+                            <div class="col-md-2">
 
-                                            </select>
-                                        </div>
-                                    </div>
+                                <div class="form-group selectcon is-empty">
+
+                                    <label class="control-label">UOM</label>
+                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <select class="form-control">
+                                        <option value="">Select UOM</option>
+                                    </select>
+
                                 </div>
-
 
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group   is-empty">
-                                    <label class="control-label">Amount <span class="red-star">*</span></label>
+                                    <label class="control-label">Quantity <span class="red-star">*</span></label>
                                     <input type="number" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
 
                                     <span class="material-input"></span></div>
                             </div>
                             <div class="col-md-2">
-                                <div class="form-group   is-empty">
-                                    <label class="control-label">Currency Type</label>
-                                    <input type="text" class="form-control disableInput ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" value="INR" readonly name="inventory-name"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
 
-                                    <span class="material-input"></span></div>
+                                <button class="btn btn-success" style="padding: 12px 20px; margin-top: 16px;">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>
+
                             </div>
 
+                            <div class="col-md-12">
 
+                                <div class="table-responsive tablecard">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>Item Code</th>
+                                            <th>Item Name</th>
+                                            <th>Uom</th>
+                                            <th>Quantity</th>
+                                            <th class="text-right">Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>1001</td>
+                                            <td>Item Name</td>
+                                            <td>UOM</td>
+                                            <td>10</td>
+                                            <td class="text-right"> <a class="btn btn-simple btn-info"><i class="material-icons">edit</i></a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>1001</td>
+                                            <td>Item Name</td>
+                                            <td>UOM</td>
+                                            <td>10</td>
+                                            <td class="text-right"> <a class="btn btn-simple btn-info"><i class="material-icons">edit</i></a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>1001</td>
+                                            <td>Item Name</td>
+                                            <td>UOM</td>
+                                            <td>10</td>
+                                            <td class="text-right"> <a class="btn btn-simple btn-info"><i class="material-icons">edit</i></a></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
                         </div>
 
                     </div>
@@ -104,21 +170,17 @@
                 </div>
 
 
-
-
-
-
                 <div class="row">
 
                     <div class="col-md-12">
 
-                        <button type="submit" ng-click="cancelBudget()"
+                        <button type="submit" ng-click="cancelPurchase()"
                                 id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
                         <button type="submit"
                                 id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
                                             <i class="material-icons">check</i>
-                                        </span>Add Budget</button>
+                                        </span>Update Purchase Requisition</button>
 
                         <div class="clearfix"></div>
                     </div>
@@ -135,11 +197,12 @@
 
 </div>
 
+
 <!-- AdvancedFilterModal -->
 <div class="modal fade AdvancedFilterModal FilterModalCon" id="AddEscalationLevel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm"   novalidate ">
+            <form name="searchForm"   novalidate >
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -211,18 +274,18 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                     <tr ng-repeat = "esc in slaEscalationList">
-                                         <td>Level {{esc.level}}</td>
+                                <tr ng-repeat = "esc in slaEscalationList">
+                                    <td>Level {{esc.level}}</td>
                                          <td>{{esc.hours}}</td>
                                          <td>{{esc.minutes}}</td>
                                          <td>
                                              <span class="tag label label-default">{{esc.email}}</span>
                                          </td>
                                          <td class="text-right">
-                                             <a  ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                             <a  ng-click = "" ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
                                              <a ng-click = "removeEscalation($index)" ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                                          </td>
-                                     </tr>
+                                </tr>
                                 </tbody>
                             </table>
 
@@ -231,9 +294,8 @@
                     </div>
 
                 </div>
-                <div>
                 <div class="modal-footer">
-                    <button ng-click = "addSlas()" ng-model = "slass" type="submit" class="btn btn-success btn-simple"  data-dismiss="modal" ng-disabled="searchForm.$invalid">Save</button>
+                    <button ng-click = "updateEscalation()" ng-model = "slass" type="submit" class="btn btn-success btn-simple"  data-dismiss="modal" ng-disabled="searchForm.$invalid">Save</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>

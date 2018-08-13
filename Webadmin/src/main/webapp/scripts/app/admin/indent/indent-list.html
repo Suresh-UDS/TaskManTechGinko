@@ -1,4 +1,4 @@
-<div ng-init="initList()">
+<div ng-init="initLoad()">
 
     <div class="row">
 
@@ -8,20 +8,23 @@
                 <i class="material-icons">filter_list</i> Basic Filter
                 <div class="ripple-container"></div>
             </button>
-            <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#advancedFilter" tabindex="0">
-                <i class="material-icons">filter_list</i> Advanced Filter
-                <div class="ripple-container"></div>
-            </button>
+            <!--<button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#advancedFilter" tabindex="0">-->
+                <!--<i class="material-icons">filter_list</i> Advanced Filter-->
+                <!--<div class="ripple-container"></div>-->
+            <!--</button>-->
 
         </div>
 
         <div class="col-md-6 txt-align-rgt">
 
-            <button ui-sref="add-inventory" has-permission="Site:Create" ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
-                <i class="material-icons">add</i>
+            <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-indent"  tabindex="0">
+                <i class="material-icons">add</i> Add
+                <div class="ripple-container"></div>
             </button>
-            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
-                <i class="material-icons">refresh</i>
+
+            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i> Reload
+                <div class="ripple-container"></div>
             </button>
 
         </div>
@@ -32,40 +35,55 @@
         <div class="col-md-12">
             <div class="card TableCard">
                 <div class="card-content">
+
                     <div class="table-responsive tablecard">
-                        <table class="table table-striped">
+                        <table class="table table-hover">
                             <thead>
-                            <tr>
-                                <th>Item Name</th>
-                                <th>Item Code</th>
-                                <th>Item Group</th>
-                                <th>Store Stock</th>
-                                <th>UOM</th>
-                                <th>Client</th>
-                                <th>Site</th>
-                                <th class="text-right">Actions</th>
-                            </tr>
+                               <tr>
+
+                                   <th>Id</th>
+                                   <th>Site</th>
+                                   <th>Requested By</th>
+                                   <th>Requested Date</th>
+                                   <th>Issued By</th>
+                                   <th>Issued Date</th>
+                                   <th>Actions</th>
+
+                               </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="inventoryItem in inventorylists">
-                                <td>{{inventoryItem.name}}</td>
-                                <td>{{inventoryItem.itemCode}}</td>
-                                <td>{{inventoryItem.itemGroup}}</td>
-                                <td>{{inventoryItem.storeStock}}</td>
-                                <td>{{inventoryItem.uom}}</td>
-                                <td>{{inventoryItem.projectName}}</td>
-                                <td>{{inventoryItem.siteName}}</td>
-                                <td class="text-right">
-                                    <button  title="View" ui-sref="view-inventory({ id: inventoryItem.id })"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                    <a  ng-class="{active: $state.includes('admin')}" ui-sref="edit-inventory({id: inventoryItem.id})"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                                    <a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                </td>
-                            </tr>
+                                <tr>
+
+                                    <td>1001</td>
+                                    <td>UDS</td>
+                                    <td>Requestor</td>
+                                    <td>10/08/2018</td>
+                                    <td>Issuer</td>
+                                    <td>10/08/2018</td>
+                                    <td class="text-right hoverMe">
+
+                                        <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
+
+                                        <div class="HoverBx">
+                                            <!--<button  title="View"  class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>-->
+                                            <a ui-sref="edit-indent"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+
+                                            <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                        </div>
+
+
+                                    </td>
+                                </tr>
+
+
+
+
+
                             </tbody>
                         </table>
-
                     </div>
+
 
                 </div>
             </div>
@@ -176,7 +194,7 @@
                                 <div class="dropdown">
                                     <label class="label-control">Client</label>
                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects" ng-pattern="Select Client" >
+                                    <select class="form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="prj.name for prj in projects" ng-pattern="Select Client" >
                                         <option value="">Select Client...</option>
                                     </select>
                                 </div>
@@ -187,7 +205,7 @@
                                 <div class="form-group">
                                     <label class="label-control">Site</label>
                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites" ng-pattern="Select Site">
+                                    <select class="form-control " ng-model="selectedSite"  ng-options="site.name for site in sites" ng-pattern="Select Site">
                                         <option value="">Select Site...</option>
                                     </select>
                                 </div>
