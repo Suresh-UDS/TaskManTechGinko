@@ -147,7 +147,7 @@ angular
 							$document[0].getElementById('labourEntryFields').style.display = $stateParams.viewOnly ? 'none' : 'block';
 							$document[0].getElementById('materialEntryFields').style.display = $stateParams.viewOnly ? 'none' : 'block';
 							//$document[0].getElementById('actionButtons').style.display = $stateParams.viewOnly ? 'none' : 'block';
-							$document[0].getElementById('closeButton').style.display = $stateParams.viewOnly ? 'visible' : 'none';
+							//$document[0].getElementById('closeButton').style.display = $stateParams.viewOnly ? 'visible' : 'none';
 						}
 
 						$scope.loadProjects();
