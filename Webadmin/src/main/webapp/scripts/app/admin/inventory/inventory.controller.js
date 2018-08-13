@@ -103,6 +103,7 @@ angular.module('timeSheetApp')
         }
         
         $scope.loadMaterials = function() { 
+        	$scope.refreshPage();
         	$scope.search();
         	$location.path('/inventory-list');
         }
@@ -152,6 +153,13 @@ angular.module('timeSheetApp')
             });
     		
     		
+    	}
+    	
+    	$scope.viewInventory = function() {
+    		InventoryComponent.findById($stateParams.id).then(function(data) { 
+    			console.log(data);
+    			$scope.inventoryViews = data;
+    		});
     	}
     	
     	

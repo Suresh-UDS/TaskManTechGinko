@@ -56,8 +56,8 @@
                                 <td>{{inventoryItem.projectName}}</td>
                                 <td>{{inventoryItem.siteName}}</td>
                                 <td class="text-right">
-                                    <button  title="View" ui-sref="view-inventory"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                    <a  ng-class="{active: $state.includes('admin')}" ui-sref="edit-inventory"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                    <button  title="View" ui-sref="view-inventory({ id: inventoryItem.id })"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
+                                    <a  ng-class="{active: $state.includes('admin')}" ui-sref="edit-inventory({id: inventoryItem.id})"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
                                     <a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                                 </td>

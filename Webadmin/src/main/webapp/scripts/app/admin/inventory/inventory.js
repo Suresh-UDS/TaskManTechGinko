@@ -20,7 +20,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		}
 	}).state('edit-inventory', {
 		parent : 'manage',
-		url : '/edit-inventory:id',
+		url : '/edit-inventory/:id',
 		controller : 'InventoryController',
 		data : {
 			authorities : [],
@@ -37,7 +37,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		}
 	}).state('view-inventory', {
 		parent : 'manage',
-		url : '/view-inventory:id',
+		url : '/view-inventory/:id',
 		controller : 'InventoryController',
 		data : {
 			authorities : [],

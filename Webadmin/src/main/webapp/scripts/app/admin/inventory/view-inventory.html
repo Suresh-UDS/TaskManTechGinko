@@ -1,4 +1,4 @@
-<div class="crud-form" ng-init="initLoad();loadingStart();">
+<div class="crud-form" ng-init="viewInventory();loadingStart();loadingStop();">
 
 
     <div class="margn-top30">
@@ -16,11 +16,11 @@
                                 <tbody>
                                     <tr>
                                         <td>Client</td>
-                                        <td></td>
+                                        <td>{{inventoryViews.projectName}}</td>
                                     </tr>
                                     <tr>
                                         <td>Site</td>
-                                        <td></td>
+                                        <td>{{inventoryViews.siteName}}</td>
 
                                     </tr>
                                 </tbody>
@@ -43,26 +43,22 @@
                                 <tbody>
                                 <tr>
                                     <td>Name </td>
-                                    <td></td>
+                                    <td>{{inventoryViews.name}}</td>
                                 </tr>
                                 <tr>
                                     <td>Item Group</td>
-                                    <td></td>
+                                    <td>{{inventoryViews.itemGroup}}</td>
 
                                 </tr>
                                 <tr>
-                                    <td>Item </td>
-                                    <td>
-
-                                    </td>
+                                    <td>Item Code </td>
+                                    <td>{{inventoryViews.itemCode}}</td>
 
                                 </tr>
                                 <tr>
 
                                     <td>Description  </td>
-                                    <td>
-
-                                    </td>
+                                    <td></td>
 
                                 </tr>
 
@@ -86,25 +82,21 @@
                                 <tbody>
                                 <tr>
                                     <td>UOM </td>
-                                    <td></td>
+                                    <td>{{inventoryViews.uom}}</td>
                                 </tr>
                                 <tr>
                                     <td>Min Stock</td>
-                                    <td></td>
+                                    <td>{{inventoryViews.minimumStock}}</td>
 
                                 </tr>
                                 <tr>
                                     <td>Max Stock</td>
-                                    <td>
-
-                                    </td>
+                                    <td>{{inventoryViews.maximumStock}}</td>
 
                                 </tr>
                                 <tr>
                                     <td>Store Stock</td>
-                                    <td>
-
-                                    </td>
+                                    <td>{{inventoryViews.storeStock}}</td>
 
                                 </tr>
 
@@ -129,29 +121,39 @@
 
                                 <tr>
                                     <td>Manufacturer name</td>
-                                    <td>
-                                        UDS
-                                    </td>
+                                    <td>{{inventoryViews.manufacturerName}}</td>
 
                                 </tr>
                                 <tr>
                                     <td>Cutoff date</td>
-                                    <td>
-                                        03/03/2018
-                                    </td>
+                                    <td>03/03/2018</td>
 
                                 </tr>
-
-
                                 </tbody>
                             </table>
                         </div>
 
                     </div>
                 </div>
-
-
             </div>
+            
+              <div class="">
+
+                  <div class="row">
+
+                      <div class="col-md-12 txt-align-rgt">
+                          <div class="form-group">
+
+                              <button class="btn" type="button"
+                                      ui-sref="inventory-list" id="cancel-button">
+                                   Back
+                              </button>
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            
 
         </div>
 
