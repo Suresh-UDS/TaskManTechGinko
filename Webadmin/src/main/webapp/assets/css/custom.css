@@ -426,7 +426,14 @@ span.calender-big-icon
 {
     padding-top: 7px;
 }
-
+.FilterModalCon .modal-content .modal-footer
+{
+    padding-right: 24px;
+}
+.modal-content .modal-header button.close
+{
+    padding: 5px 3px 0 0;
+}
 span.d-sm-arrow-icon
 {
   padding-top: 7px;
