@@ -13,7 +13,7 @@ page-add-inventory-transaction {
     transition: box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1), background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .item-md.item-block .item-inner {
-    padding-right: 8px;
+    padding-right:0px !important;
     border-bottom:none !important;
   }
   .list-md .item-input:last-child {
@@ -36,4 +36,8 @@ page-add-inventory-transaction {
   .item-md {
     padding-left: 0px !important;
   }
+  .text-input-md {
+    width: calc(100% - 12px - 0px) !important;
+  }
+
 }
