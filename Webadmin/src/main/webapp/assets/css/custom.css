@@ -589,6 +589,10 @@ h3.HeadingTxt
     padding: 5px;
     font-size: 20px;
     font-weight: 400;
+    border: 1px solid #efefef;
+    border-left: 4px solid #7b7c7b;
+    border-right: 4px solid #7b7c7b;
+    border-radius: 5px;
 }
 .titleCon
 {
@@ -602,6 +606,10 @@ h3.HeadingTxt
     box-shadow: 1px 0px 5px 0px #ffdeae;
     border-left: 4px solid #ff9800;
     border-right: 4px solid #ff9800;
+}
+.disableInput
+{
+    background: #f9f9f9 !important;
 }
 .titleCon h3
 {
