@@ -388,25 +388,14 @@ export class EmployeeList {
   }
 
   getEmployees(){
-<<<<<<< HEAD
       this.isLoading=true;
-
-=======
-      this.component.showLoader('Loading Employees');
->>>>>>> Release-2.0
       var searchCriteria = {
           currPage:this.page,
           pageSort: this.pageSort,
           siteId:this.site.id
       };
       this.attendanceService.searchEmpAttendances(searchCriteria).subscribe(response=>{
-<<<<<<< HEAD
           this.isLoading=false;
-          // this.employeeList = response.json();
-=======
-          // this.employeeList = response.json();
-          this.component.closeAll();
->>>>>>> Release-2.0
           this.employeeList = response.transactions;
           this.page = response.currPage;
           this.totalPages = response.totalPages;
