@@ -57,7 +57,7 @@
                                                         </li>
                                                          <li class="step" >
 
-                                                            <a href=".config" data-toggle="tab" >Config</a>
+                                                            <a href=".config" data-toggle="tab" ng-click="uView('off');assetConfig();" >Config</a>
                                                         </li>
                                                         <li class="step">
 
@@ -1392,6 +1392,9 @@
                                                                     <th width="30%">Checklist</th>
                                                                     <th>From Date</th>
                                                                     <th width="10%">To Date</th>
+                                                                    <th width="10%">Employee</th>
+                                                                    <th width="10%">Start Time</th>
+                                                                    <th width="10%">Planned Hours</th>
                                                                     <th width="10%">Frequency</th>
 
                                                                     <!--<th width="5%" align="right">Actions</th>-->
@@ -1421,6 +1424,10 @@
                                                                     </td> -->
                                                                     <td>{{ppmSchedules.startDate}}</td>
                                                                     <td>{{ppmSchedules.endDate}}</td>
+                                                                    <td>{{ppmSchedules.endDate}}</td>
+                                                                    <td>{{ppmSchedules.employeeName}}</td>
+                                                                    <td>{{ppmSchedules.jobStartTime}}</td>
+                                                                    <td>{{ppmSchedules.plannedHours}}</td>
                                                                     <td>{{ppmSchedules.frequencyPrefix}}&nbsp; {{ppmSchedules.frequencyDuration}}&nbsp; {{ppmSchedules.frequency}}</td>
                                                                     <!--<td class="text-right">-->
                                                                         <!--<a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>-->

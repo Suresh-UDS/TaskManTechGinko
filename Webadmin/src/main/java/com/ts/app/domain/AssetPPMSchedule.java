@@ -49,6 +49,8 @@ public class AssetPPMSchedule extends AbstractAuditingEntity {
 	private Asset asset;
 
 	private long empId;
+	
+	private String employeeName;
 
 	private String maintenanceType;
 	
@@ -176,6 +178,14 @@ public class AssetPPMSchedule extends AbstractAuditingEntity {
 
 	public void setShiftTimings(String[] shiftTimings) {
 		this.shiftTimings = shiftTimings;
+	}
+
+	public String getEmployeeName() {
+		return employeeName;
+	}
+
+	public void setEmployeeName(String employeeName) {
+		this.employeeName = employeeName;
 	}
 
 	

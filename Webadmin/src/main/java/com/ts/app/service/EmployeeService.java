@@ -890,7 +890,8 @@ public class    EmployeeService extends AbstractService {
 				pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
 			} else {
 				if(searchCriteria.isList()) {
-					pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+					Sort sort = new Sort(Sort.Direction.ASC , "name");
+					pageRequest = createPageSort(searchCriteria.getCurrPage(), sort);
 				}else {
 					pageRequest = createPageRequest(searchCriteria.getCurrPage());
 				}

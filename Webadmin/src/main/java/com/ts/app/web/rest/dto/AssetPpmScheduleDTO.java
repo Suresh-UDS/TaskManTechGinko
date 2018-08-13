@@ -16,6 +16,7 @@ public class AssetPpmScheduleDTO extends BaseDTO {
 	private String frequency;
 	private long assetId;
 	private long empId;
+	private String employeeName;
 	private String maintenanceType;
 	
 	private ZonedDateTime jobStartTime;
@@ -129,8 +130,11 @@ public class AssetPpmScheduleDTO extends BaseDTO {
 	public void setCheckListItems(List<ChecklistItemDTO> checkListItems) {
 		this.checkListItems = checkListItems;
 	}
-	
-	
-	
+	public String getEmployeeName() {
+		return employeeName;
+	}
+	public void setEmployeeName(String employeeName) {
+		this.employeeName = employeeName;
+	}
 	
 }
