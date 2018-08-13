@@ -45,6 +45,9 @@ public class InventorySpecification implements Specification<Material> {
 		if (searchCriteria.getSiteId() != 0) {
 			predicates.add(builder.equal(root.get("site").get("id"), searchCriteria.getSiteId()));
 		}
+		if (searchCriteria.getManufacturerId() != 0) {
+			predicates.add(builder.equal(root.get("manufacturer").get("id"), searchCriteria.getManufacturerId()));
+		}
 		if (searchCriteria.getMaterialName() != null && searchCriteria.getMaterialName() != "") {
 			predicates.add(builder.like(builder.lower(root.get("name")),
 					"%" + searchCriteria.getMaterialName().toLowerCase() + "%"));
@@ -52,6 +55,10 @@ public class InventorySpecification implements Specification<Material> {
 		if (searchCriteria.getItemCode() != null && searchCriteria.getItemCode() !="") {
 			predicates.add(builder.like(builder.lower(root.get("itemCode")),
 					"%" + searchCriteria.getItemCode().toLowerCase() + "%"));
+		}
+		if (searchCriteria.getItemGroup() != null && searchCriteria.getItemGroup() != "") {
+			predicates.add(builder.like(builder.lower(root.get("itemGroup")),
+					"%" + searchCriteria.getItemGroup().toLowerCase() + "%"));
 		}
 		
 		if(searchCriteria.getMaterialCreatedDate() != null) { 

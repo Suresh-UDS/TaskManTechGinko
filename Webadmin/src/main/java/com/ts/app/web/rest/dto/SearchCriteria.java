@@ -188,6 +188,8 @@ public class SearchCriteria extends Paginator {
 	
 	private Timestamp transactionDate;
 	
+	private String itemGroup;
+	
 	private MaterialTransactionType transactionType;
 	
 	private int roleLevel;
@@ -985,6 +987,14 @@ public class SearchCriteria extends Paginator {
 		this.transactionType = transactionType;
 	}
 
+	public String getItemGroup() {
+		return itemGroup;
+	}
+
+	public void setItemGroup(String itemGroup) {
+		this.itemGroup = itemGroup;
+	}
+	
 	public int getRoleLevel() {
 		return roleLevel;
 	}
@@ -992,7 +1002,6 @@ public class SearchCriteria extends Paginator {
 	public void setRoleLevel(int roleLevel) {
 		this.roleLevel = roleLevel;
 	}
-
 
 	
 }
