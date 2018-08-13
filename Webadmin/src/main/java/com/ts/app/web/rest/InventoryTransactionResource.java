@@ -84,7 +84,7 @@ public class InventoryTransactionResource {
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
-	@RequestMapping(value="/delete/inventoryTrans", method=RequestMethod.DELETE)
+	@RequestMapping(value="/delete/inventoryTrans/{id}", method=RequestMethod.DELETE)
 	public ResponseEntity<?> deleteMaterialTrans(@PathVariable("id") long id) { 
 		inventoryTransactionService.deleteMaterialTrans(id);
 		return new ResponseEntity<>(HttpStatus.OK);
