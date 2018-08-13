@@ -174,7 +174,8 @@ public class JobManagementResource {
 
 	@RequestMapping(path="/job/employee", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<EmployeeDTO> getAsssignableEmployee(){
-		return jobService.getAsssignableEmployee();
+		long userId = SecurityUtils.getCurrentUserId();
+		return jobService.getAsssignableEmployee(userId);
 	}
 
 	@RequestMapping(path="/job/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)

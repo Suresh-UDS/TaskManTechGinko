@@ -1277,10 +1277,29 @@ public class JobManagementService extends AbstractService {
 		return paginatedJobs;
 	}
 
-	public List<EmployeeDTO> getAsssignableEmployee() {
+	public List<EmployeeDTO> getAsssignableEmployee(long userId) {
+		User user = userRepository.findOne(userId);
+		Employee employee = user.getEmployee();
+
+		//log.debug(""+employee.getEmpId());
+
+		List<Long> subEmpIds = new ArrayList<Long>();
+		if(employee != null && !user.isAdmin()) {
+			Hibernate.initialize(employee.getSubOrdinates());
+			findAllSubordinates(employee, subEmpIds);
+			log.debug("List of subordinate ids -"+ subEmpIds);
+			if(CollectionUtils.isEmpty(subEmpIds)) {
+				subEmpIds.add(employee.getId());
+			}
+		}
 		Sort sort = new Sort(Sort.Direction.ASC , "name");
 		Pageable pageRequest = createPageSort(1, sort);
-		Page<Employee> result = employeeRepository.findAll(pageRequest);
+		Page<Employee> result = null;
+		if(user.isAdmin()) {
+			result = employeeRepository.findAll(pageRequest);
+		}else {
+			result = employeeRepository.findAllByEmpIds(subEmpIds, false, pageRequest);
+		}
 		List<Employee> employees =  result.getContent();
 		List<EmployeeDTO> empDto = new ArrayList<>();
 		if(CollectionUtils.isNotEmpty(employees)) {
