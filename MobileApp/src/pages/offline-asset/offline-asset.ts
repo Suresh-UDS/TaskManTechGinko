@@ -104,7 +104,8 @@ export class OfflineAsset {
         //offline
         this.dbService.getJobs(this.assetDetails.id).then(
             (res) => {
-                this.componentService.closeLoader()
+                this.spinner=false;
+                // this.componentService.closeLoader()
                 console.log(res)
                 this.assetDetails.jobs = res;
             },
@@ -253,7 +254,7 @@ export class OfflineAsset {
         this.jobService.searchTickets(searchCriteria).subscribe(
             response=>{
                 this.spinner = false;
-                this.componentService.closeLoader();
+                // this.componentService.closeLoader();
                 console.log("Getting tickets response");
                 console.log(response);
                 this.assetDetails.tickets = response.transactions;
@@ -261,7 +262,7 @@ export class OfflineAsset {
             },
             error=>{
                 this.spinner = false;
-                this.componentService.closeLoader();
+                // this.componentService.closeLoader();
                 console.log(error);
                 console.log("Getting Ticket errors")
             })

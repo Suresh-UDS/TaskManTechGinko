@@ -380,9 +380,7 @@ export class EmployeeList {
       };
       this.attendanceService.searchEmpAttendances(searchCriteria).subscribe(response=>{
           this.isLoading=false;
-          this.employeeList = response.json();
-          this.component.showLoader('Loading Employees');
-          this.component.closeAll();
+          // this.employeeList = response.json();
           this.employeeList = response.transactions;
           this.page = response.currPage;
           this.totalPages = response.totalPages;
