@@ -403,8 +403,14 @@ export class DBService {
                 var employee;
                 var param = [];
                 for(var j=0;j<this.selectSite.length;j++){
-                    this.attendanceService.searchEmpAttendances(this.selectSite[j].id).subscribe(response=>{
-                        employee = response.json();
+                    var searchCriteria = {
+                        currPage:1,
+                        pageSort: 15,
+                        siteId:this.selectSite[j].id,
+                        report:true
+                    };
+                    this.attendanceService.searchEmpAttendances(searchCriteria).subscribe(response=>{
+                        employee = response.transactions;
                         console.log(employee);
                         if (employee.length > 0) {
                             for (var i = 0; i < employee.length; i++) {
