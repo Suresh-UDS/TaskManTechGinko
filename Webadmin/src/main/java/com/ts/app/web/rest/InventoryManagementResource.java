@@ -19,10 +19,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.MaterialItemGroup;
 import com.ts.app.domain.MaterialUOMType;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.InventoryManagementService;
+import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.MaterialDTO;
+import com.ts.app.web.rest.dto.MaterialItemGroupDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -41,7 +44,7 @@ public class InventoryManagementResource {
 	@Inject
 	private InventoryManagementService inventoryService;
 	
-	@RequestMapping(value="/saveInventory", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/save/inventory", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity<?> saveInventory(@Valid @RequestBody MaterialDTO materialDTO, HttpServletRequest request) { 
 		log.debug("inventory object: {}", materialDTO);
@@ -92,6 +95,23 @@ public class InventoryManagementResource {
 		MaterialUOMType[] list = null;
 		list = inventoryService.getAllMaterialUom();
 		return list;
+	}
+	
+	@RequestMapping(value = "/materialItemgroup", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public ResponseEntity<?> saveItemGroup(@Valid @RequestBody MaterialItemGroupDTO materialGroupDTO, HttpServletRequest request) {
+		try {
+			materialGroupDTO = inventoryService.createMaterialGroup(materialGroupDTO);
+		} catch (Exception e) {
+			throw new TimesheetException("Error while add material Item group" +e);
+		}
+		return new ResponseEntity<>(materialGroupDTO, HttpStatus.CREATED);
+	}
+
+	@RequestMapping(value = "/materialItemgroup", method = RequestMethod.GET)
+	public List<MaterialItemGroupDTO> findAllItemGroups() {
+		log.info("--Invoked inventoryResource.findAll item Groups --");
+		return inventoryService.findAllItemGroups();
 	}
 	
 	@RequestMapping(value = "/inventory/search", method = RequestMethod.POST)

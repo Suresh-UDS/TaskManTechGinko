@@ -14,22 +14,23 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "material_item_group")
 public class MaterialItemGroup extends AbstractAuditingEntity implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 
     @NotNull
     @Size(min = 1, max = 250)
     @Column(length = 250, nullable = false)
     private String itemGroup;
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

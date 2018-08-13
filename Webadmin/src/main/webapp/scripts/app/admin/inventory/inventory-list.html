@@ -1,4 +1,4 @@
-<div ng-init="initLoad()">
+<div ng-init="initList()">
 
     <div class="row">
 
@@ -39,7 +39,7 @@
                                 <th>Item Name</th>
                                 <th>Item Code</th>
                                 <th>Item Group</th>
-                                <th>Min Stock</th>
+                                <th>Store Stock</th>
                                 <th>UOM</th>
                                 <th>Client</th>
                                 <th>Site</th>
@@ -47,59 +47,14 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>Name 1</td>
-                                <td>IN00034</td>
-                                <td>group 1</td>
-                                <td>300</td>
-                                <td>50</td>
-                                <td>UDS</td>
-                                <td>HDFC</td>
-                                <td class="text-right">
-                                    <button  title="View" ui-sref="view-inventory"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                    <a  ng-class="{active: $state.includes('admin')}" ui-sref="edit-inventory"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
-                                    <a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Name 1</td>
-                                <td>IN00034</td>
-                                <td>group 1</td>
-                                <td>300</td>
-                                <td>50</td>
-                                <td>UDS</td>
-                                <td>HDFC</td>
-                                <td class="text-right">
-                                    <button  title="View" ui-sref="view-inventory"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                    <a  ng-class="{active: $state.includes('admin')}" ui-sref="edit-inventory"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
-                                    <a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Name 1</td>
-                                <td>IN00034</td>
-                                <td>group 1</td>
-                                <td>300</td>
-                                <td>50</td>
-                                <td>UDS</td>
-                                <td>HDFC</td>
-                                <td class="text-right">
-                                    <button  title="View" ui-sref="view-inventory"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                    <a  ng-class="{active: $state.includes('admin')}" ui-sref="edit-inventory"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
-                                    <a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Name 1</td>
-                                <td>IN00034</td>
-                                <td>group 1</td>
-                                <td>300</td>
-                                <td>50</td>
-                                <td>UDS</td>
-                                <td>HDFC</td>
+                            <tr ng-repeat="inventoryItem in inventorylists">
+                                <td>{{inventoryItem.name}}</td>
+                                <td>{{inventoryItem.itemCode}}</td>
+                                <td>{{inventoryItem.itemGroup}}</td>
+                                <td>{{inventoryItem.storeStock}}</td>
+                                <td>{{inventoryItem.uom}}</td>
+                                <td>{{inventoryItem.projectName}}</td>
+                                <td>{{inventoryItem.siteName}}</td>
                                 <td class="text-right">
                                     <button  title="View" ui-sref="view-inventory"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
                                     <a  ng-class="{active: $state.includes('admin')}" ui-sref="edit-inventory"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>

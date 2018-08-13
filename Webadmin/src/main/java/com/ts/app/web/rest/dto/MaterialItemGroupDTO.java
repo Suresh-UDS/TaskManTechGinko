@@ -1,10 +1,7 @@
 package com.ts.app.web.rest.dto;
 
-import java.io.Serializable;
-
-public class MaterialItemGroupDTO extends BaseDTO implements Serializable {
+public class MaterialItemGroupDTO extends BaseDTO {
 	
-	private static final long serialVersionUID = 1L;
 	private long id;
     private String itemGroup;
 

@@ -32,8 +32,10 @@ import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.MaterialDTO;
+import com.ts.app.web.rest.dto.MaterialItemGroupDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 
@@ -141,6 +143,20 @@ public class InventoryManagementService extends AbstractService{
 		MaterialUOMType[] uoms = MaterialUOMType.values(); 
 		return uoms;
 	}
+	
+	public MaterialItemGroupDTO createMaterialGroup(MaterialItemGroupDTO materialGroupDTO) {
+		MaterialItemGroup materialItmGroup = mapperUtil.toEntity(materialGroupDTO, MaterialItemGroup.class);
+		materialItmGroup.setActive(MaterialItemGroup.ACTIVE_YES);
+		materialItemRepository.save(materialItmGroup);
+		materialGroupDTO = mapperUtil.toModel(materialItmGroup, MaterialItemGroupDTO.class);
+		return materialGroupDTO;
+	}
+	
+	public List<MaterialItemGroupDTO> findAllItemGroups() {
+		List<MaterialItemGroup> materialItmList = materialItemRepository.findAll();
+		List<MaterialItemGroupDTO> materialItmModel = mapperUtil.toModelList(materialItmList, MaterialItemGroupDTO.class);
+		return materialItmModel;
+	}
 
 	public SearchResult<MaterialDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 		SearchResult<MaterialDTO> result = new SearchResult<MaterialDTO>();
@@ -211,6 +227,8 @@ public class InventoryManagementService extends AbstractService{
 		result.setTransactions(transactions);
 		return;
 	}
+
+	
 
 	
 
