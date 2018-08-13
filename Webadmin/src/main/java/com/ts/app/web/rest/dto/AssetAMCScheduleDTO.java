@@ -28,6 +28,8 @@ public class AssetAMCScheduleDTO extends BaseDTO {
 	
 	private long empId;
 	
+	private String employeeName;
+	
 	private String maintenanceType;
 	
 	private ZonedDateTime jobStartTime;
@@ -172,6 +174,14 @@ public class AssetAMCScheduleDTO extends BaseDTO {
 
 	public void setCheckListItems(List<ChecklistItemDTO> checkListItems) {
 		this.checkListItems = checkListItems;
+	}
+
+	public String getEmployeeName() {
+		return employeeName;
+	}
+
+	public void setEmployeeName(String employeeName) {
+		this.employeeName = employeeName;
 	}
 	
 	

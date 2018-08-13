@@ -667,9 +667,9 @@ angular.module('timeSheetApp')
 	        		$scope.searchCriteria.jobTitle = $scope.selectedJob;
 	        	}*/
                 if($scope.searchEmployee){
-                    $scope.searchCriteria.empId = $scope.searchEmployee.id;
+                    $scope.searchCriteria.employeeId = $scope.searchEmployee.id;
                 }else{
-                    $scope.searchCriteria.empId = null;
+                    $scope.searchCriteria.employeeId = null;
                 }
 
 

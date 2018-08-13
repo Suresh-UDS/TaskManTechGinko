@@ -387,7 +387,7 @@ public class JobManagementService extends AbstractService {
                                     page = jobRepository.findByStartDateAndSiteAndLocation(searchCriteria.getSiteId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
 
                                 }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
-		            		        page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
+		            		        		page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
                                 }
@@ -1277,16 +1277,40 @@ public class JobManagementService extends AbstractService {
 		return paginatedJobs;
 	}
 
-	public List<EmployeeDTO> getAsssignableEmployee() {
-		List<Employee> employees =  employeeRepository.findAll();
+	public List<EmployeeDTO> getAsssignableEmployee(long userId) {
+		User user = userRepository.findOne(userId);
+		Employee employee = user.getEmployee();
+
+		//log.debug(""+employee.getEmpId());
+
+		List<Long> subEmpIds = new ArrayList<Long>();
+		if(employee != null && !user.isAdmin()) {
+			Hibernate.initialize(employee.getSubOrdinates());
+			findAllSubordinates(employee, subEmpIds);
+			log.debug("List of subordinate ids -"+ subEmpIds);
+			if(CollectionUtils.isEmpty(subEmpIds)) {
+				subEmpIds.add(employee.getId());
+			}
+		}
+		Sort sort = new Sort(Sort.Direction.ASC , "name");
+		Pageable pageRequest = createPageSort(1, sort);
+		Page<Employee> result = null;
+		if(user.isAdmin()) {
+			result = employeeRepository.findAll(pageRequest);
+		}else {
+			result = employeeRepository.findAllByEmpIds(subEmpIds, false, pageRequest);
+		}
+		List<Employee> employees =  result.getContent();
 		List<EmployeeDTO> empDto = new ArrayList<>();
-		for (Employee emp : employees) {
-			EmployeeDTO dto = new EmployeeDTO();
-			dto.setId(emp.getId());
-			dto.setCode(emp.getCode());
-			dto.setFullName(emp.getFullName());
-			dto.setName(emp.getName());
-			empDto.add(dto);
+		if(CollectionUtils.isNotEmpty(employees)) {
+			for (Employee emp : employees) {
+				EmployeeDTO dto = new EmployeeDTO();
+				dto.setId(emp.getId());
+				dto.setCode(emp.getCode());
+				dto.setFullName(emp.getFullName());
+				dto.setName(emp.getName());
+				empDto.add(dto);
+			}
 		}
 		return empDto;
 	}

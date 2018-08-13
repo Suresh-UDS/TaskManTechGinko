@@ -185,8 +185,8 @@ angular.module('timeSheetApp')
 
         $scope.ppmFromMsg =false;
 
-        $('#dateFilterPpmFrom').datetimepicker().on('dp.show', function () {
-            return $(this).data('DateTimePicker').minDate(new Date());
+        $('#dateFilterPpmFrom').datetimepicker().on('dp.show', function (e) {
+            return $(this).data('DateTimePicker').minDate(e.date);
         });
 
         $('input#dateFilterPpmFrom').on('dp.change', function(e){
@@ -194,7 +194,7 @@ angular.module('timeSheetApp')
             $scope.assetPPM.startDate = e.date._d;
             $scope.ppmFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $('#dateFilterPpmTo').datetimepicker().on('dp.show', function () {
-                return $(this).data('DateTimePicker').minDate(e.date._d);
+                return $(this).data('DateTimePicker').minDate(e.date);
             });
 
             // if($scope.assetPPM.startDate > $scope.assetPPM.endDate) {
@@ -1140,7 +1140,7 @@ angular.module('timeSheetApp')
             $scope.warFromDate = e.date._d;
 
             $('#warToDate').datetimepicker().on('dp.show', function () {
-                     return $(this).data('DateTimePicker').minDate(e.date._d);
+                     return $(this).data('DateTimePicker').minDate(e.date);
                     });
 
             if($scope.warToDate){
@@ -2313,8 +2313,8 @@ angular.module('timeSheetApp')
 
         $scope.amcFromMsg =false;
 
-        $('input#dateFilterAmcFrom').on('dp.show',function () {
-            return $(this).data('DateTimePicker').minDate(new Date());
+        $('input#dateFilterAmcFrom').on('dp.show',function (e) {
+            return $(this).data('DateTimePicker').minDate(e.date);
         })
 
 	    $('input#dateFilterAmcFrom').on('dp.change', function(e){
@@ -2322,7 +2322,7 @@ angular.module('timeSheetApp')
             $scope.amcSchedule.startDate = e.date._d;
             $scope.amcFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $('input#dateFilterAmcTo').on('dp.show',function () {
-                return $(this).data('DateTimePicker').minDate(e.date._d);
+                return $(this).data('DateTimePicker').minDate(e.date);
             })
 
 

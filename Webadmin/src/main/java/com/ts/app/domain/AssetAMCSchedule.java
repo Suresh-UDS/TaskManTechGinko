@@ -67,6 +67,8 @@ public class AssetAMCSchedule extends AbstractAuditingEntity {
 
 	private long empId;
 	
+	private String employeeName;
+	
 	private ZonedDateTime jobStartTime;
 	private ZonedDateTime jobEndTime;
 	private int plannedHours;	
@@ -191,6 +193,14 @@ public class AssetAMCSchedule extends AbstractAuditingEntity {
 
 	public void setShiftTimings(String[] shiftTimings) {
 		this.shiftTimings = shiftTimings;
+	}
+
+	public String getEmployeeName() {
+		return employeeName;
+	}
+
+	public void setEmployeeName(String employeeName) {
+		this.employeeName = employeeName;
 	}
 	
 	

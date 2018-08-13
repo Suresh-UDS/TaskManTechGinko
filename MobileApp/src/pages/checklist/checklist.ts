@@ -5,6 +5,7 @@ import {Camera, CameraOptions} from "@ionic-native/camera";
 import {componentService} from "../service/componentService";
 import {JobService} from "../service/jobService";
 
+
 /**
  * Generated class for the Checklist page.
  *
@@ -24,6 +25,7 @@ export class Checklist {
     index:any;
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,
                 private camera:Camera,private component:componentService, private jobService: JobService) {
+
         this.checkListItems=[];
         this.takenImages=[];
         this.jobDetails=[];
@@ -73,26 +75,29 @@ export class Checklist {
             imageData = 'data:image/jpeg;base64,' + imageData;
             // imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/");
 
-            // this.takenImages.push(imageData);
-            if(this.checkListItems[i].image_1 == null)
-            {
-                this.checkListItems[i].image_1 = imageData;
-                this.jobDetails.checklistItems = this.checkListItems
-                this.saveJob(this.jobDetails)
-            }
-            else if(this.checkListItems[i].image_2 == null){
-                this.checkListItems[i].image_2 = imageData;
-                this.jobDetails.checklistItems = this.checkListItems
-                this.saveJob(this.jobDetails)
-            }
-            else if(this.checkListItems[i].image_3 == null)
-            {
-                this.checkListItems[i].image_3 = imageData;
-                this.jobDetails.checklistItems = this.checkListItems
-                this.saveJob(this.jobDetails)
-            }
+            // if(this.checkListItems[i].image_1 !=null){
+            //     console.log("image_1"+this.checkListItems[i].image_1);
+            //     if(this.checkListItems[i].image_2 !=null){
+            //         console.log("image_2"+this.checkListItems[i].image_2);
+            //
+            //         if(this.checkListItems[i].image_3 !=null){
+            //             console.log("image_3"+this.checkListItems[i].image_3);
+            //
+            //             this.cs.showToastMessage('Cannot add more than 3 images','bottom');
+            //         }else{
+            //             console.log("No third image");
+            //             this.checkListItems[i].image_3 = imageData;
+            //         }
+            //     }else{
+            //         console.log("No second image");
+            //         this.checkListItems[i].image_2 = imageData;
+            //     }
+            // }else{
+            //     console.log("No first image");
+            //     this.checkListItems[i].image_1 = imageData;
+            // }
 
-
+            this.checkListItems[i].image_1 = imageData;
 
 
         })
