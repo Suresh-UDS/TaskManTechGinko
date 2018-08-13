@@ -100,7 +100,7 @@ public class ProjectService extends AbstractService {
 	
 	private void mapToModel(Project project , ProjectDTO projectDTO) {
 		projectDTO.setId(project.getId());
-		projectDTO.setName(project.getName());
+		projectDTO.setName(org.apache.commons.lang3.StringUtils.upperCase(project.getName()));
 		projectDTO.setCountry(project.getCountry());
 		projectDTO.setState(project.getState());
 		projectDTO.setAddressLat(project.getAddressLat());
