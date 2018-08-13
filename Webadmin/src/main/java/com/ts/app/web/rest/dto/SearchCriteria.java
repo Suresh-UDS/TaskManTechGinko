@@ -188,6 +188,8 @@ public class SearchCriteria extends Paginator {
 	
 	private Timestamp transactionDate;
 	
+	private String itemGroup;
+	
 	private MaterialTransactionType transactionType;
 	
 	public String getWarrantyTypeName() {
@@ -981,6 +983,14 @@ public class SearchCriteria extends Paginator {
 
 	public void setTransactionType(MaterialTransactionType transactionType) {
 		this.transactionType = transactionType;
+	}
+
+	public String getItemGroup() {
+		return itemGroup;
+	}
+
+	public void setItemGroup(String itemGroup) {
+		this.itemGroup = itemGroup;
 	}
 
 	

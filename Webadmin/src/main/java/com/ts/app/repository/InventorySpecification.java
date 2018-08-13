@@ -53,6 +53,10 @@ public class InventorySpecification implements Specification<Material> {
 			predicates.add(builder.like(builder.lower(root.get("itemCode")),
 					"%" + searchCriteria.getItemCode().toLowerCase() + "%"));
 		}
+		if (searchCriteria.getItemGroup() != null && searchCriteria.getItemGroup() != "") {
+			predicates.add(builder.like(builder.lower(root.get("itemGroup")),
+					"%" + searchCriteria.getItemGroup().toLowerCase() + "%"));
+		}
 		
 		if(searchCriteria.getMaterialCreatedDate() != null) { 
 			log.debug("Inventory created date -" + searchCriteria.getMaterialCreatedDate());

@@ -2,7 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('InventoryController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent,$http,$stateParams,$location,
-    		ManufacturerComponent, InventoryComponent) {
+    		ManufacturerComponent, InventoryComponent, $filter) {
 
           
     	$rootScope.loginView = false;
@@ -17,6 +17,13 @@ angular.module('timeSheetApp')
     	$scope.selectedUnit = {};
     	$scope.selectedItemGroup = {};
     	$scope.materialItemGroup = {};
+    	$scope.searchSite ={};
+        $scope.searchProject ={};
+        $scope.searchItemCode = null;
+        $scope.searchItemName = null;
+        $scope.searchItemGroup = null;
+        $scope.searchCreatedDate = "";
+        $scope.searchCreatedDateSer = null;
     	$scope.pages = { currPage : 1};
     	
     	$scope.refreshPage = function() { 
@@ -24,7 +31,37 @@ angular.module('timeSheetApp')
     	                currPage: 1,
     	                totalPages: 0
     	            }
+    		 $scope.clearFilter();
     	}
+    	
+
+        $scope.clearFilter = function() {
+            $scope.selectedManufacturer = {};
+            $scope.searchItemCode = null;
+            $scope.searchCriteria = {};
+            $scope.selectedSite = null;
+            $scope.selectedStatus = null;
+            $scope.searchItemName = null;
+            $scope.searchItemGroup = null;
+            $scope.searchCreatedDate = null
+            $scope.searchAssetType ={};
+            $scope.searchSite ={};
+            $scope.searchProject ={};
+            $scope.selectedItemGroup ={};
+
+            $scope.pages = {
+                currPage: 1,
+                totalPages: 0
+            }
+            $scope.search();
+        };
+        
+        $scope.initCalender = function(){
+
+            demo.initFormExtendedDatetimepickers();
+        }
+
+        $scope.initCalender();
     	
     	$scope.showNotifications= function(position,alignment,color,msg){
 
@@ -73,6 +110,15 @@ angular.module('timeSheetApp')
             });
         }
     	
+    	$scope.loadSearchSites = function() { 
+    		if($scope.searchProject) { 
+    			ProjectComponent.findSites($scope.searchProject.id).then(function (data) {
+                    $scope.searchSite = null;
+                    $scope.sites = data;
+                });
+    		}
+    	}
+    	
     	$scope.loadUOM = function() {
     		InventoryComponent.getMaterialUOM().then(function(data){
     			console.log(data);
@@ -82,7 +128,14 @@ angular.module('timeSheetApp')
     	
     	$scope.cancelInventory = function(){
             $location.path('/inventory-list');
-       }
+    	}
+    	
+    	 $('input#searchCreatedDate').on('dp.change', function(e){
+             $scope.searchCreatedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+             $scope.searchCreatedDateSer = e.date._d;
+    	 });
+    	 
+
     	
     	/* Add item group */
 
@@ -249,6 +302,11 @@ angular.module('timeSheetApp')
 
     	};
     	
+    	$scope.searchFilter = function () {
+//            $scope.setPage(1);
+            $scope.search();
+         }
+    	
     	
     	$scope.search = function () {
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
@@ -280,6 +338,35 @@ angular.module('timeSheetApp')
 	        		$scope.searchCriteria.inventorylistId = 0;
 	        	}
         	}
+        	if($scope.searchProject) { 
+        		$scope.searchCriteria.projectId = $scope.searchProject.id;
+        	}
+        	if($scope.searchSite) { 
+        		$scope.searchCriteria.siteId = $scope.searchSite.id;
+        	}
+        	if($scope.selectedManufacturer) { 
+        		$scope.searchCriteria.manufacturerId = $scope.selectedManufacturer.id;
+        	}
+        	if($scope.searchItemCode) {
+        		$scope.searchCriteria.itemCode = $scope.searchItemCode;
+        	}
+        	if($scope.searchItemName) {
+        		$scope.searchCriteria.materialName = $scope.searchItemName;
+        	}
+            if($scope.searchItemGroup) { 
+            	$scope.searchCriteria.itemGroup = $scope.searchItemGroup;
+            }
+            if($scope.searchCreatedDate != "") {
+                if($scope.searchCreatedDate != undefined){
+                $scope.searchCriteria.materialCreatedDate = $scope.searchCreatedDateSer;
+                $scope.searchCriteria.findAll = false;
+               }else{
+                $scope.searchCriteria.materialCreatedDate = null;
+                $scope.searchCriteria.findAll = true;
+               }
+	   	     }else{
+	                $scope.searchCriteria.materialCreatedDate = null;
+	   	     }
         	console.log($scope.searchCriteria);
         	InventoryComponent.search($scope.searchCriteria).then(function (data) {
         		console.log(data);
@@ -288,20 +375,11 @@ angular.module('timeSheetApp')
                 $scope.inventorylistLoader = true;
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
-                if($scope.checklists == null){
-                    $scope.pages.startInd = 0;
-                }else{
-                    $scope.pages.startInd = (data.currPage - 1) * 10 + 1;
-                }
-
                 $scope.pages.endInd = data.totalCount > 10  ? (data.currPage) * 10 : data.totalCount ;
                 $scope.pages.totalCnt = data.totalCount;
             	$scope.hide = true;
             });
-        	$rootScope.searchCriteriaChecklist = $scope.searchCriteria;
-        	if($scope.pages.currPage == 1) {
-            	$scope.firstStyle();
-        	}
+        	
         };
 
 
