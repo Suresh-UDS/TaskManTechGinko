@@ -460,25 +460,14 @@ angular.module('timeSheetApp')
         };
         $scope.saveEmployee = function () {
             $scope.saveLoad = true;
-        	$scope.error = null;
-        	$scope.success = null;
-        	$scope.errorEmployeeExists = null;
-        	$scope.errorProject = null;
-        	$scope.errorSite = null;
-        	$scope.errorManager = null;
+	        	$scope.error = null;
+	        	$scope.success = null;
+	        	$scope.errorEmployeeExists = null;
+	        	$scope.errorProject = null;
+	        	$scope.errorSite = null;
+	        	$scope.errorManager = null;
             console.log($scope.selectedManager)
-            /*
-        	if(!$scope.selectedProject.id){
-        		$scope.errorProject = "true";
-        	}else if(!$scope.selectedSite.id){
-        		$scope.errorSite = "true";
-        		$scope.errorProject = null;
-        	}else
-        	*/
-//        	if($scope.selectedManager && !$scope.selectedManager.id){
-//                $scope.errorManager = "true";
-//                $scope.errorSite = null;
-//            }else {
+
         		var saveEmployee = false;
         		console.log('exployee exists -'+$scope.existingEmployee);
                 if($scope.existingEmployee && !$scope.saveConfirmed) {
@@ -509,8 +498,11 @@ angular.module('timeSheetApp')
                 		$scope.employee.createUser = true;
                 		$scope.employee.userRoleId = $scope.selectedRole.id;
                 	}
-                	if($scope.projectSiteList) {
+                	if($scope.projectSiteList && $scope.projectSiteList.length > 0) {
                 		$scope.employee.projectSites = $scope.projectSiteList;
+                	}else {
+                		$scope.showNotifications('top','center','danger','Client and Site are required');
+                		return;
                 	}
                 	if($scope.locationList) {
                 		$scope.employee.locations = $scope.locationList;
@@ -742,8 +734,11 @@ angular.module('timeSheetApp')
 	        	$scope.employee.projectId = $scope.selectedProject.id;
 	        	$scope.employee.siteId = $scope.selectedSite.id;
 	        	$scope.employee.managerId = $scope.selectedManager ? $scope.selectedManager.id : 0;
-            	if($scope.projectSiteList) {
+            	if($scope.projectSiteList && $scope.projectSiteList.length > 0) {
             		$scope.employee.projectSites = $scope.projectSiteList;
+            	}else {
+            		$scope.showNotifications('top','center','danger','Client and Site are required');
+            		return;
             	}
 
 	        	EmployeeComponent.updateEmployee($scope.employee).then(function(){

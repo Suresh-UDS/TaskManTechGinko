@@ -933,6 +933,8 @@ public class    EmployeeService extends AbstractService {
 					page = employeeRepository.findBySiteIdAndProjectId(searchCriteria.getProjectId(), searchCriteria.getSiteId(),DateUtil.convertToZDT(searchCriteria.getFromDate()), DateUtil.convertToZDT(searchCriteria.getToDate()), isClient, pageRequest);
 				}else if(StringUtils.isNotEmpty(searchCriteria.getName())) {
 					page = employeeRepository.findByProjectSiteAndEmployeeName(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getName(), isClient, pageRequest);
+				}else if(StringUtils.isNotEmpty(searchCriteria.getEmployeeEmpId())) {
+					page = employeeRepository.findByProjectSiteAndEmployeeEmpId(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getEmployeeEmpId(), pageRequest);
 				}else {
 					page = employeeRepository.findBySiteIdAndProjectId(searchCriteria.getProjectId(), searchCriteria.getSiteId(), isClient, pageRequest);
 				}
