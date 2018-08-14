@@ -29,6 +29,8 @@ public class MaterialDTO extends BaseDTO {
 	private String uom;
 	
 	private String itemGroup;
+	
+	private long itemGroupId;
 
 	public long getId() {
 		return id;
@@ -140,6 +142,14 @@ public class MaterialDTO extends BaseDTO {
 
 	public void setManufacturerName(String manufacturerName) {
 		this.manufacturerName = manufacturerName;
+	}
+
+	public long getItemGroupId() {
+		return itemGroupId;
+	}
+
+	public void setItemGroupId(long itemGroupId) {
+		this.itemGroupId = itemGroupId;
 	}
 	
 }

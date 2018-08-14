@@ -17,9 +17,15 @@ public class MaterialTransactionDTO extends BaseDTO {
 	
 	private long assetId;
 	
-	private String itemCode;
+	private long materialId;
 	
-	private String name;
+	private String materialItemCode;
+	
+	private String materialName;
+	
+	private long materialGroupId;
+	
+	private String materialGroupItemGroup;
 	
 	private long quantity;
 	
@@ -71,20 +77,28 @@ public class MaterialTransactionDTO extends BaseDTO {
 		this.assetId = assetId;
 	}
 
-	public String getItemCode() {
-		return itemCode;
+	public long getMaterialId() {
+		return materialId;
 	}
 
-	public void setItemCode(String itemCode) {
-		this.itemCode = itemCode;
+	public void setMaterialId(long materialId) {
+		this.materialId = materialId;
 	}
 
-	public String getName() {
-		return name;
+	public String getMaterialItemCode() {
+		return materialItemCode;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setMaterialItemCode(String materialItemCode) {
+		this.materialItemCode = materialItemCode;
+	}
+
+	public String getMaterialName() {
+		return materialName;
+	}
+
+	public void setMaterialName(String materialName) {
+		this.materialName = materialName;
 	}
 
 	public long getQuantity() {
@@ -127,6 +141,21 @@ public class MaterialTransactionDTO extends BaseDTO {
 		this.transactionDate = transactionDate;
 	}
 
+	public long getMaterialGroupId() {
+		return materialGroupId;
+	}
+
+	public void setMaterialGroupId(long materialGroupId) {
+		this.materialGroupId = materialGroupId;
+	}
+
+	public String getMaterialGroupItemGroup() {
+		return materialGroupItemGroup;
+	}
+
+	public void setMaterialGroupItemGroup(String materialGroupItemGroup) {
+		this.materialGroupItemGroup = materialGroupItemGroup;
+	}
 
 	
 	

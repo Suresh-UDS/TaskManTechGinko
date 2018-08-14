@@ -328,6 +328,12 @@ ul.chatlinesList
   box-shadow: 0 12px 20px -10px rgba(255, 152, 0, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(255, 152, 0, 0.2);
 
 }
+li ul.nav.SubNav li a p
+{
+    line-height: 20px;
+}
+
+
 .dropdown-menu li a:hover, .dropdown-menu li a:focus, .dropdown-menu li a:active
 {
   background-color: #ff9800;

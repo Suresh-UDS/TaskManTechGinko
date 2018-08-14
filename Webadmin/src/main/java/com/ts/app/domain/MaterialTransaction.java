@@ -41,9 +41,13 @@ public class MaterialTransaction extends AbstractAuditingEntity implements Seria
 	@JoinColumn(name = "assetId", nullable = true)
 	private Asset asset;
 	
-	private String itemCode;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "materialId", nullable = true)
+	private Material material;
 	
-	private String name;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "materialGroupId", nullable = true)
+	private MaterialItemGroup materialGroup;
 	
 	private long quantity;
 	
@@ -95,20 +99,12 @@ public class MaterialTransaction extends AbstractAuditingEntity implements Seria
 		this.asset = asset;
 	}
 
-	public String getItemCode() {
-		return itemCode;
+	public Material getMaterial() {
+		return material;
 	}
 
-	public void setItemCode(String itemCode) {
-		this.itemCode = itemCode;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+	public void setMaterial(Material material) {
+		this.material = material;
 	}
 
 	public long getStoreStock() {
@@ -149,6 +145,14 @@ public class MaterialTransaction extends AbstractAuditingEntity implements Seria
 
 	public void setTransactionDate(Timestamp transactionDate) {
 		this.transactionDate = transactionDate;
+	}
+
+	public MaterialItemGroup getMaterialGroup() {
+		return materialGroup;
+	}
+
+	public void setMaterialGroup(MaterialItemGroup materialGroup) {
+		this.materialGroup = materialGroup;
 	}
 
 	

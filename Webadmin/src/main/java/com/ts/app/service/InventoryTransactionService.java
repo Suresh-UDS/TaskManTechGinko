@@ -1,7 +1,6 @@
 package com.ts.app.service;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -19,13 +18,18 @@ import org.springframework.util.StringUtils;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.Material;
 import com.ts.app.domain.MaterialTransaction;
 import com.ts.app.domain.MaterialTransactionType;
 import com.ts.app.domain.MaterialUOMType;
 import com.ts.app.domain.User;
+import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.InventoryRepository;
 import com.ts.app.repository.InventoryTransSpecification;
 import com.ts.app.repository.InventoryTransactionRepository;
+import com.ts.app.repository.JobRepository;
+import com.ts.app.repository.MaterialItemGroupRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
@@ -35,6 +39,7 @@ import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.MaterialTransactionDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
+import com.ts.app.web.rest.errors.TimesheetException;
 
 @Service
 @Transactional
@@ -58,12 +63,72 @@ public class InventoryTransactionService extends AbstractService{
 	private EmployeeRepository employeeRepository;
 	
 	@Inject
+	private JobRepository jobRepository;
+	
+	@Inject
+	private AssetRepository assetRepository;
+	
+	@Inject
+	private InventoryRepository inventoryRepository;
+	
+	@Inject
+	private MaterialItemGroupRepository materialItemRepository;
+	
+	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 	
 	public MaterialTransactionDTO createInventoryTransaction(MaterialTransactionDTO materialTransDTO) { 
 		MaterialTransaction materialEntity = mapperUtil.toEntity(materialTransDTO, MaterialTransaction.class);
 		materialEntity.setSite(siteRepository.findOne(materialTransDTO.getSiteId()));
 		materialEntity.setProject(projectRepository.findOne(materialTransDTO.getProjectId()));
+		materialEntity.setMaterial(inventoryRepository.findOne(materialTransDTO.getMaterialId()));
+		materialEntity.setMaterialGroup(materialItemRepository.findOne(materialTransDTO.getMaterialGroupId()));
+		if(materialTransDTO.getJobId() > 0) {
+			materialEntity.setJob(jobRepository.findOne(materialTransDTO.getJobId()));
+		}else {
+			materialEntity.setJob(null);
+		}
+		if(materialTransDTO.getAssetId() > 0) {
+			materialEntity.setAsset(assetRepository.findOne(materialTransDTO.getAssetId()));
+		}else {
+			materialEntity.setAsset(null);
+		}
+		
+		/** Create material if does not exists*/
+		if(!StringUtils.isEmpty(materialTransDTO.getMaterialName())) {
+			Material material = inventoryRepository.findByMaterialName(materialTransDTO.getMaterialName());
+			if(material == null) { 
+				Material materialDomain = new Material();
+				materialDomain.setItemGroup(materialTransDTO.getMaterialGroupItemGroup());
+				materialDomain.setItemGroupId(materialTransDTO.getMaterialGroupId());
+				materialDomain.setName(materialTransDTO.getMaterialName());
+				materialDomain.setProject(projectRepository.findOne(materialTransDTO.getProjectId()));
+				materialDomain.setSite(siteRepository.findOne(materialTransDTO.getSiteId()));
+				materialDomain.setActive(Material.ACTIVE_YES);
+				inventoryRepository.save(materialDomain);
+			}
+		}
+		
+		if(materialTransDTO.getTransactionType().equals(MaterialTransactionType.ISSUED)) {
+			Material material = inventoryRepository.findOne(materialTransDTO.getMaterialId());
+			long prevStoreStock = material.getStoreStock();
+			if(prevStoreStock > materialTransDTO.getQuantity()) { 
+				long currentStock = prevStoreStock - materialTransDTO.getQuantity();
+				materialEntity.setStoreStock(currentStock);
+				material.setStoreStock(currentStock);
+				inventoryRepository.save(material);
+			}
+		}
+		
+		if(materialTransDTO.getTransactionType().equals(MaterialTransactionType.RECEIVED)) {
+			Material material = inventoryRepository.findOne(materialTransDTO.getMaterialId());
+			long prevStoreStock = material.getStoreStock();
+			long currentStock = prevStoreStock + materialTransDTO.getQuantity();
+			materialEntity.setStoreStock(currentStock);
+			material.setStoreStock(currentStock);
+			inventoryRepository.save(material);
+		}
+		
 		materialEntity.setActive(MaterialTransaction.ACTIVE_YES);
 		materialEntity.setTransactionDate(DateUtil.convertToTimestamp(materialTransDTO.getTransactionDate()));
 		materialEntity.setUom(MaterialUOMType.valueOf(materialTransDTO.getUom()).getValue());
@@ -93,17 +158,22 @@ public class InventoryTransactionService extends AbstractService{
 
 	private void mapToModel(MaterialTransaction materialTrans, MaterialTransactionDTO materialTransDTO) {
 		// TODO Auto-generated method stub
-		materialTrans.setItemCode(materialTransDTO.getItemCode());
+		materialTrans.setMaterial(inventoryRepository.findOne(materialTransDTO.getMaterialId()));
+		materialTrans.setMaterialGroup(materialItemRepository.findOne(materialTransDTO.getMaterialGroupId()));
 		if(materialTransDTO.getSiteId() > 0) {
 			materialTrans.setSite(siteRepository.findOne(materialTransDTO.getSiteId()));	
 		}
 		if(materialTransDTO.getProjectId() > 0) {
 			materialTrans.setProject(projectRepository.findOne(materialTransDTO.getProjectId()));	
 		}
+		if(materialTransDTO.getJobId() > 0) {
+			materialTrans.setJob(jobRepository.findOne(materialTransDTO.getJobId()));
+		}
+		if(materialTransDTO.getAssetId() > 0) {
+			materialTrans.setAsset(assetRepository.findOne(materialTransDTO.getAssetId()));
+		}
 		materialTrans.setStoreStock(materialTransDTO.getStoreStock());
 		materialTrans.setQuantity(materialTransDTO.getQuantity());
-		materialTrans.setName(materialTransDTO.getName());
-		materialTrans.setStoreStock(materialTransDTO.getStoreStock());
 		if(materialTransDTO.getTransactionDate() != null) {
 			materialTrans.setTransactionDate(DateUtil.convertToTimestamp(materialTransDTO.getTransactionDate()));
 		}

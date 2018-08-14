@@ -38,6 +38,8 @@ public class Material extends AbstractAuditingEntity implements Serializable{
 	
 	private String itemGroup;
 	
+	private long itemGroupId;
+	
 	private String itemCode;
 	
 	private String name;
@@ -136,6 +138,14 @@ public class Material extends AbstractAuditingEntity implements Serializable{
 
 	public void setItemGroup(String itemGroup) {
 		this.itemGroup = itemGroup;
+	}
+
+	public long getItemGroupId() {
+		return itemGroupId;
+	}
+
+	public void setItemGroupId(long itemGroupId) {
+		this.itemGroupId = itemGroupId;
 	}
 
 	

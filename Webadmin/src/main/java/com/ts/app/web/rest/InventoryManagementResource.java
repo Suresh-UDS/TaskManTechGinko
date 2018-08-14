@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.Material;
 import com.ts.app.domain.MaterialItemGroup;
 import com.ts.app.domain.MaterialUOMType;
 import com.ts.app.security.SecurityUtils;
@@ -112,6 +113,18 @@ public class InventoryManagementResource {
 	public List<MaterialItemGroupDTO> findAllItemGroups() {
 		log.info("--Invoked inventoryResource.findAll item Groups --");
 		return inventoryService.findAllItemGroups();
+	}
+	
+	@RequestMapping(value = "material/itemgroup/{id}", method = RequestMethod.GET)
+	public List<MaterialDTO> findOneItemGroups(@PathVariable("id") long id) {
+		log.info("--Invoked inventoryResource.findAll item Groups --");
+		List<MaterialDTO> result = null;
+		try {
+			result = inventoryService.getMaterialGroup(id);
+		}catch(Exception e) { 
+			throw new TimesheetException("Error while get material group items" +e);
+		}
+		return result;
 	}
 	
 	@RequestMapping(value = "/inventory/search", method = RequestMethod.POST)
