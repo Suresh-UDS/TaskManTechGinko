@@ -3,10 +3,7 @@ import {NavController, NavParams} from "ionic-angular";
 import{ViewController} from "ionic-angular";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 import {componentService} from "../service/componentService";
-<<<<<<< HEAD
 import {JobService} from "../service/jobService";
-=======
->>>>>>> Release-1.0
 
 /**
  * Generated class for the Checklist page.
@@ -22,16 +19,11 @@ export class Checklist {
 
     checkListItems:any;
     takenImages:any;
-<<<<<<< HEAD
     jobDetails:any;
     showIcon:any;
     index:any;
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,
                 private camera:Camera,private component:componentService, private jobService: JobService) {
-=======
-  constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,private cs:componentService,
-                private camera:Camera) {
->>>>>>> Release-1.0
         this.checkListItems=[];
         this.takenImages=[];
         this.jobDetails=[];
@@ -81,28 +73,6 @@ export class Checklist {
             imageData = 'data:image/jpeg;base64,' + imageData;
             // imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/");
 
-<<<<<<< HEAD
-            // this.takenImages.push(imageData);
-            if(this.checkListItems[i].image_1 == null)
-            {
-                this.checkListItems[i].image_1 = imageData;
-                this.jobDetails.checklistItems = this.checkListItems
-                this.saveJob(this.jobDetails)
-            }
-            else if(this.checkListItems[i].image_2 == null){
-                this.checkListItems[i].image_2 = imageData;
-                this.jobDetails.checklistItems = this.checkListItems
-                this.saveJob(this.jobDetails)
-            }
-            else if(this.checkListItems[i].image_3 == null)
-            {
-                this.checkListItems[i].image_3 = imageData;
-                this.jobDetails.checklistItems = this.checkListItems
-                this.saveJob(this.jobDetails)
-            }
-
-
-=======
             // if(this.checkListItems[i].image_1 !=null){
             //     console.log("image_1"+this.checkListItems[i].image_1);
             //     if(this.checkListItems[i].image_2 !=null){
@@ -126,7 +96,6 @@ export class Checklist {
             // }
 
             this.checkListItems[i].image_1 = imageData;
->>>>>>> Release-1.0
 
 
         })
