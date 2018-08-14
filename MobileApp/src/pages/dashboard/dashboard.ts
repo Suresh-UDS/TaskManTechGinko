@@ -67,7 +67,7 @@ export class DashboardPage {
               private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService, public events:Events, private actionSheetCtrl:ActionSheetController, private alertController:AlertController, private dbService:DBService) {
 
 
-      this.rateCard=CreateQuotationPage;
+      this.rateCard=CreateRateCardPage;
       this.addJob=CreateJobPage;
       this.addQuotation=CreateQuotationPage;
       this.addEmployee=CreateEmployeePage;

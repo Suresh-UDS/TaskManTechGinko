@@ -39,5 +39,14 @@ page-add-inventory-transaction {
   .text-input-md {
     width: calc(100% - 12px - 0px) !important;
   }
+  ion-select
+  {
+    overflow:inherit !important;
+    max-width:100% !important;
+  }
+  ion-label
+  {
+    overflow:inherit !important;
+  }
 
 }
