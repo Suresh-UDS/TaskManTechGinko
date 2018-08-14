@@ -36,7 +36,7 @@ spring:
     mail:
         host: smtp.gmail.com
         port: 587
-        username: timesheettestuser1@gmail.com
+        username: udsfmshelpdesk@gmail.com
         password: Test123#
         properties:
             mail.transport.protocol: smtp

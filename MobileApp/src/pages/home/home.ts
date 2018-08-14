@@ -2,7 +2,7 @@ import {Component, Injectable} from '@angular/core';
 import { NavController } from 'ionic-angular';
 // import { CanActivate } from '@angular/router';
 // import { Routes,Router, RouterModule } from '@angular/router';
-import {authService} from "../service/authService";
+// import {authService} from "../service/authService";
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'

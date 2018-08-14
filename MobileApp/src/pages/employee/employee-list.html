@@ -10,6 +10,13 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Employee List</ion-title>
+    <!--<ion-buttons right>-->
+      <!--<button color="primary" ion-button clear (click)="getEmployeeAttendance()" class="add-btn">-->
+          <!--<i class="material-icons">-->
+              <!--list_alt-->
+          <!--</i>-->
+      <!--</button>-->
+    <!--</ion-buttons>-->
   </ion-navbar>
 </ion-header>
 
@@ -18,7 +25,7 @@
   <ion-list>
     <ion-item *ngFor="let employee of employeeList;let i of index" class="bottom-border" >
 
-      <p><span class="EmpNameTxt" style="float:left" (click)="getEmployeeAttendance(employee.id)"  >{{employee.name}} {{employee.lastName}}</span>
+      <p><span class="EmpNameTxt" style="float:left" (click)="getEmployeeAttendance(employee.empId)" >{{employee.name}} {{employee.lastName}}</span>
         <span style="float: right">
           <button ion-button  (click)="viewCamera(employee,'enroll')"  >Enroll</button>
           <span *ngIf="employee.faceAuthorised">
