@@ -33,10 +33,17 @@ angular.module('timeSheetApp')
 
         $scope.newChecklistItem = {};
 
+        $scope.checklistError = false;
+
         $scope.addChecklistItem = function() {
-        	console.log('new checklist item - ' + $scope.newChecklistItem);
-        	$scope.checklistItems.push($scope.newChecklistItem);
-        	$scope.newChecklistItem = {};
+            if(jQuery.isEmptyObject($scope.newChecklistItem) == false){
+            	console.log('new checklist item - ' + $scope.newChecklistItem);
+            	$scope.checklistItems.push($scope.newChecklistItem);
+            	$scope.newChecklistItem = {};
+                $scope.checklistError = false;
+            }else{
+                $scope.checklistError = true;
+            }
         }
 
         $scope.conform = function(text)
