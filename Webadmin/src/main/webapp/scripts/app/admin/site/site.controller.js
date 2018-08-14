@@ -29,7 +29,8 @@ angular.module('timeSheetApp')
         		end : false,
         }
 
-        $scope.newShiftItem ={}
+        $scope.newShiftItem ={};
+        $scope.shiftItems=[];
 
         $scope.shiftFrom = new Date();
         $scope.shiftTo = new Date();
@@ -153,39 +154,31 @@ angular.module('timeSheetApp')
             demo.initFormExtendedDatetimepickers();
         }
 
+        $scope.initCalender();
+
         $('#shiftFrom').on('dp.change', function(e){
 
-            console.log(e.date._d);
-            console.log($filter('date')(e.date._d, 'HH:mm:ss'))
-            if(e.date._d > $scope.newShiftItem.endTime) {
-            		$scope.showNotifications('top','center','danger','From time cannot be after To time');
-            		$scope.shiftFrom = $scope.newShiftItem.startTime;
-            		return false;
-            }else {
-                // $scope.newShiftItem.startTime = e.date._d.getHours() + ':' + e.date._d.getMinutes();
+            console.log('shiftFrom', e.date._d);
+
+            if(e.date._d) {
                 $scope.newShiftItem.startTime = $filter('date')(e.date._d, 'HH:mm');
+                $scope.newShiftItem.startTimeDup = $filter('date')(e.date._d, 'hh:mm a');
             }
-            /*
-            $('#shiftTo').on('dp.show', function(){
-                return $(this).data('DateTimePicker').minDate(e.date._d);
-            });
-            */
+            
 
         });
 
         $('#shiftTo').on('dp.change', function(e){
 
-            console.log(e.date._d);
-            if($scope.newShiftItem.startTime > e.date._d) {
-            		$scope.showNotifications('top','center','danger','To time cannot be before From time');
-            		$scope.shiftTo = $scope.newShiftItem.endTime;
-            		return false;
-            }else {
+            console.log('shiftTo', e.date._d);
+
+            if(e.date._d) {
                 $scope.newShiftItem.endTime = $filter('date')(e.date._d, 'HH:mm');
+                $scope.newShiftItem.endTimeDup = $filter('date')(e.date._d, 'hh:mm a');
             }
 
         });
-        $scope.initCalender();
+        
 
 
         //
@@ -262,17 +255,34 @@ angular.module('timeSheetApp')
 
         };
 
-        $scope.shiftItems=[];
+        
 
-        $scope.newshiftItem = {};
-
+          $scope.sStatus = false;
+          $scope.eStatus = false;
         $scope.addShiftItem = function(event) {
-            console.log(shiftFrom,shiftTo)
-        		event.preventDefault();
-        		console.log('new shift item - ' + JSON.stringify($scope.newShiftItem));
-        		$scope.shiftItems.push($scope.newShiftItem);
-        		console.log('shiftItems - '+ JSON.stringify($scope.shiftItems));
-        		$scope.newShiftItem = {};
+            if(jQuery.isEmptyObject($scope.newShiftItem) == false){
+                if(!$scope.newShiftItem.startTime){
+                   $scope.sStatus = true;
+                   $scope.eStatus = false;
+                }
+                else if(!$scope.newShiftItem.endTime){
+                    $scope.eStatus = true;
+                    $scope.sStatus = false;
+                }
+                else{
+                    console.log(shiftFrom,shiftTo);
+            		event.preventDefault();
+            		console.log('new shift item - ' + JSON.stringify($scope.newShiftItem));
+            		$scope.shiftItems.push($scope.newShiftItem);
+            		console.log('shiftItems - '+ JSON.stringify($scope.shiftItems));
+            		$scope.newShiftItem = {};
+                    $scope.sStatus = false;
+                    $scope.eStatus = false;
+                }
+            }else{
+                $scope.sStatus = false;
+                $scope.eStatus = false;
+            }   
         }
 
         $scope.removeItem = function(ind) {
