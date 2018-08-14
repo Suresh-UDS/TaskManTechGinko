@@ -1,5 +1,9 @@
 package com.ts.app.web.rest.dto;
 
+import java.util.List;
+
+import com.ts.app.domain.MaterialTransaction;
+
 public class MaterialDTO extends BaseDTO {
 
 	private long id;
@@ -31,6 +35,8 @@ public class MaterialDTO extends BaseDTO {
 	private String itemGroup;
 	
 	private long itemGroupId;
+	
+	private List<MaterialTransactionDTO> materialTransactions;
 
 	public long getId() {
 		return id;
@@ -150,6 +156,14 @@ public class MaterialDTO extends BaseDTO {
 
 	public void setItemGroupId(long itemGroupId) {
 		this.itemGroupId = itemGroupId;
+	}
+
+	public List<MaterialTransactionDTO> getMaterialTransactions() {
+		return materialTransactions;
+	}
+
+	public void setMaterialTransactions(List<MaterialTransactionDTO> materialTransactions) {
+		this.materialTransactions = materialTransactions;
 	}
 	
 }
