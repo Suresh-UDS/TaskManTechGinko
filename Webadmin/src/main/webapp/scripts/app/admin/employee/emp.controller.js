@@ -158,20 +158,48 @@ angular.module('timeSheetApp')
 
 
         $scope.addProjectSite = function() {
-	        	console.log('selected project -' + $scope.selectedProject.name);
-	        	console.log('selected site -' + $scope.selectedSite.name);
+	        	
+            if($scope.selectedProject && $scope.selectedSite){
+
+                console.log('selected project -' , $scope.selectedProject.name);
+                console.log('selected site -' , $scope.selectedSite.name);
+
 	        	var projSite = {
 	        		"projectId" : $scope.selectedProject.id,
 	        		"projectName" : $scope.selectedProject.name,
 	        		"siteId" : $scope.selectedSite.id,
 	        		"siteName" : $scope.selectedSite.name,
 	        	}
+
+                
 	        	if($scope.employee) {
 	        		projSite.employeeId = $scope.employee.id
 	        		projSite.employeeName = $scope.employee.name
 	        	}
+
+                function isProject(project) { 
+                    return project.projectId === projSite.projectId;
+                }
+                function isSite(site) { 
+                    return site.siteId === projSite.siteId;
+                }
+
+                //console.log('project>>>>', $scope.projectSiteList.find(isProject)); 
+                //console.log('site>>>>', $scope.projectSiteList.find(isSite)); 
+
+                $scope.dupProject = $scope.projectSiteList.find(isProject);
+                $scope.dupSite = $scope.projectSiteList.find(isSite);
+
+                if(($scope.dupProject && $scope.dupSite)){
+                    
+                   return;
+                }
+
 	        	$scope.projectSiteList.push(projSite);
-	        	console.log('project site list -' + $scope.projectSiteList)
+	        	console.log('project site list -' , $scope.projectSiteList)
+            }else{
+                return;
+            }
         };
 
         $scope.removeProjectSite = function(ind) {
