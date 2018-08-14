@@ -241,8 +241,8 @@ public class SchedulerHelperService extends AbstractService {
 							}
 							if (overdueAlertSetting != null && overdueAlertSetting.getSettingValue().equalsIgnoreCase("true")) { // send escalation emails to managers and alert
 																																	// emails
-								mailService.sendOverdueJobAlert(assignee.getUser(), alertEmailIds, job.getSite().getName(), job.getId(), job.getTitle(), exportResult.getFile());
-								job.setOverDueEmailAlert(true);
+								//mailService.sendOverdueJobAlert(assignee.getUser(), alertEmailIds, job.getSite().getName(), job.getId(), job.getTitle(), exportResult.getFile());
+								//job.setOverDueEmailAlert(true);
 							}
 						} catch (Exception e) {
 							log.error("Error while sending push and email notification for overdue job alerts", e);
