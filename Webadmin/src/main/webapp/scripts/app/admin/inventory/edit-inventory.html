@@ -13,10 +13,7 @@
 
 
                     <div class="row">
-
                         <div class="col-md-6">
-
-
                             <div class="panel panel-default">
                                 <div class="panel-heading">Inventory Details</div>
                                 <div class="panel-body">
@@ -70,7 +67,9 @@
 
                                 </div>
                             </div>
+                        </div>
 
+                        <div class="col-md-6">
                             <div class="panel panel-default">
                                 <div class="panel-heading">Location</div>
                                 <div class="panel-body">
@@ -108,7 +107,11 @@
 
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="panel panel-default">
                                 <div class="panel-heading">Stock Information</div>
                                 <div class="panel-body">
@@ -117,14 +120,14 @@
                                         <div class="col-md-6" ng-init="loadUOM()">
                                             <div class="form-group  ">
                                                 <label class="control-label">UOM</label>
-                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            	<select class="form-control" ng-model="selectedUnit" ng-options="materialUOM for materialUOM in materialUOMs">
-                                                	<option value="">Select UOM</option>
-                                            	</select>
+                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                <select class="form-control" ng-model="selectedUnit" ng-options="materialUOM for materialUOM in materialUOMs">
+                                                    <option value="">Select UOM</option>
+                                                </select>
                                             </div>
                                         </div>
 
-										<div class="col-md-6">
+                                        <div class="col-md-6">
                                             <div class="form-group ">
                                                 <label class="control-label">Store Stock </label>
                                                 <input type="number" class="form-control"   name='storestock'
@@ -133,7 +136,7 @@
                                             </div>
                                         </div>
 
-										<div class="col-md-6">
+                                        <div class="col-md-6">
                                             <div class="form-group  ">
                                                 <label class="control-label">Min Stock</label>
                                                 <input type="number" class="form-control"   name='minstock'
@@ -155,7 +158,8 @@
 
                                 </div>
                             </div>
-
+                        </div>
+                        <div class="col-md-6">
                             <div class="panel panel-default">
                                 <div class="panel-heading">Manufacturer Details </div>
                                 <div class="panel-body">
@@ -173,31 +177,29 @@
                                                             <option value="">Select Manufacturer</option>
                                                         </select>
                                                     </div>
-                                                 <!--    <div class="col-md-2 RightAddBtn">
-                                                        <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple" data-toggle="modal"  data-target="#addManufacturer"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
-                                                    </div> -->
+                                                    <!--    <div class="col-md-2 RightAddBtn">
+                                                           <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple" data-toggle="modal"  data-target="#addManufacturer"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                       </div> -->
 
                                                 </div>
 
                                             </div>
-										<!--
-                                            <div class="form-group  ">
-                                                <label class="control-label">Manufacturer name </label>
-                                                <input type="text" class="form-control"   name='manufacturername'
-                                                       ng-model="inventory.manufacturerName" ng-minlength='2' ng-maxlength='50' required autocomplete="off"/>
+                                            <!--
+                                                <div class="form-group  ">
+                                                    <label class="control-label">Manufacturer name </label>
+                                                    <input type="text" class="form-control"   name='manufacturername'
+                                                           ng-model="inventory.manufacturerName" ng-minlength='2' ng-maxlength='50' required autocomplete="off"/>
 
-                                            </div> -->
+                                                </div> -->
                                         </div>
 
                                     </div>
 
                                 </div>
                             </div>
-
-
                         </div>
-
                     </div>
+
 
                     <div class="row">
 
