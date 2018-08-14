@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
 				function($scope, $rootScope, $state, $timeout, JobComponent,AssetComponent,
 						ProjectComponent, SiteComponent,EmployeeComponent,ChecklistComponent,
                         LocationComponent, $http, $stateParams,
-						$location,PaginationComponent,$filter, TicketComponent, $q,$interval) {
+						$location,PaginationComponent,$filter, TicketComponent, $q,$interval,getLocalStorage) {
         $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
@@ -62,22 +62,60 @@ angular.module('timeSheetApp')
         };
 
         $scope.init = function() {
-        		$scope.loadJobStatuses();
+            $scope.loadJobStatuses();
             $scope.loadJobs();
         }
+
+        //
+
+                    $scope.conform = function(text,validation)
+                    {
+                        console.log($scope.selectedProject)
+                        $rootScope.conformText = text;
+                        $scope.valid = validation;
+                        $('#conformationModal').modal();
+
+                    }
+                    $rootScope.back = function (text) {
+                        if(text == 'cancel')
+                        {
+                            /** @reatin - retaining scope value.**/
+                            $rootScope.retain=1;
+                            $scope.cancel();
+                        }
+                        else if(text == 'save')
+                        {
+                            $scope.saveJob($scope.valid);
+                        }
+                        else if(text == 'update')
+                        {
+                            /** @reatin - retaining scope value.**/
+                            $rootScope.retain=1;
+                            $scope.saveJob();
+                        }
+                    };
+
+                    //
+
 
         $scope.loadProjects = function () {
         	ProjectComponent.findAll().then(function (data) {
                 $scope.projects = data;
 
+                for(var i=0;i<$scope.projects.length;i++)
+                {
+                    $scope.uiClient[i] = $scope.projects[i].name;
+                }
+                $scope.clientDisable = false;
+                $scope.clientFilterDisable = false;
+
             });
         };
         /*$(document).ready(function(){
-           $('#jobStartDate').datetimepicker({ dateFormat: 'dd/MM/yyyy hh:mm a' }).val(); 
+           $('#jobStartDate').datetimepicker({ dateFormat: 'dd/MM/yyyy hh:mm a' }).val();
         });*/
-         
-        
 
+        //Date
         $('input#jobStartDate').on('dp.change', function(e){
         		$scope.job.plannedStartTime = e.date._d;
                 $scope.selectPlannedStartTime = $filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
@@ -105,12 +143,192 @@ angular.module('timeSheetApp')
                 $scope.selectedJobDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
                 $scope.selectedJobDateSer = e.date._d;
         });
-        
+
         $('input#selectedJobDateTo').on('dp.change', function(e){
 
             $scope.selectedJobDateTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $scope.selectedJobDateToSer = e.date._d;
         });
+
+        //
+
+        // All Site
+        $scope.loadAllSites = function () {
+            $scope.siteSpin = true;
+              SiteComponent.findAll().then(function (data) {
+              // $scope.selectedSite = null;
+
+                  //
+              $scope.sites = data;
+              //     for(var i=0;i<$scope.sites.length;i++)
+              //     {
+              //         $scope.uiSite[i] = $scope.sites[i].name;
+              //     }
+              //     $scope.siteFilterDisable = false;
+              //     $scope.siteSpin = false;
+
+              });
+        };
+
+        // Load dep sites
+        $scope.loadDepSites = function (searchProject) {
+            $scope.clearField = false;
+            $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
+            $scope.hideSite = false;
+                if(jQuery.isEmptyObject($scope.selectedProject) == false) {
+                    var depProj=$scope.selectedProject.id;
+                }else if(jQuery.isEmptyObject($scope.searchProject) == false){
+                     var depProj=$scope.searchProject.id;
+                }else{
+                     var depProj=0;
+                }
+
+                        $scope.siteSpin = true;
+                        ProjectComponent.findSites(depProj).then(function (data) {
+                            $scope.searchSite = null;
+                            $scope.sitesList = data;
+                            console.log($scope.sitesList)
+                            for(var i=0;i<$scope.sitesList.length;i++)
+                            {
+                                $scope.uiSite[i] = $scope.sitesList[i].name;
+                            }
+                            $scope.siteFilterDisable = false;
+                            $scope.siteSpin = false;
+                        });
+        };
+        // Load Sites for selectbox //
+        $scope.siteDisable = true;
+        $scope.uiSite = [];
+        $scope.siteFilterDisable = true;
+        $scope.getSite = function (search) {
+             var newSupes = $scope.uiSite.slice();
+             if (search && newSupes.indexOf(search) === -1) {
+                newSupes.unshift(search);
+             }
+
+             return newSupes;
+             }
+        //
+
+        // Load dep blocks
+        $scope.loadBlocks = function () {
+            // $scope.blockSpin = true;
+            // $scope.selectedSite = $scope.sites[$scope.uiSite.indexOf(selectedSite)]
+            console.log('selected project -' + ($scope.selectedProject ? $scope.selectedProject.id : 0) + ', site -' + ($scope.selectedSite ? $scope.selectedSite.id : 0))
+            var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
+            var siteId = $scope.selectedSite ? $scope.selectedSite.id : 0;
+                LocationComponent.findBlocks(projectId,siteId).then(function (data) {
+                //$scope.selectedBlock = null;
+                $scope.blocks = data;
+
+                    // for(var i=0;i<$scope.blocks.length;i++)
+                    // {
+                    //     $scope.uiBlock[i] = $scope.blocks[i];
+                    // }
+                    // console.log( $scope.blocks)
+                    // console.log( $scope.uiBlock)
+                    // $scope.blockFilterDisable = false;
+                    // $scope.blockSpin = false;
+
+                });
+        };
+        //
+
+        // Load Blocks for selectbox //
+        $scope.uiBlock = [];
+        $scope.blockFilterDisable = true;
+        $scope.getBlock = function (search) {
+            var newSupes = $scope.uiBlock.slice();
+            if (search && newSupes.indexOf(search) === -1) {
+                 newSupes.unshift(search);
+            }
+
+            return newSupes;
+        }
+        //
+
+
+        //Load dep Floor
+        $scope.loadFloors = function () {
+            // $scope.floorSpin = true;
+            // $scope.selectedBlock = $scope.blocks[$scope.uiFloor.indexOf(selectedBlock)]
+             var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
+             var siteId = $scope.selectedSite ? $scope.selectedSite.id : 0;
+
+                        LocationComponent.findFloors(projectId,siteId,$scope.selectedBlock).then(function (data) {
+                            //$scope.selectedFloor = null;
+                            $scope.floors = data;
+                            // for(var i=0;i<$scope.floors.length;i++)
+                            // {
+                            //     $scope.uiFloor[i] = $scope.floors[i];
+                            // }
+                            // $scope.floorFilterDisable = false;
+                            // $scope.floorSpin = false;
+
+                        });
+        };
+        //
+
+        // Load Floors for selectbox //
+                    $scope.floorSpin = false;
+                    $scope.floorFilterDisable = true;
+                    $scope.uiFloor = [];
+                    $scope.getFloor = function (search) {
+                        var newSupes = $scope.uiFloor.slice();
+                        if (search && newSupes.indexOf(search) === -1) {
+                            newSupes.unshift(search);
+                        }
+
+                        return newSupes;
+                    }
+        //
+
+
+                    // Load Clients for selectbox //
+                    $scope.siteSpin = false;
+                    $scope.clientFilterDisable = true;
+                    $scope.uiClient = [];
+                    $scope.getClient = function (search) {
+                        var newSupes = $scope.uiClient.slice();
+                        if (search && newSupes.indexOf(search) === -1) {
+                            newSupes.unshift(search);
+                        }
+
+                        return newSupes;
+                    }
+                    //
+
+
+                    // Load Sites for selectbox //
+                    $scope.employeeFilterDisable = true;
+                    $scope.uiEmployee = [];
+
+                    $scope.getEmp = function (search) {
+                        var newSupes = $scope.uiEmployee.slice();
+                        if (search && newSupes.indexOf(search) === -1) {
+                            newSupes.unshift(search);
+                        }
+
+                        return newSupes;
+                    }
+
+                    //
+
+                    // Load Status for selectbox //
+                    $scope.statusFilterDisable = true;
+                    $scope.uiStatus = [];
+
+                    $scope.getStatus= function (search) {
+                        var newSupes = $scope.uiStatus.slice();
+                        if (search && newSupes.indexOf(search) === -1) {
+                            newSupes.unshift(search);
+                        }
+
+                        return newSupes;
+                    }
+
+                    //
+
 
         $scope.loadChecklists = function () {
         		ChecklistComponent.findAll().then(function (data) {
@@ -133,30 +351,26 @@ angular.module('timeSheetApp')
             });
         };
 
-        $scope.loadDepSites = function () {
 
-            if(jQuery.isEmptyObject($scope.selectedProject) == false) {
-                   var depProj=$scope.selectedProject.id;
-            }else if(jQuery.isEmptyObject($scope.searchProject) == false){
-                    var depProj=$scope.searchProject.id;
-            }else{
-                    var depProj=0;
+        $scope.loadEmployees = function (searchSite) {
+            $scope.clearField = false;
+            console.log($state.current.name)
+            if($state.current.name != "add-job")
+            {
+                $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)]
             }
 
-            ProjectComponent.findSites(depProj).then(function (data) {
-                $scope.searchSite = null;
-                $scope.sitesList = data;
-            });
-        };
-
-        $scope.loadEmployees = function () {
+            $scope.hideEmp = false;
+            $scope.empSpin = true;
+            $scope.hideSite = true;
+            $scope.uiEmployee.splice(0,$scope.uiEmployee.length);
             var deferred = $q.defer();
             if($scope.searchSite){
-               $scope.searchCriteria.siteId = $scope.searchSite.id; 
+               $scope.searchCriteria.siteId = $scope.searchSite.id;
             }else if($scope.selectedSite){
-               $scope.searchCriteria.siteId = $scope.selectedSite.id; 
+               $scope.searchCriteria.siteId = $scope.selectedSite.id;
             }else{
-                $scope.searchCriteria.siteId = null; 
+                $scope.searchCriteria.siteId = null;
             }
 
 
@@ -167,11 +381,28 @@ angular.module('timeSheetApp')
         			$scope.searchEmployee = null;
         			$scope.employees = data.transactions;
                     console.log('Employee List',$scope.employees);
+                    console.log('Employee List',$scope.uiEmployee);
+                    for(var i=0;i<$scope.employees.length;i++)
+                    {
+                        $scope.uiEmployee[i] = $scope.employees[i].name;
+                    }
+                    $scope.employeeFilterDisable = false;
+                    $scope.empSpin = false;
         			deferred.resolve($scope.employees);
             });
     			return deferred.promise;
 
         };
+         $scope.loadSearchEmployees = function (searchEmployee) {
+             $scope.clearField = false;
+             // $scope.hideEmp = false;
+              $scope.searchEmployee = $scope.employees[$scope.uiEmployee.indexOf(searchEmployee)]
+         }
+         $scope.loadSearchStatus = function (searchStatus) {
+              $scope.hideStatus = true;
+             $scope.clearField = false;
+              $scope.searchStatus = $scope.statuses[$scope.uiStatus.indexOf(searchStatus)]
+         }
 
          $scope.checkSite  = function(){
             if($scope.searchCriteria.siteId == undefined || $scope.searchCriteria.siteId == 0){
@@ -187,26 +418,10 @@ angular.module('timeSheetApp')
             });
         };
 
-        $scope.loadBlocks = function () {
-	    		console.log('selected project -' + ($scope.selectedProject ? $scope.selectedProject.id : 0) + ', site -' + ($scope.selectedSite ? $scope.selectedSite.id : 0))
-                var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
-	    		var siteId = $scope.selectedSite ? $scope.selectedSite.id : 0;
-	    		LocationComponent.findBlocks(projectId,siteId).then(function (data) {
-	    			//$scope.selectedBlock = null;
-	            $scope.blocks = data;
-	        });
-	    };
 
 
-        $scope.loadFloors = function () {
-        		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
-                var siteId = $scope.selectedSite ? $scope.selectedSite.id : 0;
 
-	    		LocationComponent.findFloors(projectId,siteId,$scope.selectedBlock).then(function (data) {
-	    			//$scope.selectedFloor = null;
-	            $scope.floors = data;
-	        });
-	    };
+
 
 	    $scope.loadZones = function () {
 	    		console.log('load zones - ' + $scope.selectedSite.id +',' +$scope.selectedBlock +','+$scope.selectedFloor);
@@ -235,12 +450,18 @@ angular.module('timeSheetApp')
                 $scope.job.locationId = data.id;
             })
         }
-
+        $scope.statusSpin = true;
         $scope.loadJobStatuses = function(){
             JobComponent.loadJobStatuses().then(function(data){
                $scope.selectedLocation = null;
                $scope.statuses = data;
-
+                $scope.hideStatus = false;
+                for(var i=0;i<$scope.statuses.length;i++)
+                {
+                    $scope.uiStatus[i] = $scope.statuses[i];
+                }
+                $scope.statusFilterDisable = false;
+                $scope.statusSpin = false;
             });
         };
 
@@ -359,17 +580,19 @@ angular.module('timeSheetApp')
         };
 
 
-        $scope.loadAllSites = function () {
-        	SiteComponent.findAll().then(function (data) {
-        		// $scope.selectedSite = null;
-                $scope.sites = data;
-            });
-        };
+
 
         $scope.loadEmployee = function () {
+            $scope.empSpin = true;
         	JobComponent.findEmployees().then(function (data) {
         		// $scope.selectedEmployee = null;
                 $scope.employees = data;
+                for(var i=0;i<$scope.employees.length;i++)
+                {
+                    $scope.uiEmployee[i] = $scope.employees[i].name;
+                }
+                $scope.employeeFilterDisable = false;
+                $scope.empSpin = false;
             });
         };
 
@@ -405,7 +628,7 @@ angular.module('timeSheetApp')
                     $scope.job.plannedStartTime =new Date();
                     $scope.selectPlannedStartTime = $filter('date')(new Date(), 'dd/MM/yyyy hh:mm a');
 
-	        	
+
     	        	if($stateParams.ticketId){
                     TicketComponent.getTicketDetails($stateParams.ticketId).then(function(data){
                         console.log("Ticket details");
@@ -454,7 +677,9 @@ angular.module('timeSheetApp')
 
         }
 
+        $scope.saveLoad = false;
         $scope.saveJob = function () {
+                $scope.saveLoad = true;
                 $scope.disable = true;
 	        	$scope.error = null;
 	        	$scope.success =null;
@@ -531,10 +756,12 @@ angular.module('timeSheetApp')
 	        	}
 	        	post($scope.job).then(function () {
 	                $scope.success = 'OK';
+                    $scope.saveLoad = false;
 	                $scope.showNotifications('top','center','success',message);
 	            	$location.path('/jobs');
                     $scope.disable = false;
             }).catch(function (response) {
+                $scope.saveLoad = false;
                 $scope.success = null;
                 $scope.disable = false;
                 console.log('Error - '+ response.data);
@@ -568,10 +795,13 @@ angular.module('timeSheetApp')
          $scope.loadJobs = function(){
             $scope.clearFilter();
             $scope.search();
+             $scope.loadJobStatuses();
         }
 
         $scope.refreshPage = function(){
             $scope.loadJobs();
+            $scope.clearField = true;
+
         }
 
         $scope.deleteConfirm = function (job){
@@ -614,16 +844,17 @@ angular.module('timeSheetApp')
          }
 
          $scope.searchFilter1 = function () {
-            $scope.searchEmployee = null;
-            $scope.searchStatus = null;
-            $scope.searchCriteria.empId =null;
-            $scope.searchCriteria.jobStatus =null;
+            // $scope.searchEmployee = null;
+            // $scope.searchStatus = null;
+            // $scope.searchCriteria.empId =null;
+            // $scope.searchCriteria.jobStatus =null;
             $scope.setPage(1);
             $scope.search();
          }
 
 
         $scope.search = function () {
+            console.log('selected status - -------------'+ $scope.searchStatus);
                 $scope.noData = false;
         		console.log('$scope.pages - ' + $scope.pages + ', $scope.pages.currPage - ' + $scope.pages.currPage);
 	        	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
@@ -641,22 +872,24 @@ angular.module('timeSheetApp')
 	        	console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaProject));
                 $scope.searchCriteria.findAll = false;
                  /*&& !$scope.selectedJob*/
-	        	if(!$scope.searchProject && !$scope.searchSite && !$scope.searchStatus){
+	        	if(!$scope.searchProject && !$scope.searchSite && !$scope.searchStatus && !$scope.searchEmployee){
 	        		$scope.searchCriteria.findAll = true;
 	        	}
 
-	        	if($scope.searchProject) {
+	        	if($scope.searchProject && $scope.searchProject.searchStatus != '0') {
 	        		$scope.searchCriteria.projectId = $scope.searchProject.id;
+                    $scope.searchCriteria.projectName = $scope.searchProject.name;
 	        	}else{
                     $scope.searchCriteria.projectId = null;
                 }
 
-	        	if($scope.searchSite) {
+	        	if($scope.searchSite && $scope.searchSite.searchStatus != '0') {
 	        		$scope.searchCriteria.siteId = $scope.searchSite.id;
+                    $scope.searchCriteria.siteName = $scope.searchSite.name;
 		        }else{
                     $scope.searchCriteria.siteId = null;
                 }
-	        	console.log('selected status - '+ JSON.stringify($scope.searchStatus));
+
 	        	if($scope.searchStatus){
 		        		$scope.searchCriteria.jobStatus = $scope.searchStatus;
 		        }else{
@@ -668,6 +901,7 @@ angular.module('timeSheetApp')
 	        	}*/
                 if($scope.searchEmployee){
                     $scope.searchCriteria.employeeId = $scope.searchEmployee.id;
+                    $scope.searchCriteria.employeeName = $scope.searchEmployee.name;
                 }else{
                     $scope.searchCriteria.employeeId = null;
                 }
@@ -676,7 +910,7 @@ angular.module('timeSheetApp')
 	        	if($scope.selectedJobDate) {
 	        		$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedJobDateSer;
 	        	}
-	        	
+
 	        	if($scope.selectedJobDateTo) {
 	        		$scope.searchCriteria.checkInDateTimeTo = $scope.selectedJobDateToSer;
 	        	}
@@ -706,14 +940,49 @@ angular.module('timeSheetApp')
                      $scope.jobs = '';
                      $scope.jobsLoader = false;
                      $scope.loadPageTop();
-                     $rootScope.searchCriterias = $scope.searchCriteria;      
-	        	JobComponent.search($rootScope.searchCriterias).then(function (data) {
+                     $rootScope.searchCriterias = $scope.searchCriteria;
+
+            /* Localstorage (Retain old values while edit page to list) start */
+            // alert($rootScope.retain)
+            if($rootScope.retain == 1){
+                $scope.localStorage = getLocalStorage.getSearch();
+                console.log('Local storage---',$scope.localStorage);
+
+                if($scope.localStorage){
+                    $scope.filter = true;
+                    $scope.pages.currPage = $scope.localStorage.currPage;
+                    $scope.searchProject = {searchStatus:'0',id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
+                    $scope.searchSite = {searchStatus:'0',id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
+                    // $scope.searchEmployee = {searchStatus:'0',id:$scope.localStorage.employeeId,name:$scope.localStorage.employeeName};
+
+                }
+
+                $rootScope.retain = 0;
+
+                var searchCriteras  = $scope.localStorage;
+            }else{
+
+                var searchCriteras  = $scope.searchCriteria;
+            }
+
+            /* Localstorage (Retain old values while edit page to list) end */
+
+
+
+
+
+            JobComponent.search(searchCriteras).then(function (data) {
                     $scope.jobs = data.transactions;
 	        		$scope.jobsLoader = true;
 
-                    /*
-                        ** Call pagination  main function **
-                    */
+
+                /** retaining list search value.**/
+                getLocalStorage.updateSearch(searchCriteras);
+
+
+                /*
+                    ** Call pagination  main function **
+                */
                      $scope.pager = {};
                      $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
                      $scope.totalCountPages = data.totalCount;
@@ -739,7 +1008,7 @@ angular.module('timeSheetApp')
 	        	});
 
         };
-
+                    $scope.clearField = false;
         $scope.clearFilter = function() {
             $rootScope.exportStatusObj.exportMsg = '';
             $scope.downloader=false;
@@ -752,7 +1021,12 @@ angular.module('timeSheetApp')
             $scope.searchEmployee = null;
             $scope.searchStatus = null;
             $scope.searchProject = null;
+            $scope.localStorage = null;
             $scope.searchCriteria.columnName =null;
+            $scope.selectedJobDate = null;
+            $scope.selectedJobDateTo = null;
+            $scope.filter = false;
+
             $scope.pages = {
                 currPage: 1,
                 totalPages: 0
@@ -792,6 +1066,10 @@ angular.module('timeSheetApp')
              $scope.initPage();
              $scope.setPage(1);
          }
+         $scope.initList = function(){
+                        $scope.loadPageTop();
+                        $scope.setPage(1);
+                    }
 
 
     /*
@@ -916,7 +1194,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.cancel = function () {
-                            
+
              if($scope.status == 1){
 
                  $location.path('/tickets');
@@ -926,7 +1204,7 @@ angular.module('timeSheetApp')
                 $location.path('/jobs');
              }
 
-            
+
         };
 
 

@@ -48,6 +48,7 @@ angular.module('timeSheetApp')
                     $scope.uiClient[i] = $scope.projectsList[i].name;
                 }
                 $scope.clientDisable = false;
+                $scope.clientFilterDisable = false;
             });
         };
 
@@ -57,10 +58,18 @@ angular.module('timeSheetApp')
             });
         };
 
+        // Filter //
+
+        $scope.siteSpin = false;
+
+        //
+
+
 
 
         // Load Clients for selectbox //
         $scope.clienteDisable = true;
+        $scope.clientFilterDisable = true;
         $scope.uiClient = [];
         $scope.getClient = function (search) {
             var newSupes = $scope.uiClient.slice();
@@ -88,9 +97,11 @@ angular.module('timeSheetApp')
 
          $scope.loadDepSites = function (selectedProject) {
              $scope.selectedProject = $scope.projectsList[$scope.uiClient.indexOf(selectedProject)]
+             $scope.searchProject = $scope.projectsList[$scope.uiClient.indexOf(selectedProject)]
              $scope.siteSpin = true;
              $scope.siteDisable = true;
              $scope.selectedSite = null;
+             $scope.hideSite = false;
             if(jQuery.isEmptyObject($scope.selectedProject) == false) {
                    var depProj=$scope.selectedProject.id;
             }else if(jQuery.isEmptyObject($scope.searchProject) == false){
@@ -108,11 +119,12 @@ angular.module('timeSheetApp')
                 }
                 $scope.siteDisable = false;
                 $scope.siteSpin = false;
-                console.log("===========Slected Site ==============")
-                console.log($scope.sitesList)
+                $scope.siteFilterDisable = false;
             });
         };
 
+
+        $scope.siteFilterDisable = true;
         $scope.siteDisable = true;
         $scope.uiSite = [];
         $scope.getSites = function (search) {
@@ -134,8 +146,10 @@ angular.module('timeSheetApp')
         		})
         }
 
-        $scope.loadDepBlocks = function () {
-
+        $scope.loadDepBlocks = function (site) {
+            $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(site)]
+            $scope.hideSite = true;
+            $scope.hideBlock = false;
             if(jQuery.isEmptyObject($scope.selectedProject) == false) {
 
                    var depProj=$scope.selectedProject.id;
@@ -155,11 +169,41 @@ angular.module('timeSheetApp')
 	    		LocationComponent.findBlocks(depProj,depSite).then(function (data) {
 	    			$scope.selectedBlock = null;
 	            $scope.blocksList = data;
+
+	            //
+                    for(var i=0;i<$scope.blocksList.length;i++)
+                    {
+                        $scope.uiBlock[i] = $scope.blocksList[i];
+                    }
+                    console.log($scope.uiBlock)
+                    $scope.blockDisable = false;
+                    $scope.blockSpin = false;
+                    $scope.blockFilterDisable = false;
 	        });
 	    };
 
-	    $scope.loadDepFloors = function () {
 
+        // Load Blocks for selectbox //
+        $scope.blockFilterDisable = true;
+        $scope.BlockDisable = true;
+        $scope.uiBlock = [];
+        $scope.getBlock = function (search) {
+            var newSupes = $scope.uiBlock.slice();
+            if (search && newSupes.indexOf(search) === -1) {
+                newSupes.unshift(search);
+            }
+
+            return newSupes;
+        }
+
+        //
+
+
+	    $scope.loadDepFloors = function (searchBlock) {
+
+            $scope.hideBlock = true;
+            $scope.hideFloor = false;
+            $scope.searchBlock = searchBlock;
             if(jQuery.isEmptyObject($scope.selectedProject) == false) {
                    var depProj=$scope.selectedProject.id;
             }else if(jQuery.isEmptyObject($scope.searchProject) == false){
@@ -184,11 +228,39 @@ angular.module('timeSheetApp')
 	    		LocationComponent.findFloors(depProj,depSite,depBlock).then(function (data) {
 	    		$scope.selectedFloor = null;
 	            $scope.floorsList = data;
+                //
+                    console.log($scope.floorsList)
+                    for(var i=0;i<$scope.floorsList.length;i++)
+                    {
+                        $scope.uiFloor[i] = $scope.floorsList[i];
+                    }
+                    console.log($scope.floorsList)
+                    $scope.floorDisable = false;
+                    $scope.floorSpin = false;
+                    $scope.floorFilterDisable = false;
 	        });
 	    };
 
-	    $scope.loadDepZones = function () {
 
+        // Load Floors for selectbox //
+        $scope.floorFilterDisable = true;
+        $scope.floorDisable = true;
+        $scope.uiFloor = [];
+        $scope.getFloor = function (search) {
+            var newSupes = $scope.uiFloor.slice();
+            if (search && newSupes.indexOf(search) === -1) {
+                newSupes.unshift(search);
+            }
+            return newSupes;
+        }
+        //
+
+
+	    $scope.loadDepZones = function (searchFloor) {
+            $scope.hideFloor = true;
+            $scope.hideZone = false;
+            $scope.searchFloor = searchFloor;
+            console.log($scope.searchFloor)
             if(jQuery.isEmptyObject($scope.selectedProject) == false) {
                    var depProj=$scope.selectedProject.id;
             }else if(jQuery.isEmptyObject($scope.searchProject) == false){
@@ -213,16 +285,46 @@ angular.module('timeSheetApp')
             if($scope.selectedZone !=null) {
                    console.log('load zones - ' + $scope.selectedProject.id +',' +$scope.selectedSite.id +',' +$scope.selectedBlock +','+$scope.selectedFloor);
                    var depZone=$scope.selectedZone;
-            }else if($scope.searchZone !=null){
-                    var depZone=$scope.searchZone;
+            }else if($scope.searchFloor !=null){
+                    var depFloor=$scope.searchFloor;
             }else{
                     var depZone=null;
             }
-	    		LocationComponent.findZones(depProj,depSite,depBlock,depZone).then(function (data) {
+	    		LocationComponent.findZones(depProj,depSite,depBlock,depFloor).then(function (data) {
 	    		     $scope.selectedZone = null;
 	                 $scope.zonesList = data;
+                    //
+                    console.log($scope.zonesList)
+                    for(var i=0;i<$scope.zonesList.length;i++)
+                    {
+                        $scope.uiZone[i] = $scope.zonesList[i];
+                    }
+                    console.log($scope.zonesList)
+                    $scope.zoneDisable = false;
+                    $scope.zoneSpin = false;
+                    $scope.zoneFilterDisable = false;
 	        });
 	    };
+
+
+        // Load Zones for selectbox //
+        $scope.zoneFilterDisable = true;
+        $scope.zoneDisable = true;
+        $scope.uiZone = [];
+        $scope.getZone = function (search) {
+            var newSupes = $scope.uiZone.slice();
+            if (search && newSupes.indexOf(search) === -1) {
+                newSupes.unshift(search);
+            }
+            return newSupes;
+        }
+        //
+        //
+        $scope.loadSearchZones = function (searchZone) {
+            $scope.searchZone = searchZone;
+            $scope.hideZone = true;
+        }
+        //
 
 
         $scope.conform = function(text)
@@ -376,13 +478,15 @@ angular.module('timeSheetApp')
 
             }else {
                 $scope.searchCriteria.findAll = false;
-                    if($scope.searchProject) {   
+                    if($scope.searchProject) {
                     $scope.searchCriteria.projectId = $scope.searchProject.id;
+                    $scope.searchCriteria.projectName = $scope.searchProject.name;
                     }else {
                     $scope.searchCriteria.projectId = null;
                     }
                     if($scope.searchSite) {
                         $scope.searchCriteria.siteId = $scope.searchSite.id;
+                        $scope.searchCriteria.siteName = $scope.searchSite.name;
                     }else{
                         $scope.searchCriteria.siteId = null;
                     }
@@ -394,7 +498,7 @@ angular.module('timeSheetApp')
                     if($scope.searchFloor) {
                         $scope.searchCriteria.floor = $scope.searchFloor;
                     }else{
-                        $scope.searchCriteria.floor = null; 
+                        $scope.searchCriteria.floor = null;
                     }
                     if($scope.searchZone) {
                         $scope.searchCriteria.zone = $scope.searchZone;
@@ -419,6 +523,7 @@ angular.module('timeSheetApp')
             }
 
              console.log("search criteria",$scope.searchCriteria);
+
                 $scope.locations = '';
                 $scope.locationsLoader = false;
                 $scope.loadPageTop();
