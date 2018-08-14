@@ -11,6 +11,7 @@ angular.module('timeSheetApp')
         $scope.validationErrorMsg = null;
         $scope.authorities = ["User", "Admin"];
         $scope.noData = false;
+        $scope.isEdit = false;
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -54,6 +55,9 @@ angular.module('timeSheetApp')
 
         }
         $rootScope.back = function (text) {
+
+            $scope.isEdit = false;
+
             if(text == 'cancel')
             {
                 $scope.cancelChecklist();
@@ -71,12 +75,13 @@ angular.module('timeSheetApp')
 
         $scope.saveChecklist = function () {
             $scope.saveLoad = true;
-        	console.log('checklist -'+ JSON.stringify($scope.checklist));
-        	console.log('checklist -'+ JSON.stringify($scope.checklistItems));
-        	$scope.checklist.items = $scope.checklistItems
+        	console.log('checklist -' , JSON.stringify($scope.checklist));
+        	console.log('checklist -' , JSON.stringify($scope.checklistItems));
+        	$scope.checklist.items = $scope.checklistItems;
 
-        	console.log('checklist after adding items - ' + JSON.stringify($scope.checklist));
-        	ChecklistComponent.createChecklist($scope.checklist).then(function () {
+        	console.log('checklist after adding items - ' , JSON.stringify($scope.checklist));
+            var post = $scope.isEdit == true ? ChecklistComponent.updateChecklist($scope.checklist) : ChecklistComponent.createChecklist($scope.checklist);
+        	post.then(function () { 
                 $scope.saveLoad = false;
             	$scope.success = 'OK';
             	$scope.checklistItems = [];
@@ -115,7 +120,8 @@ angular.module('timeSheetApp')
 
 
 
-        $scope.loadChecklist = function(id) {
+        $scope.loadChecklist = function(id,action) {
+            $scope.isEdit = (action == 'edit') ? true : false;
         	console.log('loadChecklist -' + id);
         	ChecklistComponent.findOne(id).then(function (data) {
         		$scope.checklist = data;

@@ -99,7 +99,8 @@
 
                                        <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" ng-click="conform('save')"
                                                type="submit" id="form-button-save" ng-disabled="form.$invalid ">
-                                           <span class="btn-label"><i class="material-icons">check</i></span> Save
+                                           <span class="btn-label"><i class="material-icons">check</i></span>
+                                           <span ng-show ="!isEdit">Save</span><span ng-show ="isEdit">Update</span>  
                                            <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                        </button>
 
@@ -150,7 +151,7 @@
 
                                 </td>
                                 <td>
-                                    <a  ng-class="{active: $state.includes('admin')}" ng-click="loadChecklist(checklist.id)"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                    <a  ng-class="{active: $state.includes('admin')}" ng-click="loadChecklist(checklist.id,'edit')"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
                                 </td>
 
                             </tr>
