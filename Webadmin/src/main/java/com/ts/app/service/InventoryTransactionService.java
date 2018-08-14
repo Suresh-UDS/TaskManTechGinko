@@ -1,7 +1,6 @@
 package com.ts.app.service;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -19,6 +18,7 @@ import org.springframework.util.StringUtils;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.Material;
 import com.ts.app.domain.MaterialTransaction;
 import com.ts.app.domain.MaterialTransactionType;
 import com.ts.app.domain.MaterialUOMType;
@@ -39,6 +39,7 @@ import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.MaterialTransactionDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
+import com.ts.app.web.rest.errors.TimesheetException;
 
 @Service
 @Transactional
@@ -92,6 +93,42 @@ public class InventoryTransactionService extends AbstractService{
 		}else {
 			materialEntity.setAsset(null);
 		}
+		
+		/** Create material if does not exists*/
+		if(!StringUtils.isEmpty(materialTransDTO.getMaterialName())) {
+			Material material = inventoryRepository.findByMaterialName(materialTransDTO.getMaterialName());
+			if(material == null) { 
+				Material materialDomain = new Material();
+				materialDomain.setItemGroup(materialTransDTO.getMaterialGroupItemGroup());
+				materialDomain.setItemGroupId(materialTransDTO.getMaterialGroupId());
+				materialDomain.setName(materialTransDTO.getMaterialName());
+				materialDomain.setProject(projectRepository.findOne(materialTransDTO.getProjectId()));
+				materialDomain.setSite(siteRepository.findOne(materialTransDTO.getSiteId()));
+				materialDomain.setActive(Material.ACTIVE_YES);
+				inventoryRepository.save(materialDomain);
+			}
+		}
+		
+		if(materialTransDTO.getTransactionType().equals(MaterialTransactionType.ISSUED)) {
+			Material material = inventoryRepository.findOne(materialTransDTO.getMaterialId());
+			long prevStoreStock = material.getStoreStock();
+			if(prevStoreStock > materialTransDTO.getQuantity()) { 
+				long currentStock = prevStoreStock - materialTransDTO.getQuantity();
+				materialEntity.setStoreStock(currentStock);
+				material.setStoreStock(currentStock);
+				inventoryRepository.save(material);
+			}
+		}
+		
+		if(materialTransDTO.getTransactionType().equals(MaterialTransactionType.RECEIVED)) {
+			Material material = inventoryRepository.findOne(materialTransDTO.getMaterialId());
+			long prevStoreStock = material.getStoreStock();
+			long currentStock = prevStoreStock + materialTransDTO.getQuantity();
+			materialEntity.setStoreStock(currentStock);
+			material.setStoreStock(currentStock);
+			inventoryRepository.save(material);
+		}
+		
 		materialEntity.setActive(MaterialTransaction.ACTIVE_YES);
 		materialEntity.setTransactionDate(DateUtil.convertToTimestamp(materialTransDTO.getTransactionDate()));
 		materialEntity.setUom(MaterialUOMType.valueOf(materialTransDTO.getUom()).getValue());
