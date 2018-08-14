@@ -45,7 +45,7 @@
             <ion-item>
                 <ion-label text-capitalize class="client-label" text-left>Group:</ion-label>
                 <ion-select  interface="popover"  text-lowercase>
-                    <ion-option text-center text-lowercase></ion-option>
+                    <ion-option text-center text-lowercase *ngFor="let g of inventoryGroups;let i of index">{{g.itemGroup}}</ion-option>
                 </ion-select>
             </ion-item>
         </ion-col>

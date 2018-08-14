@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import {NavController, NavParams} from "ionic-angular";
-import{WheelSelector} from "@ionic-native/wheel-selector";
 import{componentService} from "../service/componentService";
 import{SiteService} from "../service/siteService";
+import {InventoryService} from "../service/inventoryService";
 
 /**
  * Generated class for the AddInventoryTransaction page.
@@ -29,10 +29,11 @@ export class AddInventoryTransaction {
     searchCriteria:any;
     selectOptions:any;
     type:any;
+    inventoryGroups:any;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,private selector:WheelSelector,private component:componentService,
-              private siteService:SiteService,
+  constructor(public navCtrl: NavController, public navParams: NavParams,private component:componentService,
+              private siteService:SiteService, private inventoryService:InventoryService
   ) {
 
       this.numbers = [0,1,2,3,4,5,6,7,8,9,10];
@@ -78,6 +79,7 @@ export class AddInventoryTransaction {
                 console.log(response);
                 this.siteList=response;
                 console.log(this.siteList);
+                this.getAllInventoryGroups();
             },
             error=>{
                 if(error.type==3)
@@ -94,11 +96,13 @@ export class AddInventoryTransaction {
       this.navCtrl.pop();
     }
 
-    selectNumber() {
-        this.selector.show({
-            title: "How Many?",
-            items: [this.numbers],
-        })
+    getAllInventoryGroups(){
+        this.inventoryService.getAllGroups().subscribe(
+            response=>{
+                console.log(response);
+                this.inventoryGroups = response;
+            }
+        )
     }
 
 }
