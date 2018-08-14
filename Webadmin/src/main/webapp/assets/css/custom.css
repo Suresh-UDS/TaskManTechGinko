@@ -337,6 +337,12 @@ ul.chatlinesList
 {
   padding-right:5px;
 }
+.dropdown select.form-control option:hover
+{
+    background: #ccc !important;
+    color: #000 !important;
+    box-shadow: inset 20px 20px #00f !important;
+}
 .form-control-feedback
 {
   opacity: 1;

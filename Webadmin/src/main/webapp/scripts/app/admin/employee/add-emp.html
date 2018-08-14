@@ -255,12 +255,6 @@
 			                                             <p class="help-block" style="color: maroon"
 			                                                ng-show="form.UserRole.$error.required">User Role is
 			                                                 required.</p>
-			                                             <p class="help-block" style="color: maroon"
-			                                                ng-show="form.UserRole.$error.minlength">User Role is
-			                                                 required to be at least 5 character.</p>
-			                                             <p class="help-block" style="color: maroon"
-			                                                ng-show="form.UserRole.$error.maxlength">User Role
-			                                                 cannot be longer than 50 characters.</p>
 			                                         </div>
 			                                     </div>
 
@@ -304,18 +298,7 @@
                                                                    ng-show="form.projectName.$error.required">
                                                                     Client name is required.
                                                                 </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.projectName.$error.minlength">
-                                                                    Client name is required to be at least 2 character.
-                                                                </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.projectName.$error.maxlength">
-                                                                    Client name cannot be longer than 50 characters.
-                                                                </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.projectName.$error.pattern">
-                                                                    Client name can only contain letters, digits and space.
-                                                                </p>
+                                                                
                                                             </div>
                                                         </div>
                                                     </div>
@@ -339,18 +322,7 @@
                                                                    ng-show="form.siteName.$error.required">
                                                                     Site name is required.
                                                                 </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.siteName.$error.minlength">
-                                                                    Site name is required to be at least 2 character.
-                                                                </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.siteName.$error.maxlength">
-                                                                    Site name cannot be longer than 50 characters.
-                                                                </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.siteName.$error.pattern">
-                                                                    Site name can only contain letters, digits and space.
-                                                                </p>
+                                                                
                                                             </div>
                                                         </div>
                                                     </div>
@@ -360,7 +332,7 @@
 
 											<div class="col-md-3">
 
-                                                <button class="btn btn-success" style="margin-top:0;" type="button" ng-disabled="!selectedSite" ng-click="addProjectSite()">
+                                                <button class="btn btn-success" style="margin-top:0;" type="button" ng-disabled="form.$invalid" ng-click="addProjectSite()">
 					                                <span class="btn-label">
 					                                    <i class="material-icons">add</i>
 					                                </span>
@@ -422,14 +394,6 @@
                                                                 <p class="help-block" style="color:maroon"
                                                                    ng-show="form.manager.$error.required">
                                                                     Manager is required.
-                                                                </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.manager.$error.maxlength">
-                                                                    Manager cannot be longer than 50 characters.
-                                                                </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.manager.$error.pattern">
-                                                                    Manager can only contain letters, digits and space.
                                                                 </p>
                                                             </div>
                                                         </div>
