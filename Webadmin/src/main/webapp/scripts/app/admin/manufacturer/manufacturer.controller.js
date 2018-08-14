@@ -5,7 +5,7 @@ angular.module('timeSheetApp')
 				'ManufacturerController',
 				function($scope, $rootScope, $state, $timeout, ManufacturerComponent,AssetTypeComponent,
 						$http, $stateParams,
-						$location,PaginationComponent) {
+						$location,PaginationComponent,getLocalStorage) {
         $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
@@ -70,6 +70,8 @@ angular.module('timeSheetApp')
         $rootScope.back = function (text) {
            if(text == 'cancel')
            {
+               /** @reatin - retaining scope value.**/
+               $rootScope.retain=1;
                $scope.cancelManufacturer();
            }
            else if(text == 'save')
@@ -78,6 +80,8 @@ angular.module('timeSheetApp')
            }
            else if(text == 'update')
            {
+               /** @reatin - retaining scope value.**/
+               $rootScope.retain=1;
                $scope.UpdateManufacturer();
            }
         };
@@ -90,9 +94,34 @@ angular.module('timeSheetApp')
                 //$scope.selectedAssetType = null;
                 $scope.assetTypes = data;
                 console.log('Asset type',$scope.assetTypes);
+
+                    // for(var i=0;i<$scope.assetTypes.length;i++)
+                    // {
+                    //     $scope.uiAssetType[i] = $scope.assetTypes[i].name;
+                    // }
+                    // $scope.assetTypeDisable = false;
                 $scope.loadingStop();
             });
         }
+
+                    // Load AssetType for selectbox //
+                    $scope.assetTypeDisable = true;
+                    $scope.uiAssetType = [];
+                    $scope.getType = function (search) {
+                        var newSupes = $scope.uiAssetType.slice();
+                        if (search && newSupes.indexOf(search) === -1) {
+                            newSupes.unshift(search);
+                        }
+
+                        return newSupes;
+                    }
+
+                    $scope.loadAssetType = function(searchAssetType)
+                    {
+                        $scope.searchAssetType = $scope.assetTypes[$scope.uiAssetType.indexOf(searchAssetType)]
+                    }
+                    //
+
 
         $scope.getManufacturerDetails = function(id, mode) {
                 $rootScope.loadingStart();
@@ -166,10 +195,10 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.findAll = true;
             }
 
-            if($scope.searchName) {
+            if($scope.searchName && $scope.searchName.searchStatus != '0' ) {
                     $scope.searchCriteria.manufacturerName = $scope.searchName;
                 }
-                if($scope.searchAssetType) {
+                if($scope.searchAssetType && $scope.searchAssetType.searchStatus != '0') {
                     $scope.searchCriteria.assetTypeName = $scope.searchAssetType.name;
                 }
 
@@ -195,11 +224,39 @@ angular.module('timeSheetApp')
                      $scope.manufacturers = '';
                      $scope.manufacturersLoader = false;
                      $scope.loadPageTop();
-            ManufacturerComponent.search($scope.searchCriteria).then(function (data) {
+
+            /* Localstorage (Retain old values while edit page to list) start */
+
+            if($rootScope.retain == 1){
+                $scope.localStorage = getLocalStorage.getSearch();
+                console.log('Local storage---',$scope.localStorage);
+
+                if($scope.localStorage){
+                    $scope.filter = true;
+                    $scope.pages.currPage = $scope.localStorage.currPage;
+                    $scope.searchAssetType = {searchStatus:'0',assetTypeName:$scope.localStorage.assetTypeName};
+                    // $scope.searchName = {searchStatus:'0',manufacturerName:$scope.localStorage.manufacturerName};
+                }
+
+                $rootScope.retain = 0;
+
+                var searchCriteras  = $scope.localStorage;
+            }else{
+
+                var searchCriteras  = $scope.searchCriteria;
+            }
+
+            /* Localstorage (Retain old values while edit page to list) end */
+            ManufacturerComponent.search(searchCriteras).then(function (data) {
 
                 console.log(data);
                 $scope.manufacturers = data.transactions;
                 $scope.manufacturersLoader = true;
+
+                /** retaining list search value.**/
+                getLocalStorage.updateSearch(searchCriteras);
+
+
 
 
                 /*
@@ -367,6 +424,7 @@ angular.module('timeSheetApp')
             $scope.selectedAssetType = null;
             $scope.selectedName = null;
             $scope.searchAssetType = null;
+            $scope.localStorage = null;
             $scope.searchName = null;
             $scope.searchCriteria = {};
             $scope.selectedSite = null;
