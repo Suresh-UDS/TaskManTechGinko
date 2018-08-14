@@ -23,4 +23,14 @@ export class InventoryService {
         )
     }
 
+    getMaterialsByGroup(groupId): Observable<any>{
+        return this.http.get(this.config.Url+'api/material/itemgroup/'+groupId).map(
+            response=>{
+                console.log(response.status);
+                var allJobs = response.json();
+                return allJobs;
+            }
+        )
+    }
+
 }
