@@ -2,7 +2,7 @@
 <div class="crud-form"
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
 	<div class="" ng-controller="EmployeeController">
-		<div class="row"  ng-init="initLoad();loadingAuto();">
+		<div class="row"  ng-init="initLoad();initAdd();">
             <!-- <div class="col-md-12" >
 
                 <div class="alert alert-success" ng-show="success">
@@ -289,7 +289,7 @@
                                                                <!--ng-blur="loadSites()"-->
                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class=" form-control " ng-model="selectedProject"  ng-required="true" ng-change="loadSites()" ng-options="project as project.name for project in projects" name="projectName" >
+                                                        <select class=" form-control " ng-model="selectedProject"  ng-required="empLocation" ng-change="loadSites()" ng-options="project as project.name for project in projects" name="projectName" >
                                                             <option value="">Select Client...</option>
                                                         </select>
                                                         <div ng-show="form.$submitted || form.projectName.$touched || form.projectName.$dirty">
@@ -312,7 +312,7 @@
                                                                <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control " ng-model="selectedSite"  ng-required="true" ng-change="loadBlocks()" ng-options="site as site.name for site in sites" name="siteName" >
+                                                        <select class="form-control " ng-model="selectedSite"  ng-required="empLocation" ng-change="loadBlocks()" ng-options="site as site.name for site in sites" name="siteName" >
                                                             <option value="">Select Site...</option>
                                                         </select>
 
@@ -328,8 +328,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-
 											<div class="col-md-3">
 
                                                 <button class="btn btn-success" style="margin-top:0;" type="button" ng-disabled="form.$invalid" ng-click="addProjectSite()">
@@ -340,7 +338,12 @@
                                                 </button>
 
                                             </div>
-
+                                             <div class="col-md-12">
+                                                <div
+                                                    ng-show="empLocation">
+                                                    <p class="help-block" style="color: maroon">Client info is requied</p>
+                                                </div>
+                                            </div>
 
                                             <div class="col-md-12 addedActionList pdng-top15" ng-hide="!(projectSiteList.length > 0)">
 
@@ -564,7 +567,7 @@
                        <div class="row">
                                <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
                                    <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}"
-                                           type="submit" id="form-button-save" ng-disabled="form.$invalid ">
+                                           type="submit" id="form-button-save" ng-disabled="form.$invalid || empLocation">
                                        <span class="btn-label"><i class="material-icons">check</i></span> Save
                                        <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                    </button>

@@ -315,7 +315,7 @@
                                                                ng-blur="loadSites()"
                                                                ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" /> -->
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class=" form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects track by project.name" name="projectName" ng-required="true">
+                                                        <select class=" form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects track by project.name" name="projectName" ng-required="empLocation">
                                                             <option value="">Select Client...</option>
                                                         </select>
                                                         <div ng-show="form.$submitted || form.projectName.$touched || form.projectName.$dirty">
@@ -338,7 +338,7 @@
                                                                <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites track by site.id" name="siteName" ng-required="true">
+                                                        <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites track by site.id" name="siteName" ng-required="empLocation">
                                                             <option value="">Select Site...</option>
                                                         </select>
 
@@ -367,7 +367,13 @@
 
                                             </div>
 
-
+                                             <div class="col-md-12">
+                                                <div
+                                                    ng-show="empLocation">
+                                                    <p class="help-block" style="color: maroon">Client info is requied</p>
+                                                </div>
+                                            </div>
+                                            
                                             <div class="col-md-12 addedActionList pdng-top15" ng-hide="!(employee.projectSites.length > 0)">
 
 
@@ -442,7 +448,7 @@
                                <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
 
                                    <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}"
-                                           type="submit" id="form-button-save" ng-disabled="form.$invalid">
+                                           type="submit" id="form-button-save" ng-disabled="form.$invalid || empLocation">
                                        <span class="btn-label"><i class="material-icons">check</i></span> Update
                                        <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                    </button>

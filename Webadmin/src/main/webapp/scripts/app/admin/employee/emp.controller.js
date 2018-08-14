@@ -13,6 +13,7 @@ angular.module('timeSheetApp')
         $scope.errorEmployeeExists = null;
         $scope.pager = {};
         $scope.noData = false;
+        $scope.projectSitesCnt = 0;
 
         $scope.markLeftOptions = 'delete';
 
@@ -156,7 +157,7 @@ angular.module('timeSheetApp')
 
         //
 
-
+        $scope.empLocation = false;
         $scope.addProjectSite = function() {
 	        	
             if($scope.selectedProject && $scope.selectedSite){
@@ -196,23 +197,35 @@ angular.module('timeSheetApp')
                 }
 
 	        	$scope.projectSiteList.push(projSite);
-	        	console.log('project site list -' , $scope.projectSiteList)
+	        	console.log('project site list -' , $scope.projectSiteList);
+                if($scope.projectSiteList.length > 0) {
+                    $scope.empLocation = false; 
+                }
             }else{
                 return;
             }
         };
 
+        $scope.initAdd = function(){
+           $scope.empLocation = true; 
+        }
+
+         
         $scope.removeProjectSite = function(ind) {
         		$scope.projectSiteList.splice(ind,1);
-//        		alert($scope.projectSiteList.length);
-        		if($scope.projectSiteList.length === 0) {
-        			document.getElementById("form-button-save").disabled = true;
+                //alert($scope.projectSiteList.length);
+
+        		if($scope.projectSiteList.length == 0) {
+        			//document.getElementById("form-button-save").disabled = true;
+                    $scope.empLocation = true;
+
         		}
         };
 
         $scope.locationList = [];
 
         $scope.addLocation = function() {
+            if($scope.selectedBlock){
 	        	console.log('selected block -' + $scope.selectedBlock);
 	        	console.log('selected floor -' + $scope.selectedFloor);
 	        	console.log('selected zone -' + $scope.selectedZone);
@@ -227,8 +240,31 @@ angular.module('timeSheetApp')
 	        		loc.employeeId = $scope.employee.id
 	        		loc.employeeName = $scope.employee.name
 	        	}
+
+                function isBlock(block) { 
+                    return block.block === loc.block;
+                }
+                function isFloor(floor) { 
+                    return floor.floor === loc.floor;
+                }
+                function isZone(zone) { 
+                    return zone.zone === loc.zone;
+                }
+
+                $scope.dupBlock = $scope.locationList.find(isBlock);
+                $scope.dupFloor = $scope.locationList.find(isFloor);
+                $scope.dupZone = $scope.locationList.find(isZone);
+
+                if(($scope.dupBlock && $scope.dupFloor && $scope.dupZone)){
+                    
+                   return;
+                }
+
 	        	$scope.locationList.push(loc);
 	        	console.log('loc list -' + $scope.locationList)
+            }else{
+                return;
+            }
         };
 
         $scope.removeLocation = function(ind) {
@@ -240,6 +276,7 @@ angular.module('timeSheetApp')
         		$scope.loadProjects();
         		$scope.loadDesignations();
         }
+
 
 
         // Load Clients for selectbox //
@@ -704,6 +741,10 @@ angular.module('timeSheetApp')
                 $scope.loadSelectedRole($scope.employee.userRoleId);
                 $scope.sites = $scope.employee.sites;
                 $scope.loadingStop();
+                $scope.projectSitesCnt = ($scope.employee.projectSites).length;
+                if($scope.projectSitesCnt == 0) {
+                     $scope.empLocation = true;
+                }
             });
 
         };
