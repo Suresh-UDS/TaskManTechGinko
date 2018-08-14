@@ -188,6 +188,7 @@ angular.module('timeSheetApp')
     		
     		if($scope.selectedItemGroup) {
     			$scope.inventory.itemGroup = $scope.selectedItemGroup.itemGroup;
+    			$scope.inventory.itemGroupId = $scope.selectedItemGroup.id;
     		}
     		
     		if($scope.selectedUOM){
@@ -248,7 +249,7 @@ angular.module('timeSheetApp')
     			$scope.editInventory.itemCode = data.itemCode;
     			$scope.selectedSite = {id: data.siteId, name: data.siteName};
     			$scope.client = {id: data.projectId, name: data.projectName};
-    			$scope.selectedItemGroup = {itemGroup: data.itemGroup};
+    			$scope.selectedItemGroup = {id: data.itemGroupId, itemGroup: data.itemGroup};
     			$scope.selectedManufacturer = {id: data.manufacturerId, name: data.manufacturerName};
     			$scope.editInventory.minimumStock = data.minimumStock;
     			$scope.editInventory.maximumStock = data.maximumStock;
@@ -275,6 +276,7 @@ angular.module('timeSheetApp')
     		
     		if($scope.selectedItemGroup) {
     			$scope.editInventory.itemGroup = $scope.selectedItemGroup.itemGroup;
+    			$scope.editInventory.itemGroupId = $scope.selectedItemGroup.id;
     		}
     		
     		if($scope.selectedUnit){

@@ -157,6 +157,12 @@ public class InventoryManagementService extends AbstractService{
 		List<MaterialItemGroupDTO> materialItmModel = mapperUtil.toModelList(materialItmList, MaterialItemGroupDTO.class);
 		return materialItmModel;
 	}
+	
+	public List<MaterialDTO> getMaterialGroup(long itemGroupId) {
+		List<Material> materialList = inventRepository.findByMaterialGroupId(itemGroupId);
+		List<MaterialDTO> materialModelList = mapperUtil.toModelList(materialList, MaterialDTO.class);
+		return materialModelList;
+	}
 
 	public SearchResult<MaterialDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 		SearchResult<MaterialDTO> result = new SearchResult<MaterialDTO>();
@@ -227,6 +233,8 @@ public class InventoryManagementService extends AbstractService{
 		result.setTransactions(transactions);
 		return;
 	}
+
+	
 
 	
 

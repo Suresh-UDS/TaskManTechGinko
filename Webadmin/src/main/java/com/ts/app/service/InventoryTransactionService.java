@@ -23,9 +23,13 @@ import com.ts.app.domain.MaterialTransaction;
 import com.ts.app.domain.MaterialTransactionType;
 import com.ts.app.domain.MaterialUOMType;
 import com.ts.app.domain.User;
+import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.InventoryRepository;
 import com.ts.app.repository.InventoryTransSpecification;
 import com.ts.app.repository.InventoryTransactionRepository;
+import com.ts.app.repository.JobRepository;
+import com.ts.app.repository.MaterialItemGroupRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
@@ -58,12 +62,36 @@ public class InventoryTransactionService extends AbstractService{
 	private EmployeeRepository employeeRepository;
 	
 	@Inject
+	private JobRepository jobRepository;
+	
+	@Inject
+	private AssetRepository assetRepository;
+	
+	@Inject
+	private InventoryRepository inventoryRepository;
+	
+	@Inject
+	private MaterialItemGroupRepository materialItemRepository;
+	
+	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 	
 	public MaterialTransactionDTO createInventoryTransaction(MaterialTransactionDTO materialTransDTO) { 
 		MaterialTransaction materialEntity = mapperUtil.toEntity(materialTransDTO, MaterialTransaction.class);
 		materialEntity.setSite(siteRepository.findOne(materialTransDTO.getSiteId()));
 		materialEntity.setProject(projectRepository.findOne(materialTransDTO.getProjectId()));
+		materialEntity.setMaterial(inventoryRepository.findOne(materialTransDTO.getMaterialId()));
+		materialEntity.setMaterialGroup(materialItemRepository.findOne(materialTransDTO.getMaterialGroupId()));
+		if(materialTransDTO.getJobId() > 0) {
+			materialEntity.setJob(jobRepository.findOne(materialTransDTO.getJobId()));
+		}else {
+			materialEntity.setJob(null);
+		}
+		if(materialTransDTO.getAssetId() > 0) {
+			materialEntity.setAsset(assetRepository.findOne(materialTransDTO.getAssetId()));
+		}else {
+			materialEntity.setAsset(null);
+		}
 		materialEntity.setActive(MaterialTransaction.ACTIVE_YES);
 		materialEntity.setTransactionDate(DateUtil.convertToTimestamp(materialTransDTO.getTransactionDate()));
 		materialEntity.setUom(MaterialUOMType.valueOf(materialTransDTO.getUom()).getValue());
@@ -93,17 +121,22 @@ public class InventoryTransactionService extends AbstractService{
 
 	private void mapToModel(MaterialTransaction materialTrans, MaterialTransactionDTO materialTransDTO) {
 		// TODO Auto-generated method stub
-		materialTrans.setItemCode(materialTransDTO.getItemCode());
+		materialTrans.setMaterial(inventoryRepository.findOne(materialTransDTO.getMaterialId()));
+		materialTrans.setMaterialGroup(materialItemRepository.findOne(materialTransDTO.getMaterialGroupId()));
 		if(materialTransDTO.getSiteId() > 0) {
 			materialTrans.setSite(siteRepository.findOne(materialTransDTO.getSiteId()));	
 		}
 		if(materialTransDTO.getProjectId() > 0) {
 			materialTrans.setProject(projectRepository.findOne(materialTransDTO.getProjectId()));	
 		}
+		if(materialTransDTO.getJobId() > 0) {
+			materialTrans.setJob(jobRepository.findOne(materialTransDTO.getJobId()));
+		}
+		if(materialTransDTO.getAssetId() > 0) {
+			materialTrans.setAsset(assetRepository.findOne(materialTransDTO.getAssetId()));
+		}
 		materialTrans.setStoreStock(materialTransDTO.getStoreStock());
 		materialTrans.setQuantity(materialTransDTO.getQuantity());
-		materialTrans.setName(materialTransDTO.getName());
-		materialTrans.setStoreStock(materialTransDTO.getStoreStock());
 		if(materialTransDTO.getTransactionDate() != null) {
 			materialTrans.setTransactionDate(DateUtil.convertToTimestamp(materialTransDTO.getTransactionDate()));
 		}
