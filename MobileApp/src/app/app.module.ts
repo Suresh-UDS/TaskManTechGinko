@@ -126,7 +126,7 @@ import{UpdateApp} from "../pages/update-app/update-app";
 import{ForgotPassword} from "../pages/forgot-password/forgot-password";
 import{InventoryFilter} from "../pages/inventory-filter/inventory-filter";
 import{AddInventoryTransaction} from "../pages/add-inventory-transaction/add-inventory-transaction";
-import{WheelSelector} from "@ionic-native/wheel-selector";
+import {InventoryService} from "../pages/service/inventoryService";
 
 @NgModule({
   declarations: [
@@ -350,7 +350,7 @@ import{WheelSelector} from "@ionic-native/wheel-selector";
       Network,
       Market,
       LocationAccuracy,
-      WheelSelector,
+      InventoryService,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]
