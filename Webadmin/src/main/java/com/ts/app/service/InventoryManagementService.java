@@ -21,11 +21,13 @@ import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Material;
 import com.ts.app.domain.MaterialItemGroup;
+import com.ts.app.domain.MaterialTransaction;
 import com.ts.app.domain.MaterialUOMType;
 import com.ts.app.domain.User;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.InventoryRepository;
 import com.ts.app.repository.InventorySpecification;
+import com.ts.app.repository.InventoryTransactionRepository;
 import com.ts.app.repository.ManufacturerRepository;
 import com.ts.app.repository.MaterialItemGroupRepository;
 import com.ts.app.repository.ProjectRepository;
@@ -36,6 +38,7 @@ import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.MaterialDTO;
 import com.ts.app.web.rest.dto.MaterialItemGroupDTO;
+import com.ts.app.web.rest.dto.MaterialTransactionDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 
@@ -65,6 +68,9 @@ public class InventoryManagementService extends AbstractService{
 	
 	@Inject
 	private MaterialItemGroupRepository materialItemRepository;
+	
+	@Inject
+	private InventoryTransactionRepository inventTransactionRepository;
 	
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
@@ -97,6 +103,9 @@ public class InventoryManagementService extends AbstractService{
 	public MaterialDTO getMaterial(long id) {
 		Material material = inventRepository.findOne(id);
 		MaterialDTO materialDTO = mapperUtil.toModel(material, MaterialDTO.class);
+		List<MaterialTransaction> transactions = inventTransactionRepository.findByMaterialId(id);
+		List<MaterialTransactionDTO> transactionsDTO = mapperUtil.toModelList(transactions, MaterialTransactionDTO.class);
+		materialDTO.setMaterialTransactions(transactionsDTO);
 		return materialDTO;
 	}
 
