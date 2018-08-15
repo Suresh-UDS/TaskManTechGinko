@@ -112,12 +112,17 @@ public class InventoryTransactionService extends AbstractService{
 		if(materialTransDTO.getTransactionType().equals(MaterialTransactionType.ISSUED)) {
 			Material material = inventoryRepository.findOne(materialTransDTO.getMaterialId());
 			long prevStoreStock = material.getStoreStock();
-			if(prevStoreStock > materialTransDTO.getQuantity()) { 
-				long currentStock = prevStoreStock - materialTransDTO.getQuantity();
-				materialEntity.setStoreStock(currentStock);
-				material.setStoreStock(currentStock);
-				inventoryRepository.save(material);
+			if(prevStoreStock == material.getMinimumStock()) {              // send purchase request when stock is minimum level
+				
+			} else {
+				if(prevStoreStock > materialTransDTO.getQuantity()) { 
+					long currentStock = prevStoreStock - materialTransDTO.getQuantity();
+					materialEntity.setStoreStock(currentStock);
+					material.setStoreStock(currentStock);
+					inventoryRepository.save(material);
+				}
 			}
+			
 		}
 		
 		if(materialTransDTO.getTransactionType().equals(MaterialTransactionType.RECEIVED)) {
