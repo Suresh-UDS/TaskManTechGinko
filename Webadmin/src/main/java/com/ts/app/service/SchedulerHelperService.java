@@ -891,7 +891,7 @@ public class SchedulerHelperService extends AbstractService {
 				boolean shouldProcess = true;
 				if (dailyTask.isScheduleDailyExcludeWeekend()) {
 					Calendar today = Calendar.getInstance();
-
+					today.setTime(jobDate);
 					if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
 						shouldProcess = false;
 					}
