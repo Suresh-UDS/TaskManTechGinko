@@ -169,11 +169,11 @@
 
                                      <div class="HoverBx">
 
-                                         <a data-toggle="modal"  data-target="#RightModal-View" ng-click="getManufacturerDetails(manufacturer.id, 'view')"  has-permission="Manufacturer:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
+                                         <a data-toggle="modal"  title="View" data-target="#RightModal-View" ng-click="getManufacturerDetails(manufacturer.id, 'view')"  has-permission="Manufacturer:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
                                          <!-- data-target="#RightModal-Edit"  ng-click="getManufacturerDetails(manufacturer.id, 'edit')"-->
-                                         <a data-toggle="modal"  ui-sref="edit-manufacturer({ id: manufacturer.id })"    has-permission="Manufacturer:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                         <a data-toggle="modal" title="Edit"  ui-sref="edit-manufacturer({ id: manufacturer.id })"    has-permission="Manufacturer:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                                         <a  has-permission="Manufacturer:Delete" class="btn btn-simple btn-danger" ng-click="deleteConfirm(manufacturer.id)" onClick="$('#deleteManufacturer').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
+                                         <a  has-permission="Manufacturer:Delete" title="Delete" class="btn btn-simple btn-danger" ng-click="deleteConfirm(manufacturer.id)" onClick="$('#deleteManufacturer').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
 
                                      </div>
 

@@ -63,7 +63,7 @@ angular.module('timeSheetApp')
 
         $scope.init = function() {
             $scope.loadJobStatuses();
-            $scope.loadJobs();
+            //$scope.loadJobs();
         }
 
         //
@@ -943,7 +943,7 @@ angular.module('timeSheetApp')
                      $rootScope.searchCriterias = $scope.searchCriteria;
 
             /* Localstorage (Retain old values while edit page to list) start */
-            // alert($rootScope.retain)
+            
             if($rootScope.retain == 1){
                 $scope.localStorage = getLocalStorage.getSearch();
                 console.log('Local storage---',$scope.localStorage);
@@ -1064,7 +1064,7 @@ angular.module('timeSheetApp')
              $scope.loadPageTop();
              $scope.init();
              $scope.initPage();
-             $scope.setPage(1);
+             //$scope.setPage(1);
          }
          $scope.initList = function(){
                         $scope.loadPageTop();
