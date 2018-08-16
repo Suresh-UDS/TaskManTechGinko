@@ -18,8 +18,11 @@
     <strong>Invalid Site</strong> Please choose another one.
 </div> -->
 <div class="crud-form"
-	data-unique-hash="a2ad475d60b22954085c657a73309b8f"  ng-init="initLoad();loadingStart();">
+	data-unique-hash="a2ad475d60b22954085c657a73309b8f"  ng-init="initLoad();loadingStart();loadEmployee();">
 	<div class="" >
+        <div class="titleCon">
+            <h3>{{employee.name}} - {{employee.id}}</h3>
+       </div>
 		<div class="row">
 			<div class="col-md-12">
 
@@ -27,7 +30,7 @@
                     <!--<h3>Edit Employee</h3>-->
                 <!--</div>-->
 
-				<div class="form-container table-container" ng-init="loadEmployee()">
+				<div class="form-container table-container" >
 					<form ng-show="!success" name="form" role="form" novalidate
 						ng-submit="conform('update')" show-validation class="form-horizontal">
 
