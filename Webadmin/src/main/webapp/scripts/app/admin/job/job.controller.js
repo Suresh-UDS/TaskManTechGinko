@@ -170,11 +170,10 @@ angular.module('timeSheetApp')
               });
         };
 
+
+        //Check
         // Load dep sites
-        $scope.loadDepSites = function (searchProject) {
-            $scope.clearField = false;
-            $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
-            $scope.hideSite = false;
+        $scope.loadDepSites = function () {
                 if(jQuery.isEmptyObject($scope.selectedProject) == false) {
                     var depProj=$scope.selectedProject.id;
                 }else if(jQuery.isEmptyObject($scope.searchProject) == false){
@@ -352,17 +351,8 @@ angular.module('timeSheetApp')
         };
 
 
-        $scope.loadEmployees = function (searchSite) {
-            $scope.clearField = false;
-            console.log($state.current.name)
-            if($state.current.name != "add-job")
-            {
-                $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)]
-            }
-
-            $scope.hideEmp = false;
-            $scope.empSpin = true;
-            $scope.hideSite = true;
+        //Check
+        $scope.loadEmployees = function () {
             $scope.uiEmployee.splice(0,$scope.uiEmployee.length);
             var deferred = $q.defer();
             if($scope.searchSite){
@@ -382,10 +372,13 @@ angular.module('timeSheetApp')
         			$scope.employees = data.transactions;
                     console.log('Employee List',$scope.employees);
                     console.log('Employee List',$scope.uiEmployee);
-                    for(var i=0;i<$scope.employees.length;i++)
-                    {
-                        $scope.uiEmployee[i] = $scope.employees[i].name;
+                    if($scope.employees){
+                        for(var i=0;i<$scope.employees.length;i++)
+                        {
+                            $scope.uiEmployee[i] = $scope.employees[i].name;
+                        }
                     }
+
                     $scope.employeeFilterDisable = false;
                     $scope.empSpin = false;
         			deferred.resolve($scope.employees);
@@ -393,6 +386,19 @@ angular.module('timeSheetApp')
     			return deferred.promise;
 
         };
+                    $scope.loadSearchProject = function (searchProject) {
+                        $scope.clearField = false;
+                        $scope.hideSite = false;
+                        $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
+                    }
+                    $scope.loadSearchSite = function (searchSite) {
+                        $scope.hideEmp = false;
+                        $scope.empSpin = true;
+                        $scope.hideSite = true;
+                        $scope.uiEmployee.splice(0,$scope.uiEmployee.length);
+                        $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)]
+                        console.log($scope.uiEmployee)
+                    }
          $scope.loadSearchEmployees = function (searchEmployee) {
              $scope.clearField = false;
              // $scope.hideEmp = false;
@@ -460,6 +466,9 @@ angular.module('timeSheetApp')
                 {
                     $scope.uiStatus[i] = $scope.statuses[i];
                 }
+                console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+                console.log($scope.statuses )
+                console.log($scope.uiStatus )
                 $scope.statusFilterDisable = false;
                 $scope.statusSpin = false;
             });
@@ -943,7 +952,7 @@ angular.module('timeSheetApp')
                      $rootScope.searchCriterias = $scope.searchCriteria;
 
             /* Localstorage (Retain old values while edit page to list) start */
-            
+
             if($rootScope.retain == 1){
                 $scope.localStorage = getLocalStorage.getSearch();
                 console.log('Local storage---',$scope.localStorage);
@@ -1069,6 +1078,7 @@ angular.module('timeSheetApp')
          $scope.initList = function(){
                         $scope.loadPageTop();
                         $scope.setPage(1);
+                        $scope.loadJobStatuses();
                     }
 
 
