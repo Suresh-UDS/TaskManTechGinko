@@ -1,13 +1,13 @@
 
 
 <div class="crud-form"
-     data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="loadPageTop();loadingStart();">
-    <div class="col-md-8">
-        <!--<h3 class="title">Edit Site</h3>-->
+     data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="loadPageTop();loadingStart();loadProjects();loadSite();">
+    <div class="titleCon">
+            <h3>{{site.name}} - {{site.id}}</h3>
     </div>
 
-    <div ng-controller="SiteController" ng-init="loadProjects()">
-            <div class="cardsCon editSiteCon" ng-init="loadSite()">
+    <div ng-controller="SiteController" >
+            <div class="cardsCon editSiteCon" >
                 <form ng-show="!success" name="form" role="form" novalidate
                         >
                     <div class="row">
