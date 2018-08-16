@@ -944,6 +944,7 @@ public class JobManagementService extends AbstractService {
 		job.setActive(AbstractAuditingEntity.ACTIVE_YES);
 		job.setEscalationStatus(0);
 		job.setType(JobType.MAINTENANCE);
+		job.setPlannedHours(assetPpmScheduleDTO.getPlannedHours());
 		if(assetPpmScheduleDTO.getChecklistId() > 0)
 		{
 			Checklist checkList = checkListRepository.findOne(assetPpmScheduleDTO.getChecklistId());
@@ -1016,6 +1017,7 @@ public class JobManagementService extends AbstractService {
 		dto.setEmployeeName(job.getEmployee().getName());
 		dto.setPlannedStartTime(job.getPlannedStartTime());
 		dto.setPlannedEndTime(job.getPlannedEndTime());
+		dto.setPlannedHours(job.getPlannedHours());
 		dto.setActualStartTime(job.getActualStartTime());
 		dto.setActualEndTime(job.getActualEndTime());
 		dto.setActualHours(job.getActualHours());
@@ -1872,6 +1874,7 @@ public class JobManagementService extends AbstractService {
 		
 		job.setPlannedStartTime(startTime.getTime());
 		job.setPlannedEndTime(plannedEndTime.getTime());
+		job.setPlannedHours(assetAMCScheduleDTO.getPlannedHours());
 		job.setScheduleEndDate(scheduleEndDateTime.getTime());
 		Asset asset = assetRepository.findOne(assetAMCScheduleDTO.getAssetId());
 		job.setBlock(asset.getBlock());

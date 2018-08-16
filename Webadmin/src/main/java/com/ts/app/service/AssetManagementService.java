@@ -323,6 +323,9 @@ public class AssetManagementService extends AbstractService {
 				assetParamConfig.setActive("Y");
 				assetParamConfig.setAsset(asset);
 				assetParamConfig.setAssetType(assetDTO.getAssetType());
+				assetParamConfig.setAlertRequired(parameterConfig.isAlertRequired());
+				assetParamConfig.setRule(parameterConfig.getRule());
+				assetParamConfig.setThreshold(parameterConfig.getThreshold());
 				assetParamConfig.setConsumptionMonitoringRequired(parameterConfig.isConsumptionMonitoringRequired());
 				assetParamConfig.setName(parameterConfig.getName());
 				assetParamConfig.setUom(parameterConfig.getUom());
