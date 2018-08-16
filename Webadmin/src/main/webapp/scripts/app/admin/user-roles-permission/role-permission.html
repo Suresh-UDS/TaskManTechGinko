@@ -69,7 +69,7 @@
                             <tr ng-repeat=" moduleAction in moduleActions">
                                <td>{{moduleAction.name}}</td>
                                <td>
-                                   <div class="checkbox checkbox-inline" style="width:18%;" ng-repeat=" action in moduleAction.moduleActions">
+                                   <div class="checkbox checkbox-inline" style="width:12%;margin: 0;" ng-repeat=" action in moduleAction.moduleActions">
                                        <label>
                                            <input ng-model="action.selected" type="checkbox" name="action"   value="action.id" ng-change="checkPermission(moduleAction.id, moduleAction.name, action.id, action.name)" >{{action.name}}
                                        </label>
@@ -101,7 +101,7 @@
         </div>
     </div>
 
-    
+
 
 
     <!-- <div class="row">
