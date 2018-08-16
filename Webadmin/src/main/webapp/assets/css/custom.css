@@ -351,6 +351,10 @@ li ul.nav.SubNav li a p
 {
   margin-top:0;
 }
+.TableListinput table .form-group
+{
+    padding-bottom: 0 !important;
+}
 .min-hgt100
 {
   min-height:100px;
