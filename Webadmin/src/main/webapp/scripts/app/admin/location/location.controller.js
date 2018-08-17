@@ -452,7 +452,7 @@ angular.module('timeSheetApp')
          }
 
         $scope.searchFilter = function () {
-            //$scope.setPage(1);
+            $scope.setPage(1);
             $scope.search();
          }
 
@@ -522,7 +522,7 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.sortByAsc = true;
             }
 
-             console.log("search criteria",$scope.searchCriteria);
+             console.log('search criteria',$scope.searchCriteria);
 
                 $scope.locations = '';
                 $scope.locationsLoader = false;
