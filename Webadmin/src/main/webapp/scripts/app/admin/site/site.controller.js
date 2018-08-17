@@ -427,13 +427,13 @@ angular.module('timeSheetApp')
         	$scope.error = null;
         	$scope.success = null;
         	$scope.errorProject = null;
-        	if(!$scope.selectedProject.id){
+        	if($scope.selectedProject && !$scope.selectedProject.id){
         		$scope.errorProject = "true";
                 console.log("=======Update=========")
         	}else{
         	    console.log("update site");
         	    console.log($scope.site);
-        		$scope.site.projectId = $scope.selectedProject.id;
+        		$scope.site.projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
         		$scope.site.shifts = $scope.shiftItems;
 	        	SiteComponent.updateSite($scope.site).then(function() {
 	                $scope.success = 'OK';
