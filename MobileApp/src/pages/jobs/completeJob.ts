@@ -13,13 +13,14 @@ import { File } from '@ionic-native/file';
 import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
 import{ModalController} from "ionic-angular";
 import{Checklist} from "../checklist/checklist";
+import {AddInventoryTransaction} from "../add-inventory-transaction/add-inventory-transaction";
 
 @Component({
     selector: 'page-complete-job',
     templateUrl: 'completeJob.html'
 })
 export class CompleteJobPage {
-
+    categories:any;
     jobDetails:any;
     jobPhotos:any;
     takenImages:any;
@@ -44,9 +45,18 @@ export class CompleteJobPage {
     completedImages:any;
     fileTransfer: FileTransferObject = this.transfer.create();
 
+
+    checkListItems:any;
+    showIcon:any;
+    index:any;
+
     constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService, @Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
                 private loadingCtrl:LoadingController, public camera: Camera,private geolocation:Geolocation, private jobService: JobService,
                 private attendanceService: AttendanceService,public popoverCtrl: PopoverController, private component:componentService,private transfer: FileTransfer, private file: File,private modalCtrl:ModalController) {
+        this.categories = 'details';
+        this.checkListItems=[];
+        this.takenImages=[];
+        this.jobDetails=[];
         this.jobDetails=this.navParams.get('job');
         this.takenImages = [];
         this.checkOutDetails={
@@ -78,10 +88,11 @@ export class CompleteJobPage {
         this.component.showLoader('Loading Job Details');
         this.jobService.getJobDetails(this.jobDetails.id).subscribe(
             response=>{
-                this.component.closeLoader();
+                this.component.closeAll();
                 console.log("Response on job details");
                 console.log(response);
                 this.jobDetails = response;
+                this.checkListItems = this.jobDetails.checklistItems;
                 if(response.images.length>0){
                     this.component.showLoader('Getting saved images');
                     console.log("Images available");
@@ -89,11 +100,11 @@ export class CompleteJobPage {
                     for(let image of response.images){
                         this.jobService.getCompletedImage(image.employeeEmpId,image.photoOut).subscribe(
                             imageData=>{
-                                this.component.closeLoader();
+                                this.component.closeAll();
                                 console.log(imageData);
                                 this.completedImages.push(imageData._body);
                             },err=>{
-                                this.component.closeLoader();
+                                this.component.closeAll();
                                 console.log("Error in getting images");
                                 console.log(err);
                             }
@@ -108,6 +119,7 @@ export class CompleteJobPage {
                 this.component.showToastMessage("Errror in getting job details","bottom");
             }
         )
+
     }
     viewImage(index,img)
     {
@@ -387,4 +399,29 @@ export class CompleteJobPage {
         });
         profileModal.present();
     }
+
+
+    openTransaction()
+    {
+        let modal = this.modalCtrl.create(AddInventoryTransaction, {});
+        modal.present();
+
+    }
+
+
+    resetRemarks(i,completed){
+        console.log(i);
+        console.log(completed);
+        if(completed){
+            this.checkListItems[i].remarks=null;
+        }
+    }
+
+
+    show(show,i)
+    {
+        this.showIcon = !show;
+        this.index = i;
+    }
+
 }

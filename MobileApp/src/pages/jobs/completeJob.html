@@ -5,11 +5,19 @@
         </button>
         <ion-title>Complete Job</ion-title>
     </ion-navbar>
+    <ion-toolbar class="toolbar">
+        <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800">
+            <ion-segment-button value="details">Details</ion-segment-button>
+            <ion-segment-button value="checklist">Checklist</ion-segment-button>
+            <ion-segment-button value="inventory">Inventory</ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content class="margin-top5">
 
-    <ion-list >
+<div [ngSwitch]="categories">
+    <ion-list *ngSwitchCase="'details'" padding-left="" padding-right="">
         <ion-row class="margin0 white-bg padding10">
             <ion-col col-6 class="label-on-left">Job Id</ion-col>
             <ion-col col-6>
@@ -72,23 +80,155 @@
             <!--</div>-->
         <!--</ion-row>-->
 
-        <button *ngIf="jobDetails.checklistItems?.length"  class="btn btn-warning center" (click)="presentCheckListModal(jobDetails.checklistItems)">
-            Checklist
-        </button>
+
+ <!--..CheckList..-->
+        <!--<button *ngIf="jobDetails.checklistItems?.length"  class="btn btn-warning center" (click)="presentCheckListModal(jobDetails)">-->
+            <!--Checklist-->
+        <!--</button>-->
+
+
 
 
     </ion-list>
 
+    <ion-list *ngSwitchCase="'checklist'">
+
+        <div *ngIf="!checkListItems" >
+            <ion-card>
+                <ion-card-content>
+                    <img src="assets/imgs/warning.svg">
+                    <span><p text-center>No Data Found</p></span>
+                </ion-card-content>
+            </ion-card>
+        </div>
+
+        <div  class="white-bg border-bottom1"  *ngFor="let list of checkListItems;let i = index">
+            <ion-grid class="padding-left0">
+                <ion-row  no-margin>
+                    <ion-col col-2>
+                        <ion-item>
+                            <ion-checkbox (change)="resetRemarks(i,list.completed)" [(ngModel)]="list.completed"></ion-checkbox>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col col-7 class="ver-center">
+                        <p text-left="" no-margin="">{{list.checklistItemName}}</p>
+                    </ion-col>
+                    <ion-col col-3 class="ver-center" >
+                        <div *ngIf="list.image_1 != null" float-right="">
+                            <button class="ion-button" round  class="camera-btn1" (click)="show(showIcon,i)"><ion-icon name="images"></ion-icon></button>
+                        </div>
+                        <div *ngIf="list.image_3 == null" class="margin-left15" float-right="">
+                            <button class="ion-button" round (click)="viewCamera(i)" class="camera-btn1"><ion-icon name="ios-camera"></ion-icon></button>
+                        </div>
+                    </ion-col>
+                </ion-row>
+                <ion-row class="no-margin width80 margin-auto" *ngIf="showIcon && i==index" padding="">
+                    <ion-col col-4  class="margin-top25" *ngIf="list.imageUrl_1 ; else image1">
+                        <img [src]="list.imageUrl_1" class="job-img margin-bottom25" >
+                    </ion-col>
+                    <ng-template #image1>
+                        <ion-col col-4  class="margin-top25" *ngIf="list.image_1">
+                            <img [src]="list.image_1" class="job-img margin-bottom25" >
+                        </ion-col>
+                    </ng-template>
+
+                    <ion-col col-4  class="margin-top25" *ngIf="list.imageUrl_2 ; else image2">
+                        <img [src]="list.imageUrl_2" class="job-img margin-bottom25" >
+                    </ion-col>
+                    <ng-template #image2>
+                        <ion-col col-4  class="margin-top25" *ngIf="list.image_2">
+                            <img [src]="list.image_2" class="job-img margin-bottom25" >
+                        </ion-col>
+                    </ng-template>
+
+                    <ion-col col-4  class="margin-top25"  *ngIf="list.imageUrl_3 ; else image3">
+                        <img [src]="list.imageUrl_3" class="job-img margin-bottom25" >
+                    </ion-col>
+                    <ng-template #image3>
+                        <ion-col col-4  class="margin-top25" *ngIf="list.image_3">
+                            <img [src]="list.image_3" class="job-img margin-bottom25" >
+                        </ion-col>
+                    </ng-template>
+                </ion-row>
+                <ion-row *ngIf="!list.completed">
+                    <ion-item class="text-item width80 margin-auto" no-padding="" text-center="">
+                        <ion-textarea placeholder="Enter Remarks here.." class="text-border padding5"  [(ngModel)]="list.remarks"></ion-textarea>
+                    </ion-item>
+                </ion-row>
+            </ion-grid>
+        </div>
+    </ion-list>
+
+
+    <ion-list *ngSwitchCase="'inventory'"  padding-left="" padding-right="">
+        <div *ngIf="!material">
+            <ion-card>
+                <ion-card-content>
+                    <img src="assets/imgs/warning.svg">
+                    <span><p text-center>No Data Found</p></span>
+                </ion-card-content>
+            </ion-card>
+        </div>
+        <ion-fab right bottom mini>
+            <button ion-fab color="dark" (click)="openTransaction()">
+                <ion-icon name="md-add" class="clr-orange"></ion-icon>
+            </button>
+        </ion-fab>
+
+        <div class="white-bg col-md-8 padding-right0 margin-top10" *ngFor="let m of material">
+            <div class="padding-top5">
+                <ion-row class="margin0 border-btm">
+                    <ion-col col-12>
+                        <p text-capitalize class="margin0" text-center>Name1-IN00034-group1</p>
+                    </ion-col>
+                </ion-row>
+
+                <ion-row no-margin="" >
+                    <ion-col col-6>
+                        <p class="margin0" text-center>300</p>
+                        <p class="margin0 clr-orange fnt-12" text-center="">Min stock</p>
+                    </ion-col>
+                    <ion-col col-6>
+                        <div class="">
+                            <p text-center class="margin0" text-uppercase>HDFC</p>
+                            <p text-center class="margin0 clr-orange fnt-12">Site</p>
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </div>
+        </div>
+
+
+
+    </ion-list>
+</div>
+
+
 </ion-content>
 
-<ion-footer>
+<div [ngSwitch]="true">
+    <ion-list *ngSwitchCase=" categories === 'checklist'">
+        <ion-footer *ngIf="checkListItems">
+            <ion-toolbar text-center>
+                <button class="btn btn-warning center" text-center  (click)="dismiss()">
+                    Save Checklist
+                </button>
+            </ion-toolbar>
+        </ion-footer>
+    </ion-list>
+    <ion-list *ngSwitchCase=" categories === 'details'">
+        <ion-footer>
+            <ion-toolbar class="align-right" padding-left padding-right>
+                <button class="btn btn-warning center pull-left width42" (click)="saveJob(jobDetails)">
+                    Save
+                </button>
+                <button class="btn btn-success center pull-right" (click)="completeJob(jobDetails,takenImages)">
+                    Complete <ion-icon name="ios-arrow-forward-outline"></ion-icon>
+                </button>
+            </ion-toolbar>
+        </ion-footer>
+    </ion-list>
+</div>
 
-    <ion-toolbar class="align-right" padding-left padding-right>
-        <button class="btn btn-warning center pull-left width42" (click)="saveJob(jobDetails)">
-            Save
-        </button>
-        <button class="btn btn-success center pull-right" (click)="completeJob(jobDetails,takenImages)">
-            Complete <ion-icon name="ios-arrow-forward-outline"></ion-icon>
-        </button>
-    </ion-toolbar>
-</ion-footer>
+
+
