@@ -150,11 +150,15 @@ angular.module('timeSheetApp')
 
 
         $scope.loadProject = function() {
-        	ProjectComponent.findOne($stateParams.id).then(function (data) {
-                $scope.project.addressLng = data.addressLng
-                $scope.project.addressLat = data.addressLat;
-                $scope.project = data;
-            });
+            if($stateParams.id){
+            	ProjectComponent.findOne($stateParams.id).then(function (data) {
+                    $scope.project.addressLng = data.addressLng
+                    $scope.project.addressLat = data.addressLat;
+                    $scope.project = data;
+                });
+            }else{
+               $location.path('/projects'); 
+            }
 
         };
 
