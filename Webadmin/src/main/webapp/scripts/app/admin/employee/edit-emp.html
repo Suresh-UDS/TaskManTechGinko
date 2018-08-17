@@ -21,7 +21,7 @@
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f"  ng-init="initLoad();loadingStart();loadEmployee();">
 	<div class="" >
         <div class="titleCon">
-            <h3>{{employee.name}} - {{employee.id}}</h3>
+            <h3>{{employee.name}}</h3>
        </div>
 		<div class="row">
 			<div class="col-md-12">
@@ -327,7 +327,7 @@
                                                                    ng-show="form.projectName.$error.required">
                                                                     Client name is required.
                                                                 </p>
-                                                                
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -351,7 +351,7 @@
                                                                    ng-show="form.siteName.$error.required">
                                                                     Site name is required.
                                                                 </p>
-                                                                
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -360,7 +360,7 @@
 
                                             <div class="col-md-4">
 
-                                                <button class="btn btn-success margn-top20" 
+                                                <button class="btn btn-success margn-top20"
                                                 type="button" ng-disabled="form.$invalid" ng-click="addProjectSite()">
 					                                <span class="btn-label">
 					                                    <i class="material-icons">add</i>
@@ -376,7 +376,7 @@
                                                     <p class="help-block" style="color: maroon">Client info is requied</p>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="col-md-12 addedActionList pdng-top15" ng-hide="!(employee.projectSites.length > 0)">
 
 
