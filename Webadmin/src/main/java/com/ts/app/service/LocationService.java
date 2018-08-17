@@ -247,7 +247,16 @@ public class LocationService extends AbstractService {
 					page = locationRepository.findByProject(searchCriteria.getProjectId(), pageRequest);
 				}
 			}else {
-				page = locationRepository.findAll(pageRequest);
+				if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
+					page = locationRepository.findAll(pageRequest);
+				}else {
+					List<Long> siteIds = new ArrayList<Long>();
+	            		List<EmployeeProjectSite> sites = employee.getProjectSites();
+	            		for(EmployeeProjectSite site : sites) {
+	            			siteIds.add(site.getSite().getId());
+	            		}
+	            		page = locationRepository.findBySites(siteIds, pageRequest);
+				}
 			}
 			if(page != null) {
 				transitems = mapperUtil.toModelList(page.getContent(), LocationDTO.class);
