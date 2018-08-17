@@ -306,9 +306,8 @@ public class LocationService extends AbstractService {
 //        String qrCodeBase64 = null;
         Map<String, Object> qrCodeObject = new HashMap<>();
         if (loc != null) {
-            String codeName = String.valueOf(location);
-            codeName = siteId+"_"+codeName;
-            qrCodeImage = QRCodeUtil.generateQRCode(codeName);
+        		String codeName = siteId+"_"+loc.getBlock()+"_"+loc.getFloor()+"_"+loc.getZone();
+        		qrCodeImage = QRCodeUtil.generateQRCode(codeName);
             String qrCodePath = env.getProperty("AWS.s3-locationqr-path");
 //            String imageFileName = null;
             if (org.apache.commons.lang3.StringUtils.isNotEmpty(qrCodePath)) {

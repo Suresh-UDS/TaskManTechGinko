@@ -658,7 +658,7 @@ angular.module('timeSheetApp')
             // console.log(qr.siteId);
             // console.log(qr.locationId);
             // LocationComponent.createQr(qr).then(function(response){
-            LocationComponent.generateQR(qrDetails).then(function(response){
+            LocationComponent.createQr(qrDetails).then(function(response){
 
                 console.log('response qr---',response);
 
