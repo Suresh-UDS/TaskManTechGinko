@@ -94,7 +94,7 @@ public class InventoryTransactionService extends AbstractService{
 			materialEntity.setAsset(null);
 		}
 		
-		/** Create material if does not exists*/
+		/** Create material if does not exists */
 		if(!StringUtils.isEmpty(materialTransDTO.getMaterialName())) {
 			Material material = inventoryRepository.findByMaterialName(materialTransDTO.getMaterialName());
 			if(material == null) { 
@@ -128,10 +128,14 @@ public class InventoryTransactionService extends AbstractService{
 		if(materialTransDTO.getTransactionType().equals(MaterialTransactionType.RECEIVED)) {
 			Material material = inventoryRepository.findOne(materialTransDTO.getMaterialId());
 			long prevStoreStock = material.getStoreStock();
-			long currentStock = prevStoreStock + materialTransDTO.getQuantity();
-			materialEntity.setStoreStock(currentStock);
-			material.setStoreStock(currentStock);
-			inventoryRepository.save(material);
+			if(prevStoreStock < material.getMaximumStock()) {
+				
+			}else {
+				long currentStock = prevStoreStock + materialTransDTO.getQuantity();
+				materialEntity.setStoreStock(currentStock);
+				material.setStoreStock(currentStock);
+				inventoryRepository.save(material);
+			}
 		}
 		
 		materialEntity.setActive(MaterialTransaction.ACTIVE_YES);
@@ -163,28 +167,10 @@ public class InventoryTransactionService extends AbstractService{
 
 	private void mapToModel(MaterialTransaction materialTrans, MaterialTransactionDTO materialTransDTO) {
 		// TODO Auto-generated method stub
-		materialTrans.setMaterial(inventoryRepository.findOne(materialTransDTO.getMaterialId()));
-		materialTrans.setMaterialGroup(materialItemRepository.findOne(materialTransDTO.getMaterialGroupId()));
-		if(materialTransDTO.getSiteId() > 0) {
-			materialTrans.setSite(siteRepository.findOne(materialTransDTO.getSiteId()));	
+		if(materialTransDTO.getTransactionType().equals(MaterialTransactionType.ADJUSTMENT)) { 
+			
 		}
-		if(materialTransDTO.getProjectId() > 0) {
-			materialTrans.setProject(projectRepository.findOne(materialTransDTO.getProjectId()));	
-		}
-		if(materialTransDTO.getJobId() > 0) {
-			materialTrans.setJob(jobRepository.findOne(materialTransDTO.getJobId()));
-		}
-		if(materialTransDTO.getAssetId() > 0) {
-			materialTrans.setAsset(assetRepository.findOne(materialTransDTO.getAssetId()));
-		}
-		materialTrans.setStoreStock(materialTransDTO.getStoreStock());
-		materialTrans.setQuantity(materialTransDTO.getQuantity());
-		if(materialTransDTO.getTransactionDate() != null) {
-			materialTrans.setTransactionDate(DateUtil.convertToTimestamp(materialTransDTO.getTransactionDate()));
-		}
-		if(materialTransDTO.getUom() != null) {
-			materialTrans.setUom(MaterialUOMType.valueOf(materialTransDTO.getUom()).getValue());	
-		}
+	
 	}
 
 	public void deleteMaterialTrans(long id) {
