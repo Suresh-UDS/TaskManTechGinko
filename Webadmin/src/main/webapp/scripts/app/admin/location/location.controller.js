@@ -96,6 +96,8 @@ angular.module('timeSheetApp')
         //Load sites for selectbox//
 
          $scope.loadDepSites = function (selectedProject) {
+             $scope.clearField = false;
+             $scope.uiSite.splice(0,$scope.uiSite.length);
              $scope.selectedProject = $scope.projectsList[$scope.uiClient.indexOf(selectedProject)]
              $scope.searchProject = $scope.projectsList[$scope.uiClient.indexOf(selectedProject)]
              $scope.siteSpin = true;
@@ -147,6 +149,7 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadDepBlocks = function (site) {
+            $scope.uiBlock.splice(0,$scope.uiBlock.length);
             $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(site)]
             $scope.hideSite = true;
             $scope.hideBlock = false;
@@ -200,7 +203,7 @@ angular.module('timeSheetApp')
 
 
 	    $scope.loadDepFloors = function (searchBlock) {
-
+            $scope.uiFloor.splice(0,$scope.uiFloor.length);
             $scope.hideBlock = true;
             $scope.hideFloor = false;
             $scope.searchBlock = searchBlock;
@@ -257,6 +260,7 @@ angular.module('timeSheetApp')
 
 
 	    $scope.loadDepZones = function (searchFloor) {
+            $scope.uiZone.splice(0,$scope.uiZone.length);
             $scope.hideFloor = true;
             $scope.hideZone = false;
             $scope.searchFloor = searchFloor;
@@ -585,6 +589,7 @@ angular.module('timeSheetApp')
 
 
         $scope.clearFilter = function() {
+            $scope.clearField = true;
             $scope.selectedSite = null;
             $scope.selectedProject = null;
             $scope.selectedBlock = null;
