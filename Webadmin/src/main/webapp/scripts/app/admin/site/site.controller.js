@@ -115,6 +115,8 @@ angular.module('timeSheetApp')
         $scope.siteFilterDisable = true;
         $scope.siteSpin = false;
         $scope.loadDepSites = function (searchProject) {
+            $scope.uiSite.splice(0,$scope.uiSite.length);
+            $scope.clearField = false;
             $scope.searchSite = null;
             $scope.hideSite = false;
             if($scope.localStorage)
@@ -164,7 +166,7 @@ angular.module('timeSheetApp')
                 $scope.newShiftItem.startTime = $filter('date')(e.date._d, 'HH:mm');
                 $scope.newShiftItem.startTimeDup = $filter('date')(e.date._d, 'hh:mm a');
             }
-            
+
 
         });
 
@@ -178,7 +180,7 @@ angular.module('timeSheetApp')
             }
 
         });
-        
+
 
 
         //
@@ -255,7 +257,7 @@ angular.module('timeSheetApp')
 
         };
 
-        
+
 
           $scope.sStatus = false;
           $scope.eStatus = false;
@@ -282,7 +284,7 @@ angular.module('timeSheetApp')
             }else{
                 $scope.sStatus = false;
                 $scope.eStatus = false;
-            }   
+            }
         }
 
         $scope.removeItem = function(ind) {
@@ -640,6 +642,7 @@ angular.module('timeSheetApp')
 
 
         $scope.clearFilter = function() {
+            $scope.clearField = true;
         	$scope.selectedSite = null;
         	$scope.selectedProject = null;
             $scope.searchProject = null;
