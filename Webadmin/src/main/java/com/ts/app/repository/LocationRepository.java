@@ -25,6 +25,9 @@ public interface LocationRepository extends JpaRepository<Location, Long>  {
 	@Query("SELECT loc FROM Location loc WHERE loc.site.id = :siteId")
 	Page<Location> findBySite(@Param("siteId") long siteId, Pageable pageRequest);
 
+	@Query("SELECT loc FROM Location loc WHERE loc.site.id in (:siteIds)")
+	Page<Location> findBySites(@Param("siteIds") List<Long> siteIds, Pageable pageRequest);
+
 	@Query("SELECT loc FROM EmployeeLocation loc WHERE loc.siteId = :siteId and loc.employee.id = :employeeId")
 	List<EmployeeLocation> findBySiteAndEmployee(@Param("siteId") long siteId, @Param("employeeId") long employeeId);
 

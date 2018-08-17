@@ -448,11 +448,11 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.floor =null;
             $scope.searchCriteria.zone =null;
             $scope.setPage(1);
-            $scope.search();
+            //$scope.search();
          }
 
         $scope.searchFilter = function () {
-            $scope.setPage(1);
+            //$scope.setPage(1);
             $scope.search();
          }
 
@@ -614,7 +614,7 @@ angular.module('timeSheetApp')
         $scope.initLoad = function(){
              $scope.loadPageTop();
              $scope.loading = true;
-             $scope.loadLocations();
+             //$scope.loadLocations();
              $scope.setPage(1);
              if($stateParams.location){
                  $scope.qrcodePage($stateParams.location);
