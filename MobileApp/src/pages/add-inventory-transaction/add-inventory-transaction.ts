@@ -30,6 +30,10 @@ export class AddInventoryTransaction {
     selectOptions:any;
     type:any;
     inventoryGroups:any;
+    inventoryMaterial:any;
+
+    inventoryTransaction:any;
+    selectedMaterial:any;
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams,private component:componentService,
@@ -37,6 +41,7 @@ export class AddInventoryTransaction {
   ) {
 
       this.numbers = [0,1,2,3,4,5,6,7,8,9,10];
+      this.inventoryTransaction=[];
   }
 
   ionViewDidLoad() {
@@ -49,7 +54,7 @@ export class AddInventoryTransaction {
 
           response=>{
               this.component.closeLoader();
-              console.log("====project======");
+              console.log("project");
               console.log(response);
               this.clientList=response;
               this.selectedProject = this.clientList[0];
@@ -75,7 +80,7 @@ export class AddInventoryTransaction {
         this.scrollSite = true;
         this.siteService.findSitesByProject(project.id).subscribe(
             response=>{
-                console.log("====Site By ProjectId======");
+                console.log("Site By ProjectId");
                 console.log(response);
                 this.siteList=response;
                 console.log(this.siteList);
@@ -84,7 +89,7 @@ export class AddInventoryTransaction {
             error=>{
                 if(error.type==3)
                 {
-                    this.msg='Server Unreachable'
+                    this.msg='Server Unreachable';
                 }
                 this.component.showToastMessage(this.msg,'bottom');
             }
@@ -103,6 +108,29 @@ export class AddInventoryTransaction {
                 this.inventoryGroups = response;
             }
         )
+    }
+
+    getMaterialByGroup(group){
+        this.inventoryService.getMaterialsByGroup(group.id).subscribe(
+            response=>{
+                console.log("Get Material Group");
+                console.log(response);
+                this.inventoryMaterial=response;
+            },err=>{
+                console.log("Error in getting  material group");
+                console.log(err);
+            }
+        )
+    }
+
+    addTransaction(m){
+        var details={
+            materialName:m.name,
+            materialId:m.id,
+            uom:m.uom,
+            number:0
+        };
+        this.inventoryTransaction(details);
     }
 
 }
