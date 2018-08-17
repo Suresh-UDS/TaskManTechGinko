@@ -99,6 +99,9 @@
                                 <td>{{site.projectName}}</td>
 
                                 <td class="text-right">
+
+                                    <a title="View" ng-class="{active: $state.includes('admin')}" has-permission="Site:View" ui-sref="view-site({ id: site.id })"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+
                                     <a title="Edit" ng-class="{active: $state.includes('admin')}" has-permission="Site:Edit" ui-sref="edit-site({ id: site.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
                                     <!--<a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>-->
@@ -217,7 +220,7 @@
                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                     <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable" ng-change="loadDepSites(searchProject)">
-                                        <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :searchProject}}</ui-select-match>
+                                        <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :clearField?'Select Client':searchProject}}</ui-select-match>
                                         <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
                                             <div ng-bind="client"></div>
                                         </ui-select-choices>
@@ -236,8 +239,8 @@
                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                     <!--<span class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sitesList.length == 0" ng-change="selectSite(searchSite)">
-                                        <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?searchSite :'Select Site' }}</ui-select-match>
+                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sitesList.length == 0" ng-change="selectSite(searchSite)" ng-click="selectSite(searchSite)">
+                                        <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?clearField?'Select site':searchSite : 'Select Site' }}</ui-select-match>
                                         <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
                                             <div ng-bind="site"></div>
                                         </ui-select-choices>

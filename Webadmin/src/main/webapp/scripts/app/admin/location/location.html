@@ -1,5 +1,5 @@
 
-<div class="" ng-controller="LocationController" ng-init="initLoad();">
+<div class=""  ng-init="initLoad();">
 	<div class="success-message hidden"></div>
 
 
@@ -373,8 +373,8 @@
 
                                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable" ng-change="loadDepSites(searchProject)">
-                                                        <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :searchProject}}</ui-select-match>
+                                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable" ng-change="loadDepSites(searchProject)" ng-click="loadDepSites(searchProject)">
+                                                        <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :clearField?'Select Client':searchProject}}</ui-select-match>
                                                         <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
                                                             <div ng-bind="client"></div>
                                                         </ui-select-choices>
@@ -393,7 +393,7 @@
                                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sitesList.length == 0" ng-change="loadDepBlocks(searchSite)" ng-click="loadDepBlocks(searchSite)">
-                                                        <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site0' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site1' : hideSite ?searchSite : 'Select Site2' }}</ui-select-match>
+                                                        <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site0' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site1' : hideSite ?clearField?'Select Site':searchSite : 'Select Site2' }}</ui-select-match>
                                                         <ui-select-choices  repeat="site in getSites($select.search) | filter: $select.search">
                                                             <div ng-bind="site"></div>
                                                         </ui-select-choices>
@@ -435,7 +435,7 @@
                                                 <span ng-show="blockSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                 <span ng-show="!blockSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                 <ui-select ng-model="searchBlock" ng-disabled="blockFilterDisable || blocksList.length == 0" ng-change="loadDepFloors(searchBlock)" ng-click="loadDepFloors(searchBlock)">
-                                                    <ui-select-match placeholder="Select Block...">{{blocksList.length == 0 ? 'Select Block' : searchBlock.searchStatus ? searchBlock.name?searchBlock.name:'Select Block' : hideBlock ?searchBlock :'Select Block' }}</ui-select-match>
+                                                    <ui-select-match placeholder="Select Block...">{{blocksList.length == 0 ? 'Select Block' : searchBlock.searchStatus ? searchBlock.name?searchBlock.name:'Select Block' : hideBlock ?clearField?'Select Block':searchBlock :'Select Block' }}</ui-select-match>
                                                     <ui-select-choices  repeat="block in getBlock($select.search) | filter: $select.search">
                                                         <div ng-bind="block"></div>
                                                     </ui-select-choices>
@@ -453,7 +453,7 @@
                                                 <span ng-show="floorSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                 <span ng-show="!floorSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                 <ui-select ng-model="searchFloor" ng-disabled="floorFilterDisable || floorsList.length == 0" ng-change="loadDepZones(searchFloor)" ng-click="loadDepZones(searchFloor)">
-                                                    <ui-select-match placeholder="Select Block...">{{floorsList.length == 0 ? 'Select Floor' : searchFloor.searchStatus ? searchFloor.name?searchFloor.name:'Select Floor' : hideFloor ?searchFloor :'Select Floor' }}</ui-select-match>
+                                                    <ui-select-match placeholder="Select Block...">{{floorsList.length == 0 ? 'Select Floor' : searchFloor.searchStatus ? searchFloor.name?searchFloor.name:'Select Floor' : hideFloor ?clearField?'Select Floor':searchFloor :'Select Floor' }}</ui-select-match>
                                                     <ui-select-choices  repeat="floor in getFloor($select.search) | filter: $select.search">
                                                         <div ng-bind="floor"></div>
                                                     </ui-select-choices>
@@ -471,7 +471,7 @@
                                                 <span ng-show="zoneSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                 <span ng-show="!floorSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                 <ui-select ng-model="searchZone" ng-disabled="zoneFilterDisable || zonesList.length == 0" ng-change="loadSearchZones(searchZone)" ng-click="loadSearchZones(searchZone)">
-                                                    <ui-select-match placeholder="Select Zone...">{{zonesList.length == 0 ? 'Select Zone' : searchZone.searchStatus ? searchZone.name?searchZone.name:'Select Zone' : hideZone ?searchZone :'Select Zone' }}</ui-select-match>
+                                                    <ui-select-match placeholder="Select Zone...">{{zonesList.length == 0 ? 'Select Zone' : searchZone.searchStatus ? searchZone.name?searchZone.name:'Select Zone' : hideZone ?clearField?'Select Zone':searchZone :'Select Zone' }}</ui-select-match>
                                                     <ui-select-choices  repeat="zone in getZone($select.search) | filter: $select.search">
                                                         <div ng-bind="zone"></div>
                                                     </ui-select-choices>

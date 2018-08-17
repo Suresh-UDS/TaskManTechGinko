@@ -115,6 +115,8 @@ angular.module('timeSheetApp')
         $scope.siteFilterDisable = true;
         $scope.siteSpin = false;
         $scope.loadDepSites = function (searchProject) {
+            $scope.uiSite.splice(0,$scope.uiSite.length);
+            $scope.clearField = false;
             $scope.searchSite = null;
             $scope.hideSite = false;
             if($scope.localStorage)
@@ -164,7 +166,7 @@ angular.module('timeSheetApp')
                 $scope.newShiftItem.startTime = $filter('date')(e.date._d, 'HH:mm');
                 $scope.newShiftItem.startTimeDup = $filter('date')(e.date._d, 'hh:mm a');
             }
-            
+
 
         });
 
@@ -178,7 +180,7 @@ angular.module('timeSheetApp')
             }
 
         });
-        
+
 
 
         //
@@ -223,10 +225,10 @@ angular.module('timeSheetApp')
 	        	$scope.success = null;
 	        	$scope.errorSitesExists = null;
 	        	$scope.errorProject = null;
-	        	if(!$scope.selectedProject.id){
+	        	if(!$scope.selectedProject){
 	        		$scope.errorProject = "true";
 	        	}else{
-	        		$scope.site.projectId = $scope.selectedProject.id;
+	        		$scope.site.projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
 	        		console.log('shifts - ' + JSON.stringify($scope.shiftItems));
 	        		$scope.site.shifts = $scope.shiftItems;
                     SiteComponent.createSite($scope.site).then(function() {
@@ -255,7 +257,7 @@ angular.module('timeSheetApp')
 
         };
 
-        
+
 
           $scope.sStatus = false;
           $scope.eStatus = false;
@@ -282,7 +284,7 @@ angular.module('timeSheetApp')
             }else{
                 $scope.sStatus = false;
                 $scope.eStatus = false;
-            }   
+            }
         }
 
         $scope.removeItem = function(ind) {
@@ -309,7 +311,9 @@ angular.module('timeSheetApp')
         	SiteComponent.findOne($stateParams.id).then(function (data) {
                 $scope.site = data;
                 console.log('$scope.site.shifts - '+$scope.site.shifts);
+                $scope.selectedProject = {id:$scope.site.projectId,name:$scope.site.projectName};
                 $scope.shiftItems = $scope.site.shifts;
+                console.log('Selected project' , $scope.selectedProject);
 
 
                 // Shift time HH:MM
@@ -401,7 +405,8 @@ angular.module('timeSheetApp')
                 }
                 //
 
-                $scope.loadSelectedProject($scope.site.projectId);
+                //$scope.loadSelectedProject($scope.site.projectId);
+                
             });
         };
 
@@ -427,7 +432,7 @@ angular.module('timeSheetApp')
         	$scope.error = null;
         	$scope.success = null;
         	$scope.errorProject = null;
-        	if($scope.selectedProject && !$scope.selectedProject.id){
+        	if(!$scope.selectedProject){
         		$scope.errorProject = "true";
                 console.log("=======Update=========")
         	}else{
@@ -517,8 +522,8 @@ angular.module('timeSheetApp')
         	}
 
         	$scope.searchCriteria.currPage = currPageVal;
-        	console.log('Selected  project -' + JSON.stringify($scope.searchProject) +" , "+ $scope.searchSite);
-        	console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaSite));
+        	console.log('Selected  project -' , JSON.stringify($scope.searchProject) + '' +$scope.searchSite);
+        	
 
         	if(!$scope.searchSite && !$scope.searchProject) {
         		if($rootScope.searchCriteriaSite) {
@@ -640,6 +645,7 @@ angular.module('timeSheetApp')
 
 
         $scope.clearFilter = function() {
+            $scope.clearField = true;
         	$scope.selectedSite = null;
         	$scope.selectedProject = null;
             $scope.searchProject = null;
