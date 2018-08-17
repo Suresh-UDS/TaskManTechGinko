@@ -99,6 +99,9 @@
                                 <td>{{site.projectName}}</td>
 
                                 <td class="text-right">
+
+                                    <a title="View" ng-class="{active: $state.includes('admin')}" has-permission="Site:View" ui-sref="view-site({ id: site.id })"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+
                                     <a title="Edit" ng-class="{active: $state.includes('admin')}" has-permission="Site:Edit" ui-sref="edit-site({ id: site.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
                                     <!--<a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>-->
