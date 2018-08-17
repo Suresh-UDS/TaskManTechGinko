@@ -167,9 +167,6 @@ public class InventoryTransactionService extends AbstractService{
 
 	private void mapToModel(MaterialTransaction materialTrans, MaterialTransactionDTO materialTransDTO) {
 		// TODO Auto-generated method stub
-		if(materialTransDTO.getTransactionType().equals(MaterialTransactionType.ADJUSTMENT)) { 
-			
-		}
 	
 	}
 
