@@ -11,6 +11,7 @@ import {Network} from "@ionic-native/network";
 import {DBService} from "../service/dbService";
 import {Diagnostic} from "@ionic-native/diagnostic";
 import{AddInventoryTransaction} from "../add-inventory-transaction/add-inventory-transaction";
+import{InventoryService} from "../service/inventoryService";
 
 /**
  * Generated class for the InventoryMaster page.
@@ -29,22 +30,30 @@ export class InventoryMaster {
     totalPages:0;
     open:any;
     qr:any;
+    pageSort:15;
 
 
 
     database:any;
     db:any;
     fileTransfer: FileTransferObject = this.transfer.create();
+    material:any;
 
   constructor(@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,private transfer: FileTransfer,
               public modalCtrl:ModalController,private diagnostic: Diagnostic,private sqlite: SQLite,
               public componentService:componentService, public navCtrl: NavController, public navParams: NavParams,
               public modalController:ModalController, public qrScanner:QRScanner, public assetService:AssetService,
-              public dbService:DBService,private network:Network,private alertCtrl:AlertController) {
+              public dbService:DBService,private network:Network,private alertCtrl:AlertController,private inventoryService:InventoryService
+            ) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad InventoryMaster');
+    var searchCriteria={
+        currPage:this.page,
+        pageSort: this.pageSort
+    };
+    this.inventoryMaterial(searchCriteria);
   }
 
     openFilter()
@@ -62,7 +71,7 @@ export class InventoryMaster {
             };
             this.assetService.searchAssets(searchCriteria).subscribe(
                 response=>{
-                    this.componentService.closeLoader()
+                    this.componentService.closeLoader();
                     console.log("Asset search filters response");
                     console.log(response)
                 },err=>{
@@ -85,5 +94,19 @@ export class InventoryMaster {
        modal.present();
 
     }
+
+   inventoryMaterial(searchCriteria){
+      this.inventoryService.getMaterials(searchCriteria).subscribe(
+          response=>{
+              console.log("Getting Inventory Materials");
+              console.log(response);
+              this.material=response;
+          },err=>{
+              console.log("Error in Getting Inventory Materials");
+              console.log(err);
+          }
+      )
+   }
+
 
 }

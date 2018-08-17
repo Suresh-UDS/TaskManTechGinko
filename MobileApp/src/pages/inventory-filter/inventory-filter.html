@@ -32,7 +32,12 @@
               <ion-item no-lines>
                 <ion-scroll scrollX="true">
                   <div *ngIf="siteList?.length==0" class="padding-top15">
-                    <h4 text-center class="clr-blk">No Data Found</h4>
+                    <ion-card>
+                      <ion-card-content>
+                        <img src="assets/imgs/warning.svg">
+                        <span><p text-center>No Data Found</p></span>
+                      </ion-card-content>
+                    </ion-card>
                   </div>
                   <button class="siteBtn scroll-item" ion-button round  *ngFor="let s of siteList;let i of index" (click)="highLightSite(i,s)" [color]="i==activeSite ? 'primary' : 'light'">
                     <p class="siteName">{{s.name}}</p>
