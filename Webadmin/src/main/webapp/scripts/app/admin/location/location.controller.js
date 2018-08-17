@@ -94,9 +94,10 @@ angular.module('timeSheetApp')
 
 
         //Load sites for selectbox//
-
+$scope.filter = false;
          $scope.loadDepSites = function (selectedProject) {
              $scope.clearField = false;
+             $scope.filter = false;
              $scope.uiSite.splice(0,$scope.uiSite.length);
              $scope.selectedProject = $scope.projectsList[$scope.uiClient.indexOf(selectedProject)]
              $scope.searchProject = $scope.projectsList[$scope.uiClient.indexOf(selectedProject)]
@@ -590,6 +591,7 @@ angular.module('timeSheetApp')
 
         $scope.clearFilter = function() {
             $scope.clearField = true;
+            $scope.filter = false;
             $scope.selectedSite = null;
             $scope.selectedProject = null;
             $scope.selectedBlock = null;
