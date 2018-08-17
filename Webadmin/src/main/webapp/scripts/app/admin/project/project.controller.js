@@ -128,6 +128,7 @@ angular.module('timeSheetApp')
         $scope.selectProject = function(project)
         {
             $scope.filter = false;
+            $scope.clearField = false;
             $scope.searchProject = $scope.projectsList[$scope.uiClient.indexOf(project)]
             console.log('Project dropdown list:',$scope.searchProject)
         }
@@ -355,6 +356,7 @@ angular.module('timeSheetApp')
 
 
         $scope.clearFilter = function() {
+            $scope.clearField = true;
             $scope.selectedProject = null;
             $scope.searchProject = null;
             $scope.searchCriteria = {};
