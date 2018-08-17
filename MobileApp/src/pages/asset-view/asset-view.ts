@@ -18,6 +18,9 @@ import {DBService} from "../service/dbService";
 import {FileTransferObject, FileUploadOptions, FileTransfer} from "@ionic-native/file-transfer";
 import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
 import{AlertController} from "ionic-angular";
+import{AddInventoryTransaction} from "../add-inventory-transaction/add-inventory-transaction";
+import {InventoryFilter} from "../inventory-filter/inventory-filter";
+import{InventoryService} from "../service/inventoryService";
 
 
 declare var demo ;
@@ -43,6 +46,7 @@ export class AssetView {
 
     totalPages:0;
     page:1;
+    // open:any;
 
 
     fromDate:any;
@@ -56,10 +60,22 @@ export class AssetView {
     fileTransfer: FileTransferObject = this.transfer.create();
 
 
+    qr:any;
+    pageSort:15;
+
+
+
+    database:any;
+    db:any;
+    material:any;
+
+
     constructor(public dbService:DBService,public camera: Camera,@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
                 private transfer: FileTransfer,private modalCtrl:ModalController,private datePicker: DatePicker,
                 private componentService:componentService,public navCtrl: NavController, public navParams: NavParams,
-                public jobService:JobService, public assetService:AssetService,public alertCtrl: AlertController) {
+                public jobService:JobService, public assetService:AssetService,public alertCtrl: AlertController,
+                private inventoryService:InventoryService
+                ) {
 
     this.assetDetails = this.navParams.data.assetDetails;
     this.categories = 'details';
@@ -94,6 +110,12 @@ export class AssetView {
           assetId:this.assetDetails.id
       };
       this.getAssetById();
+
+      var searchCriteria={
+          currPage:this.page,
+          pageSort: this.pageSort
+      };
+      this.inventoryMaterial(searchCriteria);
   }
 
     getReadings(){
@@ -697,6 +719,59 @@ export class AssetView {
                 console.log("Site Transfer History");
                 console.log(response);
                 this.site=response.transactions;
+            }
+        )
+    }
+
+    openFilter()
+    {
+        // this.open = false;
+        console.log("Opening filter modal");
+        let modal = this. modalCtrl.create(InventoryFilter,{},{cssClass : 'asset-filter',showBackdrop : true});
+        modal.onDidDismiss(data=>{
+            console.log("Modal dismissed");
+            // this.open = true;
+            console.log(data);
+            var searchCriteria = {
+                siteId:data.siteId,
+                projectId:data.projectId,
+            };
+            this.assetService.searchAssets(searchCriteria).subscribe(
+                response=>{
+                    this.componentService.closeLoader();
+                    console.log("Asset search filters response");
+                    console.log(response)
+                },err=>{
+                    this.componentService.closeLoader();
+                    console.log("Error in filtering assets");
+                    console.log(err);
+                }
+            )
+            // this.getAsset(searchCriteria);
+
+        });
+        modal.present();
+
+    }
+
+
+    openTransaction()
+    {
+        let modal = this.modalCtrl.create(AddInventoryTransaction, {});
+        modal.present();
+
+    }
+
+    inventoryMaterial(searchCriteria){
+        this.inventoryService.getMaterials(searchCriteria).subscribe(
+            response=>{
+                console.log("Getting Inventory Materials");
+                console.log(response);
+                this.material=response;
+            },err=>{
+                console.log("Error in Getting Inventory Materials");
+                console.log(err);
+
             }
         )
     }

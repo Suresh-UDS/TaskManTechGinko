@@ -32,7 +32,7 @@ export class Checklist {
   ionViewDidLoad() {
     console.log('ionViewDidLoad Checklist');
       this.component.showLoader('Loading Checklist Details');
-      this.jobDetails= this.navParams.data.jobDetails
+      this.jobDetails= this.navParams.data.jobDetails;
       console.log(this.jobDetails);
       this.jobService.getJobDetails(this.jobDetails.id).subscribe(
           response=> {
