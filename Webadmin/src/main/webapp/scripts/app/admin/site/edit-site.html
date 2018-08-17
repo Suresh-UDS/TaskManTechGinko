@@ -3,7 +3,7 @@
 <div class="crud-form"
      data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="loadPageTop();loadingStart();loadProjects();loadSite();">
     <div class="titleCon">
-            <h3>{{site.name}} - {{site.id}}</h3>
+            <h3>{{site.name}}</h3>
     </div>
 
     <div ng-controller="SiteController" >
@@ -245,7 +245,7 @@
 				                        <div class="form-group">
 				                            <label class="label-control">From Time</label>
 				                            <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
-				                            <input type="text" class="form-control timepicker"  id="shiftFrom" ng-model="newShiftItem.startTimeDup"  placeholder="hh:mm" 
+				                            <input type="text" class="form-control timepicker"  id="shiftFrom" ng-model="newShiftItem.startTimeDup"  placeholder="hh:mm"
                                             autocomplete="off" />
 
                                             <div ng-show="sStatus">
@@ -260,7 +260,7 @@
 				                        <div class="form-group">
 				                            <label class="label-control">To Time</label>
 				                            <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
-				                            <input type="text" class="form-control timepicker"  id="shiftTo"  ng-model="newShiftItem.endTimeDup" placeholder="hh:mm" 
+				                            <input type="text" class="form-control timepicker"  id="shiftTo"  ng-model="newShiftItem.endTimeDup" placeholder="hh:mm"
                                              autocomplete="off" />
 
                                             <div ng-show="eStatus">
@@ -282,7 +282,7 @@
 
 			                        </div>
                    				</div>
-                   			
+
                                 <div class="row">
                                     <div class="col-md-12">
                                			<div class="form-group">
