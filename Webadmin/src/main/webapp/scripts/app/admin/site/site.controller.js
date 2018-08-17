@@ -225,10 +225,10 @@ angular.module('timeSheetApp')
 	        	$scope.success = null;
 	        	$scope.errorSitesExists = null;
 	        	$scope.errorProject = null;
-	        	if(!$scope.selectedProject.id){
+	        	if(!$scope.selectedProject){
 	        		$scope.errorProject = "true";
 	        	}else{
-	        		$scope.site.projectId = $scope.selectedProject.id;
+	        		$scope.site.projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
 	        		console.log('shifts - ' + JSON.stringify($scope.shiftItems));
 	        		$scope.site.shifts = $scope.shiftItems;
                     SiteComponent.createSite($scope.site).then(function() {
@@ -311,7 +311,9 @@ angular.module('timeSheetApp')
         	SiteComponent.findOne($stateParams.id).then(function (data) {
                 $scope.site = data;
                 console.log('$scope.site.shifts - '+$scope.site.shifts);
+                $scope.selectedProject = {id:$scope.site.projectId,name:$scope.site.projectName};
                 $scope.shiftItems = $scope.site.shifts;
+                console.log('Selected project' , $scope.selectedProject);
 
 
                 // Shift time HH:MM
@@ -403,7 +405,8 @@ angular.module('timeSheetApp')
                 }
                 //
 
-                $scope.loadSelectedProject($scope.site.projectId);
+                //$scope.loadSelectedProject($scope.site.projectId);
+                
             });
         };
 
@@ -429,13 +432,13 @@ angular.module('timeSheetApp')
         	$scope.error = null;
         	$scope.success = null;
         	$scope.errorProject = null;
-        	if(!$scope.selectedProject.id){
+        	if(!$scope.selectedProject){
         		$scope.errorProject = "true";
                 console.log("=======Update=========")
         	}else{
         	    console.log("update site");
         	    console.log($scope.site);
-        		$scope.site.projectId = $scope.selectedProject.id;
+        		$scope.site.projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
         		$scope.site.shifts = $scope.shiftItems;
 	        	SiteComponent.updateSite($scope.site).then(function() {
 	                $scope.success = 'OK';
@@ -519,8 +522,8 @@ angular.module('timeSheetApp')
         	}
 
         	$scope.searchCriteria.currPage = currPageVal;
-        	console.log('Selected  project -' + JSON.stringify($scope.searchProject) +" , "+ $scope.searchSite);
-        	console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaSite));
+        	console.log('Selected  project -' , JSON.stringify($scope.searchProject) + '' +$scope.searchSite);
+        	
 
         	if(!$scope.searchSite && !$scope.searchProject) {
         		if($rootScope.searchCriteriaSite) {
