@@ -16,9 +16,11 @@
             </div> -->
 			<div class="col-md-12">
 
-                <!--<div class="titleCon">-->
-                    <!--&lt;!&ndash;<h3>Add Job</h3>&ndash;&gt;-->
-                <!--</div>-->
+
+                <!-- <div class="titleCon">
+                    <h3>Add Job</h3>
+                </div> -->
+
 
 				<div class="form-container table-container jobcards">
 					<form ng-show="!success" name="form" role="form" novalidate
@@ -348,7 +350,7 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Start date<span class="red-star">*</span></label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datetimepicker"  id="jobStartDate"  ng-model="selectPlannedStartTime" placeholder="{{SelectPlannedStartTime | date:'dd/MMM/yyyy hh:mm a'}}"  required/>
+                                                    <input type="text" class="form-control datetimepicker"  id="jobStartDate"  ng-model="selectPlannedStartTime" placeholder="{{SelectPlannedStartTime | date:'dd/MMM/yyyy hh:mm a'}}" autocomplete="off"  required/>
 
                                                 </div>
                                                 <!--<div class="form-group label-floating">-->
@@ -660,7 +662,7 @@
                                     </span>
                                                     </p> -->
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datetimepicker" ng-model="selectScheduleEndDate" name='scheduleEndDate' id="scheduleEndDate"  />
+                                                    <input type="text" class="form-control datetimepicker" ng-model="selectScheduleEndDate" name='scheduleEndDate' autocomplete="off" id="scheduleEndDate"  />
 
 
                                                     <div ng-show="form.$submitted || form.scheduleEndDate.$touched">

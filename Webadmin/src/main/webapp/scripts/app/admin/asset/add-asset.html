@@ -1294,9 +1294,9 @@
                                                                     <div class="col-md-2" ng-init="loadFreqPrefix()">
                                                                         <div class="dropdown">
                                                                             <div class="form-group">
-                                                                                <label class="control-label">Select Frequency</label>
+                                                                                <label class="control-label">Select Frequency<span class="red-star">*</span> </label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                <select class="form-control" ng-model="selectedFrequency" ng-options="frequencyPrefix for frequencyPrefix in frequencyPrefixies">
+                                                                                <select class="form-control" ng-model="selectedFrequency" ng-options="frequencyPrefix for frequencyPrefix in frequencyPrefixies" required>
                                                                                     <option value="">Select..</option>
                                                                                 </select>
                                                                             </div>
@@ -1306,7 +1306,7 @@
                                                                         <div class="form-group">
                                                                             <label class="control-label">&nbsp;</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                            <select class="form-control" ng-model="selectedTimeInterval" ng-options="frequencyDuration for frequencyDuration in frequencyDurations">
+                                                                            <select class="form-control" ng-model="selectedTimeInterval" ng-options="frequencyDuration for frequencyDuration in frequencyDurations" required>
                                                                                 <option value="">selected..</option>
                                                                             </select>
                                                                         </div>
@@ -1315,7 +1315,7 @@
                                                                         <div class="form-group">
                                                                             <label class="control-label">&nbsp;</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                            <select class="form-control" ng-model="selectedFrequnceyOccurrence" ng-options="frequency for frequency in frequencies">
+                                                                            <select class="form-control" ng-model="selectedFrequnceyOccurrence" ng-options="frequency for frequency in frequencies" required>
                                                                                 <option value="">select..</option>
                                                                             </select>
                                                                         </div>
@@ -1457,9 +1457,9 @@
                                                                             <div class="row">
                                                                                 <div class="col-md-12">
                                                                                 <!-- <div class="col-md-10 pad-r-0px"> -->
-                                                                                    <label class="control-label">Type</label>
+                                                                                    <label class="control-label">Type<span class="red-star">*</span> </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="amcSchedule.maintenanceType" tabindex="0" aria-invalid="false">
+                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="amcSchedule.maintenanceType" tabindex="0" aria-invalid="false" required>
                                                                                         <option value="" >Select Maintenance Type..</option>
                                                                                         <option value="amc" >AMC</option>
                                                                                         <option value="dlp" >DLP</option>
@@ -1609,9 +1609,9 @@
                                                                     <div class="col-md-2" ng-init="loadFreqPrefix()">
                                                                         <div class="dropdown">
                                                                             <div class="form-group">
-                                                                                <label class="control-label">Select Frequency</label>
+                                                                                <label class="control-label">Select Frequency<span class="red-star">*</span> </label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                <select class="form-control" ng-model="selectedFrequencyPrefix" ng-options="frequencyPrefix for frequencyPrefix in frequencyPrefixies">
+                                                                                <select class="form-control" ng-model="selectedFrequencyPrefix" ng-options="frequencyPrefix for frequencyPrefix in frequencyPrefixies" required>
                                                                                     <option value="">Select..</option>
                                                                                 </select>
                                                                             </div>
@@ -1621,7 +1621,7 @@
                                                                         <div class="form-group">
                                                                             <label class="control-label">&nbsp;</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                            <select class="form-control" ng-model="selectedFreqDuration" ng-options="frequencyDuration for frequencyDuration in frequencyDurations">
+                                                                            <select class="form-control" ng-model="selectedFreqDuration" ng-options="frequencyDuration for frequencyDuration in frequencyDurations" required>
                                                                                 <option value="">selected..</option>
                                                                             </select>
                                                                         </div>
@@ -1630,7 +1630,7 @@
                                                                         <div class="form-group">
                                                                             <label class="control-label">&nbsp;</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                            <select class="form-control" ng-model="selectedFrequency" ng-options="frequency for frequency in frequencies">
+                                                                            <select class="form-control" ng-model="selectedFrequency" ng-options="frequency for frequency in frequencies" required>
                                                                                 <option value="">select..</option>
                                                                             </select>
                                                                         </div>
