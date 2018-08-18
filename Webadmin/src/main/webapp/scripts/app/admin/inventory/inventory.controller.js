@@ -2,7 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('InventoryController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent,$http,$stateParams,$location,
-    		ManufacturerComponent, InventoryComponent, $filter) {
+    		ManufacturerComponent, InventoryComponent, $filter, PaginationComponent) {
 
           
     	$rootScope.loginView = false;
@@ -305,7 +305,7 @@ angular.module('timeSheetApp')
     	};
     	
     	$scope.searchFilter = function () {
-//            $scope.setPage(1);
+            $scope.setPage(1);
             $scope.search();
          }
     	
@@ -375,14 +375,46 @@ angular.module('timeSheetApp')
                 $scope.inventorylists = data.transactions;
                 $scope.loadingStop();
                 $scope.inventorylistLoader = true;
-                $scope.pages.currPage = data.currPage;
-                $scope.pages.totalPages = data.totalPages;
-                $scope.pages.endInd = data.totalCount > 10  ? (data.currPage) * 10 : data.totalCount ;
-                $scope.pages.totalCnt = data.totalCount;
-            	$scope.hide = true;
+                /*
+                 ** Call pagination  main function **
+             */
+
+	             $scope.pager = {};
+	             $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+	             $scope.totalCountPages = data.totalCount;
+	
+	             console.log("Pagination",$scope.pager);
+	             console.log("Asset List - ", data);
+	
+	             $scope.pages.currPage = data.currPage;
+	             $scope.pages.totalPages = data.totalPages;
+	             $scope.loading = false;
+	
+	             if($scope.inventorylists && $scope.inventorylists.length > 0 ){
+	                 $scope.showCurrPage = data.currPage;
+	                 $scope.pageEntries = $scope.inventorylists.length;
+	                 $scope.totalCountPages = data.totalCount;
+	                 $scope.pageSort = 10;
+	
+	             $scope.noData = false;
+	
+	             }else{
+	                  $scope.noData = true;
+	             }
+
             });
         	
         };
+
+        $scope.setPage = function (page) {
+
+            if (page < 1 || page > $scope.pager.totalPages) {
+                return;
+            }
+            $scope.pages.currPage = page;
+            $scope.search();
+
+        }
 
 
 			//init load
@@ -390,12 +422,12 @@ angular.module('timeSheetApp')
 			     $scope.loadPageTop(); 
 			     $scope.loadProjects();
 			     $scope.loadManufacturer();
-			     $scope.loadUOM();
-			  
+			     $scope.loadUOM();			  
 			 }
 			
 			$scope.initList = function() { 
 				$scope.loadMaterials();
+			     $scope.setPage(1);
 			}
 
 			//Loading Page go to top position
