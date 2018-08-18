@@ -324,7 +324,7 @@
                                                 <div class="form-group">
                                                     <label class="label-control">Start date<span class="red-star">*</span> </label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text"  ng-model="selectPlannedStartTime"  class="form-control datetimepicker"  id="jobStartDate" required/>
+                                                    <input type="text"  ng-model="selectPlannedStartTime"  class="form-control datetimepicker" autocomplete="off"  id="jobStartDate" required/>
 
                                                 </div>
 
@@ -605,7 +605,7 @@
                                                     </p> -->
 
                                                      <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datetimepicker" ng-model="selectScheduleEndDate" name='scheduleEndDate' id="scheduleEndDate"  />
+                                                    <input type="text" class="form-control datetimepicker" ng-model="selectScheduleEndDate" name='scheduleEndDate' autocomplete="off" id="scheduleEndDate"  />
 
                                                     <div ng-show="form.$submitted || form.scheduleEndDate.$touched">
                                                         <div ng-show="form.scheduleEndDate.$dirty || form.scheduleEndDate.$invalid">

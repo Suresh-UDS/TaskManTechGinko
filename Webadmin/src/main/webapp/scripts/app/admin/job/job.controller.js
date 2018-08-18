@@ -123,7 +123,7 @@ angular.module('timeSheetApp')
         });
 
         $('#jobStartDate').datetimepicker({
-        format: 'DD/MM/YYYY HH:MM A'
+        format: 'DD/MM/YYYY HH:mm A'
         });
 
         $('input#scheduleEndDate').on('dp.change', function(e){
@@ -134,7 +134,7 @@ angular.module('timeSheetApp')
 	    });
 
         $('#scheduleEndDate').datetimepicker({
-        format: 'DD/MM/YYYY HH:MM A'
+        format: 'DD/MM/YYYY HH:mm A'
         });
 
 
