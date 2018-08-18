@@ -196,8 +196,6 @@ angular.module('timeSheetApp')
         $rootScope.back = function (text) {
             if(text == 'cancel')
             {
-                /** @reatin - retaining scope value.**/
-                $rootScope.retain=1;
                 $scope.cancelSite();
             }
             else if(text == 'save')
@@ -294,6 +292,9 @@ angular.module('timeSheetApp')
 
         $scope.cancelSite = function () {
 
+                /** @reatin - retaining scope value.**/
+                $rootScope.retain=1;
+                
         		$location.path('/sites');
         };
 
