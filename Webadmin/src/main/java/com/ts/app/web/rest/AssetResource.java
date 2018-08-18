@@ -271,13 +271,13 @@ public class AssetResource {
 			HttpServletRequest request) {
 		log.info(">>> Inside the save assetgroup -");
 		log.info(">>> Inside Save assetgroup <<< " + assetgroupDTO.getAssetgroup());
-		long userId = SecurityUtils.getCurrentUserId();
 		try {
-			AssetgroupDTO assetgroup = assetService.createAssetGroup(assetgroupDTO);
+			assetgroupDTO.setUserId(SecurityUtils.getCurrentUserId());
+			assetgroupDTO = assetService.createAssetGroup(assetgroupDTO);
 		} catch (Exception e) {
 			throw new TimesheetException(e, assetgroupDTO);
 		}
-		return new ResponseEntity<>(HttpStatus.CREATED);
+		return new ResponseEntity<>(assetgroupDTO, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/assetgroup", method = RequestMethod.GET)
