@@ -294,8 +294,10 @@ angular.module('timeSheetApp')
 
                 /** @reatin - retaining scope value.**/
                 $rootScope.retain=1;
-                
+
         		$location.path('/sites');
+
+
         };
 
         $scope.loadSites = function () {
@@ -582,7 +584,7 @@ angular.module('timeSheetApp')
                 $scope.loadPageTop();
 
                  /* Localstorage (Retain old values while edit page to list) start */
-
+                
                  if($rootScope.retain == 1){
                     $scope.localStorage = getLocalStorage.getSearch();
                     console.log('Local storage---',$scope.localStorage);
