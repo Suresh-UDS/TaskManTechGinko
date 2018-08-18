@@ -465,6 +465,9 @@ span.d-arrow-icon
 span.d-big-arrow-icon {
     padding-top: 38px;
 }
+.DownArrowCon span.d-arrow-icon {
+    padding-top: 28px;
+}
 .download-btn
 {
   line-height:32px;;
@@ -1707,6 +1710,10 @@ span.flotingIcons.icon-13 {
 .modal.AdvancedFilterModal .modal-dialog
 {
     width: 900px;
+}
+.modal.BasicFilterModal .modal-dialog
+{
+    width: 750px;
 }
 
 
