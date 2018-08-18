@@ -351,7 +351,7 @@ angular.module('timeSheetApp')
 //                $scope.searchCriteria.findAll = false;
 //            }
 
-            	if(!$scope.searchEmployeeId && !$scope.searchEmployeeName && !$scope.searchSite && !$scope.searchProject && !$scope.selectedDateFrom && !$scope.selectedDateTo ) {
+            	if(!$scope.searchEmployeeId && !$scope.searchEmployeeName && !$scope.searchSite && !$scope.searchProject) {
                     $scope.searchCriteria.findAll = true;
                 }
 
