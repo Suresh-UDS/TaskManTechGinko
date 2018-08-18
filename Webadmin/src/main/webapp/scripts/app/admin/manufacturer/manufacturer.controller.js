@@ -234,7 +234,7 @@ angular.module('timeSheetApp')
                 if($scope.localStorage){
                     $scope.filter = true;
                     $scope.pages.currPage = $scope.localStorage.currPage;
-                    $scope.searchAssetType = {searchStatus:'0',assetTypeName:$scope.localStorage.assetTypeName};
+                    $scope.searchAssetType = {searchStatus:'0',name:$scope.localStorage.assetTypeName};
                     // $scope.searchName = {searchStatus:'0',manufacturerName:$scope.localStorage.manufacturerName};
                 }
 
