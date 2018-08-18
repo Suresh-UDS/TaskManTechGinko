@@ -24,7 +24,7 @@
 
                            <div class="panel panel-default">
                                <div class="panel-heading">Site Details</div>
-                               <div class="panel-body">
+                               <div class="panel-body DownArrowCon" style="min-height: 330px;">
 
                                    <div class="row">
 
@@ -135,7 +135,7 @@
                                            <div class="form-group">
                                                <label class="control-label">State<span class="red-star">*</span></label>
                                                <!-- <input type="text" ng-model="site.state" class="form-control InputTxtCaps"> -->
-                                               <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                               <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                 <select name='stateName'
                                                   class="form-control " ng-model="site.state"  ng-options="stateName for stateName in stateNames" autofocus  required >
                                                     <option value="">Select State...</option>
@@ -168,7 +168,7 @@
 
                            <div class="panel panel-default">
                                <div class="panel-heading">Location Details</div>
-                               <div class="panel-body">
+                               <div class="panel-body" style="min-height: 330px;">
 
                                    <div class="row">
                                        <div class="col-md-6">
@@ -256,12 +256,12 @@
   				                            <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
   				                            <input type="text" class="form-control timepicker"  id="shiftFrom" ng-model="newShiftItem.startTimeDup"  placeholder="hh:mm" autocomplete="off" />
 
-                                    
+
                                       <div
                                           ng-show="sStatus">
                                           <p class="help-block" style="color: maroon">From time is requied</p>
                                       </div>
-                                            
+
 
   				                        </div>
 

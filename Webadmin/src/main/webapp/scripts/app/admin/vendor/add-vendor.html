@@ -27,7 +27,7 @@
 
                                     <div class="panel panel-default">
                                         <div class="panel-heading">Vendor Details</div>
-                                        <div class="panel-body">
+                                        <div class="panel-body" style="min-height: 360px;">
 
                                             <div class="row">
 
@@ -37,32 +37,39 @@
                                                         <input id='manufacturerName' ng-model="vendor.name"
                                                                class='form-control InputTxtCaps' name='name' type='text' value=""
                                                                ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
-                                                               <div ng-show="formSave.$submitted || formSave.name.$touched">
-                                                                    <div ng-show="formSave.name.$dirty || formSave.name.$invalid">
-                                                                        <p class="help-block" style="color:maroon"
-                                                                           ng-show="formSave.name.$error.required">
-                                                                            Vendor name is required.
-                                                                        </p>
+                                                        <div ng-show="formSave.$submitted || formSave.name.$touched">
+                                                            <div ng-show="formSave.name.$dirty || formSave.name.$invalid">
+                                                                <p class="help-block" style="color:maroon"
+                                                                   ng-show="formSave.name.$error.required">
+                                                                    Vendor name is required.
+                                                                </p>
 
-                                                                    </div>
-                                                                </div>
+                                                            </div>
+                                                        </div>
 
                                                     </div>
+                                                </div>
+
+                                                <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label">Contact First Name</label>
                                                         <input id='contactName' ng-model="vendor.contactFirstName"
                                                                class='form-control InputTxtCaps' name='contactFirstName' type='text' value=""
-                                                               />
+                                                        />
 
                                                     </div>
+                                                </div>
+                                                <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label">Contact Last Name</label>
                                                         <input id='contactName' ng-model="vendor.contactLastName"
                                                                class='form-control InputTxtCaps' name='contactLastName' type='text' value=""
-                                                                />
+                                                        />
 
                                                     </div>
+                                                </div>
 
+                                                <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label">Phone No</label>
                                                         <input id='mobNum' ng-model="vendor.phone"
@@ -70,15 +77,18 @@
                                                                 />
 
                                                     </div>
+
+                                                </div>
+                                                <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label">Email</label>
                                                         <input id='email' ng-model="vendor.email"
                                                                class='form-control' name='email' type='email' value=""
-                                                                />
+                                                        />
 
                                                     </div>
-
                                                 </div>
+
                                             </div>
 
 
@@ -91,52 +101,65 @@
 
                                     <div class="panel panel-default">
                                         <div class="panel-heading">Address Details</div>
-                                        <div class="panel-body">
+                                        <div class="panel-body" style="min-height: 360px;">
                                             <div class="row">
+
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label class="control-label">Line 1</label>
                                                         <input id='line1' ng-model="vendor.addressLine1"
                                                                class='form-control InputTxtCaps' name='line1' type='text' value=""
-                                                                />
+                                                        />
 
                                                     </div>
+                                                </div>
+                                                <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label class="control-label">Line 2</label>
                                                         <input id='line2' ng-model="vendor.addressLine2"
                                                                class='form-control InputTxtCaps' name='line2' type='text' value=""
-                                                               />
+                                                        />
 
                                                     </div>
+                                                </div>
+                                                <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label">City</label>
                                                         <input id='City' ng-model="vendor.city"
                                                                class='form-control InputTxtCaps' name='City' type='text' value=""
-                                                                />
+                                                        />
 
                                                     </div>
+                                                </div>
+                                                <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label">State</label>
                                                         <input id='state' ng-model="vendor.state"
                                                                class='form-control InputTxtCaps' name='state' type='text' value=""
-                                                                />
+                                                        />
 
                                                     </div>
+                                                </div>
+                                                <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label">Pin Code</label>
                                                         <input id='pinCode' ng-model="vendor.pincode"
                                                                class='form-control' name='pinCode' type='text' value=""
-                                                                />
+                                                        />
 
                                                     </div>
+                                                </div>
+                                                <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label">Country</label>
                                                         <input id='country' ng-model="vendor.country"
                                                                class='form-control InputTxtCaps' name='country' type='text' value=""
-                                                                />
+                                                        />
 
                                                     </div>
                                                 </div>
+
+
                                             </div>
 
 
