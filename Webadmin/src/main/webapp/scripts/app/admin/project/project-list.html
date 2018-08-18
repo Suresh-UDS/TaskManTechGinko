@@ -125,6 +125,7 @@
                                <td>{{project.email}}</td>
                                 <td class="text-right">
 
+                                    <a title="View" ng-class="{active: $state.includes('admin')}"  has-permission="Project:View" ui-sref="view-project({ id: project.id })"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
                                     <a title="Edit" ng-class="{active: $state.includes('admin')}"  has-permission="Project:Edit" ui-sref="edit-project({ id: project.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
                                     <!-- <a ng-class="{active: $state.includes('admin')}" ng-click="deleteConfirm(project)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a> -->
