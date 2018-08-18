@@ -189,6 +189,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.loadDepSites = function (searchProject) {
+            $scope.clearField = false;
             $scope.filter = false;
             $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
             $scope.uiSite.splice(0,$scope.uiSite.length)
@@ -351,7 +352,7 @@ angular.module('timeSheetApp')
 //                $scope.searchCriteria.findAll = false;
 //            }
 
-            	if(!$scope.searchEmployeeId && !$scope.searchEmployeeName && !$scope.searchSite && !$scope.searchProject && !$scope.selectedDateFrom && !$scope.selectedDateTo ) {
+            	if(!$scope.searchEmployeeId && !$scope.searchEmployeeName && !$scope.searchSite && !$scope.searchProject) {
                     $scope.searchCriteria.findAll = true;
                 }
 

@@ -3,7 +3,7 @@
 angular.module('timeSheetApp')
     .controller('LocationController', function ($rootScope, $scope, $state, $timeout,
         LocationComponent,ProjectComponent, SiteComponent, $http, $stateParams,
-         $location,PaginationComponent ) {
+         $location,PaginationComponent,getLocalStorage ) {
         $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
@@ -94,7 +94,7 @@ angular.module('timeSheetApp')
 
 
         //Load sites for selectbox//
-$scope.filter = false;
+         $scope.filter = false;
          $scope.loadDepSites = function (selectedProject) {
              $scope.clearField = false;
              $scope.filter = false;
@@ -342,6 +342,7 @@ $scope.filter = false;
         $rootScope.back = function (text) {
             if(text == 'cancel')
             {
+
                 $scope.cancelLocation();
             }
             else if(text == 'save')
@@ -483,13 +484,13 @@ $scope.filter = false;
 
             }else {
                 $scope.searchCriteria.findAll = false;
-                    if($scope.searchProject) {
+                    if($scope.searchProject && $scope.searchProject.searchStatus != '0') {
                     $scope.searchCriteria.projectId = $scope.searchProject.id;
                     $scope.searchCriteria.projectName = $scope.searchProject.name;
                     }else {
                     $scope.searchCriteria.projectId = null;
                     }
-                    if($scope.searchSite) {
+                    if($scope.searchSite && $scope.searchProject.searchStatus != '0') {
                         $scope.searchCriteria.siteId = $scope.searchSite.id;
                         $scope.searchCriteria.siteName = $scope.searchSite.name;
                     }else{
@@ -533,7 +534,33 @@ $scope.filter = false;
                 $scope.locationsLoader = false;
                 $scope.loadPageTop();
 
-            LocationComponent.search($scope.searchCriteria).then(function (data) {
+            /* Localstorage (Retain old values while edit page to list) start */
+            alert($rootScope.retain)
+            if($rootScope.retain == 1){
+                $scope.localStorage = getLocalStorage.getSearch();
+                console.log('Local storage---',$scope.localStorage);
+
+                if($scope.localStorage){
+                    $scope.filter = true;
+                    $scope.pages.currPage = $scope.localStorage.currPage;
+                    $scope.searchProject = {searchStatus:'0',id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
+                    $scope.searchSite = {searchStatus:'0',id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
+
+                }
+
+                $rootScope.retain = 0;
+
+                var searchCriteras  = $scope.localStorage;
+            }else{
+
+                var searchCriteras  = $scope.searchCriteria;
+            }
+
+            /* Localstorage (Retain old values while edit page to list) end */
+
+
+
+            LocationComponent.search(searchCriteras).then(function (data) {
                 $scope.locations = data.transactions;
                 $scope.locationsLoader = true;
 
@@ -558,6 +585,11 @@ $scope.filter = false;
                 //         console.log($scope.locations[i]);
                 //     }
                 // }
+
+
+                /** retaining list search value.**/
+                getLocalStorage.updateSearch(searchCriteras);
+
 
                 /*
                     ** Call pagination  main function **
@@ -612,7 +644,9 @@ $scope.filter = false;
         };
 
         $scope.cancelLocation = function () {
-        		$location.path('/locations');
+        	$location.path('/locations');
+            /** @reatin - retaining scope value.**/
+            $rootScope.retain=1;
         };
 
 

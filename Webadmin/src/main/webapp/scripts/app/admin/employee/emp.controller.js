@@ -159,7 +159,7 @@ angular.module('timeSheetApp')
 
         $scope.empLocation = false;
         $scope.addProjectSite = function() {
-	        	
+
             if($scope.selectedProject && $scope.selectedSite){
 
                 console.log('selected project -' , $scope.selectedProject.name);
@@ -172,34 +172,34 @@ angular.module('timeSheetApp')
 	        		"siteName" : $scope.selectedSite.name,
 	        	}
 
-                
+
 	        	if($scope.employee) {
 	        		projSite.employeeId = $scope.employee.id
 	        		projSite.employeeName = $scope.employee.name
 	        	}
 
-                function isProject(project) { 
+                function isProject(project) {
                     return project.projectId === projSite.projectId;
                 }
-                function isSite(site) { 
+                function isSite(site) {
                     return site.siteId === projSite.siteId;
                 }
 
-                //console.log('project>>>>', $scope.projectSiteList.find(isProject)); 
-                //console.log('site>>>>', $scope.projectSiteList.find(isSite)); 
+                //console.log('project>>>>', $scope.projectSiteList.find(isProject));
+                //console.log('site>>>>', $scope.projectSiteList.find(isSite));
 
                 $scope.dupProject = $scope.projectSiteList.find(isProject);
                 $scope.dupSite = $scope.projectSiteList.find(isSite);
 
                 if(($scope.dupProject && $scope.dupSite)){
-                    
+
                    return;
                 }
 
 	        	$scope.projectSiteList.push(projSite);
 	        	console.log('project site list -' , $scope.projectSiteList);
                 if($scope.projectSiteList.length > 0) {
-                    $scope.empLocation = false; 
+                    $scope.empLocation = false;
                 }
             }else{
                 return;
@@ -207,10 +207,10 @@ angular.module('timeSheetApp')
         };
 
         $scope.initAdd = function(){
-           $scope.empLocation = true; 
+           $scope.empLocation = true;
         }
 
-         
+
         $scope.removeProjectSite = function(ind) {
         		$scope.projectSiteList.splice(ind,1);
                 //alert($scope.projectSiteList.length);
@@ -241,13 +241,13 @@ angular.module('timeSheetApp')
 	        		loc.employeeName = $scope.employee.name
 	        	}
 
-                function isBlock(block) { 
+                function isBlock(block) {
                     return block.block === loc.block;
                 }
-                function isFloor(floor) { 
+                function isFloor(floor) {
                     return floor.floor === loc.floor;
                 }
-                function isZone(zone) { 
+                function isZone(zone) {
                     return zone.zone === loc.zone;
                 }
 
@@ -256,7 +256,7 @@ angular.module('timeSheetApp')
                 $scope.dupZone = $scope.locationList.find(isZone);
 
                 if(($scope.dupBlock && $scope.dupFloor && $scope.dupZone)){
-                    
+
                    return;
                 }
 
@@ -280,6 +280,8 @@ angular.module('timeSheetApp')
 
 
         // Load Clients for selectbox //
+
+        $scope.filter = false;
         $scope.clienteDisable = true;
         $scope.clientFilterDisable = true;
         $scope.uiClient = [];
@@ -325,8 +327,10 @@ angular.module('timeSheetApp')
 
         $scope.loadDepSites = function (searchProject) {
             $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
+
             $scope.siteSpin = true;
             $scope.hideSite = false;
+            $scope.siteFilterDisable = true;
             if(jQuery.isEmptyObject($scope.selectedProject) == false) {
                 var depProj=$scope.selectedProject.id;
             }else if(jQuery.isEmptyObject($scope.searchProject) == false){
@@ -334,7 +338,7 @@ angular.module('timeSheetApp')
             }else{
                 var depProj=0;
             }
-
+            $scope.uiSite.splice(0,$scope.uiSite.length);
             ProjectComponent.findSites(depProj).then(function (data) {
                 $scope.searchSite = null;
                 $scope.sites = data;
@@ -961,10 +965,10 @@ angular.module('timeSheetApp')
          }
 
          $scope.searchFilter1 = function () {
-            $scope.searchEmployeeId = null;
-            $scope.searchEmployeeName = null;
-            $scope.searchCriteria.employeeEmpId =null;
-            $scope.searchCriteria.name =null;
+            // $scope.searchEmployeeId = null;
+            // $scope.searchEmployeeName = null;
+            // $scope.searchCriteria.employeeEmpId =null;
+            // $scope.searchCriteria.name =null;
             $scope.setPage(1);
             $scope.search();
          }
@@ -1395,6 +1399,7 @@ angular.module('timeSheetApp')
             $scope.searchEmployeeId = null;
             $scope.searchEmployeeName = null ;
             $scope.searchCriteria = {};
+            $scope.localStorage = null;
             $rootScope.searchCriteriaEmployees = null;
             $scope.pages = {
                 currPage: 1,
