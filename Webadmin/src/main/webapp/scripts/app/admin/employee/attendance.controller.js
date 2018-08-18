@@ -189,6 +189,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.loadDepSites = function (searchProject) {
+            $scope.clearField = false;
             $scope.filter = false;
             $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
             $scope.uiSite.splice(0,$scope.uiSite.length)
