@@ -296,6 +296,8 @@ angular.module('timeSheetApp')
                 $rootScope.retain=1;
 
         		$location.path('/sites');
+
+
         };
 
         $scope.loadSites = function () {

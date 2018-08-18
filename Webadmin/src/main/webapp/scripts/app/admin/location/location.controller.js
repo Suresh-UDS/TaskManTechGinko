@@ -342,7 +342,6 @@ angular.module('timeSheetApp')
         $rootScope.back = function (text) {
             if(text == 'cancel')
             {
-
                 $scope.cancelLocation();
             }
             else if(text == 'save')
@@ -535,7 +534,7 @@ angular.module('timeSheetApp')
                 $scope.loadPageTop();
 
             /* Localstorage (Retain old values while edit page to list) start */
-            alert($rootScope.retain)
+    
             if($rootScope.retain == 1){
                 $scope.localStorage = getLocalStorage.getSearch();
                 console.log('Local storage---',$scope.localStorage);
@@ -644,9 +643,12 @@ angular.module('timeSheetApp')
         };
 
         $scope.cancelLocation = function () {
-        	$location.path('/locations');
+            
             /** @reatin - retaining scope value.**/
             $rootScope.retain=1;
+
+        	$location.path('/locations');
+
         };
 
 
@@ -743,10 +745,6 @@ angular.module('timeSheetApp')
             })
         }
 
-        $scope.cancelLocation = function () {
-
-                $location.path('/locations');
-        };
 
     });
 
