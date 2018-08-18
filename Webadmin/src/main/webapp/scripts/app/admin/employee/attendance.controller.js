@@ -191,6 +191,7 @@ angular.module('timeSheetApp')
         $scope.loadDepSites = function (searchProject) {
             $scope.filter = false;
             $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
+            $scope.uiSite.splice(0,$scope.uiSite.length)
             $scope.hideSite = false;
             if(jQuery.isEmptyObject($scope.selectedProject) == false) {
                    var depProj=$scope.selectedProject.id;
@@ -288,6 +289,7 @@ angular.module('timeSheetApp')
          }
 
           $scope.searchFilter1 = function () {
+            $scope.clearField = false;
             $scope.SearchEmployeeId = null;
             $scope.SearchEmployeeName = null;
             $scope.searchCriteria.employeeEmpId =null;
@@ -650,6 +652,7 @@ angular.module('timeSheetApp')
 
         $scope.clearFilter = function() {
             $scope.noData = false;
+            $scope.clearField = true;
             $rootScope.exportStatusObj.exportMsg = '';
             $scope.downloader=false;
             $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');

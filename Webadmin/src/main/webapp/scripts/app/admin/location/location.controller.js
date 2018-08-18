@@ -658,6 +658,7 @@ $scope.filter = false;
         };
 
             $scope.generateQR = function(qrDetails){
+                $rootScope.loadingStart();
             // var qr = {
             //     siteId:siteId,
             //     locationId:locationId
@@ -671,9 +672,10 @@ $scope.filter = false;
 
                 $scope.qr_img = response.url;
 
-                var eleId = 'qrImage';
-                var ele = document.getElementById(eleId);
-                    ele.setAttribute('src',$scope.qr_img);
+                //var eleId = 'qrImage';
+               // var ele = document.getElementById(eleId);
+                    //ele.setAttribute('src',$scope.qr_img);
+                    $rootScope.loadingStop();
                 // console.log('create qr---',$scope.qr_img);
 
             });
@@ -706,6 +708,11 @@ $scope.filter = false;
                 $scope.generateQR(response);
             })
         }
+
+        $scope.cancelLocation = function () {
+
+                $location.path('/locations');
+        };
 
     });
 

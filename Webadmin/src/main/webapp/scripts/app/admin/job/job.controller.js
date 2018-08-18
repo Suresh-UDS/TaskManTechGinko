@@ -963,7 +963,7 @@ angular.module('timeSheetApp')
                     $scope.pages.currPage = $scope.localStorage.currPage;
                     $scope.searchProject = {searchStatus:'0',id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
                     $scope.searchSite = {searchStatus:'0',id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
-                    // $scope.searchEmployee = {searchStatus:'0',id:$scope.localStorage.employeeId,name:$scope.localStorage.employeeName};
+                    $scope.searchEmployee = {searchStatus:'0',id:$scope.localStorage.employeeId,name:$scope.localStorage.employeeName};
 
                 }
 
