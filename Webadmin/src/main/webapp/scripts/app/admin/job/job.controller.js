@@ -398,7 +398,6 @@ angular.module('timeSheetApp')
                         $scope.hideSite = true;
                         $scope.uiEmployee.splice(0,$scope.uiEmployee.length);
                         $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)]
-                        $scope.uiSite.splice(0,$scope.uiSite.length)
                         console.log($scope.uiEmployee)
                     }
          $scope.loadSearchEmployees = function (searchEmployee) {
