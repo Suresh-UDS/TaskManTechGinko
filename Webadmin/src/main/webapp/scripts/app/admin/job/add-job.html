@@ -16,9 +16,11 @@
             </div> -->
 			<div class="col-md-12">
 
+
                 <!-- <div class="titleCon">
                     <h3>Add Job</h3>
                 </div> -->
+
 
 				<div class="form-container table-container jobcards">
 					<form ng-show="!success" name="form" role="form" novalidate
@@ -99,6 +101,10 @@
 
                                             </div>
 
+
+                                        </div>
+                                        <div class="row">
+
                                             <div class="col-md-6">
                                                 <div class="form-group ">
                                                     <label class="control-label">Checklist</label>
@@ -110,7 +116,7 @@
                                                         <!--ng-change="onSelectChecklist()"-->
                                                         <!--uib-typeahead="checklist as checklist.name for checklist in checklists | filter:$viewValue | limitTo:5"-->
                                                         <!--autocomplete="off" />-->
-                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <select class="form-control " ng-model="selectedChecklist"  ng-options="checklist as checklist.name for checklist in checklists">
                                                             <option value="">Please select Checklist...</option>
                                                         </select>
@@ -120,11 +126,6 @@
                                                 </div>
 
                                             </div>
-
-
-                                        </div>
-                                        <div class="row">
-
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Employee<span class="red-star">*</span> </label>
@@ -147,10 +148,10 @@
                                                         <div ng-show="form.$submitted || form.employeeName.$touched">
                                                             <div
                                                                 ng-show="form.employeeName.$dirty || form.employeeName.$invalid">
-	                                                            <p class="help-block" style="color:maroon"
-	                                                               ng-show="form.employeeName.$error.required">
-	                                                                Employee is required.
-	                                                            </p>
+                                                                <p class="help-block" style="color:maroon"
+                                                                   ng-show="form.employeeName.$error.required">
+                                                                    Employee is required.
+                                                                </p>
 
                                                             </div>
 
