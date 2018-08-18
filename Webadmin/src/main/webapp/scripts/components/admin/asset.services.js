@@ -109,11 +109,11 @@ angular.module('timeSheetApp')
 
             },
 
-            createAssetGroup :function(assetGroup,callback){
+            createAssetGroup :function(assetGroup, callback){
                 var cb = callback || angular.noop;
                 return $http.post('api/assetgroup',assetGroup).then(
                     function (response) {
-                        return cb(response);
+                        return response;
                     }).catch(
                     function (err) {
                         console.log(JSON.stringify(err));
