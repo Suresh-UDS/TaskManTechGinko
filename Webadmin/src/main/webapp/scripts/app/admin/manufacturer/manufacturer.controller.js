@@ -195,12 +195,16 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.findAll = true;
             }
 
-            if($scope.searchName && $scope.searchName.searchStatus != '0' ) {
+            if($scope.searchName ) {
                     $scope.searchCriteria.manufacturerName = $scope.searchName;
-                }
-                if($scope.searchAssetType && $scope.searchAssetType.searchStatus != '0') {
-                    $scope.searchCriteria.assetTypeName = $scope.searchAssetType.name;
-                }
+            }else{
+                $scope.searchCriteria.manufacturerName = "";
+            }
+            if($scope.searchAssetType) {
+                $scope.searchCriteria.assetTypeName = $scope.searchAssetType.name;
+            }else{
+                $scope.searchCriteria.assetTypeName = null;
+            }
 
 
             //----
@@ -234,7 +238,17 @@ angular.module('timeSheetApp')
                 if($scope.localStorage){
                     $scope.filter = true;
                     $scope.pages.currPage = $scope.localStorage.currPage;
-                    $scope.searchAssetType = {searchStatus:'0',name:$scope.localStorage.assetTypeName};
+                    if($scope.localStorage.assetTypeName){
+                        $scope.searchAssetType = {name:$scope.localStorage.assetTypeName};
+                    }else{
+                        $scope.searchAssetType = "";
+                    }
+                    if($scope.localStorage.manufacturerName){
+                        $scope.searchCriteria.manufacturerName = $scope.localStorage.manufacturerName;
+                    }else{
+                        $scope.searchCriteria.manufacturerName = "";
+                    }
+                    
                     // $scope.searchName = {searchStatus:'0',manufacturerName:$scope.localStorage.manufacturerName};
                 }
 
