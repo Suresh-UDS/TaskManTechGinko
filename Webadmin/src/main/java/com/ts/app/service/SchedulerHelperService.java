@@ -77,9 +77,9 @@ public class SchedulerHelperService extends AbstractService {
 
 	final Logger log = LoggerFactory.getLogger(SchedulerHelperService.class);
 
-	private static final String DAILY = "Daily";
-	private static final String WEEKLY = "Weekly";
-	private static final String MONTHLY = "Monthly";
+	private static final String DAILY = "DAY";
+	private static final String WEEKLY = "WEEK";
+	private static final String MONTHLY = "MONTH";
 	
 	private static final String FREQ_ONCE_EVERY_HOUR = "Once in an hour";
 

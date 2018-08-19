@@ -179,14 +179,12 @@ public class SchedulerService extends AbstractService {
 			}
 			entity = schedulerConfigRepository.save(entity);
 			// create jobs based on the creation policy
-			//createJobs(entity);
-			//createJobs(entity);
+			createJobs(entity);
 			
 			if(log.isDebugEnabled()) {
 				log.debug("Saved parent job and scheduler config " + entity);
-				log.debug("Invoking async scheduler helper to create child jobs ");
 			}
-			schedulerHelperService.createJobs(entity);
+			//schedulerHelperService.createJobs(entity);
 			if(log.isDebugEnabled()) {
 				log.debug("Invoked scheduler helper to create child jobs ");
 			}
@@ -683,9 +681,11 @@ public class SchedulerService extends AbstractService {
 			DateTime today = DateTime.now();
 			today = today.withHourOfDay(0); //set today's hour to 0
 			Calendar scheduledEndDate = Calendar.getInstance();
-			scheduledEndDate.setTime(parentJob.getScheduleEndDate());
-			scheduledEndDate.set(Calendar.HOUR_OF_DAY, 23);
-			scheduledEndDate.set(Calendar.MINUTE, 59);
+			if(parentJob.getScheduleEndDate() != null) {
+				scheduledEndDate.setTime(parentJob.getScheduleEndDate());
+				scheduledEndDate.set(Calendar.HOUR_OF_DAY, 23);
+				scheduledEndDate.set(Calendar.MINUTE, 59);
+			}
 			DateTime endDate = DateTime.now().withYear(scheduledEndDate.get(Calendar.YEAR)).withMonthOfYear(scheduledEndDate.get(Calendar.MONTH) + 1)
 					.withDayOfMonth(scheduledEndDate.get(Calendar.DAY_OF_MONTH)).withHourOfDay(scheduledEndDate.get(Calendar.HOUR_OF_DAY)).withMinuteOfHour(scheduledEndDate.get(Calendar.MINUTE));
 			
@@ -984,7 +984,7 @@ public class SchedulerService extends AbstractService {
 				boolean shouldProcess = true;
 				if (scheduledTask.isScheduleDailyExcludeWeekend()) {
 					Calendar today = Calendar.getInstance();
-
+					today.setTime(jobDate);
 					if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
 						shouldProcess = false;
 					}
@@ -1059,7 +1059,9 @@ public class SchedulerService extends AbstractService {
 		job.setLocationId(!StringUtils.isEmpty(dataMap.get("location")) ? Long.parseLong(dataMap.get("location")) : 0);
 		job.setActive("Y");
 		job.setMaintenanceType(parentJob.getMaintenanceType());
-		job.setAssetId(parentJob.getAsset().getId());
+		if(parentJob.getAsset() != null) {
+			job.setAssetId(parentJob.getAsset().getId());
+		}
 		job.setParentJobId(parentJob.getId());
 		job.setParentJob(parentJob);
 		job.setJobType(parentJob.getType());

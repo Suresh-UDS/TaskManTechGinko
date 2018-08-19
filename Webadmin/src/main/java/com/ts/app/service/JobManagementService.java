@@ -866,7 +866,7 @@ public class JobManagementService extends AbstractService {
 			data.append("&plannedHours="+jobDTO.getPlannedHours());
 			data.append("&location="+jobDTO.getLocationId());
 			data.append("&frequency="+jobDTO.getFrequency());
-			data.append("&duration="+jobDTO.getDuration());
+			data.append("&duration="+(StringUtils.isEmpty(jobDTO.getDuration()) ? "1" : jobDTO.getDuration()));
 			schConfDto.setData(data.toString());
 			schConfDto.setStartDate(jobDTO.getPlannedStartTime());
 			schConfDto.setEndDate(job.getPlannedEndTime());
