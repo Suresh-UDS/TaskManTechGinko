@@ -882,8 +882,9 @@ public class JobManagementService extends AbstractService {
 		Site site = null;
 		
 		Employee employee = employeeRepository.findOne(assetPpmScheduleDTO.getEmpId());
+		Asset asset = null;
 		if(assetPpmScheduleDTO.getAssetId() > 0) {
-			Asset asset = assetRepository.findOne(assetPpmScheduleDTO.getAssetId());
+			asset = assetRepository.findOne(assetPpmScheduleDTO.getAssetId());
 			job.setAsset(asset);
 			site = getSite(asset.getSite().getId());
 		}
@@ -909,7 +910,6 @@ public class JobManagementService extends AbstractService {
 			job.setStatus(JobStatus.ASSIGNED);
 		}
 		job.setSite(site);
-		Asset asset = assetRepository.findOne(assetPpmScheduleDTO.getAssetId());
 		job.setBlock(asset.getBlock());
 		job.setFloor(asset.getFloor());
 		job.setZone(asset.getZone());

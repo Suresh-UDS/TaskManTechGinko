@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.base.Splitter;
 import com.ts.app.config.Constants;
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Asset;
 import com.ts.app.domain.Frequency;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobChecklist;
@@ -40,6 +40,7 @@ import com.ts.app.domain.Site;
 import com.ts.app.domain.SlaConfig;
 import com.ts.app.domain.SlaEscalationConfig;
 import com.ts.app.domain.Ticket;
+import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.EmployeeShiftRepository;
@@ -128,6 +129,9 @@ public class SchedulerService extends AbstractService {
 	@Inject
 	private SlaConfigRepository slaConfigRepository;
 	
+	@Inject
+	private AssetRepository assetRepository;
+	
 
 	public SearchResult<SchedulerConfigDTO> getSchedulerConfig() {
 		// get all config to show in admin
@@ -148,7 +152,6 @@ public class SchedulerService extends AbstractService {
 
 	}
 
-	@Async
 	public void save(SchedulerConfigDTO dto, Job job) {
 		if(dto.getId() != null && dto.getId() > 0){
 			log.debug(">>> Schedule Config already created! <<<");
@@ -168,11 +171,17 @@ public class SchedulerService extends AbstractService {
 			SchedulerConfig entity = mapperUtil.toEntity(dto, SchedulerConfig.class);
 			entity.setJob(job);
 			entity.setActive("Y");
+			if(dto.getAssetId() > 0) {
+				Asset asset = assetRepository.findOne(dto.getAssetId());
+				entity.setAsset(asset);
+			}else {
+				entity.setAsset(null);
+			}
 			entity = schedulerConfigRepository.save(entity);
 			// create jobs based on the creation policy
-			createJobs(entity);
 			//createJobs(entity);
-			/*
+			//createJobs(entity);
+			
 			if(log.isDebugEnabled()) {
 				log.debug("Saved parent job and scheduler config " + entity);
 				log.debug("Invoking async scheduler helper to create child jobs ");
@@ -181,7 +190,7 @@ public class SchedulerService extends AbstractService {
 			if(log.isDebugEnabled()) {
 				log.debug("Invoked scheduler helper to create child jobs ");
 			}
-			*/
+			
 		}
 
 	}
