@@ -147,7 +147,7 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.findAll = true;
             }
 
-            if($scope.searchName && $scope.searchName.searchStatus != '0') {
+            if($scope.searchName) {
                     $scope.searchCriteria.vendorName = $scope.searchName;
                 }
 
@@ -181,7 +181,7 @@ angular.module('timeSheetApp')
                 if($scope.localStorage){
                     $scope.filter = true;
                     $scope.pages.currPage = $scope.localStorage.currPage;
-                    $scope.searchName = {searchStatus:'0',vendorName:$scope.localStorage.vendorName};
+                     $scope.searchName =$scope.localStorage.vendorName;
                 }
 
                 $rootScope.retain = 0;

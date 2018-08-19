@@ -1817,10 +1817,14 @@ angular.module('timeSheetApp')
                 console.log("Asset Type entered");
                 AssetTypeComponent.create($scope.assetType).then(function (response) {
                     console.log(response);
-                    $scope.assetType = "";
-                    $scope.showNotifications('top','center','success','Asset type has been added Successfully!!');
-                    $scope.loadAssetType();
-
+                    if(response.data.status && response.data.status === "400") { 
+                    	$scope.loadingStop();
+                    	$scope.showNotifications('top','center','danger','Asset type already exists.');
+                    }else{
+                    	  $scope.assetType = "";
+                          $scope.showNotifications('top','center','success','Asset type has been added Successfully!!');
+                          $scope.loadAssetType();
+                    }
 
                 }).catch(function(){
                  $scope.loadingStop();
@@ -1844,9 +1848,14 @@ angular.module('timeSheetApp')
                 console.log("Asset Group entered");
                 AssetComponent.createAssetGroup($scope.assetGroup).then(function (response) {
                     console.log(response);
-                    $scope.assetGroup = "";
-                    $scope.showNotifications('top','center','success','Asset group has been added Successfully!!');
-                    $scope.loadAssetGroup();
+                    if(response.data.status && response.data.status === "400") { 
+                    	$scope.loadingStop();
+                    	$scope.showNotifications('top','center','danger','Asset Group already exists.');
+                    }else{
+                    	  $scope.assetGroup = "";
+                          $scope.showNotifications('top','center','success','Asset Group has been added Successfully!!');
+                          $scope.loadAssetGroup();
+                    }
 
                 }).catch(function(){
                 $scope.loadingStop();

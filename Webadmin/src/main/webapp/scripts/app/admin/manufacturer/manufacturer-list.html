@@ -764,7 +764,7 @@
                                     <div class="form-group">
                                         <label class="control-label">Select Asset Type</label>
                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                        <select class="form-control " ng-model="searchAssetType"  ng-options="assetType as assetType.name for assetType in assetTypes" required>
+                                        <select class="form-control " ng-model="searchAssetType"  ng-options="assetType as assetType.name for assetType in assetTypes track by assetType.name" required>
                                             <option value="">Select Asset Type...</option>
                                         </select>
                                         <!--<span ng-show="assetTypeDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>-->

@@ -50,11 +50,19 @@ public class AssetTypeService extends AbstractService {
 	public AssetTypeDTO createAssetTypeInformation(AssetTypeDTO assetTypeDto) {
 		// log.info("The admin Flag value is " +adminFlag);
 		AssetType assetType = mapperUtil.toEntity(assetTypeDto, AssetType.class);
-        assetType.setActive(AssetType.ACTIVE_YES);
-		assetType = assetTypeRepository.save(assetType);
-		log.debug("Created Information for AssetType: {}", assetType);
-		assetTypeDto = mapperUtil.toModel(assetType, AssetTypeDTO.class);
+		AssetType existingType = assetTypeRepository.findByName(assetTypeDto.getName());
+		if(existingType == null) { 
+			assetType.setActive(AssetType.ACTIVE_YES);
+			assetType = assetTypeRepository.save(assetType);
+			log.debug("Created Information for AssetType: {}", assetType);
+			assetTypeDto = mapperUtil.toModel(assetType, AssetTypeDTO.class);
+		}else {
+			assetTypeDto.setMessage("Asset Type already exists");
+			assetTypeDto.setStatus("400");
+			assetTypeDto.setErrorStatus(true);
+		}
 		return assetTypeDto;
+       
 	}
 
 	public void updateAssetType(AssetTypeDTO assetType) {

@@ -1188,8 +1188,18 @@ public class AssetManagementService extends AbstractService {
 
 	public AssetgroupDTO createAssetGroup(AssetgroupDTO assetGroupDTO) {
 		AssetGroup assetgroup = mapperUtil.toEntity(assetGroupDTO, AssetGroup.class);
-		assetGroupRepository.save(assetgroup);
+		AssetGroup existingGroup = assetGroupRepository.findByName(assetGroupDTO.getAssetgroup());
+		if(existingGroup == null) { 
+			assetgroup.setActive(AssetGroup.ACTIVE_YES);
+			assetGroupRepository.save(assetgroup);
+			assetGroupDTO = mapperUtil.toModel(assetgroup, AssetgroupDTO.class);
+		}else {
+			assetGroupDTO.setErrorMessage("Already same asset group exists.");
+			assetGroupDTO.setStatus("400");
+			assetGroupDTO.setErrorStatus(true);
+		}
 		return assetGroupDTO;
+
 	}
 
 	public List<AssetgroupDTO> findAllAssetGroups() {
