@@ -795,8 +795,12 @@ public class JobManagementService extends AbstractService {
 		log.debug("Before saving new job -"+ job);
 
 		//log.debug("start Date  -"+ startDate + ", end date -" + endDate);
-//		List<Job> existingJobs = jobRepository.findScheduledJobByTitleSiteAndDate(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()));
-		List<Job> existingJobs = jobRepository.findJobByTitleSiteDateAndLocation(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()), job.getBlock(), job.getFloor(), job.getZone());
+		List<Job> existingJobs = null;
+		if(job.getSchedule().equalsIgnoreCase("ONCE")) {
+			existingJobs = jobRepository.findChildJobByTitleSiteDateAndLocation(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()), job.getBlock(), job.getFloor(), job.getZone());
+		}else {
+			existingJobs = jobRepository.findParentJobByTitleSiteDateAndLocation(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()), job.getBlock(), job.getFloor(), job.getZone());
+		}
 		log.debug("Existing job -"+ existingJobs);
 		Job newScheduledJob = null;
 		if(CollectionUtils.isEmpty(existingJobs)) {
