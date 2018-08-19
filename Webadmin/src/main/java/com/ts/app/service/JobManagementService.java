@@ -779,6 +779,32 @@ public class JobManagementService extends AbstractService {
 			job.setStatus(JobStatus.ASSIGNED);
 		}
 
+		if(job.getSchedule().equalsIgnoreCase("ONCE")) {
+			Calendar startTime = Calendar.getInstance();
+			startTime.setTime(job.getPlannedStartTime());
+			Calendar today = Calendar.getInstance();
+			today.set(Calendar.HOUR_OF_DAY, 0);
+			today.set(Calendar.MINUTE,0);
+			today.set(Calendar.SECOND,0);
+			if(startTime.before(today)) { // for one time jobs if the planned start time is before today job should not be created
+				jobDTO.setErrorMessage("Job start time cannot be earlier than current day");
+				return jobDTO;
+			}
+			
+		}else {
+			Calendar startTime = Calendar.getInstance();
+			startTime.setTime(job.getPlannedStartTime());
+			Calendar today = Calendar.getInstance();
+			today.set(Calendar.HOUR_OF_DAY, 0);
+			today.set(Calendar.MINUTE,0);
+			today.set(Calendar.SECOND,0);
+			if(startTime.before(today)) { // if the planned start time is before today then the start time to be set to today.
+				startTime.set(Calendar.YEAR, today.get(Calendar.YEAR));
+				startTime.set(Calendar.MONTH, today.get(Calendar.MONTH));
+				startTime.set(Calendar.DAY_OF_MONTH, today.get(Calendar.DAY_OF_MONTH));
+				job.setPlannedStartTime(startTime.getTime());
+			}
+		}
 		/*
 		Calendar calStart = Calendar.getInstance();
 		calStart.set(Calendar.HOUR_OF_DAY, 0);
