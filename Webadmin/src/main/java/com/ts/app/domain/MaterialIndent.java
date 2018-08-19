@@ -1,5 +1,6 @@
 package com.ts.app.domain;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Set;
 
@@ -16,7 +17,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "material_indent")
-public class MaterialIndent {
+public class MaterialIndent extends AbstractAuditingEntity implements Serializable {
 
 	/**
 	 *
