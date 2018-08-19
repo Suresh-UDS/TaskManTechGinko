@@ -525,8 +525,8 @@ angular.module('timeSheetApp')
         		$scope.selectedSite = {id : data.siteId,name : data.siteName};
                 $scope.job.plannedStartTime = data.plannedStartTime;
                 $scope.selectPlannedStartTime = $filter('date')(data.plannedStartTime, 'dd/MM/yyyy hh:mm a');
-                $scope.job.scheduleEndDate = data.plannedEndTime;
-                $scope.selectScheduleEndDate = $filter('date')(data.plannedEndTime, 'dd/MM/yyyy hh:mm a');
+                $scope.job.scheduleEndDate = data.scheduleEndDate;
+                $scope.selectScheduleEndDate = $filter('date')(data.scheduleEndDate, 'dd/MM/yyyy hh:mm a');
         		$scope.loadEmployees().then(function(employees){
         			console.log('load employees ');
             		$scope.selectedEmployee = {id : data.employeeId,name : data.employeeName};
