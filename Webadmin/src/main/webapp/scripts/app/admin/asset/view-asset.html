@@ -561,7 +561,7 @@
                                                   <tbody>
                                                   <tr ng-repeat="ppmSchedules in ppmScheduleList">
                                                       <td>{{ppmSchedules.title}}</td>
-                                                      <td class="hiddenCheckList" >{{ppmSchedules.checklistName}}
+                                                      <td class="hiddenCheckList" >{{ppmSchedules.checklistName}}  <i class="material-icons">info</i>
 
                                                          <div class="CheckListBx" ng-if="ppmSchedules.checkListItems">
                                                              <div class="bootstrap-tagsinput" ng-repeat="checkListItem in ppmSchedules.checkListItems">
@@ -661,7 +661,7 @@
                                                             <tr ng-repeat="amcSchedule in amcScheduleList">
                                                                 <td>{{amcSchedule.title}}</td>
                                                                 <td>{{amcSchedule.maintenanceType}}</td>
-                                                                <td class="hiddenCheckList">{{amcSchedule.checklistName}}
+                                                                <td class="hiddenCheckList">{{amcSchedule.checklistName}}  <i class="material-icons">info</i>
 
                                                                    <div class="CheckListBx" ng-if="amcSchedule.checkListItems">
                                                                        <div class="bootstrap-tagsinput" ng-repeat="checkListItemAmc in amcSchedule.checkListItems">
