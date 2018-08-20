@@ -54,11 +54,10 @@
       </div>
 
       <div *ngIf="!attendances">
-          <ion-item>
-              <ion-row>
-                  No data found
-              </ion-row>
-          </ion-item>
+          <ion-card-content>
+              <img src="assets/imgs/warning.svg">
+              <span><p text-center>No Data Found</p></span>
+          </ion-card-content>
       </div>
 
   </ion-list>
