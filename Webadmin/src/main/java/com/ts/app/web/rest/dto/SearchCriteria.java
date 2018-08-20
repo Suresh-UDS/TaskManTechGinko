@@ -193,6 +193,12 @@ public class SearchCriteria extends Paginator {
 	private MaterialTransactionType transactionType;
 	
 	private int roleLevel;
+	
+	private long materialId;
+	
+	private Timestamp transactionFromDate;
+	
+	private Timestamp transactionToDate;
 
 	public String getWarrantyTypeName() {
 		return warrantyTypeName;
@@ -1001,6 +1007,30 @@ public class SearchCriteria extends Paginator {
 
 	public void setRoleLevel(int roleLevel) {
 		this.roleLevel = roleLevel;
+	}
+
+	public long getMaterialId() {
+		return materialId;
+	}
+
+	public void setMaterialId(long materialId) {
+		this.materialId = materialId;
+	}
+
+	public Timestamp getTransactionFromDate() {
+		return transactionFromDate;
+	}
+
+	public void setTransactionFromDate(Timestamp transactionFromDate) {
+		this.transactionFromDate = transactionFromDate;
+	}
+
+	public Timestamp getTransactionToDate() {
+		return transactionToDate;
+	}
+
+	public void setTransactionToDate(Timestamp transactionToDate) {
+		this.transactionToDate = transactionToDate;
 	}
 
 	
