@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 
@@ -192,11 +194,13 @@ public class SiteService extends AbstractService {
 		List<Site> entities = new ArrayList<Site>();
 		if(empId > 0 && !user.isAdmin()) {
 			Employee employee = user.getEmployee();
-			List<Long> subEmpIds = new ArrayList<Long>();
+			Set<Long> subEmpIds = new TreeSet<Long>();
 			subEmpIds.add(empId);
 			if(employee != null) {
 				Hibernate.initialize(employee.getSubOrdinates());
 				subEmpIds.addAll(findAllSubordinates(employee, subEmpIds));
+				List<Long> subEmpList = new ArrayList<Long>();
+				subEmpList.addAll(subEmpIds);
 				log.debug("List of subordinate ids -"+ subEmpIds);
 			}
 			entities = siteRepository.findAll(subEmpIds);
@@ -224,14 +228,16 @@ public class SiteService extends AbstractService {
 		List<Site> entities =  new ArrayList<Site>();
 		if(empId > 0 && !user.isAdmin()) {
 			Employee employee = user.getEmployee();
-			List<Long> subEmpIds = new ArrayList<Long>();
+			Set<Long> subEmpIds = new TreeSet<Long>();
 			subEmpIds.add(empId);
+			List<Long> subEmpList = new ArrayList<Long>();
 			if(employee != null) {
 				Hibernate.initialize(employee.getSubOrdinates());
 				subEmpIds.addAll(findAllSubordinates(employee, subEmpIds));
-				log.debug("List of subordinate ids -"+ subEmpIds);
+				subEmpList.addAll(subEmpIds);
+				log.debug("List of subordinate ids -"+ subEmpList);
 			}
-			entities = siteRepository.findSites(projectId, subEmpIds);
+			entities = siteRepository.findSites(projectId, subEmpList);
 		}else {
 			entities = siteRepository.findSites(projectId);
 		}
@@ -379,15 +385,16 @@ public class SiteService extends AbstractService {
 	}
 
 	private List<Long> findSubOrdinates(Employee employee, long empId) {
-		List<Long> subEmpIds = new ArrayList<Long>();
+		Set<Long> subEmpIds = new TreeSet<Long>();
 		subEmpIds.add(empId);
+		List<Long> subEmpList = new ArrayList<Long>();
 		if(employee != null) {
 			Hibernate.initialize(employee.getSubOrdinates());
 			subEmpIds.addAll(findAllSubordinates(employee, subEmpIds));
+			subEmpList.addAll(subEmpIds);
 			log.debug("List of subordinate ids -"+ subEmpIds);
-
 		}
-		return subEmpIds;
+		return subEmpList;
 	}
 
 //    public List<Long> findAllSubordinates(Employee employee, List<Long> subEmpIds) {

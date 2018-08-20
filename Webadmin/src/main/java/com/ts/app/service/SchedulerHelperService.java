@@ -584,7 +584,7 @@ public class SchedulerHelperService extends AbstractService {
 					// send reports in email.
 					if (attendanceReportEmails != null && projEmployees > 0 && ((shiftAlert && siteShiftConsolidatedData.size() > 0) || dayReport)) {
 						ExportResult exportResult = null;
-						String alertTime = attnDayWiseAlertTime.getSettingValue();
+						String alertTime = attnDayWiseAlertTime !=null ? attnDayWiseAlertTime.getSettingValue() : null;
 						Calendar now = Calendar.getInstance();
 						now.set(Calendar.SECOND,  0);
 						now.set(Calendar.MILLISECOND, 0);
