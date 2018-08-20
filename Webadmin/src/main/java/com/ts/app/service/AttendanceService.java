@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 
@@ -620,12 +622,14 @@ public class AttendanceService extends AbstractService {
 			}
 			if (!searchCriteria.isFindAll()) {
 				Employee employee = employeeRepository.findByUserId(searchCriteria.getUserId());
-				List<Long> subEmpIds = new ArrayList<Long>();
+				Set<Long> subEmpIds = new TreeSet<Long>();
 				if (employee != null) {
 					Hibernate.initialize(employee.getSubOrdinates());
 					findAllSubordinates(employee, subEmpIds);
 					log.debug("List of subordinate ids -" + subEmpIds);
-					searchCriteria.setSubordinateIds(subEmpIds);
+					List<Long> subEmpList = new ArrayList<Long>();
+					subEmpList.addAll(subEmpIds);
+					searchCriteria.setSubordinateIds(subEmpList);
 				}
 
 

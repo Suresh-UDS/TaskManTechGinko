@@ -165,25 +165,25 @@
                                                    <label class="control-label">Phone</label>
                                                    <input id='phone' ng-model="project.phone"
                                                           class='form-control' name='phone' type='phone' value=""
-                                                          ng-minlength='10' ng-maxlength='10' ng-pattern="/^[0-9]*$/" autofocus />
+                                                          ng-minlength='10' ng-maxlength='13' ng-pattern="/^[0-9]*$/" autofocus />
                                                    <div ng-show="form.$submitted || form.phone.$touched">
                                                        <div ng-show="form.phone.$dirty || form.phone.$invalid">
                                                            <p class="help-block" style="color:maroon"
-                                                              ng-show="form.phone.$error.required">
-                                                               Contact phone is required.
-                                                           </p>
-                                                           <p class="help-block" style="color:maroon"
-                                                              ng-show="form.phone.$error.minlength">
-                                                               Contact phone is required to be at least 2 character.
-                                                           </p>
-                                                           <p class="help-block" style="color:maroon"
-                                                              ng-show="form.phone.$error.maxlength">
-                                                               Contact phone cannot be longer than 50 characters.
-                                                           </p>
-                                                           <p class="help-block" style="color:maroon"
-                                                              ng-show="form.phone.$error.pattern">
-                                                               Contact phone can only contain letters, digits and space.
-                                                           </p>
+                                                               ng-show="form.phone.$error.required">
+                                                                Contact phone no. is required.
+                                                            </p>
+                                                            <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
+                                                               ng-show="form.phone.$error.minlength">
+                                                                Contact phone no. is required to be at least 10 numbers.
+                                                            </p>
+                                                            <p class="help-block" style="width:100%;z-index:990;background:#fff;color:maroon"
+                                                               ng-show="form.phone.$error.maxlength">
+                                                                Contact phone no. cannot be longer than 13 numbers.
+                                                            </p>
+                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                               ng-show="form.phone.$error.pattern">
+                                                                Contact phone no. can only contain + , - ,numbers and space.
+                                                            </p>
                                                        </div>
                                                    </div>
                                                </div>
@@ -195,7 +195,7 @@
                                                <div class="form-group ">
                                                    <label class="control-label">Email</label>
                                                    <input id='email' ng-model="project.email"
-                                                          class='form-control' name='email' type='email' value=""
+                                                          class='form-control' name='email' type='email' value=""  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
                                                           ng-maxlength='50' autofocus />
                                                    <div ng-show="form.$submitted || form.email.$touched">
                                                        <div ng-show="form.email.$dirty || form.email.$invalid">
@@ -204,16 +204,8 @@
                                                                Contact email is required.
                                                            </p>
                                                            <p class="help-block" style="color:maroon"
-                                                              ng-show="form.email.$error.minlength">
-                                                               Contact email is required to be at least 2 character.
-                                                           </p>
-                                                           <p class="help-block" style="color:maroon"
-                                                              ng-show="form.email.$error.maxlength">
-                                                               Contact email cannot be longer than 50 characters.
-                                                           </p>
-                                                           <p class="help-block" style="color:maroon"
-                                                              ng-show="form.email.$error.pattern">
-                                                               Contact email can only contain letters, digits and space.
+                                                               ng-show="form.email.$error.pattern">
+                                                                Contact email is invalid.
                                                            </p>
                                                        </div>
                                                    </div>

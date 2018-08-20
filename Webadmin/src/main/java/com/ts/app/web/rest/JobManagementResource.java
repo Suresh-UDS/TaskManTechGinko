@@ -111,7 +111,7 @@ public class JobManagementResource {
 		log.debug("Job request parameter - "+ request.getParameter("sendNotification"));
 		log.debug("Job save response - "+ response);
 
-		if(response != null) {
+		if(response != null && response.getId() > 0) {
 			String sendNotification = request.getParameter("sendNotification");
 			if(StringUtils.isNotBlank(sendNotification)) {
 				boolean isNotification = Boolean.parseBoolean(sendNotification);
@@ -135,7 +135,11 @@ public class JobManagementResource {
 				}
 			}
 		}
-		return new ResponseEntity<>(response,HttpStatus.CREATED);
+		if(response != null && response.getId() > 0) {
+			return new ResponseEntity<>(response,HttpStatus.CREATED);
+		}else {
+			return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@RequestMapping(path="/job/{id}",method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)

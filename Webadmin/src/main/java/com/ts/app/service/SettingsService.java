@@ -166,8 +166,8 @@ public class SettingsService extends AbstractService {
 		attendanceGraceTimeSetting.setActive("Y");
 
 		Setting dayWiseAttendanceAlertTimeSetting = null;
-		if(settingsDto.getDayWiseAttendanceEmailAlertId() > 0) {
-			dayWiseAttendanceAlertTimeSetting = settingsRepository.findOne(settingsDto.getDayWiseAttendanceEmailAlertId());
+		if(settingsDto.getDayWiseAttendanceAlertTimeId() > 0) {
+			dayWiseAttendanceAlertTimeSetting = settingsRepository.findOne(settingsDto.getDayWiseAttendanceAlertTimeId());
 		}else {
 			dayWiseAttendanceAlertTimeSetting = new Setting();
 		}

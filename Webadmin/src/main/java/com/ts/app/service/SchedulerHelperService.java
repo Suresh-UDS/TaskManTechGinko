@@ -24,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,15 +72,14 @@ import com.ts.app.web.rest.dto.SearchCriteria;
  * Service class for managing Device information.
  */
 @Service
-@EnableAsync
 @Transactional
 public class SchedulerHelperService extends AbstractService {
 
 	final Logger log = LoggerFactory.getLogger(SchedulerHelperService.class);
 
-	private static final String DAILY = "Daily";
-	private static final String WEEKLY = "Weekly";
-	private static final String MONTHLY = "Monthly";
+	private static final String DAILY = "DAY";
+	private static final String WEEKLY = "WEEK";
+	private static final String MONTHLY = "MONTH";
 	
 	private static final String FREQ_ONCE_EVERY_HOUR = "Once in an hour";
 
@@ -270,8 +268,8 @@ public class SchedulerHelperService extends AbstractService {
 							}
 							if (overdueAlertSetting != null && overdueAlertSetting.getSettingValue().equalsIgnoreCase("true")) { // send escalation emails to managers and alert
 																																	// emails
-								mailService.sendOverdueJobAlert(assignee.getUser(), alertEmailIds, job.getSite().getName(), job.getId(), job.getTitle(), exportResult.getFile());
-								job.setOverDueEmailAlert(true);
+								//mailService.sendOverdueJobAlert(assignee.getUser(), alertEmailIds, job.getSite().getName(), job.getId(), job.getTitle(), exportResult.getFile());
+								//job.setOverDueEmailAlert(true);
 							}
 						} catch (Exception e) {
 							log.error("Error while sending push and email notification for overdue job alerts", e);
@@ -586,7 +584,7 @@ public class SchedulerHelperService extends AbstractService {
 					// send reports in email.
 					if (attendanceReportEmails != null && projEmployees > 0 && ((shiftAlert && siteShiftConsolidatedData.size() > 0) || dayReport)) {
 						ExportResult exportResult = null;
-						String alertTime = attnDayWiseAlertTime.getSettingValue();
+						String alertTime = attnDayWiseAlertTime !=null ? attnDayWiseAlertTime.getSettingValue() : null;
 						Calendar now = Calendar.getInstance();
 						now.set(Calendar.SECOND,  0);
 						now.set(Calendar.MILLISECOND, 0);
@@ -1102,7 +1100,7 @@ public class SchedulerHelperService extends AbstractService {
 				boolean shouldProcess = true;
 				if (dailyTask.isScheduleDailyExcludeWeekend()) {
 					Calendar today = Calendar.getInstance();
-
+					today.setTime(jobDate);
 					if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
 						shouldProcess = false;
 					}

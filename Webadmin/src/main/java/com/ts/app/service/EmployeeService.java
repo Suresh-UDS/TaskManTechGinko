@@ -644,9 +644,11 @@ public class    EmployeeService extends AbstractService {
 		if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
 			entities = employeeRepository.findAll();
 		}else {
-			List<Long> subEmpIds = null;
+			Set<Long> subEmpIds = null;
 			subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
-			entities = employeeRepository.findAllByIds(subEmpIds);
+			List<Long> subEmpList = new ArrayList<Long>();
+			subEmpList.addAll(subEmpIds);
+			entities = employeeRepository.findAllByIds(subEmpList);
 		}
 		//return mapperUtil.toModelList(entities, EmployeeDTO.class);
 		List<EmployeeDTO> empList = new ArrayList<EmployeeDTO>();
@@ -664,9 +666,11 @@ public class    EmployeeService extends AbstractService {
         if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
             entities = employeeRepository.findAllRelievers();
         }else {
-			List<Long> subEmpIds = null;
+			Set<Long> subEmpIds = null;
 			subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
-            entities = employeeRepository.findAllRelieversByIds(subEmpIds);
+			List<Long> subEmpList = new ArrayList<Long>();
+			subEmpList.addAll(subEmpIds);
+            entities = employeeRepository.findAllRelieversByIds(subEmpList);
         }
         return mapperUtil.toModelList(entities, EmployeeDTO.class);
     }
@@ -678,9 +682,11 @@ public class    EmployeeService extends AbstractService {
         if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
             entities = employeeRepository.findBySiteId(siteId);
         }else {
-            List<Long> subEmpIds = null;
+            Set<Long> subEmpIds = null;
             subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
-            entities = employeeRepository.findBySiteIdAndEmpIds(siteId, subEmpIds);
+            List<Long> subEmpList = new ArrayList<Long>();
+    			subEmpList.addAll(subEmpIds);
+            entities = employeeRepository.findBySiteIdAndEmpIds(siteId, subEmpList);
         }
         //return mapperUtil.toModelList(entities, EmployeeDTO.class);
         if(CollectionUtils.isNotEmpty(entities)) {
@@ -713,9 +719,11 @@ public class    EmployeeService extends AbstractService {
         if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
             page = employeeRepository.findBySiteId(siteId,pageRequest);
         }else {
-            List<Long> subEmpIds = null;
+            Set<Long> subEmpIds = null;
             subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
-            page = employeeRepository.findBySiteIdAndEmpIds(siteId, subEmpIds,pageRequest);
+	    		List<Long> subEmpList = new ArrayList<Long>();
+	    		subEmpList.addAll(subEmpIds);
+            page = employeeRepository.findBySiteIdAndEmpIds(siteId, subEmpList,pageRequest);
         }
         //return mapperUtil.toModelList(entities, EmployeeDTO.class);
         if(CollectionUtils.isNotEmpty(page.getContent())) {
@@ -972,13 +980,17 @@ public class    EmployeeService extends AbstractService {
             			page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), isClient, pageRequest);
             		}
             }else if (StringUtils.isNotEmpty(searchCriteria.getSiteName())) {
-	        		List<Long> subEmpIds = null;
+	        		Set<Long> subEmpIds = null;
 	        		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
-	        		page = employeeRepository.findBySiteName(searchCriteria.getSiteName(), subEmpIds, isClient, pageRequest);
+	        		List<Long> subEmpList = new ArrayList<Long>();
+	        		subEmpList.addAll(subEmpIds);
+	        		page = employeeRepository.findBySiteName(searchCriteria.getSiteName(), subEmpList, isClient, pageRequest);
             }else if (StringUtils.isNotEmpty(searchCriteria.getProjectName())) {
-	        		List<Long> subEmpIds = null;
+	        		Set<Long> subEmpIds = null;
 	        		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
-	        		page = employeeRepository.findByProjectName(searchCriteria.getProjectName(), subEmpIds, isClient, pageRequest);
+	        		List<Long> subEmpList = new ArrayList<Long>();
+	        		subEmpList.addAll(subEmpIds);
+	        		page = employeeRepository.findByProjectName(searchCriteria.getProjectName(), subEmpList, isClient, pageRequest);
 	        }else {
 	            	if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
 	            		page = employeeRepository.findAll(pageRequest);
@@ -991,10 +1003,12 @@ public class    EmployeeService extends AbstractService {
 	            			}
 	            			page = employeeRepository.findBySiteIds(siteIds, isClient, pageRequest);
 	            		}else {
-		            		List<Long> subEmpIds = null;
+		            		Set<Long> subEmpIds = null;
 		            		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+			        		List<Long> subEmpList = new ArrayList<Long>();
+			        		subEmpList.addAll(subEmpIds);
 						if(CollectionUtils.isNotEmpty(subEmpIds)) {
-		            			page = employeeRepository.findAllByEmpIds(subEmpIds, isClient, pageRequest);
+		            			page = employeeRepository.findAllByEmpIds(subEmpList, isClient, pageRequest);
 						}
 	            		}
 	            	}
