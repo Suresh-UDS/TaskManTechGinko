@@ -175,6 +175,18 @@ angular.module('timeSheetApp')
         	$location.path('/inventory-transaction-list');
         }
         
+        
+        $('#dateFilterTransactionDate').datetimepicker().on('dp.show', function (e) {
+            return $(this).data('DateTimePicker').minDate(e.date);
+        });
+
+        $('input#dateFilterTransactionDate').on('dp.change', function(e){
+        	alert(JSON.stringify(e));
+            $scope.inventory.transactionDate = e.date._d;
+            $scope.ppmFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
+        });
+
+        
         /* Save material Transaction */
     	$scope.saveInventoryTrans = function() {
     		if($scope.client){
