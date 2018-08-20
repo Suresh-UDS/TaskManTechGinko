@@ -1,6 +1,6 @@
 page-site {
   .fakeItem {
-    h2, h3, p,ion-icon {
+    h2, h3, p, ion-icon {
       background-color: lightgrey;
       opacity: 0.5;
       height: 1em;
@@ -25,4 +25,19 @@ page-site {
     }
 
   }
+
+  ion-card img {
+    width: 100% !important;
+    height:100px !important;
+  }
+  ion-card-content {
+    padding: 0px 32px !important;
+    position: relative !important;
+    vertical-align: center !important;
+  }
+  .card-md
+  {
+    width:100% !important;
+  }
+
 }
