@@ -1,4 +1,4 @@
-<div ng-init="initLoad()">
+<div ng-init="initTransactionList()">
 
     <div class="row" >
         <div class="col-md-8 txt-align-lft">
@@ -41,104 +41,35 @@
                                 <th>Item Code</th>
                                 <th>Stock received / Issued</th>
                                 <th>Store Stock</th>
-                                <th>Unit</th>
+                                <th>Quantity</th>
                                 <th>Transaction Date</th>
                                 <th class="text-right">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
 
-                                 <tr>
-                                <td>Amazon</td>
-                                <td>HDFC</td>
-                                <td>Name 1</td>
-                                <td>500033</td>
-                                <td>Issued</td>
-                                <td>50</td>
-                                <td>50</td>
-                                <td>12/03/2018</td>
+                            <tr ng-repeat="inventoryTransactionList in inventoryTransactionlists">
+                                <td>{{inventoryTransactionList.projectName}}</td>
+                                <td>{{inventoryTransactionList.siteName}}</td>
+                                <td>{{inventoryTransactionList.materialName}}</td>
+                                <td>{{inventoryTransactionList.materialItemCode}}</td>
+                                <td>{{inventoryTransactionList.transactionType}}</td>
+                                <td>{{inventoryTransactionList.storeStock}}</td>
+                                <td>{{inventoryTransactionList.quantity}}</td>
+                                <td>{{inventoryTransactionList.transactionDate | date: "dd-MM-yyyy"}}</td>
                                 <td class="text-right hoverMe" width="13%">
 
                                     <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
 
                                     <div class="HoverBx">
-                                        <button  title="View"  ui-sref="view-inventory-transaction" class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                        <a ui-sref="edit-inventory-transaction"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                        <button  title="View"  ui-sref="view-inventory-transaction({ id: inventoryTransactionList.id })" class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
+                                        <a ui-sref="edit-inventory-transaction({id: inventoryTransactionList.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                                        <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                        <a ng-class="{active: $state.includes('admin')}" onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                                     </div>
 
                                 </td>
                             </tr>
-                                 <tr>
-                                     <td>Amazon</td>
-                                     <td>HDFC</td>
-                                     <td>Name 1</td>
-                                     <td>500033</td>
-                                     <td>Issued</td>
-                                     <td>50</td>
-                                     <td>50</td>
-                                     <td>12/03/2018</td>
-                                     <td class="text-right hoverMe" width="13%">
-
-                                         <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
-
-                                         <div class="HoverBx">
-                                             <button  title="View"  ui-sref="view-inventory-transaction" class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                             <a ui-sref="edit-inventory-transaction"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
-                                             <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                         </div>
-
-                                     </td>
-                                 </tr>
-                                 <tr>
-                                     <td>Amazon</td>
-                                     <td>HDFC</td>
-                                     <td>Name 1</td>
-                                     <td>500033</td>
-                                     <td>Issued</td>
-                                     <td>50</td>
-                                     <td>50</td>
-                                     <td>12/03/2018</td>
-                                     <td class="text-right hoverMe" width="13%">
-
-                                         <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
-
-                                         <div class="HoverBx">
-                                             <button  title="View"  ui-sref="view-inventory-transaction" class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                             <a ui-sref="edit-inventory-transaction"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
-                                             <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                         </div>
-
-                                     </td>
-                                 </tr>
-                                 <tr>
-                                     <td>Amazon</td>
-                                     <td>HDFC</td>
-                                     <td>Name 1</td>
-                                     <td>500033</td>
-                                     <td>Issued</td>
-                                     <td>50</td>
-                                     <td>50</td>
-                                     <td>12/03/2018</td>
-                                     <td class="text-right hoverMe" width="13%">
-
-                                         <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
-
-                                         <div class="HoverBx">
-                                             <button  title="View"  ui-sref="view-inventory-transaction" class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                             <a ui-sref="edit-inventory-transaction"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
-                                             <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                         </div>
-
-                                     </td>
-                                 </tr>
-
-
-
 
                             </tbody>
                         </table>
@@ -151,7 +82,7 @@
     </div>
     <!-- end row -->
 
-    <div class="card margin-TB-5 txt-align-center" ng-hide="sites">
+    <!-- <div class="card margin-TB-5 txt-align-center" ng-hide="sites">
 
         <div class="card-content">
             <div class="" style="text-align:center;padding: 10px 0;">
@@ -162,37 +93,13 @@
 
         </div>
 
-    </div>
+    </div> -->
+    
+    <!-- Pagination directive start -->
 
+    <pagination-new></pagination-new>
 
-    <div class="row">
-
-        <div class="col-md-4"></div>
-         <div class="col-md-8 text-right">
-        <ul class="pagination pagination-warning">
-
-            <li class="paging-first" ID="first">
-                <a href="#" id="first" ng-click="first()">
-                    <i id="first" class=" fa fa-step-backward"></i></a>
-            </li>
-            <li class="prev paging-previous" id="previous">
-                <a id="previous" href="#" ng-click="previous()"> prev</a>
-            </li>
-
-            <li ng-class="{active: number == pages.currPage}" class="paging" ng-repeat="number in numberArrays" ng-click="clickNextOrPrev(number)">
-                <a href="#" style="cursor:pointer">{{number}}</a>
-            </li>
-            <li class="next paging-next" id="next">
-                <a id="next" href="#" ng-click="next()" >next</a>
-            </li>
-            <li class="paging-last" id="last">
-                <a id="last" href="#" ng-click="last()"><i id="last" class="fa fa-step-forward"></i></a>
-            </li>
-
-        </ul>
-    </div>
-
-    </div>
+    <!-- Pagination directive end -->
 
 
 

@@ -15,7 +15,7 @@
 
            <div class="cardsCon addSiteCon">
                <form ng-show="!success" name="form" role="form" novalidate
-                     ng-submit="saveInventory()">
+                     ng-submit="saveInventoryTrans()">
 
                    <div class="row">
                        <div class="col-md-6">
@@ -71,52 +71,57 @@
                                    <div class="row">
                                        <div class="col-md-6">
 
+                                           <div class="form-group no-padding" ng-init="loadMaterialItmGroup()">
+                                               <div class="dropdown">
+                                                   <div class="form-group">
+                                                       <label class="control-label">Select Item Group <span class="red-star">*</span></label>
+                                                       <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                       <select class="form-control" ng-model="selectedItemGroup" ng-change="loadItems()" ng-options="materialItmGroup as materialItmGroup.itemGroup for materialItmGroup in materialItmGroups">
+                                                           <option value="">Select Item Group...</option>
+                                                       </select>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+
+                                       <div class="col-md-6">
                                            <div class="form-group no-padding" >
                                                <div class="dropdown">
                                                    <div class="form-group">
-                                                       <label class="control-label">Select Item Name <span class="red-star">*</span></label>
+                                                       <label class="control-label">Select Item Name  <span class="red-star">*</span></label>
                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                       <select class="form-control">
+                                                       <select class="form-control" ng-model="selectedMaterialItem" ng-change="loadStocks()" ng-options="materialItem as materialItem.name for materialItem in materialItems">
                                                            <option value="">Select Item Name...</option>
                                                        </select>
                                                    </div>
                                                </div>
                                            </div>
                                        </div>
-
                                        <div class="col-md-6">
-                                           <div class="form-group no-padding" >
-                                               <div class="dropdown">
-                                                   <div class="form-group">
-                                                       <label class="control-label">Select Item code <span class="red-star">*</span></label>
-                                                       <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                       <select class="form-control">
-                                                           <option value="">Select Item code...</option>
-                                                       </select>
-                                                   </div>
-                                               </div>
+                                           <div class="form-group ">
+                                               <label class="control-label">Store stock</label>
+                                               <input type="number" class="form-control"   name='stockrec' ng-disabled="true"
+                                                      ng-model="inventory.storeStock"  required autocomplete="off"/>
                                            </div>
                                        </div>
                                        <div class="col-md-6">
                                            <div class="form-group ">
-                                               <label class="control-label">Stock Received </label>
-                                               <input type="number" class="form-control"   name='stockrec'
-                                                      ng-model="inventory.stockrec"  required autocomplete="off"/>
-                                           </div>
-                                       </div>
-                                       <div class="col-md-6">
-                                           <div class="form-group ">
-                                               <label class="control-label">Stock consumed </label>
+                                               <label class="control-label">Quantity</label>
                                                <input type="number" class="form-control"   name='stockconsu'
-                                                      ng-model="inventory.stockconsu"  required autocomplete="off"/>
+                                                      ng-model="inventory.quantity"  required autocomplete="off"/>
                                            </div>
                                        </div>
                                        <div class="col-md-12">
-                                           <div class="form-group">
-                                               <label class="control-label">Date</label>
-                                               <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                               <input type="text" class="form-control datetimepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
-
+                                           <div class="form-group no-padding" >
+                                               <div class="dropdown">
+                                                   <div class="form-group" ng-init="loadTransactionType()">
+                                                       <label class="control-label">Transaction Type <span class="red-star">*</span></label>
+                                                       <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                       <select class="form-control" ng-model="selectedTransactionType" ng-options="transactionType for transactionType in transactionTypes">
+                                                           <option value="">Select Transaction type...</option>
+                                                       </select>
+                                                   </div>
+                                               </div>
                                            </div>
                                        </div>
 
@@ -137,7 +142,7 @@
 
                        <div class="col-md-12">
 
-                           <button type="submit" ng-click="cancelInventory()"
+                           <button type="submit" ng-click="cancelInventoryTrans()"
                                    id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
                            <button type="submit" type="submit"

@@ -33,7 +33,7 @@ angular.module('timeSheetApp')
 
                 var cb = callback || angular.noop;
 
-                return  $http.delete('api//delete/inventory/'+id).then(
+                return  $http.delete('api/delete/inventory/'+id).then(
                     function (response) {
                         return cb(response);
                     }).catch(

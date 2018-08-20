@@ -6,8 +6,8 @@
         <!--<h3 class="title">Edit Site</h3>-->
     </div>
 
-    <div ng-init="loadInventory();loadingStart();">
-            <div class="cardsCon editSiteCon" ng-init="loadSite()">
+    <div ng-init="editInventoryTrans();">
+            <div class="cardsCon editSiteCon">
                 <form ng-show="!success" name="form" role="form" novalidate
                       ng-submit="updateInventory()"  >
 
@@ -19,26 +19,26 @@
 
                                     <div class="row">
 
-                                        <div class="col-md-12">
+                                        <div class="col-md-12" ng-init="loadProjects()">
                                             <div class="form-group no-padding" >
                                                 <div class="dropdown">
                                                     <div class="form-group">
                                                         <label class="control-label">Select Client <span class="red-star">*</span></label>
                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control" ng-model="client" ng-change="loadAllSites()" ng-options="project as project.name for project in projects" required>
+                                                        <select class="form-control" ng-model="client" ng-change="loadAllSites()" ng-options="project as project.name for project in projects track by project.id" required>
                                                             <option value="">Select Client...</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-12">
+                                        <div class="col-md-12" ng-init="loadSites()">
                                             <div class="form-group no-padding" >
                                                 <div class="dropdown">
                                                     <div class="form-group">
                                                         <label class="control-label">Select Site <span class="red-star">*</span></label>
                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control" ng-model="projectSite"  ng-options="site as site.name for site in sites">
+                                                        <select class="form-control" ng-model="selectedSite" ng-options="site as site.name for site in sites track by site.id">
                                                             <option value="">Select Site...</option>
                                                         </select>
                                                     </div>
@@ -117,11 +117,11 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            <button type="submit" ng-click="cancelInventory()"
+                            <button type="submit" ng-click="cancelInventoryTrans()"
                                     id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
                             <button type="submit" type="submit"
-                                    id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
+                                    id="form-button-save" class="btn btn-success pull-right"><span class="btn-label">
                                         <i class="material-icons">check</i>
                                     </span>Update</button>
 
