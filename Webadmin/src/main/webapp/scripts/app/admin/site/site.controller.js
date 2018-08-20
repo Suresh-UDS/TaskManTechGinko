@@ -426,7 +426,7 @@ angular.module('timeSheetApp')
 
 
         $scope.updateSite = function (validation) {
-
+            $scope.saveLoad = true; 
             console.log("=======Update=========")
             if(validation){
                 return false;
@@ -464,7 +464,8 @@ angular.module('timeSheetApp')
 	                    $scope.error = 'ERROR';
                         $scope.showNotifications('top','center','danger','Unable to update site,please try again later.');
 	                }
-	            });;
+                    $scope.saveLoad = false;
+	            });
         	}
         };
 
