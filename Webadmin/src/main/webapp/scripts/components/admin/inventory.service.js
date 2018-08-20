@@ -18,7 +18,7 @@ angular.module('timeSheetApp')
             },
             update : function(inventory,callback){
                 var cb = callback || angular.noop;
-                return $http.put('api//update/inventory',inventory).then(
+                return $http.put('api/update/inventory',inventory).then(
                     function (response) {
                         return cb(response);
                     }).catch(
