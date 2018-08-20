@@ -38,7 +38,7 @@ angular.module('timeSheetApp')
 
         };
 
-        $('input#dayWiseAttendanceAlterTime').on('dp.change', function(e){
+        $('input#dayWiseAttendanceAlertTime').on('dp.change', function(e){
             console.log(e.date);
             console.log(e.date._d);
             
@@ -46,7 +46,7 @@ angular.module('timeSheetApp')
              
             //$scope.selectedDayWiseAttnEmailTime= $filter('date')(e.date._d, 'yyyy-MM-dd HH:mm:ss');
             $scope.selectedDayWiseAttnEmailTime = e.date._d;
-            $scope.settings.dayWiseAttendanceAlterTime = $scope.selectedDayWiseAttnEmailTime;
+            $scope.settings.dayWiseAttendanceAlertTime = $scope.selectedDayWiseAttnEmailTime;
 
         });
         
