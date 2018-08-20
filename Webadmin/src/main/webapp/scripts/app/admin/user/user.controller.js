@@ -80,8 +80,37 @@ angular.module('timeSheetApp')
         $scope.loadUserRoles = function () {
         	UserRoleComponent.findAll().then(function (data) {
                 $scope.userRoles = data;
+
+
+                //
+                for(var i=0;i<$scope.userRoles.length;i++)
+                {
+                    $scope.uiRole[i] = $scope.userRoles[i].name;
+                }
+                $scope.roleDisable = false;
+                //
+
             });
         };
+
+        // Load User Role for selectbox //
+        $scope.roleDisable = true;
+        $scope.uiRole = [];
+        $scope.getRole = function (search) {
+            var newSupes = $scope.uiRole.slice();
+            if (search && newSupes.indexOf(search) === -1) {
+                newSupes.unshift(search);
+            }
+
+            return newSupes;
+        }
+
+        $scope.loadSearchRole = function(role)
+        {
+            $scope.selectedRole = $scope.userRoles[$scope.uiRole.indexOf(role)]
+            console.log('Project dropdown list:',$scope.searchProject)
+        }
+        //
 
 
         $scope.loadEmployee = function () {
@@ -227,7 +256,7 @@ angular.module('timeSheetApp')
 
 
 
-
+        $scope.filter = false;
         $scope.search = function () {
                 $scope.noData = false;
 	        	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
@@ -269,6 +298,7 @@ angular.module('timeSheetApp')
 
 	        	if($scope.selectedRole) {
 	        		$scope.searchCriteria.userRoleId = $scope.selectedRole.id;
+                    $scope.searchCriteria.userRoleName = $scope.selectedRole.name;
 	        	}
 
 
@@ -372,6 +402,7 @@ angular.module('timeSheetApp')
             $scope.userEmail = null;
             $scope.selectedRole = null;
             $scope.searchCriteria = {};
+            $scope.localStorage = null;
             $rootScope.searchCriteriaUser = null;
             $scope.pages = {
                 currPage: 1,

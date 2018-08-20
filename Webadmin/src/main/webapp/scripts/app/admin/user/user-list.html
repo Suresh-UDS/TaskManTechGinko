@@ -12,19 +12,44 @@
         </div>
         <div class="col-md-6 txt-align-rgt">
 
+            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i> Clear Filter
+                <div class="ripple-container"></div>
+            </button>
+
             <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-user" has-permission="User:Create"  ng-class="{active: $state.includes('admin')}" tabindex="0">
                 <i class="material-icons">add</i> Add
                 <div class="ripple-container"></div>
             </button>
 
-            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
-                <i class="material-icons">refresh</i> Reload
-                <div class="ripple-container"></div>
-            </button>
+
 
         </div>
     </div>
+    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
+            <span class="AppliedFilterTxtCon">
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.userLogin || localStorage.userLogin">
+                    Client: {{searchCriteria.userLogin || localStorage.userLogin}}
+                </span>
 
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.userFirstName || localStorage.userFirstName">
+                    Site: {{searchCriteria.userFirstName || localStorage.userFirstName}}
+                </span>
+
+                 <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.userLastName || localStorage.userLastName">
+                    Site: {{searchCriteria.userLastName || localStorage.userLastName}}
+                </span>
+
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.userEmail || localStorage.userEmail">
+                    Site: {{searchCriteria.userEmail || localStorage.userEmail}}
+                </span>
+
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.userRoleName || localStorage.userRoleName">
+                    Site: {{searchCriteria.userRoleName || localStorage.userRoleName}}
+                </span>
+
+            </span>
+    </div>
 
 
     <div class="row" ng-init="init()">
@@ -351,11 +376,19 @@
                         <div class="col-xs-12 col-md-4">
                             <div class="dropdown">
                                 <div class="form-group">
-                                    <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="selectedRole"  ng-options="role as role.name for role in userRoles">
-                                        <option value="">Select Role...</option>
-                                    </select>
+                                    <!--<span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                    <!--<select class="form-control " ng-model="selectedRole"  ng-options="role as role.name for role in userRoles">-->
+                                        <!--<option value="">Select Role...</option>-->
+                                    <!--</select>-->
 
+                                    <span ng-show="roleDisable"  class="form-control-feedback orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                    <span ng-show="!roleDisable" class="form-control-feedback "><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <ui-select ng-model="selectedRole" ng-disabled="roleDisable" ng-change="loadSearchRole(selectedRole)">
+                                        <ui-select-match placeholder="Select Role...">{{filter ? selectedRole.name?selectedRole.name:'Select Role' :selectedRole}}</ui-select-match>
+                                        <ui-select-choices  repeat="client in getRole($select.search) | filter: $select.search track by $index ">
+                                            <div ng-bind="client"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
                                 </div>
                             </div>
                         </div>
