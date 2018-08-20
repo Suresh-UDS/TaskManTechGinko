@@ -19,9 +19,9 @@ public class MaterialIndentDTO extends BaseDTO{
 	
 	private long siteId;
 
-	private Employee requestedBy;
+	private String requestedByName;
 	
-	private Employee issuedBy;
+	private String issuedByName;
 	
 	private Timestamp requestedDate;
 	
@@ -45,20 +45,20 @@ public class MaterialIndentDTO extends BaseDTO{
 		this.siteId = siteId;
 	}
 
-	public Employee getRequestedBy() {
-		return requestedBy;
+	public String getRequestedByName() {
+		return requestedByName;
 	}
 
-	public void setRequestedBy(Employee requestedBy) {
-		this.requestedBy = requestedBy;
+	public void setRequestedByName(String requestedByName) {
+		this.requestedByName = requestedByName;
 	}
 
-	public Employee getIssuedBy() {
-		return issuedBy;
+	public String getIssuedByName() {
+		return issuedByName;
 	}
 
-	public void setIssuedBy(Employee issuedBy) {
-		this.issuedBy = issuedBy;
+	public void setIssuedByName(String issuedByName) {
+		this.issuedByName = issuedByName;
 	}
 
 	public Timestamp getRequestedDate() {
