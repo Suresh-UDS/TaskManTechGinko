@@ -127,6 +127,7 @@ ul.checkList li
 .hiddenCheckList
 {
     position: relative;
+    line-height: 25px;
 }
 .CheckListBx
 {
@@ -143,6 +144,18 @@ ul.checkList li
 {
     display: block;
 }
+
+.hiddenCheckList .leftTxt
+{
+    float: left;
+}
+.hiddenCheckList .infoIcon
+{
+    float: left;
+    padding-left: 5px;
+    color: #00bcd4;
+}
+
 .orng-1
 {
     background: #ff7b00 !important;

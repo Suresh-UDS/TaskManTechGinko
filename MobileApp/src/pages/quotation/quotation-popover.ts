@@ -18,10 +18,11 @@ export class QuotationPopoverPage {
   addrates:any;
   eMsg:any;
   field:any;
+  number:any;
   constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, public authService:authService,public viewCtrl: ViewController,
               private quotationService:QuotationService
               ) {
-    this.addrates={type:'',name:'',no:1,cost:0,uom:'',total:0}
+    this.addrates={type:'',name:'',number:1,cost:0,uom:'',total:0}
   }
   ionViewWillEnter(){
     this.getRateCardTypes();
@@ -41,9 +42,9 @@ export class QuotationPopoverPage {
   addRates()
   {
 
-    if(this.name && this.cost && this.type)
+    if(this.name && this.cost && this.type && this.number)
     {
-      this.addrates={type:this.type,name:this.name,no:1,cost:this.cost,uom:this.selectedUOM,total:this.cost};
+      this.addrates={type:this.type,name:this.name,no:1,cost:this.cost,uom:this.selectedUOM,total:this.cost,number:this.number};
       console.log(this.addrates);
       // this.navCtrl.push(CreateQuotationPage2,{rates:this.addrates})
       this.viewCtrl.dismiss(this.addrates);
@@ -64,6 +65,11 @@ export class QuotationPopoverPage {
       {
         this.eMsg="cost";
         this.field="cost";
+      }
+      else if(!this.number)
+      {
+        this.eMsg="number";
+        this.field="number";
       }
 
     }

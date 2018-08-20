@@ -47,6 +47,20 @@
                     </div>
                 </div>
             </ion-col>
+
+            <ion-col col-12>
+                <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='number'}">
+                    <label class="control-label">No</label>
+                    <input class="form-control" type="number" [(ngModel)]="number" id="number" name="number" #cst="ngModel" required [ngClass]="{'has-error': cst.errors || eMsg=='all'|| eMsg=='number'}">
+                    <div *ngIf="cst.errors && (cst.dirty || cst.touched)" class="error-msg">
+
+                    </div>
+
+                    <div *ngIf="cst.errors && (cst.untouched )" class="error-msg">
+
+                    </div>
+                </div>
+            </ion-col>
             <ion-col col-5 >
                 <button ion-button color="secondary" class="align-right" (click)="addRates()">Ok</button>
             </ion-col>

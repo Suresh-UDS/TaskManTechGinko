@@ -485,4 +485,6 @@ export class CreateQuotationPage2 {
         this.openSites=true;
         this.selectSiteIndex=i;
     }
+
+
 }

@@ -3,6 +3,7 @@ package com.ts.app.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 
@@ -161,15 +162,19 @@ public class ProjectService extends AbstractService {
 			//long userGroupId = user.getUserGroup().getId();
 			//entities = projectRepository.findAllByUserGroupId(empId);
 			Employee employee = user.getEmployee();
-			List<Long> subEmpIds = new ArrayList<Long>();
+			Set<Long> subEmpIds = new TreeSet<Long>();
 			subEmpIds.add(empId);
+			List<Long> subEmpList = new ArrayList<Long>();
 			if(employee != null) {
 				Hibernate.initialize(employee.getSubOrdinates());
 				subEmpIds.addAll(siteService.findAllSubordinates(employee, subEmpIds));
-				log.debug("List of subordinate ids -"+ subEmpIds);
+	        		
+	        		subEmpList.addAll(subEmpIds);
+
+				log.debug("List of subordinate ids -"+ subEmpList);
 
 			}
-			entities = projectRepository.findAll(subEmpIds);
+			entities = projectRepository.findAll(subEmpList);
 		}else {
 			entities = projectRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
 		}
@@ -272,15 +277,17 @@ public class ProjectService extends AbstractService {
     }
 
     private List<Long> findSubOrdinates(Employee employee, long empId) {
-		List<Long> subEmpIds = new ArrayList<Long>();
+		Set<Long> subEmpIds = new TreeSet<Long>();
 		subEmpIds.add(empId);
+		List<Long> subEmpList = new ArrayList<Long>();
 		if(employee != null) {
 			Hibernate.initialize(employee.getSubOrdinates());
 			subEmpIds.addAll(findAllSubordinates(employee, subEmpIds));
+			subEmpList.addAll(subEmpIds);
 			log.debug("List of subordinate ids -"+ subEmpIds);
 
 		}
-		return subEmpIds;
+		return subEmpList;
 	}
 
 	public ImportResult importFile(MultipartFile file, long dateTime) {
