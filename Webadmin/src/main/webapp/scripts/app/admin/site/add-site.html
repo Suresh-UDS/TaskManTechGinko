@@ -175,12 +175,16 @@
                                            <div class="form-group  ">
                                                <label class="control-label">Site Location (Latitude)<span class="red-star">*</span> </label>
                                                <input type="text" class="form-control"   name='latitude'
-                                                      ng-model="site.addressLat" ng-minlength='1' ng-maxlength='50' required autocomplete="off"/>
+                                                      ng-model="site.addressLat" ng-pattern='/^[-+]?[0-9]{1,7}(\.[0-9]+)?$/' required autocomplete="off"/>
                                                <div ng-show="form.$submitted || form.latitude.$touched">
                                                    <div ng-show="form.latitude.$dirty || form.latitude.$invalid">
                                                        <p class="help-block" style="color:maroon"
                                                           ng-show="form.latitude.$error.required">
                                                            Latitude is required.
+                                                       </p>
+                                                       <p class="help-block" style="color:maroon"
+                                                           ng-show="form.latitude.$error.pattern">
+                                                            Latitude is invalid.
                                                        </p>
                                                    </div>
                                                </div>
@@ -192,14 +196,18 @@
                                        <div class="col-md-6">
                                            <div class="form-group  ">
                                                <label class="control-label">Site Location (Longitude)<span class="red-star">*</span> </label>
-                                               <input type="text" class="form-control"   name='siteLocation'
-                                                      ng-model="site.addressLng" ng-minlength='1' ng-maxlength='50' required autocomplete="off"/>
-                                               <div ng-show="form.$submitted || form.siteLocation.$touched">
-                                                   <div ng-show="form.siteLocation.$dirty || form.siteLocation.$invalid">
+                                               <input type="text" class="form-control"   name='longitude'
+                                                      ng-model="site.addressLng" ng-pattern='/^[-+]?[0-9]{1,7}(\.[0-9]+)?$/' required autocomplete="off"/>
+                                               <div ng-show="form.$submitted || form.longitude.$touched">
+                                                   <div ng-show="form.longitude.$dirty || form.longitude.$invalid">
                                                        <p class="help-block" style="color:maroon"
-                                                          ng-show="form.siteLocation.$error.required">
+                                                          ng-show="form.longitude.$error.required">
                                                            Longitude is required.
                                                        </p>
+                                                       <p class="help-block" style="color:maroon"
+                                                           ng-show="form.longitude.$error.pattern">
+                                                            Longitude is invalid.
+                                                        </p>
 
                                                    </div>
                                                </div>
@@ -212,13 +220,17 @@
                                            <div class="form-group ">
                                                <label class="control-label">Geo Fence Radius (in Kms.)<span class="red-star">*</span> </label>
                                                <input type="text" class="form-control"   name='radius'
-                                                      ng-model="site.radius"  required autocomplete="off"/>
+                                                      ng-model="site.radius" ng-pattern='/^[-+]?[0-9]{1,7}(\.[0-9]+)?$/'  required autocomplete="off"/>
                                                <div ng-show="form.$submitted || form.radius.$touched">
                                                    <div ng-show="form.radius.$dirty || form.radius.$invalid">
                                                        <p class="help-block" style="color:maroon"
                                                           ng-show="form.radius.$error.required">
                                                            Radius is required.
                                                        </p>
+                                                       <p class="help-block" style="color:maroon"
+                                                           ng-show="form.radius.$error.pattern">
+                                                            Radius is invalid.
+                                                        </p>
 
                                                    </div>
                                                </div>

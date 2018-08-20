@@ -517,6 +517,10 @@ public class ImportUtil {
                         }
 
                     }
+					if(currentRow.getCell(16) != null) {
+						boolean isScheduleExcludeWeeknd = currentRow.getCell(16).getBooleanCellValue();
+						jobDto.setScheduleDailyExcludeWeekend(isScheduleExcludeWeeknd);
+					}
 					jobService.saveJob(jobDto);
 
 				}

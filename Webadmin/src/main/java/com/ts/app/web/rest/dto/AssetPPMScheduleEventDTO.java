@@ -1,12 +1,13 @@
 package com.ts.app.web.rest.dto;
 
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 public class AssetPPMScheduleEventDTO extends BaseDTO {
 
 	private long id;
 	private String title;
-	private Date start;
+	private ZonedDateTime start;
 	private String frequencyPrefix;
 	private int frequencyDuration;
 	private String frequency;
@@ -82,11 +83,11 @@ public class AssetPPMScheduleEventDTO extends BaseDTO {
 		this.assetId = assetId;
 	}
 
-	public Date getStart() {
+	public ZonedDateTime getStart() {
 		return start;
 	}
 
-	public void setStart(Date start) {
+	public void setStart(ZonedDateTime start) {
 		this.start = start;
 	}
 

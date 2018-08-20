@@ -121,7 +121,10 @@ export class EmployeeList {
                   if (canRequest) {
                       // the accuracy option will be ignored by iOS
                       this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
-                          () => console.log('Request successful'),
+                          () => {
+                              console.log('Request successful');
+                              this.getEmployees();
+                          },
                           error => {console.log('Error requesting location permissions', error);
                               demo.showSwal('warning-message-and-confirmation-ok','GPS Not available','Please turn GPS on');
                               this.navCtrl.pop();
@@ -358,12 +361,16 @@ export class EmployeeList {
           this.closeAll();
           if(response && response.status === 200){
               var msg='Face Verified and Attendance marked Successfully';
-              this.showSuccessToast(msg);
+              // this.showSuccessToast(msg);
+              demo.showSwal('feedback-success','Face Verified','Attendance Marked Successfully');
+              this.navCtrl.pop();
           }
       },error=>{
           var msg = 'Attendance Not Marked';
           console.log(error);
-          this.showSuccessToast(msg);
+          // this.showSuccessToast(msg);
+          demo.showSwal('warning-message-and-confirmation-ok','Failed to Save','Error in Marking Attendance');
+
           this.closeAll();
       })
   }
@@ -375,12 +382,15 @@ export class EmployeeList {
           this.closeAll();
           if(response && response.status === 200){
               var msg='Face Verified and Attendance marked Successfully';
-              this.showSuccessToast(msg);
+              // this.showSuccessToast(msg);
+              demo.showSwal('feedback-success','Face Verified','Attendance Marked Successfully');
+              this.navCtrl.pop();
           }
       },error=>{
           var msg = 'Attendance Not Marked';
           console.log(error);
-          this.showSuccessToast(msg);
+          // this.showSuccessToast(msg);
+          demo.showSwal('warning-message-and-confirmation-ok','Failed to Save','Error in Marking Attendance');
           this.closeAll();
       })
   }

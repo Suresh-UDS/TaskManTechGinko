@@ -779,6 +779,32 @@ public class JobManagementService extends AbstractService {
 			job.setStatus(JobStatus.ASSIGNED);
 		}
 
+		if(job.getSchedule().equalsIgnoreCase("ONCE")) {
+			Calendar startTime = Calendar.getInstance();
+			startTime.setTime(job.getPlannedStartTime());
+			Calendar today = Calendar.getInstance();
+			today.set(Calendar.HOUR_OF_DAY, 0);
+			today.set(Calendar.MINUTE,0);
+			today.set(Calendar.SECOND,0);
+			if(startTime.before(today)) { // for one time jobs if the planned start time is before today job should not be created
+				jobDTO.setErrorMessage("Job start time cannot be earlier than current day");
+				return jobDTO;
+			}
+			
+		}else {
+			Calendar startTime = Calendar.getInstance();
+			startTime.setTime(job.getPlannedStartTime());
+			Calendar today = Calendar.getInstance();
+			today.set(Calendar.HOUR_OF_DAY, 0);
+			today.set(Calendar.MINUTE,0);
+			today.set(Calendar.SECOND,0);
+			if(startTime.before(today)) { // if the planned start time is before today then the start time to be set to today.
+				startTime.set(Calendar.YEAR, today.get(Calendar.YEAR));
+				startTime.set(Calendar.MONTH, today.get(Calendar.MONTH));
+				startTime.set(Calendar.DAY_OF_MONTH, today.get(Calendar.DAY_OF_MONTH));
+				job.setPlannedStartTime(startTime.getTime());
+			}
+		}
 		/*
 		Calendar calStart = Calendar.getInstance();
 		calStart.set(Calendar.HOUR_OF_DAY, 0);
@@ -795,8 +821,12 @@ public class JobManagementService extends AbstractService {
 		log.debug("Before saving new job -"+ job);
 
 		//log.debug("start Date  -"+ startDate + ", end date -" + endDate);
-//		List<Job> existingJobs = jobRepository.findScheduledJobByTitleSiteAndDate(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()));
-		List<Job> existingJobs = jobRepository.findJobByTitleSiteDateAndLocation(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()), job.getBlock(), job.getFloor(), job.getZone());
+		List<Job> existingJobs = null;
+		if(job.getSchedule().equalsIgnoreCase("ONCE")) {
+			existingJobs = jobRepository.findChildJobByTitleSiteDateAndLocation(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()), job.getBlock(), job.getFloor(), job.getZone());
+		}else {
+			existingJobs = jobRepository.findParentJobByTitleSiteDateAndLocation(jobDTO.getTitle(), jobDTO.getSiteId(), DateUtil.convertToSQLDate(job.getPlannedStartTime()), DateUtil.convertToSQLDate(job.getPlannedEndTime()), job.getBlock(), job.getFloor(), job.getZone());
+		}
 		log.debug("Existing job -"+ existingJobs);
 		Job newScheduledJob = null;
 		if(CollectionUtils.isEmpty(existingJobs)) {
@@ -836,7 +866,7 @@ public class JobManagementService extends AbstractService {
 			data.append("&plannedHours="+jobDTO.getPlannedHours());
 			data.append("&location="+jobDTO.getLocationId());
 			data.append("&frequency="+jobDTO.getFrequency());
-			data.append("&duration="+jobDTO.getDuration());
+			data.append("&duration="+(StringUtils.isEmpty(jobDTO.getDuration()) ? "1" : jobDTO.getDuration()));
 			schConfDto.setData(data.toString());
 			schConfDto.setStartDate(jobDTO.getPlannedStartTime());
 			schConfDto.setEndDate(job.getPlannedEndTime());
@@ -882,8 +912,9 @@ public class JobManagementService extends AbstractService {
 		Site site = null;
 		
 		Employee employee = employeeRepository.findOne(assetPpmScheduleDTO.getEmpId());
+		Asset asset = null;
 		if(assetPpmScheduleDTO.getAssetId() > 0) {
-			Asset asset = assetRepository.findOne(assetPpmScheduleDTO.getAssetId());
+			asset = assetRepository.findOne(assetPpmScheduleDTO.getAssetId());
 			job.setAsset(asset);
 			site = getSite(asset.getSite().getId());
 		}
@@ -909,7 +940,6 @@ public class JobManagementService extends AbstractService {
 			job.setStatus(JobStatus.ASSIGNED);
 		}
 		job.setSite(site);
-		Asset asset = assetRepository.findOne(assetPpmScheduleDTO.getAssetId());
 		job.setBlock(asset.getBlock());
 		job.setFloor(asset.getFloor());
 		job.setZone(asset.getZone());

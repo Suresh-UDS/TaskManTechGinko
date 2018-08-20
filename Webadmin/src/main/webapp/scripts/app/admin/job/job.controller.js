@@ -525,8 +525,8 @@ angular.module('timeSheetApp')
         		$scope.selectedSite = {id : data.siteId,name : data.siteName};
                 $scope.job.plannedStartTime = data.plannedStartTime;
                 $scope.selectPlannedStartTime = $filter('date')(data.plannedStartTime, 'dd/MM/yyyy hh:mm a');
-                $scope.job.scheduleEndDate = data.plannedEndTime;
-                $scope.selectScheduleEndDate = $filter('date')(data.plannedEndTime, 'dd/MM/yyyy hh:mm a');
+                $scope.job.scheduleEndDate = data.scheduleEndDate;
+                $scope.selectScheduleEndDate = $filter('date')(data.scheduleEndDate, 'dd/MM/yyyy hh:mm a');
         		$scope.loadEmployees().then(function(employees){
         			console.log('load employees ');
             		$scope.selectedEmployee = {id : data.employeeId,name : data.employeeName};
@@ -760,30 +760,32 @@ angular.module('timeSheetApp')
 	        	// $scope.job.jobStatus = $scope.selectedStatus.name;
 	        	console.log('job details to save - ' + JSON.stringify($scope.job));
 	        	var post = $scope.isEdit ? JobComponent.update : JobComponent.create
-	        	var message = 'Job has been created successfully!!'
+	        	var message = 'Job created successfully!!'
 	        	if($scope.job.id) {
-	        		message = 'Job has been updated successfully!!'
+	        		message = 'Job updated successfully!!'
 	        	}
-	        	post($scope.job).then(function () {
-	                $scope.success = 'OK';
+	        	post($scope.job, function (response, err) {
+	        		if(response) {
+	        			$scope.success = 'OK';
+	        			$scope.saveLoad = false;
+	                	$scope.showNotifications('top','center','success',message);
+	            		$location.path('/jobs');
+	            		$scope.disable = false;
+	        		}else if(err) {
                     $scope.saveLoad = false;
-	                $scope.showNotifications('top','center','success',message);
-	            	$location.path('/jobs');
+                    $scope.success = null;
                     $scope.disable = false;
-            }).catch(function (response) {
-                $scope.saveLoad = false;
-                $scope.success = null;
-                $scope.disable = false;
-                console.log('Error - '+ response.data);
-                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
-                    $scope.errorProjectExists = 'ERROR';
-                    $scope.showNotifications('top','center','danger','Job already exists');
+                    console.log('Error - '+ err.data);
+                    if (err.status === 400 && err.data.message === 'error.duplicateRecordError') {
+                        $scope.errorProjectExists = 'ERROR';
+                        $scope.showNotifications('top','center','danger','Job already exists');
 
-                } else {
-                    $scope.showNotifications('top','center','danger','Unable to creating job. Please try again later..');
-                    $scope.error = 'ERROR';
-                }
-            });
+                    } else {
+                        $scope.showNotifications('top','center','danger','Failed to create job. Please try again later..' + err.data.errorMessage);
+                        $scope.error = 'ERROR';
+                    }
+	        		}
+            })
 
         };
 
