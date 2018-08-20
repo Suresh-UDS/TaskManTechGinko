@@ -24,6 +24,7 @@ angular.module('timeSheetApp')
         $scope.searchItemGroup = null;
         $scope.searchCreatedDate = "";
         $scope.searchCreatedDateSer = null;
+        $scope.transactionCriteria = {};
     	$scope.pages = { currPage : 1};
     	
     	$scope.refreshPage = function() { 
@@ -172,7 +173,8 @@ angular.module('timeSheetApp')
         	$scope.search();
         	$location.path('/inventory-list');
         }
-    	
+        
+        /* Save material */
     	$scope.saveInventory = function() {
     		if($scope.client){
     			$scope.inventory.projectId = $scope.client.id;
@@ -228,6 +230,46 @@ angular.module('timeSheetApp')
     		});
     	}
     	
+    	/* view material transactions */
+        $scope.loadMaterialTrans = function() {
+            $rootScope.loadingStart();
+            $rootScope.loadPageTop();
+            var redCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+                    if(!$scope.transactionCriteria) {
+                        var redSearchCriteria = {
+                                currPage : redCurrPageVal
+                        };
+                        $scope.transactionCriteria = redSearchCriteria;
+                    }
+
+                $scope.transactionCriteria.currPage = redCurrPageVal;
+                $scope.transactionCriteria.module = "Transactions";
+                $scope.searchModule = "Transactions";
+                $scope.transactionCriteria.materialId = $stateParams.id;
+                $scope.transactionCriteria.sort = $scope.pageSort;
+            $scope.materialTransactions = "";
+        	console.log('materialTransaction search criteria',$scope.transactionCriteria);
+        	InventoryComponent.findByMaterialTrans($scope.transactionCriteria).then(function(data){
+                $rootScope.loadingStop();
+        		console.log('View Transactions - ' +JSON.stringify(data));
+        			$scope.materialTransactions = data.transactions;
+                 /*
+                ** Call pagination  main function **
+                */
+
+                $scope.pager = {};
+                $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+
+                $scope.totalCountPages = data.totalCount;
+
+                console.log("Pagination", $scope.pager);
+                console.log("MaterialTransactions List - ", data);
+
+        	});
+        }
+        /* end material transactions */
+        
+        /* delete material */
         $scope.deleteConfirm = function (id){
         	$scope.inventoryId = id;
         }
@@ -239,6 +281,7 @@ angular.module('timeSheetApp')
             	$scope.loadMaterials();
         	});
         }
+        /* end delete material */
         
     	$scope.editInventory = function() {
     		InventoryComponent.findById($stateParams.id).then(function(data) { 
@@ -258,6 +301,7 @@ angular.module('timeSheetApp')
     		});
     	}
     	
+    	/* Update Material */
     	$scope.updateInventory = function () {
             $scope.error = null;
             $scope.success =null;
@@ -304,13 +348,15 @@ angular.module('timeSheetApp')
 
     	};
     	
+    	/* end update Material */
+    	
     	$scope.searchFilter = function () {
             $scope.setPage(1);
             $scope.search();
          }
     	
     	
-    	$scope.search = function () {
+    	$scope.search = function () {										// search material 
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         	if(!$scope.searchCriteria) {
             	var searchCriteria = {
@@ -378,7 +424,6 @@ angular.module('timeSheetApp')
                 /*
                  ** Call pagination  main function **
              */
-
 	             $scope.pager = {};
 	             $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
 	             $scope.totalCountPages = data.totalCount;
@@ -412,9 +457,19 @@ angular.module('timeSheetApp')
                 return;
             }
             $scope.pages.currPage = page;
-            $scope.search();
+            if($scope.searchModule =='Transactions'){
+                $scope.loadPPMJobs();
+            }else{
+            	$scope.search();
+            }
 
         }
+        
+        $scope.loadSubModule = function(cb){
+            $scope.pages = { currPage : 1};
+            $scope.pager = {};
+            return cb();
+          }
 
 
 			//init load

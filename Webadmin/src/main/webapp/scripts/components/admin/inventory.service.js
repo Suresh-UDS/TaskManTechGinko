@@ -78,6 +78,11 @@ angular.module('timeSheetApp')
             	return $http.get('api/materialItemgroup').then(function(response) { 
             		return response.data;
             	});
+            },
+            findByMaterialTrans: function(criteria) { 
+            	return $http.post('api/inventory/transactions', criteria).then(function(response) { 
+            		return response.data;
+            	});
             }
         };
     });
