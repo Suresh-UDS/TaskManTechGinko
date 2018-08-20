@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 
@@ -40,7 +41,6 @@ import com.ts.app.domain.UserRolePermission;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
-import com.ts.app.repository.NotificationRepository;
 import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
@@ -391,12 +391,14 @@ public class TicketManagementService extends AbstractService {
 	            			siteIds.add(site.getSite().getId());
 	            		}
             		}
-                List<Long> subEmpIds = new ArrayList<Long>();
+                Set<Long> subEmpIds = new TreeSet<Long>();
                 if(employee != null) {
                     Hibernate.initialize(employee.getSubOrdinates());
                     findAllSubordinates(employee, subEmpIds);
+                    List<Long> subEmpList = new ArrayList<Long>();
+                    subEmpList.addAll(subEmpIds);	
                     log.debug("List of subordinate ids -"+ subEmpIds);
-                    searchCriteria.setSubordinateIds(subEmpIds);
+                    searchCriteria.setSubordinateIds(subEmpList);
                 }
                 if(searchCriteria.getSiteId() > 0) {
                 		if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {

@@ -1,9 +1,9 @@
 package com.ts.app.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 
@@ -79,13 +79,13 @@ public abstract class AbstractService {
         return new PageRequest(page, Integer.MAX_VALUE, s); 
     }
 	
-    public List<Long> findAllSubordinates(Employee employee, List<Long> subEmpIds) {
+    public Set<Long> findAllSubordinates(Employee employee, Set<Long> subEmpIds) {
         Set<Employee> subs = employee.getSubOrdinates();
         if(logger.isDebugEnabled()) {
         		logger.debug("List of subordinates -"+ subs);
         }
         if(subEmpIds == null){
-            subEmpIds = new ArrayList<Long>();
+            subEmpIds = new TreeSet<Long>();
         }
         subEmpIds.add(employee.getId());
         for(Employee sub : subs) {
