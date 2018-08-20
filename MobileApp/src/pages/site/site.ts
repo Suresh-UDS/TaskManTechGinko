@@ -16,6 +16,8 @@ export class SitePage {
   sites:any;
   msg:any;
 
+    fakeUsers: Array<any> = new Array(12);
+
   constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService) {
 
   }
@@ -23,7 +25,7 @@ export class SitePage {
   ionViewDidLoad() {
     this.employeeId=window.localStorage.getItem('employeeId');
     console.log('ionViewDidLoad SitePage');
-    this.component.showLoader('Getting All Sites');
+    // this.component.showLoader('Getting All Sites');
     this.siteService.searchSite().subscribe(
       response=>{
         console.log('ionViewDidLoad SitePage:');
@@ -31,11 +33,11 @@ export class SitePage {
         console.log(response.json()
         );
         this.sites=response.json();
-          this.component.closeLoader();
+          // this.component.closeLoader();
       },
       error=>{
         console.log('ionViewDidLoad SitePage:'+error);
-          this.component.closeLoader();
+          // this.component.closeLoader();
           if(error.type==3)
           {
               this.msg='Server Unreachable'
