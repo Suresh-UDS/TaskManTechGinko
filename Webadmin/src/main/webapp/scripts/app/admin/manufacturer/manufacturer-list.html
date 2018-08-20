@@ -4,27 +4,41 @@
     <div class="row" ng-init="loadManufacturers();loadAllAssetTypes()">
         <div class="col-md-6 txt-align-lft">
 
-            <button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
-                <i class="material-icons">filter_list</i> Basic Filter
+            <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
+                <i class="material-icons">filter_list</i>Filter
                 <div class="ripple-container"></div>
             </button>
 
         </div>
         <div class="col-md-6 txt-align-rgt">
 
+            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i> Clear Filter
+                <div class="ripple-container"></div>
+            </button>
+
             <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-manufacturer" ng-class="{active: $state.includes('admin')}" tabindex="0">
                 <i class="material-icons">add</i> Add
                 <div class="ripple-container"></div>
             </button>
 
-            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
-                <i class="material-icons">refresh</i> Reload
-                <div class="ripple-container"></div>
-            </button>
+
 
         </div>
-    </div>
 
+
+
+    </div>
+    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
+            <span class="AppliedFilterTxtCon">
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.assetTypeName || localStorage.assetTypeName">
+                    Client: {{searchCriteria.assetTypeName || localStorage.assetTypeName}}
+                </span>
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.manufacturerName || localStorage.manufacturerName">
+                    Client: {{searchCriteria.manufacturerName || localStorage.manufacturerName}}
+                </span>
+            </span>
+    </div>
 
     <div class="row">
         <div class="col-md-12">
@@ -155,11 +169,11 @@
 
                                      <div class="HoverBx">
 
-                                         <a data-toggle="modal"  data-target="#RightModal-View" ng-click="getManufacturerDetails(manufacturer.id, 'view')"  has-permission="Manufacturer:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
+                                         <a data-toggle="modal"  title="View" data-target="#RightModal-View" ng-click="getManufacturerDetails(manufacturer.id, 'view')"  has-permission="Manufacturer:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
                                          <!-- data-target="#RightModal-Edit"  ng-click="getManufacturerDetails(manufacturer.id, 'edit')"-->
-                                         <a data-toggle="modal"  ui-sref="edit-manufacturer({ id: manufacturer.id })"    has-permission="Manufacturer:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                         <a data-toggle="modal" title="Edit"  ui-sref="edit-manufacturer({ id: manufacturer.id })"    has-permission="Manufacturer:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                                         <a  has-permission="Manufacturer:Delete" ui-sref="" class="btn btn-simple btn-danger" ng-click="deleteConfirm(manufacturer.id)" onClick="$('#deleteManufacturer').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
+                                         <a  has-permission="Manufacturer:Delete" title="Delete" class="btn btn-simple btn-danger" ng-click="deleteConfirm(manufacturer.id)" onClick="$('#deleteManufacturer').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
 
                                      </div>
 
@@ -593,7 +607,7 @@
 
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="">View Manufacturer Details</h4>
+                <h4 class="modal-title" id="">View Manufacturer Details - {{manufacturer.name}}</h4>
             </div>
 
             <div class="modal-body">
@@ -750,9 +764,17 @@
                                     <div class="form-group">
                                         <label class="control-label">Select Asset Type</label>
                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                        <select class="form-control " ng-model="searchAssetType"  ng-options="assetType as assetType.name for assetType in assetTypes" required>
+                                        <select class="form-control " ng-model="searchAssetType"  ng-options="assetType as assetType.name for assetType in assetTypes track by assetType.name" required>
                                             <option value="">Select Asset Type...</option>
                                         </select>
+                                        <!--<span ng-show="assetTypeDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>-->
+                                        <!--<span ng-show="!assetTypeDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                        <!--<ui-select ng-model="searchAssetType" ng-disabled="assetTypeDisable" ng-change="loadAssetType(searchAssetType)">-->
+                                            <!--<ui-select-match placeholder="Select clients...">{{filter ? searchAssetType.name?searchAssetType.name:'Select Assettype' :searchAssetType}}</ui-select-match>-->
+                                            <!--<ui-select-choices  repeat="assetType in getType($select.search) | filter: $select.search">-->
+                                                <!--<div ng-bind="assetType"></div>-->
+                                            <!--</ui-select-choices>-->
+                                        <!--</ui-select>-->
                                     </div>
                                 </div>
                             </div>
@@ -761,7 +783,7 @@
                             <div class="form-group no-padding" >
                                 <div class="dropdown">
                                     <div class="form-group">
-                                        <label class="control-label">Name</label>
+                                        <label class="control-label">Manufacturer Name</label>
                                         <input id='name'
                                                class='form-control'
                                                name='name'
@@ -777,7 +799,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" >Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>

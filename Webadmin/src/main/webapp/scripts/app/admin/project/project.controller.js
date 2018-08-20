@@ -79,8 +79,6 @@ angular.module('timeSheetApp')
         $rootScope.back = function (text) {
             if(text == 'cancel')
             {
-                /** @reatin - retaining scope value.**/
-                $rootScope.retain=1;
                 $scope.cancelProject();
             }
             else if(text == 'save')
@@ -96,6 +94,10 @@ angular.module('timeSheetApp')
         };
 
         $scope.cancelProject = function () {
+            
+             /** @reatin - retaining scope value.**/
+                $rootScope.retain=1;
+
             $rootScope.conformText = "";
         	$location.path('/projects');
         };
@@ -107,21 +109,13 @@ angular.module('timeSheetApp')
                 {
                     $scope.uiClient[i] = $scope.projectsList[i].name;
                 }
+                $scope.clientFilterDisable = false;
             });
         };
 
         // Load Clients for selectbox //
-        $scope.clienteDisable = true;
+        $scope.clientDisable = true;
         $scope.uiClient = [];
-
-        // $scope.$watch('selectedProject', function(newVal, oldVal) {
-        //     if (newVal !== oldVal) {
-        //         if ($scope.uiClient.indexOf(newVal) === -1) {
-        //             $scope.uiClient.unshift(newVal);
-        //         }
-        //     }
-        // });
-
 
         $scope.getClient = function (search) {
 
@@ -135,12 +129,18 @@ angular.module('timeSheetApp')
 
         $scope.selectProject = function(project)
         {
+            $scope.filter = false;
+            $scope.clearField = false;
             $scope.searchProject = $scope.projectsList[$scope.uiClient.indexOf(project)]
             console.log('Project dropdown list:',$scope.searchProject)
         }
 
         //
 
+        //Filter
+        $scope.clientFilterDisable = true;
+        $scope.filter = false;
+        //
 
         $scope.loadProjects = function () {
             $scope.clearFilter();
@@ -152,11 +152,15 @@ angular.module('timeSheetApp')
 
 
         $scope.loadProject = function() {
-        	ProjectComponent.findOne($stateParams.id).then(function (data) {
-                $scope.project.addressLng = data.addressLng
-                $scope.project.addressLat = data.addressLat;
-                $scope.project = data;
-            });
+            if($stateParams.id){
+            	ProjectComponent.findOne($stateParams.id).then(function (data) {
+                    $scope.project.addressLng = data.addressLng
+                    $scope.project.addressLat = data.addressLat;
+                    $scope.project = data;
+                });
+            }else{
+               $location.path('/projects'); 
+            }
 
         };
 
@@ -301,7 +305,13 @@ angular.module('timeSheetApp')
                     if($scope.localStorage){
                         $scope.pages.currPage = $scope.localStorage.currPage;
                         //$scope.searchProject = {id:$scope.localStorage.projectId,name:$scope.localStorage.projectName,searchStatus:'0'};
-
+                        $scope.filter = true;
+                        if($scope.localStorage.projectId){
+                             $scope.searchProject ={id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
+                        }else{
+                             $scope.searchProject ="";
+                        }
+                       
                     }
 
                     $rootScope.retain = 0;
@@ -331,6 +341,8 @@ angular.module('timeSheetApp')
                  console.log("Pagination",$scope.pager);
                  console.log($scope.projects);
 
+
+
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
 
@@ -355,9 +367,11 @@ angular.module('timeSheetApp')
 
 
         $scope.clearFilter = function() {
+            $scope.clearField = true;
             $scope.selectedProject = null;
             $scope.searchProject = null;
             $scope.searchCriteria = {};
+            $scope.localStorage = null;
             $rootScope.searchCriteriaProject = null;
             $scope.pages = {
                 currPage: 1,

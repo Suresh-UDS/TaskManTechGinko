@@ -33,7 +33,7 @@ angular.module('timeSheetApp')
                         return cb(checklist);
                     },
                     function (err) {
-                        this.logout();
+                        //this.logout();
                         return cb(err);
                     }.bind(this)).$promise;
             },

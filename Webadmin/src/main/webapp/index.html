@@ -99,6 +99,8 @@
     </div>
 
     <div class="overlay"></div>
+    
+    
 
     <!-- bower:js -->
     <script src="bower_components/modernizr/modernizr.js"></script>
@@ -161,6 +163,7 @@
 
     <!-- build:js({.tmp,src/main/webapp}) scripts/app.js -->
 
+    <!-- jquery:min js -->
     <script src="/assets/js/jquery-3.2.1.min.js" type="text/javascript"></script>
 
     <script src="scripts/app/app.js"></script>
@@ -538,14 +541,14 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"
                         aria-hidden="true">&times;</button>
-                <h4 class="modal-title">{{conformText}}</h4>
+                <h4 class="modal-title">{{conformText == 'cancel' ? "Discard" : conformText }}</h4>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to {{conformText}}?</p>
+                <p>Are you sure want to {{conformText == 'cancel' ? "discard the changes" : conformText }}?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success delete-confirmation-button" data-dismiss="modal" ng-click="back(conformText)">Confirm</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{conformText == 'cancel' ? "No" : "Cancel" }}</button>
+                <button type="button" class="btn btn-success delete-confirmation-button" data-dismiss="modal" ng-click="back(conformText)">{{conformText == 'cancel' ? "Yes" : "Confirm" }}</button>
             </div>
         </div>
     </div>

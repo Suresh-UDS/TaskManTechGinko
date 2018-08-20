@@ -185,8 +185,8 @@ angular.module('timeSheetApp')
 
         $scope.ppmFromMsg =false;
 
-        $('#dateFilterPpmFrom').datetimepicker().on('dp.show', function () {
-            return $(this).data('DateTimePicker').minDate(new Date());
+        $('#dateFilterPpmFrom').datetimepicker().on('dp.show', function (e) {
+            return $(this).data('DateTimePicker').minDate(e.date);
         });
 
         $('input#dateFilterPpmFrom').on('dp.change', function(e){
@@ -194,7 +194,7 @@ angular.module('timeSheetApp')
             $scope.assetPPM.startDate = e.date._d;
             $scope.ppmFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $('#dateFilterPpmTo').datetimepicker().on('dp.show', function () {
-                return $(this).data('DateTimePicker').minDate(e.date._d);
+                return $(this).data('DateTimePicker').minDate(e.date);
             });
 
             // if($scope.assetPPM.startDate > $scope.assetPPM.endDate) {
@@ -369,6 +369,33 @@ angular.module('timeSheetApp')
             }
         }
 
+
+        //Conformation modal
+
+                    $scope.conform = function(text)
+                    {
+                        console.log($scope.selectedProject)
+                        $rootScope.conformText = text;
+                        $('#conformationModal').modal();
+
+                    }
+                    $rootScope.back = function (text) {
+                        if(text == 'cancel')
+                        {
+                            $scope.cancel();
+                        }
+                        else if(text == 'save')
+                        {
+                            $scope.saveAsset();
+                        }
+                        else if(text == 'update')
+                        {
+                            $scope.updateAsset()
+                        }
+                    };
+
+        //
+
         $scope.loadProjects = function () {
             ProjectComponent.findAll().then(function (data) {
                 console.log("Loading all projects")
@@ -516,6 +543,8 @@ angular.module('timeSheetApp')
                 var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
                 LocationComponent.findBlocks(0,$scope.selectedSites.id).then(function (data) {
                     $scope.selectedBlock = null;
+                    $scope.selectedFloor = null;
+                    $scope.selectedZone = null;
                 $scope.blocks = data;
                  console.log("Loading all blocks -- " ,  $scope.blocks);
             });
@@ -525,6 +554,7 @@ angular.module('timeSheetApp')
                 var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
                 LocationComponent.findFloors(0,$scope.selectedSites.id,$scope.selectedBlock).then(function (data) {
                     $scope.selectedFloor = null;
+                    $scope.selectedZone = null;
                 $scope.floors = data;
                 console.log("Loading all floors -- " ,  $scope.floors);
             });
@@ -999,9 +1029,9 @@ angular.module('timeSheetApp')
 
             $rootScope.loadingStart();
 
-            var scheduleObj = {assetId:$stateParams.id,checkInDateTimeFrom:startDate,checkInDateTimeTo:endDate};
+            $scope.scheduleObj = {assetId:$stateParams.id,checkInDateTimeFrom:startDate,checkInDateTimeTo:endDate};
 
-            AssetComponent.getPPMScheduleCalendar(scheduleObj.assetId,scheduleObj).then(function(data){
+            AssetComponent.getPPMScheduleCalendar($scope.scheduleObj.assetId,$scope.scheduleObj).then(function(data){
 
                 console.log("Asset Calendar details ==" + JSON.stringify(data));
 
@@ -1098,9 +1128,9 @@ angular.module('timeSheetApp')
         });
 
 
-        $('#warFromDate').datetimepicker().on('dp.show', function () {
+        /*$('#warFromDate').datetimepicker().on('dp.show', function () {
             return $(this).data('DateTimePicker').minDate(new Date());
-        });
+        });*/
 
         $('input#warFromDate').on('dp.change', function(e){
 
@@ -1108,34 +1138,38 @@ angular.module('timeSheetApp')
 
             $scope.warFromDate1 = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $scope.warFromDate = e.date._d;
-            
+
+            $('#warToDate').datetimepicker().on('dp.show', function () {
+                     return $(this).data('DateTimePicker').minDate(e.date);
+                    });
+
             if($scope.warToDate){
 
                 if($scope.warFromDate > $scope.warToDate) {
-                
+
                         //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
                         $scope.warFromMsg = true;
-                
-                
+
+
                         //return false;
                 }else {
-                
+
                    $scope.warFromMsg =false;
-                
-                
+
+
                 }
-                
+
                 if($scope.warToDate < $scope.warFromDate) {
                         //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
                         $scope.warToMsg =true;
-                
-                
+
+
                         //return false;
                 }else {
-                
+
                      $scope.warToMsg =false;
-                
-                
+
+
                 }
             }
         });
@@ -1152,31 +1186,33 @@ angular.module('timeSheetApp')
                 if($scope.warToDate < $scope.warFromDate) {
                         //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
                         $scope.warToMsg =true;
-                
-                
+
+
                         //return false;
                 }else {
-                
+
                      $scope.warToMsg =false;
-                
-                
+
+
                 }
-                
+
                 if($scope.warFromDate > $scope.warToDate) {
-                
+
                         //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
                         $scope.warFromMsg = true;
-                
-                
+
+
                         //return false;
                 }else {
-                
+
                    $scope.warFromMsg =false;
-                
-                
+
+
                 }
             }
         });
+
+
 
         $('input#searchAcquiredDate').on('dp.change', function(e){
                 $scope.searchAcquiredDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
@@ -1193,6 +1229,7 @@ angular.module('timeSheetApp')
          /* Create and save asset */
 
         $scope.saveAsset = function () {
+            $scope.saveLoad = true;
                 $scope.loadingStart();
                 $scope.btnDisabled = true;
                 $scope.error = null;
@@ -1221,9 +1258,10 @@ angular.module('timeSheetApp')
                     console.log("Asset Create List -- ",$scope.assetGen);
                     AssetComponent.create($scope.assetGen).then(function(response) {
                         console.log("Asset response",JSON.stringify(response));
-                        $scope.assetVal.id=response.id;
+                        $scope.assetVal=response;
                         $scope.assetVal.siteId=response.siteId;
                         $scope.success = 'OK';
+                        $scope.saveLoad = false;
                         $scope.loadingStop();
                         $scope.showNotifications('top','center','success','Asset has been added Successfully!!');
                         $scope.loadEmployees();
@@ -1233,6 +1271,7 @@ angular.module('timeSheetApp')
 
                     }).catch(function (response) {
                         $scope.loadingStop();
+                        $scope.saveLoad = false;
                         $scope.btnDisabled= false;
                         $scope.success = null;
                         console.log('Error - '+ response.data);
@@ -1338,6 +1377,7 @@ angular.module('timeSheetApp')
        /* Update and save asset */
 
         $scope.updateAsset = function () {
+            $scope.saveLoad = true;
             $scope.loadingStart();
         	$scope.error = null;
             $scope.success =null;
@@ -1418,6 +1458,7 @@ angular.module('timeSheetApp')
         	AssetComponent.update($scope.assetEdit).then(function () {
 
                 $scope.success = 'OK';
+                $scope.saveLoad = false;
                 $scope.loadingStop();
                 $scope.btnDisabled =false;
                  $scope.showNotifications('top','center','success','Asset has been updated Successfully!!');
@@ -1426,6 +1467,7 @@ angular.module('timeSheetApp')
             	//$location.path('/assets');
 
             }).catch(function (response) {
+                $scope.saveLoad = false;
                 $rootScope.loadingStop();
                 $scope.success = null;
                 $scope.btnDisabled =false;
@@ -1775,10 +1817,14 @@ angular.module('timeSheetApp')
                 console.log("Asset Type entered");
                 AssetTypeComponent.create($scope.assetType).then(function (response) {
                     console.log(response);
-                    $scope.assetType = "";
-                    $scope.showNotifications('top','center','success','Asset type has been added Successfully!!');
-                    $scope.loadAssetType();
-
+                    if(response.data.status && response.data.status === "400") { 
+                    	$scope.loadingStop();
+                    	$scope.showNotifications('top','center','danger','Asset type already exists.');
+                    }else{
+                    	  $scope.assetType = "";
+                          $scope.showNotifications('top','center','success','Asset type has been added Successfully!!');
+                          $scope.loadAssetType();
+                    }
 
                 }).catch(function(){
                  $scope.loadingStop();
@@ -1802,9 +1848,14 @@ angular.module('timeSheetApp')
                 console.log("Asset Group entered");
                 AssetComponent.createAssetGroup($scope.assetGroup).then(function (response) {
                     console.log(response);
-                    $scope.assetGroup = "";
-                    $scope.showNotifications('top','center','success','Asset group has been added Successfully!!');
-                    $scope.loadAssetGroup();
+                    if(response.data.status && response.data.status === "400") { 
+                    	$scope.loadingStop();
+                    	$scope.showNotifications('top','center','danger','Asset Group already exists.');
+                    }else{
+                    	  $scope.assetGroup = "";
+                          $scope.showNotifications('top','center','success','Asset Group has been added Successfully!!');
+                          $scope.loadAssetGroup();
+                    }
 
                 }).catch(function(){
                 $scope.loadingStop();
@@ -1893,6 +1944,11 @@ angular.module('timeSheetApp')
         		$scope.loadEmployees();
         }
 
+         $scope.cancelSiteChange = function() {
+            $scope.selectedSites ={id:$scope.assetList.siteId,name:$scope.assetList.siteName};
+        }
+
+    
         $scope.loadAllParameters = function() {
             //$rootScope.loadingStart();
     		ParameterComponent.findAll().then(function (data) {
@@ -2266,8 +2322,8 @@ angular.module('timeSheetApp')
 
         $scope.amcFromMsg =false;
 
-        $('input#dateFilterAmcFrom').on('dp.show',function () {
-            return $(this).data('DateTimePicker').minDate(new Date());
+        $('input#dateFilterAmcFrom').on('dp.show',function (e) {
+            return $(this).data('DateTimePicker').minDate(e.date);
         })
 
 	    $('input#dateFilterAmcFrom').on('dp.change', function(e){
@@ -2275,7 +2331,7 @@ angular.module('timeSheetApp')
             $scope.amcSchedule.startDate = e.date._d;
             $scope.amcFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $('input#dateFilterAmcTo').on('dp.show',function () {
-                return $(this).data('DateTimePicker').minDate(e.date._d);
+                return $(this).data('DateTimePicker').minDate(e.date);
             })
 
 
@@ -3329,10 +3385,24 @@ angular.module('timeSheetApp')
       }
 
       $scope.loadSubModule = function(cb){
-        $scope.pages = {};
+        $scope.pages = { currPage : 1};
         $scope.pager = {};
         return cb();
       }
+
+    $scope.siteChange = function(){
+
+        if($scope.assetList.siteId != $scope.selectedSites.id){
+
+            $('#siteChangeModalConfig').modal();
+
+        }
+    }
+
+    $scope.backToView = function(){
+  
+        $location.path('view-asset/'+ $scope.scheduleObj.assetId);
+    }
 
 
 

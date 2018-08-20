@@ -14,6 +14,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -25,6 +27,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.ts.app.web.rest.dto.PushRequestDTO;
 
 @Service
+@EnableAsync
 public class PushService {
 
 	private final Logger log = LoggerFactory.getLogger(PushService.class);
@@ -40,7 +43,7 @@ public class PushService {
 	@Inject
 	private Environment env;
 
-
+	@Async
 	public void sendAttendanceCheckoutAlert(long userIds[], Map<String,Object> values) {
 		Locale locale = Locale.forLanguageTag("en-US");
 		Context context = new Context(locale);
@@ -51,6 +54,7 @@ public class PushService {
 		send(userIds, emailContent);
 	}
 	
+	@Async
 	public void sendNewJobAlert(long userIds[], Map<String,Object> values) {
 		Locale locale = Locale.forLanguageTag("en-US");
 		Context context = new Context(locale);
@@ -68,7 +72,7 @@ public class PushService {
 		send(userIds, content);
 	}
 
-
+	@Async
 	public void send(long users[],String message) {
 		try {
 		    log.debug("Sending push messages to - "+users[0]);
@@ -103,6 +107,7 @@ public class PushService {
 		}
 	}
 
+	@Async
 	public void subscribe(PushRequestDTO pushRequest) {
 		try {
 			String pushEndpoint = env.getProperty("pushService.url")+"api/push/subscribe";

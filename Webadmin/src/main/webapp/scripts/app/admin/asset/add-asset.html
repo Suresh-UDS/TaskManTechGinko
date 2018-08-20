@@ -1,6 +1,9 @@
 <div class="crud-form" ng-init="loadPageTop();loadingStart();loadProjects();"
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
 	<div class="" >
+        <div class="titleCon" ng-if="assetVal.id">
+            <h3>{{assetVal.title}} - {{assetVal.id}}</h3>
+        </div>
 		<div class="row">
             <!-- <div class="col-mod-12">
                 <div class="alert alert-success" ng-show="success">
@@ -19,20 +22,19 @@
                     <div class="">
                         <div class="form-container table-container">
 
-
                             <div class="row">
                                 <div class="col-md-12">
-                                    <!--      Wizard container        -->
+                                    <!-- Wizard container -->
                                     <div class="wizard-container">
                                         <div class="card wizard-card active" data-color="orange" id="wizardProfile">
                                              <!-- ng-show="!success" -->
                                              <!-- ng-submit="saveAsset()" -->
-                                            <!-- <form name="form" role="form" novalidate
-                                                    class="form-horizontal" > -->
-                                                <!--        You can switch " data-color="purple" "  with one of the next bright colors: "green", "orange", "red", "blue"       -->
-                                                <!--<div class="wizard-header">-->
-                                                   <!---->
-                                                <!--</div>-->
+                                             <!-- <form name="form" role="form" novalidate
+                                                class="form-horizontal" > -->
+                                             <!--        You can switch " data-color="purple" "  with one of the next bright colors: "green", "orange", "red", "blue"       -->
+                                             <!--<div class="wizard-header">-->
+                                               <!---->
+                                             <!--</div>-->
                                                 <div class="wizard-navigation" >
                                                     <div  ng-class="!assetVal.id ? 'OverlayBx' : ''" ></div>
                                                     <ul class="arrow-steps" >
@@ -55,7 +57,7 @@
                                                         </li>
                                                          <li class="step" >
 
-                                                            <a href=".config" data-toggle="tab" >Config</a>
+                                                            <a href=".config" data-toggle="tab" ng-click="uView('off');assetConfig();" >Config</a>
                                                         </li>
                                                         <li class="step">
 
@@ -63,10 +65,7 @@
 
                                                         </li>
                                                     </ul>
-
                                                 </div>
-
-
                                                 <div class="tab-content">
                                                     <div class="tab-pane fade in active  general" id="general">
                                                         <form name="form" role="form" novalidate
@@ -119,16 +118,16 @@
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-12">
-	                                                                              <div class="form-group selectcon is-empty" ng-init="loadAssetType()">
+                                                                                  <div class="form-group selectcon is-empty" ng-init="loadAssetType()">
                                                                                     <div class="row">
-		                                                                                <div class="col-md-10 pad-r-0px">
+                                                                                        <div class="col-md-10 pad-r-0px">
                                                                                             <div class="form-group">
                                                                                                 <label class="control-label">Type <span class="red-star">*</span></label>
                                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-    		                                                                                    <select class="form-control" ng-model="selectedAssetType" ng-options="assetype as assetype.name for assetype in assetTypes" name="assetTypeName"
+        	                                                                                    <select class="form-control" ng-model="selectedAssetType" ng-options="assetype as assetype.name for assetype in assetTypes" name="assetTypeName"
                                                                                                 required>
-    		                                                                                        <option value="">Select Asset Type ..</option>
-    		                                                                                    </select>
+        	                                                                                        <option value="">Select Asset Type ..</option>
+        	                                                                                    </select>
 
                                                                                                  <div ng-show="form.$submitted || form.assetTypeName.$touched">
                                                                                                     <div ng-show="form.assetTypeName.$dirty || form.assetTypeName.$invalid">
@@ -139,25 +138,25 @@
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
-		                                                                               </div>
-		                                                                           <div class="col-md-2 pdng-top25">
-		                                                                                    <!-- <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addAssetType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-		                                                                                        <i class="material-icons">add</i>
-		                                                                                    </a> -->
+                                                                                       </div>
+                                                                                   <div class="col-md-2 pdng-top25">
+                                                                                            <!-- <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addAssetType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                                <i class="material-icons">add</i>
+                                                                                            </a> -->
                                                                                             <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addAssetType').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
                                                                                         </div>
-	                                                                                </div>
+                                                                                    </div>
 
-	                                                                                <!-- <div class="collapse" id="addAssetType">
-	                                                                                    <div class="">
-	                                                                                        <input class="input-desc" id="addAssetTypeInput" ng-model="assetType.name"   name="AssetType" type="text" value=""/>
-	                                                                                  <a class="btn btn-success"  ng-click="addAssetType()">Add</a>
-	                                                                                    </div>
-	                                                                                </div> -->
+                                                                                    <!-- <div class="collapse" id="addAssetType">
+                                                                                        <div class="">
+                                                                                            <input class="input-desc" id="addAssetTypeInput" ng-model="assetType.name"   name="AssetType" type="text" value=""/>
+                                                                                      <a class="btn btn-success"  ng-click="addAssetType()">Add</a>
+                                                                                        </div>
+                                                                                    </div> -->
 
-	                                                                            </div>
+                                                                                </div>
 
-	                                                                              <div class="form-group selectcon is-empty" ng-init="loadAssetGroup()">
+                                                                                  <div class="form-group selectcon is-empty" ng-init="loadAssetGroup()">
 
                                                                                     <div class="row">
                                                                                         <div class="col-md-10 pad-r-0px">
@@ -232,18 +231,18 @@
                                                                                     </select>
 
                                                                                     <div ng-show="form.$submitted || form.AssetClient.$touched">
-											                                         <div ng-show="form.AssetClient.$dirty || form.AssetClient.$invalid">
-											                                             <p class="help-block" style="color: maroon"
-											                                                ng-show="form.AssetClient.$error.required">Client is
-											                                                 required.</p>
-											                                             <p class="help-block" style="color: maroon"
-											                                                ng-show="form.AssetClient.$error.minlength">Client is
-											                                                 required to be at least 5 character.</p>
-											                                             <p class="help-block" style="color: maroon"
-											                                                ng-show="form.AssetClient.$error.maxlength">Client
-											                                                 cannot be longer than 50 characters.</p>
-											                                         </div>
-											                                     	</div>
+        									                                         <div ng-show="form.AssetClient.$dirty || form.AssetClient.$invalid">
+        									                                             <p class="help-block" style="color: maroon"
+        									                                                ng-show="form.AssetClient.$error.required">Client is
+        									                                                 required.</p>
+        									                                             <p class="help-block" style="color: maroon"
+        									                                                ng-show="form.AssetClient.$error.minlength">Client is
+        									                                                 required to be at least 5 character.</p>
+        									                                             <p class="help-block" style="color: maroon"
+        									                                                ng-show="form.AssetClient.$error.maxlength">Client
+        									                                                 cannot be longer than 50 characters.</p>
+        									                                         </div>
+        									                                     	</div>
 
                                                                                 </div>
                                                                             </div> -->
@@ -255,14 +254,14 @@
                                                                                         <option value="">Select Site ...</option>
                                                                                     </select>
 
-																					<div ng-show="form.$submitted || form.AssetSite.$touched">
-											                                         <div ng-show="form.AssetSite.$dirty || form.AssetSite.$invalid">
-											                                             <p class="help-block" style="color: maroon"
-											                                                ng-show="form.AssetSite.$error.required">Site is
-											                                                 required.</p>
+        																			<div ng-show="form.$submitted || form.AssetSite.$touched">
+        									                                         <div ng-show="form.AssetSite.$dirty || form.AssetSite.$invalid">
+        									                                             <p class="help-block" style="color: maroon"
+        									                                                ng-show="form.AssetSite.$error.required">Site is
+        									                                                 required.</p>
 
-											                                         </div>
-											                                     	</div>
+        									                                         </div>
+        									                                     	</div>
 
                                                                                 </div>
                                                                             </div>
@@ -336,19 +335,19 @@
                                                                                            ng-pattern="/^[A-Za-z0-9\s]*$/"
                                                                                            autofocus
                                                                                             />
-																					<div ng-show="form.$submitted || form.assetModel.$touched">
-																						<div ng-show="form.assetModel.$dirty || form.assetModel.$invalid">
+        																			<div ng-show="form.$submitted || form.assetModel.$touched">
+        																				<div ng-show="form.assetModel.$dirty || form.assetModel.$invalid">
 
-																							<p class="help-block" style="color:maroon"
-																							   ng-show="form.assetModel.$error.maxlength">
-																								Model Number cannot be longer than 250 characters.
-																							</p>
-																							<p class="help-block" style="color:maroon"
-																							   ng-show="form.assetModel.$error.pattern">
-																								Model Number can only contain letters, digits and space.
-																							</p>
-																						</div>
-																					</div>
+        																					<p class="help-block" style="color:maroon"
+        																					   ng-show="form.assetModel.$error.maxlength">
+        																						Model Number cannot be longer than 250 characters.
+        																					</p>
+        																					<p class="help-block" style="color:maroon"
+        																					   ng-show="form.assetModel.$error.pattern">
+        																						Model Number can only contain letters, digits and space.
+        																					</p>
+        																				</div>
+        																			</div>
 
                                                                                 </div>
                                                                              </div>
@@ -365,19 +364,19 @@
                                                                                            autofocus
                                                                                             />
                                                                                             <!-- ng-pattern="/^[A-Za-z0-9\s]*$/" -->
-																					<div ng-show="form.$submitted || form.assetSerial.$touched">
-																						<div ng-show="form.assetSerial.$dirty || form.assetSerial.$invalid">
+        																			<div ng-show="form.$submitted || form.assetSerial.$touched">
+        																				<div ng-show="form.assetSerial.$dirty || form.assetSerial.$invalid">
 
-																							<p class="help-block" style="color:maroon"
-																							   ng-show="form.assetSerial.$error.maxlength">
-																								Serial number cannot be longer than 250 characters.
-																							</p>
-																							<p class="help-block" style="color:maroon"
-																							   ng-show="form.assetSerial.$error.pattern">
-																								Serial number can only contain letters, digits and space.
-																							</p>
-																						</div>
-																					</div>
+        																					<p class="help-block" style="color:maroon"
+        																					   ng-show="form.assetSerial.$error.maxlength">
+        																						Serial number cannot be longer than 250 characters.
+        																					</p>
+        																					<p class="help-block" style="color:maroon"
+        																					   ng-show="form.assetSerial.$error.pattern">
+        																						Serial number can only contain letters, digits and space.
+        																					</p>
+        																				</div>
+        																			</div>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-6">
@@ -621,8 +620,8 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">From Date</label>
                                                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                    <input type="text" class="form-control datepicker"  id="warFromDate" ng-model ="warFromDate1" placeholder="{{warFromDate | date:'dd/MMM/yyyy'}}" name="warFromDate"/>
-                                                                                    <div ng-show="form.$submitted || form.warFromDate.$touched">
+                                                                                    <input type="text" class="form-control datepicker"  id="warFromDate" ng-model ="warFromDate1" placeholder="{{warFromDate1 | date:'dd/MM/yyyy'}}" name="warFromDate"/>
+                                                                                    <!-- <div ng-show="form.$submitted || form.warFromDate.$touched"> -->
                                                                                         <!-- <div
                                                                                             ng-show="form.warFromDate.$dirty || form.warFromDate.$invalid">
                                                                                             <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
@@ -632,12 +631,12 @@
 
 
                                                                                         </div> -->
-                                                                                        <p class="help-block" style="color:maroon"
+                                                                                        <!-- <p class="help-block" style="color:maroon"
                                                                                            ng-show="warFromMsg">
                                                                                             From date cannot be lesser than To date.
                                                                                         </p>
 
-                                                                                    </div>
+                                                                                    </div> -->
 
                                                                                 </div>
 
@@ -646,8 +645,8 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">To Date</label>
                                                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                    <input type="text" class="form-control datepicker"  id="warToDate" name="warToDate" ng-model ="warToDate1"  placeholder="{{warToDate | date:'dd/MMM/yyyy'}}" autocomplete="off" required/>
-                                                                                    <div ng-show="form.$submitted || form.warToDate.$touched">
+                                                                                    <input type="text" class="form-control datepicker"  id="warToDate" name="warToDate" ng-model ="warToDate1"  placeholder="{{warToDate1 | date:'dd/MM/yyyy'}}" autocomplete="off"/>
+                                                                                    <!-- <div ng-show="form.$submitted || form.warToDate.$touched"> -->
                                                                                          <!-- <div
                                                                                             ng-show="form.warToDate.$dirty || form.warToDate.$invalid">
                                                                                             <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
@@ -657,12 +656,12 @@
 
 
                                                                                         </div> -->
-                                                                                        <p class="help-block" style="color:maroon"
+                                                                                        <!-- <p class="help-block" style="color:maroon"
                                                                                            ng-show="warToMsg">
                                                                                             To date cannot be lesser than From date.
                                                                                         </p>
 
-                                                                                    </div>
+                                                                                    </div> -->
 
                                                                                 </div>
 
@@ -950,12 +949,12 @@
                                                                             <div class="" style="float:left;width:90%;">
                                                                                 <label class="control-label">Threshold</label>
                                                                                 <input id='threshold'
-								                                                 ng-model="selectedThreshold"
-								                                                 class='form-control'
-								                                                 name='threshold'
-								                                                 type='text' value=""
-								                                                 ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
-								                                                  />
+        						                                                 ng-model="selectedThreshold"
+        						                                                 class='form-control'
+        						                                                 name='threshold'
+        						                                                 type='text' value=""
+        						                                                 ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+        						                                                  />
                                                                                 <!-- <div ng-show="form6.$submitted || form6.paramUOM.$touched">
                                                                                     <div ng-show="form6.paramUOM.$dirty || form6.paramUOM.$invalid">
                                                                                         <p class="help-block" style="color:maroon"
@@ -990,13 +989,15 @@
                                                                         <div class="form-group">
                                                                             <label class="control-label">Min Value  </label>
                                                                             <input id='min'
-								                                                 ng-model="selectedMinValue"
-								                                                 class='form-control'
-								                                                 name='MinValue'
-                                                                                  ng-change="checkMinMax()"
-								                                                 type='number' value=""
-								                                                  autofocus
-								                                                  />
+        						                                                 ng-model="selectedMinValue"
+        						                                                 class='form-control'
+        						                                                 name='MinValue'
+                                                                     value="1"
+                                                                     min="1"
+                                                                     ng-change="checkMinMax()"
+        						                                                 type='number' value=""
+        						                                                  autofocus
+        						                                                  />
                                                                                 <div ng-show="form2.$submitted || form2.MinValue.$touched">
                                                                                     <p class="help-block" style="color:maroon" ng-show="minError">
                                                                                        Min value must below max value.
@@ -1008,13 +1009,13 @@
                                                                          <div class="form-group">
                                                                             <label class="control-label">Max Value </label>
                                                                             <input id='max'
-								                                                 ng-model="selectedMaxValue"
-								                                                 class='form-control'
-								                                                 name='MaxValue'
+        						                                                 ng-model="selectedMaxValue"
+        						                                                 class='form-control'
+        						                                                 name='MaxValue'
                                                                                   ng-change="checkMinMax()"
-								                                                 type='number' value=""
-								                                                  autofocus
-								                                                  />
+        						                                                 type='number' value=""
+        						                                                  autofocus
+        						                                                  />
                                                                               <div ng-show="form2.$submitted || form2.MaxValue.$touched">
                                                                                 <p class="help-block" style="color:maroon" ng-show="maxError">
                                                                                    Max value must above min value.
@@ -1090,6 +1091,7 @@
                                                                                             <th>Type</th>
                                                                                             <th>Units</th>
                                                                                             <th>Rule</th>
+                                                                                            <th>Threshold</th>
                                                                                             <th>Min Value</th>
                                                                                             <th>Max Value</th>
                                                                                             <th>Consumption</th>
@@ -1105,6 +1107,7 @@
                                                                                                 <td>{{assetParam.assetType}}</td>
                                                                                                 <td>{{assetParam.uom}}</td>
                                                                                                 <td>{{assetParam.rule}}</td>
+                                                                                                <td>{{assetParam.threshold}}</td>
                                                                                                 <td>{{assetParam.min}}</td>
                                                                                                 <td>{{assetParam.max}}</td>
                                                                                                 <td>
@@ -1229,11 +1232,7 @@
                                                                                     </p>
 
                                                                                 </div>
-                                                                                 <p class="help-block" style="color:maroon"
-                                                                                       ng-show="ppmFromMsg">
-                                                                                        Fromdate cannot be greater than To date.
-                                                                                </p>
-
+                                                                          
                                                                             </div>
 
                                                                         </div>
@@ -1253,11 +1252,7 @@
 
 
                                                                                 </div>
-                                                                                <p class="help-block" style="color:maroon"
-                                                                                       ng-show="ppmToMsg">
-                                                                                        Todate cannot be lesser than Fromdate.
-                                                                                </p>
-
+                                                                               
                                                                             </div>
 
                                                                         </div>
@@ -1299,9 +1294,9 @@
                                                                     <div class="col-md-2" ng-init="loadFreqPrefix()">
                                                                         <div class="dropdown">
                                                                             <div class="form-group">
-                                                                                <label class="control-label">Select Frequency</label>
+                                                                                <label class="control-label">Select Frequency<span class="red-star">*</span> </label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                <select class="form-control" ng-model="selectedFrequency" ng-options="frequencyPrefix for frequencyPrefix in frequencyPrefixies">
+                                                                                <select class="form-control" ng-model="selectedFrequency" ng-options="frequencyPrefix for frequencyPrefix in frequencyPrefixies" required>
                                                                                     <option value="">Select..</option>
                                                                                 </select>
                                                                             </div>
@@ -1311,7 +1306,7 @@
                                                                         <div class="form-group">
                                                                             <label class="control-label">&nbsp;</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                            <select class="form-control" ng-model="selectedTimeInterval" ng-options="frequencyDuration for frequencyDuration in frequencyDurations">
+                                                                            <select class="form-control" ng-model="selectedTimeInterval" ng-options="frequencyDuration for frequencyDuration in frequencyDurations" required>
                                                                                 <option value="">selected..</option>
                                                                             </select>
                                                                         </div>
@@ -1320,7 +1315,7 @@
                                                                         <div class="form-group">
                                                                             <label class="control-label">&nbsp;</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                            <select class="form-control" ng-model="selectedFrequnceyOccurrence" ng-options="frequency for frequency in frequencies">
+                                                                            <select class="form-control" ng-model="selectedFrequnceyOccurrence" ng-options="frequency for frequency in frequencies" required>
                                                                                 <option value="">select..</option>
                                                                             </select>
                                                                         </div>
@@ -1330,12 +1325,12 @@
                                                                 <div class="row">
                                                                     <div class="col-md-3" >
                                                                     		<div class="form-group">
-						                                                    <label class="control-label">Start Time<span class="red-star">*</span></label>
-						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
+        				                                                    <label class="control-label">Start Time<span class="red-star">*</span></label>
+        				                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
 
-						                                                    <input type="text" class="form-control timepicker padng-right30"  id="ppmJobStartTime"  ng-model="ppmJobStartTime" placeholder="{{ppmJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" autocomplete="off" name="ppmJobStartTime" required/>
+        				                                                    <input type="text" class="form-control timepicker padng-right30"  id="ppmJobStartTime"  ng-model="ppmJobStartTime" placeholder="{{ppmJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" autocomplete="off" name="ppmJobStartTime" required/>
 
-																		   <div ng-show="form3.$submitted || form3.ppmJobStartTime.$touched">
+        																   <div ng-show="form3.$submitted || form3.ppmJobStartTime.$touched">
                                                                                 <div
                                                                                     ng-show="form3.ppmJobStartTime.$dirty || form3.ppmJobStartTime.$invalid">
                                                                                     <p class="help-block" style="color:maroon"
@@ -1347,31 +1342,31 @@
                                                                                 </div>
 
                                                                             </div>
-						                                                </div>
+        				                                                </div>
                                                                     </div>
                                                                     <div class="col-md-1">
                                                                     		<div class="form-group">
-						                                                    <label class="control-label">Hours<span class="red-star">*</span> </label>
-						                                                    <input
-						                                                        class="form-control"
-						                                                        name="plannedHours"
-						                                                        type="number"
-						                                                     	   value="1"
-						                                                     	   min="1"
-						                                                        ng-model="assetPPM.plannedHours"
-						                                                        required
-						                                                    />
+        				                                                    <label class="control-label">Hours<span class="red-star">*</span> </label>
+        				                                                    <input
+        				                                                        class="form-control"
+        				                                                        name="plannedHours"
+        				                                                        type="number"
+        				                                                     	   value="1"
+        				                                                     	   min="1"
+        				                                                        ng-model="assetPPM.plannedHours"
+        				                                                        required
+        				                                                    />
 
-						                                                    <div ng-show="form3.$submitted || form3.plannedHours.$touched">
-						                                                        <div
-						                                                            ng-show="form3.plannedHours.$dirty || form3.plannedHours.$invalid">
-						                                                            <p class="help-block" style="color:maroon"
-						                                                               ng-show="form3.plannedHours.$error.required">
-						                                                               Hours is required
-						                                                            </p>
-						                                                        </div>
-						                                                    </div>
-						                                                </div>
+        				                                                    <div ng-show="form3.$submitted || form3.plannedHours.$touched">
+        				                                                        <div
+        				                                                            ng-show="form3.plannedHours.$dirty || form3.plannedHours.$invalid">
+        				                                                            <p class="help-block" style="color:maroon"
+        				                                                               ng-show="form3.plannedHours.$error.required">
+        				                                                               Hours is required
+        				                                                            </p>
+        				                                                        </div>
+        				                                                    </div>
+        				                                                </div>
 
                                                                     </div>
                                                                     <!-- <div class="col-md-3" ng-init="loadSiteShifts()">
@@ -1384,7 +1379,7 @@
                                                                         </div>
                                                                     </div> -->
                                                                     <div class="col-md-5 txt-align-rgt" style="padding-top: 25px;">
-                                                                        <button  type="submit" class="btn btn-success add-btn margn-top0"   ng-disabled="form3.$invalid|| ppmFromMsg || ppmToMsg"">Add</button>
+                                                                        <button  type="submit" class="btn btn-success add-btn margn-top0"   ng-disabled="form3.$invalid">Add</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1399,6 +1394,9 @@
                                                                     <th width="30%">Checklist</th>
                                                                     <th>From Date</th>
                                                                     <th width="10%">To Date</th>
+                                                                    <th width="10%">Employee</th>
+                                                                    <th width="10%">Start Time</th>
+                                                                    <th width="10%">Planned Hours</th>
                                                                     <th width="10%">Frequency</th>
 
                                                                     <!--<th width="5%" align="right">Actions</th>-->
@@ -1412,7 +1410,7 @@
                                                                     <td>{{ppmSchedules.title}}</td>
                                                                     <td class="hiddenCheckList" >{{ppmSchedules.checklistName}}
 
-                                                                         <div class="CheckListBx">
+                                                                         <div class="CheckListBx" ng-if="ppmSchedules.checkListItems">
                                                                              <div class="bootstrap-tagsinput" ng-repeat="checkListItem in ppmSchedules.checkListItems">
                                                                                  <span class="tag label label-info">{{checkListItem.name}}<span data-role="remove"></span></span>
 
@@ -1428,6 +1426,10 @@
                                                                     </td> -->
                                                                     <td>{{ppmSchedules.startDate}}</td>
                                                                     <td>{{ppmSchedules.endDate}}</td>
+                                                                    <td>{{ppmSchedules.endDate}}</td>
+                                                                    <td>{{ppmSchedules.employeeName}}</td>
+                                                                    <td>{{ppmSchedules.jobStartTime}}</td>
+                                                                    <td>{{ppmSchedules.plannedHours}}</td>
                                                                     <td>{{ppmSchedules.frequencyPrefix}}&nbsp; {{ppmSchedules.frequencyDuration}}&nbsp; {{ppmSchedules.frequency}}</td>
                                                                     <!--<td class="text-right">-->
                                                                         <!--<a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>-->
@@ -1455,9 +1457,9 @@
                                                                             <div class="row">
                                                                                 <div class="col-md-12">
                                                                                 <!-- <div class="col-md-10 pad-r-0px"> -->
-                                                                                    <label class="control-label">Type</label>
+                                                                                    <label class="control-label">Type<span class="red-star">*</span> </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="amcSchedule.maintenanceType" tabindex="0" aria-invalid="false">
+                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="amcSchedule.maintenanceType" tabindex="0" aria-invalid="false" required>
                                                                                         <option value="" >Select Maintenance Type..</option>
                                                                                         <option value="amc" >AMC</option>
                                                                                         <option value="dlp" >DLP</option>
@@ -1570,11 +1572,7 @@
                                                                                     </p>
 
                                                                                 </div>
-                                                                                <!--<p class="help-block" style="color:maroon"-->
-                                                                                   <!--ng-show="amcToMsg">-->
-                                                                                    <!--Todate cannot be lesser than From date.-->
-                                                                                <!--</p>-->
-
+                              
                                                                             </div>
 
                                                                         </div>
@@ -1611,9 +1609,9 @@
                                                                     <div class="col-md-2" ng-init="loadFreqPrefix()">
                                                                         <div class="dropdown">
                                                                             <div class="form-group">
-                                                                                <label class="control-label">Select Frequency</label>
+                                                                                <label class="control-label">Select Frequency<span class="red-star">*</span> </label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                <select class="form-control" ng-model="selectedFrequencyPrefix" ng-options="frequencyPrefix for frequencyPrefix in frequencyPrefixies">
+                                                                                <select class="form-control" ng-model="selectedFrequencyPrefix" ng-options="frequencyPrefix for frequencyPrefix in frequencyPrefixies" required>
                                                                                     <option value="">Select..</option>
                                                                                 </select>
                                                                             </div>
@@ -1623,7 +1621,7 @@
                                                                         <div class="form-group">
                                                                             <label class="control-label">&nbsp;</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                            <select class="form-control" ng-model="selectedFreqDuration" ng-options="frequencyDuration for frequencyDuration in frequencyDurations">
+                                                                            <select class="form-control" ng-model="selectedFreqDuration" ng-options="frequencyDuration for frequencyDuration in frequencyDurations" required>
                                                                                 <option value="">selected..</option>
                                                                             </select>
                                                                         </div>
@@ -1632,7 +1630,7 @@
                                                                         <div class="form-group">
                                                                             <label class="control-label">&nbsp;</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                            <select class="form-control" ng-model="selectedFrequency" ng-options="frequency for frequency in frequencies">
+                                                                            <select class="form-control" ng-model="selectedFrequency" ng-options="frequency for frequency in frequencies" required>
                                                                                 <option value="">select..</option>
                                                                             </select>
                                                                         </div>
@@ -1641,12 +1639,12 @@
                                                                 <div class="row">
                                                                     <div class="col-md-3" >
                                                                     		<div class="form-group">
-						                                                    <label class="control-label">Start Time<span class="red-star">*</span></label>
-						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
+        				                                                    <label class="control-label">Start Time<span class="red-star">*</span></label>
+        				                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
 
-						                                                    <input type="text" class="form-control timepicker padng-right30"  id="amcJobStartTime"  ng-model="amcJobStartTime" name="amcJobStartTime" placeholder="{{amcJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" autocomplete="off" required/>
+        				                                                    <input type="text" class="form-control timepicker padng-right30"  id="amcJobStartTime"  ng-model="amcJobStartTime" name="amcJobStartTime" placeholder="{{amcJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" autocomplete="off" required/>
 
-																		   <div ng-show="form4.$submitted || form4.amcJobStartTime.$touched">
+        																   <div ng-show="form4.$submitted || form4.amcJobStartTime.$touched">
                                                                                 <div
                                                                                     ng-show="form4.amcJobStartTime.$dirty || form4.amcJobStartTime.$invalid">
                                                                                     <p class="help-block" style="color:maroon"
@@ -1658,31 +1656,31 @@
                                                                                 </div>
 
                                                                             </div>
-						                                                </div>
+        				                                                </div>
                                                                     </div>
                                                                     <div class="col-md-2">
                                                                     		<div class="form-group">
-						                                                    <label class="control-label">Hours<span class="red-star">*</span> </label>
-						                                                    <input
-						                                                        class="form-control"
-						                                                        name="plannedHours"
-						                                                        type="number"
-						                                                     	   value="1"
-						                                                     	   min="1"
-						                                                        ng-model="amcSchedule.plannedHours"
-						                                                        required
-						                                                    />
+        				                                                    <label class="control-label">Hours<span class="red-star">*</span> </label>
+        				                                                    <input
+        				                                                        class="form-control"
+        				                                                        name="plannedHours"
+        				                                                        type="number"
+        				                                                     	   value="1"
+        				                                                     	   min="1"
+        				                                                        ng-model="amcSchedule.plannedHours"
+        				                                                        required
+        				                                                    />
 
-						                                                    <div ng-show="form4.$submitted || form4.plannedHours.$touched">
-						                                                        <div
-						                                                            ng-show="form4.plannedHours.$dirty || form4.plannedHours.$invalid">
-						                                                            <p class="help-block" style="color:maroon"
-						                                                               ng-show="form4.plannedHours.$error.required">
-						                                                               Hours is required
-						                                                            </p>
-						                                                        </div>
-						                                                    </div>
-						                                                </div>
+        				                                                    <div ng-show="form4.$submitted || form4.plannedHours.$touched">
+        				                                                        <div
+        				                                                            ng-show="form4.plannedHours.$dirty || form4.plannedHours.$invalid">
+        				                                                            <p class="help-block" style="color:maroon"
+        				                                                               ng-show="form4.plannedHours.$error.required">
+        				                                                               Hours is required
+        				                                                            </p>
+        				                                                        </div>
+        				                                                    </div>
+        				                                                </div>
 
                                                                     </div>
                                                                     <!-- <div class="col-md-3" ng-init="loadSiteShifts()">
@@ -1695,7 +1693,7 @@
                                                                         </div>
                                                                     </div> -->
                                                                     <div class="col-md-4 txt-align-rgt" style="padding-top: 25px;">
-                                                                        <button  type="submit" class="btn btn-success add-btn margn-top0"    ng-disabled="form4.$invalid|| amcFromMsg || amcToMsg">Add</button>
+                                                                        <button  type="submit" class="btn btn-success add-btn margn-top0"    ng-disabled="form4.$invalid">Add</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1724,7 +1722,7 @@
                                                                     <td>{{amcSchedule.title}}</td>
                                                                     <td class="hiddenCheckList">{{amcSchedule.checklistName}}
 
-                                                                       <div class="CheckListBx">
+                                                                       <div class="CheckListBx" ng-if="amcSchedule.checkListItems">
                                                                            <div class="bootstrap-tagsinput" ng-repeat="checkListItemAmc in amcSchedule.checkListItems">
                                                                                <span class="tag label label-info">{{checkListItemAmc.name}}<span data-role="remove"></span></span>
 
@@ -1946,7 +1944,7 @@
                                                                            </a>
                                                                            </div>
                                                                        <a href="{{uploadFile.url}}" id="loop">
-                                                                           <img src="assets/img/{{uploadFile.extension}}.png" alt="docs" title="Download"/>
+                                                                           <img ng-src="assets/img/{{uploadFile.extension}}.png" alt="docs" title="Download"/>
                                                                            <!-- <img src="assets/img/Docs-icon.png" alt="docs" /> -->
                                                                        </a>
                                                                        <p>{{uploadFile.title}}</p>
@@ -1987,7 +1985,7 @@
                                                                         </div>
                                                                         <a href="{{uploadPhoto.url}}" id="loop2">
                                                                             <!-- <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" /> -->
-                                                                            <img src="assets/img/{{uploadFile.extension}}.png" alt="docs" title="Download"/>
+                                                                            <img ng-src="assets/img/{{uploadPhoto.extension}}.png" alt="photo" title="Download"/>
                                                                         </a>
                                                                         <p>{{uploadPhoto.title}}</p>
                                                                         <div ng-if="uploadPhoto.id == download">
@@ -2008,7 +2006,6 @@
 
                                                     </div>
                                                 </div>
-
                                                 <div class="wizard-footer"  ng-show="assetVal.id">
                                                     <div class="pull-right">
                                                         <input type='button' class='btn btn-next btn-fill btn-default btn-wd' name='next' value='Next'  />
@@ -2019,64 +2016,57 @@
                                                     </div>
                                                     <div class="clearfix"></div>
                                                 </div>
-
-                                            </div>
                                         </div>
-                                        <!-- wizard container -->
                                     </div>
+                                    <!-- wizard container -->
+                                </div>
+                            </div>
+
+                            <div class="row" >
+
+                                <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
+                                    <!--<button class="btn btn-success" type="submit" ng-hide="assetVal.id"-->
+                                            <!--id="form-button-save" ng-disabled="form.$invalid || btnDisabled || warFromMsg || warToMsg" ng-click="saveAsset()" >-->
+                                                <!--<span class="btn-label">-->
+                                        				<!--<i class="material-icons">check</i>-->
+                                    				<!--</span> Save &amp; Continue-->
+                                    <!--</button>-->
+                                    <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" ng-hide="assetVal.id"
+                                            type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisabled" ng-click="conform('save')">
+                                        <span class="btn-label"><i class="material-icons">check</i></span>  Save &amp; Continue
+                                        <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                                    </button>
+                                    <!--<button class="btn btn-info" type="submit"-->
+                                    <!--id="save-and-go-back-button" ng-disabled="form.$invalid">-->
+                                    <!--<i class="material-icons">rotate_left</i> Save and go back to list-->
+                                    <!--</button>-->
+                                    <button class="btn btn-danger" type="button"
+                                            ng-click="conform('cancel');" id="cancel-button">
+                                        <i class="material-icons">close</i> Discard
+                                    </button>
                                 </div>
 
+                            </div>
 
 
-                                <div class="row" >
+                            <!-- Start of hidden inputs -->
+                            <!-- End of hidden inputs -->
 
-                                    <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
-                                        <button class="btn btn-success" type="submit" ng-hide="assetVal.id"
-                                                id="form-button-save" ng-disabled="form.$invalid || btnDisabled || warFromMsg || warToMsg" ng-click="saveAsset()" >
-                                                    <span class="btn-label">
-                                            				<i class="material-icons">check</i>
-                                        				</span> Save &amp; Continue
-                                        </button>
-                                        <!--<button class="btn btn-info" type="submit"-->
-                                        <!--id="save-and-go-back-button" ng-disabled="form.$invalid">-->
-                                        <!--<i class="material-icons">rotate_left</i> Save and go back to list-->
-                                        <!--</button>-->
-                                        <button class="btn btn-danger" type="button"
-                                                ng-click="cancel();" id="cancel-button">
-                                            <i class="material-icons">close</i> Cancel
-                                        </button>
-                                    </div>
+                            <div class='small-loading hidden' id='FormLoading'>Loading,
+                                saving data...</div>
 
-                                </div>
-
-
-                                    <!-- Start of hidden inputs -->
-                                <!-- End of hidden inputs -->
-
-                                <div class='small-loading hidden' id='FormLoading'>Loading,
-                                    saving data...</div>
-
-                                <div class="form-group">
-                                    <div id='report-error' class='report-div error bg-danger'
-                                         style="display: none"></div>
-                                    <div id='report-success' class='report-div success bg-success'
-                                         style="display: none"></div>
-                                </div>
-
-
+                            <div class="form-group">
+                                <div id='report-error' class='report-div error bg-danger'
+                                     style="display: none"></div>
+                                <div id='report-success' class='report-div success bg-success'
+                                     style="display: none"></div>
+                            </div>
                         </div>
-
                     </div>
                 </div>
-
-
-
-
-
             </div>
 		</div>
 	</div>
-
 </div>
 
 <!-- Add asset type dialog -->
@@ -2501,7 +2491,7 @@
 
 <div class="row">
 
-    <div id="deleteModal" data-backdrop="false" class="modal fade deleteModal"
+    <div id="deleteModalConfig" data-backdrop="false" class="modal fade deleteModal"
         tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
         <div class="delete-dialog">

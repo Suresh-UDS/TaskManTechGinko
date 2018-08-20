@@ -88,6 +88,14 @@ ul.checkList li
     font-size: 15px;
     width: 40px !important;
 }
+.modal-body #accordion .panel-heading
+{
+    background-color: #fafafa;
+}
+.modal-body #accordion .panel-heading .panel-title
+{
+    font-weight: 100;
+}
 .LogoCon img.LoginLogo
 {
     border-radius: 5px;
@@ -190,7 +198,11 @@ ul.checkList li
 }
 .margn-btm-8
 {
-    margin-bottom: 8px;
+    margin-bottom: 8px !important;
+}
+.margn-btm-12
+{
+    margin-bottom: 12px !important;
 }
 .pdng-top13
 {
@@ -316,6 +328,12 @@ ul.chatlinesList
   box-shadow: 0 12px 20px -10px rgba(255, 152, 0, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(255, 152, 0, 0.2);
 
 }
+li ul.nav.SubNav li a p
+{
+    line-height: 20px;
+}
+
+
 .dropdown-menu li a:hover, .dropdown-menu li a:focus, .dropdown-menu li a:active
 {
   background-color: #ff9800;
@@ -324,6 +342,12 @@ ul.chatlinesList
 .dropdown-menu i.material-icons
 {
   padding-right:5px;
+}
+.dropdown select.form-control option:hover
+{
+    background: #ccc !important;
+    color: #000 !important;
+    box-shadow: inset 20px 20px #00f !important;
 }
 .form-control-feedback
 {
@@ -414,7 +438,14 @@ span.calender-big-icon
 {
     padding-top: 7px;
 }
-
+.FilterModalCon .modal-content .modal-footer
+{
+    padding-right: 24px;
+}
+.modal-content .modal-header button.close
+{
+    padding: 5px 3px 0 0;
+}
 span.d-sm-arrow-icon
 {
   padding-top: 7px;
@@ -433,6 +464,9 @@ span.d-arrow-icon
 }
 span.d-big-arrow-icon {
     padding-top: 38px;
+}
+.DownArrowCon span.d-arrow-icon {
+    padding-top: 28px;
 }
 .download-btn
 {
@@ -555,6 +589,27 @@ textarea.form-control {
     min-width: 390px;
     /*top: 12px;*/
 }
+.AppliedFilterCon
+{
+    padding: 10px 0 5px 0px;
+}
+span.filterdTxt
+{
+    font-size: 12px;
+    background-color: #e0e0e0;
+    box-shadow: 0 2px 4px 0 rgba(255, 255, 255, .5);
+    border-radius: 3px;
+    margin: 2px;
+    overflow: hidden;
+    transition: background-color 0.1s;
+    max-width: 200px;
+    padding: 5px;
+    border: 1px solid #ccc;
+}
+.applyTitle
+{
+    font-weight: 400;
+}
 .hoverMe:hover .Viewmore
 {
     display: none;
@@ -618,6 +673,37 @@ textarea.form-control {
     padding: 5px;
     margin: 5px;
 }
+
+h3.HeadingTxt
+{
+    background: #f9f9f9;
+    padding: 5px;
+    font-size: 20px;
+    font-weight: 400;
+}
+.titleCon
+{
+    text-align: center;
+
+    width: 50%;
+    margin: 0 auto;
+    padding: 5px 0;
+    background: #fff;
+    border: 1px solid #ffeaca;
+    border-radius: 5px;
+    box-shadow: 1px 0px 5px 0px #ffdeae;
+    border-left: 4px solid #ff9800;
+    border-right: 4px solid #ff9800;
+
+}
+.titleCon h3
+{
+    font-weight: 400;
+    font-size: 19px;
+    margin: 0;
+}
+
+
  .docsRow
  {
    padding-top:20px;
@@ -774,7 +860,15 @@ table.withSortingIcons thead tr th
     font-size: 11px;
     font-weight: 400;
     min-width: 90px;
-    padding: 10px 0px;
+    padding: 10px 5px;
+}
+.EditAssetTabs .assetsTabs ul.nav-pills li a
+{
+    padding: 10px;
+}
+.viewAssetTabs  .assetsTabs ul.nav-pills li a
+{
+    min-width: 80px;
 }
 span.red-star
 {
@@ -1616,6 +1710,10 @@ span.flotingIcons.icon-13 {
 .modal.AdvancedFilterModal .modal-dialog
 {
     width: 900px;
+}
+.modal.BasicFilterModal .modal-dialog
+{
+    width: 750px;
 }
 
 

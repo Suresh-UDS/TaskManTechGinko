@@ -101,7 +101,7 @@ public class ChecklistService extends AbstractService {
 	public void updateChecklist(ChecklistDTO checklist) {
 		log.debug("Inside Update");
 		Checklist checklistUpdate = checklistRepository.findOne(checklist.getId());
-		//checklistUpdate.getItems().clear();
+		checklistUpdate.setName(checklist.getName());
 		//checklistUpdate = checklistRepository.save(checklistUpdate);
 		List<ChecklistItemDTO> itemDtos = checklist.getItems();
 		List<ChecklistItem> items = new ArrayList<ChecklistItem>();

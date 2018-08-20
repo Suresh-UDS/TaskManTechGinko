@@ -323,6 +323,9 @@ public class AssetManagementService extends AbstractService {
 				assetParamConfig.setActive("Y");
 				assetParamConfig.setAsset(asset);
 				assetParamConfig.setAssetType(assetDTO.getAssetType());
+				assetParamConfig.setAlertRequired(parameterConfig.isAlertRequired());
+				assetParamConfig.setRule(parameterConfig.getRule());
+				assetParamConfig.setThreshold(parameterConfig.getThreshold());
 				assetParamConfig.setConsumptionMonitoringRequired(parameterConfig.isConsumptionMonitoringRequired());
 				assetParamConfig.setName(parameterConfig.getName());
 				assetParamConfig.setUom(parameterConfig.getUom());
@@ -444,7 +447,7 @@ public class AssetManagementService extends AbstractService {
 
 		//update status history
 		if(!StringUtils.isEmpty(assetDTO.getStatus())
-				&& assetDTO.getStatus().equalsIgnoreCase(asset.getStatus())) {
+				&& !assetDTO.getStatus().equalsIgnoreCase(asset.getStatus())) {
 			AssetStatusHistory assetStatusHistory = new AssetStatusHistory();
 			assetStatusHistory.setStatus(AssetStatus.valueOf(assetDTO.getStatus()).getStatus());
 			assetStatusHistory.setActive("Y");
@@ -452,8 +455,12 @@ public class AssetManagementService extends AbstractService {
 			List<AssetStatusHistory> assetStatusHistoryList = asset.getAssetStatusHistory();
 			if(CollectionUtils.isEmpty(assetStatusHistoryList)) {
 				assetStatusHistoryList = new ArrayList<AssetStatusHistory>();
+				assetStatusHistoryList.add(assetStatusHistory);
+				asset.setAssetStatusHistory(assetStatusHistoryList);
+			}else { 
+				assetStatusHistoryList.add(assetStatusHistory);
 			}
-			asset.setAssetStatusHistory(assetStatusHistoryList);
+			
 		}
 
 		asset.setAssetGroup(assetDTO.getAssetGroup());
@@ -507,11 +514,11 @@ public class AssetManagementService extends AbstractService {
 
 
 		}
-		if (assetDTO.getManufacturerId() != asset.getManufacturer().getId()) {
+		if (assetDTO.getManufacturerId() > 0) {
 			Manufacturer manufacturer = getManufacturer(assetDTO.getManufacturerId());
 			asset.setManufacturer(manufacturer);
 		}
-		if (assetDTO.getVendorId() != asset.getAmcVendor().getId()) {
+		if (assetDTO.getVendorId() > 0) {
 			Vendor vendor = getVendor(assetDTO.getVendorId());
 			asset.setAmcVendor(vendor);
 		}
@@ -555,6 +562,8 @@ public class AssetManagementService extends AbstractService {
 //			Employee employee = user.getEmployee();
 
 			Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_ASSET);
+			
+			log.debug("Setting Email list -" + setting);
 
 			if(setting.getSettingValue().equalsIgnoreCase("true") ) {
 
@@ -808,10 +817,7 @@ public class AssetManagementService extends AbstractService {
 		List<AssetPPMSchedule> assetPpmSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByAssetId(assetId, type);
 		if (CollectionUtils.isNotEmpty(assetPpmSchedules)) {
 			assetPPMScheduleEventDTOs = new ArrayList<AssetPPMScheduleEventDTO>();
-			Calendar currCal = Calendar.getInstance();
-			currCal.setTime(startDate);
-			currCal.set(Calendar.HOUR_OF_DAY, 0);
-			currCal.set(Calendar.MINUTE, 0);
+			
 			Calendar lastDate = Calendar.getInstance();
 			if(endDate == null) {
 				lastDate.add(Calendar.DAY_OF_MONTH,  lastDate.getActualMaximum(Calendar.DAY_OF_MONTH));
@@ -822,13 +828,17 @@ public class AssetManagementService extends AbstractService {
 			lastDate.set(Calendar.MINUTE, 59);
 
 			for(AssetPPMSchedule ppmSchedule : assetPpmSchedules) {
+				Calendar currCal = Calendar.getInstance();
+				currCal.setTime(startDate);
+				currCal.set(Calendar.HOUR_OF_DAY, 0);
+				currCal.set(Calendar.MINUTE, 0);
 				Date schStartDate = ppmSchedule.getStartDate();
 				Date schEndDate = ppmSchedule.getEndDate();
 				Calendar schStartCal = Calendar.getInstance();
 				schStartCal.setTime(schStartDate);
 				Calendar schEndCal = Calendar.getInstance();
 				schEndCal.setTime(schEndDate);
-				while((currCal.before(schStartCal) || schStartCal.equals(currCal)) && !currCal.after(lastDate)) { //if ppm schedule starts before current date and not after the last date of the month.
+				while(((currCal.after(schStartCal) || schStartCal.equals(currCal)) || !schStartCal.after(lastDate)) && !currCal.after(lastDate)) { //if ppm schedule starts before current date and not after the last date of the month.
 					AssetPPMScheduleEventDTO assetPPMScheduleEvent = new AssetPPMScheduleEventDTO();
 					assetPPMScheduleEvent.setId(ppmSchedule.getId());
 					assetPPMScheduleEvent.setTitle(ppmSchedule.getTitle());
@@ -1179,8 +1189,18 @@ public class AssetManagementService extends AbstractService {
 
 	public AssetgroupDTO createAssetGroup(AssetgroupDTO assetGroupDTO) {
 		AssetGroup assetgroup = mapperUtil.toEntity(assetGroupDTO, AssetGroup.class);
-		assetGroupRepository.save(assetgroup);
+		AssetGroup existingGroup = assetGroupRepository.findByName(assetGroupDTO.getAssetgroup());
+		if(existingGroup == null) { 
+			assetgroup.setActive(AssetGroup.ACTIVE_YES);
+			assetGroupRepository.save(assetgroup);
+			assetGroupDTO = mapperUtil.toModel(assetgroup, AssetgroupDTO.class);
+		}else {
+			assetGroupDTO.setErrorMessage("Already same asset group exists.");
+			assetGroupDTO.setStatus("400");
+			assetGroupDTO.setErrorStatus(true);
+		}
 		return assetGroupDTO;
+
 	}
 
 	public List<AssetgroupDTO> findAllAssetGroups() {

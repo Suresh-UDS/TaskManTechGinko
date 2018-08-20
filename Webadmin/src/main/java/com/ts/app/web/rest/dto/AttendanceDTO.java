@@ -74,6 +74,8 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
 	
 	private String enrollImgUrl;
 
+	private String remarks;
+
 	public Long getId() {
 		return id;
 	}
@@ -300,4 +302,12 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
 	public void setEnrollImgUrl(String enrollImgUrl) {
 		this.enrollImgUrl = enrollImgUrl;
 	}
+
+	public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
 }

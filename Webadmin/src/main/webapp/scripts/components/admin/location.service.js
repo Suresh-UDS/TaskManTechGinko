@@ -95,7 +95,7 @@ angular.module('timeSheetApp')
 					});
 			},
             createQr : function(qr) {
-                return $http.get('api/location/'+qr.locationId+'/qrcode/'+qr.siteId).then(function(response){
+                return $http.get('api/location/'+qr.id+'/qrcode/'+qr.siteId).then(function(response){
                     return response.data;
 
                 });

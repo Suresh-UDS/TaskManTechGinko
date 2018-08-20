@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.LocationService;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.web.rest.dto.ImportResult;
@@ -99,6 +100,7 @@ public class LocationResource {
     public SearchResult<LocationDTO> searchLocation(@RequestBody SearchCriteria searchCriteria) {
         SearchResult<LocationDTO> result = null;
         if(searchCriteria != null) {
+			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
             result = locationService.findBySearchCrieria(searchCriteria);
         }
         return result;

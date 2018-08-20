@@ -3,7 +3,7 @@
 	<div class="">
 
 		<div class="row">
-			<div class="col-mod-12">
+			<!-- <div class="col-mod-12">
 				<div class="alert alert-success" ng-show="success">
 					<strong>Quotation saved!</strong>
 				</div>
@@ -15,7 +15,7 @@
 					<strong>Quotation already registered!</strong> Please choose
 					another one.
 				</div>
-			</div>
+			</div> -->
 			<div class="col-md-12">
 				<!--<div class="titleCon">-->
 				<!--<h3>Add Quotation</h3>-->
@@ -97,10 +97,20 @@
                                                                <!--uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"-->
                                                                <!--ng-blur="loadSites()"-->
                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
-                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control" ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects track by project.id" required>
-                                                            <option value="">Please select Client...</option>
-                                                        </select>
+
+
+                                                        <!--<span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                        <!--<select class="form-control" ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects track by project.id" required>-->
+                                                            <!--<option value="">Select client...</option>-->
+                                                        <!--</select>-->
+                                                        <span ng-show="clientDisable"  class="form-control-feedback  orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                                        <span ng-show="!clientDisable" class="form-control-feedback  "><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <ui-select ng-model="selectedProject" ng-disabled="clientDisable" ng-change="loadDepSites(selectedProject)">
+                                                            <ui-select-match placeholder="Select clients...">{{selectedProject}}</ui-select-match>
+                                                            <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
+                                                                <div ng-bind="client"></div>
+                                                            </ui-select-choices>
+                                                        </ui-select>
                                                         <div ng-show="form.$submitted || form.projectName.$touched">
                                                             <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
                                                                 <p class="help-block" style="color:maroon"
@@ -132,11 +142,19 @@
                                                         <!--<input ng-focus="loadSites()" type="text" class="form-control"  ng-model="selectedSite" name="siteName" ng-value="selectedSite.name"-->
                                                                <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
-                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites track by site.id" required>
-                                                            <option value="">Please select Site...</option>
-                                                        </select>
-
+                                                        <!--<span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                        <!--<select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites track by site.id" required>-->
+                                                            <!--<option value="">Select site...</option>-->
+                                                        <!--</select>-->
+                                                        <span ng-show="siteSpin"  class="form-control-feedback  orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                                        <span ng-show="!siteSpin" class="form-control-feedback  "><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <ui-select ng-model="selectedSite" ng-disabled="(!selectedSite) && (siteFilterDisable || sitesList.length == 0)" ng-change="loadSearchSite(selectedSite)" >
+                                                            <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : selectedSite?selectedSite.name?selectedSite.name:hideSite?'Select site':selectedSite:selectedSite }}</ui-select-match>
+                                                            <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
+                                                                <div ng-bind="site"></div>
+                                                            </ui-select-choices>
+                                                        </ui-select>
+                                                        <span ng-if="sitesList.length == 0"><p class="help-block">No sites</p></span>
                                                         <div ng-show="form.$submitted || form.siteName.$touched">
                                                             <div ng-show="form.siteName.$dirty || form.siteName.$invalid">
                                                                 <p class="help-block" style="color:maroon"
@@ -510,22 +528,36 @@
 												<div class="col-md-12 txt-align-rgt">
 													<div class="form-group">
 
-														<button class="btn btn-success" ng-click="saveQuotation('submit')"
-															id="form-button-save"
-															ng-disabled="form.$invalid">
-															<span class="btn-label"><i class="material-icons">check</i></span>
-															Send
-														</button>
-														<button class="btn btn-warning" ng-click="saveQuotation('create')" ng-disabled="form.$invalid">
-															<span class="btn-label"><i class="material-icons">save</i></span>
-															Save Draft
-														</button>
-														<button class="btn btn-danger" type="button"
-															ng-click="cancelQuotation()" id="cancel-button">
-															<i class="material-icons">close</i> Cancel
-														</button>
-
-													</div>
+														<!--<button class="btn btn-success" ng-click="saveQuotation('submit')"-->
+															<!--id="form-button-save"-->
+															<!--ng-disabled="form.$invalid">-->
+															<!--<span class="btn-label"><i class="material-icons">check</i></span>-->
+															<!--Send-->
+														<!--</button>-->
+                                                        <button type="submit"  ng-click="conform('send','submit')"
+                                                                ng-disabled="form.$invalid"  class="btn btn-success ld ld-over-inverse pull-right"
+                                                                ng-class="{'running':saveLoad}">
+                                                            <span class="btn-label"><i class="material-icons">save</i></span> Send
+                                                            <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                                                        </button>
+														<!--<button class="btn btn-warning" ng-click="saveQuotation('create')" ng-disabled="form.$invalid">-->
+															<!--<span class="btn-label"><i class="material-icons">save</i></span>-->
+															<!--Save Draft-->
+														<!--</button>-->
+                                                        <button type="submit"  ng-click="conform('save','create')"
+                                                                ng-disabled="form.$invalid"  class="btn btn-warning ld ld-over-inverse pull-right"
+                                                                ng-class="{'running':saveLoad}">
+                                                            <span class="btn-label"><i class="material-icons">save</i></span> Save Draft
+                                                            <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                                                        </button>
+														<!--<button class="btn btn-danger" type="button"-->
+															<!--ng-click="cancelQuotation()" id="cancel-button">-->
+															<!--<i class="material-icons">close</i> Cancel-->
+														<!--</button>-->
+                                                        <button type="submit" ng-click="conform('cancel','')" id="cancel-button"   class="btn btn-danger pull-right">
+                                                            <i class="material-icons">close</i> Discard
+                                                        </button>
+                                                    </div>
 												</div>
 											</div>
 										</div>
@@ -541,10 +573,6 @@
 
 
 						</div>
-
-
-
-
 
 						<div class='small-loading hidden' id='FormLoading'>Loading,
 							saving data...</div>

@@ -24,7 +24,7 @@
 
                            <div class="panel panel-default">
                                <div class="panel-heading">Site Details</div>
-                               <div class="panel-body">
+                               <div class="panel-body DownArrowCon" style="min-height: 330px;">
 
                                    <div class="row">
 
@@ -46,9 +46,9 @@
                                                <!--<span ng-show="clientDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-spinner ld-spin" ></i></span>-->
                                                <span ng-show="!clientDisable" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                <ui-select ng-model="selectedProject"  ng-disabled="clientDisable"  ng-change="addProject(selectedProject)">
-                                                   <ui-select-match placeholder="Select clients...">{{selectedProject.name}}</ui-select-match>
+                                                   <ui-select-match placeholder="Select clients...">{{selectedProject}}</ui-select-match>
                                                    <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
-                                                       <div >{{ client.name || client }}</div>
+                                                       <div >{{ client }}</div>
                                                    </ui-select-choices>
 
                                                </ui-select>
@@ -135,7 +135,7 @@
                                            <div class="form-group">
                                                <label class="control-label">State<span class="red-star">*</span></label>
                                                <!-- <input type="text" ng-model="site.state" class="form-control InputTxtCaps"> -->
-                                               <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                               <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                 <select name='stateName'
                                                   class="form-control " ng-model="site.state"  ng-options="stateName for stateName in stateNames" autofocus  required >
                                                     <option value="">Select State...</option>
@@ -168,7 +168,7 @@
 
                            <div class="panel panel-default">
                                <div class="panel-heading">Location Details</div>
-                               <div class="panel-body">
+                               <div class="panel-body" style="min-height: 330px;">
 
                                    <div class="row">
                                        <div class="col-md-6">
@@ -253,8 +253,15 @@
 
   				                        <div class="form-group">
   				                            <label class="label-control">From Time</label>
-  				                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-  				                            <input type="text" class="form-control timepicker"  id="shiftFrom"  placeholder="{{shiftFrom | date:'hh:mm a'}}"/>
+  				                            <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
+  				                            <input type="text" class="form-control timepicker"  id="shiftFrom" ng-model="newShiftItem.startTimeDup"  placeholder="hh:mm" autocomplete="off" />
+
+
+                                      <div
+                                          ng-show="sStatus">
+                                          <p class="help-block" style="color: maroon">From time is requied</p>
+                                      </div>
+
 
   				                        </div>
 
@@ -263,8 +270,13 @@
 
   				                        <div class="form-group">
   				                            <label class="label-control">To Time</label>
-  				                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-  				                            <input type="text" class="form-control timepicker"  id="shiftTo"  placeholder="{{shiftTo | date:'hh:mm a'}}"/>
+  				                            <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
+  				                            <input type="text" class="form-control timepicker"  id="shiftTo" ng-model="newShiftItem.endTimeDup" placeholder="hh:mm"  autocomplete="off" />
+
+                                      <div
+                                          ng-show="eStatus">
+                                          <p class="help-block" style="color: maroon">To time is requied</p>
+                                      </div>
 
   				                        </div>
 
@@ -272,8 +284,8 @@
 
   				                    <div class="col-md-3">
 
-  			                            <button class="btn btn-success margn-top20" >
-  			                                <span class="btn-label" ng-click="addShiftItem($event)">
+  			                            <button class="btn btn-success margn-top20" ng-click="addShiftItem($event)">
+  			                                <span class="btn-label" >
   			                                    <i class="material-icons">add</i>
                                                 Add
   			                                </span>
@@ -303,7 +315,7 @@
                    <div class="row">
                        <div class="col-md-12">
                            <button type="submit" ng-click="conform('cancel','')"
-                                   id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
+                                   id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Discard</button>
 
                            <!--<button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" ng-click="conform('save')"-->
                                    <!--type="submit" id="form-button-save" ng-disabled="form.$invalid ">-->

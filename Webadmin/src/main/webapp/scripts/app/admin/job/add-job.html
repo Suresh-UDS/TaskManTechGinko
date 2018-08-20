@@ -16,13 +16,15 @@
             </div> -->
 			<div class="col-md-12">
 
-                <div class="titleCon">
-                    <!--<h3>Add Job</h3>-->
-                </div>
+
+                <!-- <div class="titleCon">
+                    <h3>Add Job</h3>
+                </div> -->
+
 
 				<div class="form-container table-container jobcards">
 					<form ng-show="!success" name="form" role="form" novalidate
-						ng-submit="saveJob()"  class="form-horizontal">
+						ng-submit="conform('save')"  class="form-horizontal">
 
                         <div class="row">
 
@@ -99,6 +101,10 @@
 
                                             </div>
 
+
+                                        </div>
+                                        <div class="row">
+
                                             <div class="col-md-6">
                                                 <div class="form-group ">
                                                     <label class="control-label">Checklist</label>
@@ -110,7 +116,7 @@
                                                         <!--ng-change="onSelectChecklist()"-->
                                                         <!--uib-typeahead="checklist as checklist.name for checklist in checklists | filter:$viewValue | limitTo:5"-->
                                                         <!--autocomplete="off" />-->
-                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <select class="form-control " ng-model="selectedChecklist"  ng-options="checklist as checklist.name for checklist in checklists">
                                                             <option value="">Please select Checklist...</option>
                                                         </select>
@@ -120,11 +126,6 @@
                                                 </div>
 
                                             </div>
-
-
-                                        </div>
-                                        <div class="row">
-
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Employee<span class="red-star">*</span> </label>
@@ -147,10 +148,10 @@
                                                         <div ng-show="form.$submitted || form.employeeName.$touched">
                                                             <div
                                                                 ng-show="form.employeeName.$dirty || form.employeeName.$invalid">
-	                                                            <p class="help-block" style="color:maroon"
-	                                                               ng-show="form.employeeName.$error.required">
-	                                                                Employee is required.
-	                                                            </p>
+                                                                <p class="help-block" style="color:maroon"
+                                                                   ng-show="form.employeeName.$error.required">
+                                                                    Employee is required.
+                                                                </p>
 
                                                             </div>
 
@@ -213,10 +214,21 @@
                                                         <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
                                                         <!--required-->
                                                         <!--autocomplete="off" />-->
+
+
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <select class="form-control " ng-model="selectedSite" ng-change="loadEmployees();loadBlocks();" ng-options="site as site.name for site in sites track by site.id" name="siteName" required>
                                                             <option value="">Select Site...</option>
                                                         </select>
+                                                        <!--<span ng-show="siteSpin"  class="form-control-feedback d-sm-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>-->
+                                                        <!--<span ng-show="!siteSpin" class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                        <!--<ui-select ng-model="selectedSite" ng-disabled="siteFilterDisable || sitesList.length == 0" ng-change="loadEmployees(selectedSite);loadBlocks(selectedSite);" >-->
+                                                            <!--<ui-select-match placeholder="Select Site...">{{sites.length == 0 ? 'Select Site' :  selectedSite}}</ui-select-match>-->
+                                                            <!--<ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">-->
+                                                                <!--<div ng-bind="site"></div>-->
+                                                            <!--</ui-select-choices>-->
+                                                        <!--</ui-select>-->
+
                                                         <div ng-show="form.$submitted || form.siteName.$touched">
                                                             <div
                                                                 ng-show="form.siteName.$dirty || form.siteName.$invalid">
@@ -240,6 +252,17 @@
                                                        <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in  blocks track by block" name="block" >
                                                         	<option value="">Select Block...</option>
                                                     	  </select>
+                                                        <!--<span ng-show="blockSpin"  class="form-control-feedback d-sm-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>-->
+                                                        <!--<span ng-show="!blockSpin" class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                        <!--<ui-select ng-model="selectedBlock" ng-disabled="blockFilterDisable || blocks.length == 0" ng-change="loadFloors(selectedBlock)" >-->
+                                                            <!--<ui-select-match placeholder="Select Block...">{{blocks.length == 0 ? 'Select Block' :  selectedBlock}}</ui-select-match>-->
+                                                            <!--<ui-select-choices  repeat="block in getBlock($select.search) | filter: $select.search">-->
+                                                                <!--<div ng-bind="block"></div>-->
+                                                            <!--</ui-select-choices>-->
+                                                        <!--</ui-select>-->
+                                                        <!--<div>-->
+                                                            <!--<p class="help-block" style="color: maroon" ng-show="blocks.length == 0">No Blocks</p>-->
+                                                        <!--</div>-->
                                                         <div ng-show="form.$submitted || form.block.$touched">
                                                             <div
                                                                 ng-show="form.block.$dirty || form.block.$invalid">
@@ -260,6 +283,19 @@
 													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors track by floor" name="floor" >
                                                         <option value="">Select Floor...</option>
                                                     	</select>
+
+                                                        <!--<span ng-show="floorSpin"  class="form-control-feedback d-sm-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>-->
+                                                        <!--<span ng-show="!floorSpin" class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                        <!--<ui-select ng-model="selectedFloor" ng-disabled="floorFilterDisable || floors.length == 0" ng-change="loadZones(selectedFloor)" >-->
+                                                            <!--<ui-select-match placeholder="Select Floor...">{{floors.length == 0 ? 'Select Floor' :  selectedFloor}}</ui-select-match>-->
+                                                            <!--<ui-select-choices  repeat="floor in getFloor($select.search) | filter: $select.search">-->
+                                                                <!--<div ng-bind="floor"></div>-->
+                                                            <!--</ui-select-choices>-->
+                                                        <!--</ui-select>-->
+                                                        <!--<div>-->
+                                                            <!--<p class="help-block" style="color: maroon" ng-show="floors.length == 0">No Floors</p>-->
+                                                        <!--</div>-->
+
                                                    	 <div ng-show="form.$submitted || form.floor.$touched">
                                                             <div
                                                                 ng-show="form.floor.$dirty || form.floor.$invalid">
@@ -314,7 +350,7 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Start date<span class="red-star">*</span></label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datetimepicker"  id="jobStartDate"  ng-model="selectPlannedStartTime" placeholder="{{SelectPlannedStartTime | date:'dd/MMM/yyyy hh:mm a'}}"  required/>
+                                                    <input type="text" class="form-control datetimepicker"  id="jobStartDate"  ng-model="selectPlannedStartTime" placeholder="{{SelectPlannedStartTime | date:'dd/MMM/yyyy hh:mm a'}}" autocomplete="off"  required/>
 
                                                 </div>
                                                 <!--<div class="form-group label-floating">-->
@@ -626,7 +662,7 @@
                                     </span>
                                                     </p> -->
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datetimepicker" ng-model="selectScheduleEndDate" name='scheduleEndDate' id="scheduleEndDate"  />
+                                                    <input type="text" class="form-control datetimepicker" ng-model="selectScheduleEndDate" name='scheduleEndDate' autocomplete="off" id="scheduleEndDate"  />
 
 
                                                     <div ng-show="form.$submitted || form.scheduleEndDate.$touched">
@@ -680,18 +716,26 @@
                             <div class="col-md-4 col-md-offset-8 txt-align-rgt">
 
                                 <div class="form-group">
-                                    <button class="btn btn-success" type="submit"
-                                            id="form-button-save" ng-disabled="form.$invalid">
-                                        <span class="btn-label">
-                                            <i class="material-icons">check</i>
-                                        </span> Save
+                                    <!--<button class="btn btn-success" type="submit"-->
+                                            <!--id="form-button-save" ng-disabled="form.$invalid">-->
+                                        <!--<span class="btn-label">-->
+                                            <!--<i class="material-icons">check</i>-->
+                                        <!--</span> Save-->
+                                    <!--</button>-->
+
+                                    <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}"
+                                            type="submit" id="form-button-save" ng-disabled="form.$invalid ">
+                                        <span class="btn-label"><i class="material-icons">check</i></span> Save
+                                        <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                     </button>
+
+
                                     <!-- 	<button class="btn btn-info b10" type="submit"
                                             id="save-and-go-back-button" ng-disabled="form.$invalid">
                                             <i class="fa fa-rotate-left" ></i> Save and go back to list
                                         </button> -->
                                     <button class="btn btn-danger" type="button"
-                                            ng-click="cancel();" id="cancel-button">
+                                            ng-click="conform('cancel')" id="cancel-button">
                                         <i class="material-icons">close</i> Cancel
                                     </button>
                                 </div>

@@ -126,7 +126,7 @@ public class SiteService extends AbstractService {
 	private SiteDTO mapToModel(Site site, boolean includeShifts) {
 		SiteDTO siteDTO = new SiteDTO();
 		siteDTO.setId(site.getId());
-		siteDTO.setName(site.getName());
+		siteDTO.setName(org.apache.commons.lang3.StringUtils.upperCase(site.getName()));
 		siteDTO.setAddress(site.getAddress());
 		siteDTO.setCountry(site.getCountry());
 		siteDTO.setState(site.getState());

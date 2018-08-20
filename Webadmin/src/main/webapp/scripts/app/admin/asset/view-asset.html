@@ -1,15 +1,18 @@
 <div class="crud-form"
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="viewAsset();">
 	<div class="">
+    <div class="titleCon">
+        <h3>{{assetDetail.title}}</h3>
+    </div>
 		<div class="row">
         	<div class="col-md-12">
 
 
 				<div class="form-container table-container">
 					<form ng-show="!success" name="form" role="form" novalidate
-						ng-submit="saveAsset()"  class="form-horizontal">
+						  class="form-horizontal">
 
-                       <div class="TabsCon ">
+                       <div class="TabsCon viewAssetTabs">
 
                            <div class="panel panel-default TabsContainer assetsTabs">
                                <!--<div class="panel-heading">Panel Heading</div>-->
@@ -36,17 +39,17 @@
                                        <li class=""><a href=".ppm-tasks" data-toggle="tab"
                                        ng-click="loadSubModule(loadPPMJobs);">PPM Jobs</a></li>
                                        <li class=""><a href=".amc-tasks" data-toggle="tab"
-                                       ng-click="loadSubModule(loadAMCJobs);">AMC Jobs</a></li>
+                                       ng-click="loadSubModule(loadAMCJobs);">Vendor Mng Jobs</a></li>
                                        <li class="">
                                            <a href=".Tickets" data-toggle="tab"
                                            ng-click="loadSubModule(loadTicket)"> Tickets</a>
                                        </li>
                                        <li class=""><a href=".Readings" data-toggle="tab"
                                        ng-click="loadSubModule(loadAssetReadings)">Readings</a></li>
-                                       
+
                                         <li class=""><a href=".SiteHistory" data-toggle="tab"
                                        	ng-click="loadSubModule(loadSiteHistory)">SiteHistory</a></li>
-                                       
+
                                         <li class=""><a href=".StatusHistory" data-toggle="tab"
                                        	ng-click="loadSubModule(loadStatusHistory)">StatusHistory</a></li>
 
@@ -560,7 +563,7 @@
                                                       <td>{{ppmSchedules.title}}</td>
                                                       <td class="hiddenCheckList" >{{ppmSchedules.checklistName}}
 
-                                                         <div class="CheckListBx">
+                                                         <div class="CheckListBx" ng-if="ppmSchedules.checkListItems">
                                                              <div class="bootstrap-tagsinput" ng-repeat="checkListItem in ppmSchedules.checkListItems">
                                                                  <span class="tag label label-info">{{checkListItem.name}}<span data-role="remove"></span></span>
 
@@ -660,7 +663,7 @@
                                                                 <td>{{amcSchedule.maintenanceType}}</td>
                                                                 <td class="hiddenCheckList">{{amcSchedule.checklistName}}
 
-                                                                   <div class="CheckListBx">
+                                                                   <div class="CheckListBx" ng-if="amcSchedule.checkListItems">
                                                                        <div class="bootstrap-tagsinput" ng-repeat="checkListItemAmc in amcSchedule.checkListItems">
                                                                            <span class="tag label label-info">{{checkListItemAmc.name}}<span data-role="remove"></span></span>
 
@@ -746,7 +749,7 @@
                                                             </div>
                                                             <a href="#" ng-click="">
                                                                 <!-- <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" /> -->
-                                                                <img src="assets/img/{{uploadPhoto.extension}}.png" alt="docs" />
+                                                                <img src="assets/img/{{uploadPhoto.extension}}.png" alt="photo" />
                                                             </a>
                                                             <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadPhoto.title}}</p>
                                                             <div ng-if="uploadPhoto.id == download">
@@ -909,7 +912,7 @@
                                             <!-- Pagination directive end -->
 
                                        </div>
-                                       
+
                                        <div class="tab-pane fade SiteHistory" id="SiteHistory" >
 
                                            <div class="table-responsive tablecard">
@@ -957,7 +960,7 @@
                                             <!-- Pagination directive end -->
 
                                        </div>
-                                       
+
                                          <div class="tab-pane fade StatusHistory" id="StatusHistory" >
 
                                            <div class="table-responsive tablecard">
@@ -983,7 +986,7 @@
                                                                 <td>{{statusHistory.assetCode}}</td>
                                                                 <td>{{statusHistory.status}}</td>
                                                                 <td>{{statusHistory.createdDate | date: "dd-MM-yyyy hh:mm:ss"}}</td>
-                                                           
+
                                                                 <!-- <td class="text-right">
                                                                     <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
                                                                 </td> -->

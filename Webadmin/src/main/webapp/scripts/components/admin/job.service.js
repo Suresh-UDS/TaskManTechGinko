@@ -32,11 +32,11 @@ angular.module('timeSheetApp')
         	    var cb = callback || angular.noop;
                 return $http.post('api/job',job).then(
                     function (response) {
-                        return cb(response);
+                        return cb(response,null);
                     }).catch(
                     function (err) {
-                        console.log(JSON.stringify(err));
-                        return cb(err);
+                        console.log(' Error response ' + JSON.stringify(err));
+                        return cb(null,err);
                     })
 
         	},

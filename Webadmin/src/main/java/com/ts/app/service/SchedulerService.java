@@ -17,15 +17,17 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Splitter;
+import com.ts.app.config.Constants;
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Asset;
 import com.ts.app.domain.Frequency;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobChecklist;
@@ -38,6 +40,7 @@ import com.ts.app.domain.Site;
 import com.ts.app.domain.SlaConfig;
 import com.ts.app.domain.SlaEscalationConfig;
 import com.ts.app.domain.Ticket;
+import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.EmployeeShiftRepository;
@@ -98,12 +101,6 @@ public class SchedulerService extends AbstractService {
 	@Inject
 	private SchedulerConfigRepository schedulerConfigRepository;
 
-	@Inject
-	private ReportService reportService;
-
-	@Inject
-	private AttendanceService attendanceService;
-
 	@Inject AttendanceRepository attendanceRepository;
 
 	@Inject EmployeeRepository employeeRepository;
@@ -117,6 +114,7 @@ public class SchedulerService extends AbstractService {
 	@Inject Environment env;
 
 	@Inject
+	@Lazy
 	public SchedulerHelperService schedulerHelperService;
 	
 	@Inject
@@ -130,6 +128,9 @@ public class SchedulerService extends AbstractService {
 	
 	@Inject
 	private SlaConfigRepository slaConfigRepository;
+	
+	@Inject
+	private AssetRepository assetRepository;
 	
 
 	public SearchResult<SchedulerConfigDTO> getSchedulerConfig() {
@@ -151,7 +152,6 @@ public class SchedulerService extends AbstractService {
 
 	}
 
-	@Async
 	public void save(SchedulerConfigDTO dto, Job job) {
 		if(dto.getId() != null && dto.getId() > 0){
 			log.debug(">>> Schedule Config already created! <<<");
@@ -171,10 +171,24 @@ public class SchedulerService extends AbstractService {
 			SchedulerConfig entity = mapperUtil.toEntity(dto, SchedulerConfig.class);
 			entity.setJob(job);
 			entity.setActive("Y");
+			if(dto.getAssetId() > 0) {
+				Asset asset = assetRepository.findOne(dto.getAssetId());
+				entity.setAsset(asset);
+			}else {
+				entity.setAsset(null);
+			}
 			entity = schedulerConfigRepository.save(entity);
 			// create jobs based on the creation policy
 			createJobs(entity);
-			//createJobs(entity);
+			
+			if(log.isDebugEnabled()) {
+				log.debug("Saved parent job and scheduler config " + entity);
+			}
+			//schedulerHelperService.createJobs(entity);
+			if(log.isDebugEnabled()) {
+				log.debug("Invoked scheduler helper to create child jobs ");
+			}
+			
 		}
 
 	}
@@ -319,6 +333,8 @@ public class SchedulerService extends AbstractService {
 							if (CollectionUtils.isEmpty(job)) {
 								createJobs(weeklyTask);
 							}
+							// processWeeklyTasks(weeklyTask);
+							//schedulerHelperService.createJobs(weeklyTask);
 						}
 					} catch (Exception ex) {
 						log.warn("Failed to create JOB ", ex);
@@ -359,6 +375,10 @@ public class SchedulerService extends AbstractService {
 							if (CollectionUtils.isEmpty(job)) {
 								createJobs(monthlyTask);
 							}
+						}
+						if (today.get(Calendar.DAY_OF_WEEK) == monthlyTask.getScheduleMonthlyDay()) {
+							// processMonthlyTasks(monthlyTask);
+							//schedulerHelperService.createJobs(monthlyTask);
 						}
 					} catch (Exception ex) {
 						log.warn("Failed to create JOB ", ex);
@@ -594,11 +614,11 @@ public class SchedulerService extends AbstractService {
 									// empAttnList, null, exportResult);
 									// send reports in email.
 									if (attendanceReportEmails != null && empCntInShift > 0) {
-										StringBuilder content = new StringBuilder("Site Name - " + site.getName() + LINE_SEPARATOR);
-										content.append("Shift - " + shift.getStartTime() + " - " + shift.getEndTime() + LINE_SEPARATOR);
-										content.append("Total employees - " + empCntInShift + LINE_SEPARATOR);
-										content.append("Present - " + attendanceCount + LINE_SEPARATOR);
-										content.append("Absent - " + absentCount + LINE_SEPARATOR);
+										StringBuilder content = new StringBuilder("Site Name - " + site.getName() + Constants.LINE_SEPARATOR);
+										content.append("Shift - " + shift.getStartTime() + " - " + shift.getEndTime() + Constants.LINE_SEPARATOR);
+										content.append("Total employees - " + empCntInShift + Constants.LINE_SEPARATOR);
+										content.append("Present - " + attendanceCount + Constants.LINE_SEPARATOR);
+										content.append("Absent - " + absentCount + Constants.LINE_SEPARATOR);
 										// mailService.sendJobReportEmailFile(attendanceReportEmails.getSettingValue(),
 										// exportResult.getFile(), null, cal.getTime());
 										mailService.sendAttendanceConsolidatedReportEmail(site.getName(), attendanceReportEmails.getSettingValue(), content.toString(), null,
@@ -612,11 +632,11 @@ public class SchedulerService extends AbstractService {
 									DateUtil.convertToSQLDate(genShiftEnd.getTime()));
 							long absentCount = empCntInShift - attendanceCount;
 							if (attendanceReportEmails != null && empCntInShift > 0) {
-								StringBuilder content = new StringBuilder("Site Name - " + site.getName() + LINE_SEPARATOR);
-								content.append("Shift - General Shift" + LINE_SEPARATOR);
-								content.append("Total employees - " + empCntInShift + LINE_SEPARATOR);
-								content.append("Present - " + attendanceCount + LINE_SEPARATOR);
-								content.append("Absent - " + absentCount + LINE_SEPARATOR);
+								StringBuilder content = new StringBuilder("Site Name - " + site.getName() + Constants.LINE_SEPARATOR);
+								content.append("Shift - General Shift" + Constants.LINE_SEPARATOR);
+								content.append("Total employees - " + empCntInShift + Constants.LINE_SEPARATOR);
+								content.append("Present - " + attendanceCount + Constants.LINE_SEPARATOR);
+								content.append("Absent - " + absentCount + Constants.LINE_SEPARATOR);
 								mailService.sendAttendanceConsolidatedReportEmail(site.getName(), attendanceReportEmails.getSettingValue(), content.toString(), null, new Date());
 							}
 						}
@@ -642,7 +662,7 @@ public class SchedulerService extends AbstractService {
 
 	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
 	public void attendanceCheckOutTask() {
-		schedulerHelperService.autoCheckOutAttendance(this);
+		schedulerHelperService.autoCheckOutAttendance();
 	}
 	
 	@Scheduled(cron="0 0 9 * * ?")
@@ -660,10 +680,24 @@ public class SchedulerService extends AbstractService {
 			List<Job> prevJobs = jobRepository.findLastJobByParentJobId(parentJob.getId(), pageRequest);
 			DateTime today = DateTime.now();
 			today = today.withHourOfDay(0); //set today's hour to 0
+			Calendar scheduledEndDate = Calendar.getInstance();
+			if(parentJob.getScheduleEndDate() != null) {
+				scheduledEndDate.setTime(parentJob.getScheduleEndDate());
+				scheduledEndDate.set(Calendar.HOUR_OF_DAY, 23);
+				scheduledEndDate.set(Calendar.MINUTE, 59);
+			}
+			DateTime endDate = DateTime.now().withYear(scheduledEndDate.get(Calendar.YEAR)).withMonthOfYear(scheduledEndDate.get(Calendar.MONTH) + 1)
+					.withDayOfMonth(scheduledEndDate.get(Calendar.DAY_OF_MONTH)).withHourOfDay(scheduledEndDate.get(Calendar.HOUR_OF_DAY)).withMinuteOfHour(scheduledEndDate.get(Calendar.MINUTE));
+			
 			if (creationPolicy.equalsIgnoreCase("monthly")) { // if the creation policy is set to monthly, create jobs for the rest of the
 																// month
 				DateTime currDate = DateTime.now();
 				DateTime lastDate = currDate.dayOfMonth().withMaximumValue().withHourOfDay(23).withMinuteOfHour(59);
+				
+				if(endDate.isBefore(lastDate)) {
+					lastDate = lastDate.withMonthOfYear(scheduledEndDate.get(Calendar.MONTH) + 1);
+					lastDate = lastDate.withDayOfMonth(scheduledEndDate.get(Calendar.DAY_OF_MONTH));
+				}
 				
 				if(CollectionUtils.isNotEmpty(prevJobs)) {
 					Job prevJob = prevJobs.get(0);
@@ -691,13 +725,13 @@ public class SchedulerService extends AbstractService {
 					Job prevJob = prevJobs.get(0);
 					currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
 					if(prevJob.getPlannedStartTime().before(currDate.toDate())){
-						if(currDate.isAfter(today)) {
+						if(currDate.isAfter(today) && currDate.isBefore(endDate)) {
 							jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate());
 						}
 					}
 				}else {
 					currDate = new DateTime(parentJob.getPlannedStartTime().getTime());
-					if(currDate.isAfter(today) || currDate.isEqual(today)) {
+					if((currDate.isAfter(today) || currDate.isEqual(today)) && currDate.isBefore(endDate)) {
 						jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate());
 					}
 				}
@@ -889,6 +923,7 @@ public class SchedulerService extends AbstractService {
 		return dateTime;
 	}
 
+	
 	public void deleteJobs(SchedulerConfig dailyTask) {
 		if ("CREATE_JOB".equals(dailyTask.getType())) {
 			String creationPolicy = env.getProperty("scheduler.dailyJob.creation");
@@ -909,7 +944,7 @@ public class SchedulerService extends AbstractService {
 
 	private void processDailyTasks(SchedulerConfig dailyTask) {
 		if ("CREATE_JOB".equals(dailyTask.getType())) {
-			jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), new Date());
+			schedulerHelperService.jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), new Date());
 			dailyTask.setLastRun(new Date());
 		} else {
 			log.warn("Unknown scheduler config type job" + dailyTask);
@@ -918,8 +953,7 @@ public class SchedulerService extends AbstractService {
 
 	private void processWeeklyTasks(SchedulerConfig weeklyTask) {
 		if ("CREATE_JOB".equals(weeklyTask.getType())) {
-
-			jobCreationTask(weeklyTask, weeklyTask.getJob(), weeklyTask.getData(), new Date());
+			schedulerHelperService.jobCreationTask(weeklyTask, weeklyTask.getJob(), weeklyTask.getData(), new Date());
 			weeklyTask.setLastRun(new Date());
 		} else {
 			log.warn("Unknown scheduler config type job" + weeklyTask);
@@ -929,7 +963,7 @@ public class SchedulerService extends AbstractService {
 	private void processMonthlyTasks(SchedulerConfig monthlyTask) {
 		if ("CREATE_JOB".equals(monthlyTask.getType())) {
 
-			jobCreationTask(monthlyTask, monthlyTask.getJob(), monthlyTask.getData(), new Date());
+			schedulerHelperService.jobCreationTask(monthlyTask, monthlyTask.getJob(), monthlyTask.getData(), new Date());
 			monthlyTask.setLastRun(new Date());
 		} else {
 			log.warn("Unknown scheduler config type job" + monthlyTask);
@@ -950,7 +984,7 @@ public class SchedulerService extends AbstractService {
 				boolean shouldProcess = true;
 				if (scheduledTask.isScheduleDailyExcludeWeekend()) {
 					Calendar today = Calendar.getInstance();
-
+					today.setTime(jobDate);
 					if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
 						shouldProcess = false;
 					}
@@ -1025,7 +1059,9 @@ public class SchedulerService extends AbstractService {
 		job.setLocationId(!StringUtils.isEmpty(dataMap.get("location")) ? Long.parseLong(dataMap.get("location")) : 0);
 		job.setActive("Y");
 		job.setMaintenanceType(parentJob.getMaintenanceType());
-		job.setAssetId(parentJob.getAsset().getId());
+		if(parentJob.getAsset() != null) {
+			job.setAssetId(parentJob.getAsset().getId());
+		}
 		job.setParentJobId(parentJob.getId());
 		job.setParentJob(parentJob);
 		job.setJobType(parentJob.getType());
@@ -1038,9 +1074,9 @@ public class SchedulerService extends AbstractService {
             List<JobChecklistDTO> checklistItems = new ArrayList<JobChecklistDTO>();
             for(JobChecklist jobcl : jobclList) {
                 JobChecklistDTO checklist = new JobChecklistDTO();
-                checklist.setChecklistId(jobcl.getChecklistId());
+                checklist.setChecklistId(String.valueOf(jobcl.getChecklistId()));
                 checklist.setChecklistName(jobcl.getChecklistName());
-                checklist.setChecklistItemId(jobcl.getChecklistItemId());
+                checklist.setChecklistItemId(String.valueOf(jobcl.getChecklistItemId()));
                 checklist.setChecklistItemName(jobcl.getChecklistItemName());
                 checklistItems.add(checklist);
 

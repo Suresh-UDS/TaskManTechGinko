@@ -5,18 +5,23 @@
         <div class="col-md-6 txt-align-lft">
 
             <button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
-                <i class="material-icons">filter_list</i> Basic Filter
+                <i class="material-icons">filter_list</i> Filter
                 <div class="ripple-container"></div>
             </button>
 
         </div>
         <div class="col-md-6 txt-align-rgt">
 
+
+            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i> Clear Filter
+                <div class="ripple-container"></div>
+            </button>
             <button class="btn btn-success add-btn margn-tb0"   ui-sref="add-vendor" ng-class="{active: $state.includes('admin')}" tabindex="0">
                 <i class="material-icons">add</i> Add
                 <div class="ripple-container"></div>
             </button>
-            
+
             <button class="btn btn-info add-btn margn-tb0"   title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
                 <i class="material-icons">import_contacts</i> Export Excel
                 <div class="ripple-container"></div>
@@ -25,12 +30,17 @@
             <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
             <div class="downloaderMd" ng-show="downloader"></div>
 
-            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
-                <i class="material-icons">refresh</i> Reload
-                <div class="ripple-container"></div>
-            </button>
+
 
         </div>
+    </div>
+    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
+            <span class="AppliedFilterTxtCon">
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.vendorName || localStorage.vendorName">
+                    Client: {{searchCriteria.vendorName || localStorage.vendorName}}
+                </span>
+
+            </span>
     </div>
 
 
@@ -106,10 +116,10 @@
                                          <a   title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
 
                                          <div class="HoverBx">
-                                             <a data-toggle="modal"  data-target="#RightModal-View" ng-click="getVendorDetails(vendor.id, 'view')"  has-permission="Vendor:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
+                                             <a data-toggle="modal" title="View Vendor"  data-target="#RightModal-View" ng-click="getVendorDetails(vendor.id, 'view')"  has-permission="Vendor:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
                                              <!--  <a data-toggle="modal"  data-target="#RightModal-Edit" ng-click="getVendorDetails(vendor.id, 'edit')"  has-permission="Vendor:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a> -->
-                                             <a  ui-sref="edit-vendor({ id: vendor.id })"  has-permission="Vendor:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                             <a  has-permission="Vendor:Delete" ui-sref="" class="btn btn-simple btn-danger" ng-click="deleteConfirm(vendor.id)" onClick="$('#deleteVendor').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
+                                             <a  ui-sref="edit-vendor({ id: vendor.id })"  title="Edit Vendor" has-permission="Vendor:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                             <a  has-permission="Vendor:Delete" title="Delete Vendor" class="btn btn-simple btn-danger" ng-click="deleteConfirm(vendor.id)" onClick="$('#deleteVendor').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
 
                                          </div>
 
@@ -478,7 +488,7 @@
 
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="">View Vendor  Details</h4>
+                <h4 class="modal-title" id="">View Vendor  Details - {{vendor.name}} ({{vendor.id}}) </h4>
             </div>
 
             <div class="modal-body">
@@ -626,7 +636,8 @@
                             <div class="form-group no-padding" >
                                 <div class="dropdown">
                                     <div class="form-group">
-                                        <label class="control-label">Search Name</label>
+
+                                        <label class="control-label">Search Vendor Name</label>
                                         <input id='name'
                                                class='form-control'
                                                name='name'

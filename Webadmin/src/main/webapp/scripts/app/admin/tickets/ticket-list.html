@@ -134,11 +134,11 @@
                                     <div class="HoverBx TicketActBx">
 
                                         <!-- <a ng-class="{active: $state.includes('admin')}" ui-sref="view-ticket({ id: ticket.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a> -->
-                                        <a  ng-class="{active: $state.includes('admin')}"  ng-click="viewTicket(ticket.id)" data-toggle="modal" data-target="#RightModal-view" class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+                                        <a title="View" ng-class="{active: $state.includes('admin')}"  ng-click="viewTicket(ticket.id)" data-toggle="modal" data-target="#RightModal-view" class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
 
                                         <a ng-if="(ticket.status != 'Closed' && ticket.jobId == 0)" has-permission="Jobs:Create" ng-class="{active: $state.includes('admin')}" ui-sref="add-job({ticketId : ticket.id})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">create job</a>
                                         <a ng-if="(ticket.status != 'Closed' && ticket.jobId == 0 && !ticket.quotationId)" has-permission="Quotation:Create" ng-class="{active: $state.includes('admin')}" ui-sref="add-quotation({ticketId : ticket.id})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">Add Quotation</a>
-	                                    <a  ng-if="(ticket.status != 'Closed')" ng-class="{active: $state.includes('admin')}" has-permission="Tickets:Edit" ui-sref="edit-ticket({ id: ticket.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+	                                    <a  ng-if="(ticket.status != 'Closed')" ng-class="{active: $state.includes('admin')}" has-permission="Tickets:Edit" title="Edit" ui-sref="edit-ticket({ id: ticket.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
                                         <a ng-if="(ticket.jobId > 0)" ng-class="{active: $state.includes('admin')}" has-permission="Jobs:View" ui-sref="view-job({id : ticket.jobId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View job</a>
                                         <a ng-if="(ticket.quotationId)" ng-class="{active: $state.includes('admin')}" has-permission="Quotation:View" ui-sref="view-quotation({id : ticket.quotationId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View Quotation</a>
@@ -499,7 +499,7 @@
                                 <div class="dropdown">
                                     <label class="label-control">Client</label>
                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects" ng-pattern="Select Client" >
+                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects" >
                                         <option value="">Select Client...</option>
                                     </select>
                                 </div>
@@ -510,7 +510,7 @@
                                 <div class="form-group">
                                     <label class="label-control">Site</label>
                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites" ng-pattern="Select Site">
+                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites" >
                                         <option value="">Select Site...</option>
                                     </select>
                                 </div>
