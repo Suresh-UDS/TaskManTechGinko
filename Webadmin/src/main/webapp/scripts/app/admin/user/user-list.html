@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-md-6 txt-align-lft">
             <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#advancedFilter" tabindex="0">
-                <i class="material-icons">filter_list</i> Advanced Filter
+                <i class="material-icons">filter_list</i> Filter
                 <div class="ripple-container"></div>
             </button>
         </div>
@@ -29,23 +29,23 @@
     <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
             <span class="AppliedFilterTxtCon">
                 <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.userLogin || localStorage.userLogin">
-                    Client: {{searchCriteria.userLogin || localStorage.userLogin}}
+                    User: {{searchCriteria.userLogin || localStorage.userLogin}}
                 </span>
 
                 <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.userFirstName || localStorage.userFirstName">
-                    Site: {{searchCriteria.userFirstName || localStorage.userFirstName}}
+                    First Name: {{searchCriteria.userFirstName || localStorage.userFirstName}}
                 </span>
 
                  <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.userLastName || localStorage.userLastName">
-                    Site: {{searchCriteria.userLastName || localStorage.userLastName}}
+                    Last Name: {{searchCriteria.userLastName || localStorage.userLastName}}
                 </span>
 
                 <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.userEmail || localStorage.userEmail">
-                    Site: {{searchCriteria.userEmail || localStorage.userEmail}}
+                    Mail: {{searchCriteria.userEmail || localStorage.userEmail}}
                 </span>
 
                 <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.userRoleName || localStorage.userRoleName">
-                    Site: {{searchCriteria.userRoleName || localStorage.userRoleName}}
+                    Role: {{searchCriteria.userRoleName || localStorage.userRoleName}}
                 </span>
 
             </span>

@@ -83,6 +83,7 @@ angular.module('timeSheetApp')
 
 
                 //
+                $scope.uiRole.splice(0,$scope.uiRole.length)
                 for(var i=0;i<$scope.userRoles.length;i++)
                 {
                     $scope.uiRole[i] = $scope.userRoles[i].name;
