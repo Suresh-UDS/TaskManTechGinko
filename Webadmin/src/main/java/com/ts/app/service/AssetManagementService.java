@@ -1,5 +1,7 @@
 package com.ts.app.service;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -7,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -828,7 +831,7 @@ public class AssetManagementService extends AbstractService {
 			lastDate.set(Calendar.MINUTE, 59);
 
 			for(AssetPPMSchedule ppmSchedule : assetPpmSchedules) {
-				Calendar currCal = Calendar.getInstance();
+				Calendar currCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
 				currCal.setTime(startDate);
 				currCal.set(Calendar.HOUR_OF_DAY, 0);
 				currCal.set(Calendar.MINUTE, 0);
@@ -849,7 +852,7 @@ public class AssetManagementService extends AbstractService {
 					assetPPMScheduleEvent.setFrequency(ppmSchedule.getFrequency());
 					assetPPMScheduleEvent.setFrequencyDuration(ppmSchedule.getFrequencyDuration());
 					assetPPMScheduleEvent.setFrequencyPrefix(ppmSchedule.getFrequencyPrefix());
-					assetPPMScheduleEvent.setStart(currCal.getTime());
+					assetPPMScheduleEvent.setStart(ZonedDateTime.ofInstant(currCal.getTime().toInstant(), ZoneId.of("Asia/Kolkata")));
 					assetPPMScheduleEvent.setAllDay(true);
 					assetPPMScheduleEvent.setWeek(currCal.get(Calendar.WEEK_OF_YEAR));
 					assetPPMScheduleEventDTOs.add(assetPPMScheduleEvent);
