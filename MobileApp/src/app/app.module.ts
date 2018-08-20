@@ -105,7 +105,8 @@ import {DatePicker} from "@ionic-native/date-picker";
 import{GetAssetReading} from "../pages/asset-view/get-asset-reading";
 import{GetAssetReadings} from "../pages/asset-view/get-asset-readings/get-asset-readings";
 import{CalenderPage} from "../pages/calender-page/calender-page";
-
+import{UpdateApp} from "../pages/update-app/update-app";
+import{ForgotPassword} from "../pages/forgot-password/forgot-password";
 import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-filter";
 import {JobFilter} from "../pages/jobs/job-filter/job-filter";
 import{SQLite,SQLiteObject} from "@ionic-native/sqlite";
@@ -203,7 +204,9 @@ import{LocationAccuracy} from "@ionic-native/location-accuracy";
       OfflineGetassetreadings,
       OfflineAttendance,
       ChangePassword,
-      InventoryMaster
+      InventoryMaster,
+      UpdateApp,
+      ForgotPassword
   ],
   imports: [
     BrowserModule,
@@ -296,7 +299,9 @@ import{LocationAccuracy} from "@ionic-native/location-accuracy";
       OfflineGetassetreadings,
       OfflineAttendance,
       ChangePassword,
-      InventoryMaster
+      InventoryMaster,
+      UpdateApp,
+      ForgotPassword
 
 
   ],
