@@ -3,7 +3,7 @@
 angular.module('timeSheetApp')
     .controller('UserController', function ($rootScope, $scope, $state, $timeout,
         UserGroupComponent,EmployeeComponent, UserComponent, UserRoleComponent,
-         $http, $stateParams, $location, JobComponent, PaginationComponent) {
+         $http, $stateParams, $location, JobComponent, PaginationComponent ,getLocalStorage) {
         $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
@@ -50,6 +50,8 @@ angular.module('timeSheetApp')
         $rootScope.back = function (text) {
             if(text == 'cancel')
             {
+                /** @reatin - retaining scope value.**/
+                $rootScope.retain=1;
                 $scope.cancelUser();
             }
             else if(text == 'save')
@@ -58,6 +60,8 @@ angular.module('timeSheetApp')
             }
             else if(text == 'update')
             {
+                /** @reatin - retaining scope value.**/
+                $rootScope.retain=1;
                 $scope.updateUser()
             }
         };
@@ -291,7 +295,34 @@ angular.module('timeSheetApp')
                      $scope.loadPageTop();
 
 
-            UserComponent.search($scope.searchCriteria).then(function (data) {
+            /* Localstorage (Retain old values while edit page to list) start */
+
+            if($rootScope.retain == 1){
+                $scope.localStorage = getLocalStorage.getSearch();
+                console.log('Local storage---',$scope.localStorage);
+
+                if($scope.localStorage){
+                    $scope.filter = true;
+                    $scope.pages.currPage = $scope.localStorage.currPage;
+                    $scope.searchProject = {searchStatus:'0',id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
+                    $scope.searchSite = {searchStatus:'0',id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
+
+                }
+
+                $rootScope.retain = 0;
+
+                var searchCriteras  = $scope.localStorage;
+            }else{
+
+                var searchCriteras  = $scope.searchCriteria;
+            }
+
+            /* Localstorage (Retain old values while edit page to list) end */
+
+
+
+
+            UserComponent.search(searchCriteras).then(function (data) {
 	        		$scope.loadEmployee();
 	        		console.log("Employee details---"+JSON.stringify($scope.loadEmployee()));
 	                $scope.users = data.transactions;
@@ -299,6 +330,9 @@ angular.module('timeSheetApp')
 
                     $scope.usersLoader = true;
 
+
+                    /** retaining list search value.**/
+                    getLocalStorage.updateSearch(searchCriteras);
                     /*
                         ** Call pagination  main function **
                     */
