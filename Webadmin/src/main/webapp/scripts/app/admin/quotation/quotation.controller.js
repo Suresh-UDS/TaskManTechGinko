@@ -552,8 +552,9 @@ angular
                     };
 
 			        $scope.loadQuotation = function() {
-
-			        		console.log('quotation id - ' + $stateParams.id);
+                          if($stateParams.id){
+                             
+                             console.log('quotation id - ' + $stateParams.id);
 			        		RateCardComponent.findQuotation($stateParams.id).then(function (data) {
 			        			$scope.loadingStop();
 			        				console.log('quotation response - '+ JSON.stringify(data))
@@ -605,6 +606,9 @@ angular
 
 				                }
 				            });
+
+                          }
+			        		
 			        };
 
 
