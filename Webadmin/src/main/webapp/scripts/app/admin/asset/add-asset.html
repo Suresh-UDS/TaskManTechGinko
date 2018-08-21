@@ -1304,7 +1304,7 @@
                                                                                     ng-show="form3.ppmFreq.$dirty || form3.ppmFreq.$invalid">
                                                                                     <p class="help-block" style="width:100%;color:maroon"
                                                                                        ng-show="form3.ppmFreq.$error.required">
-                                                                                         required.
+                                                                                         Required.
                                                                                     </p>
 
 
@@ -1327,7 +1327,7 @@
                                                                                     ng-show="form3.ppmDur.$dirty || form3.ppmDur.$invalid">
                                                                                     <p class="help-block" style="width:100%;color:maroon"
                                                                                        ng-show="form3.ppmDur.$error.required">
-                                                                                         required.
+                                                                                         Required.
                                                                                     </p>
 
 
@@ -1349,7 +1349,7 @@
                                                                                     ng-show="form3.ppmDurPer.$dirty || form3.ppmDurPer.$invalid">
                                                                                     <p class="help-block" style="width:100%;color:maroon"
                                                                                        ng-show="form3.ppmDurPer.$error.required">
-                                                                                         required.
+                                                                                         Required.
                                                                                     </p>
 
 
@@ -1498,11 +1498,23 @@
                                                                                 <!-- <div class="col-md-10 pad-r-0px"> -->
                                                                                     <label class="control-label">Type<span class="red-star">*</span> </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="amcSchedule.maintenanceType" tabindex="0" aria-invalid="false" required>
+                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="amcSchedule.maintenanceType" tabindex="0" aria-invalid="false" name="maintenanceType" required>
                                                                                         <option value="" >Select Maintenance Type..</option>
                                                                                         <option value="amc" >AMC</option>
                                                                                         <option value="dlp" >DLP</option>
                                                                                     </select>
+                                                                                    <div ng-show="form4.$submitted || form4.maintenanceType.$touched">
+                                                                                <div
+                                                                                    ng-show="form4.maintenanceType.$dirty || form4.maintenanceType.$invalid">
+                                                                                    <p class="help-block" style="color:maroon"
+                                                                                       ng-show="form4.maintenanceType.$error.required">
+                                                                                        Type is required
+                                                                                    </p>
+
+
+                                                                                </div>
+
+                                                                            </div>
                                                                                 </div>
                                                                                 <!-- div class="col-md-2">
                                                                                     <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addChecklist').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
@@ -1658,7 +1670,7 @@
                                                                                     ng-show="form4.amcFreq.$dirty || form4.amcFreq.$invalid">
                                                                                     <p class="help-block" style="width:100%;color:maroon"
                                                                                        ng-show="form4.amcFreq.$error.required">
-                                                                                         required.
+                                                                                         Required.
                                                                                     </p>
 
 
@@ -1681,7 +1693,7 @@
                                                                                     ng-show="form4.amcDur.$dirty || form4.amcDur.$invalid">
                                                                                     <p class="help-block" style="width:100%;color:maroon"
                                                                                        ng-show="form4.amcDur.$error.required">
-                                                                                         required.
+                                                                                         Required.
                                                                                     </p>
 
 
@@ -1703,7 +1715,7 @@
                                                                                     ng-show="form4.amcDurPer.$dirty || form4.amcDurPer.$invalid">
                                                                                     <p class="help-block" style="width:100%;color:maroon"
                                                                                        ng-show="form4.amcDurPer.$error.required">
-                                                                                         required.
+                                                                                         Required.
                                                                                     </p>
 
 
