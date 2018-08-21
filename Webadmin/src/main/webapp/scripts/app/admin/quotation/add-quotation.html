@@ -104,7 +104,7 @@
                                                             <!--<option value="">Select client...</option>-->
                                                         <!--</select>-->
                                                         <span ng-show="clientDisable"  class="form-control-feedback  orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                                        <span ng-show="!clientDisable" class="form-control-feedback  "><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <span ng-show="!clientDisable" class="form-control-feedback  d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <ui-select ng-model="selectedProject" ng-disabled="clientDisable" ng-change="loadDepSites(selectedProject)">
                                                             <ui-select-match placeholder="Select clients...">{{selectedProject}}</ui-select-match>
                                                             <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
@@ -147,7 +147,7 @@
                                                             <!--<option value="">Select site...</option>-->
                                                         <!--</select>-->
                                                         <span ng-show="siteSpin"  class="form-control-feedback  orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                                        <span ng-show="!siteSpin" class="form-control-feedback  "><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <span ng-show="!siteSpin" class="form-control-feedback  d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <ui-select ng-model="selectedSite" ng-disabled="(!selectedSite) && (siteFilterDisable || sitesList.length == 0)" ng-change="loadSearchSite(selectedSite)" >
                                                             <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : selectedSite?selectedSite.name?selectedSite.name:hideSite?'Select site':selectedSite:selectedSite }}</ui-select-match>
                                                             <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
