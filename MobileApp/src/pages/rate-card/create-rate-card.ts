@@ -16,6 +16,7 @@ export class CreateRateCardPage {
         title:any;
         cost:any;
         uom:any;
+        number:any;
     };
 
     uom:any;
@@ -26,7 +27,8 @@ export class CreateRateCardPage {
             type:'',
             title:'',
             cost:'',
-            uom:''
+            uom:'',
+            number:''
         }
     }
 

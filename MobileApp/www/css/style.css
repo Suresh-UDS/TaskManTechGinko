@@ -742,6 +742,9 @@ span.EmpNameTxt
 {
     max-width: 100% !important;
 }
+.padding-right0{
+    padding-right:0px !important;
+}
 .camera-btn
 {
   background-color: orange;
@@ -1730,6 +1733,12 @@ ion-grid .row:before
 .p-r-30{
     padding-right:30px !important;
 }
+    .fab[mini] {
+        width: 32px !important;
+        height: 32px;
+        text-align: center !important;
+        margin-left: 4px !important;
+    }
 
 }
 

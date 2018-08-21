@@ -6,47 +6,51 @@ import {SiteViewPage} from "./site-view";
 import {SiteService} from "../service/siteService";
 
 @Component({
-  selector: 'page-site',
-  templateUrl: 'site.html'
+    selector: 'page-site',
+    templateUrl: 'site.html'
 })
 export class SitePage {
 
-  userId:any;
-  employeeId: any;
-  sites:any;
-  msg:any;
+    isLoading:boolean;
+
+    userId:any;
+    employeeId: any;
+    sites:any;
+    msg:any;
 
     fakeUsers: Array<any> = new Array(12);
 
-  constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService) {
+    constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService) {
 
-  }
+    }
 
-  ionViewDidLoad() {
-    this.employeeId=window.localStorage.getItem('employeeId');
-    console.log('ionViewDidLoad SitePage');
-    // this.component.showLoader('Getting All Sites');
-    this.siteService.searchSite().subscribe(
-      response=>{
-        console.log('ionViewDidLoad SitePage:');
+    ionViewDidLoad() {
+        this.isLoading=true;
+        this.employeeId=window.localStorage.getItem('employeeId');
+        console.log('ionViewDidLoad SitePage');
+        // this.component.showLoader('Getting All Sites');
+        this.siteService.searchSite().subscribe(
+            response=>{
+                this.isLoading=false;
+                console.log('ionViewDidLoad SitePage:');
 
-        console.log(response.json()
-        );
-        this.sites=response.json();
-          // this.component.closeLoader();
-      },
-      error=>{
-        console.log('ionViewDidLoad SitePage:'+error);
-          // this.component.closeLoader();
-          if(error.type==3)
-          {
-              this.msg='Server Unreachable'
-          }
+                console.log(response.json()
+                );
+                this.sites=response.json();
+                // this.component.closeLoader();
+            },
+            error=>{
+                console.log('ionViewDidLoad SitePage:'+error);
+                // this.component.closeLoader();
+                if(error.type==3)
+                {
+                    this.msg='Server Unreachable'
+                }
 
-          this.component.showToastMessage(this.msg,'bottom');
-      }
-    )
-  }
+                this.component.showToastMessage(this.msg,'bottom');
+            }
+        )
+    }
 
     viewSite(site)
     {
@@ -56,3 +60,4 @@ export class SitePage {
     }
 
 }
+

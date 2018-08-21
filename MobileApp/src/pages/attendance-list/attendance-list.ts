@@ -22,6 +22,8 @@ export class AttendanceListPage {
   siteId:any;
   employeeId:any;
   empId:any;
+
+    fakeUsers: Array<any> = new Array(12);
   constructor(public navCtrl: NavController, public navParams: NavParams,public camera: Camera, private authService: authService, private attendanceService:AttendanceService, private cs:componentService) {
 
   }
