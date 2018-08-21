@@ -326,6 +326,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.loadDepSites = function (searchProject) {
+            $scope.clearField = false;
             $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
 
             $scope.siteSpin = true;
@@ -1400,6 +1401,7 @@ angular.module('timeSheetApp')
             $scope.searchEmployeeName = null ;
             $scope.searchCriteria = {};
             $scope.localStorage = null;
+            $scope.clearField = true;
             $rootScope.searchCriteriaEmployees = null;
             $scope.pages = {
                 currPage: 1,
