@@ -514,7 +514,9 @@ public class    EmployeeService extends AbstractService {
                 long transactionId = checkInOutDto.getId();
                 log.debug("onlyCheckOut - completedJob siteId -" + transactionId);
                 //List<User> users = userService.findUsers(siteId);
-                User jobUser = job.getEmployee().getUser();
+                Employee emp =job.getEmployee();
+                Hibernate.initialize(emp.getUser());
+                User jobUser = emp.getUser();
                 List<User> users = new ArrayList<User>();
                 users.add(jobUser);
                 log.debug("onlyCheckOut - completedJob users  -" + users);
