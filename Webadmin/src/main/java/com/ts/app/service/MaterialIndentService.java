@@ -120,7 +120,9 @@ public class MaterialIndentService extends AbstractService {
 		}
 		if(materialindentDTO.getRequestedById() > 0) { 
 			material.setRequestedBy(employeeRepository.findOne(materialindentDTO.getRequestedById()));
-			material.setIssuedBy(employeeRepository.findOne(materialindentDTO.getRequestedById()));
+		}
+		if(materialindentDTO.getIssuedById() > 0) {
+			material.setIssuedBy(employeeRepository.findOne(materialindentDTO.getIssuedById()));
 		}
 		
 		List<MaterialIndentItemDTO> indentItemDTOs = materialindentDTO.getItems();
