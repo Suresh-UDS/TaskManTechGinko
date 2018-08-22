@@ -1,25 +1,25 @@
 package com.ts.app.web.rest.dto;
 
 import java.sql.Timestamp;
-import java.util.Set;
+import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.MaterialIndentItem;
-import com.ts.app.domain.Site;
-
-public class MaterialIndentDTO extends BaseDTO{
+public class MaterialIndentDTO extends BaseDTO {
 
 	private long id;
 	
 	private long siteId;
-
+	
+	private String siteName;
+	
+	private long projectId;
+	
+	private String projectName;
+	
+	private long requestedById;
+	
 	private String requestedByName;
+	
+	private long issuedById;
 	
 	private String issuedByName;
 	
@@ -27,8 +27,8 @@ public class MaterialIndentDTO extends BaseDTO{
 	
 	private Timestamp issuedDate;
 	
-	private Set<MaterialIndentItem> items;
-
+	private List<MaterialIndentItemDTO> items;
+	
 	public long getId() {
 		return id;
 	}
@@ -45,20 +45,12 @@ public class MaterialIndentDTO extends BaseDTO{
 		this.siteId = siteId;
 	}
 
-	public String getRequestedByName() {
-		return requestedByName;
+	public long getProjectId() {
+		return projectId;
 	}
 
-	public void setRequestedByName(String requestedByName) {
-		this.requestedByName = requestedByName;
-	}
-
-	public String getIssuedByName() {
-		return issuedByName;
-	}
-
-	public void setIssuedByName(String issuedByName) {
-		this.issuedByName = issuedByName;
+	public void setProjectId(long projectId) {
+		this.projectId = projectId;
 	}
 
 	public Timestamp getRequestedDate() {
@@ -77,13 +69,62 @@ public class MaterialIndentDTO extends BaseDTO{
 		this.issuedDate = issuedDate;
 	}
 
-	public Set<MaterialIndentItem> getItems() {
+	public long getRequestedById() {
+		return requestedById;
+	}
+
+	public void setRequestedById(long requestedById) {
+		this.requestedById = requestedById;
+	}
+
+	public long getIssuedById() {
+		return issuedById;
+	}
+
+	public void setIssuedById(long issuedById) {
+		this.issuedById = issuedById;
+	}
+
+	public List<MaterialIndentItemDTO> getItems() {
 		return items;
 	}
 
-	public void setItems(Set<MaterialIndentItem> items) {
+	public void setItems(List<MaterialIndentItemDTO> items) {
 		this.items = items;
 	}
+
+	public String getRequestedByName() {
+		return requestedByName;
+	}
+
+	public void setRequestedByName(String requestedByName) {
+		this.requestedByName = requestedByName;
+	}
+
+	public String getIssuedByName() {
+		return issuedByName;
+	}
+
+	public void setIssuedByName(String issuedByName) {
+		this.issuedByName = issuedByName;
+	}
+
+	public String getSiteName() {
+		return siteName;
+	}
+
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
 	
 	
 }

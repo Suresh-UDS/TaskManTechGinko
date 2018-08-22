@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+
 @Entity
 @Table(name = "material_indent")
 public class MaterialIndent extends AbstractAuditingEntity implements Serializable {
@@ -28,19 +29,27 @@ public class MaterialIndent extends AbstractAuditingEntity implements Serializab
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne()
 	@JoinColumn(name = "siteId", nullable = true)
 	private Site site;
+	
+	@ManyToOne()
+	@JoinColumn(name = "projectId", nullable = true)
+	private Project project;
 
+	@ManyToOne()
+	@JoinColumn(name = "requestedBy", nullable = true)
 	private Employee requestedBy;
 	
+	@ManyToOne()
+	@JoinColumn(name = "issuedBy", nullable = true)
 	private Employee issuedBy;
 	
 	private Timestamp requestedDate;
 	
 	private Timestamp issuedDate;
 	
-	@OneToMany(mappedBy = "materialIndent", cascade = {CascadeType.ALL}, orphanRemoval=true)
+	@OneToMany(mappedBy = "materialIndent", fetch = FetchType.EAGER, cascade = {CascadeType.ALL}, orphanRemoval=true)
 	private Set<MaterialIndentItem> items;
 
 	public long getId() {
@@ -59,6 +68,14 @@ public class MaterialIndent extends AbstractAuditingEntity implements Serializab
 		this.site = site;
 	}
 
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
+
 	public Employee getRequestedBy() {
 		return requestedBy;
 	}
@@ -66,8 +83,6 @@ public class MaterialIndent extends AbstractAuditingEntity implements Serializab
 	public void setRequestedBy(Employee requestedBy) {
 		this.requestedBy = requestedBy;
 	}
-
-
 
 	public Employee getIssuedBy() {
 		return issuedBy;
@@ -85,10 +100,6 @@ public class MaterialIndent extends AbstractAuditingEntity implements Serializab
 		this.issuedDate = issuedDate;
 	}
 
-	public void setItems(Set<MaterialIndentItem> items) {
-		this.items = items;
-	}
-
 	public Timestamp getRequestedDate() {
 		return requestedDate;
 	}
@@ -103,6 +114,25 @@ public class MaterialIndent extends AbstractAuditingEntity implements Serializab
 
 	public void setApprovedDate(Timestamp approvedDate) {
 		this.issuedDate = approvedDate;
+	}
+
+	public Set<MaterialIndentItem> getItems() {
+		return items;
+	}
+
+	public void setItems(Set<MaterialIndentItem> items) {
+		this.items = items;
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		if(items != null) {
+			sb.append(", items : ");
+			for(MaterialIndentItem item : items) {
+				sb.append("[ id :"+ item.getId() + ", quantity : "+ item.getQuantity() + ", material : "+ item.getMaterial() + ", materialIndent : "+ item.getMaterialIndent() +"]");
+			}
+		}
+		return sb.toString();
 	}
 
 }

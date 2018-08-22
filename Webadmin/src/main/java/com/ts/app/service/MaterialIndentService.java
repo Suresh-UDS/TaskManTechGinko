@@ -1,7 +1,9 @@
 package com.ts.app.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -19,27 +21,20 @@ import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Material;
 import com.ts.app.domain.MaterialIndent;
-import com.ts.app.domain.MaterialItemGroup;
-import com.ts.app.domain.MaterialTransaction;
-import com.ts.app.domain.MaterialUOMType;
+import com.ts.app.domain.MaterialIndentItem;
 import com.ts.app.domain.User;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.InventoryRepository;
-import com.ts.app.repository.InventorySpecification;
-import com.ts.app.repository.InventoryTransactionRepository;
-import com.ts.app.repository.ManufacturerRepository;
 import com.ts.app.repository.MaterialIndentRepository;
 import com.ts.app.repository.MaterialIndentSpecification;
-import com.ts.app.repository.MaterialItemGroupRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.MaterialDTO;
 import com.ts.app.web.rest.dto.MaterialIndentDTO;
-import com.ts.app.web.rest.dto.MaterialItemGroupDTO;
-import com.ts.app.web.rest.dto.MaterialTransactionDTO;
+import com.ts.app.web.rest.dto.MaterialIndentItemDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 
@@ -62,18 +57,34 @@ public class MaterialIndentService extends AbstractService {
 	private UserRepository userRepository;
 	
 	@Inject
-	private MaterialItemGroupRepository materialItemRepository;
+	private InventoryRepository inventoryRepository;
 	
 	@Inject
-	private InventoryTransactionRepository inventTransactionRepository;
+	private EmployeeRepository employeeRepository;
 	
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 	
 	public MaterialIndentDTO createIndent(MaterialIndentDTO materialIndentDTO) { 
 		MaterialIndent indentEntity = mapperUtil.toEntity(materialIndentDTO, MaterialIndent.class);
+		indentEntity.setRequestedDate(DateUtil.convertToTimestamp(materialIndentDTO.getRequestedDate()));
+		indentEntity.setIssuedDate(DateUtil.convertToTimestamp(materialIndentDTO.getIssuedDate()));
 		indentEntity.setSite(siteRepository.findOne(materialIndentDTO.getSiteId()));
+		indentEntity.setProject(projectRepository.findOne(materialIndentDTO.getProjectId()));
+		indentEntity.setIssuedBy(employeeRepository.findOne(materialIndentDTO.getRequestedById()));
+		indentEntity.setRequestedBy(employeeRepository.findOne(materialIndentDTO.getIssuedById()));
 		indentEntity.setActive(MaterialIndent.ACTIVE_YES);
+		List<MaterialIndentItemDTO> indentItems = materialIndentDTO.getItems();
+		List<MaterialIndentItem> indentItemEntity = new ArrayList<MaterialIndentItem>();
+		for(MaterialIndentItemDTO indentItm : indentItems) { 
+			MaterialIndentItem materialIndentItm = mapperUtil.toEntity(indentItm, MaterialIndentItem.class);
+			materialIndentItm.setMaterialIndent(indentEntity);
+			materialIndentItm.setMaterial(inventoryRepository.findOne(indentItm.getMaterialId()));
+			indentItemEntity.add(materialIndentItm);
+		}
+		Set<MaterialIndentItem> materialIndentItem = new HashSet<MaterialIndentItem>();
+		materialIndentItem.addAll(indentItemEntity);
+		indentEntity.setItems(materialIndentItem);
 		indentEntity = materialIndentRepository.save(indentEntity);
 		log.debug("Save object of Inventory: {}" + indentEntity);
 		materialIndentDTO = mapperUtil.toModel(indentEntity, MaterialIndentDTO.class);
@@ -82,8 +93,7 @@ public class MaterialIndentService extends AbstractService {
 
 	public MaterialIndentDTO getMaterial(long id) {
 		MaterialIndent materialIndent = materialIndentRepository.findOne(id);
-		MaterialIndentDTO materialIndentDTO = mapperUtil.toModel(materialIndent, MaterialIndentDTO.class);
-		return materialIndentDTO;
+		return mapperUtil.toModel(materialIndent, MaterialIndentDTO.class);
 	}
 
 	public List<MaterialIndentDTO> findAll() {
