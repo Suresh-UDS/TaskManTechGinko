@@ -317,7 +317,7 @@ export class DBService {
                 var jobs;
                 var param = [];
                 for (var i = 0; i < this.selectAsset.length; i++) {
-                    var search = {assetId: this.selectAsset[i].id}
+                    var search = {assetId: this.selectAsset[i].id,report:true}
                     this.jobService.getJobs(search).subscribe(
                         response => {
                             // console.log("Getting Jobs response");//
