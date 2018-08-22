@@ -16,7 +16,7 @@
 			</div> -->
 			<div class="col-md-12">
                 <div class="titleCon">
-                    <h3>{{job.title}}</h3>
+                    <h3>{{job.title}} - {{job.id}}</h3>
                 </div>
 
 				<div class="form-container table-container jobcards">
@@ -71,7 +71,9 @@
                                                     </div>
                                                 </div>
 
-                                            </div>
+                                             </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="control-label">Description<span class="red-star">*</span> </label>
@@ -99,7 +101,8 @@
                                                 </div>
 
                                             </div>
-
+                                        </div>
+                                        <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Checklist</label>
@@ -119,12 +122,6 @@
                                                 </div>
 
                                             </div>
-
-
-
-                                        </div>
-                                        <div class="row">
-
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Employee<span class="red-star">*</span> </label>
@@ -149,11 +146,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
                                             </div>
-
                                         </div>
-
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="radio">
@@ -210,7 +204,7 @@
                             			<div class="panel-heading">Location</div>
                             			<div class="panel-body">
                             				<div class="row" ng-init="loadAllSites();">
-                            					<div class="col-md-6">
+                            					<div class="col-md-12">
                                                 <div class="form-group ">
                                                     <label class="control-label">Site<span class="red-star">*</span> </label>
                                                     <div class="dropdown">

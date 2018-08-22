@@ -430,7 +430,7 @@
             </ion-card>
         </div>
 
-        <div class="white-bg border-btm" *ngFor=" let config of assetDetails.config;let i=index; " >
+        <div class="white-bg border-btm" *ngFor=" let config of assetDetails.config;let i=index; "  padding-top>
             <div class="padding-top5">
                 <ion-row class="margin0">
                     <ion-col col-2 class="ver-center">
@@ -618,11 +618,11 @@
 
     <ion-list *ngSwitchCase="'tickets'" style="margin-top : 56px" padding-left="" padding-right="">
 
-        <div  *ngIf="(assetDetails.tickets?.length == 0) && spinner" text-center class="margin-top25">
+        <div   *ngIf="(!assetDetails.tickets || assetDetails.tickets.length < 0) && spinner" text-center class="margin-top25">
             <ion-spinner name="circles"></ion-spinner>
         </div>
 
-        <div text-center *ngIf="(assetDetails.tickets?.length == 0) && !spinner">
+        <div text-center *ngIf="(!assetDetails.tickets || assetDetails.tickets.length < 0) && !spinner">
             <ion-card text-center="">
                 <ion-card-content>
                     No Data found
@@ -728,6 +728,17 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'statusHistory'" style="margin-top:18px">
+        <div  *ngIf="(!assetDetails.statusHistory || assetDetails.statusHistory.length == 0) && spinner" text-center class="margin-top25">
+            <ion-spinner name="circles"></ion-spinner>
+        </div>
+
+        <div *ngIf="(!assetDetails.statusHistory && assetDetails.statusHistory< 0) && !spinner"  text-center>
+            <ion-card text-center>
+                <ion-card-content>
+                    No Data found
+                </ion-card-content>
+            </ion-card>
+        </div>
 
         <div class="col-md-8 " *ngFor="let statusHistory of status">
             <ion-card class="shadow brdr-radius">
@@ -757,6 +768,17 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'siteHistory'" style="margin-top:18px">
+        <div  *ngIf="(!assetDetails.history || assetDetails.history.length == 0) && spinner" text-center class="margin-top25">
+            <ion-spinner name="circles"></ion-spinner>
+        </div>
+
+        <div *ngIf="(!assetDetails.history && assetDetails.history< 0) && !spinner"  text-center>
+            <ion-card text-center>
+                <ion-card-content>
+                    No Data found
+                </ion-card-content>
+            </ion-card>
+        </div>
         <div class="col-md-8 " *ngFor="let history of site">
             <ion-card class="shadow brdr-radius">
                 <ion-card-content>
