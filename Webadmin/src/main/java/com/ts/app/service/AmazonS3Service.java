@@ -449,6 +449,32 @@ public class AmazonS3Service {
 		 return prefixUrl;
 	}
 
+	public String uploadExistingTicketToS3(String fileName, String image) {
+		String key = bucketEnv + ticketPath + fileName;
+		String prefixUrl = "";
+		try {
+			
+			byte[] bI = org.apache.commons.codec.binary.Base64.decodeBase64((image.substring(image.indexOf(",")+1)).getBytes());
+			log.debug("Image Strings -" +bI);
+			InputStream fis = new ByteArrayInputStream(bI);
+			
+			ObjectMetadata metadata = new ObjectMetadata();
+			metadata.setContentLength(bI.length);
+			metadata.setContentType("image/png");
+			metadata.setCacheControl("public, max-age=31536000");
+		
+			PutObjectResult result = s3client.putObject(bucketName, key, fis, metadata);
+			s3client.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
+			log.debug("result of object request -" + result);
+			prefixUrl = cloudFrontUrl + key;
+			
+		} catch(AmazonS3Exception e) {
+			log.info("Error while upload a Ticket File -" + e);
+			e.printStackTrace();
+		}
+		 return prefixUrl;
+	}
+
 
     
 	
