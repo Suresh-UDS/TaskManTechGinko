@@ -479,17 +479,17 @@
                                                         </div>
                                                         <div class="radio radio-inline">
                                                             <label>
-                                                                <input type="radio" id="schedule" name="schedule" ng-model="job.schedule" value="DAILY" required > Daily
+                                                                <input type="radio" id="schedule" name="schedule" ng-model="job.schedule" value="DAY" required > Daily
                                                             </label>
                                                         </div>
                                                         <div class="radio radio-inline">
                                                             <label>
-                                                                <input type="radio" id="schedule" name="shedule" ng-model="job.schedule" value="WEEKLY" required> Weekly
+                                                                <input type="radio" id="schedule" name="shedule" ng-model="job.schedule" value="WEEK" required> Weekly
                                                             </label>
                                                         </div>
                                                         <div class="radio radio-inline">
                                                             <label>
-                                                                <input type="radio" id="schedule" name="shedule" ng-model="job.schedule" value="MONTHLY" required> Monthly
+                                                                <input type="radio" id="schedule" name="shedule" ng-model="job.schedule" value="MONTH" required> Monthly
                                                             </label>
                                                         </div>
                                                         <div ng-show="form.$submitted || form.schedule.$touched">
@@ -513,14 +513,14 @@
                                                     <div class="" ng-show="job.schedule == 'ONCE'">
                                                         <label class="">Not applicable</label>
                                                     </div>
-                                                    <div class="" ng-show="job.schedule == 'DAILY'">
+                                                    <div class="" ng-show="job.schedule == 'DAY'">
                                                         <div class="checkbox">
                                                             <label>
                                                                 <input type="checkbox" id="dailyExclusion" name="dailyExclusion" ng-model="job.scheduleDailyExcludeWeekend" value="true" checked="job.scheduleDailyExcludeWeekend">Exclude weekends
                                                             </label>
                                                         </div>
                                                     </div>
-                                                    <div class="" ng-show="job.schedule == 'WEEKLY'">
+                                                    <div class="" ng-show="job.schedule == 'WEEK'">
                                                         <div class="checkbox checkbox-inline">
                                                             <label>
                                                                 <input type="checkbox" id="weeklySunday" name="weeklySunday" ng-model="job.scheduleWeeklySunday" value="true" checked="job.scheduleWeeklySunday">Sun
@@ -558,14 +558,14 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="" ng-show="job.schedule == 'MONTHLY'">
+                                                    <div class="" ng-show="job.schedule == 'MONTH'">
                                                     		<select class="form-control " ng-model="job.scheduleMonthlyDay"  ng-options="day as day for day in monthDays">
                                                             <option value="">Please select the day of month...</option>
                                                          </select>
 
                                                     </div>
 
-                                                    <div ng-show="(form.$submitted || form.schedule.$touched) && (form.schedule == 'DAILY' || form.schedule == 'WEEKLY')">
+                                                    <div ng-show="(form.$submitted || form.schedule.$touched) && (form.schedule == 'DAY' || form.schedule == 'WEEK')">
                                                         <p class="help-block" style="color:maroon"
                                                            ng-show="form.dailyExclusion.$error.required">
                                                             Frequency selection is required.
