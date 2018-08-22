@@ -71,6 +71,22 @@
                             </a>
 
                         </li>
+                        <li ng-switch-when="true">
+                            <a ng-click="addCustomClass();">
+                                <!--<span class="sidebar-mini">L</span>-->
+                                <i class="material-icons">brightness_medium</i>
+                                <span class="sidebar-normal" >Night Mode</span>
+                            </a>
+
+                        </li>
+                        <li ng-switch-when="true">
+                            <a ng-click="removeCustomClass();">
+                                <!--<span class="sidebar-mini">L</span>-->
+                                <i class="material-icons">brightness_high</i>
+                                <span class="sidebar-normal" >Day Mode</span>
+                            </a>
+
+                        </li>
 			             <li ng-switch-when="true">
 	                      <a ng-click="logout()">
 	                        <!--<span class="sidebar-mini">L</span>-->

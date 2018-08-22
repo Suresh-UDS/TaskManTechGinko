@@ -31,6 +31,13 @@ angular.module('timeSheetApp')
 
         },0);
 
+        $scope.addCustomClass = function () {
+            angular.element(document.querySelector("#MainBody")).addClass("DarkTheme");
+        };
+        $scope.removeCustomClass = function () {
+            angular.element(document.querySelector("#MainBody")).removeClass("DarkTheme");
+        };
+
         $scope.initscrollbar = function()
              {
                  console.log("---- Calling scrollbar ---- ");

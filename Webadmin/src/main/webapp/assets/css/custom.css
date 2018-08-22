@@ -127,6 +127,7 @@ ul.checkList li
 .hiddenCheckList
 {
     position: relative;
+    line-height: 25px;
 }
 .CheckListBx
 {
@@ -143,6 +144,18 @@ ul.checkList li
 {
     display: block;
 }
+
+.hiddenCheckList .leftTxt
+{
+    float: left;
+}
+.hiddenCheckList .infoIcon
+{
+    float: left;
+    padding-left: 5px;
+    color: #00bcd4;
+}
+
 .orng-1
 {
     background: #ff7b00 !important;
@@ -343,6 +356,12 @@ li ul.nav.SubNav li a p
 {
   padding-right:5px;
 }
+.dropdown select.form-control option:hover
+{
+    background: #ccc !important;
+    color: #000 !important;
+    box-shadow: inset 20px 20px #00f !important;
+}
 .form-control-feedback
 {
   opacity: 1;
@@ -350,10 +369,6 @@ li ul.nav.SubNav li a p
 .form-group
 {
   margin-top:0;
-}
-.TableListinput table .form-group
-{
-    padding-bottom: 0 !important;
 }
 .min-hgt100
 {
@@ -462,6 +477,9 @@ span.d-arrow-icon
 }
 span.d-big-arrow-icon {
     padding-top: 38px;
+}
+.DownArrowCon span.d-arrow-icon {
+    padding-top: 28px;
 }
 .download-btn
 {
@@ -668,20 +686,18 @@ span.filterdTxt
     padding: 5px;
     margin: 5px;
 }
+
 h3.HeadingTxt
 {
     background: #f9f9f9;
     padding: 5px;
     font-size: 20px;
     font-weight: 400;
-    border: 1px solid #efefef;
-    border-left: 4px solid #7b7c7b;
-    border-right: 4px solid #7b7c7b;
-    border-radius: 5px;
 }
 .titleCon
 {
     text-align: center;
+
     width: 50%;
     margin: 0 auto;
     padding: 5px 0;
@@ -691,10 +707,7 @@ h3.HeadingTxt
     box-shadow: 1px 0px 5px 0px #ffdeae;
     border-left: 4px solid #ff9800;
     border-right: 4px solid #ff9800;
-}
-.disableInput
-{
-    background: #f9f9f9 !important;
+
 }
 .titleCon h3
 {
@@ -702,6 +715,7 @@ h3.HeadingTxt
     font-size: 19px;
     margin: 0;
 }
+
 
  .docsRow
  {
@@ -876,7 +890,7 @@ span.red-star
 }
 .SelectWithAddbtnCon span.d-arrow-icon
 {
-    padding-right: 16%;
+    padding-right: 20px;
 }
 .SelectWithAddbtnCon .btn.btn-fab.btn-fab-mini
 {
@@ -1710,6 +1724,10 @@ span.flotingIcons.icon-13 {
 {
     width: 900px;
 }
+.modal.BasicFilterModal .modal-dialog
+{
+    width: 750px;
+}
 
 
 
@@ -1779,9 +1797,67 @@ span.flotingIcons.icon-13 {
 
 
 
-  /*
-     DataTable sorting css
-  */
+/* Dark Theme */
+.DarkTheme {
+    background: #111;
+}
+.DarkTheme .panel .panel-body
+{
+    background: #2d2d2d;
+    color: #fff;
+}
+.DarkTheme .card,.DarkTheme .card .card-content
+{
+    background-color: #565656;
+    color: #fff;
+}
+.DarkTheme .panel-default>.panel-heading
+{
+    color: #fff;
+    background-color: #565656;
+    border-bottom: 1px solid #fff;
+}
+.DarkTheme table tr th,.DarkTheme table tr td
+{
+    color: #fff;
+}
+.DarkTheme table tr:hover td
+{
+    color: #000;
+}
+.DarkTheme .form-group .checkbox label, .form-group .radio label, .form-group label, .form-group .label-on-left, .form-group .label-on-right
+{
+    color: #ffffff;
+}
+.DarkTheme .checkbox label, .radio label, label, .label-on-left, .label-on-right
+{
+    color: #ffffff;
+}
+.DarkTheme .card .card-content .category
+{
+    color: #ffffff;
+}
+.DarkTheme .title, .title a, .card-title, .card-title a, .info-title, .info-title a, .footer-brand, .footer-brand a, .footer-big h5, .footer-big h5 a, .footer-big h4, .footer-big h4 a, .media .media-heading, .media .media-heading a
+{
+    color: #ffffff;
+}
+.DarkTheme .form-group label.control-label
+{
+    color: #ffffff;
+}
+.DarkTheme .form-control
+{
+    color: #ffffff;
+    background: #565656 !important;
+}
+
+
+
+
+
+    /*
+       DataTable sorting css
+    */
   th a.sort-by {
   padding-right: 18px;
   position: relative;
