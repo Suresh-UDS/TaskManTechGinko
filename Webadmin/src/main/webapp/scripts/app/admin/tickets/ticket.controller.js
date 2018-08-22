@@ -438,6 +438,8 @@ angular.module('timeSheetApp')
                             console.log(response);
                             $scope.ticketImage = response;
                     })
+                }else{ 
+                	$scope.ticketImage = "";
                 }
 
             });
