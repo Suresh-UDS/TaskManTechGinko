@@ -33,7 +33,7 @@
 
         </div>
     </div>
-   
+
     <div class="AppliedFilterCon" ng-show="(!clearField && !searchCriteria.findAll) || localStorage">
             <span class="AppliedFilterTxtCon">
                 <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.projectName || localStorage.projectName">
@@ -707,7 +707,7 @@
                             <div id="collapseOne" class="panel-collapse collapse collapseOne in" role="tabpanel" aria-labelledby="headingOne" aria-expanded="true" style="height: 110px;">
                                 <div class="panel-body">
 
-                                    <div class="row" ng-init="loadProjects();loadAssets();loadEmployee()">
+                                    <div class="row" >
                                         <div class="col-xs-12 col-md-4">
                                             <div class="form-group" >
                                                 <div class="dropdown">
@@ -804,7 +804,7 @@
                                                     <span ng-show="empSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!empSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <ui-select ng-model="searchEmployee" ng-disabled="employeeFilterDisable || employees.length == 0"  ng-change="loadSearchEmployee(searchEmployee)" >
-                                                        <ui-select-match placeholder="Select Employee...">{{employees.length == 0 ? 'Select Site' : searchEmployee.searchStatus ? searchEmployee.name?searchEmployee.name:'Select Employee1' :  clearField?'Select Employee2':searchEmployee  }}</ui-select-match>
+                                                        <ui-select-match placeholder="Select Employee...">{{employees.length == 0 ? 'Select Site' : searchEmployee.searchStatus ? searchEmployee.name?searchEmployee.name:'Select Employee' :  hideEmp ?clearField?'Select Employee':searchEmployee:'Select Employee'  }}</ui-select-match>
                                                         <ui-select-choices  repeat="emp in getEmp($select.search) | filter: $select.search">
                                                             <div ng-bind="emp"></div>
                                                         </ui-select-choices>

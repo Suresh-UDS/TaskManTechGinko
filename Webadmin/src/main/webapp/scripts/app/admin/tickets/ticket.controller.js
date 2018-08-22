@@ -319,6 +319,7 @@ angular.module('timeSheetApp')
             $scope.clearField = false;
             $scope.hideSite = false;
             $scope.siteSpin = true;
+            $scope.uiSite.splice(0,$scope.uiSite.length);
             $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
         }
         $scope.loadSearchSite = function (searchSite) {
@@ -340,6 +341,7 @@ angular.module('timeSheetApp')
         $scope.loadSearchEmployee = function (searchEmployee) {
             // $scope.hideStatus = true;
             console.log(searchEmployee)
+            $scope.hideEmp = true;
             $scope.clearField = false;
             $scope.searchEmployee = $scope.employees[$scope.uiEmployee.indexOf(searchEmployee)]
         }
@@ -422,12 +424,13 @@ angular.module('timeSheetApp')
                 }
 
                 $scope.searchCriteria.list = true;
+                console.log($scope.searchCriteria)
                 EmployeeComponent.search($scope.searchCriteria).then(function (data) {
                     $scope.selectedEmployee = null;
                 $scope.employees = data.transactions;
 
                 //
-                    console.log($scope.employees );
+                    console.log("=============",$scope.employees );
                     if($scope.employees){
                         for(var i=0;i<$scope.employees.length;i++)
                         {
