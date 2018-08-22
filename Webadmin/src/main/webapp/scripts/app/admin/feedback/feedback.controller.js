@@ -101,9 +101,11 @@ angular.module('timeSheetApp')
             $scope.loadProjects();
         };
 
+
         $scope.loadProjects = function () {
                 ProjectComponent.findAll().then(function (data) {
                 $scope.projects = data;
+
             });
         };
 
@@ -111,6 +113,8 @@ angular.module('timeSheetApp')
                 ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
                     $scope.selectedSite = null;
                 $scope.sites = data;
+
+
             });
         };
 
@@ -130,6 +134,7 @@ angular.module('timeSheetApp')
                 LocationComponent.findBlocks($scope.selectedProject.id,$scope.selectedSite.id).then(function (data) {
                     $scope.selectedBlock = null;
                 $scope.blocks = data;
+
             });
         };
 
@@ -137,6 +142,8 @@ angular.module('timeSheetApp')
                 LocationComponent.findFloors($scope.selectedProject.id,$scope.selectedSite.id,$scope.selectedBlock).then(function (data) {
                     $scope.selectedFloor = null;
                 $scope.floors = data;
+
+
             });
         };
 
@@ -145,6 +152,8 @@ angular.module('timeSheetApp')
                 LocationComponent.findZones($scope.selectedProject.id,$scope.selectedSite.id,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
                     $scope.selectedZone = null;
                 $scope.zones = data;
+
+
             });
         };
 
@@ -399,6 +408,7 @@ angular.module('timeSheetApp')
 
 
         $scope.clearFilter = function() {
+            $scope.clearField = true;
             $scope.selectedSite = {};
             $scope.selectedProject = {};
             $scope.searchCriteria = {};
@@ -427,6 +437,7 @@ angular.module('timeSheetApp')
 
         //init load
         $scope.initLoad = function(){
+            console.log("***************************")
              $scope.loadPageTop();
              $scope.init();
 
