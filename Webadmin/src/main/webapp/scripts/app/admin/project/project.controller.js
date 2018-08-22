@@ -309,7 +309,7 @@ angular.module('timeSheetApp')
                         if($scope.localStorage.projectId){
                              $scope.searchProject ={id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
                         }else{
-                             $scope.searchProject ="";
+                             $scope.searchProject = null;
                         }
                        
                     }
@@ -407,7 +407,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.showNotifications= function(position,alignment,color,msg){
-                        demo.showNotification(position,alignment,color,msg);
-                    }
+            demo.showNotification(position,alignment,color,msg);
+        }
 
     });
