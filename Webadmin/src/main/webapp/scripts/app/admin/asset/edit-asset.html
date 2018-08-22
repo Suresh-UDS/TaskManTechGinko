@@ -1020,31 +1020,11 @@
                                                                     </div>
                                                                     <div class="col-md-3" ng-init="loadCheckList();">
                                                                         <div class="form-group selectcon is-empty SelectWithAddbtnCon">
-                                                                            <div class="row">
-                                                                                <div class="col-md-12">
-                                                                                <!-- <div class="col-md-10 pad-r-0px"> -->
-                                                                                    <label class="control-label">Checklist</label>
-                                                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedChecklist" ng-options="checklist as checklist.name for checklist in checkLists" tabindex="0" aria-invalid="false">
-                                                                                            <option value="" >Select Checklist ..</option>
-                                                                                        </select>
-                                                                                </div>
-                                                                                <!-- <div class="col-md-2"> -->
-                                                                                   <!--  <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addChecklist" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                                        <i class="material-icons">add</i>
-                                                                                    </a> -->
-                                                                                   <!--  <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addChecklist').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
-                                                                                </div> -->
-
-                                                                               <!--  <div class="clear"></div>
-                                                                                <div class="collapse" id="addAssetGroup">
-                                                                                    <div class="">
-                                                                                        <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
-                                                                                        <a class="btn btn-success" ng-click="" tabindex="0">Add</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <span class="material-input"></span></div> -->
-                                                                            </div>
+                                                                            <label class="control-label">Checklist</label>
+                                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                            <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedChecklist" ng-options="checklist as checklist.name for checklist in checkLists" tabindex="0" aria-invalid="false">
+                                                                                <option value="" >Select Checklist ..</option>
+                                                                            </select>
                                                                         </div>
                                                                     </div>
 
@@ -1326,29 +1306,24 @@
                                                             <div class="row">
 															    <div class="col-md-3">
                                                                     <div class="form-group selectcon is-empty SelectWithAddbtnCon">
-                                                                        <div class="row">
-                                                                            <div class="col-md-12">
-                                                                            <!-- <div class="col-md-10 pad-r-0px"> -->
-                                                                                <label class="control-label">Type<span class="red-star">*</span> </label>
-                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="amcSchedule.maintenanceType" tabindex="0" aria-invalid="false" name="maintenanceType" required>
-                                                                                        <option value="" >Select Maintenance Type..</option>
-                                                                                        <option value="amc" >AMC</option>
-                                                                                        <option value="dlp" >DLP</option>
-                                                                                    </select>
-                                                                                    <div ng-show="form4.$submitted || form4.maintenanceType.$touched">
-                                                                                <div
-                                                                                    ng-show="form4.maintenanceType.$dirty || form4.maintenanceType.$invalid">
-                                                                                    <p class="help-block" style="color:maroon"
-                                                                                       ng-show="form4.maintenanceType.$error.required">
-                                                                                        Type is required
-                                                                                    </p>
+                                                                        <label class="control-label">Type<span class="red-star">*</span> </label>
+                                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                        <select class="form-control ng-pristine ng-valid ng-touched" ng-model="amcSchedule.maintenanceType" tabindex="0" aria-invalid="false" name="maintenanceType" required>
+                                                                            <option value="" >Select Maintenance Type..</option>
+                                                                            <option value="amc" >AMC</option>
+                                                                            <option value="dlp" >DLP</option>
+                                                                        </select>
+                                                                        <div ng-show="form4.$submitted || form4.maintenanceType.$touched">
+                                                                            <div
+                                                                                ng-show="form4.maintenanceType.$dirty || form4.maintenanceType.$invalid">
+                                                                                <p class="help-block" style="color:maroon"
+                                                                                   ng-show="form4.maintenanceType.$error.required">
+                                                                                    Type is required
+                                                                                </p>
 
-
-                                                                                </div>
 
                                                                             </div>
-                                                                            </div>
+
                                                                         </div>
 
                                                                     </div>
@@ -1381,31 +1356,11 @@
                                                                 </div>
                                                                 <div class="col-md-3" ng-init="loadCheckList()">
                                                                     <div class="form-group selectcon is-empty SelectWithAddbtnCon">
-                                                                        <div class="row">
-                                                                            <div class="col-md-12">
-                                                                            <!-- <div class="col-md-10 pad-r-0px"> -->
-                                                                                <label class="control-label">Checklist</label>
-                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedChecklist" ng-options="checklist as checklist.name for checklist in checkLists" tabindex="0" aria-invalid="false">
-                                                                                        <option value="" >Select Checklist ..</option>
-                                                                                    </select>
-                                                                            </div>
-                                                                            <!-- <div class="col-md-2"> -->
-                                                                               <!--  <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addChecklist" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                                    <i class="material-icons">add</i>
-                                                                                </a> -->
-                                                                               <!--  <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addChecklist').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
-                                                                            </div> -->
-
-                                                                           <!--  <div class="clear"></div>
-                                                                            <div class="collapse" id="addAssetGroup">
-                                                                                <div class="">
-                                                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
-                                                                                    <a class="btn btn-success" ng-click="" tabindex="0">Add</a>
-                                                                                </div>
-                                                                            </div>
-                                                                            <span class="material-input"></span></div> -->
-                                                                        </div>
+                                                                        <label class="control-label">Checklist</label>
+                                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                        <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedChecklist" ng-options="checklist as checklist.name for checklist in checkLists" tabindex="0" aria-invalid="false">
+                                                                            <option value="" >Select Checklist ..</option>
+                                                                        </select>
                                                                     </div>
                                                                 </div>
 
