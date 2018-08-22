@@ -32,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
 import com.ts.app.domain.CheckInOut;
@@ -60,6 +61,7 @@ import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.CheckInOutRepository;
 import com.ts.app.repository.ChecklistRepository;
 import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.JobChecklistRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.JobSpecification;
 import com.ts.app.repository.LocationRepository;
@@ -167,28 +169,31 @@ public class JobManagementService extends AbstractService {
 
     @Inject
     private AssetRepository assetRepository;
-    
+
     @Inject
     private AmazonS3Utils amazonS3utils;
-    
+
     @Value("${AWS.s3-cloudfront-url}")
     private String cloudFrontUrl;
-    
+
     @Value("${AWS.s3-bucketEnv}")
     private String bucketEnv;
-    
+
     @Value("${AWS.s3-checklist-path}")
     private String checkListpath;
-    
+
     @Value("${AWS.s3-checkinout-path}")
     private String checkInOutImagePath;
 
     @Inject
     private PushService pushService;
-    
+
     @Inject
     private ChecklistRepository checkListRepository;
-    
+
+    @Inject
+    private JobChecklistRepository jobChecklistRepository;
+
 
     public void updateJobStatus(long siteId, JobStatus toBeJobStatus) {
 		//UPDATE ALL OVERDUE JOB STATUS
@@ -790,7 +795,7 @@ public class JobManagementService extends AbstractService {
 				jobDTO.setErrorMessage("Job start time cannot be earlier than current day");
 				return jobDTO;
 			}
-			
+
 		}else {
 			Calendar startTime = Calendar.getInstance();
 			startTime.setTime(job.getPlannedStartTime());
@@ -812,7 +817,7 @@ public class JobManagementService extends AbstractService {
 		Calendar calEnd = Calendar.getInstance();
 		calEnd.set(Calendar.HOUR_OF_DAY, 11);
 		calEnd.set(Calendar.MINUTE,59);
-		
+
 		job.setMaintenanceType(jobDTO.getMaintenanceType());
 
 		java.sql.Date startDate = new java.sql.Date(calStart.getTimeInMillis());
@@ -903,14 +908,14 @@ public class JobManagementService extends AbstractService {
 
 		return mapperUtil.toModel(job, JobDTO.class);
 	}
-	
-	
+
+
 	public ResponseEntity<?> createJob(AssetPpmScheduleDTO assetPpmScheduleDTO) {
 		log.debug(">>> assetPpmSchedule Title from CreateJOb <<<"+assetPpmScheduleDTO.getTitle()+" Employee Id "+assetPpmScheduleDTO.getEmpId());
-		
+
 		Job job = new Job();
 		Site site = null;
-		
+
 		Employee employee = employeeRepository.findOne(assetPpmScheduleDTO.getEmpId());
 		Asset asset = null;
 		if(assetPpmScheduleDTO.getAssetId() > 0) {
@@ -918,7 +923,7 @@ public class JobManagementService extends AbstractService {
 			job.setAsset(asset);
 			site = getSite(asset.getSite().getId());
 		}
-		
+
 		if(job.getStatus() == null) {
 			job.setStatus(JobStatus.OPEN);
 		}
@@ -950,19 +955,19 @@ public class JobManagementService extends AbstractService {
 		startTime.setTime(assetPpmScheduleDTO.getStartDate());
 		startTime.set(Calendar.HOUR_OF_DAY, jobStartTime.get(Calendar.HOUR_OF_DAY));
 		startTime.set(Calendar.MINUTE, jobStartTime.get(Calendar.MINUTE));
-		startTime.getTime();		
-		
+		startTime.getTime();
+
 		Calendar plannedEndTime = Calendar.getInstance();
 		plannedEndTime.setTime(jobStartTime.getTime());
 		plannedEndTime.add(Calendar.HOUR_OF_DAY, assetPpmScheduleDTO.getPlannedHours());
-		plannedEndTime.getTime();		
-		
+		plannedEndTime.getTime();
+
 		Calendar scheduleEndDateTime = Calendar.getInstance();
 		scheduleEndDateTime.setTime(assetPpmScheduleDTO.getEndDate());
 		scheduleEndDateTime.set(Calendar.HOUR_OF_DAY, 23);
 		scheduleEndDateTime.set(Calendar.MINUTE, 59);
 		scheduleEndDateTime.getTime();
-		
+
 		job.setPlannedStartTime(startTime.getTime());
 		job.setPlannedEndTime(plannedEndTime.getTime());
 		job.setScheduleEndDate(scheduleEndDateTime.getTime());
@@ -1005,7 +1010,7 @@ public class JobManagementService extends AbstractService {
 			schConfDto.setType("CREATE_JOB");
 			StringBuffer data = new StringBuffer();
 			data.append("title="+assetPpmScheduleDTO.getTitle());
-			data.append("&description="+assetPpmScheduleDTO.getFrequencyPrefix()+" "+assetPpmScheduleDTO.getFrequencyDuration()+" "+assetPpmScheduleDTO.getFrequency());				
+			data.append("&description="+assetPpmScheduleDTO.getFrequencyPrefix()+" "+assetPpmScheduleDTO.getFrequencyDuration()+" "+assetPpmScheduleDTO.getFrequency());
 			data.append("&siteId="+site.getId());
 			data.append("&empId="+employee.getId());
 			//data.append("&empId="+assetPpmScheduleDTO.getEmployeeId());
@@ -1029,14 +1034,14 @@ public class JobManagementService extends AbstractService {
 
 		JobDTO jobDto = mapperUtil.toModel(job, JobDTO.class);
 
-		return new ResponseEntity<>(jobDto, HttpStatus.CREATED);			
+		return new ResponseEntity<>(jobDto, HttpStatus.CREATED);
 	}
 	private JobDTO mapToModel(Job job) {
 		JobDTO dto = new JobDTO();
 		dto.setId(job.getId());
 		dto.setTitle(job.getTitle());
 		if(job.getAsset() != null) {
-			dto.setAssetId(job.getAsset().getId());	
+			dto.setAssetId(job.getAsset().getId());
 		}
 		dto.setSiteId(job.getSite().getId());
 		dto.setSiteName(job.getSite().getName());
@@ -1127,6 +1132,9 @@ public class JobManagementService extends AbstractService {
 		job.setActualEndTime(jobDTO.getActualEndTime());
 		job.setActualHours(jobDTO.getActualHours());
 		job.setSchedule(jobDTO.getSchedule());
+		if(StringUtils.isEmpty(jobDTO.getSchedule())){
+		    job.setSchedule("ONCE");
+        }
 		job.setScheduleEndDate(jobDTO.getScheduleEndDate());
 		job.setScheduleDailyExcludeWeekend(jobDTO.isScheduleDailyExcludeWeekend());
 		job.setScheduleWeeklySunday(jobDTO.isScheduleWeeklySunday());
@@ -1159,27 +1167,27 @@ public class JobManagementService extends AbstractService {
 			List<JobChecklist> checklistItems = new ArrayList<JobChecklist>();
 			for(JobChecklistDTO jobclDto : jobclDtoList) {
 				JobChecklist checklist = mapperUtil.toEntity(jobclDto, JobChecklist.class);
-				if(checklist.getImage_1() != null) { 
+				if(checklist.getImage_1() != null) {
 					long jobId = checklist.getJob().getId();
 					String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_1(), checklist.getChecklistItemName(), jobId, "image_1");
-					String Imageurl_1 = cloudFrontUrl + bucketEnv + checkListpath + fileName; 
+					String Imageurl_1 = cloudFrontUrl + bucketEnv + checkListpath + fileName;
 					checklist.setImage_1(fileName);
 					jobclDto.setImageUrl_1(Imageurl_1);
 				}
-				if(checklist.getImage_2() != null) { 
+				if(checklist.getImage_2() != null) {
 					long jobId = checklist.getJob().getId();
 					String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_2(), checklist.getChecklistItemName(), jobId, "image_2");
 					String Imageurl_2 = cloudFrontUrl + bucketEnv + checkListpath + fileName;
 					checklist.setImage_2(fileName);
 					jobclDto.setImageUrl_2(Imageurl_2);
 				}
-				if(checklist.getImage_3() != null) { 
+				if(checklist.getImage_3() != null) {
 					long jobId = checklist.getJob().getId();
 					String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_3(), checklist.getChecklistItemName(), jobId, "image_3");
 					String Imageurl_3 = cloudFrontUrl + bucketEnv + checkListpath + fileName;
 					checklist.setImage_3(fileName);
 					jobclDto.setImageUrl_3(Imageurl_3);
-					
+
 				}
                 log.debug("Job checklist remarks"+checklist.getImage_1());
                 checklist.setJob(job);
@@ -1199,7 +1207,7 @@ public class JobManagementService extends AbstractService {
 		if(site == null) throw new TimesheetException("Site not found : "+siteId);
 		return site;
 	}
-	
+
     public Ticket getTicket(long id){
         Ticket ticket= ticketRepository.findOne(id);
         return ticket;
@@ -1251,18 +1259,18 @@ public class JobManagementService extends AbstractService {
 			jobDto.setTicketId(job.getTicket().getId());
 			jobDto.setTicketName(job.getTicket().getTitle());
 		}
-		if(jobDto.getChecklistItems() != null) { 
+		if(jobDto.getChecklistItems() != null) {
 			List<JobChecklistDTO> jobChecklists = jobDto.getChecklistItems();
-			for(JobChecklistDTO jobChecklist : jobChecklists) { 
-				if(jobChecklist.getImage_1() != null) { 
+			for(JobChecklistDTO jobChecklist : jobChecklists) {
+				if(jobChecklist.getImage_1() != null) {
 					String imageUrl_1 =  cloudFrontUrl + bucketEnv + checkListpath + jobChecklist.getImage_1();
 					jobChecklist.setImageUrl_1(imageUrl_1);
 				}
-				if(jobChecklist.getImage_2() != null) { 
+				if(jobChecklist.getImage_2() != null) {
 					String imageUrl_2 =  cloudFrontUrl + bucketEnv + checkListpath + jobChecklist.getImage_2();
 					jobChecklist.setImageUrl_2(imageUrl_2);
 				}
-				if(jobChecklist.getImage_3() != null) { 
+				if(jobChecklist.getImage_3() != null) {
 					String imageUrl_3 =  cloudFrontUrl + bucketEnv + checkListpath + jobChecklist.getImage_3();
 					jobChecklist.setImageUrl_3(imageUrl_3);
 				}
@@ -1835,17 +1843,17 @@ public class JobManagementService extends AbstractService {
 		return er;
 	}
 
-	
+
 	public ResponseEntity<?> createAMCJobs(AssetAMCScheduleDTO assetAMCScheduleDTO) {
 
 		log.debug(">>> assetAMCSchedule Title from CreateAMCJob <<<"+assetAMCScheduleDTO.getTitle());
-		
+
 		Job job = new Job();
-		
+
 		Site site = null;
-	
+
 		Employee employee = employeeRepository.findOne(assetAMCScheduleDTO.getEmpId());
-		
+
 		if(assetAMCScheduleDTO.getAssetId() > 0) {
 			Asset asset = assetRepository.findOne(assetAMCScheduleDTO.getAssetId());
 			job.setAsset(asset);
@@ -1868,20 +1876,20 @@ public class JobManagementService extends AbstractService {
 		java.sql.Date endDate = new java.sql.Date(calEnd.getTimeInMillis());
 		log.debug("Before saving new job -"+ job);
 		log.debug("start Date  -"+ startDate + ", end date -" + endDate);
-		
+
 		Calendar startTime = Calendar.getInstance();
 		startTime.setTime(assetAMCScheduleDTO.getStartDate());
 		startTime.set(Calendar.HOUR_OF_DAY, 0);
 		startTime.set(Calendar.MINUTE, 0);
 		startTime.getTime();
-		
+
 		Calendar endTime = Calendar.getInstance();
 		endTime.setTime(assetAMCScheduleDTO.getEndDate());
 		endTime.set(Calendar.HOUR_OF_DAY, 11);
 		endTime.set(Calendar.MINUTE, 59);
 		endTime.getTime();
 		*/
-		
+
 		Calendar jobStartTime = Calendar.getInstance();
 		jobStartTime.setTimeInMillis(assetAMCScheduleDTO.getJobStartTime().toInstant().toEpochMilli());
 
@@ -1889,19 +1897,19 @@ public class JobManagementService extends AbstractService {
 		startTime.setTime(assetAMCScheduleDTO.getStartDate());
 		startTime.set(Calendar.HOUR_OF_DAY, jobStartTime.get(Calendar.HOUR_OF_DAY));
 		startTime.set(Calendar.MINUTE, jobStartTime.get(Calendar.MINUTE));
-		startTime.getTime();		
-		
+		startTime.getTime();
+
 		Calendar plannedEndTime = Calendar.getInstance();
 		plannedEndTime.setTime(jobStartTime.getTime());
 		plannedEndTime.add(Calendar.HOUR_OF_DAY, assetAMCScheduleDTO.getPlannedHours());
-		plannedEndTime.getTime();		
-		
+		plannedEndTime.getTime();
+
 		Calendar scheduleEndDateTime = Calendar.getInstance();
 		scheduleEndDateTime.setTime(assetAMCScheduleDTO.getEndDate());
 		scheduleEndDateTime.set(Calendar.HOUR_OF_DAY, 11);
 		scheduleEndDateTime.set(Calendar.MINUTE, 59);
 		scheduleEndDateTime.getTime();
-		
+
 		job.setPlannedStartTime(startTime.getTime());
 		job.setPlannedEndTime(plannedEndTime.getTime());
 		job.setPlannedHours(assetAMCScheduleDTO.getPlannedHours());
@@ -1910,7 +1918,7 @@ public class JobManagementService extends AbstractService {
 		job.setBlock(asset.getBlock());
 		job.setFloor(asset.getFloor());
 		job.setZone(asset.getZone());
-		
+
 		job.setEmployee(employee);
 		if(employee != null) {
 			job.setStatus(JobStatus.ASSIGNED);
@@ -1952,7 +1960,7 @@ public class JobManagementService extends AbstractService {
 			schConfDto.setType("CREATE_JOB");
 			StringBuffer data = new StringBuffer();
 			data.append("title="+assetAMCScheduleDTO.getTitle());
-			data.append("&description="+assetAMCScheduleDTO.getFrequencyPrefix()+" "+assetAMCScheduleDTO.getFrequencyDuration()+" "+assetAMCScheduleDTO.getFrequency());				
+			data.append("&description="+assetAMCScheduleDTO.getFrequencyPrefix()+" "+assetAMCScheduleDTO.getFrequencyDuration()+" "+assetAMCScheduleDTO.getFrequency());
 			data.append("&siteId="+site.getId());
 			data.append("&empId="+employee.getId());
 			//data.append("&empId="+assetPpmScheduleDTO.getEmployeeId());
@@ -1961,7 +1969,7 @@ public class JobManagementService extends AbstractService {
 			data.append("&plannedHours="+assetAMCScheduleDTO.getPlannedHours());
 			//data.append("&location="+assetPpmScheduleDTO.getLocationId());
 			data.append("&frequency="+assetAMCScheduleDTO.getFrequency());
-			data.append("&duration="+assetAMCScheduleDTO.getFrequencyDuration());			
+			data.append("&duration="+assetAMCScheduleDTO.getFrequencyDuration());
 			schConfDto.setData(data.toString());
 			schConfDto.setSchedule(Frequency.valueOf(assetAMCScheduleDTO.getFrequency()).getValue());
 			schConfDto.setStartDate(assetAMCScheduleDTO.getStartDate());
@@ -1971,11 +1979,54 @@ public class JobManagementService extends AbstractService {
 
 			schedulerService.save(schConfDto,job);
 		}
-		
+
 		JobDTO jobDto = mapperUtil.toModel(job, JobDTO.class);
 
 		return new ResponseEntity<>(jobDto, HttpStatus.CREATED);
-			
-	
+
+
+	}
+
+	public String uploadExistingChecklistImg() {
+		List<JobChecklist> jobchecklists = jobChecklistRepository.findAll();
+		for(JobChecklist jobChecklist : jobchecklists) {
+			if(jobChecklist.getImage_1() != null) {
+				if(jobChecklist.getImage_1().indexOf("data:image") == 0) {
+					String base64String = jobChecklist.getImage_1().split(",")[1];
+					boolean isBase64 = Base64.isBase64(base64String);
+					JobChecklistDTO checklist = mapperUtil.toModel(jobChecklist, JobChecklistDTO.class);
+					if(isBase64){
+						String image1 = amazonS3utils.uploadCheckListImage(checklist.getImage_1(), checklist.getChecklistItemName(), checklist.getJobId(), "image_1");
+						jobChecklist.setImage_1(image1);
+						jobChecklistRepository.save(jobChecklist);
+					}
+				}
+			}
+			if(jobChecklist.getImage_2() != null) {
+				if(jobChecklist.getImage_2().indexOf("data:image") == 0) {
+					String base64String = jobChecklist.getImage_2().split(",")[1];
+					boolean isBase64 = Base64.isBase64(base64String);
+					JobChecklistDTO checklist = mapperUtil.toModel(jobChecklist, JobChecklistDTO.class);
+					if(isBase64){
+						String image2 = amazonS3utils.uploadCheckListImage(checklist.getImage_2(), checklist.getChecklistItemName(), checklist.getJobId(), "image_2");
+						jobChecklist.setImage_2(image2);
+						jobChecklistRepository.save(jobChecklist);
+					}
+				}
+			}
+			if(jobChecklist.getImage_3() != null) {
+				if(jobChecklist.getImage_3().indexOf("data:image") == 0) {
+					String base64String = jobChecklist.getImage_3().split(",")[1];
+					boolean isBase64 = Base64.isBase64(base64String);
+					JobChecklistDTO checklist = mapperUtil.toModel(jobChecklist, JobChecklistDTO.class);
+					if(isBase64){
+						String image3 = amazonS3utils.uploadCheckListImage(checklist.getImage_3(), checklist.getChecklistItemName(), checklist.getJobId(), "image_3");
+						jobChecklist.setImage_3(image3);
+						jobChecklistRepository.save(jobChecklist);
+					}
+				}
+			}
+		}
+		return "Successfully upload checklist images";
 	}
 }

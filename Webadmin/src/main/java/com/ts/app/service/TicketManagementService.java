@@ -1,9 +1,11 @@
 package com.ts.app.service;
 
+import java.io.File;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -24,6 +26,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
 import com.ts.app.config.Constants;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
@@ -53,6 +56,7 @@ import com.ts.app.service.util.PagingUtil;
 import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.JobChecklistDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.TicketDTO;
@@ -551,7 +555,7 @@ public class TicketManagementService extends AbstractService {
 	@Transactional
     public TicketDTO uploadFile(TicketDTO ticketDTO) throws JSONException {
 
-        log.debug("Employee list from check in out images"+ticketDTO.getId());
+        log.debug("Ticket images upload to AWS s3 -"+ticketDTO.getId());
         ticketDTO = amazonS3utils.uploadTicketFile(ticketDTO.getId(), ticketDTO.getImageFile(), System.currentTimeMillis(), ticketDTO);
         Ticket ticket = ticketRepository.findOne(ticketDTO.getId());
         ticket.setImage(ticketDTO.getImage());
@@ -568,5 +572,25 @@ public class TicketManagementService extends AbstractService {
         fileUrl = cloudFrontUrl + bucketEnv + ticketFilePath + ticket.getImage();
         return fileUrl;
     }
+
+	public String uploadExistingTicketImg() {
+		List<Ticket> tickets = ticketRepository.findAll();
+		for(Ticket ticket : tickets) { 
+			if(ticket.getImage() != null) { 
+				if(ticket.getImage().indexOf("data:image") == 0) {
+					String base64String = ticket.getImage().split(",")[1];
+					boolean isBase64 = Base64.isBase64(base64String);
+					long dateTime = new Date().getTime();
+					TicketDTO ticketModel = mapperUtil.toModel(ticket, TicketDTO.class);
+					if(isBase64){ 
+						ticketModel = amazonS3utils.uploadExistingTicketFile(ticketModel.getId(), ticketModel.getImage(), dateTime, ticketModel);
+						ticket.setImage(ticketModel.getImage());
+						ticketRepository.save(ticket);
+					}
+				}
+			}
+		}
+		return "Successfully upload existing ticket file to S3";
+	}
 
 }

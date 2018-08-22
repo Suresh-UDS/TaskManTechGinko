@@ -227,6 +227,20 @@ public class AmazonS3Utils {
     	
 		return locDTO;
 	}
+
+	public TicketDTO uploadExistingTicketFile(long ticketId, String image, long dateTime, TicketDTO ticketModel) {
+	   	String fileUrl = "";
+        String name = ticketId + "_" + dateTime + ".jpg";
+        try { 
+        	String fileName = name;
+        	fileUrl = amazonS3Service.uploadExistingTicketToS3(fileName, image);
+        	ticketModel.setImage(fileName);
+        	ticketModel.setUrl(fileUrl);
+        } catch(Exception e) { 
+        	e.printStackTrace();
+        }
+        return ticketModel;
+	}
     
   
     

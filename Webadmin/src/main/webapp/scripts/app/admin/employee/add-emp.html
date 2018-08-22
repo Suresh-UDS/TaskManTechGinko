@@ -1,4 +1,3 @@
-
 <div class="crud-form"
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
 	<div class="" ng-controller="EmployeeController">
@@ -25,28 +24,21 @@
 
             </div> -->
 			<div class="col-md-12">
-
                 <!--<div class="titleCon">-->
                     <!--<h3>Add Employee</h3>-->
                 <!--</div>-->
-
-
 				<div class="form-container table-container">
 					<form ng-show="!success" name="form" role="form" novalidate
 						ng-submit="conform('save')"
 						onClick="" class="form-horizontal">
-
-
                         <div class="row" ng-init="loadUserRoles()">
-
                             <div class="col-md-6">
-
                                 <div class="panel panel-default">
-                                    <div class="panel-heading">Identity and Name</div>
+                                    <div class="panel-heading">
+                                    Identity and Name
+                                    </div>
                                     <div class="panel-body">
-
                                         <div class="row">
-
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Employee ID<span class="red-star">*</span></label>
@@ -112,7 +104,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
@@ -170,9 +161,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
-
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
@@ -223,64 +212,53 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
-
                             </div>
-
-
                        		<div class="col-md-6">
-
 								<div class="panel panel-default">
-                                    <div class="panel-heading">Role</div>
+                                    <div class="panel-heading">
+                                    Role
+                                    </div>
                                     <div class="panel-body">
-
                                         <div class="row">
-                                        		<div class="col-md-6">
-			                                 <div class="form-group">
-			                                     <label class="control-label">User Role <span class="red-star">*</span> </label>
-			                                     <!--<input type="text" class="form-control"-->
-			                                             <!--ng-model="selectedRole"-->
-			                                            <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
-			                                            <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
-			                                            <!--required >-->
-                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-			                                     <select class="form-control " ng-model="selectedRole"  ng-options="role as role.name for role in userRoles" name="UserRole" required>
-			                                         <option value="">Select role...</option>
-			                                     </select>
+                                        	<div class="col-md-12">
+			                                    <div class="form-group">
+    			                                     <label class="control-label">User Role <span class="red-star">*</span> </label>
+    			                                     <!--<input type="text" class="form-control"-->
+    			                                             <!--ng-model="selectedRole"-->
+    			                                            <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
+    			                                            <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
+    			                                            <!--required >-->
+                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+    			                                     <select class="form-control " ng-model="selectedRole"  ng-options="role as role.name for role in userRoles" name="UserRole" required>
+    			                                         <option value="">Select role...</option>
+    			                                     </select>
 
-			                                     <div ng-show="form.$submitted || form.UserRole.$touched || form.UserRole.$dirty">
-			                                         <div ng-show="form.UserRole.$dirty || form.UserRole.$invalid">
-			                                             <p class="help-block" style="color: maroon"
-			                                                ng-show="form.UserRole.$error.required">User Role is
-			                                                 required.</p>
-			                                         </div>
-			                                     </div>
-
-			                                 </div>
+    			                                     <div ng-show="form.$submitted || form.UserRole.$touched || form.UserRole.$dirty">
+    			                                         <div ng-show="form.UserRole.$dirty || form.UserRole.$invalid">
+    			                                             <p class="help-block" style="color: maroon"
+    			                                                ng-show="form.UserRole.$error.required">User Role is
+    			                                                 required.</p>
+    			                                         </div>
+    			                                     </div>
+			                                    </div>
 			                                 </div>
 			                           </div>
 			                       </div>
-			                       </div>
-
-                             </div>
-
+			                    </div>
+                            </div>
                          </div>
-
                        <div class="row" >
-
-                       <div class="col-md-6">
-
+                            <div class="col-md-6">
                                 <div class="panel panel-default">
-                                    <div class="panel-heading">Client Info<span class="red-star">*</span></div>
+                                    <div class="panel-heading">
+                                        Client Info<span class="red-star">*</span>
+                                    </div>
                                     <div class="panel-body">
-
                                         <div class="row">
-
                                             <div class="col-md-4">
                                                 <div class="form-group">
-
                                                     <!--<label class="control-label">Client</label>-->
                                                     <div class="dropdown">
 
@@ -363,25 +341,18 @@
 
                                                 </div>
                                             </div>
-
                                         </div>
-
                                     </div>
                                 </div>
-
-                             </div>
-
+                            </div>
 	                       <div class="col-md-6">
-
                                <div class="panel panel-default">
-                                   <div class="panel-heading">Reporting hierarchy</div>
+                                   <div class="panel-heading">
+                                   Reporting hierarchy
+                                   </div>
                                    <div class="panel-body">
-
                                        <div class="row">
-
-
-
-        		                                    <div class="col-md-6">
+        		                            <div class="col-md-12">
                                                 <div class="form-group " >
                                                     <label class="control-label">Manager<span class="red-star"></span></label>
                                                     <div class="dropdown">
@@ -403,67 +374,64 @@
                                                     </div>
                                                 </div>
                                             </div>
+        		                        </div>
+        		                    </div>
+                               </div>
+        						<!--<div class="form-group"  >-->
+        							<!--<label class="col-sm-3 control-label"> Photo Code </label>-->
+        							<!--<div class="col-sm-4">-->
+        								<!--<input id='code' ng-model="employee.code" class='form-control'-->
+        									<!--name='code' type='text' value="" ng-minlength=4 ng-maxlength=10 ng-pattern="/^[0-9]*$/"  required/>-->
+        								<!--<div ng-show="form.$submitted || form.code.$touched">-->
+        			                    	<!--<div ng-show="form.code.$dirty || form.code.$invalid">-->
+        			                        <!--<p class="help-block" style="color:maroon"-->
+        			                               <!--ng-show="form.code.$error.required">-->
+        			                           <!--Photo Code is required.-->
+        			                        <!--</p>-->
+        			                        <!--<p class="help-block" style="color:maroon"-->
+        			                               <!--ng-show="form.code.$error.minlength">-->
+        			                            <!--Photo Code is required to be at least 4 character.-->
+        			                        <!--</p>-->
+        			                        <!--<p class="help-block" style="color:maroon"-->
+        			                               <!--ng-show="form.code.$error.maxlength">-->
+        			                            <!--Photo Code cannot be longer than 10 characters.-->
+        			                        <!--</p>-->
+        			                        <!--<p class="help-block" style="color:maroon"-->
+        			                               <!--ng-show="form.code.$error.pattern">-->
+        			                            <!--Photo Code can only contain digits.-->
+        			                    	<!--</p>-->
+        			                    	<!--</div>-->
+        		                    	<!--</div>-->
+        							<!--</div>-->
+        						<!--</div>-->
 
-        		                                </div>
+        						<!-- Start of hidden inputs -->
+        						<!-- End of hidden inputs -->
+        						<!-- <div id="activateEmployeeModal" data-backdrop="false" class="modal fade" tabindex="-1" role="dialog"
+        							aria-labelledby="myModalLabel" aria-hidden="true" >
+        							<div class="confirm-dialog">
+        							<div class="modal-content">
+        							<div class="modal-body">
+        									Employee with the same ID {{existingEmployee.empId}} exists. Do you want to activate?
+        							</div>
+        							<div class="confirm-footer">
+        									<button type="button" ng-click="saveEmployee()" class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>
+        									<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-        		               </div>
-                       </div>
+        							</div>
+        							</div>
+        						</div>
+        						</div> -->
 
-
-						<!--<div class="form-group"  >-->
-							<!--<label class="col-sm-3 control-label"> Photo Code </label>-->
-							<!--<div class="col-sm-4">-->
-								<!--<input id='code' ng-model="employee.code" class='form-control'-->
-									<!--name='code' type='text' value="" ng-minlength=4 ng-maxlength=10 ng-pattern="/^[0-9]*$/"  required/>-->
-								<!--<div ng-show="form.$submitted || form.code.$touched">-->
-			                    	<!--<div ng-show="form.code.$dirty || form.code.$invalid">-->
-			                        <!--<p class="help-block" style="color:maroon"-->
-			                               <!--ng-show="form.code.$error.required">-->
-			                           <!--Photo Code is required.-->
-			                        <!--</p>-->
-			                        <!--<p class="help-block" style="color:maroon"-->
-			                               <!--ng-show="form.code.$error.minlength">-->
-			                            <!--Photo Code is required to be at least 4 character.-->
-			                        <!--</p>-->
-			                        <!--<p class="help-block" style="color:maroon"-->
-			                               <!--ng-show="form.code.$error.maxlength">-->
-			                            <!--Photo Code cannot be longer than 10 characters.-->
-			                        <!--</p>-->
-			                        <!--<p class="help-block" style="color:maroon"-->
-			                               <!--ng-show="form.code.$error.pattern">-->
-			                            <!--Photo Code can only contain digits.-->
-			                    	<!--</p>-->
-			                    	<!--</div>-->
-		                    	<!--</div>-->
-							<!--</div>-->
-						<!--</div>-->
-
-						<!-- Start of hidden inputs -->
-						<!-- End of hidden inputs -->
-						<!-- <div id="activateEmployeeModal" data-backdrop="false" class="modal fade" tabindex="-1" role="dialog"
-							aria-labelledby="myModalLabel" aria-hidden="true" >
-							<div class="confirm-dialog">
-							<div class="modal-content">
-							<div class="modal-body">
-									Employee with the same ID {{existingEmployee.empId}} exists. Do you want to activate?
-							</div>
-							<div class="confirm-footer">
-									<button type="button" ng-click="saveEmployee()" class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>
-									<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-
-							</div>
-							</div>
-						</div>
-						</div> -->
-
-                           </div>
+                            </div>
 						</div>
 
-                       <div class="row" >
+                        <div class="row" >
 							<div class="col-md-6">
-
                             		<div class="panel panel-default">
-                            			<div class="panel-heading">Location</div>
+                            			<div class="panel-heading">
+                                        Location
+                                        </div>
                             			<div class="panel-body">
                             				<div class="row">
                             				<div class="col-md-4">
@@ -561,60 +529,53 @@
                             			</div>
                             		</div>
                             </div>
-
                        </div>
-
                        <div class="row">
-                               <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
-                                   <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}"
-                                           type="submit" id="form-button-save" ng-disabled="form.$invalid || empLocation">
-                                       <span class="btn-label"><i class="material-icons">check</i></span> Save
-                                       <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
-                                   </button>
-                                   <!--<button class="btn btn-info" type="submit"-->
-                                   <!--id="save-and-go-back-button" ng-disabled="form.$invalid">-->
-                                   <!--<i class="material-icons">rotate_left</i> Save and go back to list-->
-                                   <!--</button>-->
-                                   <button class="btn btn-danger" type="button"
-                                           ng-click="conform('cancel')" id="cancel-button">
-                                       <i class="material-icons">close</i> Discard
-                                   </button>
-                               </div>
+                            <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
+                               <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}"
+                                       type="submit" id="form-button-save" ng-disabled="form.$invalid || empLocation">
+                                   <span class="btn-label"><i class="material-icons">check</i></span> Save
+                                   <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                               </button>
+                               <!--<button class="btn btn-info" type="submit"-->
+                               <!--id="save-and-go-back-button" ng-disabled="form.$invalid">-->
+                               <!--<i class="material-icons">rotate_left</i> Save and go back to list-->
+                               <!--</button>-->
+                               <button class="btn btn-danger" type="button"
+                                       ng-click="conform('cancel')" id="cancel-button">
+                                   <i class="material-icons">close</i> Discard
+                               </button>
+                            </div>
+                        </div>
+						<div id="deleteModal" data-backdrop="false" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+							<div class="delete-dialog">
+								<div class="modal-content">
+									<div class="modal-body">
+											Employee with the same ID {{existingEmployee.empId}} exists. Do you want to activate?
+									</div>
+									<div class="delete-footer">
+											<button type="button" ng-click="confirmSave()" class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>
+									<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-                           </div>
-
-						<div id="deleteModal" data-backdrop="false" class="modal fade" tabindex="-1" role="dialog"
-										aria-labelledby="myModalLabel" aria-hidden="true" >
-										<div class="delete-dialog">
-									<div class="modal-content">
-										<div class="modal-body">
-												Employee with the same ID {{existingEmployee.empId}} exists. Do you want to activate?
-										</div>
-										<div class="delete-footer">
-												<button type="button" ng-click="confirmSave()" class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>
-										<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-
-										</div>
 									</div>
 								</div>
-									</div>
-						<div class='small-loading hidden' id='FormLoading'>Loading,
-							saving data...</div>
-
+							</div>
+						</div>
+						<div class='small-loading hidden' id='FormLoading'>
+                            Loading,
+							saving data...
+                        </div>
 						<div class="form-group">
 							<div id='report-error' class='report-div error bg-danger'
 								style="display: none"></div>
 							<div id='report-success' class='report-div success bg-success'
 								style="display: none"></div>
 						</div>
-
-
 					</form>
 				</div>
 			</div>
 		</div>
 	</div>
-
 </div>
 
 
