@@ -321,7 +321,7 @@
                     </button>
                     <h4 class="modal-title">Filter</h4>
 
-                    <span ng-if="show"><h5 class="error-msg txt-align-center"> Select Client and Site</h5></span>
+
 
                 </div>
                 <div class="modal-body">
@@ -386,7 +386,7 @@
                             <div class="panel-heading" role="tab" id="headingTwo">
                                 <a ng-if="(!searchProject && !searchSite) || (searchProject && !searchSite)" ng-click="errorMsg()">
                                     <h4 class="panel-title">
-                                        Advanced Filter
+                                        Advanced Filter<span ng-if="show" class="error-msg txt-align-center"> (Select Client and Site)</span>
                                         <i class="material-icons">keyboard_arrow_down</i>
                                     </h4>
                                 </a>
