@@ -43,7 +43,6 @@
                 <span class="tag label label-info"  ng-show="searchCriteria.siteName || localStorage.siteName">
                     Site: {{searchCriteria.siteName || localStorage.siteName}}
                 </span>
-
             </span>
     </div>
 
@@ -242,7 +241,7 @@
                                             <div ng-bind="site"></div>
                                         </ui-select-choices>
                                     </ui-select>
-                                    <span ng-if="sitesList.length == 0"><p class="help-block">No sites</p></span>
+                                    <span ng-if="sitesList.length == 0"><p class="error-msg margin0">No sites</p></span>
                                 </div>
                             </div>
                         </div>

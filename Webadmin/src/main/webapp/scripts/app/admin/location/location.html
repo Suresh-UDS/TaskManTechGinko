@@ -398,7 +398,7 @@
                                                             <div ng-bind="site"></div>
                                                         </ui-select-choices>
                                                     </ui-select>
-                                                    <span ng-if="sitesList.length == 0"><p class="help-block">No sites</p></span>
+                                                    <span ng-if="sitesList.length == 0"><p class="error-msg margin0">No sites</p></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -440,7 +440,7 @@
                                                         <div ng-bind="block"></div>
                                                     </ui-select-choices>
                                                 </ui-select>
-                                                <span ng-if="blocksList.length == 0"><p class="help-block">No Blocks</p></span>
+                                                <span ng-if="blocksList.length == 0"><p class="error-msg margin0">No Blocks</p></span>
                                             </div>
                                         </div>
                                         <div class="dropdown col-xs-12 col-md-4 col-sm-4">
@@ -458,7 +458,7 @@
                                                         <div ng-bind="floor"></div>
                                                     </ui-select-choices>
                                                 </ui-select>
-                                                <span ng-if="floorsList.length == 0"><p class="help-block">No Floor</p></span>
+                                                <span ng-if="floorsList.length == 0"><p class="error-msg margin0">No Floor</p></span>
                                             </div>
                                         </div>
                                         <div class="dropdown col-xs-12 col-md-4 col-sm-4">
@@ -476,7 +476,7 @@
                                                         <div ng-bind="zone"></div>
                                                     </ui-select-choices>
                                                 </ui-select>
-                                                <span ng-if="zonesList.length == 0"><p class="help-block">No Zone</p></span>
+                                                <span ng-if="zonesList.length == 0"><p class="error-msg margin0">No Zone</p></span>
 
 
                                             </div>
@@ -489,10 +489,6 @@
                         </div>
 
                     </div>
-
-
-
-
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-danger btn-simple" data-dismiss="modal" >Cancel</button>
