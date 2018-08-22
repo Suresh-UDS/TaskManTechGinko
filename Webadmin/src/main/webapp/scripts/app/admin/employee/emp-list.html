@@ -1,9 +1,6 @@
 <div ng-init="loadPageTop()">
-
-
     <div class="row" ng-init="loadEmployees();loadProjects();loadAllEmployees();loadSites()">
         <div class="col-md-6 txt-align-lft">
-
             <!--<button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">-->
                 <!--<i class="material-icons">filter_list</i> Basic Filter-->
                 <!--<div class="ripple-container"></div>-->
@@ -17,9 +14,7 @@
                 <div class="ripple-container"></div>
             </button>
         </div>
-
         <div class="col-md-6 txt-align-rgt">
-
             <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
                 <i class="material-icons">refresh</i> Clear Filter
                 <div class="ripple-container"></div>
@@ -166,11 +161,8 @@
                         <!--</form>-->
 
                     <!--</div>-->
-
-
                     <div class="table-responsive tablecard">
                         <table id="" class="table table-hover withSortingIcons">
-
                             <thead>
                             <tr>
                                 <th>ID
@@ -211,77 +203,59 @@
                                 <th class="disabled-sorting text-right">Actions</th>
                             </tr>
                             </thead>
-
                             <tbody>
-                            <tr ng-repeat="employee in employees" repeat-done="initDataTables()">
-                                <td>{{employee.empId}}</td>
-                                <td>{{employee.name}} {{employee.lastName}}</td>
-							   <td>{{employee.projectName}}</td>
-                                <td ng-if="employee.enrolled_face">
-                                    <a id="images" href="#" onClick="$('#enrollImageModal').modal()" data-target="#enrollImageModal" data-dismiss="#enrollImageModal" ng-click="loadEnrolledImage(employee.url)">
-                                        <img src={{employee.url}} width="30px" height="30px"/>
-                                    </a>
-                                </td>
-                                <td ng-if="!employee.enrolled_face">
-                                    <img src="assets/img/user.png" width="30px" height="30px"/>
-                                </td>
+                                <tr ng-repeat="employee in employees" repeat-done="initDataTables()">
+                                    <td>{{employee.empId}}</td>
+                                    <td>{{employee.name}} {{employee.lastName}}</td>
+    							   <td>{{employee.projectName}}</td>
+                                    <td ng-if="employee.enrolled_face">
+                                        <a id="images" href="#" onClick="$('#enrollImageModal').modal()" data-target="#enrollImageModal" data-dismiss="#enrollImageModal" ng-click="loadEnrolledImage(employee.url)">
+                                            <img src={{employee.url}} width="30px" height="30px"/>
+                                        </a>
+                                    </td>
+                                    <td ng-if="!employee.enrolled_face">
+                                        <img src="assets/img/user.png" width="30px" height="30px"/>
+                                    </td>
 
-                                <td has-permission="Employee:Edit" ng-if="!employee.faceAuthorised && employee.faceIdEnrolled">
-                                    <button class="btn btn-success btn-sm" has-permission="Employee:Create" ng-click="approveImage(employee)">Approve</button>
-                                </td>
-                                <td has-permission="Employee:Edit" ng-if="employee.faceAuthorised && employee.faceIdEnrolled"><p style="color:green">Face Id Approved</p> </td>
-                                <td has-permission="Employee:Edit" ng-if="!employee.faceAuthorised && !employee.faceIdEnrolled"><p style="color:red">Face Id not enrolled</p> </td>
-                                <td>
-                                    <button class="btn btn-primary btn-xs btn-warning"  ng-if="employee.reliever">Reliever</button>
-                                    <button class="btn btn-primary btn-xs btn-danger" disabled ng-if="employee.left">InActive</button>
-                                    <button class="btn btn-primary btn-xs btn-success"  ng-if="!employee.left">Active</button>
-                                </td>
-                                <td class="text-right hoverMe">
-
-
-                                    <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
-
-
-                                    <div class="HoverBx">
-
-                                        <button ng-disabled="employee.left" title="View"  ng-click="getEmployeeDetails(employee.id)" has-permission="Employee:Edit" data-toggle="modal" data-target="#ViewModal"    class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></button>
-                                        <!--<button ng-disabled="employee.left" title="View"  ng-click="getCheckInDetails(employee.id)" has-permission="Employee:Edit" ui-sref="view-employee({ id: employee.id })"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>-->
-                                        <button ng-disabled="employee.left" title="Mark Attendance "   data-toggle="modal" has-permission="Employee:Edit" data-target="#noticeModal" ng-click="getEmployeeDetails(employee.id)"  class="btn btn-simple btn-info btn-icon like"><i  class="material-icons">date_range</i></button>
-                                        <button ng-disabled="employee.left" ng-class="{active: $state.includes('admin')}"  has-permission="Employee:Edit"  ui-sref="edit-employee({ id: employee.id })" type="button" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">
-                                            <i class="material-icons">edit</i>
-                                        </button>
-                                        <button ng-disabled="employee.left" title="Mark Left"   has-permission="Employee:Edit"  data-toggle="modal" data-target="#leftModal" data-dismiss="#leftModal" ng-click="employeeDetails(employee.id)"  class="btn btn-simple btn-info btn-icon like"> <i style="color: #942a25" class="fas fa-user-times"></i></button>
-                                        <!--<button ng-disabled="employee.left" title="Site Transfer"   data-toggle="modal" data-target="#siteTransferModal" data-dismiss="#siteTransferModal"   class="btn btn-simple btn-info btn-icon like" ng-click="siteTransferDetails(employee);loadSites()" > <i style="font-size: 20px; color: orangered" class="material-icons">transfer_within_a_station</i></button>-->
-                                        <button ng-if="!employee.reliever" ng-disabled="employee.left" title="Relieve Employee"   has-permission="Employee:Edit"  data-toggle="modal" data-target="#relieverConfirmation" data-dismiss="#relieverConfirmation" ng-click="getRelievers(employee)"   class="btn btn-simple btn-info btn-icon like"> <i class="material-icons">assignment_ind</i></button>
-
-                                    </div>
-
-
-                                </td>
-
-                            </tr>
-
-
+                                    <td has-permission="Employee:Edit" ng-if="!employee.faceAuthorised && employee.faceIdEnrolled">
+                                        <button class="btn btn-success btn-sm" has-permission="Employee:Create" ng-click="approveImage(employee)">Approve</button>
+                                    </td>
+                                    <td has-permission="Employee:Edit" ng-if="employee.faceAuthorised && employee.faceIdEnrolled"><p style="color:green">Face Id Approved</p> </td>
+                                    <td has-permission="Employee:Edit" ng-if="!employee.faceAuthorised && !employee.faceIdEnrolled"><p style="color:red">Face Id not enrolled</p> </td>
+                                    <td>
+                                        <button class="btn btn-primary btn-xs btn-warning"  ng-if="employee.reliever">Reliever</button>
+                                        <button class="btn btn-primary btn-xs btn-danger" disabled ng-if="employee.left">InActive</button>
+                                        <button class="btn btn-primary btn-xs btn-success"  ng-if="!employee.left">Active</button>
+                                    </td>
+                                    <td class="text-right hoverMe">
+                                        <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
+                                        <div class="HoverBx">
+                                            <button ng-disabled="employee.left" title="View"  ng-click="getEmployeeDetails(employee.id)" has-permission="Employee:Edit" data-toggle="modal" data-target="#ViewModal"    class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></button>
+                                            <!--<button ng-disabled="employee.left" title="View"  ng-click="getCheckInDetails(employee.id)" has-permission="Employee:Edit" ui-sref="view-employee({ id: employee.id })"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>-->
+                                            <button ng-disabled="employee.left" title="Mark Attendance "   data-toggle="modal" has-permission="Employee:Edit" data-target="#noticeModal" ng-click="getEmployeeDetails(employee.id)"  class="btn btn-simple btn-info btn-icon like"><i  class="material-icons">date_range</i></button>
+                                            <button ng-disabled="employee.left" ng-class="{active: $state.includes('admin')}"  has-permission="Employee:Edit"  ui-sref="edit-employee({ id: employee.id })" type="button" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">
+                                                <i class="material-icons">edit</i>
+                                            </button>
+                                            <button ng-disabled="employee.left" title="Mark Left"   has-permission="Employee:Edit"  data-toggle="modal" data-target="#leftModal" data-dismiss="#leftModal" ng-click="employeeDetails(employee.id)"  class="btn btn-simple btn-info btn-icon like"> <i style="color: #942a25" class="fas fa-user-times"></i></button>
+                                            <!--<button ng-disabled="employee.left" title="Site Transfer"   data-toggle="modal" data-target="#siteTransferModal" data-dismiss="#siteTransferModal"   class="btn btn-simple btn-info btn-icon like" ng-click="siteTransferDetails(employee);loadSites()" > <i style="font-size: 20px; color: orangered" class="material-icons">transfer_within_a_station</i></button>-->
+                                            <button ng-if="!employee.reliever" ng-disabled="employee.left" title="Relieve Employee"   has-permission="Employee:Edit"  data-toggle="modal" data-target="#relieverConfirmation" data-dismiss="#relieverConfirmation" ng-click="getRelievers(employee)"   class="btn btn-simple btn-info btn-icon like"> <i class="material-icons">assignment_ind</i></button>
+                                        </div>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
-
                     </div>
-
                     <div class="txt-align-center LoaderCon"  ng-hide="employeesLoader">
-
                         <div class="pad-TB-30">
                             <div loader-css="ball-pulse"></div>
                             <h3 >Loading, please wait...</h3>
                         </div>
-
                     </div>
-
                     <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
 
                         <h3>No data Found</h3>
 
                     </div>
-
                 </div>
                 <!-- end content-->
             </div>
@@ -290,8 +264,6 @@
         <!-- end col-md-12 -->
     </div>
     <!-- end row -->
-
-
 </div>
 
     <!-- Pagination directive start -->
@@ -299,9 +271,6 @@
     <pagination-new></pagination-new>
 
     <!-- Pagination directive end -->
-
-
-
 <!-- Modal -->
 <div class="modal right fade" id="ViewModal" tabindex="-1" role="dialog" aria-labelledby="ViewModal12">
     <div class="modal-dialog" role="document" ng-init="initLoad()">
@@ -371,28 +340,16 @@
                                                  id="close-button-right">
                                             <!-- <i class="fa fa-warning"></i> --> Back
                                         </button>
-
                                     </div>
-
                                 </div>
                             </div>
-
                         </div>
-
-
-
                     </div>
-
                 </div>
             </div>
-
         </div><!-- modal-content -->
     </div><!-- modal-dialog -->
 </div><!-- modal -->
-
-
-
-
 <div class="modal fade" id="noticeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-notice">
         <div class="modal-content">
@@ -401,34 +358,27 @@
                 <h5 class="modal-title" id="myModalLabel">Site List</h5>
             </div>
             <div class="modal-body">
-
                 <div class="col-md-12">
                     <div class="card">
-
                         <div class="card-content">
-
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
                                     <tr>
-
                                         <th>Id</th>
                                         <th>Site Name</th>
                                         <th>Check In/Out</th>
-
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="projSite in sites">
-
-                                        <td>{{projSite.siteId}}</td>
-                                        <td>{{projSite.siteName}}</td>
-                                        <td>
-                                            <button ng-disabled="isCheckedIn" ng-click="checkIn(projSite.siteId,employee.empId,employee.id)" data-dismiss="modal"  class="btn btn-success btn-sm btn-round">check-In</button>
-                                            <button ng-disabled="!isCheckedIn" ng-click="checkOut(projSite.siteId,employee.empId,employee.id)" data-dismiss="modal"  class="btn btn-success btn-sm btn-round">check-Out</button>
-                                        </td>
-
-                                    </tr>
+                                        <tr ng-repeat="projSite in sites">
+                                            <td>{{projSite.siteId}}</td>
+                                            <td>{{projSite.siteName}}</td>
+                                            <td>
+                                                <button ng-disabled="isCheckedIn" ng-click="checkIn(projSite.siteId,employee.empId,employee.id)" data-dismiss="modal"  class="btn btn-success btn-sm btn-round">check-In</button>
+                                                <button ng-disabled="!isCheckedIn" ng-click="checkOut(projSite.siteId,employee.empId,employee.id)" data-dismiss="modal"  class="btn btn-success btn-sm btn-round">check-Out</button>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -442,7 +392,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="leftModal" tabindex="-1" role="dialog" aria-labelledby="leftModal" aria-hidden="true">
     <div class="modal-dialog modal-notice">
         <div class="modal-content">
@@ -1094,15 +1043,10 @@
                                                 <!--</div>-->
                                             <!--</div>-->
                                         <!--</div>-->
-
-
-
                                     <!--</div>-->
-
                                 <!--</div>-->
                             <!--</div>-->
                         <!--</div>-->
-
                         <!--<div class="panel panel-default">-->
                             <!--<div class="panel-heading" role="tab" id="headingTwo">-->
                                 <!--<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">-->
@@ -1114,9 +1058,7 @@
                             <!--</div>-->
                             <!--<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">-->
                                 <!--<div class="panel-body">-->
-
-                                    <!--<div class="row">-->
-
+                                   <!--<div class="row">-->
                                         <!--<div class="dropdown col-xs-12 col-md-4 col-sm-4">-->
                                             <!--<div class="form-group">-->
                                                 <!--<label class="control-label">Block </label>-->
@@ -1133,9 +1075,6 @@
                                                 <!--<select class="form-control " ng-model="searchFloor" ng-change="loadDepZones()"  ng-options="floor as floor for floor in floorsList">-->
                                                     <!--<option value="">Select Floor...</option>-->
                                                 <!--</select>-->
-
-
-
                                             <!--</div>-->
                                         <!--</div>-->
                                         <!--<div class="dropdown col-xs-12 col-md-4 col-sm-4">-->
@@ -1145,23 +1084,13 @@
                                                 <!--<select class="form-control " ng-model="searchZone"  ng-options="zone as zone for zone in zonesList">-->
                                                     <!--<option value="">Select Zone...</option>-->
                                                 <!--</select>-->
-
-
-
                                             <!--</div>-->
                                         <!--</div>-->
-
-                                    <!--</div>-->
-
+                                   <!--</div>-->
                                 <!--</div>-->
                             <!--</div>-->
                         <!--</div>-->
-
                     <!--</div>-->
-
-
-
-
                 <!--</div>-->
                 <!--<div class="modal-footer">-->
                     <!--<button type="submit" class="btn btn-danger btn-simple" data-dismiss="modal" >Cancel</button>-->
@@ -1173,17 +1102,7 @@
     <!--</div>-->
 <!--</div>-->
 <!--&lt;!&ndash;  End Modal &ndash;&gt;-->
-
-
-
 <!-- -->
-
-
-
-
-
-
-
 <!-- BasicFilterModal -->
 <!--<div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">-->
     <!--<div class="modal-dialog">-->
@@ -1320,10 +1239,7 @@
                     <h4 class="modal-title">Filter</h4>
                 </div>
                 <div class="modal-body">
-
-
                     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="headingOne">
                                 <a role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="collapsed">
@@ -1378,15 +1294,10 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
-
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="headingTwo">
                                 <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
@@ -1398,10 +1309,7 @@
                             </div>
                             <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">
                                 <div class="panel-body">
-
-
                                     <div class="row">
-
                                         <div class="col-md-4">
                                             <div class="form-group" style="padding-top: 20px;" >
                                                 <div class="dropdown">
@@ -1410,8 +1318,7 @@
                                                            placeholder="Employee Id"
                                                            ng-model="searchEmployeeId"
                                                     />
-
-                                                </div>
+                                               </div>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -1425,18 +1332,11 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
-
-
-
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-danger btn-simple" data-dismiss="modal" >Cancel</button>
@@ -1447,6 +1347,4 @@
         </div>
     </div>
 </div>
-
-
 <!-- -->
