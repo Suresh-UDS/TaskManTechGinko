@@ -577,7 +577,7 @@ export class AssetView {
         this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
             response=>{
                 this.spinner = false;
-                this.componentService.closeLoader()
+                this.componentService.closeLoader();
                 console.log("Asset config");
                 console.log(response);
                 this.assetDetails.config = response;
@@ -624,16 +624,18 @@ export class AssetView {
         this.assetService.assetTicket(search).subscribe(
             response=>{
                 this.spinner = false;
-                this.componentService.closeLoader();
+                this.componentService.closeAll();
                 console.log("Getting tickets response");
                 console.log(response);
+                this.spinner = false;
                 this.assetDetails.tickets = response.transactions;
-                console.log(this.assetDetails.tickets)
+                console.log(this.assetDetails.tickets);
             },
             error=>{
                 this.spinner = false;
-                this.componentService.closeLoader();
+                this.componentService.closeAll();
                 console.log(error);
+                this.spinner = false;
                 console.log("Getting Ticket errors")
             })
     }
@@ -676,11 +678,13 @@ export class AssetView {
 
 
     statusHistory(assetId){
+        this.spinner=true;
         var search={
             assetId:assetId
         };
         this.assetService. statusHistory(search).subscribe(
             response=>{
+                this.spinner=false;
                 console.log("Status History");
                 console.log(response);
                 this.status=response.transactions;
@@ -689,11 +693,13 @@ export class AssetView {
     }
 
     siteHistory(assetId){
+        this.spinner=true;
         var search={
             assetId:assetId
         };
         this.assetService.siteHistory(search).subscribe(
             response=>{
+                this.spinner=false;
                 console.log("Site Transfer History");
                 console.log(response);
                 this.site=response.transactions;
