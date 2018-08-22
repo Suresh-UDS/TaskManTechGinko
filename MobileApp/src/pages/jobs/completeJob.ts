@@ -44,9 +44,20 @@ export class CompleteJobPage {
     completedImages:any;
     fileTransfer: FileTransferObject = this.transfer.create();
 
+    checkListItems:any;
+    showIcon:any;
+    index:any;
+    spinner:any;
+    categories:any;
+
     constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService, @Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
                 private loadingCtrl:LoadingController, public camera: Camera,private geolocation:Geolocation, private jobService: JobService,
                 private attendanceService: AttendanceService,public popoverCtrl: PopoverController, private component:componentService,private transfer: FileTransfer, private file: File,private modalCtrl:ModalController) {
+        this.spinner=true;
+        this.categories = 'details';
+        this.checkListItems=[];
+        this.takenImages=[];
+        this.jobDetails=[];
         this.jobDetails=this.navParams.get('job');
         this.takenImages = [];
         this.checkOutDetails={
@@ -82,6 +93,7 @@ export class CompleteJobPage {
                 console.log("Response on job details");
                 console.log(response);
                 this.jobDetails = response;
+                this.checkListItems = this.jobDetails.checklistItems;
                 if(response.images.length>0){
                     this.component.showLoader('Getting saved images');
                     console.log("Images available");
@@ -386,5 +398,64 @@ export class CompleteJobPage {
             this.jobDetails.checkListItems = data;
         });
         profileModal.present();
+    }
+
+
+    viewCameraCheckList(i) {
+        console.log(i);
+        const options: CameraOptions = {
+            quality: 50,
+            destinationType: this.camera.DestinationType.DATA_URL,
+            encodingType: this.camera.EncodingType.JPEG,
+            mediaType: this.camera.MediaType.PICTURE
+        };
+
+        this.camera.getPicture(options).then((imageData) => {
+
+            // console.log('imageData -' +imageData);
+            imageData = 'data:image/jpeg;base64,' + imageData;
+            // imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/");
+
+            // if(this.checkListItems[i].image_1 !=null){
+            //     console.log("image_1"+this.checkListItems[i].image_1);
+            //     if(this.checkListItems[i].image_2 !=null){
+            //         console.log("image_2"+this.checkListItems[i].image_2);
+            //
+            //         if(this.checkListItems[i].image_3 !=null){
+            //             console.log("image_3"+this.checkListItems[i].image_3);
+            //
+            //             this.cs.showToastMessage('Cannot add more than 3 images','bottom');
+            //         }else{
+            //             console.log("No third image");
+            //             this.checkListItems[i].image_3 = imageData;
+            //         }
+            //     }else{
+            //         console.log("No second image");
+            //         this.checkListItems[i].image_2 = imageData;
+            //     }
+            // }else{
+            //     console.log("No first image");
+            //     this.checkListItems[i].image_1 = imageData;
+            // }
+
+            this.checkListItems[i].image_1 = imageData;
+
+
+        })
+
+    }
+
+    resetRemarks(i,completed){
+        console.log(i);
+        console.log(completed);
+        if(completed){
+            this.checkListItems[i].remarks=null;
+        }
+    }
+
+    show(show,i)
+    {
+        this.showIcon = !show;
+        this.index = i;
     }
 }
