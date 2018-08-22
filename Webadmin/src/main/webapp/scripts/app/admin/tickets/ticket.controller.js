@@ -535,7 +535,7 @@ angular.module('timeSheetApp')
                     $scope.success = 'OK';
                     $scope.showNotifications('top','center','success','Ticket status has been updated successfuly!!');
                     $(".fade").removeClass("modal-backdrop");
-                    $('#deleteModalNew').modal('hide');
+                    $('#closeTicket').modal('hide');
                     $state.reload();
                 });
             }
