@@ -260,7 +260,7 @@ public class SiteService extends AbstractService {
 		}
 		return mapperUtil.toModel(entity, SiteDTO.class);
 	}
-	
+
 	public List<ShiftDTO> findShifts(long id, Date date) {
 		List<ShiftDTO> shiftDtos = new ArrayList<ShiftDTO>();
 		Site entity = siteRepository.findOne(id);
@@ -322,7 +322,11 @@ public class SiteService extends AbstractService {
                 pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
 
             }else{
-                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+                if (searchCriteria.isReport()) {
+                    pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+                } else {
+                    pageRequest = createPageRequest(searchCriteria.getCurrPage());
+                }
             }
             Page<Site> page = null;
 			List<SiteDTO> transactions = null;
