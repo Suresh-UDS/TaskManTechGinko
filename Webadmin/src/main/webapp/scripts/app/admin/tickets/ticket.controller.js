@@ -430,7 +430,7 @@ angular.module('timeSheetApp')
                 $scope.employees = data.transactions;
 
                 //
-                    console.log("=============",$scope.employees );
+                    
                     if($scope.employees){
                         for(var i=0;i<$scope.employees.length;i++)
                         {
