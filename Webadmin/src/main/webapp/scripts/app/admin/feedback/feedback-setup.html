@@ -30,7 +30,7 @@
         </div>
 
     </div>
-    
+
     <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
             <span class="AppliedFilterTxtCon">
                 <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.projectName || localStorage.projectName">
@@ -320,6 +320,9 @@
                         <i class="material-icons">clear</i>
                     </button>
                     <h4 class="modal-title">Filter</h4>
+
+                    <span ng-if="show"><h5 class="error-msg txt-align-center"> Select Client and Site</h5></span>
+
                 </div>
                 <div class="modal-body">
                     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
@@ -332,7 +335,7 @@
                                     </h4>
                                 </a>
                             </div>
-                            <div id="collapseOne" class="panel-collapse collapse collapseOne in" role="tabpanel" aria-labelledby="headingOne" aria-expanded="true" style="height: 110px;">
+                            <div  id="collapseOne" class="panel-collapse collapse collapseOne in" role="tabpanel" aria-labelledby="headingOne" aria-expanded="true" style="height: 110px;">
                                 <div class="panel-body">
                                     <div class="row" >
                                         <div class="col-xs-12 col-md-4">
@@ -381,7 +384,13 @@
 
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="headingTwo">
-                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                <a ng-if="(!searchProject && !searchSite) || (searchProject && !searchSite)" ng-click="error()">
+                                    <h4 class="panel-title">
+                                        Advanced Filter
+                                        <i class="material-icons">keyboard_arrow_down</i>
+                                    </h4>
+                                </a>
+                                <a ng-if="searchProject && searchSite" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                     <h4 class="panel-title">
                                         Advanced Filter
                                         <i class="material-icons">keyboard_arrow_down</i>

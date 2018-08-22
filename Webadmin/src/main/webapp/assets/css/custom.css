@@ -872,6 +872,10 @@ span.red-star
     padding:0 5px;
     color:red;
 }
+.error-msg
+{
+    color: red;
+}
 .SelectWithAddbtnCon span.d-arrow-icon
 {
     padding-right: 16%;

@@ -146,6 +146,7 @@ angular.module('timeSheetApp')
             $scope.hideSite = true;
             $scope.uiBlock.splice(0,$scope.uiBlock.length);
             $scope.searchSite = $scope.sites[$scope.uiSite.indexOf(searchSite)]
+            $scope.show = false;
         }
         $scope.loadSearchBlock = function (searchBlock) {
             $scope.hideBlock = true;
@@ -367,6 +368,11 @@ angular.module('timeSheetApp')
             $scope.search();
          }
 
+
+        $scope.error = function(){
+            $scope.show = true;
+        }
+
         $scope.search = function () {
              $scope.noData = false;
             var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
@@ -499,11 +505,11 @@ angular.module('timeSheetApp')
 
 
         $scope.clearFilter = function() {
-            $scope.selectedSite = null;
-            $scope.selectedProject = null;
-            $scope.selectedBlock = null;
-            $scope.selectedFloor = null;
-            $scope.selectedZone = null;
+            $scope.searchSite = null;
+            $scope.searchProject = null;
+            $scope.searchBlock = null;
+            $scope.searchFloor = null;
+            $scope.searchZone = null;
             $scope.searchCriteria = {};
             $rootScope.searchCriteriaSite = null;
             $scope.pages = {
