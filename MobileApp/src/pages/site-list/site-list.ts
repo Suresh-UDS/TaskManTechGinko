@@ -70,10 +70,18 @@ export class SiteListPage {
 
     ionViewWillEnter(){
         this.isLoading=true;
-        this.siteService.searchSite().subscribe(response=>{
-            this.isLoading=false;
-            console.log(response.json());
-            this.siteList = response.json();
+        var searchCriteria = {
+            findAll:true,
+            currPage:1,
+            sort:10,
+            sortByAsc:true,
+            isReport:true
+        };
+
+        this.siteService.searchSites(searchCriteria).subscribe(
+            response=>{
+                this.siteList=response.transactions;
+                this.isLoading=false;
             this.userGroup = window.localStorage.getItem('userGroup');
             this.employeeId = window.localStorage.getItem('employeeId');
             this.employeeFullName = window.localStorage.getItem('employeeFullName');
