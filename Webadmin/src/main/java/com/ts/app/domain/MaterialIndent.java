@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -51,6 +52,9 @@ public class MaterialIndent extends AbstractAuditingEntity implements Serializab
 	
 	@OneToMany(mappedBy = "materialIndent", fetch = FetchType.EAGER, cascade = {CascadeType.ALL}, orphanRemoval=true)
 	private Set<MaterialIndentItem> items;
+	
+	@Column(name = "indentRefNumber")
+	private String indentRefNumber;
 
 	public long getId() {
 		return id;
@@ -123,7 +127,15 @@ public class MaterialIndent extends AbstractAuditingEntity implements Serializab
 	public void setItems(Set<MaterialIndentItem> items) {
 		this.items = items;
 	}
-	
+
+	public String getIndentRefNumber() {
+		return indentRefNumber;
+	}
+
+	public void setIndentRefNumber(String indentRefNumber) {
+		this.indentRefNumber = indentRefNumber;
+	}
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		if(items != null) {

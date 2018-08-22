@@ -2,6 +2,7 @@ package com.ts.app.service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.ChecklistItem;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Material;
@@ -33,6 +35,7 @@ import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ChecklistItemDTO;
 import com.ts.app.web.rest.dto.MaterialIndentDTO;
 import com.ts.app.web.rest.dto.MaterialIndentItemDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
@@ -112,6 +115,38 @@ public class MaterialIndentService extends AbstractService {
 		if(materialindentDTO.getSiteId() > 0) { 
 			material.setSite(siteRepository.findOne(materialindentDTO.getSiteId()));
 		}
+		if(materialindentDTO.getProjectId() > 0) { 
+			material.setProject(projectRepository.findOne(materialindentDTO.getProjectId()));
+		}
+		if(materialindentDTO.getRequestedById() > 0) { 
+			material.setRequestedBy(employeeRepository.findOne(materialindentDTO.getRequestedById()));
+			material.setIssuedBy(employeeRepository.findOne(materialindentDTO.getRequestedById()));
+		}
+		
+		List<MaterialIndentItemDTO> indentItemDTOs = materialindentDTO.getItems();
+		List<MaterialIndentItem> indentItemEntity = new ArrayList<MaterialIndentItem>();
+		Iterator<MaterialIndentItem> itemsItr = indentItemEntity.iterator();
+		while(itemsItr.hasNext()) {
+			boolean itemFound = false;
+			MaterialIndentItem itemEntity = itemsItr.next();
+			for(MaterialIndentItemDTO itemDto : indentItemDTOs) {
+				if(itemEntity.getId() == itemDto.getId()) {
+					itemFound = true;
+					break;
+				}
+			}
+			log.debug("itemFound - "+ itemFound);
+			if(!itemFound){
+				itemsItr.remove();
+			}
+		}
+		for(MaterialIndentItemDTO itemDto : indentItemDTOs) {
+			if(itemDto.getId() == 0) {
+				MaterialIndentItem newItem = mapperUtil.toEntity(itemDto, MaterialIndentItem.class);
+				newItem.setMaterialIndent(material);
+				material.getItems().add(newItem);
+			}
+		}	
 	}
 
 	public void deleteMaterialIndent(long id) {

@@ -1,6 +1,7 @@
 package com.ts.app.repository;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.ts.app.domain.MaterialIndent;
+import com.ts.app.service.util.DateUtil;
 import com.ts.app.web.rest.dto.SearchCriteria;
 
 public class MaterialIndentSpecification implements Specification<MaterialIndent> {
@@ -40,15 +42,29 @@ public class MaterialIndentSpecification implements Specification<MaterialIndent
 		if (searchCriteria.getSiteId() != 0) {
 			predicates.add(builder.equal(root.get("site").get("id"), searchCriteria.getSiteId()));
 		}
-		if (searchCriteria.getMaterialName() != null && searchCriteria.getMaterialName() != "") {
-			predicates.add(builder.like(builder.lower(root.get("name")),
-					"%" + searchCriteria.getMaterialName().toLowerCase() + "%"));
+		if(searchCriteria.getProjectId() != 0) {
+			predicates.add(builder.equal(root.get("project").get("id"), searchCriteria.getProjectId()));
 		}
-		if (searchCriteria.getItemGroup() != null && searchCriteria.getItemGroup() != "") {
-			predicates.add(builder.like(builder.lower(root.get("itemGroup")),
-					"%" + searchCriteria.getItemGroup().toLowerCase() + "%"));
+		if (searchCriteria.getIndentRefNumber() != null && searchCriteria.getIndentRefNumber() != "") {
+			predicates.add(builder.like(builder.lower(root.get("indentRefNumber")),
+					"%" + searchCriteria.getIndentRefNumber().toLowerCase() + "%"));
 		}
-	
+		if(searchCriteria.getRequestedDate() != null) { 
+			log.debug("Inventory transaction created date -" + searchCriteria.getRequestedDate());
+			Calendar endCal = Calendar.getInstance();
+			endCal.set(Calendar.HOUR_OF_DAY, 23);
+			endCal.set(Calendar.MINUTE, 59);
+			endCal.set(Calendar.SECOND, 0);
+			predicates.add(builder.between(root.get("requestedDate"), searchCriteria.getRequestedDate(), DateUtil.convertToTimestamp(endCal.getTime())));
+		}
+		if(searchCriteria.getIssuedDate() != null) { 
+			log.debug("Inventory transaction created date -" + searchCriteria.getIssuedDate());
+			Calendar endCaltime = Calendar.getInstance();
+			endCaltime.set(Calendar.HOUR_OF_DAY, 23);
+			endCaltime.set(Calendar.MINUTE, 59);
+			endCaltime.set(Calendar.SECOND, 0);
+			predicates.add(builder.between(root.get("issuedDate"), searchCriteria.getIssuedDate(), DateUtil.convertToTimestamp(endCaltime.getTime())));
+		}
 		
 		predicates.add(builder.equal(root.get("active"), "Y"));
 

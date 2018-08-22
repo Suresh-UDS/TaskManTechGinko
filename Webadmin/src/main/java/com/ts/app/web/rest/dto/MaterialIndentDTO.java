@@ -29,6 +29,8 @@ public class MaterialIndentDTO extends BaseDTO {
 	
 	private List<MaterialIndentItemDTO> items;
 	
+	private String indentRefNumber;
+	
 	public long getId() {
 		return id;
 	}
@@ -123,6 +125,14 @@ public class MaterialIndentDTO extends BaseDTO {
 
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
+	}
+
+	public String getIndentRefNumber() {
+		return indentRefNumber;
+	}
+
+	public void setIndentRefNumber(String indentRefNumber) {
+		this.indentRefNumber = indentRefNumber;
 	}
 
 	
