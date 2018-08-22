@@ -173,5 +173,13 @@ public class TicketManagementResource {
 	public String findQuotationImage(@PathVariable("id") long ticketId, @PathVariable("imageId") String imageId) {
 		return ticketService.getTicketImage(ticketId, imageId);
 	}
+	
+	@RequestMapping(value = "/ticket/uploadExistingFile", method = RequestMethod.POST)
+	public String uploadExistingTicketImages() {
+		log.debug("Upload existing ticket image S3");
+		return ticketService.uploadExistingTicketImg();
+	}
+	
+	
 
 }
