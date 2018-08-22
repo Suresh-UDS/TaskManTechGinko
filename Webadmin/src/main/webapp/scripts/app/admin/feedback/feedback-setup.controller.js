@@ -369,7 +369,7 @@ angular.module('timeSheetApp')
          }
 
 
-        $scope.error = function(){
+        $scope.errorMsg = function(){
             $scope.show = true;
         }
 

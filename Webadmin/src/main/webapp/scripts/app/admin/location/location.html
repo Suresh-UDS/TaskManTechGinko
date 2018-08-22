@@ -343,6 +343,8 @@
                         <i class="material-icons">clear</i>
                     </button>
                     <h4 class="modal-title">Filter</h4>
+                    <span ng-if="show"><h5 class="error-msg txt-align-center"> Select Client and Site</h5></span>
+
                 </div>
                 <div class="modal-body">
 
@@ -413,7 +415,13 @@
 
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="headingTwo">
-                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                <a ng-if="(!searchProject && !searchSite) || (searchProject && !searchSite)" ng-click="errorMsg()">
+                                    <h4 class="panel-title">
+                                        Advanced Filter
+                                        <i class="material-icons">keyboard_arrow_down</i>
+                                    </h4>
+                                </a>
+                                <a class="collapsed" ng-if="searchProject && searchSite" role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                     <h4 class="panel-title">
                                         Advanced Filter
                                         <i class="material-icons">keyboard_arrow_down</i>

@@ -151,6 +151,7 @@ angular.module('timeSheetApp')
         $scope.loadDepBlocks = function (site) {
             $scope.uiBlock.splice(0,$scope.uiBlock.length);
             $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(site)]
+            $scope.show = false;
             $scope.hideSite = true;
             $scope.hideBlock = false;
             if(jQuery.isEmptyObject($scope.selectedProject) == false) {
@@ -454,6 +455,10 @@ angular.module('timeSheetApp')
             $scope.setPage(1);
             //$scope.search();
          }
+
+        $scope.errorMsg = function(){
+            $scope.show = true;
+        }
 
         $scope.searchFilter = function () {
             //$scope.setPage(1);
