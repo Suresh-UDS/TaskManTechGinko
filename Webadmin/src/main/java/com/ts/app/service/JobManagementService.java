@@ -32,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
 import com.ts.app.domain.CheckInOut;
@@ -60,6 +61,7 @@ import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.CheckInOutRepository;
 import com.ts.app.repository.ChecklistRepository;
 import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.JobChecklistRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.JobSpecification;
 import com.ts.app.repository.LocationRepository;
@@ -188,6 +190,9 @@ public class JobManagementService extends AbstractService {
     
     @Inject
     private ChecklistRepository checkListRepository;
+    
+    @Inject
+    private JobChecklistRepository jobChecklistRepository;
     
 
     public void updateJobStatus(long siteId, JobStatus toBeJobStatus) {
@@ -1977,5 +1982,48 @@ public class JobManagementService extends AbstractService {
 		return new ResponseEntity<>(jobDto, HttpStatus.CREATED);
 			
 	
+	}
+
+	public String uploadExistingChecklistImg() {
+		List<JobChecklist> jobchecklists = jobChecklistRepository.findAll();
+		for(JobChecklist jobChecklist : jobchecklists) { 
+			if(jobChecklist.getImage_1() != null) { 
+				if(jobChecklist.getImage_1().indexOf("data:image") == 0) {
+					String base64String = jobChecklist.getImage_1().split(",")[1];
+					boolean isBase64 = Base64.isBase64(base64String);
+					JobChecklistDTO checklist = mapperUtil.toModel(jobChecklist, JobChecklistDTO.class);
+					if(isBase64){ 
+						String image1 = amazonS3utils.uploadCheckListImage(checklist.getImage_1(), checklist.getChecklistItemName(), checklist.getJobId(), "image_1");
+						jobChecklist.setImage_1(image1);
+						jobChecklistRepository.save(jobChecklist);
+					}
+				}
+			}
+			if(jobChecklist.getImage_2() != null) { 
+				if(jobChecklist.getImage_2().indexOf("data:image") == 0) {
+					String base64String = jobChecklist.getImage_2().split(",")[1];
+					boolean isBase64 = Base64.isBase64(base64String);
+					JobChecklistDTO checklist = mapperUtil.toModel(jobChecklist, JobChecklistDTO.class);
+					if(isBase64){ 
+						String image2 = amazonS3utils.uploadCheckListImage(checklist.getImage_2(), checklist.getChecklistItemName(), checklist.getJobId(), "image_2");
+						jobChecklist.setImage_2(image2);
+						jobChecklistRepository.save(jobChecklist);
+					}
+				}
+			}
+			if(jobChecklist.getImage_3() != null) { 
+				if(jobChecklist.getImage_3().indexOf("data:image") == 0) {
+					String base64String = jobChecklist.getImage_3().split(",")[1];
+					boolean isBase64 = Base64.isBase64(base64String);
+					JobChecklistDTO checklist = mapperUtil.toModel(jobChecklist, JobChecklistDTO.class);
+					if(isBase64){ 
+						String image3 = amazonS3utils.uploadCheckListImage(checklist.getImage_3(), checklist.getChecklistItemName(), checklist.getJobId(), "image_3");
+						jobChecklist.setImage_3(image3);
+						jobChecklistRepository.save(jobChecklist);
+					}
+				}
+			}
+		}
+		return "Successfully upload checklist images";
 	}
 }

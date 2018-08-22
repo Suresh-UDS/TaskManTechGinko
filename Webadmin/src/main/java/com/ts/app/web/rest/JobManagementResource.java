@@ -460,6 +460,12 @@ public class JobManagementResource {
         log.info("--Invoked findCheckInOut By JobId--"+jobId);
         return jobService.findCheckInOutByJob(jobId);
     }
+    
+    @RequestMapping(value = "/job/uploadExisting/checklistImg", method = RequestMethod.GET)
+    public String uploadExistingChecklist() {
+    	log.debug("Existing checklist image upload to AWS s3");
+    	return jobService.uploadExistingChecklistImg(); 
+    }
 
 
 
