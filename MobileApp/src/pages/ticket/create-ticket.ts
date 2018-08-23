@@ -69,9 +69,17 @@ export class CreateTicket {
           currPage:1
       };
       this.cs.showLoader('Loading Sites..');
-      this.siteService.searchSite().subscribe(
+      var searchCriteria = {
+          findAll:true,
+          currPage:1,
+          sort:10,
+          sortByAsc:true,
+          report:true
+      };
+
+      this.siteService.searchSites(searchCriteria).subscribe(
           response=>{
-              this.sites = response.json();
+              this.sites=response.transactions;
               this.cs.closeLoader();
           },error=>{
               this.cs.closeLoader();

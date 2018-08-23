@@ -243,7 +243,7 @@ export class DashboardPage {
           currPage:1,
           sort:10,
           sortByAsc:true,
-          isReport:true
+          report:true
       }
 
       this.siteService.searchSites(searchCriteria).subscribe(
@@ -330,12 +330,15 @@ export class DashboardPage {
         };
         this.searchJobs(this.searchCriteria);
         this.empSpinner=true;
-        this.siteService.searchSiteEmployee(id).subscribe(
-            response=> {
-                console.log(response.json());
-                if(response.json().length !==0)
+        var searchCriteria = {
+
+            siteId:id,
+            list:true
+        };
+        this.attendanceService.searchEmpAttendances(searchCriteria).subscribe(response=>{
+                if(response.transactions && response.transactions.length !==0)
                 {
-                    this.employee=response.json();
+                    this.employee=response.transactions;
                     this.empSpinner=false;
                     this.empSelect=false;
                     this.selectSite=true;

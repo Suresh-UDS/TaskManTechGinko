@@ -226,7 +226,7 @@ export class AssetView {
         this.jobService.getJobs(searchCriteria).subscribe(
             response=>{
                 this.spinner = false;
-                this.componentService.closeLoader();
+                this.componentService.closeAll();
                 console.log("Getting Jobs response");
                 console.log(response);
                 this.assetDetails.jobs = response.transactions;
@@ -236,7 +236,7 @@ export class AssetView {
             },
             error=>{
                 this.spinner = false;
-                this.componentService.closeLoader();
+                this.componentService.closeAll();
                 console.log(error)
                 console.log("Getting Jobs errors")
             })
@@ -271,7 +271,7 @@ export class AssetView {
                         }
                         this.page = response.currPage;
                         this.totalPages = response.totalPages;
-                        this.componentService.closeLoader();
+                        this.componentService.closeAll();
                     },
                     error => {
                         console.log('ionViewDidLoad Jobs Page:' + error);
@@ -311,7 +311,7 @@ export class AssetView {
                         }
                         this.page = response.currPage;
                         this.totalPages = response.totalPages;
-                        this.componentService.closeLoader();
+                        this.componentService.closeAll();
                     },
                     error => {
                         console.log('ionViewDidLoad Readings  Page:' + error);
@@ -457,7 +457,7 @@ export class AssetView {
 
            // this.getReading(this.readingSearchCriteria);
             this.getReading(this.readingSearchCriteria);
-           // this.componentService.closeLoader();
+           // this.componentService.closeAll();
         }
 
     }
@@ -470,12 +470,12 @@ export class AssetView {
         // Online
         this.assetService.getAssetById(this.assetDetails.id).subscribe(
             response=>{
-                this.componentService.closeLoader();
+                this.componentService.closeAll();
                 console.log("Asset by id");
                 console.log(response);
                 this.assetDetails = response;
             },err=>{
-                this.componentService.closeLoader();
+                this.componentService.closeAll();
                 console.log("Error in getting asset by id");
                 console.log(err);
             }
@@ -491,7 +491,7 @@ export class AssetView {
         // offline
         // this.dbService.getPPM(this.assetDetails.id).then(
         //     (res)=>{
-        //         this.componentService.closeLoader();
+        //         this.componentService.closeAll();
         //         console.log(res);
         //         this.assetDetails.ppms = res;
         //     },
@@ -526,7 +526,7 @@ export class AssetView {
         //offline
         // this.dbService.getAMC(this.assetDetails.id).then(
         //     (res)=>{
-        //         this.componentService.closeLoader();
+        //         this.componentService.closeAll();
         //         console.log(res);
         //         this.assetDetails.amcs = res;
         //     },
@@ -560,7 +560,7 @@ export class AssetView {
         //offline
         // this.dbService.getConfig(this.assetDetails.assetType,this.assetDetails.id).then(
         //     (res)=>{
-        //         this.componentService.closeLoader()
+        //         this.componentService.closeAll()
         //         this.spinner = false;
         //         console.log(res)
         //         this.assetDetails.config = res;

@@ -830,7 +830,7 @@ a.add-btn,button.add-btn
 .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th
 {
     border-top: 1px solid #f9f9f9;
-    text-transform: capitalize;
+    /*text-transform: capitalize;*/
 }
 th span.sortingIcons
 {
@@ -889,6 +889,10 @@ span.red-star
 {
     padding:0 5px;
     color:red;
+}
+.error-msg
+{
+    color: red;
 }
 .SelectWithAddbtnCon span.d-arrow-icon
 {
@@ -1169,7 +1173,15 @@ button.btn.btn-outline {
       border-radius: 2px;
       background: none !important;
       padding-left:10px;
-      text-transform: capitalize;
+
+}
+.form-control, .form-group .form-control::first-letter
+{
+    /*text-transform: uppercase;*/
+}
+.tablecard table tr td::first-letter
+{
+    text-transform: uppercase
 }
 .form-group label.control-label
 {

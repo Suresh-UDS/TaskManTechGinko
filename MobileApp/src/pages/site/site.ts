@@ -45,7 +45,7 @@ export class SitePage {
             currPage:1,
             sort:10,
             sortByAsc:true,
-            isReport:true
+            report:true
         };
 
         this.siteService.searchSites(searchCriteria).subscribe(
