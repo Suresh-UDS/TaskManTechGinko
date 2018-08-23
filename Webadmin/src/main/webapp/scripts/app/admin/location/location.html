@@ -42,16 +42,17 @@
                     Site: {{searchCriteria.siteName || localStorage.siteName}}
                 </span>
 
-                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteria.block || localStorage.block">
-                    Site: {{searchCriteria.block || localStorage.block}}
+
+                <span class="tag label label-info"  ng-show="searchCriteria.block || localStorage.block">
+                    Block: {{searchCriteria.block || localStorage.block}}
                 </span>
 
-                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteria.floor || localStorage.floor">
-                    Site: {{searchCriteria.floor || localStorage.floor}}
+                <span class="tag label label-info"  ng-show="searchCriteria.floor || localStorage.floor">
+                    Floor: {{searchCriteria.floor || localStorage.floor}}
                 </span>
 
-                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteria.zone || localStorage.zone">
-                    Site: {{searchCriteria.zone || localStorage.zone}}
+                <span class="tag label label-info"  ng-show="searchCriteria.zone || localStorage.zone">
+                    Zone: {{searchCriteria.zone || localStorage.zone}}
                 </span>
             </span>
     </div>
@@ -343,6 +344,7 @@
                         <i class="material-icons">clear</i>
                     </button>
                     <h4 class="modal-title">Filter</h4>
+
                 </div>
                 <div class="modal-body">
 
@@ -374,6 +376,7 @@
                                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable" ng-change="loadDepSites(searchProject)" ng-click="loadDepSites(searchProject)">
+
                                                         <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :clearField?'Select Client':searchProject}}</ui-select-match>
                                                         <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
                                                             <div ng-bind="client"></div>
@@ -393,12 +396,13 @@
                                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sitesList.length == 0" ng-change="loadDepBlocks(searchSite)" ng-click="loadDepBlocks(searchSite)">
+
                                                         <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?clearField?'Select Site':searchSite : 'Select Site' }}</ui-select-match>
                                                         <ui-select-choices  repeat="site in getSites($select.search) | filter: $select.search">
                                                             <div ng-bind="site"></div>
                                                         </ui-select-choices>
                                                     </ui-select>
-                                                    <span ng-if="sitesList.length == 0"><p class="help-block">No sites</p></span>
+                                                    <span ng-if="sitesList.length == 0"><p class="error-msg margin0">No sites</p></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -413,7 +417,13 @@
 
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="headingTwo">
-                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                <a ng-if="(!searchProject && !searchSite) || (searchProject && !searchSite)" ng-click="errorMsg()">
+                                    <h4 class="panel-title">
+                                        Advanced Filter <span ng-if="show" class="error-msg txt-align-center">(Select Client and Site)</span>
+                                        <i class="material-icons">keyboard_arrow_down</i>
+                                    </h4>
+                                </a>
+                                <a class="collapsed" ng-if="searchProject && searchSite" role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                     <h4 class="panel-title">
                                         Advanced Filter
                                         <i class="material-icons">keyboard_arrow_down</i>
@@ -440,7 +450,7 @@
                                                         <div ng-bind="block"></div>
                                                     </ui-select-choices>
                                                 </ui-select>
-                                                <span ng-if="blocksList.length == 0"><p class="help-block">No Blocks</p></span>
+                                                <span ng-if="blocksList.length == 0"><p class="error-msg margin0">No Blocks</p></span>
                                             </div>
                                         </div>
                                         <div class="dropdown col-xs-12 col-md-4 col-sm-4">
@@ -453,12 +463,14 @@
                                                 <span ng-show="floorSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                 <span ng-show="!floorSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                 <ui-select ng-model="searchFloor" ng-disabled="floorFilterDisable || floorsList.length == 0" ng-change="loadDepZones(searchFloor)" ng-click="loadDepZones(searchFloor)">
+
                                                     <ui-select-match placeholder="Select Floor...">{{floorsList.length == 0 ? 'Select Floor' : searchFloor.searchStatus ? searchFloor.name?searchFloor.name:'Select Floor' : hideFloor ?clearField?'Select Floor':searchFloor :'Select Floor' }}</ui-select-match>
+
                                                     <ui-select-choices  repeat="floor in getFloor($select.search) | filter: $select.search">
                                                         <div ng-bind="floor"></div>
                                                     </ui-select-choices>
                                                 </ui-select>
-                                                <span ng-if="floorsList.length == 0"><p class="help-block">No Floor</p></span>
+                                                <span ng-if="floorsList.length == 0"><p class="error-msg margin0">No Floor</p></span>
                                             </div>
                                         </div>
                                         <div class="dropdown col-xs-12 col-md-4 col-sm-4">
@@ -476,9 +488,7 @@
                                                         <div ng-bind="zone"></div>
                                                     </ui-select-choices>
                                                 </ui-select>
-                                                <span ng-if="zonesList.length == 0"><p class="help-block">No Zone</p></span>
-
-
+                                                <span ng-if="zonesList.length == 0"><p class="error-msg margin0">No Zone</p></span>
                                             </div>
                                         </div>
 
@@ -489,10 +499,6 @@
                         </div>
 
                     </div>
-
-
-
-
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-danger btn-simple" data-dismiss="modal" >Cancel</button>

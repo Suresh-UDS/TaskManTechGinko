@@ -9,6 +9,7 @@ import {CompleteJobPage} from "./completeJob";
 import {JobService} from "../service/jobService";
 import{ModalController} from "ionic-angular";
 import{JobFilter} from "./job-filter/job-filter";
+import {ScanQR} from "./scanQR";
 
 @Component({
   selector: 'page-jobs',
@@ -42,7 +43,6 @@ export class JobsPage {
         this.allJobs = [];
         this.todaysJobs =[];
         this.categories = 'today';
-        this.loadTodaysJobs();
 
         this.events.subscribe('userType',(type)=>{
             console.log("User type event");
@@ -52,12 +52,17 @@ export class JobsPage {
 
         console.log("Location Id from scanned",this.navParams.get('locationId'));
         this.scannedLocationId = this.navParams.get('locationId');
-        console.log("Location Id from scanned",this.navParams.get('locationId'));
+        console.log("Location Id from scanned",this.navParams.get('siteId'));
+        console.log(this.scannedLocationId);
+        console.log(this.scannedSiteId);
         this.scannedSiteId = this.navParams.get('siteId');
 
         this.scannedBlock = this.navParams.get('block');
         this.scannedFloor = this.navParams.get('floor');
         this.scannedZone = this.navParams.get('zone');
+
+
+        this.loadTodaysJobs();
 
     }
 
@@ -134,6 +139,9 @@ export class JobsPage {
             };
             msg='Unable to fetch jobs of the location '+this.scannedLocationId+' in site '+this.scannedSiteId;
         }else if(this.scannedBlock && this.scannedFloor && this.scannedZone){
+
+            console.log("No location id present");
+            console.log(this.scannedBlock);
             searchCriteria={
                 checkInDateTimeFrom:new Date(),
                 siteId:this.scannedSiteId,
@@ -143,6 +151,7 @@ export class JobsPage {
             };
             msg = 'Unable to fetch jobs for the location '+this.scannedBlock+' - '+this.scannedFloor+' - '+this.scannedZone;
         }else{
+            console.log("Scanned location Id or block floor zone not available");
             searchCriteria = {
                 checkInDateTimeFrom:new Date(),
                 locationId:this.scannedLocationId,
@@ -352,6 +361,10 @@ export class JobsPage {
     presentModal() {
         const modal = this.modalCtrl.create(JobFilter);
         modal.present();
+    }
+
+    scanQR(){
+        this.navCtrl.push(ScanQR);
     }
 
 }
