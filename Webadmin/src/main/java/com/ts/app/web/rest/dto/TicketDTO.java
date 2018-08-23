@@ -69,7 +69,6 @@ public class TicketDTO extends BaseDTO {
     
     private long assetId;
 
-
     public long getId() {
         return id;
     }
@@ -325,4 +324,7 @@ public class TicketDTO extends BaseDTO {
 	public void setAssetId(long assetId) {
 		this.assetId = assetId;
 	}
+
+	
+	
 }
