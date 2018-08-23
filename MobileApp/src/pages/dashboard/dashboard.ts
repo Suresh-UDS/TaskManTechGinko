@@ -557,7 +557,7 @@ export class DashboardPage {
                                 })
                         }
                         else {
-                            this.attendanceService.markAttendanceCheckOut(data[i].siteId, data[i].employeeId, data[i].latitudeIn, data[i].longitudeIn, data[i].checkOutImage, data[i].attendanceId).subscribe(
+                            this.attendanceService.markAttendanceCheckOut(data[i].siteId, data[i].employeeEmpId, data[i].latitudeIn, data[i].longitudeIn, data[i].checkOutImage, data[i].attendanceId).subscribe(
                                 response => {
                                     resolve("ssss")
                                     console.log("Offline attendance data synced to server");
