@@ -5,25 +5,41 @@
     <div class="row" ng-init="loadUserRoles()">
         <div class="col-md-6 txt-align-lft">
 
-            <button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
-                <i class="material-icons">filter_list</i> Basic Filter
+            <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
+                <i class="material-icons">filter_list</i> Filter
                 <div class="ripple-container"></div>
             </button>
 
         </div>
         <div class="col-md-6 txt-align-rgt">
 
+            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i> Clear filter
+                <div class="ripple-container"></div>
+            </button>
+
             <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-user-role"  ng-class="{active: $state.includes('admin')}"  tabindex="0">
                 <i class="material-icons">add</i> Add
                 <div class="ripple-container"></div>
             </button>
 
-            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
-                <i class="material-icons">refresh</i> Reload
-                <div class="ripple-container"></div>
-            </button>
-
         </div>
+    </div>
+    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
+            <span class="AppliedFilterTxtCon">
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.userRoleId || localStorage.userRoleId">
+                    Role Id: {{searchCriteria.userRoleId || localStorage.userRoleId}}
+                </span>
+
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.role || localStorage.role">
+                    Role: {{searchCriteria.role || localStorage.role}}
+                </span>
+
+                 <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.roleLevel || localStorage.roleLevel">
+                    Role Level: {{searchCriteria.roleLevel || localStorage.roleLevel}}
+                </span>
+
+            </span>
     </div>
 
     <div class="row" >

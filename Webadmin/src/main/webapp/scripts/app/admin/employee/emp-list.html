@@ -1187,7 +1187,46 @@
                 <!--</div>-->
                 <!--<div class="modal-body">-->
 
-
+                        <!-- <div class="col-xs-12 col-md-4">
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <label class="label-control">Client</label>
+                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites();" ng-options="project as project.name for project in projects"  required>
+                                        <option value="">Select Client...</option>
+                                    </select>
+                                    <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                    <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable" ng-change="loadDepSites(searchProject)" ng-click="loadDepSites(searchProject)">
+                                        <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :searchProject}}</ui-select-match>
+                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
+                                            <div ng-bind="client"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <div class="dropdown">
+                                <div class="form-group">
+                                    <label class="label-control">Site</label>
+                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites" >
+                                        <option value="">Select Site...</option>
+                                    </select>
+                                    <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                    <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-change="loadSearchSite(searchSite)" ng-click="loadSearchSite(searchSite)">
+                                        <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site0' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site1' : hideSite ?searchSite : 'Select Site2' }}</ui-select-match>
+                                        <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
+                                            <div ng-bind="site"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span ng-if="sites.length == 0"><p class="error-msg margin0">No sites</p></span>
+                                </div>
+                            </div>
+                        </div>
+ -->
                     <!--<div class="row">-->
 
                         <!--<div class="col-md-4">-->

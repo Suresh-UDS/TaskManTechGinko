@@ -95,11 +95,14 @@ angular.module('timeSheetApp')
                 $scope.assetTypes = data;
                 console.log('Asset type',$scope.assetTypes);
 
-                    // for(var i=0;i<$scope.assetTypes.length;i++)
-                    // {
-                    //     $scope.uiAssetType[i] = $scope.assetTypes[i].name;
-                    // }
-                    // $scope.assetTypeDisable = false;
+                //Filter
+                    for(var i=0;i<$scope.assetTypes.length;i++)
+                    {
+                        $scope.uiAssetType[i] = $scope.assetTypes[i].name;
+                    }
+                    $scope.assetTypeDisable = false;
+
+                //
                 $scope.loadingStop();
             });
         }
@@ -118,6 +121,7 @@ angular.module('timeSheetApp')
 
                     $scope.loadAssetType = function(searchAssetType)
                     {
+                        $scope.clearField = false;
                         $scope.searchAssetType = $scope.assetTypes[$scope.uiAssetType.indexOf(searchAssetType)]
                     }
                     //
@@ -443,6 +447,7 @@ angular.module('timeSheetApp')
             $scope.searchCriteria = {};
             $scope.selectedSite = null;
             $scope.selectedStatus = null;
+            $scope.clearField = true;
             $scope.pages = {
                 currPage: 1,
                 totalPages: 0
