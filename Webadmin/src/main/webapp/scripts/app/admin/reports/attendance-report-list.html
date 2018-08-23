@@ -7,6 +7,10 @@
                 <i class="material-icons">filter_list</i> Filter
                 <div class="ripple-container"></div>
             </button>
+            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshReport()" tabindex="0">
+                <i class="material-icons">refresh</i> Clear Filter
+                <div class="ripple-container"></div>
+            </button>
             <!--<button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#advancedFilter" tabindex="0">-->
                 <!--<i class="material-icons">filter_list</i> Advanced Filter-->
                 <!--<div class="ripple-container"></div>-->
@@ -15,10 +19,7 @@
         </div>
         <div class="col-md-6 txt-align-rgt downloaderMain">
 
-            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshReport()" tabindex="0">
-                <i class="material-icons">refresh</i> Clear Filter
-                <div class="ripple-container"></div>
-            </button>
+
 
             <button ng-show="attendancesData.length" class="btn btn-success add-btn margn-tb0"  title="Export HTML"  ng-click=exportAllData('html') tabindex="0">
                 <i class="material-icons">description</i> Export HTML
