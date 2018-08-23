@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('ChangePwdController', function ($rootScope, $scope, $state, $timeout, Auth) {
+    .controller('ChangePwdController', function ($rootScope, $scope, $state, $timeout, Auth, $location) {
         $rootScope.loginView = false;
         if($rootScope.loginView == true){
             $(".content").addClass("remove-mr");
@@ -28,6 +28,8 @@ angular.module('timeSheetApp')
             Auth.changeNewPassword(changePasswordData).then(function (data) {
                 $scope.showNotifications('top','center','success','Password successfully changed..');
                 $scope.saveLoad = false;
+                Auth.logout();
+                $location.path('/login');
             }).catch(function (err) {
                 $scope.showNotifications('top','center','danger','Password update failed ..');
                 $scope.saveLoad = false;
