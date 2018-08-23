@@ -31,6 +31,8 @@ public class MaterialIndentDTO extends BaseDTO {
 	
 	private String indentRefNumber;
 	
+	private long transactionId;
+	
 	public long getId() {
 		return id;
 	}
@@ -133,6 +135,14 @@ public class MaterialIndentDTO extends BaseDTO {
 
 	public void setIndentRefNumber(String indentRefNumber) {
 		this.indentRefNumber = indentRefNumber;
+	}
+
+	public long getTransactionId() {
+		return transactionId;
+	}
+
+	public void setTransactionId(long transactionId) {
+		this.transactionId = transactionId;
 	}
 
 	

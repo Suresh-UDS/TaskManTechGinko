@@ -29,6 +29,7 @@ import com.ts.app.repository.InventoryRepository;
 import com.ts.app.repository.InventoryTransSpecification;
 import com.ts.app.repository.InventoryTransactionRepository;
 import com.ts.app.repository.JobRepository;
+import com.ts.app.repository.MaterialIndentRepository;
 import com.ts.app.repository.MaterialItemGroupRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
@@ -75,6 +76,9 @@ public class InventoryTransactionService extends AbstractService{
 	private MaterialItemGroupRepository materialItemRepository;
 	
 	@Inject
+	private MaterialIndentRepository materialIndentRepository;
+	
+	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 	
 	public MaterialTransactionDTO createInventoryTransaction(MaterialTransactionDTO materialTransDTO) { 
@@ -92,6 +96,11 @@ public class InventoryTransactionService extends AbstractService{
 			materialEntity.setAsset(assetRepository.findOne(materialTransDTO.getAssetId()));
 		}else {
 			materialEntity.setAsset(null);
+		}
+		if(materialTransDTO.getMaterialIndentId() > 0) {
+			materialEntity.setMaterialIndent(materialIndentRepository.findOne(materialTransDTO.getMaterialIndentId()));
+		}else {
+			materialEntity.setMaterialIndent(null);
 		}
 		
 		/** Create material if does not exists */

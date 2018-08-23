@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
@@ -55,6 +56,10 @@ public class MaterialIndent extends AbstractAuditingEntity implements Serializab
 	
 	@Column(name = "indentRefNumber")
 	private String indentRefNumber;
+	
+	@OneToOne()
+	@JoinColumn(name = "materialTransacationId", nullable= true)
+	private MaterialTransaction transaction;
 
 	public long getId() {
 		return id;
@@ -134,6 +139,14 @@ public class MaterialIndent extends AbstractAuditingEntity implements Serializab
 
 	public void setIndentRefNumber(String indentRefNumber) {
 		this.indentRefNumber = indentRefNumber;
+	}
+
+	public MaterialTransaction getTransaction() {
+		return transaction;
+	}
+
+	public void setTransaction(MaterialTransaction transaction) {
+		this.transaction = transaction;
 	}
 
 	public String toString() {
