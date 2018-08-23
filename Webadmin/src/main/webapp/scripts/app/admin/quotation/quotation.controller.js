@@ -131,7 +131,7 @@ angular
                                 $scope.quotation.title =data.title;
                                 $scope.quotation.description = data.description;
                                 $scope.quotation.ticketId = data.id;
-                                //$scope.selectedProject = {id:data.employeeId};
+                                $scope.selectedProject = {id:data.projectId, name:data.projectName};
                                 $scope.selectedSite = {id:data.siteId,name:data.siteName};
                                 $scope.status = 1;
 
@@ -510,7 +510,7 @@ angular
                                     $scope.saveLoad = false;
 									console.log(response);
                                 console.log($scope.selectedImageFile);
-								if($scope.selectedImageFile !=""){
+								if($scope.selectedImageFile){
 
 								RateCardComponent.upload(response._id,$scope.selectedImageFile)
 								    .then(function(response) {
