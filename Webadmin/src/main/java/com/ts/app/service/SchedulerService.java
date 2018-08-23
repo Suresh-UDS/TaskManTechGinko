@@ -116,22 +116,22 @@ public class SchedulerService extends AbstractService {
 	@Inject
 	@Lazy
 	public SchedulerHelperService schedulerHelperService;
-	
+
 	@Inject
 	private SlaConfigService slaConfigService;
-	
+
 	@Inject
 	private SLANotificationLogRepository slaNotificationLogRepository;
-	
+
 	@Inject
 	private TicketRepository ticketRepository;
-	
+
 	@Inject
 	private SlaConfigRepository slaConfigRepository;
-	
+
 	@Inject
 	private AssetRepository assetRepository;
-	
+
 
 	public SearchResult<SchedulerConfigDTO> getSchedulerConfig() {
 		// get all config to show in admin
@@ -180,7 +180,7 @@ public class SchedulerService extends AbstractService {
 			entity = schedulerConfigRepository.save(entity);
 			// create jobs based on the creation policy
 			createJobs(entity);
-			
+
 			if(log.isDebugEnabled()) {
 				log.debug("Saved parent job and scheduler config " + entity);
 			}
@@ -188,12 +188,12 @@ public class SchedulerService extends AbstractService {
 			if(log.isDebugEnabled()) {
 				log.debug("Invoked scheduler helper to create child jobs ");
 			}
-			
+
 		}
 
 	}
 
-	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
+//	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
 	// @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
 	//@Scheduled(cron = "0 0 23 1/1 * ?")
 	public void createDailyTask() {
@@ -225,8 +225,8 @@ public class SchedulerService extends AbstractService {
 						log.debug("Parent job id - "+parentJobId);
 						log.debug("Parent job date - "+startDate);
 						log.debug("Parent job date - "+endDate);
-						
-						 try { 
+
+						 try {
 							 boolean shouldProcess = true;
                              if(dailyTask.isScheduleDailyExcludeWeekend()) {
                                  log.debug("Schedule exclude weekend true");
@@ -251,7 +251,7 @@ public class SchedulerService extends AbstractService {
 
 	//@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
 	// @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
-	@Scheduled(cron = "0 0 23 1/1 * ?")
+//	@Scheduled(cron = "0 0 23 1/1 * ?")
 	public void createWeeklyTask() {
 		if (env.getProperty("scheduler.weeklyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -348,7 +348,7 @@ public class SchedulerService extends AbstractService {
 
 	//@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
 	// @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
-	@Scheduled(cron = "0 0 23 1/1 * ?")
+//	@Scheduled(cron = "0 0 23 1/1 * ?")
 	public void createMonthlyTask() {
 		if (env.getProperty("scheduler.monthlyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -389,8 +389,8 @@ public class SchedulerService extends AbstractService {
 			}
 		}
 	}
-	
-	@Scheduled(cron = "0 0 23 1/1 * ?")
+
+//	@Scheduled(cron = "0 0 23 1/1 * ?")
 	public void createFortnightlyTask() {
 		if (env.getProperty("scheduler.fortnightlyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -422,8 +422,8 @@ public class SchedulerService extends AbstractService {
 			}
 		}
 	}
-	
-	@Scheduled(cron = "0 0 23 1/1 * ?")
+
+//	@Scheduled(cron = "0 0 23 1/1 * ?")
 	public void createQuarterlyTask() {
 		if (env.getProperty("scheduler.quarterlyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -454,8 +454,8 @@ public class SchedulerService extends AbstractService {
 			}
 		}
 	}
-	
-	@Scheduled(cron = "0 0 23 1/1 * ?")
+
+//	@Scheduled(cron = "0 0 23 1/1 * ?")
 	public void createHalfYearlyTask() {
 		if (env.getProperty("scheduler.halfyearlyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -486,8 +486,8 @@ public class SchedulerService extends AbstractService {
 			}
 		}
 	}
-	
-	@Scheduled(cron = "0 0 23 1/1 * ?")
+
+//	@Scheduled(cron = "0 0 23 1/1 * ?")
 	public void createYearlyTask() {
 		if (env.getProperty("scheduler.yearlyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -519,7 +519,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(initialDelay = 60000, fixedRate = 900000) // Runs every 15 mins
+//	@Scheduled(initialDelay = 60000, fixedRate = 900000) // Runs every 15 mins
 	public void overDueTaskCheck() {
 		schedulerHelperService.overdueJobReport();
 	}
@@ -646,27 +646,27 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(cron = "0 */30 * * * ?")
+//	@Scheduled(cron = "0 */30 * * * ?")
 	public void attendanceShiftReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		schedulerHelperService.generateDetailedAttendanceReport(cal.getTime(), true, false, false);
 	}
 
 
-	@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
+//	@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
 	public void attendanceDetailReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_YEAR, -1);
 		schedulerHelperService.generateDetailedAttendanceReport(cal.getTime(), false, true, false);
 	}
 
-	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
+//	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
 	public void attendanceCheckOutTask() {
 		schedulerHelperService.autoCheckOutAttendance();
 	}
-	
-	@Scheduled(cron="0 0 9 * * ?")
-	public void warrantyExpireAlert() { 
+
+//	@Scheduled(cron="0 0 9 * * ?")
+	public void warrantyExpireAlert() {
 		schedulerHelperService.sendWarrantyExpireAlert();
 		schedulerHelperService.sendSchedulePPMJobsAlert();
 		schedulerHelperService.sendScheduleAMCJobsAlert();
@@ -688,17 +688,17 @@ public class SchedulerService extends AbstractService {
 			}
 			DateTime endDate = DateTime.now().withYear(scheduledEndDate.get(Calendar.YEAR)).withMonthOfYear(scheduledEndDate.get(Calendar.MONTH) + 1)
 					.withDayOfMonth(scheduledEndDate.get(Calendar.DAY_OF_MONTH)).withHourOfDay(scheduledEndDate.get(Calendar.HOUR_OF_DAY)).withMinuteOfHour(scheduledEndDate.get(Calendar.MINUTE));
-			
+
 			if (creationPolicy.equalsIgnoreCase("monthly")) { // if the creation policy is set to monthly, create jobs for the rest of the
 																// month
 				DateTime currDate = DateTime.now();
 				DateTime lastDate = currDate.dayOfMonth().withMaximumValue().withHourOfDay(23).withMinuteOfHour(59);
-				
+
 				if(endDate.isBefore(lastDate)) {
 					lastDate = lastDate.withMonthOfYear(scheduledEndDate.get(Calendar.MONTH) + 1);
 					lastDate = lastDate.withDayOfMonth(scheduledEndDate.get(Calendar.DAY_OF_MONTH));
 				}
-				
+
 				if(CollectionUtils.isNotEmpty(prevJobs)) {
 					Job prevJob = prevJobs.get(0);
 					currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
@@ -738,7 +738,7 @@ public class SchedulerService extends AbstractService {
 			}
 		}
 	}
-	
+
 	/*public void createJobsOld(SchedulerConfig dailyTask) {
 		if ("CREATE_JOB".equals(dailyTask.getType())) {
 			if (dailyTask.getSchedule().equalsIgnoreCase(Frequency.DAY.getTypeFrequency())) {
@@ -824,7 +824,7 @@ public class SchedulerService extends AbstractService {
 				log.debug(">>> Yearly <<<");
 				String creationPolicy = env.getProperty("scheduler.yearlyJob.creation");
 				if(creationPolicy.equalsIgnoreCase("daily")) { //if the creation policy is set to daily, create jobs for the rest of the month
-					PageRequest pageRequest = new PageRequest(1, 1); 
+					PageRequest pageRequest = new PageRequest(1, 1);
 					List<Job> prevJobs = jobRepository.findLastJobByParentJobId(dailyTask.getJob().getId(), pageRequest);
 					DateTime currDate = DateTime.now();
 					if(CollectionUtils.isNotEmpty(prevJobs)) {
@@ -844,7 +844,7 @@ public class SchedulerService extends AbstractService {
 				log.debug(">>> Fortnightly <<<");
 				String creationPolicy = env.getProperty("scheduler.fornightlyJob.creation");
 				if(creationPolicy.equalsIgnoreCase("daily")) { //if the creation policy is set to daily, create jobs for the rest of the month
-					PageRequest pageRequest = new PageRequest(1, 1); 
+					PageRequest pageRequest = new PageRequest(1, 1);
 					List<Job> prevJobs = jobRepository.findLastJobByParentJobId(dailyTask.getJob().getId(), pageRequest);
 					DateTime currDate = DateTime.now();
 					if(CollectionUtils.isNotEmpty(prevJobs)) {
@@ -885,13 +885,13 @@ public class SchedulerService extends AbstractService {
 			log.warn("Unknown scheduler config type job" + dailyTask);
 		}
 	}*/
-	
-	
+
+
 	private DateTime addDays(DateTime dateTime , String scheduleType, String data) {
 		Frequency frequency = Frequency.fromValue(scheduleType);
 		Map<String, String> dataMap = Splitter.on("&").withKeyValueSeparator("=").split(data);
 		int duration = Integer.parseInt(dataMap.get("duration"));
-		
+
 		switch(frequency) {
 			case HOUR :
 				dateTime = dateTime.plusHours(1 * duration);
@@ -901,7 +901,7 @@ public class SchedulerService extends AbstractService {
 				break;
 			case WEEK :
 				dateTime = dateTime.plusWeeks(1 * duration);
-				break;	
+				break;
 			case FORTNIGHT :
 				dateTime = dateTime.plusDays(14 * duration);
 				break;
@@ -918,12 +918,12 @@ public class SchedulerService extends AbstractService {
 				dateTime = dateTime.plusMonths(3 * duration);
 				break;
 			default:
-			
+
 		}
 		return dateTime;
 	}
 
-	
+
 	public void deleteJobs(SchedulerConfig dailyTask) {
 		if ("CREATE_JOB".equals(dailyTask.getType())) {
 			String creationPolicy = env.getProperty("scheduler.dailyJob.creation");
@@ -991,7 +991,7 @@ public class SchedulerService extends AbstractService {
 				}
 				if (shouldProcess) {
 					List<Job> job = jobRepository.findJobsByParentJobIdAndDate(parentJob.getId(), DateUtil.convertToSQLDate(jobDate), DateUtil.convertToSQLDate(jobDate));
-					if (CollectionUtils.isEmpty(job)) {					
+					if (CollectionUtils.isEmpty(job)) {
 						createJob(parentJob, dataMap, jobDate, eHrs, sHrs, eHrs);
 					}
 				}
@@ -1110,13 +1110,13 @@ public class SchedulerService extends AbstractService {
 		}
 		return job;
 	}
-	
+
 	private List<SchedulerConfig> findScheduledTask(Date taskDate, String schedule) {
 		return schedulerConfigRepository.findScheduledTask(taskDate, schedule);
 	}
-	
-	@Scheduled(cron = "0 */5 * * * ?")
-	public void slaTicketEscalationNotification() 
+
+//	@Scheduled(cron = "0 */5 * * * ?")
+	public void slaTicketEscalationNotification()
 	{
 		String mailStatus = "";
 		log.debug(">>> Tickets ");
@@ -1133,7 +1133,7 @@ public class SchedulerService extends AbstractService {
 				Set<SlaEscalationConfig> slaEscalationConfigs = slaConfig.getSlaesc();
 				int hours  = slaConfig.getHours();
 				ArrayList<String> category = slaConfig.getCategory();
-				for(SlaEscalationConfig slaEscalationConfig : slaEscalationConfigs) 
+				for(SlaEscalationConfig slaEscalationConfig : slaEscalationConfigs)
 				{
 						int eschours = slaEscalationConfig.getHours();
 						int escmins = slaEscalationConfig.getMinutes();
@@ -1187,7 +1187,7 @@ public class SchedulerService extends AbstractService {
 													}
 													ticket.setId(ticket.getId());
 													ticket.setEscalationStatus(slaEscalationConfig.getLevel());
-													
+
 												}
 											}
 										}
@@ -1197,11 +1197,11 @@ public class SchedulerService extends AbstractService {
 						}
 					}
 				}
-			}	
+			}
 		}
-	
-	@Scheduled(cron = "0 0 2 * * ?")
-	public void slaJobEscalationNotification() 
+
+//	@Scheduled(cron = "0 0 2 * * ?")
+	public void slaJobEscalationNotification()
 	{
 		String mailStatus = "";
 		log.debug(">>> Job Escalation ");
@@ -1218,7 +1218,7 @@ public class SchedulerService extends AbstractService {
 				Set<SlaEscalationConfig> slaEscalationConfigs = slaConfig.getSlaesc();
 				int hours  = slaConfig.getHours();
 				ArrayList<String> category = slaConfig.getCategory();
-				for(SlaEscalationConfig slaEscalationConfig : slaEscalationConfigs) 
+				for(SlaEscalationConfig slaEscalationConfig : slaEscalationConfigs)
 				{
 						int eschours = slaEscalationConfig.getHours();
 						int escmins = slaEscalationConfig.getMinutes();
@@ -1237,11 +1237,11 @@ public class SchedulerService extends AbstractService {
 										java.time.ZonedDateTime date = job.getCreatedDate().plusHours(hours).plusMinutes(escmins);
 										if(date.isBefore(currentDate) || date.equals(currentDate))
 										{
-											try 
+											try
 											{
 												mailStatus = mailService.sendEscalationEmail(email,subject,content,false,false,"empty");
-											} 
-											catch (Exception e) 
+											}
+											catch (Exception e)
 											{
 												// TODO Auto-generated catch block
 												e.printStackTrace();
@@ -1259,7 +1259,7 @@ public class SchedulerService extends AbstractService {
 												slaNotificationLog.setEmails(slaEscalationConfig.getEmail());
 												try
 												{
-													slaConfigService.slaEscalationNotificationSave(slaNotificationLog); 
+													slaConfigService.slaEscalationNotificationSave(slaNotificationLog);
 												}
 												catch(Exception e)
 												{

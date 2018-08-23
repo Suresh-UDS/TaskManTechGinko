@@ -682,10 +682,19 @@ angular.module('timeSheetApp')
                         }*/
                            $scope.selectedSite = {id:data.siteId};
                            $scope.selectedEmployee = {id:data.employeeId};
-                           $scope.selectedBlock = {name:data.block};
-                           $scope.selectedFloor = {name:data.floor};
-                           $scope.selectedZone = {name:data.zone};
+                           if(data.block) {
+                               $scope.selectedBlock = {name:data.block};
+                           }
+                           if(data.floor) {
+                               $scope.selectedFloor = {name:data.floor};
+                           }
+                           if(data.zone) {
+                               $scope.selectedZone = {name:data.zone};
+                           }
                            $scope.loadEmployees();
+                           $scope.loadBlocks();
+                           $scope.loadFloors();
+                           $scope.loadZones();
                            $scope.status = 1;
 
 

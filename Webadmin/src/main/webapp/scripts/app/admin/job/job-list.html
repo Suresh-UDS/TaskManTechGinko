@@ -530,7 +530,7 @@
                                                 <div class="dropdown">
                                                     <label class="label-control">From date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker"  id="selectedJobDate"  ng-model="selectedJobDate" autocomplete="off" />
+                                                    <input type="text" class="form-control datepicker" placeholder="Select Date" id="selectedJobDate"  ng-model="selectedJobDate" autocomplete="off" />
                                                 </div>
                                             </div>
                                         </div>
@@ -555,7 +555,7 @@
                                                     <!--</select>-->
                                                     <span ng-show="empSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!empSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchEmployee" ng-disabled="employees.length == 0 || employees == null" ng-change="loadSearchEmployees(searchEmployee)">
+                                                    <ui-select ng-model="searchEmployee" ng-disabled="employees.length == 0 || employees == null" ng-change="loadSearchEmployees(searchEmployee)" ng-click="loadSearchEmployees(searchEmployee)"  >
                                                         <ui-select-match placeholder="Select Employee...">{{employees.length == 0 ? 'Select Employee': searchEmployee.searchStatus ? searchEmployee.name?searchEmployee.name:'Select Employee' :  hideEmp?clearField?'Select Employee':searchEmployee:'Select Employee'  }}</ui-select-match>
                                                         <ui-select-choices  repeat="emp in getEmp($select.search) | filter: $select.search track by $index">
                                                             <div ng-bind="emp"></div>
