@@ -205,7 +205,7 @@ jhipster:
         ehcache:
             maxBytesLocalHeap: 512M
     mail: # specific JHipster mail property, for standard properties see MailProperties
-        from: no-reply@taskmanadmin.uds.in
+        from: taskmanfms@uds.in
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         spark:
