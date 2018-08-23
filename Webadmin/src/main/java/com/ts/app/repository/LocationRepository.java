@@ -40,7 +40,7 @@ public interface LocationRepository extends JpaRepository<Location, Long>  {
 	@Query("SELECT loc FROM Location loc WHERE loc.project.id = :projectId and loc.site.id = :siteId and loc.block = :block and loc.floor = :floor")
 	Page<Location> findByFloor(@Param("siteId") long siteId, @Param("block") String block, @Param("floor") String floor, Pageable pageRequest);
 
-	@Query("SELECT loc FROM Location loc WHERE loc.project.id = :projectId and loc.site.id = :siteId and loc.block = :block and loc.floor = :floor and loc.zone = :zone")
+	@Query("SELECT loc FROM Location loc WHERE loc.site.id = :siteId and loc.block = :block and loc.floor = :floor and loc.zone = :zone and loc.active='Y'")
 	Page<Location> findByZone(@Param("siteId") long siteId, @Param("block") String block, @Param("floor") String floor, @Param("zone") String zone, Pageable pageRequest);
 
 	@Query("SELECT distinct loc.block FROM Location loc WHERE loc.project.id = :projectId and loc.site.id = :siteId")
