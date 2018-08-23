@@ -835,7 +835,7 @@ angular.module('timeSheetApp')
             }
 
             $scope.searchCriteria.currPage = currPageVal;
-
+            $scope.searchCriteria.isList = true;
             console.log('Selected Asset' + $scope.searchAssetName);
 
             if(!$scope.searchAcquiredDate && !$scope.searchCreatedDate &&
