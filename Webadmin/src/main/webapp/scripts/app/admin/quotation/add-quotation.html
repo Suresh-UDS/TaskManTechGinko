@@ -45,8 +45,7 @@
 														<div
 															ng-show="form.quotationTitle.$dirty || form.quotationTitle.$invalid">
 															<p class="help-block" style="color: maroon"
-																ng-show="form.quotationTitle.$error.required">Enter
-																a valid Title.</p>
+																ng-show="form.quotationTitle.$error.required">Title is required.</p>
 															<p class="help-block" style="color: maroon"
 																ng-show="form.quotationTitle.$error.minlength">
 																Title should be atleast 2 Characters.</p>
@@ -200,6 +199,10 @@
 
 							</div>
 							<div class="col-md-12">
+								<p class="help-block" style="color:maroon"
+                                   ng-show="quoteStatus">
+                                    <span class="red-star">*</span>Required Service/Material/Labour is mandatory.
+                                </p>
 								<div class="panel panel-default TabsContainer">
 									<!--<div class="panel-heading">Panel Heading</div>-->
 									<div class="panel-body">
@@ -229,7 +232,7 @@
 															<input ng-model="serviceName"
 																class='form-control' name='serviceName' type='text' value=""
 																ng-minlength='1' ng-maxlength='100'
-																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
+																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus ng-change="validCheck();" />
 
 														</div>
 													</div>
@@ -316,7 +319,7 @@
 															<input ng-model="labourCategory"
 																class='form-control' name='labourCategory' type='text' value=""
 																ng-minlength='1' ng-maxlength='100'
-																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus  />
+																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus ng-change="validCheck();" />
 
 														</div>
 													</div>
@@ -403,7 +406,7 @@
 															<input ng-model="materialName"
 																class='form-control' name='materialName' type='text' value=""
 																ng-minlength='1' ng-maxlength='100'
-																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus  />
+																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus ng-change="validCheck();"  />
 
 														</div>
 													</div>
@@ -535,7 +538,7 @@
 															<!--Send-->
 														<!--</button>-->
                                                         <button type="submit"  ng-click="conform('send','submit')"
-                                                                ng-disabled="form.$invalid"  class="btn btn-success ld ld-over-inverse pull-right"
+                                                                ng-disabled="form.$invalid || quoteStatus"  class="btn btn-success ld ld-over-inverse pull-right"
                                                                 ng-class="{'running':saveLoad}">
                                                             <span class="btn-label"><i class="material-icons">save</i></span> Send
                                                             <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
