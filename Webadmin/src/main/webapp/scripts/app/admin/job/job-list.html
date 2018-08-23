@@ -61,10 +61,10 @@
                 </span>
 
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.checkInDateTimeFrom || localStorage.checkInDateTimeFrom">
-                    From: {{searchCriteria.checkInDateTimeFrom || localStorage.checkInDateTimeFrom}}
+                    From: {{searchCriteria.checkInDateTimeFrom || localStorage.checkInDateTimeFrom | date:'dd/MM/yyyy'}}
                 </span>
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.checkInDateTimeTo || localStorage.checkInDateTimeTo">
-                    To: {{searchCriteria.checkInDateTimeTo || localStorage.checkInDateTimeTo}}
+                    To: {{searchCriteria.checkInDateTimeTo || localStorage.checkInDateTimeTo | date:'dd/MM/yyyy'}}
                 </span>
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.employeeName || localStorage.employeeName">
                     Employee: {{searchCriteria.employeeName || localStorage.employeeName}}
