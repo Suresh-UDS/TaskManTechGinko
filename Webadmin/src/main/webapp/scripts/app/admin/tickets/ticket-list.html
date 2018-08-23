@@ -328,6 +328,12 @@
                                   	<a ng-if="(listJobId > 0)"  ui-sref="view-job({id : listJobId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View Job {{listJobId}}</a>
                                   	</td>
                                   </tr>
+                                  <tr>
+                                  	<td>Comments</td>
+                                  	<td>
+                                  		{{listComments}}
+                                  	</td>
+                                  </tr>
                                  </tbody>
                              </table>
                          </div>
@@ -417,7 +423,9 @@
                 <h4 class="modal-title">Close Ticket</h4>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to close the ticket?</p>
+	                <p>Are you sure you want to close the ticket?</p>
+	                <br/>
+                    <input class="form-control border-bottom-input" ng-model="cTicket.comments" placeholder="Enter Remarks..">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

@@ -13,12 +13,16 @@ import { File } from '@ionic-native/file';
 import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
 import{ModalController} from "ionic-angular";
 import{Checklist} from "../checklist/checklist";
+import{ImageViewerController} from "ionic-img-viewer";
+import {AttendancePopoverPage} from "../attendance/attendance-popover";
+// import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 @Component({
     selector: 'page-complete-job',
     templateUrl: 'completeJob.html'
 })
 export class CompleteJobPage {
+    _imageViewerCtrl: ImageViewerController;
 
     jobDetails:any;
     jobPhotos:any;
@@ -52,7 +56,9 @@ export class CompleteJobPage {
 
     constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService, @Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
                 private loadingCtrl:LoadingController, public camera: Camera,private geolocation:Geolocation, private jobService: JobService,
-                private attendanceService: AttendanceService,public popoverCtrl: PopoverController, private component:componentService,private transfer: FileTransfer, private file: File,private modalCtrl:ModalController) {
+                private attendanceService: AttendanceService,public popoverCtrl: PopoverController, private component:componentService,private transfer: FileTransfer,
+                private file: File,private modalCtrl:ModalController,imageViewerCtrl: ImageViewerController) {
+        this._imageViewerCtrl = imageViewerCtrl;
         this.spinner=true;
         this.categories = 'details';
         this.checkListItems=[];
@@ -457,5 +463,21 @@ export class CompleteJobPage {
     {
         this.showIcon = !show;
         this.index = i;
+    }
+
+    // openImage(imageToView){ const viewer =  this._imageViewerCtrl .create(imageToView)
+    //     viewer.present(); }
+
+    viewImg(img)
+    {
+        let popover = this.popoverCtrl.create(AttendancePopoverPage,{i:img},{cssClass:'view-img checklist-img',showBackdrop:true});
+        popover.present({
+        });
+    }
+    imgViewer(image){
+        // this.photoViewer.show(image);
+        let popover = this.popoverCtrl.create(AttendancePopoverPage,{i:image},{cssClass:'view-img checklist-img',showBackdrop:true});
+        popover.present({
+        });
     }
 }
