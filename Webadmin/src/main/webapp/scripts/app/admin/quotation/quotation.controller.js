@@ -314,15 +314,16 @@ angular
                         $scope.hideSite = false;
                         if($state.current.name == 'add-quotation')
                         {
-                            $scope.selectedSite = $scope.projects[$scope.uiSite.indexOf(searchSite)]
+                            $scope.selectedSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)]
                         }
                         else if($state.current.name == 'edit-quotation')
                         {
-                            $scope.selectedSite = $scope.projects[$scope.uiSite.indexOf(searchSite)]
+                            $scope.selectedSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)]
                         }
                         else {
                             $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)]
                         }
+                        //console.log('<<<< Site >>>>',$scope.selectedSite);
 
                     }
                     // Load Sites for selectbox //
@@ -509,7 +510,7 @@ angular
                                     $scope.saveLoad = false;
 									console.log(response);
                                 console.log($scope.selectedImageFile);
-								if($scope.selectedImageFile !=""){
+								if($scope.selectedImageFile){
 
 								RateCardComponent.upload(response._id,$scope.selectedImageFile)
 								    .then(function(response) {
@@ -716,7 +717,7 @@ angular
 
 			        $scope.searchFilter = function () {
 			            $scope.setPage(1);
-			            $scope.search();
+			            //$scope.search();
 			         }
 
 
@@ -874,7 +875,7 @@ angular
 			         //init load
                         $scope.initLoad = function(){
                              $scope.loadPageTop();
-                             $scope.loadAllQuotations();
+                             //$scope.loadAllQuotations();
                              $scope.init();
 
                          }

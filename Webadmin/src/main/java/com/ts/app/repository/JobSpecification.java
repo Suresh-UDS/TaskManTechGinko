@@ -82,7 +82,11 @@ public class JobSpecification implements Specification<Job> {
 
             if(searchCriteria.getEmployeeId()!=0 && !searchCriteria.isAdmin()){
         			predicates.add(builder.equal(root.get("employee").get("id"),  searchCriteria.getEmployeeId()));
-        		}
+        	}
+            
+            if(searchCriteria.getEmployeeId()!=0 && searchCriteria.isAdmin()){
+    			predicates.add(builder.equal(root.get("employee").get("id"),  searchCriteria.getEmployeeId()));
+            }
 
             if(StringUtils.isNotEmpty(searchCriteria.getJobTypeName())){
         			predicates.add(builder.equal(root.get("type"),  JobType.getType(searchCriteria.getJobTypeName())));
