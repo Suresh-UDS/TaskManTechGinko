@@ -10,7 +10,30 @@
 </ion-header>
 
 <ion-content padding>
+
+    <div *ngIf="(assetConfig.length < 0)">
+        <ion-item>
+            <ion-card text-center>
+                <ion-card-content>
+                    No Configuration found
+                </ion-card-content>
+            </ion-card>
+        </ion-item>
+    </div>
+
+    <div *ngIf="(!assetConfig)">
+        <ion-item>
+            <ion-card text-center>
+                <ion-card-content>
+                    No Configuration found
+                </ion-card-content>
+            </ion-card>
+        </ion-item>
+    </div>
+
+
     <ion-list *ngFor="let config of assetConfig;let i=index;">
+
         <ion-row class="margin0 border-btm-blk" data-toggle="collapse" [attr.data-target]="'#'+i" >
             <ion-col col-2 class="ver-center">
                 <button ion-button clear color="primary" class="">
