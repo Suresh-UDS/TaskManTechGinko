@@ -65,33 +65,42 @@ export class AssetList {
 
   ionViewWillEnter()
   {
-      console.log("Check Network Connection");
-      this.componentService.showLoader("Loading Assets");
 
-      var searchCriteria ={
-          currPage:this.page+1
-      };
-      if(this.network.type!='none'){
+      if(this.navParams.get('text'))
+      {
 
-          this.getAsset(searchCriteria)
 
       }else{
 
-          //     //offline
-          // setTimeout(() => {
-          //     this.dbService.getAsset().then(
-          //         (res)=>{
-          //             this.componentService.closeLoader();
-          //             console.log(res);
-          //             this.assetList = res;
-          //         },
-          //         (err)=>{
-          //             this.assetList = [];
-          //             this.componentService.closeLoader()
-          //         })
-          // },3000);
+          console.log("Check Network Connection");
+          // this.componentService.showLoader("Loading Assets");
 
+          var searchCriteria ={
+              currPage:this.page+1
+          };
+          if(this.network.type!='none'){
+
+              this.getAsset(searchCriteria)
+
+          }else{
+
+              //     //offline
+              // setTimeout(() => {
+              //     this.dbService.getAsset().then(
+              //         (res)=>{
+              //             this.componentService.closeLoader();
+              //             console.log(res);
+              //             this.assetList = res;
+              //         },
+              //         (err)=>{
+              //             this.assetList = [];
+              //             this.componentService.closeLoader()
+              //         })
+              // },3000);
+
+          }
       }
+
 
   }
 
@@ -248,14 +257,15 @@ export class AssetList {
 
   getAsset(searchCriteria)
   {
+      this.componentService.showLoader("Loading Assets");
       this.assetService.searchAssets(searchCriteria).subscribe(
           response=>{
-              this.componentService.closeLoader()
+              this.componentService.closeAll();
               console.log("Asset search filters response");
               console.log(response)
               this.assetList=response.transactions
           },err=>{
-              this.componentService.closeLoader();
+              this.componentService.closeAll();
               console.log("Error in filtering assets");
               console.log(err);
           }

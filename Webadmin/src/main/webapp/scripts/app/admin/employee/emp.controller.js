@@ -458,13 +458,24 @@ angular.module('timeSheetApp')
 
 
                 });
-        	}else {
+        	}
+            else if($scope.searchProject) {
+                ProjectComponent.findSites($scope.searchProject.id).then(function (data) {
+                    $scope.sites = data;
+                    $scope.hideLoader();
+
+
+                });
+            }
+        	else {
             	SiteComponent.findAll().then(function (data) {
                     $scope.sites = data;
                     $scope.hideLoader();
 
                 });
         	}
+
+
         };
 
 

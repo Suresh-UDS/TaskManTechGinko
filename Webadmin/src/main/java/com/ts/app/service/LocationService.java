@@ -232,11 +232,11 @@ public class LocationService extends AbstractService {
 			List<LocationDTO> transitems = null;
 			if(!searchCriteria.isFindAll()) {
 				if(StringUtils.isNotEmpty(searchCriteria.getZone())) {
-					page = locationRepository.findByZone(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), pageRequest);
+					page = locationRepository.findByZone(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), pageRequest);
 				}else if(StringUtils.isNotEmpty(searchCriteria.getFloor())) {
-					page = locationRepository.findByFloor(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), pageRequest);
+					page = locationRepository.findByFloor(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), pageRequest);
 				}else if(StringUtils.isNotEmpty(searchCriteria.getBlock())) {
-					page = locationRepository.findByBlock(searchCriteria.getSiteId(), searchCriteria.getBlock(), pageRequest);
+					page = locationRepository.findByBlock(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getBlock(), pageRequest);
 				}else if(searchCriteria.getSiteId() > 0) {
 					if(searchCriteria.getEmployeeId() > 0) {
 						List<EmployeeLocation> empLocs  = locationRepository.findBySiteAndEmployee(searchCriteria.getSiteId(), searchCriteria.getEmployeeId());

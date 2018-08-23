@@ -173,8 +173,8 @@ public class AttendanceService extends AbstractService {
         int shiftStartGraceTime = Integer.valueOf(env.getProperty("attendance.shiftStartGraceTime"));
         int shiftEndGraceTime = Integer.valueOf(env.getProperty("attendance.shiftEndGraceTime"));
         if(CollectionUtils.isNotEmpty(shifts)) {
-			Calendar prevShiftStartCal = Calendar.getInstance();
-			Calendar prevShiftEndCal = Calendar.getInstance();
+			Calendar prevShiftStartCal = null;
+			Calendar prevShiftEndCal = null;
 
         		for(Shift shift : shifts) {
         	        if(log.isDebugEnabled()) {
@@ -256,7 +256,7 @@ public class AttendanceService extends AbstractService {
 					}
 				}
 
-				if(checkInCal.after(startCalLeadTime) && (prevShiftStartCal.before(startCalLeadTime) || prevShiftStartCal.equals(startCalLeadTime)) ) { // 1:30 PM checkin time > 1 PM (2 PM shift start) - 1 hr lead time
+				if(checkInCal.after(startCalLeadTime) && (prevShiftStartCal != null &&  (prevShiftStartCal.before(startCalLeadTime) || prevShiftStartCal.equals(startCalLeadTime))) ) { // 1:30 PM checkin time > 1 PM (2 PM shift start) - 1 hr lead time
 					if((startCal.after(checkInCal))  // 2:00 PM shift starts > 1:30 PM check in
 							|| startCal.equals(checkInCal)) {
 						dbAttn.setShiftStartTime(startTime);  //2 PM considered as shift starts
@@ -271,7 +271,13 @@ public class AttendanceService extends AbstractService {
 							break;
 						}
 					}
-				}else {
+				}else if(checkInCal.after(startCalLeadTime) && (prevShiftStartCal != null && prevShiftStartCal.after(startCalLeadTime))){
+					dbAttn.setShiftStartTime(startTime);
+					dbAttn.setShiftEndTime(endTime);
+					if(empShift != null) {
+						break;
+					}
+				}else if(checkInCal.after(startCalLeadTime)) {
 					dbAttn.setShiftStartTime(startTime);
 					dbAttn.setShiftEndTime(endTime);
 					if(empShift != null) {
@@ -300,9 +306,10 @@ public class AttendanceService extends AbstractService {
 					}
 				}
 				*/
-				
+				prevShiftStartCal = Calendar.getInstance();
 				prevShiftStartCal.setTime(startCal.getTime());
 				
+				prevShiftEndCal = Calendar.getInstance();
 				prevShiftEndCal.setTime(endCal.getTime());
 
         		}

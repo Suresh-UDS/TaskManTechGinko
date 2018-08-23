@@ -177,6 +177,7 @@ angular.module('timeSheetApp')
 
         });
 
+
         $scope.valid= null;
 
         $scope.conform = function(text,validation)
@@ -250,8 +251,11 @@ angular.module('timeSheetApp')
 
         };
 
+
         $scope.sStatus = false;
         $scope.eStatus = false;
+
+
 
         $scope.addShiftItem = function(event) {
             if(jQuery.isEmptyObject($scope.newShiftItem) == false){

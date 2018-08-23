@@ -61,10 +61,10 @@
                 </span>
 
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.checkInDateTimeFrom || localStorage.checkInDateTimeFrom">
-                    From: {{searchCriteria.checkInDateTimeFrom || localStorage.checkInDateTimeFrom}}
+                    From: {{searchCriteria.checkInDateTimeFrom || localStorage.checkInDateTimeFrom | date:'dd/MM/yyyy'}}
                 </span>
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.checkInDateTimeTo || localStorage.checkInDateTimeTo">
-                    To: {{searchCriteria.checkInDateTimeTo || localStorage.checkInDateTimeTo}}
+                    To: {{searchCriteria.checkInDateTimeTo || localStorage.checkInDateTimeTo | date:'dd/MM/yyyy'}}
                 </span>
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.employeeName || localStorage.employeeName">
                     Employee: {{searchCriteria.employeeName || localStorage.employeeName}}
@@ -470,7 +470,7 @@
                                                     <!--</select>-->
                                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable" ng-change="loadSearchProject(searchProject);loadDepSites()" ng-click="loadSearchProject(searchProject);loadDepSites()">
+                                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable || loadFilter" ng-click="loadSearchProject(searchProject);loadDepSites()">
                                                         <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :clearField?'Select Client':searchProject}}</ui-select-match>
                                                         <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
                                                             <div ng-bind="client"></div>
@@ -489,7 +489,7 @@
                                                     <!--</select>-->
                                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sitesList.length == 0" ng-change="loadSearchSite(searchSite);loadEmployees()" ng-click="loadSearchSite(searchSite);loadEmployees()">
+                                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sitesList.length == 0" ng-change="loadSearchSite(searchSite);loadDepEmployees()" ng-click="loadSearchSite(searchSite)">
                                                         <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?clearField?'Select Site':searchSite : 'Select Site' }}</ui-select-match>
                                                         <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search track by $index">
                                                             <div ng-bind="site"></div>
@@ -553,13 +553,13 @@
                                                     <!--</select>-->
                                                     <span ng-show="empSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!empSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchEmployee" ng-change="loadSearchEmployees(searchEmployee)">
-                                                        <ui-select-match placeholder="Select Employee...">{{employees.length == 0 ? 'Select Site' : searchEmployee.searchStatus ? searchEmployee.name?searchEmployee.name:'Select Employee' :  hideEmp?clearField?'Select Employee':searchEmployee:'Select Employee'  }}</ui-select-match>
+                                                    <ui-select ng-model="searchEmployee" ng-disabled="employees.length == 0 || employees == null" ng-change="loadSearchEmployees(searchEmployee)">
+                                                        <ui-select-match placeholder="Select Employee...">{{employees.length == 0 ? 'Select Employee': searchEmployee.searchStatus ? searchEmployee.name?searchEmployee.name:'Select Employee' :  hideEmp?clearField?'Select Employee':searchEmployee:'Select Employee'  }}</ui-select-match>
                                                         <ui-select-choices  repeat="emp in getEmp($select.search) | filter: $select.search track by $index">
                                                             <div ng-bind="emp"></div>
                                                         </ui-select-choices>
                                                     </ui-select>
-                                                    <span ng-if="employees.length == 0 && !employees"><p class="help-block">No sites</p></span>
+                                                    <span ng-if="employees.length == 0 || employees == null"><p class="help-block">No Employee</p></span>
                                                 </div>
                                             </div>
                                         </div>

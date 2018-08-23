@@ -763,18 +763,18 @@
                                 <div class="dropdown">
                                     <div class="form-group">
                                         <label class="control-label">Select Asset Type</label>
-                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                        <select class="form-control " ng-model="searchAssetType"  ng-options="assetType as assetType.name for assetType in assetTypes track by assetType.name" required>
-                                            <option value="">Select Asset Type...</option>
-                                        </select>
-                                        <!--<span ng-show="assetTypeDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>-->
-                                        <!--<span ng-show="!assetTypeDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                        <!--<ui-select ng-model="searchAssetType" ng-disabled="assetTypeDisable" ng-change="loadAssetType(searchAssetType)">-->
-                                            <!--<ui-select-match placeholder="Select clients...">{{filter ? searchAssetType.name?searchAssetType.name:'Select Assettype' :searchAssetType}}</ui-select-match>-->
-                                            <!--<ui-select-choices  repeat="assetType in getType($select.search) | filter: $select.search">-->
-                                                <!--<div ng-bind="assetType"></div>-->
-                                            <!--</ui-select-choices>-->
-                                        <!--</ui-select>-->
+                                        <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                        <!--<select class="form-control " ng-model="searchAssetType"  ng-options="assetType as assetType.name for assetType in assetTypes" required>-->
+                                            <!--<option value="">Select Asset Type...</option>-->
+                                        <!--</select>-->
+                                        <span ng-show="assetTypeDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                        <span ng-show="!assetTypeDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                        <ui-select ng-model="searchAssetType" ng-disabled="assetTypeDisable" ng-change="loadAssetType(searchAssetType)">
+                                            <ui-select-match placeholder="Select clients...">{{filter ? searchAssetType.name?searchAssetType.name:'Select Assettype' :clearField?'Select Assettype':searchAssetType}}</ui-select-match>
+                                            <ui-select-choices  repeat="assetType in getType($select.search) | filter: $select.search track by $index">
+                                                <div ng-bind="assetType"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
                                     </div>
                                 </div>
                             </div>
