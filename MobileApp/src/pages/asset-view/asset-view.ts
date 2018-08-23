@@ -76,7 +76,7 @@ export class AssetView {
   ionViewDidLoad() {
     console.log('ionViewDidLoad AssetView');
     console.log(this.assetDetails);
-    this.componentService.showLoader("");
+    // this.componentService.showLoader("");
 
       this.searchCriteria={
           assetId:this.assetDetails.id
@@ -102,7 +102,7 @@ export class AssetView {
         let profileModal = this.modalCtrl.create(GetAssetReading, {assetDetails:this.assetDetails });
         profileModal.onDidDismiss(data => {
             console.log(data);
-            this.componentService.closeLoader();
+            this.componentService.closeAll();
             // this.getReading(this.readingSearchCriteria);
             this.getReading(this.readingSearchCriteria);
         });
@@ -466,7 +466,7 @@ export class AssetView {
 
 
     getAssetById(){
-        this.componentService.closeLoader();
+        this.componentService.closeAll();
         // Online
         this.assetService.getAssetById(this.assetDetails.id).subscribe(
             response=>{
@@ -504,14 +504,14 @@ export class AssetView {
         this.assetService.getAssetPPMSchedule(this.assetDetails.id).subscribe(
             response=>{
                 this.spinner = false;
-                this.componentService.closeLoader();
+                this.componentService.closeAll();
                 console.log("Get asset PPM response");
                 console.log(response);
                 this.assetDetails.ppms = response;
             },
             error=>{
                 this.spinner = false;
-                this.componentService.closeLoader();
+                this.componentService.closeAll();
                 console.log("Get asset PPM error");
                 console.log(error);
             })
@@ -540,14 +540,14 @@ export class AssetView {
         this.assetService.getAssetAMCSchedule(this.assetDetails.id).subscribe(
             response=>{
                 this.spinner = false;
-                this.componentService.closeLoader()
+                this.componentService.closeAll()
                 console.log("Get asset AMC response");
                 this.assetDetails.amcs = response;
                 console.log(this.assetDetails.amcs);
             },
             error=>{
                 this.spinner = false;
-                this.componentService.closeLoader()
+                this.componentService.closeAll()
                 console.log("Get asset AMC error");
                 console.log(error);
             })
@@ -577,13 +577,13 @@ export class AssetView {
         this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
             response=>{
                 this.spinner = false;
-                this.componentService.closeLoader();
+                this.componentService.closeAll();
                 console.log("Asset config");
                 console.log(response);
                 this.assetDetails.config = response;
             },err=>{
                 this.spinner = false;
-                this.componentService.closeLoader();
+                this.componentService.closeAll();
                 console.log("Error in getting asset config");
                 console.log(err);
             })
