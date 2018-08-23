@@ -383,6 +383,8 @@ public class JobManagementService extends AbstractService {
 		            		    if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateSiteAndEmployeeAndLocation(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
 
+                                }else if(!StringUtils.isEmpty(searchCriteria.getJobStatus())){
+                                    page = jobRepository.findByEmployeeAndStatus(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(), searchCriteria.getJobStatus(), fromDt, toDt, pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateSiteAndEmployee(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
 
@@ -393,8 +395,10 @@ public class JobManagementService extends AbstractService {
 
                                 }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
 		            		        		page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
-                                }else{
-                                    page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
+                                }else if(!StringUtils.isEmpty(searchCriteria.getJobStatus())){
+                                    page = jobRepository.findByStartDateAndStatus(searchCriteria.getSiteId(), searchCriteria.getJobStatus(), fromDt, toDt, pageRequest);
+                                }else {
+                                	page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
                                 }
 		            		}else if(searchCriteria.getSiteId() == 0 && searchCriteria.getEmployeeId() > 0) {
 		            		    if(searchCriteria.getLocationId()>0){
@@ -424,6 +428,8 @@ public class JobManagementService extends AbstractService {
 
                                 }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
                                     page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
+                                }else if(!StringUtils.isEmpty(searchCriteria.getJobStatus())){
+                                    page = jobRepository.findByEmployeeAndStatus(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(), searchCriteria.getJobStatus(), fromDt, toDt, pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateSiteAndEmployee(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
 
@@ -434,6 +440,8 @@ public class JobManagementService extends AbstractService {
 
                                 }else if (org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
                                     page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
+                                }else if(!StringUtils.isEmpty(searchCriteria.getJobStatus())){
+                                    page = jobRepository.findByStartDateAndStatus(searchCriteria.getSiteId(), searchCriteria.getJobStatus(), fromDt, toDt, pageRequest);
                                 }else{
                                     page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
                                 }

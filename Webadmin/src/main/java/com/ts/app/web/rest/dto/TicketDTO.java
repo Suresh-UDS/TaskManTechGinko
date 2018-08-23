@@ -15,6 +15,10 @@ public class TicketDTO extends BaseDTO {
 
     private String siteName;
 
+    private long projectId;
+
+    private String projectName;
+
     private long employeeId;
 
     private String employeeName;
@@ -323,6 +327,22 @@ public class TicketDTO extends BaseDTO {
 
 	public void setAssetId(long assetId) {
 		this.assetId = assetId;
+	}
+
+	public long getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(long projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
 	}
 
 	
