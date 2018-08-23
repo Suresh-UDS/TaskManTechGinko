@@ -131,7 +131,7 @@ angular
                                 $scope.quotation.title =data.title;
                                 $scope.quotation.description = data.description;
                                 $scope.quotation.ticketId = data.id;
-                                //$scope.selectedProject = {id:data.employeeId};
+                                $scope.selectedProject = {id:data.projectId, name:data.projectName};
                                 $scope.selectedSite = {id:data.siteId,name:data.siteName};
                                 $scope.status = 1;
 

@@ -501,10 +501,13 @@ public class RateCardService extends AbstractService {
 		User user = userRepository.findOne(searchCriteria.getUserId());
 		Employee employee = user.getEmployee();
 		List<EmployeeProjectSite> projectSites = employee.getProjectSites();
-		List<Long> siteIds = new ArrayList<Long>();
-		if(CollectionUtils.isNotEmpty(projectSites)) {
-			for(EmployeeProjectSite projSite : projectSites) {
-				siteIds.add(projSite.getSite().getId());
+		List<Long> siteIds = null;
+		if(searchCriteria.getSiteId() == 0) {
+			siteIds = new ArrayList<Long>();
+			if(CollectionUtils.isNotEmpty(projectSites)) {
+				for(EmployeeProjectSite projSite : projectSites) {
+					siteIds.add(projSite.getSite().getId());
+				}
 			}
 		}
 
