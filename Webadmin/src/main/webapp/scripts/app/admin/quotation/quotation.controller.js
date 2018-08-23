@@ -510,7 +510,7 @@ angular
                                     $scope.saveLoad = false;
 									console.log(response);
                                 console.log($scope.selectedImageFile);
-								if($scope.selectedImageFile !=""){
+								if($scope.selectedImageFile){
 
 								RateCardComponent.upload(response._id,$scope.selectedImageFile)
 								    .then(function(response) {
