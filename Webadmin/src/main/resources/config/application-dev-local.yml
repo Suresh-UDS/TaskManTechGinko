@@ -40,11 +40,11 @@ spring:
         host: smtp.office365.com
         port: 587
         username: taskmanfms@uds.in
-        password: Mab63357
+        password: Task@2018
         properties:
             mail.transport.protocol: smtp
             mail.smtp.auth: true
-            mail.smtp.ssl.enable: false
+            mail.smtp.ssl.enable: true
             mail.smtp.starttls.enable: true
             mail.smtp.port: 587
             mail.debug: true
@@ -177,7 +177,7 @@ jhipster:
         ehcache:
             maxBytesLocalHeap: 256M
     mail: # specific JHipster mail property, for standard properties see MailProperties
-        from: no-reply@taskman.uds.com
+        from: taskmanfms@uds.in
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         spark:
