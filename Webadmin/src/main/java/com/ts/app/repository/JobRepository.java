@@ -189,5 +189,11 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     
     @Query("SELECT j FROM Job j WHERE j.maintenanceType = :amcType")
 	List<Job> findAllAMCJobs(@Param("amcType") String amcType);
+
+    @Query("SELECT j from Job j where  (j.plannedStartTime between :fromDt and :toDt) and j.site.id = :siteId and j.status = :jobStatus")
+	Page<Job> findByStartDateAndStatus(@Param("siteId") long siteId, @Param("jobStatus") JobStatus jobStatus, @Param("fromDt") Date fromDt, @Param("toDt") Date toDt, Pageable pageRequest);
+    
+    @Query("SELECT j from Job j where  (j.plannedStartTime between :fromDt and :toDt) and j.site.id = :siteId and j.employee.id = :employeeId and j.status = :jobStatus")
+	Page<Job> findByEmployeeAndStatus(@Param("siteId") long siteId, @Param("employeeId") long employeeId, @Param("jobStatus") JobStatus jobStatus, @Param("fromDt") Date fromDt, @Param("toDt") Date toDt, Pageable pageRequest);
     
 }
