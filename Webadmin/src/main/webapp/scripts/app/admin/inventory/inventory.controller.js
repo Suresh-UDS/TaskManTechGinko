@@ -482,7 +482,7 @@ angular.module('timeSheetApp')
 			
 			$scope.initList = function() { 
 				$scope.loadMaterials();
-			     $scope.setPage(1);
+				$scope.setPage(1);
 			}
 
 			//Loading Page go to top position
