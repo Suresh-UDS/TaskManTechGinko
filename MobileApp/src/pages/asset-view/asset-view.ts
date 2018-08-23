@@ -76,7 +76,7 @@ export class AssetView {
   ionViewDidLoad() {
     console.log('ionViewDidLoad AssetView');
     console.log(this.assetDetails);
-    this.componentService.showLoader("");
+    // this.componentService.showLoader("");
 
       this.searchCriteria={
           assetId:this.assetDetails.id
@@ -102,7 +102,7 @@ export class AssetView {
         let profileModal = this.modalCtrl.create(GetAssetReading, {assetDetails:this.assetDetails });
         profileModal.onDidDismiss(data => {
             console.log(data);
-            this.componentService.closeLoader();
+            this.componentService.closeAll();
             // this.getReading(this.readingSearchCriteria);
             this.getReading(this.readingSearchCriteria);
         });
