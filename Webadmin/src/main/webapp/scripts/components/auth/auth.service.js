@@ -125,9 +125,12 @@ angular.module('timeSheetApp')
             },
 
             changeNewPassword:function(changePasswordData,callback){
+                var  cb = callback || angular.noop;
                 return $http.post('api/user/change_password',changePasswordData).then(function (response) {
-                    return response;
-                })
+                    return cb();
+                },function (err) {
+                    return cb(err);
+                }).$promise;
             }
         };
     });
