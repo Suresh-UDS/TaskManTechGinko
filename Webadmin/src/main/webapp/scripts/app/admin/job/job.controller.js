@@ -352,6 +352,7 @@ angular.module('timeSheetApp')
 
 
         //Check
+        $scope.loadFilter = false;
         $scope.loadEmployees = function () {
             $scope.uiEmployee.splice(0,$scope.uiEmployee.length);
             var deferred = $q.defer();
@@ -362,23 +363,20 @@ angular.module('timeSheetApp')
             }else{
                 $scope.searchCriteria.siteId = null;
             }
-
-
         		$scope.searchCriteria.list = true;
                 $scope.employees = "";
         		EmployeeComponent.search($scope.searchCriteria).then(function (data) {
                     $scope.selectedEmployee = null;
         			$scope.searchEmployee = null;
         			$scope.employees = data.transactions;
-                    console.log('Employee List',$scope.employees);
-                    console.log('Employee List',$scope.uiEmployee);
+        			$scope.loadFilter = true;
                     if($scope.employees){
                         for(var i=0;i<$scope.employees.length;i++)
                         {
                             $scope.uiEmployee[i] = $scope.employees[i].name;
                         }
                     }
-
+                    console.log($scope.uiEmployee)
                     $scope.employeeFilterDisable = false;
                     $scope.empSpin = false;
         			deferred.resolve($scope.employees);
@@ -386,6 +384,8 @@ angular.module('timeSheetApp')
     			return deferred.promise;
 
         };
+
+
                     $scope.loadSearchProject = function (searchProject) {
                         $scope.clearField = false;
                         $scope.hideSite = false;
@@ -398,11 +398,10 @@ angular.module('timeSheetApp')
                         $scope.hideSite = true;
                         $scope.uiEmployee.splice(0,$scope.uiEmployee.length);
                         $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)]
-                        console.log($scope.uiEmployee)
                     }
          $scope.loadSearchEmployees = function (searchEmployee) {
              $scope.clearField = false;
-             // $scope.hideEmp = false;
+             $scope.hideEmp = false;
               $scope.searchEmployee = $scope.employees[$scope.uiEmployee.indexOf(searchEmployee)]
          }
          $scope.loadSearchStatus = function (searchStatus) {

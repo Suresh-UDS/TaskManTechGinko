@@ -245,12 +245,15 @@
                 <h4 class="modal-title">Close Ticket</h4>
             </div>
             <div class="modal-body">
-                <p>Are you sure that you want to close ticket?</p>
+               <p>Are you sure you want to close the ticket?</p>
+               <br/>
+               <input class="form-control border-bottom-input" ng-model="ticket.comments" placeholder="Enter Remarks..">
+                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <button type="button"
-                        class="btn btn-success delete-confirmation-button" ng-click="closeTicketConfirm(cTicket)">Close Ticket</button>
+                        class="btn btn-success delete-confirmation-button" ng-click="closeTicketConfirm(cTicket)"   >Close Ticket</button>
             </div>
         </div>
     </div>
@@ -284,3 +287,6 @@
             </div>
         </div>
     </div>
+    
+
+    

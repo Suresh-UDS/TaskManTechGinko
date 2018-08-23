@@ -174,7 +174,7 @@
                                 <td>{{userRole.createdDate | date:'MM/dd/yyyy @ h:mma'}}</td>
 
                                 <td class="text-right">
-                                    <a title="View"  data-toggle="modal" data-target="#ViewModal"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
+                                    <a title="View"  data-toggle="modal" data-target="#ViewModal"  class="btn btn-simple btn-info btn-icon like" ng-click="loadUserRole(userRole.id)"><i class="material-icons">remove_red_eye</i></a>
                                     <a  title="Edit" ui-sref="edit-user-role({ id: userRole.id })"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">edit</i></a>
                                     <!-- <a ng-class="{active: $state.includes('admin')}" ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a> -->
                                 </td>

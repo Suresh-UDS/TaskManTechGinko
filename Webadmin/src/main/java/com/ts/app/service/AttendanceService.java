@@ -271,6 +271,12 @@ public class AttendanceService extends AbstractService {
 							break;
 						}
 					}
+				}else {
+					dbAttn.setShiftStartTime(startTime);
+					dbAttn.setShiftEndTime(endTime);
+					if(empShift != null) {
+						break;
+					}
 				}
 
 				/*

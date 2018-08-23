@@ -529,16 +529,33 @@ angular.module('timeSheetApp')
             }
 
             $scope.closeTicketConfirm =function(cTicket){
+            	alert(cTicket.comments);
             $scope.loadingStart();
             JobComponent.updateTicket(cTicket).then(function() {
                     $scope.loadingStop();
                     $scope.success = 'OK';
                     $scope.showNotifications('top','center','success','Ticket status has been updated successfuly!!');
                     $(".fade").removeClass("modal-backdrop");
-                    $('#deleteModalNew').modal('hide');
+                    $('#closeTicket').modal('hide');
                     $state.reload();
                 });
             }
+            
+            $scope.addRemarksId = function(ticketId,remarks){
+            		$scope.ticketRemarksId = ticketId;
+            		$scope.ticketRemarks = remarks;
+            };
+
+            $scope.addRemarks = function(remarks){
+            		console.log("remarks clicked");
+            		console.log($scope.ticketRemarksId);
+            		AttendanceComponent.addRemarks($scope.attendanceRemarksId,remarks).then(function (data) {
+            			$scope.showNotifications('top','center','success','Remarks Added to the attendance');
+            			console.log(data);
+            			// $scope.showNotifications('top','center','danger','Site Already Exists');
+            			$scope.search();
+            		})
+            };
 
             $scope.reopenTicket = function (ticket){
 

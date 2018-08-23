@@ -561,14 +561,16 @@
                                                   <tbody>
                                                   <tr ng-repeat="ppmSchedules in ppmScheduleList">
                                                       <td>{{ppmSchedules.title}}</td>
-                                                      <td class="hiddenCheckList" > <span class="leftTxt">{{ppmSchedules.checklistName}}</span>  <span class="infoIcon" ng-if="ppmSchedules.checkListItems"><i class="material-icons">info</i> </span>
-
-                                                         <div class="CheckListBx" ng-if="ppmSchedules.checkListItems">
+                                                      <td class="hiddenCheckList" > <span class="leftTxt">{{ppmSchedules.checklistName}}</span>  <span class="infoIcon" ng-if="ppmSchedules.checkListItems"><i class="material-icons">info</i>
+                                                       <div class="CheckListBx" ng-if="ppmSchedules.checkListItems">
                                                              <div class="bootstrap-tagsinput" ng-repeat="checkListItem in ppmSchedules.checkListItems">
                                                                  <span class="tag label label-info">{{checkListItem.name}}<span data-role="remove"></span></span>
 
                                                              </div>
                                                          </div>
+                                                      </span>
+
+
 
                                                       </td>
                                                       <!-- <td>
@@ -661,14 +663,16 @@
                                                             <tr ng-repeat="amcSchedule in amcScheduleList">
                                                                 <td>{{amcSchedule.title}}</td>
                                                                 <td>{{amcSchedule.maintenanceType}}</td>
-                                                                <td class="hiddenCheckList"> <span class="leftTxt">{{amcSchedule.checklistName}} </span>  <span class="infoIcon" ng-if="amcSchedule.checkListItems"><i class="material-icons">info</i> </span>
-
+                                                                <td class="hiddenCheckList"> <span class="leftTxt">{{amcSchedule.checklistName}} </span>  <span class="infoIcon" ng-if="amcSchedule.checkListItems"><i class="material-icons">info</i>
                                                                    <div class="CheckListBx" ng-if="amcSchedule.checkListItems">
                                                                        <div class="bootstrap-tagsinput" ng-repeat="checkListItemAmc in amcSchedule.checkListItems">
                                                                            <span class="tag label label-info">{{checkListItemAmc.name}}<span data-role="remove"></span></span>
 
                                                                        </div>
                                                                    </div>
+                                                                </span>
+
+
 
                                                                 </td>
                                                                 <td>{{amcSchedule.startDate}}</td>
