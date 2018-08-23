@@ -1,7 +1,7 @@
 <div ng-init="initLoad()">
 
 
-    <div class="row" ng-init="loadProjects();loadSites();loadEmployees();loadTicketStatuses();">
+    <div class="row" ng-init="loadProjects();loadSites();loadEmployees();loadTicketStatuses()">
         <div class="col-md-6 txt-align-lft">
 
             <!--<button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">-->
@@ -745,13 +745,13 @@
                                                     <!--</select>-->
                                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-change="loadSearchSite(searchSite);loadEmployees()">
+                                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-change="loadSearchSite(searchSite);loadFilterEmployee()" ng-click="loadSearchSite(searchSite)">
                                                         <ui-select-match placeholder="Select Site...">{{sites.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?clearField?'Select Site':searchSite : 'Select Site' }}</ui-select-match>
                                                         <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
                                                             <div ng-bind="site"></div>
                                                         </ui-select-choices>
                                                     </ui-select>
-                                                    <span ng-if="sites.length == 0"><p class="help-block">No sites</p></span>
+                                                    <span ng-if="sites.length == 0 && !siteSpin"><p class="help-block">No sites</p></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -811,13 +811,13 @@
                                                     <!--</select>-->
                                                     <span ng-show="empSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!empSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchEmployee" ng-disabled="employeeFilterDisable || employees.length == 0"  ng-change="loadSearchEmployee(searchEmployee)" >
+                                                    <ui-select ng-model="searchEmployee" ng-disabled="employeeFilterDisable || employees.length == 0 || employees == null"  ng-click="loadSearchEmployee(searchEmployee)" >
                                                         <ui-select-match placeholder="Select Employee...">{{employees.length == 0 ? 'Select Site' : searchEmployee.searchStatus ? searchEmployee.name?searchEmployee.name:'Select Employee' :  hideEmp ?clearField?'Select Employee':searchEmployee:'Select Employee'  }}</ui-select-match>
                                                         <ui-select-choices  repeat="emp in getEmp($select.search) | filter: $select.search">
                                                             <div ng-bind="emp"></div>
                                                         </ui-select-choices>
                                                     </ui-select>
-                                                    <span ng-if="employees.length == 0 || !employees"><p class="error-msg margin0">No Employees</p></span>
+                                                    <span ng-if="(employees.length == 0 || employees == null) && !empSpin"><p class="error-msg margin0">No Employees</p></span>
                                                 </div>
                                             </div>
                                         </div>
