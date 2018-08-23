@@ -1104,10 +1104,15 @@ ion-fab-list
 .view-img ion-backdrop
 {
   opacity: 0.7 !important;
+    transform: rotate(90deg) !important;
 }
 .job-img
 {
   transform: rotate(90deg);
+}
+.checklist-img
+{
+    transform: rotate(90deg);
 }
 .paddding-top20
 {

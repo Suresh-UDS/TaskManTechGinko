@@ -222,8 +222,9 @@ export class JobFilter{
 
     filterJob(){
         this.searchCriteria = {
-            siteId:this.selectedSite.id,
-            projectId:this.selectedProject.id,
+            selectedSite:this.selectedSite.id,
+            selectedProject:this.selectedProject.id,
+            selectedEmployee:this.employ
         };
         this.viewCtrl.dismiss(this.searchCriteria);
     }

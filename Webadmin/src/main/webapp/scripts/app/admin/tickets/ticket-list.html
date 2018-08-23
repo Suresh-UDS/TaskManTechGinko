@@ -144,7 +144,7 @@
                                         <a ng-if="(ticket.jobId > 0)" ng-class="{active: $state.includes('admin')}" has-permission="Jobs:View" ui-sref="view-job({id : ticket.jobId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View job</a>
                                         <a ng-if="(ticket.quotationId)" ng-class="{active: $state.includes('admin')}" has-permission="Quotation:View" ui-sref="view-quotation({id : ticket.quotationId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View Quotation</a>
 
-                                        <a ng-if="(ticket.status != 'Closed')" ng-class="{active: $state.includes('admin')}" has-permission="Tickets:Close"  ng-click="closeTicket(ticket.id)"   onClick="$('#deleteModalNew').modal()" data-target="#myModal"   class="btn btn-simple btn-info">close ticket</a>
+                                        <a ng-if="(ticket.status != 'Closed')" ng-class="{active: $state.includes('admin')}" has-permission="Tickets:Close"  ng-click="closeTicket(ticket.id)"   onClick="$('#closeTicket').modal()" data-target="#myModal"   class="btn btn-simple btn-info">close ticket</a>
                                         <a ng-if="ticket.status == 'Closed'"  has-permission="Tickets:Reopen"  class="btn btn-simple btn-info"  ng-click="reopenTicket(ticket.id)"   onClick="$('#reopenModalNew').modal()" data-target="#myModal">Reopen ticket</a>
 
                                     </div>
@@ -328,6 +328,12 @@
                                   	<a ng-if="(listJobId > 0)"  ui-sref="view-job({id : listJobId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View Job {{listJobId}}</a>
                                   	</td>
                                   </tr>
+                                  <tr>
+                                  	<td>Comments</td>
+                                  	<td>
+                                  		{{listComments}}
+                                  	</td>
+                                  </tr>
                                  </tbody>
                              </table>
                          </div>
@@ -408,7 +414,7 @@
 </div><!--End View modal -->
 
 <!-- Ticket Close confirmation dialog -->
-<div id="deleteModalNew" class="delete-confirmation modal fade">
+<div id="closeTicket" class="delete-confirmation modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -417,7 +423,9 @@
                 <h4 class="modal-title">Close Ticket</h4>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to close the ticket?</p>
+	                <p>Are you sure you want to close the ticket?</p>
+	                <br/>
+                    <input class="form-control border-bottom-input" ng-model="cTicket.comments" placeholder="Enter Remarks..">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

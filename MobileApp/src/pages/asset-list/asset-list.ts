@@ -349,7 +349,7 @@ export class AssetList {
     }
 
     // Scroll
-    doInfiniteTodaysJobs(infiniteScroll){
+    doInfiniteAsset(infiniteScroll){
         console.log('Begin async operation');
         console.log(infiniteScroll);
         console.log(this.totalPages);
@@ -369,7 +369,7 @@ export class AssetList {
             setTimeout(()=>{
                 this.assetService.searchAssets(searchCriteria).subscribe(
                     response=>{
-                        console.log('ionViewDidLoad jobs list:');
+                        console.log('ionViewDidLoad Asset list:');
                         console.log(response);
                         console.log(response.transactions);
                         for(var i=0;i<response.transactions.length;i++){
@@ -380,7 +380,7 @@ export class AssetList {
                         this.componentService.closeLoader();
                     },
                     error=>{
-                        console.log('ionViewDidLoad Jobs Page:'+error);
+                        console.log('ionViewDidLoad Asset-list Page:'+error);
                     }
                 );
                 infiniteScroll.complete();

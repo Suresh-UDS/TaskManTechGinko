@@ -3,7 +3,7 @@
 
 
 
-    <div class="row" ng-init="loadProjectsList();">
+    <div class="row" ng-init="loadProjectsList();loadProjects();loadAssets();loadEmployee()">
         <div class="col-md-6 txt-align-lft">
 
             <!--<button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">-->
@@ -459,7 +459,7 @@
                             <div id="collapseOne" class="panel-collapse collapse collapseOne in" role="tabpanel" aria-labelledby="headingOne" aria-expanded="true" style="height: 110px;">
                                 <div class="panel-body">
 
-                                    <div class="row" ng-init="loadProjects();loadAssets();loadEmployee()">
+                                    <div class="row">
                                         <div class="col-xs-12 col-md-4">
                                             <div class="form-group" >
                                                 <div class="dropdown">
@@ -491,7 +491,7 @@
                                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sitesList.length == 0" ng-change="loadSearchSite(searchSite);loadEmployees()" ng-click="loadSearchSite(searchSite);loadEmployees()">
                                                         <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?clearField?'Select Site':searchSite : 'Select Site' }}</ui-select-match>
-                                                        <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
+                                                        <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search track by $index">
                                                             <div ng-bind="site"></div>
                                                         </ui-select-choices>
                                                     </ui-select>
@@ -554,12 +554,12 @@
                                                     <span ng-show="empSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!empSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <ui-select ng-model="searchEmployee" ng-change="loadSearchEmployees(searchEmployee)">
-                                                        <ui-select-match placeholder="Select Employee...">{{employees.length == 0 ? 'Select Site' : searchEmployee.searchStatus ? searchEmployee.name?searchEmployee.name:'Select Employee' :  clearField?'Select Employee':searchEmployee  }}</ui-select-match>
-                                                        <ui-select-choices  repeat="emp in getEmp($select.search) | filter: $select.search">
+                                                        <ui-select-match placeholder="Select Employee...">{{employees.length == 0 ? 'Select Site' : searchEmployee.searchStatus ? searchEmployee.name?searchEmployee.name:'Select Employee' :  hideEmp?clearField?'Select Employee':searchEmployee:'Select Employee'  }}</ui-select-match>
+                                                        <ui-select-choices  repeat="emp in getEmp($select.search) | filter: $select.search track by $index">
                                                             <div ng-bind="emp"></div>
                                                         </ui-select-choices>
                                                     </ui-select>
-                                                    <span ng-if="employees.length == 0"><p class="help-block">No sites</p></span>
+                                                    <span ng-if="employees.length == 0 && !employees"><p class="help-block">No sites</p></span>
                                                 </div>
                                             </div>
                                         </div>

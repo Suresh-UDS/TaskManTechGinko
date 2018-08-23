@@ -13,7 +13,7 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
     <div [ngSwitch]="categories">
         <ion-list *ngSwitchCase="'details'">
         <ion-row class="margin0 white-bg padding10">
@@ -42,7 +42,7 @@
             </ion-row>
             <ion-row>
                 <ion-col col-3 *ngFor="let image of takenImages;let i of index" class="">
-                    <img [src]="image" class="job-img margin-bottom25" (click)="viewImage(i,image)">
+                    <img [src]="image" class="job-img margin-bottom25" (click)="imgViewer(image)">
                 </ion-col>
             </ion-row>
         </div>
@@ -56,7 +56,7 @@
             <ion-row>
                 <!--<ion-col col-3 *ngFor="let image of completedImages;let i of index" class="">-->
                 <ion-col col-3 *ngFor="let image of jobDetails.images;let i of index" class="">
-                <img [src]="image.url" class="job-img margin-bottom25" (click)="viewOnlyImage(i,image)">
+                <img [src]="image.url" class="job-img margin-bottom25" (click)="imgViewer(image.url)">
                 </ion-col>
             </ion-row>
         </div>
@@ -108,7 +108,7 @@
                             </ion-item>
                         </ion-col>
                         <ion-col col-7>
-                            <p text-right="">{{list.checklistItemName}}</p>
+                            <p text-left>{{list.checklistItemName}}</p>
                         </ion-col>
                         <ion-col col-3 class="ver-center" >
                         <div *ngIf="list.image_1 != null" float-right="">
@@ -126,29 +126,29 @@
                     </ion-row>
                     <ion-row class="no-margin margin-auto">
                         <ion-col col-4  class="margin-top25" *ngIf="list.imageUrl_1 ; else image1">
-                            <img [src]="list.imageUrl_1" class="job-img margin-bottom25" >
+                            <img [src]="list.imageUrl_1" class="job-img margin-bottom25" (click)="viewImg(list.imageUrl_1)">
                         </ion-col>
                         <ng-template #image1>
                             <ion-col col-4  class="margin-top25" *ngIf="list.image_1">
-                                <img [src]="list.image_1" class="job-img margin-bottom25" >
+                                <img [src]="list.image_1" class="job-img margin-bottom25" (click)="viewImg(list.image_1)">
                             </ion-col>
                         </ng-template>
 
                         <ion-col col-4  class="margin-top25" *ngIf="list.imageUrl_2 ; else image2">
-                            <img [src]="list.imageUrl_2" class="job-img margin-bottom25" >
+                            <img [src]="list.imageUrl_2" class="job-img margin-bottom25" (click)="viewImg(list.imageUrl_2)">
                         </ion-col>
                         <ng-template #image2>
                             <ion-col col-4  class="margin-top25" *ngIf="list.image_2">
-                                <img [src]="list.image_2" class="job-img margin-bottom25" >
+                                <img [src]="list.image_2" class="job-img margin-bottom25" (click)="viewImg(list.image_2)">
                             </ion-col>
                         </ng-template>
 
                         <ion-col col-4  class="margin-top25"  *ngIf="list.imageUrl_3 ; else image3">
-                            <img [src]="list.imageUrl_3" class="job-img margin-bottom25" >
+                            <img [src]="list.imageUrl_3" class="job-img margin-bottom25" (click)="viewImg(list.imageUrl_3)">
                         </ion-col>
                         <ng-template #image3>
                             <ion-col col-4  class="margin-top25" *ngIf="list.image_3">
-                                <img [src]="list.image_3" class="job-img margin-bottom25" >
+                                <img [src]="list.image_3" class="job-img margin-bottom25" (click)="viewImg(list.image_3)">
                             </ion-col>
                         </ng-template>
                     </ion-row>

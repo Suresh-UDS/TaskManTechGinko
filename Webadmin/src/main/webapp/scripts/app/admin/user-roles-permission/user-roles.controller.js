@@ -109,9 +109,9 @@ angular.module('timeSheetApp')
 
 
 
-        $scope.loadUserRole = function() {
-        	console.log('loadUserRole -' + $stateParams.id);
-        	UserRoleComponent.findOne($stateParams.id).then(function (data) {
+        $scope.loadUserRole = function(id) {
+        	//console.log('loadUserRole -' + $stateParams.id);
+        	UserRoleComponent.findOne(id).then(function (data) {
                 $scope.loadingStop();
                 $scope.userRole = data;
             });
