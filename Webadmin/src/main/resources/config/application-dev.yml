@@ -60,7 +60,9 @@ liquibase:
 
 server:
     port: 8088
-
+    tomcat:
+         max-connections: 100
+         max-threads:  400
 upload:
     file:
          path: /opt/uploads
