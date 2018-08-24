@@ -279,7 +279,7 @@
                                                     <label class="control-label">Zone </label>
                                                     <div class="dropdown">
                                                      <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-													<select class="form-control " ng-model="selectedZone"  ng-options="(zone | uppercase) as zone for zone in zones track by zone">
+													<select class="form-control " ng-model="selectedZone"  ng-options="zone as (zone | uppercase) for zone in zones track by zone">
                                                         <option value="">Select Zone...</option>
                                                     </select>
                                                    	 <div ng-show="form.$submitted || form.floor.$touched">
