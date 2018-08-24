@@ -166,6 +166,7 @@ angular.module('timeSheetApp')
 
         });
 
+
         $('#shiftTo').on('dp.change', function(e){
 
             console.log('shiftTo', e.date._d);
@@ -176,6 +177,8 @@ angular.module('timeSheetApp')
             }
 
         });
+
+        
 
 
         $scope.valid= null;
@@ -254,22 +257,43 @@ angular.module('timeSheetApp')
 
         $scope.sStatus = false;
         $scope.eStatus = false;
+        $scope.dupStatus = false;
 
 
 
         $scope.addShiftItem = function(event) {
+
             if(jQuery.isEmptyObject($scope.newShiftItem) == false){
+                  //alert($scope.newShiftItem.endTime);
                 if(!$scope.newShiftItem.startTime){
                    $scope.sStatus = true;
                    $scope.eStatus = false;
+                   return;
                 }
                 else if(!$scope.newShiftItem.endTime){
                     $scope.eStatus = true;
                     $scope.sStatus = false;
-                }
-                else{
+                    return;
+                }else{
                     console.log(shiftFrom,shiftTo);
             		event.preventDefault();
+                   
+                    if($scope.shiftItems.length > 0){
+                        
+                        for(var i=0; i < $scope.shiftItems.length;i++){
+                    
+                            var oldshiftStart = $scope.shiftItems[i].startTime;
+                            var oldshiftEnd = $scope.shiftItems[i].endTime;
+                            
+                            if((oldshiftStart == $scope.newShiftItem.startTime) 
+                                && (oldshiftEnd == $scope.newShiftItem.endTime)){
+                                $scope.dupStatus = true;
+                                return;
+                            }
+
+                            $scope.dupStatus = false;
+                        }
+                    }
             		console.log('new shift item - ' + JSON.stringify($scope.newShiftItem));
             		$scope.shiftItems.push($scope.newShiftItem);
             		console.log('shiftItems - '+ JSON.stringify($scope.shiftItems));
@@ -280,6 +304,7 @@ angular.module('timeSheetApp')
             }else{
                 $scope.sStatus = false;
                 $scope.eStatus = false;
+
             }
         }
 
