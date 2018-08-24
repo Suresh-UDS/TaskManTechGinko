@@ -716,8 +716,8 @@ angular
 			        }
 
 			        $scope.searchFilter = function () {
-			            $scope.setPage(1);
-			            //$scope.search();
+			            //$scope.setPage(1);
+			            $scope.search();
 			         }
 
 
@@ -728,12 +728,12 @@ angular
 						$scope.searchCreatedBy = null;
 						$scope.searchApprovedBy = null;
 						$scope.searchStatus = null;
-			            $scope.searchCriteria.id =null;
+			            $scope.searchCriteria={};
 			            $scope.searchCriteria.quotationTitle =null;
 			            $scope.searchCriteria.quotationCreatedBy =null;
 			            $scope.searchCriteria.quotationApprovedBy =null;
 			            $scope.searchCriteria.quotationStatus =null;
-			            $scope.setPage(1);
+			            //$scope.setPage(1);
 			            $scope.search();
 			         }
 
@@ -756,14 +756,14 @@ angular
 			        		$scope.searchCriteria.findAll = true;
 			        	}
 
-			        	if($scope.searchProject && $scope.searchProject.searchStatus != '0') {
+			        	if($scope.searchProject) {
 			        		$scope.searchCriteria.projectId = $scope.searchProject.id;
                             $scope.searchCriteria.projectName = $scope.searchProject.name;
 			        	}else{
 			        		$scope.searchCriteria.projectId = null;
 			        	}
 
-			        	if($scope.searchSite && $scope.searchSite.searchStatus != '0') {
+			        	if($scope.searchSite) {
 			        		$scope.searchCriteria.siteId = $scope.searchSite.id;
                             $scope.searchCriteria.siteName = $scope.searchSite.name;
 				    }/*else if($scope.sites) {
@@ -875,7 +875,7 @@ angular
 			         //init load
                         $scope.initLoad = function(){
                              $scope.loadPageTop();
-                             //$scope.loadAllQuotations();
+                             $scope.loadAllQuotations();
                              $scope.init();
 
                          }
@@ -912,5 +912,19 @@ angular
 					                $state.reload();
 					            });
 					        }
+
+					        $scope.quoteStatus = true;
+
+					        $scope.validCheck = function(){
+                               
+                               if($scope.materialName || $scope.serviceName || $scope.labourCategory){
+	                               $scope.quoteStatus = false;
+						        }else{
+						        	$scope.quoteStatus = true;
+						        }
+
+					        }
+
+					        
 
 				});
