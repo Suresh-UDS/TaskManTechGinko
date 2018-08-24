@@ -71,10 +71,8 @@ public class MaterialIndentService extends AbstractService {
 	public MaterialIndentDTO createIndent(MaterialIndentDTO materialIndentDTO) { 
 		MaterialIndent indentEntity = mapperUtil.toEntity(materialIndentDTO, MaterialIndent.class);
 		indentEntity.setRequestedDate(DateUtil.convertToTimestamp(materialIndentDTO.getRequestedDate()));
-		indentEntity.setIssuedDate(DateUtil.convertToTimestamp(materialIndentDTO.getIssuedDate()));
 		indentEntity.setSite(siteRepository.findOne(materialIndentDTO.getSiteId()));
 		indentEntity.setProject(projectRepository.findOne(materialIndentDTO.getProjectId()));
-		indentEntity.setIssuedBy(employeeRepository.findOne(materialIndentDTO.getRequestedById()));
 		indentEntity.setRequestedBy(employeeRepository.findOne(materialIndentDTO.getIssuedById()));
 		indentEntity.setActive(MaterialIndent.ACTIVE_YES);
 		List<MaterialIndentItemDTO> indentItems = materialIndentDTO.getItems();
