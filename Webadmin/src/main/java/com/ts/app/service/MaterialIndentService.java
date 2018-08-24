@@ -227,6 +227,12 @@ public class MaterialIndentService extends AbstractService {
 		return;
 	}
 
+	public List<MaterialIndentDTO> getMaterialBySite(MaterialIndentDTO indentDTO) {
+		List<MaterialIndent> materialIndentList = materialIndentRepository.findIndentBySites(indentDTO.getProjectId(), indentDTO.getSiteId());
+		List<MaterialIndentDTO> materialIndentModel = mapperUtil.toModelList(materialIndentList, MaterialIndentDTO.class);
+		return materialIndentModel;
+	}
+
 	
 	
 	

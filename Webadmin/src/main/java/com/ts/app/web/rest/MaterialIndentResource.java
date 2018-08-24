@@ -54,6 +54,18 @@ public class MaterialIndentResource {
 		return materialIndentService.getMaterial(id);
 	}
 	
+	@RequestMapping(value = "/materialIndent/sites", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public List<MaterialIndentDTO> getMaterialIndent(@Valid @RequestBody MaterialIndentDTO indentDTO, HttpServletRequest request) { 
+		List<MaterialIndentDTO> result = null;
+		try {
+			result = materialIndentService.getMaterialBySite(indentDTO);
+		} catch(Exception e) {
+			throw new TimesheetException("Error while get material indents based on Site" + e);
+		}
+		return result;
+	}
+	
 	@RequestMapping(value="/materialIndent/findAll", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<MaterialIndentDTO> getAllMaterials() { 
 		List<MaterialIndentDTO> result = null;
