@@ -38,9 +38,15 @@ export class ViewJobPage {
         console.log(this.jobDetails);
 
         if(this.jobDetails.ticketId){
+            this.component.showLoader("Getting Job Details");
             this.jobService.getTicketDetails(this.jobDetails.ticketId).subscribe(
                 response=>{
+                    this.component.closeAll();
                     this.ticketDetails = response;
+                },err=>
+                {
+                    this.component.showToastMessage('Error in getting Job Details','bottom');
+                    console.log(err);
                 }
             )
         }
