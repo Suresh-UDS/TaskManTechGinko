@@ -113,9 +113,9 @@ export class EmployeeList {
   ionViewWillEnter(){
 
       console.log("Attendnace page location availability");
-      this.diagonistic.getLocationMode().then((isAvailable)=>{
+      this.diagonistic.isLocationEnabled().then((isAvailable)=>{
           console.log(isAvailable);
-          if(isAvailable == 'location_off'){
+          if(!isAvailable){
               this.locationAccuracy.canRequest().then((canRequest: boolean) => {
 
                   if (canRequest) {

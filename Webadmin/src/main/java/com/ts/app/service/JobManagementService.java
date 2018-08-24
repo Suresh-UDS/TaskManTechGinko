@@ -754,7 +754,7 @@ public class JobManagementService extends AbstractService {
 
 	public List<Long> findAllSubordinates(Employee employee, List<Long> subEmpIds) {
 		Set<Employee> subs = employee.getSubOrdinates();
-		log.debug("List of subordinates -"+ subs);
+		//log.debug("List of subordinates -"+ subs);
 		if(subs == null){
 			subEmpIds = new ArrayList<Long>();
 		}
