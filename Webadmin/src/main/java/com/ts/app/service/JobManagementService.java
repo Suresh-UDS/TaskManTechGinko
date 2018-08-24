@@ -794,6 +794,20 @@ public class JobManagementService extends AbstractService {
 
 		Job job = new Job();
 
+		//Date Validation
+		if(job.getScheduleEndDate() != null) {
+			Calendar startCal = Calendar.getInstance();
+			startCal.setTime(job.getPlannedStartTime());
+			Calendar scheduleEndCal = Calendar.getInstance();
+			scheduleEndCal.setTime(job.getScheduleEndDate());
+			if(scheduleEndCal.before(startCal)) {
+				jobDTO.setErrorMessage("Job schedule end date cannot be earlier than start date");
+				return jobDTO;
+			}
+					
+		}
+		
+		
 		mapToEntity(jobDTO, job);
 		if(job.getStatus() == null) {
 			job.setStatus(JobStatus.ASSIGNED);
@@ -1109,11 +1123,11 @@ public class JobManagementService extends AbstractService {
         }
         if(org.apache.commons.lang3.StringUtils.isNotEmpty(jobDTO.getFloor())){
 
-            job.setBlock(jobDTO.getFloor());
+            job.setFloor(jobDTO.getFloor());
         }
         if(org.apache.commons.lang3.StringUtils.isNotEmpty(jobDTO.getZone())){
 
-            job.setBlock(jobDTO.getZone());
+            job.setZone(jobDTO.getZone());
         }
 		if(asset!=null){
 		    job.setAsset(asset);
