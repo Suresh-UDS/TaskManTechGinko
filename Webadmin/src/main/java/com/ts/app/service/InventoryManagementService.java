@@ -17,6 +17,8 @@ import org.springframework.util.StringUtils;
 
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.AssetGroup;
+import com.ts.app.domain.AssetParameterReading;
+import com.ts.app.domain.AssetStatusHistoryDTO;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Material;
@@ -33,7 +35,9 @@ import com.ts.app.repository.MaterialItemGroupRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.AssetParameterReadingDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.MaterialDTO;
@@ -209,7 +213,7 @@ public class InventoryManagementService extends AbstractService{
 			List<Material> allMaterialsList = new ArrayList<Material>();
 			List<MaterialDTO> transactions = null;
 
-            log.debug("AssetSpecification toPredicate - searchCriteria get consolidated status -"+ searchCriteria.isConsolidated());
+            log.debug("InventorySpecification toPredicate - searchCriteria get consolidated status -"+ searchCriteria.isConsolidated());
 
 			if(!searchCriteria.isConsolidated()) {
 				log.debug(">>> inside search consolidate <<<");
@@ -231,6 +235,64 @@ public class InventoryManagementService extends AbstractService{
 	}
 
 	private void buildSearchResult(SearchCriteria searchCriteria, Page<Material> page, List<MaterialDTO> transactions, SearchResult<MaterialDTO> result) {
+		if (page != null) {
+			result.setTotalPages(page.getTotalPages());
+		}
+		result.setCurrPage(page.getNumber() + 1);
+		result.setTotalCount(page.getTotalElements());
+		result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
+		result.setEndInd((result.getTotalCount() > 10 ? (result.getCurrPage()) * 10 : result.getTotalCount()));
+
+		result.setTransactions(transactions);
+		return;
+	}
+
+	public SearchResult<MaterialTransactionDTO> viewMaterialTransactions(SearchCriteria searchCriteria) {
+		SearchResult<MaterialTransactionDTO> result = new SearchResult<MaterialTransactionDTO>();
+
+		Pageable pageRequest = null;
+		if(searchCriteria != null) {
+			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
+				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+				log.debug("Sorting object" + sort);
+				pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+			} else {
+				if (searchCriteria.isList()) {
+					pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+				} else {
+					pageRequest = createPageRequest(searchCriteria.getCurrPage());
+				}
+			}
+
+			Page<MaterialTransaction> page = null;
+			List<MaterialTransaction> allTransactionsList = new ArrayList<MaterialTransaction>();
+			List<MaterialTransactionDTO> transactions = null;
+
+			if(searchCriteria.getTransactionFromDate() != null && searchCriteria.getTransactionToDate() != null) {
+				page = inventTransactionRepository.findByTransactionDate(DateUtil.convertToTimestamp(searchCriteria.getTransactionFromDate()), DateUtil.convertToTimestamp(searchCriteria.getTransactionToDate()), pageRequest);
+			}else {
+				page = inventTransactionRepository.findByMaterialTransaction(searchCriteria.getMaterialId(), pageRequest);
+			}
+
+			allTransactionsList.addAll(page.getContent());
+
+			if(CollectionUtils.isNotEmpty(allTransactionsList)) {
+				if(transactions == null) {
+					transactions = new ArrayList<MaterialTransactionDTO>();
+				}
+	        		for(MaterialTransaction materialTrans : allTransactionsList) {
+	        			transactions.add(mapperUtil.toModel(materialTrans, MaterialTransactionDTO.class));
+	        		}
+				buildSearchResultTransax(searchCriteria, page, transactions,result);
+			}
+		}
+
+		return result;
+	}
+
+	private void buildSearchResultTransax(SearchCriteria searchCriteria, Page<MaterialTransaction> page,
+		List<MaterialTransactionDTO> transactions, SearchResult<MaterialTransactionDTO> result) {
+	// TODO Auto-generated method stub
 		if (page != null) {
 			result.setTotalPages(page.getTotalPages());
 		}

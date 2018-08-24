@@ -11,7 +11,11 @@ public class MaterialTransactionDTO extends BaseDTO {
 	
 	private long siteId;
 	
+	private String siteName;
+	
 	private long projectId;
+	
+	private String projectName;
 	
 	private long jobId;
 	
@@ -36,6 +40,8 @@ public class MaterialTransactionDTO extends BaseDTO {
 	private MaterialTransactionType transactionType;
 	
 	private Timestamp transactionDate;
+	
+	private long materialIndentId;
 
 	public long getId() {
 		return id;
@@ -155,6 +161,30 @@ public class MaterialTransactionDTO extends BaseDTO {
 
 	public void setMaterialGroupItemGroup(String materialGroupItemGroup) {
 		this.materialGroupItemGroup = materialGroupItemGroup;
+	}
+
+	public String getSiteName() {
+		return siteName;
+	}
+
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public long getMaterialIndentId() {
+		return materialIndentId;
+	}
+
+	public void setMaterialIndentId(long materialIndentId) {
+		this.materialIndentId = materialIndentId;
 	}
 
 	

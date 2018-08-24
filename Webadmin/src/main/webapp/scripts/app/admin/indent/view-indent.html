@@ -1,4 +1,4 @@
-<div class="crud-form" ng-init="initLoad();loadingStart();">
+<div class="crud-form" ng-init="viewIndents();loadingStart();">
 
 
     <div class="margn-top30">
@@ -16,11 +16,16 @@
                                 <tbody>
                                     <tr>
                                         <td>Client</td>
-                                        <td>UDS</td>
+                                        <td>{{materialIndentObj.projectName}}</td>
                                     </tr>
                                     <tr>
                                         <td>Site</td>
-                                        <td>HDFC Vadapalani</td>
+                                        <td>{{materialIndentObj.siteName}}</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>Reference Number</td>
+                                        <td>{{materialIndentObj.indentRefNumber}}</td>
 
                                     </tr>
                                 </tbody>
@@ -43,11 +48,16 @@
                                 <tbody>
                                 <tr>
                                     <td>Employee Id</td>
-                                    <td>1001</td>
+                                    <td>{{materialIndentObj.requestedById}}</td>
                                 </tr>
                                 <tr>
                                     <td>Employee Name</td>
-                                    <td>Muthukumar</td>
+                                    <td>{{materialIndentObj.requestedByName}}</td>
+
+                                </tr>
+                                <tr>
+                                    <td>Requested Date</td>
+                                    <td>{{materialIndentObj.requestedDate | date: "dd-MM-yyyy"}}</td>
 
                                 </tr>
                                 </tbody>
@@ -62,7 +72,7 @@
             <div class="col-md-12 col-lg-12">
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">Escalation Level</div>
+                    <div class="panel-heading">Material Items</div>
                     <div class="panel-body TableListinput">
 
 
@@ -78,34 +88,15 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>1001 </td>
-                                    <td>Item Name</td>
-                                    <td>Uom</td>
-                                    <td>10</td>
+                                <tr ng-repeat="material in materialIndentObj.items">
+                                    <td>{{material.materialItemCode}}</td>
+                                    <td>{{material.materialName}}</td>
+                                    <td>{{material.materialUom}}</td>
+                                    <td>{{material.quantity}}</td>
                                     <td width="10%">
                                         <input type="number" class="form-control" name="issue_qty"  ng-minlength="1" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>1001 </td>
-                                    <td>Item Name</td>
-                                    <td>Uom</td>
-                                    <td>10</td>
-                                    <td width="10%">
-                                        <input type="number" class="form-control" name="issue_qty"  ng-minlength="1" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>1001 </td>
-                                    <td>Item Name</td>
-                                    <td>Uom</td>
-                                    <td>10</td>
-                                    <td width="10%">
-                                        <input type="number" class="form-control" name="issue_qty"  ng-minlength="1" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
-                                    </td>
-                                </tr>
-
 
                                 </tbody>
                                 <tfoot>

@@ -1,6 +1,11 @@
 package com.ts.app.domain;
 
+import java.io.Serializable;
+
+import javax.persistence.Cacheable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -8,9 +13,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @Entity
 @Table(name = "material_indent_item")
-public class MaterialIndentItem {
+public class MaterialIndentItem extends AbstractAuditingEntity implements Serializable {
 
 	/**
 	 *
@@ -21,8 +29,11 @@ public class MaterialIndentItem {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	private Material item;
+	@ManyToOne()
+	@JoinColumn(name = "material_id")
+	private Material material;
 	
+	@Column(name = "quantity")
 	private long quantity; 
 	
 	@ManyToOne()
@@ -37,12 +48,12 @@ public class MaterialIndentItem {
 		this.id = id;
 	}
 
-	public Material getItem() {
-		return item;
+	public Material getMaterial() {
+		return material;
 	}
 
-	public void setItem(Material item) {
-		this.item = item;
+	public void setMaterial(Material material) {
+		this.material = material;
 	}
 
 	public long getQuantity() {
@@ -60,6 +71,7 @@ public class MaterialIndentItem {
 	public void setMaterialIndent(MaterialIndent materialIndent) {
 		this.materialIndent = materialIndent;
 	}
+
 
 	
 }

@@ -14,7 +14,7 @@
                             <a href=".Inventory" data-toggle="tab" > Inventory Details</a>
                         </li>
                         <li>
-                            <a href=".Transaction" data-toggle="tab" > Transaction Details</a>
+                            <a href=".Transaction" data-toggle="tab" ng-click="loadSubModule(loadMaterialTrans)" > Transaction Details</a>
                         </li>
                     </ul>
 
@@ -175,46 +175,26 @@
                                                  <table class="table table-striped">
                                                      <thead>
                                                      <tr>
-                                                         <th width="30%"> Description</th>
+                                                         <th width="30%"> Transaction Type</th>
+                                                         <th>Store Stock</th>
                                                          <th>Qty</th>
                                                          <th>Date</th>
                                                          <th class="text-right">Actions</th>
                                                      </tr>
                                                      </thead>
                                                      <tbody>
-                                                     <tr>
-                                                         <td>Received</td>
-                                                         <td>10</td>
-                                                         <td>20/06/2018</td>
+                                                     <tr ng-repeat="materialTransaction in materialTransactions">
+                                                         <td>{{materialTransaction.transactionType}}</td>
+                                                         <td>{{materialTransaction.storeStock}}</td>
+                                                         <td>{{materialTransaction.quantity}}</td>
+                                                         <td>{{materialTransaction.transactionDate | date: "dd-MM-yyyy" }}</td>
                                                          <td class="text-right">
                                                              <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                                                          </td>
                                                      </tr>
-                                                     <tr>
-                                                         <td>Received</td>
-                                                         <td>10</td>
-                                                         <td>20/06/2018</td>
-                                                         <td class="text-right">
-                                                             <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                                         </td>
-                                                     </tr>
-                                                     <tr>
-                                                         <td>Received</td>
-                                                         <td>10</td>
-                                                         <td>20/06/2018</td>
-                                                         <td class="text-right">
-                                                             <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                                         </td>
-                                                     </tr>
-                                                     <tr>
-                                                         <td>Received</td>
-                                                         <td>10</td>
-                                                         <td>20/06/2018</td>
-                                                         <td class="text-right">
-                                                             <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                                         </td>
-                                                     </tr>
-
+                                                       <tr ng-show="!materialTransactions">
+                                                       	<td colspan="5" align="center">No Transactions Found</td>
+                                                       </tr>
                                                      </tbody>
                                                  </table>
 

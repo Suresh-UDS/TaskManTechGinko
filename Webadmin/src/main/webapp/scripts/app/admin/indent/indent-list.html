@@ -1,4 +1,4 @@
-<div ng-init="initLoad()">
+<div ng-init="initList()">
 
     <div class="row">
 
@@ -40,34 +40,32 @@
                         <table class="table table-hover">
                             <thead>
                                <tr>
-
-                                   <th>Id</th>
+                                   <th>Reference No</th>
+                                   <th>Client</th>
                                    <th>Site</th>
                                    <th>Requested By</th>
                                    <th>Requested Date</th>
                                    <th>Issued By</th>
                                    <th>Issued Date</th>
                                    <th>Actions</th>
-
                                </tr>
                             </thead>
                             <tbody>
-
-                                <tr>
-
-                                    <td>1001</td>
-                                    <td>UDS</td>
-                                    <td>Requestor</td>
-                                    <td>10/08/2018</td>
-                                    <td>Issuer</td>
-                                    <td>10/08/2018</td>
+                                <tr ng-repeat="materialIndent in materialIndents">
+                                    <td>{{materialIndent.indentRefNumber}}</td>
+                                    <td>{{materialIndent.projectName}}</td>
+                                    <td>{{materialIndent.siteName}}</td>
+                                    <td>{{materialIndent.requestedByName}}</td>
+                                    <td>{{materialIndent.requestedDate | date:"dd-MM-yyyy"}}</td>
+                                    <td>{{materialIndent.issuedByName}}</td>
+                                    <td>{{materialIndent.issuedDate | date: "dd-MM-yyyy"}}</td>
                                     <td class="text-right hoverMe">
 
                                         <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
 
                                         <div class="HoverBx">
-                                            <button  title="View"  ui-sref="view-indent" class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                            <a ui-sref="edit-indent"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                            <button  title="View"  ui-sref="view-indent({id: materialIndent.id })" class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
+                                            <a ui-sref="edit-indent({id: materialIndent.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
                                             <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                                         </div>
@@ -76,14 +74,9 @@
                                     </td>
                                 </tr>
 
-
-
-
-
                             </tbody>
                         </table>
                     </div>
-
 
                 </div>
             </div>
@@ -91,37 +84,12 @@
     </div>
     <!-- end row -->
 
+   
+    <!-- Pagination directive start -->
 
-    <div class="row">
+    <pagination-new></pagination-new>
 
-        <div class="col-md-4"></div>
-        <div class="col-md-8 text-right">
-            <ul class="pagination pagination-warning">
-
-                <li class="paging-first" ID="first">
-                    <a href="#" id="first" ng-click="first()">
-                        <i id="first" class=" fa fa-step-backward"></i></a>
-                </li>
-                <li class="prev paging-previous" id="previous">
-                    <a id="previous" href="#" ng-click="previous()"> prev</a>
-                </li>
-
-                <li ng-class="{active: number == pages.currPage}" class="paging" ng-repeat="number in numberArrays" ng-click="clickNextOrPrev(number)">
-                    <a href="#" style="cursor:pointer">{{number}}</a>
-                </li>
-                <li class="next paging-next" id="next">
-                    <a id="next" href="#" ng-click="next()" >next</a>
-                </li>
-                <li class="paging-last" id="last">
-                    <a id="last" href="#" ng-click="last()"><i id="last" class="fa fa-step-forward"></i></a>
-                </li>
-
-            </ul>
-        </div>
-
-    </div>
-
-
+    <!-- Pagination directive end -->
 
 
     <!-- Delete confirmation dialog -->

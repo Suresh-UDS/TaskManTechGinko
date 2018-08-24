@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.AssetStatusHistoryDTO;
 import com.ts.app.domain.Material;
 import com.ts.app.domain.MaterialItemGroup;
 import com.ts.app.domain.MaterialUOMType;
@@ -27,6 +28,7 @@ import com.ts.app.service.InventoryManagementService;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.MaterialDTO;
 import com.ts.app.web.rest.dto.MaterialItemGroupDTO;
+import com.ts.app.web.rest.dto.MaterialTransactionDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -133,6 +135,17 @@ public class InventoryManagementResource {
 		if (searchCriteria != null) {
 			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
 			result = inventoryService.findBySearchCrieria(searchCriteria);
+		}
+		return result;
+	}
+	
+	@RequestMapping(value = "/inventory/transactions", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public SearchResult<MaterialTransactionDTO> viewMaterialTransaction(@RequestBody SearchCriteria searchCriteria) {
+		SearchResult<MaterialTransactionDTO> result = null;
+		try {
+			result = inventoryService.viewMaterialTransactions(searchCriteria);
+		} catch(Exception e) {
+			throw new TimesheetException("Error while get material transactions " +e);
 		}
 		return result;
 	}

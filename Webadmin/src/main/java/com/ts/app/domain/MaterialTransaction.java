@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -48,6 +49,10 @@ public class MaterialTransaction extends AbstractAuditingEntity implements Seria
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "materialGroupId", nullable = true)
 	private MaterialItemGroup materialGroup;
+	
+	@OneToOne()
+	@JoinColumn(name = "materialIndentId", nullable = true)
+	private MaterialIndent materialIndent;
 	
 	private long quantity;
 	
@@ -153,6 +158,14 @@ public class MaterialTransaction extends AbstractAuditingEntity implements Seria
 
 	public void setMaterialGroup(MaterialItemGroup materialGroup) {
 		this.materialGroup = materialGroup;
+	}
+
+	public MaterialIndent getMaterialIndent() {
+		return materialIndent;
+	}
+
+	public void setMaterialIndent(MaterialIndent materialIndent) {
+		this.materialIndent = materialIndent;
 	}
 
 	

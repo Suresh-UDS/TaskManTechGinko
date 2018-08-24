@@ -20,7 +20,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		}
 	}).state('edit-indent', {
 		parent : 'manage',
-		url : '/edit-indent:id',
+		url : '/edit-indent/:id',
 		controller : 'IndentController',
 		data : {
 			authorities : [],
@@ -37,7 +37,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		}
 	}).state('view-indent', {
 		parent : 'manage',
-		url : '/view-indent:id',
+		url : '/view-indent/:id',
 		controller : 'IndentController',
 		data : {
 			authorities : [],

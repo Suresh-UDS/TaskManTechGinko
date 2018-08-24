@@ -1,4 +1,4 @@
-<div class="crud-form" ng-init="initLoad();loadingStart();">
+<div class="crud-form" ng-init="viewInventoryTrans();loadingStart();loadingStop();">
 
 
     <div class="margn-top30">
@@ -16,11 +16,11 @@
                                 <tbody>
                                     <tr>
                                         <td>Client</td>
-                                        <td></td>
+                                        <td>{{transactionViews.projectName}}</td>
                                     </tr>
                                     <tr>
                                         <td>Site</td>
-                                        <td></td>
+                                        <td>{{transactionViews.siteName}}</td>
 
                                     </tr>
                                 </tbody>
@@ -43,34 +43,34 @@
                                 <tbody>
                                 <tr>
                                     <td>Item Name </td>
-                                    <td></td>
+                                    <td>{{transactionViews.materialName}}</td>
                                 </tr>
                                 <tr>
                                     <td>Item Code</td>
-                                    <td></td>
+                                    <td>{{transactionViews.materialItemCode}}</td>
 
                                 </tr>
                                 <tr>
-                                    <td>Stock Received </td>
-                                    <td>
-
-                                    </td>
+                                    <td>Store Stock</td>
+                                    <td>{{transactionViews.storeStock}}</td>
 
                                 </tr>
                                 <tr>
 
-                                    <td>Stock consumed  </td>
-                                    <td>
+                                    <td>Quantity</td>
+                                    <td>{{transactionViews.quantity}}</td>
 
-                                    </td>
+                                </tr>
+                                <tr>
+
+                                    <td>Transaction Type</td>
+                                    <td>{{transactionViews.transactionType}}</td>
 
                                 </tr>
                                 <tr>
 
                                     <td>Date </td>
-                                    <td>
-
-                                    </td>
+                                    <td>{{transactionViews.transactionDate | date:"dd-MM-yyyy"}}</td>
 
                                 </tr>
 
@@ -83,6 +83,20 @@
 
 
             </div>
+            
+            
+               <div class="row">
+                   <div class="col-md-12 txt-align-rgt">
+                       <div class="form-group">
+
+                           <button class="btn" type="button"
+                                   ui-sref="inventory-transaction-list" id="cancel-button">
+                               Back
+                           </button>
+
+                       </div>
+                   </div>
+               </div>
 
         </div>
 
