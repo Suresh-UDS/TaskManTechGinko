@@ -1109,11 +1109,11 @@ public class JobManagementService extends AbstractService {
         }
         if(org.apache.commons.lang3.StringUtils.isNotEmpty(jobDTO.getFloor())){
 
-            job.setBlock(jobDTO.getFloor());
+            job.setFloor(jobDTO.getFloor());
         }
         if(org.apache.commons.lang3.StringUtils.isNotEmpty(jobDTO.getZone())){
 
-            job.setBlock(jobDTO.getZone());
+            job.setZone(jobDTO.getZone());
         }
 		if(asset!=null){
 		    job.setAsset(asset);
