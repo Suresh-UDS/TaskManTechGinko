@@ -34,13 +34,14 @@ spring:
             hibernate.generate_statistics: false
             hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
     mail:
-        host: smtp.gmail.com
+        host: smtp.office365.com
         port: 587
-        username: udsfmshelpdesk@gmail.com
-        password: Test123#
+        username: taskmanfms@uds.in
+        password: Task@2018
         properties:
             mail.transport.protocol: smtp
             mail.smtp.auth: true
+            mail.smtp.ssl.enable: true
             mail.smtp.starttls.enable: true
             mail.smtp.port: 587
             mail.debug: true
@@ -184,7 +185,7 @@ jhipster:
         ehcache:
             maxBytesLocalHeap: 512M
     mail: # specific JHipster mail property, for standard properties see MailProperties
-        from: no-reply@taskmanadmin.uds.in
+        from: taskmanfms@uds.in
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         spark:

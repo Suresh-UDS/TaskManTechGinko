@@ -244,6 +244,18 @@ public class AttendanceService extends AbstractService {
 							break;
 						}
 					}
+				}else if(checkInCal.after(startCalLeadTime) && (prevShiftStartCal != null && prevShiftStartCal.after(startCalLeadTime))){
+					dbAttn.setShiftStartTime(startTime);
+					dbAttn.setShiftEndTime(endTime);
+					if(empShift != null) {
+						break;
+					}
+				}else if(checkInCal.after(startCalLeadTime)) {
+					dbAttn.setShiftStartTime(startTime);
+					dbAttn.setShiftEndTime(endTime);
+					if(empShift != null) {
+						break;
+					}
 				}
 
 				/*

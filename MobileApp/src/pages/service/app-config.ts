@@ -12,7 +12,7 @@ export interface ApplicationConfig
 
 export const AppConfig: ApplicationConfig={
     // Url: "http://192.168.1.4:8088/",
-    // Url: "http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/",
+    //Url: "http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/",
     Url: "https://taskmanapi.uds.in/",
 };
 
