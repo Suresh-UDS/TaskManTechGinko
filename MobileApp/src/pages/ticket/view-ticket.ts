@@ -5,6 +5,7 @@ import {JobService} from "../service/jobService";
 import {Ticket} from "./ticket";
 import {CreateJobPage} from "../jobs/add-job";
 import {QuotationImagePopoverPage} from "../quotation/quotation-image-popover";
+import{ViewJobPage} from "../jobs/view-job";
 
 
 /**
@@ -24,6 +25,7 @@ export class ViewTicket {
   ticketImage:any;
   constructor(public navCtrl: NavController, public navParams: NavParams,private cs:componentService, private jobService:JobService,private popoverCtrl:PopoverController) {
     // this.ticketDetails = this.navParams.data.ticket;
+      console.log("ticket");
       console.log(this.navParams.data.ticket);
       this.ticketDetails ={};
 
@@ -36,8 +38,10 @@ export class ViewTicket {
   }
 
   getTicketDetails(ticketDetails){
+      this.cs.showLoader("Getting Ticket Details");
       this.jobService.getTicketDetails(ticketDetails.id).subscribe(
           response=>{
+              this.cs.closeAll();
               console.log(response);
               this.ticketDetails = response;
               if(this.ticketDetails.image){
@@ -72,5 +76,13 @@ export class ViewTicket {
         this.navCtrl.push(CreateJobPage,{ticketDetails:this.ticketDetails});
     }
 
+
+    viewJob(ticketDetails){
+            var jobDetails={
+                id:ticketDetails.jobId,
+                ticketId:ticketDetails.id
+            }
+            this.navCtrl.push(ViewJobPage,{job:jobDetails});
+    }
 
 }

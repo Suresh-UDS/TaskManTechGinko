@@ -72,14 +72,13 @@ export class CreateJobPage {
         this.siteService.searchSite().subscribe(
             response=>{
                 console.log('ionViewDidLoad Add jobs');
-
                 console.log(response.json());
                 this.sites=response.json();
-                this.component.closeLoader();
+                this.component.closeAll();
             },
             error=>{
                 console.log('ionViewDidLoad SitePage:'+error);
-                this.component.closeLoader();
+                this.component.closeAll();
                 if(error.type==3)
                 {
                     this.msg='Server Unreachable'
@@ -92,8 +91,10 @@ export class CreateJobPage {
     }
     addJob()
     {
+
         if(this.title && this.description && this.siteName && this.employ && this.startDate && this.endDate)
         {
+            this.component.showLoader("Creating job");
             this.eMsg="";
             this.siteId=window.localStorage.getItem('site')
            var SDate = moment(this.startDate).local().format('YYYY-MM-DD HH:mm:ss');
@@ -163,10 +164,12 @@ export class CreateJobPage {
 
             this.jobService.createJob(this.newJob).subscribe(
                 response=> {
+                    this.component.closeAll();
                 console.log(response);
                 this.navCtrl.setRoot(JobsPage);
                 },
                 error=>{
+                    this.component.closeAll();
                     console.log(error);
                     if(error.type==3)
                     {
