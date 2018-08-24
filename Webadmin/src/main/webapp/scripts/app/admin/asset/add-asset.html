@@ -250,7 +250,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control " ng-model="selectedSites"  ng-options="site as site.name for site in sites" ng-change="loadBlocks();loadEmployees();" name="AssetSite"  required>
+                                                                                    <select class="form-control " ng-model="selectedSites"  ng-options="site as (site.name | uppercase)  for site in sites " ng-change="loadBlocks();loadEmployees();" name="AssetSite"  required>
                                                                                         <option value="">Select Site ...</option>
                                                                                     </select>
 
@@ -272,7 +272,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Block  </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control " ng-model="selectedBlock"  ng-options="block  for  block in  blocks track by block" name="AssetBlock"  ng-change="loadFloors()">
+                                                                                    <select class="form-control " ng-model="selectedBlock"  ng-options="(block | uppercase) for  block in  blocks track by block" name="AssetBlock"  ng-change="loadFloors()">
                                                                                         <option value="">Select Block ...</option>
                                                                                     </select>
                                                                                 </div>
@@ -281,7 +281,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Floor </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control " ng-model="selectedFloor" ng-options="floor for floor in floors track by floor" name="AssetFloor" ng-change="loadZones()" >
+                                                                                    <select class="form-control " ng-model="selectedFloor" ng-options="(floor | uppercase)  for floor in floors track by floor" name="AssetFloor" ng-change="loadZones()" >
                                                                                         <option value="">Please select Floor ...</option>
                                                                                     </select>
                                                                                 </div>
@@ -290,7 +290,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Zone  </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control " ng-model="selectedZone"  ng-options="zone for zone in zones track by zone" name="AssetZone" >
+                                                                                    <select class="form-control " ng-model="selectedZone"  ng-options="(zone | uppercase) for zone in zones track by zone" name="AssetZone" >
                                                                                         <option value="">Select Zone  ...</option>
                                                                                     </select>
 

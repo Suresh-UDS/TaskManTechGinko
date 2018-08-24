@@ -319,7 +319,7 @@
                                              <div class="col-md-12">
                                                 <div
                                                     ng-show="empLocation">
-                                                    <p class="help-block" style="color: maroon">Client info is requied</p>
+                                                    <p class="help-block" style="color: maroon">Client info is required</p>
                                                 </div>
                                             </div>
 
@@ -439,7 +439,7 @@
                                                     <label class="control-label">Block<span class="red-star"></span> </label>
                                                     <div class="dropdown">
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                       <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in  blocks" name="block" >
+                                                       <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as (block | uppercase) for  block in  blocks" name="block" >
                                                         	<option value="">Select Block...</option>
                                                     	  </select>
                                                         <div ng-show="form.$submitted || form.block.$touched || form.block.$dirty">
@@ -459,7 +459,7 @@
                                                     <label class="control-label">Floor<span class="red-star"></span> </label>
                                                     <div class="dropdown">
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors" name="floor" >
+													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as (floor | uppercase) for floor in floors" name="floor" >
                                                         <option value="">Select Floor...</option>
                                                     	</select>
                                                    	 <div ng-show="form.$submitted || form.floor.$touched || form.floor.$dirty">
@@ -479,7 +479,7 @@
                                                     <label class="control-label">Zone<span class="red-star"></span> </label>
                                                     <div class="dropdown">
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-													<select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones" name="zone" >
+													<select class="form-control " ng-model="selectedZone"  ng-options="zone as (zone | uppercase) for zone in zones" name="zone" >
                                                         <option value="">Select Zone...</option>
                                                     </select>
                                                    	 <div ng-show="form.$submitted || form.floor.$touched || form.floor.$dirty">
@@ -516,7 +516,7 @@
                                                     <ul class="listOfActions list-group">
 
                                                         <li class="list-group-item justify-content-between" ng-repeat="loc in locationList" ng-bind-html-unsafe="loc.text">
-                                                            {{loc.block}}  -  {{loc.floor}} - {{loc.zone}}
+                                                            {{loc.block | uppercase}}  -  {{loc.floor | uppercase}} - {{loc.zone | uppercase}}
                                                             <span class="badge badge-default badge-pill" ng-click="removeLocation($index)"><i class="material-icons">remove_circle</i></span>
                                                         </li>
 

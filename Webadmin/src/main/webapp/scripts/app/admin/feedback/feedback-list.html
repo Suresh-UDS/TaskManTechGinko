@@ -123,8 +123,6 @@
                                 </table>
 
                                 <div class="TailsCon">
-
-
                                     <div class="TailsContent">
                                         <ul class="blocksListCon">
                                            <li ng-repeat="item in filteredLocations" ng-class="item.zone == selectedZone && item.block== selectedBlock && item.floor== selectedFloor ? 'active' : ''"> <a type="submit" ng-click="genZoneReport(item.projectId,item.siteId,item.block, item.floor,item.zone,searchForm)"  ng-show="(($index < (vm.page * vm.numRecords)) && ($index >= ((vm.page - 1) * vm.numRecords)))">{{ item.block }}<br/>{{item.floor}}<br/>{{item.zone}}</a></li>
@@ -134,7 +132,6 @@
                                         <!--<div class="pos-abs next"><button ng-click="vm.next()"><i class="material-icons">keyboard_arrow_right</i></button></div>-->
                                         <!--<div class="pos-abs back"><button ng-click="vm.back()"><i class="material-icons">keyboard_arrow_left</i></button></div>-->
                                     </div>
-
                                 </div>
 
                         </div>
@@ -353,8 +350,8 @@
                                     <!--</select>-->
                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable" ng-change="loadDepSites(searchProject)">
-                                        <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :clearField?'Select Client':searchProject}}</ui-select-match>
+                                    <ui-select ng-model="selectedProject" ng-disabled="clientFilterDisable" ng-change="loadSearchProject(selectedProject);loadSites()">
+                                        <ui-select-match placeholder="Select clients...">{{filter ? selectedProject.name?selectedProject.name:'Select Client' :clearField?'Select Client':selectedProject}}</ui-select-match>
                                         <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
                                             <div ng-bind="client"></div>
                                         </ui-select-choices>
@@ -373,13 +370,13 @@
                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                     <!--<span class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sitesList.length == 0" ng-change="selectSite(searchSite)" ng-click="selectSite(searchSite)">
-                                        <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?clearField?'Select site':searchSite : 'Select Site' }}</ui-select-match>
+                                    <ui-select ng-model="selectedSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-click="loadSearchSite(selectedSite);searchLocations();loadFeedbackMasters();">
+                                        <ui-select-match placeholder="Select Site...">{{sites.length == 0 ? 'Select Site' : selectedSite.searchStatus ? selectedSite.name?selectedSite.name:'Select Site' : hideSite ?clearField?'Select site':selectedSite : 'Select Site' }}</ui-select-match>
                                         <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
                                             <div ng-bind="site"></div>
                                         </ui-select-choices>
                                     </ui-select>
-                                    <span ng-if="sitesList.length == 0"><p class="error-msg margin0">No sites</p></span>
+                                    <span ng-if="sites.length == 0"><p class="error-msg margin0">No sites</p></span>
                                 </div>
                             </div>
                         </div>
