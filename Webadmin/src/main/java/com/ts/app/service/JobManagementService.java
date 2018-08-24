@@ -239,7 +239,8 @@ public class JobManagementService extends AbstractService {
 					subEmpIds.add(sub.getId());
 				}
 				*/
-				findAllSubordinates(employee, subEmpIds);
+				int levelCnt = 1;
+				findAllSubordinates(employee, subEmpIds, levelCnt);
 				log.debug("List of subordinate ids -"+ subEmpIds);
 				if(CollectionUtils.isEmpty(subEmpIds)) {
 					subEmpIds.add(employee.getId());
@@ -589,7 +590,8 @@ public class JobManagementService extends AbstractService {
 				if(employee != null) {
 					searchCriteria.setDesignation(employee.getDesignation());
 					Hibernate.initialize(employee.getSubOrdinates());
-					findAllSubordinates(employee, subEmpIds);
+					int levelCnt = 1;
+					findAllSubordinates(employee, subEmpIds, levelCnt);
 					log.debug("List of subordinate ids -"+ subEmpIds);
 					if(CollectionUtils.isEmpty(subEmpIds)) {
 						subEmpIds.add(employee.getId());
@@ -719,7 +721,8 @@ public class JobManagementService extends AbstractService {
 					subEmpIds.add(sub.getId());
 				}
 				*/
-                findAllSubordinates(employee, subEmpIds);
+                int levelCnt = 1;
+                findAllSubordinates(employee, subEmpIds, levelCnt);
                 log.debug("List of subordinate ids -"+ subEmpIds);
                 searchCriteria.setSubordinateIds(subEmpIds);
             }
@@ -752,9 +755,12 @@ public class JobManagementService extends AbstractService {
         return result;
     }
 
-	public List<Long> findAllSubordinates(Employee employee, List<Long> subEmpIds) {
+	public List<Long> findAllSubordinates(Employee employee, List<Long> subEmpIds, int levelCnt) {
+		if(levelCnt > 5 ) {
+			return subEmpIds;
+		}
 		Set<Employee> subs = employee.getSubOrdinates();
-		log.debug("List of subordinates -"+ subs);
+		//log.debug("List of subordinates -"+ subs);
 		if(subs == null){
 			subEmpIds = new ArrayList<Long>();
 		}
@@ -762,7 +768,8 @@ public class JobManagementService extends AbstractService {
 			subEmpIds.add(sub.getId());
 			Hibernate.initialize(sub.getSubOrdinates());
 			if(CollectionUtils.isNotEmpty(sub.getSubOrdinates())){
-				findAllSubordinates(sub, subEmpIds);
+				levelCnt++;
+				findAllSubordinates(sub, subEmpIds, levelCnt);
 			}
 		}
 		return subEmpIds;
@@ -1121,7 +1128,7 @@ public class JobManagementService extends AbstractService {
 		job.setEmployee(employee);
 		job.setComments(jobDTO.getComments());
 		job.setPlannedStartTime(jobDTO.getPlannedStartTime());
-		if(jobDTO.getPlannedEndTime() == null) {
+		//if(jobDTO.getPlannedEndTime() == null) {
 			Calendar endTimeCal = Calendar.getInstance();
 			endTimeCal.setTime(jobDTO.getPlannedStartTime());
 			endTimeCal.add(Calendar.HOUR_OF_DAY, jobDTO.getPlannedHours());
@@ -1131,9 +1138,9 @@ public class JobManagementService extends AbstractService {
 				endTimeCal.add(Calendar.DAY_OF_MONTH, 1);
 			}
 			job.setPlannedEndTime(endTimeCal.getTime());
-		}else {
-			job.setPlannedEndTime(jobDTO.getPlannedEndTime());
-		}
+		//}else {
+		//	job.setPlannedEndTime(jobDTO.getPlannedEndTime());
+		//}
 		job.setPlannedHours(jobDTO.getPlannedHours());
 
 		job.setActualStartTime(jobDTO.getActualStartTime());
@@ -1334,7 +1341,8 @@ public class JobManagementService extends AbstractService {
 		List<Long> subEmpIds = new ArrayList<Long>();
 		if(employee != null && !user.isAdmin()) {
 			Hibernate.initialize(employee.getSubOrdinates());
-			findAllSubordinates(employee, subEmpIds);
+			int levelCnt = 1;
+			findAllSubordinates(employee, subEmpIds, levelCnt);
 			log.debug("List of subordinate ids -"+ subEmpIds);
 			if(CollectionUtils.isEmpty(subEmpIds)) {
 				subEmpIds.add(employee.getId());
@@ -1669,7 +1677,8 @@ public class JobManagementService extends AbstractService {
             if(employee != null) {
                 searchCriteria.setDesignation(employee.getDesignation());
                 Hibernate.initialize(employee.getSubOrdinates());
-                findAllSubordinates(employee, subEmpIds);
+                int levelCnt = 1;
+                findAllSubordinates(employee, subEmpIds,levelCnt);
                 log.debug("List of subordinate ids -"+ subEmpIds);
                 if(CollectionUtils.isEmpty(subEmpIds)) {
                     subEmpIds.add(employee.getId());
