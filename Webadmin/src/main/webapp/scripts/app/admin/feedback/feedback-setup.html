@@ -415,7 +415,7 @@
                                                 <ui-select ng-model="searchBlock" ng-disabled="blockFilterDisable || blocks.length == 0" ng-change="loadSearchBlock(searchBlock);loadFloors()" ng-click="loadSearchBlock(searchBlock);loadFloors()">
                                                     <ui-select-match placeholder="Select Block...">{{blocks.length == 0 ? 'Select Block' : searchBlock.searchStatus ? searchBlock.name?searchBlock.name:'Select Block' : hideBlock ?clearField?'Select Block':searchBlock :'Select Block' }}</ui-select-match>
                                                     <ui-select-choices  repeat="block in getBlock($select.search) | filter: $select.search track by $index">
-                                                        <div ng-bind="block"></div>
+                                                        <div ng-bind="block | uppercase"></div>
                                                     </ui-select-choices>
                                                 </ui-select>
                                                 <span ng-if="blocks.length == 0"><p class="help-block">No Blocks</p></span>
@@ -433,7 +433,7 @@
                                                 <ui-select ng-model="searchFloor" ng-disabled="floorFilterDisable || floorsList.length == 0" ng-change="loadSearchFloor(searchFloor);loadZones()" ng-click="loadSearchFloor(searchFloor);loadZones()">
                                                     <ui-select-match placeholder="Select Block...">{{floors.length == 0 ? 'Select Floor' : searchFloor.searchStatus ? searchFloor.name?searchFloor.name:'Select Floor' : hideFloor ?clearField?'Select Floor':searchFloor :'Select Floor' }}</ui-select-match>
                                                     <ui-select-choices  repeat="floor in getFloor($select.search) | filter: $select.search track by $index">
-                                                        <div ng-bind="floor"></div>
+                                                        <div ng-bind="floor | uppercase"></div>
                                                     </ui-select-choices>
                                                 </ui-select>
                                                 <span ng-if="floors.length == 0"><p class="help-block">No Floor</p></span>
@@ -451,7 +451,7 @@
                                                 <ui-select ng-model="searchZone" ng-disabled="zoneFilterDisable || zones.length == 0" ng-change="loadSearchZone(searchZone)" ng-click="loadSearchZone(searchZone)">
                                                     <ui-select-match placeholder="Select Zone...">{{zones.length == 0 ? 'Select Zone' : searchZone.searchStatus ? searchZone.name?searchZone.name:'Select Zone' : hideZone ?clearField?'Select Zone':searchZone :'Select Zone' }}</ui-select-match>
                                                     <ui-select-choices  repeat="zone in getZone($select.search) | filter: $select.search track by $index">
-                                                        <div ng-bind="zone"></div>
+                                                        <div ng-bind="zone | uppercase"></div>
                                                     </ui-select-choices>
                                                 </ui-select>
                                                 <span ng-if="zonesList.length == 0"><p class="help-block">No Zone</p></span>
