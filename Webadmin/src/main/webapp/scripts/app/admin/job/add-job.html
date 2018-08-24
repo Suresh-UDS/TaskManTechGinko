@@ -313,7 +313,7 @@
                                                     <label class="control-label">Zone<!--  <span class="red-star">*</span> --> </label>
                                                     <div class="dropdown">
                                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-													<select class="form-control " ng-model="selectedZone" ng-change="getLocationDetails(selectedBlock,selectedFloor,selectedZone)"  ng-options="zon as (zone | uppercase) for zone in zones track by zone" name="zone">
+													<select class="form-control " ng-model="selectedZone" ng-change="getLocationDetails(selectedBlock,selectedFloor,selectedZone)"  ng-options="zone as (zone | uppercase) for zone in zones track by zone" name="zone">
                                                         <option value="">Select Zone...</option>
                                                     </select>
                                                    	 <div ng-show="form.$submitted || form.floor.$touched">
