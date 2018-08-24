@@ -1,6 +1,5 @@
 package com.ts.app.service;
 
-import java.io.File;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -33,6 +32,7 @@ import com.ts.app.domain.Asset;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Job;
+import com.ts.app.domain.Project;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.Ticket;
@@ -56,7 +56,6 @@ import com.ts.app.service.util.PagingUtil;
 import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.ExportResult;
-import com.ts.app.web.rest.dto.JobChecklistDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.TicketDTO;
@@ -277,7 +276,10 @@ public class TicketManagementService extends AbstractService {
 
     public TicketDTO getTicketDetails(long id){
         Ticket ticket = ticketRepository.findOne(id);
+        Project proj = ticket.getSite().getProject();
         TicketDTO ticketDTO1 = mapperUtil.toModel(ticket,TicketDTO.class);
+        ticketDTO1.setProjectId(proj.getId());
+        ticketDTO1.setProjectName(proj.getName());
         Job job = jobRepository.findByTicketId(id);
         if(job!=null) {
         		ticketDTO1.setJobId(job.getId());

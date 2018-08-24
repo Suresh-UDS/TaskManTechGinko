@@ -1248,9 +1248,12 @@
                                                                 <thead>
                                                                 <tr  >
                                                                     <th width="15%">Title</th>
-                                                                    <th width="30%">Checklist</th>
-                                                                    <th>From Date</th>
+                                                                    <th width="25%">Checklist</th>
+                                                                    <th width="10%">From Date</th>
                                                                     <th width="10%">To Date</th>
+                                                                    <th width="10%">Employee</th>
+                                                                    <th width="10%">Start Time</th>
+                                                                    <th width="10%">Planned Hours</th>
                                                                     <th width="10%">Frequency</th>
 
                                                                     <!--<th width="5%" align="right">Actions</th>-->
@@ -1262,35 +1265,28 @@
                                                                 <tbody>
                                                                 <tr ng-repeat="ppmSchedules in ppmScheduleList">
                                                                     <td>{{ppmSchedules.title}}</td>
-                                                                    <td class="hiddenCheckList" ><span class="leftTxt">{{ppmSchedules.checklistName}} </span>  <span class="infoIcon" ng-if="ppmSchedules.checkListItems"><i class="material-icons">info</i>
+                                                                    <td class="hiddenCheckList" > <span class="leftTxt">{{ppmSchedules.checklistName}}  </span>  <span class="infoIcon" ng-if="ppmSchedules.checkListItems"><i class="material-icons">info</i>
                                                                      <div class="CheckListBx" ng-if="ppmSchedules.checkListItems">
-                                                                           <div class="bootstrap-tagsinput" ng-repeat="checkListItem in ppmSchedules.checkListItems">
-                                                                               <span class="tag label label-info">{{checkListItem.name}}<span data-role="remove"></span></span>
+                                                                             <div class="bootstrap-tagsinput" ng-repeat="checkListItem in ppmSchedules.checkListItems">
+                                                                                 <span class="tag label label-info">{{checkListItem.name}}<span data-role="remove"></span></span>
 
-                                                                           </div>
-                                                                       </div>
+                                                                             </div>
+                                                                         </div>
                                                                     </span>
-
-
-
                                                                     </td>
-                                                                    <!-- <td>
-                                                                        <div class="bootstrap-tagsinput">
-                                                                            <span class="tag label label-info" ng-repeat="checkList in checklistItms">{{checkList.name}}<span data-role="remove"></span></span>
-                                                                            <input type="text" placeholder="">
-                                                                        </div>
-                                                                    </td> -->
-                                                                    <td>{{ppmSchedules.startDate}}</td>
-                                                                    <td>{{ppmSchedules.endDate}}</td>
+                                                                    <td>{{ppmSchedules.startDate | date :  "dd-MM-y"}}</td>
+                                                                    <td>{{ppmSchedules.endDate | date :  "dd-MM-y"}}</td>
+                                                                    <td>{{ppmSchedules.employeeName}}</td>
+                                                                    <td>{{ppmSchedules.jobStartTime | date :  "dd-MM-y h:mm:ss Z"}}</td>
+                                                                    <td>
+                                                                    {{ppmSchedules.plannedHours}}</td>
                                                                     <td>{{ppmSchedules.frequencyPrefix}}&nbsp; {{ppmSchedules.frequencyDuration}}&nbsp; {{ppmSchedules.frequency}}</td>
-
                                                                     <!--<td class="text-right">-->
-                                                                        <!--&lt;!&ndash;<a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>&ndash;&gt;-->
+                                                                        <!--<a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>-->
                                                                     <!--</td>-->
-
                                                                 </tr>
                                                                 <tr>
-                                                                <td colspan="7" align="center" ng-show="!ppmScheduleList">No PPM Schedules Found</td>
+                                                                     <td colspan="8" align="center" ng-show="!ppmScheduleList">No PPM Schedules Found</td>
                                                                 </tr>
 
                                                                 </tbody>
@@ -1573,9 +1569,12 @@
                                                             <thead>
                                                             <tr>
                                                                 <th width="15%">Title</th>
-                                                                <th width="30%">Checklist</th>
-                                                                <th>From Date</th>
+                                                                <th width="25%">Checklist</th>
+                                                                <th width="10%">From Date</th>
                                                                 <th width="10%">To Date</th>
+                                                                <th width="10%">Employee</th>
+                                                                <th width="10%">Start Time</th>
+                                                                <th width="10%">Planned Hours</th>
                                                                 <th width="10%">Frequency</th>
 
                                                                 <!--<th width="5%" align="right">Actions</th>-->
@@ -1587,16 +1586,6 @@
                                                             <tbody>
                                                             <tr ng-repeat="amcSchedule in amcScheduleList">
                                                                 <td>{{amcSchedule.title}}</td>
-                                                                <!-- <td class="hiddenCheckList">{{amcSchedule.checklistName}}
-
-                                                                   <div class="CheckListBx">
-                                                                       <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
-                                                                           <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
-                                                                           <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
-                                                                           <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
-                                                                   </div>
-
-                                                                </td> -->
                                                                 <td class="hiddenCheckList"> <span class="leftTxt"> {{amcSchedule.checklistName}}</span>  <span class="infoIcon" ng-if="amcSchedule.checkListItems"><i class="material-icons">info</i>
                                                                    <div class="CheckListBx" ng-if="amcSchedule.checkListItems">
                                                                        <div class="bootstrap-tagsinput" ng-repeat="checkListItemAmc in amcSchedule.checkListItems">
@@ -1605,19 +1594,15 @@
                                                                        </div>
                                                                    </div>
                                                                 </span>
-
-
-
                                                                 </td>
-                                                                <!-- <td>
-                                                                    <div class="bootstrap-tagsinput">
-                                                                        <span class="tag label label-info" ng-repeat="checkList in checklistItms">{{checkList.name}}<span data-role="remove"></span></span>
-                                                                        <input type="text" placeholder="">
-                                                                    </div>
-                                                                </td> -->
-                                                                <td>{{amcSchedule.startDate}}</td>
-                                                                <td>{{amcSchedule.endDate}}</td>
+                                                                <td>{{amcSchedule.startDate | date :  "dd-MM-y"}}</td>
+                                                                <td>{{amcSchedule.endDate | date :  "dd-MM-y"}}</td>
+                                                                <td>{{amcSchedule.employeeName}}</td>
+                                                                <td>{{amcSchedule.jobStartTime | date :  "dd-MM-y h:mm:ss Z"}}</td>
+                                                                <td>
+                                                                {{amcSchedule.plannedHours}}</td>
                                                                 <td>{{amcSchedule.frequencyPrefix}}&nbsp; {{amcSchedule.frequencyDuration}}&nbsp; {{amcSchedule.frequency}}</td>
+
 
                                                                 <!--<td class="text-right">-->
                                                                     <!--&lt;!&ndash;<a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>&ndash;&gt;-->
@@ -1625,7 +1610,7 @@
 
                                                             </tr>
                                                             <tr>
-                                                               <td colspan="7" align="center" ng-show="!amcScheduleList">No AMC Schedules Found</td>
+                                                               <td colspan="8" align="center" ng-show="!amcScheduleList">No AMC Schedules Found</td>
                                                             </tr>
 
                                                             </tbody>

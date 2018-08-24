@@ -20,13 +20,15 @@
                 <i class="material-icons">filter_list</i>Filter
                 <div class="ripple-container"></div>
             </button>
-        </div>
-        <div class="col-md-6 txt-align-rgt">
-
             <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
                 <i class="material-icons">refresh</i> Clear Filter
                 <div class="ripple-container"></div>
             </button>
+
+        </div>
+        <div class="col-md-6 txt-align-rgt">
+
+
 
             <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-job" has-permission="Job:Create" ng-class="{active: $state.includes('admin')}" tabindex="0">
                 <i class="material-icons">add</i> Add
@@ -61,10 +63,10 @@
                 </span>
 
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.checkInDateTimeFrom || localStorage.checkInDateTimeFrom">
-                    From: {{searchCriteria.checkInDateTimeFrom || localStorage.checkInDateTimeFrom}}
+                    From: {{searchCriteria.checkInDateTimeFrom || localStorage.checkInDateTimeFrom | date:'dd/MM/yyyy'}}
                 </span>
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.checkInDateTimeTo || localStorage.checkInDateTimeTo">
-                    To: {{searchCriteria.checkInDateTimeTo || localStorage.checkInDateTimeTo}}
+                    To: {{searchCriteria.checkInDateTimeTo || localStorage.checkInDateTimeTo | date:'dd/MM/yyyy'}}
                 </span>
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.employeeName || localStorage.employeeName">
                     Employee: {{searchCriteria.employeeName || localStorage.employeeName}}
@@ -528,7 +530,7 @@
                                                 <div class="dropdown">
                                                     <label class="label-control">From date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker"  id="selectedJobDate"  ng-model="selectedJobDate" autocomplete="off" />
+                                                    <input type="text" class="form-control datepicker" placeholder="Select Date" id="selectedJobDate"  ng-model="selectedJobDate" autocomplete="off" />
                                                 </div>
                                             </div>
                                         </div>
@@ -553,7 +555,7 @@
                                                     <!--</select>-->
                                                     <span ng-show="empSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!empSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchEmployee" ng-disabled="employees.length == 0 || employees == null" ng-change="loadSearchEmployees(searchEmployee)">
+                                                    <ui-select ng-model="searchEmployee" ng-disabled="employees.length == 0 || employees == null" ng-change="loadSearchEmployees(searchEmployee)" ng-click="loadSearchEmployees(searchEmployee)"  >
                                                         <ui-select-match placeholder="Select Employee...">{{employees.length == 0 ? 'Select Employee': searchEmployee.searchStatus ? searchEmployee.name?searchEmployee.name:'Select Employee' :  hideEmp?clearField?'Select Employee':searchEmployee:'Select Employee'  }}</ui-select-match>
                                                         <ui-select-choices  repeat="emp in getEmp($select.search) | filter: $select.search track by $index">
                                                             <div ng-bind="emp"></div>

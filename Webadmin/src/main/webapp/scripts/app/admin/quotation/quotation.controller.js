@@ -131,7 +131,7 @@ angular
                                 $scope.quotation.title =data.title;
                                 $scope.quotation.description = data.description;
                                 $scope.quotation.ticketId = data.id;
-                                //$scope.selectedProject = {id:data.employeeId};
+                                $scope.selectedProject = {id:data.projectId, name:data.projectName};
                                 $scope.selectedSite = {id:data.siteId,name:data.siteName};
                                 $scope.status = 1;
 
@@ -314,15 +314,16 @@ angular
                         $scope.hideSite = false;
                         if($state.current.name == 'add-quotation')
                         {
-                            $scope.selectedSite = $scope.projects[$scope.uiSite.indexOf(searchSite)]
+                            $scope.selectedSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)]
                         }
                         else if($state.current.name == 'edit-quotation')
                         {
-                            $scope.selectedSite = $scope.projects[$scope.uiSite.indexOf(searchSite)]
+                            $scope.selectedSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)]
                         }
                         else {
                             $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)]
                         }
+                        //console.log('<<<< Site >>>>',$scope.selectedSite);
 
                     }
                     // Load Sites for selectbox //
@@ -509,7 +510,7 @@ angular
                                     $scope.saveLoad = false;
 									console.log(response);
                                 console.log($scope.selectedImageFile);
-								if($scope.selectedImageFile !=""){
+								if($scope.selectedImageFile){
 
 								RateCardComponent.upload(response._id,$scope.selectedImageFile)
 								    .then(function(response) {
@@ -715,7 +716,7 @@ angular
 			        }
 
 			        $scope.searchFilter = function () {
-			            $scope.setPage(1);
+			            //$scope.setPage(1);
 			            $scope.search();
 			         }
 
@@ -727,12 +728,12 @@ angular
 						$scope.searchCreatedBy = null;
 						$scope.searchApprovedBy = null;
 						$scope.searchStatus = null;
-			            $scope.searchCriteria.id =null;
+			            $scope.searchCriteria={};
 			            $scope.searchCriteria.quotationTitle =null;
 			            $scope.searchCriteria.quotationCreatedBy =null;
 			            $scope.searchCriteria.quotationApprovedBy =null;
 			            $scope.searchCriteria.quotationStatus =null;
-			            $scope.setPage(1);
+			            //$scope.setPage(1);
 			            $scope.search();
 			         }
 
@@ -755,14 +756,14 @@ angular
 			        		$scope.searchCriteria.findAll = true;
 			        	}
 
-			        	if($scope.searchProject && $scope.searchProject.searchStatus != '0') {
+			        	if($scope.searchProject) {
 			        		$scope.searchCriteria.projectId = $scope.searchProject.id;
                             $scope.searchCriteria.projectName = $scope.searchProject.name;
 			        	}else{
 			        		$scope.searchCriteria.projectId = null;
 			        	}
 
-			        	if($scope.searchSite && $scope.searchSite.searchStatus != '0') {
+			        	if($scope.searchSite) {
 			        		$scope.searchCriteria.siteId = $scope.searchSite.id;
                             $scope.searchCriteria.siteName = $scope.searchSite.name;
 				    }/*else if($scope.sites) {
@@ -911,5 +912,19 @@ angular
 					                $state.reload();
 					            });
 					        }
+
+					        $scope.quoteStatus = true;
+
+					        $scope.validCheck = function(){
+                               
+                               if($scope.materialName || $scope.serviceName || $scope.labourCategory){
+	                               $scope.quoteStatus = false;
+						        }else{
+						        	$scope.quoteStatus = true;
+						        }
+
+					        }
+
+					        
 
 				});

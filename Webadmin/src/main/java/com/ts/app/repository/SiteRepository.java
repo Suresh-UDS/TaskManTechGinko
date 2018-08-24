@@ -1,6 +1,7 @@
 package com.ts.app.repository;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +25,7 @@ public interface SiteRepository extends JpaRepository<Site, Long> {
 	List<Site> findAll(@Param("empId") long empId);
 
 	@Query("SELECT distinct s FROM Site s join s.employeeProjSites e WHERE e.employee.id in (:empIds) and s.active='Y' order by s.name")
-	List<Site> findAll(@Param("empIds") List<Long> empIds);
+	List<Site> findAll(@Param("empIds") Set<Long> empIds);
 
     @Query("SELECT distinct s FROM Site s join s.employeeProjSites e WHERE e.employee.id=:empId")
     List<Site> findSiteByEmployeeId(@Param("empId") Long empId);

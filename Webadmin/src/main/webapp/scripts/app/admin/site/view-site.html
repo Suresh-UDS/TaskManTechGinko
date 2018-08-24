@@ -25,11 +25,11 @@
                                             </tr>
                                             <tr>
                                                 <td>Client Name</td>
-                                                <td>{{site.projectName}}</td>
+                                                <td class="TxtFirstCaps">{{site.projectName}}</td>
                                             </tr>
                                             <tr>
                                                 <td>Site Name</td>
-                                                <td>{{site.name}}</td>
+                                                <td class="TxtFirstCaps">{{site.name}}</td>
                                             </tr>
                                             <tr>
                                                 <td>Address</td>
@@ -91,23 +91,21 @@
                                 <div class="panel-heading">Shift Timings Details</div>
                                 <div class="panel-body">
 
-                                    <div class="table-responsive">
+                                    <div class="table table-bordered">
                                         <table class="table">
                                             <tbody>
                                             <tr>
                                                 <td>From Time</td>
-                                                <td>{{newShiftItem.startTimeDup}}</td>
-                                            </tr>
-                                            <tr>
                                                 <td>To Time</td>
-                                                <td>{{newShiftItem.endTimeDup}}</td>
+                                            </tr>
+                                            <tr  ng-repeat=" item in shiftItems">
+                                                <td>{{item.startTime | date:'hh:mm a'}}</td>
+                                                <td>{{item.endTime | date:'hh:mm a'}}</td>
                                             </tr>
 
                                             </tbody>
                                         </table>
                                     </div>
-
-
                                 </div>
                             </div>
 
