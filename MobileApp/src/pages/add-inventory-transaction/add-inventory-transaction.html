@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-         <ion-title>Inventory Transaction</ion-title>
+         <ion-title>Add-Inventory Transaction</ion-title>
         <ion-buttons right>
           <button ion-button color="fnt-black" icon-only (click)="dismiss()" class="padding-right10">
             <ion-icon ios="ios-close" md="md-close" class="fnt-24"></ion-icon>
@@ -40,10 +40,43 @@
         </ion-col>
     </ion-row>
     <ion-row no-margin>
+        <!--<ion-col col-12>-->
+        <!--<ion-item>-->
+        <!--<ion-label text-capitalize class="client-label" text-left>Employee:</ion-label>-->
+        <!--<ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedProject" text-lowercase>-->
+        <!--<ion-option    text-center text-lowercase></ion-option>-->
+        <!--</ion-select>-->
+        <!--</ion-item>-->
+        <!--</ion-col>-->
+
+        <!-- <ion-searchbar
+                 [(ngModel)]="searchText"
+                 [showCancelButton]="shouldShowCancel"
+                 (ionInput)="onInput($event)"
+                 (ionCancel)="onCancel($event)">
+         </ion-searchbar>-->
+
+        <ion-input type="text" [(ngModel)]="searchText" (ionChange)='f(searchText)' class="txt-input" placeholder="Search Employees">
+
+        </ion-input>
+    </ion-row>
+    <ion-row *ngIf="searchText"  no-margin>
+        <div>
+            <ul class="fnt-z white-bg width90">
+                <li>Seeni</li>
+                <li>Venkatesh</li>
+                <li>Sowmiya</li>
+                <li>Karthick</li>
+            </ul>
+        </div>
+    </ion-row>
+
+
+    <ion-row no-margin>
         <ion-col col-12>
             <ion-item>
                 <ion-label text-capitalize class="client-label" text-left>Group:</ion-label>
-                <ion-select  interface="popover"  text-lowercase>
+                <ion-select  [selectOptions]="selectOptions"  interface="popover" text-lowercase>
                     <ion-option text-center text-lowercase *ngFor="let g of inventoryGroups;let i of index" (ionSelect)="getMaterialByGroup(g)" >{{g.itemGroup}}</ion-option>
                 </ion-select>
             </ion-item>
@@ -52,16 +85,17 @@
     <ion-row no-margin>
         <ion-col col-9>
             <ion-item>
-                <ion-select  interface="popover" [(ngModel)]="selectedMaterial">
-                    <ion-option text-center text-lowercase *ngFor="let m of inventoryMaterial"></ion-option>
+                <ion-label text-capitalize class="client-label" text-left>Material:</ion-label>
+                <ion-select  [selectOptions]="selectOptions" interface="popover" text-lowercase>
+                    <ion-option text-center text-lowercase  (ionSelect)="getMaterialByGroup(m)"  *ngFor="let m of inventoryMaterial;let i of index" value="">{{m.name}}</ion-option>
                 </ion-select>
             </ion-item>
         </ion-col>
         <ion-col col-3 text-center>
-            <button class="btn btn-warning center" (click)="addTransaction(selectedMaterial)">Add</button>
+            <button class="btn btn-warning center" (click)="addIndent(selectedMaterial)">Add</button>
         </ion-col>
     </ion-row>
-   <ion-row no-margin class="white-bg" *ngFor="let t of inventoryTransaction">
+    <ion-row no-margin class="white-bg" *ngFor="let t of inventoryTransaction">
         <ion-col col-6>
             <ion-list>
                 <ion-item>
@@ -79,14 +113,14 @@
         <ion-col col-2>
             <ion-list>
                 <ion-item>
-                    <ion-input type="text" value="" placeholder="uom" disabled></ion-input>
+                    <ion-input type="text" value="" placeholder="uom" disabled>{{t.uom}}</ion-input>
                 </ion-item>
             </ion-list>
         </ion-col>
         <ion-col col-2>
-            <button ion-fab mini color="dark">
-                <ion-icon name="md-checkmark" class="clr-orange"></ion-icon>
+            <button ion-fab mini color="dark" (click)="removeTransaction(i)">
+                <ion-icon name="md-close" class="clr-orange"></ion-icon>
             </button>
         </ion-col>
-   </ion-row>
+    </ion-row>
 </ion-content>

@@ -16,121 +16,137 @@ import {InventoryService} from "../service/inventoryService";
 })
 export class AddInventoryTransaction {
 
-    numbers:any;
-    clientList:any;
-    siteList:any;
-    selectedProject:any;
-    selectedSite:any;
-    msg:any;
-    group:any;
-    scrollSite:any;
-    activeSite:any;
-    selectedAssetGroup:any;
-    searchCriteria:any;
-    selectOptions:any;
-    type:any;
-    inventoryGroups:any;
-    inventoryMaterial:any;
+    searchText: any;
+    shouldShowCancel: boolean;
 
+    numbers: any;
+    clientList: any;
+    siteList: any;
+    selectedProject: any;
+    selectedSite: any;
+    msg: any;
+    group: any;
+    scrollSite: any;
+    activeSite: any;
+    selectedAssetGroup: any;
+    searchCriteria: any;
+    selectOptions: any;
+    type: any;
+    inventoryGroups: any;
+    inventoryMaterial: any;
+
+    indent: any;
+    selectedMaterial: any;
     inventoryTransaction:any;
-    selectedMaterial:any;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,private component:componentService,
+    constructor(public navCtrl: NavController, public navParams: NavParams,private component:componentService,
               private siteService:SiteService, private inventoryService:InventoryService
   ) {
 
-      this.numbers = [0,1,2,3,4,5,6,7,8,9,10];
-      this.inventoryTransaction=[];
+        this.indent = [];
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad AddInventoryTransaction');
-      this.component.showLoader('Getting Project');
-      this.selectOptions={
-          cssClass: 'selectbox-popover'
-      }
-      this.siteService.getAllProjects().subscribe(
-
-          response=>{
-              this.component.closeLoader();
-              console.log("project");
-              console.log(response);
-              this.clientList=response;
-              this.selectedProject = this.clientList[0];
-              this.selectSite(this.selectedProject);
-              console.log('select default value:');
-          },
-          error=>{
-              this.component.closeLoader();
-              if(error.type==3)
-              {
-                  this.msg='Server Unreachable'
-              }
-              this.component.showToastMessage(this.msg,'bottom');
-          }
-      )
-
-
-  }
-
-    selectSite(project)
-    {
-        this.selectedProject = project;
-        this.scrollSite = true;
-        this.siteService.findSitesByProject(project.id).subscribe(
-            response=>{
-                console.log("Site By ProjectId");
+    ionViewDidLoad() {
+        console.log('ionViewDidLoad Indent');
+        this.component.showLoader('Getting Project');
+        this.selectOptions = {
+            cssClass: 'selectbox-popover'
+        }
+        this.siteService.getAllProjects().subscribe(
+            response => {
+                this.component.closeLoader();
+                console.log("project");
                 console.log(response);
-                this.siteList=response;
-                console.log(this.siteList);
-                this.getAllInventoryGroups();
+                this.clientList = response;
+                this.selectedProject = this.clientList[0];
+                this.selectSite(this.selectedProject);
+                console.log('select default value:');
             },
-            error=>{
-                if(error.type==3)
-                {
-                    this.msg='Server Unreachable';
+            error => {
+                this.component.closeLoader();
+                if (error.type == 3) {
+                    this.msg = 'Server Unreachable'
                 }
-                this.component.showToastMessage(this.msg,'bottom');
+                this.component.showToastMessage(this.msg, 'bottom');
             }
         )
     }
 
-    dismiss()
-    {
-      this.navCtrl.pop();
+    selectSite(project) {
+        this.selectedProject = project;
+        this.scrollSite = true;
+        this.siteService.findSitesByProject(project.id).subscribe(
+            response => {
+                console.log("Site By ProjectId");
+                console.log(response);
+                this.siteList = response;
+                console.log(this.siteList);
+                this.getAllInventoryGroups();
+            },
+            error => {
+                if (error.type == 3) {
+                    this.msg = 'Server Unreachable';
+                }
+                this.component.showToastMessage(this.msg, 'bottom');
+            }
+        )
     }
 
-    getAllInventoryGroups(){
+    dismiss() {
+        this.navCtrl.pop();
+    }
+
+    getAllInventoryGroups() {
         this.inventoryService.getAllGroups().subscribe(
-            response=>{
+            response => {
                 console.log(response);
                 this.inventoryGroups = response;
             }
         )
     }
 
-    getMaterialByGroup(group){
+    getMaterialByGroup(group) {
         this.inventoryService.getMaterialsByGroup(group.id).subscribe(
-            response=>{
+            response => {
                 console.log("Get Material Group");
                 console.log(response);
-                this.inventoryMaterial=response;
-            },err=>{
+                this.inventoryMaterial = response;
+            }, err => {
                 console.log("Error in getting  material group");
                 console.log(err);
             }
         )
     }
 
-    addTransaction(m){
-        var details={
-            materialName:m.name,
-            materialId:m.id,
-            uom:m.uom,
-            number:0
+    addIndent(m) {
+        console.log(m);
+        var details = {
+            materialName: m.name,
+            materialId: m.id,
+            uom: m.uom,
+            number: 0
         };
-        this.inventoryTransaction(details);
+        this.indent.push(details);
     }
 
+    removeTransaction(i) {
+        this.indent.pop(i);
+    }
+
+    onInput(event) {
+        console.log("event");
+        console.log(event);
+        console.log(event.data);
+    }
+
+    f(searchText) {
+        console.log("function");
+        console.log(searchText);
+    }
+
+    selectMaterial(m) {
+        console.log("m");
+        console.log(m);
+    }
 }

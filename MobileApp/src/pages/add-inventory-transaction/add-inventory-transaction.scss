@@ -49,4 +49,28 @@ page-add-inventory-transaction {
     overflow:inherit !important;
   }
 
+  ul
+  {
+    list-style:none !important;
+    -webkit-padding-start: 5px;
+  }
+  li{
+    border-bottom: 1px solid #ccc !important;
+    padding: 12px !important;
+  }
+  .fnt-z{
+    position:absolute !important;
+    z-index:2 !important;
+  }
+  .width90
+  {
+    width:90% !important
+  }
+
+  .txt-input
+  {
+    border: 1px solid #f4f4f4 !important;
+    padding: 9px !important;
+    background-color: white !important;
+  }
 }
