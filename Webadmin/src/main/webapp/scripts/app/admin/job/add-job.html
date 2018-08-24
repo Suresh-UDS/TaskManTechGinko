@@ -42,13 +42,13 @@
                                                     <label class="control-label">Title <span class="red-star">*</span></label>
                                                     <input id='jobName'
                                                            ng-model="job.title"
-                                                           class='form-control InputTxtCaps'
+                                                           class='form-control InputTxtCapsAll'
                                                            name='jobName'
                                                            type='text' value=""
                                                            ng-minlength='5'
                                                            ng-maxlength='250'
                                                            ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
-                                                           required />
+                                                           required/>
 
                                                     <div ng-show="form.$submitted || form.jobName.$touched">
                                                         <div ng-show="form.jobName.$dirty || form.jobName.$invalid">
@@ -332,9 +332,6 @@
                             			</div>
                             		</div>
                             </div>
-
-
-
                         </div>
 
                         <div class="row">
