@@ -794,21 +794,15 @@ public class JobManagementService extends AbstractService {
 
 		Job job = new Job();
 
-		//Date Validation
-		if(job.getScheduleEndDate() != null) {
-			Calendar startCal = Calendar.getInstance();
-			startCal.setTime(job.getPlannedStartTime());
-			Calendar scheduleEndCal = Calendar.getInstance();
-			scheduleEndCal.setTime(job.getScheduleEndDate());
-			if(scheduleEndCal.before(startCal)) {
-				jobDTO.setErrorMessage("Job schedule end date cannot be earlier than start date");
-				return jobDTO;
-			}
-					
+		jobDTO = validate(jobDTO, job);
+		
+		if(!StringUtils.isEmpty(jobDTO.getErrorMessage())) {
+			return jobDTO;
 		}
 		
-		
 		mapToEntity(jobDTO, job);
+		
+
 		if(job.getStatus() == null) {
 			job.setStatus(JobStatus.ASSIGNED);
 		}
@@ -1389,7 +1383,16 @@ public class JobManagementService extends AbstractService {
 
 	public JobDTO updateJob(JobDTO jobDTO, long userId) {
 		Job job = findJob(jobDTO.getId());
+
+		jobDTO = validate(jobDTO, job);
+
+		if(!StringUtils.isEmpty(jobDTO.getErrorMessage())) {
+			return jobDTO;
+		}
+
 		mapToEntity(jobDTO, job);
+		
+
         log.debug("Ticket in job update ----"+jobDTO.getTicketId());
         Ticket ticket = null;
 		if(jobDTO.getTicketId()>0){
@@ -2059,5 +2062,35 @@ public class JobManagementService extends AbstractService {
 			}
 		}
 		return "Successfully upload checklist images";
+	}
+	
+	/*
+	 * Validate job date information
+	 */
+	private JobDTO validate(JobDTO jobDTO, Job job) {
+		//Date Validation for job
+		if(jobDTO.getScheduleEndDate() != null) {
+			Calendar startCal = Calendar.getInstance();
+			startCal.setTime(jobDTO.getPlannedStartTime());
+			Calendar scheduleEndCal = Calendar.getInstance();
+			scheduleEndCal.setTime(jobDTO.getScheduleEndDate());
+			if(scheduleEndCal.before(startCal)) {
+				jobDTO.setErrorMessage("Job schedule end date cannot be earlier than start date");
+				return jobDTO;
+			}
+		}
+		Job parentJob = job.getParentJob();
+		if(parentJob != null) {
+			Calendar startCal = Calendar.getInstance();
+			startCal.setTime(jobDTO.getPlannedStartTime());
+			Calendar parentStartCal = Calendar.getInstance();
+			parentStartCal.setTime(parentJob.getPlannedStartTime());
+			if(parentStartCal.after(startCal)) {
+				jobDTO.setErrorMessage("Job schedule start date cannot be earlier than parent job start date");
+				return jobDTO;
+			}
+			
+		}
+		return jobDTO;
 	}
 }

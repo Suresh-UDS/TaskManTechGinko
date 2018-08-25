@@ -150,23 +150,26 @@ public class JobManagementResource {
 		long userId = SecurityUtils.getCurrentUserId();
 		JobDTO response = jobService.updateJob(jobDTO, userId);
         if(response != null) {
-
-            long siteId = response.getSiteId();
-            List<User> users = userService.findUsers(siteId);
-            if(CollectionUtils.isNotEmpty(users)) {
-                if (StringUtils.isNotEmpty(response.getStatus())
-                		&& response.getStatus().equalsIgnoreCase("OUTOFSCOPE")) {
-                    long userIds[] = new long[users.size()];
-                    int ind = 0;
-                    for (User user : users) {
-                        userIds[ind] = user.getId();
-                        ind++;
-                    }
-                    String message = "Job -" + response.getTitle() + "of site-" + response.getSiteName() + "is marked as Out of Scope";
-                    pushService.send(userIds, message);
-                    jobService.saveNotificationLog(id, SecurityUtils.getCurrentUserId(), users, siteId, message);
-                }
-            }
+        		if(StringUtils.isEmpty(response.getErrorMessage())) {
+	            long siteId = response.getSiteId();
+	            List<User> users = userService.findUsers(siteId);
+	            if(CollectionUtils.isNotEmpty(users)) {
+	                if (StringUtils.isNotEmpty(response.getStatus())
+	                		&& response.getStatus().equalsIgnoreCase("OUTOFSCOPE")) {
+	                    long userIds[] = new long[users.size()];
+	                    int ind = 0;
+	                    for (User user : users) {
+	                        userIds[ind] = user.getId();
+	                        ind++;
+	                    }
+	                    String message = "Job -" + response.getTitle() + "of site-" + response.getSiteName() + "is marked as Out of Scope";
+	                    pushService.send(userIds, message);
+	                    jobService.saveNotificationLog(id, SecurityUtils.getCurrentUserId(), users, siteId, message);
+	                }
+	            }
+        		}else {
+        			return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+        		}
         }
 		return new ResponseEntity<>(response,HttpStatus.CREATED);
 	}

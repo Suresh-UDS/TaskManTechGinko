@@ -223,7 +223,7 @@
 															<input ng-model="serviceName"
 																class='form-control' name='serviceName' type='text' value=""
 																ng-minlength='1' ng-maxlength='100'
-																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus ng-change="validCheck();" />
+																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus  />
 
 														</div>
 													</div>
@@ -310,7 +310,7 @@
 															<input ng-model="labourCategory"
 																class='form-control' name='labourCategory' type='text' value=""
 																ng-minlength='1' ng-maxlength='100'
-																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus ng-change="validCheck();"  />
+																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus   />
 
 														</div>
 													</div>
@@ -397,7 +397,7 @@
 															<input ng-model="materialName"
 																class='form-control' name='materialName' type='text' value=""
 																ng-minlength='1' ng-maxlength='100'
-																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus ng-change="validCheck();"  />
+																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus   />
 
 														</div>
 													</div>
@@ -538,7 +538,7 @@
 															<!--Save Draft-->
 														<!--</button>-->
                                                         <button type="submit"  ng-click="conform('save','create')"
-                                                                ng-disabled="form.$invalid"  class="btn btn-warning ld ld-over-inverse pull-right"
+                                                                ng-disabled="form.$invalid || quoteStatus"  class="btn btn-warning ld ld-over-inverse pull-right"
                                                                 ng-class="{'running':saveLoad}">
                                                             <span class="btn-label"><i class="material-icons">save</i></span> Save Draft
                                                             <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>

@@ -710,6 +710,11 @@ angular.module('timeSheetApp')
                     $(".fade").removeClass("modal-backdrop");
                     $('#closeTicket').modal('hide');
                     $state.reload();
+                }).catch(function(response){
+                    $scope.success = null;
+                    $scope.loadingStop();
+                    $scope.showNotifications('top','center','success', response.data.message);
+
                 });
             }
 
