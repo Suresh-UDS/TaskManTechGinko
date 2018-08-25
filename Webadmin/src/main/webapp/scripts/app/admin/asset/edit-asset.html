@@ -2,7 +2,7 @@
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
 	<div class="">
         <div class="titleCon">
-            <h3>{{assetEdit.title}}</h3>
+            <h3>{{assetEdit.title | uppercase}}</h3>
         </div>
 		<div class="row">
 			<!-- <div class="col-mod-12">
@@ -83,7 +83,7 @@
                                                                                 <label class="control-label">Name<span class="red-star">*</span></label>
                                                                                 <input id='assetName'
                                                                                        ng-model="assetEdit.title"
-                                                                                       class='form-control'
+                                                                                       class='form-control InputTxtCapsAll'
                                                                                        name='assetName'
                                                                                        type='text' value=""
                                                                                        ng-minlength='5'

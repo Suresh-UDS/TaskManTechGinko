@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="titleCon margn-btm-12">
-                <h3>{{project.name}}</h3>
+                <h3>{{project.name | uppercase}}</h3>
             </div>
         </div>
     </div>
@@ -27,12 +27,12 @@
                                     </tr>
                                     <tr>
                                         <td>Client Name</td>
-                                        <td>{{project.name}}</td>
+                                        <td>{{project.name | uppercase}}</td>
                                     </tr>
 
                                     <tr>
                                         <td>Address</td>
-                                        <td>{{project.address}}</td>
+                                        <td >{{project.address}}</td>
                                     </tr>
 
                                     </tbody>
@@ -53,11 +53,11 @@
                                     <tbody>
                                     <tr>
                                         <td>First Name</td>
-                                        <td>{{project.contactFirstName}}</td>
+                                        <td style="text-transform: capitalize">{{project.contactFirstName}}</td>
                                     </tr>
                                     <tr>
                                         <td>Last Name</td>
-                                        <td>{{project.contactLastName}}</td>
+                                        <td style="text-transform: capitalize">{{project.contactLastName}}</td>
                                     </tr>
                                     <tr>
                                         <td>Phone</td>

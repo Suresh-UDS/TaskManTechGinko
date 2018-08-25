@@ -29,11 +29,11 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>Issue</td>
-                                                    <td>{{tickets.title}}</td>
+                                                    <td>{{tickets.title | uppercase}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Description</td>
-                                                    <td>{{tickets.description}}</td>
+                                                    <td>{{tickets.description | capitalize}}</td>
 
                                                 </tr>
                                                 <tr>
@@ -127,7 +127,7 @@
                                                     <td>Name of Asset</td>
                                                     <td>{{selectedAsset.title}}</td>
                                                 </tr>
-                                               
+
                                                 </tbody>
                                             </table>
                                         </div>
@@ -248,7 +248,7 @@
                <p>Are you sure you want to close the ticket?</p>
                <br/>
                <input class="form-control border-bottom-input" ng-model="ticket.comments" placeholder="Enter Remarks..">
-                
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -287,6 +287,6 @@
             </div>
         </div>
     </div>
-    
 
-    
+
+
