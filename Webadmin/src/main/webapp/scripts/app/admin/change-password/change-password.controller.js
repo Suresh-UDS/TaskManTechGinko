@@ -12,6 +12,7 @@ angular.module('timeSheetApp')
         $scope.rememberMe = true;
         $scope.oldPassword=null;
         $scope.newPassword=null;
+        $scope.confirmPassword = null;
         $scope.saveLoad = false;
        
         $scope.showNotifications= function(position,alignment,color,msg){
@@ -21,20 +22,27 @@ angular.module('timeSheetApp')
         $scope.changeNewPassword = function(){
             $scope.saveLoad = true;
             // event.preventDefault();
-            var changePasswordData = {
-                newPassword:$scope.newPassword,
-                oldPassword:$scope.oldPassword
-            }
-            Auth.changeNewPassword(changePasswordData).then(function (data) {
-                $scope.showNotifications('top','center','success','Password successfully changed..');
-                $scope.saveLoad = false;
-                Auth.logout();
-                $location.path('/login');
-            }).catch(function (err) {
-                $scope.showNotifications('top','center','danger','Password update failed ..');
-                $scope.saveLoad = false;
-            });
+            if($scope.newPassword === $scope.confirmPassword) {
+            	var changePasswordData = {
+                        newPassword:$scope.newPassword,
+                        oldPassword:$scope.oldPassword
+                    }
+                    Auth.changeNewPassword(changePasswordData).then(function (data) {
+                        $scope.showNotifications('top','center','success','Password successfully changed..');
+                        $scope.saveLoad = false;
+//                        Auth.logout();
+//                        $location.path('/login');
+                        $scope.cancelChangePwd();
+                    }).catch(function (err) {
+                        $scope.showNotifications('top','center','danger','Password update failed ..');
+                        $scope.saveLoad = false;
+                    });
 
+            }else{
+            	$scope.showNotifications('top','center','danger','Confirm Password does not match.');
+                $scope.saveLoad = false;
+            }
+            
         };
 
         $scope.conform = function(text,validation)
@@ -61,6 +69,7 @@ angular.module('timeSheetApp')
         $scope.cancelChangePwd = function(){
             $scope.newPassword='';
             $scope.oldPassword='';
+            $scope.confirmPassword='';
         };
 
         

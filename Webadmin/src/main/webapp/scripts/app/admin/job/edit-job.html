@@ -16,7 +16,7 @@
 			</div> -->
 			<div class="col-md-12">
                 <div class="titleCon">
-                    <h3>{{job.title}} - {{job.id}}</h3>
+                    <h3>{{job.title}}</h3>
                 </div>
 
 				<div class="form-container table-container jobcards">
@@ -32,6 +32,22 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Job</div>
                                     <div class="panel-body">
+
+                                        <div class="row">
+
+                                            <div class="col-md-12">
+
+                                                <div class="form-group">
+                                                    <label class="control-label">Job Id</label>
+                                                    <input id='jobId'
+                                                           ng-model="job.id"
+                                                           class='form-control'
+                                                           name='jobId'
+                                                           type='text' ng-disabled="true" readonly />
+                                                </div>
+
+                                             </div>
+                                        </div>
 
                                         <div class="row">
 
