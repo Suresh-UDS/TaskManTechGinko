@@ -60,7 +60,7 @@ import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 
 /**
- * Service class for managing users.
+ * Service class for managing employee attendance functions.
  */
 @Service
 @Transactional
