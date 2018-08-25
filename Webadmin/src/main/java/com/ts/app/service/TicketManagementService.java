@@ -594,7 +594,7 @@ public class TicketManagementService extends AbstractService {
     public TicketDTO uploadFile(TicketDTO ticketDTO) throws JSONException {
 
         log.debug("Ticket images upload to AWS s3 -"+ticketDTO.getId());
-        ticketDTO = amazonS3utils.uploadTicketFile(ticketDTO.getId(), ticketDTO.getImageFile(), System.currentTimeMillis(), ticketDTO);
+        ticketDTO = amazonS3utils.uploadTicketFile(ticketDTO.getId(), ticketDTO.getImageFile(), ticketDTO);
         Ticket ticket = ticketRepository.findOne(ticketDTO.getId());
         ticket.setImage(ticketDTO.getImage());
         ticketRepository.saveAndFlush(ticket);
@@ -605,7 +605,7 @@ public class TicketManagementService extends AbstractService {
 
 	public String getTicketImage(long ticketId, String imageId) {
         String fileUrl = null;
-        log.debug("Ticket Image service"+ticketId+" "+imageId);
+        log.debug("Ticket Image service"+ ticketId +" "+ imageId);
         Ticket ticket = ticketRepository.findOne(ticketId);
         fileUrl = cloudFrontUrl + bucketEnv + ticketFilePath + ticket.getImage();
         return fileUrl;
