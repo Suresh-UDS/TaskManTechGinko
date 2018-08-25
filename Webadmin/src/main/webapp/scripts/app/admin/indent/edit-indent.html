@@ -78,7 +78,7 @@
                                         <div class="form-group">
                                             <label class="control-label">Select ItemCode<span class="red-star">*</span></label>
                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select ng-options = "material as material.itemCode for material in materials track by material.id" ng-model ="selectedItemCode" ng-change="change(material)" class="form-control">
+                                            <select ng-options = "material as material.itemCode for material in materials track by material.id" ng-model="selectedItemCode" ng-change="change()" class="form-control">
                                                 <option value="">Select ItemCode...</option>
                                             </select>
                                         </div>
@@ -95,7 +95,7 @@
 
                                 <div class="form-group   is-empty">
                                     <label class="control-label">Store Stock <span class="red-star">*</span></label>
-                                    <input type="text" ng-model="selectedStoreStock" class="form-control">
+                                    <input type="text" ng-model="selectedStoreStock" class="form-control" ng-disabled="true">
                                     <span class="material-input"></span></div>
                             </div>
                             <div class="col-md-2">
@@ -107,7 +107,7 @@
                             </div>
                             <div class="col-md-2">
 
-                                <button class="btn btn-success" style="padding: 12px 20px; margin-top: 16px;">
+                                <button class="btn btn-success" ng-click="addMaterialItem()" style="padding: 12px 20px; margin-top: 16px;">
                                 <span class="btn-label">
                                     <i class="material-icons">add</i>
                                 </span>
@@ -133,9 +133,9 @@
                                         <tr ng-repeat="material in materialItems">
                                             <td>{{material.materialItemCode}}</td>
                                             <td>{{material.materialName}}</td>
-                                            <td>{{material.storeStock}}</td>
+                                            <td>{{material.materialStoreStock}}</td>
                                             <td>{{material.quantity}}</td>
-                                            <td class="text-right" ng-click="editMaterial(material.id, material)"> <a class="btn btn-simple btn-info"><i class="material-icons">edit</i></a></td>
+                                            <td class="text-right" ng-click="editMaterial(material)"> <a class="btn btn-simple btn-info"><i class="material-icons">edit</i></a></td>
                                         </tr>
                                         </tbody>
                                     </table>

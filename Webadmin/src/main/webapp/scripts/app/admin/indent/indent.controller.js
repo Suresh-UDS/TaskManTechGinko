@@ -10,6 +10,10 @@ angular.module('timeSheetApp')
 		
 		$scope.selectedEmployee = {};
 		
+		$scope.selectedItemCode = {};
+		
+		$scope.selectedMaterialItems = [];
+		
 		$rootScope.loginView = false;
 	
 		$scope.pages = { currPage : 1};
@@ -126,14 +130,27 @@ angular.module('timeSheetApp')
 			});
 		}
 		
-		$scope.change = function(material) {
-			console.log(material);
-			$scope.selectedItemName = material.name;
-			$scope.selectedStoreStock = material.storeStock;
+		$scope.change = function() {
+			console.log($scope.selectedItemCode);
+			$scope.selectedItemName = $scope.selectedItemCode.name;
+			$scope.selectedStoreStock = $scope.selectedItemCode.storeStock;
 		}
 		
-		$scope.editMaterial = function(id, material) {
-			alert("Clicked" + id + "" +JSON.stringify(material));
+		$scope.addMaterialItem = function() { 
+			$scope.material = {};
+			$scope.material.materialName = $scope.selectedItemName;
+			$scope.material.materialItemCode = $scope.selectedItemCode.itemCode;
+			$scope.material.materialStoreStock = $scope.selectedItemCode.storeStock;
+			$scope.material.quantity = $scope.selectedQuantity;
+			$scope.materialItems.push($scope.material);
+		}
+		
+		$scope.editMaterial = function(item) {
+			alert(JSON.stringify(item));
+			$scope.selectedItemName = item.materialName;
+			$scope.selectedItemCode = {id: item.materialId };
+			$scope.selectedStoreStock = item.materialStoreStock;
+			$scope.selectedQuantity = item.quantity;
 		}
 
         $scope.search = function () {
