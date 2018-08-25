@@ -323,6 +323,7 @@ angular.module('timeSheetApp')
                     //
 
                     $scope.loadSearchProject = function (searchProject) {
+                        $scope.filter = false;
                         $scope.siteSpin = true;
                         $scope.hideSite = false;
                         $scope.clearField = false;
@@ -338,6 +339,7 @@ angular.module('timeSheetApp')
                     }
 
                     $scope.loadSearchType = function (searchAssetType) {
+                        $scope.filter = false;
                         $scope.clearField = false;
                         $scope.searchAssetType = $scope.assetTypes[$scope.uiType.indexOf(searchAssetType)];
                         console.log($scope.searchAssetType)
@@ -1108,6 +1110,7 @@ angular.module('timeSheetApp')
                     $scope.pages.currPage = $scope.localStorage.currPage;
                     $scope.searchProject = {searchStatus:'0',id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
                     $scope.searchSite = {searchStatus:'0',id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
+                    // $scope.searchAssetType = {searchStatus:'0',name:$scope.localStorage.assetTypeName};
 
                 }
 
@@ -1982,7 +1985,7 @@ angular.module('timeSheetApp')
                 console.log("Asset Type entered");
                 AssetTypeComponent.create($scope.assetType).then(function (response) {
                     console.log(response);
-                    if(response.data.status && response.data.status === "400") { 
+                    if(response.data.status && response.data.status === "400") {
                     	$scope.loadingStop();
                     	$scope.showNotifications('top','center','danger','Asset type already exists.');
                     }else{
@@ -2013,7 +2016,7 @@ angular.module('timeSheetApp')
                 console.log("Asset Group entered");
                 AssetComponent.createAssetGroup($scope.assetGroup).then(function (response) {
                     console.log(response);
-                    if(response.data.status && response.data.status === "400") { 
+                    if(response.data.status && response.data.status === "400") {
                     	$scope.loadingStop();
                     	$scope.showNotifications('top','center','danger','Asset Group already exists.');
                     }else{

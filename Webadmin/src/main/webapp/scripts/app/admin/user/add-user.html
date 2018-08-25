@@ -46,7 +46,7 @@
                                                           <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
                                                           <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                                           <!--required >-->
-                                                   <select class="form-control " ng-model="selectedRole"  ng-options="role as role.name for role in userRoles">
+                                                   <select class="form-control " ng-model="selectedRole"  ng-options="role as (role.name | uppercase) for role in userRoles">
                                                        <option value="">Please select Roles...</option>
                                                    </select>
 
