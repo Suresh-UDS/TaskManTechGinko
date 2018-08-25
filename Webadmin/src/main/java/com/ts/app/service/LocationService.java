@@ -190,7 +190,8 @@ public class LocationService extends AbstractService {
 					subEmpIds.add(sub.getId());
 				}
 				*/
-				findAllSubordinates(employee, subEmpIds);
+				int levelCnt = 1;
+				findAllSubordinates(employee, subEmpIds, levelCnt);
 	        		List<Long> subEmpList = new ArrayList<Long>();
 	        		subEmpList.addAll(subEmpIds);
 				
