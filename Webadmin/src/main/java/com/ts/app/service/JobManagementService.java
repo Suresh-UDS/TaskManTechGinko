@@ -1566,8 +1566,17 @@ public class JobManagementService extends AbstractService {
 		User currUser = userRepository.findOne(userId);
 		Hibernate.initialize(currUser.getEmployee());
 		Employee currUserEmp = currUser.getEmployee();
-
 		Job job = findJob(id);
+		//validate job completion time
+		Calendar now = Calendar.getInstance();
+		Calendar jobStartTime = Calendar.getInstance();
+		jobStartTime.setTime(job.getPlannedStartTime());
+		if(now.before(jobStartTime)) {
+			JobDTO jobDto = mapperUtil.toModel(job, JobDTO.class);
+			jobDto.setErrorMessage("Cannot complete job before the scheduled job start time");
+			return jobDto;
+		}
+
 		job.setActualStartTime(job.getPlannedStartTime());
 		Date endDate = new Date();
 		int totalHours = Hours.hoursBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getHours();
@@ -2097,11 +2106,16 @@ public class JobManagementService extends AbstractService {
 			startCal.setTime(jobDTO.getPlannedStartTime());
 			Calendar parentStartCal = Calendar.getInstance();
 			parentStartCal.setTime(parentJob.getPlannedStartTime());
+			Calendar parentEndCal = Calendar.getInstance();
+			parentEndCal.setTime(parentJob.getScheduleEndDate());
 			if(parentStartCal.after(startCal)) {
 				jobDTO.setErrorMessage("Job schedule start date cannot be earlier than parent job start date");
 				return jobDTO;
 			}
-			
+			if(parentEndCal.before(startCal)) {
+				jobDTO.setErrorMessage("Job schedule start date cannot be later than parent job schedule end date");
+				return jobDTO;
+			}
 		}
 		return jobDTO;
 	}

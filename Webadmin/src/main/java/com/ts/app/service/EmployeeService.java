@@ -523,6 +523,10 @@ public class    EmployeeService extends AbstractService {
         checkInOutDto.setId(checkInOut.getId());
         if(checkInOutDto.isCompleteJob()){
             JobDTO completedJob = jobManagementService.onlyCompleteJob(checkInOutDto.getJobId(), checkInOutDto.getUserId());
+            if(completedJob != null && StringUtils.isNotEmpty(completedJob.getErrorMessage())) {
+            		checkInOutDto.setErrorMessage(completedJob.getErrorMessage());
+            		return checkInOutDto;
+            }
             log.debug("onlyCheckOut - completedJob" + completedJob);
             log.debug("Transaction id "+checkInOutDto.getId());
             if(completedJob != null) {
