@@ -417,9 +417,20 @@ angular.module('timeSheetApp')
         {
             $scope.empSpin = true;
             $scope.employeeFilterDisable = true;
-            if($scope.searchSite)
-            {
-                $scope.searchCriteria.siteId = $scope.searchSite.id;
+            if( $scope.searchProject || $scope.searchSite)
+            {   
+                if($scope.searchProject){
+                    $scope.searchCriteria.projectId = $scope.searchProject.id;
+                }else{
+                    $scope.searchCriteria.projectId = null;
+                }
+                if($scope.searchSite){
+                    $scope.searchCriteria.siteId = $scope.searchSite.id;
+                }else{
+                   $scope.searchCriteria.siteId = null; 
+                }
+                
+                console.log('Employee Load',$scope.searchCriteria);
                 EmployeeComponent.search($scope.searchCriteria).then(function (data) {
                     $scope.selectedEmployee = null;
                     $scope.employees = data.transactions;
