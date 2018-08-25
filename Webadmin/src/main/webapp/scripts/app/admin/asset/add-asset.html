@@ -2,7 +2,7 @@
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
 	<div class="" >
         <div class="titleCon" ng-if="assetVal.id">
-            <h3>{{assetVal.title}} - {{assetVal.id}}</h3>
+            <h3>{{assetVal.title | uppercase}} - {{assetVal.id}}</h3>
         </div>
 		<div class="row">
             <!-- <div class="col-mod-12">
@@ -85,7 +85,7 @@
                                                                                     <label class="control-label">Name <span class="red-star">*</span></label>
                                                                                 <input id='assetTitle'
                                                                                        ng-model="assetGen.title"
-                                                                                       class='form-control InputTxtCaps'
+                                                                                       class='form-control InputTxtCapsAll'
                                                                                        name='assetTitle'
                                                                                        type='text' value=""
                                                                                        ng-minlength='5'
@@ -776,17 +776,17 @@
                                                                           <div class="row">
                                                                              <div class="col-md-6">
 
-                                                                                 <p><span class="txtBold">Asset</span>  : {{assetGen.title}}</p>
-                                                                                 <p><span class="txtBold">Type </span> : {{selectedAssetType.name}}</p>
-                                                                                 <p><span class="txtBold">Group</span>  : {{selectedAssetGroup.assetgroup}}</p>
+                                                                                 <p><span class="txtBold">Asset</span>  : {{assetGen.title | uppercase}}</p>
+                                                                                 <p><span class="txtBold">Type </span> : {{selectedAssetType.name | uppercase}}</p>
+                                                                                 <p><span class="txtBold">Group</span>  : {{selectedAssetGroup.assetgroup | uppercase}}</p>
 
 
                                                                                  </div>
                                                                              <div class="col-md-6">
 
-                                                                                 <p><span class="txtBold">Site</span> : {{selectedSites.name}}</p>
-                                                                                 <p><span class="txtBold">Manufacturer</span>  : {{selectedManufacturer.name}}</p>
-                                                                                 <p><span class="txtBold">Vendor</span>  : {{selectedVendor.name}}</p>
+                                                                                 <p><span class="txtBold">Site</span> : {{selectedSites.name | uppercase}}</p>
+                                                                                 <p><span class="txtBold">Manufacturer</span>  : {{selectedManufacturer.name | uppercase}}</p>
+                                                                                 <p><span class="txtBold">Vendor</span>  : {{selectedVendor.name | uppercase}}</p>
 
 
                                                                              </div>
@@ -1458,7 +1458,7 @@
                                                                     <td>{{ppmSchedules.startDate | date :  "dd-MM-y"}}</td>
                                                                     <td>{{ppmSchedules.endDate | date :  "dd-MM-y"}}</td>
                                                                     <td>{{ppmSchedules.employeeName}}</td>
-                                                                    <td>{{ppmSchedules.jobStartTime | date :  "dd-MM-y h:mm:ss Z"}}</td>{{ppmSchedules.plannedHours}}</td>
+                                                                    <td>{{ppmSchedules.jobStartTime | date :  "dd-MM-y h:mm a"}}</td>{{ppmSchedules.plannedHours}}</td>
                                                                     <td>{{ppmSchedules.frequencyPrefix}}&nbsp; {{ppmSchedules.frequencyDuration}}&nbsp; {{ppmSchedules.frequency}}</td>
                                                                     <!--<td class="text-right">-->
                                                                         <!--<a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>-->
@@ -1814,7 +1814,7 @@
                                                                 <td>{{amcSchedule.startDate | date :  "dd-MM-y"}}</td>
                                                                 <td>{{amcSchedule.endDate | date :  "dd-MM-y"}}</td>
                                                                 <td>{{amcSchedule.employeeName}}</td>
-                                                                <td>{{amcSchedule.jobStartTime | date :  "dd-MM-y h:mm:ss Z"}}</td>
+                                                                <td>{{amcSchedule.jobStartTime | date :  "dd-MM-y h:mm a"}}</td>
                                                                 <td>
                                                                 {{amcSchedule.plannedHours}}</td>
                                                                 <td>{{amcSchedule.frequencyPrefix}}&nbsp; {{amcSchedule.frequencyDuration}}&nbsp; {{amcSchedule.frequency}}</td>

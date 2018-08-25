@@ -777,6 +777,10 @@ textarea.InputTxtCaps
 {
     text-transform: capitalize;
 }
+.caps
+{
+    text-transform: capitalize;
+}
 .TxtFirstCaps
 {
     text-transform: capitalize ;

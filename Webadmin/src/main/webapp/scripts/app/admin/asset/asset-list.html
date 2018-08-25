@@ -78,9 +78,7 @@
             <!--</button> &ndash;&gt;-->
 
         <!--</div>-->
-
     </div>
-
     <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
             <span class="AppliedFilterTxtCon">
                 <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.projectName || localStorage.projectName">
@@ -225,7 +223,7 @@
                                 </div>
                             </td>
                                 <td>{{asset.code}}</td>
-                                <td>{{asset.title}}</td>
+                                <td>{{asset.title | uppercase}}</td>
                                 <td>{{asset.assetType}}</td>
                                 <td>{{asset.assetGroup}}</td>
                                 <!-- <td>{{asset.status}}</td> -->

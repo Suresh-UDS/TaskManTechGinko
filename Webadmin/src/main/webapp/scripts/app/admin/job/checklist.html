@@ -27,7 +27,7 @@
 
                                 <div class="form-group pdng-top15">
                                     <label class="control-label">Name<span class="red-star">*</span></label>
-                                    <input type="text" name="checklistName" class="form-control InputTxtCaps" ng-model="checklist.name" ng-required="true">
+                                    <input type="text" name="checklistName" class="form-control InputTxtCapsAll" ng-model="checklist.name" ng-required="true">
                                     <div ng-show="form.$submitted || form.checklistName.$touched || form.addChecklist.$touched">
                                        <div ng-show="form.checklistName.$dirty || form.checklistName.$invalid">
                                            <p class="help-block" style="color:maroon"
@@ -100,7 +100,7 @@
                                        <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" ng-click="conform('save')"
                                                type="submit" id="form-button-save" ng-disabled="form.$invalid ">
                                            <span class="btn-label"><i class="material-icons">check</i></span>
-                                           <span ng-show ="!isEdit">Save</span><span ng-show ="isEdit">Update</span>  
+                                           <span ng-show ="!isEdit">Save</span><span ng-show ="isEdit">Update</span>
                                            <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                        </button>
 
@@ -145,7 +145,7 @@
                             <tbody>
                             <tr ng-repeat=" checklist in checklists">
                                <td>{{checklist.id}}</td>
-                                <td>{{checklist.name}}</td>
+                                <td>{{checklist.name | uppercase}}</td>
                                 <td>
                                 	<label  ng-repeat=" item in checklist.items">{{item.name}}</label>
 

@@ -158,7 +158,7 @@
                         <tbody>
                         <tr ng-repeat="quotation in quotations">
                             <td>{{quotation.serialId}}</td>
-                            <td>{{quotation.title}}</td>
+                            <td>{{quotation.title | uppercase}}</td>
                             <td>{{quotation.projectName}}</td>
                             <td>{{quotation.siteName}}</td>
                             <td>{{quotation.createdByUserName}}</td>
@@ -465,7 +465,7 @@
                                                     <!--</select>-->
                                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable" ng-change="loadDepSites(searchProject)">
+                                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable || projectsList.length == 0" ng-change="loadDepSites(searchProject)">
                                                         <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client1' :clearField?'Select Client2':searchProject}}</ui-select-match>
                                                         <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
                                                             <div ng-bind="client"></div>

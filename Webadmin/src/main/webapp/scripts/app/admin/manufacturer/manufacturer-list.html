@@ -161,7 +161,7 @@
                             <tbody>
 							<tr ng-repeat="manufacturer in manufacturers" repeat-done="initDataTables()">
 								<td>{{manufacturer.assetType}}</td>
-								<td>{{manufacturer.name}}</td>
+								<td>{{manufacturer.name | uppercase}}</td>
                                 	<td>{{manufacturer.contactFirstName}} {{manufacturer.contactLastName}}</td>
 							   	<td>{{manufacturer.phone}}</td>
                                  <td class="text-right hoverMe">
@@ -608,7 +608,7 @@
 
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="">View Manufacturer Details - {{manufacturer.name}}</h4>
+                <h4 class="modal-title" id="">View Manufacturer Details - {{manufacturer.name | uppercase}}</h4>
             </div>
 
             <div class="modal-body">
@@ -630,7 +630,7 @@
                                       </tr>
                                       <tr>
                                           <td>Manufacturer Name</td>
-                                          <td>{{manufacturer.name}}</td>
+                                          <td>{{manufacturer.name | uppercase}}</td>
                                       </tr>
                                       <tr>
                                           <td>Contact First Name</td>
@@ -675,22 +675,22 @@
                                       <tbody>
                                       <tr>
                                           <td>Line 1 </td>
-                                          <td>{{manufacturer.addressLine1}}</td>
+                                          <td class="caps">{{manufacturer.addressLine1}}</td>
                                       </tr>
                                       <tr>
                                           <td>Line 2</td>
-                                          <td>{{manufacturer.addressLine2}}</td>
+                                          <td class="caps">{{manufacturer.addressLine2}}</td>
 
                                       </tr>
                                       <tr>
                                           <td>City</td>
-                                          <td>{{manufacturer.city}}</td>
+                                          <td class="caps">{{manufacturer.city}}</td>
 
                                       </tr>
                                       <tr>
 
                                           <td>State</td>
-                                          <td>{{manufacturer.state}}</td>
+                                          <td class="caps">{{manufacturer.state}}</td>
 
                                       </tr>
                                       <tr>
@@ -702,7 +702,7 @@
                                       <tr>
 
                                           <td>Country</td>
-                                          <td>{{manufacturer.country}}</td>
+                                          <td class="caps">{{manufacturer.country}}</td>
 
                                       </tr>
                                       </tbody>
