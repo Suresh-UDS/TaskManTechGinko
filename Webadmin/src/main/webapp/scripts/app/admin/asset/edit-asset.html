@@ -1277,7 +1277,7 @@
                                                                     <td>{{ppmSchedules.startDate | date :  "dd-MM-y"}}</td>
                                                                     <td>{{ppmSchedules.endDate | date :  "dd-MM-y"}}</td>
                                                                     <td>{{ppmSchedules.employeeName}}</td>
-                                                                    <td>{{ppmSchedules.jobStartTime | date :  "dd-MM-y h:mm:ss Z"}}</td>
+                                                                    <td>{{ppmSchedules.jobStartTime | date :  "dd-MM-y hh:mm a"}}</td>
                                                                     <td>
                                                                     {{ppmSchedules.plannedHours}}</td>
                                                                     <td>{{ppmSchedules.frequencyPrefix}}&nbsp; {{ppmSchedules.frequencyDuration}}&nbsp; {{ppmSchedules.frequency}}</td>
@@ -1598,7 +1598,7 @@
                                                                 <td>{{amcSchedule.startDate | date :  "dd-MM-y"}}</td>
                                                                 <td>{{amcSchedule.endDate | date :  "dd-MM-y"}}</td>
                                                                 <td>{{amcSchedule.employeeName}}</td>
-                                                                <td>{{amcSchedule.jobStartTime | date :  "dd-MM-y h:mm:ss Z"}}</td>
+                                                                <td>{{amcSchedule.jobStartTime | date :  "dd-MM-y h:mm a"}}</td>
                                                                 <td>
                                                                 {{amcSchedule.plannedHours}}</td>
                                                                 <td>{{amcSchedule.frequencyPrefix}}&nbsp; {{amcSchedule.frequencyDuration}}&nbsp; {{amcSchedule.frequency}}</td>
