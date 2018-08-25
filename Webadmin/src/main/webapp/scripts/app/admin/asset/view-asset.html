@@ -2,7 +2,7 @@
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="viewAsset();">
 	<div class="">
     <div class="titleCon">
-        <h3>{{assetDetail.title}}</h3>
+        <h3>{{assetDetail.title | uppercase}}</h3>
     </div>
 		<div class="row">
         	<div class="col-md-12">
@@ -71,7 +71,7 @@
                                                                    <tbody>
                                                                    <tr>
                                                                        <td>Name</td>
-                                                                       <td>{{assetDetail.title}}</td>
+                                                                       <td>{{assetDetail.title | uppercase}}</td>
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Asset Type</td>
