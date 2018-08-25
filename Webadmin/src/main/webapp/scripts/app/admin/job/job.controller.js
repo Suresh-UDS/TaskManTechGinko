@@ -799,11 +799,19 @@ angular.module('timeSheetApp')
 	        	}
 	        	post($scope.job, function (response, err) {
 	        		if(response) {
-	        			$scope.success = 'OK';
-	        			$scope.saveLoad = false;
-	                	$scope.showNotifications('top','center','success',message);
-	            		$location.path('/jobs');
-	            		$scope.disable = false;
+	        			if(response.data.errorMesssage) {
+                        $scope.saveLoad = false;
+                        $scope.success = null;
+                        $scope.disable = false;
+                        $scope.showNotifications('top','center','danger','Failed to save job.' + response.data.errorMessage);
+                        $scope.error = 'ERROR';
+	        			}else {
+		        			$scope.success = 'OK';
+		        			$scope.saveLoad = false;
+		                	$scope.showNotifications('top','center','success',message);
+		            		$location.path('/jobs');
+		            		$scope.disable = false;
+	        			}
 	        		}else if(err) {
                     $scope.saveLoad = false;
                     $scope.success = null;
@@ -814,7 +822,7 @@ angular.module('timeSheetApp')
                         $scope.showNotifications('top','center','danger','Job already exists');
 
                     } else {
-                        $scope.showNotifications('top','center','danger','Failed to create job. Please try again later..' + err.data.errorMessage);
+                        $scope.showNotifications('top','center','danger','Failed to save job.' + err.data.errorMessage);
                         $scope.error = 'ERROR';
                     }
 	        		}

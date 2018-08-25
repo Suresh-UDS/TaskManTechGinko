@@ -904,13 +904,20 @@ angular
 
 					        $scope.closeTicketConfirm =function(cTicket){
 
-					        JobComponent.updateTicket(cTicket).then(function() {
-					                $scope.success = 'OK';
-					                $scope.showNotifications('top','center','success','Ticket status updated');
-					                $(".fade").removeClass("modal-backdrop");
-					                $scope.ticketStatus = 'Closed';
-					                $state.reload();
-					            });
+					        JobComponent.updateTicket(cTicket).then(function(data) {
+						        		if(data.errorMessage) {
+							                $scope.success = null;
+							                $scope.showNotifications('top','center','danger',data.errorMessage);
+							                $(".fade").removeClass("modal-backdrop");
+							                $state.reload();
+						        		}else {
+						                $scope.success = 'OK';
+						                $scope.showNotifications('top','center','success','Ticket status updated');
+						                $(".fade").removeClass("modal-backdrop");
+						                $scope.ticketStatus = 'Closed';
+						                $state.reload();
+						        		}
+					            })
 					        }
 
 					        $scope.quoteStatus = true;
