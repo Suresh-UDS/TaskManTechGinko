@@ -143,11 +143,11 @@
                             <tbody>
                             <tr ng-repeat=" location in locations">
                                <td>{{location.id}}</td>
-                                <td>{{location.projectName}}</td>
-                                <td>{{location.siteName}}</td>
-                                <td>{{location.block}}</td>
-                                <td>{{location.floor}}</td>
-                                <td>{{location.zone}}</td>
+                                <td>{{location.projectName | uppercase}}</td>
+                                <td>{{location.siteName | uppercase}}</td>
+                                <td>{{location.block | uppercase}}</td>
+                                <td>{{location.floor | uppercase}}</td>
+                                <td>{{location.zone | uppercase}}</td>
                                 <td>
                                     <!--<button  title="Generate QR"   data-toggle="modal" data-target="#qrcodeModal" data-dismiss="#qrcodeModal" class="btn btn-simple btn-info btn-icon like" ng-click="generateQR(location.siteId,location.id)"> <i style="font-size: 20px !important; " class="fa fa-qrcode"></i></button>-->
 
