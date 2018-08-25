@@ -673,6 +673,11 @@ public class AssetManagementService extends AbstractService {
 		}else {
 			assetAMC.setChecklist(null);
 		}
+		
+		if(assetAMCScheduleDTO.getEmpId() > 0) {
+			Employee employee = employeeRepository.findOne(assetAMCScheduleDTO.getEmpId());
+			assetAMCScheduleDTO.setEmployeeName(employee.getName());
+		}
 		Asset asset = assetRepository.findOne(assetAMCScheduleDTO.getAssetId());
 		assetAMC.setAsset(asset);
 		assetAMC.setActive(AssetAMCSchedule.ACTIVE_YES);
@@ -732,6 +737,8 @@ public class AssetManagementService extends AbstractService {
 		if (CollectionUtils.isNotEmpty(assetAMCSchedules)) {
 			assetAMCScheduleDTOs = mapperUtil.toModelList(assetAMCSchedules, AssetAMCScheduleDTO.class);
 			for(AssetAMCScheduleDTO assetAMC : assetAMCScheduleDTOs) {
+				Employee employee = employeeRepository.findOne(assetAMC.getEmpId());
+				assetAMC.setEmployeeName(employee.getName());
 				if(assetAMC.getChecklistId() > 0) {
 					List<ChecklistItem> checkList = checklistRespository.findByChecklistId(assetAMC.getChecklistId());
 					List<ChecklistItemDTO> cheklistItemDTO = mapperUtil.toModelList(checkList, ChecklistItemDTO.class);
@@ -755,6 +762,8 @@ public class AssetManagementService extends AbstractService {
 		if (CollectionUtils.isNotEmpty(assetPpmSchedules)) {
 			assetPpmScheduleDTOs = mapperUtil.toModelList(assetPpmSchedules, AssetPpmScheduleDTO.class);
 			for(AssetPpmScheduleDTO assetPPM : assetPpmScheduleDTOs) {
+				Employee employee = employeeRepository.findOne(assetPPM.getEmpId());
+				assetPPM.setEmployeeName(employee.getName());
 				if(assetPPM.getChecklistId() > 0) {
 					List<ChecklistItem> checkList = checklistRespository.findByChecklistId(assetPPM.getChecklistId());
 					List<ChecklistItemDTO> cheklistItemDTO = mapperUtil.toModelList(checkList, ChecklistItemDTO.class);
@@ -1300,6 +1309,10 @@ public class AssetManagementService extends AbstractService {
 			assetPPMSchedule.setChecklist(checklist);
 		}else {
 			assetPPMSchedule.setChecklist(null);
+		}
+		if(assetPpmScheduleDTO.getEmpId() > 0) { 
+			Employee employee = employeeRepository.findOne(assetPpmScheduleDTO.getEmpId());
+			assetPPMSchedule.setEmployeeName(employee.getName());
 		}
 		Asset asset = assetRepository.findOne(assetPpmScheduleDTO.getAssetId());
 		assetPPMSchedule.setAsset(asset);
