@@ -12,6 +12,7 @@ import {DBService} from "../service/dbService";
 import {Diagnostic} from "@ionic-native/diagnostic";
 import{AddInventoryTransaction} from "../add-inventory-transaction/add-inventory-transaction";
 import{InventoryService} from "../service/inventoryService";
+import{Indent} from "../indent/indent";
 
 /**
  * Generated class for the InventoryMaster page.
@@ -38,6 +39,7 @@ export class InventoryMaster {
     db:any;
     fileTransfer: FileTransferObject = this.transfer.create();
     material:any;
+    spinner:any;
 
   constructor(@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,private transfer: FileTransfer,
               public modalCtrl:ModalController,private diagnostic: Diagnostic,private sqlite: SQLite,
@@ -96,12 +98,15 @@ export class InventoryMaster {
     }
 
    inventoryMaterial(searchCriteria){
+      this.spinner=true;
       this.inventoryService.getMaterials(searchCriteria).subscribe(
           response=>{
+              this.spinner=false;
               console.log("Getting Inventory Materials");
               console.log(response);
-              this.material=response;
+              this.material=response.transactions;
           },err=>{
+              this.spinner=false;
               console.log("Error in Getting Inventory Materials");
               console.log(err);
           }
