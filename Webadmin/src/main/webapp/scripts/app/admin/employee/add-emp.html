@@ -42,7 +42,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Employee ID<span class="red-star">*</span></label>
-                                                    <input id='employeeEmpId' ng-model="employee.empId" class='form-control'
+                                                    <input id='employeeEmpId' ng-model="employee.empId" class='form-control InputTxtCapsAll'
                                                            name='employeeEmpId' type='text' value="" ng-minlength=1 ng-maxlength=10 ng-pattern="/^[A-Za-z0-9]*$/" autofocus required ng-blur="getEmployeeByEmpId()"/>
                                                     <div ng-show="form.$submitted || form.employeeEmpId.$touched || form.employeeEmpId.$dirty">
                                                         <div ng-show="form.employeeEmpId.$dirty || form.employeeEmpId.$invalid">
@@ -276,7 +276,7 @@
                                                                    ng-show="form.projectName.$error.required">
                                                                     Client name is required.
                                                                 </p>
-                                                                
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -300,7 +300,7 @@
                                                                    ng-show="form.siteName.$error.required">
                                                                     Site name is required.
                                                                 </p>
-                                                                
+
                                                             </div>
                                                         </div>
                                                     </div>
