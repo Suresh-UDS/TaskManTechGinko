@@ -1,6 +1,6 @@
 <div class="crud-form"
      data-unique-hash="a2ad475d60b22954085c657a73309b8f">
-    <div  ng-init="editIndent();loadingAuto();">
+    <div  ng-init="initLoad();editIndent();loadingStart();">
 
 
         <div class="col-md-8">
@@ -54,8 +54,7 @@
                         </div>
                         <h3 class="HeadingTxt">Requester Details</h3>
                         <div class="row">
-
-
+                        
                                <div class="col-md-4">
                                 <div class="form-group no-padding">
                                     <div class="dropdown">
@@ -70,42 +69,39 @@
                                 </div>
                             </div>
 
-
-
                         </div>
                         <h3 class="HeadingTxt">Item Details </h3>
                         <div class="row">
                             <div class="col-md-3">
-                                <div class="form-group   is-empty">
-                                    <label class="control-label">Item Code <span class="red-star">*</span></label>
-                                    <input type="number" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
-
-                                    <span class="material-input"></span></div>
+                                    <div class="form-group no-padding">
+                                    <div class="dropdown">
+                                        <div class="form-group">
+                                            <label class="control-label">Select ItemCode<span class="red-star">*</span></label>
+                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select ng-options = "material as material.itemCode for material in materials track by material.id" ng-model ="selectedItemCode" ng-change="change(material)" class="form-control">
+                                                <option value="">Select ItemCode...</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group   is-empty">
                                     <label class="control-label">Item Name <span class="red-star">*</span></label>
-                                    <input type="text" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
-
+                                    <input type="text" ng-model="selectedItemName" class="form-control">
                                     <span class="material-input"></span></div>
                             </div>
                             <div class="col-md-2">
 
-                                <div class="form-group selectcon is-empty">
-
-                                    <label class="control-label">UOM</label>
-                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control">
-                                        <option value="">Select UOM</option>
-                                    </select>
-
-                                </div>
-
+                                <div class="form-group   is-empty">
+                                    <label class="control-label">Store Stock <span class="red-star">*</span></label>
+                                    <input type="text" ng-model="selectedStoreStock" class="form-control">
+                                    <span class="material-input"></span></div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group   is-empty">
                                     <label class="control-label">Quantity <span class="red-star">*</span></label>
-                                    <input type="number" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
+                                    <input type="number" class="form-control" ng-model="selectedQuantity">
 
                                     <span class="material-input"></span></div>
                             </div>
@@ -128,7 +124,7 @@
                                         <tr>
                                             <th>Item Code</th>
                                             <th>Item Name</th>
-                                            <th>Uom</th>
+                                            <th>Store Stock</th>
                                             <th>Quantity</th>
                                             <th class="text-right">Actions</th>
                                         </tr>
@@ -137,9 +133,9 @@
                                         <tr ng-repeat="material in materialItems">
                                             <td>{{material.materialItemCode}}</td>
                                             <td>{{material.materialName}}</td>
-                                            <td>{{material.materialUom}}</td>
+                                            <td>{{material.storeStock}}</td>
                                             <td>{{material.quantity}}</td>
-                                            <td class="text-right"> <a class="btn btn-simple btn-info"><i class="material-icons">edit</i></a></td>
+                                            <td class="text-right" ng-click="editMaterial(material.id, material)"> <a class="btn btn-simple btn-info"><i class="material-icons">edit</i></a></td>
                                         </tr>
                                         </tbody>
                                     </table>

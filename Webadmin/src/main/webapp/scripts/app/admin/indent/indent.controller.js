@@ -2,7 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('IndentController', function ($rootScope, $scope, $state, $timeout,
-    		ProjectComponent, SiteComponent, EmployeeComponent, IndentComponent, $http, $stateParams, $location, PaginationComponent) {
+    		ProjectComponent, SiteComponent, EmployeeComponent, InventoryComponent, IndentComponent, $http, $stateParams, $location, PaginationComponent) {
 	
 		$scope.selectedProject = {};
 	
@@ -30,6 +30,7 @@ angular.module('timeSheetApp')
 		$scope.initLoad = function(){
 			$scope.loadProjects();
 		    $scope.loadPageTop();
+		    $scope.loadAllUOM();
 		    $scope.searchFilter();
 		 }
 	
@@ -89,6 +90,13 @@ angular.module('timeSheetApp')
                });
             }
         }
+        
+        $scope.loadAllUOM = function() { 
+        	InventoryComponent.getMaterialUOM().then(function(data){ 
+        		console.log(data);
+        		$scope.UOMs = data;
+        	});
+        }
 		
 		$scope.viewIndents = function() { 
 			IndentComponent.findById($stateParams.id).then(function(data) { 
@@ -101,13 +109,31 @@ angular.module('timeSheetApp')
 		$scope.editIndent = function() {
 			IndentComponent.findById($stateParams.id).then(function(data) { 
 				console.log(data);
+				$scope.loadingStop();
 				$scope.editIndentObj = data;
 				$scope.selectedProject = {id: $scope.editIndentObj.projectId };
 				$scope.selectedSite = {id: $scope.editIndentObj.siteId };
 				$scope.selectedEmployee = {id: $scope.editIndentObj.requestedById }
 				$scope.materialItems = $scope.editIndentObj.items;
+				$scope.search = {};
+				$scope.search.projectId = $scope.editIndentObj.projectId;
+				$scope.search.siteId = $scope.editIndentObj.siteId;
+				InventoryComponent.search($scope.search).then(function(data) { 
+					console.log(data);
+					$scope.materials = data.transactions;
+				});
 				
 			});
+		}
+		
+		$scope.change = function(material) {
+			console.log(material);
+			$scope.selectedItemName = material.name;
+			$scope.selectedStoreStock = material.storeStock;
+		}
+		
+		$scope.editMaterial = function(id, material) {
+			alert("Clicked" + id + "" +JSON.stringify(material));
 		}
 
         $scope.search = function () {
@@ -150,6 +176,7 @@ angular.module('timeSheetApp')
             $scope.loadPageTop();
             IndentComponent.search($scope.searchCriteria).then(function (data) {
             	console.log(data);
+            	$scope.loadingStop();
                 $scope.materialIndents = data.transactions;
 
                  /*
