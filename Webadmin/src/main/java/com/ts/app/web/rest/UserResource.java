@@ -291,7 +291,6 @@ public class UserResource {
     public ResponseEntity<?> changeNewPassword(@RequestBody KeyAndPasswordDTO keyAndPasswordDTO){
         User user = userRepository.findOne(SecurityUtils.getCurrentUserId());
         UserDTO userDto = null;
-        
         if(user !=null){
             userDto = userService.changeNewPassword(SecurityUtils.getCurrentUserId(), keyAndPasswordDTO.getNewPassword());
             userDto.setMessage("Username Changed");
