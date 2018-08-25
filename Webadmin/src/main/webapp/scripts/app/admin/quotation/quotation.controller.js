@@ -343,6 +343,7 @@ angular
 
                         $scope.siteSpin = true;
                         $scope.hideSite = true;
+                        $scope.clearField = false;
 
                             $scope.uiSite.splice(0,$scope.uiSite.length)
 
@@ -552,10 +553,10 @@ angular
 
                     };
 
+                    // *
 			        $scope.loadQuotation = function() {
                           if($stateParams.id){
-                             
-                             console.log('quotation id - ' + $stateParams.id);
+                            console.log('quotation id - ' + $stateParams.id);
 			        		RateCardComponent.findQuotation($stateParams.id).then(function (data) {
 			        			$scope.loadingStop();
 			        				console.log('quotation response - '+ JSON.stringify(data))
@@ -609,11 +610,12 @@ angular
 				            });
 
                           }
-			        		
+
 			        };
 
 
 					$scope.approveQuotation = function(quotation) {
+					    console.log(quotation)
 						RateCardComponent.approveQuotation(quotation).then(
 								function(response) {
 									console.log(response);
@@ -668,6 +670,8 @@ angular
 			        $scope.refreshPage = function() {
 
 			           $scope.loadAllQuotations();
+			           //check
+                        $scope.loadQuotation()
 			        };
 
 			        $scope.clearFilter = function() {
@@ -916,7 +920,7 @@ angular
 					        $scope.quoteStatus = true;
 
 					        $scope.validCheck = function(){
-                               
+
                                if($scope.materialName || $scope.serviceName || $scope.labourCategory){
 	                               $scope.quoteStatus = false;
 						        }else{
@@ -925,6 +929,6 @@ angular
 
 					        }
 
-					        
+
 
 				});
