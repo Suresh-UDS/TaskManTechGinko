@@ -240,7 +240,7 @@ angular
                                 $scope.projects = data;
                                 //$scope.selectedProject = $scope.projects[0];
                                 console.log()
-                                if($state.current.name == 'edit-quotation')
+                                if($state.current.name == 'edit-quotation' || $state.current.name == 'view-quotation')
                                 {
 
                                 }
@@ -561,6 +561,10 @@ angular
                     // *
 			        $scope.loadQuotation = function() {
                           if($stateParams.id){
+                          	        $scope.serviceTotalCost = "";
+			        				$scope.labourTotalCost = "";
+			        				$scope.materialTotalCost = "";
+			        				$scope.totalCost = "";
                             console.log('quotation id - ' + $stateParams.id);
 			        		RateCardComponent.findQuotation($stateParams.id).then(function (data) {
 			        			$scope.loadingStop();
@@ -581,7 +585,11 @@ angular
 			        					}
 			        					$scope.totalCost += rateCardDetail.cost;
 			        				}
-				                $scope.loadSelectedProject($scope.quotation.projectId);
+
+				                //$scope.loadSelectedProject($scope.quotation.projectId);
+				                $scope.selectedProject = {};
+				                $scope.selectedProject.id = $scope.quotation.projectId;
+				                $scope.selectedProject.name = $scope.quotation.projectName;
 				                $scope.selectedSite = {};
 				                $scope.selectedSite.id = $scope.quotation.siteId;
 				                $scope.selectedSite.name = $scope.quotation.siteName;
