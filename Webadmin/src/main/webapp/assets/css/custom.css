@@ -773,6 +773,10 @@ input.InputTxtCapsAll
 {
     text-transform: uppercase;
 }
+textarea.InputTxtCaps
+{
+    text-transform: capitalize;
+}
 .TxtFirstCaps
 {
     text-transform: capitalize ;
