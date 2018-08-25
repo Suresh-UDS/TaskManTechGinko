@@ -816,7 +816,7 @@ angular.module('timeSheetApp')
                     $scope.saveLoad = false;
                     $scope.success = null;
                     $scope.disable = false;
-                    console.log('Error - '+ err.data);
+                    console.log('Error - '+ err);
                     if (err.status === 400 && err.data.message === 'error.duplicateRecordError') {
                         $scope.errorProjectExists = 'ERROR';
                         $scope.showNotifications('top','center','danger','Job already exists');
