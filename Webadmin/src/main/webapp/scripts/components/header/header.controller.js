@@ -44,20 +44,23 @@ angular.module('timeSheetApp')
         {
                Principal.identity().then(function(response)
             {
-                   //alert(response.firstName + response.lastName)
-                 //console.log('current user' +JSON.stringify(response.login));
-                 if(response.firstName != null){
+                //alert(response.firstName + response.lastName)
+                //console.log('current user' +JSON.stringify(response.login));
+                if(response.firstName != null){
 
-                  $rootScope.accountNames = response.firstName;
+                    $rootScope.accountNames = response.firstName;
+
                     if(response.lastName != null){
-                     $rootScope.accountNames += " " + response.lastName;
-                   }
-                 }
-                 else{
-                    $rootScope.accountNames = response.login;
-                 }
 
-                 //alert($rootScope.accountName);
+                     $rootScope.accountNames += " " + response.lastName;
+                    }
+                }
+                else{
+                    
+                    $rootScope.accountNames = response.login;
+                }
+
+                //alert($rootScope.accountName);
 
              });
         };
