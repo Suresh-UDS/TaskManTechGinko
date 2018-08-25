@@ -302,11 +302,11 @@
                                  <tbody>
                                  <tr>
                                      <td>Issue</td>
-                                     <td>{{listTitle}}</td>
+                                     <td>{{listTitle | uppercase}}</td>
                                  </tr>
                                  <tr>
                                      <td>Description</td>
-                                     <td>{{listDescription}}</td>
+                                     <td>{{listDescription | capitalize}}</td>
 
                                  </tr>
                                  <tr>
@@ -338,7 +338,7 @@
                                   </tr>
                                   <tr>
                                     <td>Created Date</td>
-                                    <td>{{listCreatedDate}}</td>
+                                    <td>{{listCreatedDate | date:'dd/MM/yyyy hh:mm a'}}</td>
 
                                   </tr>
                                   <tr>
