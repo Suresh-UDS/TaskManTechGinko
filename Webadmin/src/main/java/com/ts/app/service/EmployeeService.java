@@ -651,7 +651,8 @@ public class    EmployeeService extends AbstractService {
 			entities = employeeRepository.findAll();
 		}else {
 			Set<Long> subEmpIds = null;
-			subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+			int levelCnt = 1;
+			subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds, levelCnt);
 			List<Long> subEmpList = new ArrayList<Long>();
 			subEmpList.addAll(subEmpIds);
 			entities = employeeRepository.findAllByIds(subEmpList);
@@ -673,7 +674,8 @@ public class    EmployeeService extends AbstractService {
             entities = employeeRepository.findAllRelievers();
         }else {
 			Set<Long> subEmpIds = null;
-			subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+			int levelCnt = 1;
+			subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds, levelCnt);
 			List<Long> subEmpList = new ArrayList<Long>();
 			subEmpList.addAll(subEmpIds);
             entities = employeeRepository.findAllRelieversByIds(subEmpList);
@@ -689,7 +691,8 @@ public class    EmployeeService extends AbstractService {
             entities = employeeRepository.findBySiteId(siteId);
         }else {
             Set<Long> subEmpIds = null;
-            subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+            int levelCnt = 1;
+            subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds, levelCnt);
             List<Long> subEmpList = new ArrayList<Long>();
     			subEmpList.addAll(subEmpIds);
             entities = employeeRepository.findBySiteIdAndEmpIds(siteId, subEmpList);
@@ -726,7 +729,8 @@ public class    EmployeeService extends AbstractService {
             page = employeeRepository.findBySiteId(siteId,pageRequest);
         }else {
             Set<Long> subEmpIds = null;
-            subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+            int levelCnt =1 ;
+            subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds, levelCnt);
 	    		List<Long> subEmpList = new ArrayList<Long>();
 	    		subEmpList.addAll(subEmpIds);
             page = employeeRepository.findBySiteIdAndEmpIds(siteId, subEmpList,pageRequest);
@@ -987,13 +991,15 @@ public class    EmployeeService extends AbstractService {
             		}
             }else if (StringUtils.isNotEmpty(searchCriteria.getSiteName())) {
 	        		Set<Long> subEmpIds = null;
-	        		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+	        		int levelCnt = 1;
+	        		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds, levelCnt);
 	        		List<Long> subEmpList = new ArrayList<Long>();
 	        		subEmpList.addAll(subEmpIds);
 	        		page = employeeRepository.findBySiteName(searchCriteria.getSiteName(), subEmpList, isClient, pageRequest);
             }else if (StringUtils.isNotEmpty(searchCriteria.getProjectName())) {
 	        		Set<Long> subEmpIds = null;
-	        		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+	        		int levelCnt =1;
+	        		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds, levelCnt);
 	        		List<Long> subEmpList = new ArrayList<Long>();
 	        		subEmpList.addAll(subEmpIds);
 	        		page = employeeRepository.findByProjectName(searchCriteria.getProjectName(), subEmpList, isClient, pageRequest);
@@ -1010,7 +1016,8 @@ public class    EmployeeService extends AbstractService {
 	            			page = employeeRepository.findBySiteIds(siteIds, isClient, pageRequest);
 	            		}else {
 		            		Set<Long> subEmpIds = null;
-		            		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+		            		int levelCnt = 1;
+		            		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds, levelCnt);
 			        		List<Long> subEmpList = new ArrayList<Long>();
 			        		subEmpList.addAll(subEmpIds);
 						if(CollectionUtils.isNotEmpty(subEmpIds)) {
