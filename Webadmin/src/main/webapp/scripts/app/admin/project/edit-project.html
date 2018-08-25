@@ -70,6 +70,10 @@
                                                            ng-pattern="/^[A-Za-z0-9\s&-/]*$/" required/>
                                                     <div ng-show="form.$submitted || form.address.$touched">
                                                         <div ng-show="form.address.$dirty || form.address.$invalid">
+                                                             <p class="help-block" style="color:maroon"
+                                                               ng-show="form.address.$error.required">
+                                                                Address is required.
+                                                            </p>
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.address.$error.maxlength">
                                                                 Address cannot be longer than 100 characters.
