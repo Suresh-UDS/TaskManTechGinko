@@ -119,7 +119,7 @@
                             <tbody>
                             <tr ng-repeat="project in projects">
                                 <td>{{project.id}}</td>
-                                <td>{{project.name}}</td>
+                                <td>{{project.name | uppercase}}</td>
                                <td>{{project.address}}</td>
                                <td>{{project.contactFirstName}} {{project.contactLastName}}</td>
                                <td>{{project.phone}}</td>
@@ -247,7 +247,6 @@
                                     <label class="label-control">Client</label>
                                     <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
                                     <!-- ng-change="loadDepSites()" -->
-
                                     <!--<select class="form-control " ng-model="searchProject"  ng-options="project as project.name for project in projectsList" ng-pattern="Select Client" required>-->
                                         <!--<option value="">Select Client...</option>-->
                                     <!--</select>-->
@@ -255,16 +254,17 @@
                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                     <ui-select ng-model="searchProject" ng-change="selectProject(searchProject)" ng-click="selectProject(searchProject)"  required>
                                         <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :clearField?'Select Client':searchProject}}</ui-select-match>
-                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
+                                        <ui-select-no-choice>
+                                            --No--
+                                        </ui-select-no-choice>
+                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search" >
                                             <div ng-bind="client"></div>
                                         </ui-select-choices>
                                     </ui-select>
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
