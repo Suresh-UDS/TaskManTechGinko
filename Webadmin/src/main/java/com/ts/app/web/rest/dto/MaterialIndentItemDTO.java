@@ -10,6 +10,8 @@ public class MaterialIndentItemDTO extends BaseDTO {
 	
 	private String materialItemCode;
 	
+	private long materialStoreStock;
+	
 	private String materialUom;
 		
 	private long quantity;
@@ -70,6 +72,14 @@ public class MaterialIndentItemDTO extends BaseDTO {
 
 	public void setMaterialIndentId(long materialIndentId) {
 		this.materialIndentId = materialIndentId;
+	}
+
+	public long getMaterialStoreStock() {
+		return materialStoreStock;
+	}
+
+	public void setMaterialStoreStock(long materialStoreStock) {
+		this.materialStoreStock = materialStoreStock;
 	} 
 	
 		
