@@ -306,7 +306,7 @@
                                  </tr>
                                  <tr>
                                      <td>Description</td>
-                                     <td>{{listDescription | capitalize}}</td>
+                                     <td><span ng-if="listDescription">{{listDescription | capitalize}}</span><span ng-if="!listDescription">-</span></td>
 
                                  </tr>
                                  <tr>
