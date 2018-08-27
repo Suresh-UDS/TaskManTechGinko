@@ -138,11 +138,33 @@ angular.module('timeSheetApp')
 		
 		$scope.addMaterialItem = function() { 
 			$scope.material = {};
-			$scope.material.materialName = $scope.selectedItemName;
-			$scope.material.materialItemCode = $scope.selectedItemCode.itemCode;
-			$scope.material.materialStoreStock = $scope.selectedItemCode.storeStock;
-			$scope.material.quantity = $scope.selectedQuantity;
-			$scope.materialItems.push($scope.material);
+			if($scope.selectedItemCode.storeStock > $scope.selectedQuantity){
+				if(checkDuplicateInObject($scope.selectedItemCode.id, $scope.materialItems)) {
+					$scope.showNotifications('top','center','danger','Already exist same item in the list');
+				}else{
+					$scope.material.materialName = $scope.selectedItemName;
+					$scope.material.materialId = $scope.selectedItemCode.id;
+					$scope.material.materialItemCode = $scope.selectedItemCode.itemCode;
+					$scope.material.materialStoreStock = $scope.selectedItemCode.storeStock;
+					$scope.material.quantity = $scope.selectedQuantity;
+					$scope.materialItems.push($scope.material);
+				}
+			}else{
+				$scope.showNotifications('top','center','danger','Quantity cannot execeed to store stock');
+			}
+			
+		}
+		
+		function checkDuplicateInObject(id, array) {
+			var isDuplicate = false;
+			array.map(function(item){ 
+				if(item.materialId === id){
+					return isDuplicate = true;
+				}
+			});
+			
+			return isDuplicate;
+			
 		}
 		
 		$scope.editMaterial = function(item) {
@@ -221,6 +243,14 @@ angular.module('timeSheetApp')
             });
 
         };
+        
+        $scope.showNotifications= function(position,alignment,color,msg){
+           $rootScope.overlayShow();
+           demo.showNotification(position,alignment,color,msg);
+            $timeout(function() {
+              $rootScope.overlayHide() ;
+            }, 5000);
+        }
         
 		//Loading Page go to top position
 		$scope.loadPageTop = function(){

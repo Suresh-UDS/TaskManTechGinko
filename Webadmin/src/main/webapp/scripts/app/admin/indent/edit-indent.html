@@ -88,7 +88,7 @@
                             <div class="col-md-3">
                                 <div class="form-group   is-empty">
                                     <label class="control-label">Item Name <span class="red-star">*</span></label>
-                                    <input type="text" ng-model="selectedItemName" class="form-control">
+                                    <input type="text" ng-model="selectedItemName" class="form-control" ng-disabled="true">
                                     <span class="material-input"></span></div>
                             </div>
                             <div class="col-md-2">
@@ -107,7 +107,7 @@
                             </div>
                             <div class="col-md-2">
 
-                                <button class="btn btn-success" ng-click="addMaterialItem()" style="padding: 12px 20px; margin-top: 16px;">
+                                <button class="btn btn-success" ng-click="addMaterialItem()" ng-disabled="!selectedQuantity" style="padding: 12px 20px; margin-top: 16px;">
                                 <span class="btn-label">
                                     <i class="material-icons">add</i>
                                 </span>
