@@ -2,25 +2,25 @@
 
     <!-- New changes Start -->
 
-    <!--<div class="row">-->
+    <div class="row">
 
 
-        <!--<div class="col-md-6 txt-align-lft">-->
-            <!--<button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#AdvancedFilterModal" tabindex="0">-->
-                <!--<i class="material-icons">filter_list</i>Filter-->
-                <!--<div class="ripple-container"></div>-->
-            <!--</button>-->
-            <!--<button class="btn btn-warning  add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">-->
-                <!--<i class="material-icons">refresh</i>Clear filter-->
-                <!--<div class="ripple-container"></div>-->
-            <!--</button>-->
-        <!--</div>-->
+        <div class="col-md-6 txt-align-lft">
+            <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#AdvancedFilterModal" tabindex="0">
+                <i class="material-icons">filter_list</i>Filter
+                <div class="ripple-container"></div>
+            </button>
+            <button class="btn btn-warning  add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i>Clear filter
+                <div class="ripple-container"></div>
+            </button>
+        </div>
 
-        <!--<div class="col-md-6 txt-align-rgt">-->
+        <div class="col-md-6 txt-align-rgt">
 
-        <!--</div>-->
+        </div>
 
-    <!--</div>-->
+    </div>
 
     <!-- New changes End -->
 
@@ -31,114 +31,114 @@
             <div class="col-md-12">
 
 
-                <div class="card"  >
+                <!--<div class="card"  >-->
 
-                    <div class="card-content">
+                    <!--<div class="card-content">-->
 
-                        <div class="SearchTable">
+                        <!--<div class="SearchTable">-->
 
-                                <table class=" no-padding-tblCon" border="0">
-                                    <tr class="filter-row gc-search-row">
-                                        <td width="15%">
-                                            <div class="form-group pdng-top20" >
-                                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                <input ng-model="selectedFromDate" id="dateFilterFrom" type="text" class="form-control datepicker border-bottom-input"   />
-                                            </div>
-                                        </td>
+                                <!--<table class=" no-padding-tblCon" border="0">-->
+                                    <!--<tr class="filter-row gc-search-row">-->
+                                        <!--<td width="15%">-->
+                                            <!--<div class="form-group pdng-top20" >-->
+                                                <!--<span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>-->
+                                                <!--<input ng-model="selectedFromDate" id="dateFilterFrom" type="text" class="form-control datepicker border-bottom-input"   />-->
+                                            <!--</div>-->
+                                        <!--</td>-->
 
-                                        <td width="15%">
-                                            <div class="form-group pdng-top20"  >
-                                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                <input ng-model="selectedToDate" id="dateFilterTo" type="text" class="form-control datepicker border-bottom-input"   />
-                                            </div>
-                                        </td>
-                                        <td width="25%">
-                                            <div class="form-group pad10px">
-                                                <label class="control-label">Client</label>
-                                                <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
-                                                    <option value="">Select Client...</option>
-                                                </select>
+                                        <!--<td width="15%">-->
+                                            <!--<div class="form-group pdng-top20"  >-->
+                                                <!--<span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>-->
+                                                <!--<input ng-model="selectedToDate" id="dateFilterTo" type="text" class="form-control datepicker border-bottom-input"   />-->
+                                            <!--</div>-->
+                                        <!--</td>-->
+                                        <!--<td width="25%">-->
+                                            <!--<div class="form-group pad10px">-->
+                                                <!--<label class="control-label">Client</label>-->
+                                                <!--<span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                <!--<select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">-->
+                                                    <!--<option value="">Select Client...</option>-->
+                                                <!--</select>-->
 
-                                            </div>
-                                        </td>
+                                            <!--</div>-->
+                                        <!--</td>-->
 
-                                        <td width="20%">
-                                            <div class="form-group pad10px">
-                                                <label class="control-label">Site</label>
-                                                <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                <select class="form-control " ng-model="selectedSite"  ng-change="searchLocations();loadFeedbackMasters();" ng-options="site as site.name for site in sites">
-                                                    <option value="">Select Site...</option>
-                                                </select>
-                                            </div>
-                                        </td>
-                                        <td align="right" width="15%">
-                                            <div class="floatR form-group">
-                                                <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid" ng-click="search()">
-                                                    <i class="material-icons">search</i>
-                                                </button>
-                                                <button ng-show="attendancesData.length" type="button"  ng-click=exportAllData() class="btn btn-circle green-clr">
-                                                    <i class="material-icons">file_upload</i>
-                                                </button>
-                                                <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
-                                                    <i class="material-icons">refresh</i>
-                                                </button>
-                                                <!--<button ng-click="printDiv('printable')" class="btn btn-circle orange-clr">-->
-                                                    <!--<i class="material-icons">print</i>-->
+                                        <!--<td width="20%">-->
+                                            <!--<div class="form-group pad10px">-->
+                                                <!--<label class="control-label">Site</label>-->
+                                                <!--<span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                <!--<select class="form-control " ng-model="selectedSite"  ng-change="searchLocations();loadFeedbackMasters();" ng-options="site as site.name for site in sites">-->
+                                                    <!--<option value="">Select Site...</option>-->
+                                                <!--</select>-->
+                                            <!--</div>-->
+                                        <!--</td>-->
+                                        <!--<td align="right" width="15%">-->
+                                            <!--<div class="floatR form-group">-->
+                                                <!--<button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid" ng-click="search()">-->
+                                                    <!--<i class="material-icons">search</i>-->
                                                 <!--</button>-->
-                                                <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
+                                                <!--<button ng-show="attendancesData.length" type="button"  ng-click=exportAllData() class="btn btn-circle green-clr">-->
+                                                    <!--<i class="material-icons">file_upload</i>-->
+                                                <!--</button>-->
+                                                <!--<button ng-click="refreshPage()" class="btn btn-circle orange-clr">-->
+                                                    <!--<i class="material-icons">refresh</i>-->
+                                                <!--</button>-->
+                                                <!--&lt;!&ndash;<button ng-click="printDiv('printable')" class="btn btn-circle orange-clr">&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;<i class="material-icons">print</i>&ndash;&gt;-->
+                                                <!--&lt;!&ndash;</button>&ndash;&gt;-->
+                                                <!--<a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>-->
 
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="filter-row gc-search-row">
-
-
-                                        <!-- td>
-                                            <div class="form-group">
-                                                 <label class="control-label">Block<span class="red-star">*</span> </label>
-                                                 <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in  blocks">
-                                                     <option value="">Please select Block...</option>
-                                                 </select>
-                                             </div>
-                                        </td>
-                                         <td>
-                                            <div class="form-group">
-                                                 <label class="control-label">Floor<span class="red-star">*</span> </label>
-                                                 <select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors">
-                                                      <option value="">Please select Floor...</option>
-                                                  </select>
-                                             </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group">
-                                                 <label class="control-label">Zone<span class="red-star">*</span> </label>
-                                                  <select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones">
-                                                     <option value="">Please select Zone...</option>
-                                                 </select>
-                                             </div>
-                                        </td-->
-
-                                    </tr>
-                                </table>
-
-                                <div class="TailsCon">
-                                    <div class="TailsContent">
-                                        <ul class="blocksListCon">
-                                           <li ng-repeat="item in filteredLocations" ng-class="item.zone == selectedZone && item.block== selectedBlock && item.floor== selectedFloor ? 'active' : ''"> <a type="submit" ng-click="genZoneReport(item.projectId,item.siteId,item.block, item.floor,item.zone,searchForm)"  ng-show="(($index < (vm.page * vm.numRecords)) && ($index >= ((vm.page - 1) * vm.numRecords)))">{{ item.block }}<br/>{{item.floor}}<br/>{{item.zone}}</a></li>
-                                        </ul>
-
-                                        <div class="clear"></div>
-                                        <!--<div class="pos-abs next"><button ng-click="vm.next()"><i class="material-icons">keyboard_arrow_right</i></button></div>-->
-                                        <!--<div class="pos-abs back"><button ng-click="vm.back()"><i class="material-icons">keyboard_arrow_left</i></button></div>-->
-                                    </div>
-                                </div>
-
-                        </div>
+                                            <!--</div>-->
+                                        <!--</td>-->
+                                    <!--</tr>-->
+                                    <!--<tr class="filter-row gc-search-row">-->
 
 
-                    </div>
-                </div>
+                                        <!--&lt;!&ndash; td>-->
+                                            <!--<div class="form-group">-->
+                                                 <!--<label class="control-label">Block<span class="red-star">*</span> </label>-->
+                                                 <!--<select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in  blocks">-->
+                                                     <!--<option value="">Please select Block...</option>-->
+                                                 <!--</select>-->
+                                             <!--</div>-->
+                                        <!--</td>-->
+                                         <!--<td>-->
+                                            <!--<div class="form-group">-->
+                                                 <!--<label class="control-label">Floor<span class="red-star">*</span> </label>-->
+                                                 <!--<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors">-->
+                                                      <!--<option value="">Please select Floor...</option>-->
+                                                  <!--</select>-->
+                                             <!--</div>-->
+                                        <!--</td>-->
+                                        <!--<td>-->
+                                            <!--<div class="form-group">-->
+                                                 <!--<label class="control-label">Zone<span class="red-star">*</span> </label>-->
+                                                  <!--<select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones">-->
+                                                     <!--<option value="">Please select Zone...</option>-->
+                                                 <!--</select>-->
+                                             <!--</div>-->
+                                        <!--</td&ndash;&gt;-->
+
+                                    <!--</tr>-->
+                                <!--</table>-->
+
+                                <!--<div class="TailsCon">-->
+                                    <!--<div class="TailsContent">-->
+                                        <!--<ul class="blocksListCon">-->
+                                           <!--<li ng-repeat="item in filteredLocations" ng-class="item.zone == selectedZone && item.block== selectedBlock && item.floor== selectedFloor ? 'active' : ''"> <a type="submit" ng-click="genZoneReport(item.projectId,item.siteId,item.block, item.floor,item.zone,searchForm)"  ng-show="(($index < (vm.page * vm.numRecords)) && ($index >= ((vm.page - 1) * vm.numRecords)))">{{ item.block }}<br/>{{item.floor}}<br/>{{item.zone}}</a></li>-->
+                                        <!--</ul>-->
+
+                                        <!--<div class="clear"></div>-->
+                                        <!--&lt;!&ndash;<div class="pos-abs next"><button ng-click="vm.next()"><i class="material-icons">keyboard_arrow_right</i></button></div>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<div class="pos-abs back"><button ng-click="vm.back()"><i class="material-icons">keyboard_arrow_left</i></button></div>&ndash;&gt;-->
+                                    <!--</div>-->
+                                <!--</div>-->
+
+                        <!--</div>-->
+
+
+                    <!--</div>-->
+                <!--</div>-->
 
 
                 <div class="card">
@@ -382,6 +382,18 @@
                         </div>
 
 
+                    </div>
+
+                    <div class="TailsCon">
+                        <div class="TailsContent">
+                            <ul class="blocksListCon">
+                                <li ng-repeat="item in filteredLocations" ng-class="item.zone == selectedZone && item.block== selectedBlock && item.floor== selectedFloor ? 'active' : ''"> <a type="submit" ng-click="genZoneReport(item.projectId,item.siteId,item.block, item.floor,item.zone,searchForm)"  ng-show="(($index < (vm.page * vm.numRecords)) && ($index >= ((vm.page - 1) * vm.numRecords)))">{{ item.block }}<br/>{{item.floor}}<br/>{{item.zone}}</a></li>
+                            </ul>
+
+                            <div class="clear"></div>
+                            <!--<div class="pos-abs next"><button ng-click="vm.next()"><i class="material-icons">keyboard_arrow_right</i></button></div>-->
+                            <!--<div class="pos-abs back"><button ng-click="vm.back()"><i class="material-icons">keyboard_arrow_left</i></button></div>-->
+                        </div>
                     </div>
 
                 </div>
