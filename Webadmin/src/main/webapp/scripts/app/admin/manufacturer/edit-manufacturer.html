@@ -33,12 +33,12 @@
                                                         <div class="row" ng-init="loadAllAssetTypes()">
 
                                                             <div class="col-md-12">
-                                                               <div class="form-group">
+                                                                <div class="form-group">
                                                                     <label class="control-label">Asset Type<span class="red-star">*</span></label>
                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                          			<select class="form-control " ng-model="selectedAssetType"  ng-options="assetType as assetType.name for assetType in assetTypes track by assetType.name" name="assetType" required>
-                                                                     	<option value="">Select Asset Type...</option>
-                        											</select>
+                                                                    <select class="form-control " ng-model="selectedAssetType"  ng-options="assetType as assetType.name for assetType in assetTypes track by assetType.name" name="assetType" required>
+                                                                        <option value="">Select Asset Type...</option>
+                                                                    </select>
                                                                     <div ng-show="formEdit.$submitted || formEdit.assetType.$touched">
                                                                         <div ng-show="formEdit.assetType.$dirty || formEdit.assetType.$invalid">
                                                                             <p class="help-block" style="color:maroon"
@@ -50,6 +50,8 @@
                                                                     </div>
 
                                                                 </div>
+                                                            </div>
+                                                            <div class="col-md-12">
                                                                 <div class="form-group">
                                                                     <label class="control-label">Manufacturer Name<span class="red-star">*</span></label>
                                                                     <input id='manufacturerName' ng-model="manufacturer.name"
@@ -77,35 +79,45 @@
                                                                     </div>
 
                                                                 </div>
+                                                            </div>
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="control-label">Contact First Name</label>
                                                                     <input id='contactName' ng-model="manufacturer.contactFirstName"
                                                                            class='form-control' name='contactFirstName' type='text' value=""
-                                                                            />
+                                                                    />
 
                                                                 </div>
+                                                            </div>
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="control-label">Contact Last Name</label>
                                                                     <input id='firstName' ng-model="manufacturer.contactLastName"
                                                                            class='form-control' name='contactLastName' type='text' value=""
-                                                                            />
+                                                                    />
 
                                                                 </div>
+                                                            </div>
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="control-label">Phone No</label>
                                                                     <input id='mobNum' ng-model="manufacturer.phone"
                                                                            class='form-control' name='phone' type='text' value=""
-                                                                            />
+                                                                    />
 
                                                                 </div>
+                                                            </div>
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="control-label">Email</label>
                                                                     <input id='email' ng-model="manufacturer.email"
                                                                            class='form-control' name='email' type='email' value=""
-                                                                            />
+                                                                    />
 
                                                                 </div>
                                                             </div>
+
+
                                                         </div>
 
 
@@ -120,50 +132,65 @@
                                                     <div class="panel-heading">Address Details</div>
                                                     <div class="panel-body">
                                                         <div class="row">
+
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
                                                                     <label class="control-label">Line 1</label>
                                                                     <input id='line1' ng-model="manufacturer.addressLine1"
                                                                            class='form-control InputTxtCaps' name='line1' type='text' value=""
-                                                                            />
+                                                                    />
 
                                                                 </div>
+                                                            </div>
+                                                            <div class="col-md-12">
                                                                 <div class="form-group">
                                                                     <label class="control-label">Line 2</label>
                                                                     <input id='line2' ng-model="manufacturer.addressLine2"
                                                                            class='form-control  InputTxtCaps' name='line2' type='text' value=""
-                                                                            />
+                                                                    />
 
                                                                 </div>
+                                                            </div>
+
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="control-label">City</label>
                                                                     <input id='City' ng-model="manufacturer.city"
                                                                            class='form-control InputTxtCaps' name='City' type='text' value=""
-                                                                            />
+                                                                    />
 
                                                                 </div>
+                                                            </div>
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="control-label InputTxtCaps">State</label>
                                                                     <input id='state' ng-model="manufacturer.state"
                                                                            class='form-control InputTxtCaps' name='state' type='text' value=""
-                                                                            />
+                                                                    />
 
                                                                 </div>
+                                                            </div>
+
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="control-label">Pin Code</label>
                                                                     <input id='pinCode' ng-model="manufacturer.pincode"
                                                                            class='form-control' name='pinCode' type='text' value=""
-                                                                            />
+                                                                    />
 
                                                                 </div>
+                                                            </div>
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="control-label">Country</label>
                                                                     <input id='country' ng-model="manufacturer.country"
                                                                            class='form-control InputTxtCaps' name='country' type='text' value=""
-                                                                            />
+                                                                    />
 
                                                                 </div>
                                                             </div>
+
+                                                          
                                                         </div>
 
 
