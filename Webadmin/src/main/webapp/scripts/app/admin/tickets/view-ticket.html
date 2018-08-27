@@ -29,11 +29,11 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>Issue</td>
-                                                    <td>{{tickets.title | uppercase}}</td>
+                                                    <td ng-if="tickets.title">{{tickets.title | uppercase}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Description</td>
-                                                    <td>{{tickets.description | capitalize}}</td>
+                                                    <td ng-if="tickets.description">{{tickets.description | capitalize}}</td>
 
                                                 </tr>
                                                 <tr>
