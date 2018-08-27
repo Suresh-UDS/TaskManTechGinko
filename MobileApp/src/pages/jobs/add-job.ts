@@ -66,6 +66,7 @@ export class CreateJobPage {
         if(this.ticket){
             this.title = this.ticket.title;
             this.description = this.ticket.description;
+            this.siteName = this.ticket.siteId;
         }
 
         this.component.showLoader('Getting All Sites');
@@ -97,7 +98,6 @@ export class CreateJobPage {
             this.component.showLoader("Creating job");
             this.eMsg="";
             this.siteId=window.localStorage.getItem('site')
-           var SDate = moment(this.startDate).local().format('YYYY-MM-DD HH:mm:ss');
            var SDate = moment(this.startDate).local().format('YYYY-MM-DD HH:mm:ss');
             var EDate = new Date(this.endDate);
 
@@ -246,6 +246,8 @@ export class CreateJobPage {
         if(id)
         {
         console.log('ionViewDidLoad Add jobs employee');
+
+        console.log(this.siteName);
 
         window.localStorage.setItem('site',id);
         console.log(this.empSelect);
