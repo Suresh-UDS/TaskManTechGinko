@@ -436,7 +436,8 @@ public class TicketManagementService extends AbstractService {
                 Set<Long> subEmpIds = new TreeSet<Long>();
                 if(employee != null) {
                     Hibernate.initialize(employee.getSubOrdinates());
-                    findAllSubordinates(employee, subEmpIds);
+                    int levelCnt = 1;
+                    findAllSubordinates(employee, subEmpIds, levelCnt);
                     List<Long> subEmpList = new ArrayList<Long>();
                     subEmpList.addAll(subEmpIds);	
                     log.debug("List of subordinate ids -"+ subEmpIds);

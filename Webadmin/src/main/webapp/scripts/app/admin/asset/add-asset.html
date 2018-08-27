@@ -1458,7 +1458,7 @@
                                                                     <td>{{ppmSchedules.startDate | date :  "dd-MM-y"}}</td>
                                                                     <td>{{ppmSchedules.endDate | date :  "dd-MM-y"}}</td>
                                                                     <td>{{ppmSchedules.employeeName}}</td>
-                                                                    <td>{{ppmSchedules.jobStartTime | date :  "dd-MM-y h:mm a"}}</td>{{ppmSchedules.plannedHours}}</td>
+                                                                    <td>{{ppmSchedules.jobStartTime | date :'dd-MMM-yyyy @ hh:mm a'}}</td>{{ppmSchedules.plannedHours}}</td>
                                                                     <td>{{ppmSchedules.frequencyPrefix}}&nbsp; {{ppmSchedules.frequencyDuration}}&nbsp; {{ppmSchedules.frequency}}</td>
                                                                     <!--<td class="text-right">-->
                                                                         <!--<a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>-->
@@ -1814,7 +1814,7 @@
                                                                 <td>{{amcSchedule.startDate | date :  "dd-MM-y"}}</td>
                                                                 <td>{{amcSchedule.endDate | date :  "dd-MM-y"}}</td>
                                                                 <td>{{amcSchedule.employeeName}}</td>
-                                                                <td>{{amcSchedule.jobStartTime | date :  "dd-MM-y h:mm a"}}</td>
+                                                                <td>{{amcSchedule.jobStartTime | date :'dd-MMM-yyyy @ hh:mm a'}}</td>
                                                                 <td>
                                                                 {{amcSchedule.plannedHours}}</td>
                                                                 <td>{{amcSchedule.frequencyPrefix}}&nbsp; {{amcSchedule.frequencyDuration}}&nbsp; {{amcSchedule.frequency}}</td>

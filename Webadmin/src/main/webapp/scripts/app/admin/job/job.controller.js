@@ -115,11 +115,20 @@ angular.module('timeSheetApp')
            $('#jobStartDate').datetimepicker({ dateFormat: 'dd/MM/yyyy hh:mm a' }).val();
         });*/
 
+        $('input#jobStartDate').datetimepicker().on('dp.show', function (e) {
+            return $(this).data('DateTimePicker').minDate(e.date);
+        });
+
         //Date
         $('input#jobStartDate').on('dp.change', function(e){
         		$scope.job.plannedStartTime = e.date._d;
                 $scope.selectPlannedStartTime = $filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
         		console.log('job start time - ' + $scope.job.plannedStartTime);
+                $scope.job.scheduleEndDate = "";
+                $scope.selectScheduleEndDate = "";
+                $('input#scheduleEndDate').datetimepicker().on('dp.show', function () {
+                return $(this).data('DateTimePicker').minDate(e.date);
+                });
         });
 
         $('#jobStartDate').datetimepicker({
@@ -816,7 +825,7 @@ angular.module('timeSheetApp')
                     $scope.saveLoad = false;
                     $scope.success = null;
                     $scope.disable = false;
-                    console.log('Error - '+ err.data);
+                    console.log('Error - '+ err);
                     if (err.status === 400 && err.data.message === 'error.duplicateRecordError') {
                         $scope.errorProjectExists = 'ERROR';
                         $scope.showNotifications('top','center','danger','Job already exists');

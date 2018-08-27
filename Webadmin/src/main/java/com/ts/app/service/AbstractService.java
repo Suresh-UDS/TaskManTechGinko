@@ -79,11 +79,17 @@ public abstract class AbstractService {
         return new PageRequest(page, Integer.MAX_VALUE, s); 
     }
 	
-    public Set<Long> findAllSubordinates(Employee employee, Set<Long> subEmpIds) {
+    public Set<Long> findAllSubordinates(Employee employee, Set<Long> subEmpIds,int levelCnt) {
+		if(levelCnt > 5 ) {
+			return subEmpIds;
+		}
+    	
         Set<Employee> subs = employee.getSubOrdinates();
+        /*
         if(logger.isDebugEnabled()) {
         		logger.debug("List of subordinates -"+ subs);
         }
+        */
         if(subEmpIds == null){
             subEmpIds = new TreeSet<Long>();
         }
@@ -92,7 +98,8 @@ public abstract class AbstractService {
             subEmpIds.add(sub.getId());
             Hibernate.initialize(sub.getSubOrdinates());
             if(CollectionUtils.isNotEmpty(sub.getSubOrdinates())){
-                findAllSubordinates(sub, subEmpIds);
+            		levelCnt++;
+                findAllSubordinates(sub, subEmpIds, levelCnt);
             }
         }
         return subEmpIds;

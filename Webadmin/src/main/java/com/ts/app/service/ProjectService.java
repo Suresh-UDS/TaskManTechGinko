@@ -167,7 +167,8 @@ public class ProjectService extends AbstractService {
 			List<Long> subEmpList = new ArrayList<Long>();
 			if(employee != null) {
 				Hibernate.initialize(employee.getSubOrdinates());
-				subEmpIds.addAll(siteService.findAllSubordinates(employee, subEmpIds));
+				int levelCnt = 1;
+				subEmpIds.addAll(siteService.findAllSubordinates(employee, subEmpIds, levelCnt));
 	        		
 	        		subEmpList.addAll(subEmpIds);
 
@@ -282,7 +283,8 @@ public class ProjectService extends AbstractService {
 		List<Long> subEmpList = new ArrayList<Long>();
 		if(employee != null) {
 			Hibernate.initialize(employee.getSubOrdinates());
-			subEmpIds.addAll(findAllSubordinates(employee, subEmpIds));
+			int levelCnt = 1;
+			subEmpIds.addAll(findAllSubordinates(employee, subEmpIds, levelCnt));
 			subEmpList.addAll(subEmpIds);
 			log.debug("List of subordinate ids -"+ subEmpIds);
 

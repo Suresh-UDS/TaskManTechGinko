@@ -838,6 +838,11 @@ a.add-btn,button.add-btn
     border-top: none !important;
 }
 
+.table-scroll-x .table
+{
+    width: 150%;
+    max-width: 150%;
+}
 
 .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th
 {
