@@ -1243,18 +1243,18 @@
                                                         </div>
                                                         </form>
                                                         <div class="table-responsive tablecard">
-                                                            <table class="table table-striped">
+                                                            <table class="table table-striped tdWidthAuto">
 
                                                                 <thead>
-                                                                <tr  >
-                                                                    <th width="15%">Title</th>
-                                                                    <th width="25%">Checklist</th>
-                                                                    <th width="10%">From Date</th>
-                                                                    <th width="10%">To Date</th>
-                                                                    <th width="10%">Employee</th>
-                                                                    <th width="10%">Start Time</th>
-                                                                    <th width="10%">Planned Hours</th>
-                                                                    <th width="10%">Frequency</th>
+                                                                <tr>
+                                                                    <th>Title</th>
+                                                                    <th>Checklist</th>
+                                                                    <th>From Date</th>
+                                                                    <th>To Date</th>
+                                                                    <th>Employee</th>
+                                                                    <th>Start Time</th>
+                                                                    <th>Planned Hours</th>
+                                                                    <th>Frequency</th>
 
                                                                     <!--<th width="5%" align="right">Actions</th>-->
 
@@ -1277,7 +1277,7 @@
                                                                     <td>{{ppmSchedules.startDate | date :  "dd-MM-y"}}</td>
                                                                     <td>{{ppmSchedules.endDate | date :  "dd-MM-y"}}</td>
                                                                     <td>{{ppmSchedules.employeeName}}</td>
-                                                                    <td>{{ppmSchedules.jobStartTime | date :  "dd-MM-y hh:mm a"}}</td>
+                                                                    <td>{{ppmSchedules.jobStartTime | date :'dd-MMM-yyyy @ hh:mm a'}}</td>
                                                                     <td>
                                                                     {{ppmSchedules.plannedHours}}</td>
                                                                     <td>{{ppmSchedules.frequencyPrefix}}&nbsp; {{ppmSchedules.frequencyDuration}}&nbsp; {{ppmSchedules.frequency}}</td>
@@ -1564,18 +1564,18 @@
                                                     </div>
                                                     </form>
                                                     <div class="table-responsive tablecard">
-                                                        <table class="table table-striped">
+                                                        <table class="table table-striped tdWidthAuto">
 
                                                             <thead>
                                                             <tr>
-                                                                <th width="15%">Title</th>
-                                                                <th width="25%">Checklist</th>
-                                                                <th width="10%">From Date</th>
-                                                                <th width="10%">To Date</th>
-                                                                <th width="10%">Employee</th>
-                                                                <th width="10%">Start Time</th>
-                                                                <th width="10%">Planned Hours</th>
-                                                                <th width="10%">Frequency</th>
+                                                                <th>Title</th>
+                                                                <th>Checklist</th>
+                                                                <th>From Date</th>
+                                                                <th>To Date</th>
+                                                                <th>Employee</th>
+                                                                <th>Start Time</th>
+                                                                <th>Planned Hours</th>
+                                                                <th>Frequency</th>
 
                                                                 <!--<th width="5%" align="right">Actions</th>-->
 
@@ -1598,7 +1598,7 @@
                                                                 <td>{{amcSchedule.startDate | date :  "dd-MM-y"}}</td>
                                                                 <td>{{amcSchedule.endDate | date :  "dd-MM-y"}}</td>
                                                                 <td>{{amcSchedule.employeeName}}</td>
-                                                                <td>{{amcSchedule.jobStartTime | date :  "dd-MM-y h:mm a"}}</td>
+                                                                <td>{{amcSchedule.jobStartTime | date :'dd-MMM-yyyy @ hh:mm a'}}</td>
                                                                 <td>
                                                                 {{amcSchedule.plannedHours}}</td>
                                                                 <td>{{amcSchedule.frequencyPrefix}}&nbsp; {{amcSchedule.frequencyDuration}}&nbsp; {{amcSchedule.frequency}}</td>
@@ -1637,13 +1637,13 @@
                                                                     <div class="row">
 
 
-                                                                        <div class="col-md-6">
+                                                                        <div class="col-md-4">
 
                                                                             <div class="form-group selectcon is-empty SelectWithAddbtnCon">
 
                                                                                 <div class="" style="float:left;width:90%;">
                                                                                     <label class="control-label">Select Parameter<span class="red-star">*</span> </label>
-                                                                                    <span class="form-control-feedback d-arrow-icon" style="padding-right: 85px"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                    <span class="form-control-feedback d-arrow-icon" style="padding-right: 60px"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                     <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameter" name="param" ng-options="parameter as parameter.name for parameter in parameters track by parameter.name" tabindex="0" aria-invalid="false" required>
                                                                                     <option value="" class="" selected="selected">Select Parameter ..</option>
                                                                                     </select>
@@ -1657,7 +1657,7 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="" style="float:left;">
+                                                                                <div class="" style="float:left;width:10%;">
                                                                                    <!--  <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addParamet" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
                                                                                         <i class="material-icons">add</i>
                                                                                     </a> -->
@@ -1675,12 +1675,12 @@
 
                                                                         </div>
 
-                                                                        <div class="col-md-6">
+                                                                        <div class="col-md-4">
                                                                             <div class="form-group selectcon is-empty SelectWithAddbtnCon">
 
                                                                                 <div class="" style="float:left;width:90%;">
                                                                                     <label class="control-label">Select Units<span class="red-star">*</span></label>
-                                                                                    <span class="form-control-feedback d-arrow-icon" style="padding-right: 85px"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                    <span class="form-control-feedback d-arrow-icon" style="padding-right: 60px"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                     <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameterUOM" name="paramUOM"  ng-options="parameterUOM as parameterUOM.uom for parameterUOM in parameterUOMs track by parameterUOM.uom" tabindex="0" aria-invalid="false" required>
                                                                                     <option value="" class="" selected="selected">Select Units ..</option>
                                                                                     </select>
@@ -1694,7 +1694,7 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="" style="float:left;">
+                                                                                <div class="" style="float:left;width:10%;">
                                                                                    <!--  <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addUnits" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
                                                                                         <i class="material-icons">add</i>
                                                                                     </a> -->
@@ -1716,13 +1716,13 @@
                                                                      <div class="row">
 
 
-                                                                        <div class="col-md-6">
+                                                                        <div class="col-md-8">
 
                                                                             <div class="form-group selectcon is-empty SelectWithAddbtnCon">
 
-                                                                                <div class="" style="float:left;width:90%;" ng-init="loadAllRules()">
+                                                                                <div class="" style="float:left;width:100%;" ng-init="loadAllRules()">
                                                                                     <label class="control-label">Select Rule </label>
-                                                                                    <span class="form-control-feedback d-arrow-icon" style="padding-right: 85px"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                    <span class="form-control-feedback d-arrow-icon" style="padding-right: 30px"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                     <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedRule" name="param" ng-options="rule for rule in readingRules" tabindex="0" aria-invalid="false" >
                                                                                     <option value="" class="" selected="selected">Select Rule ..</option>
                                                                                     </select>
@@ -1754,7 +1754,7 @@
 
                                                                         </div>
 
-                                                                        <div class="col-md-6">
+                                                                        <div class="col-md-4">
                                                                             <div class="form-group selectcon is-empty SelectWithAddbtnCon">
 
                                                                                 <div class="" style="float:left;width:90%;">
