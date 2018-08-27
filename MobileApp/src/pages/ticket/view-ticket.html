@@ -92,10 +92,10 @@
 
 <ion-footer *ngIf="ticketDetails.status != 'Closed'" >
     <ion-toolbar class="align-right" padding-left padding-right  >
-        <button class="btn btn-warning center pull-left" (click)="createJob()" *ngIf="ticketDetails.jobId ==null">
+        <button class="btn btn-warning center pull-left" (click)="createJob()" *ngIf="ticketDetails.jobId ==null || ticketDetails.jobId==0">
             Create Job
         </button>
-        <button class="btn btn-warning center pull-left" (click)="viewJob(ticketDetails)" *ngIf="ticketDetails.jobId !=null">
+        <button class="btn btn-warning center pull-left" (click)="viewJob(ticketDetails)" *ngIf="ticketDetails.jobId >0">
             View Job
         </button>
         <button class="btn btn-success center pull-right" (click)="closeTicket()">
