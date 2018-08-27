@@ -2099,15 +2099,16 @@ public class JobManagementService extends AbstractService {
 		}
 		
 		//validate job completion time
-		Calendar now = Calendar.getInstance();
-		Calendar jobStartTime = Calendar.getInstance();
-		jobStartTime.setTime(jobDTO.getPlannedStartTime());
-		if(now.before(jobStartTime)) {
-			JobDTO jobDto = mapperUtil.toModel(job, JobDTO.class);
-			jobDto.setErrorMessage("Cannot complete job before the scheduled job start time");
-			return jobDto;
-		}
-		
+		if(jobDTO.getJobStatus() != null && jobDTO.getJobStatus().equals(JobStatus.COMPLETED)) {
+			Calendar now = Calendar.getInstance();
+			Calendar jobStartTime = Calendar.getInstance();
+			jobStartTime.setTime(jobDTO.getPlannedStartTime());
+			if(now.before(jobStartTime)) {
+				JobDTO jobDto = mapperUtil.toModel(job, JobDTO.class);
+				jobDto.setErrorMessage("Cannot complete job before the scheduled job start time");
+				return jobDto;
+			}
+		}	
 		return jobDTO;
 	}
 }
