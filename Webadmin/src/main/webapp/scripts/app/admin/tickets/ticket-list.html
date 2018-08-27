@@ -358,7 +358,7 @@
 
 								<tr>
                                       <td>Image/File </td>
-                                      <td ng-if="ticketImage">
+                                      <td ng-if="ticketImage !=null">
                       						<a href="#" ng-show="extension === 'jpg' || extension === 'jpeg' || extension === 'png'" onClick="$('#myModalNew').modal()" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="loadTicketImage(ticketImage,tickets.id)">
                          							<img id="images" src={{ticketImage}} width="100px" height="100px" />
                      							</a>
@@ -366,7 +366,7 @@
                  												<img  id="images" ng-src="assets/img/{{extension}}.png" style="margin-top: 15px;" width="100px" height="100px"/>
              									</a>
                                       </td>
-                                      <td ng-if="!ticketImage">No Images</td>
+                                      <td ng-if="ticketImage == null">No Images</td>
                                   </tr>
                                   <tr>
                                   	<td>Job</td>

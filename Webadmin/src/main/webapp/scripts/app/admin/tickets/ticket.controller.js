@@ -567,6 +567,7 @@ angular.module('timeSheetApp')
                             })
                         }
 
+
                     }
 
                 });
@@ -613,7 +614,8 @@ angular.module('timeSheetApp')
                             $scope.ticketImage = response;
                     })
                 }else{
-                	$scope.ticketImage = "#";
+                	// $scope.ticketImage = "#";
+                    $scope.ticketImage = null;
                 }
 
             });
