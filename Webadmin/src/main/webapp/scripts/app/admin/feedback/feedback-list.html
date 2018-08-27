@@ -21,7 +21,35 @@
         </div>
 
     </div>
+    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
+            <span class="AppliedFilterTxtCon">
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.checkInDateTimeFrom || localStorage.checkInDateTimeFrom">
+                    From: {{searchCriteria.checkInDateTimeFrom || localStorage.checkInDateTimeFrom | date:'dd/MM/yyyy'}}
+                </span>
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.checkInDateTimeTo || localStorage.checkInDateTimeTo">
+                    To: {{searchCriteria.checkInDateTimeTo || localStorage.checkInDateTimeTo | date:'dd/MM/yyyy'}}
+                </span>
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.projectName || localStorage.projectName">
+                    Client: {{searchCriteria.projectName || localStorage.projectName}}
+                </span>
 
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.siteName || localStorage.siteName">
+                    Site: {{searchCriteria.siteName || localStorage.siteName}}
+                </span>
+                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteria.block || localStorage.block">
+                    Block: {{searchCriteria.block || localStorage.block}}
+                </span>
+
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.floor || localStorage.floor">
+                    Floor: {{searchCriteria.floor || localStorage.floor}}
+                </span>
+
+                <span class="tag label label-info"  style="margin-right: 10px"ng-show="searchCriteria.zone || localStorage.zone">
+                    Zone: {{searchCriteria.zone || localStorage.zone}}
+                </span>
+
+            </span>
+    </div>
     <!-- New changes End -->
 
    <form name="searchForm"  novalidate >
