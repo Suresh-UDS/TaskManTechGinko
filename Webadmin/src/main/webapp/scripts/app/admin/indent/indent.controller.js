@@ -131,6 +131,7 @@ angular.module('timeSheetApp')
 				console.log(data);
 				$scope.loadingStop();
 				$scope.editIndentObj = data;
+				$scope.selectedRefNumber = $scope.editIndentObj.indentRefNumber;
 				$scope.selectedProject = {id: $scope.editIndentObj.projectId };
 				$scope.selectedSite = {id: $scope.editIndentObj.siteId };
 				$scope.selectedEmployee = {id: $scope.editIndentObj.requestedById }
