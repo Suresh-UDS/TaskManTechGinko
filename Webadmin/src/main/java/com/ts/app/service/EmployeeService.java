@@ -1219,7 +1219,7 @@ public class    EmployeeService extends AbstractService {
 	public String uploadEmpExistingImage() {
 		// TODO Auto-generated method stub
 		int currPage = 1;
-		int pageSize = 10;
+		int pageSize = 100;
 		Pageable pageRequest = createPageRequest(currPage, pageSize);
 		Page<Employee> empResult = employeeRepository.findAll(pageRequest);
 		List<Employee> empEntity = empResult.getContent();
@@ -1231,10 +1231,14 @@ public class    EmployeeService extends AbstractService {
 						String base64String = employee.getEnrolled_face().split(",")[1];
 						long dateTime = new Date().getTime();
 						boolean isBase64 = Base64.isBase64(base64String);
-						EmployeeDTO emp = mapperUtil.toModel(employee, EmployeeDTO.class);
-						if(isBase64){ 
-							emp = amazonS3utils.uploadEnrollImage(emp.getEnrolled_face(), emp, dateTime);
-							employee.setEnrolled_face(emp.getEnrolled_face());
+						try {
+							EmployeeDTO emp = mapperUtil.toModel(employee, EmployeeDTO.class);
+							if(isBase64){ 
+								emp = amazonS3utils.uploadEnrollImage(emp.getEnrolled_face(), emp, dateTime);
+								employee.setEnrolled_face(emp.getEnrolled_face());
+							}
+						}catch(Exception e) {
+							log.debug("Error while mapping employee" + employee.getId() +" - "+employee.getName());
 						}
 					}	
 				}
