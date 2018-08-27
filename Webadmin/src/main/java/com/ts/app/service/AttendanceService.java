@@ -839,7 +839,15 @@ public class AttendanceService extends AbstractService {
 
 	public String uploadExistingCheckOutImage() {
 		// TODO Auto-generated method stub
-		List<Attendance> attendanceEntity = attendanceRepository.findAll();
+		int currPage = 1;
+		int pageSize = 10;
+		Pageable pageRequest = createPageRequest(currPage, pageSize);
+		log.debug("Curr Page ="+ currPage + ",  pageSize -" + pageSize);
+		Page<Attendance> attnResult = attendanceRepository.findAll(pageRequest);
+		List<Attendance> attendanceEntity = attnResult.getContent();
+		while(CollectionUtils.isNotEmpty(attendanceEntity)) {
+			log.debug("Curr Page ="+ currPage + ",  pageSize -" + pageSize);
+			log.debug("Length of attendance List" +attendanceEntity.size());
 		for(Attendance attendance : attendanceEntity) { 
 			if(attendance.getCheckOutImage() != null) {
 				if(attendance.getCheckOutImage().indexOf("data:image") == 0) { 
@@ -849,12 +857,17 @@ public class AttendanceService extends AbstractService {
 					if(isBase64) { 
 						long dateTime = new Date().getTime();
 						attendanceModel = s3ServiceUtils.uploadCheckInImage(attendanceModel.getCheckOutImage(), attendanceModel, dateTime);
-						attendance.setCheckInImage(attendanceModel.getCheckOutImage());
-						attendanceRepository.save(attendance);
+						attendance.setCheckOutImage(attendanceModel.getCheckOutImage());
 					}
 				}
 			}
-		} 
+		}
+		attendanceRepository.save(attendanceEntity);
+		currPage++;
+		pageRequest = createPageRequest(currPage, pageSize);
+		attnResult = attendanceRepository.findAll(pageRequest);
+		attendanceEntity = attnResult.getContent();
+		}
 		return "Upload attendance checkOutImage successfully";
 	}
 

@@ -1218,22 +1218,34 @@ public class    EmployeeService extends AbstractService {
 
 	public String uploadEmpExistingImage() {
 		// TODO Auto-generated method stub
-		List<Employee> empEntity = employeeRepository.findAll();
-		for(Employee employee : empEntity) { 
-			if(employee.getEnrolled_face() != null) {
-				if(employee.getEnrolled_face().indexOf("data:image") == 0) { 
-					String base64String = employee.getEnrolled_face().split(",")[1];
-					long dateTime = new Date().getTime();
-					boolean isBase64 = Base64.isBase64(base64String);
-					EmployeeDTO emp = mapperUtil.toModel(employee, EmployeeDTO.class);
-					if(isBase64){ 
-						emp = amazonS3utils.uploadEnrollImage(emp.getEnrolled_face(), emp, dateTime);
-						employee.setEnrolled_face(emp.getEnrolled_face());
-						employeeRepository.save(employee);
-					}
-				}	
+		int currPage = 1;
+		int pageSize = 10;
+		Pageable pageRequest = createPageRequest(currPage, pageSize);
+		Page<Employee> empResult = employeeRepository.findAll(pageRequest);
+		List<Employee> empEntity = empResult.getContent();
+		while(CollectionUtils.isNotEmpty(empEntity)) {
+			log.debug("Length of empEntity List" +empEntity.size());
+			for(Employee employee : empEntity) { 
+				if(employee.getEnrolled_face() != null) {
+					if(employee.getEnrolled_face().indexOf("data:image") == 0) { 
+						String base64String = employee.getEnrolled_face().split(",")[1];
+						long dateTime = new Date().getTime();
+						boolean isBase64 = Base64.isBase64(base64String);
+						EmployeeDTO emp = mapperUtil.toModel(employee, EmployeeDTO.class);
+						if(isBase64){ 
+							emp = amazonS3utils.uploadEnrollImage(emp.getEnrolled_face(), emp, dateTime);
+							employee.setEnrolled_face(emp.getEnrolled_face());
+						}
+					}	
+				}
 			}
+			employeeRepository.save(empEntity);
+			currPage++;
+			pageRequest = createPageRequest(currPage, pageSize);
+			empResult = employeeRepository.findAll(pageRequest);
+			empEntity = empResult.getContent();
 		}
+		
 		return "Upload Employee enroll image successfully";
 	}
 
