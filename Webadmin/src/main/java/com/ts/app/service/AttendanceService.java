@@ -840,10 +840,10 @@ public class AttendanceService extends AbstractService {
 	public String uploadExistingCheckOutImage() {
 		// TODO Auto-generated method stub
 		int currPage = 1;
-		int pageSize = 10;
+		int pageSize = 100;
 		Pageable pageRequest = createPageRequest(currPage, pageSize);
 		log.debug("Curr Page ="+ currPage + ",  pageSize -" + pageSize);
-		Page<Attendance> attnResult = attendanceRepository.findAll(pageRequest);
+		Page<Attendance> attnResult = attendanceRepository.findByImage(pageRequest);
 		List<Attendance> attendanceEntity = attnResult.getContent();
 		while(CollectionUtils.isNotEmpty(attendanceEntity)) {
 			log.debug("Curr Page ="+ currPage + ",  pageSize -" + pageSize);
