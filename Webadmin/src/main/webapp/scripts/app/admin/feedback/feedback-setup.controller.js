@@ -183,12 +183,12 @@ angular.module('timeSheetApp')
         };
 
         $scope.loadSites = function () {
-        		ProjectComponent.findSites($scope.searchProject.id).then(function (data) {
+
+            var projectId = $scope.selectedProject ? $scope.selectedProject.id : $scope.searchProject ? $scope.searchProject.id : 0;
+        		ProjectComponent.findSites(projectId).then(function (data) {
         			$scope.selectedSite = null;
                 $scope.sites = data;
                     //
-                    console.log("==================");
-                    console.log($scope.sites)
                     for(var i=0;i<$scope.sites.length;i++)
                     {
                         $scope.uiSite[i] = $scope.sites[i].name;
@@ -200,7 +200,11 @@ angular.module('timeSheetApp')
         };
 
         $scope.loadBlocks = function () {
-	    		LocationComponent.findBlocks($scope.searchProject.id,$scope.searchSite.id).then(function (data) {
+
+            var projectId = $scope.selectedProject ? $scope.selectedProject.id : $scope.searchProject ? $scope.searchProject.id : 0;
+            var siteId = $scope.selectedSite ? $scope.selectedSite.id : $scope.searchSite ? $scope.searchSite.id : 0;
+
+	    		LocationComponent.findBlocks(projectId ,siteId).then(function (data) {
 	    			$scope.selectedBlock = null;
 	            $scope.blocks = data;
                     //
@@ -216,7 +220,11 @@ angular.module('timeSheetApp')
 	    };
 
         $scope.loadFloors = function () {
-	    		LocationComponent.findFloors($scope.searchProject.id,$scope.searchSite.id,$scope.searchBlock).then(function (data) {
+            var projectId = $scope.selectedProject ? $scope.selectedProject.id : $scope.searchProject ? $scope.searchProject.id : 0;
+            var siteId = $scope.selectedSite ? $scope.selectedSite.id : $scope.searchSite ? $scope.searchSite.id : 0;
+            var block = $scope.selectedBlock ? $scope.selectedBlock : $scope.searchBlock ? $scope.searchBlock : null;
+
+            LocationComponent.findFloors(projectId,siteId,block).then(function (data) {
 	    			$scope.selectedFloor = null;
 	            $scope.floors = data;
                     //
@@ -231,8 +239,12 @@ angular.module('timeSheetApp')
 	    };
 
         $scope.loadZones = function () {
+            var projectId = $scope.selectedProject ? $scope.selectedProject.id : $scope.searchProject ? $scope.searchProject.id : 0;
+            var siteId = $scope.selectedSite ? $scope.selectedSite.id : $scope.searchSite ? $scope.searchSite.id : 0;
+            var block = $scope.selectedBlock ? $scope.selectedBlock : $scope.searchBlock ? $scope.searchBlock : null;
+            var floor = $scope.selectedFloor ? $scope.selectedFloor : $scope.searchFloor ? $scope.searchFloor : null;
         		// console.log('load zones - ' + $scope.selectedProject.id +',' +$scope.selectedSite.id +',' +$scope.selectedBlock +','+$scope.selectedFloor);
-	    		LocationComponent.findZones($scope.searchProject.id,$scope.searchSite.id,$scope.searchBlock, $scope.searchFloor).then(function (data) {
+	    		LocationComponent.findZones(projectId,siteId,block, floor).then(function (data) {
 	    			$scope.selectedZone = null;
 	            $scope.zones = data;
 	            //

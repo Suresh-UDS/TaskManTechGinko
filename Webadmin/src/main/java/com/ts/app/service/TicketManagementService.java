@@ -26,6 +26,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.ts.app.config.Constants;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
@@ -117,6 +120,9 @@ public class TicketManagementService extends AbstractService {
 	@Value("${AWS.s3-ticket-path}")
 	private String ticketFilePath;
 	
+	@Inject
+	private RateCardService rateCardService;
+	
     public TicketDTO saveTicket(TicketDTO ticketDTO){
     		User user = userRepository.findOne(ticketDTO.getUserId());
         Ticket ticket = mapperUtil.toEntity(ticketDTO,Ticket.class);
@@ -196,68 +202,98 @@ public class TicketManagementService extends AbstractService {
     public TicketDTO updateTicket(TicketDTO ticketDTO){
     		User user = userRepository.findOne(ticketDTO.getUserId());
         Ticket ticket = ticketRepository.findOne(ticketDTO.getId());
-        Site site = siteRepository.findOne(ticket.getSite().getId());
-        if(site!=null){
-            ticket.setSite(site);
+        //validations
+        //check if job or quotatione exists
+        String message = null;
+        boolean isValid = false;
+        if(StringUtils.isNotEmpty(ticket.getQuotationId())) {
+        		Object quotationResp = rateCardService.getQuotation(ticket.getQuotationId());
+        		if(quotationResp != null) {
+        			String quotation = (String)quotationResp;
+        			JsonParser jsonp = new JsonParser();
+        			JsonElement jsonEle = jsonp.parse(quotation);
+        			JsonObject jsonObj = jsonEle.getAsJsonObject();
+        			JsonElement approvedEle = jsonObj.get("isApproved");
+        			if(approvedEle != null) {
+        				if(!approvedEle.getAsBoolean()) {
+        					message = "Ticket has an associated quotation which is still pending for approval";
+        					JsonElement rejectedEle = jsonObj.get("isRejected");
+        					if(rejectedEle != null && rejectedEle.getAsBoolean()) {
+        						isValid = true;
+        					}
+        				}else {
+        					isValid = true;
+        				}
+        			}
+        		}
         }
-        if(ticketDTO.getAssetId() > 0) {
-        	Asset asset = assetRepository.findOne(ticketDTO.getAssetId());
-        	ticket.setAsset(asset);
-        }else { 
-       	 ticket.setAsset(null);
-        }
-        Calendar currCal = Calendar.getInstance();
-        Employee ticketOwner = employeeRepository.findOne(ticket.getEmployee().getId());
-        Employee assignedTo = null;
-        if(ticketDTO.getEmployeeId()!=0) {
-            if (ticket.getEmployee().getId() != ticketDTO.getEmployeeId()) {
-                assignedTo = employeeRepository.findOne(ticketDTO.getEmployeeId());
-                ticket.setStatus("Assigned");
-                ticket.setAssignedTo(assignedTo);
-                ticket.setAssignedOn(new java.sql.Date(currCal.getTimeInMillis()));
-            }else {
-            		assignedTo = ticket.getEmployee();
-            }
+        
+        if(isValid) {
+	        Site site = siteRepository.findOne(ticket.getSite().getId());
+	        if(site!=null){
+	            ticket.setSite(site);
+	        }
+	        if(ticketDTO.getAssetId() > 0) {
+	        	Asset asset = assetRepository.findOne(ticketDTO.getAssetId());
+	        	ticket.setAsset(asset);
+	        }else { 
+	       	 ticket.setAsset(null);
+	        }
+	        Calendar currCal = Calendar.getInstance();
+	        Employee ticketOwner = employeeRepository.findOne(ticket.getEmployee().getId());
+	        Employee assignedTo = null;
+	        if(ticketDTO.getEmployeeId()!=0) {
+	            if (ticket.getEmployee().getId() != ticketDTO.getEmployeeId()) {
+	                assignedTo = employeeRepository.findOne(ticketDTO.getEmployeeId());
+	                ticket.setStatus("Assigned");
+	                ticket.setAssignedTo(assignedTo);
+	                ticket.setAssignedOn(new java.sql.Date(currCal.getTimeInMillis()));
+	            }else {
+	            		assignedTo = ticket.getEmployee();
+	            }
+	        }else {
+	        		assignedTo = ticket.getAssignedTo();
+	        }
+	        ticket.setStatus(ticketDTO.getStatus());
+	        if (StringUtils.isNotEmpty(ticketDTO.getTitle())) {
+	            ticket.setTitle(ticketDTO.getTitle());
+	        }else{
+	            ticket.setTitle(ticket.getTitle());
+	        }
+	        if (StringUtils.isNotEmpty(ticketDTO.getDescription())) {
+	            ticket.setDescription(ticketDTO.getDescription());
+	        }else{
+	            ticket.setDescription(ticket.getDescription());
+	        }
+	        ticket.setSeverity(ticketDTO.getSeverity());
+	        ticket.setComments(ticketDTO.getComments());
+	        ticket.setCategory(ticketDTO.getCategory());
+	        if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Closed"))) {
+	        		ticket.setClosedBy(user.getEmployee());
+	        		ticket.setClosedOn(new java.sql.Date(currCal.getTimeInMillis()));
+	        }
+	
+	        if(StringUtils.isNotEmpty(ticketDTO.getStatus()) && (ticketDTO.getStatus().equalsIgnoreCase("Reopen"))) {
+	        		ticket.setStatus(TicketStatus.OPEN.toValue());
+	        }
+	
+	        if(ticketDTO.isPendingAtUDS()){
+	            ticket.setPendingAtUDS(ticketDTO.isPendingAtUDS());
+	        }
+	
+	        if(ticketDTO.isPendingAtClient()){
+	            ticket.setPendingAtClient(ticketDTO.isPendingAtClient());
+	        }
+	
+	        ticket = ticketRepository.saveAndFlush(ticket);
+	
+	        ticketDTO = mapperUtil.toModel(ticket, TicketDTO.class);
+	        //if(assignedTo != null) {
+	        		sendNotifications(ticketOwner, assignedTo, user.getEmployee(), ticket, site, false);
+	        //}
         }else {
-        		assignedTo = ticket.getAssignedTo();
+        		ticketDTO.setErrorMessage(message);
         }
-        ticket.setStatus(ticketDTO.getStatus());
-        if (StringUtils.isNotEmpty(ticketDTO.getTitle())) {
-            ticket.setTitle(ticketDTO.getTitle());
-        }else{
-            ticket.setTitle(ticket.getTitle());
-        }
-        if (StringUtils.isNotEmpty(ticketDTO.getDescription())) {
-            ticket.setDescription(ticketDTO.getDescription());
-        }else{
-            ticket.setDescription(ticket.getDescription());
-        }
-        ticket.setSeverity(ticketDTO.getSeverity());
-        ticket.setComments(ticketDTO.getComments());
-        ticket.setCategory(ticketDTO.getCategory());
-        if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Closed"))) {
-        		ticket.setClosedBy(user.getEmployee());
-        		ticket.setClosedOn(new java.sql.Date(currCal.getTimeInMillis()));
-        }
-
-        if(StringUtils.isNotEmpty(ticketDTO.getStatus()) && (ticketDTO.getStatus().equalsIgnoreCase("Reopen"))) {
-        		ticket.setStatus(TicketStatus.OPEN.toValue());
-        }
-
-        if(ticketDTO.isPendingAtUDS()){
-            ticket.setPendingAtUDS(ticketDTO.isPendingAtUDS());
-        }
-
-        if(ticketDTO.isPendingAtClient()){
-            ticket.setPendingAtClient(ticketDTO.isPendingAtClient());
-        }
-
-        ticket = ticketRepository.saveAndFlush(ticket);
-
-        ticketDTO = mapperUtil.toModel(ticket, TicketDTO.class);
-        //if(assignedTo != null) {
-        		sendNotifications(ticketOwner, assignedTo, user.getEmployee(), ticket, site, false);
-        //}
 
         return ticketDTO;
     }
@@ -400,7 +436,8 @@ public class TicketManagementService extends AbstractService {
                 Set<Long> subEmpIds = new TreeSet<Long>();
                 if(employee != null) {
                     Hibernate.initialize(employee.getSubOrdinates());
-                    findAllSubordinates(employee, subEmpIds);
+                    int levelCnt = 1;
+                    findAllSubordinates(employee, subEmpIds, levelCnt);
                     List<Long> subEmpList = new ArrayList<Long>();
                     subEmpList.addAll(subEmpIds);	
                     log.debug("List of subordinate ids -"+ subEmpIds);
@@ -558,7 +595,7 @@ public class TicketManagementService extends AbstractService {
     public TicketDTO uploadFile(TicketDTO ticketDTO) throws JSONException {
 
         log.debug("Ticket images upload to AWS s3 -"+ticketDTO.getId());
-        ticketDTO = amazonS3utils.uploadTicketFile(ticketDTO.getId(), ticketDTO.getImageFile(), System.currentTimeMillis(), ticketDTO);
+        ticketDTO = amazonS3utils.uploadTicketFile(ticketDTO.getId(), ticketDTO.getImageFile(), ticketDTO);
         Ticket ticket = ticketRepository.findOne(ticketDTO.getId());
         ticket.setImage(ticketDTO.getImage());
         ticketRepository.saveAndFlush(ticket);
@@ -569,7 +606,7 @@ public class TicketManagementService extends AbstractService {
 
 	public String getTicketImage(long ticketId, String imageId) {
         String fileUrl = null;
-        log.debug("Ticket Image service"+ticketId+" "+imageId);
+        log.debug("Ticket Image service"+ ticketId +" "+ imageId);
         Ticket ticket = ticketRepository.findOne(ticketId);
         fileUrl = cloudFrontUrl + bucketEnv + ticketFilePath + ticket.getImage();
         return fileUrl;

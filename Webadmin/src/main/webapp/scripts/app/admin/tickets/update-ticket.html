@@ -26,7 +26,7 @@
                                            <div class="form-group">
                                                <label class="control-label">Title<span class="red-star">*</span> </label>
 
-                                               <input type="text" class="form-control"   name='title'
+                                               <input type="text" class="form-control InputTxtCapsAll"   name='title'
                                                       ng-model="tickets.title" ng-minlength=1 ng-maxlength=100
                                                       autofocus  required autocomplete="off"/>
                                                <div ng-show="form.$submitted || form.title.$touched">
@@ -45,7 +45,7 @@
                                        <div class="col-md-12">
                                            <div class="form-group">
                                                <label class="control-label">Description<span class="red-star">*</span> </label>
-                                               <input id='description' ng-model="tickets.description" class='form-control'
+                                               <input id='description' ng-model="tickets.description" class='form-control InputTxtCaps'
                                                       name='description' type='text' value=""
                                                        autofocus required/>
                                                <div ng-show="form.$submitted || form.description.$touched">
@@ -277,8 +277,12 @@
 			                          />
 
 
-              							<a id="images" href="#" onClick="$('#myModalNew').modal()" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="loadTicketImage(ticketImage,tickets.id)">
-                 							<img  src={{ticketImage}} width="100px" height="100px" />
+              							<a id="images" href="#" onClick="$('#myModalNew').modal()" ng-show="extension === 'jpg' || extension === 'jpeg' || extension === 'png'" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="loadTicketImage(ticketImage,tickets.id)">
+                 							<img src={{ticketImage}} width="100px" style="margin-top: 15px;" height="100px"/>
+             							</a>
+             							
+             							<a id="images" href="{{ticketImage}}" ng-hide="extension === 'jpg' || extension === 'jpeg' || extension === 'png'">
+                 							<img ng-src="assets/img/{{extension}}.png" style="margin-top: 15px;" width="100px" height="100px"/>
              							</a>
 
 

@@ -110,14 +110,14 @@ public class AmazonS3Utils {
 		return quotationDTO;
     } 
     
-    public TicketDTO uploadTicketFile(long ticketId, MultipartFile mulitipartfile, long dateTime, TicketDTO ticketDTO) {
+    public TicketDTO uploadTicketFile(long ticketId, MultipartFile mulitipartfile, TicketDTO ticketDTO) {
     	String fileUrl = "";
-        String name = ticketId + "_" + dateTime + ".jpg";
         try { 
         	File file = convertMultiPartToFile(mulitipartfile);
-        	String fileName = name;
-        	fileUrl = amazonS3Service.uploadTicketFileToS3(fileName, file);
-        	ticketDTO.setImage(fileName);
+        	String fileName = generateFileName(mulitipartfile);
+        	String nameOfFile = ticketId + "_" + fileName;
+        	fileUrl = amazonS3Service.uploadTicketFileToS3(nameOfFile, file);
+        	ticketDTO.setImage(nameOfFile);
         	ticketDTO.setUrl(fileUrl);
         } catch(Exception e) { 
         	e.printStackTrace();

@@ -34,25 +34,25 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Name<span class="red-star">*</span></label>
                                                     <input id='projectName' ng-model="project.name"
-                                                           class='form-control InputTxtCaps' name='projectName' type='text' value=""
+                                                           class='form-control InputTxtCapsAll' name='projectName' type='text' value=""
                                                            ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
                                                     <div ng-show="form.$submitted || form.projectName.$touched">
                                                         <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.projectName.$error.required">
-                                                                Project name is required.
+                                                                Client name is required.
                                                             </p>
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.projectName.$error.minlength">
-                                                                Project name is required to be at least 2 character.
+                                                                Client name is required to be at least 2 character.
                                                             </p>
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.projectName.$error.maxlength">
-                                                                Project name cannot be longer than 50 characters.
+                                                                Client name cannot be longer than 50 characters.
                                                             </p>
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.projectName.$error.pattern">
-                                                                Project name can only contain letters, digits and space.
+                                                                Client name can only contain letters, digits and space.
                                                             </p>
                                                         </div>
                                                     </div>
@@ -70,7 +70,7 @@
                                                     <div ng-show="form.$submitted || form.address.$touched">
                                                         <div ng-show="form.address.$dirty || form.address.$invalid">
                                                             <p class="help-block" style="color:maroon"
-                                                               ng-show="form.projectName.$error.required">
+                                                               ng-show="form.address.$error.required">
                                                                 Address is required.
                                                             </p>
                                                             <p class="help-block" style="color:maroon"

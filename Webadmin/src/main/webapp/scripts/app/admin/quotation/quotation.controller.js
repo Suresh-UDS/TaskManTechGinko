@@ -240,7 +240,7 @@ angular
                                 $scope.projects = data;
                                 //$scope.selectedProject = $scope.projects[0];
                                 console.log()
-                                if($state.current.name == 'edit-quotation')
+                                if($state.current.name == 'edit-quotation' || $state.current.name == 'view-quotation')
                                 {
 
                                 }
@@ -343,6 +343,7 @@ angular
 
                         $scope.siteSpin = true;
                         $scope.hideSite = true;
+                        $scope.clearField = false;
 
                             $scope.uiSite.splice(0,$scope.uiSite.length)
 
@@ -420,7 +421,7 @@ angular
 							$scope.materialTotalCost += parseFloat($scope.materialItemCost)
 							$scope.totalCost += parseFloat($scope.materialItemCost)
 							$scope.materialRateCardDetails.push(rateCardDetail);
-
+                            $scope.validCheck();
 						}
 					}
 
@@ -428,6 +429,7 @@ angular
 						$scope.materialTotalCost -= parseFloat($scope.materialRateCardDetails[ind].cost);
 						$scope.totalCost -= parseFloat($scope.materialRateCardDetails[ind].cost);
 						$scope.materialRateCardDetails.splice(ind, 1);
+						$scope.validCheck();
 					}
 
 					$scope.addService = function() {
@@ -447,6 +449,7 @@ angular
 							$scope.serviceTotalCost += parseFloat($scope.serviceItemCost)
 							$scope.totalCost += parseFloat($scope.serviceItemCost)
 							$scope.serviceRateCardDetails.push(rateCardDetail);
+							$scope.validCheck();
 						}
 					}
 
@@ -454,6 +457,7 @@ angular
 						$scope.serviceTotalCost -= parseFloat($scope.serviceRateCardDetails[ind].cost);
 						$scope.totalCost -= parseFloat($scope.serviceRateCardDetails[ind].cost);
 						$scope.serviceRateCardDetails.splice(ind, 1);
+						$scope.validCheck();
 					}
 
 					$scope.addLabour = function() {
@@ -473,6 +477,7 @@ angular
 							$scope.labourTotalCost += parseFloat($scope.labourItemCost)
 							$scope.totalCost += parseFloat($scope.labourItemCost)
 							$scope.labourRateCardDetails.push(rateCardDetail);
+							$scope.validCheck();
 						}
 					}
 
@@ -480,6 +485,7 @@ angular
 						$scope.labourTotalCost -= parseFloat($scope.labourRateCardDetails[ind].cost);
 						$scope.totalCost -= parseFloat($scope.labourRateCardDetails[ind].cost);
 						$scope.labourRateCardDetails.splice(ind, 1);
+						$scope.validCheck();
 					}
 
                     $scope.saveLoad = false;
@@ -552,10 +558,14 @@ angular
 
                     };
 
+                    // *
 			        $scope.loadQuotation = function() {
                           if($stateParams.id){
-                             
-                             console.log('quotation id - ' + $stateParams.id);
+                          	        $scope.serviceTotalCost = "";
+			        				$scope.labourTotalCost = "";
+			        				$scope.materialTotalCost = "";
+			        				$scope.totalCost = "";
+                            console.log('quotation id - ' + $stateParams.id);
 			        		RateCardComponent.findQuotation($stateParams.id).then(function (data) {
 			        			$scope.loadingStop();
 			        				console.log('quotation response - '+ JSON.stringify(data))
@@ -575,7 +585,11 @@ angular
 			        					}
 			        					$scope.totalCost += rateCardDetail.cost;
 			        				}
-				                $scope.loadSelectedProject($scope.quotation.projectId);
+
+				                //$scope.loadSelectedProject($scope.quotation.projectId);
+				                $scope.selectedProject = {};
+				                $scope.selectedProject.id = $scope.quotation.projectId;
+				                $scope.selectedProject.name = $scope.quotation.projectName;
 				                $scope.selectedSite = {};
 				                $scope.selectedSite.id = $scope.quotation.siteId;
 				                $scope.selectedSite.name = $scope.quotation.siteName;
@@ -609,11 +623,12 @@ angular
 				            });
 
                           }
-			        		
+
 			        };
 
 
 					$scope.approveQuotation = function(quotation) {
+					    console.log(quotation)
 						RateCardComponent.approveQuotation(quotation).then(
 								function(response) {
 									console.log(response);
@@ -668,6 +683,8 @@ angular
 			        $scope.refreshPage = function() {
 
 			           $scope.loadAllQuotations();
+			           //check
+                        $scope.loadQuotation();
 			        };
 
 			        $scope.clearFilter = function() {
@@ -904,20 +921,29 @@ angular
 
 					        $scope.closeTicketConfirm =function(cTicket){
 
-					        JobComponent.updateTicket(cTicket).then(function() {
-					                $scope.success = 'OK';
-					                $scope.showNotifications('top','center','success','Ticket status updated');
-					                $(".fade").removeClass("modal-backdrop");
-					                $scope.ticketStatus = 'Closed';
-					                $state.reload();
-					            });
+					        JobComponent.updateTicket(cTicket).then(function(data) {
+						        		if(data.errorMessage) {
+							                $scope.success = null;
+							                $scope.showNotifications('top','center','danger',data.errorMessage);
+							                $(".fade").removeClass("modal-backdrop");
+							                $state.reload();
+						        		}else {
+						                $scope.success = 'OK';
+						                $scope.showNotifications('top','center','success','Ticket status updated');
+						                $(".fade").removeClass("modal-backdrop");
+						                $scope.ticketStatus = 'Closed';
+						                $state.reload();
+						        		}
+					            })
 					        }
 
 					        $scope.quoteStatus = true;
 
 					        $scope.validCheck = function(){
-                               
-                               if($scope.materialName || $scope.serviceName || $scope.labourCategory){
+
+                               if(($scope.serviceRateCardDetails.length > 0 ) || 
+                               	($scope.labourRateCardDetails.length > 0) || 
+                               	($scope.materialRateCardDetails.length > 0)){
 	                               $scope.quoteStatus = false;
 						        }else{
 						        	$scope.quoteStatus = true;
@@ -925,6 +951,6 @@ angular
 
 					        }
 
-					        
+
 
 				});

@@ -417,9 +417,20 @@ angular.module('timeSheetApp')
         {
             $scope.empSpin = true;
             $scope.employeeFilterDisable = true;
-            if($scope.searchSite)
-            {
-                $scope.searchCriteria.siteId = $scope.searchSite.id;
+            if( $scope.searchProject || $scope.searchSite)
+            {   
+                if($scope.searchProject){
+                    $scope.searchCriteria.projectId = $scope.searchProject.id;
+                }else{
+                    $scope.searchCriteria.projectId = null;
+                }
+                if($scope.searchSite){
+                    $scope.searchCriteria.siteId = $scope.searchSite.id;
+                }else{
+                   $scope.searchCriteria.siteId = null; 
+                }
+                
+                console.log('Employee Load',$scope.searchCriteria);
                 EmployeeComponent.search($scope.searchCriteria).then(function (data) {
                     $scope.selectedEmployee = null;
                     $scope.employees = data.transactions;
@@ -551,6 +562,7 @@ angular.module('timeSheetApp')
                             TicketComponent.findTicketImage($scope.tickets.id,$scope.tickets.image).
                                     then(function (response) {
                                     console.log(response);
+                                    $scope.extension = response.split('.').pop();
                                     $scope.ticketImage = response;
                             })
                         }
@@ -597,10 +609,11 @@ angular.module('timeSheetApp')
                     TicketComponent.findTicketImage(tlist.id,tlist.image).
                             then(function (response) {
                             console.log(response);
+                            $scope.extension = response.split('.').pop();
                             $scope.ticketImage = response;
                     })
                 }else{
-                	$scope.ticketImage = "";
+                	$scope.ticketImage = "#";
                 }
 
             });
@@ -610,6 +623,10 @@ angular.module('timeSheetApp')
          }
 
         };
+        
+//        $scope.close = function() { 
+//        	$scope.ticketImage = "#";
+//        }
 
 
         $scope.loadTicketImage = function(image,qId) {
@@ -699,6 +716,11 @@ angular.module('timeSheetApp')
                     $(".fade").removeClass("modal-backdrop");
                     $('#closeTicket').modal('hide');
                     $state.reload();
+                }).catch(function(response){
+                    $scope.success = null;
+                    $scope.loadingStop();
+                    $scope.showNotifications('top','center','success', response.data.message);
+
                 });
             }
 

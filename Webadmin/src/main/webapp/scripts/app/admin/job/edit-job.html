@@ -16,7 +16,7 @@
 			</div> -->
 			<div class="col-md-12">
                 <div class="titleCon">
-                    <h3>{{job.title}} - {{job.id}}</h3>
+                    <h3>{{job.title}}</h3>
                 </div>
 
 				<div class="form-container table-container jobcards">
@@ -30,8 +30,24 @@
                             <div class="col-md-6">
 
                                 <div class="panel panel-default">
-                                    <div class="panel-heading">Job</div>
+                                    <div class="panel-heading">Job Details - ID - {{job.id}}</div>
                                     <div class="panel-body">
+
+                                        <!-- <div class="row">
+
+                                            <div class="col-md-12">
+
+                                                <div class="form-group">
+                                                    <label class="control-label">Job Id</label>
+                                                    <input id='jobId'
+                                                           ng-model="job.id"
+                                                           class='form-control'
+                                                           name='jobId'
+                                                           type='text' ng-disabled="true" readonly />
+                                                </div>
+
+                                             </div>
+                                        </div> -->
 
                                         <div class="row">
 
@@ -41,7 +57,7 @@
                                                     <label class="control-label">Title <span class="red-star">*</span></label>
                                                     <input id='jobName'
                                                            ng-model="job.title"
-                                                           class='form-control'
+                                                           class='form-control InputTxtCapsAll'
                                                            name='jobName'
                                                            type='text' value=""
                                                            ng-minlength='5'
@@ -239,7 +255,7 @@
                                                     <label class="control-label">Block </label>
                                                     <div class="dropdown">
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                       <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block for  block in blocks track by block">
+                                                       <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="(block | uppercase) for  block in blocks track by block">
                                                         	<option value="">Select Block...</option>
                                                     	  </select>
                                                         <div ng-show="form.$submitted || form.block.$touched">
@@ -259,7 +275,7 @@
                                                     <label class="control-label">Floor </label>
                                                     <div class="dropdown">
                                                      <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor for floor in floors track by floor">
+													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="(floor | uppercase) for floor in floors track by floor">
                                                         <option value="">Select Floor...</option>
                                                     	</select>
                                                    	 <div ng-show="form.$submitted || form.floor.$touched">
@@ -279,7 +295,7 @@
                                                     <label class="control-label">Zone </label>
                                                     <div class="dropdown">
                                                      <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-													<select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones track by zone">
+													<select class="form-control " ng-model="selectedZone"  ng-options="zone as (zone | uppercase) for zone in zones track by zone">
                                                         <option value="">Select Zone...</option>
                                                     </select>
                                                    	 <div ng-show="form.$submitted || form.floor.$touched">

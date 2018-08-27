@@ -2,7 +2,7 @@
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
 	<div class="" >
         <div class="titleCon" ng-if="assetVal.id">
-            <h3>{{assetVal.title}} - {{assetVal.id}}</h3>
+            <h3>{{assetVal.title | uppercase}} - {{assetVal.id}}</h3>
         </div>
 		<div class="row">
             <!-- <div class="col-mod-12">
@@ -85,7 +85,7 @@
                                                                                     <label class="control-label">Name <span class="red-star">*</span></label>
                                                                                 <input id='assetTitle'
                                                                                        ng-model="assetGen.title"
-                                                                                       class='form-control InputTxtCaps'
+                                                                                       class='form-control InputTxtCapsAll'
                                                                                        name='assetTitle'
                                                                                        type='text' value=""
                                                                                        ng-minlength='5'
@@ -250,7 +250,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control " ng-model="selectedSites"  ng-options="site as site.name for site in sites" ng-change="loadBlocks();loadEmployees();" name="AssetSite"  required>
+                                                                                    <select class="form-control " ng-model="selectedSites"  ng-options="site as (site.name | uppercase)  for site in sites " ng-change="loadBlocks();loadEmployees();" name="AssetSite"  required>
                                                                                         <option value="">Select Site ...</option>
                                                                                     </select>
 
@@ -272,7 +272,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Block  </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control " ng-model="selectedBlock"  ng-options="block  for  block in  blocks track by block" name="AssetBlock"  ng-change="loadFloors()">
+                                                                                    <select class="form-control " ng-model="selectedBlock"  ng-options="(block | uppercase) for  block in  blocks track by block" name="AssetBlock"  ng-change="loadFloors()">
                                                                                         <option value="">Select Block ...</option>
                                                                                     </select>
                                                                                 </div>
@@ -281,7 +281,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Floor </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control " ng-model="selectedFloor" ng-options="floor for floor in floors track by floor" name="AssetFloor" ng-change="loadZones()" >
+                                                                                    <select class="form-control " ng-model="selectedFloor" ng-options="(floor | uppercase)  for floor in floors track by floor" name="AssetFloor" ng-change="loadZones()" >
                                                                                         <option value="">Please select Floor ...</option>
                                                                                     </select>
                                                                                 </div>
@@ -290,10 +290,9 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Zone  </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control " ng-model="selectedZone"  ng-options="zone for zone in zones track by zone" name="AssetZone" >
+                                                                                    <select class="form-control " ng-model="selectedZone"  ng-options="(zone | uppercase) for zone in zones track by zone" name="AssetZone" >
                                                                                         <option value="">Select Zone  ...</option>
                                                                                     </select>
-
 
 
                                                                                 </div>
@@ -777,17 +776,17 @@
                                                                           <div class="row">
                                                                              <div class="col-md-6">
 
-                                                                                 <p><span class="txtBold">Asset</span>  : {{assetGen.title}}</p>
-                                                                                 <p><span class="txtBold">Type </span> : {{selectedAssetType.name}}</p>
-                                                                                 <p><span class="txtBold">Group</span>  : {{selectedAssetGroup.assetgroup}}</p>
+                                                                                 <p><span class="txtBold">Asset</span>  : {{assetGen.title | uppercase}}</p>
+                                                                                 <p><span class="txtBold">Type </span> : {{selectedAssetType.name | uppercase}}</p>
+                                                                                 <p><span class="txtBold">Group</span>  : {{selectedAssetGroup.assetgroup | uppercase}}</p>
 
 
                                                                                  </div>
                                                                              <div class="col-md-6">
 
-                                                                                 <p><span class="txtBold">Site</span> : {{selectedSites.name}}</p>
-                                                                                 <p><span class="txtBold">Manufacturer</span>  : {{selectedManufacturer.name}}</p>
-                                                                                 <p><span class="txtBold">Vendor</span>  : {{selectedVendor.name}}</p>
+                                                                                 <p><span class="txtBold">Site</span> : {{selectedSites.name | uppercase}}</p>
+                                                                                 <p><span class="txtBold">Manufacturer</span>  : {{selectedManufacturer.name | uppercase}}</p>
+                                                                                 <p><span class="txtBold">Vendor</span>  : {{selectedVendor.name | uppercase}}</p>
 
 
                                                                              </div>
@@ -832,7 +831,7 @@
 
                                                                                             <div class="" style="float:left;width:90%;">
                                                                                                 <label class="control-label">Select Parameter<span class="red-star">*</span> </label>
-                                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                                <span class="form-control-feedback d-arrow-icon" style="padding-right: 85px"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                                 <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameter" name="param"  ng-options="parameter as parameter.name for parameter in parameters track by parameter.name" tabindex="0" aria-invalid="false" required>
                                                                                                     <option value="" class="" selected="selected">Select Parameter ..</option>
                                                                                                 </select>
@@ -869,7 +868,7 @@
 
                                                                                             <div class="" style="float:left;width:90%;">
                                                                                                 <label class="control-label">Select Units<span class="red-star">*</span></label>
-                                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                                <span class="form-control-feedback d-arrow-icon" style="padding-right: 85px"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                                 <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameterUOM" name="parameterUOM"  ng-options="parameterUOM as parameterUOM.uom for parameterUOM in parameterUOMs track by parameterUOM.uom" tabindex="0" aria-invalid="false" required>
                                                                                                     <option value="" class="" selected="selected">Select Units ..</option>
                                                                                                 </select>
@@ -911,7 +910,7 @@
 
                                                                             <div class="" style="float:left;width:90%;" ng-init="loadAllRules()">
                                                                                 <label class="control-label">Select Rule </label>
-                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                <span class="form-control-feedback d-arrow-icon" style="padding-right: 85px"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                 <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedRule" name="param" ng-options="rule for rule in readingRules" tabindex="0" aria-invalid="false" required>
                                                                                 <option value="" class="" selected="selected">Select Rule ..</option>
                                                                                 </select>
@@ -1459,7 +1458,7 @@
                                                                     <td>{{ppmSchedules.startDate | date :  "dd-MM-y"}}</td>
                                                                     <td>{{ppmSchedules.endDate | date :  "dd-MM-y"}}</td>
                                                                     <td>{{ppmSchedules.employeeName}}</td>
-                                                                    <td>{{ppmSchedules.jobStartTime | date :  "dd-MM-y h:mm:ss Z"}}</td>{{ppmSchedules.plannedHours}}</td>
+                                                                    <td>{{ppmSchedules.jobStartTime | date :  "dd-MM-y h:mm a"}}</td>{{ppmSchedules.plannedHours}}</td>
                                                                     <td>{{ppmSchedules.frequencyPrefix}}&nbsp; {{ppmSchedules.frequencyDuration}}&nbsp; {{ppmSchedules.frequency}}</td>
                                                                     <!--<td class="text-right">-->
                                                                         <!--<a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>-->
@@ -1815,7 +1814,7 @@
                                                                 <td>{{amcSchedule.startDate | date :  "dd-MM-y"}}</td>
                                                                 <td>{{amcSchedule.endDate | date :  "dd-MM-y"}}</td>
                                                                 <td>{{amcSchedule.employeeName}}</td>
-                                                                <td>{{amcSchedule.jobStartTime | date :  "dd-MM-y h:mm:ss Z"}}</td>
+                                                                <td>{{amcSchedule.jobStartTime | date :  "dd-MM-y h:mm a"}}</td>
                                                                 <td>
                                                                 {{amcSchedule.plannedHours}}</td>
                                                                 <td>{{amcSchedule.frequencyPrefix}}&nbsp; {{amcSchedule.frequencyDuration}}&nbsp; {{amcSchedule.frequency}}</td>

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -182,6 +183,9 @@ public class EmployeeResource {
     public ResponseEntity<?> employeeJobUpdate(@RequestBody CheckInOutDTO checkInOut) {
         checkInOut.setUserId(SecurityUtils.getCurrentUserId());
         employeeService.saveCheckOutInfo(checkInOut);
+        if(StringUtils.isNotEmpty(checkInOut.getErrorMessage())) {
+        		return new ResponseEntity<String>("{ \"empId\" : "+'"'+checkInOut.getEmployeeEmpId() + '"'+", \"status\" : \"failure\", \"transactionId\" : \"" + checkInOut.getId() +"\" , \"errorMessage\" : \"" + checkInOut.getErrorMessage() +"\" }", HttpStatus.OK);	
+        }
         return new ResponseEntity<String>("{ \"empId\" : "+'"'+checkInOut.getEmployeeEmpId() + '"'+", \"status\" : \"success\", \"transactionId\" : \"" + checkInOut.getId() +"\" }", HttpStatus.OK);
     }
 

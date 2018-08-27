@@ -3,7 +3,7 @@
 <div class="crud-form"
      data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="loadPageTop();loadingStart();loadProjectsList();loadSite();">
     <div class="titleCon">
-            <h3>{{site.name}}</h3>
+            <h3>{{site.name | uppercase}}</h3>
     </div>
 
     <div>
@@ -70,7 +70,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label class="control-label">Site Name<span class="red-star">*</span> </label>
-                                                <input id='siteName' ng-model="site.name" class='form-control InputTxtCaps'
+                                                <input id='siteName' ng-model="site.name" class='form-control InputTxtCapsAll'
                                                        name='siteName' type='text' value=""
                                                        ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
                                                 <div ng-show="form.$submitted || form.siteName.$touched">
@@ -262,7 +262,7 @@
                                             autocomplete="off" />
 
                                             <div ng-show="sStatus">
-                                              <p class="help-block" style="color: maroon">From time is requied</p>
+                                              <p class="help-block" style="color: maroon">From time is required</p>
                                             </div>
 
 				                        </div>
@@ -277,7 +277,7 @@
                                              autocomplete="off" />
 
                                             <div ng-show="eStatus">
-                                                  <p class="help-block" style="color: maroon">To time is requied</p>
+                                                  <p class="help-block" style="color: maroon">To time is required</p>
                                             </div>
 
 				                        </div>

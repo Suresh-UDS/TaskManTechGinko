@@ -213,8 +213,8 @@
 								<tr ng-repeat="employee in employees"
 									repeat-done="initDataTables()">
 									<td>{{employee.empId}}</td>
-									<td>{{employee.name}} {{employee.lastName}}</td>
-									<td>{{employee.projectName}}</td>
+									<td>{{employee.name | uppercase}} {{employee.lastName | uppercase}}</td>
+									<td>{{employee.projectName | uppercase}}</td>
 									<td ng-if="employee.enrolled_face"><a id="images" href="#"
 										onClick="$('#enrollImageModal').modal()"
 										data-target="#enrollImageModal"
@@ -363,13 +363,13 @@
 												<tr>
 
 													<td>Firstname</td>
-													<td>{{employee.name}}</td>
+													<td>{{employee.name | uppercase}}</td>
 
 												</tr>
 												<tr>
 
 													<td>Lastname</td>
-													<td>{{employee.lastName}}</td>
+													<td>{{employee.lastName | uppercase}}</td>
 
 												</tr>
 												<tr>

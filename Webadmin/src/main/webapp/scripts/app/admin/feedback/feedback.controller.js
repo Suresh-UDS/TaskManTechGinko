@@ -57,9 +57,9 @@ angular.module('timeSheetApp')
 
         $scope.searchCriteria = {};
 
-        $scope.selectedProject = {};
+        $scope.selectedProject = null;
 
-        $scope.selectedSite = {};
+        $scope.selectedSite = null;
 
         $scope.selectedBlock = null;
 
@@ -105,7 +105,13 @@ angular.module('timeSheetApp')
         $scope.loadProjects = function () {
                 ProjectComponent.findAll().then(function (data) {
                 $scope.projects = data;
-
+                    //
+                    // for(var i=0;i<$scope.projects.length;i++)
+                    // {
+                    //     $scope.uiClient[i] = $scope.projects[i].name;
+                    // }
+                    // $scope.clientFilterDisable = false;
+                    //
             });
         };
 
@@ -113,10 +119,58 @@ angular.module('timeSheetApp')
                 ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
                     $scope.selectedSite = null;
                 $scope.sites = data;
-
+                    // //
+                    // for(var i=0;i<$scope.sites.length;i++)
+                    // {
+                    //     $scope.uiSite[i] = $scope.sites[i].name;
+                    // }
+                    // $scope.siteSpin = false;
+                    // $scope.siteFilterDisable = false;
+                    // //
 
             });
         };
+
+
+        //Filter
+        // Load Clients for selectbox //
+        // $scope.clientFilterDisable = true;
+        // $scope.uiClient = [];
+        // $scope.getClient = function (search) {
+        //     var newSupes = $scope.uiClient.slice();
+        //     if (search && newSupes.indexOf(search) === -1) {
+        //         newSupes.unshift(search);
+        //     }
+        //     return newSupes;
+        // }
+
+        //Load Sites for selectbox //
+        // $scope.siteFilterDisable = true;
+        // $scope.uiSite = [];
+        // $scope.getSite = function (search) {
+        //
+        //     var newSupes = $scope.uiSite.slice();
+        //     if (search && newSupes.indexOf(search) === -1) {
+        //         newSupes.unshift(search);
+        //     }
+        //     return newSupes;
+        // }
+
+        //
+        // $scope.loadSearchProject = function (searchProject) {
+        //     $scope.clearField = false;
+        //     $scope.hideSite = false;
+        //     $scope.siteSpin = true;
+        //     $scope.uiSite.splice(0,$scope.uiSite.length);
+        //     $scope.selectedProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
+        // }
+        // $scope.loadSearchSite = function (searchSite) {
+        //     $scope.hideSite = true;
+        //     $scope.selectedSite = $scope.sites[$scope.uiSite.indexOf(searchSite)]
+        //     $scope.show = false;
+        // }
+
+        //
 
         $scope.searchLocations = function () {
             $scope.searchCriteria.block = null;
@@ -129,8 +183,8 @@ angular.module('timeSheetApp')
                     $scope.searchCriteria.siteId = null;
                     $scope.searchCriteria.findAll = false;
                 }
-                
-                
+
+
                 LocationComponent.search($scope.searchCriteria).then(function (data) {
                     $scope.filteredLocations = data.transactions;
                     console.log('searchLocations- ', $scope.filteredLocations);
@@ -386,7 +440,7 @@ angular.module('timeSheetApp')
                     }
 
                 }
-                    
+
             }).catch(function(res){
                 $rootScope.loadingStop();
                 $scope.feedbackListLoader = true;
@@ -426,8 +480,8 @@ angular.module('timeSheetApp')
         $scope.clearFilter = function() {
 
             $scope.clearField = true;
-            $scope.selectedSite = {};
-            $scope.selectedProject = {};
+            $scope.selectedSite = null;
+            $scope.selectedProject = null;
             $scope.searchCriteria = {};
             //$rootScope.searchCriteriaSite = null;
             $scope.averageRating = '0';

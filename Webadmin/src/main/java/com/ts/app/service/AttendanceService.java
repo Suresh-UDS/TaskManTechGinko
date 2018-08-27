@@ -60,7 +60,7 @@ import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 
 /**
- * Service class for managing users.
+ * Service class for managing employee attendance functions.
  */
 @Service
 @Transactional
@@ -638,7 +638,8 @@ public class AttendanceService extends AbstractService {
 				Set<Long> subEmpIds = new TreeSet<Long>();
 				if (employee != null) {
 					Hibernate.initialize(employee.getSubOrdinates());
-					findAllSubordinates(employee, subEmpIds);
+					int levelCnt = 1;
+					findAllSubordinates(employee, subEmpIds, levelCnt);
 					log.debug("List of subordinate ids -" + subEmpIds);
 					List<Long> subEmpList = new ArrayList<Long>();
 					subEmpList.addAll(subEmpIds);

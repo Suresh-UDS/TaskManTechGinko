@@ -158,7 +158,7 @@
                         <tbody>
                         <tr ng-repeat="quotation in quotations">
                             <td>{{quotation.serialId}}</td>
-                            <td>{{quotation.title}}</td>
+                            <td>{{quotation.title | uppercase}}</td>
                             <td>{{quotation.projectName}}</td>
                             <td>{{quotation.siteName}}</td>
                             <td>{{quotation.createdByUserName}}</td>
@@ -465,8 +465,8 @@
                                                     <!--</select>-->
                                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable" ng-change="loadDepSites(searchProject)">
-                                                        <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :clearField?'Select Client':searchProject}}</ui-select-match>
+                                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable || projectsList.length == 0" ng-change="loadDepSites(searchProject)">
+                                                        <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client1' :clearField?'Select Client2':searchProject}}</ui-select-match>
                                                         <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
                                                             <div ng-bind="client"></div>
                                                         </ui-select-choices>
@@ -486,7 +486,7 @@
                                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sitesList.length == 0" ng-change="loadSearchSite(searchSite)" ng-click="loadSearchSite(searchSite)">
                                                         <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' :clearField?'Select Site':hideSite?'Select Site':searchSite }}</ui-select-match>
-                                                        <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
+                                                        <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search track by $index">
                                                             <div ng-bind="site"></div>
                                                         </ui-select-choices>
                                                     </ui-select>

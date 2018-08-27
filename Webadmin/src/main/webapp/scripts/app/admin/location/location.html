@@ -143,11 +143,11 @@
                             <tbody>
                             <tr ng-repeat=" location in locations">
                                <td>{{location.id}}</td>
-                                <td>{{location.projectName}}</td>
-                                <td>{{location.siteName}}</td>
-                                <td>{{location.block}}</td>
-                                <td>{{location.floor}}</td>
-                                <td>{{location.zone}}</td>
+                                <td>{{location.projectName | uppercase}}</td>
+                                <td>{{location.siteName | uppercase}}</td>
+                                <td>{{location.block | uppercase}}</td>
+                                <td>{{location.floor | uppercase}}</td>
+                                <td>{{location.zone | uppercase}}</td>
                                 <td>
                                     <!--<button  title="Generate QR"   data-toggle="modal" data-target="#qrcodeModal" data-dismiss="#qrcodeModal" class="btn btn-simple btn-info btn-icon like" ng-click="generateQR(location.siteId,location.id)"> <i style="font-size: 20px !important; " class="fa fa-qrcode"></i></button>-->
 
@@ -449,7 +449,7 @@
                                                 <ui-select ng-model="searchBlock" ng-disabled="blockFilterDisable || blocksList.length == 0" ng-change="loadDepFloors(searchBlock)" ng-click="loadDepFloors(searchBlock)">
                                                     <ui-select-match placeholder="Select Block...">{{blocksList.length == 0 ? 'Select Block' : searchBlock.searchStatus ? searchBlock.name?searchBlock.name:'Select Block' : hideBlock ?clearField?'Select Block':searchBlock :'Select Block' }}</ui-select-match>
                                                     <ui-select-choices  repeat="block in getBlock($select.search) | filter: $select.search">
-                                                        <div ng-bind="block"></div>
+                                                        <div ng-bind="block | uppercase"></div>
                                                     </ui-select-choices>
                                                 </ui-select>
                                                 <span ng-if="blocksList.length == 0"><p class="error-msg margin0">No Blocks</p></span>
@@ -469,7 +469,7 @@
                                                     <ui-select-match placeholder="Select Floor...">{{floorsList.length == 0 ? 'Select Floor' : searchFloor.searchStatus ? searchFloor.name?searchFloor.name:'Select Floor' : hideFloor ?clearField?'Select Floor':searchFloor :'Select Floor' }}</ui-select-match>
 
                                                     <ui-select-choices  repeat="floor in getFloor($select.search) | filter: $select.search">
-                                                        <div ng-bind="floor"></div>
+                                                        <div ng-bind="floor | uppercase"></div>
                                                     </ui-select-choices>
                                                 </ui-select>
                                                 <span ng-if="floorsList.length == 0"><p class="error-msg margin0">No Floor</p></span>
@@ -487,7 +487,7 @@
                                                 <ui-select ng-model="searchZone" ng-disabled="zoneFilterDisable || zonesList.length == 0" ng-change="loadSearchZones(searchZone)" ng-click="loadSearchZones(searchZone)">
                                                     <ui-select-match placeholder="Select Zone...">{{zonesList.length == 0 ? 'Select Zone' : searchZone.searchStatus ? searchZone.name?searchZone.name:'Select Zone' : hideZone ?clearField?'Select Zone':searchZone :'Select Zone' }}</ui-select-match>
                                                     <ui-select-choices  repeat="zone in getZone($select.search) | filter: $select.search">
-                                                        <div ng-bind="zone"></div>
+                                                        <div ng-bind="zone | uppercase"></div>
                                                     </ui-select-choices>
                                                 </ui-select>
                                                 <span ng-if="zonesList.length == 0"><p class="error-msg margin0">No Zone</p></span>
