@@ -64,20 +64,16 @@
                 <ion-col col-12 id="{{i}}" class="collapse padding-left0">
                     <table>
                         <tr>
-                            <td width="30%" class="clr-orange"  text-center>Cost</td>
-                            <td width="30%" class="clr-orange"  text-center>No</td>
-                            <td width="30%" class="clr-orange"  text-center>UOM</td>
-                            <td width="10%" class="clr-orange" text-center>Action</td>
-                            <!--<td width="10%" text-center></td>-->
+                            <td width="30%" class="clr-orange">Cost</td>
+                            <td width="30%" class="clr-orange">No</td>
+                            <td width="30%" class="clr-orange">UOM</td>
+                            <td width="10%" class="clr-orange">Action</td>
                         </tr>
                         <tr>
-                            <td class="" text-center><p>{{rate.cost}}</p></td>
-                            <!--<td class="" text-center><p>{{rate.number}}</p></td>-->
-                            <td class="" text-center><p><input  text-center type="number" class="form-control align-center" [(ngModel)]="rate.number" (change)="addTotal(i,rate.no,rate.cost)"></p></td>
-                            <td class="" text-center><p>{{rate.uom}}</p></td>
-                            <!--<td> <p><i class="material-icons clr-red" (click)="remove(i)">close</i></p></td>-->
-                            <td text-center><ion-icon name="close" class="clr-red" (click)="remove(i)"></ion-icon></td>
-                            <!--<td text-center><ion-icon name="create" class="clr-green" (click)="addRates($event)"></ion-icon></td>-->
+                            <td class=""><p>{{rate.cost}}</p></td>
+                            <td class=""><p><input type="number" class="form-control align-center width15" [(ngModel)]="rate.number" (change)="addTotal(i,rate.number,rate.cost)"></p></td>
+                            <td class=""><p>{{rate.uom}}</p></td>
+                            <td> <p><i class="material-icons clr-red" (click)="remove(i)">close</i></p></td>
                         </tr>
                     </table>
                 </ion-col>
