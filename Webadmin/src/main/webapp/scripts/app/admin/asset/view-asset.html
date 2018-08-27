@@ -176,7 +176,7 @@
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Acquired Date</td>
-                                                                       <td>{{assetDetail.acquiredDate}} </td>
+                                                                       <td>{{assetDetail.acquiredDate | date :  'dd-MM-yyyy'}} </td>
 
                                                                    </tr>
                                                                    <tr>
@@ -236,12 +236,12 @@
                                                                    </tr>
                                                                    <tr>
                                                                        <td>From Date</td>
-                                                                       <td> {{assetDetail.warrantyFromDate}}</td>
+                                                                       <td> {{assetDetail.warrantyFromDate | date :  'dd-MM-yyyy'}}</td>
 
                                                                    </tr>
                                                                    <tr>
                                                                        <td>To Date</td>
-                                                                       <td> {{assetDetail.warrantyToDate}}</td>
+                                                                       <td> {{assetDetail.warrantyToDate | date :  'dd-MM-yyyy'}}</td>
 
                                                                    </tr>
                                                                    <!-- <tr>
@@ -373,7 +373,7 @@
                                                    <tr ng-repeat="ticket in tickets">
                                                        <td><a class="job-txt" ui-sref="view-ticket({ id: ticket.id })">{{ticket.id}}</a></td>
                                                        <td>{{ticket.title}}</td>
-                                                       <td>{{ticket.createdDate}}</td>
+                                                       <td>{{ticket.createdDate | date :  'dd-MMM-yyyy @ hh:mm a'}}</td>
                                                        <td>{{ticket.siteName}}</td>
                                                        <td>{{ticket.severity}}</td>
                                                        <td>{{ticket.status}}</td>
@@ -404,11 +404,12 @@
                                                    <tr>
                                                        <th>Title</th>
                                                        <th>Schedule Type</th>
-                                                       <th>Schedule Start Date</th>
-                                                       <th>Schedule End Date</th>
+                                                       <!-- <th>Schedule Start Date</th>
+                                                       <th>Schedule End Date</th> -->
                                                        <th>Job ID</th>
                                                        <th>Start Time</th>
                                                        <th>End Time</th>
+                                                       <th>Completed Time</th>
                                                        <th>Assigned</th>
                                                        <th>Status</th>
                                                    </tr>
@@ -419,11 +420,12 @@
                                                    <tr ng-repeat="ppmList in ppmJobLists">
                                                    	  <td>{{ppmList.title}}</td>
                                                        <td>{{ppmList.description}}</td>
-                                                       <td>{{ppmList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
-                                                       <td>{{ppmList.scheduleEndDate | date:'dd-MMM-yyyy'}}</td>
+                                                       <!-- <td>{{ppmList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
+                                                       <td>{{ppmList.scheduleEndDate | date:'dd-MMM-yyyy'}}</td> -->
                                                        <td><a class="job-txt" ui-sref="view-job({ id: ppmList.id })">{{ppmList.id}}</a></td>
                                                        <td>{{ppmList.plannedStartTime | date:'dd-MMM-yyyy @ hh:mm a'}}</td>
                                                        <td>{{ppmList.plannedEndTime | date:'dd-MMM-yyyy @ hh:mm a'}}</td>
+                                                       <td><span ng-if ="ppmList.actualEndTime">{{ppmList.actualEndTime | date:'dd-MMM-yyyy @ hh:mm a'}}</span><span ng-if ="!ppmList.actualEndTime">-</span></td>
                                                        <td>{{ppmList.employeeName}}</td>
                                                        <td>{{ppmList.jobStatus}}</td>
                                                    </tr>
@@ -450,11 +452,12 @@
                                                    <tr>
                                                    	  <th>Title</th>
                                                        <th>Schedule Type</th>
-                                                       <th>Schedule Start Date</th>
-                                                       <th>Schedule End Date</th>
+                                                       <!-- <th>Schedule Start Date</th>
+                                                       <th>Schedule End Date</th> -->
                                                        <th>Job ID</th>
                                                        <th>Start Time</th>
                                                        <th>End Time</th>
+                                                       <th>Completed Time</th>
                                                        <th>Assigned</th>
                                                        <th>Status</th>
                                                    </tr>
@@ -465,11 +468,12 @@
                                                    <tr ng-repeat="amcList in amcJobLists">
                                                        <td>{{amcList.title}}</td>
                                                        <td>{{amcList.description}}</td>
-                                                       <td>{{amcList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
-                                                       <td>{{amcList.scheduleEndDate | date:'dd-MMM-yyyy'}}</td>
+                                                      <!--  <td>{{amcList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
+                                                       <td>{{amcList.scheduleEndDate | date:'dd-MMM-yyyy'}}</td> -->
                                                        <td><a class="job-txt" ui-sref="view-job({ id: amcList.id })">{{amcList.id}}</a></td>
                                                        <td>{{amcList.plannedStartTime | date:'dd-MMM-yyyy @ hh:mm a'}}</td>
                                                        <td>{{amcList.plannedEndTime | date:'dd-MMM-yyyy @ hh:mm a'}}</td>
+                                                       <td><span ng-if="amcList.actualEndTime">{{amcList.actualEndTime | date:'dd-MMM-yyyy @ hh:mm a'}}</span ng-if="!amcList.actualEndTime">-<span></span></td>
                                                        <td>{{amcList.employeeName}}</td>
                                                        <td>{{amcList.jobStatus}}</td>
                                                    </tr>
@@ -578,7 +582,7 @@
                                                       <td>{{ppmSchedules.startDate | date :  "dd-MM-y"}}</td>
                                                       <td>{{ppmSchedules.endDate | date :  "dd-MM-y"}}</td>
                                                       <td>{{ppmSchedules.employeeName}}</td>
-                                                      <td>{{ppmSchedules.jobStartTime | date :  "dd-MM-y h:mm:ss Z"}}</td>
+                                                      <td>{{ppmSchedules.jobStartTime | date :  'dd-MMM-yyyy @ hh:mm a'}}</td>
                                                       <td>
                                                       {{ppmSchedules.plannedHours}}</td>
                                                       <td>{{ppmSchedules.frequencyPrefix}}&nbsp; {{ppmSchedules.frequencyDuration}}&nbsp; {{ppmSchedules.frequency}}</td>
@@ -677,7 +681,7 @@
                                                                 <td>{{amcSchedule.startDate | date :  "dd-MM-y"}}</td>
                                                                 <td>{{amcSchedule.endDate | date :  "dd-MM-y"}}</td>
                                                                 <td>{{amcSchedule.employeeName}}</td>
-                                                                <td>{{amcSchedule.jobStartTime | date :  "dd-MM-y h:mm:ss Z"}}</td>
+                                                                <td>{{amcSchedule.jobStartTime | date :  'dd-MMM-yyyy @ hh:mm a'}}</td>
                                                                 <td>
                                                                 {{amcSchedule.plannedHours}}</td>
                                                                 <td>{{amcSchedule.frequencyPrefix}}&nbsp; {{amcSchedule.frequencyDuration}}&nbsp; {{amcSchedule.frequency}}</td>
@@ -895,7 +899,7 @@
                                                                       <tbody>
                                                                       <tr ng-show="assetReadings" ng-repeat="reading in assetReadings">
                                                                           <td> <a  ng-click="viewAssetReading(reading.id)"><span class="label label-warning">{{reading.name}}</span></a></td>
-                                                                          <td>{{reading.createdDate | date: "dd-MM-yyyy hh:mm:ss"}}</td>
+                                                                          <td>{{reading.createdDate | date:'dd-MMM-yyyy @ hh:mm a'}}</td>
                                                                           <td>{{reading.initialValue}}&nbsp; {{reading.uom}}</td>
                                                                           <td>{{reading.finalValue}}&nbsp; {{reading.uom}}</td>
                                                                           <td>{{reading.consumption}}&nbsp; {{reading.uom}}</td>
@@ -947,7 +951,7 @@
                                                                 <td>{{siteHistory.assetTitle}}</td>
                                                                 <td>{{siteHistory.assetCode}}</td>
                                                                 <td>{{siteHistory.siteName}}</td>
-                                                                <td>{{siteHistory.createdDate | date: "dd-MM-yyyy hh:mm:ss"}}</td>
+                                                                <td>{{siteHistory.createdDate | date:'dd-MMM-yyyy @ hh:mm a'}}</td>
                                                                 <!-- <td>{{amcSchedule.endDate}}</td>
                                                                 <td>{{amcSchedule.frequencyPrefix}}&nbsp; {{amcSchedule.frequencyDuration}}&nbsp; {{amcSchedule.frequency}}</td> -->
                                                                 <!-- <td class="text-right">
@@ -995,7 +999,7 @@
                                                                 <td>{{statusHistory.assetTitle}}</td>
                                                                 <td>{{statusHistory.assetCode}}</td>
                                                                 <td>{{statusHistory.status}}</td>
-                                                                <td>{{statusHistory.createdDate | date: "dd-MM-yyyy hh:mm:ss"}}</td>
+                                                                <td>{{statusHistory.createdDate | date:'dd-MMM-yyyy @ hh:mm a'}}</td>
 
                                                                 <!-- <td class="text-right">
                                                                     <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
