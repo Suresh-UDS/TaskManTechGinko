@@ -28,6 +28,8 @@ spring:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
         show_sql: true
+        hibernate:
+            ddl-auto: update
         properties:
             hibernate.cache.use_second_level_cache: true
             hibernate.cache.use_query_cache: true
