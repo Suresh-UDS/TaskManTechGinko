@@ -803,23 +803,35 @@ public class AttendanceService extends AbstractService {
 
 	public String uploadExistingCheckInImage() {
 		// TODO Auto-generated method stub
-		List<Attendance> attendanceEntity = attendanceRepository.findAll();
-		log.debug("Length of attendance List" +attendanceEntity.size());
-		for(Attendance attendance : attendanceEntity) { 
-			if(attendance.getCheckInImage() != null) {
-				if(attendance.getCheckInImage().indexOf("data:image") == 0) { 
-					String base64String = attendance.getCheckInImage().split(",")[1];
-					boolean isBase64 = Base64.isBase64(base64String);
-					AttendanceDTO attendanceModel = mapperUtil.toModel(attendance, AttendanceDTO.class);
-					if(isBase64) { 
-						long dateTime = new Date().getTime();
-						attendanceModel = s3ServiceUtils.uploadCheckInImage(attendanceModel.getCheckInImage(), attendanceModel, dateTime);
-						attendance.setCheckInImage(attendanceModel.getCheckInImage());
-						attendanceRepository.save(attendance);
+		int currPage = 1;
+		int pageSize = 100;
+		Pageable pageRequest = createPageRequest(currPage, pageSize);
+ 
+		Page<Attendance> attnResult = attendanceRepository.findAll(pageRequest);
+		List<Attendance> attendanceEntity = attnResult.getContent();
+		while(CollectionUtils.isNotEmpty(attendanceEntity)) {
+			log.debug("Length of attendance List" +attendanceEntity.size());
+			for(Attendance attendance : attendanceEntity) { 
+				if(attendance.getCheckInImage() != null) {
+					if(attendance.getCheckInImage().indexOf("data:image") == 0) { 
+						String base64String = attendance.getCheckInImage().split(",")[1];
+						boolean isBase64 = Base64.isBase64(base64String);
+						AttendanceDTO attendanceModel = mapperUtil.toModel(attendance, AttendanceDTO.class);
+						if(isBase64) { 
+							long dateTime = new Date().getTime();
+							attendanceModel = s3ServiceUtils.uploadCheckInImage(attendanceModel.getCheckInImage(), attendanceModel, dateTime);
+							attendance.setCheckInImage(attendanceModel.getCheckInImage());
+						}
 					}
 				}
 			}
-		} 
+			attendanceRepository.save(attendanceEntity);
+			currPage++;
+			pageRequest = createPageRequest(currPage, pageSize);
+			attnResult = attendanceRepository.findAll(pageRequest);
+			attendanceEntity = attnResult.getContent();
+			
+		}	
 		return "Upload attendance checkInImage successfully";
 	}
 
