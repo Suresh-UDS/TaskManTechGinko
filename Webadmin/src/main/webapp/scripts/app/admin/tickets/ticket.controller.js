@@ -418,7 +418,7 @@ angular.module('timeSheetApp')
             $scope.empSpin = true;
             $scope.employeeFilterDisable = true;
             if( $scope.searchProject || $scope.searchSite)
-            {   
+            {
                 if($scope.searchProject){
                     $scope.searchCriteria.projectId = $scope.searchProject.id;
                 }else{
@@ -427,9 +427,9 @@ angular.module('timeSheetApp')
                 if($scope.searchSite){
                     $scope.searchCriteria.siteId = $scope.searchSite.id;
                 }else{
-                   $scope.searchCriteria.siteId = null; 
+                   $scope.searchCriteria.siteId = null;
                 }
-                
+
                 console.log('Employee Load',$scope.searchCriteria);
                 EmployeeComponent.search($scope.searchCriteria).then(function (data) {
                     $scope.selectedEmployee = null;
@@ -623,8 +623,8 @@ angular.module('timeSheetApp')
          }
 
         };
-        
-//        $scope.close = function() { 
+
+//        $scope.close = function() {
 //        	$scope.ticketImage = "#";
 //        }
 
@@ -758,6 +758,9 @@ angular.module('timeSheetApp')
                 });
             }
 
+        $scope.closeModal = function () {
+            $('#RightModal-view').modal('hide');
+        }
 
         $scope.deleteConfirm = function (ticket){
             $scope.confirmTicket = ticket;
