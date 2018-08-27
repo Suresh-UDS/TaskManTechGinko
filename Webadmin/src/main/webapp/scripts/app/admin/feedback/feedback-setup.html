@@ -224,7 +224,7 @@
                                 <td>{{feedbackMapping.floor}}</td>
                                 <td>{{feedbackMapping.zone}}</td>
                                 <td>{{feedbackMapping.feedback.name | uppercase}}</td>
-                                <td><a  ng-click="" ui-sref=""   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a></td>
+                                <td><a  data-toggle="modal" data-target="#RightModal-view" ng-click="viewFbSetup(feedbackMapping.id)"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a></td>
                             </tr>
                             </tbody>
                         </table>
@@ -606,3 +606,75 @@
     <!--</div>-->
 <!--</div>-->
 <!--  End Modal -->
+
+<div class="modal right fade" id="RightModal-view" tabindex="-1" role="dialog" aria-labelledby="RightModal">
+    <div class="modal-dialogNew" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel2">Feedback Mapping Details - Feedback Mapping id - {{FbSetupList.id}}</h4>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="card">
+
+                    <div class="card-content">
+
+                        <div class="table-responsive">
+                             <table class="table">
+                                 <tbody>
+                                
+                                 <tr>
+                                     <td>Client</td>
+                                     <td>{{FbSetupList.projectName| uppercase}}</td>
+                                 </tr>
+                                  <tr>
+                                    <td>Site</td>
+                                    <td>{{FbSetupList.siteName| uppercase}}</td>
+                                 </tr>
+                                 <tr>
+                                    <td>Block</td>
+                                    <td>{{FbSetupList.block}}</td>
+
+                                  </tr>
+                                  <tr>
+                                    <td>Floor</td>
+                                    <td>{{FbSetupList.floor}}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>Zone</td>
+                                    <td>{{FbSetupList.zone}}</td>
+                                  </tr>
+                                   <tr>
+                                     <td>Feedback Name</td>
+                                     <td>{{FbSetupList.feedback.name | uppercase}}</td>
+                                 </tr>
+                                 </tbody>
+                             </table>
+                         </div>
+
+                        <div class="row">
+
+                            <div class="col-md-offset-8 pull-right">
+                                <button class="btn btn-default close-button-right b10" type="button"
+                                        data-dismiss="modal" ng-click="close()">
+                                    <!-- <i class="material-icons">keyboard_arrow_left</i> Back -->
+                                     Close
+                                </button>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div><!--End View modal -->
