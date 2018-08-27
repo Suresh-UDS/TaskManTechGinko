@@ -18,15 +18,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.ChecklistItem;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Material;
 import com.ts.app.domain.MaterialIndent;
 import com.ts.app.domain.MaterialIndentItem;
+import com.ts.app.domain.MaterialTransaction;
 import com.ts.app.domain.User;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.InventoryRepository;
+import com.ts.app.repository.InventoryTransactionRepository;
 import com.ts.app.repository.MaterialIndentRepository;
 import com.ts.app.repository.MaterialIndentSpecification;
 import com.ts.app.repository.ProjectRepository;
@@ -35,7 +36,6 @@ import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.ChecklistItemDTO;
 import com.ts.app.web.rest.dto.MaterialIndentDTO;
 import com.ts.app.web.rest.dto.MaterialIndentItemDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
@@ -63,6 +63,9 @@ public class MaterialIndentService extends AbstractService {
 	private InventoryRepository inventoryRepository;
 	
 	@Inject
+	private InventoryTransactionRepository inventTransactionRepository;
+	
+	@Inject
 	private EmployeeRepository employeeRepository;
 	
 	@Inject
@@ -73,7 +76,8 @@ public class MaterialIndentService extends AbstractService {
 		indentEntity.setRequestedDate(DateUtil.convertToTimestamp(materialIndentDTO.getRequestedDate()));
 		indentEntity.setSite(siteRepository.findOne(materialIndentDTO.getSiteId()));
 		indentEntity.setProject(projectRepository.findOne(materialIndentDTO.getProjectId()));
-		indentEntity.setRequestedBy(employeeRepository.findOne(materialIndentDTO.getIssuedById()));
+		indentEntity.setRequestedBy(employeeRepository.findOne(materialIndentDTO.getRequestedById()));
+		indentEntity.setIssuedBy(employeeRepository.findOne(materialIndentDTO.getIssuedById()));
 		indentEntity.setActive(MaterialIndent.ACTIVE_YES);
 		List<MaterialIndentItemDTO> indentItems = materialIndentDTO.getItems();
 		List<MaterialIndentItem> indentItemEntity = new ArrayList<MaterialIndentItem>();
@@ -83,11 +87,22 @@ public class MaterialIndentService extends AbstractService {
 			materialIndentItm.setMaterial(inventoryRepository.findOne(indentItm.getMaterialId()));
 			indentItemEntity.add(materialIndentItm);
 		}
+		MaterialTransaction materialTranc = null;
 		Set<MaterialIndentItem> materialIndentItem = new HashSet<MaterialIndentItem>();
 		materialIndentItem.addAll(indentItemEntity);
 		indentEntity.setItems(materialIndentItem);
+		if(materialIndentDTO.getTransactionId() > 0) {
+			materialTranc = inventTransactionRepository.findOne(materialIndentDTO.getTransactionId());
+			indentEntity.setTransaction(materialTranc);
+		}else {
+			indentEntity.setTransaction(null);
+		}
 		indentEntity = materialIndentRepository.save(indentEntity);
 		log.debug("Save object of Inventory: {}" + indentEntity);
+		if (materialTranc != null) {
+			materialTranc.setMaterialIndent(indentEntity);;
+			inventTransactionRepository.save(materialTranc);
+		}
 		materialIndentDTO = mapperUtil.toModel(indentEntity, MaterialIndentDTO.class);
 		return materialIndentDTO;
 	}

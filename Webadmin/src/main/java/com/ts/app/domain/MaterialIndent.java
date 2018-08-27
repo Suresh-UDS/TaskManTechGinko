@@ -29,6 +29,7 @@ public class MaterialIndent extends AbstractAuditingEntity implements Serializab
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
 	private long id;
 	
 	@ManyToOne()
@@ -147,17 +148,6 @@ public class MaterialIndent extends AbstractAuditingEntity implements Serializab
 
 	public void setTransaction(MaterialTransaction transaction) {
 		this.transaction = transaction;
-	}
-
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		if(items != null) {
-			sb.append(", items : ");
-			for(MaterialIndentItem item : items) {
-				sb.append("[ id :"+ item.getId() + ", quantity : "+ item.getQuantity() + ", material : "+ item.getMaterial() + ", materialIndent : "+ item.getMaterialIndent() +"]");
-			}
-		}
-		return sb.toString();
 	}
 
 }
