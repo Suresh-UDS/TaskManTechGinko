@@ -804,12 +804,14 @@ public class AttendanceService extends AbstractService {
 	public String uploadExistingCheckInImage() {
 		// TODO Auto-generated method stub
 		int currPage = 1;
-		int pageSize = 100;
+		int pageSize = 10;
 		Pageable pageRequest = createPageRequest(currPage, pageSize);
- 
+		log.debug("Curr Page ="+ currPage + ",  pageSize -" + pageSize);
 		Page<Attendance> attnResult = attendanceRepository.findAll(pageRequest);
 		List<Attendance> attendanceEntity = attnResult.getContent();
+		log.debug("Length of attendance List" +attendanceEntity.size());
 		while(CollectionUtils.isNotEmpty(attendanceEntity)) {
+			log.debug("Curr Page ="+ currPage + ",  pageSize -" + pageSize);
 			log.debug("Length of attendance List" +attendanceEntity.size());
 			for(Attendance attendance : attendanceEntity) { 
 				if(attendance.getCheckInImage() != null) {
