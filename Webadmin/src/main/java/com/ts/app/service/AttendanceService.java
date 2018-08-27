@@ -856,7 +856,7 @@ public class AttendanceService extends AbstractService {
 					AttendanceDTO attendanceModel = mapperUtil.toModel(attendance, AttendanceDTO.class);
 					if(isBase64) { 
 						long dateTime = new Date().getTime();
-						attendanceModel = s3ServiceUtils.uploadCheckInImage(attendanceModel.getCheckOutImage(), attendanceModel, dateTime);
+						attendanceModel = s3ServiceUtils.uploadCheckoutImage(attendanceModel.getCheckOutImage(), attendanceModel, dateTime);
 						attendance.setCheckOutImage(attendanceModel.getCheckOutImage());
 					}
 				}
