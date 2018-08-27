@@ -561,10 +561,10 @@ angular
                     // *
 			        $scope.loadQuotation = function() {
                           if($stateParams.id){
-                          	        $scope.serviceTotalCost = "";
-			        				$scope.labourTotalCost = "";
-			        				$scope.materialTotalCost = "";
-			        				$scope.totalCost = "";
+                          	        $scope.serviceTotalCost = 0;
+			        				$scope.labourTotalCost = 0;
+			        				$scope.materialTotalCost = 0;
+			        				$scope.totalCost = 0;
                             console.log('quotation id - ' + $stateParams.id);
 			        		RateCardComponent.findQuotation($stateParams.id).then(function (data) {
 			        			$scope.loadingStop();

@@ -53,10 +53,10 @@ angular.module('timeSheetApp')
         $scope.photoCount ='0';
         $scope.searchAssetName =null;
         $scope.searchAssetCode =null;
-        $scope.searchAssetType ={};
-        $scope.searchSite ={};
-        $scope.searchProject ={};
-        $scope.searchAssetGroup ={};
+        $scope.searchAssetType =null;
+        $scope.searchSite =null;
+        $scope.searchProject =null;
+        $scope.searchAssetGroup =null;
         $scope.searchAcquiredDateSer =null;
         $scope.searchCreatedDateSer =null;
         $scope.ppmSearchCriteria = {};
@@ -1110,7 +1110,7 @@ angular.module('timeSheetApp')
                     $scope.pages.currPage = $scope.localStorage.currPage;
                     $scope.searchProject = {searchStatus:'0',id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
                     $scope.searchSite = {searchStatus:'0',id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
-                    // $scope.searchAssetType = {searchStatus:'0',name:$scope.localStorage.assetTypeName};
+                    $scope.searchAssetType = {searchStatus:'0',name:$scope.localStorage.assetTypeName};
 
                 }
 
@@ -1775,8 +1775,8 @@ angular.module('timeSheetApp')
            //$scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.searchAcquiredDate = null;
             $scope.searchAssetType = null;
-            $scope.searchSite ={};
-            $scope.searchProject ={};
+            $scope.searchSite =null;
+            $scope.searchProject =null;
             $scope.searchAssetGroup = null;
             $scope.clearField = true;
             $scope.localStorage = null;
