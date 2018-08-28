@@ -25,15 +25,15 @@
                                             </tr>
                                             <tr>
                                                 <td>Client Name</td>
-                                                <td class="TxtFirstCaps">{{site.projectName | uppercase}}</td>
+                                                <td  ng-if="site.projectName">{{site.projectName | uppercase}}</td>
                                             </tr>
                                             <tr>
                                                 <td>Site Name</td>
-                                                <td class="TxtFirstCaps">{{site.name | uppercase}}</td>
+                                                <td  ng-if="site.name"> {{site.name | uppercase}}</td>
                                             </tr>
                                             <tr>
                                                 <td>Address</td>
-                                                <td>{{site.address | capitalize}}</td>
+                                                <td ng-if="site.address">{{site.address | capitalize}}</td>
                                             </tr>
                                             <tr>
                                                 <td>State</td>
