@@ -538,6 +538,7 @@ angular.module('timeSheetApp')
     			$scope.searchCriteria.exportType = type;
     			$scope.searchCriteria.report = true;
                 $rootScope.exportStatusObj.exportMsg = '';
+                $scope.typeMsg = type;
                 $scope.downloader=true;
     			AttendanceComponent.exportAllData($scope.searchCriteria).then(function(data){
 	        		var result = data.results[0];

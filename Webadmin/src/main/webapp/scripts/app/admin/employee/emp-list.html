@@ -24,7 +24,7 @@
 		<div class="col-md-6 txt-align-rgt">
 
 
-			<button class="btn btn-success add-btn margn-tb0"
+			<button class="btn btn-success add-btn margn-tb0 "
 				ui-sref="add-employee" has-permission="Employee:Create"
 				ng-class="{active: $state.includes('admin')}" tabindex="0">
 				<i class="material-icons">add</i> Add
@@ -36,9 +36,10 @@
 				<i class="material-icons">location_on</i> Map
 				<div class="ripple-container"></div>
 			</button>
-			<button class="btn btn-success add-btn margn-tb0"
+			<button class="btn btn-success add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':downloader}"
 				ng-show="employees.length" ng-click="exportAllData();" tabindex="0">
 				<i class="material-icons">file_download</i> Export
+                <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
 				<div class="ripple-container"></div>
 			</button>
 
@@ -381,7 +382,7 @@
 												</tr>
 												<tr>
 													<td>User Account Linked</td>
-													<td><a href="#/view-user/{{employee.userId}}" ng-click="closeModal()">View
+													<td><a href="#/view-user/{{employee.userId}}">View
 															User Account</a></td>
 												</tr>
 

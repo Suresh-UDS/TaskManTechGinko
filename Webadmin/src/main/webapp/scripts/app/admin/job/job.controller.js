@@ -1178,6 +1178,7 @@ angular.module('timeSheetApp')
         $scope.exportAllData = function(type){
                 $scope.searchCriteria.exportType = type;
                 $rootScope.exportStatusObj.exportMsg = '';
+                $scope.typeMsg = type;
                 $scope.downloader=true;
                 JobComponent.exportAllData($scope.searchCriteria).then(function(data){
                     var result = data.results[0];

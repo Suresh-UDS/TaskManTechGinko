@@ -15,24 +15,20 @@
 
         </div>
         <div class="col-md-6 txt-align-rgt">
-
-
-
             <button class="btn btn-success add-btn margn-tb0"   ui-sref="add-vendor" ng-class="{active: $state.includes('admin')}" tabindex="0">
                 <i class="material-icons">add</i> Add
                 <div class="ripple-container"></div>
             </button>
 
-            <button class="btn btn-info add-btn margn-tb0"   title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
+            <button class="btn btn-info add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':downloader}"  title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
                 <i class="material-icons">import_contacts</i> Export Excel
+                <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
                 <div class="ripple-container"></div>
             </button>
 
+
             <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
             <div class="downloaderMd" ng-show="downloader"></div>
-
-
-
         </div>
     </div>
     <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
