@@ -257,7 +257,7 @@ export class CreateTicket {
 
   viewImage(index,img)
     {
-        let popover = this.popoverCtrl.create(QuotationImagePopoverPage,{i:img,ind:index},{cssClass:'view-img',showBackdrop:true});
+        let popover = this.popoverCtrl.create(QuotationImagePopoverPage,{i:img,ind:index},{cssClass:''});
         popover.present({
 
         });
