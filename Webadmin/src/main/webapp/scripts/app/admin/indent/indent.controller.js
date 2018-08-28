@@ -131,6 +131,7 @@ angular.module('timeSheetApp')
 				console.log(data);
 				$scope.loadingStop();
 				$scope.editIndentObj = data;
+				$scope.selectedRefNumber = $scope.editIndentObj.indentRefNumber;
 				$scope.selectedProject = {id: $scope.editIndentObj.projectId };
 				$scope.selectedSite = {id: $scope.editIndentObj.siteId };
 				$scope.selectedEmployee = {id: $scope.editIndentObj.requestedById }
@@ -202,25 +203,81 @@ angular.module('timeSheetApp')
 			$scope.indentObject.indentRefNumber = $scope.selectedRefNumber;
 			$scope.indentObject.requestedDate = new Date();
 			console.log($scope.indentObject);
-			
-			IndentComponent.create($scope.indentObject).then(function(data) { 
-				console.log(data);
-				if(data.status === 201 && data.statusText) { 
+			$scope.loadingStart();
+			IndentComponent.create($scope.indentObject).then(function(response) { 
+				console.log(response);
+				$scope.loadingStop();
+				if(response.status === 201 && response.statusText==="Created") { 
 					$scope.showNotifications('top','center','success','Material Indent has been added successfully.');
 					$location.path('/indent-list');
 				}else{
 					$scope.showNotifications('top','center','danger','Material Indent has not been created.');
 				}
-			});
+			}).catch(function(response){ 
+				console.log(response);
+				$scope.success = null;
+                $scope.loadingStop();
+                $scope.showNotifications('top','center','danger','Unable to create Material Indent. Please try again later..');
+			}); 
 			
 		}
 		
-		$scope.editMaterial = function(item) {
-			alert(JSON.stringify(item));
-			$scope.selectedItemName = item.materialName;
-			$scope.selectedItemCode = {id: item.materialId };
-			$scope.selectedStoreStock = item.materialStoreStock;
-			$scope.selectedQuantity = item.quantity;
+		$scope.showUpdateBtn = false;
+		
+		$scope.editMaterial = function(index, item) {
+			$scope.updateMaterial = item;
+			$scope.indexOf = index;
+			$scope.showUpdateBtn = true;
+			$scope.selectedItemName = $scope.updateMaterial.materialName;
+			$scope.selectedItemCode = {id: $scope.updateMaterial.materialId };
+			$scope.selectedStoreStock = $scope.updateMaterial.materialStoreStock;
+			$scope.selectedQuantity = $scope.updateMaterial.quantity;
+		}
+		
+		$scope.updateMaterialItem = function(){
+			if($scope.updateMaterial.materialStoreStock > $scope.selectedQuantity){
+				$scope.updateMaterial.quantity = $scope.selectedQuantity;
+				console.log($scope.indexOf);
+				console.log($scope.updateMaterial);
+				updateItems($scope.indexOf, $scope.updateMaterial);
+			}else{
+				$scope.showNotifications('top','center','danger','Quantity cannot execeeds to store stock');
+			}	
+		}
+		
+		$scope.selectedRow = null;
+		
+		function updateItems(index, object) {
+			$scope.materialItems[index] = object;
+			$scope.selectedRow = index;
+			$scope.selectedItemName = null;
+			$scope.selectedItemCode = {};
+			$scope.selectedStoreStock = null;
+			$scope.selectedQuantity = null;
+			$timeout(function(){ 
+				$scope.selectedRow = null;
+			},1000);
+		}	
+		
+		$scope.updateIndent = function() { 
+			if($scope.selectedProject) {
+				$scope.editIndentObj.projectId = $scope.selectedProject.id;
+			}
+			if($scope.selectedSite) {
+				$scope.editIndentObj.siteId = $scope.selectedSite.id;
+			}
+			if($scope.selectedEmployee) { 
+				$scope.editIndentObj.requestedById = $scope.selectedEmployee.id;
+			}
+			if($scope.materialItems) { 
+				$scope.editIndentObj.items = $scope.materialItems;
+			}
+			$scope.editIndentObj.indentRefNumber = $scope.selectedRefNumber;
+			
+			console.log($scope.editIndentObj);
+//			IndentComponent.update($scope.editIndentObj).then(function(resp){ 
+//				console.log(resp);
+//			});
 		}
 
         $scope.search = function () {

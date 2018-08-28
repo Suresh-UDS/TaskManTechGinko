@@ -20,11 +20,11 @@ angular.module('timeSheetApp')
                 var cb = callback || angular.noop;
                 return $http.put('api/update/materialIndent', indent).then(
                     function (response) {
-                        return cb(response);
+                        return response;
                     }).catch(
                     function (err) {
                         console.log(JSON.stringify(err));
-                        return cb(err);
+                        return err;
                     });
             },
 

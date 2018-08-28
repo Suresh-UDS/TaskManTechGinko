@@ -14,8 +14,7 @@
         <!--</div>-->
 
         <div class="cardsCon addSiteCon">
-            <form ng-show="!success" name="form" role="form" novalidate
-                  ng-submit="updateIndent()">
+            <form ng-show="!success" name="form" role="form" novalidate>
                   
                 <div class="card margin-TB-5 tablecard">
 
@@ -66,6 +65,13 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                             <div class="col-md-3">
+                                <div class="form-group   is-empty">
+                                    <label class="control-label">Reference Number <span class="red-star">*</span></label>
+                                    <input type="text" class="form-control" ng-model="selectedRefNumber" ng-disabled="true">
+                                    <span class="material-input"></span></div>
+                            </div>
 
                         </div>
                         <h3 class="HeadingTxt">Item Details </h3>
@@ -105,11 +111,19 @@
                             </div>
                             <div class="col-md-2">
 
-                                <button class="btn btn-success" ng-click="addMaterialItem()" ng-disabled="!selectedQuantity" style="padding: 12px 20px; margin-top: 16px;">
+                                <button class="btn btn-success" ng-click="addMaterialItem()" ng-show="!showUpdateBtn" ng-disabled="!selectedQuantity" style="padding: 12px 20px; margin-top: 16px;">
                                 <span class="btn-label">
                                     <i class="material-icons">add</i>
                                 </span>
                                     Add
+                                </button>
+                                
+                                
+                                <button class="btn btn-success" ng-click="updateMaterialItem()" ng-show="showUpdateBtn" ng-disabled="!selectedQuantity" style="padding: 12px 20px; margin-top: 16px;">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Update
                                 </button>
 
                             </div>
@@ -128,12 +142,12 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr ng-repeat="material in materialItems">
+                                        <tr ng-repeat="material in materialItems" ng-class="{'highlight-text':$index == selectedRow}">
                                             <td>{{material.materialItemCode}}</td>
                                             <td>{{material.materialName}}</td>
                                             <td>{{material.materialStoreStock}}</td>
                                             <td>{{material.quantity}}</td>
-                                            <td class="text-right" ng-click="editMaterial(material)"> <a class="btn btn-simple btn-info"><i class="material-icons">edit</i></a></td>
+                                            <td class="text-right" ng-click="editMaterial($index, material)"> <a class="btn btn-simple btn-info"><i class="material-icons">edit</i></a></td>
                                         </tr>
                                         <tr> 
                                         	<td ng-if="!materialItems.length" colspan="7" align="center"> No Material Items Found </td>
@@ -155,10 +169,10 @@
 
                     <div class="col-md-12">
 
-                        <button type="submit" ng-click="cancelIndent()"
+                        <button type="button" ng-click="cancelIndent()"
                                 id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
-                        <button type="submit"
+                        <button type="button" ng-click="updateIndent()"
                                 id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
                                             <i class="material-icons">check</i>
                                         </span>Update Indent</button>
