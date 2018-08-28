@@ -197,6 +197,14 @@ angular.module('timeSheetApp')
                 return $(this).data('DateTimePicker').minDate(e.date);
             });
 
+            $scope.assetPPM.jobStartTime = '';
+            $scope.ppmJobStartTime ='';
+            $scope.ppmJobStartTimeTmp ='';
+
+            $('input#ppmJobStartTime').datetimepicker().on('dp.show', function () {
+                return $(this).data('DateTimePicker').minDate(e.date);
+            });
+
             // if($scope.assetPPM.startDate > $scope.assetPPM.endDate) {
             //
             //         //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
@@ -2500,7 +2508,15 @@ angular.module('timeSheetApp')
             $scope.amcFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $('input#dateFilterAmcTo').on('dp.show',function () {
                 return $(this).data('DateTimePicker').minDate(e.date);
-            })
+            });
+
+            $scope.amcSchedule.jobStartTime = '';
+            $scope.amcJobStartTime ='';
+            $scope.amcJobStartTimeTmp ='';
+
+            $('input#amcJobStartTime').datetimepicker().on('dp.show', function () {
+                return $(this).data('DateTimePicker').minDate(e.date);
+            });
 
 
             // if($scope.amcSchedule.startDate > $scope.amcSchedule.endDate) {
