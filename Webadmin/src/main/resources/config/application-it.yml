@@ -172,15 +172,18 @@ AWS:
    s3-secretKey: uCX0tIw8hBWj/oDCdKzmFdSEZlnXmdu0yx2PIKrX
    s3-bucketName: fms-taskman
    s3-cloudfront-url: http://d1wn8hrsdttztl.cloudfront.net/
-   s3-bucketEnv: prod/
+   s3-bucketEnv: dev/
    s3-asset-path: assets/
    s3-qrcode-path: qrcode/
    s3-attendance-path: attendance/
    s3-ticket-path : tickets/
    s3-quotation-path : quotations/
    s3-enroll-path : employeeEnroll/
-   s3-checkin-path : attendanceCheckIn/
-   s3-checkout-path : attendanceCheckOut/   
+   s3-checkin-path : attendanceCheckIns/
+   s3-checkout-path : attendanceCheckOuts/
+   s3-checkinout-path : checkInOutImages/
+   s3-checklist-path : checkListImages/
+   s3-locationqr-path : locationQrCodes/
 
 scheduler:
    job:
