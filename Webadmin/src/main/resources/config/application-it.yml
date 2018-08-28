@@ -94,6 +94,10 @@ import:
         path:
             new: /opt/imports/new
             completed: /opt/imports/completed
+
+extensionImg: jpeg,jpg,png    
+extensionFile: pdf,xlsx,xls,docx,doc,csv,txt
+
 asset:
    file:
        path: /opt/asset/uploads/site      
