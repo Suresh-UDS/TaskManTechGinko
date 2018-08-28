@@ -437,7 +437,7 @@
 									<tbody>
 										<tr ng-repeat="projSite in sites">
 											<td>{{projSite.siteId}}</td>
-											<td>{{projSite.siteName}}</td>
+											<td>{{projSite.siteName | uppercase}}</td>
 											<td>
 												<button ng-disabled="isCheckedIn"
 													ng-click="checkIn(projSite.siteId,employee.empId,employee.id)"
