@@ -183,8 +183,8 @@ AWS:
    s3-checkout-path : attendanceCheckOut/   
 
 scheduler:
-job:
-   creationPolicy: monthly
+   job:
+      creationPolicy: monthly
    dailyJob:
       enabled: true
       creation: monthly
