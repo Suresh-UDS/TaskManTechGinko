@@ -257,14 +257,14 @@ export class CreateTicket {
 
   viewImage(index,img)
     {
-        let popover = this.popoverCtrl.create(QuotationImagePopoverPage,{i:img,ind:index},{cssClass:'view-img',showBackdrop:true});
+        let popover = this.popoverCtrl.create(QuotationImagePopoverPage,{i:img,ind:index},{cssClass:''});
         popover.present({
 
         });
 
         popover.onDidDismiss(data=>
         {
-            this.takenImages.pop(data);
+            // this.takenImages.pop(data);
         })
     }
 

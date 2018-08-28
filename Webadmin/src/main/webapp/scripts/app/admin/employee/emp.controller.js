@@ -984,7 +984,9 @@ angular.module('timeSheetApp')
             $scope.setPage(1);
             $scope.search();
          }
-
+        $scope.closeModal = function () {
+            $('#ViewModal').modal('hide');
+        }
         $scope.search = function () {
                 $scope.noData = false;
 	        	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
