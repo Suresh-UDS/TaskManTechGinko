@@ -68,7 +68,8 @@
                                                 <tr>
 
                                                     <td>Asset</td>
-                                                    <td>{{job.assetTitle}}</td>
+                                                    <td><span ng-if="job.assetTitle">{{job.assetTitle}}</span>
+                                                        <span ng-if="!job.assetTitle">No assets</span></td>
 
                                                 </tr>
 
@@ -146,8 +147,8 @@
                                                 <tr>
 
                                                     <td>Comments </td>
-                                                    <td>
-                                                        {{job.comments}}
+                                                    <td><span ng-if="job.comments">{{job.comments}}</span>
+                                                        <span ng-if="!job.comments">No comments</span>
                                                     </td>
 
                                                 </tr>

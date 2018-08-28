@@ -594,7 +594,7 @@ textarea.form-control {
     top: 3px;
     right: 10px;
     padding: 8px;
-    background: #fff;
+    background: #f5f5f5;
     border-radius: 3px;
     min-width: 200px;
 }
@@ -1214,6 +1214,14 @@ button.btn.btn-outline {
 .tablecard table tr td.lowercase::first-letter
 {
     text-transform: lowercase;
+}
+.tablecard table tr td.lowercase
+{
+    text-transform: lowercase !important;
+}
+.inputLowerCase
+{
+    text-transform: lowercase !important;
 }
 input.InputFirstCaps::first-letter
 {
