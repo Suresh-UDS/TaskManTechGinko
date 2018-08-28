@@ -102,7 +102,7 @@ public class InventoryTransactionResource {
 		SearchResult<MaterialTransactionDTO> result = null;
 		if (searchCriteria != null) {
 			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
-			result = inventoryTransactionService.findBySearchCrieria(searchCriteria);
+			result = inventoryTransactionService.findBySearchCriteria(searchCriteria);
 		}
 		return result;
 	}

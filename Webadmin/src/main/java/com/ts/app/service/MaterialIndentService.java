@@ -100,7 +100,7 @@ public class MaterialIndentService extends AbstractService {
 		indentEntity = materialIndentRepository.save(indentEntity);
 		log.debug("Save object of Inventory: {}" + indentEntity);
 		if (materialTranc != null) {
-			materialTranc.setMaterialIndent(indentEntity);;
+			materialTranc.setMaterialIndent(indentEntity);
 			inventTransactionRepository.save(materialTranc);
 		}
 		materialIndentDTO = mapperUtil.toModel(indentEntity, MaterialIndentDTO.class);

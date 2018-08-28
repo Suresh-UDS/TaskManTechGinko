@@ -19,6 +19,7 @@ import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Material;
+import com.ts.app.domain.MaterialIndent;
 import com.ts.app.domain.MaterialTransaction;
 import com.ts.app.domain.MaterialTransactionType;
 import com.ts.app.domain.MaterialUOMType;
@@ -87,6 +88,7 @@ public class InventoryTransactionService extends AbstractService{
 		materialEntity.setProject(projectRepository.findOne(materialTransDTO.getProjectId()));
 		materialEntity.setMaterial(inventoryRepository.findOne(materialTransDTO.getMaterialId()));
 		materialEntity.setMaterialGroup(materialItemRepository.findOne(materialTransDTO.getMaterialGroupId()));
+		MaterialIndent materialIndent = null;
 		if(materialTransDTO.getJobId() > 0) {
 			materialEntity.setJob(jobRepository.findOne(materialTransDTO.getJobId()));
 		}else {
@@ -98,7 +100,8 @@ public class InventoryTransactionService extends AbstractService{
 			materialEntity.setAsset(null);
 		}
 		if(materialTransDTO.getMaterialIndentId() > 0) {
-			materialEntity.setMaterialIndent(materialIndentRepository.findOne(materialTransDTO.getMaterialIndentId()));
+			materialIndent = materialIndentRepository.findOne(materialTransDTO.getMaterialIndentId());
+			materialEntity.setMaterialIndent(materialIndent);
 		}else {
 			materialEntity.setMaterialIndent(null);
 		}
@@ -152,6 +155,10 @@ public class InventoryTransactionService extends AbstractService{
 		materialEntity.setUom(MaterialUOMType.valueOf(materialTransDTO.getUom()).getValue());
 		materialEntity = inventTransactionRepository.save(materialEntity);
 		log.debug("Save object of Inventory: {}" +materialEntity);
+		if(materialIndent != null) { 
+			materialIndent.setTransaction(materialEntity);
+			materialIndentRepository.save(materialIndent);
+		}
 		materialTransDTO = mapperUtil.toModel(materialEntity, MaterialTransactionDTO.class);
 		return materialTransDTO;
 	}
@@ -190,7 +197,7 @@ public class InventoryTransactionService extends AbstractService{
 		return materialTransType;
 	}
 	
-	public SearchResult<MaterialTransactionDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
+	public SearchResult<MaterialTransactionDTO> findBySearchCriteria(SearchCriteria searchCriteria) {
 		SearchResult<MaterialTransactionDTO> result = new SearchResult<MaterialTransactionDTO>();
 		User user = userRepository.findOne(searchCriteria.getUserId());
 		log.debug(">>> user <<<"+ user.getFirstName() +" and "+user.getId());
