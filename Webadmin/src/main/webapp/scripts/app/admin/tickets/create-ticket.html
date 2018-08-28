@@ -51,7 +51,7 @@
                                        <div class="col-md-12">
                                            <div class="form-group">
                                                <label class="control-label">Description<span class="red-star">*</span> </label>
-                                               <input id='description' ng-model="tickets.description" class='form-control InputTxtCaps'
+                                               <input id='description' ng-model="tickets.description" class='form-control InputFirstCaps'
                                                       name='description' type='text' value=""
                                                        autofocus required ng-keypress="keyPressHandler($event)"/>
                                                <div ng-show="form.$submitted || form.description.$touched">
@@ -178,7 +178,7 @@
                                             required
                                             name="employee"
                                             ng-model="selectedEmployee"
-                                            class="form-control searchable-input floatL" ng-options="emp as emp.fullName group by emp.designation for emp in employees | filter: {designation : '!' + 'Client'} track by emp.id">
+                                            class="form-control searchable-input floatL selectTxtCaps" ng-options="emp as emp.fullName group by emp.designation for emp in employees | filter: {designation : '!' + 'Client'} track by emp.id">
                                             <option value="">Select Employee</option>
 
                                         </select>

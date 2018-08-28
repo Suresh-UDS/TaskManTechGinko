@@ -1215,6 +1215,14 @@ button.btn.btn-outline {
 {
     text-transform: lowercase;
 }
+.tablecard table tr td.lowercase
+{
+    text-transform: lowercase !important;
+}
+.inputLowerCase
+{
+    text-transform: lowercase !important;
+}
 input.InputFirstCaps::first-letter
 {
     text-transform: uppercase;
