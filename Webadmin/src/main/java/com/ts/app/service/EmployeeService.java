@@ -1221,7 +1221,7 @@ public class    EmployeeService extends AbstractService {
 		int currPage = 1;
 		int pageSize = 100;
 		Pageable pageRequest = createPageRequest(currPage, pageSize);
-		Page<Employee> empResult = employeeRepository.findAll(pageRequest);
+		Page<Employee> empResult = employeeRepository.findByImage(pageRequest);
 		List<Employee> empEntity = empResult.getContent();
 		while(CollectionUtils.isNotEmpty(empEntity)) {
 			log.debug("Length of empEntity List" +empEntity.size());
@@ -1232,10 +1232,9 @@ public class    EmployeeService extends AbstractService {
 						long dateTime = new Date().getTime();
 						boolean isBase64 = Base64.isBase64(base64String);
 						try {
-							EmployeeDTO emp = mapperUtil.toModel(employee, EmployeeDTO.class);
+//							EmployeeDTO emp = mapperUtil.toModel(employee, EmployeeDTO.class);
 							if(isBase64){ 
-								emp = amazonS3utils.uploadEnrollImage(emp.getEnrolled_face(), emp, dateTime);
-								employee.setEnrolled_face(emp.getEnrolled_face());
+								employee = amazonS3utils.uploadExistingEnrollImage(employee.getEnrolled_face(), employee, dateTime);
 							}
 						}catch(Exception e) {
 							log.debug("Error while mapping employee" + employee.getId() +" - "+employee.getName());
