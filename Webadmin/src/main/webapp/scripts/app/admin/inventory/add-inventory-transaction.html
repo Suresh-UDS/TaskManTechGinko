@@ -46,8 +46,22 @@
                                                    <div class="form-group">
                                                        <label class="control-label">Select Site <span class="red-star">*</span></label>
                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                       <select class="form-control" ng-model="projectSite"  ng-options="site as site.name for site in sites">
+                                                       <select class="form-control" ng-model="projectSite"  ng-change="loadIndents()" ng-options="site as site.name for site in sites">
                                                            <option value="">Select Site...</option>
+                                                       </select>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+                                       
+                                        <div class="col-md-12">
+                                           <div class="form-group no-padding" >
+                                               <div class="dropdown">
+                                                   <div class="form-group">
+                                                       <label class="control-label">Select Indent <span class="red-star">*</span></label>
+                                                       <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                       <select class="form-control" ng-model="selectedIndent" ng-change="loadItems()" ng-options="materialIndent as materialIndent.indentRefNumber for materialIndent in materialIndents">
+                                                           <option value="">Select Indent...</option>
                                                        </select>
                                                    </div>
                                                </div>
@@ -71,13 +85,13 @@
                                    <div class="row">
                                        <div class="col-md-6">
 
-                                           <div class="form-group no-padding" ng-init="loadMaterialItmGroup()">
+                                           <div class="form-group no-padding">
                                                <div class="dropdown">
                                                    <div class="form-group">
-                                                       <label class="control-label">Select Item Group <span class="red-star">*</span></label>
+                                                       <label class="control-label">Select Item Code <span class="red-star">*</span></label>
                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                       <select class="form-control" ng-model="selectedItemGroup" ng-change="loadItems()" ng-options="materialItmGroup as materialItmGroup.itemGroup for materialItmGroup in materialItmGroups">
-                                                           <option value="">Select Item Group...</option>
+                                                       <select class="form-control" ng-model="selectedItemCode" ng-change="change()" ng-options="materialItem as materialItem.materialItemCode for materialItem in materialItems">
+                                                           <option value="">Select Item Code...</option>
                                                        </select>
                                                    </div>
                                                </div>
@@ -86,15 +100,11 @@
 
                                        <div class="col-md-6">
                                            <div class="form-group no-padding" >
-                                               <div class="dropdown">
-                                                   <div class="form-group">
-                                                       <label class="control-label">Select Item Name  <span class="red-star">*</span></label>
-                                                       <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                       <select class="form-control" ng-model="selectedMaterialItem" ng-change="loadStocks()" ng-options="materialItem as materialItem.name for materialItem in materialItems">
-                                                           <option value="">Select Item Name...</option>
-                                                       </select>
-                                                   </div>
-                                               </div>
+                                            <div class="form-group ">
+                                               <label class="control-label">Item Name</label>
+                                               <input type="text" class="form-control"   name='stockrec' ng-disabled="true"
+                                                      ng-model="selectedItemName"  required autocomplete="off"/>
+                                           </div>
                                            </div>
                                        </div>
                                        <div class="col-md-6">

@@ -2,7 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('InventoryTransactionController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent,$http,$stateParams,$location,
-    			ManufacturerComponent, InventoryComponent, InventoryTransactionComponent, $filter, PaginationComponent) {
+    			ManufacturerComponent, InventoryComponent, InventoryTransactionComponent, IndentComponent, $filter, PaginationComponent) {
 
         
     	$rootScope.loginView = false;
@@ -18,6 +18,7 @@ angular.module('timeSheetApp')
     	$scope.selectedItemGroup = {};
     	$scope.materialItemGroup = {};
     	$scope.selectedMaterialItem = {};
+    	$scope.selectedIndent = {};
     	$scope.searchSite ={};
         $scope.searchProject ={};
         $scope.searchItemCode = null;
@@ -27,6 +28,8 @@ angular.module('timeSheetApp')
         $scope.searchCreatedDate = "";
         $scope.searchCreatedDateSer = null;
         $scope.transactionCriteria = {};
+        $scope.searchCriteria = {};
+        $scope.selectedItemCode = {};
     	$scope.pages = { currPage : 1};
     	
     	$scope.refreshPage = function() { 
@@ -136,11 +139,21 @@ angular.module('timeSheetApp')
         }
     	
     	$scope.loadItems = function() {
-    		if($scope.selectedItemGroup) { 
-    			InventoryTransactionComponent.findByMaterialItem($scope.selectedItemGroup.id).then(function(data) {
+    		if($scope.selectedIndent) { 
+    			IndentComponent.findById($scope.selectedIndent.id).then(function(data) {
     				console.log(data);
-    				$scope.materialItems = data;
+    				$scope.materialItems = data.items;
     				$scope.loadingStop();
+    			});
+    		}
+    	}
+    	
+    	$scope.loadIndents = function() { 
+    		if($scope.projectSite.id) {
+    			$scope.searchCriteria.siteId = $scope.projectSite.id;
+    			IndentComponent.search($scope.searchCriteria).then(function(data) { 
+    				console.log(data);
+    				$scope.materialIndents = data.transactions;
     			});
     		}
     	}
@@ -185,6 +198,13 @@ angular.module('timeSheetApp')
             $scope.inventory.transactionDate = e.date._d;
             $scope.ppmFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
         });
+        
+    	$scope.change = function() {
+			console.log($scope.selectedItemCode);
+			$scope.selectedItemName = $scope.selectedItemCode.materialName;
+			$scope.inventory.storeStock= $scope.selectedItemCode.materialStoreStock;
+			$scope.inventory.quantity = $scope.selectedItemCode.quantity;
+		}
 
         
         /* Save material Transaction */
@@ -197,12 +217,13 @@ angular.module('timeSheetApp')
     			$scope.inventory.siteId = $scope.projectSite.id;
     		}
     		
-    		if($scope.selectedItemGroup){
-    			$scope.inventory.materialGroupId = $scope.selectedItemGroup.id;
+    		if($scope.selectedIndent) { 
+    			$scope.inventory.materialIndentId = $scope.selectedIndent.id;
     		}
     		
-    		if($scope.selectedMaterialItem) { 
-    			$scope.inventory.materialId = $scope.selectedMaterialItem.id;
+    		if($scope.selectedItemCode){
+    			$scope.inventory.materialId = $scope.selectedItemCode.materialId
+    			$scope.inventory.materialGroupId = $scope.selectedItemCode.materialItemGroupId;
     		}
     		
     		if($scope.selectedTransactionType) { 
@@ -212,26 +233,26 @@ angular.module('timeSheetApp')
     		
     		console.log(JSON.stringify($scope.inventory));
     		
-//    		InventoryTransactionComponent.create($scope.inventory).then(function(data) { 
-//    			console.log(data);
-//                $scope.loadingStop();
-//                $scope.inventory = "";
-//                $scope.showNotifications('top','center','success','Material Transaction has been created!');
-//                $scope.loadMaterialTrans();
-//    		}).catch(function (response) {
-//                $scope.loadingStop();
-//                $scope.btnDisabled= false;
-//                $scope.success = null;
-//                console.log('Error - '+ response.data);
-//                console.log('status - '+ response.status + ' , message - ' + response.data.message);
-//                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
-//                        $scope.errorAssetsExists = 'ERROR';
-//                    $scope.showNotifications('top','center','danger','Material Transaction Already Exists');
-//                } else {
-//                    $scope.showNotifications('top','center','danger','Unable to creating Transaction. Please try again later..');
-//                    $scope.error = 'ERROR';
-//                }
-//            });
+    		InventoryTransactionComponent.create($scope.inventory).then(function(data) { 
+    			console.log(data);
+                $scope.loadingStop();
+                $scope.inventory = "";
+                $scope.showNotifications('top','center','success','Material Transaction has been created!');
+                $scope.loadMaterialTrans();
+    		}).catch(function (response) {
+                $scope.loadingStop();
+                $scope.btnDisabled= false;
+                $scope.success = null;
+                console.log('Error - '+ response.data);
+                console.log('status - '+ response.status + ' , message - ' + response.data.message);
+                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+                        $scope.errorAssetsExists = 'ERROR';
+                    $scope.showNotifications('top','center','danger','Material Transaction Already Exists');
+                } else {
+                    $scope.showNotifications('top','center','danger','Unable to creating Transaction. Please try again later..');
+                    $scope.error = 'ERROR';
+                }
+            });
     		
     		
     	}
