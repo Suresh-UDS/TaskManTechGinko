@@ -24,7 +24,7 @@
 		<div class="col-md-6 txt-align-rgt">
 
 
-			<button class="btn btn-success add-btn margn-tb0"
+			<button class="btn btn-success add-btn margn-tb0 "
 				ui-sref="add-employee" has-permission="Employee:Create"
 				ng-class="{active: $state.includes('admin')}" tabindex="0">
 				<i class="material-icons">add</i> Add
@@ -36,9 +36,10 @@
 				<i class="material-icons">location_on</i> Map
 				<div class="ripple-container"></div>
 			</button>
-			<button class="btn btn-success add-btn margn-tb0"
+			<button class="btn btn-success add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':downloader}"
 				ng-show="employees.length" ng-click="exportAllData();" tabindex="0">
 				<i class="material-icons">file_download</i> Export
+                <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
 				<div class="ripple-container"></div>
 			</button>
 
@@ -437,7 +438,7 @@
 									<tbody>
 										<tr ng-repeat="projSite in sites">
 											<td>{{projSite.siteId}}</td>
-											<td>{{projSite.siteName}}</td>
+											<td>{{projSite.siteName | uppercase}}</td>
 											<td>
 												<button ng-disabled="isCheckedIn"
 													ng-click="checkIn(projSite.siteId,employee.empId,employee.id)"

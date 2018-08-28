@@ -86,11 +86,11 @@
     </ion-list>
 
         <ion-list *ngSwitchCase="'checklist'">
-            <div  *ngIf="(!checkListItems || checkListItems == 0) && spinner" text-center class="margin-top25">
-                <ion-spinner name="circles"></ion-spinner>
-            </div>
+            <!--<div  *ngIf="(!checkListItems || checkListItems == 0) && spinner" text-center class="margin-top25">-->
+                <!--<ion-spinner name="circles"></ion-spinner>-->
+            <!--</div>-->
 
-            <div *ngIf="!checkListItems" >
+            <div *ngIf="!checkListItems || checkListItems == 0" >
                 <ion-card>
                     <ion-card-content>
                         <img src="assets/imgs/warning.svg">

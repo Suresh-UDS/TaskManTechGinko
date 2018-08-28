@@ -555,8 +555,12 @@ angular.module('timeSheetApp')
         		$scope.job.pendingAtUDS=true;
         		$scope.selectedSite = {id : data.siteId,name : data.siteName};
                 $scope.job.plannedStartTime = data.plannedStartTime;
-                $scope.selectPlannedStartTime = $filter('date')(data.plannedStartTime, 'dd/MM/yyyy hh:mm a');
-                $scope.job.scheduleEndDate = data.scheduleEndDate;
+                $scope.selectPlannedStartTime = $filter('date')(data.plannedStartTime, 'dd/MM/yyyy hh:mm a');  
+                if($scope.job.schedule == 'ONCE'){
+                  $scope.job.scheduleEndDate = "";  
+                }else{
+                   $scope.job.scheduleEndDate = data.scheduleEndDate; 
+                }
                 $scope.selectScheduleEndDate = $filter('date')(data.scheduleEndDate, 'dd/MM/yyyy hh:mm a');
         		$scope.loadEmployees().then(function(employees){
         			console.log('load employees ');
@@ -1178,6 +1182,7 @@ angular.module('timeSheetApp')
         $scope.exportAllData = function(type){
                 $scope.searchCriteria.exportType = type;
                 $rootScope.exportStatusObj.exportMsg = '';
+                $scope.typeMsg = type;
                 $scope.downloader=true;
                 JobComponent.exportAllData($scope.searchCriteria).then(function(data){
                     var result = data.results[0];
@@ -1271,6 +1276,10 @@ angular.module('timeSheetApp')
 
 
         };
+
+        $scope.resetDate = function(){
+            $scope.selectScheduleEndDate= "";
+        }
 
 
     });

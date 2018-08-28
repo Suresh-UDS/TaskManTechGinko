@@ -476,7 +476,7 @@
 
                             </div>
 
-                            <div class="col-md-6" ng-if="job.schedule !='ONCE'">
+                            <div class="col-md-6" >
 
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Schedule</div>
@@ -490,7 +490,7 @@
                                                     <div>
                                                         <div class="radio radio-inline">
                                                             <label>
-                                                                <input type="radio" id="schedule" name="schedule" ng-model="job.schedule" value="ONCE" checked="checked" required> Once
+                                                                <input type="radio" id="schedule" name="schedule" ng-model="job.schedule" value="ONCE" checked="checked" ng-click="resetDate();" required> Once
                                                             </label>
                                                         </div>
                                                         <div class="radio radio-inline">
@@ -526,17 +526,17 @@
                                                 <div class="form-group minhgt90">
                                                     <label class="control-label font-size15">Select frequency </label>
 
-                                                    <div class="" ng-show="job.schedule == 'ONCE'">
+                                                    <div class="" ng-if="job.schedule == 'ONCE'">
                                                         <label class="">Not applicable</label>
                                                     </div>
-                                                    <div class="" ng-show="job.schedule == 'DAY'">
+                                                    <div class="" ng-if="job.schedule == 'DAY'">
                                                         <div class="checkbox">
                                                             <label>
                                                                 <input type="checkbox" id="dailyExclusion" name="dailyExclusion" ng-model="job.scheduleDailyExcludeWeekend" value="true" checked="job.scheduleDailyExcludeWeekend">Exclude weekends
                                                             </label>
                                                         </div>
                                                     </div>
-                                                    <div class="" ng-show="job.schedule == 'WEEK'">
+                                                    <div class="" ng-if="job.schedule == 'WEEK'">
                                                         <div class="checkbox checkbox-inline">
                                                             <label>
                                                                 <input type="checkbox" id="weeklySunday" name="weeklySunday" ng-model="job.scheduleWeeklySunday" value="true" checked="job.scheduleWeeklySunday">Sun
@@ -615,7 +615,7 @@
                                                     </p> -->
 
                                                      <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datetimepicker" ng-model="selectScheduleEndDate" name='scheduleEndDate' autocomplete="off" id="scheduleEndDate"  />
+                                                    <input type="text" class="form-control datetimepicker" ng-model="selectScheduleEndDate" name='scheduleEndDate' autocomplete="off" id="scheduleEndDate" ng-disabled="job.schedule == 'ONCE'"  />
 
                                                     <div ng-show="form.$submitted || form.scheduleEndDate.$touched">
                                                         <div ng-show="form.scheduleEndDate.$dirty || form.scheduleEndDate.$invalid">

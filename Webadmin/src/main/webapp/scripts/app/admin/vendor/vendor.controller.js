@@ -505,6 +505,7 @@ angular.module('timeSheetApp')
                 if(data) {
                     exportStatusObj.exportStatus = data.status;
                     console.log('exportStatus - '+ exportStatusObj);
+                    console.log(data)
                     exportStatusObj.exportMsg = data.msg;
                     $scope.downloader=false;
                     console.log('exportMsg - '+ exportStatusObj.exportMsg);

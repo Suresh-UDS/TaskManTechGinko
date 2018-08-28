@@ -510,6 +510,7 @@ angular.module('timeSheetApp')
                 $rootScope.exportStatusObj.exportMsg = '';
                 $scope.downloader=true;
                 $scope.searchCriteria.exportType = type;
+                $scope.typeMsg = type;
                 $scope.searchCriteria.report = true;
 
                 console.log('calling asset export api');

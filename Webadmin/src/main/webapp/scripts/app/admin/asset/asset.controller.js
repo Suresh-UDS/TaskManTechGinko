@@ -3434,6 +3434,7 @@ angular.module('timeSheetApp')
                 $scope.downloader=true;
                 $scope.searchCriteria.exportType = type;
                 $scope.searchCriteria.report = true;
+                $scope.typeMsg = type;
 
                 console.log('calling asset export api');
                 AssetComponent.exportAllData($scope.searchCriteria).then(function(data){

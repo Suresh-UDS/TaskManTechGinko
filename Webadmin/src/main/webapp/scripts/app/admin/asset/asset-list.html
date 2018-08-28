@@ -41,13 +41,15 @@
                 <div class="ripple-container"></div>
             </button>
 
-            <button ng-show="assets.length" class="btn btn-success add-btn margn-tb0"  title="Export HTML"  ng-click=exportAllData('html') tabindex="0">
+            <button ng-show="assets.length" class="btn btn-success add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':(downloader && typeMsg=='html')}"  title="Export HTML"  ng-click=exportAllData('html') tabindex="0">
                 <i class="material-icons">description</i> Export HTML
+                <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
                 <div class="ripple-container"></div>
             </button>
 
-            <button ng-show="assets.length" class="btn btn-info add-btn margn-tb0"   title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
+            <button ng-show="assets.length" class="btn btn-info add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':(downloader && typeMsg=='xlsx')}"   title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
                 <i class="material-icons">import_contacts</i> Export Excel
+                <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
                 <div class="ripple-container"></div>
             </button>
 
