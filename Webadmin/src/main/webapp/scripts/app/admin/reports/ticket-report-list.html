@@ -38,7 +38,26 @@
 
         </div>
     </div>
+    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
+            <span class="AppliedFilterTxtCon">
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.projectName || localStorage.projectName">
+                    Client: {{searchCriteria.projectName || localStorage.projectName}}
+                </span>
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.siteName || localStorage.siteName">
+                    Site: {{searchCriteria.siteName || localStorage.siteName}}
+                </span>
 
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.fromDate || localStorage.fromDate">
+                    From: {{searchCriteria.fromDate || localStorage.fromDate | date:'dd/MM/yyyy'}}
+                </span>
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.toDate || localStorage.toDate">
+                    To: {{searchCriteria.toDate || localStorage.toDate | date:'dd/MM/yyyy'}}
+                </span>
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.ticketStatus || localStorage.ticketStatus">
+                    Status: {{searchCriteria.ticketStatus || localStorage.ticketStatus}}
+                </span>
+            </span>
+    </div>
     <div class="row">
         <div class="col-md-12">
             <div class="card margin-TB-5 TableCard" >
@@ -441,12 +460,10 @@
                                                     <!--<select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projectsList"  >-->
                                                     <!--<option value="">Select Client...</option>-->
                                                     <!--</select>-->
-
                                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable" ng-change="loadDepSites(searchProject)" ng-click="loadDepSites(searchProject)">
-
-                                                        <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :clearField?'Select Client':searchProject}}</ui-select-match>
+                                                    <ui-select ng-model="selectedProject" ng-disabled="clientFilterDisable" ng-change="loadSearchProject(selectedProject)"  ng-click="loadSearchProject(selectedProject)">
+                                                        <ui-select-match placeholder="Select clients...">{{filter ? selectedProject.name?selectedProject.name:'Select Client' :clearField?'Select Client':selectedProject}}</ui-select-match>
                                                         <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
                                                             <div ng-bind="client"></div>
                                                         </ui-select-choices>
@@ -464,35 +481,24 @@
                                                     <!--</select>-->
                                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sitesList.length == 0" ng-change="loadDepBlocks(searchSite)" ng-click="loadDepBlocks(searchSite)">
-
-                                                        <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?clearField?'Select Site':searchSite : 'Select Site' }}</ui-select-match>
-                                                        <ui-select-choices  repeat="site in getSites($select.search) | filter: $select.search">
+                                                    <ui-select ng-model="selectedSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-change="loadSearchSite(selectedSite);loadFilterEmployee()" ng-click="loadSearchSite(selectedSite)">
+                                                        <ui-select-match placeholder="Select Site...">{{sites.length == 0 ? 'Select Site' : selectedSite.searchStatus ? selectedSite.name?selectedSite.name:'Select Site' : hideSite ?clearField?'Select Site':selectedSite : 'Select Site' }}</ui-select-match>
+                                                        <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
                                                             <div ng-bind="site"></div>
                                                         </ui-select-choices>
                                                     </ui-select>
-                                                    <span ng-if="sitesList.length == 0"><p class="error-msg margin0">No sites</p></span>
+                                                    <span ng-if="sites.length == 0 && !siteSpin"><p class="error-msg margin0">No sites</p></span>
                                                 </div>
                                             </div>
                                         </div>
-
-
-
                                     </div>
-
                                 </div>
                             </div>
                         </div>
 
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="headingTwo">
-                                <a ng-if="(!searchProject && !searchSite) || (searchProject && !searchSite)" ng-click="errorMsg()">
-                                    <h4 class="panel-title">
-                                        Advanced Filter <span ng-if="show" class="error-msg txt-align-center">(Select Client and Site)</span>
-                                        <i class="material-icons">keyboard_arrow_down</i>
-                                    </h4>
-                                </a>
-                                <a class="collapsed" ng-if="searchProject && searchSite" role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                     <h4 class="panel-title">
                                         Advanced Filter
                                         <i class="material-icons">keyboard_arrow_down</i>
@@ -531,17 +537,18 @@
                                             <div class="dropdown" >
                                                 <div class="form-group">
                                                     <label class="label-control">Status</label>
-                                                    <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control " ng-model="selectedStatus" ng-options="status as status for status in ticketStatuses">
-                                                        <option value="">Select status...</option>
-                                                    </select>
+                                                    <span ng-show="statusSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                                    <span ng-show="!statusSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <ui-select ng-model="selectedStatus" ng-change="loadSearchStatus(selectedStatus)">
+                                                        <ui-select-match placeholder="Select Status...">{{ticketStatuses.length == 0 ? 'Select Status' : selectedStatus.searchStatus ? selectedStatus.name?selectedStatus.name:'Select Status' :clearField?'Select Status':selectedStatus  }}</ui-select-match>
+                                                        <ui-select-choices  repeat="status in getStatus($select.search) | filter: $select.search">
+                                                            <div ng-bind="status"></div>
+                                                        </ui-select-choices>
+                                                    </ui-select>
                                                 </div>
                                             </div>
                                         </div>
-
-
                                     </div>
-
                                 </div>
                             </div>
                         </div>

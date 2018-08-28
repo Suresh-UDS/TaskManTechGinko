@@ -13,103 +13,126 @@
     </div>
  -->
 
+    <div class="row" ng-init="loadEmployeesShift();loadProjects()">
+        <div class="col-md-6 txt-align-lft" ng-init="loadSites()">
+
+            <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
+                <i class="material-icons">filter_list</i>Filter
+                <div class="ripple-container"></div>
+            </button>
+            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i> Clear Filter
+                <div class="ripple-container"></div>
+            </button>
+
+        </div>
+        <div class="col-md-6 txt-align-rgt">
+
+
+
+
+
+        </div>
+    </div>
+
     <div class="row" >
 
-        <div class="col-md-12" ng-init="loadEmployeesShift();loadProjects()">
+        <div class="col-md-12" >
             <div class="card TableCard">
                 <div class="card-content">
 
 
-                    <div class="SearchTable" ng-init="loadSites()">
+                    <!--<div class="SearchTable" >-->
 
-                        <form name="searchForm"  ng-submit="searchShiftFilter()" novalidate >
+                        <!--<form name="searchForm"  ng-submit="searchShiftFilter()" novalidate >-->
 
-                            <div class="row">
+                            <!--<div class="row">-->
 
-<!--                                     <td>
-                                        <label>Show</label>
-                                        <select class="siteList margin0" ng-model="sort" ng-change="hasChanged()" ng-options="paging.value for paging in pageSizes" value="{{paging.value}}">
-                                        </select>
-                                    </td>
- -->								  <div class="col-md-2">
-								   			<div class="dropdown">
-                                                <div class="form-group">
-                                                    <label class="control-label">Select Client</label>
-                                                     <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control " ng-model="searchProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
-                                                        <option value="">Select Client...</option>
-                                                    </select>
-
-
-
-                                                </div>
-                                            </div>
-                                    </div>
-                                    <div class="col-md-2">
-
-                                            <div class="dropdown">
-                                                <div class="form-group">
-                                                    <label class="control-label">Select Site</label>
-                                                    <!--<input type="text" class="form-control"-->
-                                                    <!--ng-model="selectedRole"-->
-                                                    <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
-                                                    <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
-                                                    <!--required >-->
-                                                    <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites">
-                                                        <option value="">Select Site...</option>
-                                                    </select>
+<!--&lt;!&ndash;                                     <td>-->
+                                        <!--<label>Show</label>-->
+                                        <!--<select class="siteList margin0" ng-model="sort" ng-change="hasChanged()" ng-options="paging.value for paging in pageSizes" value="{{paging.value}}">-->
+                                        <!--</select>-->
+                                    <!--</td>-->
+ <!--&ndash;&gt;								  <div class="col-md-2">-->
+								   			<!--<div class="dropdown">-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<label class="control-label">Select Client</label>-->
+                                                     <!--<span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                    <!--<select class="form-control " ng-model="searchProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">-->
+                                                        <!--<option value="">Select Client...</option>-->
+                                                    <!--</select>-->
 
 
 
-                                                </div>
-                                            </div>
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-2">-->
+
+                                            <!--<div class="dropdown">-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<label class="control-label">Select Site</label>-->
+                                                    <!--&lt;!&ndash;<input type="text" class="form-control"&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;ng-model="selectedRole"&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;required >&ndash;&gt;-->
+                                                    <!--<span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                    <!--<select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites">-->
+                                                        <!--<option value="">Select Site...</option>-->
+                                                    <!--</select>-->
 
 
-								   </div>
-								    <div class="col-xs-12 col-md-4">
-                                         <div class="form-group no-padding" >
-                                             <div class="dropdown">
- 					                            <label class="label-control">Date</label>
- 					                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
- 					                            <input type="text" class="form-control datepicker"  id="searchDate"  ng-model="searchDate"/>
-                                             </div>
-                                         </div>
-                                     </div>
-                                   <!--  <div class="col-md-2">
-                                    		<div class="form-group" style="padding-top: 20px;" >
-                                            <div class="dropdown">
-                                                <input type="text"
-                                                       class="form-control border-bottom-input"
-                                                       placeholder="Employee Id"
-                                                       ng-model="selectedEmployeeId"
-												/>
 
-                                            </div>
-                                        </div>
-                                    </div -->
-                                <div class="col-md-4">
-                                    <div class="form-group pull-right" style="padding-top: 10px;">
+                                                <!--</div>-->
+                                            <!--</div>-->
 
-                                        <button type="submit" class="btn btn-circle blue-clr">
-                                            <i class="material-icons">search</i>
-                                        </button>
-                                        <!-- <button ui-sref="add-employee" has-permission="Employee:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
-                                            <i class="material-icons">add</i>
-                                        </button>
-                                        <button ui-sref="employee-location" class="btn btn-circle orange-clr">
-                                            <i class="material-icons">location_on</i>
-                                        </button>
-                                        <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
-                                            <i class="material-icons">refresh</i>
-                                        </button> -->
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
 
-                    		</div>
-                    </form>
+								   <!--</div>-->
+								    <!--<div class="col-xs-12 col-md-4">-->
+                                         <!--<div class="form-group no-padding" >-->
+                                             <!--<div class="dropdown">-->
+ 					                            <!--<label class="label-control">Date</label>-->
+ 					                            <!--<span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>-->
+ 					                            <!--<input type="text" class="form-control datepicker"  id="searchDate"  ng-model="searchDate"/>-->
+                                             <!--</div>-->
+                                         <!--</div>-->
+                                     <!--</div>-->
+                                   <!--&lt;!&ndash;  <div class="col-md-2">-->
+                                    		<!--<div class="form-group" style="padding-top: 20px;" >-->
+                                            <!--<div class="dropdown">-->
+                                                <!--<input type="text"-->
+                                                       <!--class="form-control border-bottom-input"-->
+                                                       <!--placeholder="Employee Id"-->
+                                                       <!--ng-model="selectedEmployeeId"-->
+												<!--/>-->
 
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div &ndash;&gt;-->
+                                <!--<div class="col-md-4">-->
+                                    <!--<div class="form-group pull-right" style="padding-top: 10px;">-->
+
+                                        <!--<button type="submit" class="btn btn-circle blue-clr">-->
+                                            <!--<i class="material-icons">search</i>-->
+                                        <!--</button>-->
+                                        <!--&lt;!&ndash; <button ui-sref="add-employee" has-permission="Employee:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">-->
+                                            <!--<i class="material-icons">add</i>-->
+                                        <!--</button>-->
+                                        <!--<button ui-sref="employee-location" class="btn btn-circle orange-clr">-->
+                                            <!--<i class="material-icons">location_on</i>-->
+                                        <!--</button>-->
+                                        <!--<button ng-click="refreshPage()" class="btn btn-circle orange-clr">-->
+                                            <!--<i class="material-icons">refresh</i>-->
+                                        <!--</button> &ndash;&gt;-->
+                                    <!--</div>-->
+                                    <!--<div class="clearfix"></div>-->
+                                <!--</div>-->
+
+                    		<!--</div>-->
+                    <!--</form>-->
+                        <!---->
+                    <!--</div>    -->
 
                     <div class="table-responsive tablecard">
                         <table id="" class="table table-hover withSortingIcons">
@@ -206,7 +229,7 @@
                         </table>
 
                     </div>
-                    <div class="row">
+                    <div class="row" ng-if="employeeShifts.length>0">
 
                          <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
                              <button class="btn btn-success" ng-click="updateEmployeeShifts()"
@@ -257,6 +280,8 @@
     <pagination-new></pagination-new>
 
     <!-- Pagination directive end -->
+
+</div>
 
 
 <!-- Delete confirmation dialog -->
@@ -1003,7 +1028,7 @@
 
 
 <!-- BasicFilterModal -->
-<div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade AdvancedFilterModal FilterModalCon" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <form name="searchForm"   novalidate >
@@ -1011,36 +1036,70 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         <i class="material-icons">clear</i>
                     </button>
-                    <h4 class="modal-title">Basic Filter</h4>
+                    <h4 class="modal-title">Filter</h4>
                 </div>
                 <div class="modal-body">
 
                     <div class="row">
 
-                        <div class="col-xs-12 col-md-4">
+                        <div class="col-xs-12 col-md-5">
                             <div class="form-group" >
                                 <div class="dropdown">
                                     <label class="label-control">Client</label>
-                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects" ng-pattern="Select Client" >
-                                        <option value="">Select Client...</option>
-                                    </select>
+                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                    <!--<select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects" ng-pattern="Select Client" >-->
+                                        <!--<option value="">Select Client...</option>-->
+                                    <!--</select>-->
+                                    <span ng-show="clientFilterDisable"
+                                          class="form-control-feedback d-big-arrow-icon orange-color"><i
+                                        class="ld ld-ring ld-spin"></i></span> <span
+                                    ng-show="!clientFilterDisable"
+                                    class="form-control-feedback d-big-arrow-icon "><i
+                                    class="material-icons">keyboard_arrow_down</i></span>
+                                    <ui-select ng-model="searchProject"
+                                               ng-disabled="clientFilterDisable"
+                                               ng-change="loadDepSites(searchProject)"
+                                               ng-click="loadDepSites(searchProject)"> <ui-select-match
+                                        placeholder="Select clients...">{{filter
+                                        ? searchProject.name?searchProject.name:'Select Client'
+                                        :clearField?'Select Client':searchProject}}</ui-select-match> <ui-select-choices
+                                        repeat="client in getClient($select.search) | filter: $select.search">
+                                        <div ng-bind="client"></div>
+                                    </ui-select-choices> </ui-select>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-md-4">
+                        <div class="col-xs-12 col-md-5">
                             <div class="dropdown">
                                 <div class="form-group">
                                     <label class="label-control">Site</label>
-                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sitesList" ng-pattern="Select Site" ng-change="loadEmployees()" >
-                                        <option value="">Select Site...</option>
-                                    </select>
+                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                    <!--<select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sitesList" ng-pattern="Select Site" ng-change="loadEmployees()" >-->
+                                        <!--<option value="">Select Site...</option>-->
+                                    <!--</select>-->
+                                    <span ng-show="siteSpin"
+                                          class="form-control-feedback d-big-arrow-icon orange-color"><i
+                                        class="ld ld-ring ld-spin"></i></span> <span ng-show="!siteSpin"
+                                                                                     class="form-control-feedback d-big-arrow-icon "><i
+                                    class="material-icons">keyboard_arrow_down</i></span>
+                                    <ui-select ng-model="searchSite"
+                                               ng-disabled="siteFilterDisable || sites.length == 0"
+                                               ng-change="loadSearchSite(searchSite)"
+                                               ng-click="loadSearchSite(searchSite)"> <ui-select-match
+                                        placeholder="Select Site...">{{sites.length
+                                        == 0 ? 'Select Site' : searchSite.searchStatus ?
+                                        searchSite.name?searchSite.name:'Select Site' : hideSite
+                                        ?clearField?'Select Site':searchSite : 'Select Site' }}</ui-select-match> <ui-select-choices
+                                        repeat="site in getSite($select.search) | filter: $select.search">
+                                        <div ng-bind="site"></div>
+                                    </ui-select-choices> </ui-select>
+                                    <span ng-if="sites.length == 0"><p
+                                        class="help-block">No sites</p></span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-xs-12 col-md-4">
+                        <div class="col-xs-12 col-md-2">
                             <div class="form-group" >
                                 <div class="dropdown">
                                     <label class="label-control">Date</label>

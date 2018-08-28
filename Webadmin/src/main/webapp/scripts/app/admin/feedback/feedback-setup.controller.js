@@ -346,6 +346,26 @@ angular.module('timeSheetApp')
   	        });
         };
 
+          $scope.viewFbSetup = function(id){
+            var FbSetupId =parseInt(id);
+         if(FbSetupId){
+
+            FeedbackComponent.findOneFeedbackMapping(FbSetupId).then(function(data){
+
+                console.log("Feedback mapping details ==" + JSON.stringify(data));
+
+                $scope.FbSetupList= data;
+
+            });
+
+         }else{
+
+            $location.path('/feedback-setup');
+         }
+
+        };
+        
+
         $scope.isActiveAsc = 'id';
         $scope.isActiveDesc = '';
 

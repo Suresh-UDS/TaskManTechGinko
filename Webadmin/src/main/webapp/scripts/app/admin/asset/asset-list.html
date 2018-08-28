@@ -495,8 +495,8 @@
                             </div>
                             <div id="collapseOne" class="panel-collapse collapse collapseOne in" role="tabpanel" aria-labelledby="headingOne" aria-expanded="true" style="height: 110px;">
                                 <div class="panel-body">
-
-                                    <div class="row" ng-init="loadProjects();loadAssets();loadEmployee()">
+                                    <!--loadAssets();-->
+                                    <div class="row" ng-init="loadProjects();loadEmployee()">
                                         <div class="col-xs-12 col-md-4">
                                             <div class="form-group" >
                                                 <div class="dropdown">
@@ -536,11 +536,7 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
-
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -577,7 +573,6 @@
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-md-4">
-
                                             <div class="dropdown">
                                                 <div class="form-group">
                                                     <label class="label-control">Asset Type</label>
@@ -587,7 +582,7 @@
                                                     <!--</select>-->
                                                     <span ng-show="typeFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!typeFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchAssetType" ng-disabled="typeFilterDisable" ng-change="loadSearchType(searchAssetType)">
+                                                    <ui-select ng-model="searchAssetType" ng-disabled="typeFilterDisable" ng-click="loadSearchType(searchAssetType)">
                                                         <ui-select-match placeholder="Select asset Type...">{{filter ? searchAssetType.name?searchAssetType.name:'Select asset Type' :clearField?'Select Asset Type':searchAssetType}}</ui-select-match>
                                                         <ui-select-choices  repeat="type in getType($select.search) | filter: $select.search track by $index">
                                                             <div ng-bind="type"></div>
@@ -611,7 +606,7 @@
                                                     <!--</select>-->
                                                     <span ng-show="groupFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!groupFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchAssetGroup" ng-disabled="groupFilterDisable" ng-change="loadSearchGroup(searchAssetGroup)">
+                                                    <ui-select ng-model="searchAssetGroup" ng-disabled="groupFilterDisable" ng-click="loadSearchGroup(searchAssetGroup)">
                                                         <ui-select-match placeholder="Select asset group...">{{filter ? searchAssetGroup.name?searchAssetGroup.name:'Select Asset Group' :clearField?'Select Asset Group':searchAssetGroup}}</ui-select-match>
                                                         <ui-select-choices  repeat="group in getGroup($select.search) | filter: $select.search track by $index">
                                                             <div ng-bind="group"></div>
@@ -652,12 +647,7 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
-
-
-
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-danger btn-simple" data-dismiss="modal" >Cancel</button>

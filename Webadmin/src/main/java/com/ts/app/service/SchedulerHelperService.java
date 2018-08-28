@@ -590,13 +590,17 @@ public class SchedulerHelperService extends AbstractService {
 						now.set(Calendar.MILLISECOND, 0);
 						Calendar alertTimeCal = Calendar.getInstance();
 						if(StringUtils.isNotEmpty(alertTime)) {
-							Date alertDateTime = DateUtil.parseToDateTime(alertTime);
-							alertTimeCal.setTime(alertDateTime);
-							alertTimeCal.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH));
-							alertTimeCal.set(Calendar.MONTH, now.get(Calendar.MONTH));
-							alertTimeCal.set(Calendar.YEAR, now.get(Calendar.YEAR));
-							alertTimeCal.set(Calendar.SECOND, 0);
-							alertTimeCal.set(Calendar.MILLISECOND, 0);
+							try {
+								Date alertDateTime = DateUtil.parseToDateTime(alertTime);
+								alertTimeCal.setTime(alertDateTime);
+								alertTimeCal.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH));
+								alertTimeCal.set(Calendar.MONTH, now.get(Calendar.MONTH));
+								alertTimeCal.set(Calendar.YEAR, now.get(Calendar.YEAR));
+								alertTimeCal.set(Calendar.SECOND, 0);
+								alertTimeCal.set(Calendar.MILLISECOND, 0);
+							}catch (Exception e) {
+								log.error("Error while parsing attendance shift alert time configured for client : " + proj.getName() , e);
+							}
 						}
 						
 						if(dayReport && (attnDayWiseAlertTime == null ||  alertTimeCal.equals(now) || onDemand)) {

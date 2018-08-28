@@ -35,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
+import com.ts.app.domain.Attendance;
 import com.ts.app.domain.CheckInOut;
 import com.ts.app.domain.CheckInOutImage;
 import com.ts.app.domain.Checklist;
@@ -2023,45 +2024,55 @@ public class JobManagementService extends AbstractService {
 	}
 
 	public String uploadExistingChecklistImg() {
-		List<JobChecklist> jobchecklists = jobChecklistRepository.findAll();
-		for(JobChecklist jobChecklist : jobchecklists) {
-			if(jobChecklist.getImage_1() != null) {
-				if(jobChecklist.getImage_1().indexOf("data:image") == 0) {
-					String base64String = jobChecklist.getImage_1().split(",")[1];
-					boolean isBase64 = Base64.isBase64(base64String);
-					JobChecklistDTO checklist = mapperUtil.toModel(jobChecklist, JobChecklistDTO.class);
-					if(isBase64){
-						String image1 = amazonS3utils.uploadCheckListImage(checklist.getImage_1(), checklist.getChecklistItemName(), checklist.getJobId(), "image_1");
-						jobChecklist.setImage_1(image1);
-						jobChecklistRepository.save(jobChecklist);
+		int currPage = 1;
+		int pageSize = 10;
+		Pageable pageRequest = createPageRequest(currPage, pageSize);
+		log.debug("Curr Page ="+ currPage + ",  pageSize -" + pageSize);
+		Page<JobChecklist> checkResult = jobChecklistRepository.findAll(pageRequest);
+		List<JobChecklist> jobchecklists = checkResult.getContent();
+		while(CollectionUtils.isNotEmpty(jobchecklists)) {
+			for(JobChecklist jobChecklist : jobchecklists) {
+				if(jobChecklist.getImage_1() != null) {
+					if(jobChecklist.getImage_1().indexOf("data:image") == 0) {
+						String base64String = jobChecklist.getImage_1().split(",")[1];
+						boolean isBase64 = Base64.isBase64(base64String);
+						JobChecklistDTO checklist = mapperUtil.toModel(jobChecklist, JobChecklistDTO.class);
+						if(isBase64){
+							String image1 = amazonS3utils.uploadCheckListImage(checklist.getImage_1(), checklist.getChecklistItemName(), checklist.getJobId(), "image_1");
+							jobChecklist.setImage_1(image1);
+						}
+					}
+				}
+				if(jobChecklist.getImage_2() != null) {
+					if(jobChecklist.getImage_2().indexOf("data:image") == 0) {
+						String base64String = jobChecklist.getImage_2().split(",")[1];
+						boolean isBase64 = Base64.isBase64(base64String);
+						JobChecklistDTO checklist = mapperUtil.toModel(jobChecklist, JobChecklistDTO.class);
+						if(isBase64){
+							String image2 = amazonS3utils.uploadCheckListImage(checklist.getImage_2(), checklist.getChecklistItemName(), checklist.getJobId(), "image_2");
+							jobChecklist.setImage_2(image2);
+						}
+					}
+				}
+				if(jobChecklist.getImage_3() != null) {
+					if(jobChecklist.getImage_3().indexOf("data:image") == 0) {
+						String base64String = jobChecklist.getImage_3().split(",")[1];
+						boolean isBase64 = Base64.isBase64(base64String);
+						JobChecklistDTO checklist = mapperUtil.toModel(jobChecklist, JobChecklistDTO.class);
+						if(isBase64){
+							String image3 = amazonS3utils.uploadCheckListImage(checklist.getImage_3(), checklist.getChecklistItemName(), checklist.getJobId(), "image_3");
+							jobChecklist.setImage_3(image3);
+						}
 					}
 				}
 			}
-			if(jobChecklist.getImage_2() != null) {
-				if(jobChecklist.getImage_2().indexOf("data:image") == 0) {
-					String base64String = jobChecklist.getImage_2().split(",")[1];
-					boolean isBase64 = Base64.isBase64(base64String);
-					JobChecklistDTO checklist = mapperUtil.toModel(jobChecklist, JobChecklistDTO.class);
-					if(isBase64){
-						String image2 = amazonS3utils.uploadCheckListImage(checklist.getImage_2(), checklist.getChecklistItemName(), checklist.getJobId(), "image_2");
-						jobChecklist.setImage_2(image2);
-						jobChecklistRepository.save(jobChecklist);
-					}
-				}
-			}
-			if(jobChecklist.getImage_3() != null) {
-				if(jobChecklist.getImage_3().indexOf("data:image") == 0) {
-					String base64String = jobChecklist.getImage_3().split(",")[1];
-					boolean isBase64 = Base64.isBase64(base64String);
-					JobChecklistDTO checklist = mapperUtil.toModel(jobChecklist, JobChecklistDTO.class);
-					if(isBase64){
-						String image3 = amazonS3utils.uploadCheckListImage(checklist.getImage_3(), checklist.getChecklistItemName(), checklist.getJobId(), "image_3");
-						jobChecklist.setImage_3(image3);
-						jobChecklistRepository.save(jobChecklist);
-					}
-				}
-			}
+			jobChecklistRepository.save(jobchecklists);
+			currPage++;
+			pageRequest = createPageRequest(currPage, pageSize);
+			checkResult = jobChecklistRepository.findAll(pageRequest);
+			jobchecklists = checkResult.getContent();
 		}
+		
 		return "Successfully upload checklist images";
 	}
 	
@@ -2099,15 +2110,16 @@ public class JobManagementService extends AbstractService {
 		}
 		
 		//validate job completion time
-		Calendar now = Calendar.getInstance();
-		Calendar jobStartTime = Calendar.getInstance();
-		jobStartTime.setTime(jobDTO.getPlannedStartTime());
-		if(now.before(jobStartTime)) {
-			JobDTO jobDto = mapperUtil.toModel(job, JobDTO.class);
-			jobDto.setErrorMessage("Cannot complete job before the scheduled job start time");
-			return jobDto;
-		}
-		
+		if(jobDTO.getJobStatus() != null && jobDTO.getJobStatus().equals(JobStatus.COMPLETED)) {
+			Calendar now = Calendar.getInstance();
+			Calendar jobStartTime = Calendar.getInstance();
+			jobStartTime.setTime(jobDTO.getPlannedStartTime());
+			if(now.before(jobStartTime)) {
+				JobDTO jobDto = mapperUtil.toModel(job, JobDTO.class);
+				jobDto.setErrorMessage("Cannot complete job before the scheduled job start time");
+				return jobDto;
+			}
+		}	
 		return jobDTO;
 	}
 }

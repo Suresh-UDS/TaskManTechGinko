@@ -613,22 +613,34 @@ public class TicketManagementService extends AbstractService {
     }
 
 	public String uploadExistingTicketImg() {
-		List<Ticket> tickets = ticketRepository.findAll();
-		for(Ticket ticket : tickets) { 
-			if(ticket.getImage() != null) { 
-				if(ticket.getImage().indexOf("data:image") == 0) {
-					String base64String = ticket.getImage().split(",")[1];
-					boolean isBase64 = Base64.isBase64(base64String);
-					long dateTime = new Date().getTime();
-					TicketDTO ticketModel = mapperUtil.toModel(ticket, TicketDTO.class);
-					if(isBase64){ 
-						ticketModel = amazonS3utils.uploadExistingTicketFile(ticketModel.getId(), ticketModel.getImage(), dateTime, ticketModel);
-						ticket.setImage(ticketModel.getImage());
-						ticketRepository.save(ticket);
+		int currPage = 1;
+		int pageSize = 10;
+		Pageable pageRequest = createPageRequest(currPage, pageSize);
+		log.debug("Curr Page ="+ currPage + ",  pageSize -" + pageSize);
+		Page<Ticket> ticketResult = ticketRepository.findAll(pageRequest);
+		List<Ticket> tickets = ticketResult.getContent();
+		while(CollectionUtils.isNotEmpty(tickets)) {
+			for(Ticket ticket : tickets) { 
+				if(ticket.getImage() != null) { 
+					if(ticket.getImage().indexOf("data:image") == 0) {
+						String base64String = ticket.getImage().split(",")[1];
+						boolean isBase64 = Base64.isBase64(base64String);
+						long dateTime = new Date().getTime();
+						TicketDTO ticketModel = mapperUtil.toModel(ticket, TicketDTO.class);
+						if(isBase64){ 
+							ticketModel = amazonS3utils.uploadExistingTicketFile(ticketModel.getId(), ticketModel.getImage(), dateTime, ticketModel);
+							ticket.setImage(ticketModel.getImage());
+						}
 					}
 				}
 			}
+			ticketRepository.save(tickets);
+			currPage++;
+			pageRequest = createPageRequest(currPage, pageSize);
+			ticketResult = ticketRepository.findAll(pageRequest);
+			tickets = ticketResult.getContent();
 		}
+		
 		return "Successfully upload existing ticket file to S3";
 	}
 

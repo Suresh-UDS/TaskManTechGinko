@@ -773,10 +773,19 @@ input.InputTxtCapsAll
 {
     text-transform: uppercase;
 }
+.selectTxtCaps option
+{
+    text-transform: uppercase;
+}
+
 textarea.InputTxtCaps
 {
     text-transform: capitalize;
 }
+
+
+
+
 .caps
 {
     text-transform: capitalize;
@@ -1023,18 +1032,20 @@ ul.blocksListCon
     padding: 0;
 }
 .blocksListCon li {
-    width: 16%;
-    height: 120px;
+    width: 130px;
+    height: 130px;
     float: left;
-    border: 1px solid #dfdfdf;
+    border: 2px solid #b9b9b9;
     margin: 3px;
     padding: 30px 15px 15px 15px;
     text-align: center;
     cursor: pointer;
+    border-left: 6px solid #b9b9b9;
+    border-radius: 5px;
 }
 .blocksListCon li:hover
 {
-    border: 1px solid #545454;
+    border: 2px solid #b9b9b9;
 }
 .jobcards .card [data-background-color] .card-title {
     /*color:#ff9800;*/
@@ -1200,6 +1211,19 @@ button.btn.btn-outline {
 {
     text-transform: uppercase
 }
+.tablecard table tr td.lowercase::first-letter
+{
+    text-transform: lowercase;
+}
+input.InputFirstCaps::first-letter
+{
+    text-transform: uppercase;
+}
+
+
+
+
+
 .form-group label.control-label
 {
    color:#444;
@@ -1444,7 +1468,10 @@ button.btn.btn-outline {
 }
 
 
-
+.modal
+{
+    z-index: 99999;
+}
 
 /* left right modal css*/
 

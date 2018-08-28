@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ts.app.domain.Employee;
 import com.ts.app.service.AmazonS3Service;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
@@ -240,6 +241,20 @@ public class AmazonS3Utils {
         	e.printStackTrace();
         }
         return ticketModel;
+	}
+
+	public Employee uploadExistingEnrollImage(String enrolled_face, Employee employee, long dateTime) {
+		String filename = "enrollImage_"+ dateTime +".png";
+    	String fileUrl = "";
+    	try {
+	        fileUrl = amazonS3Service.uploadEnrollImageToS3(filename, enrolled_face);
+	        employee.setEnrolled_face(filename);
+	        log.debug(fileUrl);
+    	} catch(Exception e) { 
+    		e.printStackTrace();
+    	}
+    	
+		return employee;
 	}
     
   

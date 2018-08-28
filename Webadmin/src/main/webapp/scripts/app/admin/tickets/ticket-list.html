@@ -306,7 +306,7 @@
                                  </tr>
                                  <tr>
                                      <td>Description</td>
-                                     <td>{{listDescription | capitalize}}</td>
+                                     <td><span ng-if="listDescription">{{listDescription | capitalize}}</span><span ng-if="!listDescription">-</span></td>
 
                                  </tr>
                                  <tr>
@@ -358,21 +358,20 @@
 
 								<tr>
                                       <td>Image/File </td>
-                                      <td>
+                                      <td ng-if="ticketImage !=null">
                       						<a href="#" ng-show="extension === 'jpg' || extension === 'jpeg' || extension === 'png'" onClick="$('#myModalNew').modal()" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="loadTicketImage(ticketImage,tickets.id)">
                          							<img id="images" src={{ticketImage}} width="100px" height="100px" />
                      							</a>
-
                      							<a  href="{{ticketImage}}" ng-hide="extension === 'jpg' || extension === 'jpeg' || extension === 'png'">
                  												<img  id="images" ng-src="assets/img/{{extension}}.png" style="margin-top: 15px;" width="100px" height="100px"/>
-             												</a>
+             									</a>
                                       </td>
-
+                                      <td ng-if="ticketImage == null">No Images</td>
                                   </tr>
                                   <tr>
                                   	<td>Job</td>
                                   	<td>
-                                  	<a ng-if="(listJobId > 0)"  ui-sref="view-job({id : listJobId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View Job {{listJobId}}</a>
+                                  	<a ng-if="(listJobId > 0)" ui-sref="view-job({id : listJobId})" ng-click="closeModal()" class="btn btn-simple btn-info">View Job {{listJobId}}</a>
                                   	</td>
                                   </tr>
                                   <tr>

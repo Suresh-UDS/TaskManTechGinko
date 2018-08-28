@@ -244,8 +244,8 @@
                                             <!--<a id="{{ 'jobPhoto-' + $index }}" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImages(job.employeeEmpId,image.photoOut, $index)">-->
                                             <!--<img data-ng-src="/api/employee/{{job.employeeEmpId}}/checkInOut/{{image.photoOut}}" width="30px" height="30px"/>-->
                                             <!--</a>-->
-                                            <a onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(image)" >
-                                                <img src="{{image}}" width="150px" height="150px">
+                                            <a onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(url)" >
+                                                <img src="{{url}}" width="150px" height="150px">
 
                                             </a>
                                         </div>
@@ -275,15 +275,15 @@
                                                 <span ng-if="!checklist.remarks && !checklist.completed">No remarks added</span>
                                             </td>
                                             <td>
-                                                <span ng-if="!checklist.image_1">No Image added</span>
-                                                <a ng-if="checklist.image_1" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.image_1)" >
-                                                    <img src="{{checklist.image_1}}" width="80px" height="80px">
+                                                <span ng-if="!checklist.imageUrl_1">No Image added</span>
+                                                <a ng-if="checklist.imageUrl_1" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.imageUrl_1)" >
+                                                    <img src="{{checklist.imageUrl_1}}" width="80px" height="80px">
                                                 </a>
-                                                <a ng-if="checklist.image_2" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.image_2)" >
-                                                    <img src="{{checklist.image_2}}" width="80px" height="80px">
+                                                <a ng-if="checklist.imageUrl_2" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.imageUrl_2)" >
+                                                    <img src="{{checklist.imageUrl_2}}" width="80px" height="80px">
                                                 </a>
-                                                <a ng-if="checklist.image_3" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.image_3)" >
-                                                    <img src="{{checklist.image_3}}" width="80px" height="80px">
+                                                <a ng-if="checklist.imageUrl_3" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.imageUrl_3)" >
+                                                    <img src="{{checklist.imageUrl_3}}" width="80px" height="80px">
                                                 </a>
                                             </td>
                                         </tr>
@@ -325,7 +325,7 @@
 							<div class="col-sm-12 txt-align-rgt">
 
 								<button class="btn btn-default " type="button"
-									ng-click="conform('cancel')" id="cancel-button">
+									ng-click="back('cancel')" id="cancel-button">
 									<i class=""></i> Back
 								</button>
 							</div>
