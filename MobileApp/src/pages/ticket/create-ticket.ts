@@ -264,7 +264,7 @@ export class CreateTicket {
 
         popover.onDidDismiss(data=>
         {
-            this.takenImages.pop(data);
+            // this.takenImages.pop(data);
         })
     }
 
