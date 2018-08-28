@@ -112,6 +112,13 @@ export class AssetList {
       {
           // this.componentService.closeLoader();
           var text = this.navParams.get('text');
+
+          var searchCriteria ={
+              currPage:this.page+1
+          };
+
+          this.getAsset(searchCriteria)
+
           this.assetService.getAssetByCode(text).subscribe(
               response=>{
                   this.componentService.showToastMessage('Asset found, navigating..','bottom')
