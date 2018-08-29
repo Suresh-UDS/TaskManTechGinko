@@ -371,7 +371,7 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.siteId = null;
             }
         		//$scope.searchCriteria.list = true;
-                $scope.searchCriteria.isList = true;
+                $scope.searchCriteria.isReport = true;
 
                 $scope.employees = "";
         		EmployeeComponent.search($scope.searchCriteria).then(function (data) {
