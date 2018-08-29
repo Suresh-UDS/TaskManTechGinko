@@ -42,6 +42,32 @@
       </ion-item>
     </ion-col>
   </ion-row>
+    <ion-row no-margin>
+        <ion-col col-12>
+            <ion-item>
+                <ion-label text-capitalize class="client-label" text-left>Reference number:</ion-label>
+                <ion-input type="text"></ion-input>
+            </ion-item>
+        </ion-col>
+    </ion-row>
+    <!--<ion-row no-margin>-->
+        <!--<ion-col>-->
+            <!--<ion-input type="text" [(ngModel)]="searchText" (ionChange)='f(searchText)' class="txt-input" placeholder="Search Employees">-->
+
+            <!--</ion-input>-->
+        <!--</ion-col>-->
+    <!--</ion-row>-->
+
+    <!--<ion-row *ngIf="searchText"  no-margin>-->
+        <!--<div>-->
+            <!--<ul class="fnt-z white-bg width90">-->
+                <!--<li>Seeni</li>-->
+                <!--<li>Venkatesh</li>-->
+                <!--<li>Sowmiya</li>-->
+                <!--<li>Karthick</li>-->
+            <!--</ul>-->
+        <!--</div>-->
+    <!--</ion-row>-->
 
   <ion-row no-margin>
     <ion-col col-12>
@@ -107,6 +133,11 @@
       </button>
     </ion-col>
   </ion-row>
+    <ion-row no-margin>
+        <button ion-fab mini color="primary" (click)="viewDetails()">
+            <ion-icon name="eye"></ion-icon>
+        </button>
+    </ion-row>
 </ion-content>
 <ion-footer>
     <ion-toolbar text-center>

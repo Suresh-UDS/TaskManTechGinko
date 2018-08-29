@@ -132,6 +132,7 @@ import {PurchaseRequisitionService} from "../pages/service/PurchaseRequisitionSe
 import {ExpensePage} from "../pages/expense/expense";
 import {TransactionPage} from "../pages/expense/transaction";
 import {Indent} from "../pages/indent/indent";
+import{IndentView} from "../pages/indent-view/indent-view";
 
 @NgModule({
   declarations: [
@@ -220,7 +221,8 @@ import {Indent} from "../pages/indent/indent";
       AddInventoryTransaction,
     ExpensePage,
     TransactionPage,
-      Indent
+      Indent,
+      IndentView
   ],
   imports: [
     BrowserModule,
@@ -320,7 +322,8 @@ import {Indent} from "../pages/indent/indent";
       AddInventoryTransaction,
     ExpensePage,
     TransactionPage,
-      Indent
+      Indent,
+      IndentView
       // WheelSelector
 
 

@@ -6,6 +6,7 @@ import {InventoryService} from "../service/inventoryService";
 import{ViewController} from "ionic-angular";
 import{InventoryMaster} from "../inventory-master/inventory-master";
 import{PurchaseRequisitionService} from "../service/PurchaseRequisitionService";
+import{IndentView} from "../indent-view/indent-view";
 
 /**
  * Generated class for the Indent page.
@@ -184,6 +185,11 @@ export class Indent {
                 console.log(err);
             }
         )
+    }
+
+    viewDetails()
+    {
+        this.navCtrl.push(IndentView);
     }
 
 }
