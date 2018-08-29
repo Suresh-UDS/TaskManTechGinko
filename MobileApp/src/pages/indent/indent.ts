@@ -38,6 +38,8 @@ export class Indent {
 
     indent: any;
     selectedMaterial: any;
+    pageSort:15;
+    page:1;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, private component: componentService,
                 private siteService: SiteService, private inventoryService: InventoryService,public viewCtrl:ViewController) {
@@ -79,7 +81,8 @@ export class Indent {
                 console.log(response);
                 this.siteList = response;
                 console.log(this.siteList);
-                this.getAllInventoryGroups();
+                // this.getAllInventoryGroups();
+
             },
             error => {
                 if (error.type == 3) {
@@ -144,6 +147,31 @@ export class Indent {
 
     selectMaterial(m) {
         this.selectedMaterial = m;
+    }
+
+    searchMaterials(siteId)
+    {
+        var searchCriteria={
+            currPage:this.page,
+            pageSort: this.pageSort,
+            siteId:siteId,
+            list:true,
+        }
+        this.inventoryService.getMaterials(searchCriteria).subscribe(
+            response=>{
+                console.log("Getting Materials");
+                console.log(response);
+                this.inventoryMaterial=response.transactions;
+            },error=>
+            {
+                console.log("Error in getting materials");
+                console.log(error);
+            }
+        )
+    }
+
+    saveIndentMaterial(){
+
     }
 }
 

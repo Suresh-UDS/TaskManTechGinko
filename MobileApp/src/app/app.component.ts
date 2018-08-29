@@ -29,6 +29,7 @@ import {SplashLogo} from "../pages/splash-logo/splash-logo";
 import{OfflinePage} from "../pages/offline-page/offline-page";
 import{OfflineAssetList} from "../pages/offline-assetlist/offline-assetlist";
 import{OfflineGetassetreadings} from "../pages/offline-getassetreadings/offline-getassetreadings";
+import{Indent} from "../pages/indent/indent";
 
 import{OneSignal} from "@ionic-native/onesignal";
 import {componentService} from "../pages/service/componentService";
@@ -154,7 +155,8 @@ export class MyApp {
       { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt',permission:'QuotationList'},
        { title: 'Feedback', component: InitFeedbackPage,active:false,icon:'feedback',permission:'FeedbackList'},
        { title: 'ChangePassword', component:ChangePassword,active:false,icon:'feedback',permission:'FeedbackList'},
-        {title: 'InventoryMaster', component:InventoryMaster,active:false,icon:'feedback',permission:'FeedbackList'}
+        {title: 'InventoryMaster', component:InventoryMaster,active:false,icon:'feedback',permission:'FeedbackList'},
+        {title:'Indent',component:Indent,active:false,icon:'build',permission:'TicketsList'}
         // {title:'Splash page', component:Splash,active:false,icon:'feedback',permission:'DashboardList'},
         // {title:'Splash logo', component:SplashLogo,active:false,icon:'feedback',permission:'DashboardList'},
       // { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},

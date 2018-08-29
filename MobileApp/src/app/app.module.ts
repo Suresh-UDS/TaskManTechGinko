@@ -60,6 +60,7 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { File } from '@ionic-native/file';
 import{TicketFilter} from "../pages/ticket/ticket-filter/ticket-filter";
 import{InventoryMaster} from "../pages/inventory-master/inventory-master";
+import{Indent} from "../pages/indent/indent";
 
 import {SQLitePorter} from "@ionic-native/sqlite-porter";
 
@@ -127,6 +128,7 @@ import{ForgotPassword} from "../pages/forgot-password/forgot-password";
 import{InventoryFilter} from "../pages/inventory-filter/inventory-filter";
 import{AddInventoryTransaction} from "../pages/add-inventory-transaction/add-inventory-transaction";
 import {InventoryService} from "../pages/service/inventoryService";
+import{AutoCompleteModule} from "ionic2-auto-complete";
 
 @NgModule({
   declarations: [
@@ -212,13 +214,15 @@ import {InventoryService} from "../pages/service/inventoryService";
       UpdateApp,
       ForgotPassword,
       InventoryFilter,
-      AddInventoryTransaction
+      AddInventoryTransaction,
+      Indent
   ],
   imports: [
     BrowserModule,
     HttpModule,
     DatePickerModule,
     BrowserAnimationsModule,
+      AutoCompleteModule,
     IonicModule.forRoot(MyApp,{
         backButtonText: '',
         backButtonIcon: 'ios-arrow-back',
@@ -310,6 +314,7 @@ import {InventoryService} from "../pages/service/inventoryService";
       ForgotPassword,
       InventoryFilter,
       AddInventoryTransaction,
+      Indent
       // WheelSelector
 
 
