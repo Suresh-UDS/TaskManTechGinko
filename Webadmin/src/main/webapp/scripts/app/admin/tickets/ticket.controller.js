@@ -570,6 +570,8 @@ angular.module('timeSheetApp')
 
                     }
 
+                }).catch(function(){
+                    $scope.loadingStop();
                 });
 
             }else{
