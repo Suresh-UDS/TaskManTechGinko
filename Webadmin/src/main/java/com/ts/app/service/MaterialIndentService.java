@@ -28,6 +28,7 @@ import com.ts.app.domain.User;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.InventoryRepository;
 import com.ts.app.repository.InventoryTransactionRepository;
+import com.ts.app.repository.MaterialIndentItemRepository;
 import com.ts.app.repository.MaterialIndentRepository;
 import com.ts.app.repository.MaterialIndentSpecification;
 import com.ts.app.repository.ProjectRepository;
@@ -69,6 +70,9 @@ public class MaterialIndentService extends AbstractService {
 	private EmployeeRepository employeeRepository;
 	
 	@Inject
+	private MaterialIndentItemRepository materialIndentItemRepository;
+	
+	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 	
 	public MaterialIndentDTO createIndent(MaterialIndentDTO materialIndentDTO) { 
@@ -83,6 +87,7 @@ public class MaterialIndentService extends AbstractService {
 		List<MaterialIndentItem> indentItemEntity = new ArrayList<MaterialIndentItem>();
 		for(MaterialIndentItemDTO indentItm : indentItems) { 
 			MaterialIndentItem materialIndentItm = mapperUtil.toEntity(indentItm, MaterialIndentItem.class);
+			materialIndentItm.setActive(MaterialIndentItem.ACTIVE_YES);
 			materialIndentItm.setMaterialIndent(indentEntity);
 			materialIndentItm.setMaterial(inventoryRepository.findOne(indentItm.getMaterialId()));
 			indentItemEntity.add(materialIndentItm);
@@ -121,7 +126,7 @@ public class MaterialIndentService extends AbstractService {
 	public void updateMaterialIndents(MaterialIndentDTO materialIndentDTO) {
 		MaterialIndent materialIndent = materialIndentRepository.findOne(materialIndentDTO.getId());
 		mapToModel(materialIndent, materialIndentDTO);
-		materialIndentRepository.saveAndFlush(materialIndent);		
+		materialIndentRepository.save(materialIndent);		
 	}
 
 	private void mapToModel(MaterialIndent material, MaterialIndentDTO materialindentDTO) {
@@ -160,6 +165,10 @@ public class MaterialIndentService extends AbstractService {
 				MaterialIndentItem newItem = mapperUtil.toEntity(itemDto, MaterialIndentItem.class);
 				newItem.setMaterialIndent(material);
 				material.getItems().add(newItem);
+			}else {
+				MaterialIndentItem existingItm = materialIndentItemRepository.findOne(itemDto.getId());
+				existingItm.setQuantity(itemDto.getQuantity());
+				materialIndentItemRepository.save(existingItm);
 			}
 		}	
 	}

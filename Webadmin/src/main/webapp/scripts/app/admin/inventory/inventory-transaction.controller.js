@@ -321,7 +321,7 @@ angular.module('timeSheetApp')
                     $scope.showNotifications('top','center','danger','Unable to update Material');
                     $scope.error = 'ERROR';
                 }
-            });;
+            });
 
     	};
     	

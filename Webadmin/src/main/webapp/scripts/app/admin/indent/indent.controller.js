@@ -18,6 +18,8 @@ angular.module('timeSheetApp')
 		
 		$scope.selectedRefNumber = null;
 		
+		$scope.issuedQuantity = null;
+		
 		$rootScope.loginView = false;
 	
 		$scope.pages = { currPage : 1};
@@ -187,6 +189,15 @@ angular.module('timeSheetApp')
 			return isDuplicate;
 		}
 		
+		$scope.validate = function(material) { 
+			console.log(material);
+			if(material.quantity > $scope.issuedQuantity) { 
+				$scope.showNotifications('top','center','danger','Issued Quantity cannot execeeds to requested quantity');
+			}else{
+				console.log('Not Greater than a required quantity');
+			}
+		}
+		
 		$scope.saveIndent = function() {
 			if($scope.selectedProject) {
 				$scope.indentObject.projectId = $scope.selectedProject.id;
@@ -275,9 +286,9 @@ angular.module('timeSheetApp')
 			$scope.editIndentObj.indentRefNumber = $scope.selectedRefNumber;
 			
 			console.log($scope.editIndentObj);
-//			IndentComponent.update($scope.editIndentObj).then(function(resp){ 
-//				console.log(resp);
-//			});
+			IndentComponent.update($scope.editIndentObj).then(function(resp){ 
+				console.log(resp);
+			});
 		}
 
         $scope.search = function () {
