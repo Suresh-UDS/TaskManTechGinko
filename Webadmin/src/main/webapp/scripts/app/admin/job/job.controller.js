@@ -40,7 +40,7 @@ angular.module('timeSheetApp')
         $scope.searchStatus = null;
         $scope.disable = false;
         $rootScope.exportStatusObj  ={};
-        $scope.status = 0;
+        $scope.checkStatus = 0;
         $scope.selectPlannedStartTime;
 
         /*
@@ -710,7 +710,7 @@ angular.module('timeSheetApp')
                            $scope.loadBlocks();
                            $scope.loadFloors();
                            $scope.loadZones();
-                           $scope.status = 1;
+                           $scope.checkStatus  = 1;
 
 
                     })
@@ -1267,7 +1267,7 @@ angular.module('timeSheetApp')
 
         $scope.cancel = function () {
 
-             if($scope.status == 1){
+             if($scope.checkStatus == 1){
 
                  $location.path('/tickets');
 
