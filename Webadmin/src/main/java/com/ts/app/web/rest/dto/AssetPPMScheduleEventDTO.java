@@ -1,13 +1,14 @@
 package com.ts.app.web.rest.dto;
 
-import java.time.ZonedDateTime;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class AssetPPMScheduleEventDTO extends BaseDTO {
 
 	private long id;
 	private String title;
-	private ZonedDateTime start;
+	private Date start;
 	private String frequencyPrefix;
 	private int frequencyDuration;
 	private String frequency;
@@ -83,11 +84,12 @@ public class AssetPPMScheduleEventDTO extends BaseDTO {
 		this.assetId = assetId;
 	}
 
-	public ZonedDateTime getStart() {
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	public Date getStart() {
 		return start;
 	}
 
-	public void setStart(ZonedDateTime start) {
+	public void setStart(Date start) {
 		this.start = start;
 	}
 
