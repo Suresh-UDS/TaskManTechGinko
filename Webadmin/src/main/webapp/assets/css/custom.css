@@ -852,7 +852,21 @@ a.add-btn,button.add-btn
 .panel-body .table-responsive table tr:first-child td {
     border-top: none !important;
 }
-
+.table-responsive table tr th
+{
+    font-weight: 400;
+}
+.EmpProfilePicCon
+{
+    text-align: center;
+    min-height: 100px;
+}
+img.EmpProfilePic
+{
+    width: 100px;
+    height: 100px;
+    border-radius: 50% ;
+}
 /* View page Css */
 
 .ViewContentPageCon .panel-body .table-responsive table tr td:nth-child(odd)
