@@ -63,10 +63,15 @@
       </ion-item>
     </ion-col>
   </ion-row>
-    <ion-row no-margin text-center>
-        <ion-col col-9>
-            <ion-item>
-                <ion-label>Added Materials</ion-label>
+    <ion-row no-margin>
+        <ion-col col-12 float-right>
+            <button class="btn btn-warning pull-right"  (click)="addIndent(selectedMaterial)">Add</button>
+        </ion-col>
+    </ion-row>
+    <ion-row no-margin *ngIf="selectedMaterial">
+        <ion-col col-12>
+            <ion-item text-center class="bg-gray">
+                <ion-label class="clr-orange bg-gray">Added Materials</ion-label>
             </ion-item>
         </ion-col>
         <ion-col col-3>
@@ -102,4 +107,12 @@
     </ion-col>
   </ion-row>
 </ion-content>
+<ion-footer>
+    <ion-toolbar text-center>
+        <button class="btn btn-warning center width42" (click)="saveIndentMaterial(material)">
+            Save
+        </button>
+    </ion-toolbar>
+</ion-footer>
+
 

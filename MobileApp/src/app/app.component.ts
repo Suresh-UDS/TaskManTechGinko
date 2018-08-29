@@ -154,7 +154,6 @@ export class MyApp {
         { title: 'Attendance', component: SiteListPage,active:false,icon:'content_paste',permission:'AttendanceList'},
         { title: 'Rate Card', component: RateCardPage,active:false,icon:'description',permission:'RateCardList'},
       { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt',permission:'QuotationList'},
-      { title: 'Expense', component:ExpensePage, active:false, icon:'receipt',permission:'AttendanceList'},
        { title: 'Feedback', component: InitFeedbackPage,active:false,icon:'feedback',permission:'FeedbackList'},
        { title: 'ChangePassword', component:ChangePassword,active:false,icon:'feedback',permission:'FeedbackList'},
         {title: 'InventoryMaster', component:InventoryMaster,active:false,icon:'feedback',permission:'FeedbackList'},

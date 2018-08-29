@@ -131,6 +131,7 @@ import{AutoCompleteModule} from "ionic2-auto-complete";
 import {PurchaseRequisitionService} from "../pages/service/PurchaseRequisitionService";
 import {ExpensePage} from "../pages/expense/expense";
 import {TransactionPage} from "../pages/expense/transaction";
+import {Indent} from "../pages/indent/indent";
 
 @NgModule({
   declarations: [
@@ -218,7 +219,8 @@ import {TransactionPage} from "../pages/expense/transaction";
       InventoryFilter,
       AddInventoryTransaction,
     ExpensePage,
-    TransactionPage
+    TransactionPage,
+      Indent
   ],
   imports: [
     BrowserModule,
@@ -317,7 +319,8 @@ import {TransactionPage} from "../pages/expense/transaction";
       InventoryFilter,
       AddInventoryTransaction,
     ExpensePage,
-    TransactionPage
+    TransactionPage,
+      Indent
       // WheelSelector
 
 
