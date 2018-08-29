@@ -1208,7 +1208,7 @@ angular.module('timeSheetApp')
 
             AssetComponent.getPPMScheduleCalendar($scope.scheduleObj.assetId,$scope.scheduleObj).then(function(data){
 
-                //console.log("Asset Calendar details ==" + JSON.stringify(data));
+                console.log("Asset Calendar details ==" + JSON.stringify(data));
 
                 $scope.PPMScheduleCalendar = data;
 

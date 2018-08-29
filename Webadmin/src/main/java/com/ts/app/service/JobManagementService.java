@@ -1040,7 +1040,7 @@ public class JobManagementService extends AbstractService {
 			//data.append("&empId="+assetPpmScheduleDTO.getEmployeeId());
 			data.append("&plannedStartTime="+startTime.getTime());
 			data.append("&plannedEndTime="+plannedEndTime.getTime());
-			data.append("&plannedHours="+assetPpmScheduleDTO.getFrequencyDuration());
+			data.append("&plannedHours="+assetPpmScheduleDTO.getPlannedHours());
 			//data.append("&location="+assetPpmScheduleDTO.getLocationId());
 			data.append("&frequency="+assetPpmScheduleDTO.getFrequency());
 			data.append("&duration="+assetPpmScheduleDTO.getFrequencyDuration());

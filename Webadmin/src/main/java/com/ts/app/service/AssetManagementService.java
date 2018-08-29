@@ -832,7 +832,7 @@ public class AssetManagementService extends AbstractService {
 			
 			Calendar lastDate = Calendar.getInstance();
 			if(endDate == null) {
-				lastDate.add(Calendar.DAY_OF_MONTH,  lastDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+				lastDate.add(Calendar.DAY_OF_MONTH,  lastDate.getMaximum(Calendar.DAY_OF_MONTH));
 			}else {
 				lastDate.setTime(endDate);
 			}
@@ -850,6 +850,9 @@ public class AssetManagementService extends AbstractService {
 				schStartCal.setTime(schStartDate);
 				Calendar schEndCal = Calendar.getInstance();
 				schEndCal.setTime(schEndDate);
+				if(schStartCal.after(currCal)) {
+					currCal.setTime(schStartCal.getTime());
+				}
 				while(((currCal.after(schStartCal) || schStartCal.equals(currCal)) || !schStartCal.after(lastDate)) && !currCal.after(lastDate)) { //if ppm schedule starts before current date and not after the last date of the month.
 					AssetPPMScheduleEventDTO assetPPMScheduleEvent = new AssetPPMScheduleEventDTO();
 					assetPPMScheduleEvent.setId(ppmSchedule.getId());
@@ -861,7 +864,7 @@ public class AssetManagementService extends AbstractService {
 					assetPPMScheduleEvent.setFrequency(ppmSchedule.getFrequency());
 					assetPPMScheduleEvent.setFrequencyDuration(ppmSchedule.getFrequencyDuration());
 					assetPPMScheduleEvent.setFrequencyPrefix(ppmSchedule.getFrequencyPrefix());
-					assetPPMScheduleEvent.setStart(ZonedDateTime.ofInstant(currCal.getTime().toInstant(), ZoneId.of("Asia/Kolkata")));
+					assetPPMScheduleEvent.setStart(DateUtil.convertUTCToIST(currCal));
 					assetPPMScheduleEvent.setAllDay(true);
 					assetPPMScheduleEvent.setWeek(currCal.get(Calendar.WEEK_OF_YEAR));
 					assetPPMScheduleEventDTOs.add(assetPPMScheduleEvent);
