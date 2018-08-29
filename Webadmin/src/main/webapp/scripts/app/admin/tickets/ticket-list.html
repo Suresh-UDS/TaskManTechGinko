@@ -329,7 +329,7 @@
                                   </tr>
                                   <tr>
                                     <td>Asset</td>
-                                    <td>{{listAssets}}</td>
+                                    <td><span ng-if="listAssets">{{listAssets}}</span><span ng-if="!listAssets">-</span></td>
                                   </tr>
                                   <tr>
                                     <td>Created by</td>
@@ -370,14 +370,14 @@
                                   </tr>
                                   <tr>
                                   	<td>Job</td>
-                                  	<td>
-                                  	<a ng-if="(listJobId > 0)" ui-sref="view-job({id : listJobId})" ng-click="closeModal()" class="btn btn-simple btn-info">View Job {{listJobId}}</a>
+                                  	<td><span ng-if="listJobId">
+                                  	<a ng-if="(listJobId > 0)" ui-sref="view-job({id : listJobId})" ng-click="closeModal()" class="btn btn-simple btn-info">View Job {{listJobId}}</a></span><span ng-if="!listJobId">-</span>
                                   	</td>
                                   </tr>
                                   <tr>
                                   	<td>Comments</td>
-                                  	<td>
-                                  		{{listComments}}
+                                  	<td><span ng-if="listComments">{{listComments}}</span><span ng-if="!listComments">-</span>
+                                  		
                                   	</td>
                                   </tr>
                                  </tbody>

@@ -102,6 +102,9 @@
                                                 <td>{{item.startTime | date:'hh:mm a'}}</td>
                                                 <td>{{item.endTime | date:'hh:mm a'}}</td>
                                             </tr>
+                                            <tr>
+                                                <td colspan="2" align="center" ng-show="!shiftItems">No Shifts</td>
+                                            </tr>
 
                                             </tbody>
                                         </table>

@@ -53,19 +53,19 @@
                                     <tbody>
                                     <tr>
                                         <td>First Name</td>
-                                        <td style="text-transform: capitalize">{{project.contactFirstName}}</td>
+                                        <td><span style="text-transform: capitalize" ng-if='project.contactFirstName'>{{project.contactFirstName}}</span><span ng-if='!project.contactFirstName'>-</span></td>
                                     </tr>
                                     <tr>
                                         <td>Last Name</td>
-                                        <td style="text-transform: capitalize">{{project.contactLastName}}</td>
+                                        <td><span style="text-transform: capitalize" ng-if='project.contactLastName'>{{project.contactLastName}}</span><span ng-if='!project.contactLastName'>-</span></td>
                                     </tr>
                                     <tr>
                                         <td>Phone</td>
-                                        <td>{{project.phone}}</td>
+                                        <td><span ng-if='project.phone'>{{project.phone}}</span><span ng-if='!project.phone'>-</span></td>
                                     </tr>
                                     <tr>
                                         <td>Email</td>
-                                        <td>{{project.email}}</td>
+                                        <td><span ng-if='project.email'>{{project.email}}</span><span ng-if='!project.email'>-</span></td>
                                     </tr>
                                     </tbody>
                                 </table>
