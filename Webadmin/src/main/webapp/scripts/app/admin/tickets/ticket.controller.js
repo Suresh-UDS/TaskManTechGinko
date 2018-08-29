@@ -570,6 +570,8 @@ angular.module('timeSheetApp')
 
                     }
 
+                }).catch(function(){
+                    $scope.loadingStop();
                 });
 
             }else{
@@ -855,6 +857,8 @@ angular.module('timeSheetApp')
 
             $scope.searchCriteria.currPage = currPageVal;
             $scope.searchCriteria.findAll = false;
+
+            $scope.searchCriteria.isReport = true;
 
              if(!$scope.searchTitle && !$scope.searchDescription && !$scope.searchProject && !$scope.searchSite
                 && !$scope.searchEmployee && !$scope.searchStatus && !$scope.selectedDateFrom && !$scope.selectedDateTo ) {

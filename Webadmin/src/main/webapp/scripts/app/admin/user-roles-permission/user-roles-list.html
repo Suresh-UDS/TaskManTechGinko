@@ -297,77 +297,79 @@
             </div>
 
             <div class="modal-body" ng-init="loadUserRole()">
-                <div class="row">
-                    <div class="col-md-12">
+                <div class="row ViewContentPageCon">
+                    <div class="col-md-12 margn-top30">
 
-                        <div class="col-md-12 margn-top30">
-
-                            <div class="panel panel-default">
-                                <div class="panel-heading">User Role Details</div>
-                                <div class="panel-body">
-
-                                    <div class="table-responsive">
-                                        <table class="table">
-
-                                            <tbody>
-                                            <tr>
-
-
-                                                <td>Id</td>
-                                                <td>{{userRole.id}}</td>
-
-                                            </tr>
-                                            <tr>
-
-                                                <td>Name</td>
-                                                <td>{{userRole.name | uppercase}}</td>
-
-
-                                            </tr>
-                                            <tr>
-                                                <td>Description </td>
-
-                                                <td>{{userRole.description}}</td>
-
-                                            </tr>
-                                            <tr>
-
-                                                <td>Level </td>
-                                                <td>{{userRole.roleLevel}}</td>
-
-                                            </tr>
-                                            <tr>
-
-                                                <td>Active </td>
-                                                <td>{{userRole.active}}</td>
-
-                                            </tr>
-                                            <tr>
-
-                                                <td>Created Date </td>
-                                                <td>{{userRole.createdDate}}</td>
-
-                                            </tr>
-
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <div class="txt-align-rgt">
-
-                                        <button  data-dismiss="modal"  class="btn btn-default close-button-right b10" type="button"
-                                                 id="close-button-right">
-                                            <!-- <i class="fa fa-warning"></i> --> Back
-                                        </button>
-
-                                    </div>
-
-                                </div>
-                            </div>
-
+                        <div class="titleCon margn-btm-12">
+                            <h3>{{userRole.name | uppercase}}</h3>
                         </div>
 
+                        <div class="panel panel-default">
+                            <div class="panel-heading">User Role Details</div>
+                            <div class="panel-body">
+
+
+
+                                <div class="table-responsive">
+                                    <table class="table">
+
+                                        <tbody>
+                                        <tr>
+
+
+                                            <td>Id</td>
+                                            <td>{{userRole.id}}</td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <td>Name</td>
+                                            <td>{{userRole.name | uppercase}}</td>
+
+
+                                        </tr>
+                                        <tr>
+                                            <td>Description </td>
+
+                                            <td>{{userRole.description}}</td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <td>Level </td>
+                                            <td>{{userRole.roleLevel}}</td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <td>Active </td>
+                                            <td>{{userRole.active}}</td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <td>Created Date </td>
+                                            <td>{{userRole.createdDate  | date:'MM/dd/yyyy @ h:mma'}}</td>
+
+                                        </tr>
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                        <div class="txt-align-rgt">
+
+                            <button  data-dismiss="modal"  class="btn btn-default close-button-right b10" type="button"
+                                     id="close-button-right">
+                                <!-- <i class="fa fa-warning"></i> --> Back
+                            </button>
+
+                        </div>
 
 
                     </div>

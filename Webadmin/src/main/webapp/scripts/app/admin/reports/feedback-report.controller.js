@@ -113,6 +113,8 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria = searchCriteria;
             }
 
+            $scope.searchCriteria.isReport = true;
+
             $scope.searchCriteria.currPage = currPageVal;
             console.log('Selected feedback' + $scope.selectedLocation);
 
