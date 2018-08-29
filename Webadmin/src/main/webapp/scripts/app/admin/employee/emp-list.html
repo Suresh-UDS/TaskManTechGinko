@@ -380,13 +380,13 @@
 
                                             <td>Site</td>
                                             <td><a data-toggle="modal" data-target="#noticeModal"
-                                                   href="#">List Of Sites</a></td>
+                                                   href="javascript:void(0);">List Of Sites</a></td>
 
                                         </tr>
                                         <tr>
                                             <td>User Account Linked</td>
-                                            <td><a href="#/view-user/{{employee.userId}}" ng-click="closeModal()">View
-                                                User Account</a></td>
+                                            <td><span ng-if="employee.userId"><a ui-sref="view-user({id:employee.userId,checkStatus:1})" ng-click="closeModal()" >View
+                                                User Account</a></span><span ng-if="!employee.userId">-</span></td>
                                         </tr>
 
                                         </tbody>
@@ -401,7 +401,7 @@
                     <div class="col-md-6">
 
                         <div class="panel panel-default">
-                            <div class="panel-heading">Enroll Details</div>
+                            <div class="panel-heading">Attendance Enroll Details</div>
                             <div class="panel-body" style="min-height: 320px;">
 
                                 <div class="EmpProfilePicCon">
@@ -462,8 +462,7 @@
                     <button data-dismiss="modal"
                             class="btn btn-default close-button-right b10" type="button"
                             id="close-button-right">
-                        <!-- <i class="fa fa-warning"></i> -->
-                        Back
+                        Close
                     </button>
                 </div>
 			</div>
