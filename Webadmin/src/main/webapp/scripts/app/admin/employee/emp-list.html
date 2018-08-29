@@ -404,11 +404,15 @@
                             <div class="panel-heading">Enroll Details</div>
                             <div class="panel-body" style="min-height: 320px;">
 
-                                <div class="EmpProfilePicCon" >
+                                <div class="EmpProfilePicCon">
 
-                                    <img ng-if="employee.enrolled_face"  src="{{employee.url}}" class="EmpProfilePic"  class="EmpProfilePic" />
+                                   <div ng-if="employee.enrolled_face" class="EmpPic">
+                                       <img   src={{employee.url}} class="EmpProfilePic"  class="EmpProfilePic" />
+                                   </div>
 
-                                    <img ng-if="!employee.enrolled_face" src="assets/img/user.png"  class="EmpProfilePic" />
+                                   <div ng-if="!employee.enrolled_face" class="EmpPic">
+                                       <img  src="assets/img/user.png"  class="EmpProfilePic" />
+                                   </div>
 
                                 </div>
 
