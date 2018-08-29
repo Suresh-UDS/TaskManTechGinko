@@ -1,0 +1,57 @@
+<!--
+  Generated template for the Expense page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Expense</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+      <div >
+         <div >
+          <ion-row padding>
+
+            <ion-col>
+              <ion-item *ngFor="let items of listitem" (click)="viewTransaction()" >
+                <ion-row>
+                  <ion-col><p text-left class="margin0">Site  </p></ion-col>
+                  <ion-col><p text-right>{{items.site}}</p> </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col><p text-left class="margin0">Transaction Type </p></ion-col>
+                  <ion-col><p text-right class="margin0">{{items.trans_type}}</p> </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col><p text-left class="margin0">Debit </p></ion-col>
+                  <ion-col><p text-right class="margin0">{{items.debit}}</p></ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col><p text-left class="margin0">Credit </p></ion-col>
+                  <ion-col><p text-right class="margin0">{{items.credit}}</p></ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col><p text-left class="margin0">Balance</p></ion-col>
+                  <ion-col><p text-right class="margin0">{{items.balance}}</p></ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col><p text-left class="margin0">Actions</p></ion-col>
+                  <ion-col><p text-right class="margin0">{{items.actions}}</p></ion-col>
+                </ion-row>
+              </ion-item>
+            </ion-col>
+
+          </ion-row>
+        </div>
+      </div>
+
+
+</ion-content>
