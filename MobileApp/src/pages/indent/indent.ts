@@ -5,6 +5,7 @@ import {componentService} from "../service/componentService";
 import {InventoryService} from "../service/inventoryService";
 import{ViewController} from "ionic-angular";
 import{InventoryMaster} from "../inventory-master/inventory-master";
+import{PurchaseRequisitionService} from "../service/PurchaseRequisitionService";
 
 /**
  * Generated class for the Indent page.
@@ -19,6 +20,7 @@ import{InventoryMaster} from "../inventory-master/inventory-master";
 export class Indent {
     searchText: any;
     shouldShowCancel: boolean;
+    material:any;
 
     numbers: any;
     clientList: any;
@@ -42,7 +44,8 @@ export class Indent {
     page:1;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, private component: componentService,
-                private siteService: SiteService, private inventoryService: InventoryService,public viewCtrl:ViewController) {
+                private siteService: SiteService, private inventoryService: InventoryService,
+                public viewCtrl:ViewController,public purchaseService:PurchaseRequisitionService) {
         this.indent = [];
     }
 
@@ -170,8 +173,18 @@ export class Indent {
         )
     }
 
-    saveIndentMaterial(){
-
+    saveIndentMaterial(indent){
+        console.log("Save");
+        console.log(indent);
+        this.purchaseService.saveMaterialIndent(indent).subscribe(
+            response=>{
+                console.log("Save indent Material");
+                console.log(response);
+            },err=>{
+                console.log("Error in save indent material");
+                console.log(err);
+            }
+        )
     }
 }
 

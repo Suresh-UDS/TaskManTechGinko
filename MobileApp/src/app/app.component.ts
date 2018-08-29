@@ -157,6 +157,7 @@ export class MyApp {
        { title: 'ChangePassword', component:ChangePassword,active:false,icon:'feedback',permission:'FeedbackList'},
         {title: 'InventoryMaster', component:InventoryMaster,active:false,icon:'feedback',permission:'FeedbackList'},
         {title:'Indent',component:Indent,active:false,icon:'build',permission:'TicketsList'}
+        
         // {title:'Splash page', component:Splash,active:false,icon:'feedback',permission:'DashboardList'},
         // {title:'Splash logo', component:SplashLogo,active:false,icon:'feedback',permission:'DashboardList'},
       // { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},

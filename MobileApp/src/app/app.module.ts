@@ -129,6 +129,7 @@ import{InventoryFilter} from "../pages/inventory-filter/inventory-filter";
 import{AddInventoryTransaction} from "../pages/add-inventory-transaction/add-inventory-transaction";
 import {InventoryService} from "../pages/service/inventoryService";
 import{AutoCompleteModule} from "ionic2-auto-complete";
+import {PurchaseRequisitionService} from "../pages/service/PurchaseRequisitionService";
 
 @NgModule({
   declarations: [
@@ -356,6 +357,7 @@ import{AutoCompleteModule} from "ionic2-auto-complete";
       Market,
       LocationAccuracy,
       InventoryService,
+      PurchaseRequisitionService,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]
