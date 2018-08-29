@@ -340,8 +340,8 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.ticketStatus = $scope.selectedStatus;
             $scope.searchCriteria.currPage = currPageVal;
             $scope.searchCriteria.findAll = false;
-
-
+            $scope.searchCriteria.isReport = true;
+                
             console.log($scope.selectedProject , $scope.selectedSite)
              if( !$scope.selectedProject && !$scope.selectedSite
                 &&  !$scope.selectedStatus) {

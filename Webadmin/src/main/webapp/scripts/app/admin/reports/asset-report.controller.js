@@ -296,6 +296,7 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.assetStatus = $scope.searchStatus;
             $scope.searchCriteria.currPage = currPageVal;
             $scope.searchCriteria.findAll = false;
+            $scope.searchCriteria.isReport = true;
 
              //&&  !$scope.searchStatus
 
