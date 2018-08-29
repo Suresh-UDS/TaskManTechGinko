@@ -127,8 +127,6 @@ import{ForgotPassword} from "../pages/forgot-password/forgot-password";
 import{InventoryFilter} from "../pages/inventory-filter/inventory-filter";
 import{AddInventoryTransaction} from "../pages/add-inventory-transaction/add-inventory-transaction";
 import {InventoryService} from "../pages/service/inventoryService";
-import {ExpensePage} from "../pages/expense/expense";
-import {TransactionPage} from "../pages/expense/transaction";
 
 @NgModule({
   declarations: [
@@ -214,9 +212,7 @@ import {TransactionPage} from "../pages/expense/transaction";
       UpdateApp,
       ForgotPassword,
       InventoryFilter,
-      AddInventoryTransaction,
-    ExpensePage,
-    TransactionPage
+      AddInventoryTransaction
   ],
   imports: [
     BrowserModule,
@@ -314,8 +310,6 @@ import {TransactionPage} from "../pages/expense/transaction";
       ForgotPassword,
       InventoryFilter,
       AddInventoryTransaction,
-    ExpensePage,
-    TransactionPage
       // WheelSelector
 
 
