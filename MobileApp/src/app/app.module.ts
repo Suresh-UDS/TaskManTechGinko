@@ -60,7 +60,6 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { File } from '@ionic-native/file';
 import{TicketFilter} from "../pages/ticket/ticket-filter/ticket-filter";
 import{InventoryMaster} from "../pages/inventory-master/inventory-master";
-import{Indent} from "../pages/indent/indent";
 
 import {SQLitePorter} from "@ionic-native/sqlite-porter";
 
@@ -130,6 +129,8 @@ import{AddInventoryTransaction} from "../pages/add-inventory-transaction/add-inv
 import {InventoryService} from "../pages/service/inventoryService";
 import{AutoCompleteModule} from "ionic2-auto-complete";
 import {PurchaseRequisitionService} from "../pages/service/PurchaseRequisitionService";
+import {ExpensePage} from "../pages/expense/expense";
+import {TransactionPage} from "../pages/expense/transaction";
 
 @NgModule({
   declarations: [
@@ -216,14 +217,14 @@ import {PurchaseRequisitionService} from "../pages/service/PurchaseRequisitionSe
       ForgotPassword,
       InventoryFilter,
       AddInventoryTransaction,
-      Indent
+    ExpensePage,
+    TransactionPage
   ],
   imports: [
     BrowserModule,
     HttpModule,
     DatePickerModule,
     BrowserAnimationsModule,
-      AutoCompleteModule,
     IonicModule.forRoot(MyApp,{
         backButtonText: '',
         backButtonIcon: 'ios-arrow-back',
@@ -315,7 +316,8 @@ import {PurchaseRequisitionService} from "../pages/service/PurchaseRequisitionSe
       ForgotPassword,
       InventoryFilter,
       AddInventoryTransaction,
-      Indent
+    ExpensePage,
+    TransactionPage
       // WheelSelector
 
 

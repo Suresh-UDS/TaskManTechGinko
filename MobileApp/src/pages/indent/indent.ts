@@ -84,8 +84,7 @@ export class Indent {
                 console.log(response);
                 this.siteList = response;
                 console.log(this.siteList);
-                // this.getAllInventoryGroups();
-
+                this.getAllInventoryGroups();
             },
             error => {
                 if (error.type == 3) {
@@ -186,5 +185,6 @@ export class Indent {
             }
         )
     }
+
 }
 

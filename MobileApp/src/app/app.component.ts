@@ -29,7 +29,6 @@ import {SplashLogo} from "../pages/splash-logo/splash-logo";
 import{OfflinePage} from "../pages/offline-page/offline-page";
 import{OfflineAssetList} from "../pages/offline-assetlist/offline-assetlist";
 import{OfflineGetassetreadings} from "../pages/offline-getassetreadings/offline-getassetreadings";
-import{Indent} from "../pages/indent/indent";
 
 import{OneSignal} from "@ionic-native/onesignal";
 import {componentService} from "../pages/service/componentService";
@@ -41,6 +40,8 @@ import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-fil
 import {authService} from "../pages/service/authService";
 import{ChangePassword} from "../pages/change-password/change-password";
 import{InventoryMaster} from "../pages/inventory-master/inventory-master";
+import {ExpensePage} from "../pages/expense/expense";
+import {Indent} from "../pages/indent/indent";
 
 @Component({
   templateUrl: 'app.html'
@@ -153,11 +154,11 @@ export class MyApp {
         { title: 'Attendance', component: SiteListPage,active:false,icon:'content_paste',permission:'AttendanceList'},
         { title: 'Rate Card', component: RateCardPage,active:false,icon:'description',permission:'RateCardList'},
       { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt',permission:'QuotationList'},
+      { title: 'Expense', component:ExpensePage, active:false, icon:'receipt',permission:'AttendanceList'},
        { title: 'Feedback', component: InitFeedbackPage,active:false,icon:'feedback',permission:'FeedbackList'},
        { title: 'ChangePassword', component:ChangePassword,active:false,icon:'feedback',permission:'FeedbackList'},
         {title: 'InventoryMaster', component:InventoryMaster,active:false,icon:'feedback',permission:'FeedbackList'},
         {title:'Indent',component:Indent,active:false,icon:'build',permission:'TicketsList'}
-        
         // {title:'Splash page', component:Splash,active:false,icon:'feedback',permission:'DashboardList'},
         // {title:'Splash logo', component:SplashLogo,active:false,icon:'feedback',permission:'DashboardList'},
       // { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},

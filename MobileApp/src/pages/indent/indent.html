@@ -36,23 +36,23 @@
     <ion-col col-12>
       <ion-item>
         <ion-label text-capitalize class="client-label" text-left>Site:</ion-label>
-        <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedSite" text-lowercase>
-          <ion-option  *ngFor="let s of siteList;let i of index" (ionSelect)="searchMaterials(s.id)" text-center text-lowercase>{{s.name}}</ion-option>
+        <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedProject" text-lowercase>
+          <ion-option  *ngFor="let s of siteList;let i of index" (ionSelect)="selectSite(p)" text-center text-lowercase>{{s.name}}</ion-option>
         </ion-select>
       </ion-item>
     </ion-col>
   </ion-row>
 
-  <!--<ion-row no-margin>-->
-    <!--<ion-col col-12>-->
-      <!--<ion-item>-->
-        <!--<ion-label text-capitalize class="client-label" text-left>Group:</ion-label>-->
-        <!--<ion-select  interface="popover"   text-lowercase>-->
-          <!--<ion-option text-center text-lowercase *ngFor="let g of inventoryGroups;let i of index" (ionSelect)="getMaterialByGroup(g)" >{{g.itemGroup}}</ion-option>-->
-        <!--</ion-select>-->
-      <!--</ion-item>-->
-    <!--</ion-col>-->
-  <!--</ion-row>-->
+  <ion-row no-margin>
+    <ion-col col-12>
+      <ion-item>
+        <ion-label text-capitalize class="client-label" text-left>Group:</ion-label>
+        <ion-select  interface="popover"   text-lowercase>
+          <ion-option text-center text-lowercase *ngFor="let g of inventoryGroups;let i of index" (ionSelect)="getMaterialByGroup(g)" >{{g.itemGroup}}</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-col>
+  </ion-row>
   <ion-row no-margin text-center>
     <ion-col col-12>
       <ion-item>
@@ -63,16 +63,14 @@
       </ion-item>
     </ion-col>
   </ion-row>
-    <ion-row no-margin>
-        <ion-col col-12 float-right>
-            <button class="btn btn-warning pull-right"  (click)="addIndent(selectedMaterial)">Add</button>
-        </ion-col>
-    </ion-row>
-    <ion-row no-margin *ngIf="selectedMaterial">
-        <ion-col col-12>
-            <ion-item text-center class="bg-gray">
-                <ion-label class="clr-orange bg-gray">Added Materials</ion-label>
+    <ion-row no-margin text-center>
+        <ion-col col-9>
+            <ion-item>
+                <ion-label>Added Materials</ion-label>
             </ion-item>
+        </ion-col>
+        <ion-col col-3>
+            <button class="btn btn-warning center" (click)="addIndent(selectedMaterial)">Add</button>
         </ion-col>
     </ion-row>
   <ion-row no-margin class="white-bg" *ngFor="let t of indent">
@@ -104,12 +102,4 @@
     </ion-col>
   </ion-row>
 </ion-content>
-<ion-footer>
-    <ion-toolbar text-center>
-        <button class="btn btn-warning center width42" (click)="saveIndentMaterial(indent)">
-            Save
-        </button>
-    </ion-toolbar>
-</ion-footer>
-
 
