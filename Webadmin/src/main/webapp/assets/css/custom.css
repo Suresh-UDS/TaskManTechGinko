@@ -852,6 +852,10 @@ a.add-btn,button.add-btn
 .panel-body .table-responsive table tr:first-child td {
     border-top: none !important;
 }
+.table-responsive table tr th
+{
+    font-weight: 400;
+}
 
 /* View page Css */
 
