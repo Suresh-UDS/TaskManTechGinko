@@ -697,7 +697,6 @@ h3.HeadingTxt
 .titleCon
 {
     text-align: center;
-
     width: 50%;
     margin: 0 auto;
     padding: 5px 0;
@@ -707,6 +706,7 @@ h3.HeadingTxt
     box-shadow: 1px 0px 5px 0px #ffdeae;
     border-left: 4px solid #ff9800;
     border-right: 4px solid #ff9800;
+    min-height: 35px;
 
 }
 .titleCon h3
@@ -715,7 +715,14 @@ h3.HeadingTxt
     font-size: 19px;
     margin: 0;
 }
-
+.modal-body .titleCon
+{
+    width: 70%;
+}
+.modal-body .titleCon h3
+{
+    font-size: 16px;
+}
 
  .docsRow
  {
@@ -845,10 +852,20 @@ a.add-btn,button.add-btn
 .panel-body .table-responsive table tr:first-child td {
     border-top: none !important;
 }
-/*.panel-body .table-responsive table tr td:nth-child(even)*/
-/*{*/
-    /*font-weight: 400;*/
-/*}*/
+
+/* View page Css */
+
+.ViewContentPageCon .panel-body .table-responsive table tr td:nth-child(odd)
+{
+    color: #7b7c7b;
+}
+.ViewContentPageCon  .panel-body .table-responsive table tr td:nth-child(even)
+{
+    font-weight: 400;
+}
+
+
+
 .table-scroll-x .table
 {
     width: 150%;
@@ -1326,6 +1343,7 @@ input.InputFirstCaps::first-letter
   background-color: #f5f5f5;
   border-bottom: 1px solid #ddd;
   padding:10px;
+  font-weight: 400;
 }
 
 /* wizard triangle */
@@ -1481,6 +1499,10 @@ input.InputFirstCaps::first-letter
 .modal
 {
     z-index: 99999;
+}
+.modal-title
+{
+    font-weight: 400;
 }
 
 /* left right modal css*/
