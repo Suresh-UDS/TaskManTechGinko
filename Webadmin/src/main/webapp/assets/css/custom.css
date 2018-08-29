@@ -371,10 +371,7 @@ li ul.nav.SubNav li a p
 {
   margin-top:0;
 }
-.min-hgt100
-{
-  min-height:100px;
-}
+
 h2.title
 {
   margin: 5px 0;
@@ -458,7 +455,9 @@ span.calender-big-icon
 }
 .modal-content .modal-header button.close
 {
-    padding: 5px 3px 0 0;
+    padding: 0 10px;
+    font-size: 26px;
+    color: #686868;
 }
 span.d-sm-arrow-icon
 {
@@ -846,7 +845,10 @@ a.add-btn,button.add-btn
 .panel-body .table-responsive table tr:first-child td {
     border-top: none !important;
 }
-
+/*.panel-body .table-responsive table tr td:nth-child(even)*/
+/*{*/
+    /*font-weight: 400;*/
+/*}*/
 .table-scroll-x .table
 {
     width: 150%;
