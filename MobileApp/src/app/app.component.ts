@@ -40,6 +40,7 @@ import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-fil
 import {authService} from "../pages/service/authService";
 import{ChangePassword} from "../pages/change-password/change-password";
 import{InventoryMaster} from "../pages/inventory-master/inventory-master";
+import {ExpensePage} from "../pages/expense/expense";
 
 @Component({
   templateUrl: 'app.html'
@@ -152,6 +153,7 @@ export class MyApp {
         { title: 'Attendance', component: SiteListPage,active:false,icon:'content_paste',permission:'AttendanceList'},
         { title: 'Rate Card', component: RateCardPage,active:false,icon:'description',permission:'RateCardList'},
       { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt',permission:'QuotationList'},
+      { title: 'Expense', component:ExpensePage, active:false, icon:'receipt',permission:'AttendanceList'},
        { title: 'Feedback', component: InitFeedbackPage,active:false,icon:'feedback',permission:'FeedbackList'},
        { title: 'ChangePassword', component:ChangePassword,active:false,icon:'feedback',permission:'FeedbackList'},
         {title: 'InventoryMaster', component:InventoryMaster,active:false,icon:'feedback',permission:'FeedbackList'}
