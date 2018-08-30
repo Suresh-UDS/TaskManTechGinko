@@ -22,11 +22,7 @@
 
 
 <ion-content padding>
-    <ion-fab right bottom mini>
-        <button ion-fab color="dark" (click)="openTransaction()">
-            <ion-icon name="md-add" class="clr-orange"></ion-icon>
-        </button>
-    </ion-fab>
+
     <div *ngIf=" (!material || material.length < 0) && !spinner ">
         <ion-card>
             <ion-card-content>
@@ -39,7 +35,7 @@
         <ion-spinner name="circles"></ion-spinner>
     </div>
 
-    <div class="col-md-8 padding-right0 padding-left0" *ngFor="let m of material">
+    <div class="col-md-8 padding-right0 padding-left0" *ngFor="let m of material" (click)="viewSelectedTransaction(m)" >
         <div class="card">
             <div class="card-content table-responsive padding-top0">
                 <ion-row class="margin0 border-btm">

@@ -133,6 +133,7 @@ import {ExpensePage} from "../pages/expense/expense";
 import {TransactionPage} from "../pages/expense/transaction";
 import {Indent} from "../pages/indent/indent";
 import{IndentView} from "../pages/indent-view/indent-view";
+import {InventoryTransaction} from "../pages/inventorytransaction/inventorytransaction";
 
 @NgModule({
   declarations: [
@@ -222,7 +223,8 @@ import{IndentView} from "../pages/indent-view/indent-view";
     ExpensePage,
     TransactionPage,
       Indent,
-      IndentView
+      IndentView,
+    InventoryTransaction
   ],
   imports: [
     BrowserModule,
@@ -323,7 +325,8 @@ import{IndentView} from "../pages/indent-view/indent-view";
     ExpensePage,
     TransactionPage,
       Indent,
-      IndentView
+      IndentView,
+    InventoryTransaction
       // WheelSelector
 
 

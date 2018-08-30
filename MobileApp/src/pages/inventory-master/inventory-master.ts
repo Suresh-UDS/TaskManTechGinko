@@ -13,6 +13,7 @@ import {Diagnostic} from "@ionic-native/diagnostic";
 import{AddInventoryTransaction} from "../add-inventory-transaction/add-inventory-transaction";
 import{InventoryService} from "../service/inventoryService";
 import{Indent} from "../indent/indent";
+import {InventoryTransaction} from "../inventorytransaction/inventorytransaction";
 
 /**
  * Generated class for the InventoryMaster page.
@@ -40,6 +41,7 @@ export class InventoryMaster {
     fileTransfer: FileTransferObject = this.transfer.create();
     material:any;
     spinner:any;
+    transactionlist: any;
 
   constructor(@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,private transfer: FileTransfer,
               public modalCtrl:ModalController,private diagnostic: Diagnostic,private sqlite: SQLite,
@@ -90,12 +92,7 @@ export class InventoryMaster {
     }
 
 
-    openTransaction()
-    {
-        let modal = this.modalCtrl.create(AddInventoryTransaction, {});
-       modal.present();
 
-    }
 
    inventoryMaterial(searchCriteria){
       this.spinner=true;
@@ -112,6 +109,12 @@ export class InventoryMaster {
           }
       )
    }
+
+  viewSelectedTransaction(m){
+     console.log('ionViewDidLoad selected material transaction');
+     console.log(m);
+     this.navCtrl.push(InventoryTransaction,{m:m});
+  }
 
 
 }
