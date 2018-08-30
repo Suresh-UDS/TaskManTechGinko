@@ -34,6 +34,7 @@ import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.User;
 import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.AmazonS3Service;
 import com.ts.app.service.JobManagementService;
 import com.ts.app.service.PushService;
 import com.ts.app.service.SchedulerService;
@@ -91,6 +92,9 @@ public class JobManagementResource {
 
 	@Inject
 	private ReportUtil reportUtil;
+	
+	@Inject
+	private AmazonS3Service amazonService;
 
 
 	@RequestMapping(path="/job/lookup/status", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -469,7 +473,12 @@ public class JobManagementResource {
     	log.debug("Existing checklist image upload to AWS s3");
     	return jobService.uploadExistingChecklistImg(); 
     }
-
+    
+    @RequestMapping(value = "/getFilesFromAws", method = RequestMethod.GET)
+    public void getFilesFromS3() {
+    	log.debug("Get All Files from AWS S3");
+    	amazonService.getAllFiles();
+    }
 
 
 
