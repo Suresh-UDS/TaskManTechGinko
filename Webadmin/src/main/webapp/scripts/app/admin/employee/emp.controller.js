@@ -1156,7 +1156,11 @@ angular.module('timeSheetApp')
         		empShift.siteId = selectedShiftSite.id;
     	 		$scope.modifiedEmpShifts.push(empShift);
     	 		$scope.modified = true;
-	    }
+
+    	 		$scope.searchCriteria.siteId = selectedShiftSite.id;
+    	 		$scope.searchShift();
+	    };
+
 
         $scope.updateEmployeeShifts = function() {
         		if($scope.modifiedEmpShifts && $scope.modifiedEmpShifts.length > 0) {
