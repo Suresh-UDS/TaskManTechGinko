@@ -58,238 +58,255 @@
 
     <div class="row" >
 
-        <div class="col-md-12" >
-            <div class="card TableCard">
-                <div class="card-content">
+        <form name="form" role="form" novalidate>
+
+            <div class="col-md-12" >
+                <div class="card TableCard">
+                    <div class="card-content">
 
 
-                    <!--<div class="SearchTable" >-->
+                        <!--<div class="SearchTable" >-->
 
-                        <!--<form name="searchForm"  ng-submit="searchShiftFilter()" novalidate >-->
+                            <!--<form name="searchForm"  ng-submit="searchShiftFilter()" novalidate >-->
 
-                            <!--<div class="row">-->
+                                <!--<div class="row">-->
 
-<!--&lt;!&ndash;                                     <td>-->
-                                        <!--<label>Show</label>-->
-                                        <!--<select class="siteList margin0" ng-model="sort" ng-change="hasChanged()" ng-options="paging.value for paging in pageSizes" value="{{paging.value}}">-->
-                                        <!--</select>-->
-                                    <!--</td>-->
- <!--&ndash;&gt;								  <div class="col-md-2">-->
-								   			<!--<div class="dropdown">-->
-                                                <!--<div class="form-group">-->
-                                                    <!--<label class="control-label">Select Client</label>-->
-                                                     <!--<span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                    <!--<select class="form-control " ng-model="searchProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">-->
-                                                        <!--<option value="">Select Client...</option>-->
-                                                    <!--</select>-->
+    <!--&lt;!&ndash;                                     <td>-->
+                                            <!--<label>Show</label>-->
+                                            <!--<select class="siteList margin0" ng-model="sort" ng-change="hasChanged()" ng-options="paging.value for paging in pageSizes" value="{{paging.value}}">-->
+                                            <!--</select>-->
+                                        <!--</td>-->
+     <!--&ndash;&gt;								  <div class="col-md-2">-->
+    								   			<!--<div class="dropdown">-->
+                                                    <!--<div class="form-group">-->
+                                                        <!--<label class="control-label">Select Client</label>-->
+                                                         <!--<span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                        <!--<select class="form-control " ng-model="searchProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">-->
+                                                            <!--<option value="">Select Client...</option>-->
+                                                        <!--</select>-->
 
 
 
+                                                    <!--</div>-->
                                                 <!--</div>-->
-                                            <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="col-md-2">-->
+                                        <!--</div>-->
+                                        <!--<div class="col-md-2">-->
 
-                                            <!--<div class="dropdown">-->
-                                                <!--<div class="form-group">-->
-                                                    <!--<label class="control-label">Select Site</label>-->
-                                                    <!--&lt;!&ndash;<input type="text" class="form-control"&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;ng-model="selectedRole"&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;required >&ndash;&gt;-->
-                                                    <!--<span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                    <!--<select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites">-->
-                                                        <!--<option value="">Select Site...</option>-->
-                                                    <!--</select>-->
-
+                                                <!--<div class="dropdown">-->
+                                                    <!--<div class="form-group">-->
+                                                        <!--<label class="control-label">Select Site</label>-->
+                                                        <!--&lt;!&ndash;<input type="text" class="form-control"&ndash;&gt;-->
+                                                        <!--&lt;!&ndash;ng-model="selectedRole"&ndash;&gt;-->
+                                                        <!--&lt;!&ndash;uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"&ndash;&gt;-->
+                                                        <!--&lt;!&ndash;name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus&ndash;&gt;-->
+                                                        <!--&lt;!&ndash;required >&ndash;&gt;-->
+                                                        <!--<span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                        <!--<select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites">-->
+                                                            <!--<option value="">Select Site...</option>-->
+                                                        <!--</select>-->
 
 
+
+                                                    <!--</div>-->
                                                 <!--</div>-->
-                                            <!--</div>-->
 
 
-								   <!--</div>-->
-								    <!--<div class="col-xs-12 col-md-4">-->
-                                         <!--<div class="form-group no-padding" >-->
-                                             <!--<div class="dropdown">-->
- 					                            <!--<label class="label-control">Date</label>-->
- 					                            <!--<span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>-->
- 					                            <!--<input type="text" class="form-control datepicker"  id="searchDate"  ng-model="searchDate"/>-->
+    								   <!--</div>-->
+    								    <!--<div class="col-xs-12 col-md-4">-->
+                                             <!--<div class="form-group no-padding" >-->
+                                                 <!--<div class="dropdown">-->
+     					                            <!--<label class="label-control">Date</label>-->
+     					                            <!--<span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>-->
+     					                            <!--<input type="text" class="form-control datepicker"  id="searchDate"  ng-model="searchDate"/>-->
+                                                 <!--</div>-->
                                              <!--</div>-->
                                          <!--</div>-->
-                                     <!--</div>-->
-                                   <!--&lt;!&ndash;  <div class="col-md-2">-->
-                                    		<!--<div class="form-group" style="padding-top: 20px;" >-->
-                                            <!--<div class="dropdown">-->
-                                                <!--<input type="text"-->
-                                                       <!--class="form-control border-bottom-input"-->
-                                                       <!--placeholder="Employee Id"-->
-                                                       <!--ng-model="selectedEmployeeId"-->
-												<!--/>-->
+                                       <!--&lt;!&ndash;  <div class="col-md-2">-->
+                                        		<!--<div class="form-group" style="padding-top: 20px;" >-->
+                                                <!--<div class="dropdown">-->
+                                                    <!--<input type="text"-->
+                                                           <!--class="form-control border-bottom-input"-->
+                                                           <!--placeholder="Employee Id"-->
+                                                           <!--ng-model="selectedEmployeeId"-->
+    												<!--/>-->
 
+                                                <!--</div>-->
                                             <!--</div>-->
+                                        <!--</div &ndash;&gt;-->
+                                    <!--<div class="col-md-4">-->
+                                        <!--<div class="form-group pull-right" style="padding-top: 10px;">-->
+
+                                            <!--<button type="submit" class="btn btn-circle blue-clr">-->
+                                                <!--<i class="material-icons">search</i>-->
+                                            <!--</button>-->
+                                            <!--&lt;!&ndash; <button ui-sref="add-employee" has-permission="Employee:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">-->
+                                                <!--<i class="material-icons">add</i>-->
+                                            <!--</button>-->
+                                            <!--<button ui-sref="employee-location" class="btn btn-circle orange-clr">-->
+                                                <!--<i class="material-icons">location_on</i>-->
+                                            <!--</button>-->
+                                            <!--<button ng-click="refreshPage()" class="btn btn-circle orange-clr">-->
+                                                <!--<i class="material-icons">refresh</i>-->
+                                            <!--</button> &ndash;&gt;-->
                                         <!--</div>-->
-                                    <!--</div &ndash;&gt;-->
-                                <!--<div class="col-md-4">-->
-                                    <!--<div class="form-group pull-right" style="padding-top: 10px;">-->
-
-                                        <!--<button type="submit" class="btn btn-circle blue-clr">-->
-                                            <!--<i class="material-icons">search</i>-->
-                                        <!--</button>-->
-                                        <!--&lt;!&ndash; <button ui-sref="add-employee" has-permission="Employee:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">-->
-                                            <!--<i class="material-icons">add</i>-->
-                                        <!--</button>-->
-                                        <!--<button ui-sref="employee-location" class="btn btn-circle orange-clr">-->
-                                            <!--<i class="material-icons">location_on</i>-->
-                                        <!--</button>-->
-                                        <!--<button ng-click="refreshPage()" class="btn btn-circle orange-clr">-->
-                                            <!--<i class="material-icons">refresh</i>-->
-                                        <!--</button> &ndash;&gt;-->
+                                        <!--<div class="clearfix"></div>-->
                                     <!--</div>-->
-                                    <!--<div class="clearfix"></div>-->
-                                <!--</div>-->
 
-                    		<!--</div>-->
-                    <!--</form>-->
-                        <!---->
-                    <!--</div>    -->
+                        		<!--</div>-->
+                        <!--</form>-->
+                            <!---->
+                        <!--</div>    -->
 
-                    <div class="table-responsive tablecard">
-                        <table id="" class="table table-hover withSortingIcons">
+                        <div class="table-responsive tablecard">
+                            <table id="" class="table table-hover withSortingIcons">
 
-                            <thead>
-                            <tr>
-                                <th>ID
+                                <thead>
+                                <tr>
+                                    <th>Employee Id
 
-                                    <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('employeeEmpId')" ng-class="isActiveAsc == 'employeeEmpId' ? 'active' : ''" >
-                                            <i  class="fa fa-caret-up"></i>
+                                        <span class="sortingIcons">
+                                            <span ng-click="columnAscOrder('employeeEmpId')" ng-class="isActiveAsc == 'employeeEmpId' ? 'active' : ''" >
+                                                <i  class="fa fa-caret-up"></i>
+                                            </span>
+                                            <span ng-click="columnDescOrder('employeeEmpId')" ng-class="isActiveDesc == 'employeeEmpId' ? 'active' : ''" >
+                                                 <i  ng-class="class" class="fa fa-caret-down"></i>
+                                            </span>
                                         </span>
-                                        <span ng-click="columnDescOrder('employeeEmpId')" ng-class="isActiveDesc == 'employeeEmpId' ? 'active' : ''" >
-                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                    </th>
+                                    <th>Name
+                                        <span class="sortingIcons">
+                                            <span ng-click="columnAscOrder('employeeFullName')" ng-class="isActiveAsc == 'employeeFullName' ? 'active' : ''" >
+                                                <i  class="fa fa-caret-up"></i>
+                                            </span>
+                                            <span ng-click="columnDescOrder('employeeFullName')" ng-class="isActiveDesc == 'employeeFullName' ? 'active' : ''" >
+                                                 <i  ng-class="class" class="fa fa-caret-down"></i>
+                                            </span>
                                         </span>
-                                    </span>
-                                </th>
-                                <th>Name
-                                    <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('employeeFullName')" ng-class="isActiveAsc == 'employeeFullName' ? 'active' : ''" >
-                                            <i  class="fa fa-caret-up"></i>
+                                    </th>
+                                    <th>Site
+                                        <span class="sortingIcons">
+                                            <span ng-click="columnAscOrder('siteName')" ng-class="isActiveAsc == 'siteName' ? 'active' : ''" >
+                                                <i  class="fa fa-caret-up"></i>
+                                            </span>
+                                            <span ng-click="columnDescOrder('siteName')" ng-class="isActiveDesc == 'siteName' ? 'active' : ''" >
+                                                 <i  ng-class="class" class="fa fa-caret-down"></i>
+                                            </span>
                                         </span>
-                                        <span ng-click="columnDescOrder('employeeFullName')" ng-class="isActiveDesc == 'employeeFullName' ? 'active' : ''" >
-                                             <i  ng-class="class" class="fa fa-caret-down"></i>
-                                        </span>
-                                    </span>
-                                </th>
-                                <th>Site
-                                    <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('siteName')" ng-class="isActiveAsc == 'siteName' ? 'active' : ''" >
-                                            <i  class="fa fa-caret-up"></i>
-                                        </span>
-                                        <span ng-click="columnDescOrder('siteName')" ng-class="isActiveDesc == 'siteName' ? 'active' : ''" >
-                                             <i  ng-class="class" class="fa fa-caret-down"></i>
-                                        </span>
-                                    </span>
 
-                                </th>
-                                <th>Shift Time</th>
-                                <!-- <th>Shift End Time</th> -->
-                                <th class="disabled-sorting text-right">Actions</th>
-                            </tr>
-                            </thead>
+                                    </th>
+                                    <th>Shift Time</th>
+                                    <!-- <th>Shift End Time</th> -->
+                                    <th class="disabled-sorting text-right">Actions</th>
+                                </tr>
+                                </thead>
 
-                            <tbody>
-                            <tr ng-repeat="employeeShift in employeeShifts" repeat-done="initDataTables()">
-                                <td>{{employeeShift.employeeEmpId}}</td>
-                                <td>{{employeeShift.employeeFullName}}</td>
-							   <td>
-							   	   {{employeeShift.siteName}}
+                                <tbody>
+                                <tr ng-repeat="employeeShift in employeeShifts" repeat-done="initDataTables()">
+                                    <td>{{employeeShift.employeeEmpId}}</td>
+                                    <td>{{employeeShift.employeeFullName}}</td>
+    							   <td>
+    							   	   {{employeeShift.siteName}}
 
-                                   <div class="dropdown">
-                                        <div class="form-group">
-                                           <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-        								   <select class="form-control " ng-model="selectedShiftSite" ng-change="updateEmpShiftSite(employeeShift, selectedShiftSite)"  ng-options="site as site.name for site in sites track by site.id">
-        	                                    <option value="">Select Site...</option>
-        	                                </select>
+                                       <div class="dropdown">
+                                            <div class="form-group">
+                                               <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+            								   <select class="form-control " ng-model="selectedShiftSite" ng-change="updateEmpShiftSite(employeeShift, selectedShiftSite)"  ng-options="site as site.name for site in sites track by site.id" name="selectedShiftSite{{$index}}" ng-required="!employeeShift.siteName">
+            	                                    <option value="">Select Site...</option>
+            	                                </select>
+                                                <div ng-show="form.selectedShiftSite{{$index}}.$touched">
+                                                     <div ng-show="form.selectedShiftSite.$dirty || form.selectedShiftSite{{$index}}.$invalid">
+                                                         <p class="help-block" style="color: maroon"
+                                                            ng-show="form.selectedShiftSite{{$index}}.$error.required">Site is
+                                                             required.</p>
+                                                     </div>
+                                                </div>
+                                           </div>
                                        </div>
-                                   </div>
-                                </td>
-                                <td>
-                                	   {{employeeShift.startTime | date:'dd-MM-yyyy HH:mm'}} - {{employeeShift.endTime | date:'dd-MM-yyyy HH:mm'}}
-                                   <div class="dropdown">
-                                        <div class="form-group">
-                                           <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-        								   <select class="form-control" ng-model="selectedShiftDateTime" ng-change="updateShiftTime(employeeShift,selectedShiftDateTime)" ng-options="shift as (shift.startDateTime | date:'dd-MM-yyyy HH:mm') + '  -  ' + (shift.endDateTime | date:'dd-MM-yyyy HH:mm') for shift in shifts">
-        	                                    <option value="">Select Start Time...</option>
-        	                                </select>
+                                    </td>
+                                    <td>
+                                    	   {{employeeShift.startTime | date:'dd-MM-yyyy HH:mm'}} - {{employeeShift.endTime | date:'dd-MM-yyyy HH:mm'}}
+                                       <div class="dropdown">
+                                            <div class="form-group">
+                                               <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+            								   <select class="form-control" ng-model="selectedShiftDateTime" ng-change="updateShiftTime(employeeShift,selectedShiftDateTime)" ng-options="shift as (shift.startDateTime | date:'dd-MM-yyyy HH:mm') + '  -  ' + (shift.endDateTime | date:'dd-MM-yyyy HH:mm') for shift in shifts" name="selectedShiftDateTime{{$index}}" ng-required="!employeeShift.startTime">
+            	                                    <option value="">Select Start Time...</option>
+            	                                </select>
+                                                <div ng-show="form.selectedShiftDateTime{{$index}}.$touched">
+                                                     <div ng-show="form.selectedShiftDateTime{{$index}}.$dirty || form.selectedShiftDateTime{{$index}}.$invalid">
+                                                         <p class="help-block" style="color: maroon"
+                                                            ng-show="form.selectedShiftDateTime{{$index}}.$error.required">Shift time is
+                                                             required.</p>
+                                                     </div>
+                                                </div>
+                                           </div>
                                        </div>
-                                   </div>
-                                </td>
-                                <!-- td>
-                                	   {{employeeShift.startTime | date:'dd-MM-yyyy HH:mm'}}
-								   <select class="form-control" ng-model="selectedStartDateTime" ng-change="updateStartTime(employeeShift,selectedStartDateTime)" ng-options="shift as shift.startDateTime | date:'dd-MM-yyyy HH:mm' for shift in shifts">
-	                                    <option value="">Select Start Time...</option>
-	                                </select>
-                                </td>
-                                <td>
-                                	   {{employeeShift.endTime | date:'dd-MM-yyyy HH:mm'}}
-								   <select class="form-control" ng-model="selectedEndDateTime" ng-change="updateEndTime(employeeShift,selectedEndDateTime)"  ng-options="shift as shift.endDateTime | date:'dd-MM-yyyy HH:mm' for shift in shifts">
-	                                    <option value="">Select End Time...</option>
-	                                </select>
-                                </td-->
+                                    </td>
+                                    <!-- td>
+                                    	   {{employeeShift.startTime | date:'dd-MM-yyyy HH:mm'}}
+    								   <select class="form-control" ng-model="selectedStartDateTime" ng-change="updateStartTime(employeeShift,selectedStartDateTime)" ng-options="shift as shift.startDateTime | date:'dd-MM-yyyy HH:mm' for shift in shifts">
+    	                                    <option value="">Select Start Time...</option>
+    	                                </select>
+                                    </td>
+                                    <td>
+                                    	   {{employeeShift.endTime | date:'dd-MM-yyyy HH:mm'}}
+    								   <select class="form-control" ng-model="selectedEndDateTime" ng-change="updateEndTime(employeeShift,selectedEndDateTime)"  ng-options="shift as shift.endDateTime | date:'dd-MM-yyyy HH:mm' for shift in shifts">
+    	                                    <option value="">Select End Time...</option>
+    	                                </select>
+                                    </td-->
 
-                                <td class="text-right">
+                                    <td class="text-right">
 
-                                    <button title="Delete shift"   has-permission="EmployeeShift:Delete"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"  ng-click="deleteConfirm(employeeShift)"  > <i style="font-size: 20px" class="material-icons">close</i></button>
-                                </td>
+                                        <button title="Delete shift"   has-permission="EmployeeShift:Delete"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"  ng-click="deleteConfirm(employeeShift)"  > <i style="font-size: 20px" class="material-icons">close</i></button>
+                                    </td>
 
-                            </tr>
+                                </tr>
 
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
 
-                    </div>
-                    <div class="row" ng-if="employeeShifts.length>0">
+                        </div>
+                        <div class="row" ng-if="employeeShifts.length>0">
 
-                         <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
-                             <button class="btn btn-success" ng-click="updateEmployeeShifts()"
-                                     id="form-button-save" >
-                                        <span class="btn-label">
-                                				<i class="material-icons">check</i>
-                            				</span> Save
-                             </button>
-                             <!--<button class="btn btn-info" type="submit"-->
-                             <!--id="save-and-go-back-button" ng-disabled="form.$invalid">-->
-                             <!--<i class="material-icons">rotate_left</i> Save and go back to list-->
-                             <!--</button>-->
-                             <button class="btn btn-danger" type="button"
-                                     ng-click="cancelEmployeeShiftUpdate()" id="cancel-button">
-                                 <i class="material-icons">close</i> Cancel
-                             </button>
+                             <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
+                                 <button class="btn btn-success" ng-click="updateEmployeeShifts()"
+                                         id="form-button-save" ng-disabled="form.$invalid" >
+                                            <span class="btn-label">
+                                    				<i class="material-icons">check</i>
+                                				</span> Save
+                                 </button>
+                                 <!--<button class="btn btn-info" type="submit"-->
+                                 <!--id="save-and-go-back-button" ng-disabled="form.$invalid">-->
+                                 <!--<i class="material-icons">rotate_left</i> Save and go back to list-->
+                                 <!--</button>-->
+                                 <button class="btn btn-danger" type="button"
+                                         ng-click="cancelEmployeeShiftUpdate()" id="cancel-button">
+                                     <i class="material-icons">close</i> Cancel
+                                 </button>
+                             </div>
+
                          </div>
+                         <div class="txt-align-center LoaderCon"  ng-hide="employeesLoader">
 
-                     </div>
-                     <div class="txt-align-center LoaderCon"  ng-hide="employeesLoader">
+                        <div class="pad-TB-30">
+                            <div loader-css="ball-pulse"></div>
+                            <h3 >Loading, please wait...</h3>
+                        </div>
 
-                    <div class="pad-TB-30">
-                        <div loader-css="ball-pulse"></div>
-                        <h3 >Loading, please wait...</h3>
+                        </div>
+
+                        <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
+
+                        <h3>No data Found</h3>
+
+                        </div>
                     </div>
-
-                    </div>
-
-                    <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
-
-                    <h3>No data Found</h3>
-
-                    </div>
+                    <!-- end content-->
                 </div>
-                <!-- end content-->
+                <!--  end card  -->
             </div>
-            <!--  end card  -->
-        </div>
-        <!-- end col-md-12 -->
+            <!-- end col-md-12 -->
+        </form>
     </div>
     <!-- end row -->
 
@@ -354,7 +371,7 @@
                                             <tbody>
                                             <tr>
 
-                                                <td>ID</td>
+                                                <td>Employee ID</td>
                                                 <td>{{employee.id}}</td>
 
                                             </tr>
@@ -1125,7 +1142,7 @@
                                 <div class="dropdown">
                                     <label class="label-control">Date</label>
                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                    <input type="text" class="form-control datepicker"  id="searchDate"  ng-model="searchDate"/>
+                                    <input type="text" class="form-control datepicker"  id="selectedDate"  ng-model="selectedDate" autocomplete="off" />
                                 </div>
                             </div>
                         </div>

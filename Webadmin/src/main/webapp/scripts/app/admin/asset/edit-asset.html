@@ -123,7 +123,7 @@
                                                                                         <label class="control-label">Type<span class="red-star">*</span></label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                                        <select class="form-control" ng-model="selectedAssetType" ng-options="assetype as assetype.name for assetype in assetTypes track by assetype.name" name="assetTypeName" required>
+                                                                                        <select class="form-control" ng-model="selectedAssetType" ng-options="assetype as (assetype.name | uppercase) for assetype in assetTypes track by assetype.name" name="assetTypeName" required>
                                                                                          <option value="">Select Asset Type ..</option>
                                                                                         </select>
                                                                                         <div ng-show="form.$submitted || form.assetTypeName.$touched">
@@ -160,7 +160,7 @@
                                                                                     <div class="col-md-10 pad-r-0px">
                                                                                          <label class="control-label">Group</label>
                                                                                          <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control" ng-model="selectedAssetGroup" ng-options="assetgroup as assetgroup.assetgroup for assetgroup in assetGroups track by assetgroup.assetgroup">
+                                                                                        <select class="form-control" ng-model="selectedAssetGroup" ng-options="assetgroup as (assetgroup.assetgroup | uppercase) for assetgroup in assetGroups track by assetgroup.assetgroup">
                                                                                             <option value="">Select Asset Group ..</option>
                                                                                         </select>
 
@@ -192,7 +192,7 @@
                                                                             <div class="form-group" ng-init="loadStatus();">
                                                                                 <label class="control-label">Status<span class="red-star">*</span></label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                <select class="form-control" ng-model="selectedAssetStatus" name="AssetStatus" ng-options="status for status in statuses track by status" required>
+                                                                                <select class="form-control" ng-model="selectedAssetStatus" name="AssetStatus" ng-options="(status | uppercase) for status in statuses track by status" required>
                                                                                     <option value="">Select Status ..</option>
                                                                                 </select>
                                                                                 <div ng-show="form.$submitted || form.AssetStatus.$touched">
@@ -249,7 +249,7 @@
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control " ng-model="selectedSites"  ng-options="site as site.name for site in sites track by site.id" ng-change="siteChange();" name="AssetSite" required>
+                                                                                        <select class="form-control " ng-model="selectedSites"  ng-options="site as (site.name | uppercase) for site in sites track by site.id" ng-change="siteChange();" name="AssetSite" required>
                                                                                             <option value="">Select Site ...</option>
                                                                                         </select>
 
@@ -317,7 +317,7 @@
                                                                             <div class="form-group selectcon">
                                                                                 <label class="control-label">Manufacturer </label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedManufacturer" ng-options="manufacturer as manufacturer.name for manufacturer in manufacturers track by manufacturer.name">
+                                                                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedManufacturer" ng-options="manufacturer as (manufacturer.name | uppercase) for manufacturer in manufacturers track by manufacturer.name">
                                                                                     <option value="">Select Manufacturer ..</option>
                                                                                 </select>
 
@@ -419,7 +419,7 @@
                                                                         <div class="col-md-6">
                                                                             <div class="form-group">
                                                                                 <label class="control-label">Purchase price <!--     <span class="red-star">*</span>  --></label>
-                                                                                <input id=''
+                                                                                <input 
                                                                                        ng-model="assetEdit.purchasePrice"
                                                                                        class='form-control'
                                                                                        name='assetPurchase'
@@ -442,7 +442,7 @@
                                                                         <div class="col-md-6">
                                                                             <div class="form-group">
                                                                                 <label class="control-label">Current Price  <!--    <span class="red-star">*</span>  --></label>
-                                                                                <input id=''
+                                                                                <input 
                                                                                        ng-model="assetEdit.currentPrice"
                                                                                        class='form-control'
                                                                                        name='assetCurrent'
@@ -465,7 +465,7 @@
                                                                         <div class="col-md-6">
                                                                             <div class="form-group">
                                                                                 <label class="control-label">Estimated dispose price   <!--   <span class="red-star">*</span>  --></label>
-                                                                                <input id=''
+                                                                                <input 
                                                                                        ng-model="assetEdit.estimatedDisposePrice"
                                                                                        class='form-control'
                                                                                        name='assetEstimate'
@@ -536,7 +536,7 @@
 
                                                                                     <label class="control-label">Vendor </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedVendor" ng-options="vendor as vendor.name for vendor in vendors track by vendor.id">
+                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedVendor" ng-options="vendor as (vendor.name | uppercase) for vendor in vendors track by vendor.id">
                                                                                         <option value="">Select Vendor ..</option>
                                                                                     </select>
                                                                                  </div>
@@ -609,7 +609,7 @@
                                                                                         <div class="col-md-10 pad-r-0px">
                                                                                             <label class="control-label">Service Warranty Type </label>
                                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                            <select class="form-control" ng-model="selectedServiceWarranty" ng-options="servicewarranty as servicewarranty.name for servicewarranty in servicewarranties track by servicewarranty.name ">
+                                                                                            <select class="form-control" ng-model="selectedServiceWarranty" ng-options="servicewarranty as (servicewarranty.name | uppercase) for servicewarranty in servicewarranties track by servicewarranty.name ">
                                                                                                 <option value="">Select Service Warranty Type ..</option>
                                                                                             </select>
 
@@ -1022,7 +1022,7 @@
                                                                         <div class="form-group selectcon is-empty SelectWithAddbtnCon">
                                                                             <label class="control-label">Checklist</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                            <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedChecklist" ng-options="checklist as checklist.name for checklist in checkLists" tabindex="0" aria-invalid="false">
+                                                                            <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedChecklist" ng-options="checklist as (checklist.name | uppercase) for checklist in checkLists" tabindex="0" aria-invalid="false">
                                                                                 <option value="" >Select Checklist ..</option>
                                                                             </select>
                                                                         </div>
@@ -1080,7 +1080,7 @@
 
                                                                                 <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                                <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" ng-required="true">
+                                                                                <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as (emp.name | uppercase) for emp in employees track by emp.id" name="employeeName" ng-required="true">
 
 
                                                                                     <option value="">Select Employees...</option>
@@ -1113,7 +1113,7 @@
                                                                                 <label class="control-label">Select Frequency <span class="red-star">*</span> </label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                                <select class="form-control" ng-model="selectedFrequency" ng-options="frequencyPrefix for frequencyPrefix in frequencyPrefixies" name="ppmFreq" required>
+                                                                                <select class="form-control" ng-model="selectedFrequency" ng-options="(frequencyPrefix | uppercase) for frequencyPrefix in frequencyPrefixies" name="ppmFreq" required>
                                                                                 <option value="">Select..</option>
                                                                                 </select>
                                                                                 <div ng-show="form3.$submitted || form3.ppmFreq.$touched">
@@ -1137,7 +1137,7 @@
                                                                             <label class="control-label">&nbsp;</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                            <select class="form-control" ng-model="selectedTimeInterval" ng-options="frequencyDuration for frequencyDuration in frequencyDurations" name="ppmDur" required>
+                                                                            <select class="form-control" ng-model="selectedTimeInterval" ng-options="(frequencyDuration | uppercase) for frequencyDuration in frequencyDurations" name="ppmDur" required>
                                                                                     <option value="">selected..</option>
                                                                             </select>
                                                                             <div ng-show="form3.$submitted || form3.ppmDur.$touched">
@@ -1160,7 +1160,7 @@
                                                                             <label class="control-label">&nbsp;</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                            <select class="form-control" ng-model="selectedFrequnceyOccurrence" ng-options="frequency for frequency in frequencies" name="ppmDurPer" required>
+                                                                            <select class="form-control" ng-model="selectedFrequnceyOccurrence" ng-options="(frequency | uppercase) for frequency in frequencies" name="ppmDurPer" required>
                                                                                     <option value="">select..</option>
                                                                             </select>
                                                                             <div ng-show="form3.$submitted || form3.ppmDurPer.$touched">
@@ -1356,7 +1356,7 @@
                                                                     <div class="form-group selectcon is-empty SelectWithAddbtnCon">
                                                                         <label class="control-label">Checklist</label>
                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                        <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedChecklist" ng-options="checklist as checklist.name for checklist in checkLists" tabindex="0" aria-invalid="false">
+                                                                        <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedChecklist" ng-options="checklist as (checklist.name | uppercase) for checklist in checkLists" tabindex="0" aria-invalid="false">
                                                                             <option value="" >Select Checklist ..</option>
                                                                         </select>
                                                                     </div>
@@ -1413,7 +1413,7 @@
 
                                                                             <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                            <select class="form-control "  ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" ng-required="true">
+                                                                            <select class="form-control "  ng-model="selectedEmployee"  ng-options="emp as (emp.name | uppercase) for emp in employees track by emp.id" name="employeeName" ng-required="true">
 
 
                                                                                 <option value="">Select Employees...</option>
@@ -1445,7 +1445,7 @@
                                                                         <div class="form-group">
                                                                             <label class="control-label">Select Frequency<span class="red-star">*</span> </label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                            <select class="form-control" ng-model="selectedFrequencyPrefix" ng-options="frequencyPrefix for frequencyPrefix in frequencyPrefixies" name="amcFreq" required>
+                                                                            <select class="form-control" ng-model="selectedFrequencyPrefix" ng-options="(frequencyPrefix | uppercase) for frequencyPrefix in frequencyPrefixies" name="amcFreq" required>
                                                                                 <option value="">Select..</option>
                                                                             </select>
                                                                             <div ng-show="form4.$submitted || form4.amcFreq.$touched">
@@ -1468,7 +1468,7 @@
                                                                     <div class="form-group">
                                                                         <label class="control-label">&nbsp;</label>
                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                        <select class="form-control" ng-model="selectedFreqDuration" ng-options="frequencyDuration for frequencyDuration in frequencyDurations"  name="amcDur" required>
+                                                                        <select class="form-control" ng-model="selectedFreqDuration" ng-options="(frequencyDuration | uppercase) for frequencyDuration in frequencyDurations"  name="amcDur" required>
                                                                             <option value="">selected..</option>
                                                                         </select>
                                                                         <div ng-show="form4.$submitted || form4.amcDur.$touched">
@@ -1490,7 +1490,7 @@
                                                                     <div class="form-group">
                                                                         <label class="control-label">&nbsp;</label>
                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                        <select class="form-control" ng-model="selectedFrequency" ng-options="frequency for frequency in frequencies" name="amcDurPer" required>
+                                                                        <select class="form-control" ng-model="selectedFrequency" ng-options="(frequency | uppercase) for frequency in frequencies" name="amcDurPer" required>
                                                                             <option value="">select..</option>
                                                                         </select>
                                                                         <div ng-show="form4.$submitted || form4.amcDurPer.$touched">
@@ -1644,7 +1644,7 @@
                                                                                 <div class="" style="float:left;width:90%;">
                                                                                     <label class="control-label">Select Parameter<span class="red-star">*</span> </label>
                                                                                     <span class="form-control-feedback d-arrow-icon" style="padding-right: 60px"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameter" name="param" ng-options="parameter as parameter.name for parameter in parameters track by parameter.name" tabindex="0" aria-invalid="false" required>
+                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameter" name="param" ng-options="parameter as (parameter.name | uppercase) for parameter in parameters track by parameter.name" tabindex="0" aria-invalid="false" required>
                                                                                     <option value="" class="" selected="selected">Select Parameter ..</option>
                                                                                     </select>
                                                                                     <div ng-show="form6.$submitted || form6.param.$touched">
@@ -1681,7 +1681,7 @@
                                                                                 <div class="" style="float:left;width:90%;">
                                                                                     <label class="control-label">Select Units<span class="red-star">*</span></label>
                                                                                     <span class="form-control-feedback d-arrow-icon" style="padding-right: 60px"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameterUOM" name="paramUOM"  ng-options="parameterUOM as parameterUOM.uom for parameterUOM in parameterUOMs track by parameterUOM.uom" tabindex="0" aria-invalid="false" required>
+                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameterUOM" name="paramUOM"  ng-options="parameterUOM as (parameterUOM.uom | uppercase) for parameterUOM in parameterUOMs track by parameterUOM.uom" tabindex="0" aria-invalid="false" required>
                                                                                     <option value="" class="" selected="selected">Select Units ..</option>
                                                                                     </select>
                                                                                     <div ng-show="form6.$submitted || form6.paramUOM.$touched">
@@ -1723,7 +1723,7 @@
                                                                                 <div class="" style="float:left;width:100%;" ng-init="loadAllRules()">
                                                                                     <label class="control-label">Select Rule </label>
                                                                                     <span class="form-control-feedback d-arrow-icon" style="padding-right: 30px"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedRule" name="param" ng-options="rule for rule in readingRules" tabindex="0" aria-invalid="false" >
+                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedRule" name="param" ng-options="(rule | uppercase) for rule in readingRules" tabindex="0" aria-invalid="false" >
                                                                                     <option value="" class="" selected="selected">Select Rule ..</option>
                                                                                     </select>
                                                                                     <!-- <div ng-show="form6.$submitted || form6.param.$touched">
@@ -2060,7 +2060,7 @@
                                                                        <div class="col-md-11">
                                                                            <div class="form-group">
                                                                                <label class="control-label">Photo Title</label>
-                                                                               <input id='fileTitle'
+                                                                               <input id='photoTitle'
                                                                                       ng-model="uploadAssetPhoto.title"
                                                                                       class='form-control'
                                                                                       name='photoTitle'
