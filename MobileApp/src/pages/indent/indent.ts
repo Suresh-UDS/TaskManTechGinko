@@ -174,9 +174,7 @@ export class Indent {
     }
 
     saveIndentMaterial(indent){
-        console.log("Save");
-        console.log(indent);
-        this.purchaseService.saveMaterialIndent(indent).subscribe(
+        this.purchaseService.saveIndentMaterial(indent).subscribe(
             response=>{
                 console.log("Save indent Material");
                 console.log(response);

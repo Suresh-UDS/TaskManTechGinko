@@ -10,7 +10,9 @@ import {AppConfig, ApplicationConfig, MY_CONFIG_TOKEN} from "./app-config";
 @Injectable()
 export class PurchaseRequisitionService {
 
-    constructor(private http: HttpClient, private https: Http, public loadingCtrl: LoadingController, @Inject(MY_CONFIG_TOKEN) private config: ApplicationConfig) {
+    constructor(private http: HttpClient, private https: Http,
+                public loadingCtrl: LoadingController, @Inject(MY_CONFIG_TOKEN) private config: ApplicationConfig)
+    {
 
     }
 
@@ -34,6 +36,18 @@ export class PurchaseRequisitionService {
             }
         )
     }
+
+
+    saveIndentMaterial(indentDetails):Observable<any>{
+        return this.http.post(this.config.Url+'api/save/inventory',indentDetails).map(
+            response=>{
+                console.log(response);
+                return response.json();
+            }
+        )
+    }
+
+
 
     // updateMaterialIndent():Observable<any>{
     //     return this.http.p

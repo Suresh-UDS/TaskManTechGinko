@@ -41,6 +41,27 @@ export class InventoryService {
         )
     }
 
+    inventoryTransactionList(searchCriteria):Observable<any>{
+        return this.http.post(this.config.Url+'api/inventoryTrans/search',searchCriteria).map(
+            response=>{
+                console.log(response);
+                return response.json();
+            }
+        )
+    }
+
+    saveInventoryTransaction(transactionDetails):Observable<any>{
+        return this.http.post(this.config.Url+'api/saveInventory/transaction',transactionDetails).map(
+            response=>{
+                console.log(response);
+                return response.json();
+            }
+        )
+    }
+
+
+
+
 
 
 }
