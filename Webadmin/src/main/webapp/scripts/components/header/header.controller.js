@@ -63,12 +63,12 @@ angular.module('timeSheetApp')
             {
                 //alert(response.firstName + response.lastName)
                 //console.log('current user' +JSON.stringify(response.firstName));
-                
-                if(response.firstName != null || response.lastName != null){
+
+                if(response.firstName || response.lastName){
 
                     $rootScope.accountNames = response.firstName;
 
-                    if(response.lastName != null){
+                    if(response.lastName){
 
                      $rootScope.accountNames += " " + response.lastName;
                     }
