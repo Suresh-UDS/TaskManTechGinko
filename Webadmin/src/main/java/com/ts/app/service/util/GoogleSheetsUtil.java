@@ -43,7 +43,7 @@ public class GoogleSheetsUtil {
 	
 	private static final Logger log = LoggerFactory.getLogger(GoogleSheetsUtil.class);
 	
-	private static final String APPLICATION_NAME = "TaskMan_Google_Sheets_API";
+	private static final String APPLICATION_NAME = "TaskMan";
 	private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 	private static final String CREDENTIALS_FOLDER = "credentials"; // Directory to store user credentials.
 
@@ -52,7 +52,7 @@ public class GoogleSheetsUtil {
 	 * scopes, delete your previously saved credentials/ folder.
 	 */
 	private static final List<String> SCOPES = Collections.singletonList(DriveScopes.DRIVE_FILE);
-	private static final String CLIENT_SECRET_DIR = "client_secret_872397104992-2auumih3ono1ig5dt5k3cg1c1ctfuvgr.apps.googleusercontent.com.json";
+	private static final String CLIENT_SECRET_DIR = "client_secret_7634333701-h17hql7aoqgsf1pq08sqjdrdb8q7tavi.apps.googleusercontent.com.json";
 
 	@Inject
 	private Environment env;
@@ -127,7 +127,7 @@ public class GoogleSheetsUtil {
 		        Permission userPermission = new Permission()
 		            .setType("user")
 		            .setRole("writer")
-		            .setEmailAddress("gnanaprakash@techginko.com");
+		            .setEmailAddress("udsfmshelpdesk@gmail.com");
 		        service.permissions().create(file.getId(), userPermission)
 		            .setFields("id")
 		            .queue(batch, new JsonBatchCallback<Permission>() {

@@ -611,16 +611,16 @@
                 <h4 class="modal-title" id="">View Manufacturer Details - {{manufacturer.name | uppercase}}</h4>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-body ViewContentPageCon">
+                <div class="titleCon margn-btm-12">
+                    <h3>{{manufacturer.name | uppercase}}</h3>
+                </div>
 
               <div class="row">
                   <div class="col-md-6">
-
                       <div class="panel panel-default">
                           <div class="panel-heading">Manufacturer Details</div>
-                          <div class="panel-body">
-
-
+                          <div class="panel-body" style="min-height:350px;">
                               <div class="table-responsive">
                                   <table class="table">
                                       <tbody>
@@ -655,21 +655,13 @@
                                       </tbody>
                                   </table>
                               </div>
-
-
-
                           </div>
                       </div>
-
-
                   </div>
                   <div class="col-md-6">
-
                       <div class="panel panel-default">
                           <div class="panel-heading">Address Details</div>
-                          <div class="panel-body">
-
-
+                          <div class="panel-body" style="min-height:350px;">
                               <div class="table-responsive">
                                   <table class="table">
                                       <tbody>
@@ -711,8 +703,12 @@
 
                           </div>
                       </div>
-
-
+                  </div>
+                  <div class="col-md-12 txt-align-rgt">
+                      <button class="btn btn-default" type="button"
+                              data-dismiss="modal" id="close-button-right">
+                          Close
+                      </button>
                   </div>
               </div>
 

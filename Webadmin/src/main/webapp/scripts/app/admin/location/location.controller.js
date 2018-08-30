@@ -533,7 +533,7 @@ angular.module('timeSheetApp')
                 $scope.loadPageTop();
 
             /* Localstorage (Retain old values while edit page to list) start */
-    
+
             if($rootScope.retain == 1){
                 $scope.localStorage = getLocalStorage.getSearch();
                 console.log('Local storage---',$scope.localStorage);
@@ -547,12 +547,12 @@ angular.module('timeSheetApp')
                        $scope.searchProject = null;
                     }
                     if($scope.localStorage.siteId){
-                      $scope.searchSite = {id:$scope.localStorage.siteId,name:$scope.localStorage.siteName}; 
+                      $scope.searchSite = {id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
                     }else{
-                       $scope.searchSite = null;  
+                       $scope.searchSite = null;
                     }
-                    
-                    
+
+
 
                 }
 
@@ -672,6 +672,7 @@ angular.module('timeSheetApp')
 
 
         $scope.printDiv = function(printable) {
+            console.log("Print Screen")
             var printContents = document.getElementById(printable).innerHTML;
             var originalContents = document.body.innerHTML;
             document.body.innerHTML = printContents;
@@ -684,7 +685,7 @@ angular.module('timeSheetApp')
         }
        /*
 		 * * Pagination init function ** @Param:integer
-		 * 
+		 *
 		 */
 
         $scope.setPage = function (page) {
@@ -729,11 +730,19 @@ angular.module('timeSheetApp')
         };
 
         $scope.printDiv = function(printable) {
+            // var printContents = document.getElementById(printable).innerHTML;
+            // var originalContents = document.body.innerHTML;
+            // document.body.innerHTML = printContents;
+            // window.print();
+            // document.body.innerHTML = originalContents;
+
             var printContents = document.getElementById(printable).innerHTML;
-            var originalContents = document.body.innerHTML;
-            document.body.innerHTML = printContents;
-            window.print();
-            document.body.innerHTML = originalContents;
+            var popupWin = window.open('', '_blank', 'width=1000,height=1000');
+            popupWin.document.open();
+            popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head>' +
+                '<body onload="window.print()">' + printContents + '</body>' +
+                '</html>');
+            popupWin.document.close();
         }
 
         $scope.printPage = function () {

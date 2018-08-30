@@ -158,7 +158,7 @@
                                         </span>
                                     </span>
                                 </th>
-                                <th>Start Time
+                                <th>Actual Start Time
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('plannedStartTime')" ng-class="isActiveAsc == 'plannedStartTime' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
@@ -169,7 +169,7 @@
                                     </span>
 
                                 </th>
-                                 <th>End Time
+                                 <th>Actual End Time
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('actualEndTime')" ng-class="isActiveAsc == 'actualEndTime' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
@@ -211,8 +211,8 @@
                                 <td>{{job.siteName}}</td>
                                 <td>{{job.title}}</td>
                                 <td>{{job.employeeName}}</td>
-                                <td><label ng-bind="job.plannedStartTime | date:'dd-MMM-yyyy hh:mm a'"/></td>
-                                <td><label ng-bind="job.actualEndTime | date:'dd-MMM-yyyy hh:mm a'"/></td>
+                                <td><label ng-bind="job.plannedStartTime | date :'dd-MMM-yyyy @ hh:mm a'"/></td>
+                                <td><label ng-bind="job.actualEndTime | date :'dd-MMM-yyyy @ hh:mm a'"/></td>
                                 <td>{{job.status}}</td>
                                 <td>{{job.jobType}}</td>
 								<td>{{job.schedule}}</td>
@@ -226,7 +226,7 @@
 
                                         <a ng-click="getCheckInDetails(employee.id)" title="View" ui-sref="view-job({ id: job.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
 
-                                        <a  ng-class="{active: $state.includes('admin')}" title="Edit" has-permission="Job:Edit" ui-sref="edit-job({ id: job.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                        <a ng-if="job.status !='COMPLETED'" ng-class="{active: $state.includes('admin')}" title="Edit" has-permission="Job:Edit" ui-sref="edit-job({ id: job.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
                                         <a ng-class="{active: $state.includes('admin')}" title="Delete" ng-click="deleteConfirm(job)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
 
