@@ -317,7 +317,31 @@ export class DBService {
                 var jobs;
                 var param = [];
                 for (var i = 0; i < this.selectAsset.length; i++) {
-                    var search = {assetId: this.selectAsset[i].id,report:true}
+                    var search = {assetId: this.selectAsset[i].id,report:true,maintenanceType:'AMC'}
+                    this.jobService.getJobs(search).subscribe(
+                        response => {
+                            // console.log("Getting Jobs response");//
+                            // console.log(response);//
+                            jobs = response.transactions;
+
+                            var search = {assetId: this.selectAsset[i].id,report:true,maintenanceType:'PPM'}
+                            this.jobService.getJobs(search).subscribe(
+                                response => {
+                              jobs.push(response.transactions);
+                                })
+
+                            if (jobs) {
+                                for (var i = 0; i < jobs.length; i++) {
+                                    param.push([jobs[i].id, jobs[i].assetId, jobs[i].title, jobs[i].employeeName, jobs[i].siteName, jobs[i].plannedEndTime, jobs[i].plannedStartTime, jobs[i].description, jobs[i].status, jobs[i].maintenanceType, jobs[i].checkInDateTimeFrom, jobs[i].checkInDateTimeTo])
+                                }
+                            }
+                        },
+                        error => {
+                            console.log("Get asset Jobs error");
+                        })
+                }
+                for (var i = 0; i < this.selectAsset.length; i++) {
+                    var search = {assetId: this.selectAsset[i].id,report:true,maintenanceType:'PPM'}
                     this.jobService.getJobs(search).subscribe(
                         response => {
                             // console.log("Getting Jobs response");//
