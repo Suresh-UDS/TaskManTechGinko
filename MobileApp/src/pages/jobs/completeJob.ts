@@ -123,7 +123,6 @@ export class CompleteJobPage {
                 this.component.closeLoader();
                 console.log("Error in getting job details");
                 console.log(error);
-                this.component.showToastMessage("Errror in getting job details","bottom");
             }
         )
     }
