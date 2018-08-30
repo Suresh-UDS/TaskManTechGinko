@@ -204,6 +204,7 @@ angular.module('timeSheetApp')
 			$scope.selectedItemName = $scope.selectedItemCode.materialName;
 			$scope.inventory.storeStock= $scope.selectedItemCode.materialStoreStock;
 			$scope.inventory.quantity = $scope.selectedItemCode.quantity;
+			$scope.inventory.uom = $scope.selectedItemCode.materialUom;
 		}
 
         
