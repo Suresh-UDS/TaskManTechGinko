@@ -221,6 +221,13 @@ scheduler:
       enabled: true
 
 default.user.password: uds12345
+
+google:
+   drive:
+      api:
+          callback:
+              host: taskmanadmin.uds.in
+              port: 8080
 # ===================================================================
 # JHipster specific properties
 # ===================================================================

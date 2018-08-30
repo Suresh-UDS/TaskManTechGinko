@@ -187,11 +187,16 @@ export class AssetView {
     doRefresh(refresher,segment)
     {
         this.componentService.showLoader("");
-        if(segment=='jobs')
+        if(segment=='ppmjobs')
         {
-            this.getJobs(this.jobSearchCriteria);
+            this.getPpmJobs(this.jobSearchCriteria);
             refresher.complete();
             // this.componentService.showLoader("");
+        }
+        else if(segment=='amcJobs')
+        {
+            this.getAmcJobs(this.jobSearchCriteria);
+            refresher.complete();
         }
         else if(segment=='tickets')
         {
@@ -202,11 +207,19 @@ export class AssetView {
     }
 
 
-    //job
-    getJobs(searchCriteria)
+    //ppmjob
+    getPpmJobs(searchCriteria)
     {
-        // var searchCriteria={
-        //     assetId:this.assetDetails.id
+        var searchPPM={
+            assetId:searchCriteria.assetId,
+            maintenanceType:'PPM'
+        }
+        // var searchAMC={
+        //     assetId:searchCriteria.assetId,
+        //     maintenanceType:'AMC'
+        // }
+        // var search={
+        //     assetId:searchCriteria.assetId,
         // }
         this.spinner = true;
         //offline
@@ -223,13 +236,13 @@ export class AssetView {
 
 
         //Online
-        this.jobService.getJobs(searchCriteria).subscribe(
+        this.jobService.getJobs(searchPPM).subscribe(
             response=>{
                 this.spinner = false;
                 this.componentService.closeAll();
                 console.log("Getting Jobs response");
                 console.log(response);
-                this.assetDetails.jobs = response.transactions;
+                this.assetDetails.ppmJobs = response.transactions;
                 this.page = response.currPage;
                 this.totalPages = response.totalPages;
                 console.log(this.assetDetails.jobs)
@@ -242,14 +255,65 @@ export class AssetView {
             })
     }
 
-    jobScroll(infiniteScroll) {
+    // amcjobs
+    getAmcJobs(searchCriteria)
+    {
+        // var searchPPM={
+        //     assetId:searchCriteria.assetId,
+        //     maintenanceType:'PPM'
+        // }
+        var searchAMC={
+            assetId:searchCriteria.assetId,
+            maintenanceType:'AMC'
+        }
+        // var search={
+        //     assetId:searchCriteria.assetId,
+        // }
+        this.spinner = true;
+        //offline
+        // this.dbService.getJobs(this.assetDetails.id).then(
+        //     (res)=>{
+        //         this.componentService.closeLoader()
+        //         console.log(res)
+        //         this.assetDetails.jobs = res;
+        //     },
+        //     (err)=>{
+        //
+        //     }
+        // )
+
+
+        //Online
+        this.jobService.getJobs(searchAMC).subscribe(
+            response=>{
+                this.spinner = false;
+                this.componentService.closeAll();
+                console.log("Getting Jobs response");
+                console.log(response);
+                this.assetDetails.amcJobs = response.transactions;
+                this.page = response.currPage;
+                this.totalPages = response.totalPages;
+                console.log(this.assetDetails.jobs)
+            },
+            error=>{
+                this.spinner = false;
+                this.componentService.closeAll();
+                console.log(error)
+                console.log("Getting Jobs errors")
+            })
+    }
+
+    // ppmscroll
+
+    jobPpmScroll(infiniteScroll) {
         console.log('Begin async operation');
         console.log(infiniteScroll);
         console.log(this.totalPages);
         console.log(this.page);
-        var searchCriteria = {
+        var searchPPM = {
             currPage: this.page + 1,
-            assetId:this.assetDetails.id
+            assetId:this.assetDetails.id,
+            maintenanceType:'PPM'
         };
         if (this.page > this.totalPages) {
             console.log("End of all pages");
@@ -261,7 +325,49 @@ export class AssetView {
             console.log(this.totalPages);
             console.log(this.page);
             setTimeout(() => {
-                this.jobService.getJobs(searchCriteria).subscribe(
+                this.jobService.getJobs(searchPPM).subscribe(
+                    response => {
+                        console.log('ionViewDidLoad jobs list:');
+                        console.log(response);
+                        console.log(response.transactions);
+                        for (var i = 0; i < response.transactions.length; i++) {
+                            this.assetDetails.jobs.push(response.transactions[i]);
+                        }
+                        this.page = response.currPage;
+                        this.totalPages = response.totalPages;
+                        this.componentService.closeAll();
+                    },
+                    error => {
+                        console.log('ionViewDidLoad Jobs Page:' + error);
+                    }
+                )
+                infiniteScroll.complete();
+            }, 1000);
+        }
+    }
+
+     // amcscroll
+    jobAmcScroll(infiniteScroll) {
+        console.log('Begin async operation');
+        console.log(infiniteScroll);
+        console.log(this.totalPages);
+        console.log(this.page);
+        var searchAMC = {
+            currPage: this.page + 1,
+            assetId:this.assetDetails.id,
+            maintenanceType:'AMC'
+        };
+        if (this.page > this.totalPages) {
+            console.log("End of all pages");
+            infiniteScroll.complete();
+            this.componentService.showToastMessage('Todays jobs Loaded', 'bottom');
+
+        } else {
+            console.log("Getting pages");
+            console.log(this.totalPages);
+            console.log(this.page);
+            setTimeout(() => {
+                this.jobService.getJobs(searchAMC).subscribe(
                     response => {
                         console.log('ionViewDidLoad jobs list:');
                         console.log(response);
@@ -425,7 +531,7 @@ export class AssetView {
         console.log("From Date:" + fromDate.toISOString());
         console.log("To Date:" + toDate.toISOString());
 
-        if(categories == 'jobs')
+        if(categories == 'ppmjobs')
         {
             this.jobSearchCriteria={
                 checkInDateTimeFrom:fromDate.toISOString(),
@@ -433,7 +539,16 @@ export class AssetView {
                 assetId:this.assetDetails.id
             };
 
-            this.getJobs(this.jobSearchCriteria)
+            this.getPpmJobs(this.jobSearchCriteria)
+        }
+        else if(this.categories == 'amcJobs')
+        {
+            this.jobSearchCriteria={
+                checkInDateTimeFrom:fromDate.toISOString(),
+                checkInDateTimeTo:toDate.toISOString(),
+                assetId:this.assetDetails.id
+            };
+
         }
         else if(this.categories == 'tickets')
         {

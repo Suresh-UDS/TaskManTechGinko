@@ -335,6 +335,9 @@ public class TicketManagementService extends AbstractService {
     }
 
     public SearchResult<TicketDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
+    		if(log.isDebugEnabled()) {
+    			log.debug("Search Criteria - " + searchCriteria);
+    		}
         User user = userRepository.findOne(searchCriteria.getUserId());
         SearchResult<TicketDTO> result = new SearchResult<TicketDTO>();
         if(searchCriteria != null) {

@@ -1317,9 +1317,14 @@ input.InputFirstCaps::first-letter
   border-radius: 0;
   /*margin: 8px 0;*/
 }
-.ListingPageCon .tablecard
+.ListingPageCon .card-content
 {
     min-height: 500px;
+}
+
+.navbar-toggle
+{
+    color: #fff;
 }
 
 

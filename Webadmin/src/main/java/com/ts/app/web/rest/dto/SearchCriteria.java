@@ -453,6 +453,7 @@ public class SearchCriteria extends Paginator {
     public String toString() {
         final StringBuilder sb = new StringBuilder("SearchCriteria{");
         sb.append("id=").append(id);
+        sb.append(", currPage='").append(getCurrPage()).append('\'');
         sb.append(", jobTitle='").append(jobTitle).append('\'');
         sb.append(", assetTitle='").append(assetTitle).append('\'');
         sb.append(", assetType=").append(assetType);
