@@ -165,7 +165,8 @@ locationService:
 quotationService:
 #   url: http://locahost:8000/api/site/location
 #   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
-   url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8001/api
+#   url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8001/api
+    url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8001/api
 
 pushService:
    url: http://localhost:9000/
