@@ -40,7 +40,7 @@ angular.module('timeSheetApp')
         $scope.searchStatus = null;
         $scope.disable = false;
         $rootScope.exportStatusObj  ={};
-        $scope.status = 0;
+        $scope.checkStatus = 0;
         $scope.selectPlannedStartTime;
 
         /*
@@ -121,7 +121,7 @@ angular.module('timeSheetApp')
 
         //Date
         $('input#jobStartDate').on('dp.change', function(e){
-        		$scope.job.plannedStartTime = e.date._d;
+        		$scope.job.plannedStartTime = new Date(e.date._d);
                 $scope.selectPlannedStartTime = $filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
         		console.log('job start time - ' + $scope.job.plannedStartTime);
                 $scope.job.scheduleEndDate = "";
@@ -137,7 +137,7 @@ angular.module('timeSheetApp')
 
         $('input#scheduleEndDate').on('dp.change', function(e){
 
-	    		$scope.job.scheduleEndDate = e.date._d;
+	    		$scope.job.scheduleEndDate = new Date(e.date._d);
                 $scope.selectScheduleEndDate = $filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
 	    		console.log('job schedule end date - ' + $scope.job.scheduleEndDate);
 	    });
@@ -150,13 +150,13 @@ angular.module('timeSheetApp')
         $('input#selectedJobDate').on('dp.change', function(e){
 
                 $scope.selectedJobDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
-                $scope.selectedJobDateSer = e.date._d;
+                $scope.selectedJobDateSer = new Date(e.date._d);
         });
 
         $('input#selectedJobDateTo').on('dp.change', function(e){
 
             $scope.selectedJobDateTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
-            $scope.selectedJobDateToSer = e.date._d;
+            $scope.selectedJobDateToSer = new Date(e.date._d);
         });
 
         //
@@ -370,7 +370,9 @@ angular.module('timeSheetApp')
             }else{
                 $scope.searchCriteria.siteId = null;
             }
-        		$scope.searchCriteria.list = true;
+        		//$scope.searchCriteria.list = true;
+                $scope.searchCriteria.isReport = true;
+
                 $scope.employees = "";
         		EmployeeComponent.search($scope.searchCriteria).then(function (data) {
                     $scope.selectedEmployee = null;
@@ -708,7 +710,7 @@ angular.module('timeSheetApp')
                            $scope.loadBlocks();
                            $scope.loadFloors();
                            $scope.loadZones();
-                           $scope.status = 1;
+                           $scope.checkStatus  = 1;
 
 
                     })
@@ -1265,7 +1267,7 @@ angular.module('timeSheetApp')
 
         $scope.cancel = function () {
 
-             if($scope.status == 1){
+             if($scope.checkStatus == 1){
 
                  $location.path('/tickets');
 

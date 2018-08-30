@@ -49,6 +49,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 				controller : 'UserController'
 			}
 		},
+		params:{checkStatus:':checkStatus'},
 		resolve : {
 
 		}

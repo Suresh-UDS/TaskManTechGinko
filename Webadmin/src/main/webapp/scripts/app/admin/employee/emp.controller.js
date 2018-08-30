@@ -996,6 +996,9 @@ angular.module('timeSheetApp')
 	            	};
 	            	$scope.searchCriteria = searchCriteria;
 	        	}
+
+                $scope.searchCriteria.isReport = true;
+
 	    		console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaEmployees));
 	    		console.log('criteria in scope -'+JSON.stringify($scope.searchCriteria));
 
@@ -1156,7 +1159,11 @@ angular.module('timeSheetApp')
         		empShift.siteId = selectedShiftSite.id;
     	 		$scope.modifiedEmpShifts.push(empShift);
     	 		$scope.modified = true;
-	    }
+
+    	 		$scope.searchCriteria.siteId = selectedShiftSite.id;
+    	 		$scope.searchShift();
+	    };
+
 
         $scope.updateEmployeeShifts = function() {
         		if($scope.modifiedEmpShifts && $scope.modifiedEmpShifts.length > 0) {
@@ -1213,6 +1220,10 @@ angular.module('timeSheetApp')
 	            $scope.searchCriteria.currPage = currPageVal;
 	            $scope.searchCriteria.findAll = false;
 
+                if(!$scope.searchProject && !$scope.searchSite){
+                    $scope.searchCriteria.findAll = true;
+                }
+
 	            if($scope.searchProject) {
 	                    $scope.searchCriteria.projectId = $scope.searchProject.id;
 	            }
@@ -1220,6 +1231,12 @@ angular.module('timeSheetApp')
 	            if($scope.searchSite) {
 	                    $scope.searchCriteria.siteId = $scope.searchSite.id;
 	            }
+
+                if($scope.selectedDate){
+                      $scope.searchCriteria.fromDate = $scope.selectedDate;
+                }else{
+                      $scope.searchCriteria.fromDate = new Date();
+                }
 
 	            //-------
 	            if($scope.pageSort){
@@ -1236,8 +1253,6 @@ angular.module('timeSheetApp')
 	                $scope.searchCriteria.columnName ="id";
 	                $scope.searchCriteria.sortByAsc = true;
 	            }
-
-	            $scope.searchCriteria.fromDate = $scope.searchDate;
 
 	            console.log("search criteria",$scope.searchCriteria);
 	             $scope.employeeShifts = '';
