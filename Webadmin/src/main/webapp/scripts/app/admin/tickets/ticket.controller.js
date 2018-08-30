@@ -711,7 +711,6 @@ angular.module('timeSheetApp')
             }
 
             $scope.closeTicketConfirm =function(cTicket){
-            	alert(cTicket.comments);
             $scope.loadingStart();
             JobComponent.updateTicket(cTicket).then(function() {
                     $scope.loadingStop();
