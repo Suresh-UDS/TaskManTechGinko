@@ -16,6 +16,7 @@ angular.module('timeSheetApp')
         $scope.pageSort = 10;
         $scope.pager = {};
         $scope.noData = false;
+        $scope.checkStatus = 0;
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -158,8 +159,17 @@ angular.module('timeSheetApp')
         };
 
         $scope.cancelUser = function () {
-        	$location.path('/users');
+        	
+             if($scope.checkStatus == 1){
+
+                 $location.path('/employees');
+
+             }else{
+
+                $location.path('/users');
+             }
         };
+
 
         $scope.loadUsers = function () {
             $scope.clearFilter();
@@ -173,6 +183,9 @@ angular.module('timeSheetApp')
 
 
         $scope.loadUser = function() {
+            if($stateParams.checkStatus == 1){
+               $scope.checkStatus = 1;
+            }
 	        	$scope.loadEmployee();
 	        	UserComponent.findOne($stateParams.id).then(function (data) {
 	                $scope.user = data;

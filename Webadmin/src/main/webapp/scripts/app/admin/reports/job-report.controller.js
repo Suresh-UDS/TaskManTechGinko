@@ -480,11 +480,11 @@ angular.module('timeSheetApp')
             	$scope.searchCriteria = searchCriteria;
         	//}
 
-                $scope.searchCriteria.isReport = true;
+                //$scope.searchCriteria.isReport = true;
 
                 $scope.searchCriteria.currPage = currPageVal;
                 $scope.searchCriteria.findAll = false;
-
+                $scope.searchCriteria.isReport = true;
                /* && !$scope.selectedJob*/
 
                 if(!$scope.searchProject && !$scope.searchSite && !$scope.searchStatus){

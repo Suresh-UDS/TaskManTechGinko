@@ -258,7 +258,11 @@ public class JobManagementService extends AbstractService {
             if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
                 Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
                 log.debug("Sorting object" +sort);
-                pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+                if(searchCriteria.isReport()) {
+                		pageRequest = createPageSort(searchCriteria.getCurrPage(), Integer.MAX_VALUE, sort);
+                }else {
+                		pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+                }
 
             }else{
                 log.debug("Sorting object not found",searchCriteria.isReport());
@@ -2080,6 +2084,12 @@ public class JobManagementService extends AbstractService {
 	 * Validate job date information
 	 */
 	private JobDTO validate(JobDTO jobDTO, Job job) {
+		
+		if(job.getStatus() != null && job.getStatus().equals(JobStatus.COMPLETED)) {
+			jobDTO.setErrorMessage("Job details cannot be updated in COMPLETED state");
+			return jobDTO;
+		}
+		
 		//Date Validation for job
 		if(jobDTO.getScheduleEndDate() != null) {
 			Calendar startCal = Calendar.getInstance();

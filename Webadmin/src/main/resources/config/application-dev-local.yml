@@ -68,13 +68,13 @@ upload:
          path: /opt/uploads
 export:
     file:
-         path: D:\opt\uploads
+         path: /opt/uploads
 qrcode:
     file:
          path: /opt/qrcode
 locationQRCode:
     file:
-        path: /opt/location/qrcode         
+        path: /opt/location/qrcode
 attendance:
     shiftStartLeadTime: 1
     shiftEndLeadTime: 1
@@ -83,14 +83,14 @@ attendance:
     file:
         path:  /opt/attendance
     template:
-        path: /opt/template/Attendance_Report_Format.xlsx    
+        path: /opt/template/Attendance_Report_Format.xlsx
 quotation:
     file:
         path:  /opt/quotation
 ticket:
     file:
-        path:  /opt/ticket    
-extensionImg: jpeg,jpg,png    
+        path:  /opt/ticket
+extensionImg: jpeg,jpg,png
 extensionFile: pdf,xlsx,xls,docs,doc,csv,txt
 
 import:
@@ -100,14 +100,14 @@ import:
             completed: /opt/imports/completed
 asset:
    file:
-       path: D:\asset\uploads\site      
+       path: D:\asset\uploads\site
    weekly:
        template:
            path: /opt/template/Asset_52Week_Report_Format.xlsx
 multipart:
    maxFileSize: 15MB
    maxRequestSize: 15MB
-         
+
 max:
     user: 10
     userGroup: 2
@@ -145,10 +145,10 @@ reports:
         url: http://localhost:8088/#/vendor-report
 
 url:
-    ticket-view: http://localhost:8088/#/view-ticket
-    quotation-view: http://localhost:8088/#/view-quotation
-    job-view: http://localhost:8088/#/view-job
-    
+    ticket-view: http://localhost:8088/#/view-ticket/
+    quotation-view: http://localhost:8088/#/view-quotation/
+    job-view: http://localhost:8088/#/view-job/
+
 facedetection:
     api:
         url: https://api.kairos.com/detect
@@ -165,14 +165,15 @@ locationService:
 quotationService:
 #   url: http://locahost:8000/api/site/location
 #   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
-   url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8001/api
+#   url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8001/api
+    url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8001/api
 
 pushService:
    url: http://localhost:9000/
-   
+
 AWS:
    s3-url: https://s3.ap-south-1.amazonaws.com
-   s3-accessKey: AKIAJJQEB7US7QOAV2LQ 
+   s3-accessKey: AKIAJJQEB7US7QOAV2LQ
    s3-secretKey: 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
    s3-bucketName: fms-taskman
    s3-cloudfront-url: http://d1wn8hrsdttztl.cloudfront.net/
@@ -200,7 +201,7 @@ scheduler:
    monthlyJob:
       enabled: true
    quarterlyJob:
-      enabled: true   
+      enabled: true
    yearlyJob:
       enabled: true
       creation: daily
@@ -246,4 +247,4 @@ jhipster:
     datasource:
         cachePrepStmts: true
         prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048            
+        prepStmtCacheSqlLimit: 2048

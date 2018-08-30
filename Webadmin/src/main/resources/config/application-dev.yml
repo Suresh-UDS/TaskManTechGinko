@@ -96,20 +96,20 @@ import:
         path:
             new: /opt/imports/new
             completed: /opt/imports/completed
-           
-extensionImg: jpeg,jpg,png    
-extensionFile: pdf,xlsx,xls,docx,doc,csv,txt       
+
+extensionImg: jpeg,jpg,png
+extensionFile: pdf,xlsx,xls,docx,doc,csv,txt
 
 asset:
    file:
-       path: /opt/asset/uploads/site      
+       path: /opt/asset/uploads/site
    weekly:
        template:
            path: /opt/template/Asset_52Week_Report_Format.xlsx
 multipart:
    maxFileSize: 15MB
    maxRequestSize: 15MB
-   
+
 max:
     user: 10
     userGroup: 2
@@ -146,9 +146,9 @@ reports:
         url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/vendor-report
 
 url:
-    ticket-view: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/view-ticket
-    quotation-view: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/view-quotation
-    job-view: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/view-job
+    ticket-view: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/view-ticket/
+    quotation-view: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/view-quotation/
+    job-view: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/view-job/
 
 facedetection:
     api:
@@ -171,10 +171,10 @@ quotationService:
 
 pushService:
    url: http://localhost:9000/
-   
+
 AWS:
    s3-url: https://s3.ap-south-1.amazonaws.com
-   s3-accessKey: AKIAJJQEB7US7QOAV2LQ 
+   s3-accessKey: AKIAJJQEB7US7QOAV2LQ
    s3-secretKey: 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
    s3-bucketName: fms-taskman
    s3-cloudfront-url: http://d1wn8hrsdttztl.cloudfront.net/
@@ -202,7 +202,7 @@ scheduler:
    monthlyJob:
       enabled: true
    quarterlyJob:
-      enabled: true   
+      enabled: true
    yearlyJob:
       enabled: true
       creation: daily
@@ -227,7 +227,7 @@ google:
    drive:
       api:
           callback:
-              host: ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com    
+              host: ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com
               port: 8080
 # ===================================================================
 # JHipster specific properties
@@ -254,4 +254,4 @@ jhipster:
     datasource:
         cachePrepStmts: true
         prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048            
+        prepStmtCacheSqlLimit: 2048

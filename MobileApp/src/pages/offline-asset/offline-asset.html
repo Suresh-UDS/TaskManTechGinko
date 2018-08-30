@@ -16,6 +16,12 @@
           <!--<ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10" ></ion-icon>-->
         <!--</button>-->
       <!--</div>-->
+
+        <button ion-fab mini color="primary" class="margin0" *ngSwitchCase=" categories === 'readings'" (click)="getReadings()">
+            <ion-icon name="speedometer" class="fnt-35"></ion-icon>
+        </button>
+
+
     </ion-buttons>
 
   </ion-navbar>
@@ -68,34 +74,6 @@
 
 <ion-content>
 
-  <ion-fab right bottom mini  margin-bottom="" #fab>
-    <button ion-fab color="dark">
-      <ion-icon name="md-add" class="clr-orange"></ion-icon>
-    </button>
-    <ion-fab-list side="top" fab-list-margin class="margin-left-right0" [ngSwitch]="categories">
-
-      <ion-label color="dark" class="margin0 bg-orange"  >Reading</ion-label>
-      <button ion-fab color="primary" (click)="getReadings()" >
-        <ion-icon name="speedometer" class="fnt-35"></ion-icon>
-      </button>
-
-      <!--<ion-label color="dark" class="margin0 bg-orange"  *ngSwitchCase =" 'jobs' ">Job</ion-label>-->
-      <!--<button ion-fab color="primary" (click)="createJob()" *ngSwitchCase =" 'jobs' ">-->
-      <!--<ion-icon name="ios-construct-outline" class="fnt-35"></ion-icon>-->
-      <!--</button>-->
-
-      <!--<ion-label color="dark" class="margin0 bg-orange"  *ngSwitchCase =" 'details' ">Image</ion-label>-->
-      <!--<button ion-fab color="primary" (click)="addAssetImage()" *ngSwitchCase =" 'details'" >-->
-        <!--<ion-icon name="camera" class="fnt-24"></ion-icon>-->
-      <!--</button>-->
-
-      <!--<ion-label color="dark" class="margin0 bg-orange"  *ngSwitchCase =" 'tickets' ">Ticket</ion-label>-->
-      <!--<button ion-fab color="primary" (click)="createTicket()" *ngSwitchCase =" 'tickets' ">-->
-        <!--<ion-icon name="ios-construct-outline" class="fnt-35"></ion-icon>-->
-      <!--</button>-->
-
-    </ion-fab-list>
-  </ion-fab>
 
 
 

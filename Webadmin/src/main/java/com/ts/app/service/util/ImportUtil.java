@@ -425,7 +425,7 @@ public class ImportUtil {
 				Row currentRow = datatypeSheet.getRow(r);
 				JobDTO jobDto = new JobDTO();
 				jobDto.setTitle(currentRow.getCell(0).getStringCellValue());
-				jobDto.setDesc(currentRow.getCell(1).getStringCellValue());
+				jobDto.setDescription(currentRow.getCell(1).getStringCellValue());
 				jobDto.setSiteId(siteId);
 //				long location = (long)currentRow.getCell(2).getNumericCellValue();
 //				Location loc = locationRepo.findByName(location);
