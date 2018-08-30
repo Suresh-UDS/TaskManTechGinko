@@ -30,6 +30,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.CopyObjectRequest;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -475,6 +476,43 @@ public class AmazonS3Service {
 		 return prefixUrl;
 	}
 
+	public void getAllFiles() { 
+		log.debug("===================== Calling a AWS S3 for get files =====================");
+		try {
+			String key = "prod/";
+			List<S3ObjectSummary> fileList = s3client.listObjects(bucketName, key).getObjectSummaries();
+			
+			for (S3ObjectSummary file : fileList) {
+				log.debug("===================== Get Files - Done! =====================" + file.getKey());
+				String filename = file.getKey();
+				if(filename.contains("${AWS.s3-checklist-path")) {
+					log.debug("===================== Before Rename File =====================" + filename);
+					String sourceKey = filename;
+					String renamedFile = filename.substring(filename.indexOf("}")+1);
+					log.debug("===================== After Rename File =====================" + renamedFile);
+					if(renamedFile.contains("/")) {
+						String slashFile = renamedFile.replace("/", "-");
+						log.debug("===================== After Slash Removed File =====================" + slashFile);
+						CopyObjectRequest copyObjRequest = new CopyObjectRequest(bucketName, sourceKey, bucketName, key + checkListPath + slashFile)
+																	.withCannedAccessControlList(CannedAccessControlList.PublicReadWrite);
+						s3client.copyObject(copyObjRequest);
+					}else {
+						
+						log.debug("=====================Source Key  =====================" + sourceKey);
+						CopyObjectRequest copyObjRequest = new CopyObjectRequest(bucketName, sourceKey, bucketName, key + checkListPath + renamedFile)
+																	.withCannedAccessControlList(CannedAccessControlList.PublicReadWrite);
+		                s3client.copyObject(copyObjRequest);
+					}
+					
+				}
+			
+			}
+           
+        } catch(AmazonServiceException e) {
+            e.printStackTrace();
+        }
+	}
+	
 
     
 	
