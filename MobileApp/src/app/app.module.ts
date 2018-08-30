@@ -122,6 +122,9 @@ import{OfflineGetassetreadings} from "../pages/offline-getassetreadings/offline-
 import {OfflineAttendance} from "../pages/employee/offline-attendance";
 import{ChangePassword} from "../pages/change-password/change-password";
 import{LocationAccuracy} from "@ionic-native/location-accuracy";
+// import { PhotoViewer } from '@ionic-native/photo-viewer';
+
+// import{IonicImageViewerModule} from "ionic-img-viewer";
 
 @NgModule({
   declarations: [
@@ -205,7 +208,8 @@ import{LocationAccuracy} from "@ionic-native/location-accuracy";
       ChangePassword,
       InventoryMaster,
       UpdateApp,
-      ForgotPassword
+      ForgotPassword,
+      // PhotoViewer
   ],
   imports: [
     BrowserModule,
@@ -218,6 +222,7 @@ import{LocationAccuracy} from "@ionic-native/location-accuracy";
         iconMode: 'md'
     }),
     IonicImageViewerModule,
+      // PhotoViewer,
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],

@@ -94,6 +94,10 @@ import:
         path:
             new: /opt/imports/new
             completed: /opt/imports/completed
+
+extensionImg: jpeg,jpg,png    
+extensionFile: pdf,xlsx,xls,docx,doc,csv,txt
+
 asset:
    file:
        path: /opt/asset/uploads/site      
@@ -141,9 +145,9 @@ reports:
         url: https://taskmanadmin.uds.in/#/asset-report
 
 url:
-    ticket-view: https://taskmanadmin.uds.in#/view-ticket
-    quotation-view: https://taskmanadmin.uds.in#/view-quotation
-    job-view: https://taskmanadmin.uds.in#/view-job
+    ticket-view: https://taskmanadmin.uds.in#/view-ticket/
+    quotation-view: https://taskmanadmin.uds.in#/view-quotation/
+    job-view: https://taskmanadmin.uds.in#/view-job/
 
 facedetection:
     api:
@@ -183,7 +187,7 @@ AWS:
    s3-checkout-path : attendanceCheckOuts/
    s3-checkinout-path : checkInOutImages/
    s3-checklist-path : checkListImages/
-   s3-locationqr-path : locationQrCodes/ 
+   s3-locationqr-path : locationQrCodes/
 
 scheduler:
    job:

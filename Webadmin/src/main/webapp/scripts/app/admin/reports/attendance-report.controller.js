@@ -61,7 +61,7 @@ angular.module('timeSheetApp')
          $('input#dateFilterFrom').on('dp.change', function(e){
             console.log(e.date);
             console.log(e.date._d);
-            $scope.selectedDateFromSer= e.date._d;
+            $scope.selectedDateFromSer= new Date(e.date._d);
 
             $.notifyClose();
 
@@ -81,7 +81,7 @@ angular.module('timeSheetApp')
         $('input#dateFilterTo').on('dp.change', function(e){
             console.log(e.date);
             console.log(e.date._d);
-            $scope.selectedDateToSer= e.date._d;
+            $scope.selectedDateToSer= new Date(e.date._d);
 
             $.notifyClose();
 
@@ -306,7 +306,7 @@ angular.module('timeSheetApp')
             	}
             	$scope.searchCriteria = searchCriteria;
         	}
-        	$scope.searchCriteria.isList = true;
+        	$scope.searchCriteria.isReport = true;
     		console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaAttendances));
     		console.log('criteria in scope -'+JSON.stringify($scope.searchCriteria));
 
@@ -538,6 +538,7 @@ angular.module('timeSheetApp')
     			$scope.searchCriteria.exportType = type;
     			$scope.searchCriteria.report = true;
                 $rootScope.exportStatusObj.exportMsg = '';
+                $scope.typeMsg = type;
                 $scope.downloader=true;
     			AttendanceComponent.exportAllData($scope.searchCriteria).then(function(data){
 	        		var result = data.results[0];

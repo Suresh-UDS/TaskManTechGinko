@@ -35,6 +35,27 @@
         </div>
     </div>
 
+    <div class="AppliedFilterCon"
+         ng-show="!searchCriteria.findAll || localStorage">
+		<span class="AppliedFilterTxtCon">
+            <span class="tag label label-info" style="margin-right: 10px"
+                ng-show="searchCriteria.projectName || localStorage.projectName">
+				Client: {{searchCriteria.projectName || localStorage.projectName}}
+            </span>
+
+		    <span class="tag label label-info" style="margin-right: 10px"
+                ng-show="searchCriteria.siteName || localStorage.siteName">
+				Site: {{searchCriteria.siteName || localStorage.siteName}}
+            </span>
+
+            <span class="tag label label-info" style="margin-right: 10px"
+                  ng-show="searchCriteria.searchDate || localStorage.searchDate">
+				Site: {{searchCriteria.searchDate || localStorage.searchDate}}
+            </span>
+		</span>
+    </div>
+
+
     <div class="row" >
 
         <div class="col-md-12" >
@@ -1104,7 +1125,7 @@
                                 <div class="dropdown">
                                     <label class="label-control">Date</label>
                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                    <input type="text" class="form-control datepicker"  id="selectedDate"  ng-model="selectedDate"/>
+                                    <input type="text" class="form-control datepicker"  id="searchDate"  ng-model="searchDate"/>
                                 </div>
                             </div>
                         </div>
@@ -1115,7 +1136,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter1()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchShiftFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>

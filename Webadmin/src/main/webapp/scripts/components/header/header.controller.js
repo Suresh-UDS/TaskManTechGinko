@@ -26,13 +26,19 @@ angular.module('timeSheetApp')
 
              $scope.loadingStop();
 
-             /* var absUrl = $location.absUrl();
-             var array = absUrl.split("/");
-             //array[4] */
+             var absUrl = $location.absUrl();
+             var urlArray = absUrl.split("/");
+             //urlArray[4] 
 
-             if($state.current.name != "login"){
+             if(urlArray[4] !=''){
 
-                $rootScope.stateValue = $state.current.name;
+                $rootScope.stateValue = urlArray[4];
+
+                if(urlArray[5] !=''){
+
+                $rootScope.stateValue += '/'+ urlArray[5];
+
+                }
              }
 
              $state.go('login');
@@ -57,11 +63,11 @@ angular.module('timeSheetApp')
             {
                 //alert(response.firstName + response.lastName)
                 //console.log('current user' +JSON.stringify(response.login));
-                if(response.firstName != null){
+                if(!response.firstName){
 
                     $rootScope.accountNames = response.firstName;
 
-                    if(response.lastName != null){
+                    if(!response.lastName){
 
                      $rootScope.accountNames += " " + response.lastName;
                     }

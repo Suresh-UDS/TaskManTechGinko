@@ -176,6 +176,8 @@ angular.module('timeSheetApp')
             $scope.searchCriteria = searchCriteria;
             // }
 
+            $scope.searchCriteria.isReport = true;
+
             $scope.searchCriteria.currPage = currPageVal;
             $scope.searchCriteria.findAll = false;
 
@@ -505,6 +507,7 @@ angular.module('timeSheetApp')
                 if(data) {
                     exportStatusObj.exportStatus = data.status;
                     console.log('exportStatus - '+ exportStatusObj);
+                    console.log(data)
                     exportStatusObj.exportMsg = data.msg;
                     $scope.downloader=false;
                     console.log('exportMsg - '+ exportStatusObj.exportMsg);

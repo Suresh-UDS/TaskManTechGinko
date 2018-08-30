@@ -1,4 +1,4 @@
-<div class="crud-form" ng-init="loadPageTop();">
+<div class="crud-form ViewContentPageCon" ng-init="loadPageTop();">
 
     <div class="row">
         <div class="col-md-12">
@@ -9,6 +9,7 @@
 
             <div class="panel panel-default" ng-init="loadSite()">
                 <div class="panel-body">
+
                     <div class="row">
 
                         <div class="col-md-6 col-lg-6">
@@ -25,15 +26,15 @@
                                             </tr>
                                             <tr>
                                                 <td>Client Name</td>
-                                                <td class="TxtFirstCaps">{{site.projectName | uppercase}}</td>
+                                                <td  ng-if="site.projectName">{{site.projectName | uppercase}}</td>
                                             </tr>
                                             <tr>
                                                 <td>Site Name</td>
-                                                <td class="TxtFirstCaps">{{site.name | uppercase}}</td>
+                                                <td  ng-if="site.name"> {{site.name | uppercase}}</td>
                                             </tr>
                                             <tr>
                                                 <td>Address</td>
-                                                <td>{{site.address}}</td>
+                                                <td ng-if="site.address">{{site.address | capitalize}}</td>
                                             </tr>
                                             <tr>
                                                 <td>State</td>
@@ -89,7 +90,7 @@
 
                             <div class="panel panel-default">
                                 <div class="panel-heading">Shift Timings Details</div>
-                                <div class="panel-body">
+                                <div class="panel-body" style="min-height: 250px;">
 
                                     <div class="table table-bordered">
                                         <table class="table">
@@ -101,6 +102,9 @@
                                             <tr  ng-repeat=" item in shiftItems">
                                                 <td>{{item.startTime | date:'hh:mm a'}}</td>
                                                 <td>{{item.endTime | date:'hh:mm a'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" align="center" ng-show="!shiftItems">No Shifts</td>
                                             </tr>
 
                                             </tbody>

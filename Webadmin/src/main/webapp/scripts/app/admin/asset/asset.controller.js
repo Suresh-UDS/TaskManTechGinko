@@ -191,9 +191,17 @@ angular.module('timeSheetApp')
 
         $('input#dateFilterPpmFrom').on('dp.change', function(e){
             $scope.ppmTo = "";
-            $scope.assetPPM.startDate = e.date._d;
+            $scope.assetPPM.startDate = new Date(e.date._d);
             $scope.ppmFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $('#dateFilterPpmTo').datetimepicker().on('dp.show', function () {
+                return $(this).data('DateTimePicker').minDate(e.date);
+            });
+
+            $scope.assetPPM.jobStartTime = '';
+            $scope.ppmJobStartTime ='';
+            $scope.ppmJobStartTimeTmp ='';
+
+            $('input#ppmJobStartTime').datetimepicker().on('dp.show', function () {
                 return $(this).data('DateTimePicker').minDate(e.date);
             });
 
@@ -228,7 +236,7 @@ angular.module('timeSheetApp')
         $scope.ppmToMsg =false;
 
         $('input#dateFilterPpmTo').on('dp.change', function(e){
-            $scope.assetPPM.endDate = e.date._d;
+            $scope.assetPPM.endDate = new Date(e.date._d);
             $scope.ppmTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
             //
             // if($scope.assetPPM.endDate < $scope.assetPPM.startDate) {
@@ -260,7 +268,7 @@ angular.module('timeSheetApp')
         });
 
         $('input#ppmJobStartTime').on('dp.change', function(e){
-            $scope.assetPPM.jobStartTime = e.date._d;
+            $scope.assetPPM.jobStartTime = new Date(e.date._d);
             $scope.ppmJobStartTime =$filter('date')(e.date._d, 'hh:mm a');
             $scope.ppmJobStartTimeTmp =$filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
         });
@@ -973,7 +981,7 @@ angular.module('timeSheetApp')
             }
 
             $scope.searchCriteria.currPage = currPageVal;
-            $scope.searchCriteria.isList = true;
+            $scope.searchCriteria.isReport = true;
             console.log('Selected Asset' + $scope.searchAssetName);
 
             if(!$scope.searchAcquiredDate && !$scope.searchCreatedDate &&
@@ -1200,7 +1208,7 @@ angular.module('timeSheetApp')
 
             AssetComponent.getPPMScheduleCalendar($scope.scheduleObj.assetId,$scope.scheduleObj).then(function(data){
 
-                //console.log("Asset Calendar details ==" + JSON.stringify(data));
+                console.log("Asset Calendar details ==" + JSON.stringify(data));
 
                 $scope.PPMScheduleCalendar = data;
 
@@ -1301,10 +1309,10 @@ angular.module('timeSheetApp')
 
         $('input#warFromDate').on('dp.change', function(e){
 
-            $scope.assetGen.warrantyFromDate =  e.date._d;
+            $scope.assetGen.warrantyFromDate =  new Date(e.date._d);
 
             $scope.warFromDate1 = $filter('date')(e.date._d, 'dd/MM/yyyy');
-            $scope.warFromDate = e.date._d;
+            $scope.warFromDate = new Date(e.date._d);
 
             $('#warToDate').datetimepicker().on('dp.show', function () {
                      return $(this).data('DateTimePicker').minDate(e.date);
@@ -1344,9 +1352,9 @@ angular.module('timeSheetApp')
          $scope.warToMsg =false;
 
         $('input#warToDate').on('dp.change', function(e){
-            $scope.assetGen.warrantyToDate = e.date._d;
+            $scope.assetGen.warrantyToDate = new Date(e.date._d);
             $scope.warToDate1 = $filter('date')(e.date._d, 'dd/MM/yyyy');
-            $scope.warToDate = e.date._d;
+            $scope.warToDate = new Date(e.date._d);
 
             if($scope.warFromDate){
 
@@ -1383,12 +1391,12 @@ angular.module('timeSheetApp')
 
         $('input#searchAcquiredDate').on('dp.change', function(e){
                 $scope.searchAcquiredDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
-                $scope.searchAcquiredDateSer = e.date._d;
+                $scope.searchAcquiredDateSer = new Date(e.date._d);
         });
 
         $('input#searchCreatedDate').on('dp.change', function(e){
                 $scope.searchCreatedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
-                $scope.searchCreatedDateSer = e.date._d;
+                $scope.searchCreatedDateSer = new Date(e.date._d);
         });
 
 
@@ -2496,11 +2504,19 @@ angular.module('timeSheetApp')
 
 	    $('input#dateFilterAmcFrom').on('dp.change', function(e){
             $scope.amcTo = "";
-            $scope.amcSchedule.startDate = e.date._d;
+            $scope.amcSchedule.startDate = new Date(e.date._d);
             $scope.amcFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $('input#dateFilterAmcTo').on('dp.show',function () {
                 return $(this).data('DateTimePicker').minDate(e.date);
-            })
+            });
+
+            $scope.amcSchedule.jobStartTime = '';
+            $scope.amcJobStartTime ='';
+            $scope.amcJobStartTimeTmp ='';
+
+            $('input#amcJobStartTime').datetimepicker().on('dp.show', function () {
+                return $(this).data('DateTimePicker').minDate(e.date);
+            });
 
 
             // if($scope.amcSchedule.startDate > $scope.amcSchedule.endDate) {
@@ -2533,7 +2549,7 @@ angular.module('timeSheetApp')
          $scope.amcToMsg =false;
 
         $('input#dateFilterAmcTo').on('dp.change', function(e){
-            $scope.amcSchedule.endDate = e.date._d;
+            $scope.amcSchedule.endDate = new Date(e.date._d);
             $scope.amcTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
 
             // if($scope.amcSchedule.endDate < $scope.amcSchedule.startDate) {
@@ -2564,7 +2580,7 @@ angular.module('timeSheetApp')
         });
 
         $('input#amcJobStartTime').on('dp.change', function(e){
-            $scope.amcSchedule.jobStartTime = e.date._d;
+            $scope.amcSchedule.jobStartTime = new Date(e.date._d);
              $scope.amcJobStartTimeTmp = $filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
              $scope.amcJobStartTime = $filter('date')(e.date._d, 'hh:mm a');
         });
@@ -3434,6 +3450,7 @@ angular.module('timeSheetApp')
                 $scope.downloader=true;
                 $scope.searchCriteria.exportType = type;
                 $scope.searchCriteria.report = true;
+                $scope.typeMsg = type;
 
                 console.log('calling asset export api');
                 AssetComponent.exportAllData($scope.searchCriteria).then(function(data){

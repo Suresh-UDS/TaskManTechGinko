@@ -16,16 +16,15 @@
 
         </div>
         <div class="col-md-6 txt-align-rgt downloaderMain">
-
-
-
-            <button ng-show="jobs.length" class="btn btn-success add-btn margn-tb0"  title="Export HTML"  ng-click=exportAllData('html') tabindex="0">
+            <button ng-show="jobs.length" class="btn btn-success add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':(downloader && typeMsg=='html')}"  title="Export HTML"  ng-click=exportAllData('html') tabindex="0">
                 <i class="material-icons">description</i> Export HTML
+                <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
                 <div class="ripple-container"></div>
             </button>
 
-            <button ng-show="jobs.length" class="btn btn-info add-btn margn-tb0"   title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
+            <button ng-show="jobs.length" class="btn btn-info add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':(downloader && typeMsg=='xlsx')}"   title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
                 <i class="material-icons">import_contacts</i> Export Excel
+                <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
                 <div class="ripple-container"></div>
             </button>
 
@@ -392,11 +391,7 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
-
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -412,17 +407,13 @@
                             </div>
                             <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">
                                 <div class="panel-body">
-
-
                                     <div class="row">
                                         <div class="col-xs-12 col-md-4">
                                             <div class="dropdown" >
-
                                                 <div class="form-group dateFilterCon">
                                                     <label class="label-control">From date</label>
                                                     <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
                                                     <input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedDateFrom" autocomplete="off" />
-
                                                 </div>
                                             </div>
 

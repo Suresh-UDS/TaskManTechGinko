@@ -203,29 +203,37 @@ public class TicketManagementService extends AbstractService {
     		User user = userRepository.findOne(ticketDTO.getUserId());
         Ticket ticket = ticketRepository.findOne(ticketDTO.getId());
         //validations
-        //check if job or quotatione exists
+        //check if job or quotation exists
         String message = null;
         boolean isValid = false;
         if(StringUtils.isNotEmpty(ticket.getQuotationId())) {
         		Object quotationResp = rateCardService.getQuotation(ticket.getQuotationId());
         		if(quotationResp != null) {
         			String quotation = (String)quotationResp;
-        			JsonParser jsonp = new JsonParser();
-        			JsonElement jsonEle = jsonp.parse(quotation);
-        			JsonObject jsonObj = jsonEle.getAsJsonObject();
-        			JsonElement approvedEle = jsonObj.get("isApproved");
-        			if(approvedEle != null) {
-        				if(!approvedEle.getAsBoolean()) {
-        					message = "Ticket has an associated quotation which is still pending for approval";
-        					JsonElement rejectedEle = jsonObj.get("isRejected");
-        					if(rejectedEle != null && rejectedEle.getAsBoolean()) {
-        						isValid = true;
-        					}
-        				}else {
-        					isValid = true;
-        				}
+        			if(StringUtils.isNotEmpty(quotation)) {
+	        			JsonParser jsonp = new JsonParser();
+	        			JsonElement jsonEle = jsonp.parse(quotation);
+	        			JsonObject jsonObj = jsonEle.getAsJsonObject();
+	        			JsonElement approvedEle = jsonObj.get("isApproved");
+	        			if(approvedEle != null) {
+	        				if(!approvedEle.getAsBoolean()) {
+	        					message = "Ticket has an associated quotation which is still pending for approval";
+	        					JsonElement rejectedEle = jsonObj.get("isRejected");
+	        					if(rejectedEle != null && rejectedEle.getAsBoolean()) {
+	        						isValid = true;
+	        					}
+	        				}else {
+	        					isValid = true;
+	        				}
+	        			}
+        			}else {
+        				isValid = true;
         			}
+        		}else {
+        			isValid = true;
         		}
+        }else {
+        		isValid = true;
         }
         
         if(isValid) {

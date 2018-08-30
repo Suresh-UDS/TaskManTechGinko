@@ -272,7 +272,7 @@ angular.module('timeSheetApp')
             		$scope.dateFilterFrom = $scope.selectedFromDate;
             		return false;
             }else {
-                $scope.selectedFromDate = e.date._d;
+                $scope.selectedFromDate = new Date(e.date._d);
                 $scope.refreshReport();
             }
         });
@@ -286,7 +286,7 @@ angular.module('timeSheetApp')
             		$scope.dateFilterTo = $scope.selectedToDate;
             		return false;
             }else {
-                $scope.selectedToDate = e.date._d;
+                $scope.selectedToDate = new Date(e.date._d);
                 $scope.refreshReport();
             }
 

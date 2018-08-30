@@ -47,7 +47,7 @@ angular.module('timeSheetApp')
          $('input#dateFilterFrom').on('dp.change', function(e){
             console.log(e.date);
             console.log(e.date._d);
-            $scope.selectedDateFromSer= e.date._d;
+            $scope.selectedDateFromSer= new Date(e.date._d);
 
             $.notifyClose();
 
@@ -67,7 +67,7 @@ angular.module('timeSheetApp')
         $('input#dateFilterTo').on('dp.change', function(e){
             console.log(e.date);
             console.log(e.date._d);
-            $scope.selectedDateToSer= e.date._d;
+            $scope.selectedDateToSer= new Date(e.date._d);
 
             $.notifyClose();
 
@@ -128,18 +128,20 @@ angular.module('timeSheetApp')
             $scope.siteSpin = true;
             $scope.hideSite = false;
             $scope.clearField = false;
+            $scope.siteFilterDisable = true;
             $scope.uiSite.splice(0,$scope.uiSite.length)
             $scope.searchSite = null;
-            $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)];
+            $scope.selectedProject = $scope.projects[$scope.uiClient.indexOf(searchProject)];
+            $scope.loadDepSites()
         }
         $scope.loadSearchSite = function (searchSite) {
             $scope.hideSite = true;
-            $scope.searchSite = $scope.sites[$scope.uiSite.indexOf(searchSite)];
+            $scope.selectedSite = $scope.sites[$scope.uiSite.indexOf(searchSite)];
         }
         $scope.loadSearchStatus = function (searchStatus) {
             // $scope.hideStatus = true;
             $scope.clearField = false;
-            $scope.searchStatus = $scope.ticketStatuses[$scope.uiStatus.indexOf(searchStatus)]
+            $scope.selectedStatus = $scope.ticketStatuses[$scope.uiStatus.indexOf(searchStatus)]
         }
 
         //
@@ -330,15 +332,17 @@ angular.module('timeSheetApp')
                 }
                 $scope.searchCriteria = searchCriteria;
             }
-            console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaTickets));
-            console.log('criteria in scope -'+JSON.stringify($scope.searchCriteria));
-
-            console.log('Selected  project -' + $scope.selectedEmployee + ", " + $scope.selectedProject +" , "+ $scope.selectedSite);
-            console.log('Selected  date range -' + $scope.checkInDateTimeFrom + ", " + $scope.checkInDateTimeTo);
+            // console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaTickets));
+            // console.log('criteria in scope -'+JSON.stringify($scope.searchCriteria));
+            //
+            // console.log('Selected  project -' + $scope.selectedEmployee + ", " + $scope.selectedProject +" , "+ $scope.selectedSite);
+            // console.log('Selected  date range -' + $scope.checkInDateTimeFrom + ", " + $scope.checkInDateTimeTo);
             $scope.searchCriteria.ticketStatus = $scope.selectedStatus;
             $scope.searchCriteria.currPage = currPageVal;
             $scope.searchCriteria.findAll = false;
-
+            $scope.searchCriteria.isReport = true;
+                
+            console.log($scope.selectedProject , $scope.selectedSite)
              if( !$scope.selectedProject && !$scope.selectedSite
                 &&  !$scope.selectedStatus) {
                 $scope.searchCriteria.findAll = true;
@@ -366,11 +370,13 @@ angular.module('timeSheetApp')
 
                 if($scope.selectedProject) {
                     $scope.searchCriteria.projectId = $scope.selectedProject.id;
+                    $scope.searchCriteria.projectName = $scope.selectedProject.name;
 
                 }
 
                 if($scope.selectedSite) {
                     $scope.searchCriteria.siteId = $scope.selectedSite.id;
+                    $scope.searchCriteria.siteName = $scope.selectedSite.name;
                     }
 
                 if($scope.selectedEmployee)
@@ -398,7 +404,7 @@ angular.module('timeSheetApp')
                 // $scope.searchCriteria.sortByAsc = true;
             }
 
-               console.log("search criteria",$scope.searchCriteria);
+               console.log("search criteria ==================",$scope.searchCriteria);
                      $scope.ticketsData = '';
                      $scope.ticketsDataLoader = false;
                      $scope.loadPageTop();
@@ -518,6 +524,7 @@ angular.module('timeSheetApp')
         $scope.clearFilter = function() {
             $rootScope.exportStatusObj.exportMsg = '';
             $scope.downloader=false;
+            $scope.clearField = true;
             $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedDateFromSer = d;
@@ -552,6 +559,7 @@ angular.module('timeSheetApp')
                 $scope.downloader=true;
                 $scope.searchCriteria.exportType = type;
                 $scope.searchCriteria.report = true;
+                $scope.typeMsg = type;
 
                 console.log('calling ticket export api');
                 TicketComponent.exportAllData($scope.searchCriteria).then(function(data){

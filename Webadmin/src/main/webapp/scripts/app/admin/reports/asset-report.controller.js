@@ -296,6 +296,7 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.assetStatus = $scope.searchStatus;
             $scope.searchCriteria.currPage = currPageVal;
             $scope.searchCriteria.findAll = false;
+            $scope.searchCriteria.isReport = true;
 
              //&&  !$scope.searchStatus
 
@@ -510,6 +511,7 @@ angular.module('timeSheetApp')
                 $rootScope.exportStatusObj.exportMsg = '';
                 $scope.downloader=true;
                 $scope.searchCriteria.exportType = type;
+                $scope.typeMsg = type;
                 $scope.searchCriteria.report = true;
 
                 console.log('calling asset export api');

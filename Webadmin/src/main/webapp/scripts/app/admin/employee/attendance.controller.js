@@ -843,6 +843,7 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.report = true;
                 $rootScope.exportStatusObj.exportMsg = '';
                 $scope.downloader=true;
+                $scope.typeMsg = type;
                 AttendanceComponent.exportAllData($scope.searchCriteria).then(function(data){
                     var result = data.results[0];
                     console.log(result);

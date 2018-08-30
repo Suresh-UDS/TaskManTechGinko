@@ -102,7 +102,8 @@ public class JobSpecification implements Specification<Job> {
 
             log.debug("JobSpecification toPredicate - searchCriteria maintenanceType -"+ searchCriteria.getMaintenanceType());
             if(StringUtils.isNotEmpty(searchCriteria.getMaintenanceType())) { 
-            	predicates.add(builder.equal(root.get("maintenanceType"), searchCriteria.getMaintenanceType()));
+            		predicates.add(builder.equal(root.get("maintenanceType"), searchCriteria.getMaintenanceType()));
+            		predicates.add(builder.isNotNull(root.get("parentJob")));
             }
             
             if(searchCriteria.getCheckInDateTimeFrom() != null){

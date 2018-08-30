@@ -178,7 +178,7 @@
                                             required
                                             name="employee"
                                             ng-model="selectedEmployee"
-                                            class="form-control searchable-input floatL" ng-options="emp as emp.fullName group by emp.designation for emp in employees | filter: {designation : '!' + 'Client'} track by emp.id">
+                                            class="form-control searchable-input floatL selectTxtCaps" ng-options="emp as emp.fullName group by emp.designation for emp in employees | filter: {designation : '!' + 'Client'} track by emp.id">
                                             <option value="">Select Employee</option>
 
                                         </select>
@@ -238,7 +238,7 @@
                           <div class="panel-body">
                             <div class="row">
 
-                             <div class="col-md-6">
+                             <div class="col-md-12">
                                  <div class="form-group">
                                      <label class="control-label">Comments</label>
                                      <textarea ng-model="tickets.comments" class="form-control InputTxtCaps"></textarea>

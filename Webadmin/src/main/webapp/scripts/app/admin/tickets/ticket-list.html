@@ -288,170 +288,118 @@
 
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel2">Ticket Details - Ticket id - {{listId}}</h4>
+                <h4 class="modal-title" id="myModalLabel2">Ticket Details </h4>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-body ViewContentPageCon">
 
-                <div class="card">
+                <div class="titleCon margn-btm-12">
+                    <h3>{{listTitle | uppercase}}</h3>
+                </div>
 
-                    <div class="card-content">
+                <div class="panel panel-default">
+
+                    <div class="panel-heading">Ticket id - {{listId}}</div>
+
+                    <div class="panel-body">
 
                         <div class="table-responsive">
-                             <table class="table">
-                                 <tbody>
-                                 <tr>
-                                     <td>Issue</td>
-                                     <td>{{listTitle | uppercase}}</td>
-                                 </tr>
-                                 <tr>
-                                     <td>Description</td>
-                                     <td><span ng-if="listDescription">{{listDescription | capitalize}}</span><span ng-if="!listDescription">-</span></td>
+                            <table class="table">
+                                <tbody>
+                                <tr>
+                                    <td>Issue</td>
+                                    <td>{{listTitle | uppercase}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Description</td>
+                                    <td><span ng-if="listDescription">{{listDescription | capitalize}}</span><span ng-if="!listDescription">-</span></td>
 
-                                 </tr>
-                                 <tr>
-                                     <td>Severity</td>
-                                     <td ng-switch="listSeverity">
-                                       <span ng-switch-when="Low">Low</span>
-                                       <span ng-switch-when="Medium">Medium</span>
-                                       <span ng-switch-when="High">High</span>
-                                     </td>
+                                </tr>
+                                <tr>
+                                    <td>Severity</td>
+                                    <td ng-switch="listSeverity">
+                                        <span ng-switch-when="Low">Low</span>
+                                        <span ng-switch-when="Medium">Medium</span>
+                                        <span ng-switch-when="High">High</span>
+                                    </td>
 
-                                 </tr>
-                                  <tr>
+                                </tr>
+                                <tr>
                                     <td>Site</td>
                                     <td>{{listSite}}</td>
-                                 </tr>
-                                 <tr>
+                                </tr>
+                                <tr>
                                     <td>Employee</td>
                                     <td>{{listEmployee}}</td>
 
-                                  </tr>
-                                  <tr>
+                                </tr>
+                                <tr>
                                     <td>Asset</td>
-                                    <td>{{listAssets}}</td>
-                                  </tr>
-                                  <tr>
+                                    <td><span ng-if="listAssets">{{listAssets}}</span><span ng-if="!listAssets">-</span></td>
+                                </tr>
+                                <tr>
                                     <td>Created by</td>
                                     <td>{{listCreatedBy}}</td>
 
-                                  </tr>
-                                  <tr>
+                                </tr>
+                                <tr>
                                     <td>Created Date</td>
                                     <td>{{listCreatedDate | date:'dd/MM/yyyy hh:mm a'}}</td>
 
-                                  </tr>
-                                  <tr>
+                                </tr>
+                                <tr>
                                     <td>Status</td>
                                     <td>{{listStatus}}</td>
 
-                                  </tr>
+                                </tr>
 
-                                 <tr ng-if="listStatus !='Completed'" >
-                                     <td>Pending Status </td>
-                                     <td>
-                                         {{listPendingStatus}}
-                                     </td>
+                                <tr ng-if="listStatus !='Completed'" >
+                                    <td>Pending Status </td>
+                                    <td>
+                                        {{listPendingStatus}}
+                                    </td>
 
-                                 </tr>
-
-
-								<tr>
-                                      <td>Image/File </td>
-                                      <td ng-if="ticketImage !=null">
-                      						<a href="#" ng-show="extension === 'jpg' || extension === 'jpeg' || extension === 'png'" onClick="$('#myModalNew').modal()" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="loadTicketImage(ticketImage,tickets.id)">
-                         							<img id="images" src={{ticketImage}} width="100px" height="100px" />
-                     							</a>
-                     							<a  href="{{ticketImage}}" ng-hide="extension === 'jpg' || extension === 'jpeg' || extension === 'png'">
-                 												<img  id="images" ng-src="assets/img/{{extension}}.png" style="margin-top: 15px;" width="100px" height="100px"/>
-             									</a>
-                                      </td>
-                                      <td ng-if="ticketImage == null">No Images</td>
-                                  </tr>
-                                  <tr>
-                                  	<td>Job</td>
-                                  	<td>
-                                  	<a ng-if="(listJobId > 0)" ui-sref="view-job({id : listJobId})" ng-click="closeModal()" class="btn btn-simple btn-info">View Job {{listJobId}}</a>
-                                  	</td>
-                                  </tr>
-                                  <tr>
-                                  	<td>Comments</td>
-                                  	<td>
-                                  		{{listComments}}
-                                  	</td>
-                                  </tr>
-                                 </tbody>
-                             </table>
-                         </div>
-
-<!--                         <div class="container-fluid">
-                            <div class="text-center">
-                                <h4 class="title">Comments</h4>
-                            </div>
-
-                         <div class="row">
-                            <div class="col-md-12">
-
-                                <ul class="timeline">
-                                    <li class="timeline-inverted">
-                                        <div class="timeline-badge danger">
-                                            <i class="material-icons">card_travel</i>
-                                        </div>
-                                        <div class="timeline-panel">
-                                            <div class="timeline-heading">
-                                                <span class="label label-danger">Admin{{listModified}}</span>
-                                            </div>
-                                            <div class="timeline-body">
-                                                <p>Whats the root cause{{listComments}}</p>
-                                            </div>
-                                            <h6>
-                                                <i class="ti-time">12-04-2018 04:32:04 {{listTime}}</i>
-                                            </h6>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="timeline-badge success">
-                                            <i class="material-icons">extension</i>
-                                        </div>
-                                        <div class="timeline-panel">
-                                            <div class="timeline-heading">
-                                                <span class="label label-success">User{{listModified}}</span>
-                                            </div>
-                                            <div class="timeline-body">
-                                                <p>Power not supply{{listComments}}</p>
-                                            </div>
-                                            <h6>
-                                                <i class="ti-time">12-04-2018 05:32:04 {{listTime}}</i>
-                                            </h6>
-                                        </div>
-                                    </li>
+                                </tr>
 
 
-                                    </ul>
+                                <tr>
+                                    <td>Image/File </td>
+                                    <td ng-if="ticketImage !=null">
+                                        <a href="#" ng-show="extension === 'jpg' || extension === 'jpeg' || extension === 'png'" onClick="$('#myModalNew').modal()" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="loadTicketImage(ticketImage,tickets.id)">
+                                            <img id="images" src={{ticketImage}} width="100px" height="100px" />
+                                        </a>
+                                        <a  href="{{ticketImage}}" ng-hide="extension === 'jpg' || extension === 'jpeg' || extension === 'png'">
+                                            <img  id="images" ng-src="assets/img/{{extension}}.png" style="margin-top: 15px;" width="100px" height="100px"/>
+                                        </a>
+                                    </td>
+                                    <td ng-if="ticketImage == null">No Images</td>
+                                </tr>
+                                <tr>
+                                    <td>Job</td>
+                                    <td><span ng-if="listJobId">
+                                  	<a ng-if="(listJobId > 0)" ui-sref="view-job({id : listJobId})" ng-click="closeModal()" class="btn btn-simple btn-info">View Job {{listJobId}}</a></span><span ng-if="!listJobId">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Comments</td>
+                                    <td><span ng-if="listComments">{{listComments}}</span><span ng-if="!listComments">-</span>
 
-                                </div>
-                            </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
- -->
-
-
-                        <div class="row">
-
-                            <div class="col-md-offset-8 pull-right">
-                                <button class="btn btn-default close-button-right b10" type="button"
-                                        data-dismiss="modal" ng-click="close()">
-                                    <!-- <i class="material-icons">keyboard_arrow_left</i> Back -->
-                                     Close
-                                </button>
-                            </div>
-
-                        </div>
-
-
                     </div>
 
                 </div>
 
+                <div class="txt-align-rgt">
+                    <button class="btn btn-default close-button-right b10" type="button"
+                            data-dismiss="modal" ng-click="close()">
+                        <!-- <i class="material-icons">keyboard_arrow_left</i> Back -->
+                        Close
+                    </button>
+                </div>
 
             </div>
 

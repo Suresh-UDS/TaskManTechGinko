@@ -129,9 +129,9 @@ reports:
         url: https://taskmanadmin.uds.in/#/ticket-reports
 
 url:
-    ticket-view: https://taskmanadmin.uds.in#/view-ticket
-    quotation-view: https://taskmanadmin.uds.in#/view-quotation
-    job-view: https://taskmanadmin.uds.in#/view-job
+    ticket-view: https://taskmanadmin.uds.in#/view-ticket/
+    quotation-view: https://taskmanadmin.uds.in#/view-quotation/
+    job-view: https://taskmanadmin.uds.in#/view-job/
 
 facedetection:
     api:
@@ -153,10 +153,10 @@ quotationService:
 
 pushService:
    url: http://localhost:9000/
-   
+
 AWS:
    s3-url: https://s3.ap-south-1.amazonaws.com
-   s3-accessKey: AKIAJJQEB7US7QOAV2LQ 
+   s3-accessKey: AKIAJJQEB7US7QOAV2LQ
    s3-secretKey: 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
    s3-bucketName: fms-taskman
    s3-cloudfront-url: http://d1wn8hrsdttztl.cloudfront.net/
@@ -169,7 +169,7 @@ AWS:
    s3-enroll-path : employeeEnroll/
    s3-checkin-path : attendanceCheckIn/
    s3-checkout-path : attendanceCheckOut/
-   
+
 scheduler:
    job:
       creationPolicy: monthly

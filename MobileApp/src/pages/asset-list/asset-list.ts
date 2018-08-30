@@ -78,11 +78,8 @@ export class AssetList {
           var searchCriteria ={
               currPage:this.page+1
           };
-          if(this.network.type!='none'){
 
-              this.getAsset(searchCriteria)
-
-          }else{
+          this.getAsset(searchCriteria)
 
               //     //offline
               // setTimeout(() => {
@@ -98,7 +95,6 @@ export class AssetList {
               //         })
               // },3000);
 
-          }
       }
 
 
@@ -116,6 +112,13 @@ export class AssetList {
       {
           // this.componentService.closeLoader();
           var text = this.navParams.get('text');
+
+          var searchCriteria ={
+              currPage:this.page+1
+          };
+
+          this.getAsset(searchCriteria)
+
           this.assetService.getAssetByCode(text).subscribe(
               response=>{
                   this.componentService.showToastMessage('Asset found, navigating..','bottom')
