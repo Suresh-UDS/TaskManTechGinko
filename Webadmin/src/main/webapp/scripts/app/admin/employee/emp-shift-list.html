@@ -210,7 +210,7 @@
                                        <div class="dropdown">
                                             <div class="form-group">
                                                <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-            								   <select class="form-control " ng-model="selectedShiftSite" ng-change="updateEmpShiftSite(employeeShift, selectedShiftSite)"  ng-options="site as site.name for site in sites track by site.id" name="selectedShiftSite{{$index}}" ng-required="true">
+            								   <select class="form-control " ng-model="selectedShiftSite" ng-change="updateEmpShiftSite(employeeShift, selectedShiftSite)"  ng-options="site as site.name for site in sites track by site.id" name="selectedShiftSite{{$index}}" ng-required="!employeeShift.siteName">
             	                                    <option value="">Select Site...</option>
             	                                </select>
                                                 <div ng-show="form.selectedShiftSite{{$index}}.$touched">
@@ -228,13 +228,13 @@
                                        <div class="dropdown">
                                             <div class="form-group">
                                                <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-            								   <select class="form-control" ng-model="selectedShiftDateTime" ng-change="updateShiftTime(employeeShift,selectedShiftDateTime)" ng-options="shift as (shift.startDateTime | date:'dd-MM-yyyy HH:mm') + '  -  ' + (shift.endDateTime | date:'dd-MM-yyyy HH:mm') for shift in shifts" name="selectedShiftDateTime{{$index}}" ng-required="true">
+            								   <select class="form-control" ng-model="selectedShiftDateTime" ng-change="updateShiftTime(employeeShift,selectedShiftDateTime)" ng-options="shift as (shift.startDateTime | date:'dd-MM-yyyy HH:mm') + '  -  ' + (shift.endDateTime | date:'dd-MM-yyyy HH:mm') for shift in shifts" name="selectedShiftDateTime{{$index}}" ng-required="!employeeShift.startTime">
             	                                    <option value="">Select Start Time...</option>
             	                                </select>
                                                 <div ng-show="form.selectedShiftDateTime{{$index}}.$touched">
                                                      <div ng-show="form.selectedShiftDateTime{{$index}}.$dirty || form.selectedShiftDateTime{{$index}}.$invalid">
                                                          <p class="help-block" style="color: maroon"
-                                                            ng-show="form.selectedShiftDateTime.$error.required">Shift time is
+                                                            ng-show="form.selectedShiftDateTime{{$index}}.$error.required">Shift time is
                                                              required.</p>
                                                      </div>
                                                 </div>
@@ -270,7 +270,7 @@
 
                              <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
                                  <button class="btn btn-success" ng-click="updateEmployeeShifts()"
-                                         id="form-button-save" >
+                                         id="form-button-save" ng-disabled="form.$invalid" >
                                             <span class="btn-label">
                                     				<i class="material-icons">check</i>
                                 				</span> Save

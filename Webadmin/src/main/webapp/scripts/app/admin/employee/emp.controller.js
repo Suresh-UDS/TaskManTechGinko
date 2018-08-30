@@ -1156,7 +1156,10 @@ angular.module('timeSheetApp')
                    
 	    	 		$scope.modifiedEmpShifts.push(empShift);
 	    	 		$scope.modified = true;
-	    	 	}
+	    	 	}else{
+                     empShift.startTime = '';
+                     empShift.endTime = ''; 
+                }
 	    }
 
 
@@ -1165,7 +1168,8 @@ angular.module('timeSheetApp')
                 if(selectedShiftSite){
                     empShift.siteId = selectedShiftSite.id;
                     empShift.siteName = selectedShiftSite.name;  
-               
+                    empShift.startTime = '';
+                    empShift.endTime = ''; 
                     
         	 		$scope.modifiedEmpShifts.push(empShift);
                     $scope.modified = true;
