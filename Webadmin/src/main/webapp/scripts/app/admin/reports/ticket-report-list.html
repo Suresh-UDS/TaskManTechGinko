@@ -28,8 +28,8 @@
                 <div class="ripple-container"></div>
             </button>
 
-            <button class="btn btn-info add-btn margn-tb0  ld ld-over-inverse" ng-class="{'running':(downloader && typeMsg=='html')}" ng-show="ticketsData.length" type="button" title="Export HTML"  ng-click=exportAllData('html') ng-class="{active: $state.includes('admin')}" tabindex="0">
-                <i class="material-icons">import_contacts</i>Export CSV
+            <button class="btn btn-info add-btn margn-tb0  ld ld-over-inverse" ng-class="{'running':(downloader && typeMsg=='xlsx')}" ng-show="ticketsData.length" type="button" title="Export Excel"  ng-click=exportAllData('xlsx') ng-class="{active: $state.includes('admin')}" tabindex="0">
+                <i class="material-icons">import_contacts</i>Export Excel
                 <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
                 <div class="ripple-container"></div>
             </button>

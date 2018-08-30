@@ -68,7 +68,7 @@ upload:
          path: /opt/uploads
 export:
     file:
-         path: D:\opt\uploads
+         path: /opt/uploads
 qrcode:
     file:
          path: /opt/qrcode

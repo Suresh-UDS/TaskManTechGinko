@@ -324,7 +324,7 @@
 <!-- Modal -->
 <div class="modal right fade" id="ViewModal" tabindex="-1" role="dialog"
 	aria-labelledby="ViewModal12">
-	<div class="modal-dialog" role="document" ng-init="initLoad()">
+	<div class="modal-dialogNew" role="document" ng-init="initLoad()">
 		<div class="modal-content" ng-init="loadEmployee()">
 
 			<div class="modal-header">
@@ -341,74 +341,130 @@
                     <h3>{{employee.name | uppercase}}</h3>
                 </div>
 
-				<div class="row">
-					<div class="col-md-12">
+				<div class="row margn-top30">
+					<div class="col-md-6">
 
-						<div class="col-md-12 margn-top30">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Employee Details</div>
+                            <div class="panel-body" style="min-height: 320px;">
 
-							<div class="panel panel-default">
-								<div class="panel-heading">Employee Details</div>
-								<div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table">
 
-									<div class="table-responsive">
-										<table class="table">
+                                        <tbody>
+                                        <tr>
 
-											<tbody>
-												<tr>
+                                            <td>ID</td>
+                                            <td>{{employee.id}}</td>
 
-													<td>ID</td>
-													<td>{{employee.id}}</td>
+                                        </tr>
+                                        <tr>
 
-												</tr>
-												<tr>
+                                            <td>Employee ID</td>
+                                            <td>{{employee.empId}}</td>
 
-													<td>Employee ID</td>
-													<td>{{employee.empId}}</td>
+                                        </tr>
+                                        <tr>
 
-												</tr>
-												<tr>
+                                            <td>Firstname</td>
+                                            <td>{{employee.name | uppercase}}</td>
 
-													<td>Firstname</td>
-													<td>{{employee.name | uppercase}}</td>
+                                        </tr>
+                                        <tr>
 
-												</tr>
-												<tr>
+                                            <td>Lastname</td>
+                                            <td>{{employee.lastName | uppercase}}</td>
 
-													<td>Lastname</td>
-													<td>{{employee.lastName | uppercase}}</td>
+                                        </tr>
+                                        <tr>
 
-												</tr>
-												<tr>
+                                            <td>Site</td>
+                                            <td><a data-toggle="modal" data-target="#noticeModal"
+                                                   href="javascript:void(0);">List Of Sites</a></td>
 
-													<td>Site</td>
-													<td><a data-toggle="modal" data-target="#noticeModal"
-														href="#">List Of Sites</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>User Account Linked</td>
+                                            <td><span ng-if="employee.userId"><a ui-sref="view-user({id:employee.userId,checkStatus:1})" ng-click="closeModal()" >View
+                                                User Account</a></span><span ng-if="!employee.userId">-</span></td>
+                                        </tr>
 
-												</tr>
-												<tr>
-													<td>User Account Linked</td>
-													<td><a href="#/view-user/{{employee.userId}}" ng-click="closeModal()">View
-															User Account</a></td>
-												</tr>
+                                        </tbody>
+                                    </table>
+                                </div>
 
-											</tbody>
-										</table>
-									</div>
 
-									<div class="txt-align-rgt">
+                            </div>
+                        </div>
 
-										<button data-dismiss="modal"
-											class="btn btn-default close-button-right b10" type="button"
-											id="close-button-right">
-											<!-- <i class="fa fa-warning"></i> -->
-											Back
-										</button>
-									</div>
-								</div>
-							</div>
-						</div>
 					</div>
+                    <div class="col-md-6">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Attendance Enroll Details</div>
+                            <div class="panel-body" style="min-height: 320px;">
+
+                                <div class="EmpProfilePicCon">
+
+                                   <div ng-if="employee.enrolled_face" class="EmpPic">
+                                       <img   src={{employee.url}} class="EmpProfilePic"  class="EmpProfilePic" />
+                                   </div>
+
+                                   <div ng-if="!employee.enrolled_face" class="EmpPic">
+                                       <img  src="assets/img/user.png"  class="EmpProfilePic" />
+                                   </div>
+
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="table">
+
+                                        <tbody>
+
+                                        <tr>
+
+                                            <td>Authorize Face Id</td>
+                                            <td has-permission="Employee:Edit"
+                                                ng-if="employee.faceAuthorised && employee.faceIdEnrolled"><p
+                                                style="color: green">Face Id Approved</p></td>
+                                            <td has-permission="Employee:Edit"
+                                                ng-if="!employee.faceAuthorised && !employee.faceIdEnrolled"><p
+                                                style="color: red">Face Id not enrolled</p></td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <td>Status</td>
+                                            <td>
+                                                <button class="btn btn-primary btn-xs btn-warning"
+                                                        ng-if="employee.reliever">Reliever</button>
+                                                <button class="btn btn-primary btn-xs btn-danger" disabled
+                                                        ng-if="employee.left">InActive</button>
+                                                <button class="btn btn-primary btn-xs btn-success"
+                                                        ng-if="!employee.left">Active</button>
+                                            </td>
+
+                                        </tr>
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                    </div>
 				</div>
+
+                <div class="txt-align-rgt">
+                    <button data-dismiss="modal"
+                            class="btn btn-default close-button-right b10" type="button"
+                            id="close-button-right">
+                        Close
+                    </button>
+                </div>
 			</div>
 		</div>
 		<!-- modal-content -->

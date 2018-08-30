@@ -5,7 +5,7 @@
         	<div class="col-md-12">
 
                 <div class="titleCon">
-                    {{tickets.title | uppercase}}
+                    <h3>{{tickets.title | uppercase}}</h3>
                 </div>
 
 				<div class="form-container table-container">
@@ -13,15 +13,13 @@
 						class="form-horizontal">
 
 
-
-
-                        <div class="row">
+                        <div class="row ViewContentPageCon">
 
                             <div class="col-md-4">
 
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Ticket Details</div>
-                                    <div class="panel-body">
+                                    <div class="panel-body" style="min-height: 265px;">
 
 
                                         <div class="table-responsive">
@@ -89,7 +87,7 @@
 
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Site & Employee</div>
-                                    <div class="panel-body">
+                                    <div class="panel-body" style="min-height: 265px;">
 
 
                                         <div class="table-responsive">
@@ -113,11 +111,11 @@
                                 </div>
 
                             </div>
-                             <div class="col-md-4">
+                            <div class="col-md-4">
 
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Assets</div>
-                                    <div class="panel-body">
+                                    <div class="panel-body" style="min-height: 265px;">
 
 
                                         <div class="table-responsive">
@@ -139,7 +137,7 @@
                             <div class="col-md-4">
 	                            <div class="panel panel-default">
 	                                    <div class="panel-heading">Image</div>
-	                                    <div class="panel-body">
+	                                    <div class="panel-body" style="min-height: 265px;">
 
 
 	                                        <div class="table-responsive">
@@ -160,12 +158,11 @@
 	                                    </div>
 	                                </div>
                             </div>
-
                             <div class="col-md-4">
 
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Comments </div>
-                                    <div class="panel-body">
+                                    <div class="panel-body" style="min-height: 265px;">
 
                                         <div class="table-responsive">
                                             <table class="table">
@@ -189,18 +186,6 @@
                         </div>
 
 
-
-
-
-                        <!--<div class="titleCon">-->
-                            <!--<h5>Actual Start and End</h5>-->
-                        <!--</div>-->
-
-
-
-
-
-
 						<!-- Start of hidden inputs -->
 						<!-- End of hidden inputs -->
 
@@ -213,17 +198,23 @@
 							<div id='report-success' class='report-div success bg-success'
 								style="display: none"></div>
 						</div>
-						<div class="form-group">
-							<div class="col-sm-12 txt-align-rgt">
 
-								<button class="btn btn-default " type="button"
-									ui-sref="tickets" id="cancel-button">
-									<i class=""></i> Back
-								</button>
-								<a ng-if="(tickets.status != 'Closed')" ng-class="{active: $state.includes('admin')}"   ng-click="closeTicket(tickets.id)"   onClick="$('#deleteModalNew').modal()" data-target="#myModal"   class="btn btn-simple btn-info">close ticket</a>
-                                 <a ng-if="tickets.status == 'Closed'"class="btn btn-simple btn-info">Reopen ticket</a>
-							</div>
-						</div>
+
+                        <div class="txt-align-rgt">
+                            <button class="btn btn-default " type="button"
+                                    ui-sref="tickets" id="cancel-button">
+                                <i class=""></i> Back
+                            </button>
+                            <button class="btn btn-info " type="button" ng-if="(tickets.status != 'Closed')" ng-class="{active: $state.includes('admin')}"   ng-click="closeTicket(tickets.id)"   onClick="$('#deleteModalNew').modal()" data-target="#myModal"
+                                    ui-sref="tickets" >
+                                <i class=""></i> close ticket
+                            </button>
+                            <button class="btn btn-sucess " type="button" ng-if="tickets.status == 'Closed'"
+                                    ui-sref="tickets" >
+                                <i class=""></i> Reopen ticket
+                            </button>
+                        </div>
+
 					</form>
 					<script type="text/javascript">
 					$('.form-control').attr('readonly',true)

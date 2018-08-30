@@ -981,7 +981,7 @@ angular.module('timeSheetApp')
             }
 
             $scope.searchCriteria.currPage = currPageVal;
-            $scope.searchCriteria.isList = true;
+            $scope.searchCriteria.isReport = true;
             console.log('Selected Asset' + $scope.searchAssetName);
 
             if(!$scope.searchAcquiredDate && !$scope.searchCreatedDate &&
@@ -1208,7 +1208,7 @@ angular.module('timeSheetApp')
 
             AssetComponent.getPPMScheduleCalendar($scope.scheduleObj.assetId,$scope.scheduleObj).then(function(data){
 
-                //console.log("Asset Calendar details ==" + JSON.stringify(data));
+                console.log("Asset Calendar details ==" + JSON.stringify(data));
 
                 $scope.PPMScheduleCalendar = data;
 
