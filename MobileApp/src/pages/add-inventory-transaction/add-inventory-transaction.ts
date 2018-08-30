@@ -35,7 +35,7 @@ export class AddInventoryTransaction {
     inventoryGroups: any;
     inventoryMaterial: any;
 
-    indent: any;
+    transactionMaterials: any;
     selectedMaterial: any;
     inventoryTransaction:any;
 
@@ -44,7 +44,7 @@ export class AddInventoryTransaction {
               private siteService:SiteService, private inventoryService:InventoryService
   ) {
 
-        this.indent = [];
+        this.transactionMaterials = [];
   }
 
     ionViewDidLoad() {
@@ -119,19 +119,19 @@ export class AddInventoryTransaction {
         )
     }
 
-    addIndent(m) {
+    addTransactionMaterial(m) {
         console.log(m);
         var details = {
             materialName: m.name,
             materialId: m.id,
             uom: m.uom,
-            number: 0
+            number: 1
         };
-        this.indent.push(details);
+        this.transactionMaterials.push(details);
     }
 
     removeTransaction(i) {
-        this.indent.pop(i);
+        this.transactionMaterials.pop(i);
     }
 
     onInput(event) {
