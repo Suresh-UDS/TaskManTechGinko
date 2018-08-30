@@ -76,15 +76,17 @@ angular.module('timeSheetApp')
         $scope.searchEmployeeName = null ;
 
         $scope.pageSort = 10;
+
         $scope.selectedDate = $filter('date')(new Date(), 'yyyy-MM-dd');
 
         $scope.modifiedEmpShifts = [];
 
         $scope.modified = false;
 
-        var absUrl = $location.absUrl();
-        var array = absUrl.split("/");
-        $scope.curUrl = array[4];
+       /* var absUrl = $location.absUrl();
+        var array = absUrl.split("/");*/
+
+        $scope.curUrl = $state.current.name;
 
         $rootScope.exportStatusObj  ={};
 
@@ -95,30 +97,22 @@ angular.module('timeSheetApp')
         }
 
         $('#dateFilterFrom').on('dp.change', function(e){
-            console.log(e.date);
-
-            console.log(e.date._d);
+            //console.log(e.date);
             $scope.relieverDateFrom = e.date._d;
         });
 
         $('#dateFilterTo').on('dp.change', function(e){
-            console.log(e.date);
-
-            console.log(e.date._d);
+            //console.log(e.date);
             $scope.relieverDateTo = e.date._d;
         });
 
         $('#selectedDate').on('dp.change', function(e){
-            console.log(e.date);
-
-            console.log(e.date._d);
+            //console.log(e.date);
             $scope.selectedDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
         });
 
         $('#searchDate').on('dp.change', function(e){
-            console.log(e.date);
-
-            console.log(e.date._d);
+            //console.log(e.date);
             $scope.searchDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
         });
 
@@ -686,8 +680,18 @@ angular.module('timeSheetApp')
         };
 
        $scope.refreshPage = function() {
+        if($scope.curUrl =='employeeShifts'){
+            $scope.searchCriteria = {};
+            $scope.clearField = true;
+            $scope.selectedDate = null;
+                $scope.searchShift();
 
-           $scope.loadEmployees();
+            }else{
+
+                $scope.loadEmployees();
+            }
+
+           
        };
 
        $scope.employeeDetails= function(id){
@@ -1146,8 +1150,10 @@ angular.module('timeSheetApp')
         $scope.updateShiftTime = function(empShift,selectedShiftDateTime) {
 	    		console.log('updateShiftTime called - ' + selectedShiftDateTime);
 	    	 	if(selectedShiftDateTime) {
-	    	 		empShift.startTime = selectedShiftDateTime.startDateTime;
-	    	 		empShift.endTime = selectedShiftDateTime.endDateTime;
+                  
+                     empShift.startTime = selectedShiftDateTime.startDateTime;
+                     empShift.endTime = selectedShiftDateTime.endDateTime;
+                   
 	    	 		$scope.modifiedEmpShifts.push(empShift);
 	    	 		$scope.modified = true;
 	    	 	}
@@ -1155,18 +1161,33 @@ angular.module('timeSheetApp')
 
 
         $scope.updateEmpShiftSite = function(empShift,selectedShiftSite) {
-        		console.log('updateEmpShiftSite called - ' + JSON.stringify(selectedShiftSite));
-        		empShift.siteId = selectedShiftSite.id;
-    	 		$scope.modifiedEmpShifts.push(empShift);
-    	 		$scope.modified = true;
+                console.log('updateEmpShiftSite called - ' + JSON.stringify(selectedShiftSite));
+                if(selectedShiftSite){
+                    empShift.siteId = selectedShiftSite.id;
+                    empShift.siteName = selectedShiftSite.name;  
+               
+                    
+        	 		$scope.modifiedEmpShifts.push(empShift);
+                    $scope.modified = true;
+        	 		$scope.searchCriteria.siteId = selectedShiftSite.id;
 
-    	 		$scope.searchCriteria.siteId = selectedShiftSite.id;
-    	 		$scope.searchShift();
+                     SiteComponent.findShifts($scope.searchCriteria.siteId, $scope.searchCriteria.fromDate).then(function(data){
+                            $scope.shifts = data;
+                            console.log(JSON.stringify($scope.shifts));
+                    });
+                }else{
+                    empShift.siteId = null;
+                    empShift.siteName = null; 
+                }
+
+    	 		//$scope.searchShift();
 	    };
 
 
         $scope.updateEmployeeShifts = function() {
+            
         		if($scope.modifiedEmpShifts && $scope.modifiedEmpShifts.length > 0) {
+
 	    	        	EmployeeComponent.updateEmployeeShifts($scope.modifiedEmpShifts).then(function (data) {
 	    	        		if(data) {
 	    	        			$scope.showNotifications('top','center','success','Employee shift details updated successfully ');
@@ -1226,16 +1247,18 @@ angular.module('timeSheetApp')
 
 	            if($scope.searchProject) {
 	                    $scope.searchCriteria.projectId = $scope.searchProject.id;
-	            }
+	            }else{
+                    $scope.searchCriteria.projectId = null;
+                }
 
 	            if($scope.searchSite) {
 	                    $scope.searchCriteria.siteId = $scope.searchSite.id;
-	            }
+	            }else{
+                       $scope.searchCriteria.siteId = null;
+                }
 
                 if($scope.selectedDate){
                       $scope.searchCriteria.fromDate = $scope.selectedDate;
-                }else{
-                      $scope.searchCriteria.fromDate = new Date();
                 }
 
 	            //-------
@@ -1272,7 +1295,12 @@ angular.module('timeSheetApp')
 
 	                console.log("Pagination",$scope.pager);
 	                console.log('Employee Shift list -' + JSON.stringify($scope.employeeShifts));
-	                $scope.pages.currPage = data.currPage;
+                    if(data.currPage == 0){
+                       $scope.pages.currPage = 1; 
+                    }else{
+                        $scope.pages.currPage = data.currPage;
+                    }
+	                
 	                $scope.pages.totalPages = data.totalPages;
 
 	                if($scope.employeeShifts && $scope.employeeShifts.length > 0 ){
@@ -1596,6 +1624,10 @@ angular.module('timeSheetApp')
         $scope.exportMsg = function() {
             return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportMsg : '');
         };
+
+        $scope.cancelEmployeeShiftUpdate = function(){
+            $scope.empShift = {};
+        }
 
 
 
