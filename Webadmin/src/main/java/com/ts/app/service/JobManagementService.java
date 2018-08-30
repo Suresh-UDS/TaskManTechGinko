@@ -2080,6 +2080,12 @@ public class JobManagementService extends AbstractService {
 	 * Validate job date information
 	 */
 	private JobDTO validate(JobDTO jobDTO, Job job) {
+		
+		if(job.getStatus().equals(JobStatus.COMPLETED)) {
+			jobDTO.setErrorMessage("Job details cannot be updated in COMPLETED state");
+			return jobDTO;
+		}
+		
 		//Date Validation for job
 		if(jobDTO.getScheduleEndDate() != null) {
 			Calendar startCal = Calendar.getInstance();
