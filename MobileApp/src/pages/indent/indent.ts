@@ -38,7 +38,7 @@ export class Indent {
     type: any;
     inventoryGroups: any;
     inventoryMaterial: any;
-
+    referenceNumber:any;
     indent: any;
     selectedMaterial: any;
     pageSort:15;
@@ -127,8 +127,10 @@ export class Indent {
         var details = {
             materialName: m.name,
             materialId: m.id,
-            uom: m.uom,
-            number: 1
+            materialItemCode:m.code,
+            materialStoreStock:m.storeStock,
+            materialUom:m.uom,
+            quantity:m.quantity
         };
         this.indent.push(details);
     }
@@ -173,8 +175,16 @@ export class Indent {
         )
     }
 
-    saveIndentMaterial(indent){
-        this.purchaseService.saveIndentMaterial(indent).subscribe(
+    saveIndentMaterial(){
+
+        var indentDetails = {
+          siteId:this.selectedSite.id,
+          projectId:this.selectedProject.id,
+          items:this.indent,
+          indentReferenceNumber:this.referenceNumber,
+          requestedDate:new Date()
+        };
+        this.purchaseService.saveIndentMaterial(indentDetails).subscribe(
             response=>{
                 console.log("Save indent Material");
                 console.log(response);
