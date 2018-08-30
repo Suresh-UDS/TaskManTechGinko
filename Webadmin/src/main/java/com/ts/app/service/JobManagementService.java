@@ -2081,7 +2081,7 @@ public class JobManagementService extends AbstractService {
 	 */
 	private JobDTO validate(JobDTO jobDTO, Job job) {
 		
-		if(job.getStatus().equals(JobStatus.COMPLETED)) {
+		if(job.getStatus() != null && job.getStatus().equals(JobStatus.COMPLETED)) {
 			jobDTO.setErrorMessage("Job details cannot be updated in COMPLETED state");
 			return jobDTO;
 		}
