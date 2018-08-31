@@ -175,15 +175,26 @@ export class AssetList {
                         response=>{
                             this.dbService.dropReadingTable().then(
                                 response=>{
-                                            console.log(response)
-                                                this.setData().then(
-                                                    response=>{
-                                                        console.log(response);
-                                                    },
-                                                    error=>{
-                                                        console.log(error)
-                                                    })
-                                                })
+                                            console.log(response);
+                                            this.dbService.dropPPMJobTable().then(
+                                                response=>{
+                                                    console.log(response);
+                                                    this.dbService.dropAMCJobTable().then(
+                                                        response=>{
+                                                            console.log(response);
+                                                            this.setData().then(
+                                                                response=>{
+                                                                    console.log(response);
+                                                                },
+                                                                error=>{
+                                                                    console.log(error)
+                                                                })
+                                                            })
+                                                        }
+                                                    )
+                                                }
+                                            );
+
                          },
                          error=>{
                             this.componentService.closeLoader();
