@@ -83,19 +83,19 @@
         </ion-col>
     </ion-row>
     <ion-row no-margin>
-        <ion-col col-9>
-            <ion-item>
-                <ion-label text-capitalize class="client-label" text-left>Material:</ion-label>
-                <ion-select  [selectOptions]="selectOptions" interface="popover" text-lowercase>
-                    <ion-option text-center text-lowercase  (ionSelect)="getMaterialByGroup(m)"  *ngFor="let m of inventoryMaterial;let i of index" value="">{{m.name}}</ion-option>
-                </ion-select>
-            </ion-item>
-        </ion-col>
-        <ion-col col-3 text-center>
-            <button class="btn btn-warning center" (click)="addIndent(selectedMaterial)">Add</button>
-        </ion-col>
+                <ion-col col-9>
+                    <ion-item>
+                        <ion-label text-capitalize class="client-label" text-left>Material:</ion-label>
+                        <ion-select  [selectOptions]="selectOptions" [(ngModel)]="selectedMaterial" interface="popover" text-lowercase>
+                            <ion-option text-center text-lowercase  (ionSelect)="getMaterialByGroup(m)"  *ngFor="let m of inventoryMaterial;let i of index" value="">{{m.name}}</ion-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-col>
+                <ion-col col-3 text-center>
+                    <button class="btn btn-warning center" (click)="addIndent(selectedMaterial)">Add</button>
+                </ion-col>
     </ion-row>
-    <ion-row no-margin class="white-bg" *ngFor="let t of inventoryTransaction">
+    <ion-row no-margin class="white-bg" *ngFor="let t of transactionMaterials">
         <ion-col col-6>
             <ion-list>
                 <ion-item>
