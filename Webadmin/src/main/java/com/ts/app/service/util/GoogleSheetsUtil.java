@@ -76,8 +76,7 @@ public class GoogleSheetsUtil {
 		GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY,
 				clientSecrets, SCOPES)
 						.setDataStoreFactory(new FileDataStoreFactory(new java.io.File(CREDENTIALS_FOLDER)))
-						.setAccessType("offline")
-						.setApprovalPrompt("force").build();
+						.build();
 		String host = env.getProperty("google.drive.api.callback.host");
 		//int port = Integer.parseInt(env.getProperty("google.drive.api.callback.port"));
 		LocalServerReceiver localReceiver = new LocalServerReceiver.Builder().setHost(host).build();
