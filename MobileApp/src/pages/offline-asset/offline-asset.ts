@@ -96,17 +96,37 @@ export class OfflineAsset {
 
     //
 
-    getJobs(searchCriteria) {
+    getPPMJobs(searchCriteria) {
         // var searchCriteria={
         //     assetId:this.assetDetails.id
         // }
         this.spinner = true;
         //offline
-        this.dbService.getJobs(this.assetDetails.id).then(
+        this.dbService.getPPMJobs(this.assetDetails.id).then(
             (res) => {
                 this.componentService.closeLoader()
                 console.log(res)
-                this.assetDetails.jobs = res;
+                this.assetDetails.PPMJobs = res;
+            },
+            (err) => {
+
+            }
+        )
+
+
+
+    }
+    getAMCJobs(searchCriteria) {
+        // var searchCriteria={
+        //     assetId:this.assetDetails.id
+        // }
+        this.spinner = true;
+        //offline
+        this.dbService.getAMCJobs(this.assetDetails.id).then(
+            (res) => {
+                this.componentService.closeLoader()
+                console.log(res)
+                this.assetDetails.AMCJobs= res;
             },
             (err) => {
 

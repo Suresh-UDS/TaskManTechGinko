@@ -222,6 +222,13 @@ scheduler:
 
 default.user.password: uds12345
 
+google:
+   drive:
+      api:
+          callback:
+              host: localhost
+              port: 8080
+              
 # ===================================================================
 # JHipster specific properties
 # ===================================================================
