@@ -201,8 +201,14 @@ public class AmazonS3Utils {
 
 	public String uploadCheckListImage(String checkListImg, String checklistItemName, long jobId, String img) {
 		log.debug("Upload checklist in-out image to s3 bucket");
-		String filename = jobId +"_"+ checklistItemName +"_"+ img +".png";
+		String filename = "";
     	try {
+    		if(checklistItemName.contains("/")) {
+    			String renamedFile = checklistItemName.replace("/", "-");
+    			filename = jobId +"_"+ renamedFile +"_"+ img +".png";
+    		}else {
+    			filename = jobId +"_"+ checklistItemName +"_"+ img +".png";
+    		}
     		String fileUrl = amazonS3Service.uploadCheckListImageToS3(filename, checkListImg);
     	} catch(Exception e) { 
     		e.printStackTrace();
