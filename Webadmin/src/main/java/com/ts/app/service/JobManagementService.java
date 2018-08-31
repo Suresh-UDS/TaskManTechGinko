@@ -469,6 +469,8 @@ public class JobManagementService extends AbstractService {
                                 }
 		            		}else if(!StringUtils.isEmpty(searchCriteria.getJobTypeName())) {
 			        			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
+		            		//}else if(searchCriteria.getAssetId() > 0) {
+		            		//	page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
 		            		}else {
 		            			if(CollectionUtils.isNotEmpty(siteIds)) {
 		            				page = jobRepository.findBySiteIdsOrEmpIdsAndDateRange(searchCriteria.getUserId(), siteIds, subEmpIds, fromDt, toDt, pageRequest);
@@ -493,7 +495,7 @@ public class JobManagementService extends AbstractService {
 	        				log.debug("Asset id in job search criteria " + searchCriteria.getAssetId());
 	        			}
 	        			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
-	        			if(CollectionUtils.isEmpty(page.getContent())) {
+	        			if(searchCriteria.getAssetId() == 0 && CollectionUtils.isEmpty(page.getContent())) {
 		            		List<EmployeeProjectSite> projectSites = employee.getProjectSites();
 		            		if(CollectionUtils.isNotEmpty(projectSites)) {
 		            			for(EmployeeProjectSite projSite : projectSites) {

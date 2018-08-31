@@ -769,15 +769,7 @@ public class AttendanceService extends AbstractService {
 	}
 
 	public ExportResult generateReport(List<AttendanceDTO> transactions, SearchCriteria criteria) {
-		List<EmployeeAttendanceReport> attendanceReportList = new ArrayList<EmployeeAttendanceReport>();
-		if (CollectionUtils.isNotEmpty(transactions)) {
-			for (AttendanceDTO attn : transactions) {
-				EmployeeAttendanceReport reportData = new EmployeeAttendanceReport(attn.getEmployeeId(), attn.getEmployeeEmpId(), attn.getEmployeeFullName(), null,
-						attn.getSiteName(), null, attn.getCheckInTime(), attn.getCheckOutTime(), attn.getShiftStartTime(), attn.getShiftEndTime(), attn.getContinuedAttendanceId(), attn.isLate(), attn.getRemarks());
-				attendanceReportList.add(reportData);
-			}
-		}
-		return reportUtil.generateAttendanceReports(attendanceReportList, null, null, criteria);
+		return reportUtil.generateAttendanceReports(transactions, null, null, criteria);
 	}
 
 	public ExportResult export(List<AttendanceDTO> transactions, String empId) {
