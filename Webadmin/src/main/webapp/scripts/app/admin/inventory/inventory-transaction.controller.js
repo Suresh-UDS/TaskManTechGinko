@@ -101,7 +101,7 @@ angular.module('timeSheetApp')
     	
     	$scope.loadSites = function () {
             SiteComponent.findAll().then(function (data) {
-                $scope.selectedSite = null;
+                $scope.selectedIndent = null;
                 $scope.sites = data;
                 $scope.loadingStop();
             });
@@ -139,6 +139,7 @@ angular.module('timeSheetApp')
         }
     	
     	$scope.loadItems = function() {
+    		console.log($scope.selectedIndent);
     		if($scope.selectedIndent) { 
     			IndentComponent.findById($scope.selectedIndent.id).then(function(data) {
     				console.log(data);
@@ -149,9 +150,11 @@ angular.module('timeSheetApp')
     	}
     	
     	$scope.loadIndents = function() { 
-    		if($scope.projectSite.id) {
-    			$scope.searchCriteria.siteId = $scope.projectSite.id;
-    			IndentComponent.search($scope.searchCriteria).then(function(data) { 
+    		if($scope.projectSite) {
+    			console.log($scope.projectSite);
+    			$scope.search = {};
+    			$scope.search.siteId = $scope.projectSite.id;
+    			IndentComponent.search($scope.search).then(function(data) { 
     				console.log(data);
     				$scope.materialIndents = data.transactions;
     			});
@@ -201,12 +204,34 @@ angular.module('timeSheetApp')
         
     	$scope.change = function() {
 			console.log($scope.selectedItemCode);
-			$scope.selectedItemName = $scope.selectedItemCode.materialName;
-			$scope.inventory.storeStock= $scope.selectedItemCode.materialStoreStock;
-			$scope.inventory.quantity = $scope.selectedItemCode.quantity;
-			$scope.inventory.uom = $scope.selectedItemCode.materialUom;
+			if($scope.selectedItemCode){
+				$scope.selectedItemName = $scope.selectedItemCode.materialName;
+				if($scope.selectedItemCode.storeStock) {
+					$scope.inventory.storeStock = $scope.selectedItemCode.storeStock;
+				}else{
+					$scope.inventory.storeStock= $scope.selectedItemCode.materialStoreStock;
+				}
+				$scope.inventory.quantity = $scope.selectedItemCode.quantity;
+				$scope.inventory.uom = $scope.selectedItemCode.materialUom;
+			}
+			
 		}
-
+    	
+    	$scope.loadSiteItems = function() {
+    		if($scope.projectSite) {
+    			$scope.searchCriteria.siteId = $scope.projectSite.id;
+    			InventoryTransactionComponent.search($scope.searchCriteria).then(function(data) {
+    				console.log(data);
+    				$scope.materialItems = data.transactions;
+    				$scope.selectedItemName = "";
+    				$scope.inventory.storeStock= "";
+    				$scope.inventory.quantity = "";
+    				$scope.inventory.uom = "";
+    				$scope.inventory.transactionDate = "";
+    				document.getElementById('dateFilterTransactionDate').value = "";
+    			});
+    		}
+    	}
         
         /* Save material Transaction */
     	$scope.saveInventoryTrans = function() {
