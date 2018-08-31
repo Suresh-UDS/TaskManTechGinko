@@ -104,11 +104,13 @@ export class OfflineAsset {
         //offline
         this.dbService.getPPMJobs(this.assetDetails.id).then(
             (res) => {
+                this.spinner=false;
                 this.componentService.closeLoader()
                 console.log(res)
                 this.assetDetails.PPMJobs = res;
             },
             (err) => {
+                this.spinner=false;
 
             }
         )
@@ -124,11 +126,13 @@ export class OfflineAsset {
         //offline
         this.dbService.getAMCJobs(this.assetDetails.id).then(
             (res) => {
+                this.spinner=false;
                 this.componentService.closeLoader()
                 console.log(res)
                 this.assetDetails.AMCJobs= res;
             },
             (err) => {
+                this.spinner=false;
 
             }
         )
