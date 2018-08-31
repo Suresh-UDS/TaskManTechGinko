@@ -33,8 +33,8 @@
         <ion-col col-12>
             <ion-item>
                 <ion-label text-capitalize class="client-label" text-left>Site:</ion-label>
-                <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedProject" text-lowercase>
-                    <ion-option  *ngFor="let s of siteList;let i of index" (ionSelect)="selectSite(p)" text-center text-lowercase>{{s.name}}</ion-option>
+                <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedSite" text-lowercase>
+                    <ion-option  *ngFor="let s of siteList;let i of index" (ionSelect)="getIndents(s)" text-center text-lowercase>{{s.name}}</ion-option>
                 </ion-select>
             </ion-item>
         </ion-col>

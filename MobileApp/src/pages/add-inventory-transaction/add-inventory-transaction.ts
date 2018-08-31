@@ -3,6 +3,7 @@ import {NavController, NavParams} from "ionic-angular";
 import{componentService} from "../service/componentService";
 import{SiteService} from "../service/siteService";
 import {InventoryService} from "../service/inventoryService";
+import {PurchaseRequisitionService} from "../service/PurchaseRequisitionService";
 
 /**
  * Generated class for the AddInventoryTransaction page.
@@ -41,7 +42,7 @@ export class AddInventoryTransaction {
 
 
     constructor(public navCtrl: NavController, public navParams: NavParams,private component:componentService,
-              private siteService:SiteService, private inventoryService:InventoryService
+              private siteService:SiteService, private inventoryService:InventoryService, private prService:PurchaseRequisitionService
   ) {
 
         this.transactionMaterials = [];
@@ -102,6 +103,24 @@ export class AddInventoryTransaction {
             response => {
                 console.log(response);
                 this.inventoryGroups = response;
+            }
+        )
+    }
+
+    getIndents(site){
+
+        var searchCriteria = {
+            siteId:site.id,
+            list:true
+        };
+        this.prService.searchMaterialIndents(searchCriteria).subscribe(
+            response=>{
+                console.log("Indent list");
+                console.log(response);
+            },
+            err=>{
+                console.log("Error in getting indent");
+                console.log(err);
             }
         )
     }
