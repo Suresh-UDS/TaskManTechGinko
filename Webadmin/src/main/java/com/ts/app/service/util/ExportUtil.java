@@ -19,6 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.io.IOUtils;
@@ -364,7 +365,7 @@ public class ExportUtil {
 		return result;
 	}
 
-	public ExportResult writeAttendanceExcelReportToFile(String projName, List<EmployeeAttendanceReport> content,
+	public ExportResult writeAttendanceExcelReportToFile(String projName, List<AttendanceDTO> transactions,
 			final String empId, ExportResult result) {
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend = " + isAppend);
@@ -403,6 +404,16 @@ public class ExportUtil {
 		Thread writer_Thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
+				
+				List<EmployeeAttendanceReport> attendanceReportList = new ArrayList<EmployeeAttendanceReport>();
+				if (CollectionUtils.isNotEmpty(transactions)) {
+					for (AttendanceDTO attn : transactions) {
+						EmployeeAttendanceReport reportData = new EmployeeAttendanceReport(attn.getEmployeeId(), attn.getEmployeeEmpId(), attn.getEmployeeFullName(), null,
+								attn.getSiteName(), null, attn.getCheckInTime(), attn.getCheckOutTime(), attn.getShiftStartTime(), attn.getShiftEndTime(), attn.getContinuedAttendanceId(), attn.isLate(), attn.getRemarks());
+						attendanceReportList.add(reportData);
+					}
+				}				
+				
 				String file_Path = env.getProperty("export.file.path");
 				FileSystem fileSystem = FileSystems.getDefault();
 				if (StringUtils.isNotEmpty(empId)) {
@@ -435,7 +446,7 @@ public class ExportUtil {
 
 				int rowNum = 1;
 
-				for (EmployeeAttendanceReport transaction : content) {
+				for (EmployeeAttendanceReport transaction : attendanceReportList) {
 
 					Row dataRow = xssfSheet.createRow(rowNum++);
 
