@@ -592,7 +592,7 @@ textarea.form-control {
     position: absolute;
     top: 3px;
     right: 10px;
-    padding: 8px;
+    padding: 15px 8px;
     background: #f5f5f5;
     border-radius: 3px;
     min-width: 200px;
