@@ -205,12 +205,12 @@
                                     ui-sref="tickets" id="cancel-button">
                                 <i class=""></i> Back
                             </button>
-                            <button class="btn btn-info " type="button" ng-if="(tickets.status != 'Closed')" ng-class="{active: $state.includes('admin')}"   ng-click="closeTicket(tickets.id)"   onClick="$('#deleteModalNew').modal()" data-target="#myModal"
-                                    ui-sref="tickets" >
+                            <button class="btn btn-info" type="button" ng-if="(tickets.status != 'Closed')"ng-class="{active: $state.includes('admin')}" has-permission="Tickets:Close"   ng-click="closeTicket(tickets.id)"   onClick="$('#closeTicket').modal()" data-target="#myModal"
+                                     >
                                 <i class=""></i> close ticket
                             </button>
-                            <button class="btn btn-sucess " type="button" ng-if="tickets.status == 'Closed'"
-                                    ui-sref="tickets" >
+                            <button class="btn btn-sucess" type="button" has-permission="Tickets:Reopen" ng-if="tickets.status == 'Closed'"  ng-click="reopenTicket(ticket.id)"   onClick="$('#reopenModalNew').modal()" data-target="#myModal"
+                                     >
                                 <i class=""></i> Reopen ticket
                             </button>
                         </div>
@@ -227,7 +227,7 @@
 </div>
 
 <!-- Ticket Close confirmation dialog -->
-<div id="deleteModalNew" class="delete-confirmation modal fade">
+<div id="closeTicket" class="delete-confirmation modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -238,13 +238,35 @@
             <div class="modal-body">
                <p>Are you sure you want to close the ticket?</p>
                <br/>
-               <input class="form-control border-bottom-input" ng-model="ticket.comments" placeholder="Enter Remarks..">
+               <input class="form-control border-bottom-input" ng-model="cTicket.comments" placeholder="Enter Remarks..">
 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <button type="button"
                         class="btn btn-success delete-confirmation-button" ng-click="closeTicketConfirm(cTicket)"   >Close Ticket</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of Ticket Close confirmation dialog -->
+
+<!-- Ticket Reopen confirmation dialog -->
+<div id="reopenModalNew" class="delete-confirmation modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Reopen Ticket</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to reopen the ticket?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button"
+                        class="btn btn-success delete-confirmation-button" ng-click="reopenTicketConfirm(cTicket)">Reopen Ticket</button>
             </div>
         </div>
     </div>
