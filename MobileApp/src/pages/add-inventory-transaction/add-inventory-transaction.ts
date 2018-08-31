@@ -35,10 +35,12 @@ export class AddInventoryTransaction {
     type: any;
     inventoryGroups: any;
     inventoryMaterial: any;
+    indentMaterial: any;
 
     transactionMaterials: any;
     selectedMaterial: any;
     inventoryTransaction:any;
+    indentList: any;
 
 
     constructor(public navCtrl: NavController, public navParams: NavParams,private component:componentService,
@@ -46,6 +48,7 @@ export class AddInventoryTransaction {
   ) {
 
         this.transactionMaterials = [];
+        this.indentList = [];
   }
 
     ionViewDidLoad() {
@@ -116,21 +119,55 @@ export class AddInventoryTransaction {
         this.prService.searchMaterialIndents(searchCriteria).subscribe(
             response=>{
                 console.log("Indent list");
-                console.log(response);
+                console.log(response.transactions);
+                this.indentList = response.transactions;
             },
             err=>{
                 console.log("Error in getting indent");
                 console.log(err);
             }
         )
+
+       /* var siteId ={
+          siteID:this.indentList.siteId,
+          list:true
+        };
+      this.prService.getMaterialBySite(siteId).subscribe(
+        response=>{
+          console.log("Get Material by Site");
+          console.log(response);
+          // this.indentMaterial=response.items;
+        },err=>{
+          console.log("Error in getting Material group by site");
+          console.log(err);
+        }
+      )*/
+
     }
+
+  getMaterialByIndent(indent){
+      this.prService.getMaterialByIndents(indent.id).subscribe(
+        response=>{
+            console.log("Get Material By Indent");
+            console.log(response);
+            this.indentMaterial = response.items;
+        },err=>{
+          console.log("Error in getting Material group by indent");
+          console.log(err);
+        }
+      )
+
+
+    }
+
+
 
     getMaterialByGroup(group) {
         this.inventoryService.getMaterialsByGroup(group.id).subscribe(
             response => {
                 console.log("Get Material Group");
                 console.log(response);
-                this.inventoryMaterial = response;
+                this.inventoryMaterial = response.items;
             }, err => {
                 console.log("Error in getting  material group");
                 console.log(err);
@@ -144,9 +181,9 @@ export class AddInventoryTransaction {
     addTransactionMaterial(m) {
         console.log(m);
         var details = {
-            materialName: m.name,
+            materialName: m.materialName,
             materialId: m.id,
-            uom: m.uom,
+            uom: m.materialUom,
             number: 1
         };
         this.transactionMaterials.push(details);
