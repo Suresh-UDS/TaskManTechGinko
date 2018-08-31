@@ -317,31 +317,7 @@ export class DBService {
                 var jobs;
                 var param = [];
                 for (var i = 0; i < this.selectAsset.length; i++) {
-                    var search = {assetId: this.selectAsset[i].id,report:true,maintenanceType:'AMC'}
-                    this.jobService.getJobs(search).subscribe(
-                        response => {
-                            // console.log("Getting Jobs response");//
-                            // console.log(response);//
-                            jobs = response.transactions;
-
-                            var search = {assetId: this.selectAsset[i].id,report:true,maintenanceType:'PPM'}
-                            this.jobService.getJobs(search).subscribe(
-                                response => {
-                              jobs.push(response.transactions);
-                                })
-
-                            if (jobs) {
-                                for (var i = 0; i < jobs.length; i++) {
-                                    param.push([jobs[i].id, jobs[i].assetId, jobs[i].title, jobs[i].employeeName, jobs[i].siteName, jobs[i].plannedEndTime, jobs[i].plannedStartTime, jobs[i].description, jobs[i].status, jobs[i].maintenanceType, jobs[i].checkInDateTimeFrom, jobs[i].checkInDateTimeTo])
-                                }
-                            }
-                        },
-                        error => {
-                            console.log("Get asset Jobs error");
-                        })
-                }
-                for (var i = 0; i < this.selectAsset.length; i++) {
-                    var search = {assetId: this.selectAsset[i].id,report:true,maintenanceType:'PPM'}
+                    var search = {assetId: this.selectAsset[i].id,report:true}
                     this.jobService.getJobs(search).subscribe(
                         response => {
                             // console.log("Getting Jobs response");//
@@ -372,6 +348,97 @@ export class DBService {
 
         })
     }
+
+
+    //PPM Jobs
+    setPPMJobs()
+    {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                // this.db.executeSql("DROP TABLE job", {})
+                console.log("Set Job Data");
+                console.log(this.selectAsset)
+                var jobs;
+                var param = [];
+                for (var i = 0; i < this.selectAsset.length; i++) {
+                    var search = {assetId: this.selectAsset[i].id,report:true,maintenanceType:'PPM'}
+                    this.jobService.getJobs(search).subscribe(
+                        response => {
+                            // console.log("Getting Jobs response");//
+                            // console.log(response);//
+                            jobs = response.transactions;
+                            if (jobs) {
+                                for (var i = 0; i < jobs.length; i++) {
+                                    param.push([jobs[i].id, jobs[i].assetId, jobs[i].title, jobs[i].employeeName, jobs[i].siteName, jobs[i].plannedEndTime, jobs[i].plannedStartTime, jobs[i].description, jobs[i].status, jobs[i].maintenanceType, jobs[i].checkInDateTimeFrom, jobs[i].checkInDateTimeTo])
+                                }
+                            }
+                        },
+                        error => {
+                            console.log("Get asset Jobs error");
+                        })
+                }
+                var tablename = 'job'
+                var createQuery = "create table if not exists ppmJob(id INT,assetId INT,title TEXT,employeeName TEXT,siteName TEXT,plannedEndTime TEXT,plannedStartTime TEXT,description TEXT,status TEXT,maintenanceType TEXT,checkInDateTimeFrom TEXT,checkInDateTimeTo TEXT)";
+                var insertQuery = "insert into ppmJob(id,assetId,title,employeeName ,siteName,plannedEndTime,plannedStartTime,description,status,maintenanceType,checkInDateTimeFrom,checkInDateTimeTo ) values(?,?,?,?,?,?,?,?,?,?,?,?)";
+                var updateQuery = "update ppmJob set assetId,title,employeeName ,siteName,plannedEndTime,plannedStartTime,description,status,maintenanceType,checkInDateTimeFrom,checkInDateTimeTo where id=? ";
+                setTimeout(() => {
+                    this.create(tablename, createQuery, insertQuery, updateQuery, param).then(
+                        response=>{
+                            resolve(response)
+                        }
+                    )
+                }, 15000)
+            }, 3000)
+
+        })
+    }
+
+
+    //AMC Jobs
+
+    setAMCJobs()
+    {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                // this.db.executeSql("DROP TABLE job", {})
+                console.log("Set Job Data");
+                console.log(this.selectAsset)
+                var jobs;
+                var param = [];
+                for (var i = 0; i < this.selectAsset.length; i++) {
+                    var search = {assetId: this.selectAsset[i].id,report:true,maintenanceType:'AMC'}
+                    this.jobService.getJobs(search).subscribe(
+                        response => {
+                            // console.log("Getting Jobs response");//
+                            // console.log(response);//
+                            jobs = response.transactions;
+                            if (jobs) {
+                                for (var i = 0; i < jobs.length; i++) {
+                                    param.push([jobs[i].id, jobs[i].assetId, jobs[i].title, jobs[i].employeeName, jobs[i].siteName, jobs[i].plannedEndTime, jobs[i].plannedStartTime, jobs[i].description, jobs[i].status, jobs[i].maintenanceType, jobs[i].checkInDateTimeFrom, jobs[i].checkInDateTimeTo])
+                                }
+                            }
+                        },
+                        error => {
+                            console.log("Get asset Jobs error");
+                        })
+                }
+                var tablename = 'job'
+                var createQuery = "create table if not exists amcJob(id INT,assetId INT,title TEXT,employeeName TEXT,siteName TEXT,plannedEndTime TEXT,plannedStartTime TEXT,description TEXT,status TEXT,maintenanceType TEXT,checkInDateTimeFrom TEXT,checkInDateTimeTo TEXT)";
+                var insertQuery = "insert into amcJob(id,assetId,title,employeeName ,siteName,plannedEndTime,plannedStartTime,description,status,maintenanceType,checkInDateTimeFrom,checkInDateTimeTo ) values(?,?,?,?,?,?,?,?,?,?,?,?)";
+                var updateQuery = "update amcJob set assetId,title,employeeName ,siteName,plannedEndTime,plannedStartTime,description,status,maintenanceType,checkInDateTimeFrom,checkInDateTimeTo where id=? ";
+                setTimeout(() => {
+                    this.create(tablename, createQuery, insertQuery, updateQuery, param).then(
+                        response=>{
+                            resolve(response)
+                        }
+                    )
+                }, 15000)
+            }, 3000)
+
+        })
+    }
+
+
 
     //Tickets
     setTickets()
@@ -1115,6 +1182,66 @@ export class DBService {
                 console.log(this.db);
                 console.log("Select Get Job Table");
                 var addQuery = "select * from job where assetId=?";
+                this.db.executeSql(addQuery,[id]).then((data) => {
+                    console.log(data)
+                    if (data.rows.length > 0) {
+                        for (var i = 0; i < data.rows.length; i++) {
+                            this.selectJobs.push(data.rows.item(i))
+                        }
+                    }
+                    console.log(this.selectJobs)
+                    resolve(this.selectJobs);
+                }, (error) => {
+                    console.log("ERROR: " + JSON.stringify(error))
+                })
+
+            }, 3000)
+
+        })
+
+    }
+
+    //AMCJobs
+    getAMCJobs(id)
+    {
+        console.log("ID:"+id)
+        this.selectJobs.splice(0,this.selectJobs.length);
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                console.log("**************")
+                console.log(this.db);
+                console.log("Select Get Job Table");
+                var addQuery = "select * from amcJob where assetId=?";
+                this.db.executeSql(addQuery,[id]).then((data) => {
+                    console.log(data)
+                    if (data.rows.length > 0) {
+                        for (var i = 0; i < data.rows.length; i++) {
+                            this.selectJobs.push(data.rows.item(i))
+                        }
+                    }
+                    console.log(this.selectJobs)
+                    resolve(this.selectJobs);
+                }, (error) => {
+                    console.log("ERROR: " + JSON.stringify(error))
+                })
+
+            }, 3000)
+
+        })
+
+    }
+
+    //PPM Jobs
+    getPPMJobs(id)
+    {
+        console.log("ID:"+id)
+        this.selectJobs.splice(0,this.selectJobs.length);
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                console.log("**************")
+                console.log(this.db);
+                console.log("Select Get Job Table");
+                var addQuery = "select * from ppmJob where assetId=?";
                 this.db.executeSql(addQuery,[id]).then((data) => {
                     console.log(data)
                     if (data.rows.length > 0) {

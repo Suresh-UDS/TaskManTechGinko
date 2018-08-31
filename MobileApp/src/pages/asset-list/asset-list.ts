@@ -219,30 +219,34 @@ export class AssetList {
                                                             this.dbService.setConfig().then(
                                                                 response=>{
                                                                     console.log(response)
-                                                                    this.dbService.setJobs().then(
+                                                                    this.dbService.setPPMJobs().then(
                                                                         response=>{
                                                                             console.log(response)
-                                                                            this.dbService.setTickets().then(
+                                                                            this.dbService.setAMCJobs().then(
                                                                                 response=> {
                                                                                     console.log(response)
-                                                                                    // this.dbService.setSites().then(
-                                                                                    //     response=> {
-                                                                                    //         console.log(response)
+                                                                                    this.dbService.setTickets().then(
+                                                                                        response => {
+                                                                                            console.log(response)
+                                                                                            // this.dbService.setSites().then(
+                                                                                            //     response=> {
+                                                                                            //         console.log(response)
                                                                                             // this.dbService.setEmployee().then(
                                                                                             //     response=> {
                                                                                             //         console.log(response)
-                                                                                                        this.dbService.setViewReading().then(
-                                                                                                            response=>{
-                                                                                                                console.log(response)
-                                                                                                                this.dbService.setAssetPreviousReading().then(
-                                                                                                                    response=> {
-                                                                                                                        console.log(response)
-                                                                                                                        resolve("data s")
-                                                                                                                        this.componentService.closeLoader();
-                                                                                                                    })
-                                                                                                            })
-                                                                                                // })
-                                                                                        // })
+                                                                                            this.dbService.setViewReading().then(
+                                                                                                response => {
+                                                                                                    console.log(response)
+                                                                                                    this.dbService.setAssetPreviousReading().then(
+                                                                                                        response => {
+                                                                                                            console.log(response)
+                                                                                                            resolve("data s")
+                                                                                                            this.componentService.closeLoader();
+                                                                                                        })
+                                                                                                })
+                                                                                            // })
+                                                                                            // })
+                                                                                        })
                                                                                 })
                                                                         })
                                                                 })
@@ -250,6 +254,7 @@ export class AssetList {
                                                 })
                                 })
                         })
+
 
             },3000)
         })
