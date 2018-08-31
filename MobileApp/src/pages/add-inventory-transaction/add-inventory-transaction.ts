@@ -119,6 +119,9 @@ export class AddInventoryTransaction {
         )
     }
 
+  selectMaterial(m) {
+    this.selectedMaterial = m;
+  }
     addTransactionMaterial(m) {
         console.log(m);
         var details = {
@@ -145,8 +148,8 @@ export class AddInventoryTransaction {
         console.log(searchText);
     }
 
-    selectMaterial(m) {
+    /*selectMaterial(m) {
         console.log("m");
         console.log(m);
-    }
+    }*/
 }
