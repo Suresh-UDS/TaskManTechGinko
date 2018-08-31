@@ -19,6 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.io.IOUtils;
@@ -364,7 +365,7 @@ public class ExportUtil {
 		return result;
 	}
 
-	public ExportResult writeAttendanceExcelReportToFile(String projName, List<EmployeeAttendanceReport> content,
+	public ExportResult writeAttendanceExcelReportToFile(String projName, List<AttendanceDTO> transactions,
 			final String empId, ExportResult result) {
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend = " + isAppend);
@@ -403,6 +404,16 @@ public class ExportUtil {
 		Thread writer_Thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
+//				
+//				List<EmployeeAttendanceReport> attendanceReportList = new ArrayList<EmployeeAttendanceReport>();
+//				if (CollectionUtils.isNotEmpty(transactions)) {
+//					for (AttendanceDTO attn : transactions) {
+//						EmployeeAttendanceReport reportData = new EmployeeAttendanceReport(attn.getEmployeeId(), attn.getEmployeeEmpId(), attn.getEmployeeFullName(), null,
+//								attn.getSiteName(), null, attn.getCheckInTime(), attn.getCheckOutTime(), attn.getShiftStartTime(), attn.getShiftEndTime(), attn.getContinuedAttendanceId(), attn.isLate(), attn.getRemarks());
+//						attendanceReportList.add(reportData);
+//					}
+//				}				
+				
 				String file_Path = env.getProperty("export.file.path");
 				FileSystem fileSystem = FileSystems.getDefault();
 				if (StringUtils.isNotEmpty(empId)) {
@@ -435,21 +446,46 @@ public class ExportUtil {
 
 				int rowNum = 1;
 
-				for (EmployeeAttendanceReport transaction : content) {
-
+				//for (EmployeeAttendanceReport transaction : attendanceReportList) {
+				for (AttendanceDTO attn : transactions) {
 					Row dataRow = xssfSheet.createRow(rowNum++);
 
-					dataRow.createCell(0).setCellValue(transaction.getEmployeeIds());
+					dataRow.createCell(0).setCellValue(attn.getEmployeeEmpId());
 //					dataRow.createCell(1).setCellValue(transaction.getName() + transaction.getLastName() !=null?transaction.getLastName() :"");
-					dataRow.createCell(1).setCellValue(transaction.getLastName()!=null? transaction.getName()+transaction.getLastName():transaction.getName() );
-					dataRow.createCell(2).setCellValue(transaction.getSiteName());
-					dataRow.createCell(3).setCellValue(transaction.getProjectName());
-					dataRow.createCell(4).setCellValue(transaction.getCheckInTime() != null ? String.valueOf(transaction.getCheckInTime()) : "");
-					dataRow.createCell(5).setCellValue(transaction.getCheckOutTime() != null ? String.valueOf(transaction.getCheckOutTime()) : "");
-					dataRow.createCell(6).setCellValue(transaction.getCheckOutTime() != null ? String.valueOf(transaction.getDifferenceText()) : "");
-					dataRow.createCell(7).setCellValue(transaction.isShiftContinued() ?  "SHIFT CONTINUED" : "");
-					dataRow.createCell(8).setCellValue(transaction.isLate() ? "LATE CHECK IN" : "");
-					dataRow.createCell(9).setCellValue(transaction.getRemarks() !=null ? transaction.getRemarks() : "");
+					dataRow.createCell(1).setCellValue(attn.getEmployeeFullName());
+					dataRow.createCell(2).setCellValue(attn.getSiteName());
+					dataRow.createCell(3).setCellValue("");
+					dataRow.createCell(4).setCellValue(attn.getCheckInTime() != null ? String.valueOf(attn.getCheckInTime()) : "");
+					dataRow.createCell(5).setCellValue(attn.getCheckOutTime() != null ? String.valueOf(attn.getCheckOutTime()) : "");
+					
+					long difference = 0;
+					long differenceInHours = 0;
+					long differenceInMinutes = 0;
+					String differenceText = "";
+					if(attn.getCheckOutTime()!=null){
+			            difference = attn.getCheckOutTime().getTime() - attn.getCheckInTime().getTime();
+			            differenceInHours = difference/ (60 * 60 * 1000);//Converting duration in hours
+			            differenceInMinutes = difference / (60 * 1000) % 60;//Converting duration in Minutes
+			            if(differenceInHours<9 && differenceInMinutes<9){
+			                differenceText = '0'+String.valueOf(differenceInHours)+':'+'0'+String.valueOf(differenceInMinutes);
+			            }else if(differenceInHours<9 ){
+			                differenceText = '0'+String.valueOf(differenceInHours)+':'+String.valueOf(differenceInMinutes);
+			            }else if(differenceInMinutes<9){
+			                differenceText = String.valueOf(differenceInHours)+':'+'0'+String.valueOf(differenceInMinutes);
+			            }else{
+			                differenceText = String.valueOf(differenceInHours)+':'+String.valueOf(differenceInMinutes);
+			            }
+			        }else{
+			            differenceText = "0";
+			        }
+			        boolean shiftContinued = (attn.getContinuedAttendanceId() > 0 ? true : false);
+			        
+			        
+					dataRow.createCell(6).setCellValue(attn.getCheckOutTime() != null ? String.valueOf(differenceText) : "");
+					
+					dataRow.createCell(7).setCellValue(shiftContinued ?  "SHIFT CONTINUED" : "");
+					dataRow.createCell(8).setCellValue(attn.isLate() ? "LATE CHECK IN" : "");
+					dataRow.createCell(9).setCellValue(attn.getRemarks() !=null ? attn.getRemarks() : "");
 					/*
 					 * Blob blob = null; byte[] img = blob.getBytes(1,(int)blob.length());
 					 * BufferedImage i = null; try { i = ImageIO.read(new

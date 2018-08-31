@@ -479,9 +479,13 @@ public class AmazonS3Service {
 	public void getAllFiles() { 
 		log.debug("===================== Calling a AWS S3 for get files =====================");
 		try {
-			String key = "prod/";
+			String key = "prod/checkListImages/";
+//			String checkListKey = "prod/checkListImages/";
 			List<S3ObjectSummary> fileList = s3client.listObjects(bucketName, key).getObjectSummaries();
-			
+			log.debug("===================== Checklist File length =====================" + fileList.size());
+//			List<S3ObjectSummary> checkLists = s3client.listObjects(bucketName, checkListKey).getObjectSummaries(); 
+//			log.debug("===================== Checklist File length =====================" + checkLists.size());
+			int i = 1;
 			for (S3ObjectSummary file : fileList) {
 				log.debug("===================== Get Files - Done! =====================" + file.getKey());
 				String filename = file.getKey();
@@ -490,23 +494,39 @@ public class AmazonS3Service {
 					String sourceKey = filename;
 					String renamedFile = filename.substring(filename.indexOf("}")+1);
 					log.debug("===================== After Rename File =====================" + renamedFile);
-					if(renamedFile.contains("/")) {
-						String slashFile = renamedFile.replace("/", "-");
-						log.debug("===================== After Slash Removed File =====================" + slashFile);
-						CopyObjectRequest copyObjRequest = new CopyObjectRequest(bucketName, sourceKey, bucketName, key + checkListPath + slashFile)
-																	.withCannedAccessControlList(CannedAccessControlList.PublicReadWrite);
-						s3client.copyObject(copyObjRequest);
-					}else {
-						
+					log.debug("===================== File length =====================" + i);
+//					if(renamedFile.contains("/")) {
+//						String slashFile = renamedFile.replace("/", "-");
+//						log.debug("===================== After Slash Removed File =====================" + slashFile);
+//						CopyObjectRequest copyObjRequest = new CopyObjectRequest(bucketName, sourceKey, bucketName, key + checkListPath + slashFile)
+//																	.withCannedAccessControlList(CannedAccessControlList.PublicReadWrite);
+//						s3client.copyObject(copyObjRequest);
+//					}else {
+					
+//					for(S3ObjectSummary checkList : checkLists) { 
+//						String checkListFile = checkList.getKey();
+//						String subString[] = checkListFile.split("/", 3);
+//					    log.debug("Checklist Images Sub String file:" +  subString[0]);
+//					    log.debug("Checklist Images Sub String file:" +  subString[2]);
+//					    String checkListRenamed = subString[2];
+//						if(!checkListRenamed.equalsIgnoreCase(renamedFile)) {
+//							log.debug("===================== File length =====================" + i);
+//							log.debug("===================== Non duplicate images =====================" + i);
+//						}
+//					}
+//						
 						log.debug("=====================Source Key  =====================" + sourceKey);
-						CopyObjectRequest copyObjRequest = new CopyObjectRequest(bucketName, sourceKey, bucketName, key + checkListPath + renamedFile)
+						CopyObjectRequest copyObjRequest = new CopyObjectRequest(bucketName, sourceKey, bucketName, key + renamedFile)
 																	.withCannedAccessControlList(CannedAccessControlList.PublicReadWrite);
 		                s3client.copyObject(copyObjRequest);
-					}
+//					}
 					
 				}
+				i++;
 			
 			}
+			
+			
            
         } catch(AmazonServiceException e) {
             e.printStackTrace();

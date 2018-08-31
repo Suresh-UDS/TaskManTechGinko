@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
@@ -102,7 +102,7 @@ public class ReportUtil {
 		return cacheUtil.getSearchCriteria(uid);
 	}
 
-	public ExportResult generateAttendanceReports(List<EmployeeAttendanceReport> content, final String empId, ExportResult result, SearchCriteria criteria) {
+	public ExportResult generateAttendanceReports(List<AttendanceDTO> content, final String empId, ExportResult result, SearchCriteria criteria) {
 		if(criteria.getExportType().equalsIgnoreCase("html")) {
 			if(result == null) {
 				result = new ExportResult();
