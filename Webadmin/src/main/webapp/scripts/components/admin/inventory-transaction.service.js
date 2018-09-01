@@ -8,11 +8,11 @@ angular.module('timeSheetApp')
                 var cb = callback || angular.noop;
                 return $http.post('api/saveInventory/transaction', transaction).then(
                     function (response) {
-                        return cb(response);
+                        return response;
                     }).catch(
                     function (err) {
                         console.log(JSON.stringify(err));
-                        return cb(err);
+                        return err;
                     })
 
             },

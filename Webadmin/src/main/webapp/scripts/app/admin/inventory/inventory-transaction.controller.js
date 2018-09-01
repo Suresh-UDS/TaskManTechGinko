@@ -140,7 +140,8 @@ angular.module('timeSheetApp')
     	
     	$scope.loadItems = function() {
     		console.log($scope.selectedIndent);
-    		if($scope.selectedIndent) { 
+    		if($scope.selectedIndent) {
+    			$scope.site = false;
     			IndentComponent.findById($scope.selectedIndent.id).then(function(data) {
     				console.log(data);
     				$scope.materialItems = data.items;
@@ -217,18 +218,19 @@ angular.module('timeSheetApp')
 			
 		}
     	
+    	$scope.site = true;
     	$scope.loadSiteItems = function() {
     		if($scope.projectSite) {
     			$scope.searchCriteria.siteId = $scope.projectSite.id;
-    			InventoryTransactionComponent.search($scope.searchCriteria).then(function(data) {
+    			InventoryComponent.search($scope.searchCriteria).then(function(data) {
     				console.log(data);
     				$scope.materialItems = data.transactions;
-    				$scope.selectedItemName = "";
-    				$scope.inventory.storeStock= "";
-    				$scope.inventory.quantity = "";
-    				$scope.inventory.uom = "";
-    				$scope.inventory.transactionDate = "";
-    				document.getElementById('dateFilterTransactionDate').value = "";
+//    				$scope.selectedItemName = "";
+//    				$scope.inventory.storeStock= "";
+//    				$scope.inventory.quantity = "";
+//    				$scope.inventory.uom = "";
+//    				$scope.inventory.transactionDate = "";
+//    				document.getElementById('dateFilterTransactionDate').value = "";
     			});
     		}
     	}
@@ -264,7 +266,7 @@ angular.module('timeSheetApp')
                 $scope.loadingStop();
                 $scope.inventory = "";
                 $scope.showNotifications('top','center','success','Material Transaction has been created!');
-                $scope.loadMaterialTrans();
+                $location.path('/inventory-transaction-list');
     		}).catch(function (response) {
                 $scope.loadingStop();
                 $scope.btnDisabled= false;
