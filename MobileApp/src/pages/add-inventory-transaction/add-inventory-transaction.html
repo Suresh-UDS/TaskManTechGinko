@@ -71,8 +71,18 @@
         </div>
     </ion-row>-->
 
+  <ion-row no-margin>
+    <ion-col col-12>
+      <ion-item>
+        <ion-label text-capitalize class="client-label" text-left>Indent:</ion-label>
+        <ion-select [selectOptions]="selectOptions" interface="popover" text-lowercase>
+          <ion-option text-center text-lowercase *ngFor="let n of indentList;let i of index" (ionSelect)="getMaterialByIndent(n)">{{n.indentRefNumber}}</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-col>
+  </ion-row>
 
-    <ion-row no-margin>
+   <!-- <ion-row no-margin>
         <ion-col col-12>
             <ion-item>
                 <ion-label text-capitalize class="client-label" text-left>Group:</ion-label>
@@ -81,13 +91,13 @@
                 </ion-select>
             </ion-item>
         </ion-col>
-    </ion-row>
+    </ion-row>-->
     <ion-row no-margin>
                 <ion-col col-9>
                     <ion-item>
                         <ion-label text-capitalize class="client-label" text-left>Material:</ion-label>
                         <ion-select  [selectOptions]="selectOptions"  interface="popover" text-lowercase>
-                            <ion-option text-center text-lowercase  *ngFor="let m of inventoryMaterial;let i of index" (ionSelect)="selectMaterial(m)"   >{{m.name}}</ion-option>
+                            <ion-option text-center text-lowercase  *ngFor="let m of indentMaterial;let i of index" (ionSelect)="selectMaterial(m)">{{m.materialName}}</ion-option>
                         </ion-select>
                     </ion-item>
                 </ion-col>

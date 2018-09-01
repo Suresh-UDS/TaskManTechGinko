@@ -37,6 +37,17 @@ export class PurchaseRequisitionService {
         )
     }
 
+    getMaterialByIndents(id):Observable<any>{
+      return this.http.get(this.config.Url+'api/materialIndent/'+id).map(
+        response=>{
+          console.log(response);
+          return response.json();
+        }
+      )
+    }
+
+
+
 
     saveIndentMaterial(indentDetails):Observable<any>{
         return this.http.post(this.config.Url+'api/save/inventory',indentDetails).map(
