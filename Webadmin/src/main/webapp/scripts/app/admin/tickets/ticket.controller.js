@@ -666,7 +666,8 @@ angular.module('timeSheetApp')
                 $scope.tickets.comments = $scope.tickets.comments;
                 console.log('Tickets - ' + JSON.stringify($scope.tickets));
                 JobComponent.updateTicket($scope.tickets).then(function(response) {
-
+                    console.log("Error saving ticket");
+                    console.log(response);
                         if(response.errorStatus){
                             $scope.success = null;
                             $scope.saveLoad = false;
