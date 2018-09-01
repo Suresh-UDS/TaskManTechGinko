@@ -890,7 +890,10 @@ public class SchedulerService extends AbstractService {
 	private DateTime addDays(DateTime dateTime , String scheduleType, String data) {
 		Frequency frequency = Frequency.fromValue(scheduleType);
 		Map<String, String> dataMap = Splitter.on("&").withKeyValueSeparator("=").split(data);
-		int duration = Integer.parseInt(dataMap.get("duration"));
+		int duration = 1;
+		if(dataMap.get("duration") != null) {
+			duration = Integer.parseInt(dataMap.get("duration"));
+		}
 
 		switch(frequency) {
 			case HOUR :
