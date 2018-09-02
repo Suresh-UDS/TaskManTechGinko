@@ -385,6 +385,18 @@ public class MailService {
         subject += " - " + siteName;
         sendEmail(emailIds, subject, content, true, true,file);
     }
+     
+    @Async
+    public void sendJobExportEmail(String siteName, String emailIds, File file, Date currDate) {
+        log.debug("Sending job export report e-mail to '{}'", emailIds);
+        Locale locale = Locale.forLanguageTag("en-US");
+        Context context = new Context(locale);
+        context.setVariable("date", DateUtil.formatToDateString(currDate));
+        String content = templateEngine.process("jobExportEmail", context);
+        String subject = messageSource.getMessage("email.job.detailed.report.title", null, locale);
+        subject += " - " + siteName;
+        sendEmail(emailIds, subject, content, true, true,file);
+    }
 
     @Async
     public void sendJobReportEmailFile(String emailIds, String file,  String baseUrl, Date currDate) {

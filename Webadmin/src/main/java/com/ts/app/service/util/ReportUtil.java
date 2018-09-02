@@ -36,7 +36,7 @@ public class ReportUtil {
 	@Inject
 	private Environment env;
 
-    public ExportResult generateJobReports(List<JobDTO> content, final String empId, ExportResult result, SearchCriteria criteria) {
+    public ExportResult generateJobReports(List<JobDTO> content, User user, Employee emp, ExportResult result, SearchCriteria criteria) {
         if(criteria.getExportType().equalsIgnoreCase("html")) {
             if(result == null) {
                 result = new ExportResult();
@@ -55,14 +55,14 @@ public class ReportUtil {
             uuidVal += ".xlsx";
             exportUtil.updateExportStatus(uuidVal, "COMPLETED");
 
-            result.setEmpId(empId);
+            result.setEmpId(emp.getEmpId());
             result.setStatus("COMPLETED");
            // log.debug("RESULT OBJECT VALUES HERE *************"+result);
             return result;
 
         }else if(criteria.getExportType().equalsIgnoreCase("xlsx")) {
             //return exportUtil.writeJobReportToFile(content, empId, result);
-            return exportUtil.writeJobExcelReportToFile(content,empId,result);
+            return exportUtil.writeJobExcelReportToFile(criteria.getProjectName(), content, user, emp,result);
         }
         return result;
     }
