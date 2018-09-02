@@ -373,6 +373,18 @@ public class MailService {
         subject += " - " + siteName;
         sendEmail(emailIds, subject, content, true, true,file);
     }
+    
+    @Async
+    public void sendTicketExportEmail(String siteName, String emailIds, File file, Date currDate) {
+        log.debug("Sending ticket export report e-mail to '{}'", emailIds);
+        Locale locale = Locale.forLanguageTag("en-US");
+        Context context = new Context(locale);
+        context.setVariable("date", DateUtil.formatToDateString(currDate));
+        String content = templateEngine.process("ticketExportEmail", context);
+        String subject = messageSource.getMessage("email.ticket.detailed.report.title", null, locale);
+        subject += " - " + siteName;
+        sendEmail(emailIds, subject, content, true, true,file);
+    }
 
     @Async
     public void sendJobReportEmailFile(String emailIds, String file,  String baseUrl, Date currDate) {

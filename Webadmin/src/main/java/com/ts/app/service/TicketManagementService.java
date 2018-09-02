@@ -47,6 +47,7 @@ import com.ts.app.domain.UserRolePermission;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
+import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
@@ -77,6 +78,9 @@ public class TicketManagementService extends AbstractService {
 
     @Inject
     private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+
+    @Inject
+    private ProjectRepository projectRepository;
 
     @Inject
     private SiteRepository siteRepository;
@@ -571,11 +575,18 @@ public class TicketManagementService extends AbstractService {
 	}
 
 	public ExportResult generateReport(List<TicketDTO> transactions, SearchCriteria criteria) {
-        //return exportUtil.writeJobReportToFile(transactions, null, null);
-        //log.debug("REPORT GENERATION PROCESSING HERE ***********");
-        //log.debug("CRIITERIA *******"+criteria+"TRANSACTION *********"+transactions);
-
-        return reportUtil.generateTicketReports(transactions, null, null, criteria);
+		User user = userRepository.findOne(criteria.getUserId());
+		Employee emp = null;
+		if(user != null) {
+			emp = user.getEmployee();
+		}
+		long projId = criteria.getProjectId();
+		Project proj = null;
+		if(projId > 0) {
+			proj = projectRepository.findOne(projId);
+			criteria.setProjectName(proj.getName());
+		}
+        return reportUtil.generateTicketReports(transactions, user, emp, null, criteria);
     }
 
 

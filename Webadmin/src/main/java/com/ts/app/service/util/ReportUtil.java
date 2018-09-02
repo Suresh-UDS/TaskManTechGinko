@@ -67,7 +67,7 @@ public class ReportUtil {
         return result;
     }
     
-    public ExportResult generateTicketReports(List<TicketDTO> content, final String empId, ExportResult result, SearchCriteria criteria) {
+    public ExportResult generateTicketReports(List<TicketDTO> content, User user, Employee emp, ExportResult result, SearchCriteria criteria) {
         if(criteria.getExportType().equalsIgnoreCase("html")) {
             if(result == null) {
                 result = new ExportResult();
@@ -86,14 +86,14 @@ public class ReportUtil {
             uuidVal += ".xlsx";
             exportUtil.updateExportStatus(uuidVal, "COMPLETED");
 
-            result.setEmpId(empId);
+            result.setEmpId(emp.getEmpId());
             result.setStatus("COMPLETED");
            // log.debug("RESULT OBJECT VALUES HERE *************"+result);
             return result;
 
         }else if(criteria.getExportType().equalsIgnoreCase("xlsx")) {
             //return exportUtil.writeJobReportToFile(content, empId, result);
-            return exportUtil.writeTicketExcelReportToFile(content,empId,result);
+            return exportUtil.writeTicketExcelReportToFile(criteria.getProjectName(), content, user, emp, result);
         }
         return result;
     }

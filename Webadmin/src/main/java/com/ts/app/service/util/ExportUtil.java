@@ -1495,7 +1495,7 @@ public class ExportUtil {
 		return result;
 	}
 
-	public ExportResult writeTicketExcelReportToFile(List<TicketDTO> content, String empId, ExportResult result) {
+	public ExportResult writeTicketExcelReportToFile(String projName, List<TicketDTO> content, User user, Employee emp,  ExportResult result) {
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend = " + isAppend);
 		if (result == null) {
@@ -1503,8 +1503,8 @@ public class ExportUtil {
 		}
 		String file_Name = null;
 		if (StringUtils.isEmpty(result.getFile())) {
-			if (StringUtils.isNotEmpty(empId)) {
-				file_Name = empId + System.currentTimeMillis() + ".xlsx";
+			if (StringUtils.isNotEmpty(emp.getEmpId())) {
+				file_Name = emp.getEmpId() + System.currentTimeMillis() + ".xlsx";
 			} else {
 				file_Name = System.currentTimeMillis() + ".xlsx";
 			}
@@ -1535,8 +1535,8 @@ public class ExportUtil {
 			public void run() {
 				String file_Path = env.getProperty("export.file.path");
 				FileSystem fileSystem = FileSystems.getDefault();
-				if (StringUtils.isNotEmpty(empId)) {
-					file_Path += "/" + empId;
+				if (StringUtils.isNotEmpty(emp.getEmpId())) {
+					file_Path += "/" + emp.getEmpId();
 				}
 				Path path = fileSystem.getPath(file_Path);
 				if (!Files.exists(path)) {
@@ -1594,6 +1594,13 @@ public class ExportUtil {
 					fileOutputStream = new FileOutputStream(file_Path);
 					xssfWorkbook.write(fileOutputStream);
 					fileOutputStream.close();
+					
+					//send ticket report in email.
+					String email = StringUtils.isNotEmpty(emp.getEmail()) ? emp.getEmail() : user.getEmail();
+					if(StringUtils.isNotEmpty(email)) {
+						File file = new File(file_Path);
+			    			mailService.sendTicketExportEmail(projName, email, file, new Date());
+					}
 				} catch (IOException e) {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
@@ -1604,7 +1611,7 @@ public class ExportUtil {
 
 		writer_Thread.start();
 
-		result.setEmpId(empId);
+		result.setEmpId(emp.getEmpId());
 		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
 		result.setStatus(getExportStatus(file_Name));
 		return result;
