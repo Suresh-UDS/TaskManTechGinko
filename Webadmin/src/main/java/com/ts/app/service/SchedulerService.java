@@ -8,6 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
@@ -215,38 +219,81 @@ public class SchedulerService extends AbstractService {
 			java.sql.Date tomorrow = new java.sql.Date(nextDay.getTimeInMillis());
 			List<SchedulerConfig> dailyTasks = schedulerConfigRepository.getDailyTask(cal.getTime());
 			log.debug("Found {} Daily Tasks", dailyTasks.size());
-
+			ExecutorService executorService = Executors.newFixedThreadPool(50); //Executes job creation task for each schedule asynchronously
+			List<Future> futures = new ArrayList<Future>();
 			if (CollectionUtils.isNotEmpty(dailyTasks)) {
 				for (SchedulerConfig dailyTask : dailyTasks) {
 					long parentJobId = dailyTask.getJob().getId();
-					List<Job> job = jobRepository.findJobsByParentJobIdAndDate(parentJobId, DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(endCal.getTime()));
-					if (CollectionUtils.isEmpty(job)) {
-						//createJobs(dailyTask);
+					if(log.isDebugEnabled()) {
 						log.debug("Parent job id - "+parentJobId);
 						log.debug("Parent job date - "+startDate);
 						log.debug("Parent job date - "+endDate);
-
-						 try {
-							 boolean shouldProcess = true;
-                             if(dailyTask.isScheduleDailyExcludeWeekend()) {
-                                 log.debug("Schedule exclude weekend true");
-                                 Calendar today = Calendar.getInstance();
-                                 log.debug("Todays day---- ",today.get(Calendar.DAY_OF_WEEK));
-                                 if(today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-                                     shouldProcess =false;
-                                 }
-                             }
-                             if(shouldProcess) {
-                                 createJobs(dailyTask);
-                             }
-						 } catch (Exception ex) {
-						     log.warn("Failed to create JOB ", ex);
-						 }
+					}
+					JobCreationThread jobThrd = new JobCreationThread(dailyTask, parentJobId, cal, endCal, jobRepository);
+					futures.add(executorService.submit(jobThrd));
+				}
+				for(Future future : futures) {
+					try {
+						future.get();
+					} catch (InterruptedException | ExecutionException e) {
+						log.error("Error while running the job creation thread executor task ",e);
 					}
 				}
-				schedulerConfigRepository.save(dailyTasks);
+				executorService.shutdown();
 			}
+			schedulerConfigRepository.save(dailyTasks);
 		}
+	}
+	
+	final class JobCreationThread implements Runnable {
+		
+		private final Logger logger = LoggerFactory.getLogger(JobCreationThread.class);
+		
+		private long parentJobId;
+		private Calendar startTimeCal;
+		private Calendar endTimeCal;
+		private SchedulerConfig schedulerConfig;
+		private JobRepository jobRepository;
+		
+		public JobCreationThread(SchedulerConfig schConfig, long parentJobId, Calendar startCal, Calendar endCal, JobRepository jobRepo) {
+			this.parentJobId = parentJobId;
+			this.startTimeCal = startCal;
+			this.endTimeCal = endCal;
+			this.schedulerConfig = schConfig;
+			this.jobRepository = jobRepo;
+		}
+
+		@Override
+		public void run() {
+			if(logger.isDebugEnabled()) {
+				logger.debug("Job Creation Thread Started for, parentJobId -" + parentJobId + ", startTimeCal - " + startTimeCal + ", endTimeCal-" + endTimeCal);
+			}
+			List<Job> job = jobRepository.findJobsByParentJobIdAndDate(parentJobId, DateUtil.convertToSQLDate(startTimeCal.getTime()), DateUtil.convertToSQLDate(endTimeCal.getTime()));
+			if (CollectionUtils.isEmpty(job)) {
+
+				 try {
+					 boolean shouldProcess = true;
+                     if(schedulerConfig.isScheduleDailyExcludeWeekend()) {
+                         Calendar today = Calendar.getInstance();
+                         //if(today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                        	if(today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                             shouldProcess =false;
+                         }
+                     }
+                     if(shouldProcess) {
+                         createJobs(schedulerConfig);
+                     }
+				 } catch (Exception ex) {
+					 if(logger.isWarnEnabled())
+						 logger.warn("Failed to create JOB ", ex);
+				 }
+			}
+			if(logger.isDebugEnabled()) {
+				logger.debug("Job Creation Thread Completed for, parentJobId -" + parentJobId + ", startTimeCal - " + startTimeCal + ", endTimeCal-" + endTimeCal);
+			}
+
+		}
+		
 	}
 
 //	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
@@ -672,6 +719,7 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.sendScheduleAMCJobsAlert();
 	}
 
+	@Transactional
 	public void createJobs(SchedulerConfig scheduledTask) {
 		if ("CREATE_JOB".equals(scheduledTask.getType())) {
 			String creationPolicy = env.getProperty("scheduler.job.creationPolicy");
@@ -988,7 +1036,8 @@ public class SchedulerService extends AbstractService {
 				if (scheduledTask.isScheduleDailyExcludeWeekend()) {
 					Calendar today = Calendar.getInstance();
 					today.setTime(jobDate);
-					if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+					//if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+					if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
 						shouldProcess = false;
 					}
 				}

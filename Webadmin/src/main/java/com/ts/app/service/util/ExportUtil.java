@@ -19,7 +19,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.io.IOUtils;
@@ -36,14 +35,17 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.domain.Frequency;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.Ticket;
+import com.ts.app.domain.User;
+import com.ts.app.domain.util.StringUtil;
+import com.ts.app.service.MailService;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetPPMScheduleEventDTO;
-import com.ts.app.domain.Ticket;
-import com.ts.app.domain.util.StringUtil;
 import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
@@ -90,6 +92,10 @@ public class ExportUtil {
 	private String[] ASSET_HEADER = { "ID", "ASSET CODE", "NAME", "ASSET TYPE", "ASSET GROUP", "CLIENT", "SITE", "BLOCK", "FLOOR", "ZONE", "STATUS"};
 	
 	private String[] VENDOR_HEADER = { "ID", "NAME", "CONTACT FIRSTNAME", "CONTACT LASTNAME", "PHONE", "EMAIL", "ADDRESSLINE1", "ADDRESSLINE2", "CITY", "COUNTRY", "STATE", "PINCODE"};
+	
+	private final static String ATTENDANCE_REPORT = "ATTENDANCE_REPORT";
+	private final static String TICKET_REPORT = "TICKET_REPORT";
+	private final static String JOB_REPORT = "JOB_REPORT";
 
 	@Inject
 	private Environment env;
@@ -103,6 +109,9 @@ public class ExportUtil {
 	
 	@Inject
 	private GoogleSheetsUtil googleSheetsUtil;
+	
+	@Inject
+	private MailService mailService;
 
 	public ExportResult writeConsolidatedJobReportToFile(String projName, List<ReportResult> content,
 			final String empId, ExportResult result) {
@@ -366,7 +375,7 @@ public class ExportUtil {
 	}
 
 	public ExportResult writeAttendanceExcelReportToFile(String projName, List<AttendanceDTO> transactions,
-			final String empId, ExportResult result) {
+			User user, Employee emp, ExportResult result) {
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend = " + isAppend);
 		if (result == null) {
@@ -374,10 +383,10 @@ public class ExportUtil {
 		}
 		String file_Name = null;
 		if (StringUtils.isEmpty(result.getFile())) {
-			if (StringUtils.isNotEmpty(empId)) {
-				file_Name = empId + System.currentTimeMillis() + ".xlsx";
+			if (StringUtils.isNotEmpty(emp.getEmpId())) {
+				file_Name = ATTENDANCE_REPORT + "_" + emp.getEmpId() + System.currentTimeMillis() + ".xlsx";
 			} else {
-				file_Name = System.currentTimeMillis() + ".xlsx";
+				file_Name = ATTENDANCE_REPORT + "_" + System.currentTimeMillis() + ".xlsx";
 			}
 		} else {
 			file_Name = result.getFile() + ".xlsx";
@@ -416,8 +425,8 @@ public class ExportUtil {
 				
 				String file_Path = env.getProperty("export.file.path");
 				FileSystem fileSystem = FileSystems.getDefault();
-				if (StringUtils.isNotEmpty(empId)) {
-					file_Path += "/" + empId;
+				if (StringUtils.isNotEmpty(emp.getEmpId())) {
+					file_Path += "/" + emp.getEmpId();
 				}
 				Path path = fileSystem.getPath(file_Path);
 				if (!Files.exists(path)) {
@@ -507,6 +516,13 @@ public class ExportUtil {
 					fileOutputStream = new FileOutputStream(file_Path);
 					xssfWorkbook.write(fileOutputStream);
 					fileOutputStream.close();
+					
+					//send attendance report in email.
+					String email = StringUtils.isNotEmpty(emp.getEmail()) ? emp.getEmail() : user.getEmail();
+					if(StringUtils.isNotEmpty(email)) {
+						File file = new File(file_Path);
+			    			mailService.sendAttendanceExportEmail(projName, email, file, new Date());
+					}	
 				} catch (IOException e) {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
@@ -517,7 +533,7 @@ public class ExportUtil {
 
 		writer_Thread.start();
 
-		result.setEmpId(empId);
+		result.setEmpId(emp.getEmpId());
 		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
 		result.setStatus(getExportStatus(file_Name));
 		return result;
@@ -1365,7 +1381,7 @@ public class ExportUtil {
 		return csvData;
 	}
 
-	public ExportResult writeJobExcelReportToFile(List<JobDTO> content, String empId, ExportResult result) {
+	public ExportResult writeJobExcelReportToFile(String projName, List<JobDTO> content, User user, Employee emp, ExportResult result) {
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend = " + isAppend);
 		if (result == null) {
@@ -1373,8 +1389,8 @@ public class ExportUtil {
 		}
 		String file_Name = null;
 		if (StringUtils.isEmpty(result.getFile())) {
-			if (StringUtils.isNotEmpty(empId)) {
-				file_Name = empId + System.currentTimeMillis() + ".xlsx";
+			if (StringUtils.isNotEmpty(emp.getEmpId())) {
+				file_Name = emp.getEmpId() + System.currentTimeMillis() + ".xlsx";
 			} else {
 				file_Name = System.currentTimeMillis() + ".xlsx";
 			}
@@ -1405,8 +1421,8 @@ public class ExportUtil {
 			public void run() {
 				String file_Path = env.getProperty("export.file.path");
 				FileSystem fileSystem = FileSystems.getDefault();
-				if (StringUtils.isNotEmpty(empId)) {
-					file_Path += "/" + empId;
+				if (StringUtils.isNotEmpty(emp.getEmpId())) {
+					file_Path += "/" + emp.getEmpId();
 				}
 				Path path = fileSystem.getPath(file_Path);
 				if (!Files.exists(path)) {
@@ -1463,6 +1479,13 @@ public class ExportUtil {
 					fileOutputStream = new FileOutputStream(file_Path);
 					xssfWorkbook.write(fileOutputStream);
 					fileOutputStream.close();
+					
+					//send job report in email.
+					String email = StringUtils.isNotEmpty(emp.getEmail()) ? emp.getEmail() : user.getEmail();
+					if(StringUtils.isNotEmpty(email)) {
+						File file = new File(file_Path);
+			    			mailService.sendJobExportEmail(projName, email, file, new Date());
+					}
 				} catch (IOException e) {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
@@ -1473,13 +1496,13 @@ public class ExportUtil {
 
 		writer_Thread.start();
 
-		result.setEmpId(empId);
+		result.setEmpId(emp.getEmpId());
 		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
 		result.setStatus(getExportStatus(file_Name));
 		return result;
 	}
 
-	public ExportResult writeTicketExcelReportToFile(List<TicketDTO> content, String empId, ExportResult result) {
+	public ExportResult writeTicketExcelReportToFile(String projName, List<TicketDTO> content, User user, Employee emp,  ExportResult result) {
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend = " + isAppend);
 		if (result == null) {
@@ -1487,8 +1510,8 @@ public class ExportUtil {
 		}
 		String file_Name = null;
 		if (StringUtils.isEmpty(result.getFile())) {
-			if (StringUtils.isNotEmpty(empId)) {
-				file_Name = empId + System.currentTimeMillis() + ".xlsx";
+			if (StringUtils.isNotEmpty(emp.getEmpId())) {
+				file_Name = emp.getEmpId() + System.currentTimeMillis() + ".xlsx";
 			} else {
 				file_Name = System.currentTimeMillis() + ".xlsx";
 			}
@@ -1519,8 +1542,8 @@ public class ExportUtil {
 			public void run() {
 				String file_Path = env.getProperty("export.file.path");
 				FileSystem fileSystem = FileSystems.getDefault();
-				if (StringUtils.isNotEmpty(empId)) {
-					file_Path += "/" + empId;
+				if (StringUtils.isNotEmpty(emp.getEmpId())) {
+					file_Path += "/" + emp.getEmpId();
 				}
 				Path path = fileSystem.getPath(file_Path);
 				if (!Files.exists(path)) {
@@ -1578,6 +1601,13 @@ public class ExportUtil {
 					fileOutputStream = new FileOutputStream(file_Path);
 					xssfWorkbook.write(fileOutputStream);
 					fileOutputStream.close();
+					
+					//send ticket report in email.
+					String email = StringUtils.isNotEmpty(emp.getEmail()) ? emp.getEmail() : user.getEmail();
+					if(StringUtils.isNotEmpty(email)) {
+						File file = new File(file_Path);
+			    			mailService.sendTicketExportEmail(projName, email, file, new Date());
+					}
 				} catch (IOException e) {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
@@ -1588,7 +1618,7 @@ public class ExportUtil {
 
 		writer_Thread.start();
 
-		result.setEmpId(empId);
+		result.setEmpId(emp.getEmpId());
 		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
 		result.setStatus(getExportStatus(file_Name));
 		return result;

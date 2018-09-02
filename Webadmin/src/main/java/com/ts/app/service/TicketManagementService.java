@@ -47,6 +47,7 @@ import com.ts.app.domain.UserRolePermission;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
+import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
@@ -79,6 +80,9 @@ public class TicketManagementService extends AbstractService {
     private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 
     @Inject
+    private ProjectRepository projectRepository;
+
+    @Inject
     private SiteRepository siteRepository;
 
     @Inject
@@ -104,39 +108,39 @@ public class TicketManagementService extends AbstractService {
 
 	@Inject
 	private FileUploadHelper fileUploadHelper;
-	
+
 	@Inject
 	private AmazonS3Utils amazonS3utils;
-	
+
 	@Inject
 	private AssetRepository assetRepository;
-	
+
 	@Value("${AWS.s3-cloudfront-url}")
 	private String cloudFrontUrl;
-	
+
 	@Value("${AWS.s3-bucketEnv}")
 	private String bucketEnv;
-	
+
 	@Value("${AWS.s3-ticket-path}")
 	private String ticketFilePath;
-	
+
 	@Inject
 	private RateCardService rateCardService;
-	
+
     public TicketDTO saveTicket(TicketDTO ticketDTO){
     		User user = userRepository.findOne(ticketDTO.getUserId());
         Ticket ticket = mapperUtil.toEntity(ticketDTO,Ticket.class);
 
         Site site = siteRepository.findOne(ticketDTO.getSiteId());
         ticket.setSite(site);
-        
-        if(ticketDTO.getAssetId() > 0) { 
+
+        if(ticketDTO.getAssetId() > 0) {
         	Asset asset = assetRepository.findOne(ticketDTO.getAssetId());
             ticket.setAsset(asset);
-        }else { 
+        }else {
         	 ticket.setAsset(null);
         }
-        
+
         Employee ticketOwner = user.getEmployee();
         ticket.setEmployee(ticketOwner);
         Employee assignedTo = null;
@@ -235,7 +239,7 @@ public class TicketManagementService extends AbstractService {
         }else {
         		isValid = true;
         }
-        
+
         if(isValid) {
 	        Site site = siteRepository.findOne(ticket.getSite().getId());
 	        if(site!=null){
@@ -244,7 +248,7 @@ public class TicketManagementService extends AbstractService {
 	        if(ticketDTO.getAssetId() > 0) {
 	        	Asset asset = assetRepository.findOne(ticketDTO.getAssetId());
 	        	ticket.setAsset(asset);
-	        }else { 
+	        }else {
 	       	 ticket.setAsset(null);
 	        }
 	        Calendar currCal = Calendar.getInstance();
@@ -280,27 +284,28 @@ public class TicketManagementService extends AbstractService {
 	        		ticket.setClosedBy(user.getEmployee());
 	        		ticket.setClosedOn(new java.sql.Date(currCal.getTimeInMillis()));
 	        }
-	
+
 	        if(StringUtils.isNotEmpty(ticketDTO.getStatus()) && (ticketDTO.getStatus().equalsIgnoreCase("Reopen"))) {
 	        		ticket.setStatus(TicketStatus.OPEN.toValue());
 	        }
-	
+
 	        if(ticketDTO.isPendingAtUDS()){
 	            ticket.setPendingAtUDS(ticketDTO.isPendingAtUDS());
 	        }
-	
+
 	        if(ticketDTO.isPendingAtClient()){
 	            ticket.setPendingAtClient(ticketDTO.isPendingAtClient());
 	        }
-	
+
 	        ticket = ticketRepository.saveAndFlush(ticket);
-	
+
 	        ticketDTO = mapperUtil.toModel(ticket, TicketDTO.class);
 	        //if(assignedTo != null) {
 	        		sendNotifications(ticketOwner, assignedTo, user.getEmployee(), ticket, site, false);
 	        //}
         }else {
         		ticketDTO.setErrorMessage(message);
+        		ticketDTO.setErrorStatus(true);
         }
 
         return ticketDTO;
@@ -450,7 +455,7 @@ public class TicketManagementService extends AbstractService {
                     int levelCnt = 1;
                     findAllSubordinates(employee, subEmpIds, levelCnt);
                     List<Long> subEmpList = new ArrayList<Long>();
-                    subEmpList.addAll(subEmpIds);	
+                    subEmpList.addAll(subEmpIds);
                     log.debug("List of subordinate ids -"+ subEmpIds);
                     searchCriteria.setSubordinateIds(subEmpList);
                 }
@@ -526,7 +531,7 @@ public class TicketManagementService extends AbstractService {
 		User assignedToUser = assignedTo.getUser();
 		Hibernate.initialize(ticketOwner.getUser());
 		User ticketOwnerUser = ticketOwner.getUser();
-		
+
 		String ticketUrl = env.getProperty("url.ticket-view");
 		ticketUrl +=  ticket.getId();
 		Setting ticketReports = null;
@@ -563,18 +568,25 @@ public class TicketManagementService extends AbstractService {
 			    mailService.sendTicketClosedMail(ticketUrl,assignedTo.getUser(),assignedToEmail,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
 	        				assignedToUser.getFirstName(), assignedTo.getName(), currentUserEmp.getName(), currentUserEmp.getEmpId(), ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
     			}
-    			
+
 		    mailService.sendTicketClosedMail(ticketUrl,ticketOwner.getUser(),ticketOwnerEmail,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
     				assignedToUser.getFirstName(), assignedTo.getName(), currentUserEmp.getName(), currentUserEmp.getEmpId(), ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
     		}
 	}
 
 	public ExportResult generateReport(List<TicketDTO> transactions, SearchCriteria criteria) {
-        //return exportUtil.writeJobReportToFile(transactions, null, null);
-        //log.debug("REPORT GENERATION PROCESSING HERE ***********");
-        //log.debug("CRIITERIA *******"+criteria+"TRANSACTION *********"+transactions);
-
-        return reportUtil.generateTicketReports(transactions, null, null, criteria);
+		User user = userRepository.findOne(criteria.getUserId());
+		Employee emp = null;
+		if(user != null) {
+			emp = user.getEmployee();
+		}
+		long projId = criteria.getProjectId();
+		Project proj = null;
+		if(projId > 0) {
+			proj = projectRepository.findOne(projId);
+			criteria.setProjectName(proj.getName());
+		}
+        return reportUtil.generateTicketReports(transactions, user, emp, null, criteria);
     }
 
 
@@ -601,7 +613,7 @@ public class TicketManagementService extends AbstractService {
 		List<Ticket> tickets = ticketRepository.findByAssetId(assetId);
 		return mapperUtil.toModelList(tickets, TicketDTO.class);
 	}
-	
+
 	@Transactional
     public TicketDTO uploadFile(TicketDTO ticketDTO) throws JSONException {
 
@@ -631,14 +643,14 @@ public class TicketManagementService extends AbstractService {
 		Page<Ticket> ticketResult = ticketRepository.findAll(pageRequest);
 		List<Ticket> tickets = ticketResult.getContent();
 		while(CollectionUtils.isNotEmpty(tickets)) {
-			for(Ticket ticket : tickets) { 
-				if(ticket.getImage() != null) { 
+			for(Ticket ticket : tickets) {
+				if(ticket.getImage() != null) {
 					if(ticket.getImage().indexOf("data:image") == 0) {
 						String base64String = ticket.getImage().split(",")[1];
 						boolean isBase64 = Base64.isBase64(base64String);
 						long dateTime = new Date().getTime();
 						TicketDTO ticketModel = mapperUtil.toModel(ticket, TicketDTO.class);
-						if(isBase64){ 
+						if(isBase64){
 							ticketModel = amazonS3utils.uploadExistingTicketFile(ticketModel.getId(), ticketModel.getImage(), dateTime, ticketModel);
 							ticket.setImage(ticketModel.getImage());
 						}
@@ -651,7 +663,7 @@ public class TicketManagementService extends AbstractService {
 			ticketResult = ticketRepository.findAll(pageRequest);
 			tickets = ticketResult.getContent();
 		}
-		
+
 		return "Successfully upload existing ticket file to S3";
 	}
 

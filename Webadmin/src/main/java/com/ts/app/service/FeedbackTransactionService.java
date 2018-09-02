@@ -194,7 +194,21 @@ public class FeedbackTransactionService extends AbstractService {
         if(rating < 5 ) { //create a ticket
         		TicketDTO ticketDTO = new TicketDTO();
         		ticketDTO.setUserId(feedbackTransDto.getUserId());
-        		ticketDTO.setTitle("Feedback received for " +feedbackTransDto.getSiteName() + " - " +feedbackTransDto.getBlock() + "-" + feedbackTransDto.getFloor() + "-" + feedbackTransDto.getZone());
+        		StringBuilder title = new StringBuilder();
+        		title.append("Feedback received for ");
+        		title.append(feedbackTransDto.getSiteName());
+        		title.append(" - " +feedbackTransDto.getBlock());
+        		title.append("-" + feedbackTransDto.getFloor());
+        		title.append("-" + feedbackTransDto.getZone());
+        		if(StringUtils.isNotBlank(feedbackTransDto.getReviewerName())) {
+        			title.append(" given by " + feedbackTransDto.getReviewerName());
+        			title.append(" - " + feedbackTransDto.getReviewerCode());
+        		}else if(StringUtils.isNotBlank(feedbackTransDto.getReviewerCode())) {
+        			title.append(" given by " + feedbackTransDto.getReviewerCode());
+        		}
+        		
+        		
+        		ticketDTO.setTitle(title.toString());
         		if(CollectionUtils.isNotEmpty(feedbackAlertItems)) {
         			StringBuffer sb = new StringBuffer();
         			for(String item : feedbackAlertItems) {

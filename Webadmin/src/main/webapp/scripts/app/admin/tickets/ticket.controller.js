@@ -666,23 +666,34 @@ angular.module('timeSheetApp')
                 $scope.tickets.comments = $scope.tickets.comments;
                 console.log('Tickets - ' + JSON.stringify($scope.tickets));
                 JobComponent.updateTicket($scope.tickets).then(function(response) {
-                		console.log('ticket updated successfuly');
-	                	if($scope.selectedImageFile){
-	                		console.log('ticket image found');
-	                    	TicketComponent.upload(response.id,$scope.selectedImageFile)
-						    .then(function(response) {
-							console.log("ticket image uploaded",response);
+                    console.log("Error saving ticket");
+                    console.log(response);
+                        if(response.errorStatus){
+                            $scope.success = null;
+                            $scope.saveLoad = false;
 
-						}).catch(function (response) {
-							console.log("Failed to image upload",response);
-						});
-	            		}
-                    $scope.success = 'OK';
-                    $scope.saveLoad = false;
-                    //$(".fadeInDown").setAttribute("aria-hidden", "false");
-                    $scope.showNotifications('top','center','success','Ticket has been updated successfuly!!');
-                    //$scope.search();
-                    $location.path('/tickets');
+                            $scope.error = 'ERROR';
+                            $scope.showNotifications('top','center','danger',response.errorMessage);
+                        }else{
+                            console.log('ticket updated successfuly');
+                            if($scope.selectedImageFile){
+                                console.log('ticket image found');
+                                TicketComponent.upload(response.id,$scope.selectedImageFile)
+                                    .then(function(response) {
+                                        console.log("ticket image uploaded",response);
+
+                                    }).catch(function (response) {
+                                    console.log("Failed to image upload",response);
+                                });
+                            }
+                            $scope.success = 'OK';
+                            $scope.saveLoad = false;
+                            //$(".fadeInDown").setAttribute("aria-hidden", "false");
+                            $scope.showNotifications('top','center','success','Ticket has been updated successfuly!!');
+                            //$scope.search();
+                            $location.path('/tickets');
+                        }
+
                 }).catch(function (response) {
                     $scope.success = null;
                     $scope.saveLoad = false;

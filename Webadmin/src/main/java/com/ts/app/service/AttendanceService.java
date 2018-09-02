@@ -27,9 +27,9 @@ import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Attendance;
 import com.ts.app.domain.Employee;
-import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.EmployeeShift;
+import com.ts.app.domain.Project;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Shift;
 import com.ts.app.domain.Site;
@@ -40,6 +40,7 @@ import com.ts.app.ext.api.FaceRecognitionService;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.EmployeeShiftRepository;
+import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
@@ -91,6 +92,9 @@ public class AttendanceService extends AbstractService {
 
 	@Inject
 	private UserRepository userRepository;
+
+	@Inject
+	private ProjectRepository projectRepository;
 
 	@Inject
 	private ReportUtil reportUtil;
@@ -769,7 +773,18 @@ public class AttendanceService extends AbstractService {
 	}
 
 	public ExportResult generateReport(List<AttendanceDTO> transactions, SearchCriteria criteria) {
-		return reportUtil.generateAttendanceReports(transactions, null, null, criteria);
+		User user = userRepository.findOne(criteria.getUserId());
+		Employee emp = null;
+		if(user != null) {
+			emp = user.getEmployee();
+		}
+		long projId = criteria.getProjectId();
+		Project proj = null;
+		if(projId > 0) {
+			proj = projectRepository.findOne(projId);
+			criteria.setProjectName(proj.getName());
+		}
+		return reportUtil.generateAttendanceReports(transactions, user, emp, null, criteria);
 	}
 
 	public ExportResult export(List<AttendanceDTO> transactions, String empId) {

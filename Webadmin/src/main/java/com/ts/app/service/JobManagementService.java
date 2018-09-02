@@ -35,7 +35,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
-import com.ts.app.domain.Attendance;
 import com.ts.app.domain.CheckInOut;
 import com.ts.app.domain.CheckInOutImage;
 import com.ts.app.domain.Checklist;
@@ -50,6 +49,7 @@ import com.ts.app.domain.JobType;
 import com.ts.app.domain.Location;
 import com.ts.app.domain.NotificationLog;
 import com.ts.app.domain.Price;
+import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.Ticket;
 import com.ts.app.domain.TicketStatus;
@@ -68,6 +68,7 @@ import com.ts.app.repository.JobSpecification;
 import com.ts.app.repository.LocationRepository;
 import com.ts.app.repository.NotificationRepository;
 import com.ts.app.repository.PricingRepository;
+import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
@@ -125,6 +126,9 @@ public class JobManagementService extends AbstractService {
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+
+	@Inject
+	private ProjectRepository projectRepository;
 
 	@Inject
 	private SiteRepository siteRepository;
@@ -1843,11 +1847,18 @@ public class JobManagementService extends AbstractService {
     }
 
     public ExportResult generateReport(List<JobDTO> transactions, SearchCriteria criteria) {
-        //return exportUtil.writeJobReportToFile(transactions, null, null);
-        //log.debug("REPORT GENERATION PROCESSING HERE ***********");
-        //log.debug("CRIITERIA *******"+criteria+"TRANSACTION *********"+transactions);
-
-        return reportUtil.generateJobReports(transactions, null, null, criteria);
+    	User user = userRepository.findOne(criteria.getUserId());
+		Employee emp = null;
+		if(user != null) {
+			emp = user.getEmployee();
+		}
+		long projId = criteria.getProjectId();
+		Project proj = null;
+		if(projId > 0) {
+			proj = projectRepository.findOne(projId);
+			criteria.setProjectName(proj.getName());
+		}
+        return reportUtil.generateJobReports(transactions, user, emp, null, criteria);
     }
 
 

@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.User;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.ExportResult;
@@ -34,7 +36,7 @@ public class ReportUtil {
 	@Inject
 	private Environment env;
 
-    public ExportResult generateJobReports(List<JobDTO> content, final String empId, ExportResult result, SearchCriteria criteria) {
+    public ExportResult generateJobReports(List<JobDTO> content, User user, Employee emp, ExportResult result, SearchCriteria criteria) {
         if(criteria.getExportType().equalsIgnoreCase("html")) {
             if(result == null) {
                 result = new ExportResult();
@@ -53,19 +55,19 @@ public class ReportUtil {
             uuidVal += ".xlsx";
             exportUtil.updateExportStatus(uuidVal, "COMPLETED");
 
-            result.setEmpId(empId);
+            result.setEmpId(emp.getEmpId());
             result.setStatus("COMPLETED");
            // log.debug("RESULT OBJECT VALUES HERE *************"+result);
             return result;
 
         }else if(criteria.getExportType().equalsIgnoreCase("xlsx")) {
             //return exportUtil.writeJobReportToFile(content, empId, result);
-            return exportUtil.writeJobExcelReportToFile(content,empId,result);
+            return exportUtil.writeJobExcelReportToFile(criteria.getProjectName(), content, user, emp,result);
         }
         return result;
     }
     
-    public ExportResult generateTicketReports(List<TicketDTO> content, final String empId, ExportResult result, SearchCriteria criteria) {
+    public ExportResult generateTicketReports(List<TicketDTO> content, User user, Employee emp, ExportResult result, SearchCriteria criteria) {
         if(criteria.getExportType().equalsIgnoreCase("html")) {
             if(result == null) {
                 result = new ExportResult();
@@ -84,14 +86,14 @@ public class ReportUtil {
             uuidVal += ".xlsx";
             exportUtil.updateExportStatus(uuidVal, "COMPLETED");
 
-            result.setEmpId(empId);
+            result.setEmpId(emp.getEmpId());
             result.setStatus("COMPLETED");
            // log.debug("RESULT OBJECT VALUES HERE *************"+result);
             return result;
 
         }else if(criteria.getExportType().equalsIgnoreCase("xlsx")) {
             //return exportUtil.writeJobReportToFile(content, empId, result);
-            return exportUtil.writeTicketExcelReportToFile(content,empId,result);
+            return exportUtil.writeTicketExcelReportToFile(criteria.getProjectName(), content, user, emp, result);
         }
         return result;
     }
@@ -102,7 +104,7 @@ public class ReportUtil {
 		return cacheUtil.getSearchCriteria(uid);
 	}
 
-	public ExportResult generateAttendanceReports(List<AttendanceDTO> content, final String empId, ExportResult result, SearchCriteria criteria) {
+	public ExportResult generateAttendanceReports(List<AttendanceDTO> content, User user, Employee emp, ExportResult result, SearchCriteria criteria) {
 		if(criteria.getExportType().equalsIgnoreCase("html")) {
 			if(result == null) {
 				result = new ExportResult();
@@ -118,13 +120,13 @@ public class ReportUtil {
 			result.setUrl(reportUrl + "/" + uuidVal);
 			uuidVal += ".xlsx";
 			exportUtil.updateExportStatus(uuidVal, "COMPLETED");
-			result.setEmpId(empId);
+			result.setEmpId(emp.getEmpId());
 			result.setStatus("COMPLETED");
 			return result;
 
 		}else if(criteria.getExportType().equalsIgnoreCase("xlsx")) {
 			//return exportUtil.writeAttendanceReportToFile(criteria.getProjectName(), content, empId, result);
-            return exportUtil.writeAttendanceExcelReportToFile(criteria.getProjectName(), content, empId, result);
+            return exportUtil.writeAttendanceExcelReportToFile(criteria.getProjectName(), content, user, emp, result);
 		}
 		return result;
 	}
