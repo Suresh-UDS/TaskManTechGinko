@@ -113,6 +113,56 @@ public class MailService {
             log.warn("E-mail could not be sent to user '{}', exception is: {}", to, e.getMessage());
         }
     }
+    
+    @Async
+    public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml,File file) {
+        log.debug("Send e-mail[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
+            isMultipart, isHtml, to, subject, content);
+
+        log.debug(javaMailSender.getHost() +" , " + javaMailSender.getPort() + ", " + javaMailSender.getUsername() + " , " + javaMailSender.getPassword());
+        Properties props = javaMailSender.getJavaMailProperties();
+        Enumeration<Object> keys = props.keys();
+        while(keys.hasMoreElements()) {
+        		String key = (String)keys.nextElement();
+        		log.debug(key + ", "+ props.getProperty(key));
+        }
+        //split the to address if more than 1
+        //trim leading and traling ','
+        StringBuilder sb = new StringBuilder(to);
+        if(to.startsWith(",")) {
+        		sb = sb.replace(0, 1, "");
+        		to = sb.toString();
+        }
+        if(to.endsWith(",")) {
+        		int ind = to.lastIndexOf(",");
+        		sb.replace(ind, ind+1, "");
+        }
+        to = sb.toString();
+        String[] toEmails = null;
+        if(!StringUtils.isEmpty(to)) {
+        		toEmails = to.split(",");
+        }
+        // Prepare message using a Spring helper
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        try {
+            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
+            message.setTo(toEmails);
+            message.setFrom(new InternetAddress(jHipsterProperties.getMail().getFrom()));
+            message.setSubject(subject);
+            message.setText(content, isHtml);
+            if(isMultipart){
+	            	if(file != null) {
+	            		FileSystemResource fsr = new FileSystemResource(file);	
+	            		message.addAttachment(file.getName(),fsr, "text/html");
+	            	}
+            }
+            javaMailSender.send(mimeMessage);
+            log.debug("Sent e-mail to User '{}'", to);
+        } catch (Exception e) {
+//        	e.printStackTrace();
+            log.warn("E-mail could not be sent to user '{}', exception is: {}", to, e.getMessage());
+        }
+    }
 
     public String sendEscalationEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml,String fileName) {
         log.debug("Send e-mail[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
@@ -213,7 +263,7 @@ public class MailService {
         context.setVariable("baseUrl", baseUrl);
         String content = templateEngine.process("activationEmail", context);
         String subject = messageSource.getMessage("email.activation.title", null, locale);
-        sendEmail(user.getEmail(), subject, content, false, true, null);
+        sendEmail(user.getEmail(), subject, content, false, true, org.apache.commons.lang3.StringUtils.EMPTY);
     }
 
     @Async
@@ -225,7 +275,7 @@ public class MailService {
         context.setVariable("baseUrl", baseUrl);
         String content = templateEngine.process("passwordResetEmail", context);
         String subject = messageSource.getMessage("email.reset.title", null, locale);
-        sendEmail(user.getEmail(), subject, content, false, true, null);
+        sendEmail(user.getEmail(), subject, content, false, true, org.apache.commons.lang3.StringUtils.EMPTY);
     }
 
     @Async
@@ -242,7 +292,7 @@ public class MailService {
         context.setVariable("url", ticketUrl);
         String content = templateEngine.process("ticketCreation", context);
         String subject = messageSource.getMessage("email.ticket.alert.title", null, locale);
-        sendEmail(emailIds, subject, content, false, true,null);
+        sendEmail(emailIds, subject, content, false, true,org.apache.commons.lang3.StringUtils.EMPTY);
     }
     
     @Async
@@ -258,7 +308,7 @@ public class MailService {
         context.setVariable("url", ticketUrl);
         String content = templateEngine.process("ticketUpdated", context);
         String subject = messageSource.getMessage("email.ticket.updated.alert.title", null, locale);
-        sendEmail(emailIds, subject, content, false, true,null);
+        sendEmail(emailIds, subject, content, false, true,org.apache.commons.lang3.StringUtils.EMPTY);
     }
     
     @Async
@@ -276,7 +326,7 @@ public class MailService {
         context.setVariable("employeeCode", closedByEmpCode);
         String content = templateEngine.process("ticketClosed", context);
         String subject = messageSource.getMessage("email.ticket.closed.alert.title", null, locale);
-        sendEmail(emailIds, subject, content, false, true,null);
+        sendEmail(emailIds, subject, content, false, true,org.apache.commons.lang3.StringUtils.EMPTY);
     }
 
     public void sendAttendanceConsolidatedReportEmail(String siteName, String emailIds, String reportData,  String baseUrl, Date currDate) {
@@ -290,7 +340,7 @@ public class MailService {
         String content = templateEngine.process("attendanceConsolidatedReportEmail", context);
         String subject = messageSource.getMessage("email.attendance.report.title", null, locale);
         subject += " - " + siteName;
-        sendEmail(emailIds, subject, content, true, true,null);
+        sendEmail(emailIds, subject, content, true, true,org.apache.commons.lang3.StringUtils.EMPTY);
     }
 
     @Async
@@ -307,6 +357,18 @@ public class MailService {
         context.setVariable("siteWiseSummary", siteWiseSummary);
         context.setVariable("consolidatedData", consolidatedData);
         String content = templateEngine.process("attendanceDetailedReportEmail", context);
+        String subject = messageSource.getMessage("email.attendance.detailed.report.title", null, locale);
+        subject += " - " + siteName;
+        sendEmail(emailIds, subject, content, true, true,file);
+    }
+    
+    @Async
+    public void sendAttendanceExportEmail(String siteName, String emailIds, File file, Date currDate) {
+        log.debug("Sending attendance export report e-mail to '{}'", emailIds);
+        Locale locale = Locale.forLanguageTag("en-US");
+        Context context = new Context(locale);
+        context.setVariable("date", DateUtil.formatToDateString(currDate));
+        String content = templateEngine.process("attendanceExportEmail", context);
         String subject = messageSource.getMessage("email.attendance.detailed.report.title", null, locale);
         subject += " - " + siteName;
         sendEmail(emailIds, subject, content, true, true,file);
@@ -336,7 +398,7 @@ public class MailService {
         context.setVariable("baseUrl", baseUrl);
         String content = templateEngine.process("jobReportEmail", context);
         String subject = messageSource.getMessage("email.report.title", null, locale);
-        sendEmail(user.getEmail(), subject, content, true, true, null);
+        sendEmail(user.getEmail(), subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
     }
 
     @Async
@@ -388,7 +450,7 @@ public class MailService {
         context.setVariable("employeeCode", closedByEmpCode);
         String content = templateEngine.process("jobCompleted", context);
         String subject = messageSource.getMessage("email.job.completed.alert.title", null, locale);
-        sendEmail(emailIds, subject, content, false, true,null);
+        sendEmail(emailIds, subject, content, false, true,org.apache.commons.lang3.StringUtils.EMPTY);
     }
 
     @Async
@@ -403,7 +465,7 @@ public class MailService {
         context.setVariable("feedbackReport", reportUrl);
         String content = templateEngine.process("feedbackEmailAlert", context);
         String subject = messageSource.getMessage("email.feedback.alert.title", null, locale);
-        sendEmail(emailIds, subject, content, true, true, null);
+        sendEmail(emailIds, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
     }
     
     @Async
@@ -418,7 +480,7 @@ public class MailService {
         context.setVariable("date", date);
         String content = templateEngine.process("assetReadingAlert", context);
         String subject = messageSource.getMessage("email.reading.title", null, locale);
-        sendEmail(emailIds, subject, content, true, true, null);
+        sendEmail(emailIds, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
     }
 
 
@@ -453,7 +515,7 @@ public class MailService {
     		context.setVariable("site", values.get("site"));
     		String emailContent = templateEngine.process("attendanceCheckoutAlertEmail", context);
     		String subject = messageSource.getMessage("email.attendance.checkout.alert.title", null, locale);
-    		sendEmail(emailIds, subject, emailContent, true, true,null);
+    		sendEmail(emailIds, subject, emailContent, true, true,org.apache.commons.lang3.StringUtils.EMPTY);
     	}
     
     @Async
@@ -469,7 +531,7 @@ public class MailService {
         context.setVariable("userName", username);
         String content = templateEngine.process("assetBreakdownAlert", context);
         String subject = messageSource.getMessage("email.assetBreakdown.title", null, locale);
-        sendEmail(emailIds, subject, content, true, true, null);
+        sendEmail(emailIds, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
 	}
 
 	public void sendAssetWarrantyExpireAlert(String email, String title, String siteName, String code, String warrantyToDate) {
@@ -483,7 +545,7 @@ public class MailService {
         context.setVariable("date", warrantyToDate);
         String content = templateEngine.process("assetWarrantyExpireAlert", context);
         String subject = messageSource.getMessage("email.assetWarrantyExpire.title", null, locale);
-        sendEmail(email, subject, content, true, true, null);
+        sendEmail(email, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
 	}
 
 	public void sendPreviousDayJobAlert(String email, Long empId, String fullName, long jobId, Date plannedStartTime) {
@@ -497,7 +559,7 @@ public class MailService {
         context.setVariable("JobStartDate", plannedStartTime);
         String content = templateEngine.process("previousDayJobAlert", context);
         String subject = messageSource.getMessage("email.previousDayJobAlert.title", null, locale);
-        sendEmail(email, subject, content, true, true, null);
+        sendEmail(email, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
 		
 	}
 
@@ -510,7 +572,7 @@ public class MailService {
         context.setVariable("JobStartDate", plannedStartTime);
         String content = templateEngine.process("employeeAssignAlert", context);
         String subject = messageSource.getMessage("email.employeeAssignAlert.title", null, locale);
-        sendEmail(email, subject, content, true, true, null);
+        sendEmail(email, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
 	}
 
 	
