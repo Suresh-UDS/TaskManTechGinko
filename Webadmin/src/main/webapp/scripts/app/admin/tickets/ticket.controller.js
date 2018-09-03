@@ -666,15 +666,7 @@ angular.module('timeSheetApp')
                 $scope.tickets.comments = $scope.tickets.comments;
                 console.log('Tickets - ' + JSON.stringify($scope.tickets));
                 JobComponent.updateTicket($scope.tickets).then(function(response) {
-                    console.log("Error saving ticket");
-                    console.log(response);
-                        if(response.errorStatus){
-                            $scope.success = null;
-                            $scope.saveLoad = false;
-
-                            $scope.error = 'ERROR';
-                            $scope.showNotifications('top','center','danger',response.errorMessage);
-                        }else{
+                    
                             console.log('ticket updated successfuly');
                             if($scope.selectedImageFile){
                                 console.log('ticket image found');
@@ -692,7 +684,7 @@ angular.module('timeSheetApp')
                             $scope.showNotifications('top','center','success','Ticket has been updated successfuly!!');
                             //$scope.search();
                             $location.path('/tickets');
-                        }
+                        
 
                 }).catch(function (response) {
                     $scope.success = null;
@@ -722,18 +714,37 @@ angular.module('timeSheetApp')
             }
 
             $scope.closeTicketConfirm =function(cTicket){
-            $scope.loadingStart();
-            JobComponent.updateTicket(cTicket).then(function() {
-                    $scope.loadingStop();
-                    $scope.success = 'OK';
-                    $scope.showNotifications('top','center','success','Ticket status has been updated successfuly!!');
-                    $(".fade").removeClass("modal-backdrop");
-                    $('#closeTicket').modal('hide');
-                    $state.reload();
+                $scope.loadingStart();
+                JobComponent.updateTicket(cTicket).then(function(response) {
+                    $scope.loadingStop();  
+                    console.log("Error saving ticket");
+                    console.log(response);
+                    if(response.errorStatus){
+                        $scope.success = null;
+                        $scope.error = 'ERROR';
+                        $(".fade").removeClass("modal-backdrop");
+                        $('#closeTicket').modal('hide');
+                        $scope.showNotifications('top','center','danger',response.errorMessage);
+                    }else{   
+                        $scope.success = 'OK';
+                        $scope.showNotifications('top','center','success','Ticket status has been updated successfuly!!');
+                        $(".fade").removeClass("modal-backdrop");
+                        $('#closeTicket').modal('hide');
+                        $state.reload(); 
+                    }         
                 }).catch(function(response){
                     $scope.success = null;
                     $scope.loadingStop();
-                    $scope.showNotifications('top','center','success', response.data.message);
+                    $(".fade").removeClass("modal-backdrop");
+                    $('#closeTicket').modal('hide');
+                    console.log("Error saving ticket");
+                    console.log(response);
+                    if(response.errorStatus){
+                        $scope.error = 'ERROR';
+                        $scope.showNotifications('top','center','danger',response.errorMessage);
+                    }else{
+                        $scope.showNotifications('top','center','danger',response.message);
+                    }
 
                 });
             }
