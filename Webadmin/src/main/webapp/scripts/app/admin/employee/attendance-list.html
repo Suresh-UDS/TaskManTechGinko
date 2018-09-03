@@ -81,7 +81,7 @@
                         <table class="table table-hover withSortingIcons">
                             <thead>
                             <tr>
-                                <th>ID
+                                <th style="min-width: 60px;">ID
                                    <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('employee.empId')" ng-class="isActiveAsc == 'employee.empId' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
@@ -91,7 +91,7 @@
                                         </span>
                                     </span>
                                 </th>
-                                <th>Name
+                                <th style="min-width: 110px;">Name
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('employee.fullName')" ng-class="isActiveAsc == 'employee.fullName' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
@@ -101,7 +101,7 @@
                                         </span>
                                     </span>
                                 </th>
-                                <th>Site
+                                <th style="min-width: 100px;">Site
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('site.name')" ng-class="isActiveAsc == 'site.name' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
@@ -111,7 +111,7 @@
                                         </span>
                                     </span>
                                 </th>
-                                <th>Check-In
+                                <th style="min-width: 160px;">Check-In
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('checkInTime')" ng-class="isActiveAsc == 'checkInTime' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
@@ -122,7 +122,7 @@
                                     </span>
                                 </th>
                                 <th>Check-In Image</th>
-                                <th>Check-Out
+                                <th style="min-width: 160px;">Check-Out
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('checkOutTime')" ng-class="isActiveAsc == 'checkOutTime' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
@@ -152,7 +152,7 @@
                             <tbody>
                             <tr ng-repeat="attendance in attendancesData">
                                 <td>{{attendance.employeeEmpId}}</td>
-                                <td>{{attendance.employeeFullName}}</td>
+                                <td>{{attendance.employeeName +" "+ attendance.employeeLastName}}</td>
                                 <td>{{attendance.siteName}}</td>
                                 <td>
                                 {{attendance.checkInTime | date:'dd/MM/yyyy @ h:mma'}}
