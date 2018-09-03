@@ -23,6 +23,9 @@ import com.ts.app.domain.MaterialIndent;
 import com.ts.app.domain.MaterialTransaction;
 import com.ts.app.domain.MaterialTransactionType;
 import com.ts.app.domain.MaterialUOMType;
+import com.ts.app.domain.Project;
+import com.ts.app.domain.Setting;
+import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.EmployeeRepository;
@@ -33,8 +36,10 @@ import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.MaterialIndentRepository;
 import com.ts.app.repository.MaterialItemGroupRepository;
 import com.ts.app.repository.ProjectRepository;
+import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.CommonUtil;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
@@ -80,7 +85,17 @@ public class InventoryTransactionService extends AbstractService{
 	private MaterialIndentRepository materialIndentRepository;
 	
 	@Inject
+	private SettingsRepository settingRepository;
+	
+	@Inject
+	private MailService mailService;
+	
+	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+	
+	public static final String EMAIL_NOTIFICATION_PURCHASEREQ = "email.notification.purchasereq";
+
+	public static final String EMAIL_NOTIFICATION_PURCHASEREQ_EMAILS = "email.notification.purchasereq.emails";
 	
 	public MaterialTransactionDTO createInventoryTransaction(MaterialTransactionDTO materialTransDTO) { 
 		MaterialTransaction materialEntity = mapperUtil.toEntity(materialTransDTO, MaterialTransaction.class);
@@ -124,8 +139,31 @@ public class InventoryTransactionService extends AbstractService{
 		if(materialTransDTO.getTransactionType().equals(MaterialTransactionType.ISSUED)) {
 			Material material = inventoryRepository.findOne(materialTransDTO.getMaterialId());
 			long prevStoreStock = material.getStoreStock();
-			if(prevStoreStock == material.getMinimumStock()) {              // send purchase request when stock is minimum level
+			if(prevStoreStock == material.getMinimumStock()) {   // send purchase request when stock is minimum level
 				
+				Site site = siteRepository.findOne(materialTransDTO.getSiteId());
+				String siteName = site.getName();
+				
+				Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PURCHASEREQ);
+				
+				log.debug("Setting Email list -" + setting);
+
+				if(setting.getSettingValue().equalsIgnoreCase("true") ) {
+
+					Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PURCHASEREQ_EMAILS);
+
+					if(settingEntity.getSettingValue().length() > 0) {
+
+						List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+						for(String email : emailLists) {
+							mailService.sendPurchaseRequest(email, material.getItemCode(), siteName, material.getName());
+						}
+
+					} else {
+
+						log.info("There is no email ids registered");
+					}
+				}
 			} else {
 				if(prevStoreStock > materialTransDTO.getQuantity()) { 
 					long currentStock = prevStoreStock - materialTransDTO.getQuantity();

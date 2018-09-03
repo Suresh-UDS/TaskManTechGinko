@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{email.purchaseReqAlert.title}">Employee Assign Remainder</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="#{email.purchaseReqAlert.greeting}">
+</p>
+
+
+<p th:text="#{email.purchaseReqAlert.content(${item}, ${itemCode}, ${siteName})}">
+
+</p>
+
+<p>
+    <span th:text="#{email.purchaseReqAlert.text}">Regards, </span>
+    <br/>
+    <em th:text="#{email.signature}">.</em>
+</p>
+</body>
+</html>
