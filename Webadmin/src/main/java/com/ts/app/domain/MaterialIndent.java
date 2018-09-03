@@ -61,6 +61,8 @@ public class MaterialIndent extends AbstractAuditingEntity implements Serializab
 	@OneToOne()
 	@JoinColumn(name = "materialTransacationId", nullable= true)
 	private MaterialTransaction transaction;
+	
+	private long issuedQuantity;
 
 	public long getId() {
 		return id;
@@ -148,6 +150,14 @@ public class MaterialIndent extends AbstractAuditingEntity implements Serializab
 
 	public void setTransaction(MaterialTransaction transaction) {
 		this.transaction = transaction;
+	}
+
+	public long getIssuedQuantity() {
+		return issuedQuantity;
+	}
+
+	public void setIssuedQuantity(long issuedQuantity) {
+		this.issuedQuantity = issuedQuantity;
 	}
 
 }
