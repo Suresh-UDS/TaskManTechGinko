@@ -34,6 +34,7 @@ import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.User;
 import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.AmazonS3Service;
 import com.ts.app.service.JobManagementService;
 import com.ts.app.service.PushService;
 import com.ts.app.service.SchedulerService;
@@ -91,6 +92,9 @@ public class JobManagementResource {
 
 	@Inject
 	private ReportUtil reportUtil;
+	
+	@Inject
+	private AmazonS3Service amazonSerivce;
 
 
 	@RequestMapping(path="/job/lookup/status", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -455,6 +459,11 @@ public class JobManagementResource {
     public List<CheckInOutDTO> findCheckInOutByEmployee(@PathVariable("id") Long jobId) {
         log.info("--Invoked findCheckInOut By JobId--"+jobId);
         return jobService.findCheckInOutByJob(jobId);
+    }
+    
+    @RequestMapping(value="/uploadAttendanceCheckIn", method= RequestMethod.GET) 
+    public void uploadAttendance() { 
+    	amazonSerivce.uploadExistingCheckin();
     }
 
 

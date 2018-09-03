@@ -152,7 +152,7 @@ public class InventoryTransactionService extends AbstractService{
 		
 		materialEntity.setActive(MaterialTransaction.ACTIVE_YES);
 		materialEntity.setTransactionDate(DateUtil.convertToTimestamp(materialTransDTO.getTransactionDate()));
-		materialEntity.setUom(MaterialUOMType.valueOf(materialTransDTO.getUom()).getValue().toUpperCase());
+		materialEntity.setUom(MaterialUOMType.valueOf(materialTransDTO.getUom().toUpperCase()).getValue());
 		materialEntity = inventTransactionRepository.save(materialEntity);
 		log.debug("Save object of Inventory: {}" +materialEntity);
 		if(materialIndent != null) { 

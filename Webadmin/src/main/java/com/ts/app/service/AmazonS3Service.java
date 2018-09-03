@@ -30,6 +30,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.CopyObjectRequest;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -449,7 +450,37 @@ public class AmazonS3Service {
 		 return prefixUrl;
 	}
 
+	public void uploadExistingCheckin() { 
+		log.debug("Calling AWS S3 for Checklist Images upload");
+		String key = "prod/checkListImages/";
+		String destinationKey = "prod/checkListImages/";
+		try {
+			List<S3ObjectSummary> fileList = s3client.listObjects(bucketName, key).getObjectSummaries();
+			for(S3ObjectSummary file : fileList) { 
+				String filename = file.getKey();
+				log.debug("Checklist Images before renamed file:" +  filename);
+				    String subString[] = filename.split("/", 2);
+				    System.out.println("Checklist Images Sub String file:" +  subString[0]);
+				    System.out.println("Last String of File :" + subString[1]);
+				    String last[] = subString[1].split("/", 2);
+				    System.out.println("Last String of File :" + last[0]);
+//				if(filename.contains("/")) {
+//					String replacedFile = filename.replace("/", "-");
+//					log.debug("After Slash removed file:" +  replacedFile);
+					
+//					CopyObjectRequest copyObjRequest = new CopyObjectRequest(bucketName, filename, bucketName, destinationKey + replacedFile)
+//							.withCannedAccessControlList(CannedAccessControlList.PublicReadWrite);
+//					s3client.copyObject(copyObjRequest);
 
+					log.info("===================== Upload File - Done! =====================");
+//				}
+				
+			}
+		} catch(Exception e) { 
+			e.printStackTrace();
+		}
+		
+	}
     
 	
 	
