@@ -239,11 +239,8 @@ angular
                                 $scope.projects = data;
                                 //$scope.selectedProject = $scope.projects[0];
                                 console.log()
-                                if($state.current.name == 'edit-quotation' || $state.current.name == 'view-quotation')
+                                if($state.current.name != 'edit-quotation' && $state.current.name != 'view-quotation')
                                 {
-
-                                }
-                                else {
                                     $scope.selectedProject = null;
                                 }
                                 for(var i=0;i<$scope.projects.length;i++)
