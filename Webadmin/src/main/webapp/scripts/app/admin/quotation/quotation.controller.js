@@ -74,6 +74,8 @@ angular
 
 					$scope.status = 0;
 
+					$scope.quoteStatus = true;
+
 					$scope.noData = false;
 					$scope.searchProject = null;
 					$scope.searchSite = null;
@@ -210,9 +212,6 @@ angular
                     $rootScope.back = function (text) {
                         if(text == 'cancel')
                         {
-
-                            /** @reatin - retaining scope value.**/
-                            $rootScope.retain=1;
                             $scope.cancelQuotation();
                         }
                         else if(text == 'save')
@@ -620,6 +619,15 @@ angular
 					        			});
 
 				                }
+
+				                if(($scope.serviceRateCardDetails.length > 0 ) || 
+                               	($scope.labourRateCardDetails.length > 0) || 
+                               	($scope.materialRateCardDetails.length > 0)){
+	                               $scope.quoteStatus = false;
+						        }else{
+						        	$scope.quoteStatus = true;
+						        }
+						        
 				            });
 
                           }
@@ -674,6 +682,9 @@ angular
 
 			         }else{
 
+			         	/** @reatin - retaining scope value.**/
+                        $rootScope.retain=1;
+
 			         	$location.path('/quotation-list');
 			         }
 
@@ -688,6 +699,7 @@ angular
 			        };
 
 			        $scope.clearFilter = function() {
+			        	$scope.clearField = true;
 	        		    $scope.selectedProject = null;
 			            $scope.selectedSite = null;
 			            $scope.selectedStatus = null;
@@ -850,14 +862,47 @@ angular
                      $scope.quotationsLoader = false;
                      $scope.loadPageTop();
 
+                      /* Localstorage (Retain old values while edit page to list) start */
+                     
+	                 if($rootScope.retain == 1){
+	                    $scope.localStorage = getLocalStorage.getSearch();
+	                    console.log('Local storage---',$scope.localStorage);
 
+	                    if($scope.localStorage){
+	                            $scope.filter = true;
+	                            $scope.pages.currPage = $scope.localStorage.currPage;
+	                            if($scope.localStorage.projectId){
+	                               $scope.searchProject = {id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
+	                            }else{
+	                               $scope.searchProject = null;
+	                            }
+	                            if($scope.localStorage.siteId){
+	                              $scope.searchSite = {id:$scope.localStorage.siteId,name:$scope.localStorage.siteName}; 
+	                            }else{
+	                               $scope.searchSite = null;  
+	                            }
+
+	                    }
+
+	                    $rootScope.retain = 0;
+
+	                    var searchCriteras  = $scope.localStorage;
+	                 }else{
+
+	                    var searchCriteras  = $scope.searchCriteria;
+	                 }
+
+	                 /* Localstorage (Retain old values while edit page to list) end */
 
 
                         //RateCardComponent.search($scope.searchCriteria).then(function (data) {
-		        	RateCardComponent.getAllQuotations($scope.searchCriteria).then(function (data) {
+		        	RateCardComponent.getAllQuotations(searchCriteras).then(function (data) {
 		        	    $scope.quotations = data;
 		                //$scope.quotations = data.transactions;
 		                $scope.quotationsLoader = true;
+
+		                 /** retaining list search value.**/
+                         getLocalStorage.updateSearch(searchCriteras);
 
 		                  /*
 		                        ** Call pagination  main function **
@@ -937,7 +982,7 @@ angular
 					            })
 					        }
 
-					        $scope.quoteStatus = true;
+					        
 
 					        $scope.validCheck = function(){
 
