@@ -620,14 +620,8 @@ angular
 
 				                }
 
-				                if(($scope.serviceRateCardDetails.length > 0 ) || 
-                               	($scope.labourRateCardDetails.length > 0) || 
-                               	($scope.materialRateCardDetails.length > 0)){
-	                               $scope.quoteStatus = false;
-						        }else{
-						        	$scope.quoteStatus = true;
-						        }
-						        
+				                $scope.validCheck();
+
 				            });
 
                           }
