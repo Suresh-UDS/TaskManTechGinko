@@ -912,7 +912,11 @@ public class    EmployeeService extends AbstractService {
 			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
 				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
 				log.debug("Sorting object" + sort);
-				pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+				if(searchCriteria.isList()) {
+					pageRequest = createPageSort(searchCriteria.getCurrPage(), sort);
+				}else {
+					pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+				}
 			} else {
 				if(searchCriteria.isList()) {
 					Sort sort = new Sort(Sort.Direction.ASC , "name");
