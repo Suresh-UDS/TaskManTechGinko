@@ -557,11 +557,11 @@ angular.module('timeSheetApp')
         		$scope.job.pendingAtUDS=true;
         		$scope.selectedSite = {id : data.siteId,name : data.siteName};
                 $scope.job.plannedStartTime = data.plannedStartTime;
-                $scope.selectPlannedStartTime = $filter('date')(data.plannedStartTime, 'dd/MM/yyyy hh:mm a');  
+                $scope.selectPlannedStartTime = $filter('date')(data.plannedStartTime, 'dd/MM/yyyy hh:mm a');
                 if($scope.job.schedule == 'ONCE'){
-                  $scope.job.scheduleEndDate = "";  
+                  $scope.job.scheduleEndDate = "";
                 }else{
-                   $scope.job.scheduleEndDate = data.scheduleEndDate; 
+                   $scope.job.scheduleEndDate = data.scheduleEndDate;
                 }
                 $scope.selectScheduleEndDate = $filter('date')(data.scheduleEndDate, 'dd/MM/yyyy hh:mm a');
         		$scope.loadEmployees().then(function(employees){
@@ -1168,13 +1168,20 @@ angular.module('timeSheetApp')
 
         $scope.closeTicketConfirm =function(cTicket){
 
-	        JobComponent.updateTicket(cTicket).then(function() {
-	                $scope.success = 'OK';
-	                $scope.showNotifications('top','center','success','Ticket status updated');
-	                $(".fade").removeClass("modal-backdrop");
-	                $scope.ticketStatus = 'Closed'
-	                $state.reload();
-	            });
+            JobComponent.updateTicket(cTicket).then(function(data) {
+                if(data.errorMessage) {
+                    $scope.success = null;
+                    $scope.showNotifications('top','center','danger',data.errorMessage);
+                    $(".fade").removeClass("modal-backdrop");
+                    $state.reload();
+                }else {
+                    $scope.success = 'OK';
+                    $scope.showNotifications('top','center','success','Ticket status updated');
+                    $(".fade").removeClass("modal-backdrop");
+                    $scope.ticketStatus = 'Closed';
+                    $state.reload();
+                }
+            })
         }
 
 
