@@ -178,7 +178,12 @@ public class FeedbackTransactionService extends AbstractService {
 				feedbackLocation.append(feedbackTransDto.getBlock());
 				feedbackLocation.append("-");
 				feedbackLocation.append(feedbackTransDto.getFloor());
-
+	       		if(StringUtils.isNotBlank(feedbackTransDto.getReviewerName())) {
+	       			feedbackLocation.append(" given by " + feedbackTransDto.getReviewerName());
+	       			feedbackLocation.append(" - " + feedbackTransDto.getReviewerCode());
+	        		}else if(StringUtils.isNotBlank(feedbackTransDto.getReviewerCode())) {
+	        			feedbackLocation.append(" given by " + feedbackTransDto.getReviewerCode());
+	        		}
 				String feedbackReportUrl = env.getProperty("reports.feedback-report.url");
 				mailService.sendFeedbackAlert(alertEmailIds, feedbackTransDto.getZone(), feedbackLocation.toString(), new Date(), feedbackAlertItems, feedbackReportUrl);
 			}
