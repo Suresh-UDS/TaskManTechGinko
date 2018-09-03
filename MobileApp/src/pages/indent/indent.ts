@@ -43,15 +43,19 @@ export class Indent {
     selectedMaterial: any;
     pageSort:15;
     page:1;
+    employeeId:any;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, private component: componentService,
                 private siteService: SiteService, private inventoryService: InventoryService,
                 public viewCtrl:ViewController,public purchaseService:PurchaseRequisitionService) {
         this.indent = [];
+        this.employeeId=window.localStorage.getItem('employeeId');
     }
 
     ionViewDidLoad() {
         console.log('ionViewDidLoad Indent');
+        console.log('local storage');
+        console.log(window.localStorage.getItem('employeeId'));
         this.component.showLoader('Getting Project');
         this.selectOptions = {
             cssClass: 'selectbox-popover'
@@ -154,12 +158,12 @@ export class Indent {
         this.selectedMaterial = m;
     }
 
-    searchMaterials(siteId)
+    searchMaterials(site)
     {
         var searchCriteria={
             currPage:this.page,
             pageSort: this.pageSort,
-            siteId:siteId,
+            siteId:site.id,
             list:true,
         }
         this.inventoryService.getMaterials(searchCriteria).subscribe(
@@ -176,21 +180,26 @@ export class Indent {
     }
 
     saveIndentMaterial(){
-
+            console.log("selected site");
+            console.log(this.selectedSite);
         var indentDetails = {
           siteId:this.selectedSite.id,
           projectId:this.selectedProject.id,
           items:this.indent,
-          indentReferenceNumber:this.referenceNumber,
+            indentRefNumber:this.referenceNumber,
+            requestedById:this.employeeId,
           requestedDate:new Date()
         };
-        this.purchaseService.saveIndentMaterial(indentDetails).subscribe(
+        this.purchaseService.saveMaterialIndent(indentDetails).subscribe(
             response=>{
                 console.log("Save indent Material");
                 console.log(response);
+                this.component.showToastMessage("indent saved successfully",'bottom');
             },err=>{
                 console.log("Error in save indent material");
                 console.log(err);
+                this.component.showToastMessage("Error in save indent",'bottom');
+
             }
         )
     }
