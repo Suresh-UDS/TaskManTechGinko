@@ -813,6 +813,8 @@ public class    EmployeeService extends AbstractService {
 		}
 		log.debug("Employee retrieved by findOne - "+ entity );
 		EmployeeDTO dto =  mapperUtil.toModel(entity, EmployeeDTO.class);
+		String enroll_url = cloudFrontUrl + bucketEnv + enrollImagePath + dto.getEnrolled_face();
+		dto.setUrl(enroll_url);
 		Hibernate.initialize(entity.getManager());
 		if(entity.getManager() != null) {
 			dto.setManagerId(entity.getManager().getId());
