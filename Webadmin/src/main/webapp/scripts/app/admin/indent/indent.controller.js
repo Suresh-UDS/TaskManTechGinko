@@ -275,9 +275,21 @@ angular.module('timeSheetApp')
 			$scope.editIndentObj.indentRefNumber = $scope.selectedRefNumber;
 			
 			console.log($scope.editIndentObj);
-//			IndentComponent.update($scope.editIndentObj).then(function(resp){ 
-//				console.log(resp);
-//			});
+			IndentComponent.update($scope.editIndentObj).then(function(resp){ 
+				console.log(resp);
+				$scope.loadingStop();
+				if(resp.status === 200 && resp.statusText==="OK") { 
+					$scope.showNotifications('top','center','success','Material Indent has been updated successfully.');
+					$location.path('/indent-list');
+				}else{
+					$scope.showNotifications('top','center','danger','Material Indent has not been updated.');
+				}
+			}).catch(function(resp){
+				console.log(resp);
+				$scope.success = null;
+                $scope.loadingStop();
+                $scope.showNotifications('top','center','danger','Unable to update Material Indent. Please try again later..');
+			});
 		}
 
         $scope.search = function () {
