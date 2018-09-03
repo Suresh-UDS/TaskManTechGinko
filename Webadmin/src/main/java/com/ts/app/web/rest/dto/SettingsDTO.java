@@ -122,6 +122,14 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     private boolean warrantyEmailAlert;
     
     private List<String> warrantyEmailIds;
+    
+    private long purchaseReqEmailsId;
+    
+    private long purchaseReqEmailAlertId;
+    
+    private boolean purchaseReqEmailAlert;
+    
+    private List<String> purchaseReqEmailIds;
 
     public long getSiteId() {
 		return siteId;
@@ -569,6 +577,38 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 
 	public void setWarrantyEmailIds(List<String> warrantyEmailIds) {
 		this.warrantyEmailIds = warrantyEmailIds;
+	}
+
+	public long getPurchaseReqEmailsId() {
+		return purchaseReqEmailsId;
+	}
+
+	public void setPurchaseReqEmailsId(long purchaseReqEmailsId) {
+		this.purchaseReqEmailsId = purchaseReqEmailsId;
+	}
+
+	public long getPurchaseReqEmailAlertId() {
+		return purchaseReqEmailAlertId;
+	}
+
+	public void setPurchaseReqEmailAlertId(long purchaseReqEmailAlertId) {
+		this.purchaseReqEmailAlertId = purchaseReqEmailAlertId;
+	}
+
+	public boolean isPurchaseReqEmailAlert() {
+		return purchaseReqEmailAlert;
+	}
+
+	public void setPurchaseReqEmailAlert(boolean purchaseReqEmailAlert) {
+		this.purchaseReqEmailAlert = purchaseReqEmailAlert;
+	}
+
+	public List<String> getPurchaseReqEmailIds() {
+		return purchaseReqEmailIds;
+	}
+
+	public void setPurchaseReqEmailIds(List<String> purchaseReqEmailIds) {
+		this.purchaseReqEmailIds = purchaseReqEmailIds;
 	}
 
 	
