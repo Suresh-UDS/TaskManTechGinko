@@ -39,6 +39,10 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
 	private long employeeId;
 
 	private String employeeFullName;
+	
+	private String employeeName;
+	
+	private String employeeLastName;
 
 	private long siteId;
 
@@ -310,4 +314,20 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
+
+	public String getEmployeeName() {
+		return employeeName;
+	}
+
+	public void setEmployeeName(String employeeName) {
+		this.employeeName = employeeName;
+	}
+
+	public String getEmployeeLastName() {
+		return employeeLastName;
+	}
+
+	public void setEmployeeLastName(String employeeLastName) {
+		this.employeeLastName = employeeLastName;
+	}
 }
