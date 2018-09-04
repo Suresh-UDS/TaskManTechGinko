@@ -36,6 +36,8 @@ public class MaterialIndentItem extends AbstractAuditingEntity implements Serial
 	@Column(name = "quantity")
 	private long quantity; 
 	
+	private long issuedQuantity;
+	
 	@ManyToOne()
 	@JoinColumn(name = "material_indent_id")
 	private MaterialIndent materialIndent;
@@ -70,6 +72,14 @@ public class MaterialIndentItem extends AbstractAuditingEntity implements Serial
 
 	public void setMaterialIndent(MaterialIndent materialIndent) {
 		this.materialIndent = materialIndent;
+	}
+
+	public long getIssuedQuantity() {
+		return issuedQuantity;
+	}
+
+	public void setIssuedQuantity(long issuedQuantity) {
+		this.issuedQuantity = issuedQuantity;
 	}
 
 

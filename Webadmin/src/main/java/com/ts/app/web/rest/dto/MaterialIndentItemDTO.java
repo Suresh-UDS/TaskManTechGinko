@@ -18,6 +18,8 @@ public class MaterialIndentItemDTO extends BaseDTO {
 		
 	private long quantity;
 	
+	private long issuedQuantity;
+	
 	public long getId() {
 		return id;
 	}
@@ -80,6 +82,14 @@ public class MaterialIndentItemDTO extends BaseDTO {
 
 	public void setMaterialItemGroupId(long materialItemGroupId) {
 		this.materialItemGroupId = materialItemGroupId;
+	}
+
+	public long getIssuedQuantity() {
+		return issuedQuantity;
+	}
+
+	public void setIssuedQuantity(long issuedQuantity) {
+		this.issuedQuantity = issuedQuantity;
 	} 
 	
 		

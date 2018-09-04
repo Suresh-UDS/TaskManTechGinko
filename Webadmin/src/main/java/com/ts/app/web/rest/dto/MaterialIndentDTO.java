@@ -33,8 +33,6 @@ public class MaterialIndentDTO extends BaseDTO {
 	
 	private long transactionId;
 	
-	private long issuedQuantity;
-	
 	public long getId() {
 		return id;
 	}
@@ -146,15 +144,6 @@ public class MaterialIndentDTO extends BaseDTO {
 	public void setTransactionId(long transactionId) {
 		this.transactionId = transactionId;
 	}
-
-	public long getIssuedQuantity() {
-		return issuedQuantity;
-	}
-
-	public void setIssuedQuantity(long issuedQuantity) {
-		this.issuedQuantity = issuedQuantity;
-	}
-
 	
 	
 }

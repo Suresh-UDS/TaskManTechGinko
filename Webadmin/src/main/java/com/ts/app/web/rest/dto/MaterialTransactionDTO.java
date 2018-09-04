@@ -42,6 +42,8 @@ public class MaterialTransactionDTO extends BaseDTO {
 	private Timestamp transactionDate;
 	
 	private long materialIndentId;
+	
+	private long issuedQuantity;
 
 	public long getId() {
 		return id;
@@ -185,6 +187,14 @@ public class MaterialTransactionDTO extends BaseDTO {
 
 	public void setMaterialIndentId(long materialIndentId) {
 		this.materialIndentId = materialIndentId;
+	}
+
+	public long getIssuedQuantity() {
+		return issuedQuantity;
+	}
+
+	public void setIssuedQuantity(long issuedQuantity) {
+		this.issuedQuantity = issuedQuantity;
 	}
 
 	

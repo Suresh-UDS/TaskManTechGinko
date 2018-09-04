@@ -52,6 +52,12 @@ angular.module('timeSheetApp')
                 });
             },
             
+            createTransaction : function(transaction) {
+            	return $http.post('api/indent/materialTransaction', transaction).then(function(response) {
+            		return response.data;
+            	});
+            },
+            
             search: function(searchCriteria) {
                 return $http.post('api/materialIndent/search', searchCriteria).then(function (response) {
                     return response.data;
