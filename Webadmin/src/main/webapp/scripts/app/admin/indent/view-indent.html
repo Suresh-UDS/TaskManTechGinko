@@ -82,6 +82,7 @@
                                 <tr>
                                     <th>Item Code</th>
                                     <th>Item Name</th>
+                                    <th>Store Stock</th>
                                     <th>Uom</th>
                                     <th>Required Qty</th>
                                     <th width="10%">Issue Qty</th>
@@ -91,6 +92,7 @@
                                 <tr ng-repeat="material in materialIndentObj.items">
                                     <td>{{material.materialItemCode}}</td>
                                     <td>{{material.materialName}}</td>
+                                    <td>{{material.materialStoreStock}}</td>
                                     <td>{{material.materialUom}}</td>
                                     <td>{{material.quantity}}</td>
                                     <td width="10%">
@@ -101,7 +103,7 @@
                                 </tbody>
                                 <tfoot>
                                   <td colspan="3"></td>
-                                  <td colspan="2" class="text-right">
+                                  <td colspan="3" class="text-right">
                                       <button class="btn btn-success" type="button" ng-click="saveIndentTrans()">
                                           Save
                                        </button>
