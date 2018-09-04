@@ -28,6 +28,8 @@ import com.ts.app.domain.MaterialIndentItem;
 import com.ts.app.domain.MaterialItemGroup;
 import com.ts.app.domain.MaterialTransaction;
 import com.ts.app.domain.MaterialTransactionType;
+import com.ts.app.domain.Setting;
+import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.InventoryRepository;
@@ -37,8 +39,10 @@ import com.ts.app.repository.MaterialIndentRepository;
 import com.ts.app.repository.MaterialIndentSpecification;
 import com.ts.app.repository.MaterialItemGroupRepository;
 import com.ts.app.repository.ProjectRepository;
+import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.CommonUtil;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
@@ -81,7 +85,17 @@ public class MaterialIndentService extends AbstractService {
 	private MaterialItemGroupRepository materialItemGroupRepository;
 	
 	@Inject
+	private SettingsRepository settingRepository;
+	
+	@Inject
+	private MailService mailService;
+	
+	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+	
+	public static final String EMAIL_NOTIFICATION_PURCHASEREQ = "email.notification.purchasereq";
+
+	public static final String EMAIL_NOTIFICATION_PURCHASEREQ_EMAILS = "email.notification.purchasereq.emails";
 	
 	public MaterialIndentDTO createIndent(MaterialIndentDTO materialIndentDTO) { 
 		MaterialIndent indentEntity = mapperUtil.toEntity(materialIndentDTO, MaterialIndent.class);
@@ -266,6 +280,8 @@ public class MaterialIndentService extends AbstractService {
 		MaterialIndent matIndent = materialIndentRepository.findOne(materialIndentDto.getId());
 		matIndent.setIssuedBy(employeeRepository.findOne(materialIndentDto.getIssuedById()));
 		matIndent.setIssuedDate(DateUtil.convertToTimestamp(new Date()));
+		Site site = siteRepository.findOne(materialIndentDto.getSiteId());
+		String siteName = site.getName();
 		
 		List<MaterialIndentItemDTO> indentItemDTOs = materialIndentDto.getItems();
 		Set<MaterialIndentItem> itemEntities = matIndent.getItems();
@@ -284,7 +300,27 @@ public class MaterialIndentService extends AbstractService {
 					Material materialItm = inventoryRepository.findOne(itemDto.getMaterialId());
 					
 					if(materialItm.getMinimumStock() == materialItm.getStoreStock()) {
+					
+						Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PURCHASEREQ);
 						
+						log.debug("Setting Email list -" + setting);
+
+						if(setting.getSettingValue().equalsIgnoreCase("true") ) {
+
+							Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PURCHASEREQ_EMAILS);
+
+							if(settingEntity.getSettingValue().length() > 0) {
+
+								List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+								for(String email : emailLists) {
+									mailService.sendPurchaseRequest(email, materialItm.getItemCode(), siteName, materialItm.getName());
+								}
+
+							} else {
+
+								log.info("There is no email ids registered");
+							}
+						}
 					}
 					
 					MaterialTransaction materialTrans = new MaterialTransaction();

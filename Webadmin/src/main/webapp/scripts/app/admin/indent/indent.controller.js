@@ -253,6 +253,12 @@ angular.module('timeSheetApp')
 			console.log($scope.materialIndentObj);
 			IndentComponent.createTransaction($scope.materialIndentObj).then(function(data) { 
 				console.log(data);
+				$scope.showNotifications('top','center','success','Material Transaction has been added successfully.');
+				$location.path('/inventory-transaction-list');
+			}).catch(function(data){ 
+				$scope.success = null;
+                $scope.loadingStop();
+                $scope.showNotifications('top','center','danger','Unable to view Material Transaction.');
 			});
 			
 		}
