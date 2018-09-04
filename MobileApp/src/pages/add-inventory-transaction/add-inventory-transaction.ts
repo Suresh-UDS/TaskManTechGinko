@@ -42,7 +42,7 @@ export class AddInventoryTransaction {
     selectedMaterial: any;
     inventoryTransaction:any;
     indentList: any;
-  quantityy: any;
+  quantity: any;
 
 
     constructor(public navCtrl: NavController, public navParams: NavParams,private component:componentService,
@@ -186,7 +186,7 @@ export class AddInventoryTransaction {
         console.log("selected site");
         console.log(this.selectedSite);
         console.log(this.selectedMaterial.materialStoreStock);
-        if(this.selectedMaterial.materialStoreStock >= this.quantityy){
+        if(this.selectedMaterial.materialStoreStock >= this.quantity){
             let confirm =  this.alertCtrl.create({
               title: 'Alert',
               message:'Do you want to save?',
@@ -209,7 +209,7 @@ export class AddInventoryTransaction {
                       storeStock:this.selectedMaterial.materialStoreStock,
                       uom:this.selectedMaterial.materialUom,
                       materialGroupId:this.selectedMaterial.materialItemGroupId,
-                      quantity:this.quantityy,
+                      quantity:this.quantity,
                       transactionType:"ISSUED",
                       transactionDate:new Date()
                     };

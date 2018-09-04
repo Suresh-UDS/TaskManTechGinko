@@ -135,6 +135,7 @@ import {Indent} from "../pages/indent/indent";
 import{IndentView} from "../pages/indent-view/indent-view";
 import {InventoryTransaction} from "../pages/inventorytransaction/inventorytransaction";
 import{IndentList} from "../pages/indent-list/indent-list";
+import{IndentIssue} from "../pages/indent-issue/indent-issue";
 
 @NgModule({
   declarations: [
@@ -226,7 +227,8 @@ import{IndentList} from "../pages/indent-list/indent-list";
       Indent,
       IndentView,
     InventoryTransaction,
-      IndentList
+      IndentList,
+      IndentIssue
   ],
   imports: [
     BrowserModule,
@@ -330,7 +332,8 @@ import{IndentList} from "../pages/indent-list/indent-list";
       Indent,
       IndentView,
     InventoryTransaction,
-      IndentList
+      IndentList,
+      IndentIssue
       // WheelSelector
 
 
