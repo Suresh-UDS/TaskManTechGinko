@@ -218,22 +218,22 @@ angular.module('timeSheetApp')
 			
 		}
     	
-    	$scope.site = true;
-    	$scope.loadSiteItems = function() {
-    		if($scope.projectSite) {
-    			$scope.searchCriteria.siteId = $scope.projectSite.id;
-    			InventoryComponent.search($scope.searchCriteria).then(function(data) {
-    				console.log(data);
-    				$scope.materialItems = data.transactions;
+//    	$scope.site = true;
+//    	$scope.loadSiteItems = function() {
+//    		if($scope.projectSite) {
+//    			$scope.searchCriteria.siteId = $scope.projectSite.id;
+//    			InventoryComponent.search($scope.searchCriteria).then(function(data) {
+//    				console.log(data);
+//    				$scope.materialItems = data.transactions;
 //    				$scope.selectedItemName = "";
 //    				$scope.inventory.storeStock= "";
 //    				$scope.inventory.quantity = "";
 //    				$scope.inventory.uom = "";
 //    				$scope.inventory.transactionDate = "";
 //    				document.getElementById('dateFilterTransactionDate').value = "";
-    			});
-    		}
-    	}
+//    			});
+//    		}
+//    	}
         
         /* Save material Transaction */
     	$scope.saveInventoryTrans = function() {

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.MaterialIndent;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.MaterialIndentService;
 import com.ts.app.web.rest.dto.MaterialIndentDTO;
@@ -93,6 +94,17 @@ public class MaterialIndentResource {
 	public ResponseEntity<?> deleteMaterial(@PathVariable("id") long id) { 
 		materialIndentService.deleteMaterialIndent(id);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/indent/materialTransaction", method=RequestMethod.POST)
+	public ResponseEntity<?> createTransaction(@Valid @RequestBody MaterialIndentDTO materialIndentDto, HttpServletRequest request) {
+		MaterialIndentDTO result = null;
+		try {
+			result = materialIndentService.createMaterialTransaction(materialIndentDto);
+		}catch(Exception e) { 
+			throw new TimesheetException("Error while create transaction for Indent" +e);
+		}
+		return new ResponseEntity<>(result, HttpStatus.CREATED);
 	}
 		
 	@RequestMapping(value = "/materialIndent/search", method = RequestMethod.POST)

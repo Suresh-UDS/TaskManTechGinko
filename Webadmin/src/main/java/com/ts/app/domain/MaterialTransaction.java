@@ -64,6 +64,8 @@ public class MaterialTransaction extends AbstractAuditingEntity implements Seria
 	
 	private Timestamp transactionDate;
 	
+	private long issuedQuantity;
+	
 	public long getId() {
 		return id;
 	}
@@ -166,6 +168,14 @@ public class MaterialTransaction extends AbstractAuditingEntity implements Seria
 
 	public void setMaterialIndent(MaterialIndent materialIndent) {
 		this.materialIndent = materialIndent;
+	}
+
+	public long getIssuedQuantity() {
+		return issuedQuantity;
+	}
+
+	public void setIssuedQuantity(long issuedQuantity) {
+		this.issuedQuantity = issuedQuantity;
 	}
 
 	

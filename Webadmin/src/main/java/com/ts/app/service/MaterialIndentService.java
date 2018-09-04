@@ -1,6 +1,7 @@
 package com.ts.app.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -24,7 +25,9 @@ import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Material;
 import com.ts.app.domain.MaterialIndent;
 import com.ts.app.domain.MaterialIndentItem;
+import com.ts.app.domain.MaterialItemGroup;
 import com.ts.app.domain.MaterialTransaction;
+import com.ts.app.domain.MaterialTransactionType;
 import com.ts.app.domain.User;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.InventoryRepository;
@@ -32,6 +35,7 @@ import com.ts.app.repository.InventoryTransactionRepository;
 import com.ts.app.repository.MaterialIndentItemRepository;
 import com.ts.app.repository.MaterialIndentRepository;
 import com.ts.app.repository.MaterialIndentSpecification;
+import com.ts.app.repository.MaterialItemGroupRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
@@ -74,6 +78,9 @@ public class MaterialIndentService extends AbstractService {
 	private MaterialIndentItemRepository materialIndentItmRepo;
 	
 	@Inject
+	private MaterialItemGroupRepository materialItemGroupRepository;
+	
+	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 	
 	public MaterialIndentDTO createIndent(MaterialIndentDTO materialIndentDTO) { 
@@ -89,6 +96,7 @@ public class MaterialIndentService extends AbstractService {
 		for(MaterialIndentItemDTO indentItm : indentItems) { 
 			MaterialIndentItem materialIndentItm = mapperUtil.toEntity(indentItm, MaterialIndentItem.class);
 			materialIndentItm.setMaterialIndent(indentEntity);
+			materialIndentItm.setActive(MaterialIndentItem.ACTIVE_YES);
 			materialIndentItm.setMaterial(inventoryRepository.findOne(indentItm.getMaterialId()));
 			indentItemEntity.add(materialIndentItm);
 		}
@@ -154,6 +162,7 @@ public class MaterialIndentService extends AbstractService {
 				if(itemEntity.getId() == itemDto.getId()) {
 					itemFound = true;
 					itemEntity.setQuantity(itemDto.getQuantity());
+					itemEntity.setIssuedQuantity(itemDto.getIssuedQuantity());
 					break;
 				}
 			}
@@ -251,6 +260,68 @@ public class MaterialIndentService extends AbstractService {
 		List<MaterialIndent> materialIndentList = materialIndentRepository.findIndentBySites(indentDTO.getProjectId(), indentDTO.getSiteId());
 		List<MaterialIndentDTO> materialIndentModel = mapperUtil.toModelList(materialIndentList, MaterialIndentDTO.class);
 		return materialIndentModel;
+	}
+
+	public MaterialIndentDTO createMaterialTransaction(MaterialIndentDTO materialIndentDto) {
+		MaterialIndent matIndent = materialIndentRepository.findOne(materialIndentDto.getId());
+		matIndent.setIssuedBy(employeeRepository.findOne(materialIndentDto.getIssuedById()));
+		matIndent.setIssuedDate(DateUtil.convertToTimestamp(new Date()));
+		
+		List<MaterialIndentItemDTO> indentItemDTOs = materialIndentDto.getItems();
+		Set<MaterialIndentItem> itemEntities = matIndent.getItems();
+		Iterator<MaterialIndentItem> itemsItr = itemEntities.iterator();
+		
+		while(itemsItr.hasNext()) {
+			boolean itemFound = false;
+			MaterialIndentItem itemEntity = itemsItr.next();
+			for(MaterialIndentItemDTO itemDto : indentItemDTOs) {
+				if(itemEntity.getId() == itemDto.getId()) {
+					itemFound = true;
+					long reducedQty = itemEntity.getQuantity() - itemDto.getIssuedQuantity();
+					itemEntity.setQuantity(reducedQty);
+					itemEntity.setIssuedQuantity(itemDto.getIssuedQuantity());
+
+					Material materialItm = inventoryRepository.findOne(itemDto.getMaterialId());
+					
+					if(materialItm.getMinimumStock() == materialItm.getStoreStock()) {
+						
+					}
+					
+					MaterialTransaction materialTrans = new MaterialTransaction();
+					materialTrans.setProject(projectRepository.findOne(materialIndentDto.getProjectId()));
+					materialTrans.setSite(siteRepository.findOne(materialIndentDto.getSiteId()));
+					materialTrans.setMaterialIndent(matIndent);
+					materialTrans.setMaterialGroup(materialItemGroupRepository.findOne(materialItm.getItemGroupId()));
+					Date dateofTransaction = new Date();
+					long consumptionStock = materialItm.getStoreStock() - itemDto.getIssuedQuantity();
+					materialItm.setStoreStock(consumptionStock);
+					inventoryRepository.save(materialItm);
+					materialTrans.setMaterial(materialItm);
+					materialTrans.setUom(materialItm.getUom());
+					materialTrans.setQuantity(reducedQty);
+					materialTrans.setStoreStock(consumptionStock);
+					materialTrans.setIssuedQuantity(itemDto.getIssuedQuantity());
+					materialTrans.setTransactionType(MaterialTransactionType.ISSUED);
+					materialTrans.setTransactionDate(DateUtil.convertToTimestamp(dateofTransaction));
+					materialTrans.setActive(MaterialTransaction.ACTIVE_YES);
+					materialTrans = inventTransactionRepository.save(materialTrans);
+					if(materialTrans.getId() > 0) { 
+						matIndent.setTransaction(materialTrans);
+					}
+				
+					break;
+				}
+			}
+			log.debug("itemFound - "+ itemFound);
+			if(!itemFound){
+				itemsItr.remove();
+			}
+		}
+		
+		matIndent = materialIndentRepository.save(matIndent);
+		materialIndentDto = mapperUtil.toModel(matIndent, MaterialIndentDTO.class);
+		
+		return materialIndentDto;
 	}
 
 	

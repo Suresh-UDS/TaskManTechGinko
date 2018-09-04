@@ -25,6 +25,8 @@ angular.module('timeSheetApp')
 		$scope.pager = {};
 	
 	    $scope.noData = false;
+	    
+	    $scope.issuedQty = null;
 			
 		$scope.refreshPage = function() { 
 			 $scope.pages = {
@@ -219,6 +221,39 @@ angular.module('timeSheetApp')
                 $scope.loadingStop();
                 $scope.showNotifications('top','center','danger','Unable to create Material Indent. Please try again later..');
 			}); 
+			
+		}
+		
+		$scope.validate = function(material, issuedQty) {
+			console.log(material);
+			console.log(issuedQty);
+			if(material.quantity > issuedQty){
+				console.log("save issued indent");
+				material.issuedQuantity = issuedQty;
+				if($scope.materialIndentObj) { 
+					if($scope.materialIndentObj.items.length > 0) { 
+						for(var i in $scope.materialIndentObj.items){
+							
+							if($scope.materialIndentObj.items[i].id === material.id) {
+								$scope.materialIndentObj.items.splice(i, 1);
+								$scope.materialIndentObj.items.push(material);
+							}
+						}
+						console.log($scope.materialIndentObj);
+					}
+				}
+			}else{
+				$scope.showNotifications('top','center','danger','Quantity cannot exceeds a required quantity');
+			}
+			
+		}
+		
+		$scope.saveIndentTrans = function() {
+			console.log("save indent transaction called");
+			console.log($scope.materialIndentObj);
+			IndentComponent.createTransaction($scope.materialIndentObj).then(function(data) { 
+				console.log(data);
+			});
 			
 		}
 		
