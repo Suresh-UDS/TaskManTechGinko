@@ -1,0 +1,33 @@
+page-indent-list {
+  .list-md .item-input:last-child
+  {
+    border-bottom:none !important;
+  }
+
+  .item-md.item-block .item-inner
+  {
+    border-bottom:none !important;
+  }
+  .fnt-16
+  {
+    font-size:16px !important;
+  }
+  .label-md
+  {
+    margin:0px !important;
+  }
+  .card .card-content {
+    padding: 0px 9px !important;
+    position: relative;
+  }
+  .table-responsive {
+    width: 100%;
+   margin-bottom:0px !important;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    border: 1px solid #ddd;
+  }
+  .card {
+    margin: 5px 0 5px 0 !important;
+  }
+
+}

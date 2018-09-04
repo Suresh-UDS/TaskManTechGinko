@@ -7,6 +7,7 @@ import{ViewController} from "ionic-angular";
 import{InventoryMaster} from "../inventory-master/inventory-master";
 import{PurchaseRequisitionService} from "../service/PurchaseRequisitionService";
 import{IndentView} from "../indent-view/indent-view";
+import{IndentList} from "../indent-list/indent-list";
 
 /**
  * Generated class for the Indent page.
@@ -44,6 +45,7 @@ export class Indent {
     pageSort:15;
     page:1;
     employeeId:any;
+    purposeDetails:any;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, private component: componentService,
                 private siteService: SiteService, private inventoryService: InventoryService,
@@ -183,17 +185,18 @@ export class Indent {
             console.log("selected site");
             console.log(this.selectedSite);
         var indentDetails = {
-          siteId:this.selectedSite.id,
-          projectId:this.selectedProject.id,
-          items:this.indent,
-            indentRefNumber:this.referenceNumber,
-            requestedById:this.employeeId,
-          requestedDate:new Date()
+              siteId:this.selectedSite.id,
+              projectId:this.selectedProject.id,
+              items:this.indent,
+              indentRefNumber:this.referenceNumber,
+              requestedById:this.employeeId,
+              requestedDate:new Date()
         };
         this.purchaseService.saveMaterialIndent(indentDetails).subscribe(
             response=>{
                 console.log("Save indent Material");
                 console.log(response);
+                this.navCtrl.push(IndentList);
                 this.component.showToastMessage("indent saved successfully",'bottom');
             },err=>{
                 console.log("Error in save indent material");
@@ -204,10 +207,6 @@ export class Indent {
         )
     }
 
-    viewDetails()
-    {
-        this.navCtrl.push(IndentView);
-    }
 
 }
 
