@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {NavController, NavParams} from "ionic-angular";
+import {NavController, NavParams, AlertController} from "ionic-angular";
 import{componentService} from "../service/componentService";
 import{SiteService} from "../service/siteService";
 import {InventoryService} from "../service/inventoryService";
@@ -17,7 +17,8 @@ import {PurchaseRequisitionService} from "../service/PurchaseRequisitionService"
 })
 export class AddInventoryTransaction {
 
-    searchText: any;
+
+  searchText: any;
     shouldShowCancel: boolean;
 
     numbers: any;
@@ -41,10 +42,12 @@ export class AddInventoryTransaction {
     selectedMaterial: any;
     inventoryTransaction:any;
     indentList: any;
+  quantityy: any;
 
 
     constructor(public navCtrl: NavController, public navParams: NavParams,private component:componentService,
-              private siteService:SiteService, private inventoryService:InventoryService, private prService:PurchaseRequisitionService
+              private siteService:SiteService, private inventoryService:InventoryService, private prService:PurchaseRequisitionService,
+                public alertCtrl: AlertController
   ) {
 
         this.transactionMaterials = [];
@@ -104,6 +107,7 @@ export class AddInventoryTransaction {
     getAllInventoryGroups() {
         this.inventoryService.getAllGroups().subscribe(
             response => {
+                console.log("site response")
                 console.log(response);
                 this.inventoryGroups = response;
             }
@@ -178,15 +182,66 @@ export class AddInventoryTransaction {
   selectMaterial(m) {
     this.selectedMaterial = m;
   }
-    addTransactionMaterial(m) {
-        console.log(m);
-        var details = {
-            materialName: m.materialName,
-            materialId: m.id,
-            uom: m.materialUom,
-            number: 1
-        };
-        this.transactionMaterials.push(details);
+    addTransactionMaterial() {
+        console.log("selected site");
+        console.log(this.selectedSite);
+        console.log(this.selectedMaterial.materialStoreStock);
+        if(this.selectedMaterial.materialStoreStock >= this.quantityy){
+            let confirm =  this.alertCtrl.create({
+              title: 'Alert',
+              message:'Do you want to save?',
+              buttons:[
+                {
+                  text:'No',
+                  handler:()=>{
+                   console.log("No clicked");
+                  }
+                },
+                {
+                  text:'Yes',
+                  handler:()=>{
+                    var details = {
+                      siteId:this.selectedSite.id,
+                      projectId:this.selectedProject.id,
+                      materialId:this.selectedMaterial.materialId,
+                      materialItemCode:this.selectedMaterial.materialItemCode,
+                      materialName:this.selectedMaterial.materialName,
+                      storeStock:this.selectedMaterial.materialStoreStock,
+                      uom:this.selectedMaterial.materialUom,
+                      materialGroupId:this.selectedMaterial.materialItemGroupId,
+                      quantity:this.quantityy,
+                      transactionType:"ISSUED",
+                      transactionDate:new Date()
+                    };
+                    console.log("transaction details");
+                    console.log(details);
+                    this.prService.saveInventoryTransaction(details).subscribe(
+                      response=>{
+                        console.log("Save Inventory Transaction");
+                        console.log(response);
+                        this.component.showToastMessage("Inventory Transaction saved Successfully",'bottom');
+                        var trans_list ={
+                          materialName: response.materialName,
+                          quantity:response.quantity,
+                          uom:response.uom
+                        }
+                        this.transactionMaterials.push(trans_list);
+                      },err=>{
+                        console.log("Error in save inventory transaction");
+                        console.log(err);
+                        this.component.showToastMessage("Error in save inventory transaction",'bottom');
+                      }
+                    )
+                  }
+                }
+              ]
+            });
+            confirm.present();
+        }else {
+          this.component.showToastMessage("Your store stock is "+this.selectedMaterial.materialStoreStock,'bottom');
+        }
+
+
     }
 
     removeTransaction(i) {

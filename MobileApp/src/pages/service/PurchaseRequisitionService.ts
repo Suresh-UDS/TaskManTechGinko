@@ -58,6 +58,14 @@ export class PurchaseRequisitionService {
         )
     }
 
+    saveInventoryTransaction(inventoryTransactionDetails):Observable<any>{
+        return this.http.post(this.config.Url+'api/saveInventory/transaction',inventoryTransactionDetails).map(
+          response=>{
+            console.log(response);
+            return response.json();
+          }
+        )
+    }
 
 
     // updateMaterialIndent():Observable<any>{
