@@ -134,6 +134,7 @@ import {TransactionPage} from "../pages/expense/transaction";
 import {Indent} from "../pages/indent/indent";
 import{IndentView} from "../pages/indent-view/indent-view";
 import {InventoryTransaction} from "../pages/inventorytransaction/inventorytransaction";
+import{IndentList} from "../pages/indent-list/indent-list";
 
 @NgModule({
   declarations: [
@@ -224,7 +225,8 @@ import {InventoryTransaction} from "../pages/inventorytransaction/inventorytrans
     TransactionPage,
       Indent,
       IndentView,
-    InventoryTransaction
+    InventoryTransaction,
+      IndentList
   ],
   imports: [
     BrowserModule,
@@ -232,7 +234,8 @@ import {InventoryTransaction} from "../pages/inventorytransaction/inventorytrans
     DatePickerModule,
     BrowserAnimationsModule,
     IonicModule.forRoot(MyApp,{
-        backButtonText: '',
+        backButtonText
+            : '',
         backButtonIcon: 'ios-arrow-back',
         iconMode: 'md'
     }),
@@ -326,7 +329,8 @@ import {InventoryTransaction} from "../pages/inventorytransaction/inventorytrans
     TransactionPage,
       Indent,
       IndentView,
-    InventoryTransaction
+    InventoryTransaction,
+      IndentList
       // WheelSelector
 
 

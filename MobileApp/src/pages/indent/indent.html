@@ -22,6 +22,22 @@
 
 
 <ion-content padding>
+    <ion-row no-margin>
+        <ion-col col-12>
+            <ion-item>
+                <ion-label   text-capitalize class="client-label" text-left >Reference number:</ion-label>
+                <ion-input type="text" [(ngModel)]="referenceNumber"></ion-input>
+            </ion-item>
+        </ion-col>
+    </ion-row>
+    <ion-row no-margin>
+        <ion-col col-12>
+            <ion-item>
+                <ion-label   text-capitalize class="client-label" text-left >Purpose:</ion-label>
+                <ion-input type="text" [(ngModel)]="purposeDetails"></ion-input>
+            </ion-item>
+        </ion-col>
+    </ion-row>
   <ion-row no-margin>
     <ion-col col-12>
       <ion-item>
@@ -42,14 +58,6 @@
       </ion-item>
     </ion-col>
   </ion-row>
-    <ion-row no-margin>
-        <ion-col col-12>
-            <ion-item>
-                <ion-label   text-capitalize class="client-label" text-left >Reference number:</ion-label>
-                <ion-input type="text" [(ngModel)]="referenceNumber"></ion-input>
-            </ion-item>
-        </ion-col>
-    </ion-row>
     <!--<ion-row no-margin>-->
         <!--<ion-col>-->
             <!--<ion-input type="text" [(ngModel)]="searchText" (ionChange)='f(searchText)' class="txt-input" placeholder="Search Employees">-->
@@ -130,11 +138,7 @@
       </button>
     </ion-col>
   </ion-row>
-    <!--<ion-row no-margin>-->
-        <!--<button ion-fab mini color="primary" (click)="viewDetails()">-->
-            <!--<ion-icon name="eye"></ion-icon>-->
-        <!--</button>-->
-    <!--</ion-row>-->
+
 </ion-content>
 <ion-footer>
     <ion-toolbar text-center>

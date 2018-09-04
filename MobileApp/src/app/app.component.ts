@@ -42,6 +42,7 @@ import{ChangePassword} from "../pages/change-password/change-password";
 import{InventoryMaster} from "../pages/inventory-master/inventory-master";
 import {ExpensePage} from "../pages/expense/expense";
 import {Indent} from "../pages/indent/indent";
+import {IndentList} from "../pages/indent-list/indent-list";
 
 @Component({
   templateUrl: 'app.html'
@@ -158,7 +159,8 @@ export class MyApp {
        { title: 'Feedback', component: InitFeedbackPage,active:false,icon:'feedback',permission:'FeedbackList'},
        { title: 'ChangePassword', component:ChangePassword,active:false,icon:'feedback',permission:'FeedbackList'},
         {title: 'InventoryMaster', component:InventoryMaster,active:false,icon:'feedback',permission:'FeedbackList'},
-        {title:'Indent',component:Indent,active:false,icon:'build',permission:'TicketsList'}
+        // {title:'Indent',component:Indent,active:false,icon:'build',permission:'TicketsList'},
+        {title:'IndentList',component:IndentList,active:false,icon:'receipt',permission:'AttendanceList'}
         // {title:'Splash page', component:Splash,active:false,icon:'feedback',permission:'DashboardList'},
         // {title:'Splash logo', component:SplashLogo,active:false,icon:'feedback',permission:'DashboardList'},
       // { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},

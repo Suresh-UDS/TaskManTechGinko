@@ -12,8 +12,11 @@ import {NavController, NavParams} from "ionic-angular";
   templateUrl: 'indent-view.html',
 })
 export class IndentView {
-
+  details:any;
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+    // this.navParams.get('indentDetails');
+    this.details=this.navParams.get('indentDetails');
+
   }
 
   ionViewDidLoad() {
