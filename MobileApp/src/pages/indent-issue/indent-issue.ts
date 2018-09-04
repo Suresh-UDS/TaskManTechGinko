@@ -2,19 +2,17 @@ import { Component } from '@angular/core';
 import {NavController, NavParams,AlertController} from "ionic-angular";
 import{PurchaseRequisitionService} from "../service/PurchaseRequisitionService";
 import{componentService} from "../service/componentService";
-import{IndentIssue} from "../indent-issue/indent-issue";
-
 /**
- * Generated class for the IndentView page.
+ * Generated class for the IndentIssue page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
 @Component({
-  selector: 'page-indent-view',
-  templateUrl: 'indent-view.html',
+  selector: 'page-indent-issue',
+  templateUrl: 'indent-issue.html',
 })
-export class IndentView {
+export class IndentIssue {
     details:any;
     selectedSite:any;
     selectedMaterial:any;
@@ -26,15 +24,13 @@ export class IndentView {
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public alertCtrl:AlertController,public psService:PurchaseRequisitionService,
               public csService:componentService) {
-    // this.navParams.get('indentDetails');
-    this.details=this.navParams.get('indentDetails');
+      this.details=this.navParams.get('indentDetails');
 
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad IndentView');
+    console.log('ionViewDidLoad IndentIssue');
   }
-
     addTransactionMaterial(material) {
         console.log("selected site");
         console.log(material);
@@ -95,12 +91,6 @@ export class IndentView {
         }
 
 
-    }
-
-
-    issuePage(details)
-    {
-        this.navCtrl.push(IndentIssue,{indentDetails:details});
     }
 
 }

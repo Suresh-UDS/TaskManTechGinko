@@ -54,12 +54,12 @@
                 <ion-col col-3 no-padding>
                     <p class="margin0 clr-orange fnt-12" text-center="">Name</p>
                 </ion-col>
-                <ion-col col-2 no-padding>
+                <ion-col col-3 no-padding>
                     <div class="">
                         <p text-center class="margin0 clr-orange fnt-12">Req.qty</p>
                     </div>
                 </ion-col>
-                <ion-col col-2 no-padding>
+                <ion-col col-3 no-padding>
                     <div class="">
                         <p text-center class="margin0 clr-orange fnt-12">Issued</p>
                     </div>
@@ -72,27 +72,18 @@
             </ion-row>
             <ion-list *ngFor="let item of details.items">
                 <ion-row class="margin0">
-                    <!--<ion-col col-3 text-center no-padding>-->
-                        <!--<p>{{item.materialName}}</p>-->
-                    <!--</ion-col>-->
-                    <!--<ion-col col-4 text-center no-padding>-->
-                        <!--<p>{{item.quantity}}</p>-->
-                    <!--</ion-col>-->
-                    <!--<ion-col col-4 text-center no-padding>-->
-                        <!--<p>{{item.materialUom}}</p>-->
-                    <!--</ion-col>-->
-
                     <ion-col col-3 no-padding>
                         <p class="margin0" text-center>{{item.materialName}}</p>
                     </ion-col>
-                    <ion-col col-2 no-padding>
+                    <ion-col col-3 no-padding>
                         <div class="">
                             <p text-center class="margin0" text-uppercase>{{item.quantity}}</p>
                         </div>
                     </ion-col>
-                    <ion-col col-2 no-padding>
+                    <ion-col col-3 no-padding>
                         <div class="">
-                            <p text-center class="margin0" text-uppercase>10</p>
+                            <!--<p text-center class="margin0" text-uppercase>10</p>-->
+                            <p  text-center>{{item.issuedQuantity}}</p>
                         </div>
                     </ion-col>
                     <ion-col col-3 no-padding>
@@ -100,11 +91,11 @@
                             <p text-center class="margin0" text-uppercase>{{item.materialUom}}</p>
                         </div>
                     </ion-col>
-                    <ion-col col-2 no-padding>
-                        <button ion-fab mini color="dark">
-                            <ion-icon name="checkmark" class="clr-orange"></ion-icon>
-                        </button>
-                    </ion-col>
+                    <!--<ion-col col-2 no-padding>-->
+                        <!--<button ion-fab mini color="dark" (click)="addTransactionMaterial(item)">-->
+                            <!--<ion-icon name="checkmark" class="clr-orange"></ion-icon>-->
+                        <!--</button>-->
+                    <!--</ion-col>-->
                 </ion-row>
             </ion-list>
 
@@ -113,10 +104,10 @@
 
 </ion-content>
 
-<!--<ion-footer>-->
-    <!--<ion-toolbar text-center="">-->
-        <!--<button class="btn btn-warning center width42">-->
-            <!--Approve-->
-        <!--</button>-->
-    <!--</ion-toolbar>-->
-<!--</ion-footer>-->
+<ion-footer>
+    <ion-toolbar text-center="">
+        <button class="btn btn-warning center width42" (click)="issuePage(details)">
+           Issue
+        </button>
+    </ion-toolbar>
+</ion-footer>
