@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.ChecklistItem;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Material;
@@ -28,6 +29,7 @@ import com.ts.app.domain.User;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.InventoryRepository;
 import com.ts.app.repository.InventoryTransactionRepository;
+import com.ts.app.repository.MaterialIndentItemRepository;
 import com.ts.app.repository.MaterialIndentRepository;
 import com.ts.app.repository.MaterialIndentSpecification;
 import com.ts.app.repository.ProjectRepository;
@@ -67,6 +69,9 @@ public class MaterialIndentService extends AbstractService {
 	
 	@Inject
 	private EmployeeRepository employeeRepository;
+	
+	@Inject
+	private MaterialIndentItemRepository materialIndentItmRepo;
 	
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
@@ -139,14 +144,16 @@ public class MaterialIndentService extends AbstractService {
 		}
 		
 		List<MaterialIndentItemDTO> indentItemDTOs = materialindentDTO.getItems();
-		List<MaterialIndentItem> indentItemEntity = new ArrayList<MaterialIndentItem>();
-		Iterator<MaterialIndentItem> itemsItr = indentItemEntity.iterator();
+//		List<MaterialIndentItem> indentItemEntity = new ArrayList<MaterialIndentItem>();
+		Set<MaterialIndentItem> itemEntities = material.getItems();
+		Iterator<MaterialIndentItem> itemsItr = itemEntities.iterator();
 		while(itemsItr.hasNext()) {
 			boolean itemFound = false;
 			MaterialIndentItem itemEntity = itemsItr.next();
 			for(MaterialIndentItemDTO itemDto : indentItemDTOs) {
 				if(itemEntity.getId() == itemDto.getId()) {
 					itemFound = true;
+					itemEntity.setQuantity(itemDto.getQuantity());
 					break;
 				}
 			}

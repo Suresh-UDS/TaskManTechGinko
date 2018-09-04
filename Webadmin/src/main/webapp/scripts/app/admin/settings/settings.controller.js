@@ -23,7 +23,8 @@ angular.module('timeSheetApp')
     			assetEmailIds : [],
     			ppmEmailIds : [],
     			amcEmailIds : [],
-    			warrantyEmailIds: []
+    			warrantyEmailIds: [],
+    			purchaseReqEmailIds: []
     		};
     		
     	
@@ -210,6 +211,20 @@ angular.module('timeSheetApp')
     
 	    $scope.removeWarrantyEmail = function(index) {
     		$scope.settings.warrantyEmailIds.splice(index,1);
+	    }
+	    
+	    //Purchase Requisition alert
+	    $scope.addPREmail = function() {
+        	var email = $scope.purchaseReqEmail;
+        	if(!$scope.settings.purchaseReqEmailIds) {
+        		$scope.settings.purchaseReqEmailIds = [];
+        	}
+        	$scope.settings.purchaseReqEmailIds.push(email);
+        	$scope.purchaseReqEmail = '';
+	    }
+    
+	    $scope.removePREmail = function(index) {
+    		$scope.settings.purchaseReqEmailIds.splice(index,1);
 	    }
 	    
     		

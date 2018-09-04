@@ -81,6 +81,10 @@ public class SettingsService extends AbstractService {
 	public static final String EMAIL_NOTIFICATION_WARRANTY = "email.notification.warranty";
 	
 	public static final String EMAIL_NOTIFICATION_WARRANTY_EMAILS = "email.notification.warranty.emails";
+	
+	public static final String EMAIL_NOTIFICATION_PURCHASEREQ = "email.notification.purchasereq";
+	
+	public static final String EMAIL_NOTIFICATION_PURCHASEREQ_EMAILS = "email.notification.purchasereq.emails";
 
 	@Inject
 	private SettingsRepository settingsRepository;
@@ -485,6 +489,36 @@ public class SettingsService extends AbstractService {
 		warrantyEmailsSetting.setSiteName(settingsDto.getSiteName());
 		warrantyEmailsSetting.setActive("Y");
 		
+		Setting purchaseAlertSetting = null;
+		if(settingsDto.getPurchaseReqEmailAlertId() > 0) {
+			purchaseAlertSetting = settingsRepository.findOne(settingsDto.getPurchaseReqEmailAlertId());
+		}else {
+			purchaseAlertSetting = new Setting();
+		}
+		purchaseAlertSetting.setSettingKey(EMAIL_NOTIFICATION_PURCHASEREQ);
+		purchaseAlertSetting.setSettingValue(String.valueOf(settingsDto.isPurchaseReqEmailAlert()));
+		purchaseAlertSetting.setProjectId(settingsDto.getProjectId());
+		purchaseAlertSetting.setProjectName(settingsDto.getProjectName());
+		purchaseAlertSetting.setSiteId(settingsDto.getSiteId());
+		purchaseAlertSetting.setSiteName(settingsDto.getSiteName());
+		purchaseAlertSetting.setActive("Y");
+		
+		Setting purchaseEmailsSetting = null;
+		if(settingsDto.getPurchaseReqEmailsId() > 0) {
+			purchaseEmailsSetting = settingsRepository.findOne(settingsDto.getPurchaseReqEmailsId());
+		}else {
+			purchaseEmailsSetting = new Setting();
+		}
+		purchaseEmailsSetting.setSettingKey(EMAIL_NOTIFICATION_PURCHASEREQ_EMAILS);
+		if(CollectionUtils.isNotEmpty(settingsDto.getPurchaseReqEmailIds())) {
+			purchaseEmailsSetting.setSettingValue(CommonUtil.convertToString(settingsDto.getPurchaseReqEmailIds()));
+		}
+		purchaseEmailsSetting.setProjectId(settingsDto.getProjectId());
+		purchaseEmailsSetting.setProjectName(settingsDto.getProjectName());
+		purchaseEmailsSetting.setSiteId(settingsDto.getSiteId());
+		purchaseEmailsSetting.setSiteName(settingsDto.getSiteName());
+		purchaseEmailsSetting.setActive("Y");
+		
 		List<Setting> settingList = new ArrayList<Setting>();
 		if(StringUtils.isNotEmpty(shiftWiseAttendanceAlertSetting.getSettingValue())) {
 			settingList.add(shiftWiseAttendanceAlertSetting);
@@ -563,6 +597,12 @@ public class SettingsService extends AbstractService {
 		}
 		if(StringUtils.isNotEmpty(warrantyEmailsSetting.getSettingValue())) {
 			settingList.add(warrantyEmailsSetting);
+		}
+		if(StringUtils.isNotEmpty(purchaseAlertSetting.getSettingValue())) {
+			settingList.add(purchaseAlertSetting);
+		}
+		if(StringUtils.isNotEmpty(purchaseEmailsSetting.getSettingValue())) {
+			settingList.add(purchaseEmailsSetting);
 		}
 		
 		settingsRepository.save(settingList);
@@ -665,6 +705,12 @@ public class SettingsService extends AbstractService {
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_WARRANTY_EMAILS)) {
 					settingDto.setWarrantyEmailsId(setting.getId());
 					settingDto.setWarrantyEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_PURCHASEREQ)) {
+					settingDto.setPurchaseReqEmailAlertId(setting.getId());
+					settingDto.setPurchaseReqEmailAlert(Boolean.valueOf(setting.getSettingValue()));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_PURCHASEREQ_EMAILS)) {
+					settingDto.setPurchaseReqEmailsId(setting.getId());
+					settingDto.setPurchaseReqEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
 				}
 
 				//settings.add(settingDto);
