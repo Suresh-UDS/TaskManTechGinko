@@ -150,6 +150,13 @@ public class DateUtil {
 		return null;
 	}
 	
+	public static long getDiff(Calendar startDate, Calendar endDate) {
+		long millisecs = endDate.getTimeInMillis() - startDate.getTimeInMillis();
+		long secs = millisecs / 1000;
+		long mins = (secs / 60);
+		return mins;
+	}
+	
 	public static void main(String arg[]) {
 		String dateValue = "Thu Jul 19 09:25:00 IST 2018";
 		Date d = parseToDateTime(dateValue);

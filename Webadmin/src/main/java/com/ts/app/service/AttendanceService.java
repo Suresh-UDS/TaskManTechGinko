@@ -11,7 +11,9 @@ import java.util.TreeSet;
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.hibernate.Hibernate;
+import org.joda.time.Minutes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -265,6 +267,16 @@ public class AttendanceService extends AbstractService {
 					}else {
 						dbAttn.setShiftStartTime(startTime);
 						dbAttn.setShiftEndTime(endTime);
+					}
+				}else {
+					long prevShiftDiff = DateUtil.getDiff(prevShiftStartCal, checkInCal);
+					long currShiftDiff = DateUtil.getDiff(checkInCal, startCal);
+					if(currShiftDiff < prevShiftDiff) {
+						dbAttn.setShiftStartTime(startTime);
+						dbAttn.setShiftEndTime(endTime);
+					}else {
+						dbAttn.setShiftStartTime(prevShiftStartTime);
+						dbAttn.setShiftEndTime(prevShiftEndTime);
 					}
 				}
 				
