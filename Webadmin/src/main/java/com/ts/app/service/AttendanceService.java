@@ -198,13 +198,15 @@ public class AttendanceService extends AbstractService {
 
 				Calendar startCalLeadTime = Calendar.getInstance();
 				startCalLeadTime.setTimeInMillis(startCal.getTimeInMillis());
-				startCalLeadTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]) - shiftStartLeadTime);
+				startCalLeadTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
 				startCalLeadTime.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
+				startCalLeadTime.add(Calendar.MINUTE, -shiftStartLeadTime);
 
 				Calendar startCalGraceTime = Calendar.getInstance();
 				startCalGraceTime.setTimeInMillis(startCal.getTimeInMillis());
-				startCalGraceTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]) + shiftStartGraceTime);
+				startCalGraceTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
 				startCalGraceTime.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
+				startCalGraceTime.add(Calendar.MINUTE, shiftStartGraceTime);
 
 				String endTime = shift.getEndTime();
 				String[] endTimeUnits = endTime.split(":");
@@ -216,13 +218,15 @@ public class AttendanceService extends AbstractService {
 
 				Calendar endCalLeadTime = Calendar.getInstance();
 				endCalLeadTime.setTimeInMillis(endCal.getTimeInMillis());
-				endCalLeadTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]) - shiftEndLeadTime);
+				endCalLeadTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
 				endCalLeadTime.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
+				endCalLeadTime.add(Calendar.MINUTE, -shiftEndLeadTime);
 
 				Calendar endCalGraceTime = Calendar.getInstance();
 				endCalGraceTime.setTimeInMillis(endCal.getTimeInMillis());
-				endCalGraceTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]) + shiftEndGraceTime);
+				endCalGraceTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
 				endCalGraceTime.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
+				endCalGraceTime.add(Calendar.MINUTE, shiftEndGraceTime);
 
 				if(!isCheckIn && endCal.before(startCal)) {
 					startCal.add(Calendar.DAY_OF_MONTH, -1);
