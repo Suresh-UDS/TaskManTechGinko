@@ -71,7 +71,17 @@ angular.module('timeSheetApp')
         };
         $scope.showNotifications= function(position,alignment,color,msg){
                     demo.showNotification(position,alignment,color,msg);
-                }
+        }
+
+         $scope.initscrollbar = function()
+         {
+           console.log("---- Calling scrollbar ---- ");
+
+           $('.sidebar .sidebar-wrapper').perfectScrollbar();
+
+         }
+
+          $scope.initscrollbar();
 
         $('input#dateFilterFrom').on('dp.change', function(e){
             console.log(e.date);
@@ -221,6 +231,10 @@ angular.module('timeSheetApp')
              if($scope.status == 1){
 
                  $location.path('/assets');
+
+             }if($scope.status == 2){
+
+                 $location.path('/view-quotation/'+ $scope.qid);
 
              }else{
 
@@ -517,6 +531,8 @@ angular.module('timeSheetApp')
 
          $scope.editTicket = function(){
             var tId =parseInt($stateParams.id);
+            $scope.status =$stateParams.status;
+            $scope.qid =$stateParams.qid;
             if(tId){
 
                 JobComponent.getTicketDetails(tId).then(function(data){
@@ -666,7 +682,7 @@ angular.module('timeSheetApp')
                 $scope.tickets.comments = $scope.tickets.comments;
                 console.log('Tickets - ' + JSON.stringify($scope.tickets));
                 JobComponent.updateTicket($scope.tickets).then(function(response) {
-                    
+
                             console.log('ticket updated successfuly');
                             if($scope.selectedImageFile){
                                 console.log('ticket image found');
@@ -684,7 +700,7 @@ angular.module('timeSheetApp')
                             $scope.showNotifications('top','center','success','Ticket has been updated successfuly!!');
                             //$scope.search();
                             $location.path('/tickets');
-                        
+
 
                 }).catch(function (response) {
                     $scope.success = null;
@@ -716,7 +732,7 @@ angular.module('timeSheetApp')
             $scope.closeTicketConfirm =function(cTicket){
                 $scope.loadingStart();
                 JobComponent.updateTicket(cTicket).then(function(response) {
-                    $scope.loadingStop();  
+                    $scope.loadingStop();
                     console.log("Error saving ticket");
                     console.log(response);
                     if(response.errorStatus){
@@ -725,13 +741,13 @@ angular.module('timeSheetApp')
                         $(".fade").removeClass("modal-backdrop");
                         $('#closeTicket').modal('hide');
                         $scope.showNotifications('top','center','danger',response.errorMessage);
-                    }else{   
+                    }else{
                         $scope.success = 'OK';
                         $scope.showNotifications('top','center','success','Ticket status has been updated successfuly!!');
                         $(".fade").removeClass("modal-backdrop");
                         $('#closeTicket').modal('hide');
-                        $state.reload(); 
-                    }         
+                        $state.reload();
+                    }
                 }).catch(function(response){
                     $scope.success = null;
                     $scope.loadingStop();

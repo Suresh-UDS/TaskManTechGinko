@@ -97,6 +97,17 @@ angular
 
 			        };
 
+
+			        $scope.initscrollbar = function()
+                     {
+                       console.log("---- Calling scrollbar ---- ");
+
+                       $('.sidebar .sidebar-wrapper').perfectScrollbar();
+
+                     }
+
+                      $scope.initscrollbar();
+
 			        $('input#submittedDateFilter').on('dp.change', function(e){
 			            console.log(e.date);
 			            console.log(e.date._d);
@@ -854,7 +865,7 @@ angular
                      $scope.loadPageTop();
 
                       /* Localstorage (Retain old values while edit page to list) start */
-                     
+
 	                 if($rootScope.retain == 1){
 	                    $scope.localStorage = getLocalStorage.getSearch();
 	                    console.log('Local storage---',$scope.localStorage);
@@ -868,9 +879,9 @@ angular
 	                               $scope.searchProject = null;
 	                            }
 	                            if($scope.localStorage.siteId){
-	                              $scope.searchSite = {id:$scope.localStorage.siteId,name:$scope.localStorage.siteName}; 
+	                              $scope.searchSite = {id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
 	                            }else{
-	                               $scope.searchSite = null;  
+	                               $scope.searchSite = null;
 	                            }
 
 	                    }
@@ -973,12 +984,12 @@ angular
 					            })
 					        }
 
-					        
+
 
 					        $scope.validCheck = function(){
 
-                               if(($scope.serviceRateCardDetails.length > 0 ) || 
-                               	($scope.labourRateCardDetails.length > 0) || 
+                               if(($scope.serviceRateCardDetails.length > 0 ) ||
+                               	($scope.labourRateCardDetails.length > 0) ||
                                	($scope.materialRateCardDetails.length > 0)){
 	                               $scope.quoteStatus = false;
 						        }else{

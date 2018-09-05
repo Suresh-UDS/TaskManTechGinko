@@ -98,6 +98,17 @@ angular.module('timeSheetApp')
                     //
 
 
+        $scope.initscrollbar = function()
+         {
+           console.log("---- Calling scrollbar ---- ");
+
+           $('.sidebar .sidebar-wrapper').perfectScrollbar();
+
+         }
+
+          $scope.initscrollbar();
+
+
         $scope.loadProjects = function () {
         	ProjectComponent.findAll().then(function (data) {
                 $scope.projects = data;
@@ -1162,26 +1173,43 @@ angular.module('timeSheetApp')
 
         $scope.closeTicket = function (ticket){
 
-            $scope.cTicket={id :ticket,status :'Closed'};
+             $scope.cTicket={id :ticket,status :'Closed'};
         }
 
-
         $scope.closeTicketConfirm =function(cTicket){
-
-            JobComponent.updateTicket(cTicket).then(function(data) {
-                if(data.errorMessage) {
+            $scope.loadingStart();
+            JobComponent.updateTicket(cTicket).then(function(response) {
+                $scope.loadingStop();
+                console.log("Error saving ticket");
+                console.log(response);
+                if(response.errorStatus){
                     $scope.success = null;
-                    $scope.showNotifications('top','center','danger',data.errorMessage);
+                    $scope.error = 'ERROR';
                     $(".fade").removeClass("modal-backdrop");
-                    $state.reload();
-                }else {
+                    $('#closeTicket').modal('hide');
+                    $scope.showNotifications('top','center','danger',response.errorMessage);
+                }else{
                     $scope.success = 'OK';
-                    $scope.showNotifications('top','center','success','Ticket status updated');
+                    $scope.showNotifications('top','center','success','Ticket status has been updated successfuly!!');
                     $(".fade").removeClass("modal-backdrop");
-                    $scope.ticketStatus = 'Closed';
+                    $('#closeTicket').modal('hide');
                     $state.reload();
                 }
-            })
+            }).catch(function(response){
+                $scope.success = null;
+                $scope.loadingStop();
+                $(".fade").removeClass("modal-backdrop");
+                $('#closeTicket').modal('hide');
+                console.log("Error saving ticket");
+                console.log(response);
+                if(response.errorStatus){
+                    $scope.error = 'ERROR';
+                    $scope.showNotifications('top','center','danger',response.errorMessage);
+                }else{
+                    $scope.showNotifications('top','center','danger',response.message);
+                }
+
+            });
         }
 
 

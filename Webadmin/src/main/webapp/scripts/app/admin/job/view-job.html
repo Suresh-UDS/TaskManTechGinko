@@ -225,8 +225,8 @@
                                                   <tr>
                                                       <td>Ticket Id</td>
                                                       <td>
-                                                          <a ng-if="(job.ticketId > 0)" ng-class="{active: $state.includes('admin')}" ui-sref="view-ticket({id : job.ticketId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View Ticket {{job.ticketId}}</a>
-                                                          <a ng-if="(job.ticketId > 0) && job.jobStatus == 'COMPLETED' && ticketStatus != 'Closed'" ng-class="{active: $state.includes('admin')}"  ng-click="closeTicket(job.ticketId)"   onClick="$('#closeTicket').modal()"     class="btn btn-simple btn-info">Close Ticket {{job.ticketId}}</a>
+                                                          <a ng-if="(job.ticketId > 0)" ng-class="{active: $state.includes('admin')}" ui-sref="view-ticket({id : job.ticketId,status:2})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View Ticket {{job.ticketId}}</a>
+                                                          <a ng-if="(job.ticketId > 0) && job.jobStatus == 'COMPLETED' && ticketStatus != 'Closed'" ng-class="{active: $state.includes('admin')}"  has-permission="Tickets:Close" ng-click="closeTicket(job.ticketId)"   onClick="$('#closeTicket').modal()"     class="btn btn-simple btn-info">Close Ticket {{job.ticketId}}</a>
                                                           <a ng-if="(job.ticketId > 0) && job.jobStatus == 'COMPLETED' && ticketStatus == 'Closed'" ng-class="{active: $state.includes('admin')}" class="btn btn-simple btn-info">Ticket# {{job.ticketId}} Closed </a>
                                                       </td>
                                                   </tr>
