@@ -19,6 +19,8 @@ public class PurchaseReqItemDTO extends BaseDTO {
 	private long quantity;
 	
 	private double unitPrice;
+	
+	private long issuedQuantity;
 
 	public long getId() {
 		return id;
@@ -90,6 +92,14 @@ public class PurchaseReqItemDTO extends BaseDTO {
 
 	public void setUnitPrice(double unitPrice) {
 		this.unitPrice = unitPrice;
+	}
+
+	public long getIssuedQuantity() {
+		return issuedQuantity;
+	}
+
+	public void setIssuedQuantity(long issuedQuantity) {
+		this.issuedQuantity = issuedQuantity;
 	}
 	
 	

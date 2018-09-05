@@ -54,6 +54,10 @@ public class MaterialTransaction extends AbstractAuditingEntity implements Seria
 	@JoinColumn(name = "materialIndentId", nullable = true)
 	private MaterialIndent materialIndent;
 	
+	@OneToOne()
+	@JoinColumn(name = "purchaseRequisitionId", nullable = true)
+	private PurchaseRequisition purchaseRequisition;
+	
 	private long quantity;
 	
 	private long storeStock;
@@ -176,6 +180,14 @@ public class MaterialTransaction extends AbstractAuditingEntity implements Seria
 
 	public void setIssuedQuantity(long issuedQuantity) {
 		this.issuedQuantity = issuedQuantity;
+	}
+
+	public PurchaseRequisition getPurchaseRequisition() {
+		return purchaseRequisition;
+	}
+
+	public void setPurchaseRequisition(PurchaseRequisition purchaseRequisition) {
+		this.purchaseRequisition = purchaseRequisition;
 	}
 
 	

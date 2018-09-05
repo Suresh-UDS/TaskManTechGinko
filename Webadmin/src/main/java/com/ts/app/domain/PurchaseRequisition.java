@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -52,6 +53,10 @@ public class PurchaseRequisition extends AbstractAuditingEntity implements Seria
 	private Set<PurchaseRequisitionItem> items;
 	
 	private purchaseRequestStatus requestStatus;
+	
+	@OneToOne()
+	@JoinColumn(name = "materialTransacationId", nullable= true)
+	private MaterialTransaction transaction;
 
 	public long getId() {
 		return id;
@@ -123,6 +128,14 @@ public class PurchaseRequisition extends AbstractAuditingEntity implements Seria
 
 	public void setRequestStatus(purchaseRequestStatus requestStatus) {
 		this.requestStatus = requestStatus;
+	}
+
+	public MaterialTransaction getTransaction() {
+		return transaction;
+	}
+
+	public void setTransaction(MaterialTransaction transaction) {
+		this.transaction = transaction;
 	}
 
 	
