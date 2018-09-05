@@ -97,6 +97,8 @@ angular
 
 			        };
 
+			        $rootScope.initScrollBar();
+
 			        $('input#submittedDateFilter').on('dp.change', function(e){
 			            console.log(e.date);
 			            console.log(e.date._d);
@@ -239,11 +241,8 @@ angular
                                 $scope.projects = data;
                                 //$scope.selectedProject = $scope.projects[0];
                                 console.log()
-                                if($state.current.name == 'edit-quotation' || $state.current.name == 'view-quotation')
+                                if($state.current.name != 'edit-quotation' && $state.current.name != 'view-quotation')
                                 {
-
-                                }
-                                else {
                                     $scope.selectedProject = null;
                                 }
                                 for(var i=0;i<$scope.projects.length;i++)
@@ -566,7 +565,7 @@ angular
 			        				$scope.totalCost = 0;
                             console.log('quotation id - ' + $stateParams.id);
 			        		RateCardComponent.findQuotation($stateParams.id).then(function (data) {
-			        			$scope.loadingStop();
+
 			        				console.log('quotation response - '+ JSON.stringify(data))
 				                $scope.quotation = data;
 			        				var rateCardDetails = $scope.quotation.rateCardDetails;
@@ -616,18 +615,15 @@ angular
 					                    console.log("Ticket details");
 					                    console.log(data);
 					                    $scope.ticketStatus = data.status;
+					                    $scope.loadingStop();
 					        			});
 
+				                }else{
+				                  $scope.loadingStop();
 				                }
 
-				                if(($scope.serviceRateCardDetails.length > 0 ) || 
-                               	($scope.labourRateCardDetails.length > 0) || 
-                               	($scope.materialRateCardDetails.length > 0)){
-	                               $scope.quoteStatus = false;
-						        }else{
-						        	$scope.quoteStatus = true;
-						        }
-						        
+				                $scope.validCheck();
+
 				            });
 
                           }
@@ -863,7 +859,7 @@ angular
                      $scope.loadPageTop();
 
                       /* Localstorage (Retain old values while edit page to list) start */
-                     
+
 	                 if($rootScope.retain == 1){
 	                    $scope.localStorage = getLocalStorage.getSearch();
 	                    console.log('Local storage---',$scope.localStorage);
@@ -877,9 +873,9 @@ angular
 	                               $scope.searchProject = null;
 	                            }
 	                            if($scope.localStorage.siteId){
-	                              $scope.searchSite = {id:$scope.localStorage.siteId,name:$scope.localStorage.siteName}; 
+	                              $scope.searchSite = {id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
 	                            }else{
-	                               $scope.searchSite = null;  
+	                               $scope.searchSite = null;
 	                            }
 
 	                    }
@@ -982,12 +978,12 @@ angular
 					            })
 					        }
 
-					        
+
 
 					        $scope.validCheck = function(){
 
-                               if(($scope.serviceRateCardDetails.length > 0 ) || 
-                               	($scope.labourRateCardDetails.length > 0) || 
+                               if(($scope.serviceRateCardDetails.length > 0 ) ||
+                               	($scope.labourRateCardDetails.length > 0) ||
                                	($scope.materialRateCardDetails.length > 0)){
 	                               $scope.quoteStatus = false;
 						        }else{

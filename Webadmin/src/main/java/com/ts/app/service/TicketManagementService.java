@@ -255,13 +255,20 @@ public class TicketManagementService extends AbstractService {
 	        Employee ticketOwner = employeeRepository.findOne(ticket.getEmployee().getId());
 	        Employee assignedTo = null;
 	        if(ticketDTO.getEmployeeId()!=0) {
-	            if (ticket.getEmployee().getId() != ticketDTO.getEmployeeId()) {
+	            if (ticket.getEmployee() != null && (ticket.getEmployee().getId() != ticketDTO.getEmployeeId())) {
 	                assignedTo = employeeRepository.findOne(ticketDTO.getEmployeeId());
 	                ticket.setStatus("Assigned");
 	                ticket.setAssignedTo(assignedTo);
 	                ticket.setAssignedOn(new java.sql.Date(currCal.getTimeInMillis()));
 	            }else {
-	            		assignedTo = ticket.getEmployee();
+	            		if(ticket.getEmployee() != null) {
+	            			assignedTo = ticket.getEmployee();
+	            		}else {
+	    	                assignedTo = employeeRepository.findOne(ticketDTO.getEmployeeId());
+	    	                ticket.setStatus("Assigned");
+	    	                ticket.setAssignedTo(assignedTo);
+	    	                ticket.setAssignedOn(new java.sql.Date(currCal.getTimeInMillis()));
+	            		}
 	            }
 	        }else {
 	        		assignedTo = ticket.getAssignedTo();
@@ -527,11 +534,19 @@ public class TicketManagementService extends AbstractService {
 	}
 
 	private void sendNotifications(Employee ticketOwner, Employee assignedTo,Employee currentUserEmp,  Ticket ticket, Site site, boolean isNew) {
-		Hibernate.initialize(assignedTo.getUser());
-		User assignedToUser = assignedTo.getUser();
+		User assignedToUser = null;
+		if(assignedTo != null) {
+			Hibernate.initialize(assignedTo.getUser());
+			assignedToUser = assignedTo.getUser();
+		}
 		Hibernate.initialize(ticketOwner.getUser());
 		User ticketOwnerUser = ticketOwner.getUser();
-
+		if(assignedTo == null) {
+			assignedTo = ticketOwner;
+		}
+		if(assignedToUser == null) {
+			assignedToUser = ticketOwnerUser;
+		}
 		String ticketUrl = env.getProperty("url.ticket-view");
 		ticketUrl +=  ticket.getId();
 		Setting ticketReports = null;
@@ -551,6 +566,21 @@ public class TicketManagementService extends AbstractService {
 	    String ticketEmails = ticketReportEmails != null ? ticketReportEmails.getSettingValue() : "";
 		assignedToEmail += Constants.COMMA_SEPARATOR + ticketEmails;
 		ticketOwnerEmail += Constants.COMMA_SEPARATOR + ticketEmails;
+		if(log.isDebugEnabled()) {
+			log.debug("ticketUrl -" + ticketUrl);
+			log.debug("assignedTo - " + assignedTo);
+			log.debug("assignedTo User - " + assignedTo.getUser());
+			log.debug("assignedToEmail -"+ assignedToEmail);
+			log.debug("site - "+ site.getName());
+			log.debug("ticket - "+ ticket);
+			log.debug("ticket id -" + ticket.getId());
+			log.debug("assignedTouser first name -" + assignedToUser.getFirstName());
+			log.debug("assignedTo name -" + assignedTo.getName());
+			log.debug("ticket title -" + ticket.getTitle());
+			log.debug("ticket desc -" + ticket.getDescription());
+			log.debug("ticket status -" + ticket.getStatus());
+			log.debug("ticket severity -" + ticket.getSeverity());
+		}
 	    if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Open") || ticket.getStatus().equalsIgnoreCase("Assigned"))) {
 	    		if(isNew) {
 		    		mailService.sendTicketCreatedMail(ticketUrl,assignedTo.getUser(),assignedToEmail,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),

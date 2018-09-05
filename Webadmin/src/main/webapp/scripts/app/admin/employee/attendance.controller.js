@@ -665,8 +665,8 @@ angular.module('timeSheetApp')
             $scope.selectedSite = null;
             $scope.searchProject = null;
             $scope.searchSite = null;
-            $scope.SearchEmployeeId = null;
-            $scope.SearchEmployeeName = null;
+            $scope.searchEmployeeId = null;
+            $scope.searchEmployeeName = null;
             $scope.searchCriteria = {};
             $rootScope.searchCriteriaAttendances   = null;
             // $scope.selectedDateFrom = null;

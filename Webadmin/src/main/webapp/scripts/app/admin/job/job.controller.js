@@ -98,6 +98,17 @@ angular.module('timeSheetApp')
                     //
 
 
+        $scope.initscrollbar = function()
+         {
+           console.log("---- Calling scrollbar ---- ");
+
+           $('.sidebar .sidebar-wrapper').perfectScrollbar();
+
+         }
+
+          $scope.initscrollbar();
+
+
         $scope.loadProjects = function () {
         	ProjectComponent.findAll().then(function (data) {
                 $scope.projects = data;
@@ -370,7 +381,7 @@ angular.module('timeSheetApp')
             }else{
                 $scope.searchCriteria.siteId = null;
             }
-        		//$scope.searchCriteria.list = true;
+        		$scope.searchCriteria.list = true;
                 $scope.searchCriteria.isReport = true;
 
                 $scope.employees = "";
@@ -557,11 +568,11 @@ angular.module('timeSheetApp')
         		$scope.job.pendingAtUDS=true;
         		$scope.selectedSite = {id : data.siteId,name : data.siteName};
                 $scope.job.plannedStartTime = data.plannedStartTime;
-                $scope.selectPlannedStartTime = $filter('date')(data.plannedStartTime, 'dd/MM/yyyy hh:mm a');  
+                $scope.selectPlannedStartTime = $filter('date')(data.plannedStartTime, 'dd/MM/yyyy hh:mm a');
                 if($scope.job.schedule == 'ONCE'){
-                  $scope.job.scheduleEndDate = "";  
+                  $scope.job.scheduleEndDate = "";
                 }else{
-                   $scope.job.scheduleEndDate = data.scheduleEndDate; 
+                   $scope.job.scheduleEndDate = data.scheduleEndDate;
                 }
                 $scope.selectScheduleEndDate = $filter('date')(data.scheduleEndDate, 'dd/MM/yyyy hh:mm a');
         		$scope.loadEmployees().then(function(employees){
@@ -1162,19 +1173,43 @@ angular.module('timeSheetApp')
 
         $scope.closeTicket = function (ticket){
 
-            $scope.cTicket={id :ticket,status :'Closed'};
+             $scope.cTicket={id :ticket,status :'Closed'};
         }
 
-
         $scope.closeTicketConfirm =function(cTicket){
+            $scope.loadingStart();
+            JobComponent.updateTicket(cTicket).then(function(response) {
+                $scope.loadingStop();
+                console.log("Error saving ticket");
+                console.log(response);
+                if(response.errorStatus){
+                    $scope.success = null;
+                    $scope.error = 'ERROR';
+                    $(".fade").removeClass("modal-backdrop");
+                    $('#closeTicket').modal('hide');
+                    $scope.showNotifications('top','center','danger',response.errorMessage);
+                }else{
+                    $scope.success = 'OK';
+                    $scope.showNotifications('top','center','success','Ticket status has been updated successfuly!!');
+                    $(".fade").removeClass("modal-backdrop");
+                    $('#closeTicket').modal('hide');
+                    $state.reload();
+                }
+            }).catch(function(response){
+                $scope.success = null;
+                $scope.loadingStop();
+                $(".fade").removeClass("modal-backdrop");
+                $('#closeTicket').modal('hide');
+                console.log("Error saving ticket");
+                console.log(response);
+                if(response.errorStatus){
+                    $scope.error = 'ERROR';
+                    $scope.showNotifications('top','center','danger',response.errorMessage);
+                }else{
+                    $scope.showNotifications('top','center','danger',response.message);
+                }
 
-	        JobComponent.updateTicket(cTicket).then(function() {
-	                $scope.success = 'OK';
-	                $scope.showNotifications('top','center','success','Ticket status updated');
-	                $(".fade").removeClass("modal-backdrop");
-	                $scope.ticketStatus = 'Closed'
-	                $state.reload();
-	            });
+            });
         }
 
 
