@@ -154,7 +154,7 @@ public class AttendanceService extends AbstractService {
         if(dbAttn.isOffline()){
             dbAttn.setCheckOutTime(DateUtil.convertToTimestamp(attnDto.getCheckOutTime()));
         }
-        findShiftTiming(false, attnDto, dbAttn);
+        //findShiftTiming(false, attnDto, dbAttn);
 
         dbAttn = attendanceRepository.save(dbAttn);
         attnDto = mapperUtil.toModel(dbAttn, AttendanceDTO.class);
@@ -179,7 +179,9 @@ public class AttendanceService extends AbstractService {
         if(CollectionUtils.isNotEmpty(shifts)) {
 			Calendar prevShiftStartCal = null;
 			Calendar prevShiftEndCal = null;
-
+			String prevShiftStartTime = null;
+			String prevShiftEndTime = null;
+			
         		for(Shift shift : shifts) {
         	        if(log.isDebugEnabled()) {
                 		log.debug("shift timing - " + shift.getStartTime() + " - " + shift.getEndTime());
@@ -249,6 +251,18 @@ public class AttendanceService extends AbstractService {
 				}
 				
 
+				if(checkInCal.after(startCalLeadTime) && checkInCal.before(endCalGraceTime)) {
+					if(prevShiftStartCal != null && prevShiftStartCal.equals(startCalLeadTime)) {
+						dbAttn.setShiftStartTime(prevShiftStartTime);
+						dbAttn.setShiftEndTime(prevShiftEndTime);
+					}else {
+						dbAttn.setShiftStartTime(startTime);
+						dbAttn.setShiftEndTime(endTime);
+					}
+				}
+				
+					
+				/*
 				if(checkInCal.before(endCalLeadTime)) { // 12:30 PM checkin time < 1 PM (2PM shift ends) - 1 hr lead time
 					if((startCal.before(checkInCal))  // 7 AM shift starts < 12:30 PM check in
 							|| startCal.equals(checkInCal)) {
@@ -288,6 +302,8 @@ public class AttendanceService extends AbstractService {
 						break;
 					}
 				}
+				
+				*/
 
 				/*
 				if(checkOutCal != null) { //if checkout done
@@ -316,6 +332,8 @@ public class AttendanceService extends AbstractService {
 				prevShiftEndCal = Calendar.getInstance();
 				prevShiftEndCal.setTime(endCal.getTime());
 
+				prevShiftStartTime = startTime;
+				prevShiftEndTime = endTime;
         		}
         }
     }
