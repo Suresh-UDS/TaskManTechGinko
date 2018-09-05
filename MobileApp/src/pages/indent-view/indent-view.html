@@ -54,14 +54,19 @@
                 <ion-col col-3 no-padding>
                     <p class="margin0 clr-orange fnt-12" text-center="">Name</p>
                 </ion-col>
-                <ion-col col-3 no-padding>
+                <ion-col col-2 no-padding>
                     <div class="">
                         <p text-center class="margin0 clr-orange fnt-12">Req.qty</p>
                     </div>
                 </ion-col>
-                <ion-col col-3 no-padding>
+                <ion-col col-2 no-padding>
                     <div class="">
                         <p text-center class="margin0 clr-orange fnt-12">Issued</p>
+                    </div>
+                </ion-col>
+                <ion-col col-2 no-padding>
+                    <div class="">
+                        <p text-center class="margin0 clr-orange fnt-12">Pending</p>
                     </div>
                 </ion-col>
                 <ion-col col-3 no-padding>
@@ -75,15 +80,21 @@
                     <ion-col col-3 no-padding>
                         <p class="margin0" text-center>{{item.materialName}}</p>
                     </ion-col>
-                    <ion-col col-3 no-padding>
+                    <ion-col col-2 no-padding>
                         <div class="">
                             <p text-center class="margin0" text-uppercase>{{item.quantity}}</p>
                         </div>
                     </ion-col>
-                    <ion-col col-3 no-padding>
+                    <ion-col col-2 no-padding>
                         <div class="">
                             <!--<p text-center class="margin0" text-uppercase>10</p>-->
                             <p  text-center>{{item.issuedQuantity}}</p>
+                        </div>
+                    </ion-col>
+                    <ion-col col-2 no-padding>
+                        <div class="">
+                            <!--<p text-center class="margin0" text-uppercase>10</p>-->
+                            <p  text-center>0</p>
                         </div>
                     </ion-col>
                     <ion-col col-3 no-padding>

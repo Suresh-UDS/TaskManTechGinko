@@ -19,7 +19,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
 
   <div *ngIf=" (!details || details.length < 0)">
     <ion-card>
@@ -57,7 +57,7 @@
       </ion-row>
 
       <ion-row class="margin0 margin-top5">
-        <ion-col col-3 no-padding>
+        <ion-col col-2 no-padding>
           <p class="margin0 clr-orange fnt-12" text-center="">Name</p>
         </ion-col>
         <ion-col col-2 no-padding>
@@ -70,7 +70,12 @@
             <p text-center class="margin0 clr-orange fnt-12">Issued</p>
           </div>
         </ion-col>
-        <ion-col col-3 no-padding>
+          <ion-col col-2 no-padding>
+              <div class="">
+                  <p text-center class="margin0 clr-orange fnt-12">Pending</p>
+              </div>
+          </ion-col>
+        <ion-col col-2 no-padding>
           <div class="">
             <p text-center class="margin0 clr-orange fnt-12">Uom</p>
           </div>
@@ -78,7 +83,7 @@
       </ion-row>
       <ion-list *ngFor="let item of details.items">
         <ion-row class="margin0">
-          <ion-col col-3 no-padding>
+          <ion-col col-2 no-padding>
             <p class="margin0" text-center>{{item.materialName}}</p>
           </ion-col>
           <ion-col col-2 no-padding>
@@ -92,7 +97,13 @@
               <ion-input type="number" text-center [(ngModel)]="item.issuedQuantity"></ion-input>
             </div>
           </ion-col>
-          <ion-col col-3 no-padding>
+          <ion-col col-2 no-padding>
+            <div class="">
+              <!--<p text-center class="margin0" text-uppercase>10</p>-->
+              <p text-center class="margin0" text-uppercase>0</p>
+            </div>
+          </ion-col>
+          <ion-col col-2 no-padding>
             <div class="">
               <p text-center class="margin0" text-uppercase>{{item.materialUom}}</p>
             </div>

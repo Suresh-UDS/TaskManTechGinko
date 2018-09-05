@@ -63,6 +63,7 @@ export class IndentView {
                                 uom:material.materialUom,
                                 materialGroupId:material.materialItemGroupId,
                                 quantity:this.quantity,
+                                issuedQuantity:material.issuedQuantity,
                                 transactionType:"ISSUED",
                                 transactionDate:new Date()
                             };
