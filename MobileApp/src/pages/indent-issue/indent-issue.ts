@@ -57,6 +57,7 @@ export class IndentIssue {
                                 materialName:material.materialName,
                                 storeStock:material.materialStoreStock,
                                 uom:material.materialUom,
+                                issuedQuantity:material.issuedQuantity,
                                 materialGroupId:material.materialItemGroupId,
                                 quantity:this.quantity,
                                 transactionType:"ISSUED",
