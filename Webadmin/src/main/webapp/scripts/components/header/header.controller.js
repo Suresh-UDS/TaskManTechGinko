@@ -28,7 +28,7 @@ angular.module('timeSheetApp')
 
              var absUrl = $location.absUrl();
              var urlArray = absUrl.split("/");
-             //urlArray[4] 
+             //urlArray[4]
 
              if(urlArray[4] !=''){
 
@@ -47,15 +47,8 @@ angular.module('timeSheetApp')
 
         },0);
 
-        $scope.initscrollbar = function()
-             {
-               console.log("---- Calling scrollbar ---- ");
 
-               $('.sidebar .sidebar-wrapper').perfectScrollbar();
-
-             }
-
-              $scope.initscrollbar();
+       $rootScope.initScrollBar();
 
         $rootScope.inits = function()
         {

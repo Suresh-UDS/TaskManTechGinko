@@ -17,7 +17,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
         $rootScope.resLoader=false;
         $rootScope.searchCriterias={};
 
-        /** @reatin - retaining scope value.**/ 
+        /** @reatin - retaining scope value.**/
 
         $rootScope.retain=0;
 
@@ -169,13 +169,15 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
 
         //Perfect scroll bar INIT
 
-        // $rootScope.initScrollBar = function(){
-        //
-        //     console.log("-- Calling scrollbar -- ");
-        //
-        //     $('.sidebar .sidebar-wrapper').perfectScrollbar();
-        // }
-        //
+         $rootScope.initScrollBar = function(){
+
+            console.log("-- Calling scrollbar -- ");
+
+             $('.sidebar .sidebar-wrapper').perfectScrollbar();
+         }
+
+
+
         // $rootScope.initScrollBar();
 
     })
@@ -232,7 +234,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
         $httpProvider.defaults.cache = false;
 
     })
-    
+
     .config(['$urlMatcherFactoryProvider', function($urlMatcherFactory) {
         $urlMatcherFactory.type('boolean', {
             name : 'boolean',
