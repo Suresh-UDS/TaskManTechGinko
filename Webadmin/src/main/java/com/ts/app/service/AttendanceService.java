@@ -279,6 +279,9 @@ public class AttendanceService extends AbstractService {
 							dbAttn.setShiftStartTime(prevShiftStartTime);
 							dbAttn.setShiftEndTime(prevShiftEndTime);
 						}
+					}else {
+						dbAttn.setShiftStartTime(prevShiftStartTime);
+						dbAttn.setShiftEndTime(prevShiftEndTime);
 					}
 				}
 				
