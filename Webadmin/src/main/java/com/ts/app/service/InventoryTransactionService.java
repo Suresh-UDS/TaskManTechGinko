@@ -139,7 +139,7 @@ public class InventoryTransactionService extends AbstractService{
 		if(materialTransDTO.getTransactionType().equals(MaterialTransactionType.ISSUED)) {
 			Material material = inventoryRepository.findOne(materialTransDTO.getMaterialId());
 			long prevStoreStock = material.getStoreStock();
-			if(prevStoreStock == material.getMinimumStock()) {   // send purchase request when stock is minimum level
+			if(prevStoreStock < material.getMinimumStock()) {   // send purchase request when stock is minimum level
 				
 				Site site = siteRepository.findOne(materialTransDTO.getSiteId());
 				String siteName = site.getName();
