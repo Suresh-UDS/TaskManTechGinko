@@ -542,6 +542,7 @@ public class TicketManagementService extends AbstractService {
 		Hibernate.initialize(ticketOwner.getUser());
 		User ticketOwnerUser = ticketOwner.getUser();
 		if(assignedTo == null) {
+			assignedTo = ticketOwner;
 			assignedToUser = ticketOwnerUser;
 		}
 		String ticketUrl = env.getProperty("url.ticket-view");
