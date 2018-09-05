@@ -616,8 +616,9 @@ public class AttendanceService extends AbstractService {
 		endCal.set(Calendar.HOUR_OF_DAY, 23);
 		endCal.set(Calendar.MINUTE, 59);
 		endCal.set(Calendar.SECOND, 0);
-		Attendance attn = attendanceRepository.findCurrentCheckIn(empId, DateUtil.convertToSQLDate(startCal.getTime()), DateUtil.convertToSQLDate(endCal.getTime()));
-		if(attn != null) {
+		List<Attendance> attns = attendanceRepository.findCurrentCheckIn(empId, DateUtil.convertToSQLDate(startCal.getTime()), DateUtil.convertToSQLDate(endCal.getTime()));
+		if(CollectionUtils.isNotEmpty(attns)) {
+			Attendance attn = attns.get(0);
 			attnDto = mapperUtil.toModel(attn, AttendanceDTO.class);
 		}
 		return attnDto;
