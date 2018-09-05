@@ -262,6 +262,9 @@ public class AttendanceService extends AbstractService {
 					}else if(prevShiftStartCal != null && prevShiftStartCal.equals(startCalLeadTime)) {
 						dbAttn.setShiftStartTime(prevShiftStartTime);
 						dbAttn.setShiftEndTime(prevShiftEndTime);
+					}else {
+						dbAttn.setShiftStartTime(startTime);
+						dbAttn.setShiftEndTime(endTime);
 					}
 				}
 				
