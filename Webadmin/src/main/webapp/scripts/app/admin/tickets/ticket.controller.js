@@ -73,15 +73,7 @@ angular.module('timeSheetApp')
                     demo.showNotification(position,alignment,color,msg);
         }
 
-         $scope.initscrollbar = function()
-         {
-           console.log("---- Calling scrollbar ---- ");
-
-           $('.sidebar .sidebar-wrapper').perfectScrollbar();
-
-         }
-
-          $scope.initscrollbar();
+         $rootScope.initScrollBar();
 
         $('input#dateFilterFrom').on('dp.change', function(e){
             console.log(e.date);

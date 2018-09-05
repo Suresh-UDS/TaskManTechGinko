@@ -97,16 +97,7 @@ angular
 
 			        };
 
-
-			        $scope.initscrollbar = function()
-                     {
-                       console.log("---- Calling scrollbar ---- ");
-
-                       $('.sidebar .sidebar-wrapper').perfectScrollbar();
-
-                     }
-
-                      $scope.initscrollbar();
+			        $rootScope.initScrollBar();
 
 			        $('input#submittedDateFilter').on('dp.change', function(e){
 			            console.log(e.date);
@@ -574,7 +565,7 @@ angular
 			        				$scope.totalCost = 0;
                             console.log('quotation id - ' + $stateParams.id);
 			        		RateCardComponent.findQuotation($stateParams.id).then(function (data) {
-			        			$scope.loadingStop();
+
 			        				console.log('quotation response - '+ JSON.stringify(data))
 				                $scope.quotation = data;
 			        				var rateCardDetails = $scope.quotation.rateCardDetails;
@@ -624,8 +615,11 @@ angular
 					                    console.log("Ticket details");
 					                    console.log(data);
 					                    $scope.ticketStatus = data.status;
+					                    $scope.loadingStop();
 					        			});
 
+				                }else{
+				                  $scope.loadingStop();
 				                }
 
 				                $scope.validCheck();
