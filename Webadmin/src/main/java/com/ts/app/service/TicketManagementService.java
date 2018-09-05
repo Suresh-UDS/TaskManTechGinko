@@ -564,6 +564,21 @@ public class TicketManagementService extends AbstractService {
 	    String ticketEmails = ticketReportEmails != null ? ticketReportEmails.getSettingValue() : "";
 		assignedToEmail += Constants.COMMA_SEPARATOR + ticketEmails;
 		ticketOwnerEmail += Constants.COMMA_SEPARATOR + ticketEmails;
+		if(log.isDebugEnabled()) {
+			log.debug("ticketUrl -" + ticketUrl);
+			log.debug("assignedTo - " + assignedTo);
+			log.debug("assignedTo User - " + assignedTo.getUser());
+			log.debug("assignedToEmail -"+ assignedToEmail);
+			log.debug("site - "+ site.getName());
+			log.debug("ticket - "+ ticket);
+			log.debug("ticket id -" + ticket.getId());
+			log.debug("assignedTouser first name -" + assignedToUser.getFirstName());
+			log.debug("assignedTo name -" + assignedTo.getName());
+			log.debug("ticket title -" + ticket.getTitle());
+			log.debug("ticket desc -" + ticket.getDescription());
+			log.debug("ticket status -" + ticket.getStatus());
+			log.debug("ticket severity -" + ticket.getSeverity());
+		}
 	    if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Open") || ticket.getStatus().equalsIgnoreCase("Assigned"))) {
 	    		if(isNew) {
 		    		mailService.sendTicketCreatedMail(ticketUrl,assignedTo.getUser(),assignedToEmail,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
