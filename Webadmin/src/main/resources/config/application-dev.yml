@@ -77,10 +77,10 @@ locationQRCode:
     file:
         path: /opt/location/qrcode
 attendance:
-    shiftStartLeadTime: 1
-    shiftEndLeadTime: 1
-    shiftStartGraceTime: 1
-    shiftEndGraceTime: 1
+    shiftStartLeadTime: 60
+    shiftEndLeadTime: 60
+    shiftStartGraceTime: 60
+    shiftEndGraceTime: 60
     file:
         path:  /opt/attendance
     template:
