@@ -543,6 +543,8 @@ public class TicketManagementService extends AbstractService {
 		User ticketOwnerUser = ticketOwner.getUser();
 		if(assignedTo == null) {
 			assignedTo = ticketOwner;
+		}
+		if(assignedToUser == null) {
 			assignedToUser = ticketOwnerUser;
 		}
 		String ticketUrl = env.getProperty("url.ticket-view");
