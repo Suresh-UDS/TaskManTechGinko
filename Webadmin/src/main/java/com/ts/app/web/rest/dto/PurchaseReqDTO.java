@@ -3,6 +3,8 @@ package com.ts.app.web.rest.dto;
 import java.sql.Timestamp;
 import java.util.List;
 
+import com.ts.app.domain.purchaseRequestStatus;
+
 public class PurchaseReqDTO extends BaseDTO{
 
 	private long id;
@@ -26,6 +28,8 @@ public class PurchaseReqDTO extends BaseDTO{
 	private List<PurchaseReqItemDTO> items;
 	
 	private String purchaseRefNumber;
+	
+	private purchaseRequestStatus requestStatus;
 
 	public long getId() {
 		return id;
@@ -113,6 +117,14 @@ public class PurchaseReqDTO extends BaseDTO{
 
 	public void setPurchaseRefNumber(String purchaseRefNumber) {
 		this.purchaseRefNumber = purchaseRefNumber;
+	}
+
+	public purchaseRequestStatus getRequestStatus() {
+		return requestStatus;
+	}
+
+	public void setRequestStatus(purchaseRequestStatus requestStatus) {
+		this.requestStatus = requestStatus;
 	}
 	
 	

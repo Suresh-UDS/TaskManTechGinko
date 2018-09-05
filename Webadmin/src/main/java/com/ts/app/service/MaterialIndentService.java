@@ -33,6 +33,7 @@ import com.ts.app.domain.PurchaseRequisitionItem;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
+import com.ts.app.domain.purchaseRequestStatus;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.InventoryRepository;
 import com.ts.app.repository.InventoryTransactionRepository;
@@ -314,7 +315,7 @@ public class MaterialIndentService extends AbstractService {
 						purchaseRequest.setRequestedBy(employeeRepository.findOne(materialIndentDto.getRequestedById()));
 						purchaseRequest.setRequestedDate(DateUtil.convertToTimestamp(new Date()));
 						purchaseRequest.setActive(PurchaseRequisition.ACTIVE_YES);
-						
+						purchaseRequest.setRequestStatus(purchaseRequestStatus.PENDING);
 						addPurchaseReqItem(purchaseRequest, materialItm);
 					
 						Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PURCHASEREQ);

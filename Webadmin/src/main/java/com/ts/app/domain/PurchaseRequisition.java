@@ -50,6 +50,8 @@ public class PurchaseRequisition extends AbstractAuditingEntity implements Seria
 	
 	@OneToMany(mappedBy = "purchaseRequisition", cascade = {CascadeType.ALL}, orphanRemoval=true)
 	private Set<PurchaseRequisitionItem> items;
+	
+	private purchaseRequestStatus requestStatus;
 
 	public long getId() {
 		return id;
@@ -113,6 +115,14 @@ public class PurchaseRequisition extends AbstractAuditingEntity implements Seria
 
 	public void setItems(Set<PurchaseRequisitionItem> items) {
 		this.items = items;
+	}
+
+	public purchaseRequestStatus getRequestStatus() {
+		return requestStatus;
+	}
+
+	public void setRequestStatus(purchaseRequestStatus requestStatus) {
+		this.requestStatus = requestStatus;
 	}
 
 	
