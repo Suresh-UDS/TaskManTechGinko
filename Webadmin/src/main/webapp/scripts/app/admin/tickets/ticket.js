@@ -37,7 +37,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		}
 	}).state('view-ticket', {
 		parent : 'manage',
-		url : '/view-ticket/:id& :qid& :status',
+		url : '/view-ticket/:id',
 		controller : 'TicketController',
 		data : {
 			authorities : [],
@@ -49,7 +49,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 				controller : 'TicketController'
 			}
 		},
-		//params :{'qid': :qid, 'status': :status},
+		params :{qid: null, status: null},
 		resolve : {
 
 		}
