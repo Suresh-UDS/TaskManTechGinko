@@ -1,5 +1,6 @@
 package com.ts.app.domain;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Set;
 
@@ -16,7 +17,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "purchase_requisition")
-public class PurchaseRequisition {
+public class PurchaseRequisition extends AbstractAuditingEntity implements Serializable{
 
 	/**
 	 *
@@ -27,12 +28,20 @@ public class PurchaseRequisition {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne()
+	@JoinColumn(name = "projectId", nullable = true)
+	private Project project;
+	
+	@ManyToOne()
 	@JoinColumn(name = "siteId", nullable = true)
 	private Site site;
 
+	@ManyToOne()
+	@JoinColumn(name = "requestedBy", nullable = true)
 	private Employee requestedBy;
 	
+	@ManyToOne()
+	@JoinColumn(name = "approvedBy", nullable = true)
 	private Employee approvedBy;
 	
 	private Timestamp requestedDate;
@@ -48,6 +57,14 @@ public class PurchaseRequisition {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
 	}
 
 	public Site getSite() {
