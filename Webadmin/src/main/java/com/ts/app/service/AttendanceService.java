@@ -256,12 +256,12 @@ public class AttendanceService extends AbstractService {
 				
 
 				if(checkInCal.after(startCalLeadTime) && checkInCal.before(endCalGraceTime)) {
-					if(prevShiftStartCal != null && prevShiftStartCal.equals(startCalLeadTime)) {
-						dbAttn.setShiftStartTime(prevShiftStartTime);
-						dbAttn.setShiftEndTime(prevShiftEndTime);
-					}else {
+					if(checkInCal.after(startCal)) {
 						dbAttn.setShiftStartTime(startTime);
 						dbAttn.setShiftEndTime(endTime);
+					}else if(prevShiftStartCal != null && prevShiftStartCal.equals(startCalLeadTime)) {
+						dbAttn.setShiftStartTime(prevShiftStartTime);
+						dbAttn.setShiftEndTime(prevShiftEndTime);
 					}
 				}
 				

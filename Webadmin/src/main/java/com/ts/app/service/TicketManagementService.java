@@ -255,13 +255,20 @@ public class TicketManagementService extends AbstractService {
 	        Employee ticketOwner = employeeRepository.findOne(ticket.getEmployee().getId());
 	        Employee assignedTo = null;
 	        if(ticketDTO.getEmployeeId()!=0) {
-	            if (ticket.getEmployee().getId() != ticketDTO.getEmployeeId()) {
+	            if (ticket.getEmployee() != null && (ticket.getEmployee().getId() != ticketDTO.getEmployeeId())) {
 	                assignedTo = employeeRepository.findOne(ticketDTO.getEmployeeId());
 	                ticket.setStatus("Assigned");
 	                ticket.setAssignedTo(assignedTo);
 	                ticket.setAssignedOn(new java.sql.Date(currCal.getTimeInMillis()));
 	            }else {
-	            		assignedTo = ticket.getEmployee();
+	            		if(ticket.getEmployee() != null) {
+	            			assignedTo = ticket.getEmployee();
+	            		}else {
+	    	                assignedTo = employeeRepository.findOne(ticketDTO.getEmployeeId());
+	    	                ticket.setStatus("Assigned");
+	    	                ticket.setAssignedTo(assignedTo);
+	    	                ticket.setAssignedOn(new java.sql.Date(currCal.getTimeInMillis()));
+	            		}
 	            }
 	        }else {
 	        		assignedTo = ticket.getAssignedTo();
@@ -527,11 +534,16 @@ public class TicketManagementService extends AbstractService {
 	}
 
 	private void sendNotifications(Employee ticketOwner, Employee assignedTo,Employee currentUserEmp,  Ticket ticket, Site site, boolean isNew) {
-		Hibernate.initialize(assignedTo.getUser());
-		User assignedToUser = assignedTo.getUser();
+		User assignedToUser = null;
+		if(assignedTo != null) {
+			Hibernate.initialize(assignedTo.getUser());
+			assignedToUser = assignedTo.getUser();
+		}
 		Hibernate.initialize(ticketOwner.getUser());
 		User ticketOwnerUser = ticketOwner.getUser();
-
+		if(assignedTo == null) {
+			assignedToUser = ticketOwnerUser;
+		}
 		String ticketUrl = env.getProperty("url.ticket-view");
 		ticketUrl +=  ticket.getId();
 		Setting ticketReports = null;
