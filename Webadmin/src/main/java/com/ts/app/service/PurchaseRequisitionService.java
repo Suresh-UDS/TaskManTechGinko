@@ -34,9 +34,7 @@ import com.ts.app.domain.User;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.InventoryRepository;
 import com.ts.app.repository.InventoryTransactionRepository;
-import com.ts.app.repository.MaterialIndentItemRepository;
 import com.ts.app.repository.MaterialIndentRepository;
-import com.ts.app.repository.MaterialIndentSpecification;
 import com.ts.app.repository.MaterialItemGroupRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.PurchaseRequestSpecification;
@@ -169,6 +167,7 @@ public class PurchaseRequisitionService extends AbstractService {
 				if(itemEntity.getId() == itemDto.getId()) {
 					itemFound = true;
 					itemEntity.setQuantity(itemDto.getQuantity());
+					itemEntity.setUnitPrice(itemDto.getUnitPrice());
 					break;
 				}
 			}

@@ -205,6 +205,10 @@ public class SearchCriteria extends Paginator {
 	private Timestamp issuedDate;
 	
 	private String indentRefNumber;
+	
+	private String purchaseRefNumber;
+	
+	private Timestamp approvedDate;
 
 	public String getWarrantyTypeName() {
 		return warrantyTypeName;
@@ -1061,6 +1065,22 @@ public class SearchCriteria extends Paginator {
 
 	public void setIssuedDate(Timestamp issuedDate) {
 		this.issuedDate = issuedDate;
+	}
+
+	public String getPurchaseRefNumber() {
+		return purchaseRefNumber;
+	}
+
+	public void setPurchaseRefNumber(String purchaseRefNumber) {
+		this.purchaseRefNumber = purchaseRefNumber;
+	}
+
+	public Timestamp getApprovedDate() {
+		return approvedDate;
+	}
+
+	public void setApprovedDate(Timestamp approvedDate) {
+		this.approvedDate = approvedDate;
 	}
 
 	
