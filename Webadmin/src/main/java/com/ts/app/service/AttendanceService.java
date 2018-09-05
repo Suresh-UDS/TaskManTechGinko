@@ -269,14 +269,16 @@ public class AttendanceService extends AbstractService {
 						dbAttn.setShiftEndTime(endTime);
 					}
 				}else {
-					long prevShiftDiff = DateUtil.getDiff(prevShiftStartCal, checkInCal);
-					long currShiftDiff = DateUtil.getDiff(checkInCal, startCal);
-					if(currShiftDiff < prevShiftDiff) {
-						dbAttn.setShiftStartTime(startTime);
-						dbAttn.setShiftEndTime(endTime);
-					}else {
-						dbAttn.setShiftStartTime(prevShiftStartTime);
-						dbAttn.setShiftEndTime(prevShiftEndTime);
+					if(prevShiftStartCal != null) {
+						long prevShiftDiff = DateUtil.getDiff(prevShiftStartCal, checkInCal);
+						long currShiftDiff = DateUtil.getDiff(checkInCal, startCal);
+						if(currShiftDiff < prevShiftDiff) {
+							dbAttn.setShiftStartTime(startTime);
+							dbAttn.setShiftEndTime(endTime);
+						}else {
+							dbAttn.setShiftStartTime(prevShiftStartTime);
+							dbAttn.setShiftEndTime(prevShiftEndTime);
+						}
 					}
 				}
 				
