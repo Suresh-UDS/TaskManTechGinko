@@ -30,6 +30,8 @@ public class PurchaseReqDTO extends BaseDTO{
 	private String purchaseRefNumber;
 	
 	private purchaseRequestStatus requestStatus;
+	
+	private long transactionId;
 
 	public long getId() {
 		return id;
@@ -125,6 +127,14 @@ public class PurchaseReqDTO extends BaseDTO{
 
 	public void setRequestStatus(purchaseRequestStatus requestStatus) {
 		this.requestStatus = requestStatus;
+	}
+
+	public long getTransactionId() {
+		return transactionId;
+	}
+
+	public void setTransactionId(long transactionId) {
+		this.transactionId = transactionId;
 	}
 	
 	

@@ -114,6 +114,7 @@ public class InventoryTransactionService extends AbstractService{
 		materialEntity.setMaterial(inventoryRepository.findOne(materialTransDTO.getMaterialId()));
 		materialEntity.setMaterialGroup(materialItemRepository.findOne(materialTransDTO.getMaterialGroupId()));
 		MaterialIndent materialIndent = null;
+		PurchaseRequisition purchaseRequesition = null;
 		if(materialTransDTO.getJobId() > 0) {
 			materialEntity.setJob(jobRepository.findOne(materialTransDTO.getJobId()));
 		}else {
@@ -129,6 +130,12 @@ public class InventoryTransactionService extends AbstractService{
 			materialEntity.setMaterialIndent(materialIndent);
 		}else {
 			materialEntity.setMaterialIndent(null);
+		}
+		if(materialTransDTO.getPurchaseRequisitionId() > 0) {
+			purchaseRequesition = purchaseReqRepository.findOne(materialTransDTO.getPurchaseRequisitionId());
+			materialEntity.setPurchaseRequisition(purchaseRequesition);
+		}else {
+			materialEntity.setPurchaseRequisition(null);
 		}
 		
 		/** Create material if does not exists */
@@ -225,6 +232,10 @@ public class InventoryTransactionService extends AbstractService{
 		if(materialIndent != null) { 
 			materialIndent.setTransaction(materialEntity);
 			materialIndentRepository.save(materialIndent);
+		}
+		if(purchaseRequesition != null) { 
+			purchaseRequesition.setTransaction(materialEntity);
+			purchaseReqRepository.save(purchaseRequesition);
 		}
 		materialTransDTO = mapperUtil.toModel(materialEntity, MaterialTransactionDTO.class);
 		return materialTransDTO;

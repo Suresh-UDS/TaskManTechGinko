@@ -101,11 +101,13 @@ public class PurchaseRequisitionService extends AbstractService {
 	public PurchaseReqDTO createPurchaseRequest(PurchaseReqDTO purchaseReqDTO) { 
 		PurchaseRequisition purchaseEntity = mapperUtil.toEntity(purchaseReqDTO, PurchaseRequisition.class);
 		purchaseEntity.setRequestedDate(DateUtil.convertToTimestamp(purchaseReqDTO.getRequestedDate()));
+		purchaseEntity.setApprovedDate(DateUtil.convertToTimestamp(purchaseReqDTO.getApprovedDate()));
 		purchaseEntity.setSite(siteRepository.findOne(purchaseReqDTO.getSiteId()));
 		purchaseEntity.setProject(projectRepository.findOne(purchaseReqDTO.getProjectId()));
 		purchaseEntity.setRequestedBy(employeeRepository.findOne(purchaseReqDTO.getRequestedById()));
 		purchaseEntity.setApprovedBy(employeeRepository.findOne(purchaseReqDTO.getApprovedById()));
 		purchaseEntity.setActive(MaterialIndent.ACTIVE_YES);
+		
 		List<PurchaseReqItemDTO> purchaseItems = purchaseReqDTO.getItems();
 		List<PurchaseRequisitionItem> purchaseItemEntity = new ArrayList<PurchaseRequisitionItem>();
 		for(PurchaseReqItemDTO purchaseItm : purchaseItems) { 
@@ -115,6 +117,7 @@ public class PurchaseRequisitionService extends AbstractService {
 			purchaseIndentItm.setMaterial(inventoryRepository.findOne(purchaseItm.getMaterialId()));
 			purchaseItemEntity.add(purchaseIndentItm);
 		}
+		
 		Set<PurchaseRequisitionItem> purchaseReqItem = new HashSet<PurchaseRequisitionItem>();
 		purchaseReqItem.addAll(purchaseItemEntity);
 		purchaseEntity.setItems(purchaseReqItem);
@@ -267,73 +270,47 @@ public class PurchaseRequisitionService extends AbstractService {
 		return purchaseModel;
 	}
 
-	public MaterialIndentDTO createMaterialTransaction(MaterialIndentDTO materialIndentDto) {
-		MaterialIndent matIndent = materialIndentRepository.findOne(materialIndentDto.getId());
-		matIndent.setIssuedBy(employeeRepository.findOne(materialIndentDto.getIssuedById()));
-		matIndent.setIssuedDate(DateUtil.convertToTimestamp(new Date()));
-		Site site = siteRepository.findOne(materialIndentDto.getSiteId());
-		String siteName = site.getName();
+	public PurchaseReqDTO createMaterialTransaction(PurchaseReqDTO purchaseReqDto) {
+		PurchaseRequisition purchaseReqEntity = purchaseReqRepository.findOne(purchaseReqDto.getId());
+		purchaseReqEntity.setApprovedBy(employeeRepository.findOne(purchaseReqDto.getApprovedById()));
+		purchaseReqEntity.setApprovedDate(DateUtil.convertToTimestamp(new Date()));
 		
-		List<MaterialIndentItemDTO> indentItemDTOs = materialIndentDto.getItems();
-		Set<MaterialIndentItem> itemEntities = matIndent.getItems();
-		Iterator<MaterialIndentItem> itemsItr = itemEntities.iterator();
+		List<PurchaseReqItemDTO> purchaseItemDTOs = purchaseReqDto.getItems();
+		Set<PurchaseRequisitionItem> itemEntities = purchaseReqEntity.getItems();
+		Iterator<PurchaseRequisitionItem> itemsItr = itemEntities.iterator();
 		
 		while(itemsItr.hasNext()) {
 			boolean itemFound = false;
-			MaterialIndentItem itemEntity = itemsItr.next();
-			for(MaterialIndentItemDTO itemDto : indentItemDTOs) {
+			PurchaseRequisitionItem itemEntity = itemsItr.next();
+			for(PurchaseReqItemDTO itemDto : purchaseItemDTOs) {
 				if(itemEntity.getId() == itemDto.getId()) {
 					itemFound = true;
-					long reducedQty = itemEntity.getQuantity() - itemDto.getIssuedQuantity();
-					itemEntity.setQuantity(reducedQty);
+					long addedQty = itemEntity.getQuantity() + itemDto.getIssuedQuantity();
+					itemEntity.setQuantity(addedQty);
 					itemEntity.setIssuedQuantity(itemDto.getIssuedQuantity());
 
 					Material materialItm = inventoryRepository.findOne(itemDto.getMaterialId());
 					
-					if(materialItm.getMinimumStock() == materialItm.getStoreStock()) {
-					
-						Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PURCHASEREQ);
-						
-						log.debug("Setting Email list -" + setting);
-
-						if(setting.getSettingValue().equalsIgnoreCase("true") ) {
-
-							Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PURCHASEREQ_EMAILS);
-
-							if(settingEntity.getSettingValue().length() > 0) {
-
-								List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
-								for(String email : emailLists) {
-									mailService.sendPurchaseRequest(email, materialItm.getItemCode(), siteName, materialItm.getName());
-								}
-
-							} else {
-
-								log.info("There is no email ids registered");
-							}
-						}
-					}
-					
 					MaterialTransaction materialTrans = new MaterialTransaction();
-					materialTrans.setProject(projectRepository.findOne(materialIndentDto.getProjectId()));
-					materialTrans.setSite(siteRepository.findOne(materialIndentDto.getSiteId()));
-					materialTrans.setMaterialIndent(matIndent);
+					materialTrans.setProject(projectRepository.findOne(purchaseReqDto.getProjectId()));
+					materialTrans.setSite(siteRepository.findOne(purchaseReqDto.getSiteId()));
+					materialTrans.setPurchaseRequisition(purchaseReqEntity);
 					materialTrans.setMaterialGroup(materialItemGroupRepository.findOne(materialItm.getItemGroupId()));
 					Date dateofTransaction = new Date();
-					long consumptionStock = materialItm.getStoreStock() - itemDto.getIssuedQuantity();
+					long consumptionStock = materialItm.getStoreStock() + itemDto.getIssuedQuantity();
 					materialItm.setStoreStock(consumptionStock);
 					inventoryRepository.save(materialItm);
 					materialTrans.setMaterial(materialItm);
 					materialTrans.setUom(materialItm.getUom());
-					materialTrans.setQuantity(reducedQty);
+					materialTrans.setQuantity(addedQty);
 					materialTrans.setStoreStock(consumptionStock);
 					materialTrans.setIssuedQuantity(itemDto.getIssuedQuantity());
-					materialTrans.setTransactionType(MaterialTransactionType.ISSUED);
+					materialTrans.setTransactionType(MaterialTransactionType.RECEIVED);
 					materialTrans.setTransactionDate(DateUtil.convertToTimestamp(dateofTransaction));
 					materialTrans.setActive(MaterialTransaction.ACTIVE_YES);
 					materialTrans = inventTransactionRepository.save(materialTrans);
 					if(materialTrans.getId() > 0) { 
-						matIndent.setTransaction(materialTrans);
+						purchaseReqEntity.setTransaction(materialTrans);
 					}
 				
 					break;
@@ -345,10 +322,10 @@ public class PurchaseRequisitionService extends AbstractService {
 			}
 		}
 		
-		matIndent = materialIndentRepository.save(matIndent);
-		materialIndentDto = mapperUtil.toModel(matIndent, MaterialIndentDTO.class);
+		purchaseReqEntity = purchaseReqRepository.save(purchaseReqEntity);
+		purchaseReqDto = mapperUtil.toModel(purchaseReqEntity, PurchaseReqDTO.class);
 		
-		return materialIndentDto;
+		return purchaseReqDto;
 	}
 
 	

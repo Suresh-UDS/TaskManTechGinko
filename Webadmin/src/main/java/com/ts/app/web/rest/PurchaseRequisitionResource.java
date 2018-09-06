@@ -97,10 +97,10 @@ public class PurchaseRequisitionResource {
 	}
 	
 	@RequestMapping(value="/purchaseRequest/materialTransaction", method=RequestMethod.POST)
-	public ResponseEntity<?> createTransaction(@Valid @RequestBody MaterialIndentDTO materialIndentDto, HttpServletRequest request) {
-		MaterialIndentDTO result = null;
+	public ResponseEntity<?> createTransaction(@Valid @RequestBody PurchaseReqDTO purchaseReqDTO, HttpServletRequest request) {
+		PurchaseReqDTO result = null;
 		try {
-			result = purchaseReqService.createMaterialTransaction(materialIndentDto);
+			result = purchaseReqService.createMaterialTransaction(purchaseReqDTO);
 		}catch(Exception e) { 
 			throw new TimesheetException("Error while create transaction for Purchase Request" +e);
 		}
