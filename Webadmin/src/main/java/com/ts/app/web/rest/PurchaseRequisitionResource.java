@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.PurchaseRequisitionService;
-import com.ts.app.web.rest.dto.MaterialIndentDTO;
 import com.ts.app.web.rest.dto.PurchaseReqDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
