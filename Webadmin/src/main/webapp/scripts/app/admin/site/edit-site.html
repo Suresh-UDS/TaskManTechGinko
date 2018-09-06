@@ -320,8 +320,8 @@
                         <div class="col-md-12">
 
 
-                            <button type="submit" ng-click="conform('cancel')"
-                                    id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Discard</button>
+                            <button type="submit" ng-click="conform('back')"
+                                    id="cancel-button" ng-disabled="btnDisable"  class="btn btn-default pull-right">Back</button>
 
                             <!--<button type="submit" type="submit" ng-click="updateSite(form.$invalid)"-->
                                     <!--id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">-->
@@ -329,7 +329,7 @@
                                     <!--</span>Update site</button>-->
 
                             <button type="submit" type="submit" ng-click="conform('update',form.$invalid)" id="form-button-save"
-                                    ng-disabled="form.$invalid"  class="btn btn-success ld ld-over-inverse pull-right"
+                                    ng-disabled="form.$invalid || btnDisable"  class="btn btn-success ld ld-over-inverse pull-right"
                                     ng-class="{'running':saveLoad}">
                                 <span class="btn-label"><i class="material-icons">check</i></span> Update site
                                 <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>

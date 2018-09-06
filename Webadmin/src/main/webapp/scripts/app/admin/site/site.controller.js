@@ -18,6 +18,7 @@ angular.module('timeSheetApp')
         $scope.pages = { currPage : 1};
         $scope.pager = {};
         $scope.noData = false;
+        $scope.btnDisable = false;
         $scope.localStorage = null;
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
@@ -178,7 +179,7 @@ angular.module('timeSheetApp')
 
         });
 
-        
+
 
 
         $scope.valid= null;
@@ -193,16 +194,11 @@ angular.module('timeSheetApp')
         }
 
         $rootScope.back = function (text) {
-            if(text == 'cancel')
-            {
+            if(text == 'cancel' || text == 'back'){
                 $scope.cancelSite();
-            }
-            else if(text == 'save')
-            {
+            }else if(text == 'save'){
                 $scope.saveSite($scope.valid);
-            }
-            else if(text == 'update')
-            {
+            }else if(text == 'update'){
                 /** @reatin - retaining scope value.**/
                 $rootScope.retain=1;
                 $scope.updateSite($scope.valid);
@@ -214,7 +210,6 @@ angular.module('timeSheetApp')
         $scope.saveSite = function (validation) {
             $scope.saveLoad = true;
             if(validation){
-
                 return false;
             }
 
@@ -225,6 +220,7 @@ angular.module('timeSheetApp')
 	        	if(!$scope.selectedProject){
 	        		$scope.errorProject = "true";
 	        	}else{
+	        	    $scope.btnDisable = true;
 	        		$scope.site.projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
 	        		console.log('shifts - ' + JSON.stringify($scope.shiftItems));
 	        		$scope.site.shifts = $scope.shiftItems;
@@ -249,6 +245,7 @@ angular.module('timeSheetApp')
 	                        $scope.showNotifications('top','center','danger','Unable to add site. Please try again later..');
 	                        $scope.error = 'ERROR';
 	                    }
+	                    $scope.btnDisable = false;
 	                });
 	        	}
 
@@ -277,15 +274,15 @@ angular.module('timeSheetApp')
                 }else{
                     console.log(shiftFrom,shiftTo);
             		event.preventDefault();
-                   
+
                     if($scope.shiftItems.length > 0){
-                        
+
                         for(var i=0; i < $scope.shiftItems.length;i++){
-                    
+
                             var oldshiftStart = $scope.shiftItems[i].startTime;
                             var oldshiftEnd = $scope.shiftItems[i].endTime;
-                            
-                            if((oldshiftStart == $scope.newShiftItem.startTime) 
+
+                            if((oldshiftStart == $scope.newShiftItem.startTime)
                                 && (oldshiftEnd == $scope.newShiftItem.endTime)){
                                 $scope.dupStatus = true;
                                 return;
@@ -334,106 +331,114 @@ angular.module('timeSheetApp')
 
 
         $scope.loadSite = function() {
-        	SiteComponent.findOne($stateParams.id).then(function (data) {
-                $scope.site = data;
-                console.log('$scope.site.shifts - '+$scope.site.shifts);
-                $scope.selectedProject = {id:$scope.site.projectId,name:$scope.site.projectName};
-                $scope.shiftItems = $scope.site.shifts;
-                console.log('Selected project' , $scope.selectedProject);
-
-
-                // Shift time HH:MM
-                console.log(data);
-                for(var i=0;i<$scope.shiftItems.length;i++) {
-                    console.log($scope.shiftItems[i].startTime.length);
-                    var start = $scope.shiftItems[i].startTime.split(':');
-                    console.log(start)
-                    if(start[0].length == 1)
-                    {
-                        console.log("Yes");
-                        start[0] = '0'+start[0];
-                        $scope.shiftItems[i].startTime = start[0] +':'+ start[1];
-                        if(start[1].length == 1)
-                        {
-
-                            if(start[1]==0)
-                            {
-                                start[1] = '00';
-                                $scope.shiftItems[i].startTime = start[0] +':'+ start[1];
-                            }
-                            else {
-                                start[1] = '0'+start[1];
-                                $scope.shiftItems[i].startTime = start[0] +':'+ start[1];
-                            }
-
-
-                        }
-                    }
-                    else if(start[1].length == 1)
-                    {
-                        if(start[1]==0)
-                        {
-                            start[1] = '00';
-                            $scope.shiftItems[i].startTime = start[0] +':'+ start[1];
-                        }
-                        else {
-                            start[1] = '0'+start[1];
-                            $scope.shiftItems[i].startTime = start[0] +':'+ start[1];
-                        }
-                    }
-                    else
-                    {
-                        $scope.shiftItems =$scope.site.shifts;
-                    }
-
-
-                    var end =  $scope.shiftItems[i].endTime.split(':');
-                    console.log(end)
-                    if(end[0].length == 1)
-                    {
-                        end[0] = '0'+end[0];
-                        $scope.shiftItems[i].endTime = end[0] +':'+ end[1];
-                        if(end[1].length == 1)
-                        {
-                            if(end[1]==0)
-                            {
-                                end[1] = '00';
-                                $scope.shiftItems[i].endTime = end[0] +':'+ end[1];
-                            }
-                            else {
-                                end[1] = '0'+start[1];
-                                $scope.shiftItems[i].endTime = end[0] +':'+ end[1];
-                            }
-                        }
-                    }
-                    else if(end[1].length == 1)
-                    {
-                        if(end[1].length == 1)
-                        {
-
-                            if(end[1]==0)
-                            {
-                                end[1] = '00';
-                                $scope.shiftItems[i].endTime = end[0] +':'+ end[1];
-                            }
-                            else {
-                                end[1] = '0'+start[1];
-                                $scope.shiftItems[i].endTime = end[0] +':'+ end[1];
-                            }
-                        }
-                    }
-                    else
-                    {
+            if(parseInt($stateParams.id) > 0){
+                var siteId = parseInt($stateParams.id);
+                SiteComponent.findOne(siteId).then(function (data) {
+                        $scope.site = data;
+                      if($scope.site){
+                        console.log('$scope.site.shifts - '+$scope.site.shifts);
+                        $scope.selectedProject = {id:$scope.site.projectId,name:$scope.site.projectName};
                         $scope.shiftItems = $scope.site.shifts;
-                    }
+                        console.log('Selected project' , $scope.selectedProject);
 
 
-                }
-                //
+                        // Shift time HH:MM
+                        console.log(data);
+                        for(var i=0;i<$scope.shiftItems.length;i++) {
+                            console.log($scope.shiftItems[i].startTime.length);
+                            var start = $scope.shiftItems[i].startTime.split(':');
+                            console.log(start)
+                            if(start[0].length == 1)
+                            {
+                                console.log("Yes");
+                                start[0] = '0'+start[0];
+                                $scope.shiftItems[i].startTime = start[0] +':'+ start[1];
+                                if(start[1].length == 1)
+                                {
 
-                //$scope.loadSelectedProject($scope.site.projectId);
-                
-            });
+                                    if(start[1]==0)
+                                    {
+                                        start[1] = '00';
+                                        $scope.shiftItems[i].startTime = start[0] +':'+ start[1];
+                                    }
+                                    else {
+                                        start[1] = '0'+start[1];
+                                        $scope.shiftItems[i].startTime = start[0] +':'+ start[1];
+                                    }
+
+
+                                }
+                            }
+                            else if(start[1].length == 1)
+                            {
+                                if(start[1]==0)
+                                {
+                                    start[1] = '00';
+                                    $scope.shiftItems[i].startTime = start[0] +':'+ start[1];
+                                }
+                                else {
+                                    start[1] = '0'+start[1];
+                                    $scope.shiftItems[i].startTime = start[0] +':'+ start[1];
+                                }
+                            }
+                            else
+                            {
+                                $scope.shiftItems =$scope.site.shifts;
+                            }
+
+
+                            var end =  $scope.shiftItems[i].endTime.split(':');
+                            console.log(end)
+                            if(end[0].length == 1)
+                            {
+                                end[0] = '0'+end[0];
+                                $scope.shiftItems[i].endTime = end[0] +':'+ end[1];
+                                if(end[1].length == 1)
+                                {
+                                    if(end[1]==0)
+                                    {
+                                        end[1] = '00';
+                                        $scope.shiftItems[i].endTime = end[0] +':'+ end[1];
+                                    }
+                                    else {
+                                        end[1] = '0'+start[1];
+                                        $scope.shiftItems[i].endTime = end[0] +':'+ end[1];
+                                    }
+                                }
+                            }
+                            else if(end[1].length == 1)
+                            {
+                                if(end[1].length == 1)
+                                {
+
+                                    if(end[1]==0)
+                                    {
+                                        end[1] = '00';
+                                        $scope.shiftItems[i].endTime = end[0] +':'+ end[1];
+                                    }
+                                    else {
+                                        end[1] = '0'+start[1];
+                                        $scope.shiftItems[i].endTime = end[0] +':'+ end[1];
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                $scope.shiftItems = $scope.site.shifts;
+                            }
+
+
+                        }
+                        //
+
+                        //$scope.loadSelectedProject($scope.site.projectId);
+                      }else{
+                       $location.path('/sites');
+                      }
+                });
+            }else{
+                $location.path('/sites');
+            }
         };
 
         $scope.loadSelectedProject = function(projectId) {
@@ -449,47 +454,52 @@ angular.module('timeSheetApp')
 
 
         $scope.updateSite = function (validation) {
-            $scope.saveLoad = true; 
-            console.log("=======Update=========")
-            if(validation){
-                return false;
-            }
-
-        	$scope.error = null;
-        	$scope.success = null;
-        	$scope.errorProject = null;
-        	if(!$scope.selectedProject){
-        		$scope.errorProject = "true";
+            if(parseInt($stateParams.id) > 0){
+                $scope.saveLoad = true;
                 console.log("=======Update=========")
-        	}else{
-        	    console.log("update site");
-        	    console.log($scope.site);
-        		$scope.site.projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
-        		$scope.site.shifts = $scope.shiftItems;
-	        	SiteComponent.updateSite($scope.site).then(function() {
-	                $scope.success = 'OK';
-	                $scope.showNotifications('top','center','success','Site has been updated successfully!!');
-                    $scope.loadSites();
-                    $location.path('/sites');
-	            }).catch(function (response) {
-	                $scope.success = null;
-	                // console.log('Error - '+ response.data);
-	                // console.log('status - '+ response.status + ' , message - ' + response.data.message);
+                if(validation){
+                    return false;
+                }
+                $scope.error = null;
+                $scope.success = null;
+                $scope.errorProject = null;
+                if(!$scope.selectedProject){
+                    $scope.errorProject = "true";
+                    console.log("=======Update=========")
+                }else{
+                    $scope.btnDisable = true;
+                    console.log("update site");
+                    console.log($scope.site);
+                    $scope.site.projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
+                    $scope.site.shifts = $scope.shiftItems;
+                    SiteComponent.updateSite($scope.site).then(function() {
+                        $scope.success = 'OK';
+                        $scope.showNotifications('top','center','success','Site has been updated successfully!!');
+                        $scope.loadSites();
+                        $location.path('/sites');
+                    }).catch(function (response) {
+                        $scope.success = null;
+                        // console.log('Error - '+ response.data);
+                        // console.log('status - '+ response.status + ' , message - ' + response.data.message);
 
-	                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
-	                	$scope.$apply(function() {
-	                        $scope.errorSitesExists = 'ERROR';
-	                		$scope.success = 'OK';
-                            $scope.showNotifications('top','center','danger','Site already exists');
-	                	})
-	                    console.log($scope.errorSitesExists);
-	                } else {
-	                    $scope.error = 'ERROR';
-                        $scope.showNotifications('top','center','danger','Unable to update site,please try again later.');
-	                }
-                    $scope.saveLoad = false;
-	            });
-        	}
+                        if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+                            $scope.$apply(function() {
+                                $scope.errorSitesExists = 'ERROR';
+                                $scope.success = 'OK';
+                                $scope.showNotifications('top','center','danger','Site already exists');
+                            })
+                            console.log($scope.errorSitesExists);
+                        } else {
+                            $scope.error = 'ERROR';
+                            $scope.showNotifications('top','center','danger','Unable to update site,please try again later.');
+                        }
+                        $scope.saveLoad = false;
+                        $scope.btnDisable = false;
+                    });
+                }
+        	}else{
+                 $location.path('/sites');
+            }
         };
 
         $scope.deleteConfirm = function (site){
@@ -550,7 +560,7 @@ angular.module('timeSheetApp')
 
         	$scope.searchCriteria.currPage = currPageVal;
         	console.log('Selected  project -' , JSON.stringify($scope.searchProject) + '' +$scope.searchSite);
-        	
+
 
         	if(!$scope.searchSite && !$scope.searchProject) {
         		if($rootScope.searchCriteriaSite) {
@@ -608,7 +618,7 @@ angular.module('timeSheetApp')
                 $scope.loadPageTop();
 
                  /* Localstorage (Retain old values while edit page to list) start */
-                
+
                  if($rootScope.retain == 1){
                     $scope.localStorage = getLocalStorage.getSearch();
                     console.log('Local storage---',$scope.localStorage);
@@ -622,9 +632,9 @@ angular.module('timeSheetApp')
                                $scope.searchProject = null;
                             }
                             if($scope.localStorage.siteId){
-                              $scope.searchSite = {id:$scope.localStorage.siteId,name:$scope.localStorage.siteName}; 
+                              $scope.searchSite = {id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
                             }else{
-                               $scope.searchSite = null;  
+                               $scope.searchSite = null;
                             }
 
                     }

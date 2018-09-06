@@ -241,7 +241,7 @@ angular.module('timeSheetApp')
 
                 //document.getElementById('searchForm').submit();
 
-                $scope.search();
+                //$scope.search();
         };
 
         $scope.feedbackListLoader = true;
