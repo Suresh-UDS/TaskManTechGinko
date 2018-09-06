@@ -11,7 +11,9 @@ import java.util.TreeSet;
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.hibernate.Hibernate;
+import org.joda.time.Minutes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -265,6 +267,36 @@ public class AttendanceService extends AbstractService {
 					}else {
 						dbAttn.setShiftStartTime(startTime);
 						dbAttn.setShiftEndTime(endTime);
+					}
+				}else {
+					if(StringUtils.isEmpty(dbAttn.getShiftStartTime())){
+						if(prevShiftStartCal != null) {
+							long prevShiftDiff = DateUtil.getDiff(prevShiftStartCal, checkInCal);
+							long currShiftDiff = DateUtil.getDiff(checkInCal, startCal);
+							if(currShiftDiff < prevShiftDiff) {
+								dbAttn.setShiftStartTime(startTime);
+								dbAttn.setShiftEndTime(endTime);
+							}else {
+								dbAttn.setShiftStartTime(prevShiftStartTime);
+								dbAttn.setShiftEndTime(prevShiftEndTime);
+							}
+						}else {
+							dbAttn.setShiftStartTime(prevShiftStartTime);
+							dbAttn.setShiftEndTime(prevShiftEndTime);
+						}
+					}else {
+						String[] prevMatchedStartTimeUnits = dbAttn.getShiftStartTime().split(":");
+						Calendar prevMatchedStartCal = Calendar.getInstance();
+						prevMatchedStartCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(prevMatchedStartTimeUnits[0]));
+						prevMatchedStartCal.set(Calendar.MINUTE, Integer.parseInt(prevMatchedStartTimeUnits[1]));
+						prevMatchedStartCal.set(Calendar.SECOND, 0);
+						prevMatchedStartCal.set(Calendar.MILLISECOND, 0);
+						long prevShiftDiff = DateUtil.getDiff(prevMatchedStartCal, checkInCal);
+						long currShiftDiff = DateUtil.getDiff(checkInCal, startCal);
+						if(currShiftDiff < prevShiftDiff) {
+							dbAttn.setShiftStartTime(startTime);
+							dbAttn.setShiftEndTime(endTime);
+						}
 					}
 				}
 				
@@ -602,8 +634,9 @@ public class AttendanceService extends AbstractService {
 		endCal.set(Calendar.HOUR_OF_DAY, 23);
 		endCal.set(Calendar.MINUTE, 59);
 		endCal.set(Calendar.SECOND, 0);
-		Attendance attn = attendanceRepository.findCurrentCheckIn(empId, DateUtil.convertToSQLDate(startCal.getTime()), DateUtil.convertToSQLDate(endCal.getTime()));
-		if(attn != null) {
+		List<Attendance> attns = attendanceRepository.findCurrentCheckIn(empId, DateUtil.convertToSQLDate(startCal.getTime()), DateUtil.convertToSQLDate(endCal.getTime()));
+		if(CollectionUtils.isNotEmpty(attns)) {
+			Attendance attn = attns.get(0);
 			attnDto = mapperUtil.toModel(attn, AttendanceDTO.class);
 		}
 		return attnDto;
