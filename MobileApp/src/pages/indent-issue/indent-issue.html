@@ -14,6 +14,11 @@
 
   <ion-navbar>
     <ion-title>indent-issue</ion-title>
+    <ion-buttons right="">
+      <button ion-button color="fnt-black" icon-only (click)="dismiss()" class="padding-right10">
+        <ion-icon ios="ios-close" md="md-close" class="fnt-24"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
@@ -94,13 +99,13 @@
           <ion-col col-2 no-padding>
             <div class="">
               <!--<p text-center class="margin0" text-uppercase>10</p>-->
-              <ion-input type="number" text-center [(ngModel)]="item.issuedQuantity"></ion-input>
+              <ion-input type="number" text-center  max="item.quantity"  min="item.issuedQuantity"    [(ngModel)]="item.issuedQuantity"></ion-input>
             </div>
           </ion-col>
           <ion-col col-2 no-padding>
             <div class="">
               <!--<p text-center class="margin0" text-uppercase>10</p>-->
-              <p text-center class="margin0" text-uppercase>0</p>
+              <p text-center class="margin0" text-uppercase>{{item.quantity - item.issuedQuantity}}</p>
             </div>
           </ion-col>
           <ion-col col-2 no-padding>

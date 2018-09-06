@@ -67,6 +67,15 @@ export class PurchaseRequisitionService {
         )
     }
 
+    indentMaterialTransaction(transactionDetails):Observable<any>{
+        return this.http.post(this.config.Url+'api/indent/materialTransaction',transactionDetails).map(
+            response=>{
+                console.log(response);
+                return response.json();
+            }
+        )
+    }
+
 
     // updateMaterialIndent():Observable<any>{
     //     return this.http.p
