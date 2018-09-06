@@ -34,6 +34,7 @@ angular.module('timeSheetApp')
         $scope.sitesList = null;
         $scope.qrInfoBlock = "";
         $scope.siteSpin = false;
+        $scope.btnDisable = false;
 
         $timeout(function () {
             angular.element('[ng-model="name"]').focus();
@@ -335,12 +336,9 @@ angular.module('timeSheetApp')
         }
 
         $rootScope.back = function (text) {
-            if(text == 'cancel')
-            {
-                $scope.cancelLocation();
-            }
-            else if(text == 'save')
-            {
+            if(text == 'cancel' || text == 'back'){
+               $scope.cancelLocation();
+            }else if(text == 'save'){
                 $scope.saveLocation();
             }
         };
@@ -367,7 +365,7 @@ angular.module('timeSheetApp')
 
         $scope.updateLocation = function () {
         		console.log('Location mapping details - ' + JSON.stringify($scope.location));
-
+                $scope.btnDisable = true;
         		LocationComponent.updateLocation($scope.location).then(function () {
 	            	$scope.success = 'OK';
 	            	$location.path('/locations');
@@ -382,11 +380,13 @@ angular.module('timeSheetApp')
 	                } else {
 	                    $scope.error = 'ERROR';
 	                }
+	                $scope.btnDisable = false;
             });
         };
 
         $scope.saveLocation = function(){
             $scope.saveLoad = true;
+            $scope.btnDisable = true;
             $rootScope.conformText = "";
             console.log("---------------------------------------------------")
             console.log($scope.selectedProject)
@@ -416,6 +416,7 @@ angular.module('timeSheetApp')
   	            } else {
   	                $scope.error = 'ERROR';
   	            }
+  	            $scope.btnDisable = false;
   	        });
         };
 
@@ -750,13 +751,21 @@ angular.module('timeSheetApp')
         }
 
         $scope.qrcodePage = function(){
-            console.log($stateParams.location);
-            LocationComponent.findOne($stateParams.location).then(function (response) {
-                console.log(response);
-                $scope.qrInfoDetails  = response;
-                // $scope.generateQR(response.siteId,response.id);
-                $scope.generateQR(response);
-            })
+           if(parseInt($stateParams.location) > 0){
+                console.log($stateParams.location);
+                var locationId = parseInt($stateParams.location);
+                LocationComponent.findOne(locationId).then(function (response) {
+                    console.log(response);
+                    $scope.qrInfoDetails  = response;
+                    if(!$scope.qrInfoDetails){
+                       $location.path('/locations');
+                    }
+                    // $scope.generateQR(response.siteId,response.id);
+                    $scope.generateQR(response);
+                });
+           }else{
+              $location.path('/locations');
+           }
         }
 
     });
