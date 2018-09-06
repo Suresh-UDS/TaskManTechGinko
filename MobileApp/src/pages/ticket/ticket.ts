@@ -21,24 +21,29 @@ import{TicketFilter} from "./ticket-filter/ticket-filter";
 export class Ticket {
 
     tickets:any;
+    spinner:boolean;
   constructor(public navCtrl: NavController, public navParams: NavParams, private cs:componentService, private jobService:JobService, public modalCtrl:ModalController) {
       this.tickets = [];
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad Ticket');
-    this.cs.showLoader('Loading Tickets..');
+    this.spinner=true;
+    // this.cs.showLoader('Loading Tickets..');
     var searchCriteria={
         currPage:1
     }
     this.jobService.searchTickets(searchCriteria).subscribe(
         response=>{
+            this.spinner=false;
             console.log("Getting tickets");
             console.log(response);
             this.tickets=response.transactions;
-            this.cs.closeLoader();
+            // this.cs.closeLoader();
         },error=>{
-            this.cs.closeLoader();
+            this.spinner=false;
+            console.log(error);
+            // this.cs.closeLoader();
         }
     )
   }
