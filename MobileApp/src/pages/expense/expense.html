@@ -14,44 +14,62 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content class="greyBg">
 
-      <div >
-         <div >
-          <ion-row padding>
+     <div class="MainExpenseContainer">
 
-            <ion-col>
-              <ion-item *ngFor="let items of listitem" (click)="viewTransaction()" >
-                <ion-row>
-                  <ion-col><p text-left class="margin0">Site  </p></ion-col>
-                  <ion-col><p text-right>{{items.site}}</p> </ion-col>
-                </ion-row>
-                <ion-row>
-                  <ion-col><p text-left class="margin0">Transaction Type </p></ion-col>
-                  <ion-col><p text-right class="margin0">{{items.trans_type}}</p> </ion-col>
-                </ion-row>
-                <ion-row>
-                  <ion-col><p text-left class="margin0">Debit </p></ion-col>
-                  <ion-col><p text-right class="margin0">{{items.debit}}</p></ion-col>
-                </ion-row>
-                <ion-row>
-                  <ion-col><p text-left class="margin0">Credit </p></ion-col>
-                  <ion-col><p text-right class="margin0">{{items.credit}}</p></ion-col>
-                </ion-row>
-                <ion-row>
-                  <ion-col><p text-left class="margin0">Balance</p></ion-col>
-                  <ion-col><p text-right class="margin0">{{items.balance}}</p></ion-col>
-                </ion-row>
-                <ion-row>
-                  <ion-col><p text-left class="margin0">Actions</p></ion-col>
-                  <ion-col><p text-right class="margin0">{{items.actions}}</p></ion-col>
-                </ion-row>
-              </ion-item>
-            </ion-col>
+       <ion-card *ngFor="let items of listitem" (click)="viewTransaction()">
+         <ion-card-header text-center>
+           {{items.site}}
+         </ion-card-header>
+         <ion-card-content>
 
-          </ion-row>
-        </div>
-      </div>
+           <ion-list>
+             <ion-item>
+               <ion-icon class="CircleIcon" item-start name="ios-share-outline"></ion-icon>
+               <h2>Debit</h2>
+               <ion-note item-end class="red">- {{items.debit}}</ion-note>
+             </ion-item>
+             <ion-item>
+               <ion-icon class="CircleIcon" item-start name="ios-download-outline"></ion-icon>
+               <h2>Credit</h2>
+               <ion-note item-end class="green">+ {{items.credit}}</ion-note>
+             </ion-item>
+             <ion-item text-right>
+               <ion-icon class="CircleIcon" item-start name="ios-briefcase-outline"></ion-icon>
+               <h2>Balance</h2>
+               <ion-note item-end class="dark">{{items.balance}}</ion-note>
+             </ion-item>
+           </ion-list>
 
+
+         </ion-card-content>
+
+         <div class="posCirclesCon">
+
+             <span class="circles"></span>
+             <span class="circles"></span>
+             <span class="circles"></span>
+             <span class="circles"></span>
+             <span class="circles"></span>
+             <span class="circles"></span>
+             <span class="circles"></span>
+             <span class="circles"></span>
+             <span class="circles"></span>
+             <span class="circles"></span>
+             <span class="circles"></span>
+             <span class="circles"></span>
+             <span class="circles"></span>
+             <span class="circles"></span>
+             <span class="circles"></span>
+             <span class="circles"></span>
+             <span class="circles"></span>
+
+
+         </div>
+
+       </ion-card>
+
+     </div>
 
 </ion-content>
