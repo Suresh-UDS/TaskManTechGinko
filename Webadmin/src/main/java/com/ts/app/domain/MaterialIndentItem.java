@@ -29,7 +29,7 @@ public class MaterialIndentItem extends AbstractAuditingEntity implements Serial
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "material_id")
 	private Material material;
 	

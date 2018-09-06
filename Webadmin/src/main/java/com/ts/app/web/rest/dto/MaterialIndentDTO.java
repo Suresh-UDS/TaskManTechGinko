@@ -33,6 +33,8 @@ public class MaterialIndentDTO extends BaseDTO {
 	
 	private long transactionId;
 	
+	private String purpose;
+	
 	public long getId() {
 		return id;
 	}
@@ -143,6 +145,14 @@ public class MaterialIndentDTO extends BaseDTO {
 
 	public void setTransactionId(long transactionId) {
 		this.transactionId = transactionId;
+	}
+
+	public String getPurpose() {
+		return purpose;
+	}
+
+	public void setPurpose(String purpose) {
+		this.purpose = purpose;
 	}
 	
 	
