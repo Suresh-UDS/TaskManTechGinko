@@ -29,7 +29,7 @@ public class MaterialIndentItem extends AbstractAuditingEntity implements Serial
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "material_id")
 	private Material material;
 	
@@ -37,6 +37,8 @@ public class MaterialIndentItem extends AbstractAuditingEntity implements Serial
 	private long quantity; 
 	
 	private long issuedQuantity;
+	
+	private long pendingQuantity;
 	
 	@ManyToOne()
 	@JoinColumn(name = "material_indent_id")
@@ -80,6 +82,14 @@ public class MaterialIndentItem extends AbstractAuditingEntity implements Serial
 
 	public void setIssuedQuantity(long issuedQuantity) {
 		this.issuedQuantity = issuedQuantity;
+	}
+
+	public long getPendingQuantity() {
+		return pendingQuantity;
+	}
+
+	public void setPendingQuantity(long pendingQuantity) {
+		this.pendingQuantity = pendingQuantity;
 	}
 
 

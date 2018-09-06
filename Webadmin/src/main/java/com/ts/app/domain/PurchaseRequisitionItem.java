@@ -1,5 +1,7 @@
 package com.ts.app.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "purchase_requisition_item")
-public class PurchaseRequisitionItem {
+public class PurchaseRequisitionItem extends AbstractAuditingEntity implements Serializable {
 
 	/**
 	 *
@@ -21,11 +23,15 @@ public class PurchaseRequisitionItem {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	private Material item;
+	@ManyToOne()
+	@JoinColumn(name = "material_id")
+	private Material material;
 	
 	private long quantity; 
 	
 	private double unitPrice;
+	
+	private long issuedQuantity;
 	
 	@ManyToOne()
 	@JoinColumn(name = "purchase_requisition_id")
@@ -39,12 +45,12 @@ public class PurchaseRequisitionItem {
 		this.id = id;
 	}
 
-	public Material getItem() {
-		return item;
+	public Material getMaterial() {
+		return material;
 	}
 
-	public void setItem(Material item) {
-		this.item = item;
+	public void setMaterial(Material material) {
+		this.material = material;
 	}
 
 	public long getQuantity() {
@@ -69,6 +75,14 @@ public class PurchaseRequisitionItem {
 
 	public void setPurchaseRequisition(PurchaseRequisition purchaseRequisition) {
 		this.purchaseRequisition = purchaseRequisition;
+	}
+
+	public long getIssuedQuantity() {
+		return issuedQuantity;
+	}
+
+	public void setIssuedQuantity(long issuedQuantity) {
+		this.issuedQuantity = issuedQuantity;
 	}
 
 	

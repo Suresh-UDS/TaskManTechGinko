@@ -1,7 +1,10 @@
 package com.ts.app.service;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -24,9 +27,12 @@ import com.ts.app.domain.MaterialTransaction;
 import com.ts.app.domain.MaterialTransactionType;
 import com.ts.app.domain.MaterialUOMType;
 import com.ts.app.domain.Project;
+import com.ts.app.domain.PurchaseRequisition;
+import com.ts.app.domain.PurchaseRequisitionItem;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
+import com.ts.app.domain.purchaseRequestStatus;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.InventoryRepository;
@@ -36,6 +42,7 @@ import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.MaterialIndentRepository;
 import com.ts.app.repository.MaterialItemGroupRepository;
 import com.ts.app.repository.ProjectRepository;
+import com.ts.app.repository.PurchaseRequisitionRepository;
 import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
@@ -91,6 +98,9 @@ public class InventoryTransactionService extends AbstractService{
 	private MailService mailService;
 	
 	@Inject
+	private PurchaseRequisitionRepository purchaseReqRepository;
+	
+	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 	
 	public static final String EMAIL_NOTIFICATION_PURCHASEREQ = "email.notification.purchasereq";
@@ -104,6 +114,7 @@ public class InventoryTransactionService extends AbstractService{
 		materialEntity.setMaterial(inventoryRepository.findOne(materialTransDTO.getMaterialId()));
 		materialEntity.setMaterialGroup(materialItemRepository.findOne(materialTransDTO.getMaterialGroupId()));
 		MaterialIndent materialIndent = null;
+		PurchaseRequisition purchaseRequesition = null;
 		if(materialTransDTO.getJobId() > 0) {
 			materialEntity.setJob(jobRepository.findOne(materialTransDTO.getJobId()));
 		}else {
@@ -119,6 +130,12 @@ public class InventoryTransactionService extends AbstractService{
 			materialEntity.setMaterialIndent(materialIndent);
 		}else {
 			materialEntity.setMaterialIndent(null);
+		}
+		if(materialTransDTO.getPurchaseRequisitionId() > 0) {
+			purchaseRequesition = purchaseReqRepository.findOne(materialTransDTO.getPurchaseRequisitionId());
+			materialEntity.setPurchaseRequisition(purchaseRequesition);
+		}else {
+			materialEntity.setPurchaseRequisition(null);
 		}
 		
 		/** Create material if does not exists */
@@ -139,7 +156,29 @@ public class InventoryTransactionService extends AbstractService{
 		if(materialTransDTO.getTransactionType().equals(MaterialTransactionType.ISSUED)) {
 			Material material = inventoryRepository.findOne(materialTransDTO.getMaterialId());
 			long prevStoreStock = material.getStoreStock();
-			if(prevStoreStock == material.getMinimumStock()) {   // send purchase request when stock is minimum level
+			if(prevStoreStock < material.getMinimumStock()) {   // send purchase request when stock is minimum level
+				
+				PurchaseRequisition purchaseRequest = new PurchaseRequisition();
+				User user = userRepository.findOne(materialTransDTO.getUserId());
+				Employee employee = user.getEmployee();
+				purchaseRequest.setRequestedBy(employeeRepository.findOne(employee.getId()));
+				purchaseRequest.setRequestedDate(DateUtil.convertToTimestamp(new Date()));
+				purchaseRequest.setRequestStatus(purchaseRequestStatus.PENDING);
+				purchaseRequest.setActive(PurchaseRequisition.ACTIVE_YES);
+				
+				List<PurchaseRequisitionItem> purchaseItem = new ArrayList<PurchaseRequisitionItem>();
+				PurchaseRequisitionItem purchaseReqItemEntity = new PurchaseRequisitionItem();
+				purchaseReqItemEntity.setActive(PurchaseRequisitionItem.ACTIVE_YES);
+				purchaseReqItemEntity.setMaterial(material);
+				purchaseReqItemEntity.setPurchaseRequisition(purchaseRequest);
+				purchaseReqItemEntity.setQuantity(material.getMaximumStock());
+				purchaseReqItemEntity.setUnitPrice(0);
+				purchaseItem.add(purchaseReqItemEntity);
+				
+				Set<PurchaseRequisitionItem> materialItem = new HashSet<PurchaseRequisitionItem>();
+				materialItem.addAll(purchaseItem);
+				purchaseRequest.setItems(materialItem);
+				purchaseReqRepository.save(purchaseRequest);
 				
 				Site site = siteRepository.findOne(materialTransDTO.getSiteId());
 				String siteName = site.getName();
@@ -178,14 +217,11 @@ public class InventoryTransactionService extends AbstractService{
 		if(materialTransDTO.getTransactionType().equals(MaterialTransactionType.RECEIVED)) {
 			Material material = inventoryRepository.findOne(materialTransDTO.getMaterialId());
 			long prevStoreStock = material.getStoreStock();
-			if(prevStoreStock < material.getMaximumStock()) {
-				
-			}else {
-				long currentStock = prevStoreStock + materialTransDTO.getQuantity();
-				materialEntity.setStoreStock(currentStock);
-				material.setStoreStock(currentStock);
-				inventoryRepository.save(material);
-			}
+			long currentStock = prevStoreStock + materialTransDTO.getQuantity();
+			materialEntity.setStoreStock(currentStock);
+			material.setStoreStock(currentStock);
+			inventoryRepository.save(material);
+
 		}
 		
 		materialEntity.setActive(MaterialTransaction.ACTIVE_YES);
@@ -196,6 +232,10 @@ public class InventoryTransactionService extends AbstractService{
 		if(materialIndent != null) { 
 			materialIndent.setTransaction(materialEntity);
 			materialIndentRepository.save(materialIndent);
+		}
+		if(purchaseRequesition != null) { 
+			purchaseRequesition.setTransaction(materialEntity);
+			purchaseReqRepository.save(purchaseRequesition);
 		}
 		materialTransDTO = mapperUtil.toModel(materialEntity, MaterialTransactionDTO.class);
 		return materialTransDTO;

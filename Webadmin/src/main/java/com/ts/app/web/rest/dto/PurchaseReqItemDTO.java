@@ -1,6 +1,6 @@
 package com.ts.app.web.rest.dto;
 
-public class MaterialIndentItemDTO extends BaseDTO {
+public class PurchaseReqItemDTO extends BaseDTO {
 	
 	private long id;
 	
@@ -18,10 +18,10 @@ public class MaterialIndentItemDTO extends BaseDTO {
 		
 	private long quantity;
 	
+	private double unitPrice;
+	
 	private long issuedQuantity;
-	
-	private long pendingQuantity;
-	
+
 	public long getId() {
 		return id;
 	}
@@ -54,22 +54,6 @@ public class MaterialIndentItemDTO extends BaseDTO {
 		this.materialItemCode = materialItemCode;
 	}
 
-	public String getMaterialUom() {
-		return materialUom;
-	}
-
-	public void setMaterialUom(String materialUom) {
-		this.materialUom = materialUom;
-	}
-
-	public long getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(long quantity) {
-		this.quantity = quantity;
-	}
-
 	public long getMaterialStoreStock() {
 		return materialStoreStock;
 	}
@@ -86,6 +70,30 @@ public class MaterialIndentItemDTO extends BaseDTO {
 		this.materialItemGroupId = materialItemGroupId;
 	}
 
+	public String getMaterialUom() {
+		return materialUom;
+	}
+
+	public void setMaterialUom(String materialUom) {
+		this.materialUom = materialUom;
+	}
+
+	public long getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(long quantity) {
+		this.quantity = quantity;
+	}
+
+	public double getUnitPrice() {
+		return unitPrice;
+	}
+
+	public void setUnitPrice(double unitPrice) {
+		this.unitPrice = unitPrice;
+	}
+
 	public long getIssuedQuantity() {
 		return issuedQuantity;
 	}
@@ -93,15 +101,7 @@ public class MaterialIndentItemDTO extends BaseDTO {
 	public void setIssuedQuantity(long issuedQuantity) {
 		this.issuedQuantity = issuedQuantity;
 	}
-
-	public long getPendingQuantity() {
-		return pendingQuantity;
-	}
-
-	public void setPendingQuantity(long pendingQuantity) {
-		this.pendingQuantity = pendingQuantity;
-	} 
 	
-		
 	
+
 }

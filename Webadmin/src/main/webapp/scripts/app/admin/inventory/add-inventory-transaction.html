@@ -88,7 +88,7 @@
                                                    <div class="form-group">
                                                        <label class="control-label">Purchase Ref.No<span class="red-star">*</span></label>
                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                       <select class="form-control" ng-model="selectedIndent" ng-change="loadPurchaseItems()" ng-options="purchaseItem as purchaseItem.indentRefNumber for purchaseItem in purchaseItems">
+                                                       <select class="form-control" ng-model="selectedPurchaseReq" ng-change="loadPurchaseItems()" ng-options="purchaseItem as purchaseItem.indentRefNumber for purchaseItem in purchaseItems">
                                                            <option value="">Select Purchase Ref.No...</option>
                                                        </select>
                                                    </div>
@@ -142,7 +142,7 @@
                                            <div class="form-group no-padding" >
                                             <div class="form-group ">
                                                <label class="control-label">Item Name</label>
-                                               <input type="text" class="form-control"   name='stockrec' ng-disabled="true"
+                                               <input type="text" class="form-control"   name='itemName' ng-disabled="true"
                                                       ng-model="selectedItemName"  required autocomplete="off"/>
                                            </div>
                                            </div>
@@ -150,14 +150,14 @@
                                        <div class="col-md-6">
                                            <div class="form-group ">
                                                <label class="control-label">Store stock</label>
-                                               <input type="number" class="form-control"   name='stockrec' ng-disabled="true"
+                                               <input type="number" class="form-control"   name='stock' ng-disabled="true"
                                                       ng-model="inventory.storeStock"  required autocomplete="off"/>
                                            </div>
                                        </div>
                                        <div class="col-md-6">
                                            <div class="form-group ">
                                                <label class="control-label">Quantity</label>
-                                               <input type="number" class="form-control"   name='stockconsu'
+                                               <input type="number" class="form-control"   name='stockQuantity' ng-disabled="true"
                                                       ng-model="inventory.quantity"  required autocomplete="off"/>
                                            </div>
                                        </div>

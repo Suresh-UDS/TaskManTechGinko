@@ -49,6 +49,7 @@ public class InventoryTransactionResource {
 	public ResponseEntity<?> saveInventory(@Valid @RequestBody MaterialTransactionDTO materialTransDTO, HttpServletRequest request) { 
 		log.debug("inventory object: {}", materialTransDTO);
 		try {
+			materialTransDTO.setUserId(SecurityUtils.getCurrentUserId());
 			materialTransDTO = inventoryTransactionService.createInventoryTransaction(materialTransDTO);
 		}catch(Exception e) { 
 			throw new TimesheetException("Error while create inventory transaction" + e);

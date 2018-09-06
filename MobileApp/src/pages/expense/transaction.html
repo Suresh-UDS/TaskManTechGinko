@@ -14,57 +14,51 @@
 
 
 </ion-header>
+<ion-content>
 
 
-<ion-content padding>
+  <div id="transactionPage" class="MainExpenseContainer transactionPage">
 
-  <div >
-    <div >
-      <ion-row padding>
+    <ion-card *ngFor="let items of trans_list" (click)="viewTransaction()">
+      <ion-card-header text-center>
+        {{items.site}}
+      </ion-card-header>
+      <ion-card-content>
 
-        <ion-col>
-          <ion-item *ngFor="let items of trans_list" (click)="viewTransaction()" >
-            <ion-row>
-              <ion-col><p text-left class="margin0">Date  </p></ion-col>
-              <ion-col><p text-right>{{items.date}}</p> </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col><p text-left class="margin0">Site</p></ion-col>
-              <ion-col><p text-right class="margin0">{{items.site}}</p> </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col><p text-left class="margin0">Description</p></ion-col>
-              <ion-col><p text-right class="margin0">{{items.description}}</p></ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col><p text-left class="margin0">Receipt No</p></ion-col>
-              <ion-col><p text-right class="margin0">{{items.receipt_no}}</p></ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col><p text-left class="margin0">Expense Type</p></ion-col>
-              <ion-col><p text-right class="margin0">{{items.expense_type}}</p></ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col><p text-left class="margin0">Billable</p></ion-col>
-              <ion-col><p text-right class="margin0">{{items.billable}}</p></ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col><p text-left class="margin0">Reimbursable</p></ion-col>
-              <ion-col><p text-right class="margin0">{{items.reimbursable}}</p></ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col><p text-left class="margin0">Payment type</p></ion-col>
-              <ion-col><p text-right class="margin0">{{items.payment_type}}</p></ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col><p text-left class="margin0">Actions</p></ion-col>
-              <ion-col><p text-right class="margin0">{{items.actions}}</p></ion-col>
-            </ion-row>
+        <ion-list>
+          <ion-item>
+            Date
+            <ion-note item-end class="dark">{{items.date}}</ion-note>
           </ion-item>
-        </ion-col>
+          <ion-item>
+            Receipt No
+            <ion-note item-end class="dark">{{items.receipt_no}}</ion-note>
+          </ion-item>
+          <ion-item>
+            Description
+            <ion-note item-end class="dark">{{items.description}}</ion-note>
+          </ion-item>
+          <ion-item>
+            Expense Type
+            <ion-note item-end class="dark">{{items.expense_type}}</ion-note>
+          </ion-item>
+          <ion-item>
+            Billable
+            <ion-note item-end class="dark">{{items.billable}}</ion-note>
+          </ion-item>
+          <ion-item>
+            Reimbursable
+            <ion-note item-end class="dark">{{items.reimbursable}}</ion-note>
+          </ion-item>
+          <ion-item>
+            Payment type
+            <ion-note item-end class="dark">{{items.payment_type}}</ion-note>
+          </ion-item>
+        </ion-list>
 
-      </ion-row>
-    </div>
+      </ion-card-content>
+    </ion-card>
+
   </div>
 
 
