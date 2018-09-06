@@ -269,19 +269,34 @@ public class AttendanceService extends AbstractService {
 						dbAttn.setShiftEndTime(endTime);
 					}
 				}else {
-					if(prevShiftStartCal != null) {
-						long prevShiftDiff = DateUtil.getDiff(prevShiftStartCal, checkInCal);
-						long currShiftDiff = DateUtil.getDiff(checkInCal, startCal);
-						if(currShiftDiff < prevShiftDiff) {
-							dbAttn.setShiftStartTime(startTime);
-							dbAttn.setShiftEndTime(endTime);
+					if(StringUtils.isEmpty(dbAttn.getShiftStartTime())){
+						if(prevShiftStartCal != null) {
+							long prevShiftDiff = DateUtil.getDiff(prevShiftStartCal, checkInCal);
+							long currShiftDiff = DateUtil.getDiff(checkInCal, startCal);
+							if(currShiftDiff < prevShiftDiff) {
+								dbAttn.setShiftStartTime(startTime);
+								dbAttn.setShiftEndTime(endTime);
+							}else {
+								dbAttn.setShiftStartTime(prevShiftStartTime);
+								dbAttn.setShiftEndTime(prevShiftEndTime);
+							}
 						}else {
 							dbAttn.setShiftStartTime(prevShiftStartTime);
 							dbAttn.setShiftEndTime(prevShiftEndTime);
 						}
 					}else {
-						dbAttn.setShiftStartTime(prevShiftStartTime);
-						dbAttn.setShiftEndTime(prevShiftEndTime);
+						String[] prevMatchedStartTimeUnits = dbAttn.getShiftStartTime().split(":");
+						Calendar prevMatchedStartCal = Calendar.getInstance();
+						prevMatchedStartCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(prevMatchedStartTimeUnits[0]));
+						prevMatchedStartCal.set(Calendar.MINUTE, Integer.parseInt(prevMatchedStartTimeUnits[1]));
+						prevMatchedStartCal.set(Calendar.SECOND, 0);
+						prevMatchedStartCal.set(Calendar.MILLISECOND, 0);
+						long prevShiftDiff = DateUtil.getDiff(prevMatchedStartCal, checkInCal);
+						long currShiftDiff = DateUtil.getDiff(checkInCal, startCal);
+						if(currShiftDiff < prevShiftDiff) {
+							dbAttn.setShiftStartTime(startTime);
+							dbAttn.setShiftEndTime(endTime);
+						}
 					}
 				}
 				
