@@ -419,7 +419,7 @@
                                                                         <div class="col-md-6">
                                                                             <div class="form-group">
                                                                                 <label class="control-label">Purchase price <!--     <span class="red-star">*</span>  --></label>
-                                                                                <input 
+                                                                                <input
                                                                                        ng-model="assetEdit.purchasePrice"
                                                                                        class='form-control'
                                                                                        name='assetPurchase'
@@ -442,7 +442,7 @@
                                                                         <div class="col-md-6">
                                                                             <div class="form-group">
                                                                                 <label class="control-label">Current Price  <!--    <span class="red-star">*</span>  --></label>
-                                                                                <input 
+                                                                                <input
                                                                                        ng-model="assetEdit.currentPrice"
                                                                                        class='form-control'
                                                                                        name='assetCurrent'
@@ -465,7 +465,7 @@
                                                                         <div class="col-md-6">
                                                                             <div class="form-group">
                                                                                 <label class="control-label">Estimated dispose price   <!--   <span class="red-star">*</span>  --></label>
-                                                                                <input 
+                                                                                <input
                                                                                        ng-model="assetEdit.estimatedDisposePrice"
                                                                                        class='form-control'
                                                                                        name='assetEstimate'
@@ -2261,9 +2261,9 @@
                                                             id="save-and-go-back-button" ng-disabled="form.$invalid">
                                                             <i class="fa fa-rotate-left" ></i> Save and go back to list
                                                         </button> -->
-                                                        <button class="btn btn-danger" type="button"
-                                                                ng-click="conform('cancel')" id="cancel-button">
-                                                            <i class="material-icons">close</i> Discard
+                                                        <button class="btn btn-default" type="button"
+                                                                ng-disabled="btnDisabled" ng-click="conform('back')" id="cancel-button">
+                                                                Back
                                                         </button>
 
 
