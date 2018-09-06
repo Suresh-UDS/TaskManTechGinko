@@ -38,6 +38,8 @@ public class MaterialIndentItem extends AbstractAuditingEntity implements Serial
 	
 	private long issuedQuantity;
 	
+	private long pendingQuantity;
+	
 	@ManyToOne()
 	@JoinColumn(name = "material_indent_id")
 	private MaterialIndent materialIndent;
@@ -80,6 +82,14 @@ public class MaterialIndentItem extends AbstractAuditingEntity implements Serial
 
 	public void setIssuedQuantity(long issuedQuantity) {
 		this.issuedQuantity = issuedQuantity;
+	}
+
+	public long getPendingQuantity() {
+		return pendingQuantity;
+	}
+
+	public void setPendingQuantity(long pendingQuantity) {
+		this.pendingQuantity = pendingQuantity;
 	}
 
 
