@@ -84,6 +84,7 @@ angular
 					$scope.searchCreatedBy = null;
 					$scope.searchApprovedBy = null;
 					$scope.searchStatus = null;
+					$scope.btnDisable = false;
 
 			        $scope.selectedSubmittedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
 			        $scope.selectedApprovedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
@@ -489,6 +490,7 @@ angular
                     $scope.saveLoad = false;
 					$scope.saveQuotation = function(mode) {
                         $scope.saveLoad = true;
+                        $scope.btnDisable = true;
 						console.log("Image file",$scope.selectedImageFile);
 
 						$scope.quotation.siteId = $scope.selectedSite.id;
@@ -531,6 +533,7 @@ angular
 								}).catch(function (response) {
                                     $scope.saveLoad = false;
 			                        $scope.success = null;
+			                        $scope.btnDisable = false;
 			                        console.log('Error - '+ JSON.stringify(response.data));
 			                        if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
 			                            $scope.errorEmployeeExists = true;
@@ -563,69 +566,78 @@ angular
 			        				$scope.labourTotalCost = 0;
 			        				$scope.materialTotalCost = 0;
 			        				$scope.totalCost = 0;
+			        				var qId = $stateParams.id;
                             console.log('quotation id - ' + $stateParams.id);
-			        		RateCardComponent.findQuotation($stateParams.id).then(function (data) {
+			        		RateCardComponent.findQuotation(qId).then(function (data) {
 
 			        				console.log('quotation response - '+ JSON.stringify(data))
 				                $scope.quotation = data;
-			        				var rateCardDetails = $scope.quotation.rateCardDetails;
-			        				for(var i =0;i < rateCardDetails.length; i++) {
-			        					var rateCardDetail = rateCardDetails[i];
-			        					if(rateCardDetail.type == 'SERVICE') {
-			        						$scope.serviceTotalCost += rateCardDetail.cost;
-			        						$scope.serviceRateCardDetails.push(rateCardDetail);
-			        					}else if(rateCardDetail.type == 'LABOUR') {
-			        						$scope.labourTotalCost += rateCardDetail.cost;
-			        						$scope.labourRateCardDetails.push(rateCardDetail);
-			        					}else if(rateCardDetail.type == 'MATERIAL') {
-			        						$scope.materialTotalCost += rateCardDetail.cost;
-			        						$scope.materialRateCardDetails.push(rateCardDetail);
-			        					}
-			        					$scope.totalCost += rateCardDetail.cost;
-			        				}
+				                    if($scope.quotation){
+                                        var rateCardDetails = $scope.quotation.rateCardDetails;
+                                        for(var i =0;i < rateCardDetails.length; i++) {
+                                            var rateCardDetail = rateCardDetails[i];
+                                            if(rateCardDetail.type == 'SERVICE') {
+                                                $scope.serviceTotalCost += rateCardDetail.cost;
+                                                $scope.serviceRateCardDetails.push(rateCardDetail);
+                                            }else if(rateCardDetail.type == 'LABOUR') {
+                                                $scope.labourTotalCost += rateCardDetail.cost;
+                                                $scope.labourRateCardDetails.push(rateCardDetail);
+                                            }else if(rateCardDetail.type == 'MATERIAL') {
+                                                $scope.materialTotalCost += rateCardDetail.cost;
+                                                $scope.materialRateCardDetails.push(rateCardDetail);
+                                            }
+                                            $scope.totalCost += rateCardDetail.cost;
+                                        }
 
-				                //$scope.loadSelectedProject($scope.quotation.projectId);
-				                $scope.selectedProject = {};
-				                $scope.selectedProject.id = $scope.quotation.projectId;
-				                $scope.selectedProject.name = $scope.quotation.projectName;
-				                $scope.selectedSite = {};
-				                $scope.selectedSite.id = $scope.quotation.siteId;
-				                $scope.selectedSite.name = $scope.quotation.siteName;
+                                    //$scope.loadSelectedProject($scope.quotation.projectId);
+                                    $scope.selectedProject = {};
+                                    $scope.selectedProject.id = $scope.quotation.projectId;
+                                    $scope.selectedProject.name = $scope.quotation.projectName;
+                                    $scope.selectedSite = {};
+                                    $scope.selectedSite.id = $scope.quotation.siteId;
+                                    $scope.selectedSite.name = $scope.quotation.siteName;
 
-				                if($scope.quotation.images.length>0){
-				                    console.log("images found");
-				                    for(var i=0;i<$scope.quotation.images.length;i++){
-				                        RateCardComponent.findQuotationImages($scope.quotation._id,$scope.quotation.images[i]).
-				                        then(function (response) {
-				                            console.log(response);
-				                            console.log(response.image);
-                                            $scope.quotationImages.push(response);
-                                        })
+                                    if($scope.quotation.images.length>0){
+                                        console.log("images found");
+                                        for(var i=0;i<$scope.quotation.images.length;i++){
+                                            RateCardComponent.findQuotationImages($scope.quotation._id,$scope.quotation.images[i]).
+                                            then(function (response) {
+                                                console.log(response);
+                                                console.log(response.image);
+                                                $scope.quotationImages.push(response);
+                                            })
+                                        }
                                     }
-                                }
 
-                                 $scope.loadQImagesNew = function(image,qId) {
-						            var eleId = 'quoImage';
-						            var ele = document.getElementById(eleId);
-						            ele.setAttribute('src',image);
-						        };
+                                     $scope.loadQImagesNew = function(image,qId) {
+                                        var eleId = 'quoImage';
+                                        var ele = document.getElementById(eleId);
+                                        ele.setAttribute('src',image);
+                                    };
 
-				                if($scope.quotation.ticketId > 0) {
-					                TicketComponent.getTicketDetails($scope.quotation.ticketId).then(function(data){
-					                    console.log("Ticket details");
-					                    console.log(data);
-					                    $scope.ticketStatus = data.status;
-					                    $scope.loadingStop();
-					        			});
+                                    if($scope.quotation.ticketId > 0) {
+                                        TicketComponent.getTicketDetails($scope.quotation.ticketId).then(function(data){
+                                            console.log("Ticket details");
+                                            console.log(data);
+                                            $scope.ticketStatus = data.status;
+                                            $scope.loadingStop();
+                                            });
+
+                                    }else{
+                                      $scope.loadingStop();
+                                    }
+
+                                    $scope.validCheck();
 
 				                }else{
-				                  $scope.loadingStop();
+				                    $location.path('/quotation-list');
 				                }
-
-				                $scope.validCheck();
 
 				            });
 
+
+                          }else{
+                             $location.path('/quotation-list');
                           }
 
 			        };
