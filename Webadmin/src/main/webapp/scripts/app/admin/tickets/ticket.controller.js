@@ -35,7 +35,7 @@ angular.module('timeSheetApp')
         $scope.searchStatus = null;
         $scope.selectedAsset = {};
 
-        $timeout(function (){angular.element('[ng-model="name"]').focus();});
+        //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
         $scope.pages = { currPage : 1};
 

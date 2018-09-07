@@ -18,7 +18,7 @@ angular.module('timeSheetApp')
         $scope.noData = false;
         $scope.checkStatus = 0;
 
-        $timeout(function (){angular.element('[ng-model="name"]').focus();});
+        //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
         $scope.pages = { currPage : 1};
 
@@ -159,7 +159,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.cancelUser = function () {
-        	
+
              if($scope.checkStatus == 1){
 
                  $location.path('/employees');

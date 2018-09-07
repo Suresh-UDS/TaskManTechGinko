@@ -19,7 +19,7 @@ angular.module('timeSheetApp')
         $scope.saveLoad = false;
         $rootScope.conformText = null;
 
-        $timeout(function (){angular.element('[ng-model="name"]').focus();});
+        //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
         $scope.project = $scope.project || {};
         $scope.project.addressLat = $scope.project.addressLat || 0;

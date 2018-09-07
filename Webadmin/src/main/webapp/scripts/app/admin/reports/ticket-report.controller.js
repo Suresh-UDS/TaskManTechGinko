@@ -12,7 +12,7 @@ angular.module('timeSheetApp')
         $scope.doNotMatch = null;
         $scope.errorEmployeeExists = null;
         $scope.employeeDesignations = ["MD","Operations Manger","Supervisor"]
-        $timeout(function (){angular.element('[ng-model="name"]').focus();});
+        //$timeout(function (){angular.element('[ng-model="name"]').focus();});
         $scope.pages = { currPage : 1};
         $scope.selectedEmployee;
         $scope.searchCriteria = {};
@@ -341,7 +341,7 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.currPage = currPageVal;
             $scope.searchCriteria.findAll = false;
             $scope.searchCriteria.isReport = true;
-                
+
             console.log($scope.selectedProject , $scope.selectedSite)
              if( !$scope.selectedProject && !$scope.selectedSite
                 &&  !$scope.selectedStatus) {
