@@ -99,8 +99,8 @@
     </div>
 
     <div class="overlay"></div>
-    
-    
+
+
 
     <!-- bower:js -->
     <script src="bower_components/modernizr/modernizr.js"></script>
@@ -148,6 +148,9 @@
 
     <!-- Pagination script -->
     <script src="scripts/components/angular-pagination-directive/js/index.js"></script>
+
+    <!-- EnterDirective script -->
+    <script src="scripts/components/enterDirective/enterDirective.js"></script>
 
     <!-- Excel view & download script -->
     <script src="scripts/components/angular-excel-grid/index.js"></script>
@@ -543,7 +546,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"
                         aria-hidden="true">&times;</button>
-                <h4 class="modal-title">{{conformText == 'cancel' ? "Discard" : conformText }}</h4>
+                <h4 class="modal-title">{{conformText == 'cancel' ? "Discard" : conformText}}</h4>
             </div>
             <div class="modal-body">
                 <p>Are you sure want to {{conformText == 'cancel' ? "discard the changes" : conformText }}?</p>

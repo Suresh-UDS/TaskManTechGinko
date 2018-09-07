@@ -12,7 +12,7 @@ angular.module('timeSheetApp')
         $scope.error = null;
         $scope.doNotMatch = null;
         $scope.errorProjectExists = null;
-        
+
         $scope.selectedJobFile;
         $scope.selectedEmployeeFile;
         $scope.selectedChecklistFile;
@@ -43,16 +43,16 @@ angular.module('timeSheetApp')
         $scope.selectFile = function() {
         		console.log($scope.selectedJobFile);
         }
-        
-        
-        
+
+
+
         // upload Job File
         $scope.uploadJobFile = function() {
         	console.log('selected job file - ' + $scope.selectedJobFile);
         	if($scope.selectedJobFile){
         	$rootScope.jobImportStatusLoad = true;
         	console.log('$rootScope.jobImportStatus msg - '+$rootScope.jobImportStatus);
-        		
+
         		JobComponent.importFile($scope.selectedJobFile).then(function(data){
         			console.log(data);
         			var result = data;
@@ -66,15 +66,15 @@ angular.module('timeSheetApp')
 	         },function(err){
 	            	  console.log('Import error')
 	            	  console.log(err);
-	         });        		
+	         });
         	}else {
         		console.log('Choose a file!!!');
-        	}		
-        		
-        }	       
+        	}
+
+        }
 	    // Job Import Status
 	    $scope.jobImportStatus = function() {
-	        	console.log('$rootScope.jobImportStatus import controller -'+JSON.stringify($rootScope.jobImportStatus));	        		
+	        	console.log('$rootScope.jobImportStatus import controller -'+JSON.stringify($rootScope.jobImportStatus));
 	            	JobComponent.importStatus($rootScope.jobImportStatus.fileName).then(function(data) {
 	            		if(data) {
 	            			$rootScope.jobImportStatus.importStatus = data.status;
@@ -97,9 +97,9 @@ angular.module('timeSheetApp')
 	                			$rootScope.jobImportStatus.fileName = '#';
 	                		}
 	            		}
-	
+
 	            	});
-	
+
 	    }
 	    $scope.jobImportMsg = function() {
 	    	console.log('$rootScope.jobImportStatus message - '+ JSON.stringify($rootScope.jobImportStatus));
@@ -110,9 +110,9 @@ angular.module('timeSheetApp')
 	    	return ($rootScope.jobImportStatusLoad ? $rootScope.jobImportStatusLoad : '');
 	    };
 	    // Job end
-	    
-	    
-	    
+
+
+
 	    // upload Employee File  start
         $scope.uploadEmployeeFile = function(){
         	if($scope.selectedEmployeeFile){
@@ -134,10 +134,10 @@ angular.module('timeSheetApp')
         	});
         	}else{
         		console.log('select a file');
-        	}	
+        	}
         }
-        
-	    $scope.employeeImportStatus = function() {        	       		
+
+	    $scope.employeeImportStatus = function() {
         	EmployeeComponent.importEmployeeStatus($rootScope.employeeImportStatus.fileName).then(function(data) {
             		if(data) {
             			$rootScope.employeeImportStatus.importStatus = data.status;
@@ -162,16 +162,16 @@ angular.module('timeSheetApp')
             		}
             	});
 	    }
-	    
+
 	  $scope.employeeImportMsg = function() {
         return ('employeeMsg - '+$rootScope.employeeImportStatus ? $rootScope.employeeImportStatus.importMsg : '');
-	  }; 
+	  };
 	  $scope.empImportStatusLoad = function(){
 	    	console.log('$scope.empImportStatusLoad message '+ $rootScope.empImportStatusLoad);
 	    	return ($rootScope.empImportStatusLoad ? $rootScope.empImportStatusLoad : '');
-	   };  
+	   };
 	  //Employee end
-        
+
       //client upload file start
 	    $scope.uploadClients = function() {
 	    	if($scope.selectedClientFile){
@@ -191,13 +191,13 @@ angular.module('timeSheetApp')
             	  console.log('Client Import error')
             	  console.log(err);
          });
-	    }	
-    		
+	    }
+
     }
-	
+
 	    $scope.clientImportStatus = function() {
 	        	console.log('$rootScope.clientImportStatus -'+JSON.stringify($rootScope.clientImportStatus));
-	        		
+
 	            	ProjectComponent.importStatus($rootScope.clientImportStatus.fileName).then(function(data) {
 	            		if(data) {
 	            			$rootScope.clientImportStatus.importStatus = data.status;
@@ -226,13 +226,13 @@ angular.module('timeSheetApp')
 	    }
 	    $scope.clientImportMsg = function() {
 		   return ($rootScope.clientImportStatus ? $rootScope.clientImportStatus.importMsg : '');
-		};  
+		};
 		$scope.clientImportStatusLoad = function(){
 		    	console.log('$scope.clientImportStatusLoad message '+ $rootScope.clientImportStatusLoad);
 		    	return ($rootScope.clientImportStatusLoad ? $rootScope.clientImportStatusLoad : '');
-		}; 
-	   // client upload end 
-		
+		};
+	   // client upload end
+
 		 // upload Site File start
 	     $scope.uploadSitesFile = function(){
 	    	 if($scope.selectedSiteFile){
@@ -247,16 +247,16 @@ angular.module('timeSheetApp')
 	        				importMsg : result.msg
 	        		};
 	        		$rootScope.siteImportStatus = importStatus;
-	        		$rootScope.start('site');	        		
+	        		$rootScope.start('site');
 	        	},function(err){
 	        		console.log();
 	        	});
 	    	 }
 	     }
-	     
+
 	     $scope.siteImportStatus = function() {
 	        	console.log('$rootScope.siteImportStatus -'+JSON.stringify($rootScope.siteImportStatus));
-	        		
+
 	        	SiteComponent.importStatus($rootScope.siteImportStatus.fileName).then(function(data) {
 	            		if(data) {
 	            			$rootScope.siteImportStatus.importStatus = data.status;
@@ -281,15 +281,15 @@ angular.module('timeSheetApp')
 	            		}
 	            	});
 	    }
-	    
+
 	     /*$scope.siteImportMsg = function() {
 			   return ($rootScope.siteImportStatus ? $rootScope.siteImportStatus.importMsg : '');
 			};  */
 			$scope.siteImportStatusLoad = function(){
 			    	console.log('$scope.siteImportStatusLoad message '+ $rootScope.siteImportStatusLoad);
 			    	return ($rootScope.siteImportStatusLoad ? $rootScope.siteImportStatusLoad : '');
-			}; 
-	     
+			};
+
 			 // upload Location File start
 		     $scope.uploadLocationsFile = function(){
 		    	 if($scope.selectedLocationFile){
@@ -304,16 +304,16 @@ angular.module('timeSheetApp')
 		        				importMsg : result.msg
 		        		};
 		        		$rootScope.locationImportStatus = importStatus;
-		        		$rootScope.start('location');	        		
+		        		$rootScope.start('location');
 		        	},function(err){
 		        		console.log();
 		        	});
 		    	 }
 		     }
-		     
+
 		     $scope.locationImportStatus = function() {
 		        	console.log('$rootScope.locationImportStatus -'+JSON.stringify($rootScope.locationImportStatus));
-		        		
+
 		        LocationComponent.importStatus($rootScope.locationImportStatus.fileName).then(function(data) {
 		            		if(data) {
 		            			$rootScope.locationImportStatus.importStatus = data.status;
@@ -338,19 +338,19 @@ angular.module('timeSheetApp')
 		            		}
 		            	});
 		    }
-		    
+
 		     /*$scope.locationImportMsg = function() {
 				   return ($rootScope.locationImportStatus ? $rootScope.locationImportStatus.importMsg : '');
 				};  */
 				$scope.locationImportStatusLoad = function(){
 				    	console.log('$scope.locationImportStatusLoad message '+ $rootScope.locationImportStatusLoad);
 				    	return ($rootScope.locationImportStatusLoad ? $rootScope.locationImportStatusLoad : '');
-				}; 
-		     
-	        
-	        
-	      // site file end  
-	    
+				};
+
+
+
+	      // site file end
+
 	    //Checklist upload file start
 	    $scope.uploadChecklist = function() {
 	    	//var extn = checklistFile.substr(fileName.lastIndexOf('.')+1);
@@ -373,12 +373,12 @@ angular.module('timeSheetApp')
             	  console.log('Client Import error')
             	  console.log(err);
          });
-	  
+
 	  }
     }
-	
+
 	    $scope.checklistImportStatus = function() {
-        	console.log('$rootScope.checklistImportStatus -'+JSON.stringify($rootScope.checklistImportStatus));        		
+        	console.log('$rootScope.checklistImportStatus -'+JSON.stringify($rootScope.checklistImportStatus));
         	ChecklistComponent.importStatus($rootScope.checklistImportStatus.fileName).then(function(data) {
             		if(data) {
             			$rootScope.checklistImportStatus.importStatus = data.status;
@@ -404,14 +404,14 @@ angular.module('timeSheetApp')
 
             	});
 
-    }    
-	    
-	   
+    }
+
+
 	   $scope.checklistImportStatusLoad = function(){
 		   	console.log('$scope.checklistImportStatusLoad message '+ $rootScope.checklistImportStatusLoad);
 		   	return ($rootScope.checklistImportStatusLoad ? $rootScope.checklistImportStatusLoad : '');
-	   };   
-	    
+	   };
+
 	   //Employee shift upload file start
 	    $scope.uploadEmployeeShift = function() {
 		    	if($scope.selectedEmployeeShiftFile){
@@ -431,12 +431,12 @@ angular.module('timeSheetApp')
 	           	  console.log('Client Import error')
 	           	  console.log(err);
 	        });
-		  
+
 		  }
 	   }
-	
+
 	    $scope.employeeShiftImportStatus = function() {
-	    		console.log('$rootScope.employeeShiftImportStatus -'+JSON.stringify($rootScope.employeeShiftImportStatus));        		
+	    		console.log('$rootScope.employeeShiftImportStatus -'+JSON.stringify($rootScope.employeeShiftImportStatus));
        		EmployeeComponent.importEmployeeShiftStatus($rootScope.employeeShiftImportStatus.fileName).then(function(data) {
            		if(data) {
            			$rootScope.employeeShiftImportStatus.importStatus = data.status;
@@ -462,16 +462,16 @@ angular.module('timeSheetApp')
 
            	});
 
-	    }    
-	    
-	   
+	    }
+
+
 	   $scope.employeeShiftImportStatusLoad = function(){
 		   	console.log('$scope.employeeShiftImportStatusLoad message '+ $rootScope.employeeShiftImportStatusLoad);
 		   	return ($rootScope.employeeShiftImportStatusLoad ? $rootScope.employeeShiftImportStatusLoad : '');
-	   };    
-	   
-	   
-	   
+	   };
+
+
+
 	   //Asset upload file start
 	    $scope.uploadAsset = function() {
 		    	if($scope.selectedAssetFile){
@@ -491,12 +491,12 @@ angular.module('timeSheetApp')
 	           	  console.log('Asset Import error')
 	           	  console.log(err);
 	        });
-		  
+
 		  }
 	   }
-	
+
 	    $scope.assetImportStatus = function() {
-	    		console.log('$rootScope.assetImportStatus -'+JSON.stringify($rootScope.assetImportStatus));        		
+	    		console.log('$rootScope.assetImportStatus -'+JSON.stringify($rootScope.assetImportStatus));
       		AssetComponent.importAssetStatus($rootScope.assetImportStatus.fileName).then(function(data) {
           		if(data) {
           			$rootScope.assetImportStatus.importStatus = data.status;
@@ -522,15 +522,15 @@ angular.module('timeSheetApp')
 
           	});
 
-	    }    
-	    
-	   
+	    }
+
+
 	   $scope.assetImportStatusLoad = function(){
 		   	console.log('$scope.assetImportStatusLoad message '+ $rootScope.assetImportStatusLoad);
 		   	return ($rootScope.assetImportStatusLoad ? $rootScope.assetImportStatusLoad : '');
-	   };    
-	   
-	   
+	   };
+
+
 	   //Asset PPM upload file start
 	    $scope.uploadAssetPPM = function() {
 		    	if($scope.selectedAssetPPMFile){
@@ -550,12 +550,12 @@ angular.module('timeSheetApp')
 	           	  console.log('Asset PPM Import error')
 	           	  console.log(err);
 	        });
-		  
+
 		  }
 	   }
-	
+
 	    $scope.assetPPMImportStatus = function() {
-	    		console.log('$rootScope.assetPPMImportStatus -'+JSON.stringify($rootScope.assetPPMImportStatus));        		
+	    		console.log('$rootScope.assetPPMImportStatus -'+JSON.stringify($rootScope.assetPPMImportStatus));
      		AssetComponent.importAssetPPMStatus($rootScope.assetPPMImportStatus.fileName).then(function(data) {
          		if(data) {
          			$rootScope.assetPPMImportStatus.importStatus = data.status;
@@ -581,14 +581,14 @@ angular.module('timeSheetApp')
 
          	});
 
-	    }    
-	    
-	   
+	    }
+
+
 	   $scope.assetPPMImportStatusLoad = function(){
 		   	console.log('$scope.assetPPMImportStatusLoad message '+ $rootScope.assetPPMImportStatusLoad);
 		   	return ($rootScope.assetPPMImportStatusLoad ? $rootScope.assetPPMImportStatusLoad : '');
-	   };   
-	   
+	   };
+
 	 //Asset AMC upload file start
 	    $scope.uploadAssetAMC = function() {
 		    	if($scope.selectedAssetAMCFile){
@@ -608,12 +608,12 @@ angular.module('timeSheetApp')
 	           	  console.log('Asset AMC Import error')
 	           	  console.log(err);
 	        });
-		  
+
 		  }
 	   }
-	
+
 	    $scope.assetAMCImportStatus = function() {
-	    		console.log('$rootScope.assetAMCImportStatus -'+JSON.stringify($rootScope.assetAMCImportStatus));        		
+	    		console.log('$rootScope.assetAMCImportStatus -'+JSON.stringify($rootScope.assetAMCImportStatus));
 	    		AssetComponent.importAssetAMCStatus($rootScope.assetAMCImportStatus.fileName).then(function(data) {
 	        		if(data) {
 	        			$rootScope.assetAMCImportStatus.importStatus = data.status;
@@ -636,18 +636,18 @@ angular.module('timeSheetApp')
 	            			$rootScope.assetAMCImportStatus.fileName = '#';
 	            		}
 	        		}
-	
+
 	        	});
 
-	    }    
-	    
-	   
+	    }
+
+
 	   $scope.assetAMCImportStatusLoad = function(){
 		   	console.log('$scope.assetAMCImportStatusLoad message '+ $rootScope.assetAMCImportStatusLoad);
 		   	return ($rootScope.assetAMCImportStatusLoad ? $rootScope.assetAMCImportStatusLoad : '');
-	   };   
-	    
-	    	    
+	   };
+
+
 	 // store the interval promise in this variable
 	 var promiseJob;
 	 var promiseEmployee;
@@ -662,7 +662,7 @@ angular.module('timeSheetApp')
 	    $rootScope.start = function(typeImport) {
 	      // stops any running interval to avoid two intervals running at the same time
 	    	//$rootScope.stop('job');
-	
+
 	      // store the interval promise
 	    	if(typeImport == 'job'){
 	    		$rootScope.stop('job');
@@ -686,7 +686,7 @@ angular.module('timeSheetApp')
 	    		$rootScope.stop('site');
 	    		console.log('Import Site Start Method');
 	    		promiseSite = $interval($scope.siteImportStatus, 5000);
-	    		console.log('promise -'+promiseSite);	    		
+	    		console.log('promise -'+promiseSite);
 	    	}
 	    	if(typeImport == 'checklist'){
 	    		$rootScope.stop('checklist');
@@ -718,10 +718,10 @@ angular.module('timeSheetApp')
 	    		promiseAssetAMC = $interval($scope.assetAMCImportStatus, 5000);
 	    		console.log('promise -'+promiseAssetAMC);
 	    	}
-	    };	
+	    };
 	    // stops the interval
 	    $rootScope.stop = function(stopInterval) {
-	      if(stopInterval == 'job'){	
+	      if(stopInterval == 'job'){
 	    	  $interval.cancel(promiseJob);
 	      }
 	      if(stopInterval == 'employee'){
@@ -748,15 +748,15 @@ angular.module('timeSheetApp')
 	      if(stopInterval == 'assetAMC'){
 	    	  	$interval.cancel(promiseAssetAMC);
 	      }
-	    };	   
-	    
-	    
+	    };
+
+
          //init load
-        $scope.initLoad = function(){ 
-             $scope.loadPageTop(); 
-             $scope.initPage(); 
-          
+        $scope.initLoad = function(){
+             $scope.loadPageTop();
+             //$scope.initPage();
+
          }
-        
-        
+
+
     });

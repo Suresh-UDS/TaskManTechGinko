@@ -84,14 +84,14 @@ angular.module('timeSheetApp')
         $('#dateFilterFrom').on('dp.change', function(e){
             console.log(e.date);
             console.log(e.date._d);
-            $scope.selectedDateFrom=e.date._d;
+            $scope.selectedDateFrom=new Date(e.date._d);
 
         });
         $('#dateFilterTo').on('dp.change', function(e){
             console.log(e.date);
 
             console.log(e.date._d);
-            $scope.selectedDateTo=e.date._d;
+            $scope.selectedDateTo=new Date(e.date._d);
 
         });
 
@@ -241,7 +241,7 @@ angular.module('timeSheetApp')
 
                 //document.getElementById('searchForm').submit();
 
-                $scope.search();
+                //$scope.search();
         };
 
         $scope.feedbackListLoader = true;

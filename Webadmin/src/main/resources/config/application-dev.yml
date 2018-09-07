@@ -140,6 +140,8 @@ reports:
         url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/job-reports
     attendance-report:
         url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/attendance-reports
+    feedback-report:
+        url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/feedbacks
     asset-report:
         url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/asset-report
     vendor-report:

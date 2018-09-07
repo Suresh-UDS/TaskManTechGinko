@@ -8,7 +8,7 @@ angular.module('timeSheetApp')
         $scope.doNotMatch = null;
         $scope.errorDeviceExists = null;
 
-        $timeout(function (){angular.element('[ng-model="name"]').focus();});
+        //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
         $scope.selectedDevice;
 
@@ -66,12 +66,12 @@ angular.module('timeSheetApp')
         	$scope.success = 'OK';
         	$location.path('/devices');
         };
-        
+
         $scope.deleteConfirm = function (device){
         	console.log('...>>>delete confirm<<<');
         	$scope.confirmDevice = device;
         	console.log(device);
-        	
+
         }
 
         $scope.deleteDevice = function () {

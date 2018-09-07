@@ -15,7 +15,7 @@ angular.module('timeSheetApp')
         $scope.authorities = ["User", "Admin"];
         $scope.pager = {};
 
-        $timeout(function (){angular.element('[ng-model="name"]').focus();});
+        //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
         $scope.pages = { currPage : 1};
 
@@ -166,7 +166,7 @@ angular.module('timeSheetApp')
         	$state.reload();
         };
 
-        
+
 
         $scope.isActiveAsc = 'id';
         $scope.isActiveDesc = '';
@@ -212,7 +212,7 @@ angular.module('timeSheetApp')
             }
             if($scope.selectedModuleAction) {
                     $scope.searchCriteria.moduleActionId = $scope.selectedModuleAction.id;
-                
+
             }
 
             //-------
@@ -259,9 +259,9 @@ angular.module('timeSheetApp')
                     $scope.totalCountPages = data.totalCount;
                     $scope.pageSort = 10;
                 }
-              
+
             });
-        	
+
         };
 
 
@@ -348,7 +348,7 @@ angular.module('timeSheetApp')
 
 
                         /*
-    
+
                         ** Pagination init function **
                         @Param:integer
 

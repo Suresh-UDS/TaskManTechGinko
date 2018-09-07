@@ -12,7 +12,7 @@ angular.module('timeSheetApp')
 
 
 
-        $timeout(function (){angular.element('[ng-model="name"]').focus();});
+        //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
         $scope.pages = { currPage : 1};
 
@@ -286,10 +286,10 @@ angular.module('timeSheetApp')
         };
 
           //init load
-        $scope.initLoad = function(){ 
-             $scope.loadPageTop(); 
-            
-          
+        $scope.initLoad = function(){
+             $scope.loadPageTop();
+
+
          }
 
 

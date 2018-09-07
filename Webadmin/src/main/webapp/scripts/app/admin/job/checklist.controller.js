@@ -13,7 +13,7 @@ angular.module('timeSheetApp')
         $scope.noData = false;
         $scope.isEdit = false;
 
-        $timeout(function (){angular.element('[ng-model="name"]').focus();});
+        //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
         $scope.pages = { currPage : 1};
 
@@ -81,7 +81,7 @@ angular.module('timeSheetApp')
 
         	console.log('checklist after adding items - ' , JSON.stringify($scope.checklist));
             var post = $scope.isEdit == true ? ChecklistComponent.updateChecklist($scope.checklist) : ChecklistComponent.createChecklist($scope.checklist);
-        	post.then(function () { 
+        	post.then(function () {
                 $scope.saveLoad = false;
             	$scope.success = 'OK';
             	$scope.checklistItems = [];

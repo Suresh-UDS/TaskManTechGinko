@@ -113,15 +113,15 @@
                                                     <div class="form-group">
 
                                                         <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" ng-click="conform('save')"
-                                                                type="submit" id="form-button-save" ng-disabled="form.$invalid ">
+                                                                type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisable">
                                                             <span class="btn-label"><i class="material-icons">check</i></span> Save
                                                             <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                                         </button>
 
 
                                                         <button class="btn btn-danger" type="button"
-                                                                ng-click="conform('cancel')" id="cancel-button">
-                                                            <i class="material-icons">close</i> Discard
+                                                                ng-disabled="btnDisable" ng-click="conform('cancel')" id="cancel-button">
+                                                                <i class="material-icons">close</i> Cancel
                                                         </button>
 
                                                     </div>
