@@ -393,7 +393,7 @@ angular.module('timeSheetApp')
         }
 
          $scope.cancel = function() {
-                $scope.selectedAssetType = {};
+                $scope.selectedAssetType = "";
                 $scope.selectedParameter = {};
                 $scope.selectedParameterUOM = {};
                 $scope.selectedRule = "";
