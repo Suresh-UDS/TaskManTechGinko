@@ -17,10 +17,14 @@ import{Indent} from "../indent/indent";
 })
 export class IndentList {
 
+  isLoading : boolean;
     page:1;
     pageSort:15;
     indentMaterial:any;
     spinner:any;
+
+    fakeList : Array<any> = new Array(12);
+
   constructor(public navCtrl: NavController, public navParams: NavParams,private purchaseService:PurchaseRequisitionService) {
   }
 
@@ -42,10 +46,12 @@ export class IndentList {
 
     searchMaterial(searchCriteria)
     {
-        this.spinner=true;
+        // this.spinner=true;
+      this.isLoading = true;
         this.purchaseService.searchMaterialIndents(searchCriteria).subscribe(
             response=>{
-                this.spinner=false;
+                // this.spinner=false;
+              this.isLoading = false;
                 console.log("Getting Material Indent");
                 console.log(response);
                 this.indentMaterial=response.transactions;
