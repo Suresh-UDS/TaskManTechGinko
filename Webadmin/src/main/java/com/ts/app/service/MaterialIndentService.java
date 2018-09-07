@@ -119,6 +119,7 @@ public class MaterialIndentService extends AbstractService {
 		for(MaterialIndentItemDTO indentItm : indentItems) { 
 			MaterialIndentItem materialIndentItm = mapperUtil.toEntity(indentItm, MaterialIndentItem.class);
 			materialIndentItm.setMaterialIndent(indentEntity);
+			materialIndentItm.setPendingQuantity(indentItm.getQuantity());
 			materialIndentItm.setActive(MaterialIndentItem.ACTIVE_YES);
 			materialIndentItm.setMaterial(inventoryRepository.findOne(indentItm.getMaterialId()));
 			indentItemEntity.add(materialIndentItm);
@@ -301,11 +302,33 @@ public class MaterialIndentService extends AbstractService {
 			for(MaterialIndentItemDTO itemDto : indentItemDTOs) {
 				if(itemEntity.getId() == itemDto.getId()) {
 					itemFound = true;
-					long reducedQty = itemEntity.getQuantity() - itemDto.getIssuedQuantity();
-					itemEntity.setQuantity(reducedQty);
-					itemEntity.setIssuedQuantity(itemDto.getIssuedQuantity());
-
+					long reducedQty = 0;
 					Material materialItm = inventoryRepository.findOne(itemDto.getMaterialId());
+					if(itemEntity.getPendingQuantity() > 0) {   
+						reducedQty = itemEntity.getPendingQuantity() - itemDto.getIssuedQuantity();   
+						itemEntity.setPendingQuantity(reducedQty); 
+						itemEntity.setIssuedQuantity(itemDto.getIssuedQuantity());
+						MaterialTransaction materialTrans = new MaterialTransaction();
+						materialTrans.setProject(projectRepository.findOne(materialIndentDto.getProjectId()));
+						materialTrans.setSite(siteRepository.findOne(materialIndentDto.getSiteId()));
+						materialTrans.setMaterialIndent(matIndent);
+						materialTrans.setMaterialGroup(materialItemGroupRepository.findOne(materialItm.getItemGroupId()));
+						Date dateofTransaction = new Date();
+						long consumptionStock = materialItm.getStoreStock() - itemDto.getIssuedQuantity();
+						materialItm.setStoreStock(consumptionStock);
+						inventoryRepository.save(materialItm);
+						materialTrans.setMaterial(materialItm);
+						materialTrans.setUom(materialItm.getUom());
+						materialTrans.setStoreStock(consumptionStock);
+						materialTrans.setIssuedQuantity(itemDto.getIssuedQuantity());
+						materialTrans.setTransactionType(MaterialTransactionType.ISSUED);
+						materialTrans.setTransactionDate(DateUtil.convertToTimestamp(dateofTransaction));
+						materialTrans.setActive(MaterialTransaction.ACTIVE_YES);
+						materialTrans = inventTransactionRepository.save(materialTrans);
+						if(materialTrans.getId() > 0) { 
+							matIndent.setTransaction(materialTrans);
+						}
+					}
 					
 					if(materialItm.getStoreStock() < materialItm.getMinimumStock()) {
 						
@@ -338,28 +361,6 @@ public class MaterialIndentService extends AbstractService {
 								log.info("There is no email ids registered");
 							}
 						}
-					}
-					
-					MaterialTransaction materialTrans = new MaterialTransaction();
-					materialTrans.setProject(projectRepository.findOne(materialIndentDto.getProjectId()));
-					materialTrans.setSite(siteRepository.findOne(materialIndentDto.getSiteId()));
-					materialTrans.setMaterialIndent(matIndent);
-					materialTrans.setMaterialGroup(materialItemGroupRepository.findOne(materialItm.getItemGroupId()));
-					Date dateofTransaction = new Date();
-					long consumptionStock = materialItm.getStoreStock() - itemDto.getIssuedQuantity();
-					materialItm.setStoreStock(consumptionStock);
-					inventoryRepository.save(materialItm);
-					materialTrans.setMaterial(materialItm);
-					materialTrans.setUom(materialItm.getUom());
-					materialTrans.setQuantity(reducedQty);
-					materialTrans.setStoreStock(consumptionStock);
-					materialTrans.setIssuedQuantity(itemDto.getIssuedQuantity());
-					materialTrans.setTransactionType(MaterialTransactionType.ISSUED);
-					materialTrans.setTransactionDate(DateUtil.convertToTimestamp(dateofTransaction));
-					materialTrans.setActive(MaterialTransaction.ACTIVE_YES);
-					materialTrans = inventTransactionRepository.save(materialTrans);
-					if(materialTrans.getId() > 0) { 
-						matIndent.setTransaction(materialTrans);
 					}
 				
 					break;

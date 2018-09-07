@@ -141,12 +141,18 @@ angular.module('timeSheetApp')
     	$scope.loadItems = function() {
     		console.log($scope.selectedIndent);
     		if($scope.selectedIndent) {
-    			$scope.site = false;
     			IndentComponent.findById($scope.selectedIndent.id).then(function(data) {
     				console.log(data);
     				$scope.materialItems = data.items;
     				$scope.loadingStop();
     			});
+    		}
+    	}
+    	
+    	$scope.loadPurchaseItems = function() {
+    		console.log($scope.selectedPurchaseReq);
+    		if($scope.selectedPurchaseReq) {
+    			
     		}
     	}
     	
@@ -289,6 +295,7 @@ angular.module('timeSheetApp')
     		InventoryTransactionComponent.findById($stateParams.id).then(function(data) { 
     			console.log(data);
     			$scope.transactionViews = data;
+    			$scope.loadingStop();
     		});
     	}
         
@@ -421,6 +428,7 @@ angular.module('timeSheetApp')
 	                $scope.searchCriteria.transactionDate = null;
 	   	     }
         	console.log($scope.searchCriteria);
+        	$scope.loadingStart();
         	InventoryTransactionComponent.search($scope.searchCriteria).then(function (data) {
         		console.log(data);
                 $scope.inventoryTransactionlists = data.transactions;

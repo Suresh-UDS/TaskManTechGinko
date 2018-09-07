@@ -21,7 +21,7 @@ import {componentService} from "../service/componentService";
   templateUrl: 'site-list.html',
 })
 export class SiteListPage {
-isLoading:boolean;
+  isLoading:boolean;
   siteList:any;
   userGroup:any;
   employeeId:any;
@@ -31,7 +31,7 @@ isLoading:boolean;
   longitude:any;
   checkedIn:any;
 
-    fakeSiteList: Array<any> = new Array(12);
+  fakeSiteList: Array<any> = new Array(12);
 
     constructor(public navCtrl: NavController,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController, private attendanceService: AttendanceService, private siteService: SiteService) {
@@ -54,13 +54,13 @@ isLoading:boolean;
   }
 
   showSuccessToast(msg){
-    this.component.showToastMessage(msg,'bottom');
+      this.component.showToastMessage(msg,'bottom');
   }
 
   getAttendances(site){
-    this.attendanceService.getSiteAttendances(site.id).subscribe(response=>{
-      console.log(response.json());
-      this.navCtrl.push(AttendanceListPage,{'attendances':response.json()});
+        this.attendanceService.getSiteAttendances(site.id).subscribe(response=>{
+        console.log(response.json());
+        this.navCtrl.push(AttendanceListPage,{'attendances':response.json()});
     })
   }
 
@@ -69,8 +69,8 @@ isLoading:boolean;
   }
 
   ionViewWillEnter(){
-      this.isLoading=true;
-      this.siteService.searchSite().subscribe(response=>{
+        this.isLoading=true;
+        this.siteService.searchSite().subscribe(response=>{
         this.isLoading=false;
         console.log(response.json());
         this.siteList = response.json();

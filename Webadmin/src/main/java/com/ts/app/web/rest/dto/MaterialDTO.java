@@ -36,6 +36,8 @@ public class MaterialDTO extends BaseDTO {
 	
 	private long itemGroupId;
 	
+	private String description;
+	
 	private List<MaterialTransactionDTO> materialTransactions;
 
 	public long getId() {
@@ -164,6 +166,14 @@ public class MaterialDTO extends BaseDTO {
 
 	public void setMaterialTransactions(List<MaterialTransactionDTO> materialTransactions) {
 		this.materialTransactions = materialTransactions;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 }

@@ -12,6 +12,6 @@ import com.ts.app.domain.PurchaseRequisition;
 public interface PurchaseRequisitionRepository extends JpaRepository<PurchaseRequisition, Long>, JpaSpecificationExecutor<PurchaseRequisition>{
 
 	@Query("SELECT pr FROM PurchaseRequisition pr WHERE pr.project.id = :projectId and pr.site.id = :siteId and pr.active = 'Y'")
-	List<PurchaseRequisition> findIndentBySites(@Param("projectId") long projectId, @Param("siteId") long siteId);
+	List<PurchaseRequisition> findPurchaseReqBySite(@Param("projectId") long projectId, @Param("siteId") long siteId);
 
 }

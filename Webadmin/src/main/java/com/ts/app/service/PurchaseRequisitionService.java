@@ -265,7 +265,7 @@ public class PurchaseRequisitionService extends AbstractService {
 	}
 
 	public List<PurchaseReqDTO> getRequestBySite(PurchaseReqDTO purchaseDTO) {
-		List<PurchaseRequisition> purchaseReqList = purchaseReqRepository.findIndentBySites(purchaseDTO.getProjectId(), purchaseDTO.getSiteId());
+		List<PurchaseRequisition> purchaseReqList = purchaseReqRepository.findPurchaseReqBySite(purchaseDTO.getProjectId(), purchaseDTO.getSiteId());
 		List<PurchaseReqDTO> purchaseModel = mapperUtil.toModelList(purchaseReqList, PurchaseReqDTO.class);
 		return purchaseModel;
 	}
