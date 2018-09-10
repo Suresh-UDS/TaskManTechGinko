@@ -20,7 +20,69 @@
 
 <ion-content>
 
+  <div class="AddExpensePageCon white-bg" padding>
+
+      <div class="form-group label-floating">
+        <label class="control-label">Date</label>
+        <input type="text" class="form-control" >
+
+      </div>
+      <div class="form-group label-floating">
+        <label class="control-label">Receipt No</label>
+        <input type="Number" class="form-control" >
+
+      </div>
+      <div class="form-group label-floating">
+        <label class="control-label">Description</label>
+        <input type="text" class="form-control" >
+
+      </div>
+
+      <div class="form-group">
+          <label class="control-label">Expense type</label>
+          <ion-select  class="select-box padding-left0" id="expenseType" placeholder="Choose Expense type" name="expenseType"  interface="popover" required>
+              <ion-option>Travel</ion-option>
+              <ion-option>Food</ion-option>
+          </ion-select>
+
+      </div>
+
+      <div class="form-group">
+
+          <ion-list>
+                <ion-item class="check-style">
+                    <ion-label>Billable</ion-label>
+                    <ion-checkbox color="primary" checked="true"></ion-checkbox>
+                </ion-item>
+              <ion-item class="check-style">
+                  <ion-label>Reimbursable</ion-label>
+                  <ion-checkbox color="primary" ></ion-checkbox>
+              </ion-item>
+          </ion-list>
+
+          <div class="clearfix"></div>
 
 
+      </div>
+
+
+      <div class="form-group label-floating">
+          <label class="control-label">Payment type</label>
+          <ion-select  class="select-box padding-left0" id="paymentType" placeholder="Choose Payment type" name="paymentType"  interface="popover" required>
+              <ion-option>Cash</ion-option>
+              <ion-option>Card</ion-option>
+              <ion-option>Net Banking</ion-option>
+          </ion-select>
+
+      </div>
+
+  </div>
 
 </ion-content>
+<ion-footer>
+    <ion-toolbar class="align-center" >
+        <button class="btn btn-warning center margin-auto" type="submit" >
+            Add
+        </button>
+    </ion-toolbar>
+</ion-footer>

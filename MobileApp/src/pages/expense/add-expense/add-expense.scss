@@ -1,3 +1,17 @@
 page-add-expense {
 
+  .check-style {
+    width: 50% !important;
+    float: left;
+    border-bottom: none !important;
+  .item-inner
+    {
+      border-bottom: none !important;
+    }
+  }
+  ion-checkbox
+  {
+    margin-right:0 !important;
+  }
+
 }
