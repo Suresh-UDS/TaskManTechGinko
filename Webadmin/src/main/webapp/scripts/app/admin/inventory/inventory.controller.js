@@ -4,7 +4,7 @@ angular.module('timeSheetApp')
     .controller('InventoryController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent,$http,$stateParams,$location,
     		ManufacturerComponent, InventoryComponent, $filter, PaginationComponent) {
 
-          
+
     	$rootScope.loginView = false;
     	$scope.inventory = {};
     	$scope.editInventory = {};
@@ -26,15 +26,15 @@ angular.module('timeSheetApp')
         $scope.searchCreatedDateSer = null;
         $scope.transactionCriteria = {};
     	$scope.pages = { currPage : 1};
-    	
-    	$scope.refreshPage = function() { 
+
+    	$scope.refreshPage = function() {
     		 $scope.pages = {
     	                currPage: 1,
     	                totalPages: 0
     	            }
     		 $scope.clearFilter();
     	}
-    	
+
 
         $scope.clearFilter = function() {
             $scope.selectedManufacturer = {};
@@ -56,14 +56,14 @@ angular.module('timeSheetApp')
             }
             $scope.search();
         };
-        
+
         $scope.initCalender = function(){
 
             demo.initFormExtendedDatetimepickers();
         }
 
         $scope.initCalender();
-    	
+
     	$scope.showNotifications= function(position,alignment,color,msg){
 
             /*if(nottifShow == true){*/
@@ -78,23 +78,23 @@ angular.module('timeSheetApp')
             /*}*/
 
         }
-    	
+
     	$scope.loadProjects = function () {
             ProjectComponent.findAll().then(function (data) {
                 console.log("Loading all projects")
                 $scope.projects = data;
             });
         }
-    	
+
     	$scope.loadAllSites = function () {
-    		if($scope.client) { 
+    		if($scope.client) {
     			ProjectComponent.findSites($scope.client.id).then(function (data) {
                     $scope.searchSite = null;
                     $scope.sites = data;
                 });
     		}
         }
-    	
+
     	$scope.loadSites = function () {
             SiteComponent.findAll().then(function (data) {
                 $scope.selectedSite = null;
@@ -102,7 +102,7 @@ angular.module('timeSheetApp')
                 $scope.loadingStop();
             });
         }
-    	
+
     	$scope.loadManufacturer = function () {
             ManufacturerComponent.findAll().then(function (data) {
                 //console.log("Loading all Manufacturer -- " , data);
@@ -110,34 +110,34 @@ angular.module('timeSheetApp')
                 $scope.loadingStop();
             });
         }
-    	
-    	$scope.loadSearchSites = function() { 
-    		if($scope.searchProject) { 
+
+    	$scope.loadSearchSites = function() {
+    		if($scope.searchProject) {
     			ProjectComponent.findSites($scope.searchProject.id).then(function (data) {
                     $scope.searchSite = null;
                     $scope.sites = data;
                 });
     		}
     	}
-    	
+
     	$scope.loadUOM = function() {
     		InventoryComponent.getMaterialUOM().then(function(data){
     			console.log(data);
     			$scope.materialUOMs = data;
     		});
     	}
-    	
+
     	$scope.cancelInventory = function(){
             $location.path('/inventory-list');
     	}
-    	
+
     	 $('input#searchCreatedDate').on('dp.change', function(e){
              $scope.searchCreatedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
              $scope.searchCreatedDateSer = e.date._d;
     	 });
-    	 
 
-    	
+
+
     	/* Add item group */
 
         $scope.addMaterialItemGroup = function () {
@@ -160,46 +160,46 @@ angular.module('timeSheetApp')
                 console.log("Item Group not entered");
             }
         }
-        
+
         $scope.loadMaterialItmGroup = function () {
         	InventoryComponent.loadItemGroup().then(function (data) {
                 $scope.materialItmGroups = data;
                 $scope.loadingStop();
             });
         }
-        
-        $scope.loadMaterials = function() { 
+
+        $scope.loadMaterials = function() {
         	$scope.refreshPage();
         	$scope.search();
         	$location.path('/inventory-list');
         }
-        
+
         /* Save material */
     	$scope.saveInventory = function() {
     		if($scope.client){
     			$scope.inventory.projectId = $scope.client.id;
     		}
-    		
+
     		if($scope.projectSite){
     			$scope.inventory.siteId = $scope.projectSite.id;
     		}
-    		
-    		if($scope.selectedManufacturer) { 
+
+    		if($scope.selectedManufacturer) {
     			$scope.inventory.manufacturerId = $scope.selectedManufacturer.id;
     		}
-    		
+
     		if($scope.selectedItemGroup) {
     			$scope.inventory.itemGroup = $scope.selectedItemGroup.itemGroup;
     			$scope.inventory.itemGroupId = $scope.selectedItemGroup.id;
     		}
-    		
+
     		if($scope.selectedUOM){
     			$scope.inventory.uom = $scope.selectedUOM;
     		}
-    		
+
     		console.log(JSON.stringify($scope.inventory));
-    		
-    		InventoryComponent.create($scope.inventory).then(function(data) { 
+
+    		InventoryComponent.create($scope.inventory).then(function(data) {
     			console.log(data);
                 $scope.loadingStop();
                 $scope.inventory = "";
@@ -219,17 +219,20 @@ angular.module('timeSheetApp')
                     $scope.error = 'ERROR';
                 }
             });
-    		
-    		
+
+
     	}
-    	
+
     	$scope.viewInventory = function() {
-    		InventoryComponent.findById($stateParams.id).then(function(data) { 
+            $rootScope.loadingStart();
+            $rootScope.loadPageTop();
+            InventoryComponent.findById($stateParams.id).then(function(data) {
+                $rootScope.loadingStop();
     			console.log(data);
     			$scope.inventoryViews = data;
     		});
     	}
-    	
+
     	/* view material transactions */
         $scope.loadMaterialTrans = function() {
             $rootScope.loadingStart();
@@ -268,7 +271,7 @@ angular.module('timeSheetApp')
         	});
         }
         /* end material transactions */
-        
+
         /* delete material */
         $scope.deleteConfirm = function (id){
         	$scope.inventoryId = id;
@@ -282,9 +285,12 @@ angular.module('timeSheetApp')
         	});
         }
         /* end delete material */
-        
+
     	$scope.editInventory = function() {
-    		InventoryComponent.findById($stateParams.id).then(function(data) { 
+            $rootScope.loadingStart();
+            $rootScope.loadPageTop();
+    		InventoryComponent.findById($stateParams.id).then(function(data) {
+    		    $rootScope.loadingStop();
     			console.log(data);
     			$scope.editInventory = data;
     			$scope.editInventory.id = data.id;
@@ -300,7 +306,7 @@ angular.module('timeSheetApp')
     			$scope.selectedUnit = {materialUOM: data.uom };
     		});
     	}
-    	
+
     	/* Update Material */
     	$scope.updateInventory = function () {
             $scope.error = null;
@@ -309,24 +315,24 @@ angular.module('timeSheetApp')
         	if($scope.client){
     			$scope.editInventory.projectId = $scope.client.id;
     		}
-    		
+
     		if($scope.selectedSite){
     			$scope.editInventory.siteId = $scope.selectedSite.id;
     		}
-    		
-    		if($scope.selectedManufacturer) { 
+
+    		if($scope.selectedManufacturer) {
     			$scope.editInventory.manufacturerId = $scope.selectedManufacturer.id;
     		}
-    		
+
     		if($scope.selectedItemGroup) {
     			$scope.editInventory.itemGroup = $scope.selectedItemGroup.itemGroup;
     			$scope.editInventory.itemGroupId = $scope.selectedItemGroup.id;
     		}
-    		
+
     		if($scope.selectedUnit){
     			$scope.editInventory.uom = $scope.selectedUnit;
     		}
-    		
+
             console.log('Inventory details ='+ JSON.stringify($scope.editInventory));
 
              InventoryComponent.update($scope.editInventory).then(function () {
@@ -347,16 +353,16 @@ angular.module('timeSheetApp')
             });;
 
     	};
-    	
+
     	/* end update Material */
-    	
+
     	$scope.searchFilter = function () {
             $scope.setPage(1);
             $scope.search();
          }
-    	
-    	
-    	$scope.search = function () {										// search material 
+
+
+    	$scope.search = function () {										// search material
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         	if(!$scope.searchCriteria) {
             	var searchCriteria = {
@@ -386,13 +392,13 @@ angular.module('timeSheetApp')
 	        		$scope.searchCriteria.inventorylistId = 0;
 	        	}
         	}
-        	if($scope.searchProject) { 
+        	if($scope.searchProject) {
         		$scope.searchCriteria.projectId = $scope.searchProject.id;
         	}
-        	if($scope.searchSite) { 
+        	if($scope.searchSite) {
         		$scope.searchCriteria.siteId = $scope.searchSite.id;
         	}
-        	if($scope.selectedManufacturer) { 
+        	if($scope.selectedManufacturer) {
         		$scope.searchCriteria.manufacturerId = $scope.selectedManufacturer.id;
         	}
         	if($scope.searchItemCode) {
@@ -401,7 +407,7 @@ angular.module('timeSheetApp')
         	if($scope.searchItemName) {
         		$scope.searchCriteria.materialName = $scope.searchItemName;
         	}
-            if($scope.searchItemGroup) { 
+            if($scope.searchItemGroup) {
             	$scope.searchCriteria.itemGroup = $scope.searchItemGroup;
             }
             if($scope.searchCreatedDate != "") {
@@ -427,28 +433,28 @@ angular.module('timeSheetApp')
 	             $scope.pager = {};
 	             $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
 	             $scope.totalCountPages = data.totalCount;
-	
+
 	             console.log("Pagination",$scope.pager);
 	             console.log("Asset List - ", data);
-	
+
 	             $scope.pages.currPage = data.currPage;
 	             $scope.pages.totalPages = data.totalPages;
 	             $scope.loading = false;
-	
+
 	             if($scope.inventorylists && $scope.inventorylists.length > 0 ){
 	                 $scope.showCurrPage = data.currPage;
 	                 $scope.pageEntries = $scope.inventorylists.length;
 	                 $scope.totalCountPages = data.totalCount;
 	                 $scope.pageSort = 10;
-	
+
 	             $scope.noData = false;
-	
+
 	             }else{
 	                  $scope.noData = true;
 	             }
 
             });
-        	
+
         };
 
         $scope.setPage = function (page) {
@@ -464,7 +470,7 @@ angular.module('timeSheetApp')
             }
 
         }
-        
+
         $scope.loadSubModule = function(cb){
             $scope.pages = { currPage : 1};
             $scope.pager = {};
@@ -473,14 +479,14 @@ angular.module('timeSheetApp')
 
 
 			//init load
-			$scope.initLoad = function(){ 
-			     $scope.loadPageTop(); 
+			$scope.initLoad = function(){
+			     $scope.loadPageTop();
 			     $scope.loadProjects();
 			     $scope.loadManufacturer();
-			     $scope.loadUOM();			  
+			     $scope.loadUOM();
 			 }
-			
-			$scope.initList = function() { 
+
+			$scope.initList = function() {
 				$scope.loadMaterials();
 				$scope.setPage(1);
 			}
@@ -496,20 +502,20 @@ angular.module('timeSheetApp')
 
                 $scope.loadingStart = function(){ $('.pageCenter').show();$('.overlay').show();}
                 $scope.loadingAuto = function(){
-                    $scope.loadingStart(); 
+                    $scope.loadingStart();
                     $scope.loadtimeOut = $timeout(function(){
-                    
+
                     //console.log("Calling loader stop");
                     $('.pageCenter').hide();$('.overlay').hide();
-                            
+
                 }, 2000);
                    // alert('hi');
                 }
                 $scope.loadingStop = function(){
-                    
+
                     console.log("Calling loader");
                     $('.pageCenter').hide();$('.overlay').hide();
-                            
+
                 }
 
 
