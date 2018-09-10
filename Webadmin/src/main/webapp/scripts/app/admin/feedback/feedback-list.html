@@ -415,7 +415,7 @@
                     <div class="TailsCon">
                         <div class="TailsContent">
                             <ul class="blocksListCon">
-                                <li ng-repeat="item in filteredLocations" ng-click="genZoneReport(item.projectId,item.siteId,item.block, item.floor,item.zone,searchForm)" ng-class="item.zone == selectedZone && item.block== selectedBlock && item.floor== selectedFloor ? 'active' : ''"> <a type="submit"   ng-show="(($index < (vm.page * vm.numRecords)) && ($index >= ((vm.page - 1) * vm.numRecords)))">{{ item.block }}<br/>{{item.floor}}<br/>{{item.zone}}</a></li>
+                                <li ng-repeat="item in filteredLocations"   ng-click="genZoneReport(item.projectId,item.siteId,item.block, item.floor,item.zone,searchForm)" ng-class="item.zone == selectedZone && item.block== selectedBlock && item.floor== selectedFloor ? 'active' : ''"> <a type="submit"   ng-show="(($index < (vm.page * vm.numRecords)) && ($index >= ((vm.page - 1) * vm.numRecords)))">{{ item.block }}<br/>{{item.floor}}<br/>{{item.zone}}</a></li>
                             </ul>
 
                             <div class="clear"></div>
