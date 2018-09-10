@@ -49,6 +49,7 @@ export class AssetList {
     db:any;
     fileTransfer: FileTransferObject = this.transfer.create();
 
+    spinner:any;
 
     constructor(@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,private transfer: FileTransfer,
                 public modalCtrl:ModalController,private diagnostic: Diagnostic,private sqlite: SQLite,
@@ -66,8 +67,8 @@ export class AssetList {
   ionViewWillEnter()
   {
       console.log("Check Network Connection");
-      this.componentService.showLoader("Loading Assets");
-
+      this.spinner =true;
+      // this.componentService.showLoader("Loading Assets");
       var searchCriteria ={
           currPage:this.page+1
       };
@@ -155,9 +156,11 @@ export class AssetList {
 
     setDataSync()
     {
-        this.componentService.showLoader("Data Sync");
+      this.spinner = true;
+        // this.componentService.showLoader("Data Sync");
         this.dbService.getReading().then(
             response=> {
+              this.spinner = false;
                 console.log(response)
                     this.saveReadingToServer(response).then(
                         response=>{
@@ -174,7 +177,8 @@ export class AssetList {
                                                 })
                          },
                          error=>{
-                            this.componentService.closeLoader();
+                          this.spinner = false;
+                            // this.componentService.closeLoader();
                              this.componentService.showToastMessage("Error server sync","bottom")
                          })
             },error=>{
@@ -248,13 +252,16 @@ export class AssetList {
 
   getAsset(searchCriteria)
   {
-      this.assetService.searchAssets(searchCriteria).subscribe(
+    this.spinner = true;
+    this.assetService.searchAssets(searchCriteria).subscribe(
           response=>{
-              this.componentService.closeLoader()
+            this.spinner= false;
+              // this.componentService.closeLoader()
               console.log("Asset search filters response");
               console.log(response)
-              this.assetList=response.transactions
+              this.assetList=response.transactions;
           },err=>{
+            this.spinner = false;
               this.componentService.closeLoader();
               console.log("Error in filtering assets");
               console.log(err);
@@ -342,7 +349,7 @@ export class AssetList {
     // Pull to refresh
     doRefresh(refresher)
     {
-        this.componentService.showLoader("");
+        // this.componentService.showLoader("");
         var searchCriteria={};
         this.getAsset(searchCriteria);
         refresher.complete()

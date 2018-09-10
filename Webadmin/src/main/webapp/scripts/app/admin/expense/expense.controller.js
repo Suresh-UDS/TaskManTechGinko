@@ -2,15 +2,8 @@
 
 angular.module('timeSheetApp')
     .controller('ExpenseController', function ($rootScope, $scope, $state, $timeout,
-    		ProjectComponent, SiteComponent, SlaComponent, $http,$stateParams,$location, PaginationComponent) {
+    		ProjectComponent, SiteComponent, ExpenseComponent, $http,$stateParams,$location, PaginationComponent) {
 
-    	$scope.sla = {};
-
-    	$scope.slaList = [];
-
-    	$scope.escalation = {};
-
-    	$scope.slaEscalationList = [];
 
     	$scope.selectedProject = {};
 
@@ -25,12 +18,6 @@ angular.module('timeSheetApp')
     	$scope.pager = {};
 
         $scope.noData = false;
-
-        $scope.escalationShowOnce = false;
-
-        $scope.slaShowOnce = false;
-
-        $scope.selectedSlaList = {};
 
 			//init load
 			$scope.initLoad = function(){
@@ -66,29 +53,6 @@ angular.module('timeSheetApp')
 
                 };
 
-               // List ALL SLA
-
-                /*$scope.loadSlaList = function () {
-                	console.log("Selected Project id "+$scope.selectedProject.id);
-                	var id = $scope.selectedProject.id;
-                	if(id == null){
-                	SlaComponent.findAll().then(function (data) {
-                        $scope.slaList = data;
-                        console.log("SLA Loading data");
-                        console.log(data);
-                         $scope.loadingStop();
-                    });
-                	}
-                	else{
-                	SlaComponent.findBySiteSLA(id).then(function (data){
-                		$scope.slaList = data;
-                		console.log("SLA Loading data");
-                        console.log(data);
-                        $scope.loadingStop();
-                	});
-                	}
-                	$scope.loadProjects();
-                };*/
 
                 $scope.searchFilter = function () {
                     $scope.setPage(1);
@@ -147,7 +111,7 @@ angular.module('timeSheetApp')
                         $scope.slas = '';
                         $scope.sitesLoader = false;
                         $scope.loadPageTop();
-                    SlaComponent.search($scope.searchCriteria).then(function (data) {
+                    ExpenseComponent.search($scope.searchCriteria).then(function (data) {
                         $scope.slas = data.transactions;
                         $scope.sitesLoader = true;
 
@@ -178,61 +142,6 @@ angular.module('timeSheetApp')
 
                 };
 
-                $scope.loadSla = function() {
-                	console.log("*****Selected SLA id " + $stateParams.id);
-                	SlaComponent.findOne($stateParams.id).then(function (data){
-                		$scope.sla = data;
-                		$scope.slaList.push($scope.sla);
-                		$scope.selectedProject.id = $scope.sla.projectId;
-                		$scope.selectedProject.name = $scope.sla.projectName;
-                		$scope.selectedSite.id = $scope.sla.siteId;
-                		$scope.selectedSite.name = $scope.sla.siteName;
-                		/*for(int i = 0; $scope.sla.slaesc.length; i++) {
-                			var slaOne = {
-                				"level" : $scope.sla.slaesc.level,
-                				"hours" : $scope.sla.slaesc.hours,
-                				"minutes" : $scope.sla.slaesc.minutes,
-                				"email" : $scope.sla.slaesc.email,
-                			}
-                			$scope.slaEscalationList.push(slaOne);
-                		}*/
-                		//$scope.slaEscalationList.push($scope.sla.slaesc);
-                		console.log("Selected SLA Loading data");
-                		console.log(data);
-                		console.log($scope.sla.slaesc);
-                		$scope.loadingStop();
-                	});
-                };
-
-                $scope.addSla = function() {
-//					if(jQuery.isEmptyObject($scope.searchProject) == false)
-                	for(var i = 0; i < $scope.slaList.length; i++){
-                	console.log("SlaList add " + JSON.stringify($scope.slaList));
-                	$scope.sla = $scope.slaList[i];
-                	console.log("Sla add " + JSON.stringify($scope.sla));
-                	SlaComponent.createSla($scope.sla).then(function (data) {
-                		$scope.saveSla = data;
-                		console.log("SLA saving");
-                		console.log(data);
-                		$scope.loadingStop();
-                	});
-                	}
-                };
-
-                $scope.updateSla = function() {
-//					if(jQuery.isEmptyObject($scope.searchProject) == false)
-                	for(var i = 0; i < $scope.slaList.length; i++){
-                	console.log("SlaList add " + JSON.stringify($scope.slaList));
-                	$scope.sla = $scope.slaList[i];
-                	console.log("Sla add " + JSON.stringify($scope.sla));
-                	SlaComponent.updateSla($scope.sla).then(function (data) {
-                		$scope.saveSla = data;
-                		console.log("SLA saving");
-                		console.log(data);
-                		$scope.loadingStop();
-                	});
-                	}
-                };
 
                 $scope.loadProjects = function() {
                 	ProjectComponent.findAll().then(function (data) {
@@ -258,81 +167,5 @@ angular.module('timeSheetApp')
                 	}
                 };
 
-                $scope.addSlaEscalations = function(){
-                	console.log("Escaltions " + JSON.stringify($scope.escalation));
-                	$scope.slaEscalationList.push($scope.escalation);
-                	$scope.escalation = {};
-                	console.log("Escaltion List " + JSON.stringify($scope.slaEscalationList));
-                };
-
-                $scope.updateSlaEscalations = function(){
-                	console.log("Escaltions " + JSON.stringify($scope.escalation));
-                	$scope.slaEscalationList.push($scope.escalation);
-                	$scope.escalation = {};
-                	console.log("Escaltion List " + JSON.stringify($scope.slaEscalationList));
-                };
-
-                $scope.removeEscalation = function(ind) {
-            		$scope.slaEscalationList.splice(ind,1);
-            		console.log("remove escalation" + $scope.slaEscalationList)
-            };
-
-                $scope.addSlas = function(){
-		                	console.log("Sla " + JSON.stringify($scope.sla));
-		                	console.log("SLA Escalation List " + JSON.stringify($scope.slaEscalationList));
-		                	$scope.sla.slaesc = $scope.slaEscalationList;
-		                	$scope.slaEscalationList = [];
-		                	var slas = {
-		                			"projectId" : $scope.selectedProject.id,
-		                			"siteId" : $scope.selectedSite.id,
-		                			"processType" : $scope.sla.processType,
-		                			"category" : $scope.sla.category,
-		                			"severity" : $scope.sla.severity,
-		                			"hours" : $scope.sla.hours,
-		                			"slaesc" : $scope.sla.slaesc,
-		                	}
-		                	console.log("Sla slaEscalation " + JSON.stringify(slas));
-		                	$scope.slaList.push(slas);
-		                	$scope.selectedProject = {};
-		                	$scope.selectedSite = {};
-		                	$scope.sla = {};
-		                	console.log("SlaList " + JSON.stringify($scope.slaList));
-                };
-
-
-                $scope.updateEscalation = function(){
-                	console.log("Sla " + JSON.stringify($scope.sla));
-                	console.log("SLA Escalation List " + JSON.stringify($scope.slaEscalationList));
-                	$scope.sla.slaesc = $scope.slaEscalationList;
-                	$scope.slaEscalationList = [];
-                	$scope.escalationShowOnce = false;
-                	console.log("SlaList " + JSON.stringify($scope.slaList));
-                };
-
-                $scope.removeSla = function(ind) {
-                	console.log("remove index " + ind)
-            		$scope.slaList.splice(ind,1);
-            		console.log("remove sla " + $scope.slaList);
-            };
-
-            $scope.editEscalation = function () {
-            	console.log("Selected SLA " + JSON.stringify($scope.sla.slaesc));
-            	if($scope.escalationShowOnce ==  false)
-            		{
-            		$scope.escalationShowOnce = true;
-            		for(var i = 0; i < $scope.sla.slaesc.length; i++){
-            			$scope.escalation = $scope.sla.slaesc[i];
-            			console.log("Selected SLA" + $scope.escalation.level);
-            			$scope.updateSlaEscalations();
-            		}
-            	}
-            };
-
-            /*$scope.editSla = function() {
-            	console.log("Updated SLA " + JSON.stringify($scope.sla));
-            	$scope.slaList = [];
-            	$scope.slaList.push($scope.sla);
-
-            }*/
 
     });
