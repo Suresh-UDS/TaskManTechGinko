@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import {NavController, NavParams} from "ionic-angular";
+import {NavController, NavParams, ModalController} from "ionic-angular";
 import {TransactionPage} from "./transaction";
 import {ExpenseDetails} from "../expense-details/expense-details";
+import {AddExpense} from "../expense/add-expense/add-expense";
 
 /**
  * Generated class for the Expense page.
@@ -16,7 +17,7 @@ import {ExpenseDetails} from "../expense-details/expense-details";
 export class ExpensePage {
 
   listitem : any;
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,public modalCtrl:ModalController) {
 
     this.listitem = [
       {id:'1',site:'UDS',trans_type:'Credit',debit:'-',credit:'1,00,000',balance:'1,20,000',actions:''},
@@ -33,5 +34,10 @@ export class ExpensePage {
     console.log('ionViewDidLoad ExpenseDetails method:');
     this.navCtrl.push(ExpenseDetails);
   }
+
+    addExpenseModal() {
+        const modal = this.modalCtrl.create(AddExpense);
+        modal.present();
+    }
 
 }

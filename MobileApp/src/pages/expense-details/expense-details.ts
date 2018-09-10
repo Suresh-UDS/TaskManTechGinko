@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import {NavController, NavParams} from "ionic-angular";
+import {NavController, NavParams, ModalController, ViewController} from "ionic-angular";
 import {TransactionPage} from "../expense/transaction";
+import {AddExpense} from "../expense/add-expense/add-expense";
 
 /**
  * Generated class for the ExpenseDetails page.
@@ -15,7 +16,7 @@ import {TransactionPage} from "../expense/transaction";
 })
 export class ExpenseDetails {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,public modalCtrl:ModalController,public viewCtrl:ViewController) {
 
 
   }
@@ -27,6 +28,11 @@ export class ExpenseDetails {
     viewTransaction(){
         console.log('ionViewDidLoad Transaction method:');
         this.navCtrl.push(TransactionPage);
+    }
+
+    addExpenseModal() {
+        const modal = this.modalCtrl.create(AddExpense);
+        modal.present();
     }
 
 }
