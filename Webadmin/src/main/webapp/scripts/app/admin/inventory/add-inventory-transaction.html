@@ -18,7 +18,7 @@
                      ng-submit="saveInventoryTrans()">
 
                    <div class="row">
-                       <div class="col-md-6">
+                       <div class="col-md-12">
 
 
                            <div class="panel panel-default">
@@ -27,7 +27,7 @@
 
                                    <div class="row">
 
-                                       <div class="col-md-12">
+                                       <div class="col-md-3">
                                            <div class="form-group no-padding" >
                                                <div class="dropdown">
                                                    <div class="form-group">
@@ -40,7 +40,7 @@
                                                </div>
                                            </div>
                                        </div>
-                                       <div class="col-md-12">
+                                       <div class="col-md-3">
                                            <div class="form-group no-padding" >
                                                <div class="dropdown">
                                                    <div class="form-group">
@@ -54,7 +54,7 @@
                                            </div>
                                        </div>
                                        
-                                          <div class="col-md-12">
+                                          <div class="col-md-2">
                                            <div class="form-group no-padding" >
                                                <div class="dropdown">
                                                    <div class="form-group" ng-init="loadTransactionType()">
@@ -68,7 +68,7 @@
                                            </div>
                                        </div>
                                        
-                                        <div class="col-md-12" ng-show="selectedTransactionType === 'ISSUED'">
+                                        <div class="col-md-2" ng-show="selectedTransactionType === 'ISSUED'">
                                            <div class="form-group no-padding" >
                                                <div class="dropdown">
                                                    <div class="form-group">
@@ -82,7 +82,7 @@
                                            </div>
                                        </div>
                                        
-                                       <div class="col-md-12" ng-show="selectedTransactionType === 'RECEIVED'">
+                                       <div class="col-md-2" ng-show="selectedTransactionType === 'RECEIVED'">
                                            <div class="form-group no-padding" >
                                                <div class="dropdown">
                                                    <div class="form-group">
@@ -95,6 +95,23 @@
                                                </div>
                                            </div>
                                        </div>
+                                       
+                                       <div class="col-md-2" ng-show="selectedTransactionType === 'ISSUED'">
+                                           <div class="form-group">
+                                               <label class="control-label">Issued Date<span class="red-star">*</span></label>
+                                               <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                               <input type="text" class="form-control datepicker"  id="dateFilterIssuedDate" name="PpmTo" ng-model="ppmFrom" autocomplete="off"/>
+                                           </div>
+                                   	  </div>
+                                   	  
+                                   	  <div class="col-md-2" ng-show="selectedTransactionType === 'RECEIVED'">
+                                           <div class="form-group">
+                                               <label class="control-label">Received Date<span class="red-star">*</span></label>
+                                               <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                               <input type="text" class="form-control datepicker"  id="dateFilterReceivedDate" name="PpmTo" ng-model="ppmTo" autocomplete="off"/>
+                                           </div>
+                                   	  </div>
+
 
                                    </div>
 
@@ -103,9 +120,8 @@
 
 
                        </div>
-                       <div class="col-md-6">
-
-
+                      
+                      <!--  <div class="col-md-6">
                            <div class="panel panel-default">
                                <div class="panel-heading">Inventory Details</div>
                                <div class="panel-body">
@@ -113,17 +129,7 @@
                                    <div class="row">
                                        <div class="col-md-6">
 
-                                 <!--           <div class="form-group no-padding" ng-show="site">
-                                               <div class="dropdown">
-                                                   <div class="form-group">
-                                                       <label class="control-label">Select Item Code <span class="red-star">*</span></label>
-                                                       <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                       <select class="form-control" ng-model="selectedSiteItem" ng-change="changeItem()" ng-options="materialItem as materialItem.itemCode for materialItem in materialItems">
-                                                           <option value="">Select Item Code...</option>
-                                                       </select>
-                                                   </div>
-                                               </div>
-                                           </div> -->
+                                
                                            
                                              <div class="form-group no-padding">
                                                <div class="dropdown">
@@ -162,26 +168,80 @@
                                            </div>
                                        </div>
                                        
-                                       <div class="col-md-12">
+                                       <div class="col-md-12" ng-show="selectedTransactionType === 'ISSUED'">
                                            <div class="form-group">
-                                               <label class="control-label">To Date<span class="red-star">*</span></label>
+                                               <label class="control-label">Issued Date<span class="red-star">*</span></label>
                                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                               <input type="text" class="form-control datepicker"  id="dateFilterTransactionDate" name="PpmTo" ng-model="ppmTo" autocomplete="off"/>
-                                          
-
+                                               <input type="text" class="form-control datepicker"  id="dateFilterIssuedDate" name="PpmTo" ng-model="ppmFrom" autocomplete="off"/>
                                            </div>
-
-                                   </div>
+                                   	  </div>
+                                   	  
+                                   	  <div class="col-md-12" ng-show="selectedTransactionType === 'RECEIVED'">
+                                           <div class="form-group">
+                                               <label class="control-label">Received Date<span class="red-star">*</span></label>
+                                               <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                               <input type="text" class="form-control datepicker"  id="dateFilterReceivedDate" name="PpmTo" ng-model="ppmTo" autocomplete="off"/>
+                                           </div>
+                                   	  </div>
 
                                </div>
                            </div>
 
 
                        </div>
+                      </div> -->
+
                    </div>
-
-
-
+                   
+                   
+                   <div class="panel panel-default">
+                       <div class="panel-heading">Inventory Details</div>
+                       <div class="panel-body">
+                           <div class="table-responsive">
+                   
+                       <table class="table table-hover">
+                         <tr>
+                           <th> 
+	                           <div class="checkbox form-horizontal-checkbox">
+	                                 <label>
+	                                     <input type="checkbox" name="optionsCheckboxes" ng-model="allItemsSelected" ng-click="selectAll()">
+	                                 </label>
+	                           </div>
+                           </th>
+                           <th>Item Code</th>
+                           <th>Item Name</th>
+                           <th>Store stock</th>
+                           <th>UOM</th>
+                           <th>Quantity</th>                           
+                         </tr>
+                         
+                         <tr ng-repeat="material in materialItems">
+                           <td>
+	                           <div class="checkbox form-horizontal-checkbox">
+	                                 <label>
+	                                     <input type="checkbox" name="optionsCheckboxes" ng-model="material.isChecked" ng-change="selectedOne(material)">
+	                                 </label>
+	                           </div>
+                           </td>
+                            <td>{{material.materialItemCode}}</td>
+                            <td>{{material.materialName}}</td>
+                            <td>{{material.materialStoreStock}}</td>
+                            <td>{{material.materialUom}}</td>
+                            <td>{{material.issuedQuantity}}</td>
+                         </tr>
+                         <tr ng-show="!materialItems.length">
+                         	<td colspan="6" class="txt-align-center">No Material Items Found</td>
+                         </tr>
+                       
+                       </table> 
+                   
+                   
+                   </div>
+                          
+                       </div>
+                   </div>            
+                   
+                  
                    <div class="row">
 
                        <div class="col-md-12">

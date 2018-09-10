@@ -3,6 +3,7 @@ package com.ts.app.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -23,6 +24,7 @@ import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Material;
 import com.ts.app.domain.MaterialIndent;
+import com.ts.app.domain.MaterialIndentItem;
 import com.ts.app.domain.MaterialTransaction;
 import com.ts.app.domain.MaterialTransactionType;
 import com.ts.app.domain.MaterialUOMType;
@@ -50,7 +52,9 @@ import com.ts.app.service.util.CommonUtil;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.MaterialIndentItemDTO;
 import com.ts.app.web.rest.dto.MaterialTransactionDTO;
+import com.ts.app.web.rest.dto.PurchaseReqItemDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -86,7 +90,7 @@ public class InventoryTransactionService extends AbstractService{
 	private InventoryRepository inventoryRepository;
 	
 	@Inject
-	private MaterialItemGroupRepository materialItemRepository;
+	private MaterialItemGroupRepository materialItemGroupRepository;
 	
 	@Inject
 	private MaterialIndentRepository materialIndentRepository;
@@ -107,12 +111,12 @@ public class InventoryTransactionService extends AbstractService{
 
 	public static final String EMAIL_NOTIFICATION_PURCHASEREQ_EMAILS = "email.notification.purchasereq.emails";
 	
-	public MaterialTransactionDTO createInventoryTransaction(MaterialTransactionDTO materialTransDTO) { 
+	public MaterialTransactionDTO createInventoryTransaction(MaterialTransactionDTO materialTransDTO) {
+		 
 		MaterialTransaction materialEntity = mapperUtil.toEntity(materialTransDTO, MaterialTransaction.class);
 		materialEntity.setSite(siteRepository.findOne(materialTransDTO.getSiteId()));
 		materialEntity.setProject(projectRepository.findOne(materialTransDTO.getProjectId()));
-		materialEntity.setMaterial(inventoryRepository.findOne(materialTransDTO.getMaterialId()));
-		materialEntity.setMaterialGroup(materialItemRepository.findOne(materialTransDTO.getMaterialGroupId()));
+	
 		MaterialIndent materialIndent = null;
 		PurchaseRequisition purchaseRequesition = null;
 		if(materialTransDTO.getJobId() > 0) {
@@ -138,109 +142,155 @@ public class InventoryTransactionService extends AbstractService{
 			materialEntity.setPurchaseRequisition(null);
 		}
 		
-		/** Create material if does not exists */
-		if(!StringUtils.isEmpty(materialTransDTO.getMaterialName())) {
-			Material material = inventoryRepository.findByMaterialName(materialTransDTO.getMaterialName());
-			if(material == null) { 
-				Material materialDomain = new Material();
-				materialDomain.setItemGroup(materialTransDTO.getMaterialGroupItemGroup());
-				materialDomain.setItemGroupId(materialTransDTO.getMaterialGroupId());
-				materialDomain.setName(materialTransDTO.getMaterialName());
-				materialDomain.setProject(projectRepository.findOne(materialTransDTO.getProjectId()));
-				materialDomain.setSite(siteRepository.findOne(materialTransDTO.getSiteId()));
-				materialDomain.setActive(Material.ACTIVE_YES);
-				inventoryRepository.save(materialDomain);
-			}
-		}
-		
 		if(materialTransDTO.getTransactionType().equals(MaterialTransactionType.ISSUED)) {
-			Material material = inventoryRepository.findOne(materialTransDTO.getMaterialId());
-			long prevStoreStock = material.getStoreStock();
-			if(prevStoreStock < material.getMinimumStock()) {   // send purchase request when stock is minimum level
-				
-				PurchaseRequisition purchaseRequest = new PurchaseRequisition();
-				User user = userRepository.findOne(materialTransDTO.getUserId());
-				Employee employee = user.getEmployee();
-				purchaseRequest.setRequestedBy(employeeRepository.findOne(employee.getId()));
-				purchaseRequest.setRequestedDate(DateUtil.convertToTimestamp(new Date()));
-				purchaseRequest.setRequestStatus(purchaseRequestStatus.PENDING);
-				purchaseRequest.setActive(PurchaseRequisition.ACTIVE_YES);
-				
-				List<PurchaseRequisitionItem> purchaseItem = new ArrayList<PurchaseRequisitionItem>();
-				PurchaseRequisitionItem purchaseReqItemEntity = new PurchaseRequisitionItem();
-				purchaseReqItemEntity.setActive(PurchaseRequisitionItem.ACTIVE_YES);
-				purchaseReqItemEntity.setMaterial(material);
-				purchaseReqItemEntity.setPurchaseRequisition(purchaseRequest);
-				purchaseReqItemEntity.setQuantity(material.getMaximumStock());
-				purchaseReqItemEntity.setUnitPrice(0);
-				purchaseItem.add(purchaseReqItemEntity);
-				
-				Set<PurchaseRequisitionItem> materialItem = new HashSet<PurchaseRequisitionItem>();
-				materialItem.addAll(purchaseItem);
-				purchaseRequest.setItems(materialItem);
-				purchaseReqRepository.save(purchaseRequest);
-				
-				Site site = siteRepository.findOne(materialTransDTO.getSiteId());
-				String siteName = site.getName();
-				
-				Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PURCHASEREQ);
-				
-				log.debug("Setting Email list -" + setting);
-
-				if(setting.getSettingValue().equalsIgnoreCase("true") ) {
-
-					Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PURCHASEREQ_EMAILS);
-
-					if(settingEntity.getSettingValue().length() > 0) {
-
-						List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
-						for(String email : emailLists) {
-							mailService.sendPurchaseRequest(email, material.getItemCode(), siteName, material.getName());
+			List<MaterialIndentItemDTO> indentItemDTOs = materialTransDTO.getItems();
+			Set<MaterialIndentItem> itemEntities = materialIndent.getItems();
+			Iterator<MaterialIndentItem> itemsItr = itemEntities.iterator();
+			
+			while(itemsItr.hasNext()) {
+				boolean itemFound = false;
+				MaterialIndentItem itemEntity = itemsItr.next();
+				for(MaterialIndentItemDTO itemDto : indentItemDTOs) {
+					if(itemEntity.getId() == itemDto.getId()) {
+						itemFound = true;
+						long reducedQty = 0;
+						Material materialItm = inventoryRepository.findOne(itemDto.getMaterialId());
+						if(itemEntity.getPendingQuantity() > 0) {   
+							reducedQty = itemEntity.getPendingQuantity() - itemDto.getIssuedQuantity();   
+							itemEntity.setPendingQuantity(reducedQty); 
+							itemEntity.setIssuedQuantity(itemDto.getIssuedQuantity());
+							long consumptionStock = materialItm.getStoreStock() - itemDto.getIssuedQuantity();
+							materialItm.setStoreStock(consumptionStock);
+							inventoryRepository.save(materialItm);
+							materialEntity.setMaterialGroup(materialItemGroupRepository.findOne(materialItm.getItemGroupId()));
+							materialEntity.setMaterial(inventoryRepository.findOne(materialItm.getId()));
+							materialEntity.setUom(materialItm.getUom());
+							materialEntity.setStoreStock(consumptionStock);
+							materialEntity.setIssuedQuantity(itemDto.getIssuedQuantity());
+							materialEntity.setTransactionType(MaterialTransactionType.ISSUED);
+							materialEntity.setActive(MaterialTransaction.ACTIVE_YES);
+							materialEntity.setTransactionDate(DateUtil.convertToTimestamp(materialTransDTO.getTransactionDate()));
+							materialEntity = inventTransactionRepository.save(materialEntity);
+							log.debug("Save object of Inventory: {}" +materialEntity);
+							if(materialIndent != null) { 
+								materialIndent.setTransaction(materialEntity);
+								materialIndentRepository.save(materialIndent);
+							}
 						}
+						
+						if(materialItm.getStoreStock() < materialItm.getMinimumStock()) {   // send purchase request when stock is minimum level
+							
+							PurchaseRequisition purchaseRequest = new PurchaseRequisition();
+							User user = userRepository.findOne(materialTransDTO.getUserId());
+							Employee employee = user.getEmployee();
+							purchaseRequest.setRequestedBy(employeeRepository.findOne(employee.getId()));
+							purchaseRequest.setRequestedDate(DateUtil.convertToTimestamp(new Date()));
+							purchaseRequest.setRequestStatus(purchaseRequestStatus.PENDING);
+							purchaseRequest.setActive(PurchaseRequisition.ACTIVE_YES);
+							
+							List<PurchaseRequisitionItem> purchaseItem = new ArrayList<PurchaseRequisitionItem>();
+							PurchaseRequisitionItem purchaseReqItemEntity = new PurchaseRequisitionItem();
+							purchaseReqItemEntity.setActive(PurchaseRequisitionItem.ACTIVE_YES);
+							purchaseReqItemEntity.setMaterial(materialItm);
+							purchaseReqItemEntity.setPurchaseRequisition(purchaseRequest);
+							purchaseReqItemEntity.setQuantity(materialItm.getMaximumStock());
+							purchaseReqItemEntity.setUnitPrice(0);
+							purchaseItem.add(purchaseReqItemEntity);
+							
+							Set<PurchaseRequisitionItem> materialItem = new HashSet<PurchaseRequisitionItem>();
+							materialItem.addAll(purchaseItem);
+							purchaseRequest.setItems(materialItem);
+							purchaseReqRepository.save(purchaseRequest);
+							
+							Site site = siteRepository.findOne(materialTransDTO.getSiteId());
+							String siteName = site.getName();
+							
+							Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PURCHASEREQ);
+							
+							log.debug("Setting Email list -" + setting);
 
-					} else {
+							if(setting.getSettingValue().equalsIgnoreCase("true") ) {
 
-						log.info("There is no email ids registered");
+								Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PURCHASEREQ_EMAILS);
+
+								if(settingEntity.getSettingValue().length() > 0) {
+
+									List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+									for(String email : emailLists) {
+										mailService.sendPurchaseRequest(email, materialItm.getItemCode(), siteName, materialItm.getName());
+									}
+
+								} else {
+
+									log.info("There is no email ids registered");
+								}
+							}
+						}
+					
+						break;
 					}
 				}
-			} else {
-				if(prevStoreStock > materialTransDTO.getQuantity()) { 
-					long currentStock = prevStoreStock - materialTransDTO.getQuantity();
-					materialEntity.setStoreStock(currentStock);
-					material.setStoreStock(currentStock);
-					inventoryRepository.save(material);
+				log.debug("itemFound - "+ itemFound);
+				if(!itemFound){
+					itemsItr.remove();
 				}
 			}
-			
+		
 		}
 		
 		if(materialTransDTO.getTransactionType().equals(MaterialTransactionType.RECEIVED)) {
-			Material material = inventoryRepository.findOne(materialTransDTO.getMaterialId());
-			long prevStoreStock = material.getStoreStock();
-			long currentStock = prevStoreStock + materialTransDTO.getQuantity();
-			materialEntity.setStoreStock(currentStock);
-			material.setStoreStock(currentStock);
-			inventoryRepository.save(material);
+			List<PurchaseReqItemDTO> reqItemDTOs = materialTransDTO.getPrItems();
+			Set<PurchaseRequisitionItem> itemEntities = purchaseRequesition.getItems();
+			Iterator<PurchaseRequisitionItem> itemsItr = itemEntities.iterator();
+			
+			while(itemsItr.hasNext()) {
+				boolean itemFound = false;
+				PurchaseRequisitionItem itemEntity = itemsItr.next();
+				for(PurchaseReqItemDTO itemDto : reqItemDTOs) {
+					if(itemEntity.getId() == itemDto.getId()) {
+						itemFound = true;
+						long addedQty = itemEntity.getQuantity() + itemDto.getIssuedQuantity();
+						itemEntity.setQuantity(addedQty);
+						itemEntity.setIssuedQuantity(itemDto.getIssuedQuantity());
+
+						Material materialItm = inventoryRepository.findOne(itemDto.getMaterialId());
+						
+						materialEntity.setMaterialGroup(materialItemGroupRepository.findOne(materialItm.getItemGroupId()));
+						long consumptionStock = materialItm.getStoreStock() + itemDto.getIssuedQuantity();
+						materialItm.setStoreStock(consumptionStock);
+						inventoryRepository.save(materialItm);
+						materialEntity.setMaterial(materialItm);
+						materialEntity.setUom(materialItm.getUom());
+						materialEntity.setQuantity(addedQty);
+						materialEntity.setStoreStock(consumptionStock);
+						materialEntity.setIssuedQuantity(itemDto.getIssuedQuantity());
+						materialEntity.setTransactionType(MaterialTransactionType.RECEIVED);
+						materialEntity.setActive(MaterialTransaction.ACTIVE_YES);
+						materialEntity.setTransactionDate(DateUtil.convertToTimestamp(materialTransDTO.getTransactionDate()));
+						materialEntity = inventTransactionRepository.save(materialEntity);
+						log.debug("Save object of Inventory: {}" +materialEntity);
+						
+						if(purchaseRequesition != null) { 
+							purchaseRequesition.setTransaction(materialEntity);
+							purchaseReqRepository.save(purchaseRequesition);
+						}
+						
+						break;
+					}
+				}
+				log.debug("itemFound - "+ itemFound);
+				if(!itemFound){
+					itemsItr.remove();
+				}
+			}
 
 		}
 		
-		materialEntity.setActive(MaterialTransaction.ACTIVE_YES);
-		materialEntity.setTransactionDate(DateUtil.convertToTimestamp(materialTransDTO.getTransactionDate()));
-		materialEntity.setUom(MaterialUOMType.valueOf(materialTransDTO.getUom().toUpperCase()).getValue());
-		materialEntity = inventTransactionRepository.save(materialEntity);
-		log.debug("Save object of Inventory: {}" +materialEntity);
-		if(materialIndent != null) { 
-			materialIndent.setTransaction(materialEntity);
-			materialIndentRepository.save(materialIndent);
-		}
-		if(purchaseRequesition != null) { 
-			purchaseRequesition.setTransaction(materialEntity);
-			purchaseReqRepository.save(purchaseRequesition);
-		}
 		materialTransDTO = mapperUtil.toModel(materialEntity, MaterialTransactionDTO.class);
 		return materialTransDTO;
+	
 	}
-
+	
 	public MaterialTransactionDTO getMaterialTransaction(long id) {
 		MaterialTransaction materialTrans = inventTransactionRepository.findOne(id);
 		MaterialTransactionDTO materialTransDTO = mapperUtil.toModel(materialTrans, MaterialTransactionDTO.class);
