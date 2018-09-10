@@ -5,6 +5,8 @@ import{componentService} from "../service/componentService";
 import{IndentIssue} from "../indent-issue/indent-issue";
 import{ModalController} from "ionic-angular";
 
+declare  var demo ;
+
 /**
  * Generated class for the IndentView page.
  *
@@ -41,6 +43,7 @@ export class IndentView {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad IndentView');
+    this.getIndentDetails(this.details.id);
   }
 
 
@@ -60,7 +63,7 @@ export class IndentView {
         console.log(material);
         // console.log(this.selectedSite);
         console.log(material.materialStoreStock);
-        if(this.details.materialStoreStock >= this.details.issuedQuantity){
+        // if(this.details.materialStoreStock >= this.details.issuedQuantity){
             // if(((material.quantity - material.issuedQuantity)+material.issuedQuantity) == material.quantity){
             let confirm =  this.alertCtrl.create({
                 title: 'Do you want to save?',
@@ -76,7 +79,7 @@ export class IndentView {
                         handler:()=>{
                             console.log("transaction details");
                             console.log(this.details);
-                            this.csService.showLoader("saving please wait...")
+                            this.csService.showLoader("saving please wait...");
                             this.psService.indentMaterialTransaction(this.details).subscribe(
                                 response=>{
                                     this.csService.closeLoader();
@@ -107,12 +110,57 @@ export class IndentView {
             //
             // }
 
-        }else {
-            this.csService.showToastMessage("Your store stock is "+ material.materialStoreStock,'bottom');
-        }
+        // }else {
+        //     this.csService.showToastMessage("Your store stock is "+ material.materialStoreStock,'bottom');
+        // }
 
 
     }
+
+    checkQuantity(item,i){
+
+      console.log("Check Quantity");
+      console.log(i);
+      console.log(item);
+      console.log(this.details.items);
+      if(item.currentQuantity && item.currentQuantity>0){
+          if(item.materialStoreStock >= item.currentQuantity){
+              if(item.currentQuantity < item.pendingQuantity){
+                  this.details.items[i].issuedQuantity = item.currentQuantity;
+                  this.details.items[i].pendingQuantity -= item.currentQuantity;
+              }else{
+                  console.log(item.currentQuantity);
+                  console.log(item.pendingQuantity);
+                  demo.showSwal('warning-message-and-confirmation-ok','Invalid value','Only could be issued' );
+                  this.details.items[i].currentQuantity=0;
+                  this.getIndentDetails(this.details.id);
+              }
+          }else{
+              console.log(item.materialStoreStock);
+              console.log(item.currentQuantity);
+              demo.showSwal('warning-message-and-confirmation-ok','Invalid value','Only Available in store' );
+              this.details.items[i].currentQuantity=0;
+              this.getIndentDetails(this.details.id);
+
+          }
+      }
+
+    }
+
+    getIndentDetails(id){
+        this.csService.showLoader('Getting Indent details');
+        this.psService.getIndentDetails(id).subscribe(
+            response=>{
+                this.csService.closeAll();
+                console.log(response);
+                this.details = response;
+            },err=>{
+                this.csService.closeAll();
+                console.log("Error in getting indent details");
+            }
+        )
+    }
+
 
 
 }

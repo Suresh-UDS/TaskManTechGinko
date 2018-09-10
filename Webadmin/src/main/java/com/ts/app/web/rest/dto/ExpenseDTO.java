@@ -26,6 +26,26 @@ public class ExpenseDTO extends BaseDTO implements Serializable {
 
     private String currency;
 
+    private Timestamp expenseDate;
+
+    private String receiptNumber;
+
+    private boolean billable;
+
+    private boolean reimbursable;
+
+    private PaymentType paymentType;
+
+    private long quantity;
+
+    private double unitPrice;
+
+    private String expenseType;
+
+    private String expenseCategory;
+
+
+
     public long getId() {
         return id;
     }
@@ -154,28 +174,20 @@ public class ExpenseDTO extends BaseDTO implements Serializable {
         this.unitPrice = unitPrice;
     }
 
-    public ExpenseType getExpenseType() {
+
+    public String getExpenseType() {
         return expenseType;
     }
 
-    public void setExpenseType(ExpenseType expenseType) {
+    public void setExpenseType(String expenseType) {
         this.expenseType = expenseType;
     }
 
-    private Timestamp expenseDate;
+    public String getExpenseCategory() {
+        return expenseCategory;
+    }
 
-    private String receiptNumber;
-
-    private boolean billable;
-
-    private boolean reimbursable;
-
-    private PaymentType paymentType;
-
-    private long quantity;
-
-    private double unitPrice;
-
-    private ExpenseType expenseType;
-
+    public void setExpenseCategory(String expenseCategory) {
+        this.expenseCategory = expenseCategory;
+    }
 }
