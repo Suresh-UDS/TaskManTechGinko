@@ -23,15 +23,38 @@
   <div class="AddExpensePageCon white-bg" padding>
 
       <div class="form-group label-floating">
-        <label class="control-label">Date</label>
-        <input type="text" class="form-control" >
-
+        <ion-row no-margin class="" no-padding="" >
+          <ion-col class="ver-center  margin-right15" (click)="showCalendar()">
+            <ion-col col-2  class="ver-center padding-bottom1">
+              <ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 clr-orange"></ion-icon>
+            </ion-col>
+            <ion-col col-10 class="ver-center padding-top-bottom0">
+              <label *ngIf="!selectDate" padding-left no-margin="">Date</label>
+              <p padding-left no-margin="">{{ selectDate | date:'dd/MM/yyyy' }}</p>
+            </ion-col>
+          </ion-col>
+        </ion-row>
       </div>
+
+    <div class="form-group label-floating">
+          <label class="control-label">Client :</label>
+          <ion-select class="select-box padding-left0" [selectOptions]="selectOptions" placeholder="Choose Client" name="Client" interface="popover" required [(ngModel)]="selectedProject" text-lowercase>
+            <ion-option *ngFor="let p of clientList;let i=index"  (ionSelect)="selectSite(p)" text-center text-lowercase>{{p.name}}</ion-option>
+          </ion-select>
+    </div>
+
+    <div class="form-group label-floating">
+          <label class="control-label">Site:</label>
+          <ion-select class="select-box padding-left0" [selectOptions]="selectOptions" placeholder="Choose site" name="Site" interface="popover" required [(ngModel)]="selectedSite" >
+            <ion-option  *ngFor="let s of siteList;let i of index" text-center text-lowercase>{{s.name}}</ion-option>
+          </ion-select>
+    </div>
+
       <div class="form-group label-floating">
         <label class="control-label">Receipt No</label>
         <input type="Number" class="form-control" >
-
       </div>
+
       <div class="form-group label-floating">
         <label class="control-label">Description</label>
         <input type="text" class="form-control" >
