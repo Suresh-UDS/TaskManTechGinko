@@ -60,6 +60,7 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { File } from '@ionic-native/file';
 import{TicketFilter} from "../pages/ticket/ticket-filter/ticket-filter";
 import{InventoryMaster} from "../pages/inventory-master/inventory-master";
+import{ExpenseDetails} from"../pages/expense-details/expense-details";
 
 import {SQLitePorter} from "@ionic-native/sqlite-porter";
 
@@ -228,7 +229,8 @@ import{IndentIssue} from "../pages/indent-issue/indent-issue";
       IndentView,
     InventoryTransaction,
       IndentList,
-      IndentIssue
+      IndentIssue,
+      ExpenseDetails
   ],
   imports: [
     BrowserModule,
@@ -333,7 +335,8 @@ import{IndentIssue} from "../pages/indent-issue/indent-issue";
       IndentView,
     InventoryTransaction,
       IndentList,
-      IndentIssue
+      IndentIssue,
+      ExpenseDetails
       // WheelSelector
 
 
