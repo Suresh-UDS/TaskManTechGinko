@@ -209,6 +209,8 @@ public class SearchCriteria extends Paginator {
 	private String purchaseRefNumber;
 	
 	private Timestamp approvedDate;
+	
+	private long jobId;
 
 	public String getWarrantyTypeName() {
 		return warrantyTypeName;
@@ -1081,6 +1083,14 @@ public class SearchCriteria extends Paginator {
 
 	public void setApprovedDate(Timestamp approvedDate) {
 		this.approvedDate = approvedDate;
+	}
+
+	public long getJobId() {
+		return jobId;
+	}
+
+	public void setJobId(long jobId) {
+		this.jobId = jobId;
 	}
 
 	

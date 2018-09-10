@@ -266,6 +266,8 @@ angular.module('timeSheetApp')
 		$scope.showUpdateBtn = false;
 		
 		$scope.editMaterial = function(index, item) {
+			console.log(item);
+			console.log(index);
 			$scope.updateMaterial = item;
 			$scope.indexOf = index;
 			$scope.showUpdateBtn = true;

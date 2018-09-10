@@ -43,6 +43,7 @@ import{InventoryMaster} from "../pages/inventory-master/inventory-master";
 import {ExpensePage} from "../pages/expense/expense";
 import {Indent} from "../pages/indent/indent";
 import {IndentList} from "../pages/indent-list/indent-list";
+import{ExpenseDetails} from "../pages/expense-details/expense-details";
 
 @Component({
   templateUrl: 'app.html'
