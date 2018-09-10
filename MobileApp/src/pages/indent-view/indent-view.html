@@ -75,7 +75,7 @@
                     </div>
                 </ion-col>
             </ion-row>
-            <ion-list *ngFor="let item of details.items">
+            <ion-list *ngFor="let item of details.items; let i=index">
                 <ion-row class="margin0">
                     <ion-col col-3 no-padding>
                         <p class="margin0" text-center>{{item.materialName}}</p>
@@ -94,7 +94,7 @@
                     <ion-col col-2 no-padding>
                         <div class="">
                             <!--<p text-center class="margin0" text-uppercase>10</p>-->
-                            <p  text-center>{{item.quantity - item.issuedQuantity}}</p>
+                            <p  text-center>{{item.pendingQuantity}}</p>
                         </div>
                     </ion-col>
                     <ion-col col-3 no-padding>
@@ -112,10 +112,12 @@
                     <ion-col col-8 no-padding="">
                             <p class="clr-orange bg-gray" text-right no-padding>Current Issued Quantity</p>
                     </ion-col>
-                    <ion-col col-2 no-padding="">
+                    <ion-col col-1 no-padding="">
                     </ion-col>
                     <ion-col col-2 no-padding>
-                        <ion-input type="number" text-left   class="brdr" no-padding></ion-input>
+                        <ion-input type="number" text-center (ionChange)="checkQuantity(item,i)" [(ngModel)]="item.currentQuantity" class="brdr" no-padding></ion-input>
+                    </ion-col>
+                    <ion-col col-1 no-padding="">
                     </ion-col>
                 </ion-row>
 
