@@ -96,6 +96,7 @@ public class ExportUtil {
 	private final static String ATTENDANCE_REPORT = "ATTENDANCE_REPORT";
 	private final static String TICKET_REPORT = "TICKET_REPORT";
 	private final static String JOB_REPORT = "JOB_REPORT";
+	private final static String EMPLOYEE_REPORT = "EMPLOYEE_REPORT";
 
 	@Inject
 	private Environment env;
@@ -272,9 +273,9 @@ public class ExportUtil {
 		String fileName = null;
 		if (StringUtils.isEmpty(result.getFile())) {
 			if (StringUtils.isNotEmpty(empId)) {
-				fileName = empId + System.currentTimeMillis() + ".csv";
+				fileName = JOB_REPORT + "_" + empId + System.currentTimeMillis() + ".csv";
 			} else {
-				fileName = System.currentTimeMillis() + ".csv";
+				fileName = JOB_REPORT + "_" + System.currentTimeMillis() + ".csv";
 			}
 		} else {
 			fileName = result.getFile() + ".csv";
@@ -384,7 +385,7 @@ public class ExportUtil {
 		String file_Name = null;
 		if (StringUtils.isEmpty(result.getFile())) {
 			if (StringUtils.isNotEmpty(emp.getEmpId())) {
-				file_Name = ATTENDANCE_REPORT + "_" + emp.getEmpId() + System.currentTimeMillis() + ".xlsx";
+				file_Name = ATTENDANCE_REPORT + "_" + emp.getEmpId() + "_" + System.currentTimeMillis() + ".xlsx";
 			} else {
 				file_Name = ATTENDANCE_REPORT + "_" + System.currentTimeMillis() + ".xlsx";
 			}
@@ -425,9 +426,9 @@ public class ExportUtil {
 				
 				String file_Path = env.getProperty("export.file.path");
 				FileSystem fileSystem = FileSystems.getDefault();
-				if (StringUtils.isNotEmpty(emp.getEmpId())) {
-					file_Path += "/" + emp.getEmpId();
-				}
+//				if (StringUtils.isNotEmpty(emp.getEmpId())) {
+//					file_Path += "/" + emp.getEmpId();
+//				}
 				Path path = fileSystem.getPath(file_Path);
 				if (!Files.exists(path)) {
 					Path newEmpPath = Paths.get(file_Path);
@@ -977,7 +978,7 @@ public class ExportUtil {
 
 		String file_Name = null;
 		if (StringUtils.isEmpty(result.getFile())) {
-			file_Name = System.currentTimeMillis() + ".xlsx";
+			file_Name = EMPLOYEE_REPORT + "_" + System.currentTimeMillis() + ".xlsx";
 		} else {
 			file_Name = result.getFile() + ".xlsx";
 		}
@@ -1340,13 +1341,13 @@ public class ExportUtil {
 			fileInputStream.read(attd_excelData);
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("Error while reading the attendance export file ", e);
 		} finally {
 			if (fileInputStream != null) {
 				try {
 					fileInputStream.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					log.error("Error while reading the attendance export file ", e);
 				}
 			}
 
@@ -1390,9 +1391,9 @@ public class ExportUtil {
 		String file_Name = null;
 		if (StringUtils.isEmpty(result.getFile())) {
 			if (StringUtils.isNotEmpty(emp.getEmpId())) {
-				file_Name = emp.getEmpId() + System.currentTimeMillis() + ".xlsx";
+				file_Name = JOB_REPORT + "_" + emp.getEmpId() + "_" + System.currentTimeMillis() + ".xlsx";
 			} else {
-				file_Name = System.currentTimeMillis() + ".xlsx";
+				file_Name = JOB_REPORT + "_" + System.currentTimeMillis() + ".xlsx";
 			}
 		} else {
 			file_Name = result.getFile() + ".xlsx";
@@ -1421,9 +1422,9 @@ public class ExportUtil {
 			public void run() {
 				String file_Path = env.getProperty("export.file.path");
 				FileSystem fileSystem = FileSystems.getDefault();
-				if (StringUtils.isNotEmpty(emp.getEmpId())) {
-					file_Path += "/" + emp.getEmpId();
-				}
+//				if (StringUtils.isNotEmpty(emp.getEmpId())) {
+//					file_Path += "/" + emp.getEmpId();
+//				}
 				Path path = fileSystem.getPath(file_Path);
 				if (!Files.exists(path)) {
 					Path newEmpPath = Paths.get(file_Path);
@@ -1511,9 +1512,9 @@ public class ExportUtil {
 		String file_Name = null;
 		if (StringUtils.isEmpty(result.getFile())) {
 			if (StringUtils.isNotEmpty(emp.getEmpId())) {
-				file_Name = emp.getEmpId() + System.currentTimeMillis() + ".xlsx";
+				file_Name = TICKET_REPORT + "_" +  emp.getEmpId() + "_" + System.currentTimeMillis() + ".xlsx";
 			} else {
-				file_Name = System.currentTimeMillis() + ".xlsx";
+				file_Name = TICKET_REPORT + "_" + System.currentTimeMillis() + ".xlsx";
 			}
 		} else {
 			file_Name = result.getFile() + ".xlsx";
@@ -1542,9 +1543,9 @@ public class ExportUtil {
 			public void run() {
 				String file_Path = env.getProperty("export.file.path");
 				FileSystem fileSystem = FileSystems.getDefault();
-				if (StringUtils.isNotEmpty(emp.getEmpId())) {
-					file_Path += "/" + emp.getEmpId();
-				}
+//				if (StringUtils.isNotEmpty(emp.getEmpId())) {
+//					file_Path += "/" + emp.getEmpId();
+//				}
 				Path path = fileSystem.getPath(file_Path);
 				if (!Files.exists(path)) {
 					Path newEmpPath = Paths.get(file_Path);
@@ -1825,9 +1826,9 @@ public class ExportUtil {
 			public void run() {
 				String file_Path = env.getProperty("export.file.path");
 				FileSystem fileSystem = FileSystems.getDefault();
-				if (StringUtils.isNotEmpty(empId)) {
-					file_Path += "/" + empId;
-				}
+//				if (StringUtils.isNotEmpty(empId)) {
+//					file_Path += "/" + empId;
+//				}
 				Path path = fileSystem.getPath(file_Path);
 				if (!Files.exists(path)) {
 					Path newEmpPath = Paths.get(file_Path);

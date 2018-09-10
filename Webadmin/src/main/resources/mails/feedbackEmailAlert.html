@@ -9,7 +9,14 @@
 <p th:text="#{email.feedback.alert.text1(${feedbackName},${feedbackLocation},${feedbackDate})}">
 </p>
  
-	
+<br/> 
+<p th:text="#{email.feedback.alert.givenBy(${givenBy})}">
+</p>
+
+<br/>	
+<p th:text="#{email.feedback.alert.remarks(${remarks})}">
+</p>
+
 	<table>
       <tr>
       	<th>Feedback List</th>

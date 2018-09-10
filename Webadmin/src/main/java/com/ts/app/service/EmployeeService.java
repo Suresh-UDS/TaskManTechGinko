@@ -185,6 +185,7 @@ public class    EmployeeService extends AbstractService {
 	    log.debug("Empid "+employeeDTO.getEmpId());
 		SearchCriteria criteria = new SearchCriteria();
 		criteria.setEmployeeEmpId(employeeDTO.getEmpId());
+		criteria.setUserId(employeeDTO.getUserId());
 		SearchResult<EmployeeDTO> searchResults = findBySearchCrieria(criteria);
 		if(searchResults != null && CollectionUtils.isNotEmpty(searchResults.getTransactions())) {
 			return true;
@@ -906,6 +907,7 @@ public class    EmployeeService extends AbstractService {
 
 	public SearchResult<EmployeeDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 		User user = userRepository.findOne(searchCriteria.getUserId());
+		Hibernate.initialize(user.getEmployee());
 		Employee employee = user.getEmployee();
 		SearchResult<EmployeeDTO> result = new SearchResult<EmployeeDTO>();
 		if(searchCriteria != null) {
