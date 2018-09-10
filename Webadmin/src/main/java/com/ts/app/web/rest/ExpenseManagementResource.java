@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.ExpenseCategory;
 import com.ts.app.service.ExpenseManagementService;
 import com.ts.app.web.rest.dto.ExpenseDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
@@ -47,11 +48,18 @@ public class ExpenseManagementResource {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-//    @RequestMapping(value = "/expenses", method = RequestMethod.GET)
-//    public List<ExpenseDTO> findAll(@RequestBody SearchCriteria searchCriteria) {
-//        log.info("--Invoked LocationResource.findAllLocation --");
-//        return expenseManagementService.findAll(searchCriteria.getCurrPage());
-//    }
+    @RequestMapping(value = "/expenseCategories", method = RequestMethod.GET)
+    public List<ExpenseCategory> findAllExpenseCategories() {
+        return expenseManagementService.findAllExpenseCategories();
+    }
+
+
+
+    @RequestMapping(value = "/expenses", method = RequestMethod.POST)
+    public List<ExpenseDTO> findAll(@RequestBody SearchCriteria searchCriteria) {
+        log.info("--Invoked LocationResource.findAllLocation --");
+        return expenseManagementService.findAll(searchCriteria.getCurrPage());
+    }
 
 
 

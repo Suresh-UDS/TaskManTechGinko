@@ -2,14 +2,38 @@
 
 angular.module('timeSheetApp')
     .controller('ExpenseController', function ($rootScope, $scope, $state, $timeout,
-    		ProjectComponent, SiteComponent, ExpenseComponent, $http,$stateParams,$location, PaginationComponent) {
+    		ProjectComponent, SiteComponent, ExpenseComponent, $http,$stateParams,$location, PaginationComponent,$filter) {
 
+
+        $scope.selectedCategory = {};
+
+        $scope.description = "";
+
+        $scope.billable = true;
+
+        $scope.reimbursable = true;
+
+        $scope.selectedPaymentType = 'CASH';
+
+        $scope.transactionMode = "debit";
+
+        $scope.selectedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+
+        $scope.selectedAmount = 0;
+
+        $scope.selectedCurrency={};
+
+        $scope.currencies =[];
+
+        $scope.expenseCategories = [];
 
     	$scope.selectedProject = {};
 
     	$scope.selectedSite = {};
 
     	$scope.selectedSla = {};
+
+    	$scope.expenseDetails = {};
 
     	$rootScope.loginView = false;
 
@@ -23,6 +47,8 @@ angular.module('timeSheetApp')
 			$scope.initLoad = function(){
 				$scope.loadProjects();
 			    $scope.loadPageTop();
+			    $scope.loadExpenseCategories();
+			    $scope.getCurrencies();
 			    $scope.searchFilter();
 			 }
 
@@ -53,6 +79,26 @@ angular.module('timeSheetApp')
 
                 };
 
+                $scope.checkProject = function(){
+                    if($scope.selectedProject && $scope.selectedProject.id == undefined){
+                        $scope.showNotifications('top','center','danger','Select Client to get site list...');
+                    }
+                };
+
+                $scope.showNotifications= function(position,alignment,color,msg){
+                    demo.showNotification(position,alignment,color,msg);
+                }
+
+                $('input#selectedDate').on('dp.change', function(e){
+                    $scope.selectedDate = e.date._d;
+                    $scope.selectedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+                    console.log('Selected Date for expense transaction  - ' + $scope.selectedDate);
+                });
+
+                $('#selectedDate').datetimepicker({
+                    format: 'DD/MM/YYYY'
+                });
+
 
                 $scope.searchFilter = function () {
                     $scope.setPage(1);
@@ -72,6 +118,70 @@ angular.module('timeSheetApp')
                     $scope.pages.currPage = page;
                     $scope.search();
                 };
+
+                $scope.saveExpense = function(){
+                    if($scope.selectedProject){
+                        $scope.expenseDetails.projectId = $scope.selectedProject.id;
+                    }
+
+                    if($scope.selectedSite){
+                        $scope.expenseDetails.siteId = $scope.selectedSite.id;
+                    }
+
+                    if($scope.selectedDate){
+
+                        if($scope.transactionMode == 'debit'){
+                            $scope.expenseDetails.expenseDate = new Date($scope.selectedDate);
+                        }else{
+                            $scope.expenseDetails.creditedDate = new Date($scope.selectedDate);
+                        }
+                    }
+
+                    if($scope.selectedCategory && $scope.transactionMode == 'debit'){
+                        console.log($scope.selectedCategory);
+                        $scope.expenseDetails.expenseCategory = $scope.selectedCategory;
+                    }
+
+                    if($scope.selectedPaymentType ){
+                        $scope.expenseDetails.paymentType = $scope.selectedPaymentType;
+                    }
+
+                    if($scope.selectedCurrency){
+                        console.log($scope.selectedCurrency);
+                        $scope.expenseDetails.currency = $scope.selectedCurrency.code;
+                    }
+
+                    if($scope.selectedAmount){
+                        if($scope.transactionMode == 'debit'){
+                            $scope.expenseDetails.debitAmount = $scope.selectedAmount;
+                        }else if($scope.transactionMode == 'credit'){
+                            $scope.expenseDetails.creditAmount = $scope.selectedAmount;
+                        }
+                    }
+
+                    if($scope.billable){
+                        $scope.expenseDetails.billable = $scope.billable;
+                    }else{
+                        $scope.expenseDetails.billable = false;
+                    }
+
+                    if($scope.reimbursable){
+                        $scope.expenseDetails.reimbursable = $scope.reimbursable;
+                    }else{
+                        $scope.expenseDetails.reimbursable = false;
+                    }
+
+                    if($scope.description){
+                        $scope.expenseDetails.description = $scope.description;
+                    }
+
+                    console.log("Before saving expenses");
+                    console.log($scope.expenseDetails);
+                    ExpenseComponent.createExpense($scope.expenseDetails).then(function (data) {
+                        console.log(data);
+                    })
+                };
+
 
                 $scope.search = function () {
                     $scope.noData = false;
@@ -111,7 +221,7 @@ angular.module('timeSheetApp')
                         $scope.slas = '';
                         $scope.sitesLoader = false;
                         $scope.loadPageTop();
-                    ExpenseComponent.search($scope.searchCriteria).then(function (data) {
+                        ExpenseComponent.search($scope.searchCriteria).then(function (data) {
                         $scope.slas = data.transactions;
                         $scope.sitesLoader = true;
 
@@ -166,6 +276,26 @@ angular.module('timeSheetApp')
                         });
                 	}
                 };
+
+                $scope.loadExpenseCategories = function(){
+                    ExpenseComponent.searchExpenseCategories().then(function (data) {
+                        console.log(data);
+                        $scope.expenseCategories = data;
+
+                    })
+                }
+
+                $scope.getCurrencies = function () {
+                    ExpenseComponent.getCurrencies().then(function (data) {
+                        console.log(data);
+                        $scope.currencies = data;
+                    })
+                }
+
+                $scope.selectCategory = function (category) {
+                    console.log(category)
+                    $scope.selectedCategory = category.name;
+                }
 
 
     });

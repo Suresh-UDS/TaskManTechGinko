@@ -31,6 +31,8 @@ public class Expense extends AbstractAuditingEntity {
 
     private Timestamp expenseDate;
 
+    private Timestamp creditedDate;
+
     private String receiptNumber;
 
     private boolean billable;
@@ -43,7 +45,9 @@ public class Expense extends AbstractAuditingEntity {
 
     private double unitPrice;
 
-    private ExpenseType expenseType;
+    private String expenseType;
+
+    private String expenseCategory;
 
     public long getId() {
         return id;
@@ -165,11 +169,28 @@ public class Expense extends AbstractAuditingEntity {
         this.unitPrice = unitPrice;
     }
 
-    public ExpenseType getExpenseType() {
+
+    public String getExpenseType() {
         return expenseType;
     }
 
-    public void setExpenseType(ExpenseType expenseType) {
+    public void setExpenseType(String expenseType) {
         this.expenseType = expenseType;
+    }
+
+    public String getExpenseCategory() {
+        return expenseCategory;
+    }
+
+    public void setExpenseCategory(String expenseCategory) {
+        this.expenseCategory = expenseCategory;
+    }
+
+    public Timestamp getCreditedDate() {
+        return creditedDate;
+    }
+
+    public void setCreditedDate(Timestamp creditedDate) {
+        this.creditedDate = creditedDate;
     }
 }

@@ -26,12 +26,21 @@ angular.module('timeSheetApp')
                 });
             },
             search: function(searchCriteria) {
-                return $http.post('api/expense/search', searchCriteria).then(function (response) {
+                return $http.post('api/expenses', searchCriteria).then(function (response) {
 
                     //console.log("response is--->>>"+JSON.stringify(response.data));
                     return response.data;
                 });
             },
+
+            searchExpenseCategories: function(){
+
+                return $http.get('api/expenseCategories').then(function (response) {
+                    return response.data;
+                })
+
+            },
+
             updateExpense: function (expense, callback) {
                 var cb = callback || angular.noop;
 
@@ -57,6 +66,12 @@ angular.module('timeSheetApp')
                         return cb(err);
                     }.bind(this)).$promise;
             },
+
+            getCurrencies: function(){
+                return $http.get('scripts/components/admin/Common-Currency.json').then(function (response) {
+                    return response.data;
+                })
+            }
         }
 
     });
