@@ -278,7 +278,7 @@
 
 
                            <button  type="button"  ng-click="conform('cancel')"
-                                   id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Discard</button>
+                                   id="cancel-button"   class="btn btn-danger pull-right" ng-disabled="btnDisable"> <i class="material-icons">close</i> Cancel</button>
 
                            <!--<button type="submit" id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right">-->
                                <!--<span class="btn-label">-->
@@ -286,7 +286,7 @@
                                <!--</span>Create ticket</button>-->
 
                            <button class="btn btn-success ld ld-over-inverse pull-right" ng-class="{'running':saveLoad}"
-                                   type="submit" id="form-button-save" ng-disabled="form.$invalid">
+                                   type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisable">
                                <span class="btn-label"><i class="material-icons">check</i></span>  Create ticket
                                <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                            </button>
