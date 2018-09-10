@@ -697,7 +697,8 @@
 				<div class="row">
 					<div class="col-md-6">
 						<div class="form-group">
-							<span class="form-control-feedback calender-big-icon"><i
+                            <label class="label-control">From date</label>
+							<span class="form-control-feedback calender-icon"><i
 								class="material-icons">date_range</i></span> <input id="dateFilterFrom"
 								type="text" class="form-control datepicker"
 								ng-model="relieverDateFrom" value={{now}}
@@ -707,7 +708,8 @@
 
 					<div class="col-md-6">
 						<div class="form-group">
-							<span class="form-control-feedback calender-big-icon"><i
+                            <label class="label-control">To date</label>
+							<span class="form-control-feedback calender-icon"><i
 								class="material-icons">date_range</i></span> <input id="dateFilterTo"
 								type="text" class="form-control datepicker"
 								ng-model="relieverDateTo" value={{now}} placeholder="To Date" />
@@ -726,18 +728,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6">
-						<div class="form-group">
-							<div class="dropdown">
-								<span class="form-control-feedback d-big-arrow-icon"><i
-									class="material-icons">keyboard_arrow_down</i></span> <select
-									class="form-control" ng-model="selectedReliever"
-									ng-options="emp as emp.fullName for emp in relievers">
-									<option value="">Select..</option>
-								</select>
-							</div>
-						</div>
-					</div>
+
 				</div>
 			</div>
 
