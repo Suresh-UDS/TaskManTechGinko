@@ -125,20 +125,18 @@ export class IndentView {
       console.log(this.details.items);
       if(item.currentQuantity && item.currentQuantity>0){
           if(item.materialStoreStock >= item.currentQuantity){
-              if(item.currentQuantity < item.pendingQuantity){
-                  this.details.items[i].issuedQuantity = item.currentQuantity;
-                  this.details.items[i].pendingQuantity -= item.currentQuantity;
+              if(item.currentQuantity <= item.pendingQuantity){
+                  this.details.items[i].issuedQuantity += parseInt(item.currentQuantity);
+                  this.details.items[i].pendingQuantity -= parseInt(item.currentQuantity);
               }else{
                   console.log(item.currentQuantity);
                   console.log(item.pendingQuantity);
-                  demo.showSwal('warning-message-and-confirmation-ok','Invalid value','Only could be issued' );
+                  demo.showSwal('warning-message-and-confirmation-ok','Invalid value','only ' +item.pendingQuantity + 'could be issued' );
                   this.details.items[i].currentQuantity=0;
                   this.getIndentDetails(this.details.id);
               }
           }else{
-              console.log(item.materialStoreStock);
-              console.log(item.currentQuantity);
-              demo.showSwal('warning-message-and-confirmation-ok','Invalid value','Only Available in store' );
+              demo.showSwal('warning-message-and-confirmation-ok','Invalid value','Only '+item.materialStoreStock+ 'Available in store' );
               this.details.items[i].currentQuantity=0;
               this.getIndentDetails(this.details.id);
 
@@ -155,6 +153,7 @@ export class IndentView {
                 console.log(response);
                 this.details = response;
             },err=>{
+                console.log(err);
                 this.csService.closeAll();
                 console.log("Error in getting indent details");
             }
