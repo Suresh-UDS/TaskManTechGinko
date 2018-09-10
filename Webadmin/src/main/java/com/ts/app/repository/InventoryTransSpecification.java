@@ -51,6 +51,12 @@ public class InventoryTransSpecification implements Specification<MaterialTransa
 		if (searchCriteria.getMaterialId() != 0) {
 			predicates.add(builder.equal(root.get("material").get("id"), searchCriteria.getMaterialId()));
 		}
+		if(searchCriteria.getAssetId() != 0) {
+			predicates.add(builder.equal(root.get("asset").get("id"), searchCriteria.getAssetId()));
+		}
+		if(searchCriteria.getJobId() != 0) {
+			predicates.add(builder.equal(root.get("job").get("id"), searchCriteria.getJobId()));
+		}
 		if (searchCriteria.getMaterialName() != null && searchCriteria.getMaterialName() != "") {
 			predicates.add(builder.like(builder.lower(root.get("name")),
 					"%" + searchCriteria.getMaterialName().toLowerCase() + "%"));
