@@ -261,7 +261,7 @@ angular.module('timeSheetApp')
     	$scope.allItemsSelected = false;
     	
         $scope.selectAll = function () {
-            alert("hi")
+        	
             $scope.selectedItems = [];
 
             // Loop through all the entities and set their isChecked property
