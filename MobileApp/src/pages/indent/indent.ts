@@ -190,6 +190,7 @@ export class Indent {
               items:this.indent,
               indentRefNumber:this.referenceNumber,
               requestedById:this.employeeId,
+              issuedQuantity:0,
               requestedDate:new Date()
         };
         this.purchaseService.saveMaterialIndent(indentDetails).subscribe(

@@ -1,0 +1,29 @@
+page-expense-details {
+
+   .ExpenseDetailsPage
+   {
+     h3.currentBls
+     {
+        margin: 15px 0;
+        font-weight: 500;
+     }
+     ion-card
+     {
+       ion-item
+       {
+         border-bottom: 1px dotted #eee;
+         .item-inner
+         {
+           padding-right:0 !important;
+           ion-icon
+           {
+             margin-right: 0 !important;
+           }
+         }
+       }
+     }
+
+   }
+
+
+}

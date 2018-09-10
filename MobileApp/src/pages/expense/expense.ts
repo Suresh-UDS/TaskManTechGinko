@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {NavController, NavParams} from "ionic-angular";
 import {TransactionPage} from "./transaction";
+import {ExpenseDetails} from "../expense-details/expense-details";
 
 /**
  * Generated class for the Expense page.
@@ -28,9 +29,9 @@ export class ExpensePage {
     console.log('ionViewDidLoad Expense');
   }
 
-  viewTransaction(){
-    console.log('ionViewDidLoad viewTransaction method:');
-    this.navCtrl.push(TransactionPage);
+    viewExpenseDetails(){
+    console.log('ionViewDidLoad ExpenseDetails method:');
+    this.navCtrl.push(ExpenseDetails);
   }
 
 }

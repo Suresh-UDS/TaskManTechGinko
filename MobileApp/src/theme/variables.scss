@@ -70,6 +70,10 @@ ion-label
 {
   color: color($colors, green) !important;
 }
+.grey
+{
+  color: color($colors, grey) !important;
+}
 .greyBg
 {
   background:color($colors, grey);
@@ -165,6 +169,11 @@ button.button-md-primary p.siteName
     text-align: center;
     padding-top: 20px;
   }
+}
+.border-TB-dashed
+{
+  border-bottom: 1px dashed color($colors, grey) !important;
+  border-top: 1px dashed color($colors, grey) !important;
 }
 
 .MainExpenseContainer

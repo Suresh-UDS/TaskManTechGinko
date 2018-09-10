@@ -25,6 +25,22 @@
     <ion-fab top right edge>
         <button has-permission="TicketsCreate" (click)="createTicket()" ion-fab><ion-icon name="add"></ion-icon></button>
     </ion-fab>
+
+    <div *ngIf="(tickets && tickets.length <= 0) && !spinner" >
+        <ion-card>
+            <ion-card-content>
+                <img src="assets/imgs/warning.svg">
+                <span><p text-center>No Data Found</p></span>
+            </ion-card-content>
+        </ion-card>
+    </div>
+
+    <div  *ngIf="(!tickets || tickets.length < 0) && spinner" text-center class="margin-top25">
+        <ion-spinner name="circles"></ion-spinner>
+    </div>
+
+
+
 <div *ngIf="tickets">
     <div  class="white-bg"   *ngFor="let ticket of tickets" (click)="viewTicket(ticket)">
         <div class="padding-left16 padding-top5">

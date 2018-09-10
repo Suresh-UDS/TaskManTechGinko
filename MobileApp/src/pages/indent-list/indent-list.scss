@@ -27,11 +27,35 @@ page-indent-list {
     border: 1px solid #ddd;
   }
   .card {
-    margin: 5px 0 5px 0 !important;
+    margin:0px !important;
   }
   .label
   {
     font-weight:400 !important;
   }
+
+
+  .fakeList{
+    h2, h3, p, ion-icon {
+      background-color: lightgrey;
+      opacity: 0.5;
+      height: 1em;
+      margin-top: 10px;
+    }
+
+    h2 {
+      width: 35%;
+    }
+
+    h3 {
+      width: 40%;
+    }
+
+    p {
+      width: 180%;
+    }
+  }
+
+
 
 }
