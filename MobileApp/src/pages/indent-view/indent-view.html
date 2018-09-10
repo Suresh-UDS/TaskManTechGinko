@@ -108,7 +108,7 @@
                         <!--</button>-->
                     <!--</ion-col>-->
                 </ion-row>
-                <ion-row no-margin>
+                <ion-row no-margin *ngIf="item.pendingQuantity >0">
                     <ion-col col-8 no-padding="">
                             <p class="clr-orange bg-gray" text-right no-padding>Current Issued Quantity</p>
                     </ion-col>
@@ -118,6 +118,14 @@
                         <ion-input type="number" text-center (ionChange)="checkQuantity(item,i)" [(ngModel)]="item.currentQuantity" class="brdr" no-padding></ion-input>
                     </ion-col>
                     <ion-col col-1 no-padding="">
+                    </ion-col>
+                </ion-row>
+                <ion-row no-margin *ngIf="!item.pendingQuantity >0">
+                    <ion-col col-8 no-padding="">
+                            <p class="clr-orange bg-gray" text-right no-padding>Status:</p>
+                    </ion-col>
+                    <ion-col col-8 no-padding>
+                        <p>{{item.status}}</p>
                     </ion-col>
                 </ion-row>
 
