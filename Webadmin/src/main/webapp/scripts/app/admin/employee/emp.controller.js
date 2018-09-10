@@ -20,7 +20,7 @@ angular.module('timeSheetApp')
 
         // $scope.employeeDesignations=null;
 
-        $timeout(function (){angular.element('[ng-model="name"]').focus();});
+        //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
         $scope.pages = { currPage : 1};
 

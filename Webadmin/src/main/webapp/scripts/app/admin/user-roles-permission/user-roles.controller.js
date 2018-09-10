@@ -24,7 +24,7 @@ angular.module('timeSheetApp')
         $scope.searchUserRoleLevel = null;
         $scope.noData = false;
 
-        $timeout(function (){angular.element('[ng-model="name"]').focus();});
+        //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
         $scope.pages = { currPage : 1};
 

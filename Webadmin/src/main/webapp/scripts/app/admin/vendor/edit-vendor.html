@@ -184,13 +184,13 @@
                                     <!--<span class="btn-label"><i class="material-icons">check</i></span> Update-->
                                 <!--</button>-->
                                 <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" ng-click="conform('save')"
-                                        type="submit" id="form-button-save" ng-disabled="formEdit.$invalid">
+                                        type="submit" id="form-button-save" ng-disabled="formEdit.$invalid || btnDisable">
                                     <span class="btn-label"><i class="material-icons">check</i></span> Update
                                     <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                 </button>
-                                <button class="btn btn-danger"  data-dismiss="modal" aria-label="Close" type="button"
-                                        id="cancel-button" ng-click="conform('cancel')">
-                                    <i class="material-icons">close</i> Discard
+                                <button class="btn btn-default"  data-dismiss="modal" aria-label="Close" type="button"
+                                        id="cancel-button" ng-disabled="btnDisable" ng-click="conform('back')">
+                                    Back
                                 </button>
 
                             </div>

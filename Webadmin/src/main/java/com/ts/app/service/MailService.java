@@ -478,12 +478,14 @@ public class MailService {
     }
 
     @Async
-    public void sendFeedbackAlert(String emailIds,  String feedbackName, String feedbackLocation, Date feedbackDate, List<String> feedbackItems, String reportUrl) {
+    public void sendFeedbackAlert(String emailIds,  String feedbackName, String feedbackLocation, String givenBy, String remarks,Date feedbackDate, List<String> feedbackItems, String reportUrl) {
         log.debug("Sending feedback alert e-mail to '{}'", emailIds);
         Locale locale = Locale.forLanguageTag("en-US");
         Context context = new Context(locale);
         context.setVariable("feedbackName", feedbackName);
         context.setVariable("feedbackLocation", feedbackLocation);
+        context.setVariable("givenBy", givenBy);
+        context.setVariable("remarks", remarks);
         context.setVariable("feedbackDate", feedbackDate);
         context.setVariable("feedbacks", feedbackItems);
         context.setVariable("feedbackReport", reportUrl);

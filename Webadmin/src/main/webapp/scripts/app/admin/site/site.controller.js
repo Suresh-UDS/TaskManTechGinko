@@ -21,7 +21,7 @@ angular.module('timeSheetApp')
         $scope.btnDisable = false;
         $scope.localStorage = null;
 
-        $timeout(function (){angular.element('[ng-model="name"]').focus();});
+        //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
         $scope.pageSort = 10;
 

@@ -34,8 +34,9 @@ angular.module('timeSheetApp')
         $scope.searchDescription = null;
         $scope.searchStatus = null;
         $scope.selectedAsset = {};
+        $scope.btnDisable = false;
 
-        $timeout(function (){angular.element('[ng-model="name"]').focus();});
+        //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
         $scope.pages = { currPage : 1};
 
@@ -162,8 +163,9 @@ angular.module('timeSheetApp')
                 $scope.errorTicketsExists = null;
                 $scope.errorSite = null;
                 if(!$scope.selectedSite){
-                    $scope.errorSite = "true";
+                    $scope.errorSite = true;
                 }else{
+                    $scope.btnDisable = true;
                     $scope.tickets.title = $scope.tickets.title;
                     $scope.tickets.description = $scope.tickets.description;
                     $scope.tickets.siteId = $scope.selectedSite.id;
@@ -201,6 +203,7 @@ angular.module('timeSheetApp')
                     }).catch(function (response) {
                         $scope.success = null;
                         $scope.saveLoad = false;
+                        $scope.btnDisable = false;
                         console.log('Error - '+ response.data);
                         console.log('status - '+ response.status + ' , message - ' + response.data.message);
                         if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
@@ -522,6 +525,7 @@ angular.module('timeSheetApp')
         }
 
          $scope.editTicket = function(){
+         if(parseInt($stateParams.id) > 0){
             var tId =parseInt($stateParams.id);
             $scope.status =$stateParams.status;
             $scope.qid =$stateParams.qid;
@@ -531,6 +535,9 @@ angular.module('timeSheetApp')
                     $scope.loadingStop();
                     console.log("Ticket details==" + JSON.stringify(data));
                     $scope.tickets=data;
+                    if(!$scope.tickets){
+                       $location.path('/tickets');
+                    }
                     $scope.tickets.title = $scope.tickets.title;
                     $scope.tickets.description = $scope.tickets.description;
                     $scope.tickets.pendingAtUDS = true;
@@ -579,14 +586,18 @@ angular.module('timeSheetApp')
                     }
 
                 }).catch(function(){
+                    $location.path('/tickets');
                     $scope.loadingStop();
+
                 });
 
             }else{
 
                 $location.path('/tickets');
             }
-
+          }else{
+             $location.path('/tickets');
+          }
         };
 
         $scope.viewTicket = function(id){
@@ -656,6 +667,7 @@ angular.module('timeSheetApp')
             if(!$scope.selectedSite){
                     $scope.errorSite = "true";
                 }else{
+                $scope.btnDisable = true;
                 console.log("update ticket");
                 $scope.tickets.title = $scope.tickets.title;
                 $scope.tickets.description = $scope.tickets.description;
@@ -697,6 +709,7 @@ angular.module('timeSheetApp')
                 }).catch(function (response) {
                     $scope.success = null;
                     $scope.saveLoad = false;
+                    $scope.btnDisable = false;
                     // console.log('Error - '+ response.data);
                     // console.log('status - '+ response.status + ' , message -
                     // ' + response.data.message);

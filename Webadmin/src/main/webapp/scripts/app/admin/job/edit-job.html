@@ -490,22 +490,22 @@
                                                     <div>
                                                         <div class="radio radio-inline">
                                                             <label>
-                                                                <input type="radio" id="schedule" name="schedule" ng-model="job.schedule" value="ONCE" checked="checked" ng-click="resetDate();" required> Once
+                                                                <input type="radio" id="scheduleOnce" name="scheduleOnce" ng-model="job.schedule" value="ONCE" checked="checked" ng-click="resetDate();" required> Once
                                                             </label>
                                                         </div>
                                                         <div class="radio radio-inline">
                                                             <label>
-                                                                <input type="radio" id="schedule" name="schedule" ng-model="job.schedule" value="DAY" required > Daily
+                                                                <input type="radio" id="scheduleDay" name="scheduleDay" ng-model="job.schedule" value="DAY" required > Daily
                                                             </label>
                                                         </div>
                                                         <div class="radio radio-inline">
                                                             <label>
-                                                                <input type="radio" id="schedule" name="shedule" ng-model="job.schedule" value="WEEK" required> Weekly
+                                                                <input type="radio" id="sheduleWeek" name="sheduleWeek" ng-model="job.schedule" value="WEEK" required> Weekly
                                                             </label>
                                                         </div>
                                                         <div class="radio radio-inline">
                                                             <label>
-                                                                <input type="radio" id="schedule" name="shedule" ng-model="job.schedule" value="MONTH" required> Monthly
+                                                                <input type="radio" id="sheduleMonth" name="sheduleMonth" ng-model="job.schedule" value="MONTH" required> Monthly
                                                             </label>
                                                         </div>
                                                         <div ng-show="form.$submitted || form.schedule.$touched">
@@ -645,7 +645,7 @@
                                                         </div>
                                                         <div class="radio radio-inline">
                                                             <label>
-                                                                <input type="radio"id="active" name="active" ng-model="job.active" value="N" required >No
+                                                                <input type="radio"id="inActive" name="inActive" ng-model="job.active" value="N" required >No
                                                             </label>
                                                         </div>
                                                     </div>
@@ -676,7 +676,7 @@
                                     <!--</button>-->
 
                                     <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}"
-                                            type="submit" id="form-button-save" ng-disabled="form.$invalid ">
+                                            type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisable">
                                         <span class="btn-label"><i class="material-icons">check</i></span> Update
                                         <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                     </button>
@@ -686,7 +686,7 @@
                                             <i class="fa fa-rotate-left" ></i> Save and go back to list
                                         </button> -->
                                     <button class="btn btn-danger" type="button"
-                                            ng-click="conform('cancel')" id="cancel-button">
+                                            ng-disabled="btnDisable" ng-click="conform('cancel')" id="cancel-button">
                                         <i class="material-icons">close</i> Cancel
                                     </button>
                                 </div>

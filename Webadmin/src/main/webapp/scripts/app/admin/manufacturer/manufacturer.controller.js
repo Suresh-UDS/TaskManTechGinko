@@ -22,7 +22,7 @@ angular.module('timeSheetApp')
         $scope.manufacturer = {};
         $scope.pager = {};
         $scope.noData = false;
-
+        $scope.btnDisable = false;
         console.log($stateParams)
                     var that =  $scope;
 
@@ -68,7 +68,7 @@ angular.module('timeSheetApp')
             $('#conformationModal').modal();
         }
         $rootScope.back = function (text) {
-           if(text == 'cancel')
+           if(text == 'cancel' || text =='back')
            {
                /** @reatin - retaining scope value.**/
                $rootScope.retain=1;
@@ -137,13 +137,23 @@ angular.module('timeSheetApp')
         };
 
         $scope.editManufacturer = function(){
-            $rootScope.loadingStart();
-        		ManufacturerComponent.findById($stateParams.id).then(function(data){
-                    $scope.manufacturer=data;
-	        		$scope.selectedAssetType = {name : $scope.manufacturer.assetType};
-	        		console.log('Manufacturer details by id',$scope.manufacturer);
-                    $rootScope.loadingStop();
-	        	})
+              if(parseInt($stateParams.id) > 0){
+                  var mfrId = parseInt($stateParams.id);
+                  $rootScope.loadingStart();
+                  ManufacturerComponent.findById(mfrId).then(function(data){
+                        $scope.manufacturer=data;
+                      if($scope.manufacturer){
+                          $scope.selectedAssetType = {name : $scope.manufacturer.assetType};
+                          console.log('Manufacturer details by id',$scope.manufacturer);
+                      }else{
+                          $location.path('/manufacturer-list');
+                      }
+                        $rootScope.loadingStop();
+                  })
+              }else{
+                  $location.path('/manufacturer-list');
+              }
+
         };
 
         $scope.loadManufacturers = function(){
@@ -252,7 +262,7 @@ angular.module('timeSheetApp')
                     }else{
                         $scope.searchCriteria.manufacturerName = "";
                     }
-                    
+
                     // $scope.searchName = {searchStatus:'0',manufacturerName:$scope.localStorage.manufacturerName};
                 }
 
@@ -349,14 +359,13 @@ angular.module('timeSheetApp')
             $scope.saveLoad = true;
 	        	$scope.error = null;
 	        	$scope.success =null;
+	        	$scope.btnDisable = true;
                 $scope.loadingStart();
 
 	        	if($scope.selectedAssetType.name !=""){
 	        	    $scope.manufacturer.assetType = $scope.selectedAssetType.name;
 
 	            }
-
-
 	        	console.log('manufacturer details ='+ JSON.stringify($scope.manufacturer));
 	        	//var post = $scope.isEdit ? ManufacturerComponent.update : ManufacturerComponent.create
                 //post($scope.manufacturer).then(function () {
@@ -368,6 +377,7 @@ angular.module('timeSheetApp')
 	                $location.path('/manufacturer-list');
 	            }).catch(function (response) {
                      $scope.saveLoad = false;
+                     $scope.btnDisable = false;
                     $scope.loadingStop();
 	                $scope.success = null;
 	                console.log('Error - '+ response.data);
@@ -385,6 +395,7 @@ angular.module('timeSheetApp')
         $scope.UpdateManufacturer = function () {
                 $scope.error = null;
                 $scope.success =null;
+                $scope.btnDisable = true;
                 $scope.loadingStart();
 
                 if($scope.selectedAssetType){
@@ -403,6 +414,7 @@ angular.module('timeSheetApp')
                 }).catch(function (response) {
                     $rootScope.loadingStop();
                     $scope.success = null;
+                    $scope.btnDisable = false;
                     console.log('Error - '+ response.data);
                     if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                         $scope.showNotifications('top','center','danger','Manufacturer already exist!!');

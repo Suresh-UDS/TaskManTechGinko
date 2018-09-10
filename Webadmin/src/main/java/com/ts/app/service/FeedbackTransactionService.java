@@ -141,55 +141,12 @@ public class FeedbackTransactionService extends AbstractService {
 				items.add(item);
 			}
 			rating = (cumRating / items.size()); //calculate the overall rating.
-			//send notifications
-			Setting feedbackAlertSetting = null;
-			Setting feedbackEmails = null;
-			String alertEmailIds = "";
-			List<Setting> settings = null;
-			if(feedbackTransDto.getSiteId() > 0) {
-				settings = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK, feedbackTransDto.getSiteId());
-				if(CollectionUtils.isNotEmpty(settings)) {
-					feedbackAlertSetting = settings.get(0);
-				}
-				settings = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK_EMAILS, feedbackTransDto.getSiteId());
-				if(CollectionUtils.isNotEmpty(settings)) {
-					feedbackEmails = settings.get(0);
-				}
-				if(feedbackEmails != null) {
-					alertEmailIds = feedbackEmails.getSettingValue();
-				}
-			}else if(feedbackTransDto.getProjectId() > 0) {
-				settings = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, feedbackTransDto.getProjectId());
-				if(CollectionUtils.isNotEmpty(settings)) {
-					feedbackAlertSetting = settings.get(0);
-				}
-				settings = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, feedbackTransDto.getProjectId());
-				if(CollectionUtils.isNotEmpty(settings)) {
-					feedbackEmails = settings.get(0);
-				}
-				if(feedbackEmails != null) {
-					alertEmailIds = feedbackEmails.getSettingValue();
-				}
-			}
-			if(feedbackAlertSetting != null && feedbackAlertSetting.getSettingValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
-				StringBuilder feedbackLocation = new StringBuilder();
-				feedbackLocation.append(feedbackTransDto.getSiteName());
-				feedbackLocation.append("-");
-				feedbackLocation.append(feedbackTransDto.getBlock());
-				feedbackLocation.append("-");
-				feedbackLocation.append(feedbackTransDto.getFloor());
-	       		if(StringUtils.isNotBlank(feedbackTransDto.getReviewerName())) {
-	       			feedbackLocation.append(" given by " + feedbackTransDto.getReviewerName());
-	       			feedbackLocation.append(" - " + feedbackTransDto.getReviewerCode());
-	        		}else if(StringUtils.isNotBlank(feedbackTransDto.getReviewerCode())) {
-	        			feedbackLocation.append(" given by " + feedbackTransDto.getReviewerCode());
-	        		}
-				String feedbackReportUrl = env.getProperty("reports.feedback-report.url");
-				mailService.sendFeedbackAlert(alertEmailIds, feedbackTransDto.getZone(), feedbackLocation.toString(), new Date(), feedbackAlertItems, feedbackReportUrl);
-			}
+			
+
 		}else {
 			rating = 5;
 		}
+		sendFeedbackNotification(feedbackTransDto, feedbackAlertItems);	
 		feedbackTrans.setRating(rating);
 		feedbackTrans.setResults(items);
         feedbackTrans = feedbackTransactionRepository.save(feedbackTrans);
@@ -232,6 +189,60 @@ public class FeedbackTransactionService extends AbstractService {
 		log.debug("Created Information for FeedbackTransaction: {}", feedbackTrans);
 		feedbackTransDto = mapperUtil.toModel(feedbackTrans, FeedbackTransactionDTO.class);
 		return feedbackTransDto;
+	}
+	
+	private void sendFeedbackNotification(FeedbackTransactionDTO feedbackTransDto,List<String> feedbackAlertItems) {
+		//send notifications
+		Setting feedbackAlertSetting = null;
+		Setting feedbackEmails = null;
+		String alertEmailIds = "";
+		List<Setting> settings = null;
+		if(feedbackTransDto.getSiteId() > 0) {
+			settings = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK, feedbackTransDto.getSiteId());
+			if(CollectionUtils.isNotEmpty(settings)) {
+				feedbackAlertSetting = settings.get(0);
+			}
+			settings = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK_EMAILS, feedbackTransDto.getSiteId());
+			if(CollectionUtils.isNotEmpty(settings)) {
+				feedbackEmails = settings.get(0);
+			}
+			if(feedbackEmails != null) {
+				alertEmailIds = feedbackEmails.getSettingValue();
+			}
+		}else if(feedbackTransDto.getProjectId() > 0) {
+			settings = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, feedbackTransDto.getProjectId());
+			if(CollectionUtils.isNotEmpty(settings)) {
+				feedbackAlertSetting = settings.get(0);
+			}
+			settings = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, feedbackTransDto.getProjectId());
+			if(CollectionUtils.isNotEmpty(settings)) {
+				feedbackEmails = settings.get(0);
+			}
+			if(feedbackEmails != null) {
+				alertEmailIds = feedbackEmails.getSettingValue();
+			}
+		}
+		if(feedbackAlertSetting != null && feedbackAlertSetting.getSettingValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
+			StringBuilder feedbackLocation = new StringBuilder();
+			feedbackLocation.append(feedbackTransDto.getSiteName());
+			feedbackLocation.append("-");
+			feedbackLocation.append(feedbackTransDto.getBlock());
+			feedbackLocation.append("-");
+			feedbackLocation.append(feedbackTransDto.getFloor());
+			StringBuilder givenBy = new StringBuilder();
+       		if(StringUtils.isNotBlank(feedbackTransDto.getReviewerName())) {
+       			givenBy.append(feedbackTransDto.getReviewerName());
+       			givenBy.append(" - " + feedbackTransDto.getReviewerCode());
+        		}else if(StringUtils.isNotBlank(feedbackTransDto.getReviewerCode())) {
+        			givenBy.append(feedbackTransDto.getReviewerCode());
+        		}
+       		StringBuilder remarks = new StringBuilder();
+       		if(StringUtils.isNotBlank(feedbackTransDto.getRemarks())) {
+       			remarks.append(feedbackTransDto.getRemarks());
+       		}
+			String feedbackReportUrl = env.getProperty("reports.feedback-report.url");
+			mailService.sendFeedbackAlert(alertEmailIds, feedbackTransDto.getZone(), feedbackLocation.toString(), givenBy.toString(), remarks.toString(), new Date(), feedbackAlertItems, feedbackReportUrl);
+		}	
 	}
 
 	public List<FeedbackTransactionDTO> findAll(int currPage) {

@@ -14,7 +14,7 @@ angular.module('timeSheetApp')
         $scope.oldPassword='';
         $scope.newPassword='';
 
-        $timeout(function (){angular.element('[ng-model="username"]').focus();});
+        //$timeout(function (){angular.element('[ng-model="username"]').focus();});
 
         $scope.login = function (event) {
 
@@ -48,7 +48,7 @@ angular.module('timeSheetApp')
             $rootScope.resLoader=true;
         };
 
-         
+
         //Loading Page go to top position
 
         $scope.loadPageTop = function(){
@@ -73,12 +73,12 @@ angular.module('timeSheetApp')
 
                 console.log("Password successfully  changed");
                 $scope.showNotifications('top','center','success','Password Successfully Changed..');
-            
+
             }).catch(function (err) {
 
                 $scope.showNotifications('top','center','failure','Password Successfully Changed..');
                 console.log("Error in change password");
-           
+
             })
 
         };

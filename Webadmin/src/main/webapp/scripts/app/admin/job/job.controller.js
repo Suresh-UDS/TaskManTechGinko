@@ -42,6 +42,7 @@ angular.module('timeSheetApp')
         $rootScope.exportStatusObj  ={};
         $scope.checkStatus = 0;
         $scope.selectPlannedStartTime;
+        $scope.btnDisable = false;
 
         /*
         **
@@ -524,32 +525,32 @@ angular.module('timeSheetApp')
             };
 
         $scope.getJobDetails = function(){
-            JobComponent.findById($stateParams.id).then(function(jobData){
-                console.log(jobData);
-                if(jobData.jobStatus == "COMPLETED"){
-                    JobComponent.getCompletedDetails($stateParams.id).then(function (data) {
-                        console.log(data);
-                        console.log(data.length);
-                        for(var i=0;i<data.length;i++){
-                            console.log(data[i].checkInOutImages);
-                            $scope.checkInOutImages = data[i].checkInOutImages;
-                            // for(var j=0;j<data[i].checkInOutImages.length;j++){
-                            //     console.log(data[i].checkInOutImages[j].photoOut);
-                            //     if(data[i].checkInOutImages[j].photoOut){
-                            //         console.log("photo image id available");
-                            //         JobComponent.getCompleteImage(jobData.employeeId,data[i].checkInOutImages[j].photoOut).then(function (imageResponse) {
-                            //             console.log(imageResponse);
-                            //             $scope.completedImage = imageResponse;
-                            //         })
-                            //     }else{
-                            //         console.log("Photo image id not available");
-                            //     }
-                            // }
-                        }
-                    });
-                }
-            });
-
+                 var jobId = parseInt($stateParams.id);
+                 JobComponent.findById(jobId).then(function(jobData){
+                    console.log(jobData);
+                    if(jobData.jobStatus == "COMPLETED"){
+                        JobComponent.getCompletedDetails($stateParams.id).then(function (data) {
+                            console.log(data);
+                            console.log(data.length);
+                            for(var i=0;i<data.length;i++){
+                                console.log(data[i].checkInOutImages);
+                                $scope.checkInOutImages = data[i].checkInOutImages;
+                                // for(var j=0;j<data[i].checkInOutImages.length;j++){
+                                //     console.log(data[i].checkInOutImages[j].photoOut);
+                                //     if(data[i].checkInOutImages[j].photoOut){
+                                //         console.log("photo image id available");
+                                //         JobComponent.getCompleteImage(jobData.employeeId,data[i].checkInOutImages[j].photoOut).then(function (imageResponse) {
+                                //             console.log(imageResponse);
+                                //             $scope.completedImage = imageResponse;
+                                //         })
+                                //     }else{
+                                //         console.log("Photo image id not available");
+                                //     }
+                                // }
+                            }
+                        });
+                    }
+                });
 
 
         };
@@ -557,77 +558,97 @@ angular.module('timeSheetApp')
 
 
         $scope.editJob = function(){
-            if(!$stateParams.id){
-                $location.path('/jobs');
-            }
-        	JobComponent.findById($stateParams.id).then(function(data){
-                $scope.loadingStop();
-        	    console.log("Job details",data);
-        		$scope.job=data;
-        		$scope.job.pendingStatus='pendingAtUDS';
-        		$scope.job.pendingAtUDS=true;
-        		$scope.selectedSite = {id : data.siteId,name : data.siteName};
-                $scope.job.plannedStartTime = data.plannedStartTime;
-                $scope.selectPlannedStartTime = $filter('date')(data.plannedStartTime, 'dd/MM/yyyy hh:mm a');
-                if($scope.job.schedule == 'ONCE'){
-                  $scope.job.scheduleEndDate = "";
-                }else{
-                   $scope.job.scheduleEndDate = data.scheduleEndDate;
-                }
-                $scope.selectScheduleEndDate = $filter('date')(data.scheduleEndDate, 'dd/MM/yyyy hh:mm a');
-        		$scope.loadEmployees().then(function(employees){
-        			console.log('load employees ');
-            		$scope.selectedEmployee = {id : data.employeeId,name : data.employeeName};
-            		//$scope.selectedLocation = {id:data.locationId,name:data.locationName};
-            		$scope.loadBlocks();
-            		$scope.selectedBlock = data.block;
-            		$scope.loadFloors();
-            		$scope.selectedFloor = data.floor;
-            		$scope.loadZones();
-            		$scope.selectedZone = data.zone;
-            		$scope.selectedAsset = {id:data.assetId,title:data.assetTitle};
-            		if(data.checklistItems) {
-            			var checklist = {};
-            			var items = [];
-            			for(var i =0; i < data.checklistItems.length ; i++) {
-            				var item = {};
-            				var checklistItem = data.checklistItems[i];
-            				checklist.id = checklistItem.checklistId;
-            				checklist.name = checklistItem.checklistName;
-            				item.id = checklistItem.checklistItemId;
-            				item.name = checklistItem.checklistItemName;
-            				item.completed = checklistItem.completed;
-            				items.push(item);
-            			}
-            			checklist.items = items;
-                		$scope.selectedChecklist = checklist;
-            		}
+            if(parseInt($stateParams.id) > 0){
 
-            		if(data.images){
-            		    $scope.completedImages = [];
-            		    for(var i=0;i<data.images.length;i++){
-            		        console.log(data.images[i]);
-                            JobComponent.getCompleteImage(data.images[i].employeeEmpId,data.images[i].photoOut).then(function (imageResponse) {
-                                // console.log(imageResponse);
-                                $scope.completedImages.push(imageResponse);
-                            });
+                var jobId = parseInt($stateParams.id)
+                JobComponent.findById(jobId).then(function(data){
+                    $scope.loadingStop();
+                    console.log("Job details",data);
+                    $scope.job=data;
+                    if(!$scope.job){
+                       $location.path('/jobs');
+                    }
+                    $scope.job.pendingStatus='pendingAtUDS';
+                    $scope.job.pendingAtUDS=true;
+                    $scope.selectedSite = {id : data.siteId,name : data.siteName};
+                    $scope.job.plannedStartTime = data.plannedStartTime;
+                    $scope.selectPlannedStartTime = $filter('date')(data.plannedStartTime, 'dd/MM/yyyy hh:mm a');
+                    if($scope.job.schedule == 'ONCE'){
+                      $scope.job.scheduleEndDate = "";
+                    }else{
+                       $scope.job.scheduleEndDate = data.scheduleEndDate;
+                    }
+                    $scope.selectScheduleEndDate = $filter('date')(data.scheduleEndDate, 'dd/MM/yyyy hh:mm a');
+                    $scope.loadEmployees().then(function(employees){
+                        console.log('load employees ');
+                        $scope.selectedEmployee = {id : data.employeeId,name : data.employeeName};
+                        //$scope.selectedLocation = {id:data.locationId,name:data.locationName};
+                        $scope.loadBlocks();
+                        if(data.block){
+                           $scope.selectedBlock = data.block;
+                        }else{
+                           $scope.selectedBlock = null;
+                        }
+                        $scope.loadFloors();
+                        if(data.floor){
+                           $scope.selectedFloor = data.floor;
+                        }else{
+                           $scope.selectedFloor = null;
+                        }
+                        $scope.loadZones();
+                        if(data.zone){
+                           $scope.selectedZone = data.zone;
+                        }else{
+                           $scope.selectedZone = null;
+                        }
+                        $scope.selectedAsset = {id:data.assetId,title:data.assetTitle};
+                        if(data.checklistItems) {
+                            var checklist = {};
+                            var items = [];
+                            for(var i =0; i < data.checklistItems.length ; i++) {
+                                var item = {};
+                                var checklistItem = data.checklistItems[i];
+                                checklist.id = checklistItem.checklistId;
+                                checklist.name = checklistItem.checklistName;
+                                item.id = checklistItem.checklistItemId;
+                                item.name = checklistItem.checklistItemName;
+                                item.completed = checklistItem.completed;
+                                items.push(item);
+                            }
+                            checklist.items = items;
+                            $scope.selectedChecklist = checklist;
                         }
 
-                    }
+                        if(data.images){
+                            $scope.completedImages = [];
+                            for(var i=0;i<data.images.length;i++){
+                                console.log(data.images[i]);
+                                JobComponent.getCompleteImage(data.images[i].employeeEmpId,data.images[i].photoOut).then(function (imageResponse) {
+                                    // console.log(imageResponse);
+                                    $scope.completedImages.push(imageResponse);
+                                });
+                            }
 
-            		if($scope.job.ticketId > 0) {
-                		TicketComponent.getTicketDetails($scope.job.ticketId).then(function(data){
-                            console.log("Ticket details");
-                            console.log(data);
-                            $scope.ticketStatus = data.status;
-                		});
+                        }
 
-            		}
-        		})
+                        if($scope.job.ticketId > 0) {
+                            TicketComponent.getTicketDetails($scope.job.ticketId).then(function(data){
+                                console.log("Ticket details");
+                                console.log(data);
+                                $scope.ticketStatus = data.status;
+                            });
+
+                        }
+                    })
 
 
 
-        	});
+                }).catch(function(){
+                   $location.path('/jobs');
+                });
+        	}else{
+        	   $location.path('/jobs');
+        	}
         };
 
         $scope.loadCompletedJob = function(image) {
@@ -674,7 +695,7 @@ angular.module('timeSheetApp')
 	        	//$scope.loadEmployee();
 	        	//$scope.loadAllSites();
 	        	//$scope.loadLocations();
-	        	$scope.loadAssets();
+	        	//$scope.loadAssets();
 	        	$scope.loadPrice();
 	        	$scope.loadChecklists();
 	        	if($scope.isEdit){
@@ -753,6 +774,7 @@ angular.module('timeSheetApp')
 	        	$scope.error = null;
 	        	$scope.success =null;
 	        	$scope.errorProjectExists = null;
+	        	$scope.btnDisable = true;
 	        	console.log("job details before save job - "+$scope.selectedBlock+" - "+$scope.selectedFloor+" - "+$scope.selectedZone);
 	        	if($scope.isEdit){
 	        	    // $scope.job.ticketId
@@ -852,7 +874,9 @@ angular.module('timeSheetApp')
                         $scope.error = 'ERROR';
                     }
 	        		}
-            })
+            }).catch(function(){
+                 $scope.btnDisable = false;
+            });
 
         };
 

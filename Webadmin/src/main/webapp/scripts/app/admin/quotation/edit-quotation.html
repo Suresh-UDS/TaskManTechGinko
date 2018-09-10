@@ -528,7 +528,7 @@
 															<!--Send-->
 														<!--</button>-->
                                                         <button type="submit"  ng-click="conform('send','submit')"
-                                                                ng-disabled="form.$invalid || quoteStatus"  class="btn btn-success ld ld-over-inverse pull-right"
+                                                                ng-disabled="form.$invalid || quoteStatus || btnDisable"  class="btn btn-success ld ld-over-inverse pull-right"
                                                                 ng-class="{'running':saveLoad}">
                                                             <span class="btn-label"><i class="material-icons">save</i></span> Send
                                                             <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
@@ -538,7 +538,7 @@
 															<!--Save Draft-->
 														<!--</button>-->
                                                         <button type="submit"  ng-click="conform('save','edit')"
-                                                                ng-disabled="form.$invalid || quoteStatus"  class="btn btn-warning ld ld-over-inverse pull-right"
+                                                                ng-disabled="form.$invalid || quoteStatus || btnDisable"  class="btn btn-warning ld ld-over-inverse pull-right"
                                                                 ng-class="{'running':saveLoad}">
                                                             <span class="btn-label"><i class="material-icons">save</i></span> Save Draft
                                                             <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
@@ -547,8 +547,8 @@
 															<!--ng-click="cancelQuotation()" id="cancel-button">-->
 															<!--<i class="material-icons">close</i> Cancel-->
 														<!--</button>-->
-                                                        <button type="submit" ng-click="conform('cancel','')" id="cancel-button"   class="btn btn-danger pull-right">
-                                                            <i class="material-icons">close</i> Discard
+                                                        <button type="submit" ng-disabled="btnDisable" ng-click="conform('cancel','')" id="cancel-button"   class="btn btn-danger pull-right">
+                                                            <i class="material-icons">close</i> Cancel
                                                         </button>
 													</div>
 												</div>

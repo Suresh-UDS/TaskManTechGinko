@@ -22,6 +22,7 @@ angular.module('timeSheetApp')
         $scope.noData = false;
         $rootScope.exportStatusObj  ={};
         $scope.searchName = null;
+        $scope.btnDisable = false;
 
         console.log($stateParams)
                     var that =  $scope;
@@ -68,7 +69,7 @@ angular.module('timeSheetApp')
             $('#conformationModal').modal();
          }
          $rootScope.back = function (text) {
-             if(text == 'cancel')
+             if(text == 'cancel' || text == 'back')
              {
                  /** @reatin - retaining scope value.**/
                  $rootScope.retain=1;
@@ -130,10 +131,19 @@ angular.module('timeSheetApp')
 
 
         $scope.editVendor = function(){
-        		VendorComponent.findById($stateParams.id).then(function(data){
-	        		$scope.vendor=data;
-	        		console.log($scope.vendor);
-	        	})
+          if(parseInt($stateParams.id) > 0){
+             var vendorId = parseInt($stateParams.id);
+             VendorComponent.findById(vendorId).then(function(data){
+                $scope.vendor=data;
+                if(!$scope.vendor){
+                  $location.path('/vendor-list');
+                }
+                console.log($scope.vendor);
+             })
+          }else{
+              $location.path('/vendor-list');
+          }
+
         };
 
         $scope.loadVendors = function(){
@@ -325,6 +335,7 @@ angular.module('timeSheetApp')
                 $scope.error = null;
                 $scope.success =null;
                 $scope.saveLoad = true;
+                $scope.btnDisable = true;
                 console.log('vendor details ='+ JSON.stringify($scope.vendor));
 
                  VendorComponent.create($scope.vendor).then(function () {
@@ -335,6 +346,7 @@ angular.module('timeSheetApp')
                 }).catch(function (response) {
                      $scope.saveLoad = false;
                     $scope.success = null;
+                    $scope.btnDisable = false;
                     console.log('Error - '+ response.data);
                     if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                         $scope.showNotifications('top','center','danger','vendor already exist!!');
@@ -351,6 +363,7 @@ angular.module('timeSheetApp')
             $scope.saveLoad = true;
                 $scope.error = null;
                 $scope.success =null;
+                $scope.btnDisable = true;
 
                 console.log('vendor details ='+ JSON.stringify($scope.vendor));
 
@@ -362,6 +375,7 @@ angular.module('timeSheetApp')
                 }).catch(function (response) {
                     $scope.success = null;
                      $scope.saveLoad = false;
+                     $scope.btnDisable = false;
                     console.log('Error - '+ response.data);
                     if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                         $scope.showNotifications('top','center','danger','vendor already exist!!');

@@ -494,11 +494,11 @@
 
 
                                                         <button class="btn btn-success" ng-click="saveQuotation('submit')" ng-if="!quotation.isSubmitted && !quotation.isApproved && !quotation.isRejected"
-															id="form-button-save" ng-disabled="form.$invalid">
+															id="form-button-save" ng-disabled="form.$invalid || btnDisable">
 															<span class="btn-label"><i class="material-icons">check</i></span>
 															Send
 														</button>
-														<button class="btn btn-warning" ng-click="saveQuotation('edit')" ng-disabled="form.$invalid" ng-if="!quotation.isSubmitted && !quotation.isApproved && !quotation.isRejected">
+														<button class="btn btn-warning" ng-click="saveQuotation('edit')" ng-disabled="form.$invalid || btnDisable" ng-if="!quotation.isSubmitted && !quotation.isApproved && !quotation.isRejected">
 															<span class="btn-label"><i class="material-icons">save</i></span>
 															Save Draft
 														</button>

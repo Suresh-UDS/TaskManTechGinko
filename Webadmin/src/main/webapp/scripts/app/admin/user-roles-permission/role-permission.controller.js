@@ -14,7 +14,7 @@ angular.module('timeSheetApp')
         $scope.pager = {};
         $scope.noData = false;
 
-        $timeout(function (){angular.element('[ng-model="name"]').focus();});
+        //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
         $scope.pages = { currPage : 1};
 
@@ -23,32 +23,32 @@ angular.module('timeSheetApp')
         $scope.selectedUserRole = null;
 
         $scope.userRoles;
-        
+
         $scope.moduleActions;
 
         $scope.selectedModuleAction;
-        
+
         $scope.moduleActions;
-        
+
         $scope.moduleName;
-        
+
         $scope.selectedActions=[];
-        
+
         $scope.selectedPermissions = [];
-        
+
         $scope.permissions = {
-        		
+
         };
-        
+
         $scope.selectRole = function() {
         	console.log('selected role - '+ $scope.selectedUserRole);
         	// $scope.loadModuleActions();
         	$scope.loadPermissions();
         }
-        
+
         $scope.checkPermission = function(moduleId, moduleName, actionId, actionName) {
         	console.log('selected module and action - ' + moduleName + ' , - ' + actionName);
-        	console.log('selectedPermissions - ' + JSON.stringify($scope.selectedPermissions));        	
+        	console.log('selectedPermissions - ' + JSON.stringify($scope.selectedPermissions));
         	if(angular.isArray($scope.selectedPermissions)) {
         		var permMatch = false;
         		var perms = $scope.selectedPermissions;
@@ -58,7 +58,7 @@ angular.module('timeSheetApp')
 	        			if(perm.name.toUpperCase() === moduleName.toUpperCase()) {
 	        				permMatch = true;
 	        				var actions = perm.moduleActions;
-	        				
+
 	        				if(angular.isArray(actions)) {
 	        					var actionMatch = false;
 	        					for(var i = 0; i < actions.length ; i++) {
@@ -67,8 +67,8 @@ angular.module('timeSheetApp')
 	        							actionMatch = true;
         								actions.splice(i,1);
 	        							break;
-	        							
-	        						}	
+
+	        						}
 	        					}
 	        					if(!actionMatch) {
 	        						var action = {
@@ -80,13 +80,13 @@ angular.module('timeSheetApp')
 	        					}
 	        				}
 	        				break;
-	        				
+
 	        			}
         			}
-        			
-        			
+
+
         		}
-        		
+
         		if(!permMatch){
         				var actions = [];
 						var action = {
@@ -94,27 +94,27 @@ angular.module('timeSheetApp')
 							"name" : actionName
 						}
 						actions.push(action);
-        				
+
         				var permission = {
         					"id" : moduleId,
         					"name" : moduleName,
         					"moduleActions" : actions
-        						
+
         				}
-        				
+
         				$scope.selectedPermissions.push(permission);
-        				
+
         			}
-        		
+
         	}
         	console.log('selectedPermissions - ' + JSON.stringify($scope.selectedPermissions));
         }
-        
+
         $scope.addAction = function() {
         	var action = $scope.actionSelector
         	$scope.selectedActions.push(action);
         }
-        
+
         $scope.removeAction = function(ind) {
         	$scope.selectedActions.splice(ind,1);
         }
@@ -124,7 +124,7 @@ angular.module('timeSheetApp')
         	console.log('selectedRolePermissions -'+ JSON.stringify($scope.selectedPermissions));
         	$scope.permissions = {
         		"roleId" : $scope.selectedUserRole.id,
-        		"applicationModules" : $scope.selectedPermissions 
+        		"applicationModules" : $scope.selectedPermissions
         	}
         	RolePermissionComponent.createRolePermission($scope.permissions).then(function () {
             	$scope.success = 'OK';
@@ -149,7 +149,7 @@ angular.module('timeSheetApp')
         $scope.cancelModuleAction = function () {
         	$scope.selectedActions = [];
         };
-        
+
         $scope.init = function() {
         	$scope.loadUserRoles();
         	$scope.loadModuleActions();
@@ -158,7 +158,7 @@ angular.module('timeSheetApp')
         $scope.loadModuleActions = function () {
             $scope.noData = false;
         	var searchCriteria = {
-        		"findAll" : true	
+        		"findAll" : true
         	}
         	ModuleActionComponent.search(searchCriteria).then(function (data) {
         		$scope.moduleActions = data.transactions;
@@ -189,9 +189,9 @@ angular.module('timeSheetApp')
         	ModuleActionComponent.findOne(id).then(function (data) {
                 $scope.moduleName = data.name;
                 for(var i in data.moduleActions) {
-                	$scope.selectedActions.push(data.moduleActions[i].name);	
+                	$scope.selectedActions.push(data.moduleActions[i].name);
                 }
-                
+
             });
 
         };
@@ -253,13 +253,13 @@ angular.module('timeSheetApp')
         	console.log($scope.searchCriteria);
         	RolePermissionComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.permissions = data;
-                
+
                 console.log('permissions - ' + JSON.stringify($scope.permissions));
-                
+
                 if($scope.moduleActions && $scope.permissions) {
-                	
+
                 	var permAppModules = $scope.permissions.applicationModules;
-                	
+
                 	for(var i=0; i < $scope.moduleActions.length; i++) {
                 	// $scope.moduleActions.forEach(function(module) {
                 		var module = $scope.moduleActions[i];
@@ -269,7 +269,7 @@ angular.module('timeSheetApp')
                 			var permModule = permAppModules[j];
                 			//console.log('perm module - ' + JSON.stringify(permModule));
                 		// permAppModules.forEach(function(permModule) {
-                		
+
                 			if(module.name && (module.name.toUpperCase() === permModule.name.toUpperCase())) {
                 				permModuleMatch = true;
                 				console.log('module match - ' + module.name);
@@ -286,7 +286,7 @@ angular.module('timeSheetApp')
                 						console.log('perm action- ' + JSON.stringify(permAction));
                 					// permActions.forEach(function(permAction)
 									// {
-                						
+
                 						if(action.name.toUpperCase() == (permAction.name.toUpperCase())) {
                 							console.log('action match found -' + action.name);
                 							permActionMatch = true;
@@ -307,15 +307,15 @@ angular.module('timeSheetApp')
                     											console.log(selPermActions[a].name.toUpperCase() == (permAction.name.toUpperCase()))
                     											if(selPermActions[a].name.toUpperCase() == (permAction.name.toUpperCase())) {
                     												selActionMatch = true;
-                    												break;	
+                    												break;
                     											}
-                    										}           
+                    										}
                     										if(!selActionMatch) {
                 												var action = {
                 	                    								"id" : permAction.id,
                 	                    								"name" : permAction.name
                 	                    							}
-                												
+
                 												selPermActions.push(action);
                 												selPerms[p].moduleActions = selPermActions;
                     										}
@@ -329,7 +329,7 @@ angular.module('timeSheetApp')
                 										}
                 										break;
                 									}
-                									
+
                 								}
                 								if(!selPermMatch) { //if the selectedPermissions array does not contain the module
                 									var actions = [];
@@ -342,9 +342,9 @@ angular.module('timeSheetApp')
 	    	                	        					"id" : module.id,
 	    	                	        					"name" : module.name,
 	    	                	        					"moduleActions" : actions
-	    	                	        						
+
 	    	                	        					}
-	    	                	        				
+
 	    	                	        					$scope.selectedPermissions.push(permission);
                 								}
                 							}else {  //if the selectedPermissions array is empty
@@ -354,24 +354,24 @@ angular.module('timeSheetApp')
                     								"name" : action.name
                     							}
                     							actions.push(action);
-                    	        				
+
 	    	                	        				var permission = {
 	    	                	        					"id" : module.id,
 	    	                	        					"name" : module.name,
 	    	                	        					"moduleActions" : actions
-	    	                	        						
+
 	    	                	        				}
-	    	                	        				
+
 	    	                	        				$scope.selectedPermissions.push(permission);
-                								
+
                 							}
                 							break;
                 						}else {
                 							$scope.moduleActions[i].moduleActions[k].selected = false;
                 						}
-                						
+
                 					}
-                					
+
                 				}
                     			break;
                 			}else {
@@ -386,8 +386,8 @@ angular.module('timeSheetApp')
                     console.log('permissions - ' + JSON.stringify($scope.selectedPermissions));
 
                 }
-                
-                
+
+
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
                 if($scope.permissions == null){
@@ -470,12 +470,12 @@ angular.module('timeSheetApp')
 
                         }
 
-                        
+
                         //init load
-                        $scope.initLoad = function(){ 
-                             $scope.loadPageTop(); 
-                            
-                          
+                        $scope.initLoad = function(){
+                             $scope.loadPageTop();
+
+
                          }
 
             $scope.cancelAppModule = function() {
