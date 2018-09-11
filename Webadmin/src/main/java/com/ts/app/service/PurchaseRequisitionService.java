@@ -31,7 +31,7 @@ import com.ts.app.domain.PurchaseRequisitionItem;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
-import com.ts.app.domain.purchaseRequestStatus;
+import com.ts.app.domain.PurchaseRequestStatus;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.InventoryRepository;
 import com.ts.app.repository.InventoryTransactionRepository;
@@ -107,7 +107,7 @@ public class PurchaseRequisitionService extends AbstractService {
 		purchaseEntity.setProject(projectRepository.findOne(purchaseReqDTO.getProjectId()));
 		purchaseEntity.setRequestedBy(employeeRepository.findOne(purchaseReqDTO.getRequestedById()));
 		purchaseEntity.setApprovedBy(employeeRepository.findOne(purchaseReqDTO.getApprovedById()));
-		purchaseEntity.setRequestStatus(purchaseRequestStatus.PENDING);
+		purchaseEntity.setRequestStatus(PurchaseRequestStatus.PENDING);
 		purchaseEntity.setActive(MaterialIndent.ACTIVE_YES);
 		
 		List<PurchaseReqItemDTO> purchaseItems = purchaseReqDTO.getItems();

@@ -1,5 +1,5 @@
 package com.ts.app.domain;
 
-public enum purchaseRequestStatus {
+public enum PurchaseRequestStatus {
 	PENDING,APPROVED,REJECTED,PURCHASERAISED
 }

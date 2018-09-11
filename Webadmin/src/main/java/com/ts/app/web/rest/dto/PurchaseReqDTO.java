@@ -3,7 +3,7 @@ package com.ts.app.web.rest.dto;
 import java.sql.Timestamp;
 import java.util.List;
 
-import com.ts.app.domain.purchaseRequestStatus;
+import com.ts.app.domain.PurchaseRequestStatus;
 
 public class PurchaseReqDTO extends BaseDTO{
 
@@ -29,7 +29,7 @@ public class PurchaseReqDTO extends BaseDTO{
 	
 	private String purchaseRefNumber;
 	
-	private purchaseRequestStatus requestStatus;
+	private PurchaseRequestStatus requestStatus;
 	
 	private long transactionId;
 
@@ -121,11 +121,11 @@ public class PurchaseReqDTO extends BaseDTO{
 		this.purchaseRefNumber = purchaseRefNumber;
 	}
 
-	public purchaseRequestStatus getRequestStatus() {
+	public PurchaseRequestStatus getRequestStatus() {
 		return requestStatus;
 	}
 
-	public void setRequestStatus(purchaseRequestStatus requestStatus) {
+	public void setRequestStatus(PurchaseRequestStatus requestStatus) {
 		this.requestStatus = requestStatus;
 	}
 

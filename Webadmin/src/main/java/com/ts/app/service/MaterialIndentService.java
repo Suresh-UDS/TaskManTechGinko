@@ -22,6 +22,7 @@ import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.ChecklistItem;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.IndentStatus;
 import com.ts.app.domain.Material;
 import com.ts.app.domain.MaterialIndent;
 import com.ts.app.domain.MaterialIndentItem;
@@ -33,7 +34,7 @@ import com.ts.app.domain.PurchaseRequisitionItem;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
-import com.ts.app.domain.purchaseRequestStatus;
+import com.ts.app.domain.PurchaseRequestStatus;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.InventoryRepository;
 import com.ts.app.repository.InventoryTransactionRepository;
@@ -114,6 +115,7 @@ public class MaterialIndentService extends AbstractService {
 		indentEntity.setRequestedBy(employeeRepository.findOne(materialIndentDTO.getRequestedById()));
 		indentEntity.setIssuedBy(employeeRepository.findOne(materialIndentDTO.getIssuedById()));
 		indentEntity.setActive(MaterialIndent.ACTIVE_YES);
+		indentEntity.setIndentStatus(IndentStatus.PENDING);
 		List<MaterialIndentItemDTO> indentItems = materialIndentDTO.getItems();
 		List<MaterialIndentItem> indentItemEntity = new ArrayList<MaterialIndentItem>();
 		for(MaterialIndentItemDTO indentItm : indentItems) { 
@@ -338,7 +340,7 @@ public class MaterialIndentService extends AbstractService {
 						purchaseRequest.setRequestedBy(employeeRepository.findOne(materialIndentDto.getRequestedById()));
 						purchaseRequest.setRequestedDate(DateUtil.convertToTimestamp(new Date()));
 						purchaseRequest.setActive(PurchaseRequisition.ACTIVE_YES);
-						purchaseRequest.setRequestStatus(purchaseRequestStatus.PENDING);
+						purchaseRequest.setRequestStatus(PurchaseRequestStatus.PENDING);
 						addPurchaseReqItem(purchaseRequest, materialItm);
 					
 						Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PURCHASEREQ);

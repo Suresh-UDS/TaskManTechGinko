@@ -34,7 +34,7 @@ import com.ts.app.domain.PurchaseRequisitionItem;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
-import com.ts.app.domain.purchaseRequestStatus;
+import com.ts.app.domain.PurchaseRequestStatus;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.InventoryRepository;
@@ -185,7 +185,7 @@ public class InventoryTransactionService extends AbstractService{
 							Employee employee = user.getEmployee();
 							purchaseRequest.setRequestedBy(employeeRepository.findOne(employee.getId()));
 							purchaseRequest.setRequestedDate(DateUtil.convertToTimestamp(new Date()));
-							purchaseRequest.setRequestStatus(purchaseRequestStatus.PENDING);
+							purchaseRequest.setRequestStatus(PurchaseRequestStatus.PENDING);
 							purchaseRequest.setActive(PurchaseRequisition.ACTIVE_YES);
 							
 							List<PurchaseRequisitionItem> purchaseItem = new ArrayList<PurchaseRequisitionItem>();
