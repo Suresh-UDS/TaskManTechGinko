@@ -34,17 +34,17 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>Item Name</th>
-                                <th>Item Code</th>
-                                <th>Item Group</th>
-                                <th>Store Stock</th>
-                                <th>UOM</th>
-                                <th>Client</th>
-                                <th>Site</th>
-                                <th class="text-right">Actions</th>
+                                <th class="txt-align-center">Item Name</th>
+                                <th class="txt-align-center">Item Code</th>
+                                <th class="txt-align-center">Item Group</th>
+                                <th class="txt-align-center">Store Stock</th>
+                                <th class="txt-align-center">UOM</th>
+                                <th class="txt-align-center">Client</th>
+                                <th class="txt-align-center">Site</th>
+                                <th class="txt-align-center">Actions</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="txt-align-center">
                             <tr ng-repeat="inventoryItem in inventorylists">
                                 <td>{{inventoryItem.name}}</td>
                                 <td>{{inventoryItem.itemCode}}</td>
@@ -53,10 +53,10 @@
                                 <td>{{inventoryItem.uom}}</td>
                                 <td>{{inventoryItem.projectName}}</td>
                                 <td>{{inventoryItem.siteName}}</td>
-                                <td class="text-right">
+                                <td class="txt-align-center">
                                     <button  title="View" ui-sref="view-inventory({ id: inventoryItem.id })"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                    <a  ng-class="{active: $state.includes('admin')}" ui-sref="edit-inventory({id: inventoryItem.id})"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                    <a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(inventoryItem.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                    <a title="Edit" ng-class="{active: $state.includes('admin')}" ui-sref="edit-inventory({id: inventoryItem.id})"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                    <a title="Delete" ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(inventoryItem.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">delete</i></a>
                                 </td>
                             </tr>
                             </tbody>
@@ -70,7 +70,7 @@
     </div>
     <!-- end row -->
 
-    
+
     <!-- Pagination directive start -->
 
     <pagination-new></pagination-new>
