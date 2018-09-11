@@ -31,6 +31,7 @@ import com.ts.app.domain.PurchaseRequisitionItem;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
+import com.ts.app.domain.PurchaseRequestStatus;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.InventoryRepository;
 import com.ts.app.repository.InventoryTransactionRepository;
@@ -106,6 +107,7 @@ public class PurchaseRequisitionService extends AbstractService {
 		purchaseEntity.setProject(projectRepository.findOne(purchaseReqDTO.getProjectId()));
 		purchaseEntity.setRequestedBy(employeeRepository.findOne(purchaseReqDTO.getRequestedById()));
 		purchaseEntity.setApprovedBy(employeeRepository.findOne(purchaseReqDTO.getApprovedById()));
+		purchaseEntity.setRequestStatus(PurchaseRequestStatus.PENDING);
 		purchaseEntity.setActive(MaterialIndent.ACTIVE_YES);
 		
 		List<PurchaseReqItemDTO> purchaseItems = purchaseReqDTO.getItems();
@@ -113,6 +115,7 @@ public class PurchaseRequisitionService extends AbstractService {
 		for(PurchaseReqItemDTO purchaseItm : purchaseItems) { 
 			PurchaseRequisitionItem purchaseIndentItm = mapperUtil.toEntity(purchaseItm, PurchaseRequisitionItem.class);
 			purchaseIndentItm.setPurchaseRequisition(purchaseEntity);
+			purchaseIndentItm.setPendingQty(purchaseItm.getQuantity());
 			purchaseIndentItm.setActive(PurchaseRequisitionItem.ACTIVE_YES);
 			purchaseIndentItm.setMaterial(inventoryRepository.findOne(purchaseItm.getMaterialId()));
 			purchaseItemEntity.add(purchaseIndentItm);
@@ -285,9 +288,9 @@ public class PurchaseRequisitionService extends AbstractService {
 			for(PurchaseReqItemDTO itemDto : purchaseItemDTOs) {
 				if(itemEntity.getId() == itemDto.getId()) {
 					itemFound = true;
-					long addedQty = itemEntity.getQuantity() + itemDto.getIssuedQuantity();
+					long addedQty = itemEntity.getQuantity() + itemDto.getApprovedQty();
 					itemEntity.setQuantity(addedQty);
-					itemEntity.setIssuedQuantity(itemDto.getIssuedQuantity());
+					itemEntity.setApprovedQty(itemDto.getApprovedQty());
 
 					Material materialItm = inventoryRepository.findOne(itemDto.getMaterialId());
 					
@@ -297,14 +300,14 @@ public class PurchaseRequisitionService extends AbstractService {
 					materialTrans.setPurchaseRequisition(purchaseReqEntity);
 					materialTrans.setMaterialGroup(materialItemGroupRepository.findOne(materialItm.getItemGroupId()));
 					Date dateofTransaction = new Date();
-					long consumptionStock = materialItm.getStoreStock() + itemDto.getIssuedQuantity();
+					long consumptionStock = materialItm.getStoreStock() + itemDto.getApprovedQty();
 					materialItm.setStoreStock(consumptionStock);
 					inventoryRepository.save(materialItm);
 					materialTrans.setMaterial(materialItm);
 					materialTrans.setUom(materialItm.getUom());
 					materialTrans.setQuantity(addedQty);
 					materialTrans.setStoreStock(consumptionStock);
-					materialTrans.setIssuedQuantity(itemDto.getIssuedQuantity());
+					materialTrans.setIssuedQuantity(itemDto.getApprovedQty());
 					materialTrans.setTransactionType(MaterialTransactionType.RECEIVED);
 					materialTrans.setTransactionDate(DateUtil.convertToTimestamp(dateofTransaction));
 					materialTrans.setActive(MaterialTransaction.ACTIVE_YES);

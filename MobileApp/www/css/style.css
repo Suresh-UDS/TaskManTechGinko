@@ -729,6 +729,10 @@ span.EmpNameTxt
 {
     float: left;
 }
+.clearfix
+{
+    clear: both;
+}
 .InputCon ion-label
 {
     color: #444444;

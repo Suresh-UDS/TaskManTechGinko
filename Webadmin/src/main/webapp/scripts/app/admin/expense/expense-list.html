@@ -43,11 +43,10 @@
 
                                    <th>Date</th>
                                    <th>Site</th>
-                                   <th>Description</th>
-                                   <th>  Receipt No</th>
-                                   <th> Expense type</th>
-                                   <th> Billable</th>
-                                   <th>Reimbursable</th>
+                                   <th>Transaction type</th>
+                                   <th>  Debit</th>
+                                   <th> credit</th>
+                                   <th> Balance</th>
                                    <th> Payment type</th>
                                    <th>Actions</th>
 
@@ -55,16 +54,15 @@
                             </thead>
                             <tbody>
 
-                                <tr>
+                                <tr ng-repeat="expense in expenses">
 
-                                    <td>09/08/2018</td>
-                                    <td>Test Site</td>
-                                    <td>Travel chennai to coimbatore</td>
-                                    <td>14450</td>
-                                    <td>Travel</td>
-                                    <td>yes</td>
-                                    <td>yes</td>
-                                    <td>Cash</td>
+                                    <td>{{expense.createdDate | date:'dd/MMM/yyyy'}}</td>
+                                    <td>{{expense.siteName}}</td>
+                                    <td>{{expense.mode}}</td>
+                                    <td>{{expense.debitAmount}}</td>
+                                    <td>{{expense.creditAmount}}</td>
+                                    <td>{{expense.balanceAmount}}</td>
+                                    <td>{{expense.paymentType}}</td>
                                     <td class="text-right hoverMe">
 
                                         <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
@@ -72,54 +70,6 @@
                                         <div class="HoverBx">
                                             <button  title="View"  class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
                                             <a ui-sref="edit-expense"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
-                                            <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                        </div>
-
-
-                                    </td>
-                                </tr>
-                                <tr>
-
-                                    <td>09/08/2018</td>
-                                    <td>Test Site</td>
-                                    <td>Travel chennai to coimbatore</td>
-                                    <td>14450</td>
-                                    <td>Travel</td>
-                                    <td>yes</td>
-                                    <td>yes</td>
-                                    <td>Cash</td>
-                                    <td class="text-right hoverMe">
-
-                                        <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
-
-                                        <div class="HoverBx">
-                                            <button  title="View"  class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                            <a ui-sref="edit-expense"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
-                                            <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                        </div>
-
-
-                                    </td>
-                                </tr>
-                                <tr>
-
-                                    <td>09/08/2018</td>
-                                    <td>Test Site</td>
-                                    <td>Travel chennai to coimbatore</td>
-                                    <td>14450</td>
-                                    <td>Travel</td>
-                                    <td>yes</td>
-                                    <td>yes</td>
-                                    <td>Cash</td>
-                                    <td class="text-right hoverMe">
-
-                                        <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
-
-                                        <div class="HoverBx">
-                                            <button  title="View"  class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                            <a   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
                                             <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                                         </div>

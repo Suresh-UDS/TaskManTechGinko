@@ -129,6 +129,7 @@ import{ForgotPassword} from "../pages/forgot-password/forgot-password";
 import{InventoryFilter} from "../pages/inventory-filter/inventory-filter";
 import{AddInventoryTransaction} from "../pages/add-inventory-transaction/add-inventory-transaction";
 import {InventoryService} from "../pages/service/inventoryService";
+import {ExpenseService} from "../pages/service/expenseService";
 import{AutoCompleteModule} from "ionic2-auto-complete";
 import {PurchaseRequisitionService} from "../pages/service/PurchaseRequisitionService";
 import {ExpensePage} from "../pages/expense/expense";
@@ -381,6 +382,7 @@ import{IndentIssue} from "../pages/indent-issue/indent-issue";
       Market,
       LocationAccuracy,
       InventoryService,
+    ExpenseService,
       PurchaseRequisitionService,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}

@@ -218,11 +218,11 @@ angular.module('timeSheetApp')
                 	}
 
                     console.log("search criteria",$scope.searchCriteria);
-                        $scope.slas = '';
+                        $scope.expenses = '';
                         $scope.sitesLoader = false;
                         $scope.loadPageTop();
                         ExpenseComponent.search($scope.searchCriteria).then(function (data) {
-                        $scope.slas = data.transactions;
+                        $scope.expenses = data;
                         $scope.sitesLoader = true;
 
                          /*
@@ -233,12 +233,12 @@ angular.module('timeSheetApp')
                          $scope.totalCountPages = data.totalCount;
 
                          console.log("Pagination",$scope.pager);
-                         console.log($scope.slas);
+                         console.log(data);
 
                         $scope.pages.currPage = data.currPage;
                         $scope.pages.totalPages = data.totalPages;
 
-                        if($scope.slas && $scope.slas.length > 0 ){
+                        if($scope.expenses && $scope.expenses.length > 0 ){
                             $scope.showCurrPage = data.currPage;
                             $scope.pageEntries = $scope.slas.length;
                             $scope.totalCountPages = data.totalCount;

@@ -20,7 +20,107 @@
 
 <ion-content>
 
+  <div class="AddExpensePageCon white-bg" padding>
+
+      <div class="form-group label-floating">
+        <ion-row no-margin class="" no-padding="" >
+          <ion-col class="ver-center  margin-right15" (click)="showCalendar()">
+            <ion-col col-2  class="ver-center padding-bottom1">
+              <ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 clr-orange"></ion-icon>
+            </ion-col>
+            <ion-col col-10 class="ver-center padding-top-bottom0">
+              <label *ngIf="!selectDate" padding-left no-margin="">Date</label>
+              <p padding-left no-margin="">{{ selectDate | date:'dd/MM/yyyy' }}</p>
+            </ion-col>
+          </ion-col>
+        </ion-row>
+      </div>
+
+    <div class="form-group label-floating">
+          <label class="control-label">Client :</label>
+          <ion-select class="select-box padding-left0" [selectOptions]="selectOptions" placeholder="Choose Client"  name="Client" interface="popover" [(ngModel)]="selectedProject" text-lowercase>
+            <ion-option *ngFor="let p of clientList;let i=index"  (ionSelect)="selectSite(p)" text-center text-lowercase>{{p.name}}</ion-option>
+          </ion-select>
+    </div>
+
+    <div class="form-group label-floating">
+          <label class="control-label">Site:</label>
+          <ion-select class="select-box padding-left0" [selectOptions]="selectOptions" placeholder="Choose site" name="Site" interface="popover" required [(ngModel)]="selectedSite" >
+            <ion-option  *ngFor="let s of siteList;let i of index" text-center text-lowercase>{{s.name}}</ion-option>
+          </ion-select>
+    </div>
+
+    <div class="form-group label-floating">
+      <label class="control-label">Transaction type</label>
+      <ion-select  class="select-box padding-left0" id="transactionType" placeholder="Choose Transaction type" name="transactionType"  interface="popover" required>
+        <ion-option>Credit</ion-option>
+        <ion-option>Debit</ion-option>
+      </ion-select>
+    </div>
+
+    <div class="form-group label-floating">
+      <label class="control-label">Payment type</label>
+      <ion-select  class="select-box padding-left0" id="paymentType" placeholder="Choose Payment type" name="paymentType"  interface="popover" required>
+        <ion-option>Cash</ion-option>
+        <ion-option>Card</ion-option>
+        <ion-option>Net Banking</ion-option>
+        <ion-option>Cheque</ion-option>
+      </ion-select>
+    </div>
+
+    <div class="form-group label-floating">
+      <label class="control-label">Amount</label>
+      <input type="Number" class="form-control" >
+    </div>
+
+    <div class="form-group label-floating">
+        <label class="control-label">Receipt No</label>
+        <input type="Number" class="form-control" >
+      </div>
 
 
+
+      <div class="form-group">
+          <label class="control-label">Expense type</label>
+          <ion-select  class="select-box padding-left0" id="expenseType" placeholder="Choose Expense type" name="expenseType"  interface="popover" required>
+              <ion-option *ngFor="let e of expense_type" text-center text-lowercase>{{e.name}}</ion-option>
+          </ion-select>
+
+      </div>
+
+      <div class="form-group">
+
+          <ion-list>
+                <ion-item class="check-style">
+                    <ion-label>Billable</ion-label>
+                    <ion-checkbox color="primary" checked="true"></ion-checkbox>
+                </ion-item>
+              <ion-item class="check-style">
+                  <ion-label>Reimbursable</ion-label>
+                  <ion-checkbox color="primary" ></ion-checkbox>
+              </ion-item>
+          </ion-list>
+
+          <div class="clearfix"></div>
+
+
+      </div>
+
+    <div class="form-group label-floating">
+      <label class="control-label">Description</label>
+      <input type="text" class="form-control" >
+
+    </div>
+
+
+
+  </div>
 
 </ion-content>
+<ion-footer>
+    <ion-toolbar class="align-center" >
+        <button class="btn btn-warning center margin-auto" type="submit" >
+            Add
+        </button>
+    </ion-toolbar>
+</ion-footer>
