@@ -8,6 +8,7 @@ angular.module('timeSheetApp')
         $scope.error = null;
         $scope.doNotMatch = null;
         $scope.errorRateCardExists = null;
+        $scope.saveLoad = false;
         $scope.pager = {};
 
 
@@ -59,6 +60,7 @@ angular.module('timeSheetApp')
         	$scope.errorRateCardExists = null;
         	$scope.rateCard.projectId = $scope.selectedProject.id;
         	$scope.rateCard.type = $scope.rateCard.type.name;
+            $scope.saveLoad = true;
         	console.log('rateCard details - ' +JSON.stringify($scope.rateCard));
         	RateCardComponent.createRateCard($scope.rateCard).then(function () {
                 $scope.success = 'OK';
@@ -66,6 +68,7 @@ angular.module('timeSheetApp')
             	$location.path('/rateCardList');
             }).catch(function (response) {
                 $scope.success = null;
+                $scope.saveLoad = false;
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                     $scope.errorRateCardExists = 'ERROR';
@@ -109,12 +112,14 @@ angular.module('timeSheetApp')
         };
 
         $scope.updateRateCard = function () {
+            $scope.saveLoad = true;
         	RateCardComponent.updateRateCard($scope.rateCard).then(function () {
                 $scope.success = 'OK';
             	$scope.loadRateCards();
             	$location.path('/rateCardList');
             }).catch(function (response) {
                 $scope.success = null;
+                $scope.saveLoad = false;
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                     $scope.errorRateCardExists = 'ERROR';
