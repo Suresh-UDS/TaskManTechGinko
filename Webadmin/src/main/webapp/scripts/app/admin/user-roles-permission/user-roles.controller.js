@@ -23,6 +23,7 @@ angular.module('timeSheetApp')
         $scope.searchUserRoleName = null;
         $scope.searchUserRoleLevel = null;
         $scope.noData = false;
+        $scope.btnDisable = false;
 
         //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -65,6 +66,7 @@ angular.module('timeSheetApp')
 
         $scope.saveUserRole = function () {
             $scope.saveLoad = true;
+            $scope.btnDisable = true;
         	console.log('userRole -'+ $scope.userRole);
         	UserRoleComponent.createUserRole($scope.userRole).then(function () {
             	$scope.success = 'OK';
@@ -75,6 +77,7 @@ angular.module('timeSheetApp')
             }).catch(function (response) {
                 $scope.saveLoad = false;
                 $scope.success = null;
+                $scope.btnDisable = false;
                 console.log(response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                     $scope.errorUserRoleExists = true;
@@ -128,7 +131,7 @@ angular.module('timeSheetApp')
 
         $scope.updateUserRole = function () {
         	console.log('UserRole details - ' + JSON.stringify($scope.userRole));
-
+            $scope.btnDisable = true;
         	UserRoleComponent.updateUserRole($scope.userRole).then(function () {
             	$scope.success = 'OK';
             	$scope.loadUserRoles();
@@ -136,6 +139,7 @@ angular.module('timeSheetApp')
             	$location.path('/user-roles');
             }).catch(function (response) {
                 $scope.success = null;
+                $scope.btnDisable = false;
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                     $scope.errorUserRoleExists = true;

@@ -15,6 +15,7 @@ angular.module('timeSheetApp')
         $scope.authorities = ["User", "Admin"];
         $scope.pager = {};
         $scope.noData = false;
+        $scope.btnDisable = false;
 
         //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -328,12 +329,14 @@ angular.module('timeSheetApp')
         		$scope.feedbackMapping.feedback = $scope.selectedFeedback;
             console.log("Before pushing feedback mapping to server");
             console.log(JSON.stringify($scope.feedbackMapping));
+            $scope.btnDisable = true;
             FeedbackComponent.createFeedbackMapping($scope.feedbackMapping).then(function(){
             		console.log("success");
   	        		$location.path('/feedback-setup');
   	        		//$scope.loadFeedbackItems();
   	        }).catch(function (response) {
   	            $scope.success = null;
+                $scope.btnDisable = false;
   	            console.log(response.data);
   	            if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
   	                $scope.errorFeedbackMappingExists = true;
