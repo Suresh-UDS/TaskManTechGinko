@@ -102,13 +102,12 @@ public class PurchaseRequisitionService extends AbstractService {
 	public PurchaseReqDTO createPurchaseRequest(PurchaseReqDTO purchaseReqDTO) { 
 		PurchaseRequisition purchaseEntity = mapperUtil.toEntity(purchaseReqDTO, PurchaseRequisition.class);
 		purchaseEntity.setRequestedDate(DateUtil.convertToTimestamp(purchaseReqDTO.getRequestedDate()));
-		purchaseEntity.setApprovedDate(DateUtil.convertToTimestamp(purchaseReqDTO.getApprovedDate()));
 		purchaseEntity.setSite(siteRepository.findOne(purchaseReqDTO.getSiteId()));
 		purchaseEntity.setProject(projectRepository.findOne(purchaseReqDTO.getProjectId()));
 		purchaseEntity.setRequestedBy(employeeRepository.findOne(purchaseReqDTO.getRequestedById()));
 		purchaseEntity.setApprovedBy(employeeRepository.findOne(purchaseReqDTO.getApprovedById()));
 		purchaseEntity.setRequestStatus(PurchaseRequestStatus.PENDING);
-		purchaseEntity.setActive(MaterialIndent.ACTIVE_YES);
+		purchaseEntity.setActive(PurchaseRequisition.ACTIVE_YES);
 		
 		List<PurchaseReqItemDTO> purchaseItems = purchaseReqDTO.getItems();
 		List<PurchaseRequisitionItem> purchaseItemEntity = new ArrayList<PurchaseRequisitionItem>();
