@@ -29,10 +29,18 @@
                                     <div class="dropdown">
                                         <div class="form-group">
                                             <label class="control-label">Select Client <span class="red-star">*</span></label>
-                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select ng-options = "prj.name for prj in projects" ng-model = "selectedProject" ng-change = "loadSites()" class="form-control">
-                                                <option value="">Select Client...</option>
+                                            <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select ng-options = "prj.name for prj in projects" name="project" ng-model = "selectedProject" ng-change = "loadSites()" class="form-control" required>
+                                                <option value="">Select...</option>
                                             </select>
+                                             <div ng-show="form.$submitted || form.project.$touched">
+                                                <div ng-show="form.project.$dirty || form.project.$invalid">
+                                                    <p class="help-block" style="color: maroon"
+                                                       ng-show="form.project.$error.required">Client is
+                                                        required.</p>
+
+                                                </div>
+                                             </div>
                                         </div>
                                     </div>
                                 </div>
@@ -42,10 +50,18 @@
                                     <div class="dropdown">
                                         <div class="form-group">
                                             <label class="control-label">Select Site <span class="red-star">*</span></label>
-                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select ng-options = "site.name for site in sites" ng-model = "selectedSite" class="form-control">
-                                                <option value="">Select Site...</option>
+                                            <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select ng-options = "site.name for site in sites" name="site" ng-model = "selectedSite" ng-change="loadEmployees();loadPurchases();" class="form-control" required>
+                                                <option value="">Select...</option>
                                             </select>
+                                             <div ng-show="form.$submitted || form.site.$touched">
+                                                <div ng-show="form.site.$dirty || form.site.$invalid">
+                                                    <p class="help-block" style="color: maroon"
+                                                       ng-show="form.site.$error.required">Site is
+                                                        required.</p>
+
+                                                </div>
+                                             </div>
                                         </div>
                                     </div>
                                 </div>
@@ -53,74 +69,118 @@
                         </div>
                         <h3 class="HeadingTxt">Requester Details</h3>
                         <div class="row">
-
-
                             <div class="col-md-3">
-                                <div class="form-group   is-empty">
-                                    <label class="control-label">Employee Id <span class="red-star">*</span></label>
-                                    <input type="number" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
+                                <div class="form-group no-padding">
+                                    <div class="dropdown">
+                                        <div class="form-group">
+                                            <label class="control-label">Select Employee<span class="red-star">*</span></label>
+                                            <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select ng-options = "employee as employee.name for employee in employees" name="empName" ng-model ="selectedEmployee" class="form-control" required>
+                                                <option value="">Select...</option>
+                                            </select>
+                                            <div ng-show="form.$submitted || form.empName.$touched">
+                                                <div ng-show="form.empName.$dirty || form.empName.$invalid">
+                                                    <p class="help-block" style="color: maroon"
+                                                       ng-show="form.empName.$error.required">Employee is
+                                                        required.</p>
 
-                                    <span class="material-input"></span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="col-md-3">
-                                <div class="form-group   is-empty">
-                                    <label class="control-label">Employee Name <span class="red-star">*</span></label>
-                                    <input type="text" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
-
-                                    <span class="material-input"></span></div>
+                                <div class="form-group">
+                                    <label class="control-label">Reference Number <span class="red-star">*</span></label>
+                                    <input type="text" name="refNumber" class="form-control" ng-model="selectedRefNumber" required>
+                                    <div ng-show="form.$submitted || form.refNumber.$touched" required>
+                                        <div ng-show="form.refNumber.$dirty || form.refNumber.$invalid">
+                                            <p class="help-block" style="color: maroon"
+                                               ng-show="form.refNumber.$error.required">Reference Number is
+                                                required.</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
-
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label class="control-label">Purpose</label>
+                                    <input type="text" class="form-control" ng-model="purpose">
+                                    </div>
+                            </div>
 
                         </div>
                         <h3 class="HeadingTxt">Item Details </h3>
                         <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group   is-empty">
-                                    <label class="control-label">Item Code <span class="red-star">*</span></label>
-                                    <input type="number" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
+                            <ng-form name="itemForm" novalidate>
+                                <div class="col-md-3">
+                                    <div class="form-group no-padding">
+                                        <div class="dropdown">
+                                            <div class="form-group">
+                                                <label class="control-label">Item Code<span class="red-star">*</span></label>
+                                                <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                <select ng-options = "purchase as purchase.itemCode for purchase in purchases" ng-model="selectedItemCode"  class="form-control">
+                                                    <option value="">Select...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Item Name</label>
+                                        <input type="text" class="form-control" name="itemName" ng-disabled="true" ng-model="selectedItemCode.name">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label class="control-label">Unit of price</label>
+                                        <input type="number" class="form-control" name="uop" min="1" ng-model="selectedUop">
+                                        <!--<div ng-show="itemForm.$submitted || itemForm.uop.$touched">
+                                            <div ng-show="itemForm.uop.$dirty || itemForm.uop.$invalid">
+                                                <p class="help-block" style="color: maroon"
+                                                   ng-show="itemForm.uop.$error.required">Unit of price is
+                                                    required.</p>
+                                            </div>
+                                        </div>-->
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group   is-empty">
+                                        <label class="control-label">Quantity <span class="red-star">*</span></label>
+                                        <input type="number" class="form-control" name="quantity" min="1" ng-model="selectedQuantity" required>
+                                        <div ng-show="itemForm.$submitted || itemForm.quantity.$touched">
+                                            <div ng-show="itemForm.quantity.$dirty || itemForm.quantity.$invalid">
+                                                <p class="help-block" style="color: maroon"
+                                                   ng-show="itemForm.quantity.$error.required">Quantity is
+                                                    required.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
 
-                                    <span class="material-input"></span></div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group   is-empty">
-                                    <label class="control-label">Item Name <span class="red-star">*</span></label>
-                                    <input type="text" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
+                                    <button class="btn btn-success" ng-click="addPurchaseItem()"  ng-show="!isEdit" ng-disabled="itemForm.$invalid" style="padding: 12px 20px; margin-top: 16px;">
+                                    <span class="btn-label">
+                                        <i class="material-icons">add</i>
+                                    </span>
+                                        Add
+                                    </button>
 
-                                    <span class="material-input"></span></div>
-                            </div>
-                            <div class="col-md-2">
-
-                                <div class="form-group selectcon is-empty">
-
-                                    <label class="control-label">UOM</label>
-                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control">
-                                        <option value="">Select UOM</option>
-                                    </select>
+                                    <button class="btn btn-success" ng-click="updateMaterialItem()"  ng-show="isEdit" ng-disabled="itemForm.$invalid" style="padding: 12px 20px; margin-top: 16px;">
+                                    <span class="btn-label">
+                                        <i class="material-icons">add</i>
+                                    </span>
+                                        Update
+                                    </button>
 
                                 </div>
-
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group   is-empty">
-                                    <label class="control-label">Quantity <span class="red-star">*</span></label>
-                                    <input type="number" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
-
-                                    <span class="material-input"></span></div>
-                            </div>
-                            <div class="col-md-2">
-
-                                <button class="btn btn-success" style="padding: 12px 20px; margin-top: 16px;">
-                                <span class="btn-label">
-                                    <i class="material-icons">add</i>
-                                </span>
-                                    Add
-                                </button>
-
-                            </div>
-
+                            </ng-form>
+                        </div>
+                        <div class="row">
                             <div class="col-md-12">
 
                                 <div class="table-responsive tablecard">
@@ -129,33 +189,22 @@
                                             <tr>
                                                 <th>Item Code</th>
                                                 <th>Item Name</th>
-                                                <th>Uom</th>
+                                                <th>Uop</th>
                                                 <th>Quantity</th>
                                                 <th class="text-right">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1001</td>
-                                                <td>Item Name</td>
-                                                <td>UOM</td>
-                                                <td>10</td>
-                                                <td class="text-right"> <a class="btn btn-simple btn-info"><i class="material-icons">edit</i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>1001</td>
-                                                <td>Item Name</td>
-                                                <td>UOM</td>
-                                                <td>10</td>
-                                                <td class="text-right"> <a class="btn btn-simple btn-info"><i class="material-icons">edit</i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>1001</td>
-                                                <td>Item Name</td>
-                                                <td>UOM</td>
-                                                <td>10</td>
-                                                <td class="text-right"> <a class="btn btn-simple btn-info"><i class="material-icons">edit</i></a></td>
-                                            </tr>
+                                        <tr ng-repeat="purchase in purchaseItems" ng-class="{'highlight-text':$index == selectedRow}">
+                                            <td>{{purchase.materialItemCode}}</td>
+                                            <td>{{purchase.materialName}}</td>
+                                            <td>{{purchase.unitPrice}}</td>
+                                            <td>{{purchase.quantity}}</td>
+                                            <td class="text-right" ng-click="editpurchase($index, purchase)"> <a class="btn btn-simple btn-info"><i class="material-icons">edit</i></a></td>
+                                        </tr>
+                                        <tr>
+                                            <td ng-if="!purchaseItems.length" colspan="7" align="center"> No purchase items found </td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -177,7 +226,8 @@
                                 id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
                         <button type="submit"
-                                id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
+                                id="form-button-save" ng-disabled="form.project.$invalid || form.site.$invalid || form.empName.$invalid || form.refNumber.$invalid"
+                                class="btn btn-success pull-right" ng-click="savePurchase()"><span class="btn-label">
                                             <i class="material-icons">check</i>
                                         </span>Add Purchase Requisition</button>
 

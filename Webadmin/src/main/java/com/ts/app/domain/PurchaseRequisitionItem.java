@@ -31,7 +31,9 @@ public class PurchaseRequisitionItem extends AbstractAuditingEntity implements S
 	
 	private double unitPrice;
 	
-	private long issuedQuantity;
+	private long approvedQty;
+	
+	private long pendingQty;
 	
 	@ManyToOne()
 	@JoinColumn(name = "purchase_requisition_id")
@@ -77,14 +79,21 @@ public class PurchaseRequisitionItem extends AbstractAuditingEntity implements S
 		this.purchaseRequisition = purchaseRequisition;
 	}
 
-	public long getIssuedQuantity() {
-		return issuedQuantity;
+	public long getApprovedQty() {
+		return approvedQty;
 	}
 
-	public void setIssuedQuantity(long issuedQuantity) {
-		this.issuedQuantity = issuedQuantity;
+	public void setApprovedQty(long approvedQty) {
+		this.approvedQty = approvedQty;
 	}
 
+	public long getPendingQty() {
+		return pendingQty;
+	}
+
+	public void setPendingQty(long pendingQty) {
+		this.pendingQty = pendingQty;
+	}
 	
 	
 	

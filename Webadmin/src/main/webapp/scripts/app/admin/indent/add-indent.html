@@ -67,14 +67,14 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-3">
                                 <div class="form-group   is-empty">
                                     <label class="control-label">Reference Number <span class="red-star">*</span></label>
                                     <input type="text" class="form-control" ng-model="selectedRefNumber">
                                     <span class="material-input"></span></div>
                             </div>
-                            
+
                             <div class="col-md-5">
                                 <div class="form-group   is-empty">
                                     <label class="control-label">Purpose</label>
@@ -87,16 +87,16 @@
                         <div class="row">
                                <div class="col-md-3">
                                     <div class="form-group no-padding">
-                                    <div class="dropdown">
-                                        <div class="form-group">
-                                            <label class="control-label">Select ItemCode<span class="red-star">*</span></label>
-                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select ng-options = "material as material.itemCode for material in materials" ng-model="selectedItemCode" ng-change="change()" class="form-control">
-                                                <option value="">Select ItemCode...</option>
-                                            </select>
+                                        <div class="dropdown">
+                                            <div class="form-group">
+                                                <label class="control-label">Select ItemCode<span class="red-star">*</span></label>
+                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                <select ng-options = "material as material.itemCode for material in materials" ng-model="selectedItemCode" ng-change="change()" class="form-control">
+                                                    <option value="">Select ItemCode...</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
                             </div>
                             <div class="col-md-3">
                           		<div class="form-group   is-empty">
@@ -121,21 +121,21 @@
                                </div>
                             </div>
                             <div class="col-md-2">
-                             
+
                                 <button class="btn btn-success" ng-click="addMaterialItem()" ng-hide="showUpdateBtn" ng-disabled="!selectedQuantity" style="padding: 12px 20px; margin-top: 16px;">
                                 <span class="btn-label">
                                     <i class="material-icons">add</i>
                                 </span>
                                     Add
                                 </button>
-                                
+
                                 <button class="btn btn-success" ng-click="updateMaterialItem()" ng-show="showUpdateBtn" ng-disabled="!selectedQuantity" style="padding: 12px 20px; margin-top: 16px;">
                                 <span class="btn-label">
                                     <i class="material-icons">add</i>
                                 </span>
                                     Update
                                 </button>
-                                
+
                             </div>
 
                             <div class="col-md-12">
@@ -158,7 +158,7 @@
                                             <td>{{material.quantity}}</td>
                                             <td class="text-right" ng-click="editMaterial($index, material)"> <a class="btn btn-simple btn-info"><i class="material-icons">edit</i></a></td>
                                         </tr>
-                                        <tr> 
+                                        <tr>
                                         	<td ng-if="!materialItems.length" colspan="7" align="center"> No Material Items Found </td>
                                         </tr>
                                         </tbody>

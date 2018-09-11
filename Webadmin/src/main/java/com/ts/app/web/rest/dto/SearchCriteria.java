@@ -2,8 +2,10 @@ package com.ts.app.web.rest.dto;
 
 import com.ts.app.domain.AssetStatus;
 import com.ts.app.domain.AssetType;
+import com.ts.app.domain.IndentStatus;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.MaterialTransactionType;
+import com.ts.app.domain.PurchaseRequestStatus;
 
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
@@ -211,6 +213,10 @@ public class SearchCriteria extends Paginator {
 	private Timestamp approvedDate;
 	
 	private long jobId;
+	
+	private PurchaseRequestStatus requestStatus;
+	
+	private IndentStatus indentStatus;
 
 	public String getWarrantyTypeName() {
 		return warrantyTypeName;
@@ -1091,6 +1097,22 @@ public class SearchCriteria extends Paginator {
 
 	public void setJobId(long jobId) {
 		this.jobId = jobId;
+	}
+
+	public PurchaseRequestStatus getRequestStatus() {
+		return requestStatus;
+	}
+
+	public void setRequestStatus(PurchaseRequestStatus requestStatus) {
+		this.requestStatus = requestStatus;
+	}
+
+	public IndentStatus getIndentStatus() {
+		return indentStatus;
+	}
+
+	public void setIndentStatus(IndentStatus indentStatus) {
+		this.indentStatus = indentStatus;
 	}
 
 	

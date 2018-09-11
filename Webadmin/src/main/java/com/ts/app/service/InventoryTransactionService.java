@@ -34,7 +34,7 @@ import com.ts.app.domain.PurchaseRequisitionItem;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
-import com.ts.app.domain.purchaseRequestStatus;
+import com.ts.app.domain.PurchaseRequestStatus;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.InventoryRepository;
@@ -166,6 +166,7 @@ public class InventoryTransactionService extends AbstractService{
 							materialEntity.setMaterial(inventoryRepository.findOne(materialItm.getId()));
 							materialEntity.setUom(materialItm.getUom());
 							materialEntity.setStoreStock(consumptionStock);
+							materialEntity.setQuantity(itemEntity.getQuantity());
 							materialEntity.setIssuedQuantity(itemDto.getIssuedQuantity());
 							materialEntity.setTransactionType(MaterialTransactionType.ISSUED);
 							materialEntity.setActive(MaterialTransaction.ACTIVE_YES);
@@ -185,7 +186,7 @@ public class InventoryTransactionService extends AbstractService{
 							Employee employee = user.getEmployee();
 							purchaseRequest.setRequestedBy(employeeRepository.findOne(employee.getId()));
 							purchaseRequest.setRequestedDate(DateUtil.convertToTimestamp(new Date()));
-							purchaseRequest.setRequestStatus(purchaseRequestStatus.PENDING);
+							purchaseRequest.setRequestStatus(PurchaseRequestStatus.PENDING);
 							purchaseRequest.setActive(PurchaseRequisition.ACTIVE_YES);
 							
 							List<PurchaseRequisitionItem> purchaseItem = new ArrayList<PurchaseRequisitionItem>();
@@ -249,30 +250,31 @@ public class InventoryTransactionService extends AbstractService{
 				for(PurchaseReqItemDTO itemDto : reqItemDTOs) {
 					if(itemEntity.getId() == itemDto.getId()) {
 						itemFound = true;
-						long addedQty = itemEntity.getQuantity() + itemDto.getIssuedQuantity();
-						itemEntity.setQuantity(addedQty);
-						itemEntity.setIssuedQuantity(itemDto.getIssuedQuantity());
-
+						long reducedQty = 0;
 						Material materialItm = inventoryRepository.findOne(itemDto.getMaterialId());
-						
-						materialEntity.setMaterialGroup(materialItemGroupRepository.findOne(materialItm.getItemGroupId()));
-						long consumptionStock = materialItm.getStoreStock() + itemDto.getIssuedQuantity();
-						materialItm.setStoreStock(consumptionStock);
-						inventoryRepository.save(materialItm);
-						materialEntity.setMaterial(materialItm);
-						materialEntity.setUom(materialItm.getUom());
-						materialEntity.setQuantity(addedQty);
-						materialEntity.setStoreStock(consumptionStock);
-						materialEntity.setIssuedQuantity(itemDto.getIssuedQuantity());
-						materialEntity.setTransactionType(MaterialTransactionType.RECEIVED);
-						materialEntity.setActive(MaterialTransaction.ACTIVE_YES);
-						materialEntity.setTransactionDate(DateUtil.convertToTimestamp(materialTransDTO.getTransactionDate()));
-						materialEntity = inventTransactionRepository.save(materialEntity);
-						log.debug("Save object of Inventory: {}" +materialEntity);
-						
-						if(purchaseRequesition != null) { 
-							purchaseRequesition.setTransaction(materialEntity);
-							purchaseReqRepository.save(purchaseRequesition);
+						if(itemEntity.getPendingQty() > 0) {
+							reducedQty = itemEntity.getPendingQty() - itemDto.getApprovedQty();
+							itemEntity.setPendingQty(reducedQty);
+							itemEntity.setApprovedQty(itemDto.getApprovedQty());
+							materialEntity.setMaterialGroup(materialItemGroupRepository.findOne(materialItm.getItemGroupId()));
+							long consumptionStock = materialItm.getStoreStock() + itemDto.getApprovedQty();
+							materialItm.setStoreStock(consumptionStock);
+							inventoryRepository.save(materialItm);
+							materialEntity.setMaterial(materialItm);
+							materialEntity.setUom(materialItm.getUom());
+							materialEntity.setQuantity(itemEntity.getQuantity());
+							materialEntity.setStoreStock(consumptionStock);
+							materialEntity.setIssuedQuantity(itemDto.getApprovedQty());
+							materialEntity.setTransactionType(MaterialTransactionType.RECEIVED);
+							materialEntity.setActive(MaterialTransaction.ACTIVE_YES);
+							materialEntity.setTransactionDate(DateUtil.convertToTimestamp(materialTransDTO.getTransactionDate()));
+							materialEntity = inventTransactionRepository.save(materialEntity);
+							log.debug("Save object of Inventory: {}" +materialEntity);
+							
+							if(purchaseRequesition != null) { 
+								purchaseRequesition.setTransaction(materialEntity);
+								purchaseReqRepository.save(purchaseRequesition);
+							}
 						}
 						
 						break;

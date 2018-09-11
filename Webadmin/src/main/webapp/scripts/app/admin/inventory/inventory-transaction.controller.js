@@ -161,6 +161,7 @@ angular.module('timeSheetApp')
     			console.log($scope.projectSite);
     			$scope.search = {};
     			$scope.search.siteId = $scope.projectSite.id;
+    			$scope.search.indentStatus = "PENDING";
     			IndentComponent.search($scope.search).then(function(data) { 
     				console.log(data);
     				$scope.materialIndents = data.transactions;
@@ -198,7 +199,7 @@ angular.module('timeSheetApp')
         	$location.path('/inventory-transaction-list');
         }
         
-        $scope.inventory.transactionDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+        $scope.inventory.transactionDate = new Date();
         $scope.ppmFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.ppmTo = $filter('date')(new Date(), 'dd/MM/yyyy');
         

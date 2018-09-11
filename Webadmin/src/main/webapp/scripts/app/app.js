@@ -15,7 +15,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
         $rootScope.stateValue ="";
         $rootScope.resLoader=false;
         $rootScope.searchCriterias={};
-        /** @reatin - retaining scope value.**/ 
+        /** @reatin - retaining scope value.**/
         $rootScope.retain=0;
 
        /* Principal.identity().then(function(response)

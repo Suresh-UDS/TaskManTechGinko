@@ -147,10 +147,16 @@ angular.module('timeSheetApp')
                 console.log("MaterialItmGroup Group entered");
                 InventoryComponent.createItemGroup($scope.materialItemGroup).then(function (response) {
                     console.log(response);
-                    $scope.materialItemGroup = "";
-                    $scope.showNotifications('top','center','success','Item group has been added Successfully!!');
-                    $scope.loadMaterialItmGroup();
-
+                    if(response.data.status && response.data.status === "400"){
+                    	 $scope.materialItemGroup = "";
+                         $scope.showNotifications('top','center','danger','Item group already exists!');
+                         $scope.loadMaterialItmGroup();
+                    }else{
+	                	 $scope.materialItemGroup = "";
+	                     $scope.showNotifications('top','center','success','Item group has been added Successfully!');
+	                     $scope.loadMaterialItmGroup();
+                    }
+                   
                 }).catch(function(){
                 $scope.loadingStop();
                 $scope.showNotifications('top','center','danger','Unable to add Item group. Please try again later..');

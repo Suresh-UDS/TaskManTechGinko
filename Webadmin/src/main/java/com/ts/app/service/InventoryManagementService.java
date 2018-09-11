@@ -159,9 +159,18 @@ public class InventoryManagementService extends AbstractService{
 	
 	public MaterialItemGroupDTO createMaterialGroup(MaterialItemGroupDTO materialGroupDTO) {
 		MaterialItemGroup materialItmGroup = mapperUtil.toEntity(materialGroupDTO, MaterialItemGroup.class);
-		materialItmGroup.setActive(MaterialItemGroup.ACTIVE_YES);
-		materialItemRepository.save(materialItmGroup);
-		materialGroupDTO = mapperUtil.toModel(materialItmGroup, MaterialItemGroupDTO.class);
+		MaterialItemGroup existingGroup = materialItemRepository.findByName(materialItmGroup.getItemGroup());
+		if(existingGroup == null) {
+			materialItmGroup.setActive(MaterialItemGroup.ACTIVE_YES);
+			materialItemRepository.save(materialItmGroup);
+			materialGroupDTO = mapperUtil.toModel(materialItmGroup, MaterialItemGroupDTO.class);
+			materialGroupDTO.setErrorStatus(false);
+		}else {
+			materialGroupDTO.setErrorMessage("Already material item group exists.");
+			materialGroupDTO.setErrorStatus(true);
+			materialGroupDTO.setStatus("400");
+		}
+		
 		return materialGroupDTO;
 	}
 	
