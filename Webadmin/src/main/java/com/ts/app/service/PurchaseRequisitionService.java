@@ -119,13 +119,23 @@ public class PurchaseRequisitionService extends AbstractService {
 			purchaseIndentItm.setMaterial(inventoryRepository.findOne(purchaseItm.getMaterialId()));
 			purchaseItemEntity.add(purchaseIndentItm);
 		}
-		
+		MaterialTransaction materialTranc = null;
 		Set<PurchaseRequisitionItem> purchaseReqItem = new HashSet<PurchaseRequisitionItem>();
 		purchaseReqItem.addAll(purchaseItemEntity);
 		purchaseEntity.setItems(purchaseReqItem);
+		if(purchaseReqDTO.getTransactionId() > 0) {
+			materialTranc = inventTransactionRepository.findOne(purchaseReqDTO.getTransactionId());
+			purchaseEntity.setTransaction(materialTranc);
+		}else {
+			purchaseEntity.setTransaction(null);
+		}
 	
 		purchaseEntity = purchaseReqRepository.save(purchaseEntity);
 		log.debug("Save object of Inventory: {}" + purchaseEntity);
+		if (materialTranc != null) {
+			materialTranc.setPurchaseRequisition(purchaseEntity);
+			inventTransactionRepository.save(materialTranc);
+		}
 
 		purchaseReqDTO = mapperUtil.toModel(purchaseEntity, PurchaseReqDTO.class);
 		return purchaseReqDTO;

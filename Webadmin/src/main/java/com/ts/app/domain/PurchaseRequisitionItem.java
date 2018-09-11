@@ -31,6 +31,7 @@ public class PurchaseRequisitionItem extends AbstractAuditingEntity implements S
 	private long quantity; 
 	
 	private double unitPrice;
+	
 	@Column(name="approvedQty", nullable=true)
 	private long approvedQty;
 	
