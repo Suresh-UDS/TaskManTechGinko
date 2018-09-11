@@ -126,8 +126,8 @@ export class IndentView {
       if(item.currentQuantity && item.currentQuantity>0){
           if(item.materialStoreStock >= item.currentQuantity){
               if(item.currentQuantity <= item.pendingQuantity){
-                  this.details.items[i].issuedQuantity += parseInt(item.currentQuantity);
-                  this.details.items[i].pendingQuantity -= parseInt(item.currentQuantity);
+                  // this.details.items[i].issuedQuantity += parseInt(item.currentQuantity);
+                  // this.details.items[i].pendingQuantity -= parseInt(item.currentQuantity);
               }else{
                   console.log(item.currentQuantity);
                   console.log(item.pendingQuantity);

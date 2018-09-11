@@ -13,6 +13,10 @@ public class PurchaseReqDTO extends BaseDTO{
 	
 	private long siteId;
 	
+	private String projectName;
+	
+	private String siteName;
+	
 	private long requestedById;
 	
 	private String requestedByName;
@@ -135,6 +139,22 @@ public class PurchaseReqDTO extends BaseDTO{
 
 	public void setTransactionId(long transactionId) {
 		this.transactionId = transactionId;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getSiteName() {
+		return siteName;
+	}
+
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
 	}
 	
 	
