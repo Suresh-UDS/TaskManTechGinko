@@ -20,7 +20,9 @@ public class PurchaseReqItemDTO extends BaseDTO {
 	
 	private double unitPrice;
 	
-	private long issuedQuantity;
+	private long approvedQty;
+	
+	private long pendingQty;
 
 	public long getId() {
 		return id;
@@ -94,13 +96,23 @@ public class PurchaseReqItemDTO extends BaseDTO {
 		this.unitPrice = unitPrice;
 	}
 
-	public long getIssuedQuantity() {
-		return issuedQuantity;
+	public long getApprovedQty() {
+		return approvedQty;
 	}
 
-	public void setIssuedQuantity(long issuedQuantity) {
-		this.issuedQuantity = issuedQuantity;
+	public void setApprovedQty(long approvedQty) {
+		this.approvedQty = approvedQty;
 	}
+
+	public long getPendingQty() {
+		return pendingQty;
+	}
+
+	public void setPendingQty(long pendingQty) {
+		this.pendingQty = pendingQty;
+	}
+
+	
 	
 	
 

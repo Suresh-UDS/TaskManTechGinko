@@ -65,6 +65,9 @@ public class MaterialIndent extends AbstractAuditingEntity implements Serializab
 	@Column(name = "purpose")
 	private String purpose;
 	
+	@Column(name = "indentStatus")
+	private IndentStatus indentStatus; 
+	
 	public long getId() {
 		return id;
 	}
@@ -160,5 +163,14 @@ public class MaterialIndent extends AbstractAuditingEntity implements Serializab
 	public void setPurpose(String purpose) {
 		this.purpose = purpose;
 	}
+
+	public IndentStatus getIndentStatus() {
+		return indentStatus;
+	}
+
+	public void setIndentStatus(IndentStatus indentStatus) {
+		this.indentStatus = indentStatus;
+	}
+
 
 }

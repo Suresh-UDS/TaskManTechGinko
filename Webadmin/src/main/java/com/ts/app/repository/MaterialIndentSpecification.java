@@ -49,6 +49,9 @@ public class MaterialIndentSpecification implements Specification<MaterialIndent
 			predicates.add(builder.like(builder.lower(root.get("indentRefNumber")),
 					"%" + searchCriteria.getIndentRefNumber().toLowerCase() + "%"));
 		}
+		if(searchCriteria.getIndentStatus() != null) { 
+			predicates.add(builder.equal(root.get("indentStatus"), searchCriteria.getIndentStatus()));
+		}
 		if(searchCriteria.getRequestedDate() != null) { 
 			log.debug("Inventory transaction created date -" + searchCriteria.getRequestedDate());
 			Calendar endCal = Calendar.getInstance();

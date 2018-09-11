@@ -4,6 +4,7 @@ import {DatePickerProvider} from "ionic2-date-picker";
 import {DatePicker} from "@ionic-native/date-picker";
 import {SiteService} from "../../service/siteService";
 import {componentService} from "../../service/componentService";
+import {ExpenseService} from "../../service/expenseService";
 
 /**
  * Generated class for the AddExpense page.
@@ -17,6 +18,7 @@ import {componentService} from "../../service/componentService";
   templateUrl: 'add-expense.html',
 })
 export class AddExpense {
+  expense_type: any;
   selectOptions: { cssClass: string; };
   siteList: any;
   scrollSite: boolean;
@@ -28,7 +30,7 @@ export class AddExpense {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,
               private datePicker: DatePicker, private modalCtrl: ModalController,private siteService:SiteService,
-              private component: componentService)
+              private component: componentService, private expenseService: ExpenseService)
   {  }
 
   ionViewDidLoad() {
@@ -55,6 +57,20 @@ export class AddExpense {
         this.component.showToastMessage(this.msg, 'bottom');
       }
     )
+
+    this.expenseService.getExpenseCategories().subscribe(
+      response=>{
+        console.log("Expense categories");
+        console.log(response);
+        this.expense_type = response;
+      },
+      error=>{
+        if (error.type ==3){
+          this.msg = 'server Unreachable'
+        }
+        this.component.showToastMessage(this.msg,'bottom');
+      }
+    )
   }
 
   selectSite(project) {
@@ -75,6 +91,8 @@ export class AddExpense {
       }
     )
   }
+
+
 
   dismiss(){
         let data={'foo':'bar'};

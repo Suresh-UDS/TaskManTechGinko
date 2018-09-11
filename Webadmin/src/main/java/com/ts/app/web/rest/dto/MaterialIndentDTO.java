@@ -3,6 +3,8 @@ package com.ts.app.web.rest.dto;
 import java.sql.Timestamp;
 import java.util.List;
 
+import com.ts.app.domain.IndentStatus;
+
 public class MaterialIndentDTO extends BaseDTO {
 
 	private long id;
@@ -34,6 +36,8 @@ public class MaterialIndentDTO extends BaseDTO {
 	private long transactionId;
 	
 	private String purpose;
+	
+	private IndentStatus indentStatus;
 	
 	public long getId() {
 		return id;
@@ -153,6 +157,14 @@ public class MaterialIndentDTO extends BaseDTO {
 
 	public void setPurpose(String purpose) {
 		this.purpose = purpose;
+	}
+
+	public IndentStatus getIndentStatus() {
+		return indentStatus;
+	}
+
+	public void setIndentStatus(IndentStatus indentStatus) {
+		this.indentStatus = indentStatus;
 	}
 	
 	

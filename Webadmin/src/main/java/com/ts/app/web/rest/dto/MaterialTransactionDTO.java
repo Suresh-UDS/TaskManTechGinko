@@ -1,6 +1,7 @@
 package com.ts.app.web.rest.dto;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import com.ts.app.domain.MaterialTransactionType;
 import com.ts.app.domain.MaterialUOMType;
@@ -48,6 +49,10 @@ public class MaterialTransactionDTO extends BaseDTO {
 	private long issuedQuantity;
 	
 	private long purchaseRequisitionId;
+	
+	private List<MaterialIndentItemDTO> items;
+	
+	private List<PurchaseReqItemDTO> prItems;
 
 	public long getId() {
 		return id;
@@ -215,6 +220,22 @@ public class MaterialTransactionDTO extends BaseDTO {
 
 	public void setMaterialIndentRefNumber(String materialIndentRefNumber) {
 		this.materialIndentRefNumber = materialIndentRefNumber;
+	}
+
+	public List<MaterialIndentItemDTO> getItems() {
+		return items;
+	}
+
+	public void setItems(List<MaterialIndentItemDTO> items) {
+		this.items = items;
+	}
+
+	public List<PurchaseReqItemDTO> getPrItems() {
+		return prItems;
+	}
+
+	public void setPrItems(List<PurchaseReqItemDTO> prItems) {
+		this.prItems = prItems;
 	}
 
 	

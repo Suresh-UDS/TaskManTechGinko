@@ -50,6 +50,9 @@ public class PurchaseRequestSpecification implements Specification<PurchaseRequi
 			predicates.add(builder.like(builder.lower(root.get("purchaseRefNumber")),
 					"%" + searchCriteria.getPurchaseRefNumber().toLowerCase() + "%"));
 		}
+		if(searchCriteria.getRequestStatus() != null ) {
+			predicates.add(builder.equal(root.get("requestStatus"), searchCriteria.getRequestStatus()));
+		}
 		if(searchCriteria.getRequestedDate() != null) { 
 			log.debug("PurchaseRequest created date -" + searchCriteria.getRequestedDate());
 			Calendar endCal = Calendar.getInstance();
@@ -59,7 +62,7 @@ public class PurchaseRequestSpecification implements Specification<PurchaseRequi
 			predicates.add(builder.between(root.get("requestedDate"), searchCriteria.getRequestedDate(), DateUtil.convertToTimestamp(endCal.getTime())));
 		}
 		if(searchCriteria.getApprovedDate() != null) { 
-			log.debug("Inventory transaction created date -" + searchCriteria.getApprovedDate());
+			log.debug("PurchaseRequest transaction approved date -" + searchCriteria.getApprovedDate());
 			Calendar endCaltime = Calendar.getInstance();
 			endCaltime.set(Calendar.HOUR_OF_DAY, 23);
 			endCaltime.set(Calendar.MINUTE, 59);

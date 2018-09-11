@@ -52,7 +52,7 @@ public class PurchaseRequisition extends AbstractAuditingEntity implements Seria
 	@OneToMany(mappedBy = "purchaseRequisition", cascade = {CascadeType.ALL}, orphanRemoval=true)
 	private Set<PurchaseRequisitionItem> items;
 	
-	private purchaseRequestStatus requestStatus;
+	private PurchaseRequestStatus requestStatus;
 	
 	@OneToOne()
 	@JoinColumn(name = "materialTransacationId", nullable= true)
@@ -122,11 +122,11 @@ public class PurchaseRequisition extends AbstractAuditingEntity implements Seria
 		this.items = items;
 	}
 
-	public purchaseRequestStatus getRequestStatus() {
+	public PurchaseRequestStatus getRequestStatus() {
 		return requestStatus;
 	}
 
-	public void setRequestStatus(purchaseRequestStatus requestStatus) {
+	public void setRequestStatus(PurchaseRequestStatus requestStatus) {
 		this.requestStatus = requestStatus;
 	}
 

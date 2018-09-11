@@ -161,6 +161,7 @@ angular.module('timeSheetApp')
     			console.log($scope.projectSite);
     			$scope.search = {};
     			$scope.search.siteId = $scope.projectSite.id;
+    			$scope.search.indentStatus = "PENDING";
     			IndentComponent.search($scope.search).then(function(data) { 
     				console.log(data);
     				$scope.materialIndents = data.transactions;
@@ -198,15 +199,26 @@ angular.module('timeSheetApp')
         	$location.path('/inventory-transaction-list');
         }
         
+        $scope.inventory.transactionDate = new Date();
+        $scope.ppmFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
+        $scope.ppmTo = $filter('date')(new Date(), 'dd/MM/yyyy');
         
-        $('#dateFilterTransactionDate').datetimepicker().on('dp.show', function (e) {
-            return $(this).data('DateTimePicker').minDate(e.date);
+        $('#dateFilterIssuedDate').datetimepicker().on('dp.show', function (e) {
+            return $(this).data('DateTimePicker');
         });
 
-        $('input#dateFilterTransactionDate').on('dp.change', function(e){
-        	alert(JSON.stringify(e));
+        $('input#dateFilterIssuedDate').on('dp.change', function(e){
             $scope.inventory.transactionDate = e.date._d;
             $scope.ppmFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
+        });
+        
+        $('#dateFilterReceivedDate').datetimepicker().on('dp.show', function (e) {
+            return $(this).data('DateTimePicker');
+        });
+
+        $('input#dateFilterReceivedDate').on('dp.change', function(e){
+            $scope.inventory.transactionDate = e.date._d;
+            $scope.ppmTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
         });
         
     	$scope.change = function() {
@@ -218,7 +230,7 @@ angular.module('timeSheetApp')
 				}else{
 					$scope.inventory.storeStock= $scope.selectedItemCode.materialStoreStock;
 				}
-				$scope.inventory.quantity = $scope.selectedItemCode.quantity;
+				$scope.inventory.quantity = $scope.selectedItemCode.issuedQuantity;
 				$scope.inventory.uom = $scope.selectedItemCode.materialUom;
 			}
 			
@@ -240,6 +252,58 @@ angular.module('timeSheetApp')
 //    			});
 //    		}
 //    	}
+    	
+    	$scope.selectedItems = [];
+    	
+    	$scope.checkSelected = function(material) {
+    		$scope.selectedItems.push(material);
+    	}
+    	
+    	$scope.allItemsSelected = false;
+    	
+        $scope.selectAll = function () {
+        	
+            $scope.selectedItems = [];
+
+            // Loop through all the entities and set their isChecked property
+            for (var i = 0; i < $scope.materialItems.length; i++) {
+
+                $scope.selectedItems.push($scope.materialItems[i]);
+
+                $scope.materialItems[i].isChecked = $scope.allItemsSelected;
+            }
+
+            if(!$scope.allItemsSelected){
+                $scope.selectedItems = [];
+            }
+        };
+        
+        $scope.selectedOne = function (material) {
+
+            if($scope.selectedItems.indexOf(material) <= -1){
+
+            	$scope.selectedItems.push(material);
+
+            }else if($scope.selectedItems.indexOf(material) > -1){
+
+                var remId =$scope.selectedItems.indexOf(material);
+
+               $scope.selectedItems.splice(remId, 1);
+            }
+            // If any entity is not checked, then uncheck the "allItemsSelected" checkbox
+
+            for (var i = 0; i <= $scope.materialItems.length; i++) {
+            	console.log($scope.materialItems[i]);
+                if (!$scope.materialItems[i].isChecked) {
+                    $scope.allItemsSelected = false;
+                    return;
+                }
+            }
+
+            //If not the check the "allItemsSelected" checkbox
+            $scope.allItemsSelected = true;
+        };
+        
         
         /* Save material Transaction */
     	$scope.saveInventoryTrans = function() {
@@ -264,7 +328,10 @@ angular.module('timeSheetApp')
     			$scope.inventory.transactionType = $scope.selectedTransactionType;
     		}
     		
-    		
+    		console.log($scope.selectedItems);
+    		if($scope.selectedItems) {
+    			$scope.inventory.items = $scope.selectedItems;
+    		}
     		console.log(JSON.stringify($scope.inventory));
     		
     		InventoryTransactionComponent.create($scope.inventory).then(function(data) { 
