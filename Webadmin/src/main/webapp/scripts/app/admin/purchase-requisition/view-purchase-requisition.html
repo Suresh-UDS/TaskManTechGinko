@@ -1,4 +1,4 @@
-<div class="crud-form" ng-init="initLoad();loadingStart();">
+<div class="crud-form" ng-init="loadPageTop();viewPurchaseReq();">
 
 
     <div class="margn-top30">
@@ -16,11 +16,11 @@
                                 <tbody>
                                 <tr>
                                     <td>Client</td>
-                                    <td>UDS</td>
+                                    <td>{{purchaseReqObj.projectName}}</td>
                                 </tr>
                                 <tr>
                                     <td>Site</td>
-                                    <td>HDFC Vadapalani</td>
+                                    <td>{{purchaseReqObj.siteName}}</td>
 
                                 </tr>
                                 </tbody>
@@ -42,12 +42,12 @@
 
                                 <tbody>
                                 <tr>
-                                    <td>Employee Id</td>
-                                    <td>1001</td>
+                                    <td>Requester Id</td>
+                                    <td>{{purchaseReqObj.requestedById}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Employee Name</td>
-                                    <td>Muthukumar</td>
+                                    <td>Requester Name</td>
+                                    <td>{{purchaseReqObj.requestedByName}}</td>
 
                                 </tr>
                                 </tbody>
@@ -62,7 +62,7 @@
             <div class="col-md-12 col-lg-12">
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">Escalation Level</div>
+                    <div class="panel-heading">Item Details</div>
                     <div class="panel-body TableListinput">
 
 
@@ -78,35 +78,15 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>1001 </td>
-                                    <td>Item Name</td>
-                                    <td>Uom</td>
-                                    <td>10</td>
+                                <tr ng-repeat="items in purchaseReqObj.items">
+                                    <td>{{items.materialItemCode}} </td>
+                                    <td>{{items.materialName}}</td>
+                                    <td>{{items.materialUom}}</td>
+                                    <td>{{items.quantity}}</td>
                                     <td width="10%">
-                                        <input type="number" class="form-control" name="issue_qty"  ng-minlength="1" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
+                                        <input type="number" class="form-control" name="issue_qty"  ng-min="0" ng-max="materialUom" required>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>1001 </td>
-                                    <td>Item Name</td>
-                                    <td>Uom</td>
-                                    <td>10</td>
-                                    <td width="10%">
-                                        <input type="number" class="form-control" name="issue_qty"  ng-minlength="1" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>1001 </td>
-                                    <td>Item Name</td>
-                                    <td>Uom</td>
-                                    <td>10</td>
-                                    <td width="10%">
-                                        <input type="number" class="form-control" name="issue_qty"  ng-minlength="1" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
-                                    </td>
-                                </tr>
-
-
                                 </tbody>
                                 <tfoot>
                                 <td colspan="3"></td>
