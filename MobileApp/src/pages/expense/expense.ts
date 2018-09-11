@@ -3,6 +3,7 @@ import {NavController, NavParams, ModalController} from "ionic-angular";
 import {TransactionPage} from "./transaction";
 import {ExpenseDetails} from "../expense-details/expense-details";
 import {AddExpense} from "../expense/add-expense/add-expense";
+import {ExpenseService} from "../service/expenseService";
 
 /**
  * Generated class for the Expense page.
@@ -17,22 +18,49 @@ import {AddExpense} from "../expense/add-expense/add-expense";
 export class ExpensePage {
 
   listitem : any;
-  constructor(public navCtrl: NavController, public navParams: NavParams,public modalCtrl:ModalController) {
+  page :1;
+  pageSort:15;
+  spinner:any;
 
-    this.listitem = [
-      {id:'1',site:'UDS',trans_type:'Credit',debit:'-',credit:'1,00,000',balance:'1,20,000',actions:''},
-      {id:'2',site:'UDS',trans_type:'Debit',debit:'50,000',credit:'-',balance:'70,000',actions:''},
-      {id:'3',site:'UDS',trans_type:'Credit',debit:'-',credit:'1,00,000',balance:'1,70,000',actions:''},
-    ]
+  constructor(public navCtrl: NavController, public navParams: NavParams,public modalCtrl:ModalController,
+              private expenseService: ExpenseService) {
+
+    // this.listitem = [
+    //   {id:'1',site:'UDS',trans_type:'Credit',debit:'-',credit:'1,00,000',balance:'1,20,000',actions:''},
+    //   {id:'2',site:'UDS',trans_type:'Debit',debit:'50,000',credit:'-',balance:'70,000',actions:''},
+    //   {id:'3',site:'UDS',trans_type:'Credit',debit:'-',credit:'1,00,000',balance:'1,70,000',actions:''},
+    // ]
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad Expense');
+
+    var searchCriteria ={
+      currPage:this.page,
+      pageSort:this.pageSort
+    };
+    this.expenseList(searchCriteria);
   }
 
     viewExpenseDetails(){
     console.log('ionViewDidLoad ExpenseDetails method:');
     this.navCtrl.push(ExpenseDetails);
+  }
+
+  expenseList(searchCriteria){
+      this.spinner = true;
+      this.expenseService.searchExpenses(searchCriteria).subscribe(
+        response=>{
+          this.spinner=false;
+          console.log("Getting Expense List");
+          console.log(response);
+          this.listitem = response;
+        },err=>{
+          this.spinner=false;
+          console.log("Error in getting expense List");
+          console.log(err);
+        }
+      )
   }
 
     addExpenseModal() {
