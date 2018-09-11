@@ -85,7 +85,8 @@
                                     <th>Store Stock</th>
                                     <th>Uom</th>
                                     <th>Required Qty</th>
-                                    <th width="10%">Issue Qty</th>
+                                    <th>Issue Qty</th>
+                                    <th width="10%">Pending Qty</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -98,12 +99,13 @@
                                     <td width="10%">
                                         <input type="number" class="form-control" name="issue_qty"  ng-model="material.issuedQuantity" ng-blur="validate(material, material.issuedQuantity)" aria-required="true" aria-invalid="true">
                                     </td>
+                                    <td>{{material.pendingQuantity}}</td>
                                 </tr>
 
                                 </tbody>
                                 <tfoot>
                                   <td colspan="3"></td>
-                                  <td colspan="3" class="text-right">
+                                  <td colspan="4" class="text-right">
                                       <button class="btn btn-success" type="button" ng-click="saveIndentTrans()">
                                           Save
                                        </button>
