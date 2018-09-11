@@ -2,6 +2,7 @@ package com.ts.app.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,6 +32,7 @@ public class PurchaseRequisitionItem extends AbstractAuditingEntity implements S
 	
 	private double unitPrice;
 	
+	@Column(name="approvedQty", nullable=true)
 	private long approvedQty;
 	
 	private long pendingQty;

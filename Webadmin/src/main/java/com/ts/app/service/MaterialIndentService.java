@@ -305,11 +305,13 @@ public class MaterialIndentService extends AbstractService {
 				if(itemEntity.getId() == itemDto.getId()) {
 					itemFound = true;
 					long reducedQty = 0;
+					long addedQty = 0;
 					Material materialItm = inventoryRepository.findOne(itemDto.getMaterialId());
 					if(itemEntity.getPendingQuantity() > 0) {   
-						reducedQty = itemEntity.getPendingQuantity() - itemDto.getIssuedQuantity();   
-						itemEntity.setPendingQuantity(reducedQty); 
-						itemEntity.setIssuedQuantity(itemDto.getIssuedQuantity());
+						reducedQty = itemEntity.getPendingQuantity() - itemDto.getIssuedQuantity();  // 20 - 10 // 10 - 3 // 7 - 4 // 3-2 // 1-1
+						addedQty = itemEntity.getIssuedQuantity() + itemDto.getIssuedQuantity(); // 0 + 10 // 10 + 3 // 13 + 4 // 17 + 2 // 19 + 1
+						itemEntity.setPendingQuantity(reducedQty);  // 10 // 7 // 3 // 1 // 0
+						itemEntity.setIssuedQuantity(addedQty); // 10 // 13 // 17 // 19 // 20
 						MaterialTransaction materialTrans = new MaterialTransaction();
 						materialTrans.setProject(projectRepository.findOne(materialIndentDto.getProjectId()));
 						materialTrans.setSite(siteRepository.findOne(materialIndentDto.getSiteId()));

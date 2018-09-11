@@ -154,11 +154,13 @@ public class InventoryTransactionService extends AbstractService{
 					if(itemEntity.getId() == itemDto.getId()) {
 						itemFound = true;
 						long reducedQty = 0;
+						long addedQty = 0;
 						Material materialItm = inventoryRepository.findOne(itemDto.getMaterialId());
 						if(itemEntity.getPendingQuantity() > 0) {   
 							reducedQty = itemEntity.getPendingQuantity() - itemDto.getIssuedQuantity();   
+							addedQty = itemEntity.getIssuedQuantity() + itemDto.getIssuedQuantity();
 							itemEntity.setPendingQuantity(reducedQty); 
-							itemEntity.setIssuedQuantity(itemDto.getIssuedQuantity());
+							itemEntity.setIssuedQuantity(addedQty);
 							long consumptionStock = materialItm.getStoreStock() - itemDto.getIssuedQuantity();
 							materialItm.setStoreStock(consumptionStock);
 							inventoryRepository.save(materialItm);
