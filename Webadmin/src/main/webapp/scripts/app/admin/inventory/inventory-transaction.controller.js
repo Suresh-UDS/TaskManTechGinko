@@ -53,6 +53,7 @@ angular.module('timeSheetApp')
             $scope.searchSite ={};
             $scope.searchProject ={};
             $scope.selectedItemGroup ={};
+            $scope.selectedTransactionType = null;
 
             $scope.pages = {
                 currPage: 1,
@@ -434,6 +435,16 @@ angular.module('timeSheetApp')
             $scope.search();
          }
     	
+    	$scope.typeCheck = function(ref) {
+    		console.log('called...' +ref);
+    		$scope.search = {};
+    		$scope.search.indentRefNumber = ref;
+    		IndentComponent.search($scope.search).then(function(data){ 
+    			console.log(data.transactions);
+    			$scope.lists = data.transactions;
+    		});
+    	}
+    	
     	
     	$scope.search = function () {										// search material 
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
@@ -482,6 +493,12 @@ angular.module('timeSheetApp')
         	}
             if($scope.searchItemGroup) { 
             	$scope.searchCriteria.itemGroup = $scope.searchItemGroup;
+            }
+            if($scope.selectedTransactionType){
+            	$scope.searchCriteria.transactionType = $scope.selectedTransactionType;
+            }
+            if($scope.searchIndentNumber) {
+            	$scope.searchCriteria.indentRefNumber = $scope.searchIndentNumber;
             }
             if($scope.searchCreatedDate != "") {
                 if($scope.searchCreatedDate != undefined){
