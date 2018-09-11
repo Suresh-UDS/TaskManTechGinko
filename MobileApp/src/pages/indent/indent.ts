@@ -182,6 +182,7 @@ export class Indent {
     }
 
     saveIndentMaterial(){
+        this.component.showLoader("Saving Indent Please Wait...")
             console.log("selected site");
             console.log(this.selectedSite);
         var indentDetails = {
@@ -195,11 +196,13 @@ export class Indent {
         };
         this.purchaseService.saveMaterialIndent(indentDetails).subscribe(
             response=>{
+                this.component.closeAll();
                 console.log("Save indent Material");
                 console.log(response);
                 this.navCtrl.push(IndentList);
                 this.component.showToastMessage("indent saved successfully",'bottom');
             },err=>{
+                this.component.closeAll();
                 console.log("Error in save indent material");
                 console.log(err);
                 this.component.showToastMessage("Error in save indent",'bottom');
