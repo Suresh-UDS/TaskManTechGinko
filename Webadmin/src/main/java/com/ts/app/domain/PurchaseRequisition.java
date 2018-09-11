@@ -28,11 +28,11 @@ public class PurchaseRequisition extends AbstractAuditingEntity implements Seria
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	
+
 	@ManyToOne()
 	@JoinColumn(name = "projectId", nullable = true)
 	private Project project;
-	
+
 	@ManyToOne()
 	@JoinColumn(name = "siteId", nullable = true)
 	private Site site;
@@ -40,20 +40,20 @@ public class PurchaseRequisition extends AbstractAuditingEntity implements Seria
 	@ManyToOne()
 	@JoinColumn(name = "requestedBy", nullable = true)
 	private Employee requestedBy;
-	
+
 	@ManyToOne()
 	@JoinColumn(name = "approvedBy", nullable = true)
 	private Employee approvedBy;
-	
+
 	private Timestamp requestedDate;
-	
+
 	private Timestamp approvedDate;
-	
-	@OneToMany(mappedBy = "purchaseRequisition", cascade = {CascadeType.ALL}, orphanRemoval=true)
+
+	@OneToMany(mappedBy = "purchaseRequisition", fetch = FetchType.EAGER, cascade = {CascadeType.ALL}, orphanRemoval=true)
 	private Set<PurchaseRequisitionItem> items;
-	
+
 	private PurchaseRequestStatus requestStatus;
-	
+
 	@OneToOne()
 	@JoinColumn(name = "materialTransacationId", nullable= true)
 	private MaterialTransaction transaction;
@@ -138,5 +138,5 @@ public class PurchaseRequisition extends AbstractAuditingEntity implements Seria
 		this.transaction = transaction;
 	}
 
-	
+
 }
