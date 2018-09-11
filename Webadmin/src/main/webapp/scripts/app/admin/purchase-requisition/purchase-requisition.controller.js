@@ -2,7 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('PurchaseRequisitionController', function ($rootScope, $scope, $state, $timeout,
-    		ProjectComponent, SiteComponent,EmployeeComponent,InventoryComponent, PurchaseComponent, $http,$stateParams,$location, PaginationComponent) {
+    		ProjectComponent, SiteComponent,EmployeeComponent,InventoryComponent, PurchaseComponent, $http,$stateParams,$location, PaginationComponent, getLocalStorage) {
 
     	$scope.selectedProject = {};
 
@@ -13,6 +13,8 @@ angular.module('timeSheetApp')
     	$scope.pages = { currPage : 1};
 
     	$scope.pager = {};
+
+    	$scope.pageSort = 10;
 
         $scope.noData = false;
 
@@ -25,6 +27,7 @@ angular.module('timeSheetApp')
 			//init load
 			$scope.initLoad = function(){
 			    $scope.loadPageTop();
+			    $scope.setPage(1);
 				$scope.loadProjects();
 			    $scope.loadUOM();
 
@@ -178,7 +181,7 @@ angular.module('timeSheetApp')
                         $scope.search.projectId = $scope.selectedProject.id;
                         $scope.search.siteId = $scope.selectedSite.id;
                         InventoryComponent.search($scope.search).then(function(data) {
-                            console.log(data);
+                            console.log('Item details >>> ' , data);
                             $scope.purchases = data.transactions;
                         });
                     }
@@ -310,8 +313,8 @@ angular.module('timeSheetApp')
                 }
 
                 console.log("search criteria",$scope.searchCriteria);
-                    $scope.sites = '';
-                    $scope.sitesLoader = false;
+                    $scope.purchaseReq = '';
+                    $scope.purchaseReqLoader = false;
                     $scope.loadPageTop();
 
                      /* Localstorage (Retain old values while edit page to list) start */
@@ -430,6 +433,7 @@ angular.module('timeSheetApp')
                     }else{
                         $scope.purchaseObject.items = null;
                     }
+
                     $scope.purchaseObject.purchaseRefNumber = $scope.selectedRefNumber;
                     $scope.purchaseObject.requestedDate = new Date();
                     console.log($scope.purchaseObject);

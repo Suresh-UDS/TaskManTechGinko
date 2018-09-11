@@ -58,6 +58,16 @@
                                             </span>
                                         </span>
                                    </th>
+                                   <th>Client
+                                       <span class="sortingIcons">
+                                            <span ng-click="columnAscOrder('client')" ng-class="isActiveAsc == 'client' ? 'active' : ''" >
+                                                <i  class="fa fa-caret-up"></i>
+                                            </span>
+                                            <span ng-click="columnDescOrder('client')" ng-class="isActiveDesc == 'client' ? 'active' : ''">
+                                                 <i  ng-class="class" class="fa fa-caret-down"></i>
+                                            </span>
+                                        </span>
+                                   </th>
                                    <th>Site
                                        <span class="sortingIcons">
                                             <span ng-click="columnAscOrder('site')" ng-class="isActiveAsc == 'site' ? 'active' : ''" >
@@ -114,77 +124,45 @@
                             </thead>
                             <tbody>
 
-                                <tr>
+                            <tr ng-repeat="purchase in purchaseReq">
+                                <td>{{purchase.id}}</td>
+                                <td>{{purchase.projectName}}</td>
+                                <td>{{purchase.siteName}}</td>
+                                <td>{{purchase.requestedByName}}</td>
+                                <td>{{purchase.requestedDate | date:"dd-MM-yyyy"}}</td>
+                                <td>{{purchase.approvedByName}}</td>
+                                <td>{{purchase.approvedDate | date:"dd-MM-yyyy"}}</td>
+                                <td class="text-right hoverMe">
 
-                                    <td>1001</td>
-                                    <td>UDS</td>
-                                    <td>Requestor</td>
-                                    <td>10/08/2018</td>
-                                    <td>Approver</td>
-                                    <td>10/08/2018</td>
-                                    <td class="text-right hoverMe">
+                                    <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
 
-                                        <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
+                                    <div class="HoverBx">
+                                        <button  title="View"  ui-sref="view-indent({id: materialIndent.id })" class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
+                                        <a title="Edit"  ui-sref="edit-indent({id: materialIndent.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                                        <div class="HoverBx">
-                                            <button  title="View" ui-sref="view-purchase-requisition"  class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                            <a ui-sref="edit-purchase-requisition"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
-                                            <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                        </div>
-
-
-                                    </td>
-                                </tr>
-                                <tr>
-
-                                    <td>1001</td>
-                                    <td>UDS</td>
-                                    <td>Requestor</td>
-                                    <td>10/08/2018</td>
-                                    <td>Approver</td>
-                                    <td>10/08/2018</td>
-                                    <td class="text-right hoverMe">
-
-                                        <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
-
-                                        <div class="HoverBx">
-                                            <button  title="View" ui-sref="view-purchase-requisition"  class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                            <a ui-sref="edit-purchase-requisition"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
-                                            <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                        </div>
+                                        <a title="Delete"  ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">delete</i></a>
+                                    </div>
 
 
-                                    </td>
-                                </tr>
-                                <tr>
-
-                                    <td>1001</td>
-                                    <td>UDS</td>
-                                    <td>Requestor</td>
-                                    <td>10/08/2018</td>
-                                    <td>Approver</td>
-                                    <td>10/08/2018</td>
-                                    <td class="text-right hoverMe">
-
-                                        <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
-
-                                        <div class="HoverBx">
-                                            <button  title="View" ui-sref="view-purchase-requisition"  class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                            <a  title="Edit" ui-sref="edit-purchase-requisition"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
-                                            <a title="Delete" ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">delete</i></a>
-                                        </div>
-
-
-                                    </td>
-                                </tr>
-
-
+                                </td>
+                            </tr>
 
                             </tbody>
                         </table>
+                    </div>
+                    <div class="txt-align-center LoaderCon"  ng-hide="purchaseReqLoader">
+
+                        <div class="pad-TB-30">
+                            <div loader-css="ball-pulse"></div>
+                            <h3 >Loading, please wait...</h3>
+                        </div>
+
+                    </div>
+
+                    <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
+
+                        <h3>No data Found</h3>
+
                     </div>
 
 
