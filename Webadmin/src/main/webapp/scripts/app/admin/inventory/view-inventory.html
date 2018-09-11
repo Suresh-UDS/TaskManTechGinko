@@ -168,7 +168,7 @@
 
                                  <div class="col-md-8 col-md-offset-2">
                                      <div class="panel panel-default">
-                                         <div class="panel-heading">Transaction Details </div>
+                                         <!--<div class="panel-heading">Transaction Details </div>-->
                                          <div class="panel-body">
 
                                              <div class="table-responsive tablecard">
@@ -189,7 +189,7 @@
                                                          <td>{{materialTransaction.quantity}}</td>
                                                          <td>{{materialTransaction.transactionDate | date: "dd-MM-yyyy" }}</td>
                                                          <td class="text-right">
-                                                             <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                                             <a title="Delete" ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">delete</i></a>
                                                          </td>
                                                      </tr>
                                                        <tr ng-show="!materialTransactions">
