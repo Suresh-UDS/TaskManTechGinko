@@ -330,7 +330,7 @@ public class MaterialIndentService extends AbstractService {
 						if(materialTrans.getId() > 0) { 
 							matIndent.setTransaction(materialTrans);
 						}
-					}
+					} 
 					
 					if(materialItm.getStoreStock() < materialItm.getMinimumStock()) {
 						
@@ -372,12 +372,31 @@ public class MaterialIndentService extends AbstractService {
 			if(!itemFound){
 				itemsItr.remove();
 			}
+			
+		}
+		
+		Set<MaterialIndentItem> materialItem = matIndent.getItems();
+		boolean isPending = checkIfNoItems(materialItem);
+		if(isPending) { 
+			 matIndent.setIndentStatus(IndentStatus.PENDING);
+		}else {
+			matIndent.setIndentStatus(IndentStatus.ISSUED);
 		}
 		
 		matIndent = materialIndentRepository.save(matIndent);
 		materialIndentDto = mapperUtil.toModel(matIndent, MaterialIndentDTO.class);
 		
 		return materialIndentDto;
+	}
+
+	private boolean checkIfNoItems(Set<MaterialIndentItem> materialItem) {
+		// TODO Auto-generated method stub
+		for(MaterialIndentItem material : materialItem) { 
+			if(material.getPendingQuantity() > 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void addPurchaseReqItem(PurchaseRequisition purchaseReq, Material material) {
