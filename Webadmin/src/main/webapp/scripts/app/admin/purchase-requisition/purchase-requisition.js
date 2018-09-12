@@ -20,7 +20,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		}
 	}).state('edit-purchase-requisition', {
 		parent : 'manage',
-		url : '/edit-purchase-requisition:id',
+		url : '/edit-purchase-requisition/:id',
 		controller : 'PurchaseRequisitionController',
 		data : {
 			authorities : [],
@@ -37,7 +37,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		}
 	}).state('view-purchase-requisition', {
 		parent : 'manage',
-		url : '/view-purchase-requisition:id',
+		url : '/view-purchase-requisition/:id',
 		controller : 'PurchaseRequisitionController',
 		data : {
 			authorities : [],

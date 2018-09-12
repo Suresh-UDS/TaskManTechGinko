@@ -2,7 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('PurchaseRequisitionController', function ($rootScope, $scope, $state, $timeout,
-    		ProjectComponent, SiteComponent,EmployeeComponent,InventoryComponent, PurchaseComponent, $http,$stateParams,$location, PaginationComponent) {
+    		ProjectComponent, SiteComponent,EmployeeComponent,InventoryComponent, PurchaseComponent, $http,$stateParams,$location, PaginationComponent, getLocalStorage) {
 
     	$scope.selectedProject = {};
 
@@ -14,17 +14,20 @@ angular.module('timeSheetApp')
 
     	$scope.pager = {};
 
+    	$scope.pageSort = 10;
+
         $scope.noData = false;
 
         $scope.isEdit = false;
 
-        $scope.selectedUop = 1;
-
         $scope.purchaseObject = {};
+
+        $scope.purchaseReqObj = {};
 
 			//init load
 			$scope.initLoad = function(){
 			    $scope.loadPageTop();
+			    $scope.setPage(1);
 				$scope.loadProjects();
 			    $scope.loadUOM();
 
@@ -178,7 +181,7 @@ angular.module('timeSheetApp')
                         $scope.search.projectId = $scope.selectedProject.id;
                         $scope.search.siteId = $scope.selectedSite.id;
                         InventoryComponent.search($scope.search).then(function(data) {
-                            console.log(data);
+                            console.log('Item details >>> ' , data);
                             $scope.purchases = data.transactions;
                         });
                     }
@@ -210,7 +213,7 @@ angular.module('timeSheetApp')
                             $scope.purchase.materialUom = $scope.selectedItemCode.uom;
                             $scope.purchase.materialItemGroupId = $scope.selectedItemCode.itemGroupId;
                             $scope.purchase.quantity = $scope.selectedQuantity;
-                            $scope.purchase.unitPrice = $scope.selectedUop;
+                            $scope.purchase.unitPrice = $scope.selectedItemCode.unitPrice;
                             $scope.purchaseItems.push($scope.purchase);
                             $scope.selectedItemCode='';
                             $scope.selectedQuantity='';
@@ -310,8 +313,8 @@ angular.module('timeSheetApp')
                 }
 
                 console.log("search criteria",$scope.searchCriteria);
-                    $scope.sites = '';
-                    $scope.sitesLoader = false;
+                    $scope.purchaseReq = '';
+                    $scope.purchaseReqLoader = false;
                     $scope.loadPageTop();
 
                      /* Localstorage (Retain old values while edit page to list) start */
@@ -408,6 +411,155 @@ angular.module('timeSheetApp')
                 	}*/
                 };
 
+                $scope.viewPurchaseReq = function() {
+                $scope.loadingStart();
+                if(parseInt($stateParams.id) > 0){
+                    PurchaseComponent.findById($stateParams.id).then(function(data) {
+                        console.log(data);
+                        $scope.loadingStop();
+                        $scope.purchaseReqObj = data;
+                        console.log('Purchase Requisition by id',$scope.purchaseReqObj);
+                        if(!$scope.purchaseReqObj){
+                           $location.path('/purchase-requisition-list');
+                        }
+                    });
+                }else{
+                    $location.path('/purchase-requisition-list');
+                }
+
+                }
+
+                $scope.editPurchaseReq = function() {
+                $scope.loadingStart();
+                if(parseInt($stateParams.id) > 0){
+                    PurchaseComponent.findById($stateParams.id).then(function(data) {
+                        console.log(data);
+                        $scope.purchaseReqObj = data;
+                        if(!$scope.purchaseReqObj){
+                           $location.path('/purchase-requisition-list');
+                        }
+                        $scope.selectedRefNumber = $scope.purchaseReqObj.indentRefNumber;
+                        $scope.selectedProject = {id: $scope.purchaseReqObj.projectId };
+                        $scope.selectedSite = {id: $scope.purchaseReqObj.siteId };
+                        $scope.loadSites();
+                        $scope.loadEmployees();
+                        $scope.loadPurchases();
+                        $scope.selectedEmployee = {id: $scope.purchaseReqObj.requestedById }
+                        $scope.materialItems = $scope.purchaseReqObj.items;
+                        $scope.loadingStop();
+
+                    });
+                    }else{
+                        $location.path('/purchase-requisition-list');
+                    }
+                }
+
+                $scope.validate = function(material, issuedQty) {
+                console.log(material);
+                console.log(issuedQty);
+                if(material.quantity > issuedQty){
+                    console.log("save issued indent");
+                    material.issuedQuantity = issuedQty;
+                    if($scope.materialIndentObj) {
+                        if($scope.materialIndentObj.items.length > 0) {
+                            for(var i in $scope.materialIndentObj.items){
+
+                                if($scope.materialIndentObj.items[i].id === material.id) {
+                                    $scope.materialIndentObj.items.splice(i, 1);
+                                    $scope.materialIndentObj.items.push(material);
+                                }
+                            }
+                            console.log($scope.materialIndentObj);
+                        }
+                    }
+                }else{
+                    $scope.showNotifications('top','center','danger','Quantity cannot exceeds a required quantity');
+                }
+
+            }
+
+            $scope.saveIndentTrans = function() {
+                console.log("save indent transaction called");
+                console.log($scope.materialIndentObj);
+                IndentComponent.createTransaction($scope.materialIndentObj).then(function(data) {
+                    console.log(data);
+                    $scope.showNotifications('top','center','success','Material Transaction has been added successfully.');
+                    $location.path('/inventory-transaction-list');
+                }).catch(function(data){
+                    $scope.success = null;
+                    $scope.loadingStop();
+                    $scope.showNotifications('top','center','danger','Unable to view Material Transaction.');
+                });
+
+            }
+
+            $scope.showUpdateBtn = false;
+
+            $scope.editMaterial = function(index, item) {
+                console.log(item);
+                console.log(index);
+                $scope.updateMaterial = item;
+                $scope.indexOf = index;
+                $scope.isEdit = true;
+                $scope.selectedItemName = $scope.updateMaterial.materialName;
+                $scope.selectedItemCode = {id: $scope.updateMaterial.materialId, name: $scope.updateMaterial.materialName,unitPrice:$scope.updateMaterial.unitPrice};
+                $scope.selectedQuantity = $scope.updateMaterial.quantity;
+            }
+
+            $scope.updatePurchaseItems = function(){
+
+                    $scope.updateMaterial.materialId = $scope.selectedItemCode.materialId;
+                    $scope.updateMaterial.materialName = $scope.selectedItemName;
+                    $scope.updateMaterial.unitPrice = $scope.selectedItemCode.unitPrice;
+                    $scope.updateMaterial.quantity = $scope.selectedQuantity;
+                    $scope.updateMaterial.approvedQty = $scope.items.approvedQty;
+                    console.log($scope.indexOf);
+                    console.log($scope.updateMaterial);
+                    updateItems($scope.indexOf, $scope.updateMaterial);
+
+            }
+
+            $scope.selectedRow = null;
+
+            function updateItems(index, object) {
+                $scope.materialItems[index] = object;
+                $scope.selectedRow = index;
+                $scope.selectedItemName = null;
+                $scope.selectedItemCode = {};
+                $scope.selectedStoreStock = null;
+                $scope.selectedQuantity = null;
+                $timeout(function(){
+                    $scope.selectedRow = null;
+                },1000);
+            }
+
+                $scope.updatePurchaseReq = function() {
+                    if($scope.selectedProject) {
+                        $scope.purchaseReqObj.projectId = $scope.selectedProject.id;
+                    }
+                    if($scope.selectedSite) {
+                        $scope.purchaseReqObj.siteId = $scope.selectedSite.id;
+                    }
+                    if($scope.selectedEmployee) {
+                        $scope.purchaseReqObj.requestedById = $scope.selectedEmployee.id;
+                    }
+                    if($scope.materialItems) {
+                        $scope.purchaseReqObj.items = $scope.materialItems;
+                    }
+                    console.log('update purchase by id >>>',$scope.purchaseReqObj);
+                    PurchaseComponent.update($scope.purchaseReqObj).then(function(resp){
+                        console.log(resp);
+                        $scope.loadingStop();
+                        $scope.showNotifications('top','center','success','Purchase Requisition has been added successfully.');
+                        $location.path('/purchase-requisition-list');
+                    }).catch(function(resp){
+                        console.log(resp);
+                        $scope.success = null;
+                        $scope.loadingStop();
+                        $scope.showNotifications('top','center','danger','Unable to update Material Indent. Please try again later..');
+                    });
+                }
+
 
                 $scope.savePurchase = function() {
                     if($scope.selectedProject) {
@@ -430,6 +582,8 @@ angular.module('timeSheetApp')
                     }else{
                         $scope.purchaseObject.items = null;
                     }
+
+
                     $scope.purchaseObject.purchaseRefNumber = $scope.selectedRefNumber;
                     $scope.purchaseObject.requestedDate = new Date();
                     console.log($scope.purchaseObject);
@@ -447,6 +601,12 @@ angular.module('timeSheetApp')
                         $scope.showNotifications('top','center','danger','Unable to create Purchase Requisition. Please try again later..');
                     });
 
+                }
+                $scope.clearPurchaseItems =function(){
+                  $scope.selectedItemName = '';
+                  $scope.selectedItemCode = '';
+                  $scope.selectedQuantity = '';
+                   $scope.isEdit=false;
                 }
 
             $scope.cancelPurchase = function () {
@@ -482,6 +642,43 @@ angular.module('timeSheetApp')
                 $timeout(function() {
                   $rootScope.overlayHide() ;
                 }, 5000);
+            }
+
+            $scope.loadPurchaseReq = function () {
+                    $scope.clearFilter();
+                    $scope.search();
+            };
+
+            $scope.refreshPage = function(){
+                   $scope.loadPurchaseReq();
+            }
+            $scope.clearFilter = function() {
+                $scope.selectedSite = null;
+                $scope.selectedProject = null;
+                $scope.searchProject = null;
+                $scope.searchSite = null;
+                $scope.searchCriteria = {};
+                $scope.localStorage = null;
+                $rootScope.searchCriteriaSite = null;
+                $scope.pages = {
+                    currPage: 1,
+                    totalPages: 0
+                }
+                //$scope.search();
+            };
+
+            $scope.deleteConfirm = function (purchase){
+                $scope.deletePurchaseId= purchase;
+            }
+
+
+
+            $scope.deletePurchase = function () {
+                    PurchaseComponent.remove($scope.deletePurchaseId).then(function(){
+                        $scope.success = 'OK';
+                        $scope.showNotifications('top','center','success','Purchase requisition has been deleted successfully!!');
+                        $scope.loadPurchaseReq();
+                    });
             }
 
     });

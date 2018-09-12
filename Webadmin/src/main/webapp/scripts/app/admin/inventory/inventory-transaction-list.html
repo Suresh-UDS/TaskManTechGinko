@@ -37,7 +37,7 @@
                             <tr>
                                 <th>Client</th>
                                 <th>Site</th>
-                                <th>Name</th>
+                                <th>Item Name</th>
                                 <th>Item Code</th>
                                 <th>Issued/Received</th>
                                 <th>Store Stock</th>
@@ -183,14 +183,14 @@
                             <div id="collapseOne" class="panel-collapse collapse collapseOne in" role="tabpanel" aria-labelledby="headingOne" aria-expanded="true" style="height: 110px;">
                                 <div class="panel-body">
 
-                                    <div class="row" ng-init="loadProjectsList();loadSitesList();">
+                                    <div class="row" ng-init="loadProjects();loadSites();">
 
                                         <div class="col-xs-12 col-md-6 col-lg-6">
                                             <div class="form-group" >
                                                 <div class="dropdown">
                                                     <label class="label-control">Client</label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projectsList"  >
+                                                    <select class="form-control " ng-model="searchProject" ng-change="loadSearchSites()" ng-options="project as project.name for project in projects"  >
                                                         <option value="">Select Client...</option>
                                                     </select>
                                                 </div>
@@ -201,14 +201,12 @@
                                                 <div class="form-group">
                                                     <label class="label-control">Site</label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sitesList" ng-change="loadDepBlocks();">
+                                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites">
                                                         <option value="">Select Site...</option>
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
-
-
 
                                     </div>
 
@@ -233,13 +231,13 @@
                                         <div class="col-xs-12 col-md-4 col-sm-4">
                                             <div class="form-group no-padding" >
                                                 <div class="dropdown">
-                                                    <input type="text"
+                                                    <input type="text" ng-model="searchItemName"
                                                            class="form-control searchable-input floatL border-bottom-input"
-                                                           placeholder="Name" />
+                                                           placeholder="Item Name" />
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xs-12 col-md-4 col-sm-4">
+                                  <!--       <div class="col-xs-12 col-md-4 col-sm-4">
                                             <div class="form-group no-padding" >
                                                 <div class="dropdown">
                                                     <input type="text"
@@ -247,13 +245,38 @@
                                                            placeholder="Item Group" />
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="col-xs-12 col-md-4 col-sm-4">
                                             <div class="form-group no-padding" >
                                                 <div class="dropdown">
-                                                    <input type="text"
+                                                    <input type="text" ng-model="searchItemCode"
                                                            class="form-control searchable-input floatL border-bottom-input"
                                                            placeholder="Item Code" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-xs-12 col-md-4 col-sm-4">
+                                            <div class="form-group no-padding" >
+                                                <div class="dropdown">
+                                                    <input type="text" ng-model="searchIndentNumber" ng-model-options="{debounce: 750}" ng-change="typeCheck(searchIndentNumber)"
+                                                           class="form-control searchable-input floatL border-bottom-input"
+                                                           placeholder="Indent Ref.No" />
+                                                           
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                     <div class="col-xs-12 col-md-4">
+                                            <div class="form-group no-padding" >
+                                                <div class="dropdown" ng-init="loadTransactionType()">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Select TransactionType</label>
+                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <select class="form-control" ng-model="selectedTransactionType" ng-options="transactionType for transactionType in transactionTypes">
+                                                            <option value="">Select TransactionType</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -262,7 +285,7 @@
                                             <div class="form-group">
                                                 <label class="control-label">Date</label>
                                                 <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                <input type="text" class="form-control datetimepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+                                                <input type="text" class="form-control datetimepicker"  id="searchCreatedDate"  ng-model="searchCreatedDate" placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
 
                                             </div>
                                         </div>
