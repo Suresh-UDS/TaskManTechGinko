@@ -7,6 +7,7 @@ import {Inject, Injectable} from "@angular/core";
 import {LoadingController, ToastController} from "ionic-angular";
 import {AppConfig, ApplicationConfig, MY_CONFIG_TOKEN} from "./app-config";
 import {ObserveOnMessage} from "rxjs/operators/observeOn";
+import {getResponseURL} from "@angular/http/src/http_utils";
 
 
 @Injectable()
@@ -33,6 +34,14 @@ export class ExpenseService {
 
     saveExpenses(expenseDetails):Observable<any>{
         return this.http.post(this.config.Url+'api/expense',expenseDetails).map(
+            response=>{
+                return response.json();
+            }
+        )
+    }
+
+    getLatestRecordBySite(siteId):Observable<any>{
+        return this.http.get(this.config.Url+'api/expenses/latest'+siteId).map(
             response=>{
                 return response.json();
             }

@@ -7,6 +7,8 @@ angular.module('timeSheetApp')
 
         $scope.selectedCategory = {};
 
+        $scope.previousData = {};
+
         $scope.description = "";
 
         $scope.billable = true;
@@ -43,6 +45,8 @@ angular.module('timeSheetApp')
 
         $scope.noData = false;
 
+
+
 			//init load
 			$scope.initLoad = function(){
 				$scope.loadProjects();
@@ -50,7 +54,16 @@ angular.module('timeSheetApp')
 			    $scope.loadExpenseCategories();
 			    $scope.getCurrencies();
 			    $scope.searchFilter();
-			 }
+			 };
+
+			$scope.getLatestEntry = function(siteId){
+			    console.log(siteId);
+			    ExpenseComponent.getLatestRecordBySite(siteId.id).then(function (data) {
+                    console.log(data);
+
+                    $scope.previousData = data;
+                })
+            };
 
 			//Loading Page go to top position
 			$scope.loadPageTop = function(){
@@ -120,12 +133,19 @@ angular.module('timeSheetApp')
                 };
 
                 $scope.saveExpense = function(){
+
                     if($scope.selectedProject){
                         $scope.expenseDetails.projectId = $scope.selectedProject.id;
                     }
 
                     if($scope.selectedSite){
                         $scope.expenseDetails.siteId = $scope.selectedSite.id;
+                    }
+
+                    if($scope.transactionMode == 'debit'){
+                        $scope.expenseDetails.mode = 'debit';
+                    }else if($scope.transactionMode == 'credit'){
+                        $scope.expenseDetails.mode = 'credit';
                     }
 
                     if($scope.selectedDate){
@@ -175,11 +195,45 @@ angular.module('timeSheetApp')
                         $scope.expenseDetails.description = $scope.description;
                     }
 
-                    console.log("Before saving expenses");
-                    console.log($scope.expenseDetails);
-                    ExpenseComponent.createExpense($scope.expenseDetails).then(function (data) {
-                        console.log(data);
-                    })
+                    if($scope.transactionMode == 'debit'){
+                        if($scope.previousData && $scope.previousData.id && $scope.previousData.id>0){
+                            if($scope.previousData.balanceAmount>$scope.selectedAmount){
+                                this.expenseDetails.balanceAmount = $scope.previousData.balanceAmount-$scope.selectedAmount;
+                                console.log("Before saving expenses");
+                                console.log($scope.expenseDetails);
+                                ExpenseComponent.createExpense($scope.expenseDetails).then(function (data) {
+                                    console.log(data);
+                                    $scope.cancelExpense();
+                                })
+                            }else{
+                                $scope.showNotifications('top','center','danger','Insufficient funds.. Only '+$scope.previousData.balanceAmount+' available for the site expenses..');
+                            }
+
+                        }else{
+                            $scope.showNotifications('top','center','danger','There is no balance amount to debit from.. Please add a credit transaction.. ');
+                        }
+                    }else if($scope.transactionMode == 'credit'){
+                        if($scope.previousData && $scope.previousData.id && $scope.previousData.id>0){
+                            this.expenseDetails.balanceAmount = $scope.previousData.balanceAmount+$scope.selectedAmount;
+                            console.log("Before saving expenses");
+                            console.log($scope.expenseDetails);
+                            ExpenseComponent.createExpense($scope.expenseDetails).then(function (data) {
+                                console.log(data);
+                                $scope.cancelExpense();
+                            })
+                        }else{
+                            this.expenseDetails.balanceAmount = $scope.selectedAmount;
+                            console.log("Before saving expenses");
+                            console.log($scope.expenseDetails);
+                            ExpenseComponent.createExpense($scope.expenseDetails).then(function (data) {
+                                console.log(data);
+                                $scope.cancelExpense();
+                            })
+                        }
+                    }
+
+
+
                 };
 
 
