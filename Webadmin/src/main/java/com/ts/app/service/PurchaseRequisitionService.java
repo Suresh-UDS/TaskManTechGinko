@@ -172,7 +172,15 @@ public class PurchaseRequisitionService extends AbstractService {
 			purchaseRequest.setApprovedBy(employeeRepository.findOne(purchaseReqDTO.getApprovedById()));
 			purchaseRequest.setApprovedDate(DateUtil.convertToTimestamp(new Date()));
 		}
-		
+		if(purchaseReqDTO.getRequestStatus().equals(PurchaseRequestStatus.APPROVED)) {
+			purchaseRequest.setRequestStatus(PurchaseRequestStatus.APPROVED);
+		}	
+		if(purchaseReqDTO.getRequestStatus().equals(PurchaseRequestStatus.REJECTED)) {
+			purchaseRequest.setRequestStatus(PurchaseRequestStatus.REJECTED);
+		}
+		if(purchaseReqDTO.getRequestStatus().equals(PurchaseRequestStatus.PURCHASERAISED)) {
+			purchaseRequest.setRequestStatus(PurchaseRequestStatus.PURCHASERAISED);
+		}
 		List<PurchaseReqItemDTO> purchaseItemDTOs = purchaseReqDTO.getItems();
 		Set<PurchaseRequisitionItem> itemEntities = purchaseRequest.getItems();
 		Iterator<PurchaseRequisitionItem> itemsItr = itemEntities.iterator();

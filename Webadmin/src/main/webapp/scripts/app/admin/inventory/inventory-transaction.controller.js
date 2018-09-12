@@ -335,8 +335,8 @@ angular.module('timeSheetApp')
     		}
     		console.log(JSON.stringify($scope.inventory));
     		
-    		InventoryTransactionComponent.create($scope.inventory).then(function(data) { 
-    			console.log(data);
+    		InventoryTransactionComponent.create($scope.inventory).then(function(response) { 
+    			console.log(response);
                 $scope.loadingStop();
                 $scope.inventory = "";
                 $scope.showNotifications('top','center','success','Material Transaction has been created!');

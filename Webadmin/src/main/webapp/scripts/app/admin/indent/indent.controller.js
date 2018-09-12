@@ -375,8 +375,8 @@ angular.module('timeSheetApp')
             $scope.loadPageTop();
             IndentComponent.search($scope.searchCriteria).then(function (data) {
             	console.log(data);
-            	$scope.loadingStop();
                 $scope.materialIndents = data.transactions;
+                $scope.loadingStop();
 
                  /*
                     ** Call pagination  main function **
