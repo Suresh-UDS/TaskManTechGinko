@@ -52,7 +52,7 @@
 
     <div class="form-group label-floating">
       <label class="control-label">Transaction type</label>
-      <ion-select  class="select-box padding-left0" id="transactionType" [(ngModel)]="mode" placeholder="Choose Transaction type" name="transactionType"  interface="popover" required>
+      <ion-select  class="select-box padding-left0" id="transactionType" [(ngModel)]="transactionMode" placeholder="Choose Transaction type" name="transactionType"  interface="popover" required>
         <ion-option value="credit">Credit</ion-option>
         <ion-option value="debit">Debit</ion-option>
       </ion-select>
@@ -60,7 +60,7 @@
 
     <div class="form-group label-floating">
       <label class="control-label">Payment type</label>
-      <ion-select  class="select-box padding-left0" id="paymentType" placeholder="Choose Payment type" name="paymentType"  interface="popover" required>
+      <ion-select  class="select-box padding-left0" id="paymentType" [(ngModel)]="selectedPaymentType" placeholder="Choose Payment type" name="paymentType"  interface="popover" required>
         <ion-option value="CASH">Cash</ion-option>
         <ion-option value="CARD">Card</ion-option>
         <ion-option value="NETBANKING">Net Banking</ion-option>
@@ -70,19 +70,19 @@
 
     <div class="form-group label-floating">
       <label class="control-label">Amount</label>
-      <input type="Number" class="form-control" >
+      <input type="Number" class="form-control" [(ngModel)]="selectedAmount" >
     </div>
 
     <div class="form-group label-floating">
         <label class="control-label">Receipt No</label>
-        <input type="Number" class="form-control" >
+        <input type="Number" class="form-control" [(ngModel)]="receiptNumber" >
       </div>
 
 
 
       <div class="form-group">
           <label class="control-label">Expense type</label>
-          <ion-select  class="select-box padding-left0" id="expenseType" placeholder="Choose Expense type" name="expenseType"  interface="popover" required>
+          <ion-select  class="select-box padding-left0" id="expenseType" [(ngModel)]="selectedCategory" placeholder="Choose Expense type" name="expenseType"  interface="popover" required>
               <ion-option *ngFor="let e of expense_type" text-center text-lowercase>{{e.name}}</ion-option>
           </ion-select>
 
@@ -93,11 +93,11 @@
           <ion-list>
                 <ion-item class="check-style">
                     <ion-label>Billable</ion-label>
-                    <ion-checkbox color="primary" checked="true"></ion-checkbox>
+                    <ion-checkbox color="primary" [(ngModel)]="billable" checked="true"></ion-checkbox>
                 </ion-item>
               <ion-item class="check-style">
                   <ion-label>Reimbursable</ion-label>
-                  <ion-checkbox color="primary" ></ion-checkbox>
+                  <ion-checkbox color="primary" [(ngModel)]="reimbursable"></ion-checkbox>
               </ion-item>
           </ion-list>
 
@@ -108,7 +108,7 @@
 
     <div class="form-group label-floating">
       <label class="control-label">Description</label>
-      <input type="text" class="form-control" >
+      <input type="text" class="form-control" [(ngModel)]="description">
 
     </div>
 
@@ -119,7 +119,7 @@
 </ion-content>
 <ion-footer>
     <ion-toolbar class="align-center" >
-        <button class="btn btn-warning center margin-auto" type="submit" >
+        <button class="btn btn-warning center margin-auto" type="submit" (click)="saveExpense()" >
             Add
         </button>
     </ion-toolbar>
