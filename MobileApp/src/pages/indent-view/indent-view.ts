@@ -80,6 +80,11 @@ export class IndentView {
                             console.log("transaction details");
                             console.log(this.details);
                             this.csService.showLoader("saving please wait...");
+
+                            for(let items of this.details.items){
+                                items.issuedQuantity = items.currentQuantity;
+                            }
+
                             this.psService.indentMaterialTransaction(this.details).subscribe(
                                 response=>{
                                     this.csService.closeLoader();
@@ -141,6 +146,8 @@ export class IndentView {
               this.getIndentDetails(this.details.id);
 
           }
+      }else{
+          this.details.items[i].currentQuantity = 0;
       }
 
     }
