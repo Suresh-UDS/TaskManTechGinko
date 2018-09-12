@@ -188,6 +188,7 @@ export class Indent {
         var indentDetails = {
               siteId:this.selectedSite.id,
               projectId:this.selectedProject.id,
+              purpose:this.purposeDetails,
               items:this.indent,
               indentRefNumber:this.referenceNumber,
               requestedById:this.employeeId,
