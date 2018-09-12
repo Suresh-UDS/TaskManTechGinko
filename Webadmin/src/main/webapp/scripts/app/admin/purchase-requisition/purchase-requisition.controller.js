@@ -532,8 +532,10 @@ angular.module('timeSheetApp')
                     $scope.selectedRow = null;
                 },1000);
             }
-
-                $scope.updatePurchaseReq = function() {
+            	
+      
+                $scope.updatePurchaseReq = function(status) {
+                	console.log(status);
                     if($scope.selectedProject) {
                         $scope.purchaseReqObj.projectId = $scope.selectedProject.id;
                     }
@@ -546,17 +548,20 @@ angular.module('timeSheetApp')
                     if($scope.materialItems) {
                         $scope.purchaseReqObj.items = $scope.materialItems;
                     }
+            
+                    	$scope.purchaseReqObj.requestStatus = status;
+                    
                     console.log('update purchase by id >>>',$scope.purchaseReqObj);
                     PurchaseComponent.update($scope.purchaseReqObj).then(function(resp){
                         console.log(resp);
                         $scope.loadingStop();
-                        $scope.showNotifications('top','center','success','Purchase Requisition has been added successfully.');
+                        $scope.showNotifications('top','center','success','Purchase Requisition has been update successfully.');
                         $location.path('/purchase-requisition-list');
                     }).catch(function(resp){
                         console.log(resp);
                         $scope.success = null;
                         $scope.loadingStop();
-                        $scope.showNotifications('top','center','danger','Unable to update Material Indent. Please try again later..');
+                        $scope.showNotifications('top','center','danger','Unable to update Purchase Requisition. Please try again later..');
                     });
                 }
 

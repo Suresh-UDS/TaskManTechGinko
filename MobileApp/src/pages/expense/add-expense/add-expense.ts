@@ -18,7 +18,16 @@ import {ExpenseService} from "../../service/expenseService";
   templateUrl: 'add-expense.html',
 })
 export class AddExpense {
-    selectedSite: any;
+  receiptNumber: any;
+  description: any;
+  reimbursable: any;
+  billable: any;
+  selectedAmount: any;
+  selectedPaymentType: any;
+  selectedCategory: any;
+  selectedDate: any;
+  transactionMode: any;
+  selectedSite: any;
     expense_type: any;
   selectOptions: { cssClass: string; };
   siteList: any;
@@ -101,15 +110,87 @@ export class AddExpense {
         let data={'foo':'bar'};
         this.viewCtrl.dismiss(data);
     }
+
+
   saveExpense() {
 
-      if(this.selectedProject){
-          this.expenseDetails.projectId = this.selectedProject.id;
-      }
+
 
       if(this.selectedSite){
           this.expenseDetails.siteId = this.selectedSite.id;
       }
+
+      if(this.selectedProject){
+        this.expenseDetails.projectId = this.selectedProject.id;
+      }
+
+      if(this.transactionMode== "debit"){
+        this.expenseDetails.mode = "debit";
+      }else if(this.transactionMode == "credit"){
+        this.expenseDetails.mode = "credit";
+      }
+
+      if(this.selectedDate){
+        if(this.transactionMode == "debit"){
+          this.expenseDetails.expenseDate = new Date(this.selectedDate);
+        }else {
+          this.expenseDetails.creditedDate = new Date(this.selectedDate);
+        }
+      }
+
+      if(this.selectedCategory && this.transactionMode =="debit"){
+        this.expenseDetails.expenseCategory = this.selectedCategory;
+      }
+
+      if(this.selectedPaymentType){
+        this.expenseDetails.paymentType = this.selectedPaymentType;
+      }
+
+      this.expenseDetails.currency = "INR";
+
+      /*if(this.receiptNumber){
+        this.expenseDetails.receiptNumber
+      }*/
+
+      if(this.selectedAmount){
+        if(this.transactionMode == "debit"){
+          this.expenseDetails.debitAmount = this.selectedAmount;
+        }else if(this.transactionMode == "credit"){
+          this.expenseDetails.creditAmount = this.selectedAmount;
+        }
+      }
+
+      if(this.billable){
+        this.expenseDetails.billable = this.billable;
+      }else {
+        this.expenseDetails.billable = false;
+      }
+
+      if(this.reimbursable){
+        this.expenseDetails.reimbursable = this.reimbursable;
+      }else {
+        this.expenseDetails.reimbursable = false;
+      }
+
+      if(this.description){
+        this.expenseDetails.description = this.description;
+      }
+
+    console.log("Expense details");
+      console.log(this.expenseDetails);
+
+      this.expenseService.saveExpenses(this.expenseDetails).subscribe(
+        response=>{
+          console.log("save Expense Details");
+          console.log(response);
+          this.component.showToastMessage("Expense Details saved successfully ",'bottom');
+        },err=>{
+          console.log("Error in save expense");
+          console.log(err);
+          this.component.showToastMessage("Error in save expense transaction ",'bottom');
+        }
+      )
+
   }
 
   showCalendar() {
