@@ -18,7 +18,8 @@ import {ExpenseService} from "../../service/expenseService";
   templateUrl: 'add-expense.html',
 })
 export class AddExpense {
-  expense_type: any;
+    selectedSite: any;
+    expense_type: any;
   selectOptions: { cssClass: string; };
   siteList: any;
   scrollSite: boolean;
@@ -27,6 +28,8 @@ export class AddExpense {
   clientList: any;
   searchCriteria: any;
   selectDate: Date;
+    mode:any;
+    expenseDetails:any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,
               private datePicker: DatePicker, private modalCtrl: ModalController,private siteService:SiteService,
@@ -98,43 +101,16 @@ export class AddExpense {
         let data={'foo':'bar'};
         this.viewCtrl.dismiss(data);
     }
-  /*saveExpense() {
-    var expenseDetails = {
-      projectId: this.selectedProject.id,
-      siteId: this.selectedSite.id,
-      paymentType: this.selectedPaymentType,
-      currency: this.selectedCurrency.code,
-      description: this.description,
+  saveExpense() {
 
+      if(this.selectedProject){
+          this.expenseDetails.projectId = this.selectedProject.id;
+      }
 
-      if (this.transactionMode = 'debit') {
-      expenseDate : new Date(this.selectedDate)
-    } else {
-      creditedDate : new Date(this.selectedDate)
-    }
-    if (this.selectedCategory && this.transactionMode = 'debit') {
-      expenseCategory: this.selectedCategory,
-    }
-
-    if (this.transactionMode = 'debit') {
-      debitAmount: this.selectedAmount
-    } else {
-      creditAmount: this.selectedAmount
-    }
-
-    if (this.billable) {
-      billable: this.billable
-    } else {
-      billable: false
-    }
-
-    if (this.reimbursable) {
-      reimbursable: this.reimbursable
-    } else {
-      reimbursable: false
-    }
+      if(this.selectedSite){
+          this.expenseDetails.siteId = this.selectedSite.id;
+      }
   }
-  }*/
 
   showCalendar() {
       this.datePicker.show({

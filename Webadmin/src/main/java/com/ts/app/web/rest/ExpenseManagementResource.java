@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.Expense;
 import com.ts.app.domain.ExpenseCategory;
 import com.ts.app.service.ExpenseManagementService;
 import com.ts.app.web.rest.dto.ExpenseDTO;
@@ -15,10 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,6 +39,7 @@ public class ExpenseManagementResource {
             expense  = expenseManagementService.saveExpense(expenseDTO);
         }catch (Exception e) {
             String msg = "Error while creating expense, please check the information";
+            log.info("Error - "+e);
             throw new TimesheetException(e, expenseDTO);
 
         }
@@ -59,6 +58,12 @@ public class ExpenseManagementResource {
     public List<ExpenseDTO> findAll(@RequestBody SearchCriteria searchCriteria) {
         log.info("--Invoked LocationResource.findAllLocation --");
         return expenseManagementService.findAll(searchCriteria.getCurrPage());
+    }
+
+    @RequestMapping(value = "/expenses/latest/{siteId}", method = RequestMethod.GET)
+    public Expense findLatestRecordBySite(@PathVariable("siteId") long siteId) {
+        log.info("--Invoked expense resource .findLatestRecordBySite -- "+siteId);
+        return expenseManagementService.findLatestRecordBySite(siteId);
     }
 
 

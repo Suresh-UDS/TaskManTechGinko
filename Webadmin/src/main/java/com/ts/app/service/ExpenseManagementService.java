@@ -3,6 +3,7 @@ package com.ts.app.service;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Expense;
 import com.ts.app.domain.ExpenseCategory;
+import com.ts.app.domain.Site;
 import com.ts.app.repository.*;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
@@ -17,6 +18,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -45,7 +47,37 @@ public class ExpenseManagementService extends AbstractService {
 
     public ExpenseDTO saveExpense(ExpenseDTO expenseDTO) {
 
-        Expense expense = mapperUtil.toEntity(expenseDTO, Expense.class);
+        Expense expense = new Expense();
+
+        if(expenseDTO.getSiteId()>0){
+            Site site = siteRepository.findOne(expenseDTO.getSiteId());
+            expense.setSite(site);
+
+        }
+
+
+
+        expense.setMode(expenseDTO.getMode());
+        expense.setCurrency(expenseDTO.getCurrency());
+        expense.setPaymentType(expenseDTO.getPaymentType());
+        expense.setBillable(expenseDTO.isBillable());
+        expense.setReimbursable(expenseDTO.isReimbursable());
+        expense.setDescription(expenseDTO.getDescription());
+        expense.setBalanceAmount(expenseDTO.getBalanceAmount());
+        if(expenseDTO.getExpenseDate() !=null){
+            expense.setExpenseDate(expenseDTO.getExpenseDate());
+        }
+
+        if(Objects.equals(expenseDTO.getMode(), "debit")){
+            expense.setExpenseCategory(expenseDTO.getExpenseCategory());
+            expense.setDebitAmount(expenseDTO.getDebitAmount());
+        }
+
+        if (Objects.equals(expenseDTO.getMode(), "credit")){
+            expense.setCreditAmount(expenseDTO.getCreditAmount());
+        }
+
+
         Expense saveResult = expenseRepository.save(expense);
 
         ExpenseDTO expenseDTO1 = mapperUtil.toModel(saveResult, ExpenseDTO.class);
@@ -61,5 +93,16 @@ public class ExpenseManagementService extends AbstractService {
 
     public List<ExpenseCategory> findAllExpenseCategories(){
         return expenseCategoryRepository.findAll();
+    }
+
+    public Expense findLatestRecordBySite(long siteId){
+        List<Expense> expenseList = expenseRepository.findLatestEntryBySite(siteId);
+
+        if(expenseList.isEmpty()){
+            return null;
+        }else{
+            return expenseList.get(0);
+        }
+
     }
 }

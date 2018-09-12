@@ -119,10 +119,11 @@ public class InventoryManagementService extends AbstractService{
 		return materialList;
 	}
 
-	public void updateInventory(MaterialDTO materialDTO) {
+	public MaterialDTO updateInventory(MaterialDTO materialDTO) {
 		Material material = inventRepository.findOne(materialDTO.getId());
 		mapToModel(material, materialDTO);
-		inventRepository.saveAndFlush(material);		
+		inventRepository.saveAndFlush(material);	
+		return materialDTO;
 	}
 
 	private void mapToModel(Material material, MaterialDTO materialDTO) {

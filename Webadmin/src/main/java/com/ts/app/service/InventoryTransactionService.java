@@ -22,6 +22,7 @@ import org.springframework.util.StringUtils;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.IndentStatus;
 import com.ts.app.domain.Material;
 import com.ts.app.domain.MaterialIndent;
 import com.ts.app.domain.MaterialIndentItem;
@@ -149,6 +150,7 @@ public class InventoryTransactionService extends AbstractService{
 			
 			while(itemsItr.hasNext()) {
 				boolean itemFound = false;
+				boolean isPending = true;
 				MaterialIndentItem itemEntity = itemsItr.next();
 				for(MaterialIndentItemDTO itemDto : indentItemDTOs) {
 					if(itemEntity.getId() == itemDto.getId()) {
@@ -156,8 +158,38 @@ public class InventoryTransactionService extends AbstractService{
 						long reducedQty = 0;
 						long addedQty = 0;
 						Material materialItm = inventoryRepository.findOne(itemDto.getMaterialId());
-						if(itemEntity.getPendingQuantity() > 0) {   
-							long consumptionStock = materialItm.getStoreStock() - itemDto.getIssuedQuantity();
+						if(itemEntity.getPendingQuantity() > 0) {
+							if(materialItm.getStoreStock() > itemDto.getIssuedQuantity()) {
+								long consumptionStock = materialItm.getStoreStock() - itemDto.getIssuedQuantity();
+								reducedQty = itemEntity.getPendingQuantity() - itemDto.getIssuedQuantity();   
+								addedQty = itemEntity.getIssuedQuantity() + itemDto.getIssuedQuantity();
+								itemEntity.setPendingQuantity(reducedQty); 
+								itemEntity.setIssuedQuantity(addedQty);
+								materialItm.setStoreStock(consumptionStock);
+								inventoryRepository.save(materialItm);
+								materialEntity.setMaterialGroup(materialItemGroupRepository.findOne(materialItm.getItemGroupId()));
+								materialEntity.setMaterial(inventoryRepository.findOne(materialItm.getId()));
+								materialEntity.setUom(materialItm.getUom());
+								materialEntity.setStoreStock(consumptionStock);
+								materialEntity.setQuantity(itemEntity.getQuantity());
+								materialEntity.setIssuedQuantity(itemDto.getIssuedQuantity());
+								materialEntity.setTransactionType(MaterialTransactionType.ISSUED);
+								materialEntity.setActive(MaterialTransaction.ACTIVE_YES);
+								materialEntity.setTransactionDate(DateUtil.convertToTimestamp(materialTransDTO.getTransactionDate()));
+								materialEntity = inventTransactionRepository.save(materialEntity);
+								log.debug("Save object of Inventory: {}" +materialEntity);
+								if(materialIndent != null) { 
+									materialIndent.setTransaction(materialEntity);
+									materialIndent.setIssuedBy(employeeRepository.findOne(SecurityUtils.getCurrentUserId()));
+									materialIndentRepository.save(materialIndent);
+								}
+							
+							} else {
+								itemDto.setErrorMessage("Issued quantity not availbale in store stock.");
+								itemDto.setErrorStatus(true);
+								itemDto.setStatus("400");
+							}
+							
 							if(materialItm.getStoreStock() < materialItm.getMinimumStock()) {   // send purchase request when stock is minimum level
 								PurchaseRequisition purchaseRequest = new PurchaseRequisition();
 								User user = userRepository.findOne(materialTransDTO.getUserId());
@@ -205,31 +237,10 @@ public class InventoryTransactionService extends AbstractService{
 									}
 								}
 								
-							} else {
-								reducedQty = itemEntity.getPendingQuantity() - itemDto.getIssuedQuantity();   
-								addedQty = itemEntity.getIssuedQuantity() + itemDto.getIssuedQuantity();
-								itemEntity.setPendingQuantity(reducedQty); 
-								itemEntity.setIssuedQuantity(addedQty);
-								materialItm.setStoreStock(consumptionStock);
-								inventoryRepository.save(materialItm);
-								materialEntity.setMaterialGroup(materialItemGroupRepository.findOne(materialItm.getItemGroupId()));
-								materialEntity.setMaterial(inventoryRepository.findOne(materialItm.getId()));
-								materialEntity.setUom(materialItm.getUom());
-								materialEntity.setStoreStock(consumptionStock);
-								materialEntity.setQuantity(itemEntity.getQuantity());
-								materialEntity.setIssuedQuantity(itemDto.getIssuedQuantity());
-								materialEntity.setTransactionType(MaterialTransactionType.ISSUED);
-								materialEntity.setActive(MaterialTransaction.ACTIVE_YES);
-								materialEntity.setTransactionDate(DateUtil.convertToTimestamp(materialTransDTO.getTransactionDate()));
-								materialEntity = inventTransactionRepository.save(materialEntity);
-								log.debug("Save object of Inventory: {}" +materialEntity);
-								if(materialIndent != null) { 
-									materialIndent.setTransaction(materialEntity);
-									materialIndent.setIssuedBy(employeeRepository.findOne(SecurityUtils.getCurrentUserId()));
-									materialIndentRepository.save(materialIndent);
-								}
-							}
+							} 
 							
+						} else {
+							isPending = false;
 						}
 						
 						break;
@@ -238,6 +249,12 @@ public class InventoryTransactionService extends AbstractService{
 				log.debug("itemFound - "+ itemFound);
 				if(!itemFound){
 					itemsItr.remove();
+				}
+				
+				if(isPending) {
+					materialIndent.setIndentStatus(IndentStatus.PENDING);
+				}else {
+					materialIndent.setIndentStatus(IndentStatus.ISSUED);
 				}
 			}
 		

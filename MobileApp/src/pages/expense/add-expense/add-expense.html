@@ -52,19 +52,19 @@
 
     <div class="form-group label-floating">
       <label class="control-label">Transaction type</label>
-      <ion-select  class="select-box padding-left0" id="transactionType" placeholder="Choose Transaction type" name="transactionType"  interface="popover" required>
-        <ion-option>Credit</ion-option>
-        <ion-option>Debit</ion-option>
+      <ion-select  class="select-box padding-left0" id="transactionType" [(ngModel)]="mode" placeholder="Choose Transaction type" name="transactionType"  interface="popover" required>
+        <ion-option value="credit">Credit</ion-option>
+        <ion-option value="debit">Debit</ion-option>
       </ion-select>
     </div>
 
     <div class="form-group label-floating">
       <label class="control-label">Payment type</label>
       <ion-select  class="select-box padding-left0" id="paymentType" placeholder="Choose Payment type" name="paymentType"  interface="popover" required>
-        <ion-option>Cash</ion-option>
-        <ion-option>Card</ion-option>
-        <ion-option>Net Banking</ion-option>
-        <ion-option>Cheque</ion-option>
+        <ion-option value="CASH">Cash</ion-option>
+        <ion-option value="CARD">Card</ion-option>
+        <ion-option value="NETBANKING">Net Banking</ion-option>
+        <ion-option value="CHEQUE">Cheque</ion-option>
       </ion-select>
     </div>
 

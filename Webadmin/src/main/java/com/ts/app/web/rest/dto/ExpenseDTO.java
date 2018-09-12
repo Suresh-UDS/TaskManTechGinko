@@ -16,9 +16,9 @@ public class ExpenseDTO extends BaseDTO implements Serializable {
 
     private String description;
 
-    private String debitAmount;
+    private double debitAmount;
 
-    private String creditAmount;
+    private double creditAmount;
 
     private double balanceAmount;
 
@@ -76,22 +76,6 @@ public class ExpenseDTO extends BaseDTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getDebitAmount() {
-        return debitAmount;
-    }
-
-    public void setDebitAmount(String debitAmount) {
-        this.debitAmount = debitAmount;
-    }
-
-    public String getCreditAmount() {
-        return creditAmount;
-    }
-
-    public void setCreditAmount(String creditAmount) {
-        this.creditAmount = creditAmount;
     }
 
     public double getBalanceAmount() {
@@ -189,5 +173,21 @@ public class ExpenseDTO extends BaseDTO implements Serializable {
 
     public void setExpenseCategory(String expenseCategory) {
         this.expenseCategory = expenseCategory;
+    }
+
+    public double getDebitAmount() {
+        return debitAmount;
+    }
+
+    public void setDebitAmount(double debitAmount) {
+        this.debitAmount = debitAmount;
+    }
+
+    public double getCreditAmount() {
+        return creditAmount;
+    }
+
+    public void setCreditAmount(double creditAmount) {
+        this.creditAmount = creditAmount;
     }
 }

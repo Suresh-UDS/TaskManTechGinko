@@ -41,6 +41,12 @@ angular.module('timeSheetApp')
 
             },
 
+            getLatestRecordBySite: function(siteId){
+              return $http.get('api/expenses/latest/'+siteId).then(function (response) {
+                  return response.data;
+              })
+            },
+
             updateExpense: function (expense, callback) {
                 var cb = callback || angular.noop;
 
