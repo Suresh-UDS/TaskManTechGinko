@@ -80,11 +80,11 @@ public class InventoryManagementResource {
 	public ResponseEntity<?> updateMaterial(@Valid @RequestBody MaterialDTO materialDTO, HttpServletRequest request) {
 		log.debug("Update object: {}" +materialDTO);
 		try {
-			inventoryService.updateInventory(materialDTO);
+			materialDTO = inventoryService.updateInventory(materialDTO);
 		} catch(Exception e) { 
 			throw new TimesheetException("Error while updating Inventory" +e);
 		}
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(materialDTO, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/delete/inventory/{id}", method=RequestMethod.DELETE)

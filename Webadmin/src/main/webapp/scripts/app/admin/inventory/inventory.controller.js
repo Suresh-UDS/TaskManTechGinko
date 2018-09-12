@@ -341,10 +341,17 @@ angular.module('timeSheetApp')
 
             console.log('Inventory details ='+ JSON.stringify($scope.editInventory));
 
-             InventoryComponent.update($scope.editInventory).then(function () {
+             InventoryComponent.update($scope.editInventory).then(function (response) {
+            	console.log(response);
                 $scope.loadingStop();
-                $scope.showNotifications('top','center','success','Material updated Successfully');
-                $location.path('/inventory-list');
+                if(response.status === 400) { 
+                	 $scope.showNotifications('top','center','danger','Unable to update Material');
+                     $scope.error = 'ERROR';
+                }else{
+                	$scope.showNotifications('top','center','success','Material updated Successfully');
+                    $location.path('/inventory-list');
+                }
+                
             }).catch(function (response) {
                 $rootScope.loadingStop();
                 $scope.success = null;

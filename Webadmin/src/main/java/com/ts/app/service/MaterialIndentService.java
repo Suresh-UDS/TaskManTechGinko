@@ -309,8 +309,38 @@ public class MaterialIndentService extends AbstractService {
 					Material materialItm = inventoryRepository.findOne(itemDto.getMaterialId());
 					if(itemEntity.getPendingQuantity() > 0) {   
 						Date dateofTransaction = new Date();
-						long consumptionStock = materialItm.getStoreStock() - itemDto.getIssuedQuantity();
-						if(consumptionStock  < materialItm.getMinimumStock()) {
+						if(materialItm.getStoreStock() > itemDto.getIssuedQuantity()) {
+							long consumptionStock = materialItm.getStoreStock() - itemDto.getIssuedQuantity();
+							reducedQty = itemEntity.getPendingQuantity() - itemDto.getIssuedQuantity();  
+							addedQty = itemEntity.getIssuedQuantity() + itemDto.getIssuedQuantity(); 
+							itemEntity.setPendingQuantity(reducedQty);  
+							itemEntity.setIssuedQuantity(addedQty); 
+							MaterialTransaction materialTrans = new MaterialTransaction();
+							materialTrans.setProject(projectRepository.findOne(materialIndentDto.getProjectId()));
+							materialTrans.setSite(siteRepository.findOne(materialIndentDto.getSiteId()));
+							materialTrans.setMaterialIndent(matIndent);
+							materialTrans.setMaterialGroup(materialItemGroupRepository.findOne(materialItm.getItemGroupId()));
+							materialItm.setStoreStock(consumptionStock);
+							inventoryRepository.save(materialItm);
+							materialTrans.setMaterial(materialItm);
+							materialTrans.setUom(materialItm.getUom());
+							materialTrans.setStoreStock(consumptionStock);
+							materialTrans.setIssuedQuantity(itemDto.getIssuedQuantity());
+							materialTrans.setTransactionType(MaterialTransactionType.ISSUED);
+							materialTrans.setTransactionDate(DateUtil.convertToTimestamp(dateofTransaction));
+							materialTrans.setActive(MaterialTransaction.ACTIVE_YES);
+							materialTrans = inventTransactionRepository.save(materialTrans);
+							if(materialTrans.getId() > 0) { 
+								matIndent.setTransaction(materialTrans);
+							}
+							
+						} else {
+							itemDto.setErrorMessage("Issued quantity not availbale in store stock.");
+							itemDto.setErrorStatus(true);
+							itemDto.setStatus("400");
+						}
+						
+						if(materialItm.getStoreStock() < materialItm.getMinimumStock()) {    // send purchase request when stock is minimum level
 							PurchaseRequisition purchaseRequest = new PurchaseRequisition();
 							purchaseRequest.setProject(projectRepository.findOne(materialIndentDto.getProjectId()));
 							purchaseRequest.setSite(siteRepository.findOne(materialIndentDto.getSiteId()));
@@ -341,33 +371,9 @@ public class MaterialIndentService extends AbstractService {
 								}
 							}
 							
-						} else {
-							reducedQty = itemEntity.getPendingQuantity() - itemDto.getIssuedQuantity();  
-							addedQty = itemEntity.getIssuedQuantity() + itemDto.getIssuedQuantity(); 
-							itemEntity.setPendingQuantity(reducedQty);  
-							itemEntity.setIssuedQuantity(addedQty); 
-							MaterialTransaction materialTrans = new MaterialTransaction();
-							materialTrans.setProject(projectRepository.findOne(materialIndentDto.getProjectId()));
-							materialTrans.setSite(siteRepository.findOne(materialIndentDto.getSiteId()));
-							materialTrans.setMaterialIndent(matIndent);
-							materialTrans.setMaterialGroup(materialItemGroupRepository.findOne(materialItm.getItemGroupId()));
-							materialItm.setStoreStock(consumptionStock);
-							inventoryRepository.save(materialItm);
-							materialTrans.setMaterial(materialItm);
-							materialTrans.setUom(materialItm.getUom());
-							materialTrans.setStoreStock(consumptionStock);
-							materialTrans.setIssuedQuantity(itemDto.getIssuedQuantity());
-							materialTrans.setTransactionType(MaterialTransactionType.ISSUED);
-							materialTrans.setTransactionDate(DateUtil.convertToTimestamp(dateofTransaction));
-							materialTrans.setActive(MaterialTransaction.ACTIVE_YES);
-							materialTrans = inventTransactionRepository.save(materialTrans);
-							if(materialTrans.getId() > 0) { 
-								matIndent.setTransaction(materialTrans);
-							}
-						}
-
+						} 
+						
 					} 
-					
 									
 					break;
 				}
