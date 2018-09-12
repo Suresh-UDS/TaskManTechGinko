@@ -122,7 +122,7 @@
                                             <div class="form-group">
                                                 <label class="control-label">Item Code<span class="red-star">*</span></label>
                                                 <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                <select ng-options = "purchase as purchase.itemCode for purchase in purchases" ng-model="selectedItemCode"  class="form-control">
+                                                <select ng-options = "purchase as purchase.itemCode for purchase in purchases track by purchase.id" ng-model="selectedItemCode"  class="form-control">
                                                     <option value="">Select...</option>
                                                 </select>
                                             </div>
@@ -138,14 +138,14 @@
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label class="control-label">Unit of price</label>
-                                        <input type="number" class="form-control" name="uop" min="1" ng-model="selectedItemCode.unitPrice">
-                                        <!--<div ng-show="itemForm.$submitted || itemForm.uop.$touched">
+                                        <input type="text" class="form-control" name="uop" ng-pattern="/^[0-9]*$/"  ng-model="selectedItemCode.unitPrice">
+                                        <div ng-show="itemForm.$submitted || itemForm.uop.$touched">
                                             <div ng-show="itemForm.uop.$dirty || itemForm.uop.$invalid">
                                                 <p class="help-block" style="color: maroon"
-                                                   ng-show="itemForm.uop.$error.required">Unit of price is
-                                                    required.</p>
+                                                   ng-show="itemForm.uop.$error.pattern">Unit of price is
+                                                    invalid.</p>
                                             </div>
-                                        </div>-->
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
@@ -175,6 +175,9 @@
                                         <i class="material-icons">add</i>
                                     </span>
                                         Update
+                                    </button>
+                                    <button class="btn btn-danger" ng-click="clearPurchaseItems()"  ng-show="isEdit"  style="padding: 12px 20px; margin-top: 16px;">
+                                        Clear
                                     </button>
 
                                 </div>

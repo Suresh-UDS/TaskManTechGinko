@@ -20,8 +20,6 @@ angular.module('timeSheetApp')
 
         $scope.isEdit = false;
 
-        $scope.selectedUop = 1;
-
         $scope.purchaseObject = {};
 
         $scope.purchaseReqObj = {};
@@ -215,7 +213,7 @@ angular.module('timeSheetApp')
                             $scope.purchase.materialUom = $scope.selectedItemCode.uom;
                             $scope.purchase.materialItemGroupId = $scope.selectedItemCode.itemGroupId;
                             $scope.purchase.quantity = $scope.selectedQuantity;
-                            $scope.purchase.unitPrice = $scope.selectedUop;
+                            $scope.purchase.unitPrice = $scope.selectedItemCode.unitPrice;
                             $scope.purchaseItems.push($scope.purchase);
                             $scope.selectedItemCode='';
                             $scope.selectedQuantity='';
@@ -436,7 +434,6 @@ angular.module('timeSheetApp')
                 if(parseInt($stateParams.id) > 0){
                     PurchaseComponent.findById($stateParams.id).then(function(data) {
                         console.log(data);
-                        $scope.loadingStop();
                         $scope.purchaseReqObj = data;
                         if(!$scope.purchaseReqObj){
                            $location.path('/purchase-requisition-list');
@@ -449,6 +446,7 @@ angular.module('timeSheetApp')
                         $scope.loadPurchases();
                         $scope.selectedEmployee = {id: $scope.purchaseReqObj.requestedById }
                         $scope.materialItems = $scope.purchaseReqObj.items;
+                        $scope.loadingStop();
 
                     });
                     }else{
@@ -514,6 +512,7 @@ angular.module('timeSheetApp')
                     $scope.updateMaterial.materialName = $scope.selectedItemName;
                     $scope.updateMaterial.unitPrice = $scope.selectedItemCode.unitPrice;
                     $scope.updateMaterial.quantity = $scope.selectedQuantity;
+                    $scope.updateMaterial.approvedQty = $scope.items.approvedQty;
                     console.log($scope.indexOf);
                     console.log($scope.updateMaterial);
                     updateItems($scope.indexOf, $scope.updateMaterial);
@@ -667,5 +666,19 @@ angular.module('timeSheetApp')
                 }
                 //$scope.search();
             };
+
+            $scope.deleteConfirm = function (purchase){
+                $scope.deletePurchaseId= purchase;
+            }
+
+
+
+            $scope.deletePurchase = function () {
+                    PurchaseComponent.remove($scope.deletePurchaseId).then(function(){
+                        $scope.success = 'OK';
+                        $scope.showNotifications('top','center','success','Purchase requisition has been deleted successfully!!');
+                        $scope.loadPurchaseReq();
+                    });
+            }
 
     });

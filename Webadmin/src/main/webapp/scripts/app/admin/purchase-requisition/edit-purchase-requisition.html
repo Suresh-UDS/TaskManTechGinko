@@ -138,14 +138,14 @@
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label class="control-label">Unit of price</label>
-                                        <input type="number" class="form-control" name="uop" min="1" ng-model="selectedItemCode.unitPrice">
-                                        <!--<div ng-show="itemForm.$submitted || itemForm.uop.$touched">
+                                        <input type="number" class="form-control" name="uop" ng-pattern="/^[0-9]*$/" ng-model="selectedItemCode.unitPrice">
+                                        <div ng-show="itemForm.$submitted || itemForm.uop.$touched">
                                             <div ng-show="itemForm.uop.$dirty || itemForm.uop.$invalid">
                                                 <p class="help-block" style="color: maroon"
                                                    ng-show="itemForm.uop.$error.required">Unit of price is
-                                                    required.</p>
+                                                    invalid.</p>
                                             </div>
-                                        </div>-->
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
