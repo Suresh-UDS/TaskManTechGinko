@@ -48,7 +48,7 @@
                                         <div class="form-group">
                                             <label class="control-label">Select Site <span class="red-star">*</span></label>
                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select ng-options = "site.name for site in sites" name="site" ng-model = "selectedSite" class="form-control" ng-click="checkProject()" required>
+                                            <select ng-options = "site.name for site in sites" name="site" ng-model = "selectedSite" ng-change="getLatestEntry(selectedSite)" class="form-control" ng-click="checkProject()" required>
                                                 <option value="">Select Site...</option>
                                             </select>
 
