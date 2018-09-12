@@ -170,6 +170,7 @@ public class PurchaseRequisitionService extends AbstractService {
 		}
 		if(purchaseReqDTO.getApprovedById() > 0) {
 			purchaseRequest.setApprovedBy(employeeRepository.findOne(purchaseReqDTO.getApprovedById()));
+			purchaseRequest.setApprovedDate(DateUtil.convertToTimestamp(new Date()));
 		}
 		
 		List<PurchaseReqItemDTO> purchaseItemDTOs = purchaseReqDTO.getItems();

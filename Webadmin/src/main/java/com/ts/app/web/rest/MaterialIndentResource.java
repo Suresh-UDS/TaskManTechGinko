@@ -100,6 +100,7 @@ public class MaterialIndentResource {
 	public ResponseEntity<?> createTransaction(@Valid @RequestBody MaterialIndentDTO materialIndentDto, HttpServletRequest request) {
 		MaterialIndentDTO result = null;
 		try {
+			materialIndentDto.setUserId(SecurityUtils.getCurrentUserId());
 			result = materialIndentService.createMaterialTransaction(materialIndentDto);
 		}catch(Exception e) { 
 			throw new TimesheetException("Error while create transaction for Indent" +e);
