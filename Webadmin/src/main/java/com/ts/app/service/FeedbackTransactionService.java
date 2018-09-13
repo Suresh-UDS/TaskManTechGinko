@@ -30,19 +30,26 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Employee;
 import com.ts.app.domain.FeedbackAnswerType;
 import com.ts.app.domain.FeedbackMapping;
 import com.ts.app.domain.FeedbackTransaction;
 import com.ts.app.domain.FeedbackTransactionResult;
+import com.ts.app.domain.Project;
 import com.ts.app.domain.Setting;
+import com.ts.app.domain.User;
 import com.ts.app.repository.FeedbackMappingRepository;
 import com.ts.app.repository.FeedbackTransactionRepository;
+import com.ts.app.repository.ManufacturerRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SettingsRepository;
-import com.ts.app.repository.ManufacturerRepository;
+import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.DateUtil;
+import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.FeedbackQuestionRating;
 import com.ts.app.web.rest.dto.FeedbackReportResult;
 import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
@@ -89,6 +96,15 @@ public class FeedbackTransactionService extends AbstractService {
 
 	@Inject
 	private Environment env;
+	
+	@Inject
+	private UserRepository userRepository;
+
+	@Inject
+	private ExportUtil exportUtil;
+
+    @Inject
+    private ReportUtil reportUtil;
 
 	public FeedbackTransactionDTO saveFeebdackInformation(FeedbackTransactionDTO feedbackTransDto) {
 	    log.debug("user code- "+feedbackTransDto.getReviewerCode());
@@ -530,5 +546,39 @@ public class FeedbackTransactionService extends AbstractService {
 		return feedbackMapping;
 	}
 
+    public ExportResult generateReport(List<FeedbackTransactionDTO> transactions, SearchCriteria criteria) {
+    		User user = userRepository.findOne(criteria.getUserId());
+		Employee emp = null;
+		if(user != null) {
+			emp = user.getEmployee();
+		}
+		long projId = criteria.getProjectId();
+		Project proj = null;
+		if(projId > 0) {
+			proj = projectRepository.findOne(projId);
+			criteria.setProjectName(proj.getName());
+		}
+        return reportUtil.generateFeedbackReports(transactions, user, emp, null, criteria);
+    }
+
+
+	public ExportResult getExportStatus(String fileId) {
+		ExportResult er = new ExportResult();
+
+		fileId += ".xlsx";
+        //log.debug("FILE ID INSIDE OF getExportStatus CALL ***********"+fileId);
+
+		if(!StringUtils.isEmpty(fileId)) {
+			String status = exportUtil.getExportStatus(fileId);
+			er.setFile(fileId);
+			er.setStatus(status);
+		}
+		return er;
+	}
+
+	public byte[] getExportFile(String fileName) {
+		//return exportUtil.readExportFile(fileName);
+		return exportUtil.readExportFile(fileName);
+	}
 
 }

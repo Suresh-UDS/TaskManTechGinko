@@ -138,6 +138,22 @@ angular.module('timeSheetApp')
                 return $http.post('api/feedback/reports', searchCriteria).then(function (response) {
                     return response.data;
                 });
-            }
+            },
+            exportAllData: function(searchCriteria) {
+	            	return $http.post('api/feedback/export', searchCriteria).then(function (response) {
+	            		return response.data;
+	            	});
+	        },
+	        exportStatus: function(fileName) {
+	            	return $http.get('api/feedback/export/'+fileName+"/status").then(function (response) {
+	            		return response.data;
+	            	});
+	        },
+	        getExportFile: function(fileName) {
+	            	return $http.get('api/feedback/export/'+fileName).then(function (response) {
+	            		return response.data;
+	            	});
+	        }
+
         };
     });

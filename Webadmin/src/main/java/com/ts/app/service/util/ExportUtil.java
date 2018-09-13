@@ -10,7 +10,9 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -19,12 +21,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -50,6 +54,8 @@ import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
+import com.ts.app.web.rest.dto.FeedbackTransactionResultDTO;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.TicketDTO;
@@ -93,10 +99,13 @@ public class ExportUtil {
 	
 	private String[] VENDOR_HEADER = { "ID", "NAME", "CONTACT FIRSTNAME", "CONTACT LASTNAME", "PHONE", "EMAIL", "ADDRESSLINE1", "ADDRESSLINE2", "CITY", "COUNTRY", "STATE", "PINCODE"};
 	
+	private String[] FEEDBACK_HEADER = { "ID", "DATE", "REVIEWER NAME", "REVIEWER CODE", "SITE", "CLIENT", "FEEDBACK_NAME", "BLOCK", "FLOOR", "ZONE", "RATING", "REMARKS", "DETAILS" };
+
 	private final static String ATTENDANCE_REPORT = "ATTENDANCE_REPORT";
 	private final static String TICKET_REPORT = "TICKET_REPORT";
 	private final static String JOB_REPORT = "JOB_REPORT";
 	private final static String EMPLOYEE_REPORT = "EMPLOYEE_REPORT";
+	private final static String FEEDBACK_REPORT = "FEEDBACK_REPORT";
 
 	@Inject
 	private Environment env;
@@ -1381,7 +1390,7 @@ public class ExportUtil {
 		}
 		return csvData;
 	}
-
+	
 	public ExportResult writeJobExcelReportToFile(String projName, List<JobDTO> content, User user, Employee emp, ExportResult result) {
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend = " + isAppend);
@@ -1893,6 +1902,138 @@ public class ExportUtil {
 		writer_Thread.start();
 
 		result.setEmpId(empId);
+		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
+		result.setStatus(getExportStatus(file_Name));
+		return result;
+	}
+	
+	public ExportResult writeFeedbackExcelReportToFile(String projName, List<FeedbackTransactionDTO> content, User user, Employee emp, ExportResult result) {
+		boolean isAppend = (result != null);
+		log.debug("result = " + result + ", isAppend = " + isAppend);
+		if (result == null) {
+			result = new ExportResult();
+		}
+		String file_Name = null;
+		if (StringUtils.isEmpty(result.getFile())) {
+			if (StringUtils.isNotEmpty(emp.getEmpId())) {
+				file_Name = FEEDBACK_REPORT + "_" + emp.getEmpId() + "_" + System.currentTimeMillis() + ".xlsx";
+			} else {
+				file_Name = FEEDBACK_REPORT + "_" + System.currentTimeMillis() + ".xlsx";
+			}
+		} else {
+			file_Name = result.getFile() + ".xlsx";
+		}
+
+		if (statusMap.containsKey((file_Name))) {
+			String status = statusMap.get(file_Name);
+		} else {
+			statusMap.put(file_Name, "PROCESSING");
+		}
+
+		final String export_File_Name = file_Name;
+		if (lock == null) {
+			lock = new Lock();
+		}
+		try {
+			lock.lock();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		Thread writer_Thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String file_Path = env.getProperty("export.file.path");
+				FileSystem fileSystem = FileSystems.getDefault();
+//				if (StringUtils.isNotEmpty(emp.getEmpId())) {
+//					file_Path += "/" + emp.getEmpId();
+//				}
+				Path path = fileSystem.getPath(file_Path);
+				if (!Files.exists(path)) {
+					Path newEmpPath = Paths.get(file_Path);
+					try {
+						Files.createDirectory(newEmpPath);
+					} catch (IOException e) {
+						log.error("Error While Creating Path " + newEmpPath);
+					}
+				}
+
+				file_Path += "/" + export_File_Name;
+				// create workbook
+				XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+				// create worksheet with title
+				XSSFSheet xssfSheet = xssfWorkbook.createSheet("FEEDBACK_REPORT");
+
+				Row headerRow = xssfSheet.createRow(0);
+
+				for (int i = 0; i < FEEDBACK_HEADER.length; i++) {
+					Cell cell = headerRow.createCell(i);
+					cell.setCellValue(FEEDBACK_HEADER[i]);
+				}
+
+				int rowNum = 1;
+
+				for (FeedbackTransactionDTO transaction : content) {
+
+					Row dataRow = xssfSheet.createRow(rowNum++);
+
+					dataRow.createCell(0).setCellValue(transaction.getId());
+					ZonedDateTime dateTime = transaction.getCreatedDate();
+					Calendar feedbackDate = Calendar.getInstance();
+					feedbackDate.setTimeInMillis(dateTime.toInstant().toEpochMilli());
+					dataRow.createCell(1).setCellValue(feedbackDate.getTime());
+					dataRow.createCell(2).setCellValue(transaction.getReviewerName());
+					dataRow.createCell(3).setCellValue(transaction.getReviewerCode());
+					dataRow.createCell(4).setCellValue(transaction.getSiteName());
+					dataRow.createCell(5).setCellValue(transaction.getProjectName());
+					dataRow.createCell(6).setCellValue(transaction.getFeedbackName());
+					dataRow.createCell(7).setCellValue(transaction.getBlock());
+					dataRow.createCell(8).setCellValue(transaction.getFloor());
+					dataRow.createCell(9).setCellValue(transaction.getZone());
+					dataRow.createCell(10).setCellValue(transaction.getRating());
+					dataRow.createCell(11).setCellValue(transaction.getRemarks());
+					if(CollectionUtils.isNotEmpty(transaction.getResults())) {
+						List<FeedbackTransactionResultDTO> results = transaction.getResults();
+						for(FeedbackTransactionResultDTO result : results) {
+							StringBuffer sb = new StringBuffer();
+							sb.append("Question : " + result.getQuestion());
+							sb.append(", Answer : " + result.getAnswer());
+							sb.append(", Remarks : " + result.getRemarks());
+							dataRow.createCell(12).setCellValue(sb.toString());		
+							dataRow = xssfSheet.createRow(rowNum++);
+						}
+					}
+				}
+
+				for (int i = 0; i < FEEDBACK_HEADER.length; i++) {
+					xssfSheet.autoSizeColumn(i);
+				}
+				log.info(export_File_Name + " Feebdack Excel file created successfully !!!");
+				statusMap.put(export_File_Name, "COMPLETED");
+
+				FileOutputStream fileOutputStream = null;
+				try {
+					fileOutputStream = new FileOutputStream(file_Path);
+					xssfWorkbook.write(fileOutputStream);
+					fileOutputStream.close();
+					
+					//send job report in email.
+					String email = StringUtils.isNotEmpty(emp.getEmail()) ? emp.getEmail() : user.getEmail();
+					if(StringUtils.isNotEmpty(email)) {
+						File file = new File(file_Path);
+			    			mailService.sendJobExportEmail(projName, email, file, new Date());
+					}
+				} catch (IOException e) {
+					log.error("Error while flushing/closing  !!!");
+					statusMap.put(export_File_Name, "FAILED");
+				}
+				lock.unlock();
+			}
+		});
+
+		writer_Thread.start();
+
+		result.setEmpId(emp.getEmpId());
 		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
 		result.setStatus(getExportStatus(file_Name));
 		return result;
