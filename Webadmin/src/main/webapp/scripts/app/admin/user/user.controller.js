@@ -17,6 +17,7 @@ angular.module('timeSheetApp')
         $scope.pager = {};
         $scope.noData = false;
         $scope.checkStatus = 0;
+        $scope.btnDisable = false;
 
         //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -128,6 +129,7 @@ angular.module('timeSheetApp')
 
         $scope.saveUser = function () {
             $scope.saveLoad = true;
+            $scope.btnDisable = true;
         	if($scope.selectedGroup) {
             	$scope.user.userGroupId = $scope.selectedGroup.id;
         	}
@@ -138,6 +140,7 @@ angular.module('timeSheetApp')
         	if($scope.selectedEmployee) {
             	$scope.user.employeeId = $scope.selectedEmployee.id
         	}
+
         	UserComponent.createUser($scope.user).then(function () {
             	$scope.success = 'OK';
                 $scope.saveLoad = false;
@@ -147,6 +150,7 @@ angular.module('timeSheetApp')
             }).catch(function (response) {
                 $scope.success = null;
                 $scope.saveLoad = false;
+                $scope.btnDisable = false;
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                     $scope.errorUserExists = true;
                 } else if(response.status === 400 && response.data.message === 'error.validation'){
@@ -196,6 +200,7 @@ angular.module('timeSheetApp')
 
         $scope.updateUser = function () {
             $scope.saveLoad = true;
+            $scope.btnDisable = true;
 	        	if($scope.selectedRole) {
 	        		$scope.user.userRoleId = $scope.selectedRole.id;
 	        	}
@@ -215,6 +220,7 @@ angular.module('timeSheetApp')
             	$location.path('/users');
             }).catch(function (response) {
                 $scope.saveLoad = false;
+                $scope.btnDisable = false;
                 $scope.success = null;
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {

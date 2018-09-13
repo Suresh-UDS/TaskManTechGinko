@@ -196,12 +196,12 @@
                                             <div class="col-md-9 txt-align-rgt">
                                                 <div class="form-group">
 
-                                                    <button class="btn btn-success" type="submit" ng-click="saveFeedbackMapping()"
-                                                            id="form-button-save" ng-disabled="form.$invalid">
+                                                    <button class="btn btn-success ld ld-over-inverse" type="submit" ng-click="saveFeedbackMapping()"
+                                                            id="form-button-save" ng-disabled="form.$invalid || btnDisable">
                                                         <span class="btn-label"><i class="material-icons">check</i></span> Save
                                                     </button>
                                                     <button class="btn btn-danger" type="button"
-                                                            ng-click="cancelFeedbackMapping()" id="cancel-button">
+                                                            ng-click="cancelFeedbackMapping()" id="cancel-button" ng-disabled="btnDisable">
                                                         <i class="material-icons">close</i> Cancel
                                                     </button>
 
