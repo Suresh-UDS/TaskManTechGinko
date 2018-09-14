@@ -48,15 +48,15 @@
                             <thead>
                                <tr>
 
-                                   <th>Id
-                                       <span class="sortingIcons">
+                                   <th>Ref.No
+                                      <!--  <span class="sortingIcons">
                                             <span ng-click="columnAscOrder('id')" ng-class="isActiveAsc == 'id' ? 'active' : ''" >
                                                 <i  class="fa fa-caret-up"></i>
                                             </span>
                                             <span ng-click="columnDescOrder('id')" ng-class="isActiveDesc == 'id' ? 'active' : ''">
                                                  <i  ng-class="class" class="fa fa-caret-down"></i>
                                             </span>
-                                        </span>
+                                        </span> -->
                                    </th>
                                    <th>Client
                                        <span class="sortingIcons">
@@ -125,7 +125,7 @@
                             <tbody>
 
                             <tr ng-repeat="purchase in purchaseReq">
-                                <td>{{purchase.id}}</td>
+                                <td>{{purchase.purchaseRefNumber}}</td>
                                 <td>{{purchase.projectName}}</td>
                                 <td>{{purchase.siteName}}</td>
                                 <td>{{purchase.requestedByName}}</td>
