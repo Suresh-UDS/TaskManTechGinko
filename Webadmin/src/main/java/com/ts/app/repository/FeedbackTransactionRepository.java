@@ -38,6 +38,9 @@ public interface FeedbackTransactionRepository extends JpaRepository<FeedbackTra
 	@Query("SELECT ft FROM FeedbackTransaction ft WHERE ft.siteId = :siteId")
 	Page<FeedbackTransaction> findBySite(@Param("siteId") long siteId, Pageable pageRequest);
 	
+	@Query("SELECT ft FROM FeedbackTransaction ft WHERE ft.siteId = :siteId and ft.createdDate between :startDate and :endDate")
+	Page<FeedbackTransaction> findBySite(@Param("siteId") long siteId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate, Pageable pageRequest);
+
 	@Query("SELECT ft FROM FeedbackTransaction ft WHERE ft.projectId = :projectId and ft.siteId = :siteId and ft.block = :block")
 	Page<FeedbackTransaction> findByBlock(@Param("siteId") long siteId, @Param("block") String block,Pageable pageRequest);
 

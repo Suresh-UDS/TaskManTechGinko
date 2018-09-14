@@ -28,7 +28,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -44,15 +43,17 @@ import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.domain.Frequency;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.Setting;
 import com.ts.app.domain.Ticket;
 import com.ts.app.domain.User;
 import com.ts.app.domain.util.StringUtil;
+import com.ts.app.repository.SettingsRepository;
 import com.ts.app.service.MailService;
+import com.ts.app.service.SettingsService;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetPPMScheduleEventDTO;
 import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.ChecklistItemDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
@@ -124,6 +125,9 @@ public class ExportUtil {
 	
 	@Inject
 	private MailService mailService;
+	
+	@Inject
+	private SettingsRepository settingsRepository;
 
 	public ExportResult writeConsolidatedJobReportToFile(String projName, List<ReportResult> content,
 			final String empId, ExportResult result) {
@@ -1926,6 +1930,8 @@ public class ExportUtil {
 		if (result == null) {
 			result = new ExportResult();
 		}
+		final long siteId = result.getSiteId();
+		final long projectId = result.getProjectId();
 		String file_Name = null;
 		if (StringUtils.isEmpty(result.getFile())) {
 			if (StringUtils.isNotEmpty(emp.getEmpId())) {
@@ -2032,9 +2038,17 @@ public class ExportUtil {
 					
 					//send job report in email.
 					String email = StringUtils.isNotEmpty(emp.getEmail()) ? emp.getEmail() : user.getEmail();
+					File file = new File(file_Path);
 					if(StringUtils.isNotEmpty(email)) {
-						File file = new File(file_Path);
 			    			mailService.sendFeedbackExportEmail(projName, email, file, new Date());
+					}else {
+						List<Setting> emailSettings = settingsRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK_REPORT_EMAILS, siteId, projectId);
+						if(CollectionUtils.isNotEmpty(emailSettings)) {
+							Setting emailSetting = emailSettings.get(0);
+							if(emailSetting != null && StringUtils.isNotEmpty(emailSetting.getSettingValue())) {
+								mailService.sendFeedbackExportEmail(projName, emailSetting.getSettingValue(), file, new Date());
+							}
+						}
 					}
 				} catch (IOException e) {
 					log.error("Error while flushing/closing  !!!");

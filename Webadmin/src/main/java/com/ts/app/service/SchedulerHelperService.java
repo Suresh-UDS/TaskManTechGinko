@@ -63,10 +63,12 @@ import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
 import com.ts.app.web.rest.dto.JobChecklistDTO;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
 
 /**
  * Service class for managing Device information.
@@ -112,6 +114,9 @@ public class SchedulerHelperService extends AbstractService {
 
 	@Inject
 	private JobManagementService jobManagementService;
+	
+	@Inject
+	private FeedbackTransactionService feedbackTransactionService;
 	
 	@Inject
 	private AssetRepository assetRepository;
@@ -184,7 +189,6 @@ public class SchedulerHelperService extends AbstractService {
 					} else {
 						log.debug("no jobs found on the daterange");
 					}
-
 				}
 			}
 		}
@@ -193,87 +197,78 @@ public class SchedulerHelperService extends AbstractService {
 	public void feedbackDetailedReport() {
 		if (env.getProperty("scheduler.feedbackreport.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
-			List<Setting> settings = null;
-			Setting overdueAlertSetting = null;
-			String alertEmailIds = "";
-			Setting overdueEmails = null;
-
-			List<Job> overDueJobs = jobRepository.findOverdueJobsByStatusAndEndDateTime(cal.getTime());
-			log.debug("Found {} overdue jobs", (overDueJobs != null ? overDueJobs.size() : 0));
-
-			if (CollectionUtils.isNotEmpty(overDueJobs)) {
-				ExportResult exportResult = new ExportResult();
-				//exportResult = exportUtil.writeFeedbackExcelReportToFile(projName, content, user, emp, result) .writeJobReportToFile(overDueJobs, exportResult);
-				for (Job job : overDueJobs) {
-					long siteId = job.getSite().getId();
-					long projId = job.getSite().getProject().getId();
-					if (siteId > 0) {
-						settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, siteId);
-						if (CollectionUtils.isNotEmpty(settings)) {
-							overdueAlertSetting = settings.get(0);
-						}
-						settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, siteId);
-						if (CollectionUtils.isNotEmpty(settings)) {
-							overdueEmails = settings.get(0);
-						}
-						if (overdueEmails != null) {
-							alertEmailIds = overdueEmails.getSettingValue();
-						}
-					} else if (projId > 0) {
-						settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, projId);
-						if (CollectionUtils.isNotEmpty(settings)) {
-							overdueAlertSetting = settings.get(0);
-						}
-						settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, projId);
-						if (CollectionUtils.isNotEmpty(settings)) {
-							overdueEmails = settings.get(0);
-						}
-
-						if (overdueEmails != null) {
-							alertEmailIds = overdueEmails.getSettingValue();
-						}
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+			Calendar dayEndcal = Calendar.getInstance();
+			dayEndcal.set(Calendar.HOUR_OF_DAY, 23);
+			dayEndcal.set(Calendar.MINUTE, 59);
+			dayEndcal.set(Calendar.SECOND, 0);
+			dayEndcal.set(Calendar.MILLISECOND, 0);
+			
+			List<Project> projects = projectRepository.findAll();
+			for (Project proj : projects) {
+				SearchCriteria sc = new SearchCriteria();
+				sc.setFromDate(cal.getTime());
+				sc.setToDate(cal.getTime());
+				sc.setProjectId(proj.getId());
+				Hibernate.initialize(proj.getSite());
+				Set<Site> sites = proj.getSite();
+				Iterator<Site> siteItr = sites.iterator();
+				List<Setting> settings = null;
+				List<Setting> emailSettings = null;
+				List<Setting> timeSettings = null;
+				while(siteItr.hasNext()) {
+					Site site = siteItr.next();
+					sc.setSiteId(site.getId());
+					settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK_REPORT, site.getId(), proj.getId());
+					emailSettings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK_REPORT_EMAILS, site.getId(), proj.getId());
+					timeSettings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK_REPORT_TIME, site.getId(), proj.getId());
+					Setting feedbackReports = null;
+					if (CollectionUtils.isNotEmpty(settings)) {
+						feedbackReports = settings.get(0);
 					}
-					try {
-						List<Long> pushAlertUserIds = new ArrayList<Long>();
-						Employee assignee = job.getEmployee();
-						if (assignee.getUser() != null) {
-							pushAlertUserIds.add(assignee.getUser().getId()); // add employee user account id for push
-						}
-						int alertCnt = job.getOverdueAlertCount() + 1;
-						Employee manager = assignee;
-						for (int x = 0; x < alertCnt; x++) {
-							if (manager != null) {
-								manager = manager.getManager();
-								if (manager != null && manager.getUser() != null) {
-									alertEmailIds += "," + manager.getUser().getEmail();
-									pushAlertUserIds.add(manager.getUser().getId()); // add manager user account id for push
-								}
+					Setting feedbackEmail = null;
+					if (CollectionUtils.isNotEmpty(emailSettings)) {
+						feedbackEmail = emailSettings.get(0);
+					}
+					Setting feedbackTime = null;
+					if (CollectionUtils.isNotEmpty(timeSettings)) {
+						feedbackTime = timeSettings.get(0);
+					}
+					if (feedbackReports != null && feedbackReports.getSettingValue().equalsIgnoreCase("true")) {
+						String reportTime = feedbackTime !=null ? feedbackTime.getSettingValue() : null;
+						Calendar now = Calendar.getInstance();
+						now.set(Calendar.SECOND,  0);
+						now.set(Calendar.MILLISECOND, 0);
+						Calendar reportTimeCal = Calendar.getInstance();
+						if(StringUtils.isNotEmpty(reportTime)) {
+							try {
+								Date reportDateTime = DateUtil.parseToDateTime(reportTime);
+								reportTimeCal.setTime(reportDateTime);
+								reportTimeCal.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH));
+								reportTimeCal.set(Calendar.MONTH, now.get(Calendar.MONTH));
+								reportTimeCal.set(Calendar.YEAR, now.get(Calendar.YEAR));
+								reportTimeCal.set(Calendar.SECOND, 0);
+								reportTimeCal.set(Calendar.MILLISECOND, 0);
+							}catch (Exception e) {
+								log.error("Error while parsing feedback report time configured for client : " + proj.getName() , e);
 							}
 						}
-						try {
-							if (CollectionUtils.isNotEmpty(pushAlertUserIds)) {
-								long[] pushUserIds = Longs.toArray(pushAlertUserIds);
-								String message = "Site - " + job.getSite().getName() + ", Job - " + job.getTitle() + ", Status - " + JobStatus.OVERDUE.name() + ", Time - "
-										+ job.getPlannedEndTime();
-								pushService.send(pushUserIds, message); // send push to employee and managers.
-							}
-							if (overdueAlertSetting != null && overdueAlertSetting.getSettingValue().equalsIgnoreCase("true")) { // send escalation emails to managers and alert
-																																	// emails
-								//mailService.sendOverdueJobAlert(assignee.getUser(), alertEmailIds, job.getSite().getName(), job.getId(), job.getTitle(), exportResult.getFile());
-								//job.setOverDueEmailAlert(true);
-							}
-						} catch (Exception e) {
-							log.error("Error while sending push and email notification for overdue job alerts", e);
+						if(reportTimeCal.equals(now) && (feedbackEmail != null && StringUtils.isNotEmpty(feedbackEmail.getSettingValue()))) {
+							SearchResult<FeedbackTransactionDTO> results = feedbackTransactionService.findBySearchCrieria(sc);
+				            List<FeedbackTransactionDTO> content = results.getTransactions();
+							ExportResult result = new ExportResult();
+							result.setProjectId(proj.getId());
+							result.setSiteId(site.getId());
+							exportUtil.writeFeedbackExcelReportToFile(proj.getName(), content, null, null, result);
 						}
-						job.setOverdueAlertCount(alertCnt);
-						job.setStatus(JobStatus.OVERDUE);
-						jobRepository.save(job);
-
-					} catch (Exception ex) {
-						log.warn("Failed to create JOB ", ex);
+						
 					}
 				}
 			}
+			
 		}
 	}
 	

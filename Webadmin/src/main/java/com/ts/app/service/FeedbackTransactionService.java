@@ -285,10 +285,12 @@ public class FeedbackTransactionService extends AbstractService {
                 pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
 
             }else{
-                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            		if(searchCriteria.isReport() || searchCriteria.isFindAll()) {
+            			pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+            		}else {
+            			pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            		}
             }
-
-
 
 			Page<FeedbackTransaction> page = null;
 			List<FeedbackTransactionDTO> transitems = null;
@@ -299,6 +301,8 @@ public class FeedbackTransactionService extends AbstractService {
 					page = feedbackTransactionRepository.findByFloor(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), pageRequest);
 				}else if(StringUtils.isNotEmpty(searchCriteria.getBlock())) {
 					page = feedbackTransactionRepository.findByBlock(searchCriteria.getSiteId(), searchCriteria.getBlock(), pageRequest);
+				}else if(searchCriteria.getSiteId() > 0 && searchCriteria.getFromDate() != null && searchCriteria.getToDate() != null) {
+					page = feedbackTransactionRepository.findBySite(searchCriteria.getSiteId(), DateUtil.convertToZDT(searchCriteria.getFromDate()),DateUtil.convertToZDT(searchCriteria.getToDate()), pageRequest);
 				}else if(searchCriteria.getSiteId() > 0) {
 					page = feedbackTransactionRepository.findBySite(searchCriteria.getSiteId(), pageRequest);
 				}
