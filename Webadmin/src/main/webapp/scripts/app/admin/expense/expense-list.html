@@ -48,7 +48,7 @@
                                    <th> credit</th>
                                    <th> Balance</th>
                                    <th> Payment type</th>
-                                   <th>Actions</th>
+                                   <th class="text-center">Actions</th>
 
                                </tr>
                             </thead>
@@ -63,16 +63,17 @@
                                     <td>{{expense.creditAmount}}</td>
                                     <td>{{expense.balanceAmount}}</td>
                                     <td>{{expense.paymentType}}</td>
-                                    <td class="text-right hoverMe">
+                                    <td class="text-center">
+                                        <button  title="View"  class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
 
-                                        <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
+                                        <!--<a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>-->
 
-                                        <div class="HoverBx">
-                                            <button  title="View"  class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                            <a ui-sref="edit-expense"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                        <!--<div class="HoverBx">-->
+                                            <!--<button  title="View"  class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>-->
+                                            <!--<a ui-sref="edit-expense"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>-->
 
-                                            <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                        </div>
+                                            <!--<a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>-->
+                                        <!--</div>-->
 
 
                                     </td>
