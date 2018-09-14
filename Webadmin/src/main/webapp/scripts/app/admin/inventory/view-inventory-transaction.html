@@ -23,9 +23,13 @@
                                         <td>{{transactionViews.siteName}}</td>
 
                                     </tr>
-                                    <tr>
+                                    <tr ng-if="transactionViews.materialIndentRefNumber">
                                      <td>Indent Reference Number</td>
                                      <td>{{transactionViews.materialIndentRefNumber}}</td>
+                                    </tr>
+                                    <tr ng-if="transactionViews.purchaseRequisitionNumber">
+                                     <td>Purchase Reference Number</td>
+                                     <td>{{transactionViews.purchaseRequisitionNumber}}</td>
                                     </tr>
                                 </tbody>
                             </table>

@@ -178,7 +178,7 @@ public class PurchaseRequisitionService extends AbstractService {
 		if(purchaseReqDTO.getRequestStatus().equals(PurchaseRequestStatus.REJECTED)) {
 			purchaseRequest.setRequestStatus(PurchaseRequestStatus.REJECTED);
 		}
-		if(purchaseReqDTO.getRequestStatus().equals(PurchaseRequestStatus.PURCHASERAISED)) {
+		if(purchaseReqDTO.getPurchaseOrderNumber() != null) {
 			purchaseRequest.setRequestStatus(PurchaseRequestStatus.PURCHASERAISED);
 		}
 		List<PurchaseReqItemDTO> purchaseItemDTOs = purchaseReqDTO.getItems();

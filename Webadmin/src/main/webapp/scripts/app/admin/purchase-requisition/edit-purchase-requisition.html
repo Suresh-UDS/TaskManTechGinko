@@ -66,6 +66,16 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-4">
+                                <div class="form-group no-padding" >
+                                    <div class="dropdown">
+                                        <div class="form-group">
+                                            <label class="control-label">P.O Number </label>
+                               				<input type="text" name="refNumber" class="form-control" ng-model="purchaseReqObj.purchaseOrderNumber">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <h3 class="HeadingTxt">Requester Details</h3>
                         <div class="row">
@@ -137,12 +147,12 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label class="control-label">Unit of price</label>
-                                        <input type="number" class="form-control" name="uop" ng-pattern="/^[0-9]*$/" ng-model="selectedItemCode.unitPrice">
+                                        <label class="control-label">UOM</label>
+                                        <input type="text" class="form-control" name="uop" ng-pattern="/^[0-9]*$/" ng-model="selectedItemCode.uom" ng-disabled="true">
                                         <div ng-show="itemForm.$submitted || itemForm.uop.$touched">
                                             <div ng-show="itemForm.uop.$dirty || itemForm.uop.$invalid">
                                                 <p class="help-block" style="color: maroon"
-                                                   ng-show="itemForm.uop.$error.required">Unit of price is
+                                                   ng-show="itemForm.uop.$error.required">UOM is
                                                     invalid.</p>
                                             </div>
                                         </div>
@@ -192,7 +202,7 @@
                                         <tr>
                                             <th>Item Code</th>
                                             <th>Item Name</th>
-                                            <th>Uop</th>
+                                            <th>UOM</th>
                                             <th>Quantity</th>
                                             <th class="text-right">Actions</th>
                                         </tr>
@@ -201,7 +211,7 @@
                                         <tr ng-repeat="purchase in materialItems" ng-class="{'highlight-text':$index == selectedRow}">
                                             <td>{{purchase.materialItemCode}}</td>
                                             <td>{{purchase.materialName}}</td>
-                                            <td>{{purchase.unitPrice}}</td>
+                                            <td>{{purchase.materialUom}}</td>
                                             <td>{{purchase.quantity}}</td>
                                             <td class="text-right" ng-click="editMaterial($index, purchase)"> <a class="btn btn-simple btn-info"><i class="material-icons">edit</i></a></td>
                                         </tr>

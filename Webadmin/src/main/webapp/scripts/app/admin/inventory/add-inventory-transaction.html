@@ -46,7 +46,7 @@
                                                    <div class="form-group">
                                                        <label class="control-label">Select Site <span class="red-star">*</span></label>
                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                       <select class="form-control" ng-model="projectSite"  ng-change="loadIndents();loadSiteItems()" ng-options="site as site.name for site in sites">
+                                                       <select class="form-control" ng-model="projectSite"  ng-change="loadIndents();loadPurchases()" ng-options="site as site.name for site in sites">
                                                            <option value="">Select Site...</option>
                                                        </select>
                                                    </div>
@@ -60,7 +60,7 @@
                                                    <div class="form-group" ng-init="loadTransactionType()">
                                                        <label class="control-label">Transaction Type <span class="red-star">*</span></label>
                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                       <select class="form-control" ng-model="selectedTransactionType" ng-options="transactionType for transactionType in transactionTypes | orderBy">
+                                                       <select class="form-control" ng-model="selectedTransactionType" ng-change="changeType()" ng-options="transactionType for transactionType in transactionTypes | orderBy">
                                                            <option value="">Select Transaction type...</option>
                                                        </select>
                                                    </div>
@@ -88,7 +88,7 @@
                                                    <div class="form-group">
                                                        <label class="control-label">Purchase Ref.No<span class="red-star">*</span></label>
                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                       <select class="form-control" ng-model="selectedPurchaseReq" ng-change="loadPurchaseItems()" ng-options="purchaseItem as purchaseItem.indentRefNumber for purchaseItem in purchaseItems">
+                                                       <select class="form-control" ng-model="selectedPurchaseReq" ng-change="loadPurchaseItems()" ng-options="purchaseItem as purchaseItem.purchaseRefNumber for purchaseItem in purchaseItems">
                                                            <option value="">Select Purchase Ref.No...</option>
                                                        </select>
                                                    </div>
@@ -227,7 +227,8 @@
                             <td>{{material.materialName}}</td>
                             <td>{{material.materialStoreStock}}</td>
                             <td>{{material.materialUom}}</td>
-                            <td>{{material.issuedQuantity}}</td>
+                            <td ng-if="material.issuedQuantity">{{material.issuedQuantity}}</td>
+                            <td ng-if="material.approvedQty">{{material.approvedQty}}</td>
                          </tr>
                          <tr ng-show="!materialItems.length">
                          	<td colspan="6" class="txt-align-center">No Material Items Found</td>
@@ -250,7 +251,7 @@
                                    id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
                            <button type="submit"
-                                   id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
+                                   id="form-button-save" ng-disabled="!selectedItems.length"  class="btn btn-success pull-right"><span class="btn-label">
                                             <i class="material-icons">check</i>
                                         </span>Create</button>
 
