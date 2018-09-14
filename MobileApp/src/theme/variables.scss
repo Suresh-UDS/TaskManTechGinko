@@ -251,6 +251,8 @@ button.button-md-primary p.siteName
 
 }
 
+
+
 //header title alignment
 
 
@@ -269,6 +271,11 @@ ion-header
     }
   }
 
+}
+
+ion-buttons, .bar-button-menutoggle,.back-button
+{
+  z-index: 99;
 }
 
 
