@@ -189,6 +189,94 @@ public class SchedulerHelperService extends AbstractService {
 			}
 		}
 	}
+	
+	public void feedbackDetailedReport() {
+		if (env.getProperty("scheduler.feedbackreport.enabled").equalsIgnoreCase("true")) {
+			Calendar cal = Calendar.getInstance();
+			List<Setting> settings = null;
+			Setting overdueAlertSetting = null;
+			String alertEmailIds = "";
+			Setting overdueEmails = null;
+
+			List<Job> overDueJobs = jobRepository.findOverdueJobsByStatusAndEndDateTime(cal.getTime());
+			log.debug("Found {} overdue jobs", (overDueJobs != null ? overDueJobs.size() : 0));
+
+			if (CollectionUtils.isNotEmpty(overDueJobs)) {
+				ExportResult exportResult = new ExportResult();
+				//exportResult = exportUtil.writeFeedbackExcelReportToFile(projName, content, user, emp, result) .writeJobReportToFile(overDueJobs, exportResult);
+				for (Job job : overDueJobs) {
+					long siteId = job.getSite().getId();
+					long projId = job.getSite().getProject().getId();
+					if (siteId > 0) {
+						settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, siteId);
+						if (CollectionUtils.isNotEmpty(settings)) {
+							overdueAlertSetting = settings.get(0);
+						}
+						settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, siteId);
+						if (CollectionUtils.isNotEmpty(settings)) {
+							overdueEmails = settings.get(0);
+						}
+						if (overdueEmails != null) {
+							alertEmailIds = overdueEmails.getSettingValue();
+						}
+					} else if (projId > 0) {
+						settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, projId);
+						if (CollectionUtils.isNotEmpty(settings)) {
+							overdueAlertSetting = settings.get(0);
+						}
+						settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, projId);
+						if (CollectionUtils.isNotEmpty(settings)) {
+							overdueEmails = settings.get(0);
+						}
+
+						if (overdueEmails != null) {
+							alertEmailIds = overdueEmails.getSettingValue();
+						}
+					}
+					try {
+						List<Long> pushAlertUserIds = new ArrayList<Long>();
+						Employee assignee = job.getEmployee();
+						if (assignee.getUser() != null) {
+							pushAlertUserIds.add(assignee.getUser().getId()); // add employee user account id for push
+						}
+						int alertCnt = job.getOverdueAlertCount() + 1;
+						Employee manager = assignee;
+						for (int x = 0; x < alertCnt; x++) {
+							if (manager != null) {
+								manager = manager.getManager();
+								if (manager != null && manager.getUser() != null) {
+									alertEmailIds += "," + manager.getUser().getEmail();
+									pushAlertUserIds.add(manager.getUser().getId()); // add manager user account id for push
+								}
+							}
+						}
+						try {
+							if (CollectionUtils.isNotEmpty(pushAlertUserIds)) {
+								long[] pushUserIds = Longs.toArray(pushAlertUserIds);
+								String message = "Site - " + job.getSite().getName() + ", Job - " + job.getTitle() + ", Status - " + JobStatus.OVERDUE.name() + ", Time - "
+										+ job.getPlannedEndTime();
+								pushService.send(pushUserIds, message); // send push to employee and managers.
+							}
+							if (overdueAlertSetting != null && overdueAlertSetting.getSettingValue().equalsIgnoreCase("true")) { // send escalation emails to managers and alert
+																																	// emails
+								//mailService.sendOverdueJobAlert(assignee.getUser(), alertEmailIds, job.getSite().getName(), job.getId(), job.getTitle(), exportResult.getFile());
+								//job.setOverDueEmailAlert(true);
+							}
+						} catch (Exception e) {
+							log.error("Error while sending push and email notification for overdue job alerts", e);
+						}
+						job.setOverdueAlertCount(alertCnt);
+						job.setStatus(JobStatus.OVERDUE);
+						jobRepository.save(job);
+
+					} catch (Exception ex) {
+						log.warn("Failed to create JOB ", ex);
+					}
+				}
+			}
+		}
+	}
+	
 
 	public void overdueJobReport() {
 		if (env.getProperty("scheduler.overdueJob.enabled").equalsIgnoreCase("true")) {

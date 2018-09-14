@@ -39,6 +39,10 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     
     private boolean feedbackEmailAlert;
 
+    private long feedbackReportEmailAlertId;
+    
+    private boolean feedbackReportEmailAlert;
+
     private long quotationEmailAlertId;
     
     private boolean quotationEmailAlert;
@@ -74,6 +78,14 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     private long feedbackEmailsId;
     
     private List<String> feedbackEmailIds;
+    
+    private long feedbackReportEmailsId;
+    
+    private List<String> feedbackReportEmailIds;
+
+    private long feedbackReportTimeId;
+    
+    private Date feedbackReportTime;
 
     private long quotationEmailsId;
     
@@ -569,6 +581,54 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 
 	public void setWarrantyEmailIds(List<String> warrantyEmailIds) {
 		this.warrantyEmailIds = warrantyEmailIds;
+	}
+
+	public long getFeedbackReportEmailAlertId() {
+		return feedbackReportEmailAlertId;
+	}
+
+	public void setFeedbackReportEmailAlertId(long feedbackReportEmailAlertId) {
+		this.feedbackReportEmailAlertId = feedbackReportEmailAlertId;
+	}
+
+	public boolean isFeedbackReportEmailAlert() {
+		return feedbackReportEmailAlert;
+	}
+
+	public void setFeedbackReportEmailAlert(boolean feedbackReportEmailAlert) {
+		this.feedbackReportEmailAlert = feedbackReportEmailAlert;
+	}
+
+	public long getFeedbackReportEmailsId() {
+		return feedbackReportEmailsId;
+	}
+
+	public void setFeedbackReportEmailsId(long feedbackReportEmailsId) {
+		this.feedbackReportEmailsId = feedbackReportEmailsId;
+	}
+
+	public List<String> getFeedbackReportEmailIds() {
+		return feedbackReportEmailIds;
+	}
+
+	public void setFeedbackReportEmailIds(List<String> feedbackReportEmailIds) {
+		this.feedbackReportEmailIds = feedbackReportEmailIds;
+	}
+
+	public long getFeedbackReportTimeId() {
+		return feedbackReportTimeId;
+	}
+
+	public void setFeedbackReportTimeId(long feedbackReportTimeId) {
+		this.feedbackReportTimeId = feedbackReportTimeId;
+	}
+
+	public Date getFeedbackReportTime() {
+		return feedbackReportTime;
+	}
+
+	public void setFeedbackReportTime(Date feedbackReportTime) {
+		this.feedbackReportTime = feedbackReportTime;
 	}
 
 	
