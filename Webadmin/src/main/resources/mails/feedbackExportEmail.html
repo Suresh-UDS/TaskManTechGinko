@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{email.feedback.detailed.report.title}">TaskMan Job Detailed Report</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="#{email.report.greeting}">
+    Dear
+</p>
+
+<p>
+	Please find the feedback report file attached here.
+</p>
+
+
+<br/>
+<br/>
+<br/>
+
+
+<p>
+    <span th:text="#{email.feedback.detailed.report.text2}">Regards,</span>
+    <br/>
+    <em th:text="#{email.signature}">UDS.</em>
+</p>
+</body>
+</html>

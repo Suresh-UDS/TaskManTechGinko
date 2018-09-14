@@ -52,10 +52,12 @@ import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetPPMScheduleEventDTO;
 import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ChecklistItemDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
 import com.ts.app.web.rest.dto.FeedbackTransactionResultDTO;
+import com.ts.app.web.rest.dto.JobChecklistDTO;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.TicketDTO;
@@ -86,7 +88,7 @@ public class ExportUtil {
 	private String[] EMP_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "DESIGNATION", "REPORTING TO", "CLIENT", "SITE",
 			"ACTIVE" };
 	private String[] JOB_HEADER = { "SITE", "JOB ID", "TITLE", "DESCRIPTION", "TICKET ID", "TICKET TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
-			"STATUS" };
+			"STATUS", "CHECKLIST" };
 	private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT", "DURATION(In Hours) ",
 			 "SHIFT CONTINUED", "LATE CHECK IN","REMARKS" };
 
@@ -1476,6 +1478,17 @@ public class ExportUtil {
 					dataRow.createCell(10)
 							.setCellValue(transaction.getJobStatus() != null ? transaction.getJobStatus().name()
 									: JobStatus.OPEN.name());
+					if(CollectionUtils.isNotEmpty(transaction.getChecklistItems())) {
+						List<JobChecklistDTO> results = transaction.getChecklistItems();
+						for(JobChecklistDTO result : results) {
+							StringBuffer sb = new StringBuffer();
+							sb.append("Item : " + result.getChecklistItemName());
+							sb.append(", Status : " + (result.isCompleted() ? "COMPLETED" : "NOT COMPLETED"));
+							sb.append(", Remarks : " + (StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : ""));
+							dataRow.createCell(11).setCellValue(sb.toString());		
+							dataRow = xssfSheet.createRow(rowNum++);
+						}
+					}					
 				}
 
 				for (int i = 0; i < JOB_HEADER.length; i++) {
@@ -1998,7 +2011,7 @@ public class ExportUtil {
 							StringBuffer sb = new StringBuffer();
 							sb.append("Question : " + result.getQuestion());
 							sb.append(", Answer : " + result.getAnswer());
-							sb.append(", Remarks : " + result.getRemarks());
+							sb.append(", Remarks : " + (StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : ""));
 							dataRow.createCell(12).setCellValue(sb.toString());		
 							dataRow = xssfSheet.createRow(rowNum++);
 						}
@@ -2021,7 +2034,7 @@ public class ExportUtil {
 					String email = StringUtils.isNotEmpty(emp.getEmail()) ? emp.getEmail() : user.getEmail();
 					if(StringUtils.isNotEmpty(email)) {
 						File file = new File(file_Path);
-			    			mailService.sendJobExportEmail(projName, email, file, new Date());
+			    			mailService.sendFeedbackExportEmail(projName, email, file, new Date());
 					}
 				} catch (IOException e) {
 					log.error("Error while flushing/closing  !!!");

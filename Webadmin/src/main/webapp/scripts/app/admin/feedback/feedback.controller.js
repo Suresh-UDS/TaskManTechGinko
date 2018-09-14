@@ -74,6 +74,10 @@ angular.module('timeSheetApp')
         $scope.feedbackReport = {};
 
         $scope.now = new Date()
+        
+        $rootScope.exportStatusObj = {};
+        $scope.checkStatus = 0;
+        
 
         $scope.initCalender = function(){
 
@@ -538,7 +542,8 @@ angular.module('timeSheetApp')
                 $scope.start();
               },function(err){
                   console.log('error message for export all ')
-                  console.log(err);
+                  //console.log(err);
+                  $scope.start();
               });
 	    };
 	
