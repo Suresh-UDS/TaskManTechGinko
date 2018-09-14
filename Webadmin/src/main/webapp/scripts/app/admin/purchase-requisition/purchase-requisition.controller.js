@@ -2,7 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('PurchaseRequisitionController', function ($rootScope, $scope, $state, $timeout,
-    		ProjectComponent, SiteComponent,EmployeeComponent,InventoryComponent, PurchaseComponent, $http,$stateParams,$location, PaginationComponent, getLocalStorage) {
+    		ProjectComponent, SiteComponent,EmployeeComponent,InventoryComponent, PurchaseComponent, $http,$stateParams,$location, PaginationComponent, getLocalStorage,$interval) {
 
     	$scope.selectedProject = {};
 
@@ -23,6 +23,8 @@ angular.module('timeSheetApp')
         $scope.purchaseObject = {};
 
         $scope.purchaseReqObj = {};
+        
+        $rootScope.exportStatusObj  ={};
 
 			//init load
 			$scope.initLoad = function(){
@@ -726,7 +728,7 @@ angular.module('timeSheetApp')
                     if(!exportStatusObj.empId) {
                         exportStatusObj.empId = 0;
                     }
-                    PurchaseRequest.exportStatus(exportStatusObj.fileName).then(function(data) {
+                    PurchaseComponent.exportStatus(exportStatusObj.fileName).then(function(data) {
                         if(data) {
                             exportStatusObj.exportStatus = data.status;
                             console.log('exportStatus - '+ exportStatusObj);
@@ -785,6 +787,24 @@ angular.module('timeSheetApp')
                         return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportMsg : '');
                     }
 
+            };
+            
+         // store the interval promise in this variable
+            var promise;
+
+         // starts the interval
+            $scope.start = function() {
+              // stops any running interval to avoid two intervals running at the same time
+              $scope.stop();
+
+              // store the interval promise
+              promise = $interval($scope.exportStatus, 5000);
+              console.log('promise -'+promise);
+            };
+
+            // stops the interval
+            $scope.stop = function() {
+              $interval.cancel(promise);
             };
 
 

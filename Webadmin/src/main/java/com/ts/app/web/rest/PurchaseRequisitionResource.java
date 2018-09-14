@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.PurchaseRequestStatus;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.PurchaseRequisitionService;
 import com.ts.app.web.rest.dto.AssetDTO;
@@ -172,6 +173,12 @@ public class PurchaseRequisitionResource {
 		response.setHeader("Content-Transfer-Encoding", "binary");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileId + ".xlsx\"");
 		return content;
+	}
+	
+	@RequestMapping(value = "/purchaseRequest/status", method = RequestMethod.GET)
+	public ResponseEntity<PurchaseRequestStatus[]> getRequestStatus() {
+		PurchaseRequestStatus[] status = purchaseReqService.getRequestStatus();
+		return new ResponseEntity<>(status, HttpStatus.OK);
 	}
 	
 	

@@ -1911,9 +1911,9 @@ public class ExportUtil {
 					dataRow.createCell(1).setCellValue(transaction.getPurchaseRefNumber());
 					dataRow.createCell(2).setCellValue(transaction.getProjectName());
 					dataRow.createCell(3).setCellValue(transaction.getSiteName());
-					dataRow.createCell(4).setCellValue(transaction.getRequestedDate());
+					dataRow.createCell(4).setCellValue(transaction.getRequestedDate() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getRequestedDate()) : "");
 					dataRow.createCell(5).setCellValue(transaction.getRequestedByName());
-					dataRow.createCell(6).setCellValue(transaction.getApprovedDate());
+					dataRow.createCell(6).setCellValue(transaction.getApprovedDate() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getApprovedDate()) : "");
 					dataRow.createCell(7).setCellValue(transaction.getApprovedByName());
 					dataRow.createCell(8).setCellValue(transaction.getPurchaseOrderNumber());
 					if(transaction.getRequestStatus() == PurchaseRequestStatus.APPROVED) {

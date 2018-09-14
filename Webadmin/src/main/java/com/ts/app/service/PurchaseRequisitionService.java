@@ -387,6 +387,12 @@ public class PurchaseRequisitionService extends AbstractService {
 		// return exportUtil.readExportFile(fileName);
 		return exportUtil.readJobExportFile(fileName);
 	}
+
+	public PurchaseRequestStatus[] getRequestStatus() {
+		// TODO Auto-generated method stub
+		PurchaseRequestStatus[] requestStatus = PurchaseRequestStatus.values();
+		return requestStatus;
+	}
 	
 	
 	
