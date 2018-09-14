@@ -49,10 +49,15 @@ public class ExpenseManagementService extends AbstractService {
 
         Expense expense = new Expense();
 
+        Expense previousExpenseDetails = new Expense();
+
+        ExpenseDTO expenseDTO1;
+
         if(expenseDTO.getSiteId()>0){
             Site site = siteRepository.findOne(expenseDTO.getSiteId());
             expense.setSite(site);
 
+            previousExpenseDetails = findLatestRecordBySite(expenseDTO.getSiteId());
         }
 
 
@@ -63,24 +68,36 @@ public class ExpenseManagementService extends AbstractService {
         expense.setBillable(expenseDTO.isBillable());
         expense.setReimbursable(expenseDTO.isReimbursable());
         expense.setDescription(expenseDTO.getDescription());
-        expense.setBalanceAmount(expenseDTO.getBalanceAmount());
+//        expense.setBalanceAmount(expenseDTO.getBalanceAmount());
         if(expenseDTO.getExpenseDate() !=null){
             expense.setExpenseDate(expenseDTO.getExpenseDate());
         }
 
         if(Objects.equals(expenseDTO.getMode(), "debit")){
             expense.setExpenseCategory(expenseDTO.getExpenseCategory());
+            expense.setBalanceAmount(previousExpenseDetails.getBalanceAmount()-expenseDTO.getDebitAmount());
             expense.setDebitAmount(expenseDTO.getDebitAmount());
         }
 
+
+
         if (Objects.equals(expenseDTO.getMode(), "credit")){
-            expense.setCreditAmount(expenseDTO.getCreditAmount());
+            if(previousExpenseDetails.getBalanceAmount()>0){
+                expense.setBalanceAmount(previousExpenseDetails.getBalanceAmount()+expenseDTO.getCreditAmount());
+                expense.setCreditAmount(expenseDTO.getCreditAmount());
+
+            }else{
+                expense.setCreditAmount(expenseDTO.getCreditAmount());
+            }
+
         }
 
 
         Expense saveResult = expenseRepository.save(expense);
 
-        ExpenseDTO expenseDTO1 = mapperUtil.toModel(saveResult, ExpenseDTO.class);
+         expenseDTO1 = mapperUtil.toModel(saveResult, ExpenseDTO.class);
+
+         log.info("Expense saved - --------------"+expenseDTO1.getMode());
 
         return expenseDTO1 ;
     }
