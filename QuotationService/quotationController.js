@@ -47,15 +47,20 @@ var _ = require('underscore');
             quotation.createdDate = date;
         }else{
             quotation.isDrafted = false;
+            quotation.createdDate = date;
+
         }
 
         if(req.body.isSubmitted){
             quotation.isSubmitted = true;
+            quotation.createdDate = date;
             quotation.submittedDate = date;
             quotation.processHistory.isSubmitted = date;
             quotation.status = 'Waiting for approval';
         }else{
             quotation.isSubmitted = false;
+            quotation.createdDate = date;
+
         }
 
         if(req.body.isApproved){
