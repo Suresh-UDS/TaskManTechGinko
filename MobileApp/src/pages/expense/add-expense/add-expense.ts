@@ -37,13 +37,16 @@ export class AddExpense {
   clientList: any;
   searchCriteria: any;
   selectDate: Date;
+  previousAmount: any;
     mode:any;
     expenseDetails:any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,
               private datePicker: DatePicker, private modalCtrl: ModalController,private siteService:SiteService,
               private component: componentService, private expenseService: ExpenseService)
-  {  }
+  {
+    this.expenseDetails = {};
+  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AddExpense');
@@ -104,6 +107,22 @@ export class AddExpense {
     )
   }
 
+  getLatestRecordBySite(site){
+
+    this.selectedSite = site;
+
+    this.expenseService.getLatestRecordBySite(this.selectedSite.id).subscribe(
+      response=> {
+        console.log("Checking balance amount");
+        console.log(response);
+        this.previousAmount = response.balanceAmount;
+      },err=>{
+        console.log("Error in getting balance amount");
+        console.log(err);
+      }
+    )
+  }
+
 
 
   dismiss(){
@@ -114,29 +133,31 @@ export class AddExpense {
 
   saveExpense() {
 
-
-
-      if(this.selectedSite){
-          this.expenseDetails.siteId = this.selectedSite.id;
-      }
+    console.log("Selected site");
+    console.log(this.selectedSite);
 
       if(this.selectedProject){
         this.expenseDetails.projectId = this.selectedProject.id;
       }
 
-      if(this.transactionMode== "debit"){
+      if(this.selectedSite){
+        this.expenseDetails.siteId = this.selectedSite.id;
+      }
+
+
+    if(this.transactionMode== "debit"){
         this.expenseDetails.mode = "debit";
       }else if(this.transactionMode == "credit"){
         this.expenseDetails.mode = "credit";
       }
 
-      if(this.selectedDate){
+
         if(this.transactionMode == "debit"){
-          this.expenseDetails.expenseDate = new Date(this.selectedDate);
+          this.expenseDetails.expenseDate = new Date(this.selectDate);
         }else {
-          this.expenseDetails.creditedDate = new Date(this.selectedDate);
+          this.expenseDetails.creditedDate = new Date(this.selectDate);
         }
-      }
+
 
       if(this.selectedCategory && this.transactionMode =="debit"){
         this.expenseDetails.expenseCategory = this.selectedCategory;
@@ -176,20 +197,52 @@ export class AddExpense {
         this.expenseDetails.description = this.description;
       }
 
+
+
+    if(this.transactionMode == "debit") {
+      if (this.previousAmount > this.selectedAmount) {
+        this.expenseDetails.balanceAmount = this.previousAmount - this.selectedAmount;
+        console.log("Before saving expense");
+        console.log(this.expenseDetails);
+          this.expenseService.saveExpenses(this.expenseDetails).subscribe(
+            response=>{
+              console.log("save Expense Details");
+              console.log(response);
+              this.component.showToastMessage("Expense Details saved successfully ",'bottom');
+            },err=>{
+              console.log("Error in save expense");
+              console.log(err);
+              this.component.showToastMessage("Error in save expense transaction ",'bottom');
+            }
+          )
+
+      }else {
+        this.component.showToastMessage("Insufficient funds.. only"+this.previousAmount+"available for the site expenses",'bottom');
+      }
+
+    }else if (this.transactionMode == "credit"){
+        this.expenseDetails.balanceAmount = this.previousAmount + this.selectedAmount;
+        console.log("before saving expenses");
+        console.log(this.expenseDetails);
+
+        this.expenseService.saveExpenses(this.expenseDetails).subscribe(
+          response=>{
+            console.log("save Expense Details");
+            console.log(response);
+            this.component.showToastMessage("Expense Details saved successfully ",'bottom');
+          },err=>{
+            console.log("Error in save expense");
+            console.log(err);
+            this.component.showToastMessage("Error in save expense transaction ",'bottom');
+          }
+        )
+    }
+
+
     console.log("Expense details");
       console.log(this.expenseDetails);
 
-      this.expenseService.saveExpenses(this.expenseDetails).subscribe(
-        response=>{
-          console.log("save Expense Details");
-          console.log(response);
-          this.component.showToastMessage("Expense Details saved successfully ",'bottom');
-        },err=>{
-          console.log("Error in save expense");
-          console.log(err);
-          this.component.showToastMessage("Error in save expense transaction ",'bottom');
-        }
-      )
+
 
   }
 
@@ -206,8 +259,5 @@ export class AddExpense {
         },
           err=>console.log("Error occured while getting date:"+err)
       );
-
-
-
   }
 }

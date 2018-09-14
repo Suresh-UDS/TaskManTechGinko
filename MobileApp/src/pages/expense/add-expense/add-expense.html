@@ -45,8 +45,8 @@
 
     <div class="form-group label-floating">
           <label class="control-label">Site:</label>
-          <ion-select class="select-box padding-left0" [selectOptions]="selectOptions" placeholder="Choose site" name="Site" interface="popover" required [(ngModel)]="selectedSite" >
-            <ion-option  *ngFor="let s of siteList;let i of index" text-center text-lowercase>{{s.name}}</ion-option>
+          <ion-select class="select-box padding-left0" [selectOptions]="selectOptions" placeholder="Choose site" name="Site" interface="popover" [(ngModel)]="selectedSite" text-lowercase>
+            <ion-option  *ngFor="let s of siteList;let i of index" (ionSelect)="getLatestRecordBySite(s)" text-center text-lowercase>{{s.name}}</ion-option>
           </ion-select>
     </div>
 
