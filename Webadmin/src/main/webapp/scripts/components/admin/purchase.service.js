@@ -79,6 +79,12 @@ angular.module('timeSheetApp')
             	return $http.get('api/purchaseRequest/export/'+fileName).then(function (response) {
             		return response.data;
             	});
+            },
+            
+            getAllStatus : function() {
+            	return $http.get('api/purchaseRequest/status').then(function(response) {
+            		return response.data;
+            	});
             }
         };
     });

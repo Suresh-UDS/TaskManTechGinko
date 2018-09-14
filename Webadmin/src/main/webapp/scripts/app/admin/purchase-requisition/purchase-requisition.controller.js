@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('PurchaseRequisitionController', function ($rootScope, $scope, $state, $timeout,
+    .controller('PurchaseRequisitionController', function ($rootScope, $scope, $state, $timeout, $filter,
     		ProjectComponent, SiteComponent,EmployeeComponent,InventoryComponent, PurchaseComponent, $http,$stateParams,$location, PaginationComponent, getLocalStorage,$interval) {
 
     	$scope.selectedProject = {};
@@ -201,6 +201,13 @@ angular.module('timeSheetApp')
                     $scope.selectedItemName = $scope.selectedItemCode.name;
                     $scope.selectedQuantity = "";
                 }
+                
+                $scope.loadStatus = function() {
+                	PurchaseComponent.getAllStatus().then(function(data) {
+                		console.log(data);
+                		$scope.requestStatuses = data;
+                	});
+                }
 
                 $scope.addPurchaseItem = function() {
                     $scope.purchase = {};
@@ -326,6 +333,22 @@ angular.module('timeSheetApp')
 
                 if($scope.pageSort){
                     $scope.searchCriteria.sort = $scope.pageSort;
+                }
+                
+                if($scope.selectedRequestStatus) {
+                	$scope.searchCriteria.requestStatus = $scope.selectedRequestStatus;
+                }
+                
+                if($scope.selectedReferenceNumber) {
+                	$scope.searchCriteria.purchaseRefNumber = $scope.selectedReferenceNumber;
+                }
+                
+                if($scope.searchRequestedDate) {
+                	$scope.searchCriteria.requestedDate = $scope.searchRequestedDate;
+                }
+                
+                if($scope.searchApprovedDate) {
+                	$scope.searchCriteria.approvedDate = $scope.searchApprovedDate;
                 }
 
                 if($scope.selectedColumn){
@@ -695,6 +718,8 @@ angular.module('timeSheetApp')
                 $scope.searchProject = null;
                 $scope.searchSite = null;
                 $scope.searchCriteria = {};
+                $scope.searchRequestedDate = null;
+                $scope.searchApprovedDate = null;
                 $scope.localStorage = null;
                 $rootScope.searchCriteriaSite = null;
                 $scope.pages = {
@@ -806,6 +831,32 @@ angular.module('timeSheetApp')
             $scope.stop = function() {
               $interval.cancel(promise);
             };
+            
+            $('#dateFilterRequestedDate').datetimepicker().on('dp.show', function (e) {
+                return $(this).data('DateTimePicker');
+            });
+
+            $('input#dateFilterRequestedDate').on('dp.change', function(e){
+                $scope.searchRequestedDate = e.date._d;
+                $scope.requestedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            });
+            
+            $('#dateFilterApprovedDate').datetimepicker().on('dp.show', function (e) {
+                return $(this).data('DateTimePicker');
+            });
+
+            $('input#dateFilterApprovedDate').on('dp.change', function(e){
+                $scope.searchApprovedDate = e.date._d;
+                $scope.approvedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            });
+            
+            
+            
+            
+            
+            
+            
+            
 
 
     });

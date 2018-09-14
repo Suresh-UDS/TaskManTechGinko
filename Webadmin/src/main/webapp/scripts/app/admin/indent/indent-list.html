@@ -1,4 +1,4 @@
-<div ng-init="initList();loadingStart()">
+<div ng-init="initList();loadingStart();loadProjects();loadSites();">
 
     <div class="row">
 
@@ -77,6 +77,21 @@
 
                             </tbody>
                         </table>
+                    </div>
+                    
+                     <div class="txt-align-center LoaderCon"  ng-hide="purchaseReqLoader">
+
+                        <div class="pad-TB-30">
+                            <div loader-css="ball-pulse"></div>
+                            <h3 >Loading, please wait...</h3>
+                        </div>
+
+                    </div>
+
+                    <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
+
+                        <h3>No data Found</h3>
+
                     </div>
 
                 </div>
@@ -172,7 +187,7 @@
                             <div id="collapseOne" class="panel-collapse collapse collapseOne in" role="tabpanel" aria-labelledby="headingOne" aria-expanded="true" style="height: 110px;">
                                 <div class="panel-body">
 
-                                    <div class="row" ng-init="loadProjects();loadSites();">
+                                    <div class="row">
 
                                         <div class="col-xs-12 col-md-5">
                                             <div class="form-group" >
@@ -204,13 +219,13 @@
                                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <!--<span class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sitesList.length == 0" ng-change="selectSite(searchSite)">
-                                                        <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?searchSite :'Select Site' }}</ui-select-match>
+                                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-change="selectSite(searchSite)">
+                                                        <ui-select-match placeholder="Select Site...">{{sites.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?searchSite :'Select Site' }}</ui-select-match>
                                                         <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
                                                             <div ng-bind="site"></div>
                                                         </ui-select-choices>
                                                     </ui-select>
-                                                    <span ng-if="sitesList.length == 0"><p class="help-block">No sites</p></span>
+                                                    <span ng-if="sites.length == 0"><p class="help-block">No sites</p></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -253,7 +268,7 @@
                                                 <div class="dropdown">
                                                     <label class="label-control">Requested Date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker"  id="searchRequestedDate" placeholder="DD/MM/YYYY"  ng-model="searchRequestedDate"/>
+                                                    <input type="text" class="form-control datepicker"  id="dateFilterRequestedDate" placeholder="DD/MM/YYYY"  ng-model="requestedDate"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -262,7 +277,7 @@
                                                 <div class="dropdown">
                                                     <label class="label-control">Issued Date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker"  id="searchIssuedDate" placeholder="DD/MM/YYYY"  ng-model="searchIssuedDate"/>
+                                                    <input type="text" class="form-control datepicker"  id="dateFilterIssuedDate" placeholder="DD/MM/YYYY"  ng-model="issuedDate"/>
                                                 </div>
                                             </div>
                                         </div>
