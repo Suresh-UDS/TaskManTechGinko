@@ -544,12 +544,14 @@ angular.module('timeSheetApp')
 	                $scope.searchCriteria.transactionDate = null;
 	   	     }
         	console.log($scope.searchCriteria);
-        	$scope.loadingStart();
+        	$scope.inventoryTransactionlists = '';
+        	$scope.inventoryTranslistLoader = false;
+        	$scope.loadPageTop();
         	InventoryTransactionComponent.search($scope.searchCriteria).then(function (data) {
         		console.log(data);
                 $scope.inventoryTransactionlists = data.transactions;
                 $scope.loadingStop();
-                $scope.inventorylistLoader = true;
+                $scope.inventoryTranslistLoader = true;
                 /*
                  ** Call pagination  main function **
              */

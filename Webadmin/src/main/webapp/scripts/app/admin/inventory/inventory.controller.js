@@ -434,6 +434,9 @@ angular.module('timeSheetApp')
 	   	     }else{
 	                $scope.searchCriteria.materialCreatedDate = null;
 	   	     }
+            $scope.inventorylists = '';
+            $scope.inventorylistLoader = false;
+            $scope.loadPageTop();
         	console.log($scope.searchCriteria);
         	InventoryComponent.search($scope.searchCriteria).then(function (data) {
         		console.log(data);
