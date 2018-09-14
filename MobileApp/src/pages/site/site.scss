@@ -39,5 +39,15 @@ page-site {
   {
     width:100% !important;
   }
+  ion-list
+  {
+    ion-item
+    {
+      .item-inner
+      {
+        margin-left: 0 !important;
+      }
+    }
+  }
 
 }
