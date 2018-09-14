@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
-import {ModalController, NavController, NavParams, ViewController} from "ionic-angular";
+import {ModalController, NavController, NavParams, PopoverController, ViewController} from "ionic-angular";
 import {DatePickerProvider} from "ionic2-date-picker";
 import {DatePicker} from "@ionic-native/date-picker";
 import {SiteService} from "../../service/siteService";
 import {componentService} from "../../service/componentService";
 import {ExpenseService} from "../../service/expenseService";
+import {Camera, CameraOptions} from "@ionic-native/camera";
+import {QuotationImagePopoverPage} from "../../quotation/quotation-image-popover";
+
 
 /**
  * Generated class for the AddExpense page.
@@ -18,7 +21,17 @@ import {ExpenseService} from "../../service/expenseService";
   templateUrl: 'add-expense.html',
 })
 export class AddExpense {
-    selectedSite: any;
+  takenImages: any;
+  receiptNumber: any;
+  description: any;
+  reimbursable: any;
+  billable: any;
+  selectedAmount: any;
+  selectedPaymentType: any;
+  selectedCategory: any;
+  selectedDate: any;
+  transactionMode: any;
+  selectedSite: any;
     expense_type: any;
   selectOptions: { cssClass: string; };
   siteList: any;
@@ -28,13 +41,18 @@ export class AddExpense {
   clientList: any;
   searchCriteria: any;
   selectDate: Date;
+  previousAmount: any;
     mode:any;
     expenseDetails:any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,
               private datePicker: DatePicker, private modalCtrl: ModalController,private siteService:SiteService,
-              private component: componentService, private expenseService: ExpenseService)
-  {  }
+              private component: componentService, private expenseService: ExpenseService,public camera:Camera,
+              public popoverCtrl: PopoverController)
+  {
+    this.expenseDetails = {};
+    this.takenImages = [];
+  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AddExpense');
@@ -95,21 +113,143 @@ export class AddExpense {
     )
   }
 
+  getLatestRecordBySite(site){
+
+    this.selectedSite = site;
+
+    this.expenseService.getLatestRecordBySite(this.selectedSite.id).subscribe(
+      response=> {
+        console.log("Checking balance amount");
+        console.log(response);
+        this.previousAmount = response.balanceAmount;
+      },err=>{
+        console.log("Error in getting balance amount");
+        console.log(err);
+      }
+    )
+  }
+
 
 
   dismiss(){
         let data={'foo':'bar'};
         this.viewCtrl.dismiss(data);
     }
+
+
   saveExpense() {
 
+    console.log("Selected site");
+    console.log(this.selectedSite);
+
       if(this.selectedProject){
-          this.expenseDetails.projectId = this.selectedProject.id;
+        this.expenseDetails.projectId = this.selectedProject.id;
       }
 
       if(this.selectedSite){
-          this.expenseDetails.siteId = this.selectedSite.id;
+        this.expenseDetails.siteId = this.selectedSite.id;
       }
+
+
+    if(this.transactionMode== "debit"){
+        this.expenseDetails.mode = "debit";
+      }else if(this.transactionMode == "credit"){
+        this.expenseDetails.mode = "credit";
+      }
+
+
+        if(this.transactionMode == "debit"){
+          this.expenseDetails.expenseDate = new Date(this.selectDate);
+        }else {
+          this.expenseDetails.creditedDate = new Date(this.selectDate);
+        }
+
+
+      if(this.selectedCategory && this.transactionMode =="debit"){
+        this.expenseDetails.expenseCategory = this.selectedCategory;
+      }
+
+      if(this.selectedPaymentType){
+        this.expenseDetails.paymentType = this.selectedPaymentType;
+      }
+
+      this.expenseDetails.currency = "INR";
+
+      /*if(this.receiptNumber){
+        this.expenseDetails.receiptNumber
+      }*/
+
+      if(this.selectedAmount){
+        if(this.transactionMode == "debit"){
+          this.expenseDetails.debitAmount = this.selectedAmount;
+        }else if(this.transactionMode == "credit"){
+          this.expenseDetails.creditAmount = this.selectedAmount;
+        }
+      }
+
+      if(this.billable){
+        this.expenseDetails.billable = this.billable;
+      }else {
+        this.expenseDetails.billable = false;
+      }
+
+      if(this.reimbursable){
+        this.expenseDetails.reimbursable = this.reimbursable;
+      }else {
+        this.expenseDetails.reimbursable = false;
+      }
+
+      if(this.description){
+        this.expenseDetails.description = this.description;
+      }
+
+
+
+    if(this.transactionMode == "debit") {
+      if (this.previousAmount > this.selectedAmount) {
+        this.expenseDetails.balanceAmount = this.previousAmount - this.selectedAmount;
+        console.log("Before saving expense");
+        console.log(this.expenseDetails);
+          this.expenseService.saveExpenses(this.expenseDetails).subscribe(
+            response=>{
+              console.log("save Expense Details");
+              console.log(response);
+              this.component.showToastMessage("Expense Details saved successfully ",'bottom');
+            },err=>{
+              console.log("Error in save expense");
+              console.log(err);
+              this.component.showToastMessage("Error in save expense transaction ",'bottom');
+            }
+          )
+
+      }else {
+        this.component.showToastMessage("Insufficient funds.. only"+this.previousAmount+"available for the site expenses",'bottom');
+      }
+
+    }else if (this.transactionMode == "credit"){
+        this.expenseDetails.balanceAmount = this.previousAmount + this.selectedAmount;
+        console.log("before saving expenses");
+        console.log(this.expenseDetails);
+
+        this.expenseService.saveExpenses(this.expenseDetails).subscribe(
+          response=>{
+            console.log("save Expense Details");
+            console.log(response);
+            this.component.showToastMessage("Expense Details saved successfully ",'bottom');
+          },err=>{
+            console.log("Error in save expense");
+            console.log(err);
+            this.component.showToastMessage("Error in save expense transaction ",'bottom');
+          }
+        )
+    }
+
+
+    console.log("Expense details");
+      console.log(this.expenseDetails);
+
+
+
   }
 
   showCalendar() {
@@ -125,8 +265,36 @@ export class AddExpense {
         },
           err=>console.log("Error occured while getting date:"+err)
       );
+  }
 
 
+  viewCamera(){
+    const options: CameraOptions = {
+      quality: 50,
+      destinationType: this.camera.DestinationType.NATIVE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    };
 
+    this.camera.getPicture(options).then((imageData) => {
+
+      console.log('imageData -' +imageData);
+      imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
+      this.takenImages.push(imageData);
+
+    })
+  }
+
+  viewImage(index,img)
+  {
+    let popover = this.popoverCtrl.create(QuotationImagePopoverPage,{i:img,ind:index},{cssClass:'view-img',showBackdrop:true});
+    popover.present({
+
+    });
+
+    popover.onDidDismiss(data=>
+    {
+      this.takenImages.pop(data);
+    })
   }
 }

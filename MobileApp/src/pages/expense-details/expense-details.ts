@@ -31,7 +31,7 @@ export class ExpenseDetails {
     }
 
     addExpenseModal() {
-        const modal = this.modalCtrl.create(AddExpense);
+        let modal = this.modalCtrl.create(AddExpense,{});
         modal.present();
     }
 
