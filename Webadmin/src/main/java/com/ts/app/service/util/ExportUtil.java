@@ -1330,6 +1330,47 @@ public class ExportUtil {
 		}
 		return csvData;
 	}
+	
+	public byte[] readFeedbackExportFile(String empId, String fileName) {
+		// log.info("INSIDE OF readExportFILE **********");
+
+		String filePath = env.getProperty("export.file.path");
+		// filePath += "/" + fileName +".xlsx";
+
+		filePath += "/" + fileName + ".xlsx";
+
+		// log.debug("PATH OF THE READ EXPORT FILE*********"+filePath);
+		File file = new File(filePath);
+		// log.debug("NAME OF THE READ EXPORT FILE*********"+file);
+
+		FileInputStream fileInputStream = null;
+		byte attd_excelData[] = null;
+
+		try {
+
+			File readFeedbackFile = new File(filePath);
+			attd_excelData = new byte[(int) readFeedbackFile.length()];
+
+			// read file into bytes[]
+			fileInputStream = new FileInputStream(file);
+			fileInputStream.read(attd_excelData);
+
+		} catch (IOException e) {
+			log.error("Error while reading the feedback export file ", e);
+		} finally {
+			if (fileInputStream != null) {
+				try {
+					fileInputStream.close();
+				} catch (IOException e) {
+					log.error("Error while reading the feedback export file ", e);
+				}
+			}
+
+		}
+
+		return attd_excelData;
+
+	}
 
 	public byte[] readAttendanceExportFile(String empId, String fileName) {
 		// log.info("INSIDE OF readExportFILE **********");

@@ -722,8 +722,8 @@ public class SchedulerService extends AbstractService {
 	@Scheduled(cron="0 */5 * * * ?") // runs every 30 mins
 	public void feedbackDetailReportSchedule() {
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DAY_OF_YEAR, -1);
-		schedulerHelperService.generateDetailedAttendanceReport(cal.getTime(), false, true, false);
+		//cal.add(Calendar.DAY_OF_YEAR, -1);
+		schedulerHelperService.feedbackDetailedReport();
 	}	
 	
 	@Transactional
