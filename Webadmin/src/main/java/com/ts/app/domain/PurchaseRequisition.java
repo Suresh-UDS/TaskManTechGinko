@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -57,6 +58,12 @@ public class PurchaseRequisition extends AbstractAuditingEntity implements Seria
 	@OneToOne()
 	@JoinColumn(name = "materialTransacationId", nullable= true)
 	private MaterialTransaction transaction;
+	
+	@Column(name = "purchaseRefNumber")
+	private String purchaseRefNumber;
+	
+	@Column(name = "purchaseOrderNumber")
+	private String purchaseOrderNumber;
 
 	public long getId() {
 		return id;
@@ -136,6 +143,22 @@ public class PurchaseRequisition extends AbstractAuditingEntity implements Seria
 
 	public void setTransaction(MaterialTransaction transaction) {
 		this.transaction = transaction;
+	}
+
+	public String getPurchaseRefNumber() {
+		return purchaseRefNumber;
+	}
+
+	public void setPurchaseRefNumber(String purchaseRefNumber) {
+		this.purchaseRefNumber = purchaseRefNumber;
+	}
+
+	public String getPurchaseOrderNumber() {
+		return purchaseOrderNumber;
+	}
+
+	public void setPurchaseOrderNumber(String purchaseOrderNumber) {
+		this.purchaseOrderNumber = purchaseOrderNumber;
 	}
 
 

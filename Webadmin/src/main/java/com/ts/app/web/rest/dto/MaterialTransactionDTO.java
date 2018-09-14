@@ -46,6 +46,8 @@ public class MaterialTransactionDTO extends BaseDTO {
 	
 	private String materialIndentRefNumber;
 	
+	private String purchaseRequisitionNumber;
+	
 	private long issuedQuantity;
 	
 	private long purchaseRequisitionId;
@@ -236,6 +238,14 @@ public class MaterialTransactionDTO extends BaseDTO {
 
 	public void setPrItems(List<PurchaseReqItemDTO> prItems) {
 		this.prItems = prItems;
+	}
+
+	public String getPurchaseRequisitionNumber() {
+		return purchaseRequisitionNumber;
+	}
+
+	public void setPurchaseRequisitionNumber(String purchaseRequisitionNumber) {
+		this.purchaseRequisitionNumber = purchaseRequisitionNumber;
 	}
 
 	

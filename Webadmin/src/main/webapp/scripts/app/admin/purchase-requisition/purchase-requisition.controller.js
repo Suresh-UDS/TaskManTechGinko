@@ -395,6 +395,12 @@ angular.module('timeSheetApp')
                 	});
 
                 };
+                
+                $scope.loadAllEmployee = function() { 
+                	EmployeeComponent.findAll().then(function (data) {
+                        $scope.employees = data;
+                    });
+                }
 
                 $scope.loadSites = function () {
                 	console.log("selected project - " + JSON.stringify($scope.selectedProject));

@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
-import {ModalController, NavController, NavParams, ViewController} from "ionic-angular";
+import {ModalController, NavController, NavParams, PopoverController, ViewController} from "ionic-angular";
 import {DatePickerProvider} from "ionic2-date-picker";
 import {DatePicker} from "@ionic-native/date-picker";
 import {SiteService} from "../../service/siteService";
 import {componentService} from "../../service/componentService";
 import {ExpenseService} from "../../service/expenseService";
+import {Camera, CameraOptions} from "@ionic-native/camera";
+import {QuotationImagePopoverPage} from "../../quotation/quotation-image-popover";
+
 
 /**
  * Generated class for the AddExpense page.
@@ -18,6 +21,7 @@ import {ExpenseService} from "../../service/expenseService";
   templateUrl: 'add-expense.html',
 })
 export class AddExpense {
+  takenImages: any;
   receiptNumber: any;
   description: any;
   reimbursable: any;
@@ -43,9 +47,11 @@ export class AddExpense {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,
               private datePicker: DatePicker, private modalCtrl: ModalController,private siteService:SiteService,
-              private component: componentService, private expenseService: ExpenseService)
+              private component: componentService, private expenseService: ExpenseService,public camera:Camera,
+              public popoverCtrl: PopoverController)
   {
     this.expenseDetails = {};
+    this.takenImages = [];
   }
 
   ionViewDidLoad() {
@@ -259,5 +265,36 @@ export class AddExpense {
         },
           err=>console.log("Error occured while getting date:"+err)
       );
+  }
+
+
+  viewCamera(){
+    const options: CameraOptions = {
+      quality: 50,
+      destinationType: this.camera.DestinationType.NATIVE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    };
+
+    this.camera.getPicture(options).then((imageData) => {
+
+      console.log('imageData -' +imageData);
+      imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
+      this.takenImages.push(imageData);
+
+    })
+  }
+
+  viewImage(index,img)
+  {
+    let popover = this.popoverCtrl.create(QuotationImagePopoverPage,{i:img,ind:index},{cssClass:'view-img',showBackdrop:true});
+    popover.present({
+
+    });
+
+    popover.onDidDismiss(data=>
+    {
+      this.takenImages.pop(data);
+    })
   }
 }
