@@ -29,7 +29,7 @@
         <ion-row class="margin0">
           <ion-col col-2>
             <ion-avatar item-start *ngIf="emp.url" >
-              <img  [src]="emp.url" >
+              <img  [src]="emp.url" imageViewer >
             </ion-avatar>
             <p *ngIf="!emp.url && first(emp.name)"></p>
             <ion-avatar item-start *ngIf="!emp.url" class="emp-round">
