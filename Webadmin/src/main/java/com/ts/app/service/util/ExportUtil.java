@@ -28,6 +28,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -88,8 +90,8 @@ public class ExportUtil {
 
 	private String[] EMP_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "DESIGNATION", "REPORTING TO", "CLIENT", "SITE",
 			"ACTIVE" };
-	private String[] JOB_HEADER = { "SITE", "JOB ID", "TITLE", "DESCRIPTION", "TICKET ID", "TICKET TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
-			"STATUS", "CHECKLIST" };
+	private String[] JOB_HEADER = { "CLIENT", "SITE", "JOB ID", "TITLE", "DESCRIPTION", "TICKET ID", "TICKET TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
+			"STATUS", "CHECKLIST ITEMS", "CHECKLIST STATUS", "CHECKLIST REMARKS","CHECKLIST IMAGE LINK" };
 	private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT", "DURATION(In Hours) ",
 			 "SHIFT CONTINUED", "LATE CHECK IN","REMARKS" };
 
@@ -102,7 +104,7 @@ public class ExportUtil {
 	
 	private String[] VENDOR_HEADER = { "ID", "NAME", "CONTACT FIRSTNAME", "CONTACT LASTNAME", "PHONE", "EMAIL", "ADDRESSLINE1", "ADDRESSLINE2", "CITY", "COUNTRY", "STATE", "PINCODE"};
 	
-	private String[] FEEDBACK_HEADER = { "ID", "DATE", "REVIEWER NAME", "REVIEWER CODE", "SITE", "CLIENT", "FEEDBACK_NAME", "BLOCK", "FLOOR", "ZONE", "RATING", "REMARKS", "DETAILS" };
+	private String[] FEEDBACK_HEADER = { "ID", "DATE", "REVIEWER NAME", "REVIEWER CODE", "CLIENT", "SITE", "FEEDBACK_NAME", "BLOCK", "FLOOR", "ZONE", "RATING", "REMARKS", "QUESTION", "ANSWER", "ITEM REMARKS" };
 
 	private final static String ATTENDANCE_REPORT = "ATTENDANCE_REPORT";
 	private final static String TICKET_REPORT = "TICKET_REPORT";
@@ -1498,10 +1500,15 @@ public class ExportUtil {
 				XSSFSheet xssfSheet = xssfWorkbook.createSheet("JOB_REPORT");
 
 				Row headerRow = xssfSheet.createRow(0);
+			    CellStyle style = xssfWorkbook.createCellStyle();
+				Font font = xssfWorkbook.createFont();
+			    font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+			    style.setFont(font);
 
 				for (int i = 0; i < JOB_HEADER.length; i++) {
 					Cell cell = headerRow.createCell(i);
 					cell.setCellValue(JOB_HEADER[i]);
+					cell.setCellStyle(style);
 				}
 
 				int rowNum = 1;
@@ -1509,29 +1516,46 @@ public class ExportUtil {
 				for (JobDTO transaction : content) {
 
 					Row dataRow = xssfSheet.createRow(rowNum++);
-
-					dataRow.createCell(0).setCellValue(transaction.getSiteName());
-					dataRow.createCell(1).setCellValue(transaction.getId());
-					dataRow.createCell(2).setCellValue(transaction.getTitle());
-					dataRow.createCell(3).setCellValue(transaction.getDescription());
-					dataRow.createCell(4).setCellValue(transaction.getTicketId() > 0 ? transaction.getTicketId() +"" : "");
-					dataRow.createCell(5).setCellValue(transaction.getTicketName());
-					dataRow.createCell(6).setCellValue(transaction.getEmployeeName());
-					dataRow.createCell(7).setCellValue(String.valueOf(transaction.getJobType()));
-					dataRow.createCell(8).setCellValue(DateUtil.formatToDateTimeString(transaction.getPlannedStartTime()));
-					dataRow.createCell(9).setCellValue(DateUtil.formatToDateTimeString(transaction.getActualEndTime()));
-					dataRow.createCell(10)
+					dataRow.createCell(0).setCellValue(transaction.getSiteProjectName());
+					dataRow.createCell(1).setCellValue(transaction.getSiteName());
+					dataRow.createCell(2).setCellValue(transaction.getId());
+					dataRow.createCell(3).setCellValue(transaction.getTitle());
+					dataRow.createCell(4).setCellValue(transaction.getDescription());
+					dataRow.createCell(5).setCellValue(transaction.getTicketId() > 0 ? transaction.getTicketId() +"" : "");
+					dataRow.createCell(6).setCellValue(transaction.getTicketName());
+					dataRow.createCell(7).setCellValue(transaction.getEmployeeName());
+					dataRow.createCell(8).setCellValue(String.valueOf(transaction.getJobType()));
+					dataRow.createCell(9).setCellValue(DateUtil.formatToDateTimeString(transaction.getPlannedStartTime()));
+					dataRow.createCell(10).setCellValue(DateUtil.formatToDateTimeString(transaction.getActualEndTime()));
+					dataRow.createCell(11)
 							.setCellValue(transaction.getJobStatus() != null ? transaction.getJobStatus().name()
 									: JobStatus.OPEN.name());
 					if(CollectionUtils.isNotEmpty(transaction.getChecklistItems())) {
 						List<JobChecklistDTO> results = transaction.getChecklistItems();
+						int size = CollectionUtils.isNotEmpty(results) ? results.size() : 0;
+						int cnt = 0;
 						for(JobChecklistDTO result : results) {
-							StringBuffer sb = new StringBuffer();
-							sb.append("Item : " + result.getChecklistItemName());
-							sb.append(", Status : " + (result.isCompleted() ? "COMPLETED" : "NOT COMPLETED"));
-							sb.append(", Remarks : " + (StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : ""));
-							dataRow.createCell(11).setCellValue(sb.toString());		
-							dataRow = xssfSheet.createRow(rowNum++);
+							cnt++;
+							dataRow.createCell(12).setCellValue(result.getChecklistItemName());		
+							dataRow.createCell(13).setCellValue((result.isCompleted() ? "COMPLETED" : "NOT COMPLETED"));
+							dataRow.createCell(14).setCellValue((StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : ""));
+							if(cnt < size) {
+								dataRow = xssfSheet.createRow(rowNum++);
+								dataRow.createCell(0).setCellValue(transaction.getSiteProjectName());
+								dataRow.createCell(1).setCellValue(transaction.getSiteName());
+								dataRow.createCell(2).setCellValue(transaction.getId());
+								dataRow.createCell(3).setCellValue(transaction.getTitle());
+								dataRow.createCell(4).setCellValue(transaction.getDescription());
+								dataRow.createCell(5).setCellValue(transaction.getTicketId() > 0 ? transaction.getTicketId() +"" : "");
+								dataRow.createCell(6).setCellValue(transaction.getTicketName());
+								dataRow.createCell(7).setCellValue(transaction.getEmployeeName());
+								dataRow.createCell(8).setCellValue(String.valueOf(transaction.getJobType()));
+								dataRow.createCell(9).setCellValue(DateUtil.formatToDateTimeString(transaction.getPlannedStartTime()));
+								dataRow.createCell(10).setCellValue(DateUtil.formatToDateTimeString(transaction.getActualEndTime()));
+								dataRow.createCell(11)
+										.setCellValue(transaction.getJobStatus() != null ? transaction.getJobStatus().name()
+												: JobStatus.OPEN.name());								
+							}
 						}
 					}					
 				}
@@ -2025,10 +2049,14 @@ public class ExportUtil {
 				XSSFSheet xssfSheet = xssfWorkbook.createSheet("FEEDBACK_REPORT");
 
 				Row headerRow = xssfSheet.createRow(0);
-
+			    CellStyle style = xssfWorkbook.createCellStyle();
+				Font font = xssfWorkbook.createFont();
+			    font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+			    style.setFont(font);
 				for (int i = 0; i < FEEDBACK_HEADER.length; i++) {
 					Cell cell = headerRow.createCell(i);
 					cell.setCellValue(FEEDBACK_HEADER[i]);
+					cell.setCellStyle(style);
 				}
 
 				int rowNum = 1;
@@ -2041,26 +2069,41 @@ public class ExportUtil {
 					ZonedDateTime dateTime = transaction.getCreatedDate();
 					Calendar feedbackDate = Calendar.getInstance();
 					feedbackDate.setTimeInMillis(dateTime.toInstant().toEpochMilli());
-					dataRow.createCell(1).setCellValue(feedbackDate.getTime());
+					dataRow.createCell(1).setCellValue(DateUtil.formatToDateTimeString(feedbackDate.getTime()));
 					dataRow.createCell(2).setCellValue(transaction.getReviewerName());
 					dataRow.createCell(3).setCellValue(transaction.getReviewerCode());
-					dataRow.createCell(4).setCellValue(transaction.getSiteName());
-					dataRow.createCell(5).setCellValue(transaction.getProjectName());
+					dataRow.createCell(4).setCellValue(transaction.getProjectName());
+					dataRow.createCell(5).setCellValue(transaction.getSiteName());
 					dataRow.createCell(6).setCellValue(transaction.getFeedbackName());
 					dataRow.createCell(7).setCellValue(transaction.getBlock());
 					dataRow.createCell(8).setCellValue(transaction.getFloor());
 					dataRow.createCell(9).setCellValue(transaction.getZone());
-					dataRow.createCell(10).setCellValue(transaction.getRating());
+					dataRow.createCell(10).setCellValue(NumberUtil.formatOneDecimal(transaction.getRating()));
 					dataRow.createCell(11).setCellValue(transaction.getRemarks());
 					if(CollectionUtils.isNotEmpty(transaction.getResults())) {
 						List<FeedbackTransactionResultDTO> results = transaction.getResults();
+						int size = CollectionUtils.isNotEmpty(results) ? results.size() : 0;
+						int cnt = 0;
 						for(FeedbackTransactionResultDTO result : results) {
-							StringBuffer sb = new StringBuffer();
-							sb.append("Question : " + result.getQuestion());
-							sb.append(", Answer : " + result.getAnswer());
-							sb.append(", Remarks : " + (StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : ""));
-							dataRow.createCell(12).setCellValue(sb.toString());		
-							dataRow = xssfSheet.createRow(rowNum++);
+							cnt++;
+							dataRow.createCell(12).setCellValue(result.getQuestion());
+							dataRow.createCell(13).setCellValue(result.getAnswer());
+							dataRow.createCell(14).setCellValue(StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : "");
+							if(cnt < size) {
+								dataRow = xssfSheet.createRow(rowNum++);
+								dataRow.createCell(0).setCellValue(transaction.getId());
+								dataRow.createCell(1).setCellValue(DateUtil.formatToDateTimeString(feedbackDate.getTime()));
+								dataRow.createCell(2).setCellValue(transaction.getReviewerName());
+								dataRow.createCell(3).setCellValue(transaction.getReviewerCode());
+								dataRow.createCell(4).setCellValue(transaction.getProjectName());
+								dataRow.createCell(5).setCellValue(transaction.getSiteName());
+								dataRow.createCell(6).setCellValue(transaction.getFeedbackName());
+								dataRow.createCell(7).setCellValue(transaction.getBlock());
+								dataRow.createCell(8).setCellValue(transaction.getFloor());
+								dataRow.createCell(9).setCellValue(transaction.getZone());
+								dataRow.createCell(10).setCellValue(NumberUtil.formatOneDecimal(transaction.getRating()));
+								dataRow.createCell(11).setCellValue(transaction.getRemarks());
+							}
 						}
 					}
 				}

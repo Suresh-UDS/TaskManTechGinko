@@ -1078,7 +1078,9 @@ public class JobManagementService extends AbstractService {
 			dto.setAssetId(job.getAsset().getId());
 		}
 		dto.setSiteId(job.getSite().getId());
-		dto.setSiteName(job.getSite().getName());
+		dto.setSiteName(job.getSite().getName()); 
+		dto.setSiteProjectId(String.valueOf(job.getSite().getProject().getId()));
+		dto.setSiteProjectName(job.getSite().getProject().getName());
 		dto.setDescription(job.getDescription());
 		dto.setJobStatus(job.getStatus());
 		dto.setStatus(job.getStatus().name());
@@ -1860,7 +1862,7 @@ public class JobManagementService extends AbstractService {
     }
 
     public ExportResult generateReport(List<JobDTO> transactions, SearchCriteria criteria) {
-    	User user = userRepository.findOne(criteria.getUserId());
+    		User user = userRepository.findOne(criteria.getUserId());
 		Employee emp = null;
 		if(user != null) {
 			emp = user.getEmployee();

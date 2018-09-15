@@ -685,6 +685,15 @@ public class SettingsService extends AbstractService {
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_FEEDBACK_EMAILS)) {
 					settingDto.setFeedbackEmailsId(setting.getId());
 					settingDto.setFeedbackEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_FEEDBACK_REPORT)) {
+					settingDto.setFeedbackReportEmailAlertId(setting.getId());
+					settingDto.setFeedbackReportEmailAlert(Boolean.valueOf(setting.getSettingValue()));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_FEEDBACK_REPORT_EMAILS)) {
+					settingDto.setFeedbackReportEmailsId(setting.getId());
+					settingDto.setFeedbackReportEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_FEEDBACK_REPORT_TIME)) {
+					settingDto.setFeedbackReportTimeId(setting.getId());
+					settingDto.setFeedbackReportTime(StringUtils.isNotEmpty(setting.getSettingValue()) ? DateUtil.parseToDateTime(setting.getSettingValue()) : null);
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_QUOTATION)) {
 					settingDto.setQuotationEmailAlertId(setting.getId());
 					settingDto.setQuotationEmailAlert(Boolean.valueOf(setting.getSettingValue()));

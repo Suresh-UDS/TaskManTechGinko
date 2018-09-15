@@ -256,7 +256,7 @@ public class SchedulerHelperService extends AbstractService {
 								log.error("Error while parsing feedback report time configured for client : " + proj.getName() , e);
 							}
 						}
-						if(reportTimeCal.equals(now) && (feedbackEmail != null && StringUtils.isNotEmpty(feedbackEmail.getSettingValue()))) {
+						if(reportTime != null && reportTimeCal.equals(now) && (feedbackEmail != null && StringUtils.isNotEmpty(feedbackEmail.getSettingValue()))) {
 							SearchResult<FeedbackTransactionDTO> results = feedbackTransactionService.findBySearchCrieria(sc);
 				            List<FeedbackTransactionDTO> content = results.getTransactions();
 							ExportResult result = new ExportResult();

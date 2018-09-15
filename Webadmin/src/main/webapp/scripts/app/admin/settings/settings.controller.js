@@ -51,6 +51,18 @@ angular.module('timeSheetApp')
 
         });
         
+        $('input#feedbackReportTime').on('dp.change', function(e){
+            console.log(e.date);
+            console.log(e.date._d);
+            
+            $.notifyClose();
+             
+            //$scope.selectedDayWiseAttnEmailTime= $filter('date')(e.date._d, 'yyyy-MM-dd HH:mm:ss');
+            $scope.selectedFeedbackReportTime = e.date._d;
+            $scope.settings.feedbackReportTime = $scope.selectedFeedbackReportTime;
+
+        });
+        
         $scope.initCalender();
     		
     		$scope.addTicketEmail = function() {
