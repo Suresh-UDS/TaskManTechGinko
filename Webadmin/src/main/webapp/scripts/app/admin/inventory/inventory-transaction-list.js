@@ -9,7 +9,7 @@ angular.module('timeSheetApp')
                 controller: 'InventoryTransactionController',
                 data: {
                     authorities: [],
-                    pageTitle: 'Inventory Transaction List'
+                    pageTitle: 'Issued/Received Transactions'
                 },
                 views: {
                     'content@': {
