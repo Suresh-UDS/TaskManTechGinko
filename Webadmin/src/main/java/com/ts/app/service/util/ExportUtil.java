@@ -1516,10 +1516,10 @@ public class ExportUtil {
 				for (JobDTO transaction : content) {
 
 					Row dataRow = xssfSheet.createRow(rowNum++);
-					dataRow.createCell(0).setCellValue(transaction.getSiteProjectName());
-					dataRow.createCell(1).setCellValue(transaction.getSiteName());
+					dataRow.createCell(0).setCellValue(transaction.getSiteProjectName().toUpperCase());
+					dataRow.createCell(1).setCellValue(transaction.getSiteName().toUpperCase());
 					dataRow.createCell(2).setCellValue(transaction.getId());
-					dataRow.createCell(3).setCellValue(transaction.getTitle());
+					dataRow.createCell(3).setCellValue(transaction.getTitle().toUpperCase());
 					dataRow.createCell(4).setCellValue(transaction.getDescription());
 					dataRow.createCell(5).setCellValue(transaction.getTicketId() > 0 ? transaction.getTicketId() +"" : "");
 					dataRow.createCell(6).setCellValue(transaction.getTicketName());
@@ -1539,12 +1539,13 @@ public class ExportUtil {
 							dataRow.createCell(12).setCellValue(result.getChecklistItemName());		
 							dataRow.createCell(13).setCellValue((result.isCompleted() ? "COMPLETED" : "NOT COMPLETED"));
 							dataRow.createCell(14).setCellValue((StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : ""));
+							dataRow.createCell(15).setCellValue((StringUtils.isNotEmpty(result.getImageUrl_1()) ? result.getImageUrl_1() : ""));
 							if(cnt < size) {
 								dataRow = xssfSheet.createRow(rowNum++);
-								dataRow.createCell(0).setCellValue(transaction.getSiteProjectName());
-								dataRow.createCell(1).setCellValue(transaction.getSiteName());
+								dataRow.createCell(0).setCellValue(transaction.getSiteProjectName().toUpperCase());
+								dataRow.createCell(1).setCellValue(transaction.getSiteName().toUpperCase());
 								dataRow.createCell(2).setCellValue(transaction.getId());
-								dataRow.createCell(3).setCellValue(transaction.getTitle());
+								dataRow.createCell(3).setCellValue(transaction.getTitle().toUpperCase());
 								dataRow.createCell(4).setCellValue(transaction.getDescription());
 								dataRow.createCell(5).setCellValue(transaction.getTicketId() > 0 ? transaction.getTicketId() +"" : "");
 								dataRow.createCell(6).setCellValue(transaction.getTicketName());
