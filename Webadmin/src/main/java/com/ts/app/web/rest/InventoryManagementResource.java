@@ -1,5 +1,6 @@
 package com.ts.app.web.rest;
 
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.domain.AssetStatusHistoryDTO;
@@ -26,6 +29,7 @@ import com.ts.app.domain.MaterialUOMType;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.InventoryManagementService;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
+import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.MaterialDTO;
 import com.ts.app.web.rest.dto.MaterialItemGroupDTO;
 import com.ts.app.web.rest.dto.MaterialTransactionDTO;
@@ -146,6 +150,36 @@ public class InventoryManagementResource {
 			result = inventoryService.viewMaterialTransactions(searchCriteria);
 		} catch(Exception e) {
 			throw new TimesheetException("Error while get material transactions " +e);
+		}
+		return result;
+	}
+	
+	@RequestMapping(path="/inventory/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ImportResult> importMasterData(@RequestParam("inventoryFile") MultipartFile file){
+		Calendar cal = Calendar.getInstance();
+		ImportResult result = inventoryService.importFile(file, cal.getTimeInMillis());
+		return new ResponseEntity<ImportResult>(result, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/inventory/import/{fileId}/status", method = RequestMethod.GET)
+	public ImportResult importStatus(@PathVariable("fileId") String fileId) {
+		// log.debug("ImportStatus - fileId -"+ fileId);
+		ImportResult result = inventoryService.getImportStatus(fileId);
+		if (result != null && result.getStatus() != null) {
+			switch (result.getStatus()) {
+			case "PROCESSING":
+				result.setMsg("Importing data...");
+				break;
+			case "COMPLETED":
+				result.setMsg("Completed importing");
+				break;
+			case "FAILED":
+				result.setMsg("Failed to import. Please try again");
+				break;
+			default:
+				result.setMsg("Completed importing");
+				break;
+			}
 		}
 		return result;
 	}

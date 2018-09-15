@@ -646,6 +646,64 @@ angular.module('timeSheetApp')
 		   	console.log('$scope.assetAMCImportStatusLoad message '+ $rootScope.assetAMCImportStatusLoad);
 		   	return ($rootScope.assetAMCImportStatusLoad ? $rootScope.assetAMCImportStatusLoad : '');
 	   };   
+	   
+	   //Inventory Master upload file start
+	    $scope.uploadInventoryMaster = function() {
+		    	if($scope.selectedMasterFile){
+		    		$rootScope.inventoryImportStatusLoad = true;
+	   		console.log('************************selected asset file - ' + $scope.selectedMasterFile);
+	   		InventoryComponent.importInventoryFile($scope.selectedMasterFile).then(function(data){
+	   			console.log(data);
+	   			var result = data;
+	   			console.log(result.file + ', ' + result.status + ',' + result.msg);
+	   			var importStatus = {
+	       				fileName : result.file,
+	       				importMsg : result.msg
+	       		};
+	       		$rootScope.inventoryImportStatus = importStatus;
+	       		$rootScope.start('inventory');
+	        },function(err){
+	           	  console.log('Inventory Import error')
+	           	  console.log(err);
+	        });
+		  
+		  }
+	   }
+	
+	    $scope.inventoryImportStatus = function() {
+	    		console.log('$rootScope.assetImportStatus -'+JSON.stringify($rootScope.inventoryImportStatus));        		
+     		InventoryComponent.importInventoryStatus($rootScope.inventoryImportStatus.fileName).then(function(data) {
+         		if(data) {
+         			$rootScope.inventoryImportStatus.importStatus = data.status;
+             		console.log('*****************importStatus - '+ JSON.stringify($rootScope.inventoryImportStatus));
+             		$rootScope.inventoryImportStatus.importMsg = data.msg;
+             		console.log('**************importMsg - '+ $rootScope.inventoryImportStatus.importMsg);
+             		if($rootScope.inventoryImportStatus.importStatus == 'COMPLETED'){
+             			$rootScope.inventoryImportStatus.fileName = data.file;
+                 		console.log('importFile - '+ $rootScope.inventoryImportStatus.fileName);
+                 		$scope.stop('inventory');
+                 		$rootScope.inventoryImportStatusLoad = false;
+                 		$timeout(function() {
+                 			$rootScope.inventoryImportStatus = {};
+                 	    }, 3000);
+             		}else if($rootScope.inventoryImportStatus.importStatus == 'FAILED'){
+                 		$scope.stop('inventory');
+             		}else if(!$rootScope.inventoryImportStatus.importStatus){
+             			$scope.stop('inventory');
+             		}else {
+             			$rootScope.inventoryImportStatus.fileName = '#';
+             		}
+         		}
+
+         	});
+
+	    }    
+	    
+	   
+	   $scope.inventoryImportStatusLoad = function(){
+		   	console.log('$scope.assetImportStatusLoad message '+ $rootScope.inventoryImportStatusLoad);
+		   	return ($rootScope.inventoryImportStatusLoad ? $rootScope.inventoryImportStatusLoad : '');
+	   }; 
 	    
 	    	    
 	 // store the interval promise in this variable
@@ -718,6 +776,12 @@ angular.module('timeSheetApp')
 	    		promiseAssetAMC = $interval($scope.assetAMCImportStatus, 5000);
 	    		console.log('promise -'+promiseAssetAMC);
 	    	}
+	    	if(typeImport == 'inventory'){
+	    		$rootScope.stop('inventory');
+	    		console.log('Import inventory start method');
+	    		promiseInventory = $inventory($scope.inventoryImportStatus, 5000);
+	    		console.log('promise -' +promiseInventory);
+	    	}
 	    };	
 	    // stops the interval
 	    $rootScope.stop = function(stopInterval) {
@@ -747,6 +811,9 @@ angular.module('timeSheetApp')
 	      }
 	      if(stopInterval == 'assetAMC'){
 	    	  	$interval.cancel(promiseAssetAMC);
+	      }
+	      if(stopInterval == 'inventory'){
+	    	  $inventory.cancel(promiseInventory);
 	      }
 	    };	   
 	    
