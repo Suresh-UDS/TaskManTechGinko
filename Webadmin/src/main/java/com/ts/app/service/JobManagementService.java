@@ -1112,7 +1112,7 @@ public class JobManagementService extends AbstractService {
 				itemDto.setChecklistName(item.getChecklistName());
 				itemDto.setCompleted(item.isCompleted());
 				itemDto.setRemarks(item.getRemarks());
-				String imageUrl_1 = cloudFrontUrl + bucketEnv + checkListpath + item.getImage_1();
+				String imageUrl_1 = !StringUtils.isEmpty(item.getImage_1()) ? cloudFrontUrl + bucketEnv + checkListpath + item.getImage_1() : "";
 				itemDto.setImage_1(item.getImage_1());
 				itemDto.setImageUrl_1(imageUrl_1);
 				
