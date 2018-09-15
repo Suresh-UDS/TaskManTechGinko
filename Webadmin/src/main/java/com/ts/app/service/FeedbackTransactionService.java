@@ -581,7 +581,7 @@ public class FeedbackTransactionService extends AbstractService {
 	}
 
 	public byte[] getExportFile(String fileName) {
-		return exportUtil.readFeedbackExportFile(fileName);
+		return exportUtil.readFeedbackExportFile(null,fileName);
 	}
 
 }
