@@ -305,6 +305,8 @@ public class FeedbackTransactionService extends AbstractService {
 					page = feedbackTransactionRepository.findBySite(searchCriteria.getSiteId(), DateUtil.convertToZDT(searchCriteria.getFromDate()),DateUtil.convertToZDT(searchCriteria.getToDate()), pageRequest);
 				}else if(searchCriteria.getSiteId() > 0) {
 					page = feedbackTransactionRepository.findBySite(searchCriteria.getSiteId(), pageRequest);
+				}else if(searchCriteria.getProjectId() > 0) {
+					page = feedbackTransactionRepository.findByProject(searchCriteria.getProjectId(), pageRequest);
 				}
 			}else {
 				page = feedbackTransactionRepository.findAll(pageRequest);
@@ -378,7 +380,7 @@ public class FeedbackTransactionService extends AbstractService {
 		        weeklyFromDate = ZonedDateTime.parse(fromdate, parser);
 	        }
 		        // end
-			if(searchCriteria.getProjectId() > 0) {
+			if(searchCriteria.getProjectId() > 0 && searchCriteria.getSiteId() > 0) {
 				log.debug("***************"+searchCriteria.getSiteId()+"\t block: "+ searchCriteria.getBlock()+"\t floor : "+ searchCriteria.getFloor()+"\t zone : " +searchCriteria.getZone()+"fromTime: \t"+fromTime+"toTime \t"+toTime);
 
 				FeedbackMapping feedbackMapping = getFeedbackMappingByLocation(searchCriteria);
@@ -478,6 +480,49 @@ public class FeedbackTransactionService extends AbstractService {
 					reportResult.setQuestionRatings(asList);
 
 				//}
+			}else if(searchCriteria.getProjectId() > 0) {
+				long feedbackCount = getFeedbackCount(searchCriteria,fromTime,toTime,weeklyFromDate,weeklyToDate);
+				Float overallRating = getOverallRating(searchCriteria,fromTime,toTime,weeklyFromDate,weeklyToDate);
+				log.debug("feedback count : \t"+ feedbackCount);
+				log.debug("overallRating: \t"+overallRating);
+				reportResult.setFeedbackCount(feedbackCount);
+				reportResult.setOverallRating(overallRating == null ? "0" : df.format(overallRating));
+				//reportResult.setFeedbackName(feedbackMapping.getFeedback().getName());
+				//reportResult.setSiteId(searchCriteria.getSiteId());
+				//reportResult.setSiteName(searchCriteria.getSiteName());
+				reportResult.setProjectId(searchCriteria.getProjectId());
+				reportResult.setProjectName(searchCriteria.getProjectName());
+				//reportResult.setBlock(searchCriteria.getBlock());
+				//reportResult.setFloor(searchCriteria.getFloor());
+				//reportResult.setZone(searchCriteria.getZone());
+
+				// weekly
+				List<Object[]> weeklySite = feedbackTransactionRepository.getSitewiseAverageRating(searchCriteria.getProjectId(),weeklyFromDate,weeklyToDate);
+				List<Object[]> weeklyZone = feedbackTransactionRepository.getWeeklyZone(searchCriteria.getSiteId(), searchCriteria.getZone(),weeklyFromDate,weeklyToDate);
+
+				List<WeeklySite> weeklySiteList = new ArrayList<WeeklySite>();
+				if(CollectionUtils.isNotEmpty(weeklySite)){
+					for(Object[] row: weeklySite){
+						WeeklySite site= new WeeklySite();
+						site.setRating((Double)row[0]);
+						site.setZoneName((String)row[1]);
+						weeklySiteList.add(site);
+					}
+				}
+
+				List<WeeklyZone> weeklyZoneList = new ArrayList<WeeklyZone>();
+				if(CollectionUtils.isNotEmpty(weeklyZone)){
+					for(Object[] row: weeklyZone){
+						WeeklyZone zone = new WeeklyZone();
+						zone.setRating((Double)row[0]);
+						//zone.setDay(Long.valueOf(String.valueOf(row[1])));
+						//zone.setDate(DateUtil.convertToDateTime(String.valueOf(row[1]), ""));
+						zone.setDate(String.valueOf(row[1]));
+						weeklyZoneList.add(zone);
+					}
+				}
+				reportResult.setWeeklyZone(weeklyZoneList);
+				reportResult.setWeeklySite(weeklySiteList);
 			}
 		}
 		return reportResult;
@@ -515,12 +560,14 @@ public class FeedbackTransactionService extends AbstractService {
 	private Float getOverallRating(SearchCriteria searchCriteria, ZonedDateTime fromTime, ZonedDateTime toTime,
 			ZonedDateTime weeklyFromDate, ZonedDateTime weeklyToDate) {
 		// TODO Auto-generated method stub
-		Float overallRating;
+		Float overallRating = 0f;
 		if(StringUtils.isNotEmpty(searchCriteria.getBlock()) && StringUtils.isNotEmpty(searchCriteria.getZone())){
 			overallRating = feedbackTransactionRepository.getFeedbackOverallRating(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), weeklyFromDate, weeklyToDate);
-		} else {
+		} else if(searchCriteria.getSiteId() > 0){
 			overallRating = feedbackTransactionRepository.getWeeklyOverallRating(searchCriteria.getSiteId(),weeklyFromDate,weeklyToDate);
-		}
+		} else if(searchCriteria.getProjectId() > 0){
+			overallRating = feedbackTransactionRepository.getWeeklyOverallRatingByProject(searchCriteria.getProjectId(),weeklyFromDate,weeklyToDate);
+		} 
 		return overallRating;
 	}
 
@@ -530,9 +577,11 @@ public class FeedbackTransactionService extends AbstractService {
 		long feedbackCount=0;
 		if(StringUtils.isNotEmpty(searchCriteria.getBlock()) && StringUtils.isNotEmpty(searchCriteria.getZone())){
 			feedbackCount = feedbackTransactionRepository.getFeedbackCount(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), weeklyFromDate, weeklyToDate);
-		} else {
+		} else if(searchCriteria.getSiteId() > 0){
 			feedbackCount = feedbackTransactionRepository.getWeeklyFeedbackCount(searchCriteria.getSiteId(),weeklyFromDate,weeklyToDate);
-		}
+		} else if(searchCriteria.getProjectId() > 0){
+			feedbackCount = feedbackTransactionRepository.getWeeklyFeedbackCountByProject(searchCriteria.getProjectId(),weeklyFromDate,weeklyToDate);
+		} 
 
 		return feedbackCount;
 	}
