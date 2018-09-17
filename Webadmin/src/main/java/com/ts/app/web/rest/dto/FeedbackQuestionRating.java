@@ -8,7 +8,9 @@ public class FeedbackQuestionRating implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private long id;
-
+    
+    private String location;
+    
     private String question;
 
     private Map<String, Long> rating;
@@ -55,6 +57,14 @@ public class FeedbackQuestionRating implements Serializable {
 
 	public void setNoCount(long noCount) {
 		this.noCount = noCount;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
     
     

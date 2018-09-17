@@ -233,7 +233,8 @@ public class FeedbackService extends AbstractService {
 		if(feedbackMappingDto.getId() > 0) {
 			updateFeedbackMapping(feedbackMappingDto);
 		}else {
-			FeedbackMapping feedbackMapping = feedbackMappingRepository.findOneByLocation(feedbackMappingDto.getSiteId(), feedbackMappingDto.getBlock(), feedbackMappingDto.getFloor(), feedbackMappingDto.getZone());
+			List<FeedbackMapping> feedbackMappings = feedbackMappingRepository.findOneByLocation(feedbackMappingDto.getSiteId(), feedbackMappingDto.getBlock(), feedbackMappingDto.getFloor(), feedbackMappingDto.getZone()); 
+			FeedbackMapping feedbackMapping = CollectionUtils.isNotEmpty(feedbackMappings)  ? feedbackMappings.get(0) : null;
 			if(feedbackMapping == null) {
 				feedbackMapping = mapperUtil.toEntity(feedbackMappingDto, FeedbackMapping.class);
 	
