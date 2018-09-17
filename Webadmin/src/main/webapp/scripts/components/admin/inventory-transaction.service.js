@@ -76,6 +76,22 @@ angular.module('timeSheetApp')
             	return $http.get('api/materialTransaction/type').then(function(response) { 
             		return response.data;
             	});
+            },
+            exportAllData : function(searchObj) {
+            	return $http.post('api/inventoryTrans/export', searchObj).then(function(response) { 
+            		return response.data;
+            	});
+            },
+            exportStatus: function(fileName) {
+            	return $http.get('api/inventoryTrans/export/'+fileName+"/status").then(function (response) {
+            		return response.data;
+            	});
+            },
+
+            getExportFile: function(fileName) {
+            	return $http.get('api/inventoryTrans/export/'+fileName).then(function (response) {
+            		return response.data;
+            	});
             }
             
         };
