@@ -2075,7 +2075,7 @@ public class ExportUtil {
 					dataRow.createCell(3).setCellValue(transaction.getReviewerCode());
 					dataRow.createCell(4).setCellValue(transaction.getProjectName());
 					dataRow.createCell(5).setCellValue(transaction.getSiteName());
-					dataRow.createCell(6).setCellValue(transaction.getFeedbackName());
+					dataRow.createCell(6).setCellValue(StringUtils.isNotEmpty(transaction.getFeedbackName()) ? transaction.getFeedbackName() : transaction.getZone() + " Feedback");
 					dataRow.createCell(7).setCellValue(transaction.getBlock());
 					dataRow.createCell(8).setCellValue(transaction.getFloor());
 					dataRow.createCell(9).setCellValue(transaction.getZone());
@@ -2098,7 +2098,7 @@ public class ExportUtil {
 								dataRow.createCell(3).setCellValue(transaction.getReviewerCode());
 								dataRow.createCell(4).setCellValue(transaction.getProjectName());
 								dataRow.createCell(5).setCellValue(transaction.getSiteName());
-								dataRow.createCell(6).setCellValue(transaction.getFeedbackName());
+								dataRow.createCell(6).setCellValue(StringUtils.isNotEmpty(transaction.getFeedbackName()) ? transaction.getFeedbackName() : transaction.getZone() + " Feedback");
 								dataRow.createCell(7).setCellValue(transaction.getBlock());
 								dataRow.createCell(8).setCellValue(transaction.getFloor());
 								dataRow.createCell(9).setCellValue(transaction.getZone());
