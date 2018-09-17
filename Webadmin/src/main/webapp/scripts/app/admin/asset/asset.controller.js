@@ -1824,6 +1824,15 @@ angular.module('timeSheetApp')
 
          }
 
+         $scope.init = function(){
+
+              $scope.loadPageTop();
+              //$scope.initPage();
+              //$scope.loadAssets();
+              $scope.setPage(1);
+
+          }
+
         /*$scope.loadPPMSchedule = function(assetId){
 
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
