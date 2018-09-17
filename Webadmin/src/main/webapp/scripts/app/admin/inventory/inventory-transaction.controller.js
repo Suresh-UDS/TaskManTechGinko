@@ -2,7 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('InventoryTransactionController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent,$http,$stateParams,$location,
-    			ManufacturerComponent, InventoryComponent, InventoryTransactionComponent, IndentComponent, PurchaseComponent, $filter, PaginationComponent) {
+    			ManufacturerComponent, InventoryComponent, InventoryTransactionComponent, IndentComponent, PurchaseComponent, $filter, PaginationComponent,$interval) {
 
         
     	$rootScope.loginView = false;
@@ -31,6 +31,7 @@ angular.module('timeSheetApp')
         $scope.searchCriteria = {};
         $scope.selectedItemCode = {};
     	$scope.pages = { currPage : 1};
+    	$scope.pageSort = 10;
     	
     	$rootScope.exportStatusObj  ={};
     	
@@ -479,6 +480,27 @@ angular.module('timeSheetApp')
     		});
     	}
     	
+    	   $scope.isActiveAsc = 'id';
+           $scope.isActiveDesc = '';
+
+           $scope.columnAscOrder = function(field){
+               $scope.selectedColumn = field;
+               $scope.isActiveAsc = field;
+               $scope.isActiveDesc = '';
+               $scope.isAscOrder = true;
+               //$scope.search();
+               $scope.loadSites();
+           }
+
+           $scope.columnDescOrder = function(field){
+               $scope.selectedColumn = field;
+               $scope.isActiveDesc = field;
+               $scope.isActiveAsc = '';
+               $scope.isAscOrder = false;
+               //$scope.search();
+               $scope.loadSites();
+           }
+    	
     	
     	$scope.search = function () {										// search material 
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
@@ -533,6 +555,18 @@ angular.module('timeSheetApp')
             }
             if($scope.searchIndentNumber) {
             	$scope.searchCriteria.indentRefNumber = $scope.searchIndentNumber;
+            }
+            if($scope.pageSort){
+                $scope.searchCriteria.sort = $scope.pageSort;
+            }
+            if($scope.selectedColumn){
+
+                $scope.searchCriteria.columnName = $scope.selectedColumn;
+                $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
+
+            }else{
+                $scope.searchCriteria.columnName ="id";
+                $scope.searchCriteria.sortByAsc = true;
             }
             if($scope.searchCreatedDate != "") {
                 if($scope.searchCreatedDate != undefined){

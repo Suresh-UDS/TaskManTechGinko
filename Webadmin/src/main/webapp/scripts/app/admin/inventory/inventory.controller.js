@@ -26,6 +26,7 @@ angular.module('timeSheetApp')
         $scope.searchCreatedDateSer = null;
         $scope.transactionCriteria = {};
     	$scope.pages = { currPage : 1};
+    	$scope.pageSort = 10;
     	
     	$rootScope.exportStatusObj  ={};
 
@@ -383,6 +384,27 @@ angular.module('timeSheetApp')
             $scope.setPage(1);
             $scope.search();
          }
+    	
+    	   $scope.isActiveAsc = 'id';
+           $scope.isActiveDesc = '';
+
+           $scope.columnAscOrder = function(field){
+               $scope.selectedColumn = field;
+               $scope.isActiveAsc = field;
+               $scope.isActiveDesc = '';
+               $scope.isAscOrder = true;
+               //$scope.search();
+               $scope.loadSites();
+           }
+
+           $scope.columnDescOrder = function(field){
+               $scope.selectedColumn = field;
+               $scope.isActiveDesc = field;
+               $scope.isActiveAsc = '';
+               $scope.isAscOrder = false;
+               //$scope.search();
+               $scope.loadSites();
+           }
 
 
     	$scope.search = function () {										// search material
@@ -415,6 +437,9 @@ angular.module('timeSheetApp')
 	        		$scope.searchCriteria.inventorylistId = 0;
 	        	}
         	}
+        	if($scope.pageSort){
+                $scope.searchCriteria.sort = $scope.pageSort;
+            }
         	if($scope.searchProject) {
         		$scope.searchCriteria.projectId = $scope.searchProject.id;
         	}
