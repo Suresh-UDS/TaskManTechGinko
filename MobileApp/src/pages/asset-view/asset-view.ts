@@ -44,6 +44,9 @@ export class AssetView {
     totalPages:0;
     page:1;
 
+    PPMJobs:any;
+    AMCJobs:any;
+
 
     fromDate:any;
     toDate:any;
@@ -64,6 +67,8 @@ export class AssetView {
     this.assetDetails = this.navParams.data.assetDetails;
     this.categories = 'details';
     this.spinner=true;
+    this.PPMJobs=[];
+    this.AMCJobs=[];
 
   }
     showCalendar()
@@ -242,7 +247,7 @@ export class AssetView {
                 this.componentService.closeAll();
                 console.log("Getting Jobs response");
                 console.log(response);
-                this.assetDetails.ppmJobs = response.transactions;
+                this.PPMJobs = response.transactions;
                 this.page = response.currPage;
                 this.totalPages = response.totalPages;
                 console.log(this.assetDetails.jobs)
@@ -290,7 +295,7 @@ export class AssetView {
                 this.componentService.closeAll();
                 console.log("Getting Jobs response");
                 console.log(response);
-                this.assetDetails.amcJobs = response.transactions;
+                this.AMCJobs = response.transactions;
                 this.page = response.currPage;
                 this.totalPages = response.totalPages;
                 console.log(this.assetDetails.jobs)
@@ -331,7 +336,7 @@ export class AssetView {
                         console.log(response);
                         console.log(response.transactions);
                         for (var i = 0; i < response.transactions.length; i++) {
-                            this.assetDetails.jobs.push(response.transactions[i]);
+                           this.PPMJobs.push(response.transactions[i]);
                         }
                         this.page = response.currPage;
                         this.totalPages = response.totalPages;
@@ -373,7 +378,7 @@ export class AssetView {
                         console.log(response);
                         console.log(response.transactions);
                         for (var i = 0; i < response.transactions.length; i++) {
-                            this.assetDetails.jobs.push(response.transactions[i]);
+                            this.AMCJobs.push(response.transactions[i]);
                         }
                         this.page = response.currPage;
                         this.totalPages = response.totalPages;
