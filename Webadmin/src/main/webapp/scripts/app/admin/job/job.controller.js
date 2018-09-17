@@ -651,10 +651,10 @@ angular.module('timeSheetApp')
         	}
         };
 
-        $scope.loadCompletedJob = function(image) {
+        $scope.loadCompletedJob = function(imageUrl) {
             var eleId = 'photoStart';
             var ele = document.getElementById(eleId);
-            ele.setAttribute('src',image);
+            ele.setAttribute('src',imageUrl);
 
         };
 
