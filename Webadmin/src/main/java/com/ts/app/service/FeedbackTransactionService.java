@@ -575,7 +575,7 @@ public class FeedbackTransactionService extends AbstractService {
 		List<Object[]> questionsRating = null;
 
 		if(StringUtils.isNotEmpty(searchCriteria.getBlock()) && StringUtils.isNotEmpty(searchCriteria.getZone())){
-			questionsRating = feedbackTransactionRepository.getFeedbackAnswersCountForRating(feedbackMapping.getFeedback().getId(), weeklyFromDate, weeklyToDate);
+			questionsRating = feedbackTransactionRepository.getFeedbackAnswersCountForRating(feedbackMapping.getId(), weeklyFromDate, weeklyToDate);
 		} else {
 			questionsRating = feedbackTransactionRepository.getWeeklyFeedbackAnswersCountForRating(searchCriteria.getSiteId(), weeklyFromDate, weeklyToDate);
 		}
@@ -588,7 +588,7 @@ public class FeedbackTransactionService extends AbstractService {
 		List<Object[]> questionRatings = null;
 
 		if(StringUtils.isNotEmpty(searchCriteria.getBlock()) && StringUtils.isNotEmpty(searchCriteria.getZone())){
-			questionRatings = feedbackTransactionRepository.getFeedbackAnswersCountForYesNo(feedbackMapping.getFeedback().getId(), weeklyFromDate, weeklyToDate);
+			questionRatings = feedbackTransactionRepository.getFeedbackAnswersCountForYesNo(feedbackMapping.getId(), weeklyFromDate, weeklyToDate);
 		} else {
 			questionRatings = feedbackTransactionRepository.getWeeklyFeedbackAnswersCountForYesNo(searchCriteria.getSiteId(), weeklyFromDate, weeklyToDate);
 		}
