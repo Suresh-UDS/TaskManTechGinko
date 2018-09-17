@@ -51,7 +51,7 @@
 
                                                       <td>Site </td>
                                                       <td>
-                                                          {{job.siteName}}
+                                                          {{job.siteName | uppercase}}
                                                       </td>
 
                                                   </tr>
@@ -245,13 +245,13 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Completed Images </div>
                                     <div class="panel-body">
-                                        <div class="col-md-2" ng-repeat="image in completedImages">
+                                        <div class="col-md-2" ng-repeat="image in job.images">
                                             <!--{{image}}-->
                                             <!--<a id="{{ 'jobPhoto-' + $index }}" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImages(job.employeeEmpId,image.photoOut, $index)">-->
                                             <!--<img data-ng-src="/api/employee/{{job.employeeEmpId}}/checkInOut/{{image.photoOut}}" width="30px" height="30px"/>-->
                                             <!--</a>-->
-                                            <a onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(url)" >
-                                                <img src="{{url}}" width="150px" height="150px">
+                                            <a onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(image.url)" >
+                                                <img src="{{image.url}}" width="150px" height="150px">
 
                                             </a>
                                         </div>

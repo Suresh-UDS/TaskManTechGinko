@@ -619,17 +619,17 @@ angular.module('timeSheetApp')
                             $scope.selectedChecklist = checklist;
                         }
 
-                        if(data.images){
-                            $scope.completedImages = [];
-                            for(var i=0;i<data.images.length;i++){
-                                console.log(data.images[i]);
-                                JobComponent.getCompleteImage(data.images[i].employeeEmpId,data.images[i].photoOut).then(function (imageResponse) {
-                                    // console.log(imageResponse);
-                                    $scope.completedImages.push(imageResponse);
-                                });
-                            }
-
-                        }
+//                        if(data.images){
+//                            $scope.completedImages = [];
+//                            for(var i=0;i<data.images.length;i++){
+//                                console.log(data.images[i]);
+//                                JobComponent.getCompleteImage(data.images[i].employeeEmpId,data.images[i].photoOut).then(function (imageResponse) {
+//                                    // console.log(imageResponse);
+//                                    $scope.completedImages.push(imageResponse);
+//                                });
+//                            }
+//
+//                        }
 
                         if($scope.job.ticketId > 0) {
                             TicketComponent.getTicketDetails($scope.job.ticketId).then(function(data){
@@ -651,10 +651,10 @@ angular.module('timeSheetApp')
         	}
         };
 
-        $scope.loadCompletedJob = function(image) {
+        $scope.loadCompletedJob = function(imageUrl) {
             var eleId = 'photoStart';
             var ele = document.getElementById(eleId);
-            ele.setAttribute('src',image);
+            ele.setAttribute('src',imageUrl);
 
         };
 

@@ -55,8 +55,8 @@
         <ion-col col-6><p text-right><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{jobDetails.actualStartTime | date:'MMM d, y, h:mm a'}}</p></ion-col>
         <ion-col col-6 class="label-on-left">Actual End Time</ion-col>
         <ion-col col-6><p text-right><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{jobDetails.actualEndTime | date:'MMM d, y, h:mm a'}}</p></ion-col>
-        <ion-col col-3 *ngFor="let image of completedImages">
-            <img src="{{image}}" wdith="80px" height="80px" (click)="viewImage(image)">
+        <ion-col col-3 *ngFor="let image of jobDetails.images">
+            <img src="{{image.url}}" width="80px" height="80px"  class="job-img margin-bottom25"   (click)="viewImage(image.url)">
         </ion-col>
     </ion-row>
     <br>

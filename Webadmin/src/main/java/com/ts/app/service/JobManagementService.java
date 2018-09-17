@@ -580,7 +580,7 @@ public class JobManagementService extends AbstractService {
 				transactions = new ArrayList<JobDTO>();
 			}
         		for(Job job : allJobsList) {
-        			transactions.add(mapToModel(job));
+        			transactions.add(mapToModel(job, searchCriteria.isReport()));
         		}
 			buildSearchResult(searchCriteria, page, transactions,result);
 		}
@@ -754,7 +754,7 @@ public class JobManagementService extends AbstractService {
 
             		if(CollectionUtils.isNotEmpty(page.getContent())) {
 	            		for(Job job : page.getContent()) {
-	            			transactions.add(mapToModel(job));
+	            			transactions.add(mapToModel(job, false));
 	            		}
             		}
                 if(CollectionUtils.isNotEmpty(transactions)) {
@@ -1070,7 +1070,7 @@ public class JobManagementService extends AbstractService {
 
 		return new ResponseEntity<>(jobDto, HttpStatus.CREATED);
 	}
-	private JobDTO mapToModel(Job job) {
+	private JobDTO mapToModel(Job job, boolean isReport) {
 		JobDTO dto = new JobDTO();
 		dto.setId(job.getId());
 		dto.setTitle(job.getTitle());
@@ -1078,7 +1078,9 @@ public class JobManagementService extends AbstractService {
 			dto.setAssetId(job.getAsset().getId());
 		}
 		dto.setSiteId(job.getSite().getId());
-		dto.setSiteName(job.getSite().getName());
+		dto.setSiteName(job.getSite().getName()); 
+		dto.setSiteProjectId(String.valueOf(job.getSite().getProject().getId()));
+		dto.setSiteProjectName(job.getSite().getProject().getName());
 		dto.setDescription(job.getDescription());
 		dto.setJobStatus(job.getStatus());
 		dto.setStatus(job.getStatus().name());
@@ -1100,6 +1102,23 @@ public class JobManagementService extends AbstractService {
 		if(ticket != null) {
 			dto.setTicketId(ticket.getId());
 			dto.setTicketName(ticket.getTitle());
+		}
+		List<JobChecklist> jobCheckList = job.getChecklistItems();
+		if(CollectionUtils.isNotEmpty(jobCheckList)) {
+			List<JobChecklistDTO> checklistDtos = new ArrayList<JobChecklistDTO>();
+			for(JobChecklist item : jobCheckList) {
+				JobChecklistDTO itemDto = new JobChecklistDTO();
+				itemDto.setChecklistItemName(item.getChecklistItemName());
+				itemDto.setChecklistName(item.getChecklistName());
+				itemDto.setCompleted(item.isCompleted());
+				itemDto.setRemarks(item.getRemarks());
+				String imageUrl_1 = !StringUtils.isEmpty(item.getImage_1()) ? cloudFrontUrl + bucketEnv + checkListpath + item.getImage_1() : "";
+				itemDto.setImage_1(item.getImage_1());
+				itemDto.setImageUrl_1(imageUrl_1);
+				
+				checklistDtos.add(itemDto);
+			}
+			dto.setChecklistItems(checklistDtos);
 		}
 		return dto;
 	}
@@ -1753,7 +1772,7 @@ public class JobManagementService extends AbstractService {
                 			result = new ArrayList<JobDTO>();
                 		}
                 		for(Job job : allJobsList) {
-                			result.add(mapToModel(job));
+                			result.add(mapToModel(job, false));
                 		}
                 }
                 return result;
@@ -1847,7 +1866,7 @@ public class JobManagementService extends AbstractService {
     }
 
     public ExportResult generateReport(List<JobDTO> transactions, SearchCriteria criteria) {
-    	User user = userRepository.findOne(criteria.getUserId());
+    		User user = userRepository.findOne(criteria.getUserId());
 		Employee emp = null;
 		if(user != null) {
 			emp = user.getEmployee();

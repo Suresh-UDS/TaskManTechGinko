@@ -74,6 +74,10 @@ angular.module('timeSheetApp')
         $scope.feedbackReport = {};
 
         $scope.now = new Date()
+        
+        $rootScope.exportStatusObj = {};
+        $scope.checkStatus = 0;
+        
 
         $scope.initCalender = function(){
 
@@ -306,7 +310,7 @@ angular.module('timeSheetApp')
                 else {
                     $scope.searchCriteria.projectId = 0;
                 }
-                if($scope.selectedSite.id) {
+                if($scope.selectedSite && $scope.selectedSite.id) {
                      $scope.searchCriteria.siteId = $scope.selectedSite.id;
                     $scope.searchCriteria.siteName = $scope.selectedSite.name;
                 }
@@ -354,7 +358,7 @@ angular.module('timeSheetApp')
 
                             $scope.feedbackListData = true;
                         }
-
+                    }     
                         console.log('feedback report - ' + JSON.stringify($scope.feedbackReport));
                         $scope.averageRating = $scope.feedbackReport.overallRating;
                         $scope.feedbackCount = $scope.feedbackReport.feedbackCount;
@@ -441,7 +445,7 @@ angular.module('timeSheetApp')
 
                     }
 
-                }
+                //}
 
             }).catch(function(res){
                 $rootScope.loadingStop();
@@ -517,6 +521,92 @@ angular.module('timeSheetApp')
 
 
          }
+        
+        
+        $scope.exportAllData = function(type){
+            $scope.searchCriteria.exportType = type;
+            $rootScope.exportStatusObj.exportMsg = '';
+            $scope.typeMsg = type;
+            $scope.downloader=true;
+            FeedbackComponent.exportAllData($scope.searchCriteria).then(function(data){
+                var result = data.results[0];
+                console.log(result);
+                console.log(result.file + ', ' + result.status + ',' + result.msg);
+                var exportAllStatus = {
+                        fileName : result.file,
+                        exportMsg : 'Exporting All...',
+                        url: result.url
+                };
+                $rootScope.exportStatusObj = exportAllStatus;
+                console.log('exportStatusObj size - ' + $rootScope.exportStatusObj.length);
+                $scope.start();
+              },function(err){
+                  console.log('error message for export all ')
+                  //console.log(err);
+                  $scope.start();
+              });
+	    };
+	
+	 // store the interval promise in this variable
+	    var promise;
+	
+	 // starts the interval
+	    $scope.start = function() {
+	      // stops any running interval to avoid two intervals running at the same time
+	      $scope.stop();
+	
+	      // store the interval promise
+	      promise = $interval($scope.exportStatus, 5000);
+	      console.log('promise -'+promise);
+	    };
+	
+	    // stops the interval
+	    $scope.stop = function() {
+	      $interval.cancel(promise);
+	    };
+	
+	
+	
+	    $scope.exportStatus = function() {
+	            console.log('$rootScope.exportStatusObj -'+$rootScope.exportStatusObj);
+	
+	            FeedbackComponent.exportStatus($rootScope.exportStatusObj.fileName).then(function(data) {
+	                    console.log('feedback export status - data -' + JSON.stringify(data));
+	                    if(data) {
+	                        $rootScope.exportStatusObj.exportStatus = data.status;
+	                        console.log('exportStatus - '+ JSON.stringify($rootScope.exportStatusObj));
+	                        $rootScope.exportStatusObj.exportMsg = data.msg;
+	                        $scope.downloader=false;
+	                        console.log('exportMsg - '+ $rootScope.exportStatusObj.exportMsg);
+	                        if($rootScope.exportStatusObj.exportStatus == 'COMPLETED'){
+	                            if($rootScope.exportStatusObj.url) {
+	                                $rootScope.exportStatusObj.exportFile = $rootScope.exportStatusObj.url;
+	                            }else {
+	                                $rootScope.exportStatusObj.exportFile = data.file;
+	                            }
+	                            console.log('exportFile - '+ $rootScope.exportStatusObj.exportFile);
+	                            $scope.stop();
+	                        }else if($rootScope.exportStatusObj.exportStatus == 'FAILED'){
+	                            $scope.stop();
+	                        }else if(!$rootScope.exportStatusObj.exportStatus){
+	                            $scope.stop();
+	                        }else {
+	                            $rootScope.exportStatusObj.exportFile = '#';
+	                        }
+	                    }
+	
+	                });
+	
+	    }
+	
+	    $scope.exportFile = function() {
+	        return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportFile : '#');
+	    }
+	
+	
+	    $scope.exportMsg = function() {
+	        return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportMsg : '');
+	    };
 
     });
 
