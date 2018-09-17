@@ -289,11 +289,11 @@
                             <tbody>
                             <tr ng-repeat="attendance in attendancesData">
                                 <td>{{attendance.employeeEmpId}}</td>
-                                <td>{{attendance.employeeFullName}}</td>
+                                <td>{{attendance.employeeName +' '+ attendance.employeeLastName }}</td>
                                 <td>{{attendance.siteName}}</td>
                                 <td>{{attendance.checkInTime | date:'MM/dd/yyyy @ h:mma'}}</td>
                                 <td ng-if="attendance.checkInImage">
-                                    <a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkInImage)">
+                                    <a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkInImgUrl, attendance.enrollImgUrl)">
                                         <img src={{attendance.checkInImgUrl}} width="30px" height="30px"/>
                                     </a>
                                 </td>
@@ -303,7 +303,7 @@
 
                                 <td>{{attendance.checkOutTime | date:'MM/dd/yyyy @ h:mma'}}</td>
 
-                                <td ng-if="attendance.checkOutImage"><a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkOutImage)">
+                                <td ng-if="attendance.checkOutImage"><a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkOutImgUrl, attendance.enrollImgUrl)">
                                     <img src={{attendance.checkOutImgUrl}} width="30px" height="30px"/>
                                 </a>
                                 </td>
