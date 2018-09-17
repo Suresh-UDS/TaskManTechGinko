@@ -445,10 +445,14 @@ public class FeedbackTransactionService extends AbstractService {
 							searchCriteria.setFloor(loc.getFloor());
 							searchCriteria.setZone(loc.getZone());
 							FeedbackMapping feedbackMapping = getFeedbackMappingByLocation(searchCriteria);
-							
+							if(log.isDebugEnabled()) {
+								log.debug("Location - Block- " +searchCriteria.getBlock() + ", Floor -" + searchCriteria.getFloor() + ", Zone-" + searchCriteria.getZone());
+								log.debug("FeedbackMapping - " + (feedbackMapping != null ? feedbackMapping.getId() : null ));
+							}
 							if(feedbackMapping != null) {
 							
 								List<Object[]> questionRatings = getQuestionRatings(searchCriteria,feedbackMapping,fromTime,toTime,weeklyFromDate,weeklyToDate);
+								log.debug("Question ratings - " + (questionRatings != null ? questionRatings.size() : null ));
 								if(CollectionUtils.isNotEmpty(questionRatings)) {
 									for(Object[] row : questionRatings) {
 										FeedbackQuestionRating qrating = null;
@@ -470,6 +474,7 @@ public class FeedbackTransactionService extends AbstractService {
 								}
 								//log.debug("feedbackMapping.getFeedback().getId(): \t"+feedbackMapping.getFeedback().getId());
 								questionRatings = getquestionRatings(searchCriteria,feedbackMapping,fromTime,toTime,weeklyFromDate,weeklyToDate);
+								log.debug("Question ratings - " + (questionRatings != null ? questionRatings.size() : null ));
 								if(CollectionUtils.isNotEmpty(questionRatings)) {
 									for(Object[] row : questionRatings) {
 										FeedbackQuestionRating qrating = null;
