@@ -250,8 +250,8 @@
                                             <!--<a id="{{ 'jobPhoto-' + $index }}" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImages(job.employeeEmpId,image.photoOut, $index)">-->
                                             <!--<img data-ng-src="/api/employee/{{job.employeeEmpId}}/checkInOut/{{image.photoOut}}" width="30px" height="30px"/>-->
                                             <!--</a>-->
-                                            <a onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(url)" >
-                                                <img src="{{url}}" width="150px" height="150px">
+                                            <a onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(image.url)" >
+                                                <img src="{{image.url}}" width="150px" height="150px">
 
                                             </a>
                                         </div>
