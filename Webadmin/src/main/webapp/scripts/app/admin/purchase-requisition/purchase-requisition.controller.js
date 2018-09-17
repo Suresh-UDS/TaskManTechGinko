@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('PurchaseRequisitionController', function ($rootScope, $scope, $state, $timeout,
-    		ProjectComponent, SiteComponent,EmployeeComponent,InventoryComponent, PurchaseComponent, $http,$stateParams,$location, PaginationComponent, getLocalStorage) {
+    .controller('PurchaseRequisitionController', function ($rootScope, $scope, $state, $timeout, $filter,
+    		ProjectComponent, SiteComponent,EmployeeComponent,InventoryComponent, PurchaseComponent, $http,$stateParams,$location, PaginationComponent, getLocalStorage,$interval) {
 
     	$scope.selectedProject = {};
 
@@ -23,6 +23,8 @@ angular.module('timeSheetApp')
         $scope.purchaseObject = {};
 
         $scope.purchaseReqObj = {};
+        
+        $rootScope.exportStatusObj  ={};
 
 			//init load
 			$scope.initLoad = function(){
@@ -199,6 +201,13 @@ angular.module('timeSheetApp')
                     $scope.selectedItemName = $scope.selectedItemCode.name;
                     $scope.selectedQuantity = "";
                 }
+                
+                $scope.loadStatus = function() {
+                	PurchaseComponent.getAllStatus().then(function(data) {
+                		console.log(data);
+                		$scope.requestStatuses = data;
+                	});
+                }
 
                 $scope.addPurchaseItem = function() {
                     $scope.purchase = {};
@@ -220,6 +229,30 @@ angular.module('timeSheetApp')
                             $scope.selectedUop='';
                         }
                 }
+                
+                $scope.exportAllData = function(type){
+                    $rootScope.exportStatusObj.exportMsg = '';
+                    $scope.downloader=true;
+                    $scope.searchCriteria.exportType = type;
+                    $scope.searchCriteria.report = true;
+
+                    console.log('calling asset export api');
+                    PurchaseComponent.exportAllData($scope.searchCriteria).then(function(data){
+                        var result = data.results[0];
+                        console.log(result.file + ', ' + result.status + ',' + result.msg);
+                        var exportAllStatus = {
+                                fileName : result.file,
+                                exportMsg : 'Exporting All...',
+                                url: result.url
+                        };
+                        $scope.exportStatusMap[0] = exportAllStatus;
+                        console.log('exportStatusMap size - ' + $scope.exportStatusMap.length);
+                        $scope.start();
+                      },function(err){
+                          console.log('error message for export all ')
+                          console.log(err);
+                  });
+               };
 
 
                 $scope.isActiveAsc = 'id';
@@ -300,6 +333,22 @@ angular.module('timeSheetApp')
 
                 if($scope.pageSort){
                     $scope.searchCriteria.sort = $scope.pageSort;
+                }
+                
+                if($scope.selectedRequestStatus) {
+                	$scope.searchCriteria.requestStatus = $scope.selectedRequestStatus;
+                }
+                
+                if($scope.selectedReferenceNumber) {
+                	$scope.searchCriteria.purchaseRefNumber = $scope.selectedReferenceNumber;
+                }
+                
+                if($scope.searchRequestedDate) {
+                	$scope.searchCriteria.requestedDate = $scope.searchRequestedDate;
+                }
+                
+                if($scope.searchApprovedDate) {
+                	$scope.searchCriteria.approvedDate = $scope.searchApprovedDate;
                 }
 
                 if($scope.selectedColumn){
@@ -395,6 +444,12 @@ angular.module('timeSheetApp')
                 	});
 
                 };
+                
+                $scope.loadAllEmployee = function() { 
+                	EmployeeComponent.findAll().then(function (data) {
+                        $scope.employees = data;
+                    });
+                }
 
                 $scope.loadSites = function () {
                 	console.log("selected project - " + JSON.stringify($scope.selectedProject));
@@ -663,6 +718,8 @@ angular.module('timeSheetApp')
                 $scope.searchProject = null;
                 $scope.searchSite = null;
                 $scope.searchCriteria = {};
+                $scope.searchRequestedDate = null;
+                $scope.searchApprovedDate = null;
                 $scope.localStorage = null;
                 $rootScope.searchCriteriaSite = null;
                 $scope.pages = {
@@ -685,5 +742,121 @@ angular.module('timeSheetApp')
                         $scope.loadPurchaseReq();
                     });
             }
+            
+            $scope.exportStatusMap = [];
+
+
+            $scope.exportStatus = function() {
+                //console.log('empId='+$scope.empId);
+                console.log('exportStatusMap length -'+$scope.exportStatusMap.length);
+                angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
+                    if(!exportStatusObj.empId) {
+                        exportStatusObj.empId = 0;
+                    }
+                    PurchaseComponent.exportStatus(exportStatusObj.fileName).then(function(data) {
+                        if(data) {
+                            exportStatusObj.exportStatus = data.status;
+                            console.log('exportStatus - '+ exportStatusObj);
+                            exportStatusObj.exportMsg = data.msg;
+                            $scope.downloader=false;
+                            console.log('exportMsg - '+ exportStatusObj.exportMsg);
+                            if(exportStatusObj.exportStatus == 'COMPLETED'){
+                                if(exportStatusObj.url) {
+                                    exportStatusObj.exportFile = exportStatusObj.url;
+                                }else {
+                                    exportStatusObj.exportFile = data.file;
+                                }
+                                console.log('exportFile - '+ exportStatusObj.exportFile);
+                                $scope.stop();
+                            }else if(exportStatusObj.exportStatus == 'FAILED'){
+                                $scope.stop();
+                            }else if(!exportStatusObj.exportStatus){
+                                $scope.stop();
+                            }else {
+                                exportStatuObj.exportFile = '#';
+                            }
+                        }
+
+                    });
+                });
+
+            }
+
+            $scope.exportFile = function(empId) {
+                if(empId != 0) {
+                    var exportFile = '';
+                    angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
+                        if(empId == exportStatusObj.empId){
+                            exportFile = exportStatusObj.exportFile;
+                            return exportFile;
+                        }
+                    });
+                    return exportFile;
+                }else {
+                    return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportFile : '#');
+                }
+            }
+
+
+            $scope.exportMsg = function(empId) {
+                    if(empId != 0) {
+                        var exportMsg = '';
+                        angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
+                            if(empId == exportStatusObj.empId){
+                                exportMsg = exportStatusObj.exportMsg;
+                                return exportMsg;
+                            }
+                        });
+                        return exportMsg;
+                    }else {
+                        return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportMsg : '');
+                    }
+
+            };
+            
+         // store the interval promise in this variable
+            var promise;
+
+         // starts the interval
+            $scope.start = function() {
+              // stops any running interval to avoid two intervals running at the same time
+              $scope.stop();
+
+              // store the interval promise
+              promise = $interval($scope.exportStatus, 5000);
+              console.log('promise -'+promise);
+            };
+
+            // stops the interval
+            $scope.stop = function() {
+              $interval.cancel(promise);
+            };
+            
+            $('#dateFilterRequestedDate').datetimepicker().on('dp.show', function (e) {
+                return $(this).data('DateTimePicker');
+            });
+
+            $('input#dateFilterRequestedDate').on('dp.change', function(e){
+                $scope.searchRequestedDate = e.date._d;
+                $scope.requestedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            });
+            
+            $('#dateFilterApprovedDate').datetimepicker().on('dp.show', function (e) {
+                return $(this).data('DateTimePicker');
+            });
+
+            $('input#dateFilterApprovedDate').on('dp.change', function(e){
+                $scope.searchApprovedDate = e.date._d;
+                $scope.approvedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            });
+            
+            
+            
+            
+            
+            
+            
+            
+
 
     });

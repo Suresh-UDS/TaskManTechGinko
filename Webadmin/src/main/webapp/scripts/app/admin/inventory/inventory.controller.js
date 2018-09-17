@@ -309,7 +309,15 @@ angular.module('timeSheetApp')
     			$scope.editInventory.minimumStock = data.minimumStock;
     			$scope.editInventory.maximumStock = data.maximumStock;
     			$scope.editInventory.storeStock = data.storeStock;
-    			$scope.selectedUnit = {materialUOM: data.uom };
+//    			$scope.selectedUnit = {materialUOM: data.uom };
+    			if(data.uom){
+    				for(var i in $scope.materialUOMs){
+    					var unit = data.uom;
+    					if($scope.materialUOMs[i] === unit.toUpperCase()){
+    						$scope.selectedUnit = $scope.materialUOMs[i];
+    					}
+    				}
+    			}
     		});
     	}
 
@@ -434,6 +442,9 @@ angular.module('timeSheetApp')
 	   	     }else{
 	                $scope.searchCriteria.materialCreatedDate = null;
 	   	     }
+            $scope.inventorylists = '';
+            $scope.inventorylistLoader = false;
+            $scope.loadPageTop();
         	console.log($scope.searchCriteria);
         	InventoryComponent.search($scope.searchCriteria).then(function (data) {
         		console.log(data);

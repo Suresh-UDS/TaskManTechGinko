@@ -29,12 +29,25 @@ angular.module('timeSheetApp')
 	    $scope.issuedQty = null;
 			
 		$scope.refreshPage = function() { 
-			 $scope.pages = {
-		                currPage: 1,
-		                totalPages: 0
-		            }
-//			 $scope.clearFilter();
+			 $scope.clearFilter();
 		}
+		
+        $scope.clearFilter = function() {
+            $scope.selectedSite = null;
+            $scope.selectedProject = null;
+            $scope.searchProject = null;
+            $scope.searchSite = null;
+            $scope.searchCriteria = {};
+            $scope.searchRequestedDate = null;
+			$scope.searchIssuedDate = null;
+            $scope.localStorage = null;
+            $rootScope.searchCriteriaSite = null;
+            $scope.pages = {
+                currPage: 1,
+                totalPages: 0
+            }
+            $scope.search();
+        };
 		
 		//init load
 		$scope.initLoad = function(){
@@ -61,9 +74,95 @@ angular.module('timeSheetApp')
         		$scope.projects = data;
         		console.log(data);
         		$scope.loadingStop();
+        	     for(var i=0;i<$scope.projects.length;i++)
+                 {
+                     $scope.uiClient[i] = $scope.projects[i].name;
+                 }
+                 $scope.clientDisable = false;
+                 $scope.clientFilterDisable = false;
         	});
 
         };
+
+        // Load Clients for selectbox //
+        $scope.clienteDisable = true;
+        $scope.uiClient = [];
+        $scope.getClient = function (search) {
+            var newSupes = $scope.uiClient.slice();
+            if (search && newSupes.indexOf(search) === -1) {
+                newSupes.unshift(search);
+            }
+
+            return newSupes;
+        }
+
+        $scope.selectProject = function(project)
+        {
+            $scope.searchProject = $scope.projectsList[$scope.uiClient.indexOf(project)]
+            console.log('Project dropdown list:',$scope.searchProject)
+        }
+        //
+
+        // Load Sites for selectbox //
+        $scope.siteDisable = true;
+        $scope.uiSite = [];
+
+        $scope.getSite = function (search) {
+            var newSupes = $scope.uiSite.slice();
+            if (search && newSupes.indexOf(search) === -1) {
+                newSupes.unshift(search);
+            }
+
+            return newSupes;
+        }
+
+        $scope.selectSite = function(site)
+        {
+            $scope.searchSite = $scope.sites[$scope.uiSite.indexOf(site)]
+            $scope.hideSite = true;
+            console.log('Site dropdown list:',$scope.searchSite)
+        }
+        $scope.addProject = function (selectedProject) {
+            $scope.selectedProject = $scope.projects[$scope.uiClient.indexOf(selectedProject)]
+            $scope.edit = false;
+        }
+
+        //Filter
+        $scope.filter = false;
+        $scope.clientFilterDisable = true;
+        $scope.siteFilterDisable = true;
+        $scope.siteSpin = false;
+        $scope.loadDepSites = function (searchProject) {
+            $scope.searchSite = null;
+            $scope.hideSite = false;
+            if($scope.localStorage)
+            {
+                $scope.localStorage.siteName = null;
+            }
+            $scope.searchCriteria.siteName = null;
+            $scope.siteSpin = true;
+            $scope.filter = false;
+            $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
+            if(jQuery.isEmptyObject($scope.selectedProject) == false) {
+                   var depProj=$scope.selectedProject.id;
+            }else if(jQuery.isEmptyObject($scope.searchProject) == false){
+                    var depProj=$scope.searchProject.id;
+            }else{
+                    var depProj=0;
+            }
+
+            ProjectComponent.findSites(depProj).then(function (data) {
+                $scope.selectedSite = null;
+                $scope.sites = data;
+                for(var i=0;i<$scope.sites.length;i++)
+                {
+                    $scope.uiSite[i] = $scope.sites[i].name;
+                }
+                $scope.siteFilterDisable = false;
+                $scope.siteSpin = false;
+            });
+        };
+
 
         $scope.loadSites = function () {
         	console.log("selected project - " + JSON.stringify($scope.selectedProject));
@@ -334,7 +433,7 @@ angular.module('timeSheetApp')
                 $scope.showNotifications('top','center','danger','Unable to update Material Indent. Please try again later..');
 			});
 		}
-
+		
         $scope.search = function () {
             $scope.noData = false;
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
@@ -371,11 +470,23 @@ angular.module('timeSheetApp')
         	if($scope.searchSite) { 
         		$scope.searchCriteria.siteId = $scope.searchSite.id;
         	}
+        	if($scope.searchRequestedDate) { 
+        		$scope.searchCriteria.requestedDate = $scope.searchRequestedDate;
+        	}
+        	if($scope.searchIssuedDate) {
+        		$scope.searchCriteria.issuedDate = $scope.searchIssuedDate;
+        	}
+        	if($scope.searchReferenceNo){
+        		$scope.searchCriteria.indentRefNumber = $scope.searchReferenceNo;
+        	}
             console.log("search criteria",$scope.searchCriteria);
+            $scope.materialIndents = '';
+            $scope.purchaseReqLoader = false;
             $scope.loadPageTop();
             IndentComponent.search($scope.searchCriteria).then(function (data) {
             	console.log(data);
                 $scope.materialIndents = data.transactions;
+                $scope.purchaseReqLoader = true;
                 $scope.loadingStop();
 
                  /*
@@ -447,6 +558,24 @@ angular.module('timeSheetApp')
             $scope.pages.currPage = page;
             $scope.search();
         };
+        
+        $('#dateFilterRequestedDate').datetimepicker().on('dp.show', function (e) {
+            return $(this).data('DateTimePicker');
+        });
+
+        $('input#dateFilterRequestedDate').on('dp.change', function(e){
+            $scope.searchRequestedDate = e.date._d;
+            $scope.requestedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+        });
+        
+        $('#dateFilterIssuedDate').datetimepicker().on('dp.show', function (e) {
+            return $(this).data('DateTimePicker');
+        });
+
+        $('input#dateFilterIssuedDate').on('dp.change', function(e){
+            $scope.searchIssuedDate = e.date._d;
+            $scope.issuedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+        });	
 
 
 });

@@ -45,8 +45,12 @@ import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.CommonUtil;
 import com.ts.app.service.util.DateUtil;
+import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.service.util.PagingUtil;
+import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.MaterialIndentDTO;
 import com.ts.app.web.rest.dto.MaterialIndentItemDTO;
 import com.ts.app.web.rest.dto.PurchaseReqDTO;
@@ -91,6 +95,12 @@ public class PurchaseRequisitionService extends AbstractService {
 	
 	@Inject
 	private MailService mailService;
+	
+	@Inject
+	private ReportUtil reportUtil;
+	
+	@Inject
+	private ExportUtil exportUtil;
 	
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
@@ -178,7 +188,7 @@ public class PurchaseRequisitionService extends AbstractService {
 		if(purchaseReqDTO.getRequestStatus().equals(PurchaseRequestStatus.REJECTED)) {
 			purchaseRequest.setRequestStatus(PurchaseRequestStatus.REJECTED);
 		}
-		if(purchaseReqDTO.getRequestStatus().equals(PurchaseRequestStatus.PURCHASERAISED)) {
+		if(purchaseReqDTO.getPurchaseOrderNumber() != null) {
 			purchaseRequest.setRequestStatus(PurchaseRequestStatus.PURCHASERAISED);
 		}
 		List<PurchaseReqItemDTO> purchaseItemDTOs = purchaseReqDTO.getItems();
@@ -241,6 +251,11 @@ public class PurchaseRequisitionService extends AbstractService {
 				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
 				log.debug("Sorting object" + sort);
 				pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+				if (searchCriteria.isReport()) {
+					pageRequest = createPageSort(searchCriteria.getCurrPage(), Integer.MAX_VALUE, sort);
+				} else {
+					pageRequest = createPageSort(searchCriteria.getCurrPage(), PagingUtil.PAGE_SIZE, sort);
+				}
 			} else {
 				if (searchCriteria.isList()) {
 					pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
@@ -350,9 +365,34 @@ public class PurchaseRequisitionService extends AbstractService {
 		return purchaseReqDto;
 	}
 
+	public ExportResult generateReport(List<PurchaseReqDTO> transactions, SearchCriteria searchCriteria) {
+		return reportUtil.generatePRReports(transactions, null, null, searchCriteria);
+	}
 	
-	
-	
+	public ExportResult getExportStatus(String fileId) {
+		ExportResult er = new ExportResult();
+
+		fileId += ".xlsx";
+		// log.debug("FILE ID INSIDE OF getExportStatus CALL ***********"+fileId);
+
+		if (!StringUtils.isEmpty(fileId)) {
+			String status = exportUtil.getExportStatus(fileId);
+			er.setFile(fileId);
+			er.setStatus(status);
+		}
+		return er;
+	}
+
+	public byte[] getExportFile(String fileName) {
+		// return exportUtil.readExportFile(fileName);
+		return exportUtil.readJobExportFile(fileName);
+	}
+
+	public PurchaseRequestStatus[] getRequestStatus() {
+		// TODO Auto-generated method stub
+		PurchaseRequestStatus[] requestStatus = PurchaseRequestStatus.values();
+		return requestStatus;
+	}
 	
 	
 	

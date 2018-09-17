@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -19,8 +20,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.PurchaseRequestStatus;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.PurchaseRequisitionService;
+import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.ExportResponse;
+import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.PurchaseReqDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
@@ -115,6 +120,65 @@ public class PurchaseRequisitionResource {
 			result = purchaseReqService.findBySearchCrieria(searchCriteria);
 		}
 		return result;
+	}
+	
+	@RequestMapping(value = "/purchaseRequest/export", method = RequestMethod.POST)
+	public ExportResponse exportPurchaseRequest(@RequestBody SearchCriteria searchCriteria) {
+		// log.debug("JOB EXPORT STARTS HERE **********");
+		ExportResponse resp = new ExportResponse();
+		if (searchCriteria != null) {
+			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+			SearchResult<PurchaseReqDTO> result = purchaseReqService.findBySearchCrieria(searchCriteria);
+			List<PurchaseReqDTO> results = result.getTransactions();
+			resp.addResult(purchaseReqService.generateReport(results, searchCriteria));
+
+			// log.debug("RESPONSE FOR OBJECT resp *************"+resp);
+		}
+		return resp;
+	}
+	
+	@RequestMapping(value = "/purchaseRequest/export/{fileId}/status", method = RequestMethod.GET)
+	public ExportResult exportStatus(@PathVariable("fileId") String fileId) {
+		// log.debug("ExportStatus - fileId -"+ fileId);
+		ExportResult result = purchaseReqService.getExportStatus(fileId);
+
+		// log.debug("RESULT NOW **********"+result);
+		// log.debug("RESULT GET STATUS **********"+result.getStatus());
+
+		if (result != null && result.getStatus() != null) {
+			switch (result.getStatus()) {
+			case "PROCESSING":
+				result.setMsg("Exporting...");
+				break;
+			case "COMPLETED":
+				result.setMsg("Download");
+				result.setFile("/api/purchaseRequest/export/" + fileId);
+				break;
+			case "FAILED":
+				result.setMsg("Failed to export. Please try again");
+				break;
+			default:
+				result.setMsg("Failed to export. Please try again");
+				break;
+			}
+		}
+		return result;
+	}
+
+	@RequestMapping(value = "/purchaseRequest/export/{fileId}", method = RequestMethod.GET)
+	public byte[] getExportFile(@PathVariable("fileId") String fileId, HttpServletResponse response) {
+		byte[] content = purchaseReqService.getExportFile(fileId);
+		response.setContentType("Application/x-msexcel");
+		response.setContentLength(content.length);
+		response.setHeader("Content-Transfer-Encoding", "binary");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileId + ".xlsx\"");
+		return content;
+	}
+	
+	@RequestMapping(value = "/purchaseRequest/status", method = RequestMethod.GET)
+	public ResponseEntity<PurchaseRequestStatus[]> getRequestStatus() {
+		PurchaseRequestStatus[] status = purchaseReqService.getRequestStatus();
+		return new ResponseEntity<>(status, HttpStatus.OK);
 	}
 	
 	

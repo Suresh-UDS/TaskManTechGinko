@@ -2,7 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('InventoryTransactionController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent,$http,$stateParams,$location,
-    			ManufacturerComponent, InventoryComponent, InventoryTransactionComponent, IndentComponent, $filter, PaginationComponent) {
+    			ManufacturerComponent, InventoryComponent, InventoryTransactionComponent, IndentComponent, PurchaseComponent, $filter, PaginationComponent) {
 
         
     	$rootScope.loginView = false;
@@ -141,6 +141,8 @@ angular.module('timeSheetApp')
     	
     	$scope.loadItems = function() {
     		console.log($scope.selectedIndent);
+    		$scope.materialItems = [];
+    		$scope.selectedItems = [];
     		if($scope.selectedIndent) {
     			IndentComponent.findById($scope.selectedIndent.id).then(function(data) {
     				console.log(data);
@@ -148,12 +150,33 @@ angular.module('timeSheetApp')
     				$scope.loadingStop();
     			});
     		}
+    		
     	}
     	
     	$scope.loadPurchaseItems = function() {
     		console.log($scope.selectedPurchaseReq);
+    		$scope.materialItems = [];
+    		$scope.selectedItems = [];
     		if($scope.selectedPurchaseReq) {
-    			
+    			PurchaseComponent.findById($scope.selectedPurchaseReq.id).then(function(data) {
+    				console.log(data);
+    				$scope.materialItems = data.items;
+    				$scope.loadingStop();
+    			});
+    		}
+    	}
+    	
+    	$scope.loadPurchases = function() {
+    		console.log($scope.selectedPurchaseReq);
+    		if($scope.projectSite) {
+    			console.log($scope.projectSite);
+    			$scope.search = {};
+    			$scope.search.siteId = $scope.projectSite.id;
+    			$scope.search.requestStatus = "APPROVED";
+    			PurchaseComponent.search($scope.search).then(function(data) { 
+    				console.log(data);
+    				$scope.purchaseItems = data.transactions;
+    			});
     		}
     	}
     	
@@ -305,6 +328,13 @@ angular.module('timeSheetApp')
             $scope.allItemsSelected = true;
         };
         
+        $scope.changeType = function() { 
+        	$scope.selectedIndent = null;
+        	$scope.selectedPurchaseReq = null;
+        	$scope.materialItems = [];
+        	$scope.selectedItems = [];
+        }
+        
         
         /* Save material Transaction */
     	$scope.saveInventoryTrans = function() {
@@ -316,23 +346,25 @@ angular.module('timeSheetApp')
     			$scope.inventory.siteId = $scope.projectSite.id;
     		}
     		
-    		if($scope.selectedIndent) { 
-    			$scope.inventory.materialIndentId = $scope.selectedIndent.id;
-    		}
-    		
     		if($scope.selectedItemCode){
     			$scope.inventory.materialId = $scope.selectedItemCode.materialId
     			$scope.inventory.materialGroupId = $scope.selectedItemCode.materialItemGroupId;
     		}
     		
-    		if($scope.selectedTransactionType) { 
+    		if($scope.selectedTransactionType === 'ISSUED') { 
     			$scope.inventory.transactionType = $scope.selectedTransactionType;
+    			$scope.inventory.materialIndentId = $scope.selectedIndent.id;
+    			$scope.inventory.items = $scope.selectedItems;
+    		}
+    		
+    		if($scope.selectedTransactionType === 'RECEIVED') {
+    			$scope.inventory.transactionType = $scope.selectedTransactionType;
+    			$scope.inventory.purchaseRequisitionId = $scope.selectedPurchaseReq.id;
+    			$scope.inventory.prItems = $scope.selectedItems;
     		}
     		
     		console.log($scope.selectedItems);
-    		if($scope.selectedItems) {
-    			$scope.inventory.items = $scope.selectedItems;
-    		}
+    		
     		console.log(JSON.stringify($scope.inventory));
     		
     		InventoryTransactionComponent.create($scope.inventory).then(function(response) { 
@@ -512,12 +544,14 @@ angular.module('timeSheetApp')
 	                $scope.searchCriteria.transactionDate = null;
 	   	     }
         	console.log($scope.searchCriteria);
-        	$scope.loadingStart();
+        	$scope.inventoryTransactionlists = '';
+        	$scope.inventoryTranslistLoader = false;
+        	$scope.loadPageTop();
         	InventoryTransactionComponent.search($scope.searchCriteria).then(function (data) {
         		console.log(data);
                 $scope.inventoryTransactionlists = data.transactions;
                 $scope.loadingStop();
-                $scope.inventorylistLoader = true;
+                $scope.inventoryTranslistLoader = true;
                 /*
                  ** Call pagination  main function **
              */

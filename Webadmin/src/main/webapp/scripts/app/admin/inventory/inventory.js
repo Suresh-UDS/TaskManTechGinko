@@ -7,7 +7,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		controller : 'InventoryController',
 		data : {
 			authorities : [],
-			pageTitle : 'Add inventory'
+			pageTitle : 'Add Material'
 		},
 		views : {
 			'content@' : {
@@ -24,7 +24,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		controller : 'InventoryController',
 		data : {
 			authorities : [],
-			pageTitle : 'Edit inventory'
+			pageTitle : 'Edit Material'
 		},
 		views : {
 			'content@' : {
@@ -41,7 +41,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		controller : 'InventoryController',
 		data : {
 			authorities : [],
-			pageTitle : 'View inventory'
+			pageTitle : 'View Material'
 		},
 		views : {
 			'content@' : {

@@ -91,10 +91,10 @@
                                     <tfoot>
                                     <td colspan="3"></td>
                                     <td colspan="2" class="text-right">
-                                        <button class="btn btn-success" ng-click="updatePurchaseReq('APPROVED')" type="button">
+                                        <button class="btn btn-success" ng-show="purchaseReqObj.requestStatus === 'PENDING'" ng-click="updatePurchaseReq('APPROVED')" type="button">
                                             Approve
                                         </button>
-                                        <button class="btn" type="button" ng-click="updatePurchaseReq('REJECTED')" id="cancel-button">
+                                        <button class="btn" type="button" ng-show="purchaseReqObj.requestStatus === 'PENDING'" ng-click="updatePurchaseReq('REJECTED')" id="cancel-button">
                                             Reject
                                             <div class="ripple-container"></div></button>
                                     </td>

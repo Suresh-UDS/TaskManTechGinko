@@ -83,6 +83,27 @@ angular.module('timeSheetApp')
             	return $http.post('api/inventory/transactions', criteria).then(function(response) { 
             		return response.data;
             	});
+            },
+            
+            importInventoryFile : function() {
+            	var fileFormData = new FormData();
+	            fileFormData.append('inventoryFile', file);
+	            	return $http.post('api/inventory/import', fileFormData, {
+	                    transformRequest: angular.identity,
+	                    headers: {'Content-Type': undefined}
+
+	                }).then(function (response) {
+	            			return response.data;
+	                });
+            },
+            importInventoryStatus: function(fileName) {
+            	return $http.get('api/inventory/import/'+fileName+"/status").then(function (response) {
+            		return response.data;
+            	});
             }
+            
+            
+            
+            
         };
     });

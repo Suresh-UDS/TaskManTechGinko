@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.AssetGroup;
@@ -36,10 +37,12 @@ import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.DateUtil;
+import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.AssetParameterReadingDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.MaterialDTO;
 import com.ts.app.web.rest.dto.MaterialItemGroupDTO;
 import com.ts.app.web.rest.dto.MaterialTransactionDTO;
@@ -75,6 +78,9 @@ public class InventoryManagementService extends AbstractService{
 	
 	@Inject
 	private InventoryTransactionRepository inventTransactionRepository;
+	
+	@Inject
+	private ImportUtil importUtil;
 	
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
@@ -185,6 +191,21 @@ public class InventoryManagementService extends AbstractService{
 		List<Material> materialList = inventRepository.findByMaterialGroupId(itemGroupId);
 		List<MaterialDTO> materialModelList = mapperUtil.toModelList(materialList, MaterialDTO.class);
 		return materialModelList;
+	}
+	
+	public ImportResult importFile(MultipartFile file, long dateTime) {
+		return importUtil.importInventoryMaster(file, dateTime, false, false);
+	}
+
+	public ImportResult getImportStatus(String fileId) {
+		ImportResult er = new ImportResult();
+		// fileId += ".csv";
+		if (!StringUtils.isEmpty(fileId)) {
+			String status = importUtil.getImportStatus(fileId);
+			er.setFile(fileId);
+			er.setStatus(status);
+		}
+		return er;
 	}
 
 	public SearchResult<MaterialDTO> findBySearchCrieria(SearchCriteria searchCriteria) {

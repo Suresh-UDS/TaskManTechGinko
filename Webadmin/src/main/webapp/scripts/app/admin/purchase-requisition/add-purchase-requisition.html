@@ -137,12 +137,12 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label class="control-label">Unit of price</label>
-                                        <input type="text" class="form-control" name="uop" ng-pattern="/^[0-9]*$/"  ng-model="selectedItemCode.unitPrice">
+                                        <label class="control-label">UOM</label>
+                                        <input type="text" class="form-control" name="uop" ng-model="selectedItemCode.uom">
                                         <div ng-show="itemForm.$submitted || itemForm.uop.$touched">
                                             <div ng-show="itemForm.uop.$dirty || itemForm.uop.$invalid">
                                                 <p class="help-block" style="color: maroon"
-                                                   ng-show="itemForm.uop.$error.pattern">Unit of price is
+                                                   ng-show="itemForm.uop.$error.pattern">UOM is
                                                     invalid.</p>
                                             </div>
                                         </div>
@@ -201,7 +201,7 @@
                                         <tr ng-repeat="purchase in purchaseItems" ng-class="{'highlight-text':$index == selectedRow}">
                                             <td>{{purchase.materialItemCode}}</td>
                                             <td>{{purchase.materialName}}</td>
-                                            <td>{{purchase.unitPrice}}</td>
+                                            <td>{{purchase.materialUom}}</td>
                                             <td>{{purchase.quantity}}</td>
                                             <td class="text-right" ng-click="editMaterial($index, purchase)"> <a class="btn btn-simple btn-info"><i class="material-icons">edit</i></a></td>
                                         </tr>
