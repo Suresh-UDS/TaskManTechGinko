@@ -49,14 +49,14 @@
                 </span>
 
             </span>
-            <button ng-show="feedbackReport.feedbackCount > 0" class="btn btn-info add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':(downloader && typeMsg=='xlsx')}"   title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
+            <button ng-show="feedbackCount > 0" class="btn btn-info add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':(downloader && typeMsg=='xlsx')}"   title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
                 <i class="material-icons">import_contacts</i> Export Excel
                 <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
                 <div class="ripple-container"></div>
             </button>
             <a class="download-btn" href="{{exportFile()}}">{{exportMsg()}}</a>
             <div class="downloaderBig" ng-show="downloader"></div>
-            
+
     </div>
     <!-- New changes End -->
 
@@ -191,7 +191,7 @@
                                         <h3>No of Feedbacks</h3>
                                     </div>
                                     <div class="col-md-6">
-                                        <h3>{{feedbackReport.feedbackCount}}</h3>
+                                        <h3>{{feedbackCount}}</h3>
                                     </div>
 
                                 </div>
@@ -368,13 +368,13 @@
                         <div class="col-xs-12 col-md-3">
                             <div class="form-group pdng-top20" >
                                 <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                <input ng-model="selectedFromDate" id="dateFilterFrom" type="text" class="form-control datepicker border-bottom-input"   />
+                                <input ng-model="selectedFromDate" id="dateFilterFrom" type="text" class="form-control datepicker border-bottom-input"  autocomplete="off" />
                             </div>
                         </div>
                         <div class="col-xs-12 col-md-3">
                             <div class="form-group pdng-top20"  >
                                 <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                <input ng-model="selectedToDate" id="dateFilterTo" type="text" class="form-control datepicker border-bottom-input"   />
+                                <input ng-model="selectedToDate" id="dateFilterTo" type="text" class="form-control datepicker border-bottom-input"  autocomplete="off" />
                             </div>
                         </div>
                         <div class="col-xs-12 col-md-3">
@@ -387,8 +387,8 @@
                                     <!--</select>-->
                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <ui-select ng-model="selectedProject" ng-disabled="clientFilterDisable" ng-change="loadSearchProject(selectedProject);loadSites()">
-                                        <ui-select-match placeholder="Select clients...">{{filter ? selectedProject.name?selectedProject.name:'Select Client' :clearField?'Select Client':selectedProject}}</ui-select-match>
+                                    <ui-select ng-model="selectedProject" ng-disabled="clientFilterDisable" ng-change="loadSearchProject(selectedProject);loadSites()" ng-click="loadSearchProject(selectedProject);loadSites()">
+                                        <ui-select-match placeholder="Select client...">{{filter ? selectedProject.name?selectedProject.name:'Select client' :clearField?'Select Client':selectedProject}}</ui-select-match>
                                         <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
                                             <div ng-bind="client"></div>
                                         </ui-select-choices>
@@ -408,7 +408,7 @@
                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                     <!--<span class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>-->
                                     <ui-select ng-model="selectedSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-click="loadSearchSite(selectedSite);searchLocations();loadFeedbackMasters();">
-                                        <ui-select-match placeholder="Select Site...">{{sites.length == 0 ? 'Select Site' : selectedSite.searchStatus ? selectedSite.name?selectedSite.name:'Select Site' : hideSite ?clearField?'Select site':selectedSite : 'Select Site' }}</ui-select-match>
+                                        <ui-select-match placeholder="Select site...">{{sites.length == 0 ? 'Select site' : selectedSite.searchStatus ? selectedSite.name?selectedSite.name:'Select Site' : hideSite ?clearField?'Select site':selectedSite : 'Select Site' }}</ui-select-match>
                                         <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
                                             <div ng-bind="site"></div>
                                         </ui-select-choices>
