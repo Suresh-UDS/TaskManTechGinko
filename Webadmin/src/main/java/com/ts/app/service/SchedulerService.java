@@ -719,6 +719,13 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.sendScheduleAMCJobsAlert();
 	}
 
+	@Scheduled(cron="0 */5 * * * ?") // runs every 30 mins
+	public void feedbackDetailReportSchedule() {
+		Calendar cal = Calendar.getInstance();
+		//cal.add(Calendar.DAY_OF_YEAR, -1);
+		schedulerHelperService.feedbackDetailedReport();
+	}	
+	
 	@Transactional
 	public void createJobs(SchedulerConfig scheduledTask) {
 		if ("CREATE_JOB".equals(scheduledTask.getType())) {

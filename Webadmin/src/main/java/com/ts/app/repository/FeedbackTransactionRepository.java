@@ -38,6 +38,9 @@ public interface FeedbackTransactionRepository extends JpaRepository<FeedbackTra
 	@Query("SELECT ft FROM FeedbackTransaction ft WHERE ft.siteId = :siteId")
 	Page<FeedbackTransaction> findBySite(@Param("siteId") long siteId, Pageable pageRequest);
 	
+	@Query("SELECT ft FROM FeedbackTransaction ft WHERE ft.siteId = :siteId and ft.createdDate between :startDate and :endDate")
+	Page<FeedbackTransaction> findBySite(@Param("siteId") long siteId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate, Pageable pageRequest);
+
 	@Query("SELECT ft FROM FeedbackTransaction ft WHERE ft.projectId = :projectId and ft.siteId = :siteId and ft.block = :block")
 	Page<FeedbackTransaction> findByBlock(@Param("siteId") long siteId, @Param("block") String block,Pageable pageRequest);
 
@@ -70,6 +73,9 @@ public interface FeedbackTransactionRepository extends JpaRepository<FeedbackTra
 	@Query("SELECT avg(ft.rating), ft.zone FROM FeedbackTransaction ft WHERE ft.siteId = :siteId and ft.createdDate between :startDate and :endDate group by ft.zone")
 	List<Object[]> getWeeklySite(@Param("siteId") long siteId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
 
+	@Query("SELECT avg(ft.rating), ft.siteName FROM FeedbackTransaction ft WHERE ft.projectId = :projectId and ft.createdDate between :startDate and :endDate group by ft.siteName")
+	List<Object[]> getSitewiseAverageRating(@Param("projectId") long projectId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
+
 	@Query("SELECT avg(ft.rating), date_format(ft.createdDate,'%d-%M-%Y') as reportDate FROM FeedbackTransaction ft WHERE ft.siteId = :siteId and ft.zone= :zone and ft.createdDate between :startDate and :endDate group by date_format(ft.createdDate,'%d-%M-%Y')")
 	List<Object[]> getWeeklyZone(@Param("siteId") long siteId, @Param("zone") String zone, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
 	
@@ -77,9 +83,15 @@ public interface FeedbackTransactionRepository extends JpaRepository<FeedbackTra
 	@Query("SELECT count(ft) FROM FeedbackTransaction ft WHERE ft.siteId = :siteId and ft.createdDate between :startDate and :endDate")
 	long getWeeklyFeedbackCount(@Param("siteId") long siteId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
 	
+	@Query("SELECT count(ft) FROM FeedbackTransaction ft WHERE ft.projectId = :projectId and ft.createdDate between :startDate and :endDate")
+	long getWeeklyFeedbackCountByProject(@Param("projectId") long projectId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
+
 	// weekly overall Rating
 	@Query("SELECT avg(ft.rating) FROM FeedbackTransaction ft WHERE ft.siteId = :siteId and ft.createdDate between :startDate and :endDate")
 	Float getWeeklyOverallRating(@Param("siteId") long siteId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
+
+	@Query("SELECT avg(ft.rating) FROM FeedbackTransaction ft WHERE ft.projectId = :projectId and ft.createdDate between :startDate and :endDate")
+	Float getWeeklyOverallRatingByProject(@Param("projectId") long siteId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
 
 	// weekly getWeeklyFeedbackAnswersCountForYesNo
 	@Query("SELECT distinct ftr.question as question, ftr.answer as answer, count(ftr.answer) as count FROM FeedbackTransactionResult ftr WHERE ftr.feedbackTransaction.siteId = :siteId and ftr.createdDate between :startDate and :endDate and ftr.answerType = 0 group by ftr.question, ftr.answer")

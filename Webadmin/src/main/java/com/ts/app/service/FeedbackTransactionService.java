@@ -30,19 +30,26 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Employee;
 import com.ts.app.domain.FeedbackAnswerType;
 import com.ts.app.domain.FeedbackMapping;
 import com.ts.app.domain.FeedbackTransaction;
 import com.ts.app.domain.FeedbackTransactionResult;
+import com.ts.app.domain.Project;
 import com.ts.app.domain.Setting;
+import com.ts.app.domain.User;
 import com.ts.app.repository.FeedbackMappingRepository;
 import com.ts.app.repository.FeedbackTransactionRepository;
+import com.ts.app.repository.ManufacturerRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SettingsRepository;
-import com.ts.app.repository.ManufacturerRepository;
+import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.DateUtil;
+import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.FeedbackQuestionRating;
 import com.ts.app.web.rest.dto.FeedbackReportResult;
 import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
@@ -89,6 +96,15 @@ public class FeedbackTransactionService extends AbstractService {
 
 	@Inject
 	private Environment env;
+	
+	@Inject
+	private UserRepository userRepository;
+
+	@Inject
+	private ExportUtil exportUtil;
+
+    @Inject
+    private ReportUtil reportUtil;
 
 	public FeedbackTransactionDTO saveFeebdackInformation(FeedbackTransactionDTO feedbackTransDto) {
 	    log.debug("user code- "+feedbackTransDto.getReviewerCode());
@@ -269,10 +285,12 @@ public class FeedbackTransactionService extends AbstractService {
                 pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
 
             }else{
-                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            		if(searchCriteria.isReport() || searchCriteria.isFindAll()) {
+            			pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+            		}else {
+            			pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            		}
             }
-
-
 
 			Page<FeedbackTransaction> page = null;
 			List<FeedbackTransactionDTO> transitems = null;
@@ -283,8 +301,12 @@ public class FeedbackTransactionService extends AbstractService {
 					page = feedbackTransactionRepository.findByFloor(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), pageRequest);
 				}else if(StringUtils.isNotEmpty(searchCriteria.getBlock())) {
 					page = feedbackTransactionRepository.findByBlock(searchCriteria.getSiteId(), searchCriteria.getBlock(), pageRequest);
+				}else if(searchCriteria.getSiteId() > 0 && searchCriteria.getFromDate() != null && searchCriteria.getToDate() != null) {
+					page = feedbackTransactionRepository.findBySite(searchCriteria.getSiteId(), DateUtil.convertToZDT(searchCriteria.getFromDate()),DateUtil.convertToZDT(searchCriteria.getToDate()), pageRequest);
 				}else if(searchCriteria.getSiteId() > 0) {
 					page = feedbackTransactionRepository.findBySite(searchCriteria.getSiteId(), pageRequest);
+				}else if(searchCriteria.getProjectId() > 0) {
+					page = feedbackTransactionRepository.findByProject(searchCriteria.getProjectId(), pageRequest);
 				}
 			}else {
 				page = feedbackTransactionRepository.findAll(pageRequest);
@@ -358,7 +380,7 @@ public class FeedbackTransactionService extends AbstractService {
 		        weeklyFromDate = ZonedDateTime.parse(fromdate, parser);
 	        }
 		        // end
-			if(searchCriteria.getProjectId() > 0) {
+			if(searchCriteria.getProjectId() > 0 && searchCriteria.getSiteId() > 0) {
 				log.debug("***************"+searchCriteria.getSiteId()+"\t block: "+ searchCriteria.getBlock()+"\t floor : "+ searchCriteria.getFloor()+"\t zone : " +searchCriteria.getZone()+"fromTime: \t"+fromTime+"toTime \t"+toTime);
 
 				FeedbackMapping feedbackMapping = getFeedbackMappingByLocation(searchCriteria);
@@ -458,6 +480,49 @@ public class FeedbackTransactionService extends AbstractService {
 					reportResult.setQuestionRatings(asList);
 
 				//}
+			}else if(searchCriteria.getProjectId() > 0) {
+				long feedbackCount = getFeedbackCount(searchCriteria,fromTime,toTime,weeklyFromDate,weeklyToDate);
+				Float overallRating = getOverallRating(searchCriteria,fromTime,toTime,weeklyFromDate,weeklyToDate);
+				log.debug("feedback count : \t"+ feedbackCount);
+				log.debug("overallRating: \t"+overallRating);
+				reportResult.setFeedbackCount(feedbackCount);
+				reportResult.setOverallRating(overallRating == null ? "0" : df.format(overallRating));
+				//reportResult.setFeedbackName(feedbackMapping.getFeedback().getName());
+				//reportResult.setSiteId(searchCriteria.getSiteId());
+				//reportResult.setSiteName(searchCriteria.getSiteName());
+				reportResult.setProjectId(searchCriteria.getProjectId());
+				reportResult.setProjectName(searchCriteria.getProjectName());
+				//reportResult.setBlock(searchCriteria.getBlock());
+				//reportResult.setFloor(searchCriteria.getFloor());
+				//reportResult.setZone(searchCriteria.getZone());
+
+				// weekly
+				List<Object[]> weeklySite = feedbackTransactionRepository.getSitewiseAverageRating(searchCriteria.getProjectId(),weeklyFromDate,weeklyToDate);
+				List<Object[]> weeklyZone = feedbackTransactionRepository.getWeeklyZone(searchCriteria.getSiteId(), searchCriteria.getZone(),weeklyFromDate,weeklyToDate);
+
+				List<WeeklySite> weeklySiteList = new ArrayList<WeeklySite>();
+				if(CollectionUtils.isNotEmpty(weeklySite)){
+					for(Object[] row: weeklySite){
+						WeeklySite site= new WeeklySite();
+						site.setRating((Double)row[0]);
+						site.setZoneName((String)row[1]);
+						weeklySiteList.add(site);
+					}
+				}
+
+				List<WeeklyZone> weeklyZoneList = new ArrayList<WeeklyZone>();
+				if(CollectionUtils.isNotEmpty(weeklyZone)){
+					for(Object[] row: weeklyZone){
+						WeeklyZone zone = new WeeklyZone();
+						zone.setRating((Double)row[0]);
+						//zone.setDay(Long.valueOf(String.valueOf(row[1])));
+						//zone.setDate(DateUtil.convertToDateTime(String.valueOf(row[1]), ""));
+						zone.setDate(String.valueOf(row[1]));
+						weeklyZoneList.add(zone);
+					}
+				}
+				reportResult.setWeeklyZone(weeklyZoneList);
+				reportResult.setWeeklySite(weeklySiteList);
 			}
 		}
 		return reportResult;
@@ -495,12 +560,14 @@ public class FeedbackTransactionService extends AbstractService {
 	private Float getOverallRating(SearchCriteria searchCriteria, ZonedDateTime fromTime, ZonedDateTime toTime,
 			ZonedDateTime weeklyFromDate, ZonedDateTime weeklyToDate) {
 		// TODO Auto-generated method stub
-		Float overallRating;
+		Float overallRating = 0f;
 		if(StringUtils.isNotEmpty(searchCriteria.getBlock()) && StringUtils.isNotEmpty(searchCriteria.getZone())){
 			overallRating = feedbackTransactionRepository.getFeedbackOverallRating(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), weeklyFromDate, weeklyToDate);
-		} else {
+		} else if(searchCriteria.getSiteId() > 0){
 			overallRating = feedbackTransactionRepository.getWeeklyOverallRating(searchCriteria.getSiteId(),weeklyFromDate,weeklyToDate);
-		}
+		} else if(searchCriteria.getProjectId() > 0){
+			overallRating = feedbackTransactionRepository.getWeeklyOverallRatingByProject(searchCriteria.getProjectId(),weeklyFromDate,weeklyToDate);
+		} 
 		return overallRating;
 	}
 
@@ -510,9 +577,11 @@ public class FeedbackTransactionService extends AbstractService {
 		long feedbackCount=0;
 		if(StringUtils.isNotEmpty(searchCriteria.getBlock()) && StringUtils.isNotEmpty(searchCriteria.getZone())){
 			feedbackCount = feedbackTransactionRepository.getFeedbackCount(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), weeklyFromDate, weeklyToDate);
-		} else {
+		} else if(searchCriteria.getSiteId() > 0){
 			feedbackCount = feedbackTransactionRepository.getWeeklyFeedbackCount(searchCriteria.getSiteId(),weeklyFromDate,weeklyToDate);
-		}
+		} else if(searchCriteria.getProjectId() > 0){
+			feedbackCount = feedbackTransactionRepository.getWeeklyFeedbackCountByProject(searchCriteria.getProjectId(),weeklyFromDate,weeklyToDate);
+		} 
 
 		return feedbackCount;
 	}
@@ -530,5 +599,38 @@ public class FeedbackTransactionService extends AbstractService {
 		return feedbackMapping;
 	}
 
+    public ExportResult generateReport(List<FeedbackTransactionDTO> transactions, SearchCriteria criteria) {
+    		User user = userRepository.findOne(criteria.getUserId());
+		Employee emp = null;
+		if(user != null) {
+			emp = user.getEmployee();
+		}
+		long projId = criteria.getProjectId();
+		Project proj = null;
+		if(projId > 0) {
+			proj = projectRepository.findOne(projId);
+			criteria.setProjectName(proj.getName());
+		}
+        return reportUtil.generateFeedbackReports(transactions, user, emp, null, criteria);
+    }
+
+
+	public ExportResult getExportStatus(String fileId) {
+		ExportResult er = new ExportResult();
+
+		fileId += ".xlsx";
+        //log.debug("FILE ID INSIDE OF getExportStatus CALL ***********"+fileId);
+
+		if(!StringUtils.isEmpty(fileId)) {
+			String status = exportUtil.getExportStatus(fileId);
+			er.setFile(fileId);
+			er.setStatus(status);
+		}
+		return er;
+	}
+
+	public byte[] getExportFile(String fileName) {
+		return exportUtil.readFeedbackExportFile(null,fileName);
+	}
 
 }

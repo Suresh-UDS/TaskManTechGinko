@@ -63,10 +63,12 @@ import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
 import com.ts.app.web.rest.dto.JobChecklistDTO;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
 
 /**
  * Service class for managing Device information.
@@ -112,6 +114,9 @@ public class SchedulerHelperService extends AbstractService {
 
 	@Inject
 	private JobManagementService jobManagementService;
+	
+	@Inject
+	private FeedbackTransactionService feedbackTransactionService;
 	
 	@Inject
 	private AssetRepository assetRepository;
@@ -184,11 +189,89 @@ public class SchedulerHelperService extends AbstractService {
 					} else {
 						log.debug("no jobs found on the daterange");
 					}
-
 				}
 			}
 		}
 	}
+	
+	public void feedbackDetailedReport() {
+		if (env.getProperty("scheduler.feedbackreport.enabled").equalsIgnoreCase("true")) {
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+			Calendar dayEndcal = Calendar.getInstance();
+			dayEndcal.set(Calendar.HOUR_OF_DAY, 23);
+			dayEndcal.set(Calendar.MINUTE, 59);
+			dayEndcal.set(Calendar.SECOND, 0);
+			dayEndcal.set(Calendar.MILLISECOND, 0);
+			
+			List<Project> projects = projectRepository.findAll();
+			for (Project proj : projects) {
+				SearchCriteria sc = new SearchCriteria();
+				sc.setFromDate(cal.getTime());
+				sc.setToDate(cal.getTime());
+				sc.setProjectId(proj.getId());
+				Hibernate.initialize(proj.getSite());
+				Set<Site> sites = proj.getSite();
+				Iterator<Site> siteItr = sites.iterator();
+				List<Setting> settings = null;
+				List<Setting> emailSettings = null;
+				List<Setting> timeSettings = null;
+				while(siteItr.hasNext()) {
+					Site site = siteItr.next();
+					sc.setSiteId(site.getId());
+					settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK_REPORT, site.getId(), proj.getId());
+					emailSettings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK_REPORT_EMAILS, site.getId(), proj.getId());
+					timeSettings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK_REPORT_TIME, site.getId(), proj.getId());
+					Setting feedbackReports = null;
+					if (CollectionUtils.isNotEmpty(settings)) {
+						feedbackReports = settings.get(0);
+					}
+					Setting feedbackEmail = null;
+					if (CollectionUtils.isNotEmpty(emailSettings)) {
+						feedbackEmail = emailSettings.get(0);
+					}
+					Setting feedbackTime = null;
+					if (CollectionUtils.isNotEmpty(timeSettings)) {
+						feedbackTime = timeSettings.get(0);
+					}
+					if (feedbackReports != null && feedbackReports.getSettingValue().equalsIgnoreCase("true")) {
+						String reportTime = feedbackTime !=null ? feedbackTime.getSettingValue() : null;
+						Calendar now = Calendar.getInstance();
+						now.set(Calendar.SECOND,  0);
+						now.set(Calendar.MILLISECOND, 0);
+						Calendar reportTimeCal = Calendar.getInstance();
+						if(StringUtils.isNotEmpty(reportTime)) {
+							try {
+								Date reportDateTime = DateUtil.parseToDateTime(reportTime);
+								reportTimeCal.setTime(reportDateTime);
+								reportTimeCal.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH));
+								reportTimeCal.set(Calendar.MONTH, now.get(Calendar.MONTH));
+								reportTimeCal.set(Calendar.YEAR, now.get(Calendar.YEAR));
+								reportTimeCal.set(Calendar.SECOND, 0);
+								reportTimeCal.set(Calendar.MILLISECOND, 0);
+							}catch (Exception e) {
+								log.error("Error while parsing feedback report time configured for client : " + proj.getName() , e);
+							}
+						}
+						if(reportTime != null && reportTimeCal.equals(now) && (feedbackEmail != null && StringUtils.isNotEmpty(feedbackEmail.getSettingValue()))) {
+							SearchResult<FeedbackTransactionDTO> results = feedbackTransactionService.findBySearchCrieria(sc);
+				            List<FeedbackTransactionDTO> content = results.getTransactions();
+							ExportResult result = new ExportResult();
+							result.setProjectId(proj.getId());
+							result.setSiteId(site.getId());
+							exportUtil.writeFeedbackExcelReportToFile(proj.getName(), content, null, null, result);
+						}
+						
+					}
+				}
+			}
+			
+		}
+	}
+	
 
 	public void overdueJobReport() {
 		if (env.getProperty("scheduler.overdueJob.enabled").equalsIgnoreCase("true")) {

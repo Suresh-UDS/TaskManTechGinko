@@ -16,6 +16,7 @@ import com.ts.app.domain.User;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.TicketDTO;
@@ -205,4 +206,34 @@ public class ReportUtil {
 	public SearchCriteria getVendorReportCriteria(String uid) {
 		return cacheUtil.getSearchCriteria(uid);
 	}
+	
+    public ExportResult generateFeedbackReports(List<FeedbackTransactionDTO> content, User user, Employee emp, ExportResult result, SearchCriteria criteria) {
+        if(criteria.getExportType().equalsIgnoreCase("html")) {
+            if(result == null) {
+                result = new ExportResult();
+            }
+            String uuidVal = null;
+            if(StringUtils.isNotEmpty(criteria.getExportType()) && criteria.getExportType().equalsIgnoreCase("html")) {
+                UUID uuid = UUID.randomUUID();
+                uuidVal = uuid.toString();
+                cacheUtil.putSearchCriteria(uuidVal, criteria);
+            }
+            result.setFile(uuidVal);
+            String reportUrl = env.getProperty("reports.feedback-report.url");
+            result.setUrl(reportUrl + "/" + uuidVal);
+
+            //log.debug("UUID VALUE **********"+uuidVal);
+            uuidVal += ".xlsx";
+            exportUtil.updateExportStatus(uuidVal, "COMPLETED");
+
+            result.setEmpId(emp.getEmpId());
+            result.setStatus("COMPLETED");
+           // log.debug("RESULT OBJECT VALUES HERE *************"+result);
+            return result;
+
+        }else if(criteria.getExportType().equalsIgnoreCase("xlsx")) {
+            return exportUtil.writeFeedbackExcelReportToFile(criteria.getProjectName(), content, user, emp,result);
+        }
+        return result;
+    }
 }
