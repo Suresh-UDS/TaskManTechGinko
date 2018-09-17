@@ -281,7 +281,7 @@
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
-
+								   <th>Location</th>
                                     <th>Question</th>
                                     <th>Yes</th>
                                     <th>No</th>
@@ -290,6 +290,7 @@
                                 </thead>
                                 <tbody>
                                 <tr ng-repeat="questionRating in feedbackReport.questionRatings">
+                                    <td>{{questionRating.location}}</td>
                                     <td>{{questionRating.question}}</td>
                                     <td>{{questionRating.yesCount}}</td>
                                     <td>{{questionRating.noCount}}</td>

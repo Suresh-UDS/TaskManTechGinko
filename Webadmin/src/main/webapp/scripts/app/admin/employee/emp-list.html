@@ -221,10 +221,10 @@
 										data-target="#enrollImageModal"
 										data-dismiss="#enrollImageModal"
 										ng-click="loadEnrolledImage(employee.url)"> <img
-											src={{employee.url}} width="30px" height="30px" />
+											ng-src={{employee.url}} width="30px" height="30px" />
 									</a></td>
 									<td ng-if="!employee.enrolled_face"><img
-										src="assets/img/user.png" width="30px" height="30px" /></td>
+										ng-src="assets/img/user.png" width="30px" height="30px" /></td>
 
 									<td has-permission="Employee:Edit"
 										ng-if="!employee.faceAuthorised && employee.faceIdEnrolled">
@@ -407,11 +407,11 @@
                                 <div class="EmpProfilePicCon">
 
                                    <div ng-if="employee.enrolled_face" class="EmpPic">
-                                       <img   src={{employee.url}} class="EmpProfilePic"  class="EmpProfilePic" />
+                                       <img   ng-src={{employee.url}} class="EmpProfilePic"  class="EmpProfilePic" />
                                    </div>
 
                                    <div ng-if="!employee.enrolled_face" class="EmpPic">
-                                       <img  src="assets/img/user.png"  class="EmpProfilePic" />
+                                       <img  ng-src="assets/img/user.png"  class="EmpProfilePic" />
                                    </div>
 
                                 </div>
@@ -1470,7 +1470,7 @@
 
 									<div class="row">
 
-										<div class="col-xs-12 col-md-4">
+										<div class="col-xs-12 col-md-6">
 											<div class="form-group">
 												<div class="dropdown">
 													<label class="label-control">Client</label>
@@ -1497,7 +1497,7 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-xs-12 col-md-4">
+										<div class="col-xs-12 col-md-6">
 											<div class="dropdown">
 												<div class="form-group">
 													<label class="label-control">Site</label>
