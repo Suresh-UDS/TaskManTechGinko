@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>indent-view</ion-title>
+    <ion-title>Indent-view</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -142,11 +142,11 @@
 
         </div>
       </div>
-
+`
 </ion-content>
 
 <ion-footer>
-    <ion-toolbar text-center="">
+    <ion-toolbar text-center=""  *ngIf="details.indentStatus != 'ISSUED' ">
         <button class="btn btn-warning center width42" (click)="addTransactionMaterial(details)">
            Issue
         </button>
