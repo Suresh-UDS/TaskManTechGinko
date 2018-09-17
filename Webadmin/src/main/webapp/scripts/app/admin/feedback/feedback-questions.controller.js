@@ -44,6 +44,9 @@ angular.module('timeSheetApp')
           $scope.ratRadioActive();
         };
 
+        $scope.showNotifications= function(position,alignment,color,msg){
+            demo.showNotification(position,alignment,color,msg);
+        }
 
         // Question option types y/n and rating
 
@@ -114,15 +117,17 @@ angular.module('timeSheetApp')
 
         $scope.addFeedbackItem = function(newItem){
             console.log("Adding feedback questions");
-            console.log(newItem);
             if(newItem.scoreType!=null){
 
             }else{
                 newItem.scoreType = "yes:1";
             }
-            $scope.feedbackItems.push(newItem);
+            if(newItem.answerType) {
+                $scope.feedbackItems.push(newItem);
+            }else {
+            		$scope.showNotifications('top','center','danger','Please select an answer type');
+            }
             $scope.newFeedbackItem = null;
-            console.log($scope.feedbackItems);
         };
 
         $scope.removeItem = function(ind) {
