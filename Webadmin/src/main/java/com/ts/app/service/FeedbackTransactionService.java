@@ -165,7 +165,9 @@ public class FeedbackTransactionService extends AbstractService {
 		sendFeedbackNotification(feedbackTransDto, feedbackAlertItems);	
 		feedbackTrans.setRating(rating);
 		feedbackTrans.setResults(items);
-        feedbackTrans = feedbackTransactionRepository.save(feedbackTrans);
+		FeedbackMapping feedbackMapping = feedbackMappingRepository.findOneByLocation(feedbackTransDto.getFeedbackId(), feedbackTransDto.getSiteId(), feedbackTransDto.getBlock(), feedbackTransDto.getFloor(), feedbackTransDto.getZone());
+        feedbackTrans.setFeedback(feedbackMapping);
+		feedbackTrans = feedbackTransactionRepository.save(feedbackTrans);
         if(log.isDebugEnabled()) {
         		log.debug("Rating received for this feedback - "+ rating);
         }
