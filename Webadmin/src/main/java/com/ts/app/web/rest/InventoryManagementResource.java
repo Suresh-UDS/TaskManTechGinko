@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -29,10 +30,13 @@ import com.ts.app.domain.MaterialUOMType;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.InventoryManagementService;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
+import com.ts.app.web.rest.dto.ExportResponse;
+import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.MaterialDTO;
 import com.ts.app.web.rest.dto.MaterialItemGroupDTO;
 import com.ts.app.web.rest.dto.MaterialTransactionDTO;
+import com.ts.app.web.rest.dto.PurchaseReqDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -182,6 +186,56 @@ public class InventoryManagementResource {
 			}
 		}
 		return result;
+	}
+	
+	@RequestMapping(value = "/inventory/export", method = RequestMethod.POST)
+	public ExportResponse exportInventory(@RequestBody SearchCriteria searchCriteria) {
+		// log.debug("JOB EXPORT STARTS HERE **********");
+		ExportResponse resp = new ExportResponse();
+		if (searchCriteria != null) {
+			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+			SearchResult<MaterialDTO> result = inventoryService.findBySearchCrieria(searchCriteria);
+			List<MaterialDTO> results = result.getTransactions();
+			resp.addResult(inventoryService.generateReport(results, searchCriteria));
+
+			// log.debug("RESPONSE FOR OBJECT resp *************"+resp);
+		}
+		return resp;
+	}
+	
+	@RequestMapping(value = "/inventory/export/{fileId}/status", method = RequestMethod.GET)
+	public ExportResult exportStatus(@PathVariable("fileId") String fileId) {
+		log.debug("ExportStatus - fileId -"+ fileId);
+		ExportResult result = inventoryService.getExportStatus(fileId);
+
+		if (result != null && result.getStatus() != null) {
+			switch (result.getStatus()) {
+			case "PROCESSING":
+				result.setMsg("Exporting...");
+				break;
+			case "COMPLETED":
+				result.setMsg("Download");
+				result.setFile("/api/inventory/export/" + fileId);
+				break;
+			case "FAILED":
+				result.setMsg("Failed to export. Please try again");
+				break;
+			default:
+				result.setMsg("Failed to export. Please try again");
+				break;
+			}
+		}
+		return result;
+	}
+	
+	@RequestMapping(value = "/inventory/export/{fileId}", method = RequestMethod.GET)
+	public byte[] getExportFile(@PathVariable("fileId") String fileId, HttpServletResponse response) {
+		byte[] content = inventoryService.getExportFile(fileId);
+		response.setContentType("Application/x-msexcel");
+		response.setContentLength(content.length);
+		response.setHeader("Content-Transfer-Encoding", "binary");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileId + ".xlsx\"");
+		return content;
 	}
 	
 	

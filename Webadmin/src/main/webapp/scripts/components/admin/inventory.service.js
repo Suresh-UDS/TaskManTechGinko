@@ -100,7 +100,24 @@ angular.module('timeSheetApp')
             	return $http.get('api/inventory/import/'+fileName+"/status").then(function (response) {
             		return response.data;
             	});
+            },
+            exportAllData : function(searchObj) {
+            	return $http.post('api/inventory/export', searchObj).then(function(response) { 
+            		return response.data;
+            	});
+            },
+            exportStatus: function(fileName) {
+            	return $http.get('api/inventory/export/'+fileName+"/status").then(function (response) {
+            		return response.data;
+            	});
+            },
+
+            getExportFile: function(fileName) {
+            	return $http.get('api/inventory/export/'+fileName).then(function (response) {
+            		return response.data;
+            	});
             }
+            
             
             
             

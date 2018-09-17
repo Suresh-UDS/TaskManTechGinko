@@ -15,6 +15,7 @@ import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.MaterialDTO;
 import com.ts.app.web.rest.dto.PurchaseReqDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.TicketDTO;
@@ -217,7 +218,7 @@ public class ReportUtil {
                 cacheUtil.putSearchCriteria(uuidVal, searchCriteria);
             }
             result.setFile(uuidVal);
-            String reportUrl = env.getProperty("reports.asset-report.url");
+            String reportUrl = env.getProperty("reports.pr-report.url");
             result.setUrl(reportUrl + "/" + uuidVal);
 
             //log.debug("UUID VALUE **********"+uuidVal);
@@ -232,6 +233,37 @@ public class ReportUtil {
         }else if(searchCriteria.getExportType().equalsIgnoreCase("xlsx")) {
             //return exportUtil.writeAssetReportToFile(content, empId, result);
             return exportUtil.writePRExcelReportToFile(transactions, empId, result);
+        }
+        return result;
+	}
+	
+	public ExportResult generateInventoryReports(List<MaterialDTO> transactions, final String empId, ExportResult result, SearchCriteria searchCriteria) {
+        if(searchCriteria.getExportType().equalsIgnoreCase("html")) {
+            if(result == null) {
+                result = new ExportResult();
+            }
+            String uuidVal = null;
+            if(StringUtils.isNotEmpty(searchCriteria.getExportType()) && searchCriteria.getExportType().equalsIgnoreCase("html")) {
+                UUID uuid = UUID.randomUUID();
+                uuidVal = uuid.toString();
+                cacheUtil.putSearchCriteria(uuidVal, searchCriteria);
+            }
+            result.setFile(uuidVal);
+            String reportUrl = env.getProperty("reports.inventory-report.url");
+            result.setUrl(reportUrl + "/" + uuidVal);
+
+            //log.debug("UUID VALUE **********"+uuidVal);
+            uuidVal += ".xlsx";
+            exportUtil.updateExportStatus(uuidVal, "COMPLETED");
+
+            result.setEmpId(empId);
+            result.setStatus("COMPLETED");
+           // log.debug("RESULT OBJECT VALUES HERE *************"+result);
+            return result;
+
+        }else if(searchCriteria.getExportType().equalsIgnoreCase("xlsx")) {
+            //return exportUtil.writeAssetReportToFile(content, empId, result);
+            return exportUtil.writeInventoryExcelReportToFile(transactions, empId, result);
         }
         return result;
 	}
