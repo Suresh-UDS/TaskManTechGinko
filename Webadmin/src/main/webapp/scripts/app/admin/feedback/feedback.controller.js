@@ -74,10 +74,10 @@ angular.module('timeSheetApp')
         $scope.feedbackReport = {};
 
         $scope.now = new Date()
-        
+
         $rootScope.exportStatusObj = {};
         $scope.checkStatus = 0;
-        
+
 
         $scope.initCalender = function(){
 
@@ -120,19 +120,21 @@ angular.module('timeSheetApp')
         };
 
         $scope.loadSites = function () {
-                ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
+        if($scope.selectedProject){
+               ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
                     $scope.selectedSite = null;
-                $scope.sites = data;
-                    // //
-                    for(var i=0;i<$scope.sites.length;i++)
-                    {
-                        $scope.uiSite[i] = $scope.sites[i].name;
-                    }
-                    $scope.siteSpin = false;
-                    $scope.siteFilterDisable = false;
-                    //
+                    $scope.sites = data;
+                        // //
+                        for(var i=0;i<$scope.sites.length;i++)
+                        {
+                            $scope.uiSite[i] = $scope.sites[i].name;
+                        }
+                        $scope.siteSpin = false;
+                        $scope.siteFilterDisable = false;
+                        //
 
-            });
+               });
+            }
         };
 
 
@@ -166,12 +168,18 @@ angular.module('timeSheetApp')
             $scope.hideSite = false;
             $scope.siteSpin = true;
             $scope.uiSite.splice(0,$scope.uiSite.length);
-            $scope.selectedProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
+            if(searchProject){
+              $scope.selectedProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
+            }
+
         }
         $scope.loadSearchSite = function (searchSite) {
-            $scope.hideSite = true;
-            $scope.selectedSite = $scope.sites[$scope.uiSite.indexOf(searchSite)]
-            $scope.show = false;
+            if(searchSite){
+              $scope.hideSite = true;
+              $scope.selectedSite = $scope.sites[$scope.uiSite.indexOf(searchSite)]
+              $scope.show = false;
+            }
+
         }
 
         //
@@ -358,11 +366,10 @@ angular.module('timeSheetApp')
 
                             $scope.feedbackListData = true;
                         }
-                    }     
+                    }
                         console.log('feedback report - ' + JSON.stringify($scope.feedbackReport));
                         $scope.averageRating = $scope.feedbackReport.overallRating;
                         $scope.feedbackCount = $scope.feedbackReport.feedbackCount;
-
 
 
                     $scope.hide = true;
@@ -412,11 +419,13 @@ angular.module('timeSheetApp')
 
                         var lineZoneWiseRating = $scope.feedbackReport.weeklySite;
                         //var chartZoneWiseDataArr = [];
-
-                        for(var i =0;i<lineZoneWiseRating.length; i++) {
-                                $scope.labels.push(lineZoneWiseRating[i].zoneName);
-                                $scope.data.push(lineZoneWiseRating[i].rating);
+                        if(lineZoneWiseRating){
+                            for(var i =0;i<lineZoneWiseRating.length; i++) {
+                                    $scope.labels.push(lineZoneWiseRating[i].zoneName);
+                                    $scope.data.push(lineZoneWiseRating[i].rating);
+                            }
                         }
+
 
                         //$scope.data.push(chartZoneWiseDataArr);
                         //$scope.data = chartZoneWiseDataArr;
@@ -428,10 +437,13 @@ angular.module('timeSheetApp')
 
                         var doughnutZoneWiseRating = $scope.feedbackReport.weeklySite;
                         //var doughnutZoneWiseDataArr = [];
-                        for(var i =0;i<doughnutZoneWiseRating.length; i++) {
-                                $scope.label.push(doughnutZoneWiseRating[i].zoneName);
-                                $scope.datas.push(doughnutZoneWiseRating[i].rating);
+                        if(doughnutZoneWiseRating){
+                          for(var i =0;i<doughnutZoneWiseRating.length; i++) {
+                                  $scope.label.push(doughnutZoneWiseRating[i].zoneName);
+                                  $scope.datas.push(doughnutZoneWiseRating[i].rating);
+                          }
                         }
+
 
                         //$scope.datas.push(zoneDateWiseDataArr);
 
@@ -491,7 +503,7 @@ angular.module('timeSheetApp')
             $scope.searchCriteria = {};
             //$rootScope.searchCriteriaSite = null;
             $scope.averageRating = '0';
-            $scope.feedbackCount ='0';
+            $scope.feedbackCount = '0';
             $scope.selectedBlock = null;
             $scope.selectedFloor = null;
             $scope.selectedZone  = null;
@@ -504,7 +516,7 @@ angular.module('timeSheetApp')
                 totalPages: 0
             }
             $scope.searchLocations();
-            $scope.search();
+            //$scope.search();
         };
 
         $scope.cancelFeedback = function () {
@@ -521,8 +533,8 @@ angular.module('timeSheetApp')
 
 
          }
-        
-        
+
+
         $scope.exportAllData = function(type){
             $scope.searchCriteria.exportType = type;
             $rootScope.exportStatusObj.exportMsg = '';
@@ -546,30 +558,30 @@ angular.module('timeSheetApp')
                   $scope.start();
               });
 	    };
-	
+
 	 // store the interval promise in this variable
 	    var promise;
-	
+
 	 // starts the interval
 	    $scope.start = function() {
 	      // stops any running interval to avoid two intervals running at the same time
 	      $scope.stop();
-	
+
 	      // store the interval promise
 	      promise = $interval($scope.exportStatus, 5000);
 	      console.log('promise -'+promise);
 	    };
-	
+
 	    // stops the interval
 	    $scope.stop = function() {
 	      $interval.cancel(promise);
 	    };
-	
-	
-	
+
+
+
 	    $scope.exportStatus = function() {
 	            console.log('$rootScope.exportStatusObj -'+$rootScope.exportStatusObj);
-	
+
 	            FeedbackComponent.exportStatus($rootScope.exportStatusObj.fileName).then(function(data) {
 	                    console.log('feedback export status - data -' + JSON.stringify(data));
 	                    if(data) {
@@ -594,16 +606,16 @@ angular.module('timeSheetApp')
 	                            $rootScope.exportStatusObj.exportFile = '#';
 	                        }
 	                    }
-	
+
 	                });
-	
+
 	    }
-	
+
 	    $scope.exportFile = function() {
 	        return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportFile : '#');
 	    }
-	
-	
+
+
 	    $scope.exportMsg = function() {
 	        return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportMsg : '');
 	    };

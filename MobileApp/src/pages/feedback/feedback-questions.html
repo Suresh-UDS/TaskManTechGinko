@@ -55,7 +55,7 @@
                     </ion-list>
                     <ion-list *ngIf=" q.remarksRequired ">
                         <ion-item class="text-item">
-                            <ion-textarea placeholder="Enter Comments" margin-top="" [(ngModel)]=" q.remarks " class="text-border"></ion-textarea>
+                            <ion-textarea text-center placeholder="Enter Comments" margin-top="" [(ngModel)]=" q.remarks " class="text-border" rows="1" maxLength="500"></ion-textarea>
                         </ion-item>
                         <button class="btn btn-warning btn-wd btn-lg" (click)="questions?.length-1!=i?next():submitFeedback()">
                             <span *ngIf="questions?.length-1!=i">Next</span>
