@@ -36,9 +36,9 @@ angular.module('timeSheetApp')
         $scope.siteSpin = false;
         $scope.btnDisable = false;
 
-        $timeout(function () {
+        /*$timeout(function () {
             angular.element('[ng-model="name"]').focus();
-        });
+        });*/
 
         $scope.clientDisable = true;
 
