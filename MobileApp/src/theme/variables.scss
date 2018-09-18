@@ -74,6 +74,10 @@ ion-label
 {
   color: color($colors, grey) !important;
 }
+.dark
+{
+  color: color($colors, dark);
+}
 .greyBg
 {
   background:color($colors, grey);
@@ -469,6 +473,95 @@ ion-app.md
 
 }
 
+.cardListCon
+{
+  .card
+  {
+    width: 100%;
+    margin-bottom: 0 !important;
+    .card-header
+    {
+      padding: 10px;
+      margin-bottom: 5px;
+      font-weight: 400;
+      font-size: 14px;
+      border-bottom: 1px dotted color($colors, grey);
+    }
+    .card-content
+    {
+      padding: 10px;
+      color: #808080;
+    }
+  }
+
+
+}
+
+
+
+.jobOverdueCon
+{
+
+  ion-card
+  {
+    ion-card-header
+    {
+      color: color($colors, danger);
+      border-bottom:1px dotted color($colors, danger);
+    }
+    ion-card-content
+    {
+      span
+      {
+        color: color($colors, danger);
+      }
+    }
+  }
+
+
+}
+
+.jobCompletedCon
+{
+  ion-card
+  {
+    ion-card-header
+    {
+      color: color($colors, green);
+      border-bottom:1px dotted color($colors, green);
+    }
+    ion-card-content
+    {
+      span
+      {
+        color: color($colors, green);
+      }
+    }
+  }
+}
+
+.jobNormalCon
+{
+  ion-card
+  {
+    ion-card-header
+    {
+      color: color($colors, dark);
+      border-bottom:1px dotted color($colors, grey);
+    }
+    ion-card-content
+    {
+      span
+      {
+        color: color($colors, dark);
+      }
+    }
+  }
+}
+
+
+
+
 .border-btm-blk{
   border-bottom:1px solid #a7a1a1 !important
 }
@@ -500,6 +593,17 @@ ion-input
   border-bottom:1px solid #ccc !important;
 }
 
+.titleText
+{
+  font-weight: 400;
+  /* border-bottom: 1px dashed #EEEEEE; */
+  background: #fff;
+  padding: 15px 0;
+  margin: 10px auto;
+  font-size: 16px;
+  width: 95%;
+  border-radius: 5px;
+}
 
 @-webkit-keyframes placeHolderShimmer {
   0% {
