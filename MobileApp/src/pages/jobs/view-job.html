@@ -7,7 +7,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content class="ViewJobsCon"  [ngClass]="{'jobOverdueCon' : (jobDetails.status == 'OVERDUE'),
+<ion-content class="ViewJobsCon cardListCon"  [ngClass]="{'jobOverdueCon' : (jobDetails.status == 'OVERDUE'),
                                     'jobCompletedCon' : (jobDetails.status == 'COMPLETED'),
                                     'jobNormalCon' :(jobDetails.status =='OPEN' || jobDetails.status == 'ASSIGNED' || jobDetails.status == 'INPROGRESS')}">
 
@@ -132,9 +132,8 @@
             <img src="{{image}}" wdith="80px" height="80px" (click)="viewImage(image)">
         </ion-col>
     </ion-row>
-    <br>
 
-    <ion-row has-permission="TicketsView" class="white-bg margin0 padding10" *ngIf="jobDetails.ticketId>0">
+    <ion-row has-permission="TicketsView" class="margin0" *ngIf="jobDetails.ticketId>0">
 
         <ion-col col-6>
             <ion-card>

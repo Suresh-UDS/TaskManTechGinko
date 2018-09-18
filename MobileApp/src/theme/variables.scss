@@ -192,67 +192,6 @@ button.button-md-primary p.siteName
   border-bottom: 1px solid color($colors, grey) !important;
 }
 
-.jobOverdueCon
-{
-
-  ion-card
-  {
-    ion-card-header
-    {
-      color: color($colors, danger);
-      border-bottom:1px dotted color($colors, danger);
-    }
-    ion-card-content
-    {
-      span
-      {
-        color: color($colors, danger);
-      }
-    }
-  }
-
-
-}
-
-.jobCompletedCon
-{
-  ion-card
-  {
-    ion-card-header
-    {
-      color: color($colors, green);
-      border-bottom:1px dotted color($colors, green);
-    }
-    ion-card-content
-    {
-      span
-      {
-        color: color($colors, green);
-      }
-    }
-  }
-}
-
-.jobNormalCon
-{
-  ion-card
-  {
-    ion-card-header
-    {
-      color: color($colors, dark);
-      border-bottom:1px dotted color($colors, grey);
-    }
-    ion-card-content
-    {
-      span
-      {
-        color: color($colors, dark);
-      }
-    }
-  }
-}
-
-
 
 .MainExpenseContainer
 {
@@ -534,7 +473,7 @@ ion-app.md
 
 }
 
-.ViewJobsCon
+.cardListCon
 {
   .card
   {
@@ -546,15 +485,80 @@ ion-app.md
       margin-bottom: 5px;
       font-weight: 400;
       font-size: 14px;
+      border-bottom: 1px dotted color($colors, grey);
     }
     .card-content
     {
       padding: 10px;
+      color: #808080;
     }
   }
 
 
 }
+
+
+
+.jobOverdueCon
+{
+
+  ion-card
+  {
+    ion-card-header
+    {
+      color: color($colors, danger);
+      border-bottom:1px dotted color($colors, danger);
+    }
+    ion-card-content
+    {
+      span
+      {
+        color: color($colors, danger);
+      }
+    }
+  }
+
+
+}
+
+.jobCompletedCon
+{
+  ion-card
+  {
+    ion-card-header
+    {
+      color: color($colors, green);
+      border-bottom:1px dotted color($colors, green);
+    }
+    ion-card-content
+    {
+      span
+      {
+        color: color($colors, green);
+      }
+    }
+  }
+}
+
+.jobNormalCon
+{
+  ion-card
+  {
+    ion-card-header
+    {
+      color: color($colors, dark);
+      border-bottom:1px dotted color($colors, grey);
+    }
+    ion-card-content
+    {
+      span
+      {
+        color: color($colors, dark);
+      }
+    }
+  }
+}
+
 
 
 
