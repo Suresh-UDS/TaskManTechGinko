@@ -8,6 +8,7 @@ import{InventoryMaster} from "../inventory-master/inventory-master";
 import{PurchaseRequisitionService} from "../service/PurchaseRequisitionService";
 import{IndentView} from "../indent-view/indent-view";
 import{IndentList} from "../indent-list/indent-list";
+import{SelectSearchableModule} from "ionic-select-searchable";
 
 /**
  * Generated class for the Indent page.
