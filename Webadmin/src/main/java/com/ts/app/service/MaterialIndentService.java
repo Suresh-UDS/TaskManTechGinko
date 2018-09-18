@@ -188,6 +188,7 @@ public class MaterialIndentService extends AbstractService {
 					itemFound = true;
 					itemEntity.setQuantity(itemDto.getQuantity());
 					itemEntity.setIssuedQuantity(itemDto.getIssuedQuantity());
+					itemEntity.setPendingQuantity(itemDto.getPendingQuantity());
 					break;
 				}
 			}
