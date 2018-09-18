@@ -8,6 +8,8 @@ import java.util.Objects;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -150,13 +152,22 @@ public class ExpenseManagementService extends AbstractService {
 	 * @param toDate
 	 * @return
 	 */
-	public List<Expense> findExpenseByCategory(long siteId, String category, Date fromDate, Date toDate) {
+	public List<ExpenseDTO> findExpenseByCategory(long siteId, String category, Date fromDate, Date toDate) {
+		List<ExpenseDTO> expenses = null;
 		if(fromDate != null) {
 			toDate = (toDate == null ? fromDate : toDate);
 			Timestamp fromTS = DateUtil.convertToTimestamp(fromDate);
 			Timestamp toTS = DateUtil.convertToTimestamp(toDate);
-			return expenseRepository.getCategoryExpenseBySite(siteId, category, fromTS, toTS);
+			List<Expense> expenseEntities = expenseRepository.getCategoryExpenseBySite(siteId, category, fromTS, toTS);
+			if(CollectionUtils.isNotEmpty(expenseEntities)) {
+				expenses = mapperUtil.toModelList(expenseEntities, ExpenseDTO.class);
+			}
+		}else {
+			List<Expense> expenseEntities = expenseRepository.getCategoryExpenseBySite(siteId, category);
+			if(CollectionUtils.isNotEmpty(expenseEntities)) {
+				expenses = mapperUtil.toModelList(expenseEntities, ExpenseDTO.class);
+			}
 		}
-		return expenseRepository.getCategoryExpenseBySite(siteId, category);
+		return expenses;
 	}
 }

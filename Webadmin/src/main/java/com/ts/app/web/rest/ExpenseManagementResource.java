@@ -81,7 +81,7 @@ public class ExpenseManagementResource {
     }
 
     @RequestMapping(value = "/expenses/{siteId}/category/{category}", method = RequestMethod.GET)
-    public List<Expense> getSiteAndCategoryExpenses(@PathVariable("siteId") long siteId,@PathVariable("category") String category,@RequestParam(value="fromDate", required=false) Date fromDate, @RequestParam(value="toDate", required=false) Date toDate) {
+    public List<ExpenseDTO> getSiteAndCategoryExpenses(@PathVariable("siteId") long siteId,@PathVariable("category") String category,@RequestParam(value="fromDate", required=false) Date fromDate, @RequestParam(value="toDate", required=false) Date toDate) {
         log.info("--Invoked expense resource .getSiteAndCategoryExpenses -- "+siteId + ", category - "+ category +", fromDate -" + fromDate +" , toDate -"+ toDate);
         return expenseManagementService.findExpenseByCategory(siteId, category, fromDate, toDate);
     }
