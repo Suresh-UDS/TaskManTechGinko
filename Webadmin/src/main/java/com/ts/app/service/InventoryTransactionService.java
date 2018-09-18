@@ -52,8 +52,13 @@ import com.ts.app.repository.UserRepository;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.util.CommonUtil;
 import com.ts.app.service.util.DateUtil;
+import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.service.util.PagingUtil;
+import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.MaterialDTO;
 import com.ts.app.web.rest.dto.MaterialIndentItemDTO;
 import com.ts.app.web.rest.dto.MaterialTransactionDTO;
 import com.ts.app.web.rest.dto.PurchaseReqItemDTO;
@@ -108,6 +113,12 @@ public class InventoryTransactionService extends AbstractService{
 	
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+	
+	@Inject
+	private ReportUtil reportUtil;
+	
+	@Inject
+	private ExportUtil exportUtil;
 	
 	public static final String EMAIL_NOTIFICATION_PURCHASEREQ = "email.notification.purchasereq";
 
@@ -348,6 +359,29 @@ public class InventoryTransactionService extends AbstractService{
 		return materialTransType;
 	}
 	
+	public ExportResult generateReport(List<MaterialTransactionDTO> results, SearchCriteria searchCriteria) {
+		return reportUtil.generateTransactionReports(results, null, null, searchCriteria);
+	}
+	
+	public byte[] getExportFile(String fileName) {
+		// return exportUtil.readExportFile(fileName);
+		return exportUtil.readJobExportFile(fileName);
+	}
+
+	public ExportResult getExportStatus(String fileId) {
+		ExportResult er = new ExportResult();
+
+		fileId += ".xlsx";
+		// log.debug("FILE ID INSIDE OF getExportStatus CALL ***********"+fileId);
+
+		if (!StringUtils.isEmpty(fileId)) {
+			String status = exportUtil.getExportStatus(fileId);
+			er.setFile(fileId);
+			er.setStatus(status);
+		}
+		return er;
+	}
+	
 	public SearchResult<MaterialTransactionDTO> findBySearchCriteria(SearchCriteria searchCriteria) {
 		SearchResult<MaterialTransactionDTO> result = new SearchResult<MaterialTransactionDTO>();
 		User user = userRepository.findOne(searchCriteria.getUserId());
@@ -373,6 +407,11 @@ public class InventoryTransactionService extends AbstractService{
 				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
 				log.debug("Sorting object" + sort);
 				pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+				if (searchCriteria.isReport()) {
+					pageRequest = createPageSort(searchCriteria.getCurrPage(), Integer.MAX_VALUE, sort);
+				} else {
+					pageRequest = createPageSort(searchCriteria.getCurrPage(), PagingUtil.PAGE_SIZE, sort);
+				}
 			} else {
 				if (searchCriteria.isList()) {
 					pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);

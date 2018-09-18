@@ -31,19 +31,19 @@ public class PurchaseRequisition extends AbstractAuditingEntity implements Seria
 	private long id;
 
 	@ManyToOne()
-	@JoinColumn(name = "projectId", nullable = true)
+	@JoinColumn(name = "projectId", nullable= true)
 	private Project project;
 
 	@ManyToOne()
-	@JoinColumn(name = "siteId", nullable = true)
+	@JoinColumn(name = "siteId", nullable= true)
 	private Site site;
 
 	@ManyToOne()
-	@JoinColumn(name = "requestedBy", nullable = true)
+	@JoinColumn(name = "requestedBy", nullable= true)
 	private Employee requestedBy;
 
 	@ManyToOne()
-	@JoinColumn(name = "approvedBy", nullable = true)
+	@JoinColumn(name = "approvedBy", nullable= true)
 	private Employee approvedBy;
 
 	private Timestamp requestedDate;
@@ -59,8 +59,9 @@ public class PurchaseRequisition extends AbstractAuditingEntity implements Seria
 	@JoinColumn(name = "materialTransacationId", nullable= true)
 	private MaterialTransaction transaction;
 	
-	@Column(name = "purchaseRefNumber")
-	private String purchaseRefNumber;
+	@OneToOne(cascade = {CascadeType.ALL})
+	@JoinColumn(name = "purchase_ref_gen_id", nullable= true)
+	private PurchaseRefGen purchaseRefNumber;
 	
 	@Column(name = "purchaseOrderNumber")
 	private String purchaseOrderNumber;
@@ -145,14 +146,6 @@ public class PurchaseRequisition extends AbstractAuditingEntity implements Seria
 		this.transaction = transaction;
 	}
 
-	public String getPurchaseRefNumber() {
-		return purchaseRefNumber;
-	}
-
-	public void setPurchaseRefNumber(String purchaseRefNumber) {
-		this.purchaseRefNumber = purchaseRefNumber;
-	}
-
 	public String getPurchaseOrderNumber() {
 		return purchaseOrderNumber;
 	}
@@ -160,6 +153,16 @@ public class PurchaseRequisition extends AbstractAuditingEntity implements Seria
 	public void setPurchaseOrderNumber(String purchaseOrderNumber) {
 		this.purchaseOrderNumber = purchaseOrderNumber;
 	}
+
+	public PurchaseRefGen getPurchaseRefNumber() {
+		return purchaseRefNumber;
+	}
+
+	public void setPurchaseRefNumber(PurchaseRefGen purchaseRefNumber) {
+		this.purchaseRefNumber = purchaseRefNumber;
+	}
+
+	
 
 
 }

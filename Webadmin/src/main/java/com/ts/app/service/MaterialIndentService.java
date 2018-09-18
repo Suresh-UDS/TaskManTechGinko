@@ -25,10 +25,12 @@ import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.IndentStatus;
 import com.ts.app.domain.Material;
 import com.ts.app.domain.MaterialIndent;
+import com.ts.app.domain.MaterialIndentGen;
 import com.ts.app.domain.MaterialIndentItem;
 import com.ts.app.domain.MaterialItemGroup;
 import com.ts.app.domain.MaterialTransaction;
 import com.ts.app.domain.MaterialTransactionType;
+import com.ts.app.domain.PurchaseRefGen;
 import com.ts.app.domain.PurchaseRequisition;
 import com.ts.app.domain.PurchaseRequisitionItem;
 import com.ts.app.domain.Setting;
@@ -127,6 +129,7 @@ public class MaterialIndentService extends AbstractService {
 			indentItemEntity.add(materialIndentItm);
 		}
 		MaterialTransaction materialTranc = null;
+		MaterialIndentGen indentRef = new MaterialIndentGen();
 		Set<MaterialIndentItem> materialIndentItem = new HashSet<MaterialIndentItem>();
 		materialIndentItem.addAll(indentItemEntity);
 		indentEntity.setItems(materialIndentItem);
@@ -136,6 +139,8 @@ public class MaterialIndentService extends AbstractService {
 		}else {
 			indentEntity.setTransaction(null);
 		}
+		indentRef.setMaterialIndent(indentEntity);
+		indentEntity.setIndentRefNumber(indentRef);
 		indentEntity = materialIndentRepository.save(indentEntity);
 		log.debug("Save object of Inventory: {}" + indentEntity);
 		if (materialTranc != null) {
@@ -188,6 +193,7 @@ public class MaterialIndentService extends AbstractService {
 					itemFound = true;
 					itemEntity.setQuantity(itemDto.getQuantity());
 					itemEntity.setIssuedQuantity(itemDto.getIssuedQuantity());
+					itemEntity.setPendingQuantity(itemDto.getPendingQuantity());
 					break;
 				}
 			}
@@ -419,10 +425,13 @@ public class MaterialIndentService extends AbstractService {
 		purchaseReqItemEntity.setQuantity(material.getMaximumStock());
 		purchaseReqItemEntity.setUnitPrice(0);
 		purchaseItem.add(purchaseReqItemEntity);
-		
+		PurchaseRefGen purchaseRef = new PurchaseRefGen();
+
 		Set<PurchaseRequisitionItem> materialItem = new HashSet<PurchaseRequisitionItem>();
 		materialItem.addAll(purchaseItem);
 		purchaseReq.setItems(materialItem);
+		purchaseRef.setPurchaseRequisition(purchaseReq);
+		purchaseReq.setPurchaseRefNumber(purchaseRef);
 		purchaseReqRepository.save(purchaseReq);
 	}
 

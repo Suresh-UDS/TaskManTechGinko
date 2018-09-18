@@ -39,6 +39,7 @@ import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.domain.Frequency;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.MaterialTransactionType;
 import com.ts.app.domain.PurchaseRequestStatus;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetPPMScheduleEventDTO;
@@ -49,6 +50,8 @@ import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.MaterialDTO;
+import com.ts.app.web.rest.dto.MaterialTransactionDTO;
 import com.ts.app.web.rest.dto.PurchaseReqDTO;
 import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
@@ -95,6 +98,9 @@ public class ExportUtil {
 	
 	private String[] PR_HEADER = { "ID", "REFNUMBER", "CLIENT", "SITE", "REQUESTED DATE", "REQUESTED BY", "APPROVED DATE", "APPROVED BY", "PO NUMBER", "STATUS"};
 
+	private String[] INVENTORY_HEADER = { "ID", "ITEM NAME", "ITEM CODE", "ITEM GROUP", "CLIENT", "SITE", "MANUFACTURE NAME", "STORE STOCK", "UOM", "MINIMUM STOCK", "MAXIMUM STOCK", "DESCRIPTION"};
+
+	private String[] INVENTORY_TRANS_HEADER = { "ID", "ITEM NAME", "ITEM CODE", "CLIENT", "SITE", "STORE STOCK", "UOM", "QUANTITY", "INDENT NUMBER", "PURCHASE NUMBER", "TRANSACTION DATE", "STATUS"};
 
 	@Inject
 	private Environment env;
@@ -1908,7 +1914,7 @@ public class ExportUtil {
 					Row dataRow = xssfSheet.createRow(rowNum++);
 					statusMap.put("length", dataRow.toString());
 					dataRow.createCell(0).setCellValue(transaction.getId());
-					dataRow.createCell(1).setCellValue(transaction.getPurchaseRefNumber());
+					dataRow.createCell(1).setCellValue(transaction.getPurchaseRefGenNumber());
 					dataRow.createCell(2).setCellValue(transaction.getProjectName());
 					dataRow.createCell(3).setCellValue(transaction.getSiteName());
 					dataRow.createCell(4).setCellValue(transaction.getRequestedDate() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getRequestedDate()) : "");
@@ -1957,4 +1963,236 @@ public class ExportUtil {
 		result.setStatus(getExportStatus(file_Name));
 		return result;
 	}
+
+	public ExportResult writeInventoryExcelReportToFile(List<MaterialDTO> content, String empId, ExportResult result) {
+		boolean isAppend = (result != null);
+		log.debug("result = " + result + ", isAppend = " + isAppend);
+		if (result == null) {
+			result = new ExportResult();
+		}
+		String file_Name = null;
+		if (StringUtils.isEmpty(result.getFile())) {
+			if (StringUtils.isNotEmpty(empId)) {
+				file_Name = empId + System.currentTimeMillis() + ".xlsx";
+			} else {
+				file_Name = System.currentTimeMillis() + ".xlsx";
+			}
+		} else {
+			file_Name = result.getFile() + ".xlsx";
+		}
+
+		if (statusMap.containsKey((file_Name))) {
+			String status = statusMap.get(file_Name);
+			// log.debug("Current status for filename -" + file_Name + ", status -" +
+			// status);
+		} else {
+			statusMap.put(file_Name, "PROCESSING");
+		}
+
+		final String export_File_Name = file_Name;
+		if (lock == null) {
+			lock = new Lock();
+		}
+		try {
+			lock.lock();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		Thread writer_Thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String file_Path = env.getProperty("export.file.path");
+				FileSystem fileSystem = FileSystems.getDefault();
+				if (StringUtils.isNotEmpty(empId)) {
+					file_Path += "/" + empId;
+				}
+				Path path = fileSystem.getPath(file_Path);
+				if (!Files.exists(path)) {
+					Path newEmpPath = Paths.get(file_Path);
+					try {
+						Files.createDirectory(newEmpPath);
+					} catch (IOException e) {
+						log.error("Error While Creating Path " + newEmpPath);
+					}
+				}
+
+				file_Path += "/" + export_File_Name;
+				// create workbook
+				XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+				// create worksheet with title
+				XSSFSheet xssfSheet = xssfWorkbook.createSheet("INVENTORY_REPORT");
+
+				Row headerRow = xssfSheet.createRow(0);
+
+				for (int i = 0; i < INVENTORY_HEADER.length; i++) {
+					Cell cell = headerRow.createCell(i);
+					cell.setCellValue(INVENTORY_HEADER[i]);
+				}
+
+				int rowNum = 1;
+
+				for (MaterialDTO transaction : content) {
+					Row dataRow = xssfSheet.createRow(rowNum++);
+					statusMap.put("length", dataRow.toString());
+					dataRow.createCell(0).setCellValue(transaction.getId());
+					dataRow.createCell(1).setCellValue(transaction.getName());
+					dataRow.createCell(2).setCellValue(transaction.getItemCode());
+					dataRow.createCell(3).setCellValue(transaction.getItemGroup());
+					dataRow.createCell(4).setCellValue(transaction.getProjectName());
+					dataRow.createCell(5).setCellValue(transaction.getSiteName());
+					dataRow.createCell(6).setCellValue(transaction.getManufacturerName());
+					dataRow.createCell(7).setCellValue(transaction.getStoreStock());
+					dataRow.createCell(8).setCellValue(transaction.getUom());
+					dataRow.createCell(9).setCellValue(transaction.getMinimumStock());
+					dataRow.createCell(10).setCellValue(transaction.getMaximumStock());
+					dataRow.createCell(11).setCellValue(transaction.getDescription());
+				}
+
+				for (int i = 0; i < INVENTORY_HEADER.length; i++) {
+					xssfSheet.autoSizeColumn(i);
+				}
+				log.info(export_File_Name + " Inventory export file was created successfully !!!");
+				statusMap.put(export_File_Name, "COMPLETED");
+
+				FileOutputStream fileOutputStream = null;
+				try {
+					fileOutputStream = new FileOutputStream(file_Path);
+					xssfWorkbook.write(fileOutputStream);
+					fileOutputStream.close();
+				} catch (IOException e) {
+					log.error("Error while flushing/closing  !!!");
+					statusMap.put(export_File_Name, "FAILED");
+				}
+				lock.unlock();
+			}
+		});
+
+		writer_Thread.start();
+
+		result.setEmpId(empId);
+		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
+		result.setStatus(getExportStatus(file_Name));
+		return result;
+	}
+
+	public ExportResult writeTransactionExcelReportToFile(List<MaterialTransactionDTO> results, String empId, ExportResult result) {
+		boolean isAppend = (result != null);
+		log.debug("result = " + result + ", isAppend = " + isAppend);
+		if (result == null) {
+			result = new ExportResult();
+		}
+		String file_Name = null;
+		if (StringUtils.isEmpty(result.getFile())) {
+			if (StringUtils.isNotEmpty(empId)) {
+				file_Name = empId + System.currentTimeMillis() + ".xlsx";
+			} else {
+				file_Name = System.currentTimeMillis() + ".xlsx";
+			}
+		} else {
+			file_Name = result.getFile() + ".xlsx";
+		}
+
+		if (statusMap.containsKey((file_Name))) {
+			String status = statusMap.get(file_Name);
+			// log.debug("Current status for filename -" + file_Name + ", status -" +
+			// status);
+		} else {
+			statusMap.put(file_Name, "PROCESSING");
+		}
+
+		final String export_File_Name = file_Name;
+		if (lock == null) {
+			lock = new Lock();
+		}
+		try {
+			lock.lock();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		Thread writer_Thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String file_Path = env.getProperty("export.file.path");
+				FileSystem fileSystem = FileSystems.getDefault();
+				if (StringUtils.isNotEmpty(empId)) {
+					file_Path += "/" + empId;
+				}
+				Path path = fileSystem.getPath(file_Path);
+				if (!Files.exists(path)) {
+					Path newEmpPath = Paths.get(file_Path);
+					try {
+						Files.createDirectory(newEmpPath);
+					} catch (IOException e) {
+						log.error("Error While Creating Path " + newEmpPath);
+					}
+				}
+
+				file_Path += "/" + export_File_Name;
+				// create workbook
+				XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+				// create worksheet with title
+				XSSFSheet xssfSheet = xssfWorkbook.createSheet("INVENTORY_TRANS_REPORT");
+
+				Row headerRow = xssfSheet.createRow(0);
+
+				for (int i = 0; i < INVENTORY_TRANS_HEADER.length; i++) {
+					Cell cell = headerRow.createCell(i);
+					cell.setCellValue(INVENTORY_TRANS_HEADER[i]);
+				}
+
+				int rowNum = 1;
+
+				for (MaterialTransactionDTO transaction : results) {
+					Row dataRow = xssfSheet.createRow(rowNum++);
+					statusMap.put("length", dataRow.toString());
+					dataRow.createCell(0).setCellValue(transaction.getId());
+					dataRow.createCell(1).setCellValue(transaction.getMaterialName());
+					dataRow.createCell(2).setCellValue(transaction.getMaterialItemCode());
+					dataRow.createCell(3).setCellValue(transaction.getProjectName());
+					dataRow.createCell(4).setCellValue(transaction.getSiteName());
+					dataRow.createCell(5).setCellValue(transaction.getStoreStock());
+					dataRow.createCell(6).setCellValue(transaction.getUom());
+					dataRow.createCell(7).setCellValue(transaction.getIssuedQuantity());
+					dataRow.createCell(8).setCellValue(transaction.getMaterialIndentRefNumber());
+					dataRow.createCell(9).setCellValue(transaction.getPurchaseRefNumber());
+					dataRow.createCell(10).setCellValue(transaction.getTransactionDate() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getTransactionDate()) : "");
+					if(transaction.getTransactionType().equals(MaterialTransactionType.ISSUED)) {
+						dataRow.createCell(11).setCellValue("ISSUED");
+					}
+					if(transaction.getTransactionType().equals(MaterialTransactionType.RECEIVED)) {
+						dataRow.createCell(11).setCellValue("RECEIVED");
+					}
+					
+					
+				}
+
+				for (int i = 0; i < INVENTORY_HEADER.length; i++) {
+					xssfSheet.autoSizeColumn(i);
+				}
+				log.info(export_File_Name + " Inventory Transaction export file was created successfully !!!");
+				statusMap.put(export_File_Name, "COMPLETED");
+
+				FileOutputStream fileOutputStream = null;
+				try {
+					fileOutputStream = new FileOutputStream(file_Path);
+					xssfWorkbook.write(fileOutputStream);
+					fileOutputStream.close();
+				} catch (IOException e) {
+					log.error("Error while flushing/closing  !!!");
+					statusMap.put(export_File_Name, "FAILED");
+				}
+				lock.unlock();
+			}
+		});
+
+		writer_Thread.start();
+
+		result.setEmpId(empId);
+		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
+		result.setStatus(getExportStatus(file_Name));
+		return result;
+	}
+	
 }

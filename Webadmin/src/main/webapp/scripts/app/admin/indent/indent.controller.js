@@ -373,12 +373,13 @@ angular.module('timeSheetApp')
 			$scope.selectedItemName = $scope.updateMaterial.materialName;
 			$scope.selectedItemCode = {id: $scope.updateMaterial.materialId };
 			$scope.selectedStoreStock = $scope.updateMaterial.materialStoreStock;
-			$scope.selectedQuantity = $scope.updateMaterial.quantity;
+			$scope.selectedQuantity = $scope.updateMaterial.pendingQuantity;
 		}
 		
 		$scope.updateMaterialItem = function(){
 			if($scope.updateMaterial.materialStoreStock > $scope.selectedQuantity){
 				$scope.updateMaterial.quantity = $scope.selectedQuantity;
+				$scope.updateMaterial.pendingQuantity =  $scope.selectedQuantity;
 				console.log($scope.indexOf);
 				console.log($scope.updateMaterial);
 				updateItems($scope.indexOf, $scope.updateMaterial);
