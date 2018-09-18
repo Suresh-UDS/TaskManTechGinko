@@ -1,24 +1,32 @@
 package com.ts.app.web.rest;
 
+import java.util.Date;
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.CategoryWiseExpense;
 import com.ts.app.domain.Expense;
 import com.ts.app.domain.ExpenseCategory;
 import com.ts.app.service.ExpenseManagementService;
 import com.ts.app.web.rest.dto.ExpenseDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.errors.TimesheetException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -66,7 +74,16 @@ public class ExpenseManagementResource {
         return expenseManagementService.findLatestRecordBySite(siteId);
     }
 
+    @RequestMapping(value = "/expenses/{siteId}/category", method = RequestMethod.GET)
+    public List<CategoryWiseExpense> getSiteAndCategoryWiseExpenses(@PathVariable("siteId") long siteId,@RequestParam("fromDate") Date fromDate, @RequestParam("toDate") Date toDate) {
+        log.info("--Invoked expense resource .getSiteAndCategoryWiseExpenses -- "+siteId + ", fromDate -" + fromDate +" , toDate -"+ toDate);
+        return expenseManagementService.findExpenseByCategories(siteId, fromDate, toDate);
+    }
 
-
+    @RequestMapping(value = "/expenses/{siteId}/category/{category}", method = RequestMethod.GET)
+    public List<ExpenseDTO> getSiteAndCategoryExpenses(@PathVariable("siteId") long siteId,@PathVariable("category") String category,@RequestParam(value="fromDate", required=false) Date fromDate, @RequestParam(value="toDate", required=false) Date toDate) {
+        log.info("--Invoked expense resource .getSiteAndCategoryExpenses -- "+siteId + ", category - "+ category +", fromDate -" + fromDate +" , toDate -"+ toDate);
+        return expenseManagementService.findExpenseByCategory(siteId, category, fromDate, toDate);
+    }
 
 }

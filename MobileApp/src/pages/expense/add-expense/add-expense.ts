@@ -103,6 +103,27 @@ export class AddExpense {
     console.log('selectProject:', event.value.name);
   }
 
+  siteChange(event:{
+    component: SelectSearchableComponent,
+    value: any
+  }){
+    this.selectedProject = event.value;
+    this.siteService.findSitesByProject(event.value.id).subscribe(
+      response => {
+        console.log("Site By ProjectId");
+        console.log(response);
+        this.siteList = response;
+        console.log(this.siteList);
+      },
+      error => {
+        if (error.type == 3) {
+          this.msg = 'Server Unreachable';
+        }
+        this.component.showToastMessage(this.msg, 'bottom');
+      }
+    )
+  }
+
   selectSite(project) {
     this.selectedProject = project;
     this.scrollSite = true;

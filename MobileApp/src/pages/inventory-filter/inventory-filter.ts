@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import {NavController, NavParams, ViewController} from "ionic-angular";
 import {SiteService} from "../service/siteService";
 import {componentService} from "../service/componentService";
+import{InventoryService} from "../service/inventoryService";
+
 
 /**
  * Generated class for the InventoryFilter page.
@@ -29,7 +31,7 @@ export class InventoryFilter {
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController,
-              public component:componentService, public siteService:SiteService) {
+              public component:componentService, public siteService:SiteService,public inventoryService:InventoryService) {
   }
 
     ionViewDidLoad() {
@@ -63,7 +65,7 @@ export class InventoryFilter {
 
     selectSite(project)
     {
-        this.selectedProject = project;
+        this.selectedSite = project;
         this.scrollSite = true;
         this.siteService.findSitesByProject(project.id).subscribe(
             response=>{
@@ -93,8 +95,10 @@ export class InventoryFilter {
 
     dismiss(){
 
-        this.viewCtrl.dismiss();
+        this.viewCtrl.dismiss({projectId:this.selectedProject.id,sitedId:this.selectedSite.id});
     }
+
+
 
 
 

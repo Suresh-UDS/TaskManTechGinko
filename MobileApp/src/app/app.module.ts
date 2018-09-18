@@ -139,6 +139,8 @@ import{IndentView} from "../pages/indent-view/indent-view";
 import {InventoryTransaction} from "../pages/inventorytransaction/inventorytransaction";
 import{IndentList} from "../pages/indent-list/indent-list";
 import{IndentIssue} from "../pages/indent-issue/indent-issue";
+import{AddMaterial} from "../pages/add-material/add-material";
+import{SelectSearchableModule} from "ionic-select-searchable";
 
 @NgModule({
   declarations: [
@@ -233,13 +235,17 @@ import{IndentIssue} from "../pages/indent-issue/indent-issue";
       IndentList,
       IndentIssue,
       ExpenseDetails,
-      AddExpense
+      AddExpense,
+    AddMaterial
+
   ],
   imports: [
     BrowserModule,
     HttpModule,
     DatePickerModule,
     BrowserAnimationsModule,
+    SelectSearchableModule,
+
     IonicModule.forRoot(MyApp,{
         backButtonText
             : '',
@@ -340,8 +346,10 @@ import{IndentIssue} from "../pages/indent-issue/indent-issue";
       IndentList,
       IndentIssue,
       ExpenseDetails,
-      AddExpense
-      // WheelSelector
+      AddExpense,
+    AddMaterial
+
+    // WheelSelector
 
 
   ],

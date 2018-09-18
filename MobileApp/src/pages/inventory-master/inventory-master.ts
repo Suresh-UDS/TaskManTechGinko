@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {AlertController, ModalController, NavController, NavParams} from "ionic-angular";
+import {AlertController, ModalController, NavController, NavParams,ViewController} from "ionic-angular";
 import{InventoryFilter} from "../inventory-filter/inventory-filter";
 import {componentService} from "../service/componentService";
 import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
@@ -47,7 +47,8 @@ export class InventoryMaster {
               public modalCtrl:ModalController,private diagnostic: Diagnostic,private sqlite: SQLite,
               public componentService:componentService, public navCtrl: NavController, public navParams: NavParams,
               public modalController:ModalController, public qrScanner:QRScanner, public assetService:AssetService,
-              public dbService:DBService,private network:Network,private alertCtrl:AlertController,private inventoryService:InventoryService
+              public dbService:DBService,private network:Network,private alertCtrl:AlertController,private inventoryService:InventoryService,
+              public viewCtrl:ViewController
             ) {
   }
 
@@ -69,21 +70,17 @@ export class InventoryMaster {
             console.log("Modal dismissed");
             this.open = true;
             console.log(data);
-            var searchCriteria = {
-                siteId:data.siteId,
-                projectId:data.projectId,
-            };
-            this.assetService.searchAssets(searchCriteria).subscribe(
-                response=>{
-                    this.componentService.closeLoader();
-                    console.log("Asset search filters response");
-                    console.log(response)
-                },err=>{
-                    this.componentService.closeLoader();
-                    console.log("Error in filtering assets");
-                    console.log(err);
-                }
-            )
+            // this.assetService.searchAssets(searchCriteria).subscribe(
+            //     response=>{
+            //         this.componentService.closeLoader();
+            //         console.log("Asset search filters response");
+            //         console.log(response)
+            //     },err=>{
+            //         this.componentService.closeLoader();
+            //         console.log("Error in filtering assets");
+            //         console.log(err);
+            //     }
+            // )
             // this.getAsset(searchCriteria);
 
         });
@@ -115,6 +112,48 @@ export class InventoryMaster {
      console.log(m);
      this.navCtrl.push(InventoryTransaction,{m:m});
   }
+
+    // applyFilter()
+    // {
+    //     this.componentService.showLoader("");
+    //     var searchCriteria = {
+    //         // siteId:this.selectedSite.id,
+    //         // projectId:this.selectedProject.id
+    //     };
+    //
+    //     this.inventoryService.inventorySearch(searchCriteria).subscribe(
+    //         response=>{
+    //             this.componentService.closeAll();
+    //             console.log("Apply Filter Successfully");
+    //             console.log(response);
+    //
+    //         },err=>{
+    //             this.componentService.closeAll();
+    //             console.log("Error in apply filter");
+    //             console.log(err);
+    //         }
+    //
+    //     )
+    //
+    //     // this.searchCriteria={};
+    //     // // this.searchCriteria = {
+    //     // //     siteId:this.selectedSite.id,
+    //     // //     projectId:this.selectedProject.id,
+    //     // //     assetType:this.selectedAssetType,
+    //     // //     assetGroup:this.selectedAssetGroup
+    //     // // };
+    //     // if(this.selectedProject){
+    //     //     this.searchCriteria.projectId=this.selectedProject;
+    //     // }
+    //     // if(this.selectedSite){
+    //     //     this.searchCriteria.siteId=this.selectedSite;
+    //     // }
+    //     // console.log(this.searchCriteria);
+    //
+    //     this.viewCtrl.dismiss(this.searchCriteria);
+    //
+    //
+    // }
 
 
 }
