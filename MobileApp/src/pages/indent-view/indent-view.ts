@@ -136,12 +136,12 @@ export class IndentView {
               }else{
                   console.log(item.currentQuantity);
                   console.log(item.pendingQuantity);
-                  demo.showSwal('warning-message-and-confirmation-ok','Invalid value','only ' +item.pendingQuantity + 'could be issued' );
+                  demo.showSwal('warning-message-and-confirmation-ok','Invalid value','only ' + item.pendingQuantity + '  could be issued' );
                   this.details.items[i].currentQuantity=0;
                   this.getIndentDetails(this.details.id);
               }
           }else{
-              demo.showSwal('warning-message-and-confirmation-ok','Invalid value','Only '+item.materialStoreStock+ 'Available in store' );
+              demo.showSwal('warning-message-and-confirmation-ok','Invalid value','Only ' + item.materialStoreStock + '  Available in store stock' );
               this.details.items[i].currentQuantity=0;
               this.getIndentDetails(this.details.id);
 
