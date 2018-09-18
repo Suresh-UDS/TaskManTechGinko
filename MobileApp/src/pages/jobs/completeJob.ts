@@ -14,6 +14,7 @@ import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
 import{ModalController} from "ionic-angular";
 import{Checklist} from "../checklist/checklist";
 import {AddInventoryTransaction} from "../add-inventory-transaction/add-inventory-transaction";
+import{AddMaterial} from "../add-material/add-material";
 
 @Component({
     selector: 'page-complete-job',
@@ -299,10 +300,11 @@ export class CompleteJobPage {
                 this.jobService.updateJobImages(this.checkOutDetails).subscribe(
                     response=>{
                         this.component.closeAll();
+                        this.component.showToastMessage('Job Completed Successfully','bottom');
                         console.log("complete job response");
                         console.log(response);
                         console.log(job);
-                        this.component.showToastMessage('Job Completed Successfully','bottom');
+
                         // this.component.showLoader('Uploading Images');
                         //TODO
                         //File Upload after successful checkout
@@ -422,6 +424,11 @@ export class CompleteJobPage {
     {
         this.showIcon = !show;
         this.index = i;
+    }
+
+    addMaterial()
+    {
+        this.navCtrl.push(AddMaterial);
     }
 
 }

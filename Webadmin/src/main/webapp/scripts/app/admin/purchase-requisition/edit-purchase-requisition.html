@@ -104,14 +104,14 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="control-label">Reference Number <span class="red-star">*</span></label>
-                                    <input type="text" name="refNumber" class="form-control" ng-model="purchaseReqObj.purchaseRefNumber" required>
-                                    <div ng-show="form.$submitted || form.refNumber.$touched" required>
+                                    <input type="text" name="refNumber" class="form-control" ng-model="purchaseReqObj.purchaseRefGenNumber" ng-disabled="true">
+                                    <!-- <div ng-show="form.$submitted || form.refNumber.$touched" required>
                                         <div ng-show="form.refNumber.$dirty || form.refNumber.$invalid">
                                             <p class="help-block" style="color: maroon"
                                                ng-show="form.refNumber.$error.required">Reference Number is
                                                 required.</p>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
 

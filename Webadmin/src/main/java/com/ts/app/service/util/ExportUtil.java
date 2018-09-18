@@ -1914,7 +1914,7 @@ public class ExportUtil {
 					Row dataRow = xssfSheet.createRow(rowNum++);
 					statusMap.put("length", dataRow.toString());
 					dataRow.createCell(0).setCellValue(transaction.getId());
-					dataRow.createCell(1).setCellValue(transaction.getPurchaseRefNumber());
+					dataRow.createCell(1).setCellValue(transaction.getPurchaseRefGenNumber());
 					dataRow.createCell(2).setCellValue(transaction.getProjectName());
 					dataRow.createCell(3).setCellValue(transaction.getSiteName());
 					dataRow.createCell(4).setCellValue(transaction.getRequestedDate() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getRequestedDate()) : "");

@@ -126,6 +126,16 @@
                                             </span>
                                        </span>
                                    </th>
+                                     <th>Status
+                                       <span class="sortingIcons">
+                                            <span ng-click="columnAscOrder('requestStatus')" ng-class="isActiveAsc == 'requestStatus' ? 'active' : ''" >
+                                                <i  class="fa fa-caret-up"></i>
+                                            </span>
+                                            <span ng-click="columnDescOrder('requestStatus')" ng-class="isActiveDesc == 'requestStatus' ? 'active' : ''">
+                                                 <i  ng-class="class" class="fa fa-caret-down"></i>
+                                            </span>
+                                       </span>
+                                   </th>
                                    <th>Actions</th>
 
                                </tr>
@@ -133,13 +143,14 @@
                             <tbody>
 
                             <tr ng-repeat="purchase in purchaseReq">
-                                <td>{{purchase.purchaseRefNumber}}</td>
+                                <td>{{purchase.purchaseRefGenNumber}}</td>
                                 <td>{{purchase.projectName}}</td>
                                 <td>{{purchase.siteName}}</td>
                                 <td>{{purchase.requestedByName}}</td>
                                 <td>{{purchase.requestedDate | date:"dd-MM-yyyy"}}</td>
                                 <td>{{purchase.approvedByName}}</td>
                                 <td>{{purchase.approvedDate | date:"dd-MM-yyyy"}}</td>
+                                <td>{{purchase.requestStatus}}</td>
                                 <td class="text-right hoverMe">
 
                                     <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
