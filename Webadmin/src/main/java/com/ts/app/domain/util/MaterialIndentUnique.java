@@ -11,7 +11,7 @@ import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.id.IdentifierGenerator;
 import org.mortbay.log.Log;
 
-public class PurchaseUnique implements IdentifierGenerator {
+public class MaterialIndentUnique implements IdentifierGenerator {
 	@Override
 	public Serializable generate(SessionImplementor session, Object object) throws HibernateException {
 
@@ -19,21 +19,20 @@ public class PurchaseUnique implements IdentifierGenerator {
 	    try {
 	        Statement statement=connection.createStatement();
 
-	        //ResultSet rs=statement.executeQuery("SELECT MAX(counted) FROM (SELECT COUNT(*) as counted FROM purchase_ref_gen) as counts");
-	        ResultSet rs=statement.executeQuery("SELECT MAX(reference_number) FROM purchase_ref_gen");
-            Log.debug("Generated unique string for purchase requisition -" + rs);
+	        ResultSet rs=statement.executeQuery("SELECT MAX(reference_number) FROM material_indent_gen");
+            Log.debug("Generated unique string for Material Indent -" + rs);
 
 	        if(rs.next())
-	        {
+	        { 
 	        	int value = rs.getInt(1);
 	        	long generatedId = 0;
-	        	if(value == 0) { 
+	        	if(value == 0) {
 	        		Log.debug("Generated unique string for Material Indent -" + value);
-	        		generatedId = rs.getInt(1) + 1000001;
-	        	} else {
+	        		generatedId =rs.getInt(1) + 100001;
+	        	}else {
 	        		generatedId =rs.getInt(1) + 1;
 	        	}
-	        	Log.debug("Generated unique string for purchase requisition -" + generatedId);
+	        	Log.debug("Generated unique string for Material Indent -" + generatedId);
 	            return generatedId;
 	        }else {
 	        	return 1000001;
