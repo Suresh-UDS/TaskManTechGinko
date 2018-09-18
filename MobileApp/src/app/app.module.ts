@@ -139,8 +139,6 @@ import{IndentView} from "../pages/indent-view/indent-view";
 import {InventoryTransaction} from "../pages/inventorytransaction/inventorytransaction";
 import{IndentList} from "../pages/indent-list/indent-list";
 import{IndentIssue} from "../pages/indent-issue/indent-issue";
-import { SelectSearchableModule } from 'ionic-select-searchable';
-
 
 @NgModule({
   declarations: [
@@ -242,7 +240,6 @@ import { SelectSearchableModule } from 'ionic-select-searchable';
     HttpModule,
     DatePickerModule,
     BrowserAnimationsModule,
-    SelectSearchableModule,
     IonicModule.forRoot(MyApp,{
         backButtonText
             : '',
