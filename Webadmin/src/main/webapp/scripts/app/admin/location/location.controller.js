@@ -95,6 +95,7 @@ angular.module('timeSheetApp')
          $scope.loadDepSites = function (selectedProject) {
              $scope.clearField = false;
              $scope.filter = false;
+             $scope.siteFilterDisable = true;
              $scope.uiSite.splice(0,$scope.uiSite.length);
              $scope.selectedProject = $scope.projectsList[$scope.uiClient.indexOf(selectedProject)]
              $scope.searchProject = $scope.projectsList[$scope.uiClient.indexOf(selectedProject)]
@@ -145,41 +146,47 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadDepBlocks = function (site) {
-            $scope.uiBlock.splice(0,$scope.uiBlock.length);
-            $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(site)]
-            $scope.show = false;
-            $scope.hideSite = true;
-            $scope.hideBlock = false;
-            if(jQuery.isEmptyObject($scope.selectedProject) == false) {
+             if(site){
+                 $scope.searchSite = '';
+                 $scope.uiBlock.splice(0,$scope.uiBlock.length);
+                 $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(site)];
+                 $scope.show = false;
+                 $scope.hideSite = true;
+                 $scope.hideBlock = false;
+                 if(jQuery.isEmptyObject($scope.selectedProject) == false) {
 
-                   var depProj=$scope.selectedProject.id;
-            }else if(jQuery.isEmptyObject($scope.searchProject) == false){
-                    var depProj=$scope.searchProject.id;
-            }else{
-                    var depProj=0;
-            }
-            if(jQuery.isEmptyObject($scope.selectedSite) == false) {
-                  console.log('selected project -' + $scope.selectedProject.id + ', site -' + $scope.selectedSite.id);
-                   var depSite=$scope.selectedSite.id;
-            }else if(jQuery.isEmptyObject($scope.searchSite) == false){
-                    var depSite=$scope.searchSite.id;
-            }else{
-                    var depSite=0;
-            }
-	    		LocationComponent.findBlocks(depProj,depSite).then(function (data) {
-	    			$scope.selectedBlock = null;
-	            $scope.blocksList = data;
+                        var depProj=$scope.selectedProject.id;
+                 }else if(jQuery.isEmptyObject($scope.searchProject) == false){
+                         var depProj=$scope.searchProject.id;
+                 }else{
+                         var depProj=0;
+                 }
+                 if(jQuery.isEmptyObject($scope.selectedSite) == false) {
+                       console.log('selected project -' + $scope.selectedProject.id + ', site -' + $scope.selectedSite.id);
+                        var depSite=$scope.selectedSite.id;
+                 }else if(jQuery.isEmptyObject($scope.searchSite) == false){
+                         var depSite=$scope.searchSite.id;
+                 }else{
+                         var depSite=0;
+                 }
+                    LocationComponent.findBlocks(depProj,depSite).then(function (data) {
+                        $scope.selectedBlock = null;
+                    $scope.blocksList = data;
 
-	            //
-                    for(var i=0;i<$scope.blocksList.length;i++)
-                    {
-                        $scope.uiBlock[i] = $scope.blocksList[i];
-                    }
-                    console.log($scope.uiBlock)
-                    $scope.blockDisable = false;
-                    $scope.blockSpin = false;
-                    $scope.blockFilterDisable = false;
-	        });
+                    //
+                         for(var i=0;i<$scope.blocksList.length;i++)
+                         {
+                             $scope.uiBlock[i] = $scope.blocksList[i];
+                         }
+                         console.log($scope.uiBlock)
+                         $scope.blockDisable = false;
+                         $scope.blockSpin = false;
+                         $scope.blockFilterDisable = false;
+                });
+             }else{
+                $scope.searchSite = '';
+             }
+
 	    };
 
         // Load Blocks for selectbox //
