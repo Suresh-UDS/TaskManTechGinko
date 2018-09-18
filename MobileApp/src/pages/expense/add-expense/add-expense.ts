@@ -7,6 +7,7 @@ import {componentService} from "../../service/componentService";
 import {ExpenseService} from "../../service/expenseService";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 import {QuotationImagePopoverPage} from "../../quotation/quotation-image-popover";
+import {SelectSearchableComponent} from 'ionic-select-searchable';
 
 
 /**
@@ -92,6 +93,14 @@ export class AddExpense {
         this.component.showToastMessage(this.msg,'bottom');
       }
     )
+  }
+
+
+  portChange(event: {
+    component: SelectSearchableComponent,
+    value: any
+  }) {
+    console.log('selectProject:', event.value.name);
   }
 
   selectSite(project) {
