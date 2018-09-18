@@ -26,6 +26,7 @@ import com.ts.app.domain.MaterialIndent;
 import com.ts.app.domain.MaterialIndentItem;
 import com.ts.app.domain.MaterialTransaction;
 import com.ts.app.domain.MaterialTransactionType;
+import com.ts.app.domain.PurchaseRefGen;
 import com.ts.app.domain.PurchaseRequisition;
 import com.ts.app.domain.PurchaseRequisitionItem;
 import com.ts.app.domain.Setting;
@@ -38,6 +39,7 @@ import com.ts.app.repository.InventoryTransactionRepository;
 import com.ts.app.repository.MaterialIndentRepository;
 import com.ts.app.repository.MaterialItemGroupRepository;
 import com.ts.app.repository.ProjectRepository;
+import com.ts.app.repository.PurchaseRefGenRepository;
 import com.ts.app.repository.PurchaseRequestSpecification;
 import com.ts.app.repository.PurchaseRequisitionRepository;
 import com.ts.app.repository.SettingsRepository;
@@ -91,6 +93,9 @@ public class PurchaseRequisitionService extends AbstractService {
 	private MaterialItemGroupRepository materialItemGroupRepository;
 	
 	@Inject
+	private PurchaseRefGenRepository purchaseRefRepository;
+	
+	@Inject
 	private SettingsRepository settingRepository;
 	
 	@Inject
@@ -130,6 +135,7 @@ public class PurchaseRequisitionService extends AbstractService {
 			purchaseItemEntity.add(purchaseIndentItm);
 		}
 		MaterialTransaction materialTranc = null;
+		PurchaseRefGen purchaseRef = new PurchaseRefGen();
 		Set<PurchaseRequisitionItem> purchaseReqItem = new HashSet<PurchaseRequisitionItem>();
 		purchaseReqItem.addAll(purchaseItemEntity);
 		purchaseEntity.setItems(purchaseReqItem);
@@ -139,14 +145,19 @@ public class PurchaseRequisitionService extends AbstractService {
 		}else {
 			purchaseEntity.setTransaction(null);
 		}
-	
+		purchaseRef.setPurchaseRequisition(purchaseEntity);
+		purchaseEntity.setPurchaseRefNumber(purchaseRef);
 		purchaseEntity = purchaseReqRepository.save(purchaseEntity);
+		//if(purchaseEntity.getId() > 0) {
+		//	purchaseRef.setPurchaseRequisition(purchaseEntity);
+		//	purchaseRefRepository.save(purchaseRef);
+		//}
+		
 		log.debug("Save object of Inventory: {}" + purchaseEntity);
 		if (materialTranc != null) {
 			materialTranc.setPurchaseRequisition(purchaseEntity);
 			inventTransactionRepository.save(materialTranc);
 		}
-
 		purchaseReqDTO = mapperUtil.toModel(purchaseEntity, PurchaseReqDTO.class);
 		return purchaseReqDTO;
 	}
