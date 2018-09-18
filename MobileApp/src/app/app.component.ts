@@ -60,46 +60,56 @@ export class MyApp {
   pages: Array<{title: string, component: any,active:any,icon:any,permission:any}>;
 
   constructor(public platform: Platform,private ionicApp: IonicApp,public menuCtrl:MenuController,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion, private authService:authService) {
-      this.initializeApp();
+    this.initializeApp();
+      this.events.subscribe('permissions:set',(permission)=>{
+          console.log("Event permission in component");
+          console.log(permission);
+      })
 
-      //
-      //
-      //
-      //
-      // this.oneSignal.startInit('be468c76-586a-4de1-bd19-fc6d9512e5ca','1088177211637');
-      // this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);
-      // this.oneSignal.handleNotificationReceived().subscribe(response=>{
-      //     console.log("Notification received");
-      //     console.log(JSON.stringify(response))
-      //
-      //
-      // });
-      // this.oneSignal.handleNotificationOpened().subscribe(response=> {
-      //     console.log("Notification Opened")
-      //     console.log(JSON.stringify(response))
-      //     this.pushEvent=response.notification.payload.additionalData.event;
-      //     if(this.pushEvent=='assign_driver')
-      //     {
-      //         this.nav.setRoot(TabsPage,{event:this.pushEvent})
-      //     }
-      //     else if(this.pushEvent=='cancel_booking')
-      //     {
-      //         this.nav.setRoot(TabsPage,{event:this.pushEvent})
-      //     }
-      // });
-      //
-      // this.oneSignal.getIds().then(
-      //     response=>{
-      //         console.log("Push Subscription response - get Ids");
-      //         console.log(response);
-      //             this.registerForPush("android",response.pushToken,response.userId);
-      //     }
-      // );
-      //
-      //
-      // this.oneSignal.endInit();
-      //
-      //
+
+      this.backgroundMode.enable();
+      let subscription = this.batteryStatus.onChange().subscribe(
+          (status:BatteryStatusResponse)=>{
+              console.log("Battery level");
+              console.log(status.level,status.isPlugged);
+          }
+      );
+
+
+          this.oneSignal.startInit('be468c76-586a-4de1-bd19-fc6d9512e5ca','1088177211637');
+          this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);
+          this.oneSignal.handleNotificationReceived().subscribe(response=>{
+              console.log("Notification received");
+              console.log(JSON.stringify(response))
+
+
+          });
+          this.oneSignal.handleNotificationOpened().subscribe(response=> {
+              console.log("Notification Opened")
+              console.log(JSON.stringify(response))
+              this.pushEvent=response.notification.payload.additionalData.event;
+              if(this.pushEvent=='assign_driver')
+              {
+                  this.nav.setRoot(TabsPage,{event:this.pushEvent})
+              }
+              else if(this.pushEvent=='cancel_booking')
+              {
+                  this.nav.setRoot(TabsPage,{event:this.pushEvent})
+              }
+          });
+
+          this.oneSignal.getIds().then(
+              response=>{
+                  console.log("Push Subscription response - get Ids");
+                  console.log(response);
+                      this.registerForPush("android",response.pushToken,response.userId);
+              }
+          );
+
+
+          this.oneSignal.endInit();
+
+
 
 
 
@@ -151,7 +161,7 @@ export class MyApp {
        { title: 'ChangePassword', component:ChangePassword,active:false,icon:'feedback',permission:'FeedbackList'},
         {title: 'InventoryMaster', component:InventoryMaster,active:false,icon:'feedback',permission:'FeedbackList'},
         // {title:'Indent',component:Indent,active:false,icon:'build',permission:'TicketsList'},
-        {title:'Indent',component:IndentList,active:false,icon:'receipt',permission:'AttendanceList'}
+        {title:'IndentList',component:IndentList,active:false,icon:'receipt',permission:'AttendanceList'}
         // {title:'Splash page', component:Splash,active:false,icon:'feedback',permission:'DashboardList'},
         // {title:'Splash logo', component:SplashLogo,active:false,icon:'feedback',permission:'DashboardList'},
       // { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},

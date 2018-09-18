@@ -61,7 +61,6 @@ import { File } from '@ionic-native/file';
 import{TicketFilter} from "../pages/ticket/ticket-filter/ticket-filter";
 import{InventoryMaster} from "../pages/inventory-master/inventory-master";
 import{ExpenseDetails} from"../pages/expense-details/expense-details";
-import{AddMaterial} from "../pages/add-material/add-material";
 
 import {SQLitePorter} from "@ionic-native/sqlite-porter";
 
@@ -140,6 +139,7 @@ import{IndentView} from "../pages/indent-view/indent-view";
 import {InventoryTransaction} from "../pages/inventorytransaction/inventorytransaction";
 import{IndentList} from "../pages/indent-list/indent-list";
 import{IndentIssue} from "../pages/indent-issue/indent-issue";
+import{AddMaterial} from "../pages/add-material/add-material";
 import{SelectSearchableModule} from "ionic-select-searchable";
 
 @NgModule({
@@ -236,14 +236,16 @@ import{SelectSearchableModule} from "ionic-select-searchable";
       IndentIssue,
       ExpenseDetails,
       AddExpense,
-      AddMaterial
+    AddMaterial
+
   ],
   imports: [
     BrowserModule,
     HttpModule,
     DatePickerModule,
     BrowserAnimationsModule,
-      SelectSearchableModule,
+    SelectSearchableModule,
+
     IonicModule.forRoot(MyApp,{
         backButtonText
             : '',
@@ -345,9 +347,9 @@ import{SelectSearchableModule} from "ionic-select-searchable";
       IndentIssue,
       ExpenseDetails,
       AddExpense,
-      AddMaterial
+    AddMaterial
 
-      // WheelSelector
+    // WheelSelector
 
 
   ],
@@ -382,7 +384,6 @@ import{SelectSearchableModule} from "ionic-select-searchable";
       AppVersion,
       QRScanner,
       FabContainer,
-
       Diagnostic,
       SQLite,
       Network,
