@@ -89,15 +89,28 @@
   <!--</ion-row>-->
   <ion-row no-margin text-center>
     <ion-col col-9>
-      <ion-item>
-          <ion-label text-capitalize class="client-label" text-left>Material:</ion-label>
-          <ion-select interface="popover" >
-              <ion-option text-center *ngFor="let m of inventoryMaterial;let i of index" (ionSelect)="selectMaterial(m)" >{{m.name}}</ion-option>
-        </ion-select>
-      </ion-item>
+      <!--<ion-item>-->
+          <!--<ion-label text-capitalize class="client-label" text-left>Material:</ion-label>-->
+          <!--<ion-select interface="popover" >-->
+              <!--<ion-option text-center *ngFor="let m of inventoryMaterial;let i of index" (ionSelect)="selectMaterial(m)" >{{m.name}}</ion-option>-->
+        <!--</ion-select>-->
+      <!--</ion-item>-->
+        <ion-item>
+            <ion-label text-capitalize class="client-label" text-left>Material:</ion-label>
+            <select-searchable
+                    item-content
+                    [(ngModel)]="indentMaterial"
+                    [items]="inventoryMaterial"
+                    (ionSelect)="selectMaterial(m)"
+                    itemValueField="id"
+                    itemTextField="name"
+                    [canSearch]="true"
+                    (onChange)="portChange($event)">
+            </select-searchable>
+        </ion-item>
     </ion-col>
       <ion-col col-3 float-right>
-          <button class="btn btn-warning pull-right"  (click)="addIndent(selectedMaterial)">Add</button>
+          <button class="btn btn-warning pull-right"  (click)="addIndent(indentMaterial)">Add</button>
       </ion-col>
   </ion-row>
     <!--<ion-row no-margin>-->

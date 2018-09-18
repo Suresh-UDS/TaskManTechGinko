@@ -8,7 +8,7 @@ import{InventoryMaster} from "../inventory-master/inventory-master";
 import{PurchaseRequisitionService} from "../service/PurchaseRequisitionService";
 import{IndentView} from "../indent-view/indent-view";
 import{IndentList} from "../indent-list/indent-list";
-import{SelectSearchableModule} from "ionic-select-searchable";
+import {SelectSearchableComponent, SelectSearchableModule} from "ionic-select-searchable";
 
 /**
  * Generated class for the Indent page.
@@ -24,6 +24,7 @@ export class Indent {
     searchText: any;
     shouldShowCancel: boolean;
     material:any;
+    indentMaterial:any;
 
     numbers: any;
     clientList: any;
@@ -47,7 +48,6 @@ export class Indent {
     page:1;
     employeeId:any;
     purposeDetails:any;
-
     constructor(public navCtrl: NavController, public navParams: NavParams, private component: componentService,
                 private siteService: SiteService, private inventoryService: InventoryService,
                 public viewCtrl:ViewController,public purchaseService:PurchaseRequisitionService) {
@@ -211,6 +211,13 @@ export class Indent {
 
             }
         )
+    }
+
+    portChange(event: {
+        component: SelectSearchableComponent,
+        value: any
+    }) {
+        console.log('selectProject:', event.value.name);
     }
 
 
