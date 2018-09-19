@@ -91,6 +91,7 @@ angular.module('timeSheetApp')
         $scope.maxError =false;
         $rootScope.exportStatusObj  ={};
         $scope.searchModule ="";
+        $scope.sparesHistories = [];
 
         //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.searchAcquiredDate = "";
