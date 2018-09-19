@@ -212,7 +212,8 @@
                            <th>Item Name</th>
                            <th>Store stock</th>
                            <th>UOM</th>
-                           <th>Quantity</th>                           
+                           <th>Issued Qty</th>
+                           <th>Approved/Pending Qty</th>                           
                          </tr>
                          
                          <tr ng-repeat="material in materialItems">
@@ -227,11 +228,12 @@
                             <td>{{material.materialName}}</td>
                             <td>{{material.materialStoreStock}}</td>
                             <td>{{material.materialUom}}</td>
+                            <td>{{material.issuedQuantity}}</td>
                             <td ng-if="material.pendingQuantity">{{material.pendingQuantity}}</td>
                             <td ng-if="material.approvedQty">{{material.approvedQty}}</td>
                          </tr>
                          <tr ng-show="!materialItems.length">
-                         	<td colspan="6" class="txt-align-center">No Material Items Found</td>
+                         	<td colspan="7" class="txt-align-center">No Material Items Found</td>
                          </tr>
                        
                        </table> 
@@ -253,7 +255,7 @@
                            <button type="submit"
                                    id="form-button-save" ng-disabled="!selectedItems.length"  class="btn btn-success pull-right"><span class="btn-label">
                                             <i class="material-icons">check</i>
-                                        </span>Create</button>
+                                        </span>Save</button>
 
                            <div class="clearfix"></div>
                        </div>
