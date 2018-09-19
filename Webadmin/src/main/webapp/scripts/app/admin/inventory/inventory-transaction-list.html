@@ -12,6 +12,15 @@
 
         </div>
         <div class="col-md-4 txt-align-rgt">
+        
+         
+        	<button ng-show="inventoryTransactionlists.length" class="btn btn-info add-btn margn-tb0"   title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
+                <i class="material-icons">import_contacts</i> Export Excel
+                <div class="ripple-container"></div>
+            </button>
+            
+            <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
+            <div class="downloaderMd" ng-show="downloader"></div>
 
             <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-inventory-transaction"  has-permission="Location:Create" ng-class="{active: $state.includes('admin')}" tabindex="0">
                 <i class="material-icons">add</i> Add
@@ -35,6 +44,7 @@
                         <table class="table table-hover">
                             <thead>
                             <tr>
+                            	<th>Id</th>
                                 <th>Client</th>
                                 <th>Site</th>
                                 <th>Item Name</th>
@@ -49,6 +59,7 @@
                             <tbody>
 
                             <tr ng-repeat="inventoryTransactionList in inventoryTransactionlists">
+                            	<td>{{inventoryTransactionList.id}}</td>
                                 <td>{{inventoryTransactionList.projectName}}</td>
                                 <td>{{inventoryTransactionList.siteName}}</td>
                                 <td>{{inventoryTransactionList.materialName}}</td>
@@ -56,7 +67,7 @@
                                 <td>{{inventoryTransactionList.transactionType}}</td>
                                 <td>{{inventoryTransactionList.storeStock}}</td>
                                 <td>{{inventoryTransactionList.issuedQuantity}}</td>
-                                <td>{{inventoryTransactionList.transactionDate | date: "dd-MM-yyyy"}}</td>
+                                <td>{{inventoryTransactionList.transactionDate | date: "dd-MM-yyyy hh:mm a"}}</td>
                                 <td class="text-right hoverMe" width="13%">
 
                                     <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>

@@ -55,8 +55,9 @@ public class MaterialIndent extends AbstractAuditingEntity implements Serializab
 	@OneToMany(mappedBy = "materialIndent", fetch = FetchType.EAGER, cascade = {CascadeType.ALL}, orphanRemoval=true)
 	private Set<MaterialIndentItem> items;
 	
-	@Column(name = "indentRefNumber")
-	private String indentRefNumber;
+	@OneToOne(cascade = {CascadeType.ALL})
+	@JoinColumn(name = "indentRefNumber", nullable= true)
+	private MaterialIndentGen indentRefNumber;
 	
 	@OneToOne()
 	@JoinColumn(name = "materialTransacationId", nullable= true)
@@ -140,14 +141,6 @@ public class MaterialIndent extends AbstractAuditingEntity implements Serializab
 		this.items = items;
 	}
 
-	public String getIndentRefNumber() {
-		return indentRefNumber;
-	}
-
-	public void setIndentRefNumber(String indentRefNumber) {
-		this.indentRefNumber = indentRefNumber;
-	}
-
 	public MaterialTransaction getTransaction() {
 		return transaction;
 	}
@@ -170,6 +163,14 @@ public class MaterialIndent extends AbstractAuditingEntity implements Serializab
 
 	public void setIndentStatus(IndentStatus indentStatus) {
 		this.indentStatus = indentStatus;
+	}
+
+	public MaterialIndentGen getIndentRefNumber() {
+		return indentRefNumber;
+	}
+
+	public void setIndentRefNumber(MaterialIndentGen indentRefNumber) {
+		this.indentRefNumber = indentRefNumber;
 	}
 
 

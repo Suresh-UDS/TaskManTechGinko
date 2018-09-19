@@ -7,6 +7,7 @@ import {componentService} from "../../service/componentService";
 import {ExpenseService} from "../../service/expenseService";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 import {QuotationImagePopoverPage} from "../../quotation/quotation-image-popover";
+import {SelectSearchableComponent} from 'ionic-select-searchable';
 
 
 /**
@@ -90,6 +91,35 @@ export class AddExpense {
           this.msg = 'server Unreachable'
         }
         this.component.showToastMessage(this.msg,'bottom');
+      }
+    )
+  }
+
+
+  portChange(event: {
+    component: SelectSearchableComponent,
+    value: any
+  }) {
+    console.log('selectProject:', event.value.name);
+  }
+
+  siteChange(event:{
+    component: SelectSearchableComponent,
+    value: any
+  }){
+    this.selectedProject = event.value;
+    this.siteService.findSitesByProject(event.value.id).subscribe(
+      response => {
+        console.log("Site By ProjectId");
+        console.log(response);
+        this.siteList = response;
+        console.log(this.siteList);
+      },
+      error => {
+        if (error.type == 3) {
+          this.msg = 'Server Unreachable';
+        }
+        this.component.showToastMessage(this.msg, 'bottom');
       }
     )
   }

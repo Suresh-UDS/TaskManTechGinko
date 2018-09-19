@@ -42,6 +42,7 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
+                            	<th>Id</th>
                                 <th class="txt-align-center">Item Name</th>
                                 <th class="txt-align-center">Item Code</th>
                                 <th class="txt-align-center">Item Group</th>
@@ -54,6 +55,7 @@
                             </thead>
                             <tbody class="txt-align-center">
                             <tr ng-repeat="inventoryItem in inventorylists">
+                            	<td>{{inventoryItem.id}}</td>
                                 <td>{{inventoryItem.name}}</td>
                                 <td>{{inventoryItem.itemCode}}</td>
                                 <td>{{inventoryItem.itemGroup}}</td>

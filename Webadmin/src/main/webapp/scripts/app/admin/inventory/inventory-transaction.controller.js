@@ -2,7 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('InventoryTransactionController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent,$http,$stateParams,$location,
-    			ManufacturerComponent, InventoryComponent, InventoryTransactionComponent, IndentComponent, PurchaseComponent, $filter, PaginationComponent) {
+    			ManufacturerComponent, InventoryComponent, InventoryTransactionComponent, IndentComponent, PurchaseComponent, $filter, PaginationComponent,$interval) {
 
         
     	$rootScope.loginView = false;
@@ -31,6 +31,9 @@ angular.module('timeSheetApp')
         $scope.searchCriteria = {};
         $scope.selectedItemCode = {};
     	$scope.pages = { currPage : 1};
+    	$scope.pageSort = 10;
+    	
+    	$rootScope.exportStatusObj  ={};
     	
     	$scope.refreshPage = function() { 
     		 $scope.pages = {
@@ -477,6 +480,27 @@ angular.module('timeSheetApp')
     		});
     	}
     	
+    	   $scope.isActiveAsc = 'id';
+           $scope.isActiveDesc = '';
+
+           $scope.columnAscOrder = function(field){
+               $scope.selectedColumn = field;
+               $scope.isActiveAsc = field;
+               $scope.isActiveDesc = '';
+               $scope.isAscOrder = true;
+               //$scope.search();
+               $scope.loadSites();
+           }
+
+           $scope.columnDescOrder = function(field){
+               $scope.selectedColumn = field;
+               $scope.isActiveDesc = field;
+               $scope.isActiveAsc = '';
+               $scope.isAscOrder = false;
+               //$scope.search();
+               $scope.loadSites();
+           }
+    	
     	
     	$scope.search = function () {										// search material 
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
@@ -531,6 +555,18 @@ angular.module('timeSheetApp')
             }
             if($scope.searchIndentNumber) {
             	$scope.searchCriteria.indentRefNumber = $scope.searchIndentNumber;
+            }
+            if($scope.pageSort){
+                $scope.searchCriteria.sort = $scope.pageSort;
+            }
+            if($scope.selectedColumn){
+
+                $scope.searchCriteria.columnName = $scope.selectedColumn;
+                $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
+
+            }else{
+                $scope.searchCriteria.columnName ="id";
+                $scope.searchCriteria.sortByAsc = true;
             }
             if($scope.searchCreatedDate != "") {
                 if($scope.searchCreatedDate != undefined){
@@ -643,6 +679,117 @@ angular.module('timeSheetApp')
                             
                 }
 
+                $scope.exportAllData = function(type){
+                    $rootScope.exportStatusObj.exportMsg = '';
+                    $scope.downloader=true;
+                    $scope.searchCriteria.exportType = type;
+                    $scope.searchCriteria.report = true;
+
+                    console.log('calling asset export api');
+                    InventoryTransactionComponent.exportAllData($scope.searchCriteria).then(function(data){
+                        var result = data.results[0];
+                        console.log(result.file + ', ' + result.status + ',' + result.msg);
+                        var exportAllStatus = {
+                                fileName : result.file,
+                                exportMsg : 'Exporting All...',
+                                url: result.url
+                        };
+                        $scope.exportStatusMap[0] = exportAllStatus;
+                        console.log('exportStatusMap size - ' + $scope.exportStatusMap.length);
+                        $scope.start();
+                      },function(err){
+                          console.log('error message for export all ')
+                          console.log(err);
+                  });
+               };
+                
+                
+                $scope.exportStatusMap = [];
+                $scope.exportStatus = function() {
+                    //console.log('empId='+$scope.empId);
+                    console.log('exportStatusMap length -'+$scope.exportStatusMap.length);
+                    angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
+                        if(!exportStatusObj.empId) {
+                            exportStatusObj.empId = 0;
+                        }
+                        InventoryTransactionComponent.exportStatus(exportStatusObj.fileName).then(function(data) {
+                            if(data) {
+                                exportStatusObj.exportStatus = data.status;
+                                console.log('exportStatus - '+ exportStatusObj);
+                                exportStatusObj.exportMsg = data.msg;
+                                $scope.downloader=false;
+                                console.log('exportMsg - '+ exportStatusObj.exportMsg);
+                                if(exportStatusObj.exportStatus == 'COMPLETED'){
+                                    if(exportStatusObj.url) {
+                                        exportStatusObj.exportFile = exportStatusObj.url;
+                                    }else {
+                                        exportStatusObj.exportFile = data.file;
+                                    }
+                                    console.log('exportFile - '+ exportStatusObj.exportFile);
+                                    $scope.stop();
+                                }else if(exportStatusObj.exportStatus == 'FAILED'){
+                                    $scope.stop();
+                                }else if(!exportStatusObj.exportStatus){
+                                    $scope.stop();
+                                }else {
+                                    exportStatuObj.exportFile = '#';
+                                }
+                            }
+
+                        });
+                    });
+
+                }
+
+                $scope.exportFile = function(empId) {
+                    if(empId != 0) {
+                        var exportFile = '';
+                        angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
+                            if(empId == exportStatusObj.empId){
+                                exportFile = exportStatusObj.exportFile;
+                                return exportFile;
+                            }
+                        });
+                        return exportFile;
+                    }else {
+                        return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportFile : '#');
+                    }
+                }
+
+
+                $scope.exportMsg = function(empId) {
+                        if(empId != 0) {
+                            var exportMsg = '';
+                            angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
+                                if(empId == exportStatusObj.empId){
+                                    exportMsg = exportStatusObj.exportMsg;
+                                    return exportMsg;
+                                }
+                            });
+                            return exportMsg;
+                        }else {
+                            return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportMsg : '');
+                        }
+
+                };
+                
+             // store the interval promise in this variable
+                var promise;
+
+             // starts the interval
+                $scope.start = function() {
+                  // stops any running interval to avoid two intervals running at the same time
+                  $scope.stop();
+
+                  // store the interval promise
+                  promise = $interval($scope.exportStatus, 5000);
+                  console.log('promise -'+promise);
+                };
+
+                // stops the interval
+                $scope.stop = function() {
+                  $interval.cancel(promise);
+                };
 
     
       

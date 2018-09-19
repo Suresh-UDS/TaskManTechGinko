@@ -31,7 +31,7 @@ public class PurchaseReqDTO extends BaseDTO{
 	
 	private List<PurchaseReqItemDTO> items;
 	
-	private String purchaseRefNumber;
+	private long purchaseRefGenNumber;
 	
 	private PurchaseRequestStatus requestStatus;
 	
@@ -119,12 +119,12 @@ public class PurchaseReqDTO extends BaseDTO{
 		this.items = items;
 	}
 
-	public String getPurchaseRefNumber() {
-		return purchaseRefNumber;
+	public long getPurchaseRefGenNumber() {
+		return purchaseRefGenNumber;
 	}
 
-	public void setPurchaseRefNumber(String purchaseRefNumber) {
-		this.purchaseRefNumber = purchaseRefNumber;
+	public void setPurchaseRefGenNumber(long purchaseRefGenNumber) {
+		this.purchaseRefGenNumber = purchaseRefGenNumber;
 	}
 
 	public PurchaseRequestStatus getRequestStatus() {

@@ -1,11 +1,10 @@
 package com.ts.app.web.rest.dto;
 
-import com.ts.app.domain.ExpenseType;
-import com.ts.app.domain.PaymentType;
-
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
+
+import com.ts.app.domain.PaymentType;
 
 public class ExpenseDTO extends BaseDTO implements Serializable {
 

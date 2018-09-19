@@ -36,19 +36,44 @@
         </ion-row>
       </div>
 
-    <div class="form-group label-floating">
-          <label class="control-label">Client :</label>
-          <ion-select class="select-box padding-left0" [selectOptions]="selectOptions" placeholder="Choose Client"  name="Client" interface="popover" [(ngModel)]="selectedProject" text-lowercase>
-            <ion-option *ngFor="let p of clientList;let i=index"  (ionSelect)="selectSite(p)" text-center text-lowercase>{{p.name}}</ion-option>
-          </ion-select>
-    </div>
+          <!--<label class="control-label">Client :</label>-->
 
-    <div class="form-group label-floating">
-          <label class="control-label">Site:</label>
+      <ion-item>
+        <ion-label>Client:</ion-label>
+        <select-searchable
+          item-content
+          [(ngModel)]="selectedProject"
+          [items]="clientList"
+          itemValueField="id"
+          itemTextField="name"
+          [canSearch]="true"
+          (onChange)="siteChange($event)">
+        </select-searchable>
+      </ion-item>
+
+
+          <!--<ion-select class="select-box padding-left0" [selectOptions]="selectOptions" placeholder="Choose Client"  name="Client" interface="popover" [(ngModel)]="selectedProject" text-lowercase>
+            <ion-option *ngFor="let p of clientList;let i=index"  (ionSelect)="selectSite(p)" text-center text-lowercase>{{p.name}}</ion-option>
+          </ion-select>-->
+
+
+      <ion-item>
+        <ion-label class="control-label">Site:</ion-label>
+        <select-searchable
+          item-content
+          [(ngModel)]="selectedSite"
+          [items]="siteList"
+          itemValueField="id"
+          itemTextField="name"
+          [canSearch]="true"
+          (onChange)="portChange($event)">
+        </select-searchable>
+      </ion-item>
+
+         <!-- <label class="control-label">Site:</label>
           <ion-select class="select-box padding-left0" [selectOptions]="selectOptions" placeholder="Choose site" name="Site" interface="popover" [(ngModel)]="selectedSite" text-lowercase>
             <ion-option  *ngFor="let s of siteList;let i of index" (ionSelect)="getLatestRecordBySite(s)" text-center text-lowercase>{{s.name}}</ion-option>
-          </ion-select>
-    </div>
+          </ion-select>-->
 
     <div class="form-group label-floating">
       <label class="control-label">Transaction type</label>

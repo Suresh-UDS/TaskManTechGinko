@@ -186,7 +186,7 @@
                                                      <tr ng-repeat="materialTransaction in materialTransactions">
                                                          <td>{{materialTransaction.transactionType}}</td>
                                                          <td>{{materialTransaction.storeStock}}</td>
-                                                         <td>{{materialTransaction.quantity}}</td>
+                                                         <td>{{materialTransaction.issuedQuantity}}</td>
                                                          <td>{{materialTransaction.transactionDate | date: "dd-MM-yyyy" }}</td>
                                                          <td class="text-right">
                                                              <a title="Delete" ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">delete</i></a>

@@ -47,11 +47,11 @@ export class IndentList {
     searchMaterial(searchCriteria)
     {
         this.spinner=true;
-      this.isLoading = true;
+        this.isLoading = true;
         this.purchaseService.searchMaterialIndents(searchCriteria).subscribe(
             response=>{
                 this.spinner=false;
-              this.isLoading = false;
+                this.isLoading = false;
                 console.log("Getting Material Indent");
                 console.log(response);
                 this.indentMaterial=response.transactions;

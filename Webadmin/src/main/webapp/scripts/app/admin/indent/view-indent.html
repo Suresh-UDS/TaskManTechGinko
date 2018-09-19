@@ -97,7 +97,7 @@
                                     <td>{{material.materialUom}}</td>
                                     <td>{{material.quantity}}</td>
                                     <td width="10%">
-                                        <input type="number" class="form-control" name="issue_qty"  ng-model="material.issuedQuantity" ng-blur="validate(material, material.issuedQuantity)" aria-required="true" aria-invalid="true">
+                                        <input type="number" class="form-control" name="issue_qty"  ng-disabled="material.pendingQuantity === 0" ng-model="material.issuedQuantity" ng-blur="validate(material, material.issuedQuantity)" aria-required="true" aria-invalid="true">
                                     </td>
                                     <td>{{material.pendingQuantity}}</td>
                                 </tr>

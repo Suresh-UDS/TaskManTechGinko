@@ -59,6 +59,16 @@ export class InventoryService {
         )
     }
 
+    inventorySearch(searchCriteria):Observable<any>{
+        return this.http.post(this.config.Url+'api/inventory/search',searchCriteria).map(
+            response=>{
+                console.log(response);
+                return response.json();
+            }
+        )
+
+    }
+
 
 
 
