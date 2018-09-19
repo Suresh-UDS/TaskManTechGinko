@@ -2,6 +2,8 @@ package com.ts.app.domain;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "expense")
@@ -29,9 +31,9 @@ public class Expense extends AbstractAuditingEntity {
 
     private String currency;
 
-    private Timestamp expenseDate;
+    private Date expenseDate;
 
-    private Timestamp creditedDate;
+    private Date creditedDate;
 
     private String receiptNumber;
 
@@ -48,6 +50,9 @@ public class Expense extends AbstractAuditingEntity {
     private String expenseType;
 
     private String expenseCategory;
+
+    @OneToMany(mappedBy="expense",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<ExpenseDocument> documents;
 
     public long getId() {
         return id;
@@ -113,13 +118,7 @@ public class Expense extends AbstractAuditingEntity {
         this.currency = currency;
     }
 
-    public Timestamp getExpenseDate() {
-        return expenseDate;
-    }
 
-    public void setExpenseDate(Timestamp expenseDate) {
-        this.expenseDate = expenseDate;
-    }
 
     public String getReceiptNumber() {
         return receiptNumber;
@@ -186,11 +185,30 @@ public class Expense extends AbstractAuditingEntity {
         this.expenseCategory = expenseCategory;
     }
 
-    public Timestamp getCreditedDate() {
+
+
+
+    public List<ExpenseDocument> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(List<ExpenseDocument> documents) {
+        this.documents = documents;
+    }
+
+    public Date getExpenseDate() {
+        return expenseDate;
+    }
+
+    public void setExpenseDate(Date expenseDate) {
+        this.expenseDate = expenseDate;
+    }
+
+    public Date getCreditedDate() {
         return creditedDate;
     }
 
-    public void setCreditedDate(Timestamp creditedDate) {
+    public void setCreditedDate(Date creditedDate) {
         this.creditedDate = creditedDate;
     }
 }

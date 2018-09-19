@@ -23,7 +23,7 @@ angular.module('timeSheetApp')
 
         $scope.selectedAmount = 0;
 
-        $scope.selectedCurrency={};
+        $scope.selectedCurrency='INR';
 
         $scope.currencies =[];
 
@@ -37,6 +37,10 @@ angular.module('timeSheetApp')
 
     	$scope.expenseDetails = {};
 
+    	$scope.uploadExpenseFile = {};
+
+    	$scope.uploadExpensePhoto = {};
+
     	$rootScope.loginView = false;
 
     	$scope.pages = { currPage : 1};
@@ -45,14 +49,16 @@ angular.module('timeSheetApp')
 
         $scope.noData = false;
 
+        $scope.pageSort = 10;
 
 
-			//init load
+
+        //init load
 			$scope.initLoad = function(){
 				$scope.loadProjects();
 			    $scope.loadPageTop();
 			    $scope.loadExpenseCategories();
-			    $scope.getCurrencies();
+			    // $scope.getCurrencies();
 			    $scope.searchFilter();
 			 };
 
@@ -132,7 +138,9 @@ angular.module('timeSheetApp')
                     $scope.search();
                 };
 
-                $scope.saveExpense = function(){
+                $scope.expenseData = function(){
+
+
 
                     if($scope.selectedProject){
                         $scope.expenseDetails.projectId = $scope.selectedProject.id;
@@ -195,45 +203,53 @@ angular.module('timeSheetApp')
                         $scope.expenseDetails.description = $scope.description;
                     }
 
-                    if($scope.transactionMode == 'debit'){
-                        if($scope.previousData && $scope.previousData.id && $scope.previousData.id>0){
-                            if($scope.previousData.balanceAmount>$scope.selectedAmount){
-                                this.expenseDetails.balanceAmount = $scope.previousData.balanceAmount-$scope.selectedAmount;
-                                console.log("Before saving expenses");
-                                console.log($scope.expenseDetails);
-                                ExpenseComponent.createExpense($scope.expenseDetails).then(function (data) {
-                                    console.log(data);
-                                    $scope.cancelExpense();
-                                })
+
+                    if($scope.selectedPhotoFile){
+                        if($scope.uploadExpensePhoto.title){
+                            if($scope.selectedFile){
+                                if($scope.uploadExpenseFile.title){
+                                    $scope.saveExpense($scope.expenseDetails);
+                                }else{
+                                    $scope.showNotifications('top','center','danger','Please Enter title for file to upload...');
+                                }
                             }else{
-                                $scope.showNotifications('top','center','danger','Insufficient funds.. Only '+$scope.previousData.balanceAmount+' available for the site expenses..');
+                                $scope.saveExpense($scope.expenseDetails);
                             }
 
                         }else{
-                            $scope.showNotifications('top','center','danger','There is no balance amount to debit from.. Please add a credit transaction.. ');
+                            $scope.showNotifications('top','center','danger','Please Enter title for photo to upload...');
                         }
-                    }else if($scope.transactionMode == 'credit'){
-                        if($scope.previousData && $scope.previousData.id && $scope.previousData.id>0){
-                            this.expenseDetails.balanceAmount = $scope.previousData.balanceAmount+$scope.selectedAmount;
-                            console.log("Before saving expenses");
-                            console.log($scope.expenseDetails);
-                            ExpenseComponent.createExpense($scope.expenseDetails).then(function (data) {
-                                console.log(data);
-                                $scope.cancelExpense();
-                            })
+                    }else{
+
+                        if($scope.selectedFile){
+                            if($scope.uploadExpenseFile.title){
+                                $scope.saveExpense($scope.expenseDetails);
+                            }else{
+                                $scope.showNotifications('top','center','danger','Please Enter title for file to upload...');
+                            }
                         }else{
-                            this.expenseDetails.balanceAmount = $scope.selectedAmount;
-                            console.log("Before saving expenses");
-                            console.log($scope.expenseDetails);
-                            ExpenseComponent.createExpense($scope.expenseDetails).then(function (data) {
-                                console.log(data);
-                                $scope.cancelExpense();
-                            })
+                            $scope.saveExpense($scope.expenseDetails);
                         }
+
                     }
 
+                };
+
+                $scope.saveExpense = function(expenseDetails){
+                    ExpenseComponent.createExpense($scope.expenseDetails).then(function (data) {
+                        console.log(data);
+
+                        if($scope.selectedFile){
+                            $scope.expenseFileUpload(data);
+                        }
+
+                        if($scope.selectedPhotoFile){
+                            $scope.uploadExpensePhotoFile(data);
+                        }
 
 
+                        $scope.cancelExpense();
+                    })
                 };
 
 
@@ -243,7 +259,7 @@ angular.module('timeSheetApp')
                 	if(!$scope.searchCriteria) {
                     	var searchCriteria = {
                     			currPage : currPageVal
-                    	}
+                    	};
                     	$scope.searchCriteria = searchCriteria;
                 	}
                 	$scope.searchCriteria.currPage = currPageVal;
@@ -251,13 +267,9 @@ angular.module('timeSheetApp')
                 	console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaSite));
 
                 	if(!$scope.selectedSite) {
-                		if($rootScope.searchCriteriaSite) {
-                    		$scope.searchCriteria = $rootScope.searchCriteriaSite;
-                		}else {
                 			$scope.searchCriteria.findAll = true;
-                		}
                 	}else if($scope.selectedSite) {
-                		$scope.searchCriteria.findAll = false;
+                		$scope.searchCriteria.findAll = true;
         	        	if($scope.selectedSite) {
         		        	$scope.searchCriteria.siteId = $scope.selectedSite.id;
         		        	if(!$scope.searchCriteria.siteId) {
@@ -276,6 +288,7 @@ angular.module('timeSheetApp')
                         $scope.sitesLoader = false;
                         $scope.loadPageTop();
                         ExpenseComponent.search($scope.searchCriteria).then(function (data) {
+                            console.log(data);
                         $scope.expenses = data;
                         $scope.sitesLoader = true;
 
@@ -339,17 +352,171 @@ angular.module('timeSheetApp')
                     })
                 }
 
-                $scope.getCurrencies = function () {
-                    ExpenseComponent.getCurrencies().then(function (data) {
-                        console.log(data);
-                        $scope.currencies = data;
-                    })
-                }
+                // $scope.getCurrencies = function () {
+                //     ExpenseComponent.getCurrencies().then(function (data) {
+                //         console.log(data);
+                //         $scope.currencies = data;
+                //     })
+                // }
 
                 $scope.selectCategory = function (category) {
                     console.log(category)
                     $scope.selectedCategory = category.name;
                 }
+
+
+        $scope.imgNotValid=true;
+        $scope.imgSizeHigh=true;
+
+
+        $scope.uploadImage = function (files) {
+
+            var ext = files[0].name.match(/\.(.+)$/)[1];
+
+
+            if(angular.lowercase(ext) ==='jpg' || angular.lowercase(ext) ==='jpeg' || angular.lowercase(ext) ==='png'){
+                $scope.imgNotValid=false;
+
+
+                if(files[0].size < 15000000){
+
+                    $scope.imgSizeHigh=false;
+
+                }else{
+
+                    $scope.imgSizeHigh=true;
+                }
+
+            }
+            else{
+                $scope.imgNotValid=true;
+
+            }
+
+        }
+
+        $scope.fileNotValid=true;
+        $scope.fileSizeHigh=true;
+
+        $scope.uploadfileValidation = function (files) {
+
+            var ext = files[0].name.match(/\.(.+)$/)[1];
+
+            if(angular.lowercase(ext) ==='doc' || angular.lowercase(ext) ==='docx'
+                || angular.lowercase(ext) ==='xls'|| angular.lowercase(ext) ==='xlsx' || angular.lowercase(ext) ==='txt'
+                || angular.lowercase(ext) ==='csv' || angular.lowercase(ext) ==='pdf'){
+                $scope.fileNotValid=false;
+
+                if(files[0].size < 15000000){
+
+                    $scope.fileSizeHigh=false;
+
+                }else{
+
+                    $scope.fileSizeHigh=true;
+                }
+
+            }
+            else{
+                $scope.fileNotValid=true;
+
+            }
+
+        }
+
+        $scope.expenseFileUpload = function(expenseDetails) {
+                console.log(expenseDetails);
+                if($scope.selectedFile) {
+
+                    console.log("file title - " + $scope.uploadExpenseFile.title + "file name -" + $scope.selectedFile);
+
+                    $scope.uploadExpenseFile.expenseId = expenseDetails.id;
+
+                    $scope.uploadExpenseFile.uploadFile = $scope.selectedFile;
+                    //$scope.uploadExpenseFile.assetId = 1;
+                    $scope.uploadExpenseFile.type = 'document';
+                    console.log($scope.uploadExpenseFile);
+
+
+                    $rootScope.loadingStart();
+                    ExpenseComponent.uploadExpenseFile($scope.uploadExpenseFile).then(function(data){
+                        $scope.loadingStop();
+                        console.log("-- Upload file --",data);
+                        if(data) {
+                            $scope.uploadFiles =[];
+                            $scope.uploadFiles.push(data);
+                            $scope.getAllUploadedFiles();
+                        }else{
+                            console.log('No data found!');
+                        }
+                        $scope.uploadExpenseFile  ={};
+                        $scope.selectedFile = "";
+
+                    },function(err){
+                        $scope.loadingStop();
+                        console.log('Import error');
+                        console.log(err);
+                    }).catch(function(response){
+                        $scope.loadingStop();
+                        $scope.showNotifications('top','center','danger','Unable to  upload file..');
+                    });
+                } else {
+                    console.log('select a file');
+                }
+            }
+
+        $scope.uploadExpensePhotoFile = function(expenseDetails) {
+
+            if(!$scope.assetVal.id && !$stateParams.id){
+
+                $scope.showNotifications('top','center','danger','Please create asset first..');
+
+            }else{
+                console.log($scope.selectedPhotoFile);
+
+                console.log($scope.uploadExpensePhoto.title);
+
+                if($scope.selectedPhotoFile) {
+                    console.log('selected asset file - ' + $scope.selectedPhotoFile);
+
+                    $scope.uploadExpensePhoto.uploadFile = $scope.selectedPhotoFile;
+
+                    $scope.uploadExpenseFile.expenseId = expenseDetails.id;
+
+                    $scope.uploadExpensePhoto.type = 'image';
+
+                    console.log($scope.uploadExpensePhoto);
+                    $scope.loadingStart();
+                    ExpenseComponent.uploadExpensePhoto($scope.uploadExpensePhoto).then(function(data){
+                        console.log(data);
+                        $scope.loadingStop();
+                        if(data) {
+                            $scope.uploadExpensePhotos =[];
+                            $scope.uploadExpensePhotos.push(data);
+                            $scope.getAllUploadedPhotos();
+                        }else{
+                            console.log('No data found!');
+                        }
+
+                        $scope.uploadExpensePhoto  ={};
+                        $scope.selectedPhotoFile = "";
+
+                    },function(err){
+                        $scope.loadingStop();
+                        console.log('Import error');
+                        console.log(err);
+                    }).catch(function(response){
+                        $scope.loadingStop();
+                        $scope.showNotifications('top','center','danger','Unable to  upload file..');
+                    });
+                } else {
+                    console.log('select a file');
+                }
+            }
+
+        }
+
+
 
 
     });
