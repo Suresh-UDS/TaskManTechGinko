@@ -10,6 +10,7 @@ import {QuotationImagePopoverPage} from "../../quotation/quotation-image-popover
 import {SelectSearchableComponent} from 'ionic-select-searchable';
 import {FileTransfer, FileTransferObject, FileUploadOptions} from '@ionic-native/file-transfer';
 import {ApplicationConfig, MY_CONFIG_TOKEN} from "../../service/app-config";
+import { File } from '@ionic-native/file';
 
 declare  var demo ;
 
@@ -214,7 +215,7 @@ export class AddExpense {
       this.expenseDetails.currency = "INR";
 
       if(this.receiptNumber){
-        this.expenseDetails.receiptNumber
+        this.expenseDetails.receiptNumber= this.receiptNumber;
       }
 
       if(this.selectedAmount){
