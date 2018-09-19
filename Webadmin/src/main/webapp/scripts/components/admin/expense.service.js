@@ -77,6 +77,40 @@ angular.module('timeSheetApp')
                 return $http.get('scripts/components/admin/Common-Currency.json').then(function (response) {
                     return response.data;
                 })
+            },
+
+            uploadExpenseFile : function(expense) {
+                var file = expense.uploadFile;
+                var fileFormData = new FormData();
+
+                fileFormData.append('title', expense.title);
+                fileFormData.append('expenseId', expense.expenseId);
+                fileFormData.append('uploadFile', file);
+                fileFormData.append('type', expense.type);
+
+                return $http.post('api/expenses/uploadFile', fileFormData, {
+                    transformRequest: angular.identity,
+                    headers: {'Content-Type': undefined}
+                }).then(function (response) {
+                    return response.data;
+                });
+            },
+
+            uploadExpensePhoto : function(expense) {
+                var file = expense.uploadFile;
+                var fileFormData = new FormData();
+
+                fileFormData.append('title', expense.title);
+                fileFormData.append('assetId', expense.expenseId);
+                fileFormData.append('uploadFile', file);
+                fileFormData.append('type', expense.type);
+
+                return $http.post('api/expenses/uploadAssetPhoto', fileFormData, {
+                    transformRequest: angular.identity,
+                    headers: {'Content-Type': undefined}
+                }).then(function (response) {
+                    return response.data;
+                });
             }
         }
 

@@ -23,10 +23,25 @@ import com.codahale.metrics.annotation.Timed;
 import com.ts.app.domain.CategoryWiseExpense;
 import com.ts.app.domain.Expense;
 import com.ts.app.domain.ExpenseCategory;
+import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.ExpenseManagementService;
 import com.ts.app.web.rest.dto.ExpenseDTO;
+import com.ts.app.web.rest.dto.ExpenseDocumentDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
+import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -36,6 +51,9 @@ public class ExpenseManagementResource {
 
     @Inject
     private ExpenseManagementService expenseManagementService;
+
+    @Inject
+    private Environment env;
 //
     @RequestMapping(value = "/expense", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -52,7 +70,7 @@ public class ExpenseManagementResource {
 
         }
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(expense,HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/expenseCategories", method = RequestMethod.GET)
@@ -68,10 +86,41 @@ public class ExpenseManagementResource {
         return expenseManagementService.findAll(searchCriteria.getCurrPage());
     }
 
+    @RequestMapping(value = "/expenses/search",method = RequestMethod.POST)
+    public SearchResult<ExpenseDTO> searchExpenses(@RequestBody SearchCriteria searchCriteria){
+        SearchResult<ExpenseDTO> result = null;
+        if (searchCriteria != null) {
+            searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+            result = expenseManagementService.findBySearchCrieria(searchCriteria);
+        }
+        return result;
+    }
+
     @RequestMapping(value = "/expenses/latest/{siteId}", method = RequestMethod.GET)
     public Expense findLatestRecordBySite(@PathVariable("siteId") long siteId) {
         log.info("--Invoked expense resource .findLatestRecordBySite -- "+siteId);
         return expenseManagementService.findLatestRecordBySite(siteId);
+    }
+
+    @RequestMapping(value = { "/expenses/uploadFile" }, method = RequestMethod.POST)
+    public ResponseEntity<?> uploadAssetFile(@RequestParam("title") String title, @RequestParam("expenseId") long expenseId,
+                                             @RequestParam("uploadFile") MultipartFile file, @RequestParam("type") String type,
+                                             ExpenseDocumentDTO expenseDocumentDTO) {
+        expenseDocumentDTO.setExpenseId(expenseId);
+        expenseDocumentDTO.setTitle(title);
+        expenseDocumentDTO.setType(type);
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        log.debug("********** file extension : "+ extension);
+        String ext = env.getProperty("extensionFile");
+        log.debug("********** validation extension : "+ ext);
+        String[] arrExt = ext.split(",");
+        for (String exten : arrExt) {
+            if (extension.equalsIgnoreCase(exten)) {
+                expenseDocumentDTO = expenseManagementService.uploadFile(expenseDocumentDTO, file);
+                expenseDocumentDTO.setExtension(extension);
+            }
+        }
+        return new ResponseEntity<>(expenseDocumentDTO, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/expenses/site/category", method = RequestMethod.POST)
@@ -80,10 +129,5 @@ public class ExpenseManagementResource {
         return expenseManagementService.findExpenseByCategories(searchCriteria.getSiteId(), searchCriteria.getFromDate(), searchCriteria.getToDate());
     }
 
-    @RequestMapping(value = "/expenses/{siteId}/category/{category}", method = RequestMethod.GET)
-    public List<ExpenseDTO> getSiteAndCategoryExpenses(@PathVariable("siteId") long siteId,@PathVariable("category") String category,@RequestParam(value="fromDate", required=false) Date fromDate, @RequestParam(value="toDate", required=false) Date toDate) {
-        log.info("--Invoked expense resource .getSiteAndCategoryExpenses -- "+siteId + ", category - "+ category +", fromDate -" + fromDate +" , toDate -"+ toDate);
-        return expenseManagementService.findExpenseByCategory(siteId, category, fromDate, toDate);
-    }
 
 }
