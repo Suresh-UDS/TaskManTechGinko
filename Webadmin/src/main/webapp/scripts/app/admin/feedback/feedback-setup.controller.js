@@ -271,6 +271,7 @@ angular.module('timeSheetApp')
 	    		if(!$scope.selectedProject && !$scope.selectedSite) {
 	    			$scope.searchCriteria.findAll = true;
 	    		}
+	    		$scope.searchCriteria.isList = true;
         		FeedbackComponent.searchFeedbackMaster($scope.searchCriteria).then(function(data) {
         			$scope.feedbackMasterList = data.transactions;
         		})
@@ -441,7 +442,8 @@ angular.module('timeSheetApp')
 
 
              $scope.searchCriteria.currPage = currPageVal;
-            $scope.searchCriteria.findAll = false;
+             $scope.searchCriteria.findAll = false;
+             $scope.searchCriteria.isList = false;
 
              if( !$scope.searchProject && !$scope.searchSite
                 &&  !$scope.searchBlock &&  !$scope.searchFloor &&  !$scope.searchZone) {

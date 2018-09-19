@@ -14,6 +14,7 @@ angular.module('timeSheetApp')
         $scope.authorities = ["User", "Admin"];
         $scope.pager = {};
         $scope.noData = false;
+        $scope.isEdit = 'no';
 
         //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -52,7 +53,7 @@ angular.module('timeSheetApp')
 
         $scope.qType = function(){
 
-            var quesType = $('#displayType:checked').val();
+            var quesType = $('#displayType1:checked').val();
 
             if(quesType == 'form'){
             	$('#answerType1').prop('checked', true);
@@ -116,16 +117,19 @@ angular.module('timeSheetApp')
 
 
         $scope.addFeedbackItem = function(newItem){
+            if(!$scope.newFeedbackItem.question || !$scope.selectedSite || !$scope.selectedProject){
+              return false;
+            }
             console.log("Adding feedback questions");
-            if(newItem.scoreType!=null){
-
-            }else{
+            if(!newItem.scoreType){
                 newItem.scoreType = "yes:1";
             }
             if(newItem.answerType) {
                 $scope.feedbackItems.push(newItem);
             }else {
-            		$scope.showNotifications('top','center','danger','Please select an answer type');
+                    newItem.answerType = "YESNO";
+                    $scope.feedbackItems.push(newItem);
+            		//$scope.showNotifications('top','center','danger','Please select an answer type');
             }
             $scope.newFeedbackItem = null;
         };
@@ -136,8 +140,12 @@ angular.module('timeSheetApp')
 
 
         $scope.cancelFeedbackQuestions = function () {
+                $scope.selectedSite =null;
+                $scope.selectedProject =null;
+                $scope.feedbackItem.name =null;
 	        	$scope.feedbackItems = [];
 	        	$scope.feedback = {};
+	        	$scope.isEdit = 'no';
         };
 
         $scope.loadFeedbackItems = function () {
@@ -153,6 +161,7 @@ angular.module('timeSheetApp')
 
 
         $scope.loadFeedback = function(id) {
+            $scope.isEdit = 'yes';
         	console.log('loadFeedback -' + id);
                $scope.loadingStart();
         		FeedbackComponent.findOneFeedbackMaster(id).then(function (data) {
