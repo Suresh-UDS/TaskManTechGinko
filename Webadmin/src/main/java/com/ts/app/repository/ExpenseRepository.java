@@ -16,10 +16,10 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>,JpaSpeci
     @Query("SELECT e FROM Expense e WHERE e.site.id = :siteId order by e.createdDate" )
     List<Expense> findLatestEntryBySite(@Param("siteId") long siteId);
 
-    @Query("SELECT new com.ts.app.domain.CategoryWiseExpense(e.expenseCategory, sum(e.debitAmount)) FROM Expense e WHERE e.site.id = :siteId group by category" )
+    @Query("SELECT new com.ts.app.domain.CategoryWiseExpense(e.expenseCategory, sum(e.debitAmount)) FROM Expense e WHERE e.site.id = :siteId group by expenseCategory" )
     List<CategoryWiseExpense> getCategoryWiseExpenseBySite(@Param("siteId") long siteId);
 
-    @Query("SELECT new com.ts.app.domain.CategoryWiseExpense(e.expenseCategory, sum(e.debitAmount)) FROM Expense e WHERE e.site.id = :siteId and e.expenseDate between :fromDate and :toDate group by category" )
+    @Query("SELECT new com.ts.app.domain.CategoryWiseExpense(e.expenseCategory, sum(e.debitAmount)) FROM Expense e WHERE e.site.id = :siteId and e.expenseDate between :fromDate and :toDate group by expenseCategory" )
     List<CategoryWiseExpense> getCategoryWiseExpenseBySite(@Param("siteId") long siteId,@Param("fromDate") Timestamp fromDate, @Param("toDate") Timestamp toDate);
 
     @Query("SELECT e FROM Expense e WHERE e.site.id = :siteId and e.expenseCategory = :category" )
