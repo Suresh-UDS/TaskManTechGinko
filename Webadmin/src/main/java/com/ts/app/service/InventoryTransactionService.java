@@ -161,7 +161,6 @@ public class InventoryTransactionService extends AbstractService{
 			
 			while(itemsItr.hasNext()) {
 				boolean itemFound = false;
-				boolean isPending = true;
 				MaterialIndentItem itemEntity = itemsItr.next();
 				for(MaterialIndentItemDTO itemDto : indentItemDTOs) {
 					if(itemEntity.getId() == itemDto.getId()) {
@@ -250,8 +249,6 @@ public class InventoryTransactionService extends AbstractService{
 								
 							} 
 							
-						} else {
-							isPending = false;
 						}
 						
 						break;
@@ -262,11 +259,6 @@ public class InventoryTransactionService extends AbstractService{
 					itemsItr.remove();
 				}
 				
-				if(isPending) {
-					materialIndent.setIndentStatus(IndentStatus.PENDING);
-				}else {
-					materialIndent.setIndentStatus(IndentStatus.ISSUED);
-				}
 			}
 		
 		}
@@ -320,9 +312,31 @@ public class InventoryTransactionService extends AbstractService{
 
 		}
 		
+		Set<MaterialIndentItem> materialItem = materialIndent.getItems();
+		boolean isPending = checkIfNoItems(materialItem);
+		if(isPending) { 
+			materialIndent = materialIndentRepository.findOne(materialIndent.getId());
+			materialIndent.setIndentStatus(IndentStatus.PENDING);
+			materialIndentRepository.save(materialIndent);
+		}else {
+			materialIndent = materialIndentRepository.findOne(materialIndent.getId());
+			materialIndent.setIndentStatus(IndentStatus.ISSUED);
+			materialIndentRepository.save(materialIndent);
+		}
+		
 		materialTransDTO = mapperUtil.toModel(materialEntity, MaterialTransactionDTO.class);
 		return materialTransDTO;
 	
+	}
+	
+	private boolean checkIfNoItems(Set<MaterialIndentItem> materialItem) {
+		// TODO Auto-generated method stub
+		for(MaterialIndentItem material : materialItem) { 
+			if(material.getPendingQuantity() > 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public MaterialTransactionDTO getMaterialTransaction(long id) {

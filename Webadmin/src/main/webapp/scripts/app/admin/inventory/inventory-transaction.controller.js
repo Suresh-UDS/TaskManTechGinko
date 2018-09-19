@@ -294,7 +294,7 @@ angular.module('timeSheetApp')
 
             // Loop through all the entities and set their isChecked property
             for (var i = 0; i < $scope.materialItems.length; i++) {
-
+            	$scope.materialItems[i].issuedQuantity = $scope.materialItems[i].pendingQuantity;
                 $scope.selectedItems.push($scope.materialItems[i]);
 
                 $scope.materialItems[i].isChecked = $scope.allItemsSelected;
@@ -308,7 +308,7 @@ angular.module('timeSheetApp')
         $scope.selectedOne = function (material) {
 
             if($scope.selectedItems.indexOf(material) <= -1){
-
+            	material.issuedQuantity = material.pendingQuantity;
             	$scope.selectedItems.push(material);
 
             }else if($scope.selectedItems.indexOf(material) > -1){
