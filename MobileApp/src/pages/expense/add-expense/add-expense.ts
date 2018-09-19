@@ -268,7 +268,7 @@ export class AddExpense {
                         var employeeId = Number;
                         let token_header = window.localStorage.getItem('session');
                         let options: FileUploadOptions = {
-                            fileKey: 'expenseFile',
+                            fileKey: 'uploadFile',
                             fileName: new Date().getTime() + '_expenseFile',
                             headers: {
                                 'X-Auth-Token': token_header

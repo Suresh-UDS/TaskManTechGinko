@@ -4,6 +4,7 @@ import {TransactionPage} from "./transaction";
 import {ExpenseDetails} from "../expense-details/expense-details";
 import {AddExpense} from "../expense/add-expense/add-expense";
 import {ExpenseService} from "../service/expenseService";
+import {SiteService} from "../service/siteService";
 
 /**
  * Generated class for the Expense page.
@@ -23,7 +24,7 @@ export class ExpensePage {
   spinner:any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public modalCtrl:ModalController,
-              private expenseService: ExpenseService) {
+              private expenseService: ExpenseService, private siteService: SiteService) {
 
     // this.listitem = [
     //   {id:'1',site:'UDS',trans_type:'Credit',debit:'-',credit:'1,00,000',balance:'1,20,000',actions:''},
@@ -67,6 +68,14 @@ export class ExpensePage {
     addExpenseModal() {
         const modal = this.modalCtrl.create(AddExpense);
         modal.present();
+    }
+
+    getSites(){
+      this.siteService.searchSite().subscribe(
+          response=>{
+              console.log(response);
+          }
+      )
     }
 
 }
