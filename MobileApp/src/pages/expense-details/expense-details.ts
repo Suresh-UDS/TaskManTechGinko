@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {NavController, NavParams, ModalController, ViewController} from "ionic-angular";
 import {TransactionPage} from "../expense/transaction";
 import {AddExpense} from "../expense/add-expense/add-expense";
+import {ExpenseService} from "../service/expenseService";
 
 /**
  * Generated class for the ExpenseDetails page.
@@ -15,14 +16,45 @@ import {AddExpense} from "../expense/add-expense/add-expense";
   templateUrl: 'expense-details.html',
 })
 export class ExpenseDetails {
+  category: any;
+  amount: any;
+  site: any;
+  page:1;
+  pageSort:15;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,public modalCtrl:ModalController,public viewCtrl:ViewController) {
+
+  constructor(public navCtrl: NavController, public navParams: NavParams,public modalCtrl:ModalController,public viewCtrl:ViewController,
+              private expenseService: ExpenseService)
+  {
+
+    this.site = this.navParams.get('site');
 
 
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ExpenseDetails');
+    console.log(this.site);
+
+    console.log('site Id');
+    console.log(this.site.id);
+
+    var searchCriteria = {
+      fromDate:new Date(),
+      toDate: new Date(),
+      siteId:this.site.id
+    };
+
+
+    this.expenseService.getCategoriesBySite(searchCriteria).subscribe(response=>{
+      console.log("expense by categories");
+      console.log(response);
+      this.category = response;
+    },err=>{
+      console.log("Error in getting expense category by site");
+      console.log(err);
+    })
+
   }
 
     viewTransaction(){

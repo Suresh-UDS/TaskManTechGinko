@@ -41,10 +41,18 @@ export class ExpenseService {
     }
 
     getLatestRecordBySite(siteId):Observable<any>{
-        return this.http.get(this.config.Url+'api/expenses/latest'+siteId).map(
+        return this.http.get(this.config.Url+'api/expenses/latest/'+siteId).map(
             response=>{
                 return response.json();
             }
         )
+    }
+
+    getCategoriesBySite(searchCriteria):Observable<any>{
+      return this.http.post(this.config.Url+'api/expenses/site/category',searchCriteria).map(
+        response=>{
+          return response.json();
+        }
+      )
     }
 }
