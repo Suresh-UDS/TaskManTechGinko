@@ -58,49 +58,49 @@ import com.ts.app.web.rest.dto.SearchResult;
 public class InventoryManagementService extends AbstractService{
 
 	private final Logger log = LoggerFactory.getLogger(InventoryManagementService.class);
-	
+
 	@Inject
 	private SiteRepository siteRepository;
-	
+
 	@Inject
 	private ProjectRepository projectRepository;
-	
+
 	@Inject
 	private InventoryRepository inventRepository;
-	
+
 	@Inject
 	private UserRepository userRepository;
-	
+
 	@Inject
 	private EmployeeRepository employeeRepository;
-	
+
 	@Inject
 	private ManufacturerRepository manufacturerRepository;
-	
+
 	@Inject
 	private MaterialItemGroupRepository materialItemRepository;
-	
+
 	@Inject
 	private InventoryTransactionRepository inventTransactionRepository;
-	
+
 	@Inject
 	private ImportUtil importUtil;
-	
+
 	@Inject
 	private ReportUtil reportUtil;
-	
+
 	@Inject
 	private ExportUtil exportUtil;
-	
+
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
-	
-	public MaterialDTO createInventory(MaterialDTO materialDTO) { 
+
+	public MaterialDTO createInventory(MaterialDTO materialDTO) {
 		Material materialEntity = mapperUtil.toEntity(materialDTO, Material.class);
 		materialEntity.setSite(siteRepository.findOne(materialDTO.getSiteId()));
 		materialEntity.setProject(projectRepository.findOne(materialDTO.getProjectId()));
 		materialEntity.setManufacturer(manufacturerRepository.findOne(materialDTO.getManufacturerId()));
-		
+
 		//create material item group if does not exist
 		if(!StringUtils.isEmpty(materialEntity.getItemGroup())) {
 			MaterialItemGroup itemGroup = materialItemRepository.findByName(materialEntity.getItemGroup());
@@ -111,7 +111,7 @@ public class InventoryManagementService extends AbstractService{
 				materialItemRepository.save(itemGroup);
 			}
 		}
-		
+
 		materialEntity.setActive(Material.ACTIVE_YES);
 		materialEntity.setUom(MaterialUOMType.valueOf(materialDTO.getUom()).getValue());
 		materialEntity = inventRepository.save(materialEntity);
@@ -138,14 +138,14 @@ public class InventoryManagementService extends AbstractService{
 	public MaterialDTO updateInventory(MaterialDTO materialDTO) {
 		Material material = inventRepository.findOne(materialDTO.getId());
 		mapToModel(material, materialDTO);
-		inventRepository.saveAndFlush(material);	
+		inventRepository.saveAndFlush(material);
 		return materialDTO;
 	}
 
 	private void mapToModel(Material material, MaterialDTO materialDTO) {
 		material.setName(materialDTO.getName());
 		material.setItemCode(materialDTO.getItemCode());
-		if(materialDTO.getSiteId() > 0) { 
+		if(materialDTO.getSiteId() > 0) {
 			material.setSite(siteRepository.findOne(materialDTO.getSiteId()));
 		}
 		if(materialDTO.getProjectId() > 0) {
@@ -168,12 +168,12 @@ public class InventoryManagementService extends AbstractService{
 		material.setActive(Material.ACTIVE_NO);
 		inventRepository.save(material);
 	}
-	
+
 	public MaterialUOMType[] getAllMaterialUom() {
-		MaterialUOMType[] uoms = MaterialUOMType.values(); 
+		MaterialUOMType[] uoms = MaterialUOMType.values();
 		return uoms;
 	}
-	
+
 	public MaterialItemGroupDTO createMaterialGroup(MaterialItemGroupDTO materialGroupDTO) {
 		MaterialItemGroup materialItmGroup = mapperUtil.toEntity(materialGroupDTO, MaterialItemGroup.class);
 		MaterialItemGroup existingGroup = materialItemRepository.findByName(materialItmGroup.getItemGroup());
@@ -187,22 +187,22 @@ public class InventoryManagementService extends AbstractService{
 			materialGroupDTO.setErrorStatus(true);
 			materialGroupDTO.setStatus("400");
 		}
-		
+
 		return materialGroupDTO;
 	}
-	
+
 	public List<MaterialItemGroupDTO> findAllItemGroups() {
 		List<MaterialItemGroup> materialItmList = materialItemRepository.findAll();
 		List<MaterialItemGroupDTO> materialItmModel = mapperUtil.toModelList(materialItmList, MaterialItemGroupDTO.class);
 		return materialItmModel;
 	}
-	
+
 	public List<MaterialDTO> getMaterialGroup(long itemGroupId) {
 		List<Material> materialList = inventRepository.findByMaterialGroupId(itemGroupId);
 		List<MaterialDTO> materialModelList = mapperUtil.toModelList(materialList, MaterialDTO.class);
 		return materialModelList;
 	}
-	
+
 	public ImportResult importFile(MultipartFile file, long dateTime) {
 		return importUtil.importInventoryMaster(file, dateTime, false, false);
 	}
@@ -259,6 +259,8 @@ public class InventoryManagementService extends AbstractService{
 			if(!searchCriteria.isConsolidated()) {
 				log.debug(">>> inside search consolidate <<<");
     			page = inventRepository.findAll(new InventorySpecification(searchCriteria,true),pageRequest);
+//    			page = inventRepository.findAll(new InventorySpecification(searchCriteria,true),pageRequest);
+
     			allMaterialsList.addAll(page.getContent());
     		}
 
@@ -354,7 +356,7 @@ public class InventoryManagementService extends AbstractService{
 	public ExportResult generateReport(List<MaterialDTO> results, SearchCriteria searchCriteria) {
 		return reportUtil.generateInventoryReports(results, null, null, searchCriteria);
 	}
-	
+
 	public byte[] getExportFile(String fileName) {
 		// return exportUtil.readExportFile(fileName);
 		return exportUtil.readJobExportFile(fileName);
@@ -374,17 +376,17 @@ public class InventoryManagementService extends AbstractService{
 		return er;
 	}
 
-	
 
-	
 
-	
 
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
 }
