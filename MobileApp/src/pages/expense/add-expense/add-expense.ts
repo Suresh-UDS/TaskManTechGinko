@@ -279,7 +279,7 @@ export class AddExpense {
                             }
                         };
 
-                        this.fileTransfer.upload(this.takenImages[i], this.config.Url + 'api/employee/image/upload', options)
+                        this.fileTransfer.upload(this.takenImages[i], this.config.Url + 'api/expenses/uploadFile', options)
                             .then((data) => {
                                 console.log(data);
                                 console.log("image upload");
@@ -339,7 +339,7 @@ export class AddExpense {
                         }
                     };
 
-                    this.fileTransfer.upload(this.takenImages[i], this.config.Url+'api/employee/image/upload', options)
+                    this.fileTransfer.upload(this.takenImages[i], this.config.Url+'api/expenses/uploadFile', options)
                         .then((data) => {
                             console.log(data);
                             console.log("image upload");
