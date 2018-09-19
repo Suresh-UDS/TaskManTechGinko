@@ -74,10 +74,10 @@ public class ExpenseManagementResource {
         return expenseManagementService.findLatestRecordBySite(siteId);
     }
 
-    @RequestMapping(value = "/expenses/{siteId}/category", method = RequestMethod.GET)
-    public List<CategoryWiseExpense> getSiteAndCategoryWiseExpenses(@PathVariable("siteId") long siteId,@RequestParam("fromDate") Date fromDate, @RequestParam("toDate") Date toDate) {
-        log.info("--Invoked expense resource .getSiteAndCategoryWiseExpenses -- "+siteId + ", fromDate -" + fromDate +" , toDate -"+ toDate);
-        return expenseManagementService.findExpenseByCategories(siteId, fromDate, toDate);
+    @RequestMapping(value = "/expenses/site/category", method = RequestMethod.POST)
+    public List<CategoryWiseExpense> getSiteAndCategoryWiseExpenses(@RequestBody SearchCriteria searchCriteria) {
+        log.info("--Invoked expense resource .getSiteAndCategoryWiseExpenses -- "+searchCriteria.getSiteId() + ", fromDate -" + searchCriteria.getFromDate() +" , toDate -"+ searchCriteria.getToDate());
+        return expenseManagementService.findExpenseByCategories(searchCriteria.getSiteId(), searchCriteria.getFromDate(), searchCriteria.getToDate());
     }
 
     @RequestMapping(value = "/expenses/{siteId}/category/{category}", method = RequestMethod.GET)
