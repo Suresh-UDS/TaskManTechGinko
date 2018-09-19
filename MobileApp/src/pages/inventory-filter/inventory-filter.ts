@@ -30,6 +30,7 @@ export class InventoryFilter {
     selectOptions:any;
 
 
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController,
               public component:componentService, public siteService:SiteService,public inventoryService:InventoryService) {
   }
@@ -95,7 +96,7 @@ export class InventoryFilter {
 
     dismiss(){
 
-        this.viewCtrl.dismiss({projectId:this.selectedProject.id,sitedId:this.selectedSite.id});
+        this.viewCtrl.dismiss({project:this.selectedProject,site:this.selectedSite});
     }
 
 
