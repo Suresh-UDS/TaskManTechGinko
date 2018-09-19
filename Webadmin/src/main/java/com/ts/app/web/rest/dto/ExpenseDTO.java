@@ -1,10 +1,10 @@
 package com.ts.app.web.rest.dto;
 
-import com.ts.app.domain.ExpenseType;
-import com.ts.app.domain.PaymentType;
-
 import java.io.Serializable;
+import java.sql.Date;
 import java.sql.Timestamp;
+
+import com.ts.app.domain.PaymentType;
 
 public class ExpenseDTO extends BaseDTO implements Serializable {
 
@@ -26,7 +26,9 @@ public class ExpenseDTO extends BaseDTO implements Serializable {
 
     private String currency;
 
-    private Timestamp expenseDate;
+    private Date expenseDate;
+
+    private Date creditedDate;
 
     private String receiptNumber;
 
@@ -44,6 +46,11 @@ public class ExpenseDTO extends BaseDTO implements Serializable {
 
     private String expenseCategory;
 
+    private String documentTitle;
+
+    private String documentFile;
+
+    private String documentType;
 
 
     public long getId() {
@@ -102,13 +109,7 @@ public class ExpenseDTO extends BaseDTO implements Serializable {
         this.currency = currency;
     }
 
-    public Timestamp getExpenseDate() {
-        return expenseDate;
-    }
 
-    public void setExpenseDate(Timestamp expenseDate) {
-        this.expenseDate = expenseDate;
-    }
 
     public String getReceiptNumber() {
         return receiptNumber;
@@ -189,5 +190,45 @@ public class ExpenseDTO extends BaseDTO implements Serializable {
 
     public void setCreditAmount(double creditAmount) {
         this.creditAmount = creditAmount;
+    }
+
+    public String getDocumentTitle() {
+        return documentTitle;
+    }
+
+    public void setDocumentTitle(String documentTitle) {
+        this.documentTitle = documentTitle;
+    }
+
+    public String getDocumentFile() {
+        return documentFile;
+    }
+
+    public void setDocumentFile(String documentFile) {
+        this.documentFile = documentFile;
+    }
+
+    public String getDocumentType() {
+        return documentType;
+    }
+
+    public void setDocumentType(String documentType) {
+        this.documentType = documentType;
+    }
+
+    public Date getExpenseDate() {
+        return expenseDate;
+    }
+
+    public void setExpenseDate(Date expenseDate) {
+        this.expenseDate = expenseDate;
+    }
+
+    public Date getCreditedDate() {
+        return creditedDate;
+    }
+
+    public void setCreditedDate(Date creditedDate) {
+        this.creditedDate = creditedDate;
     }
 }

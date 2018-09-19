@@ -137,7 +137,9 @@
                                             <th>Item Code</th>
                                             <th>Item Name</th>
                                             <th>Store Stock</th>
-                                            <th>Quantity</th>
+                                            <th>Required Qty</th>
+                                            <th>Issued Qty</th>
+                                            <th>Pending Qty</th>
                                             <th class="text-right">Actions</th>
                                         </tr>
                                         </thead>
@@ -146,6 +148,8 @@
                                             <td>{{material.materialItemCode}}</td>
                                             <td>{{material.materialName}}</td>
                                             <td>{{material.materialStoreStock}}</td>
+                                            <td>{{material.quantity}}</td>
+                                            <td>{{material.issuedQuantity}}</td>
                                             <td>{{material.pendingQuantity}}</td>
                                             <td class="text-right" ng-click="editMaterial($index, material)"> <a class="btn btn-simple btn-info"><i class="material-icons">edit</i></a></td>
                                         </tr>

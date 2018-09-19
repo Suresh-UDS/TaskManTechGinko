@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {ModalController, NavController, NavParams, PopoverController, ViewController} from "ionic-angular";
 import {DatePickerProvider} from "ionic2-date-picker";
 import {DatePicker} from "@ionic-native/date-picker";
@@ -8,6 +8,11 @@ import {ExpenseService} from "../../service/expenseService";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 import {QuotationImagePopoverPage} from "../../quotation/quotation-image-popover";
 import {SelectSearchableComponent} from 'ionic-select-searchable';
+import {FileTransfer, FileTransferObject, FileUploadOptions} from '@ionic-native/file-transfer';
+import {ApplicationConfig, MY_CONFIG_TOKEN} from "../../service/app-config";
+import { File } from '@ionic-native/file';
+
+declare  var demo ;
 
 
 /**
@@ -46,13 +51,17 @@ export class AddExpense {
     mode:any;
     expenseDetails:any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,
+    fileTransfer: FileTransferObject = this.transfer.create();
+
+
+    constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,
               private datePicker: DatePicker, private modalCtrl: ModalController,private siteService:SiteService,
               private component: componentService, private expenseService: ExpenseService,public camera:Camera,
-              public popoverCtrl: PopoverController)
+              public popoverCtrl: PopoverController, private transfer: FileTransfer, private file: File,@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig)
   {
     this.expenseDetails = {};
     this.takenImages = [];
+    this.transactionMode = 'debit';
   }
 
   ionViewDidLoad() {
@@ -205,9 +214,9 @@ export class AddExpense {
 
       this.expenseDetails.currency = "INR";
 
-      /*if(this.receiptNumber){
-        this.expenseDetails.receiptNumber
-      }*/
+      if(this.receiptNumber){
+        this.expenseDetails.receiptNumber= this.receiptNumber;
+      }
 
       if(this.selectedAmount){
         if(this.transactionMode == "debit"){
@@ -236,14 +245,57 @@ export class AddExpense {
 
 
     if(this.transactionMode == "debit") {
-      if (this.previousAmount > this.selectedAmount) {
-        this.expenseDetails.balanceAmount = this.previousAmount - this.selectedAmount;
         console.log("Before saving expense");
         console.log(this.expenseDetails);
           this.expenseService.saveExpenses(this.expenseDetails).subscribe(
             response=>{
               console.log("save Expense Details");
               console.log(response);
+
+                if(response.errorStatus){
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+
+                }else {
+
+                    //Upload Images
+
+                    for (let i in this.takenImages) {
+
+                        console.log("image loop");
+                        console.log(i);
+                        console.log(this.takenImages[i]);
+                        console.log(this.takenImages[i].file);
+                        var employeeId = Number;
+                        let token_header = window.localStorage.getItem('session');
+                        let options: FileUploadOptions = {
+                            fileKey: 'expenseFile',
+                            fileName: new Date().getTime() + '_expenseFile',
+                            headers: {
+                                'X-Auth-Token': token_header
+                            },
+                            params: {
+                                title: new Date().getTime() + '_expenseFile',
+                                expenseId: response.id,
+                                type: 'image',
+                            }
+                        };
+
+                        this.fileTransfer.upload(this.takenImages[i], this.config.Url + 'api/expenses/uploadFile', options)
+                            .then((data) => {
+                                console.log(data);
+                                console.log("image upload");
+                                this.component.closeLoader();
+                                this.component.showToastMessage("Image Uploaded Successfully ", 'bottom');
+                                this.navCtrl.pop();
+                            }, (err) => {
+                                console.log(err);
+                                console.log("image upload fail");
+                                this.component.closeLoader();
+                            })
+
+                    }
+                }
+
               this.component.showToastMessage("Expense Details saved successfully ",'bottom');
             },err=>{
               console.log("Error in save expense");
@@ -252,12 +304,7 @@ export class AddExpense {
             }
           )
 
-      }else {
-        this.component.showToastMessage("Insufficient funds.. only"+this.previousAmount+"available for the site expenses",'bottom');
-      }
-
     }else if (this.transactionMode == "credit"){
-        this.expenseDetails.balanceAmount = this.previousAmount + this.selectedAmount;
         console.log("before saving expenses");
         console.log(this.expenseDetails);
 
@@ -265,7 +312,51 @@ export class AddExpense {
           response=>{
             console.log("save Expense Details");
             console.log(response);
-            this.component.showToastMessage("Expense Details saved successfully ",'bottom');
+            if(response.errorStatus){
+                demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+
+            }else{
+
+                //Upload Images
+
+                for(let i in this.takenImages) {
+
+                    console.log("image loop");
+                    console.log(i);
+                    console.log(this.takenImages[i]);
+                    console.log(this.takenImages[i].file);
+                    var employeeId=Number;
+                    let token_header=window.localStorage.getItem('session');
+                    let options: FileUploadOptions = {
+                        fileKey: 'expenseFile',
+                        fileName:new Date().getTime()+'_expenseFile',
+                        headers:{
+                            'X-Auth-Token':token_header
+                        },
+                        params:{
+                            title:new Date().getTime()+'_expenseFile' ,
+                            expenseId:response.id,
+                            type:'image',
+                        }
+                    };
+
+                    this.fileTransfer.upload(this.takenImages[i], this.config.Url+'api/expenses/uploadFile', options)
+                        .then((data) => {
+                            console.log(data);
+                            console.log("image upload");
+                            this.component.closeLoader();
+                            this.component.showToastMessage("Image Uploaded Successfully ",'bottom');
+                            this.navCtrl.pop();
+                        }, (err) => {
+                            console.log(err);
+                            console.log("image upload fail");
+                            this.component.closeLoader();
+                        })
+
+                }
+
+                this.component.showToastMessage("Transaction saved successfully ",'bottom');
+            }
           },err=>{
             console.log("Error in save expense");
             console.log(err);

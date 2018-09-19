@@ -31,7 +31,7 @@
 
      <div class="MainExpenseContainer">
 
-       <ion-card *ngFor="let items of listitem" (click)="viewExpenseDetails()">
+       <ion-card *ngFor="let items of listitem" (click)="viewExpenseDetails(items)">
          <ion-card-header text-center>
            {{items.siteName}}
          </ion-card-header>

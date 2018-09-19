@@ -42,9 +42,10 @@ export class ExpensePage {
     this.expenseList(searchCriteria);
   }
 
-    viewExpenseDetails(){
+    viewExpenseDetails(site){
     console.log('ionViewDidLoad ExpenseDetails method:');
-    this.navCtrl.push(ExpenseDetails);
+    console.log(site);
+    this.navCtrl.push(ExpenseDetails,{site:site});
   }
 
   expenseList(searchCriteria){

@@ -147,76 +147,90 @@ public class SearchCriteria extends Paginator {
 	private Date quotationSubmittedDate;
 
 	private Date quotationApprovedDate;
-	
+
 	private long manufacturerId;
-	
+
 	private String manufacturerName;
-	
+
 	private String assetTypeName;
-	
+
 	private String warrantyTypeName;
-	
+
 	private String assetGroupName;
-	
+
 	private String assetName;
-	
+
 	private String vendorName;
-	
+
 	private long assetId;
-	
+
 	private List<Long> siteIds;
 
 	private boolean notCheckedOut;
-	
+
 	private String maintenanceType;
-	
+
 	private String assetCode;
-	
+
 	private Date acquiredDate;
-	
+
 	private ZonedDateTime readingFromDate;
-	
+
 	private ZonedDateTime readingToDate;
-	
+
 	private String paramName;
-	
+
 	private Date assetCreatedDate;
-	
+
 	private String materialName;
-	
+
 	private String itemCode;
-	
+
 	private Date materialCreatedDate;
-	
+
 	private Timestamp transactionDate;
-	
+
 	private String itemGroup;
-	
+
 	private MaterialTransactionType transactionType;
-	
+
 	private int roleLevel;
-	
+
 	private long materialId;
-	
+
 	private Timestamp transactionFromDate;
-	
+
 	private Timestamp transactionToDate;
-	
+
 	private Timestamp requestedDate;
-	
+
 	private Timestamp issuedDate;
-	
+
 	private String indentRefNumber;
-	
+
 	private String purchaseRefNumber;
-	
+
 	private Timestamp approvedDate;
-	
+
 	private long jobId;
-	
+
 	private PurchaseRequestStatus requestStatus;
-	
+
 	private IndentStatus indentStatus;
+
+	private String expenseCategory;
+
+	private long expenseId;
+
+	private String expenseMode;
+
+	private Timestamp expenseFromDate;
+
+	private Timestamp expenseToDate;
+
+	private Timestamp creditedFromDate;
+
+	private Timestamp creditedToDate;
 
 	public String getWarrantyTypeName() {
 		return warrantyTypeName;
@@ -912,8 +926,8 @@ public class SearchCriteria extends Paginator {
 	public void setAssetId(long assetId) {
 		this.assetId = assetId;
 	}
-    
-	
+
+
 	public List<Long> getSiteIds() {
 		return siteIds;
 	}
@@ -1018,7 +1032,7 @@ public class SearchCriteria extends Paginator {
 	public void setItemGroup(String itemGroup) {
 		this.itemGroup = itemGroup;
 	}
-	
+
 	public int getRoleLevel() {
 		return roleLevel;
 	}
@@ -1115,5 +1129,60 @@ public class SearchCriteria extends Paginator {
 		this.indentStatus = indentStatus;
 	}
 
-	
+
+    public String getExpenseCategory() {
+        return expenseCategory;
+    }
+
+    public void setExpenseCategory(String expenseCategory) {
+        this.expenseCategory = expenseCategory;
+    }
+
+    public long getExpenseId() {
+        return expenseId;
+    }
+
+    public void setExpenseId(long expenseId) {
+        this.expenseId = expenseId;
+    }
+
+    public String getExpenseMode() {
+        return expenseMode;
+    }
+
+    public void setExpenseMode(String expenseMode) {
+        this.expenseMode = expenseMode;
+    }
+
+    public Timestamp getExpenseFromDate() {
+        return expenseFromDate;
+    }
+
+    public void setExpenseFromDate(Timestamp expenseFromDate) {
+        this.expenseFromDate = expenseFromDate;
+    }
+
+    public Timestamp getExpenseToDate() {
+        return expenseToDate;
+    }
+
+    public void setExpenseToDate(Timestamp expenseToDate) {
+        this.expenseToDate = expenseToDate;
+    }
+
+    public Timestamp getCreditedFromDate() {
+        return creditedFromDate;
+    }
+
+    public void setCreditedFromDate(Timestamp creditedFromDate) {
+        this.creditedFromDate = creditedFromDate;
+    }
+
+    public Timestamp getCreditedToDate() {
+        return creditedToDate;
+    }
+
+    public void setCreditedToDate(Timestamp creditedToDate) {
+        this.creditedToDate = creditedToDate;
+    }
 }
