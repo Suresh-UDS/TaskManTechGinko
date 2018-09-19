@@ -231,20 +231,22 @@ angular.module('timeSheetApp')
             }else{
                     var depBlock=null;
             }
-	    		LocationComponent.findFloors(depProj,depSite,depBlock).then(function (data) {
-	    		$scope.selectedFloor = null;
-	            $scope.floorsList = data;
-                //
-                    console.log($scope.floorsList)
-                    for(var i=0;i<$scope.floorsList.length;i++)
-                    {
-                        $scope.uiFloor[i] = $scope.floorsList[i];
-                    }
-                    console.log($scope.floorsList)
-                    $scope.floorDisable = false;
-                    $scope.floorSpin = false;
-                    $scope.floorFilterDisable = false;
-	        });
+            if(depBlock){
+                    LocationComponent.findFloors(depProj,depSite,depBlock).then(function (data) {
+                    $scope.selectedFloor = null;
+                    $scope.floorsList = data;
+                    //
+                        console.log($scope.floorsList)
+                        for(var i=0;i<$scope.floorsList.length;i++)
+                        {
+                            $scope.uiFloor[i] = $scope.floorsList[i];
+                        }
+                        console.log($scope.floorsList)
+                        $scope.floorDisable = false;
+                        $scope.floorSpin = false;
+                        $scope.floorFilterDisable = false;
+                });
+	        }
 	    };
 
         // Load Floors for selectbox //
@@ -296,20 +298,24 @@ angular.module('timeSheetApp')
             }else{
                     var depZone=null;
             }
-	    		LocationComponent.findZones(depProj,depSite,depBlock,depFloor).then(function (data) {
-	    		     $scope.selectedZone = null;
-	                 $scope.zonesList = data;
-                    //
-                    console.log($scope.zonesList)
-                    for(var i=0;i<$scope.zonesList.length;i++)
-                    {
-                        $scope.uiZone[i] = $scope.zonesList[i];
-                    }
-                    console.log($scope.zonesList)
-                    $scope.zoneDisable = false;
-                    $scope.zoneSpin = false;
-                    $scope.zoneFilterDisable = false;
-	        });
+            if(depBlock && depFloor){
+                LocationComponent.findZones(depProj,depSite,depBlock,depFloor).then(function (data) {
+                         $scope.selectedZone = null;
+                         $scope.zonesList = data;
+                        //
+                        console.log($scope.zonesList)
+                        for(var i=0;i<$scope.zonesList.length;i++)
+                        {
+                            $scope.uiZone[i] = $scope.zonesList[i];
+                        }
+                        console.log($scope.zonesList)
+                        $scope.zoneDisable = false;
+                        $scope.zoneSpin = false;
+                        $scope.zoneFilterDisable = false;
+                });
+
+            }
+
 	    };
 
         // Load Zones for selectbox //
@@ -650,6 +656,9 @@ angular.module('timeSheetApp')
             $scope.searchZone = null;
             $scope.searchCriteria = {};
             $rootScope.searchCriteriaSite = null;
+            $("#collapseTwo").removeClass("in");
+            $("#collapseOne").addClass("in");
+            $("#collapseOne").css("height", "110px");
             $scope.pages = {
                 currPage: 1,
                 totalPages: 0
