@@ -55,4 +55,12 @@ export class ExpenseService {
         }
       )
     }
+
+    getOverallData(siteId):Observable<any>{
+        return this.http.get(this.config.Url+'api/expenses/getData/'+siteId).map(
+            response=>{
+                return response.json();
+            }
+        )
+    }
 }

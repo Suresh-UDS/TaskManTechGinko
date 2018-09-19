@@ -43,6 +43,9 @@ export class InventoryMaster {
     spinner:any;
     transactionlist: any;
 
+    filterProject:any;
+    filterSite:any;
+
   constructor(@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,private transfer: FileTransfer,
               public modalCtrl:ModalController,private diagnostic: Diagnostic,private sqlite: SQLite,
               public componentService:componentService, public navCtrl: NavController, public navParams: NavParams,
@@ -70,6 +73,9 @@ export class InventoryMaster {
             console.log("Modal dismissed");
             this.open = true;
             console.log(data);
+            this.filterProject=data.project;
+            this.filterSite=data.site;
+            this.applyFilter(data.project,data.site);
             // this.assetService.searchAssets(searchCriteria).subscribe(
             //     response=>{
             //         this.componentService.closeLoader();
@@ -113,47 +119,48 @@ export class InventoryMaster {
      this.navCtrl.push(InventoryTransaction,{m:m});
   }
 
-    // applyFilter()
-    // {
-    //     this.componentService.showLoader("");
-    //     var searchCriteria = {
-    //         // siteId:this.selectedSite.id,
-    //         // projectId:this.selectedProject.id
-    //     };
-    //
-    //     this.inventoryService.inventorySearch(searchCriteria).subscribe(
-    //         response=>{
-    //             this.componentService.closeAll();
-    //             console.log("Apply Filter Successfully");
-    //             console.log(response);
-    //
-    //         },err=>{
-    //             this.componentService.closeAll();
-    //             console.log("Error in apply filter");
-    //             console.log(err);
-    //         }
-    //
-    //     )
-    //
-    //     // this.searchCriteria={};
-    //     // // this.searchCriteria = {
-    //     // //     siteId:this.selectedSite.id,
-    //     // //     projectId:this.selectedProject.id,
-    //     // //     assetType:this.selectedAssetType,
-    //     // //     assetGroup:this.selectedAssetGroup
-    //     // // };
-    //     // if(this.selectedProject){
-    //     //     this.searchCriteria.projectId=this.selectedProject;
-    //     // }
-    //     // if(this.selectedSite){
-    //     //     this.searchCriteria.siteId=this.selectedSite;
-    //     // }
-    //     // console.log(this.searchCriteria);
-    //
-    //     this.viewCtrl.dismiss(this.searchCriteria);
-    //
-    //
-    // }
+    applyFilter(project,site)
+    {
+        this.componentService.showLoader("");
+        var searchCriteria = {
+            siteId:site.id,
+            projectId:project.id
+        };
+
+        this.inventoryService.inventorySearch(searchCriteria).subscribe(
+            response=>{
+                this.componentService.closeAll();
+                console.log("Apply Filter Successfully");
+                console.log(response);
+                this.material=response.transactions;
+
+            },err=>{
+                this.componentService.closeAll();
+                console.log("Error in apply filter");
+                console.log(err);
+            }
+
+        )
+
+        // this.searchCriteria={};
+        // // this.searchCriteria = {
+        // //     siteId:this.selectedSite.id,
+        // //     projectId:this.selectedProject.id,
+        // //     assetType:this.selectedAssetType,
+        // //     assetGroup:this.selectedAssetGroup
+        // // };
+        // if(this.selectedProject){
+        //     this.searchCriteria.projectId=this.selectedProject;
+        // }
+        // if(this.selectedSite){
+        //     this.searchCriteria.siteId=this.selectedSite;
+        // }
+        // console.log(this.searchCriteria);
+
+        // this.viewCtrl.dismiss(this.searchCriteria);
+
+
+    }
 
 
 }

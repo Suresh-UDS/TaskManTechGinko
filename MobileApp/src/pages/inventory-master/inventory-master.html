@@ -23,6 +23,15 @@
 
 <ion-content padding>
 
+    <div class="margin-top5">
+        <span class="tag label label-info" style="margin-right: 5px"  *ngIf="filterProject">
+            Client: {{filterProject.name}}
+        </span>
+        <span class="tag label label-info"   *ngIf="filterSite">
+           Site: {{filterSite.name}}
+        </span>
+    </div>
+
     <div *ngIf=" (!material || material.length < 0) && !spinner ">
         <ion-card>
             <ion-card-content>
