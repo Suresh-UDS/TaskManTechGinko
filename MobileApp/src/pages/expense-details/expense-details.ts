@@ -3,6 +3,7 @@ import {NavController, NavParams, ModalController, ViewController} from "ionic-a
 import {TransactionPage} from "../expense/transaction";
 import {AddExpense} from "../expense/add-expense/add-expense";
 import {ExpenseService} from "../service/expenseService";
+import {componentService} from "../service/componentService";
 
 /**
  * Generated class for the ExpenseDetails page.
@@ -16,19 +17,22 @@ import {ExpenseService} from "../service/expenseService";
   templateUrl: 'expense-details.html',
 })
 export class ExpenseDetails {
+  spinner: any;
   category: any;
   amount: any;
   site: any;
   page:1;
   pageSort:15;
+  details:any
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public modalCtrl:ModalController,public viewCtrl:ViewController,
-              private expenseService: ExpenseService)
+              private expenseService: ExpenseService,private component:componentService)
   {
 
     this.site = this.navParams.get('site');
 
+    this.details = {};
 
   }
 
@@ -45,21 +49,23 @@ export class ExpenseDetails {
       siteId:this.site.id
     };
 
-
+    this.component.showLoader("Please Wait..");
     this.expenseService.getCategoriesBySite(searchCriteria).subscribe(response=>{
+      this.component.closeLoader();
       console.log("expense by categories");
       console.log(response);
-      this.category = response;
+      this.details = response;
     },err=>{
+      this.spinner = false;
       console.log("Error in getting expense category by site");
       console.log(err);
     })
 
   }
 
-    viewTransaction(){
+    viewTransaction(category,detail){
         console.log('ionViewDidLoad Transaction method:');
-        this.navCtrl.push(TransactionPage);
+        this.navCtrl.push(TransactionPage,{category:category,detail:detail});
     }
 
     addExpenseModal() {
