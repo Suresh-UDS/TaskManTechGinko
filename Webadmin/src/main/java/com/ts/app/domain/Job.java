@@ -119,6 +119,9 @@ public class Job extends AbstractAuditingEntity implements Serializable{
     private String zone;
     
     private String maintenanceType;
+    
+    @OneToMany(mappedBy="job", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<JobMaterial> jobMaterials;
 
 	public String getDuration() {
 		return duration;
@@ -421,6 +424,12 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	}
 	public void setEscalationStatus(int escalationStatus) {
 		this.escalationStatus = escalationStatus;
+	}
+	public List<JobMaterial> getJobMaterials() {
+		return jobMaterials;
+	}
+	public void setJobMaterials(List<JobMaterial> jobMaterials) {
+		this.jobMaterials = jobMaterials;
 	}
     
 }

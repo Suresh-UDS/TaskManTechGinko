@@ -43,6 +43,7 @@ import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Frequency;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobChecklist;
+import com.ts.app.domain.JobMaterial;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.JobType;
 import com.ts.app.domain.Location;
@@ -86,6 +87,7 @@ import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.JobChecklistDTO;
 import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.JobMaterialDTO;
 import com.ts.app.web.rest.dto.LocationDTO;
 import com.ts.app.web.rest.dto.NotificationLogDTO;
 import com.ts.app.web.rest.dto.PriceDTO;
@@ -1157,6 +1159,21 @@ public class JobManagementService extends AbstractService {
 				job.getChecklistItems().addAll(checklistItems);
 			}else {
 				job.setChecklistItems(checklistItems);
+			}
+		}
+		
+		if(CollectionUtils.isNotEmpty(jobDTO.getJobMaterials())) {
+			List<JobMaterialDTO> jobMaterialDTO = jobDTO.getJobMaterials(); 
+			List<JobMaterial> jobMaterials = new ArrayList<JobMaterial>();
+			for(JobMaterialDTO material : jobMaterialDTO) { 
+				JobMaterial jobMaterialEntity = mapperUtil.toEntity(material, JobMaterial.class);
+				jobMaterialEntity.setJob(job);
+				jobMaterials.add(jobMaterialEntity);
+			}
+			if(job.getJobMaterials() != null) {
+				job.getJobMaterials().addAll(jobMaterials);
+			}else {
+				job.setJobMaterials(jobMaterials);
 			}
 		}
 

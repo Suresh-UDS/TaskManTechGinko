@@ -52,6 +52,9 @@
 
                                         <li class=""><a href=".StatusHistory" data-toggle="tab"
                                        	ng-click="loadSubModule(loadStatusHistory)">StatusHistory</a></li>
+                                       	
+                                       	<li class=""><a href=".sparesHistory" data-toggle="tab"
+                                       	ng-click="loadSubModule(sparesHistory)">Spares</a></li>
 
                                    </ul>
                                    <div class="tab-content TabsContent ViewTables" style="">
@@ -993,6 +996,54 @@
                                                             </tr>
                                                             <tr>
                                                                <td colspan="4" align="center" ng-show="!statusHistories">No Status History Found</td>
+                                                            </tr>
+
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+
+                                            <!-- Pagination directive start -->
+
+                                            <pagination-new></pagination-new>
+
+                                            <!-- Pagination directive end -->
+
+                                       </div>
+                                       
+                                       <div class="tab-pane fade sparesHistory" id="sparesHistory" >
+
+                                           <div class="table-responsive tablecard">
+                                                        <table class="table table-hover tdWidthAuto">
+
+                                                            <thead>
+                                                            <tr>
+                                                                <th width="15%">MaterialName</th>
+                                                                <th width="15%">MaterialCode</th>
+                                                                <th width="30%">MaterialGroup</th>
+                                                                <th>MaterialStock</th>
+                                                                <th>MaterialUom</th>
+                                                                <!-- <th>Frequency</th> -->
+                                                                <!-- <th align="right">Actions</th> -->
+                                                            </tr>
+
+                                                            </thead>
+
+                                                            <tbody>
+
+                                                            <tr ng-repeat="spares in sparesHistories">
+                                                                <td>{{spares.materialName}}</td>
+                                                                <td>{{spares.materialCode}}</td>
+                                                                <td>{{spares.materialGroup}}</td>
+                                                                <td>{{spares.materialStock}}</td>
+                                                                <td>{{spares.materialUom}}</td>
+
+                                                                <!-- <td class="text-right">
+                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
+                                                                </td> -->
+                                                            </tr>
+                                                            <tr>
+                                                               <td colspan="5" align="center" ng-show="!sparesHistories.length">No Spares History Found</td>
                                                             </tr>
 
                                                             </tbody>
