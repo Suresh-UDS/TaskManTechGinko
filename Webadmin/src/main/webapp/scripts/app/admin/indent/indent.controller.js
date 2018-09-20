@@ -327,16 +327,15 @@ angular.module('timeSheetApp')
 		$scope.validate = function(material, issuedQty) {
 			console.log(material);
 			console.log(issuedQty);
-			if(material.quantity >= issuedQty){
+			if(material.pendingQuantity >= issuedQty){
 				console.log("save issued indent");
 				material.issuedQuantity = issuedQty;
 				if($scope.materialIndentObj) { 
 					if($scope.materialIndentObj.items.length > 0) { 
-						for(var i in $scope.materialIndentObj.items){
-							
+						for(var i in $scope.materialIndentObj.items) {
 							if($scope.materialIndentObj.items[i].id === material.id) {
-								$scope.materialIndentObj.items.splice(i, 1);
-								$scope.materialIndentObj.items.push(material);
+								$scope.materialIndentObj.items[i].issuedQuantity = issuedQty;
+//								$scope.materialIndentObj.items.push(material);
 							}
 						}
 						console.log($scope.materialIndentObj);
