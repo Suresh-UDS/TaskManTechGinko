@@ -391,7 +391,7 @@ angular.module('timeSheetApp')
     			$scope.inventory.items = $scope.selectedItems;
     			if($scope.selectedItems.length > 0) { 
     				$scope.selectedItems.map(function(item) {
-    					if(item.currentQuantity) { 
+    					if(item.currentQuantity >= 0) { 
     						item.issuedQuantity = item.currentQuantity;
     					}
     				});
@@ -404,7 +404,7 @@ angular.module('timeSheetApp')
     			$scope.inventory.prItems = $scope.selectedItems;
     			if($scope.selectedItems.length > 0) {
     				$scope.selectedItems.map(function(item) { 
-    					if(item.currentAprQty) {
+    					if(item.currentAprQty >= 0) {
     						item.approvedQty = item.currentAprQty; 
     					}
     				});
