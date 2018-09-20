@@ -144,7 +144,7 @@
                                     </span>
                                 </th>
 
-                                <th width="20%">Phone
+                                <th width="15%">Phone
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('phone')" ng-class="isActiveAsc == 'phone' ? 'active' : ''">
                                              <i  class="fa fa-caret-up"></i>
@@ -154,7 +154,17 @@
                                          </span>
                                     </span>
                                 </th>
-                                <th class="disabled-sorting text-right" width="20%">Actions</th>
+                                <th width="15%">Email
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('email')" ng-class="isActiveAsc == 'email' ? 'active' : ''">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                         <span ng-click="columnDescOrder('email')" ng-class="isActiveDesc == 'email' ? 'active' : ''">
+                                             <i  class="fa fa-caret-down"></i>
+                                         </span>
+                                    </span>
+                                </th>
+                                <th class="disabled-sorting text-right" width="10%">Actions</th>
                             </tr>
                             </thead>
 
@@ -164,6 +174,7 @@
 								<td>{{manufacturer.name | uppercase}}</td>
                                 	<td>{{manufacturer.contactFirstName}} {{manufacturer.contactLastName}}</td>
 							   	<td>{{manufacturer.phone}}</td>
+							   	<td>{{manufacturer.email}}</td>
                                  <td class="text-right hoverMe">
 
                                      <a   title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>

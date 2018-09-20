@@ -1776,8 +1776,12 @@ angular.module('timeSheetApp')
 
 
         $scope.clearFilter = function() {
+            $scope.clearField = true;
+            $scope.filter = false;
             $rootScope.exportStatusObj.exportMsg = '';
             $scope.downloader=false;
+            $scope.siteFilterDisable = true;
+            $scope.sites = null;
             $scope.selectedAsset = {};
             $scope.selectedProject = null;
             $scope.searchCriteria = {};
@@ -1787,6 +1791,7 @@ angular.module('timeSheetApp')
             $scope.searchAssetCode =null;
            //$scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.searchAcquiredDate = null;
+            $scope.searchCreatedDate = null;
             $scope.searchAssetType = null;
             $scope.searchSite =null;
             $scope.searchProject =null;

@@ -198,6 +198,8 @@ angular.module('timeSheetApp')
 
         $rootScope.back = function (text) {
             if(text == 'cancel' || text == 'back'){
+                /** @reatin - retaining scope value.**/
+                $rootScope.retain=1;
                 $scope.cancelSite();
             }else if(text == 'save'){
                 $scope.saveSite($scope.valid);
@@ -315,11 +317,7 @@ angular.module('timeSheetApp')
 
         $scope.cancelSite = function () {
 
-                /** @reatin - retaining scope value.**/
-                $rootScope.retain=1;
-
         		$location.path('/sites');
-
 
         };
 
@@ -697,6 +695,7 @@ angular.module('timeSheetApp')
             $scope.filter = false;
             $scope.siteFilterDisable = true;
         	$scope.selectedSite = null;
+        	$scope.sitesList = null;
         	$scope.selectedProject = null;
             $scope.searchProject = null;
             $scope.searchSite = null;
