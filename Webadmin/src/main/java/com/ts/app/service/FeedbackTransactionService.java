@@ -301,21 +301,21 @@ public class FeedbackTransactionService extends AbstractService {
 
 			Calendar startCal = Calendar.getInstance();
 
-			if (searchCriteria.getFromDate() != null) {
-				startCal.setTime(searchCriteria.getFromDate());
+			if (searchCriteria.getCheckInDateTimeFrom() != null) {
+				startCal.setTime(searchCriteria.getCheckInDateTimeFrom());
 			}
 			startCal.set(Calendar.HOUR_OF_DAY, 0);
 			startCal.set(Calendar.MINUTE, 0);
 			startCal.set(Calendar.SECOND, 0);
-			searchCriteria.setFromDate(startCal.getTime());
+			searchCriteria.setCheckInDateTimeFrom(startCal.getTime());
 			Calendar endCal = Calendar.getInstance();
-			if (searchCriteria.getToDate() != null) {
-				endCal.setTime(searchCriteria.getToDate());
+			if (searchCriteria.getCheckInDateTimeTo() != null) {
+				endCal.setTime(searchCriteria.getCheckInDateTimeTo());
 			}
 			endCal.set(Calendar.HOUR_OF_DAY, 23);
 			endCal.set(Calendar.MINUTE, 59);
 			endCal.set(Calendar.SECOND, 0);
-			searchCriteria.setToDate(endCal.getTime());            
+			searchCriteria.setCheckInDateTimeTo(endCal.getTime());            
 	        	java.sql.Date fromDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(startCal));
 	        	ZonedDateTime fromTime = fromDt.toLocalDate().atStartOfDay(ZoneId.of("Asia/Kolkata"));
 	        	fromTime = fromTime.withHour(23);
