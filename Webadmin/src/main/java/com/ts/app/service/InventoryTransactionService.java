@@ -312,18 +312,21 @@ public class InventoryTransactionService extends AbstractService{
 
 		}
 		
-		Set<MaterialIndentItem> materialItem = materialIndent.getItems();
-		boolean isPending = checkIfNoItems(materialItem);
-		if(isPending) { 
-			materialIndent = materialIndentRepository.findOne(materialIndent.getId());
-			materialIndent.setIndentStatus(IndentStatus.PENDING);
-			materialIndentRepository.save(materialIndent);
-		}else {
-			materialIndent = materialIndentRepository.findOne(materialIndent.getId());
-			materialIndent.setIndentStatus(IndentStatus.ISSUED);
-			materialIndentRepository.save(materialIndent);
-		}
 		
+		if(materialTransDTO.getTransactionType().equals(MaterialTransactionType.ISSUED)) {
+			Set<MaterialIndentItem> materialItem = materialIndent.getItems();
+			boolean isPending = checkIfNoItems(materialItem);
+			if(isPending) { 
+				materialIndent = materialIndentRepository.findOne(materialIndent.getId());
+				materialIndent.setIndentStatus(IndentStatus.PENDING);
+				materialIndentRepository.save(materialIndent);
+			}else {
+				materialIndent = materialIndentRepository.findOne(materialIndent.getId());
+				materialIndent.setIndentStatus(IndentStatus.ISSUED);
+				materialIndentRepository.save(materialIndent);
+			}
+		}
+	
 		materialTransDTO = mapperUtil.toModel(materialEntity, MaterialTransactionDTO.class);
 		return materialTransDTO;
 	

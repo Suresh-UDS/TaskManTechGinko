@@ -150,6 +150,13 @@ angular.module('timeSheetApp')
     			IndentComponent.findById($scope.selectedIndent.id).then(function(data) {
     				console.log(data);
     				$scope.materialItems = data.items;
+    				if($scope.materialItems.length > 0) { 
+    					$scope.materialItems.map(function(item) { 
+    						if(item.pendingQuantity <= 0) {
+    							$scope.materialItems.splice(item, 1);
+    						}
+    					});
+    				}
     				$scope.loadingStop();
     			});
     		}
@@ -294,7 +301,7 @@ angular.module('timeSheetApp')
 
             // Loop through all the entities and set their isChecked property
             for (var i = 0; i < $scope.materialItems.length; i++) {
-            	$scope.materialItems[i].issuedQuantity = $scope.materialItems[i].pendingQuantity;
+//            	$scope.materialItems[i].issuedQuantity = $scope.materialItems[i].pendingQuantity;
                 $scope.selectedItems.push($scope.materialItems[i]);
 
                 $scope.materialItems[i].isChecked = $scope.allItemsSelected;
@@ -308,7 +315,7 @@ angular.module('timeSheetApp')
         $scope.selectedOne = function (material) {
 
             if($scope.selectedItems.indexOf(material) <= -1){
-            	material.issuedQuantity = material.pendingQuantity;
+//            	material.issuedQuantity = material.pendingQuantity;
             	$scope.selectedItems.push(material);
 
             }else if($scope.selectedItems.indexOf(material) > -1){
@@ -330,6 +337,30 @@ angular.module('timeSheetApp')
             //If not the check the "allItemsSelected" checkbox
             $scope.allItemsSelected = true;
         };
+        
+        $scope.validate = function(material, issuedQty) {   // 2
+			console.log(material);
+			console.log(issuedQty);
+			if(material.pendingQuantity >= issuedQty){    //  2 >= 2
+				console.log("save issued request");
+				material.issuedQuantity = issuedQty;
+			}else{
+				$scope.showNotifications('top','center','danger','Quantity cannot exceeds a required quantity');
+			}
+			
+		}
+        
+        $scope.validateReq = function(material, approvedQty) {   // 2
+			console.log(material);
+			console.log(approvedQty);
+			if(material.approvedQty >= approvedQty){    //  2 >= 2
+				console.log("save received request");
+				material.approvedQty = approvedQty;
+			}else{
+				$scope.showNotifications('top','center','danger','Quantity cannot exceeds a approved quantity');
+			}
+			
+		}
         
         $scope.changeType = function() { 
         	$scope.selectedIndent = null;
