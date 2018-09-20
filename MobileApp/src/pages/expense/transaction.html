@@ -9,7 +9,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Transaction Page</ion-title>
+    <ion-title>{{categoryType}} - Transactions</ion-title>
   </ion-navbar>
 
 
@@ -19,15 +19,13 @@
 
   <div id="transactionPage" class="MainExpenseContainer transactionPage">
 
-    <ion-card >
-      <ion-card-header text-center>
-        {{items.expenseCategory}}
-      </ion-card-header>
+    <ion-card *ngFor="let items of trans_list" >
+
       <ion-card-content>
 
-        <h3 class="currentBls" text-center>Balance Amount: <span class="green">{{items.balanceAmount}}</span></h3>
+        <h3 class="currentBls" text-center>Debit Amount: <span class="green">{{items.debitAmount}}</span></h3>
 
-        <ion-list *ngFor="let items of trans_list">
+        <ion-list >
           <ion-item>
             Date
             <ion-note item-end class="dark">{{items.expenseDate}}</ion-note>
@@ -54,13 +52,8 @@
             <ion-note item-end class="dark">{{items.paymentType}}</ion-note>
           </ion-item>
 
-          <ion-item>
-            Amount
-            <ion-note item-end class="dark">{{items.debitAmount}}</ion-note>
-          </ion-item>
-
           <ion-row>
-            <ion-col col-3 *ngFor="let image of trans_list.images;let i of index">
+            <ion-col col-3 *ngFor="let image of trans_list.expenseDocumentList;let i of index">
               <img [src]="image" class="job-img margin-bottom25" (click)="viewImage(i,image)">
             </ion-col>
           </ion-row>
