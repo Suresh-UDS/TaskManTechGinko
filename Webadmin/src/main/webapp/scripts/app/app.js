@@ -96,7 +96,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
         $rootScope.retainUrl = function() {
             // If previous state is 'activate' or do not exist go to 'home'
             if ($rootScope.previousStateName === 'activate' || $state.get($rootScope.previousStateName) === null) {
-
+                $rootScope.inits();
                 if($rootScope.stateValue != ""){
                     $rootScope.stateValue;
                     $(".content").removeClass("remove-mr");
