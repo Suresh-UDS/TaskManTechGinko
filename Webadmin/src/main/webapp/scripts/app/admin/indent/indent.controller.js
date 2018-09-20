@@ -268,6 +268,7 @@ angular.module('timeSheetApp')
 					$scope.material.materialStoreStock = $scope.selectedItemCode.storeStock;
 					$scope.material.quantity = $scope.selectedQuantity;
 					$scope.material.materialUom = $scope.selectedItemCode.uom;
+					$scope.material.pendingQuantity = $scope.selectedQuantity;
 					$scope.materialItems.push($scope.material);
 				}
 			}else{
@@ -326,7 +327,7 @@ angular.module('timeSheetApp')
 		$scope.validate = function(material, issuedQty) {
 			console.log(material);
 			console.log(issuedQty);
-			if(material.quantity > issuedQty){
+			if(material.quantity >= issuedQty){
 				console.log("save issued indent");
 				material.issuedQuantity = issuedQty;
 				if($scope.materialIndentObj) { 
@@ -350,8 +351,10 @@ angular.module('timeSheetApp')
 		$scope.saveIndentTrans = function() {
 			console.log("save indent transaction called");
 			console.log($scope.materialIndentObj);
+			$scope.loadingStart();
 			IndentComponent.createTransaction($scope.materialIndentObj).then(function(data) { 
 				console.log(data);
+				$scope.loadingStop();
 				$scope.showNotifications('top','center','success','Material Transaction has been added successfully.');
 				$location.path('/inventory-transaction-list');
 			}).catch(function(data){ 

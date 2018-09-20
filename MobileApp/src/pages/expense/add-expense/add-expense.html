@@ -38,8 +38,8 @@
 
           <!--<label class="control-label">Client :</label>-->
 
-      <ion-item>
-        <ion-label>Client:</ion-label>
+      <ion-item class="border-btm">
+        <ion-label  text-capitalize class="client-label" text-left>Client:</ion-label>
         <select-searchable
           item-content
           [(ngModel)]="selectedProject"
@@ -58,7 +58,7 @@
 
 
       <ion-item>
-        <ion-label class="control-label">Site:</ion-label>
+        <ion-label  text-capitalize class="client-label" text-left>Site:</ion-label>
         <select-searchable
           item-content
           [(ngModel)]="selectedSite"
