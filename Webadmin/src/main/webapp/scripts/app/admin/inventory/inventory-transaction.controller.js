@@ -343,7 +343,7 @@ angular.module('timeSheetApp')
 			console.log(issuedQty);
 			if(material.pendingQuantity >= issuedQty){    //  2 >= 2
 				console.log("save issued request");
-				material.issuedQuantity = issuedQty;
+				material.currentQuantity = issuedQty;
 			}else{
 				$scope.showNotifications('top','center','danger','Quantity cannot exceeds a required quantity');
 			}
@@ -355,7 +355,7 @@ angular.module('timeSheetApp')
 			console.log(approvedQty);
 			if(material.approvedQty >= approvedQty){    //  2 >= 2
 				console.log("save received request");
-				material.approvedQty = approvedQty;
+				material.currentAprQty = approvedQty;
 			}else{
 				$scope.showNotifications('top','center','danger','Quantity cannot exceeds a approved quantity');
 			}
@@ -389,12 +389,26 @@ angular.module('timeSheetApp')
     			$scope.inventory.transactionType = $scope.selectedTransactionType;
     			$scope.inventory.materialIndentId = $scope.selectedIndent.id;
     			$scope.inventory.items = $scope.selectedItems;
+    			if($scope.selectedItems.length > 0) { 
+    				$scope.selectedItems.map(function(item) {
+    					if(item.currentQuantity) { 
+    						item.issuedQuantity = item.currentQuantity;
+    					}
+    				});
+    			}
     		}
     		
     		if($scope.selectedTransactionType === 'RECEIVED') {
     			$scope.inventory.transactionType = $scope.selectedTransactionType;
     			$scope.inventory.purchaseRequisitionId = $scope.selectedPurchaseReq.id;
     			$scope.inventory.prItems = $scope.selectedItems;
+    			if($scope.selectedItems.length > 0) {
+    				$scope.selectedItems.map(function(item) { 
+    					if(item.currentAprQty) {
+    						item.approvedQty = item.currentAprQty; 
+    					}
+    				});
+    			}
     		}
     		
     		console.log($scope.selectedItems);

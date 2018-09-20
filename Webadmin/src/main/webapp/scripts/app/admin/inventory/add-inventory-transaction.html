@@ -212,8 +212,10 @@
                            <th>Item Name</th>
                            <th>Store stock</th>
                            <th>UOM</th>
-                           <th>Issued Qty</th>
-                           <th width="5%">Approved/Pending Qty</th>                           
+                           <th>Qty Issued</th>
+                           <th>Qty Approved</th>
+                           <th>Issue Qty</th>
+                           <th>Pending Qty</th>                           
                          </tr>
                          
                          <tr ng-repeat="material in materialItems">
@@ -228,17 +230,19 @@
                             <td>{{material.materialName}}</td>
                             <td>{{material.materialStoreStock}}</td>
                             <td>{{material.materialUom}}</td>
+                            <td>{{material.issuedQuantity ? material.issuedQuantity : "Nil"}}</td>
+                            <td>{{material.approvedQty ? material.approvedQty : "Nil"}}</td>
                             <td width="10%" ng-hide="material.approvedQty">
-                                <input type="number" class="form-control" name="issue_qty" ng-model="material.issuedQuantity" ng-blur="validate(material, material.issuedQuantity)" aria-required="true" aria-invalid="true">
+                                <input type="number" class="form-control" name="issue_qty" ng-model="material.currentQuantity" ng-blur="validate(material, material.currentQuantity)" aria-required="true" aria-invalid="true">
                             </td>
                             <td width="10%" ng-show="material.approvedQty">
-                                <input type="number" class="form-control" name="approve_qty" ng-model="material.approvedQty" ng-blur="validateReq(material, material.approvedQty)" aria-required="true" aria-invalid="true">
+                                <input type="number" class="form-control" name="approve_qty" ng-model="material.currentAprQty" ng-blur="validateReq(material, material.currentAprQty)" aria-required="true" aria-invalid="true">
                             </td>
                             <td ng-if="material.pendingQuantity">{{material.pendingQuantity}}</td>
                             <td ng-if="material.approvedQty">{{material.approvedQty}}</td>
                          </tr>
                          <tr ng-show="!materialItems.length">
-                         	<td colspan="7" class="txt-align-center">No Material Items Found</td>
+                         	<td colspan="9" class="txt-align-center">No Material Items Found</td>
                          </tr>
                        
                        </table> 

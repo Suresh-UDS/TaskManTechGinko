@@ -329,18 +329,7 @@ angular.module('timeSheetApp')
 			console.log(issuedQty);
 			if(material.pendingQuantity >= issuedQty){
 				console.log("save issued indent");
-				material.issuedQuantity = issuedQty;
-				if($scope.materialIndentObj) { 
-					if($scope.materialIndentObj.items.length > 0) { 
-						for(var i in $scope.materialIndentObj.items) {
-							if($scope.materialIndentObj.items[i].id === material.id) {
-								$scope.materialIndentObj.items[i].issuedQuantity = issuedQty;
-//								$scope.materialIndentObj.items.push(material);
-							}
-						}
-						console.log($scope.materialIndentObj);
-					}
-				}
+				material.currentQuantity = issuedQty;
 			}else{
 				$scope.showNotifications('top','center','danger','Quantity cannot exceeds a required quantity');
 			}
@@ -351,16 +340,27 @@ angular.module('timeSheetApp')
 			console.log("save indent transaction called");
 			console.log($scope.materialIndentObj);
 			$scope.loadingStart();
-			IndentComponent.createTransaction($scope.materialIndentObj).then(function(data) { 
-				console.log(data);
-				$scope.loadingStop();
-				$scope.showNotifications('top','center','success','Material Transaction has been added successfully.');
-				$location.path('/inventory-transaction-list');
-			}).catch(function(data){ 
-				$scope.success = null;
-                $scope.loadingStop();
-                $scope.showNotifications('top','center','danger','Unable to view Material Transaction.');
-			});
+			if($scope.materialIndentObj) { 
+				if($scope.materialIndentObj.items.length > 0) { 
+					console.log($scope.materialIndentObj);				
+					$scope.materialIndentObj.items.map(function(item) {
+						if(item.currentQuantity >= 0) { 
+							item.issuedQuantity = item.currentQuantity;
+						}
+					});
+				}
+				console.log($scope.materialIndentObj);
+				IndentComponent.createTransaction($scope.materialIndentObj).then(function(data) { 
+					console.log(data);
+					$scope.loadingStop();
+					$scope.showNotifications('top','center','success','Material Transaction has been added successfully.');
+					$location.path('/inventory-transaction-list');
+				}).catch(function(data){ 
+					$scope.success = null;
+	                $scope.loadingStop();
+	                $scope.showNotifications('top','center','danger','Unable to view Material Transaction.');
+				});
+			}
 			
 		}
 		
