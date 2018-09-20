@@ -3,6 +3,7 @@ import {NavController, NavParams, ModalController, ViewController} from "ionic-a
 import {TransactionPage} from "../expense/transaction";
 import {AddExpense} from "../expense/add-expense/add-expense";
 import {ExpenseService} from "../service/expenseService";
+import {componentService} from "../service/componentService";
 
 /**
  * Generated class for the ExpenseDetails page.
@@ -16,6 +17,7 @@ import {ExpenseService} from "../service/expenseService";
   templateUrl: 'expense-details.html',
 })
 export class ExpenseDetails {
+  spinner: any;
   category: any;
   amount: any;
   site: any;
@@ -25,7 +27,7 @@ export class ExpenseDetails {
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public modalCtrl:ModalController,public viewCtrl:ViewController,
-              private expenseService: ExpenseService)
+              private expenseService: ExpenseService,private component:componentService)
   {
 
     this.site = this.navParams.get('site');
@@ -47,12 +49,14 @@ export class ExpenseDetails {
       siteId:this.site.id
     };
 
-
+    this.component.showLoader("Please Wait..");
     this.expenseService.getCategoriesBySite(searchCriteria).subscribe(response=>{
+      this.component.closeLoader();
       console.log("expense by categories");
       console.log(response);
       this.details = response;
     },err=>{
+      this.spinner = false;
       console.log("Error in getting expense category by site");
       console.log(err);
     })

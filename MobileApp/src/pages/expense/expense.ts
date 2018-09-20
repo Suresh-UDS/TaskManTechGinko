@@ -54,7 +54,7 @@ export class ExpensePage {
     this.navCtrl.push(ExpenseDetails,{site:site});
   }
 
-  expenseList(searchCriteria){
+  /*expenseList(searchCriteria){
       this.spinner = true;
       this.expenseService.searchExpenses(searchCriteria).subscribe(
         response=>{
@@ -73,13 +73,15 @@ export class ExpensePage {
     addExpenseModal() {
         const modal = this.modalCtrl.create(AddExpense);
         modal.present();
-    }
+    }*/
 
     getSites(){
         this.spinner = true;
-
+        console.log(this.siteList.length);
         this.siteService.searchSite().subscribe(
           response=>{
+            this.spinner=false;
+            console.log("sitelist");
               console.log(response);
               this.siteList = response.json();
 
@@ -87,21 +89,22 @@ export class ExpensePage {
                   console.log(site.name);
                   this.expenseService.getOverallData(site.id).subscribe(
                       response=>{
-                          console.log("Overall data response");
+                        console.log("Overall data response");
                           console.log(response);
                           site.name = response.siteName;
                           site.id = response.siteId;
                           site.totalBalanceAmount = response.totalBalanceAmount;
                           site.totalCreditAmount = response.totalCreditAmount;
                           site.totalDebitAmount = response.totalDebitAmount;
-                          this.spinner=false;
 
                       }
                   )
               }
           },err=>{
               this.spinner=false;
-            }
+              console.log("error in getting overall data response");
+            console.log(err);
+          }
       )
     }
 

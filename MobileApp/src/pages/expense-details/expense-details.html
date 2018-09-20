@@ -14,11 +14,18 @@
 
 
 <ion-content>
-    <ion-fab bottom right>
+
+  <!--<div  *ngIf="(!details) && spinner" text-center class="margin-top25">
+    <ion-spinner name="circles"></ion-spinner>
+  </div>-->
+
+
+  <ion-fab bottom right>
         <button ion-fab color="primary" (click)="addExpenseModal()"><ion-icon name="ios-add-outline"></ion-icon></button>
     </ion-fab>
 
-    <div class="MainExpenseContainer ExpenseDetailsPage">
+
+    <div class="MainExpenseContainer ExpenseDetailsPage" *ngIf="details">
 
         <ion-card>
             <ion-card-header text-center>
