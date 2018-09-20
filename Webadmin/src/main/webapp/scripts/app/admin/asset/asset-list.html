@@ -523,10 +523,10 @@
                                                     <!--</select>-->
                                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sites.length == 0"  ng-click="loadSearchSite(searchSite)">
+                                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sites.length == 0"  ng-change="loadSearchSite(searchSite)">
                                                         <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?clearField?'Select Site':searchSite : 'Select Site' }}</ui-select-match>
                                                         <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
-                                                            <div ng-bind="site"></div>
+                                                            <div ng-bind="site" ng-click="loadSearchSite(searchSite)"></div>
                                                         </ui-select-choices>
                                                     </ui-select>
                                                     <span ng-if="sites.length == 0"><p class="help-block">No sites</p></span>
@@ -565,7 +565,7 @@
                                                 <div class="dropdown">
                                                     <label class="label-control">Created Date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker"  id="searchCreatedDate" placeholder="DD/MM/YYYY"  ng-model="searchCreatedDate"/>
+                                                    <input type="text" class="form-control datepicker"  id="searchCreatedDate" placeholder="DD/MM/YYYY"  ng-model="searchCreatedDate" autocomplete="off"/>
                                                 </div>
                                             </div>
                                         </div>

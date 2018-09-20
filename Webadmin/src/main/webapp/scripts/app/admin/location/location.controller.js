@@ -643,7 +643,7 @@ angular.module('timeSheetApp')
 
         $scope.clearFilter = function() {
             $scope.clearField = true;
-            $scope.filter = false;
+                                              $scope.filter = false;
             $scope.siteFilterDisable = true;
             $scope.sitesList = null;
             $scope.selectedSite = null;
