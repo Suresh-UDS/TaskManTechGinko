@@ -20,6 +20,8 @@ angular.module('timeSheetApp')
         $scope.selectedLocation = null;
         $scope.selectedJobDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.selectedJobDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+        $scope.searchJobDate = null;
+        $scope.searchJobDateTo = null;
 
         $scope.searchCriteria = {};
         $scope.pages = { currPage : 1};
@@ -38,6 +40,8 @@ angular.module('timeSheetApp')
         $scope.searchProject = null;
         $scope.searchEmployee = null;
         $scope.searchStatus = null;
+        $scope.selectedJobId = null;
+        $scope.selectedJobTitle = null;
         $scope.disable = false;
         $rootScope.exportStatusObj  ={};
         $scope.checkStatus = 0;
@@ -169,6 +173,18 @@ angular.module('timeSheetApp')
 
             $scope.selectedJobDateTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $scope.selectedJobDateToSer = new Date(e.date._d);
+        });
+
+        $('input#searchJobDate').on('dp.change', function(e){
+
+                $scope.searchJobDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+                $scope.searchJobDateSer = new Date(e.date._d);
+        });
+
+        $('input#searchJobDateTo').on('dp.change', function(e){
+
+            $scope.searchJobDateTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.searchJobDateToSer = new Date(e.date._d);
         });
 
         //
@@ -420,9 +436,12 @@ angular.module('timeSheetApp')
                         $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)]
                     }
          $scope.loadSearchEmployees = function (searchEmployee) {
-             $scope.clearField = false;
-             $scope.hideEmp = true;
-              $scope.searchEmployee = $scope.employees[$scope.uiEmployee.indexOf(searchEmployee)]
+               $scope.clearField = false;
+               $scope.hideEmp = true;
+            if(searchEmployee){
+               $scope.searchEmployee = $scope.employees[$scope.uiEmployee.indexOf(searchEmployee)];
+            }
+
          }
          $scope.loadSearchStatus = function (searchStatus) {
               $scope.hideStatus = true;
@@ -975,7 +994,7 @@ angular.module('timeSheetApp')
 	        	console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaProject));
                 $scope.searchCriteria.findAll = false;
                  /*&& !$scope.selectedJob*/
-	        	if(!$scope.searchProject && !$scope.searchSite && !$scope.searchStatus && !$scope.searchEmployee){
+	        	if(!$scope.searchProject && !$scope.searchSite && !$scope.searchStatus && !$scope.searchEmployee && !$scope.searchJobId && !$scope.searchJobTitle){
 	        		$scope.searchCriteria.findAll = true;
 	        	}
 
@@ -999,9 +1018,16 @@ angular.module('timeSheetApp')
                     $scope.searchCriteria.jobStatus = null;
                 }
 
-	        	/*if($scope.selectedJob){
-	        		$scope.searchCriteria.jobTitle = $scope.selectedJob;
-	        	}*/
+                if($scope.searchJobId){
+                    $scope.searchCriteria.jobId = $scope.searchJobId;
+                }else{
+                    $scope.searchCriteria.jobId = null;
+                }
+                if($scope.searchJobTitle){
+                    $scope.searchCriteria.jobTitle = $scope.searchJobTitle;
+                }else{
+                    $scope.searchCriteria.jobTitle = null;
+                }
                 if($scope.searchEmployee){
                     $scope.searchCriteria.employeeId = $scope.searchEmployee.id;
                     $scope.searchCriteria.employeeName = $scope.searchEmployee.name;
@@ -1010,12 +1036,16 @@ angular.module('timeSheetApp')
                 }
 
 
-	        	if($scope.selectedJobDate) {
-	        		$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedJobDateSer;
+	        	if($scope.searchJobDate) {
+	        		$scope.searchCriteria.checkInDateTimeFrom = $scope.searchJobDateSer;
+	        	}else{
+	        	    $scope.searchCriteria.checkInDateTimeFrom = null;
 	        	}
 
-	        	if($scope.selectedJobDateTo) {
-	        		$scope.searchCriteria.checkInDateTimeTo = $scope.selectedJobDateToSer;
+	        	if($scope.searchJobDateTo) {
+	        		$scope.searchCriteria.checkInDateTimeTo = $scope.searchJobDateToSer;
+	        	}else{
+	        	    $scope.searchCriteria.checkInDateTimeTo = null;
 	        	}
 
 	        	console.log('search criterias - ', JSON.stringify($scope.searchCriteria));
@@ -1115,10 +1145,18 @@ angular.module('timeSheetApp')
         $scope.clearFilter = function() {
             $rootScope.exportStatusObj.exportMsg = '';
             $scope.downloader=false;
+            $scope.siteFilterDisable = true;
+            $scope.sitesList = null;
             $scope.selectedJobDateSer = new Date();
+            $scope.searchJobDate = null;
+            $scope.searchJobDateSer = null;
             $scope.selectedJobDate = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedJobDateToSer = new Date();
+            $scope.searchJobDateTo = null;
+            $scope.searchJobDateToSer = null;
             $scope.selectedJobDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+            $scope.searchJobId = null;
+            $scope.searchJobTitle = null;
             $scope.searchCriteria = {};
             $scope.searchSite = null;
             $scope.searchEmployee = null;
