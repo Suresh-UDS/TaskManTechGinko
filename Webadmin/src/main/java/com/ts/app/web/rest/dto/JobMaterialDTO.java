@@ -20,6 +20,8 @@ public class JobMaterialDTO extends BaseDTO implements Serializable {
 	
 	private long materialStock;
 	
+	private long materialQuantity;
+	
 	private long jobId;
 
 	private String jobTitle;
@@ -94,6 +96,14 @@ public class JobMaterialDTO extends BaseDTO implements Serializable {
 
 	public void setJobTitle(String jobTitle) {
 		this.jobTitle = jobTitle;
+	}
+
+	public long getMaterialQuantity() {
+		return materialQuantity;
+	}
+
+	public void setMaterialQuantity(long materialQuantity) {
+		this.materialQuantity = materialQuantity;
 	}
 	
 	
