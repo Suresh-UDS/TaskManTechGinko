@@ -161,28 +161,28 @@
                                 </td>
                                 <td ng-if="attendance.checkInImage">
                                     <a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkInImgUrl, attendance.enrollImgUrl)">
-                                        <img src={{attendance.checkInImgUrl}} width="30px" height="30px"/>
+                                        <img ng-src={{attendance.checkInImgUrl}} width="30px" height="30px"/>
                                     </a>
                                 </td>
                                 <td ng-if="!attendance.checkInImage">
-                                    <img src="assets/img/user.png" width="30px" height="30px"/>
+                                    <img ng-src="assets/img/user.png" width="30px" height="30px"/>
                                 </td>
 
 
                                 <td>{{attendance.checkOutTime | date:'dd/MM/yyyy @ h:mma'}}</td>
 
                                 <td ng-if="attendance.checkOutImage"><a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkOutImgUrl, attendance.enrollImgUrl)" >
-                                    <img src={{attendance.checkOutImgUrl}} width="30px" height="30px"/>
+                                    <img ng-src={{attendance.checkOutImgUrl}} width="30px" height="30px"/>
                                 </a>
                                 </td>
                                 <td ng-if="!attendance.checkOutImage">
-                                    <img src="assets/img/user.png" width="30px" height="30px"/>
+                                    <img ng-src="assets/img/user.png" width="30px" height="30px"/>
                                 </td>
 
                                 <td>{{attendance.shiftStartTime}} - {{attendance.shiftEndTime}}</td>
                                 <td align="center">
                                     <a id="maps" href="#" ng-click="newInitMap('mapIn',attendance.latitudeIn, attendance.longitudeIn, 'mapOut', attendance.latitudeOut, attendance.longitudeOut)" onClick="$('#mapModal').modal()" data-target="#mapModal" >
-                                        <img src="assets/img/map-icon-2-1.jpg" width="30px" height="30px" />
+                                        <img ng-src="assets/img/map-icon-2-1.jpg" width="30px" height="30px" />
                                     </a>
                                 </td>
 
@@ -540,10 +540,10 @@
                                                     <!--</select>-->
                                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-change="loadSearchSite(searchSite)" ng-click="loadSearchSite(searchSite)">
+                                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-change="loadSearchSite(searchSite)" >
                                                         <ui-select-match placeholder="Select Site...">{{sites.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?filter?'Select Site':searchSite : 'Select Site' }}</ui-select-match>
                                                         <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
-                                                            <div ng-bind="site"></div>
+                                                            <div ng-bind="site" ng-click="loadSearchSite(searchSite)"></div>
                                                         </ui-select-choices>
                                                     </ui-select>
                                                     <span ng-if="sites.length == 0"><p class="help-block">No sites</p></span>

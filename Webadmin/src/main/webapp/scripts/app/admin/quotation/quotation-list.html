@@ -1,6 +1,6 @@
 
 
-<div class="row" ng-init="initLoad();loadProjectsList();">
+<div class="row" ng-init="initLoad();">
     <div class="col-md-6 txt-align-lft">
 
         <!--<button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">-->
@@ -484,10 +484,10 @@
                                                     <!--</select>-->
                                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sitesList.length == 0" ng-change="loadSearchSite(searchSite)" ng-click="loadSearchSite(searchSite)">
+                                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sitesList.length == 0" ng-change="loadSearchSite(searchSite)" >
                                                         <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' :clearField?'Select Site':hideSite?'Select Site':searchSite }}</ui-select-match>
                                                         <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search track by $index">
-                                                            <div ng-bind="site"></div>
+                                                            <div ng-bind="site" ng-click="loadSearchSite(searchSite)"></div>
                                                         </ui-select-choices>
                                                     </ui-select>
                                                     <span ng-if="sites.length == 0"><p class="help-block">No sites</p></span>
