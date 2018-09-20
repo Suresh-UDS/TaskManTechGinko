@@ -134,7 +134,7 @@ public class FeedbackTransactionService extends AbstractService {
 				if(item.getAnswerType().equals(FeedbackAnswerType.YESNO) && item.getAnswer().equalsIgnoreCase("true")) {
 				    log.debug("answer type yes ");
 
-				    if(StringUtils.isNotEmpty(item.getScoreType()) && (item.getScoreType().equalsIgnoreCase("yes:1") || item.getScoreType().equalsIgnoreCase("no:0"))){
+				    if(StringUtils.isNotEmpty(item.getScoreType()) && (item.getScoreType().equalsIgnoreCase("yes:1"))){
 				        log.debug("answer score type yes:1");
 	                    cumRating += 5;
 	                }else{
@@ -143,7 +143,7 @@ public class FeedbackTransactionService extends AbstractService {
 	                }
 				}else if(item.getAnswerType().equals(FeedbackAnswerType.YESNO) && item.getAnswer().equalsIgnoreCase("false")){
 	                log.debug("answer score type no");
-	                if(StringUtils.isNotEmpty(item.getScoreType()) && (item.getScoreType().equalsIgnoreCase("no:1") || item.getScoreType().equalsIgnoreCase("yes:1"))){
+	                if(StringUtils.isNotEmpty(item.getScoreType()) && (item.getScoreType().equalsIgnoreCase("no:1"))){
 	                    log.debug("answer score type no:1");
 	                    cumRating += 5;
 	                }else{
@@ -170,8 +170,10 @@ public class FeedbackTransactionService extends AbstractService {
 		sendFeedbackNotification(feedbackTransDto, feedbackAlertItems);	
 		feedbackTrans.setRating(rating);
 		feedbackTrans.setResults(items);
-		FeedbackMapping feedbackMapping = feedbackMappingRepository.findOneByLocation(feedbackTransDto.getFeedbackId(), feedbackTransDto.getSiteId(), feedbackTransDto.getBlock(), feedbackTransDto.getFloor(), feedbackTransDto.getZone());
-        feedbackTrans.setFeedback(feedbackMapping);
+		Pageable pageRequest = createPageRequest(1,1);
+		Page<FeedbackMapping> feedbackMappingPage = feedbackMappingRepository.findOneByLocation(feedbackTransDto.getFeedbackId(), feedbackTransDto.getSiteId(), feedbackTransDto.getBlock(), feedbackTransDto.getFloor(), feedbackTransDto.getZone(), pageRequest);
+        List<FeedbackMapping> fbMappings = feedbackMappingPage.getContent();
+		feedbackTrans.setFeedback(fbMappings.get(0));
 		feedbackTrans = feedbackTransactionRepository.save(feedbackTrans);
         if(log.isDebugEnabled()) {
         		log.debug("Rating received for this feedback - "+ rating);
