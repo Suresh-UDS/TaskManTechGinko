@@ -59,9 +59,9 @@ export class ExpenseDetails {
 
   }
 
-    viewTransaction(){
+    viewTransaction(category,detail){
         console.log('ionViewDidLoad Transaction method:');
-        this.navCtrl.push(TransactionPage);
+        this.navCtrl.push(TransactionPage,{category:category,detail:detail});
     }
 
     addExpenseModal() {
