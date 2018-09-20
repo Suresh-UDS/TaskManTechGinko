@@ -2162,12 +2162,14 @@ public class ExportUtil {
 		if (lock == null) {
 			lock = new Lock();
 		}
+		log.debug("Trying to acquire lock");
+		
 		try {
 			lock.lock();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
+		log.debug("lock acquired");
 		Thread writer_Thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -2204,7 +2206,7 @@ public class ExportUtil {
 				}
 
 				int rowNum = 1;
-
+				log.debug("Writing feedback to excel file");
 				for (FeedbackTransactionDTO transaction : content) {
 
 					Row dataRow = xssfSheet.createRow(rowNum++);
@@ -2251,7 +2253,7 @@ public class ExportUtil {
 						}
 					}
 				}
-
+				log.debug("Completed Writing feedback to excel file");
 				for (int i = 0; i < FEEDBACK_HEADER.length; i++) {
 					xssfSheet.autoSizeColumn(i);
 				}
