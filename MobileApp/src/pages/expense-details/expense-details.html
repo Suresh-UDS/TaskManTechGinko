@@ -36,7 +36,7 @@
                   <h3 class="currentBls" text-center>Current Balance : <span class="green">{{details.totalBalanceAmount}}</span></h3>
 
                 <ion-list *ngFor="let c of details.categoryWiseExpenses">
-                    <ion-item (click)="viewTransaction()">
+                    <ion-item (click)="viewTransaction(c,details)">
                         <ion-icon class="CircleIcon" item-start name="ios-plane-outline"></ion-icon>
                         <h2>{{c.category}}</h2>
                         <ion-note item-end class="red">{{c.amount}}</ion-note>
