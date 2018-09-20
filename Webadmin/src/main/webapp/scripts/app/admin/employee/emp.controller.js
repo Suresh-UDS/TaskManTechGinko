@@ -1467,6 +1467,7 @@ angular.module('timeSheetApp')
             $scope.downloader=false;
             $scope.siteFilterDisable = true;
             $scope.sitesList = null;
+            $scope.sites = null;
             $scope.selectedSite = null;
             $scope.selectedProject = null;
             $scope.selectedEmployeeName = null;

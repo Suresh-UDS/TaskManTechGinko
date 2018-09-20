@@ -1123,13 +1123,13 @@
                                     <ui-select ng-model="searchSite"
                                                ng-disabled="siteFilterDisable || sites.length == 0"
                                                ng-change="loadSearchSite(searchSite)"
-                                               ng-click="loadSearchSite(searchSite)"> <ui-select-match
+                                              > <ui-select-match
                                         placeholder="Select Site...">{{sites.length
                                         == 0 ? 'Select Site' : searchSite.searchStatus ?
                                         searchSite.name?searchSite.name:'Select Site' : hideSite
                                         ?clearField?'Select Site':searchSite : 'Select Site' }}</ui-select-match> <ui-select-choices
                                         repeat="site in getSite($select.search) | filter: $select.search">
-                                        <div ng-bind="site"></div>
+                                        <div ng-bind="site"  ng-click="loadSearchSite(searchSite)"></div>
                                     </ui-select-choices> </ui-select>
                                     <span ng-if="sites.length == 0"><p
                                         class="help-block">No sites</p></span>
