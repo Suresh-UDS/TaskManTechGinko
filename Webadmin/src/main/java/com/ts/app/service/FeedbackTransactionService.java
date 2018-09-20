@@ -170,8 +170,10 @@ public class FeedbackTransactionService extends AbstractService {
 		sendFeedbackNotification(feedbackTransDto, feedbackAlertItems);	
 		feedbackTrans.setRating(rating);
 		feedbackTrans.setResults(items);
-		FeedbackMapping feedbackMapping = feedbackMappingRepository.findOneByLocation(feedbackTransDto.getFeedbackId(), feedbackTransDto.getSiteId(), feedbackTransDto.getBlock(), feedbackTransDto.getFloor(), feedbackTransDto.getZone());
-        feedbackTrans.setFeedback(feedbackMapping);
+		Pageable pageRequest = createPageRequest(1,1);
+		Page<FeedbackMapping> feedbackMappingPage = feedbackMappingRepository.findOneByLocation(feedbackTransDto.getFeedbackId(), feedbackTransDto.getSiteId(), feedbackTransDto.getBlock(), feedbackTransDto.getFloor(), feedbackTransDto.getZone(), pageRequest);
+        List<FeedbackMapping> fbMappings = feedbackMappingPage.getContent();
+		feedbackTrans.setFeedback(fbMappings.get(0));
 		feedbackTrans = feedbackTransactionRepository.save(feedbackTrans);
         if(log.isDebugEnabled()) {
         		log.debug("Rating received for this feedback - "+ rating);
