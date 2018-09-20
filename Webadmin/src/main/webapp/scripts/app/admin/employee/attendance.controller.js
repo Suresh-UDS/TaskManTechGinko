@@ -656,6 +656,8 @@ angular.module('timeSheetApp')
             $scope.clearField = true;
             $rootScope.exportStatusObj.exportMsg = '';
             $scope.downloader=false;
+            $scope.siteFilterDisable = true;
+            $scope.sites = null;
             $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedDateFromSer =  new Date();
