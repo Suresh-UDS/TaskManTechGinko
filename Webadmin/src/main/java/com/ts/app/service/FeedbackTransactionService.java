@@ -408,9 +408,11 @@ public class FeedbackTransactionService extends AbstractService {
 					reportResult.setZone(searchCriteria.getZone());
 
 					// weekly
-					List<Object[]> weeklySite = feedbackTransactionRepository.getWeeklySite(searchCriteria.getSiteId(),weeklyFromDate,weeklyToDate);
-					List<Object[]> weeklyZone = feedbackTransactionRepository.getWeeklyZone(searchCriteria.getSiteId(), searchCriteria.getZone(),weeklyFromDate,weeklyToDate);
-
+					List<Object[]> weeklyZone = feedbackTransactionRepository.getWeeklyZone(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(),weeklyFromDate,weeklyToDate);
+					List<Object[]> weeklySite = null;
+					if(StringUtils.isEmpty(searchCriteria.getZone()))  {
+						weeklySite = feedbackTransactionRepository.getWeeklySite(searchCriteria.getSiteId(),weeklyFromDate,weeklyToDate);
+					}
 					List<WeeklySite> weeklySiteList = new ArrayList<WeeklySite>();
 					if(CollectionUtils.isNotEmpty(weeklySite)){
 						for(Object[] row: weeklySite){
@@ -439,64 +441,82 @@ public class FeedbackTransactionService extends AbstractService {
 					List<Location> locs = locationRepository.findBySite(searchCriteria.getSiteId());
 					Map<String, FeedbackQuestionRating> qratings = new HashMap<String,FeedbackQuestionRating>();
 					
+					String block = searchCriteria.getBlock();
+					String floor = searchCriteria.getFloor();
+					String zone = searchCriteria.getZone();
+					
 					if(CollectionUtils.isNotEmpty(locs)) {
 						for(Location loc : locs) {
-							searchCriteria.setBlock(loc.getBlock());
-							searchCriteria.setFloor(loc.getFloor());
-							searchCriteria.setZone(loc.getZone());
-							FeedbackMapping feedbackMapping = getFeedbackMappingByLocation(searchCriteria);
-							if(log.isDebugEnabled()) {
-								log.debug("Location - Block- " +searchCriteria.getBlock() + ", Floor -" + searchCriteria.getFloor() + ", Zone-" + searchCriteria.getZone());
-								log.debug("FeedbackMapping - " + (feedbackMapping != null ? feedbackMapping.getId() : null ));
-							}
-							if(feedbackMapping != null) {
-							
-								List<Object[]> questionRatings = getQuestionRatings(searchCriteria,feedbackMapping,fromTime,toTime,weeklyFromDate,weeklyToDate);
-								log.debug("Question ratings - " + (questionRatings != null ? questionRatings.size() : null ));
-								if(CollectionUtils.isNotEmpty(questionRatings)) {
-									for(Object[] row : questionRatings) {
-										FeedbackQuestionRating qrating = null;
-										String question = String.valueOf(row[0]);
-										if(qratings.containsKey(question)) {
-											qrating = qratings.get(question);
-										}else {
-											qrating = new FeedbackQuestionRating();
-										}
-										qrating.setLocation(getLocationFromSearchCriteria(searchCriteria));
-										qrating.setQuestion(question);
-										if(row[1] != null && ((String)row[1]).equalsIgnoreCase("true")) {
-											qrating.setYesCount((Long)row[2]);
-										}else {
-											qrating.setNoCount((Long)row[2]);
-										}
-										qratings.put(qrating.getQuestion(), qrating);
-									}
+							boolean locMatch = false;
+							if(StringUtils.isNotBlank(block) 
+									&& StringUtils.isNotBlank(floor) 
+									&& StringUtils.isNotBlank(zone) ) {
+								if(block.equalsIgnoreCase(loc.getBlock())
+										&& floor.equalsIgnoreCase(loc.getFloor())
+										&& zone.equalsIgnoreCase(loc.getZone()) ) {
+									locMatch = true;
 								}
-								//log.debug("feedbackMapping.getFeedback().getId(): \t"+feedbackMapping.getFeedback().getId());
-								questionRatings = getquestionRatings(searchCriteria,feedbackMapping,fromTime,toTime,weeklyFromDate,weeklyToDate);
-								log.debug("Question ratings - " + (questionRatings != null ? questionRatings.size() : null ));
-								if(CollectionUtils.isNotEmpty(questionRatings)) {
-									for(Object[] row : questionRatings) {
-										FeedbackQuestionRating qrating = null;
-										String question = String.valueOf(row[0]);
-										if(qratings.containsKey(question)) {
-											qrating = qratings.get(question);
-										}else {
-											qrating = new FeedbackQuestionRating();
-										}
-										qrating.setLocation(getLocationFromSearchCriteria(searchCriteria));
-										qrating.setQuestion(String.valueOf(row[0]));
-										if(row[2] != null) {
-											Map<String,Long> ratingsMap = null;
-											if(qrating.getRating() != null ) {
-												ratingsMap = qrating.getRating();
+							}else {
+								locMatch = true;
+							}
+							if(locMatch) {
+								searchCriteria.setBlock(loc.getBlock());
+								searchCriteria.setFloor(loc.getFloor());
+								searchCriteria.setZone(loc.getZone());
+								FeedbackMapping feedbackMapping = getFeedbackMappingByLocation(searchCriteria);
+								if(log.isDebugEnabled()) {
+									log.debug("Location - Block- " +searchCriteria.getBlock() + ", Floor -" + searchCriteria.getFloor() + ", Zone-" + searchCriteria.getZone());
+									log.debug("FeedbackMapping - " + (feedbackMapping != null ? feedbackMapping.getId() : null ));
+								}
+								if(feedbackMapping != null) {
+								
+									List<Object[]> questionRatings = getQuestionRatings(searchCriteria,feedbackMapping,fromTime,toTime,weeklyFromDate,weeklyToDate);
+									log.debug("Question ratings - " + (questionRatings != null ? questionRatings.size() : null ));
+									if(CollectionUtils.isNotEmpty(questionRatings)) {
+										for(Object[] row : questionRatings) {
+											FeedbackQuestionRating qrating = null;
+											String question = String.valueOf(row[0]);
+											if(qratings.containsKey(question)) {
+												qrating = qratings.get(question);
 											}else {
-												ratingsMap = new HashMap<String,Long>();
+												qrating = new FeedbackQuestionRating();
 											}
-											ratingsMap.put(String.valueOf(row[1]), (long)row[2]);
-											qrating.setRating(ratingsMap);
+											qrating.setLocation(getLocationFromSearchCriteria(searchCriteria));
+											qrating.setQuestion(question);
+											if(row[1] != null && ((String)row[1]).equalsIgnoreCase("true")) {
+												qrating.setYesCount((Long)row[2]);
+											}else {
+												qrating.setNoCount((Long)row[2]);
+											}
+											qratings.put(qrating.getQuestion(), qrating);
 										}
-										qratings.put(question, qrating);
+									}
+									//log.debug("feedbackMapping.getFeedback().getId(): \t"+feedbackMapping.getFeedback().getId());
+									questionRatings = getquestionRatings(searchCriteria,feedbackMapping,fromTime,toTime,weeklyFromDate,weeklyToDate);
+									log.debug("Question ratings - " + (questionRatings != null ? questionRatings.size() : null ));
+									if(CollectionUtils.isNotEmpty(questionRatings)) {
+										for(Object[] row : questionRatings) {
+											FeedbackQuestionRating qrating = null;
+											String question = String.valueOf(row[0]);
+											if(qratings.containsKey(question)) {
+												qrating = qratings.get(question);
+											}else {
+												qrating = new FeedbackQuestionRating();
+											}
+											qrating.setLocation(getLocationFromSearchCriteria(searchCriteria));
+											qrating.setQuestion(String.valueOf(row[0]));
+											if(row[2] != null) {
+												Map<String,Long> ratingsMap = null;
+												if(qrating.getRating() != null ) {
+													ratingsMap = qrating.getRating();
+												}else {
+													ratingsMap = new HashMap<String,Long>();
+												}
+												ratingsMap.put(String.valueOf(row[1]), (long)row[2]);
+												qrating.setRating(ratingsMap);
+											}
+											qratings.put(question, qrating);
+										}
 									}
 								}
 							}
@@ -525,7 +545,7 @@ public class FeedbackTransactionService extends AbstractService {
 
 				// weekly
 				List<Object[]> weeklySite = feedbackTransactionRepository.getSitewiseAverageRating(searchCriteria.getProjectId(),weeklyFromDate,weeklyToDate);
-				List<Object[]> weeklyZone = feedbackTransactionRepository.getWeeklyZone(searchCriteria.getSiteId(), searchCriteria.getZone(),weeklyFromDate,weeklyToDate);
+				List<Object[]> weeklyZone = feedbackTransactionRepository.getWeeklyZone(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(),weeklyFromDate,weeklyToDate);
 
 				List<WeeklySite> weeklySiteList = new ArrayList<WeeklySite>();
 				if(CollectionUtils.isNotEmpty(weeklySite)){
@@ -588,7 +608,7 @@ public class FeedbackTransactionService extends AbstractService {
 		List<Object[]> questionRatings = null;
 
 		if(StringUtils.isNotEmpty(searchCriteria.getBlock()) && StringUtils.isNotEmpty(searchCriteria.getZone())){
-			questionRatings = feedbackTransactionRepository.getFeedbackAnswersCountForYesNo(feedbackMapping.getId(), weeklyFromDate, weeklyToDate);
+			questionRatings = feedbackTransactionRepository.getFeedbackAnswersCountForYesNo(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), feedbackMapping.getId(), weeklyFromDate, weeklyToDate);
 		} else {
 			questionRatings = feedbackTransactionRepository.getWeeklyFeedbackAnswersCountForYesNo(searchCriteria.getSiteId(), weeklyFromDate, weeklyToDate);
 		}
