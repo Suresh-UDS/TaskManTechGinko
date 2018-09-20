@@ -17,8 +17,8 @@ import com.ts.app.domain.FeedbackTransaction;
  */
 public interface FeedbackTransactionRepository extends JpaRepository<FeedbackTransaction, Long> {
 
-	@Query("SELECT ft FROM FeedbackTransaction ft WHERE ft.siteId = :siteId and ft.block = :block and ft.floor = :floor and ft.zone = :zone")
-	Page<FeedbackTransaction> findByLocation(@Param("siteId") long siteId, @Param("block") String block, @Param("floor") String floor, @Param("zone") String zone, Pageable pageRequest);
+	@Query("SELECT ft FROM FeedbackTransaction ft WHERE ft.siteId = :siteId and ft.block = :block and ft.floor = :floor and ft.zone = :zone and ft.createdDate between :startDate and :endDate")
+	Page<FeedbackTransaction> findByLocation(@Param("siteId") long siteId, @Param("block") String block, @Param("floor") String floor, @Param("zone") String zone, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate, Pageable pageRequest);
 	
 	@Query("SELECT ft FROM FeedbackTransaction ft WHERE ft.siteId = :siteId and ft.block = :block and ft.floor = :floor and ft.name = :name")
 	Page<FeedbackTransaction> findByLocationAndName(@Param("siteId") long siteId, @Param("block") String block, @Param("floor") String floor, @Param("name") String name, Pageable pageRequest);
@@ -32,8 +32,8 @@ public interface FeedbackTransactionRepository extends JpaRepository<FeedbackTra
 	@Query("SELECT ft FROM FeedbackTransaction ft WHERE ft.projectId = :projectId and ft.name = :name")
 	Page<FeedbackTransaction> findByProjectAndName(@Param("projectId") long projectId, @Param("name") String name, Pageable pageRequest);
 
-	@Query("SELECT ft FROM FeedbackTransaction ft WHERE ft.projectId = :projectId")
-	Page<FeedbackTransaction> findByProject(@Param("projectId") long projectId, Pageable pageRequest);
+	@Query("SELECT ft FROM FeedbackTransaction ft WHERE ft.projectId = :projectId and ft.createdDate between :startDate and :endDate")
+	Page<FeedbackTransaction> findByProject(@Param("projectId") long projectId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate,Pageable pageRequest);
 
 	@Query("SELECT ft FROM FeedbackTransaction ft WHERE ft.siteId = :siteId")
 	Page<FeedbackTransaction> findBySite(@Param("siteId") long siteId, Pageable pageRequest);
@@ -41,11 +41,11 @@ public interface FeedbackTransactionRepository extends JpaRepository<FeedbackTra
 	@Query("SELECT ft FROM FeedbackTransaction ft WHERE ft.siteId = :siteId and ft.createdDate between :startDate and :endDate")
 	Page<FeedbackTransaction> findBySite(@Param("siteId") long siteId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate, Pageable pageRequest);
 
-	@Query("SELECT ft FROM FeedbackTransaction ft WHERE ft.projectId = :projectId and ft.siteId = :siteId and ft.block = :block")
-	Page<FeedbackTransaction> findByBlock(@Param("siteId") long siteId, @Param("block") String block,Pageable pageRequest);
+	@Query("SELECT ft FROM FeedbackTransaction ft WHERE ft.projectId = :projectId and ft.siteId = :siteId and ft.block = :block and  ft.createdDate between :startDate and :endDate")
+	Page<FeedbackTransaction> findByBlock(@Param("siteId") long siteId, @Param("block") String block,@Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate, Pageable pageRequest);
 
-	@Query("SELECT ft FROM FeedbackTransaction ft WHERE ft.projectId = :projectId and ft.siteId = :siteId and ft.block = :block and ft.floor = :floor")
-	Page<FeedbackTransaction> findByFloor(@Param("siteId") long siteId, @Param("block") String block, @Param("floor") String floor, Pageable pageRequest);
+	@Query("SELECT ft FROM FeedbackTransaction ft WHERE ft.projectId = :projectId and ft.siteId = :siteId and ft.block = :block and ft.floor = :floor and  ft.createdDate between :startDate and :endDate")
+	Page<FeedbackTransaction> findByFloor(@Param("siteId") long siteId, @Param("block") String block, @Param("floor") String floor, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate, Pageable pageRequest);
 	
 	//report queries
 	@Query("SELECT count(ft) FROM FeedbackTransaction ft WHERE ft.siteId = :siteId and ft.block = :block and ft.floor = :floor and ft.zone = :zone and ft.createdDate between :startDate and :endDate")

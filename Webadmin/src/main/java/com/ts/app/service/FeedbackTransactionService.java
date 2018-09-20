@@ -299,21 +299,47 @@ public class FeedbackTransactionService extends AbstractService {
             		}
             }
 
+			Calendar startCal = Calendar.getInstance();
+
+			if (searchCriteria.getFromDate() != null) {
+				startCal.setTime(searchCriteria.getFromDate());
+			}
+			startCal.set(Calendar.HOUR_OF_DAY, 0);
+			startCal.set(Calendar.MINUTE, 0);
+			startCal.set(Calendar.SECOND, 0);
+			searchCriteria.setFromDate(startCal.getTime());
+			Calendar endCal = Calendar.getInstance();
+			if (searchCriteria.getToDate() != null) {
+				endCal.setTime(searchCriteria.getToDate());
+			}
+			endCal.set(Calendar.HOUR_OF_DAY, 23);
+			endCal.set(Calendar.MINUTE, 59);
+			endCal.set(Calendar.SECOND, 0);
+			searchCriteria.setToDate(endCal.getTime());            
+	        	java.sql.Date fromDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(startCal));
+	        	ZonedDateTime fromTime = fromDt.toLocalDate().atStartOfDay(ZoneId.of("Asia/Kolkata"));
+	        	fromTime = fromTime.withHour(23);
+	        	fromTime = fromTime.withMinute(59);
+	        	fromTime = fromTime.withSecond(59);
+	        	java.sql.Date toDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(endCal));
+	        	ZonedDateTime toTime = toDt.toLocalDate().atStartOfDay(ZoneId.of("Asia/Kolkata"));
+	        	toTime = toTime.withHour(23);
+	        	toTime = toTime.withMinute(59);
+	        	toTime = toTime.withSecond(59);
+
 			Page<FeedbackTransaction> page = null;
 			List<FeedbackTransactionDTO> transitems = null;
 			if(!searchCriteria.isFindAll()) {
 				if(StringUtils.isNotEmpty(searchCriteria.getZone())) {
-					page = feedbackTransactionRepository.findByLocation(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), pageRequest);
+					page = feedbackTransactionRepository.findByLocation(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), fromTime, toTime, pageRequest);
 				}else if(StringUtils.isNotEmpty(searchCriteria.getFloor())) {
-					page = feedbackTransactionRepository.findByFloor(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), pageRequest);
+					page = feedbackTransactionRepository.findByFloor(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), fromTime, toTime, pageRequest);
 				}else if(StringUtils.isNotEmpty(searchCriteria.getBlock())) {
-					page = feedbackTransactionRepository.findByBlock(searchCriteria.getSiteId(), searchCriteria.getBlock(), pageRequest);
-				}else if(searchCriteria.getSiteId() > 0 && searchCriteria.getFromDate() != null && searchCriteria.getToDate() != null) {
-					page = feedbackTransactionRepository.findBySite(searchCriteria.getSiteId(), DateUtil.convertToZDT(searchCriteria.getFromDate()),DateUtil.convertToZDT(searchCriteria.getToDate()), pageRequest);
+					page = feedbackTransactionRepository.findByBlock(searchCriteria.getSiteId(), searchCriteria.getBlock(), fromTime, toTime, pageRequest);
 				}else if(searchCriteria.getSiteId() > 0) {
-					page = feedbackTransactionRepository.findBySite(searchCriteria.getSiteId(), pageRequest);
+					page = feedbackTransactionRepository.findBySite(searchCriteria.getSiteId(), fromTime,toTime, pageRequest);
 				}else if(searchCriteria.getProjectId() > 0) {
-					page = feedbackTransactionRepository.findByProject(searchCriteria.getProjectId(), pageRequest);
+					page = feedbackTransactionRepository.findByProject(searchCriteria.getProjectId(), fromTime, toTime, pageRequest);
 				}
 			}else {
 				page = feedbackTransactionRepository.findAll(pageRequest);
