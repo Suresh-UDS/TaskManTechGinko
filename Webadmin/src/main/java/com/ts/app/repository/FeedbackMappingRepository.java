@@ -26,7 +26,7 @@ public interface FeedbackMappingRepository extends JpaRepository<FeedbackMapping
 	@Query("SELECT ft FROM FeedbackMapping ft WHERE ft.site.id = :siteId and ft.block = :block and ft.floor = :floor and ft.zone = :zone")
 	List<FeedbackMapping> findOneByLocation(@Param("siteId") long siteId, @Param("block") String block, @Param("floor") String floor, @Param("zone") String zone);
 	
-	@Query("SELECT ft FROM FeedbackMapping ft WHERE ft.feedback.id = :feedbackId and ft.site.id = :siteId and ft.block = :block and ft.floor = :floor and ft.zone = :zone")
+	@Query("SELECT ft FROM FeedbackMapping ft WHERE ft.feedback.id = :feedbackId and ft.site.id = :siteId and ft.block = :block and ft.floor = :floor and ft.zone = :zone order by ft.id desc limit 1")
 	FeedbackMapping findOneByLocation(@Param("feedbackId") long feedbackId, @Param("siteId") long siteId, @Param("block") String block, @Param("floor") String floor, @Param("zone") String zone);
 
 	@Query("SELECT ft FROM FeedbackMapping ft WHERE ft.site.id = :siteId")
