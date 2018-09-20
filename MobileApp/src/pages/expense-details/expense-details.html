@@ -10,76 +10,87 @@
     <ion-title>Expense Details</ion-title>
   </ion-navbar>
 
+  <ion-segment [(ngModel)]="expense_type" class="segment margin-auto" color="#ff9800">
+    <ion-segment-button value="debit" (click)="loadDebit()" >
+      Expense Details
+    </ion-segment-button>
+    <ion-segment-button value="credit">
+      Credit Details
+    </ion-segment-button>
+  </ion-segment>
 </ion-header>
 
 
 <ion-content>
-
-  <!--<div  *ngIf="(!details) && spinner" text-center class="margin-top25">
-    <ion-spinner name="circles"></ion-spinner>
-  </div>-->
-
-
-  <ion-fab bottom right>
+      <ion-fab bottom right>
         <button ion-fab color="primary" (click)="addExpenseModal()"><ion-icon name="ios-add-outline"></ion-icon></button>
     </ion-fab>
 
-
-    <div class="MainExpenseContainer ExpenseDetailsPage" *ngIf="details">
-
-        <ion-card>
-            <ion-card-header text-center>
-                {{details.siteName}}
-            </ion-card-header>
-            <ion-card-content>
-
-                  <h3 class="currentBls" text-center>Current Balance : <span class="green">{{details.totalBalanceAmount}}</span></h3>
-
-                <ion-list *ngFor="let c of details.categoryWiseExpenses">
-                    <ion-item (click)="viewTransaction(c,details)">
+  <div [ngSwitch]="expense_type">
+    <div *ngSwitchCase="'debit'" class="MainExpenseContainer ExpenseDetailsPage">
+      <ion-card>
+        <ion-card-header text-center>
+          {{details.siteName}}
+        </ion-card-header>
+        <ion-card-content>
+          <h3 class="currentBls" text-center>Current Balance : <span class="green">{{details.totalBalanceAmount}}</span></h3>
+          <ion-list *ngFor="let c of details.categoryWiseExpenses">
+            <ion-item (click)="viewTransaction(c,details)">
                         <ion-icon class="CircleIcon" item-start name="ios-plane-outline"></ion-icon>
                         <h2>{{c.category}}</h2>
                         <ion-note item-end class="red">{{c.amount}}</ion-note>
                         <ion-icon class="grey" item-end name="ios-arrow-forward-outline"></ion-icon>
                     </ion-item>
-                    <!--<ion-item (click)="viewTransaction()">
-                        <ion-icon class="CircleIcon" item-start name="ios-pizza-outline"></ion-icon>
-                        <h2>Food</h2>
-                        <ion-note item-end class="red">- 30,000</ion-note>
-                        <ion-icon class="grey" item-end name="ios-arrow-forward-outline"></ion-icon>
-                    </ion-item>
-                    <ion-item>
-                        <ion-icon class="CircleIcon" item-start name="ios-cart-outline"></ion-icon>
-                        <h2>Material</h2>
-                        <ion-note item-end class="red">- 40,000</ion-note>
-                        <ion-icon class="grey" item-end name="ios-arrow-forward-outline"></ion-icon>
-                    </ion-item>
-                    <ion-item>
-                        <ion-icon class="CircleIcon" item-start name="ios-cart-outline"></ion-icon>
-                        <h2>Purchase</h2>
-                        <ion-note item-end class="red">- 20,000</ion-note>
-                        <ion-icon class="grey" item-end name="ios-arrow-forward-outline"></ion-icon>
-                    </ion-item>
-                    <ion-item>
-                        <ion-icon class="CircleIcon" item-start name="ios-paper-outline"></ion-icon>
-                        <h2>Bill Payments</h2>
-                        <ion-note item-end class="red">- 12,000</ion-note>
-                        <ion-icon class="grey" item-end name="ios-arrow-forward-outline"></ion-icon>
-                    </ion-item>-->
+
                     <ion-item class="border-TB-dashed">
                         <h2>Total</h2>
                         <ion-note item-end class="dark"> {{details.totalDebitAmount}}</ion-note>
                     </ion-item>
-
                 </ion-list>
-
-
             </ion-card-content>
-
         </ion-card>
-
-
     </div>
+
+    <div *ngSwitchCase="'credit'" class="MainExpenseContainer transactionPage">
+      <div>
+        <ion-card *ngFor="let credit of credit_list" >
+
+          <ion-card-content>
+
+            <h3 class="currentBls" text-center>Credit Amount: <span class="green">{{credit.debitAmount}}</span></h3>
+
+            <ion-list >
+              <ion-item>
+                Date
+                <ion-note item-end class="dark">{{credit.date}}</ion-note>
+              </ion-item>
+
+              <ion-item>
+                Description
+                <ion-note item-end class="dark">{{credit.description}}</ion-note>
+              </ion-item>
+
+
+              <ion-item>
+                Payment type
+                <ion-note item-end class="dark">{{credit.paymentType}}</ion-note>
+              </ion-item>
+
+              <!--<ion-row>
+                <ion-col col-3 *ngFor="let image of trans_list.expenseDocumentList;let i of index">
+                  <img [src]="image" class="job-img margin-bottom25" (click)="viewImage(i,image)">
+                </ion-col>
+              </ion-row>-->
+            </ion-list>
+
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+  </div>
+
+
 
 
 </ion-content>

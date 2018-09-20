@@ -17,7 +17,8 @@ import {componentService} from "../service/componentService";
   templateUrl: 'expense-details.html',
 })
 export class ExpenseDetails {
-  spinner: any;
+  credit_list: any;
+  expense_type: string;
   category: any;
   amount: any;
   site: any;
@@ -29,15 +30,24 @@ export class ExpenseDetails {
   constructor(public navCtrl: NavController, public navParams: NavParams,public modalCtrl:ModalController,public viewCtrl:ViewController,
               private expenseService: ExpenseService,private component:componentService)
   {
-
     this.site = this.navParams.get('site');
-
     this.details = {};
+    this.expense_type ='debit';
+    this.loadDebit();
 
+    this.credit_list = [
+      {id:1,date:'09/08/2018',description:'Travel chennai to coimbatore',paymentType:'cash'},
+      {id:1,date:'09/08/2018',description:'Travel chennai to coimbatore',paymentType:'cash'},
+      {id:1,date:'09/08/2018',description:'Travel chennai to coimbatore',paymentType:'cash'}
+    ]
   }
 
-  ionViewDidLoad() {
+  ionViewDidLoad() {}
+
+
+  loadDebit(){
     console.log('ionViewDidLoad ExpenseDetails');
+    console.log('Debit details');
     console.log(this.site);
 
     console.log('site Id');
@@ -57,11 +67,13 @@ export class ExpenseDetails {
       this.details = response;
     },err=>{
       this.component.closeLoader();
-      this.spinner = false;
       console.log("Error in getting expense category by site");
       console.log(err);
     })
+  }
 
+  loadCredit(){
+    console.log('Credit details');
   }
 
     viewTransaction(category,detail){
