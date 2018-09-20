@@ -286,10 +286,11 @@ angular.module('timeSheetApp')
         $scope.siteFilterDisable = true;
         $scope.getSite = function (search) {
             var newSupes = $scope.uiSite.slice();
-            if (search && newSupes.indexOf(search) === -1) {
-                newSupes.unshift(search);
+            if(search){
+              if (search && newSupes.indexOf(search) === -1) {
+                  newSupes.unshift(search);
+              }
             }
-
             return newSupes;
         }
         //
@@ -300,10 +301,11 @@ angular.module('timeSheetApp')
 
         $scope.getStatus= function (search) {
             var newSupes = $scope.uiStatus.slice();
-            if (search && newSupes.indexOf(search) === -1) {
-                newSupes.unshift(search);
+            if(search){
+              if (search && newSupes.indexOf(search) === -1) {
+                  newSupes.unshift(search);
+              }
             }
-
             return newSupes;
         }
 
@@ -314,10 +316,11 @@ angular.module('timeSheetApp')
 
         $scope.getEmp = function (search) {
             var newSupes = $scope.uiEmployee.slice();
-            if (search && newSupes.indexOf(search) === -1) {
-                newSupes.unshift(search);
+            if(search){
+               if (search && newSupes.indexOf(search) === -1) {
+                   newSupes.unshift(search);
+               }
             }
-
             return newSupes;
         }
 
@@ -349,10 +352,13 @@ angular.module('timeSheetApp')
 
         $scope.loadSearchEmployee = function (searchEmployee) {
             // $scope.hideStatus = true;
-            console.log(searchEmployee)
-            $scope.hideEmp = true;
-            $scope.clearField = false;
-            $scope.searchEmployee = $scope.employees[$scope.uiEmployee.indexOf(searchEmployee)]
+            if(searchEmployee){
+               console.log(searchEmployee)
+               $scope.hideEmp = true;
+               $scope.clearField = false;
+               $scope.searchEmployee = $scope.employees[$scope.uiEmployee.indexOf(searchEmployee)];
+            }
+
         }
         //
 
@@ -1054,6 +1060,8 @@ angular.module('timeSheetApp')
         $scope.clearFilter = function() {
         	$scope.noData = false;
             $scope.clearField = true;
+            $scope.siteFilterDisable = true;
+            $scope.sites = null;
             $scope.selectedDateFrom = $filter('date')(fromDate, 'dd/MM/yyyy');
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
             // $scope.selectedDateFromSer = fromDate;
