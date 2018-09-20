@@ -19,29 +19,28 @@
 
   <div id="transactionPage" class="MainExpenseContainer transactionPage">
 
-    <ion-card *ngFor="let items of trans_list" (click)="viewTransaction()">
+    <ion-card >
       <ion-card-header text-center>
-        {{items.site}}
+        {{items.expenseCategory}}
       </ion-card-header>
       <ion-card-content>
 
-        <ion-list>
+        <h3 class="currentBls" text-center>Balance Amount: <span class="green">{{items.balanceAmount}}</span></h3>
+
+        <ion-list *ngFor="let items of trans_list">
           <ion-item>
             Date
-            <ion-note item-end class="dark">{{items.date}}</ion-note>
+            <ion-note item-end class="dark">{{items.expenseDate}}</ion-note>
           </ion-item>
           <ion-item>
             Receipt No
-            <ion-note item-end class="dark">{{items.receipt_no}}</ion-note>
+            <ion-note item-end class="dark">{{items.receiptNumber}}</ion-note>
           </ion-item>
           <ion-item>
             Description
             <ion-note item-end class="dark">{{items.description}}</ion-note>
           </ion-item>
-          <ion-item>
-            Expense Type
-            <ion-note item-end class="dark">{{items.expense_type}}</ion-note>
-          </ion-item>
+
           <ion-item>
             Billable
             <ion-note item-end class="dark">{{items.billable}}</ion-note>
@@ -52,8 +51,19 @@
           </ion-item>
           <ion-item>
             Payment type
-            <ion-note item-end class="dark">{{items.payment_type}}</ion-note>
+            <ion-note item-end class="dark">{{items.paymentType}}</ion-note>
           </ion-item>
+
+          <ion-item>
+            Amount
+            <ion-note item-end class="dark">{{items.debitAmount}}</ion-note>
+          </ion-item>
+
+          <ion-row>
+            <ion-col col-3 *ngFor="let image of trans_list.images;let i of index">
+              <img [src]="image" class="job-img margin-bottom25" (click)="viewImage(i,image)">
+            </ion-col>
+          </ion-row>
         </ion-list>
 
       </ion-card-content>

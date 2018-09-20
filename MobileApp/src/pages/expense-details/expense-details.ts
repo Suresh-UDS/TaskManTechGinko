@@ -56,6 +56,7 @@ export class ExpenseDetails {
       console.log(response);
       this.details = response;
     },err=>{
+      this.component.closeLoader();
       this.spinner = false;
       console.log("Error in getting expense category by site");
       console.log(err);

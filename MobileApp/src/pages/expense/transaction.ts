@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import {NavController, NavParams} from "ionic-angular";
+import {NavController, NavParams, PopoverController} from "ionic-angular";
 import {ExpenseService} from "../service/expenseService";
+import {QuotationImagePopoverPage} from "../quotation/quotation-image-popover";
 
 
 
@@ -14,13 +15,14 @@ export class TransactionPage {
     trans_list : any;
     private details: any;
     searchCriteria:any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public expenseService: ExpenseService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public expenseService: ExpenseService,
+              public  popoverCtrl: PopoverController) {
 
-    this.trans_list = [
-      {id:1,date:'09/08/2018',site:'Test Site',description:'Travel chennai to coimbatore',receipt_no:'14450',expense_type:'travel',billable:'yes',reimbursable:'yes',payment_type:'cash',actions:''},
-      {id:1,date:'09/08/2018',site:'Test Site',description:'Travel chennai to coimbatore',receipt_no:'14450',expense_type:'travel',billable:'yes',reimbursable:'yes',payment_type:'cash',actions:''},
-      {id:1,date:'09/08/2018',site:'Test Site',description:'Travel chennai to coimbatore',receipt_no:'14450',expense_type:'travel',billable:'yes',reimbursable:'yes',payment_type:'cash',actions:''}
-    ]
+    // this.trans_list = [
+    //   {id:1,date:'09/08/2018',site:'Test Site',description:'Travel chennai to coimbatore',receipt_no:'14450',expense_type:'travel',billable:'yes',reimbursable:'yes',payment_type:'cash',actions:''},
+    //   {id:1,date:'09/08/2018',site:'Test Site',description:'Travel chennai to coimbatore',receipt_no:'14450',expense_type:'travel',billable:'yes',reimbursable:'yes',payment_type:'cash',actions:''},
+    //   {id:1,date:'09/08/2018',site:'Test Site',description:'Travel chennai to coimbatore',receipt_no:'14450',expense_type:'travel',billable:'yes',reimbursable:'yes',payment_type:'cash',actions:''}
+    // ]
   }
 
   ionViewDidLoad() {
@@ -42,6 +44,20 @@ export class TransactionPage {
               console.log(err);
           }
       )
+  }
+
+  viewImage(index,img)
+  {
+    let popover = this.popoverCtrl.create(QuotationImagePopoverPage,{i:img,ind:index},{cssClass:'view-img',showBackdrop:false});
+    popover.present({
+
+    });
+
+
+    popover.onDidDismiss(data=>
+    {
+      // this.takenImages.pop(data);
+    })
   }
 
 
