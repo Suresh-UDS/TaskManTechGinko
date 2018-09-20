@@ -22,13 +22,13 @@
 
         <ion-card>
             <ion-card-header text-center>
-                Site Name
+                {{details.siteName}}
             </ion-card-header>
             <ion-card-content>
 
-                  <h3 class="currentBls" text-center>Current Balance : <span class="green">Rs 15,000,00</span></h3>
+                  <h3 class="currentBls" text-center>Current Balance : <span class="green">{{details.totalBalanceAmount}}</span></h3>
 
-                <ion-list *ngFor="let c of category">
+                <ion-list *ngFor="let c of details.categoryWiseExpenses">
                     <ion-item (click)="viewTransaction()">
                         <ion-icon class="CircleIcon" item-start name="ios-plane-outline"></ion-icon>
                         <h2>{{c.category}}</h2>
@@ -61,7 +61,7 @@
                     </ion-item>-->
                     <ion-item class="border-TB-dashed">
                         <h2>Total</h2>
-                        <ion-note item-end class="dark"> 1,12,000</ion-note>
+                        <ion-note item-end class="dark"> {{details.totalDebitAmount}}</ion-note>
                     </ion-item>
 
                 </ion-list>

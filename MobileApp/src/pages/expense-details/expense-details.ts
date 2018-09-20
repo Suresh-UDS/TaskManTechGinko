@@ -21,6 +21,7 @@ export class ExpenseDetails {
   site: any;
   page:1;
   pageSort:15;
+  details:any
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public modalCtrl:ModalController,public viewCtrl:ViewController,
@@ -29,6 +30,7 @@ export class ExpenseDetails {
 
     this.site = this.navParams.get('site');
 
+    this.details = {};
 
   }
 
@@ -49,7 +51,7 @@ export class ExpenseDetails {
     this.expenseService.getCategoriesBySite(searchCriteria).subscribe(response=>{
       console.log("expense by categories");
       console.log(response);
-      this.category = response;
+      this.details = response;
     },err=>{
       console.log("Error in getting expense category by site");
       console.log(err);

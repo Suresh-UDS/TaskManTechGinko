@@ -22,6 +22,7 @@ export class ExpensePage {
   page :1;
   pageSort:15;
   spinner:any;
+  siteList:any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public modalCtrl:ModalController,
               private expenseService: ExpenseService, private siteService: SiteService) {
@@ -31,16 +32,20 @@ export class ExpensePage {
     //   {id:'2',site:'UDS',trans_type:'Debit',debit:'50,000',credit:'-',balance:'70,000',actions:''},
     //   {id:'3',site:'UDS',trans_type:'Credit',debit:'-',credit:'1,00,000',balance:'1,70,000',actions:''},
     // ]
+
+      this.siteList = [];
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad Expense');
 
-    var searchCriteria ={
-      currPage:this.page,
-      pageSort:this.pageSort
-    };
-    this.expenseList(searchCriteria);
+    this.getSites();
+
+    // var searchCriteria ={
+    //   currPage:this.page,
+    //   pageSort:this.pageSort
+    // };
+    // this.expenseList(searchCriteria);
   }
 
     viewExpenseDetails(site){
@@ -71,10 +76,32 @@ export class ExpensePage {
     }
 
     getSites(){
-      this.siteService.searchSite().subscribe(
+        this.spinner = true;
+
+        this.siteService.searchSite().subscribe(
           response=>{
               console.log(response);
-          }
+              this.siteList = response.json();
+
+              for(let site of this.siteList){
+                  console.log(site.name);
+                  this.expenseService.getOverallData(site.id).subscribe(
+                      response=>{
+                          console.log("Overall data response");
+                          console.log(response);
+                          site.name = response.siteName;
+                          site.id = response.siteId;
+                          site.totalBalanceAmount = response.totalBalanceAmount;
+                          site.totalCreditAmount = response.totalCreditAmount;
+                          site.totalDebitAmount = response.totalDebitAmount;
+                          this.spinner=false;
+
+                      }
+                  )
+              }
+          },err=>{
+              this.spinner=false;
+            }
       )
     }
 
