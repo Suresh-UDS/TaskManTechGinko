@@ -742,7 +742,7 @@ public class ExportUtil {
 		return result;
 	}
 	
-	public ExportResult writeMusterRollAttendanceReportToFile(String projName, List<EmployeeAttendanceReport> content, final String empId, ExportResult result) {
+	public ExportResult writeMusterRollAttendanceReportToFile(String projName, Date fromDate, Date toDate, List<EmployeeAttendanceReport> content, final String empId, ExportResult result) {
 		final String KEY_SEPARATOR = "::";
 		Map<String, Map<Integer,Boolean>> attnInfoMap = new TreeMap<String,Map<Integer,Boolean>>(); 
 		//Consolidate the attendance data against emp id.
@@ -839,13 +839,37 @@ public class ExportUtil {
 		int rowNum = 12;
 
 		Set<Entry<String,Map<Integer,Boolean>>> entrySet = attnInfoMap.entrySet();
+		//get the max date of month
+		Calendar fromCal = Calendar.getInstance();
+		fromCal.setTime(fromDate);
+		int daysInMonth = fromCal.getActualMaximum(Calendar.DAY_OF_MONTH);
 		
 		for (Entry<String,Map<Integer,Boolean>> entry : entrySet) {
 
 			Row dataRow = musterSheet.getRow(rowNum++);
 
 			String key = entry.getKey();
+			Map<Integer,Boolean> attnMap = attnInfoMap.get(key);
 			
+			String[] keyArr = key.split(KEY_SEPARATOR);
+			dataRow.getCell(1).setCellValue(keyArr[0]);
+			dataRow.getCell(2).setCellValue(keyArr[1]);
+			//dataRow.getCell(3).setCellValue(); //father's name not available 
+			//dataRow.getCell(4).setCellValue(); //gender not available
+			dataRow.getCell(5).setCellValue(keyArr[2]);
+			
+			int dayStartCell = 6;
+			for(int day=1;day <= daysInMonth;day++) {
+				if(attnMap.containsKey(day)) {
+					boolean attnVal = attnMap.get(day);
+					dataRow.getCell(dayStartCell).setCellValue(attnVal ? "P" : "A");
+				}else {
+					dataRow.getCell(dayStartCell).setCellValue("A");
+				}
+				dayStartCell++;
+			}
+			dayStartCell++;
+			dataRow.getCell(dayStartCell).setCellValue(attnInfoMap.size());
 			
 			/*
 			dataRow.getCell(0).setCellValue(transaction.getEmployeeIds());
