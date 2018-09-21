@@ -9,12 +9,23 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
+
     <ion-title>Expense</ion-title>
+      <ion-buttons right>
+          <button color="primary" ion-button clear  class="add-btn"  (click)="addExpenseModal()">
+              <ion-icon name="md-add" class="clr-orange"></ion-icon>
+          </button>
+      </ion-buttons>
   </ion-navbar>
+
 </ion-header>
 
 
 <ion-content class="greyBg">
+
+  <!--<ion-fab top right edge>
+    <button ion-fab color="primary" (click)="addExpenseModal()"><ion-icon name="ios-add-outline"></ion-icon></button>
+  </ion-fab>-->
 
   <div *ngIf="(!siteList || siteList.length< 0) && !spinner ">
     <ion-card>
@@ -30,6 +41,18 @@
   </div>
 
      <div class="MainExpenseContainer">
+
+       <ion-item class="border-btm">
+         <ion-label  text-capitalize class="client-label" text-left>Client:</ion-label>
+         <select-searchable
+           item-content
+           [items]="clientList"
+           itemValueField="id"
+           itemTextField="name"
+           [canSearch]="true"
+           (onChange)="siteChange($event)">
+         </select-searchable>
+       </ion-item>
 
        <ion-card *ngFor="let site of siteList" (click)="viewExpenseDetails(site)">
          <ion-card-header text-center>
@@ -48,11 +71,22 @@
                <h2>Credit</h2>
                <ion-note item-end class="green">+ {{site.totalCreditAmount}}</ion-note>
              </ion-item>
-             <ion-item text-right>
+             <ion-item text-right *ngIf="site.totalBalanceAmount == 0 ">
                <ion-icon class="CircleIcon" item-start name="ios-briefcase-outline"></ion-icon>
                <h2>Balance</h2>
                <ion-note item-end class="dark">{{site.totalBalanceAmount}}</ion-note>
              </ion-item>
+             <ion-item text-right *ngIf="site.totalBalanceAmount > 0">
+               <ion-icon class="CircleIcon" item-start name="ios-briefcase-outline"></ion-icon>
+               <h2>Balance</h2>
+               <ion-note item-end class="green">{{site.totalBalanceAmount}}</ion-note>
+             </ion-item>
+             <ion-item text-right *ngIf="site.totalBalanceAmount < 0">
+               <ion-icon class="CircleIcon" item-start name="ios-briefcase-outline"></ion-icon>
+               <h2>Balance</h2>
+               <ion-note item-end class="red">{{site.totalBalanceAmount}}</ion-note>
+             </ion-item>
+
            </ion-list>
 
 

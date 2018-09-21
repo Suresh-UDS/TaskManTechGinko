@@ -95,9 +95,6 @@ export class ExpenseDetails {
         this.navCtrl.push(TransactionPage,{category:category,detail:detail});
     }
 
-    addExpenseModal() {
-        let modal = this.modalCtrl.create(AddExpense,{});
-        modal.present();
-    }
+
 
 }
