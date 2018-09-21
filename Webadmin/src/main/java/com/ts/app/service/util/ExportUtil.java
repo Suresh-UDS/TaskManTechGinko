@@ -2206,9 +2206,9 @@ public class ExportUtil {
 				}
 
 				int rowNum = 1;
-				log.debug("Writing feedback to excel file");
+				log.debug("Writing feedback to excel file - content size -" + (CollectionUtils.isNotEmpty(content) ? content.size() : 0));
 				for (FeedbackTransactionDTO transaction : content) {
-
+					log.debug("Feebdack Transaction DTO -" + transaction);
 					Row dataRow = xssfSheet.createRow(rowNum++);
 
 					dataRow.createCell(0).setCellValue(transaction.getId());
@@ -2252,6 +2252,8 @@ public class ExportUtil {
 							}
 						}
 					}
+					log.debug("Rownum -" + rowNum);
+
 				}
 				log.debug("Completed Writing feedback to excel file");
 				for (int i = 0; i < FEEDBACK_HEADER.length; i++) {
