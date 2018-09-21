@@ -10,9 +10,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import javax.inject.Inject;
 
@@ -718,6 +718,7 @@ public class SchedulerHelperService extends AbstractService {
 			cal.set(Calendar.MINUTE, 0);
 			cal.set(Calendar.SECOND, 0);
 			cal.set(Calendar.MILLISECOND, 0);
+			String month = cal.getDisplayName(Calendar.MONTH,Calendar.LONG_STANDALONE, Locale.US);
 			Calendar dayEndcal = Calendar.getInstance();
 			dayEndcal.setTime(toDate);
 			//dayEndcal.add(Calendar.DAY_OF_MONTH, -1);
@@ -761,9 +762,17 @@ public class SchedulerHelperService extends AbstractService {
 						}else if(siteId == 0 && !onDemand) {
 							exportAllSites = true;
 						}
+						StringBuilder shiftValues = new StringBuilder();
 						
 						if(exportAllSites || exportMatchingSite) {
 							List<Shift> shifts = siteRepository.findShiftsBySite(site.getId());
+							
+							if(CollectionUtils.isNotEmpty(shifts)) {
+								for(Shift shift : shifts) {
+									shiftValues.append(shift.getStartTime()+" TO " + shift.getEndTime());
+									shiftValues.append("    ");
+								}
+							}
 							
 							siteAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()),
 									DateUtil.convertToSQLDate(dayEndcal.getTime()));
@@ -887,7 +896,7 @@ public class SchedulerHelperService extends AbstractService {
 								}
 								
 								if(dayReport && (attnDayWiseAlertTime == null ||  alertTimeCal.equals(now) || onDemand)) {
-									exportResult = exportUtil.writeMusterRollAttendanceReportToFile(proj.getName(), fromDate, toDate, empAttnList, null, exportResult);
+									exportResult = exportUtil.writeMusterRollAttendanceReportToFile(proj.getName(), site.getName(), shiftValues.toString(), month, fromDate, toDate, siteAttnList, null, exportResult);
 									mailService.sendAttendanceMusterrollReportEmail(proj.getName(), attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(), null,
 											cal.getTime());
 								}

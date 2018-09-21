@@ -29,6 +29,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -742,14 +743,16 @@ public class ExportUtil {
 		return result;
 	}
 	
-	public ExportResult writeMusterRollAttendanceReportToFile(String projName, Date fromDate, Date toDate, List<EmployeeAttendanceReport> content, final String empId, ExportResult result) {
+	public ExportResult writeMusterRollAttendanceReportToFile(String projName, String siteName, String shifts, String month, Date fromDate, Date toDate, List<EmployeeAttendanceReport> content, final String empId, ExportResult result) {
 		final String KEY_SEPARATOR = "::";
 		Map<String, Map<Integer,Boolean>> attnInfoMap = new TreeMap<String,Map<Integer,Boolean>>(); 
 		//Consolidate the attendance data against emp id.
 		if(CollectionUtils.isNotEmpty(content)) {
 			Calendar attnCal = Calendar.getInstance(); 
 			for(EmployeeAttendanceReport empAttnReport : content) {
-				attnCal.setTime(empAttnReport.getCheckInTime());
+				if(empAttnReport.getCheckInTime() != null) {
+					attnCal.setTime(empAttnReport.getCheckInTime());
+				}
 				Integer attnDay = attnCal.get(Calendar.DAY_OF_MONTH);
 				Map<Integer, Boolean> attnDayMap = null;
 				if(attnInfoMap.containsKey(empAttnReport.getEmployeeId())) {
@@ -757,7 +760,11 @@ public class ExportUtil {
 				}else {
 					attnDayMap = new TreeMap<Integer, Boolean>();
 				}
-				attnDayMap.put(attnDay, true);
+				if(empAttnReport.getCheckInTime() != null) {
+					attnDayMap.put(attnDay, true);
+				}else {
+					attnDayMap.put(attnDay, false);
+				}
 				attnInfoMap.put(empAttnReport.getEmployeeId() + KEY_SEPARATOR + empAttnReport.getName() 
 										+ StringUtils.SPACE + empAttnReport.getLastName() + KEY_SEPARATOR + empAttnReport.getDesignation(), attnDayMap);
 			}
@@ -835,8 +842,32 @@ public class ExportUtil {
 
 		//create data sheet
 		XSSFSheet musterSheet = xssfWorkbook.getSheetAt(0);
+	    CellStyle style = xssfWorkbook.createCellStyle();
+		Font font = xssfWorkbook.createFont();
+	    font.setColor(HSSFColor.DARK_GREEN.index);
+	    style.setFillBackgroundColor(HSSFColor.DARK_GREEN.index);
+	    //style.setFont(font);
+	    //fill the header fields
+	    int rowNum = 8; //10
+	    Row headerRow = musterSheet.getRow(rowNum);
+	    Cell clientNameCell = headerRow.getCell(10);
+	    String clientNameCellVal = headerRow.getCell(10).getStringCellValue(); 
+	    clientNameCell.setCellValue(clientNameCellVal + " " + projName);
+	    rowNum = 9;
+	    headerRow = musterSheet.getRow(rowNum);
+	    Cell siteNameCell = headerRow.getCell(5);
+	    String siteNameCellVal = headerRow.getCell(5).getStringCellValue(); 
+	    siteNameCell.setCellValue(siteNameCellVal + " " + siteName);
+	    
+	    Cell shiftCell = headerRow.getCell(18);
+	    String shiftCellVal = headerRow.getCell(18).getStringCellValue(); 
+	    shiftCell.setCellValue(shiftCellVal + " " + shifts);
 
-		int rowNum = 12;
+	    Cell monthCell = headerRow.getCell(25);
+	    String monthCellVal = headerRow.getCell(25).getStringCellValue(); 
+	    monthCell.setCellValue(monthCellVal + " " + month);
+
+	    rowNum = 11;
 
 		Set<Entry<String,Map<Integer,Boolean>>> entrySet = attnInfoMap.entrySet();
 		//get the max date of month
@@ -859,17 +890,22 @@ public class ExportUtil {
 			dataRow.getCell(5).setCellValue(keyArr[2]);
 			
 			int dayStartCell = 6;
+			int presentCnt = 0;
 			for(int day=1;day <= daysInMonth;day++) {
 				if(attnMap.containsKey(day)) {
 					boolean attnVal = attnMap.get(day);
+					presentCnt += (attnVal ? 1 : 0); 
 					dataRow.getCell(dayStartCell).setCellValue(attnVal ? "P" : "A");
+					if(attnVal) {
+						dataRow.getCell(dayStartCell).setCellStyle(style);
+					}
 				}else {
 					dataRow.getCell(dayStartCell).setCellValue("A");
 				}
 				dayStartCell++;
 			}
 			dayStartCell++;
-			dataRow.getCell(dayStartCell).setCellValue(attnInfoMap.size());
+			dataRow.getCell(dayStartCell).setCellValue(presentCnt);
 			
 			/*
 			dataRow.getCell(0).setCellValue(transaction.getEmployeeIds());
