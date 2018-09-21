@@ -216,6 +216,8 @@ public class InventoryTransactionService extends AbstractService{
 								purchaseReqItemEntity.setPurchaseRequisition(purchaseRequest);
 								purchaseReqItemEntity.setQuantity(materialItm.getMaximumStock());
 								purchaseReqItemEntity.setUnitPrice(0);
+								purchaseReqItemEntity.setApprovedQty(0);
+								purchaseReqItemEntity.setPendingQty(materialItm.getMaximumStock());
 								purchaseItem.add(purchaseReqItemEntity);
 								
 								Set<PurchaseRequisitionItem> materialItem = new HashSet<PurchaseRequisitionItem>();

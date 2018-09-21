@@ -71,4 +71,12 @@ export class ExpenseService {
             }
         )
     }
+
+    getCreditTransactions(searchCriteria):Observable<any>{
+        return this.http.post(this.config.Url+'api/expenses/credit',searchCriteria).map(
+            response=>{
+                return response.json();
+            }
+        )
+    }
 }
