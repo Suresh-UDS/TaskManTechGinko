@@ -134,7 +134,7 @@ angular.module('timeSheetApp')
             $scope.uiSite.splice(0,$scope.uiSite.length)
             $scope.searchSite = null;
             $scope.selectedProject = $scope.projects[$scope.uiClient.indexOf(searchProject)];
-            $scope.loadDepSites()
+            $scope.loadDepSites();
         }
         $scope.loadSearchSite = function (searchSite) {
             $scope.hideSite = true;
@@ -342,7 +342,7 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.ticketStatus = $scope.selectedStatus;
             $scope.searchCriteria.currPage = currPageVal;
             $scope.searchCriteria.findAll = false;
-            $scope.searchCriteria.isReport = true;
+            $scope.searchCriteria.isReport = false;
 
             console.log($scope.selectedProject , $scope.selectedSite)
              if( !$scope.selectedProject && !$scope.selectedSite
@@ -563,6 +563,7 @@ angular.module('timeSheetApp')
         $scope.exportAllData = function(type){
                 $rootScope.exportStatusObj.exportMsg = '';
                 $scope.downloader=true;
+                $scope.searchCriteria.isReport = true;
                 $scope.searchCriteria.exportType = type;
                 $scope.searchCriteria.report = true;
                 $scope.typeMsg = type;
