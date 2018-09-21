@@ -412,10 +412,10 @@
                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                     <!--<span class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                    <ui-select ng-model="selectedSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-click="loadSearchSite(selectedSite);searchLocations();loadFeedbackMasters();">
+                                    <ui-select ng-model="selectedSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-change="loadSearchSite(selectedSite);searchLocations();loadFeedbackMasters();">
                                         <ui-select-match placeholder="Select site...">{{sites.length == 0 ? 'Select site' : selectedSite.searchStatus ? selectedSite.name?selectedSite.name:'Select Site' : hideSite ?clearField?'Select site':selectedSite : 'Select Site' }}</ui-select-match>
                                         <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
-                                            <div ng-bind="site"></div>
+                                            <div ng-bind="site" ng-click="loadSearchSite(selectedSite);searchLocations();loadFeedbackMasters();"></div>
                                         </ui-select-choices>
                                     </ui-select>
                                     <span ng-if="sites.length == 0"><p class="error-msg margin0">No sites</p></span>

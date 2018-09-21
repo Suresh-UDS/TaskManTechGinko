@@ -501,6 +501,8 @@ angular.module('timeSheetApp')
         $scope.clearFilter = function() {
 
             $scope.clearField = true;
+            $scope.siteFilterDisable = true;
+            $scope.sites = null;
             $scope.selectedSite = null;
             $scope.selectedProject = null;
             $scope.searchCriteria = {};
