@@ -52,11 +52,13 @@
             <ion-note item-end class="dark">{{items.paymentType}}</ion-note>
           </ion-item>
 
-          <ion-row>
-            <ion-col col-3 *ngFor="let image of trans_list.expenseDocumentList;let i of index">
-              <img [src]="image" class="job-img margin-bottom25" (click)="viewImage(i,image)">
-            </ion-col>
-          </ion-row>
+            <ion-item>
+                <div *ngFor="let image of items.expenseDocumentList;let i of index" >
+                    <img src="{{image.fileUrl}}" class="job-img margin-bottom25" (click)="viewImage(i,image.fileUrl)">
+                </div>
+            </ion-item>
+
+
         </ion-list>
 
       </ion-card-content>
