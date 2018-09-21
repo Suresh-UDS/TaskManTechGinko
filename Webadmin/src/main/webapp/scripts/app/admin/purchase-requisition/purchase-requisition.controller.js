@@ -728,6 +728,7 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria = {};
                 $scope.searchRequestedDate = null;
                 $scope.searchApprovedDate = null;
+                $scope.selectedRequestStatus = null;
                 $scope.localStorage = null;
                 $rootScope.searchCriteriaSite = null;
                 $scope.pages = {
