@@ -11,12 +11,11 @@
     </button>
 
     <ion-title>Expense</ion-title>
-
-    <ion-buttons end>
-      <button (click)="addExpenseModal()">
-        <ion-icon name="ios-add-outline"></ion-icon>
-      </button>
-    </ion-buttons>
+      <ion-buttons right>
+          <button color="primary" ion-button clear  class="add-btn"  (click)="addExpenseModal()">
+              <ion-icon name="md-add" class="clr-orange"></ion-icon>
+          </button>
+      </ion-buttons>
   </ion-navbar>
 
 </ion-header>
