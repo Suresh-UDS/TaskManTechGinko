@@ -11,7 +11,7 @@
         <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800">
             <ion-segment-button value="details">Details</ion-segment-button>
             <ion-segment-button value="checklist">Checklist</ion-segment-button>
-            <ion-segment-button value="inventory">Inventory</ion-segment-button>
+            <ion-segment-button value="inventory">Material</ion-segment-button>
         </ion-segment>
     </ion-toolbar>
 </ion-header>
@@ -161,37 +161,38 @@
         </div>
     </ion-list>
 
-
-    <ion-list *ngSwitchCase="'inventory'" >
-        <div (click)="viewDetails(indent)" class="card">
+<div *ngSwitchCase="'inventory'">
+    <ion-list  *ngFor="let i of material">
+        <div  class="card">
             <ion-row no-margin>
-                <ion-col col-5>
-                    <p class="margin0" text-center>Screw Driver</p>
+                <ion-col col-4>
+                    <p class="margin0" text-center>{{i.materialName}}</p>
                     <p class="margin0 clr-orange fnt-12 txt-hide" text-center>Material Name</p>
                 </ion-col>
-                <ion-col col-2>
+                <ion-col col-4>
                     <div class="">
-                        <p text-center class="margin0" text-uppercase>10</p>
+                        <p text-center class="margin0" text-uppercase>{{i.materialQuantity}}</p>
                         <p text-center class="margin0 clr-orange fnt-12">Quantity</p>
                     </div>
                 </ion-col>
-                <ion-col col-2>
+                <ion-col col-4>
                     <div class="">
-                        <p text-center class="margin0" text-uppercase>NOS</p>
+                        <p text-center class="margin0" text-uppercase>{{i.materialUom}}</p>
                         <p text-center class="margin0 clr-orange fnt-12">UOM</p>
                     </div>
                 </ion-col>
-                <ion-col col-3>
-                    <div class="">
-                        <p text-center class="margin0" text-uppercase>17.09.18</p>
-                        <p text-center class="margin0 clr-orange fnt-12">Date</p>
-                    </div>
-                </ion-col>
+                <!--<ion-col col-3>-->
+                    <!--<div class="">-->
+                        <!--<p text-center class="margin0" text-uppercase>17.09.18</p>-->
+                        <!--<p text-center class="margin0 clr-orange fnt-12">Date</p>-->
+                    <!--</div>-->
+                <!--</ion-col>-->
             </ion-row>
         </div>
 
 
     </ion-list>
+</div>
 </div>
 
 
@@ -207,18 +208,19 @@
             </ion-toolbar>
         </ion-footer>
     </ion-list>
-    <ion-list *ngSwitchCase=" categories === 'details'">
+    <ion-list>
         <ion-footer>
             <ion-toolbar class="align-right" padding-left padding-right>
-                <button class="btn btn-warning center pull-left width42" (click)="saveJob(jobDetails)">
+                <button class="btn btn-warning center pull-left width42" (click)="saveJob(jobDetails,material)">
                     Save
                 </button>
-                <button class="btn btn-success center pull-right" (click)="completeJob(jobDetails,takenImages)">
+                <button class="btn btn-success center pull-right" (click)="completeJob(jobDetails,takenImages,material)">
                     Complete <ion-icon name="ios-arrow-forward-outline"></ion-icon>
                 </button>
             </ion-toolbar>
         </ion-footer>
     </ion-list>
+
 </div>
 
 

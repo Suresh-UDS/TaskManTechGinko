@@ -13,4 +13,17 @@ page-add-material {
   {
     background:none !important;
   }
+  .item-md
+  {
+    padding-left:0px !important;
+  }
+  .list-md .item-input:last-child {
+    /* border-bottom: 1px solid #dedede; */
+    border-bottom:none !important;
+  }
+  .select-searchable
+  {
+    max-width:100% !important;
+  }
+
 }
