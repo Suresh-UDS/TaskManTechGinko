@@ -320,9 +320,9 @@ public class FeedbackTransactionService extends AbstractService {
 			searchCriteria.setCheckInDateTimeTo(endCal.getTime());            
 	        	java.sql.Date fromDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(startCal));
 	        	ZonedDateTime fromTime = fromDt.toLocalDate().atStartOfDay(ZoneId.of("Asia/Kolkata"));
-	        	fromTime = fromTime.withHour(23);
-	        	fromTime = fromTime.withMinute(59);
-	        	fromTime = fromTime.withSecond(59);
+	        	fromTime = fromTime.withHour(0);
+	        	fromTime = fromTime.withMinute(0);
+	        	fromTime = fromTime.withSecond(0);
 	        	java.sql.Date toDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(endCal));
 	        	ZonedDateTime toTime = toDt.toLocalDate().atStartOfDay(ZoneId.of("Asia/Kolkata"));
 	        	toTime = toTime.withHour(23);
