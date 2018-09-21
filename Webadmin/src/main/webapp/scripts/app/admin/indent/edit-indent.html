@@ -28,7 +28,7 @@
                                         <div class="form-group">
                                             <label class="control-label">Select Client <span class="red-star">*</span></label>
                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select ng-options = "project as project.name for project in projects track by project.id" ng-model ="selectedProject" ng-change ="loadSites()" class="form-control">
+                                            <select ng-options = "project as project.name for project in projects track by project.id" ng-disabled="true" ng-model ="selectedProject" ng-change ="loadSites()" class="form-control">
                                                 <option value="">Select Client...</option>
                                             </select>
                                         </div>
@@ -41,7 +41,7 @@
                                         <div class="form-group" ng-init="loadAllSites()">
                                             <label class="control-label">Select Site <span class="red-star">*</span></label>
                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select ng-options = "site as site.name for site in sites track by site.id" ng-change="loadEmployees()" ng-model ="selectedSite" class="form-control">
+                                            <select ng-options = "site as site.name for site in sites track by site.id" ng-change="loadEmployees()" ng-disabled="true" ng-model ="selectedSite" class="form-control">
                                                 <option value="">Select Site...</option>
                                             </select>
                                         </div>
