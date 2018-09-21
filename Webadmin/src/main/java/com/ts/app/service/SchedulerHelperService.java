@@ -10,9 +10,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import javax.inject.Inject;
 
@@ -706,17 +706,21 @@ public class SchedulerHelperService extends AbstractService {
 	}
 	
 	@Transactional
-	public void generateMusterRollAttendanceReport(Date date, boolean shiftAlert, boolean dayReport, boolean onDemand) {
+	public void generateMusterRollAttendanceReport(long siteId, Date fromDate, Date toDate, boolean dayReport, boolean onDemand) {
 		if (env.getProperty("scheduler.attendanceMusterRollReport.enabled").equalsIgnoreCase("true")) {
+			boolean exportAllSites = false;
+			boolean exportMatchingSite = false;
+			
 			Calendar cal = Calendar.getInstance();
-			cal.setTime(date);
+			cal.setTime(fromDate);
 			//cal.add(Calendar.DAY_OF_MONTH, -1);
 			cal.set(Calendar.HOUR_OF_DAY, 0);
 			cal.set(Calendar.MINUTE, 0);
 			cal.set(Calendar.SECOND, 0);
 			cal.set(Calendar.MILLISECOND, 0);
+			String month = cal.getDisplayName(Calendar.MONTH,Calendar.LONG_STANDALONE, Locale.US);
 			Calendar dayEndcal = Calendar.getInstance();
-			dayEndcal.setTime(date);
+			dayEndcal.setTime(toDate);
 			//dayEndcal.add(Calendar.DAY_OF_MONTH, -1);
 			dayEndcal.set(Calendar.HOUR_OF_DAY, 23);
 			dayEndcal.set(Calendar.MINUTE, 59);
@@ -737,9 +741,7 @@ public class SchedulerHelperService extends AbstractService {
 				Set<Site> sites = proj.getSite();
 				Iterator<Site> siteItr = sites.iterator();
 				List<Setting> settings = null;
-				if(shiftAlert) {
-					settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_SHIFTWISE_ATTENDANCE, proj.getId());
-				}else if(dayReport) {
+				if(dayReport) {
 					settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE, proj.getId());
 				}
 				Setting attendanceReports = null;
@@ -754,144 +756,164 @@ public class SchedulerHelperService extends AbstractService {
 					StringBuilder content = new StringBuilder();
 					while (siteItr.hasNext()) {
 						Site site = siteItr.next();
-						List<Shift> shifts = siteRepository.findShiftsBySite(site.getId());
 						
-						siteAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()),
-								DateUtil.convertToSQLDate(dayEndcal.getTime()));
-						List<Long> empPresentList = new ArrayList<Long>();
-						if (CollectionUtils.isNotEmpty(siteAttnList)) {
-							for (EmployeeAttendanceReport empAttn : siteAttnList) {
-								empPresentList.add(empAttn.getEmpId());
-							}
+						if(siteId > 0 && onDemand && site.getId() == siteId) {
+							exportMatchingSite = true;
+						}else if(siteId == 0 && !onDemand) {
+							exportAllSites = true;
 						}
-						List<Employee> empNotMarkedAttn = null;
-						if (CollectionUtils.isNotEmpty(empPresentList)) {
-							empNotMarkedAttn = employeeRepository.findNonMatchingBySiteId(site.getId(), empPresentList);
-						} else {
-							empNotMarkedAttn = employeeRepository.findBySiteId(site.getId());
-						}
-						if (CollectionUtils.isNotEmpty(empNotMarkedAttn)) {
-							//List<Shift> shifts = site.getShifts();
-							shifts = siteRepository.findShiftsBySite(site.getId());
-							for (Employee emp : empNotMarkedAttn) {
-								EmployeeShift empShift = null; 
-								for (Shift shift : shifts) {
-									String startTime = shift.getStartTime();
-									String[] startTimeUnits = startTime.split(":");
-									Calendar startCal = Calendar.getInstance();
-									startCal.setTime(date);
-									//startCal.add(Calendar.DAY_OF_MONTH, -1);
-									startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
-									startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
-									startCal.set(Calendar.SECOND, 0);
-									startCal.set(Calendar.MILLISECOND, 0);
-									String endTime = shift.getEndTime();
-									String[] endTimeUnits = endTime.split(":");
-									Calendar endCal = Calendar.getInstance();
-									endCal.setTime(date);
-									//endCal.add(Calendar.DAY_OF_MONTH, -1);
-									endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
-									endCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
-									endCal.set(Calendar.SECOND, 0);
-									endCal.set(Calendar.MILLISECOND, 0);
-									if(endCal.before(startCal)) {
-										endCal.add(Calendar.DAY_OF_MONTH, 1);
-									}
-									empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), emp.getId(), DateUtil.convertToTimestamp(startCal.getTime()), DateUtil.convertToTimestamp(endCal.getTime()));
-									if(empShift != null) {
-										break;
-									}
-								}
-								EmployeeAttendanceReport empAttnRep = new EmployeeAttendanceReport();
-								empAttnRep.setEmpId(emp.getId());
-								empAttnRep.setEmployeeId(emp.getEmpId());
-								empAttnRep.setName(emp.getName());
-								empAttnRep.setLastName(emp.getLastName());
-								empAttnRep.setDesignation(emp.getDesignation());
-								empAttnRep.setStatus(EmployeeAttendanceReport.ABSENT_STATUS);
-								empAttnRep.setSiteName(site.getName());
-								if(empShift != null) {
-									Timestamp startTime = empShift.getStartTime();
-									Calendar startCal = Calendar.getInstance();
-									startCal.setTimeInMillis(startTime.getTime());
-									empAttnRep.setShiftStartTime(startCal.get(Calendar.HOUR_OF_DAY) + ":" + startCal.get(Calendar.MINUTE));
-									Timestamp endTime = empShift.getEndTime();
-									Calendar endCal = Calendar.getInstance();
-									endCal.setTimeInMillis(endTime.getTime());
-									empAttnRep.setShiftEndTime(endCal.get(Calendar.HOUR_OF_DAY) + ":" + endCal.get(Calendar.MINUTE));
-								}else {
-									empAttnRep.setShiftStartTime("");
-									empAttnRep.setShiftEndTime("");
-								}
-								empAttnRep.setProjectName(proj.getName());
-								siteAttnList.add(empAttnRep);
-							}
-						}
-					}
-					List<Setting> emailAlertTimeSettings = null;
-					// summary map
-					if(shiftAlert) {
-						settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_SHIFTWISE_ATTENDANCE_EMAILS, proj.getId());
-					}else if(dayReport) {
-						settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_EMAILS, proj.getId());
-						emailAlertTimeSettings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_ALERT_TIME, proj.getId());
-					}
-					Setting attendanceReportEmails = null;
-					if (CollectionUtils.isNotEmpty(settings)) {
-						attendanceReportEmails = settings.get(0);
-					}
-					Setting attnDayWiseAlertTime = null;
-					if (CollectionUtils.isNotEmpty(emailAlertTimeSettings)) {
-						attnDayWiseAlertTime = emailAlertTimeSettings.get(0);
-					}
-
-					Map<String, String> summaryMap = new HashMap<String, String>();
-					//get total employee count
-					long projEmpCnt = employeeRepository.findCountByProjectId(proj.getId());
-
-					summaryMap.put("TotalEmployees", String.valueOf(projEmpCnt));
-					summaryMap.put("TotalPresent", String.valueOf(projPresent));
-					summaryMap.put("TotalAbsent", String.valueOf(projEmpCnt - projPresent));
-
-					content = new StringBuilder("Client Name - " + proj.getName() + Constants.LINE_SEPARATOR);
-					content.append("Total employees - " + projEmpCnt + Constants.LINE_SEPARATOR);
-					content.append("Present - " + projPresent + Constants.LINE_SEPARATOR);
-					content.append("Absent - " + (projEmpCnt - projPresent) + Constants.LINE_SEPARATOR);
-					log.debug("Project Name  - "+ proj.getName() + ", shift alert -" + shiftAlert + ", dayReport -" + dayReport);
-					// send reports in email.
-					if (attendanceReportEmails != null && projEmployees > 0) {
-						ExportResult exportResult = null;
-						String alertTime = attnDayWiseAlertTime !=null ? attnDayWiseAlertTime.getSettingValue() : null;
-						Calendar now = Calendar.getInstance();
-						now.set(Calendar.SECOND,  0);
-						now.set(Calendar.MILLISECOND, 0);
-						Calendar alertTimeCal = Calendar.getInstance();
-						if(StringUtils.isNotEmpty(alertTime)) {
-							try {
-								Date alertDateTime = DateUtil.parseToDateTime(alertTime);
-								alertTimeCal.setTime(alertDateTime);
-								alertTimeCal.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH));
-								alertTimeCal.set(Calendar.MONTH, now.get(Calendar.MONTH));
-								alertTimeCal.set(Calendar.YEAR, now.get(Calendar.YEAR));
-								alertTimeCal.set(Calendar.SECOND, 0);
-								alertTimeCal.set(Calendar.MILLISECOND, 0);
-							}catch (Exception e) {
-								log.error("Error while parsing attendance shift alert time configured for client : " + proj.getName() , e);
-							}
-						}
+						StringBuilder shiftValues = new StringBuilder();
 						
-						if(dayReport && (attnDayWiseAlertTime == null ||  alertTimeCal.equals(now) || onDemand)) {
-							exportResult = exportUtil.writeMusterRollAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
-							//mailService.sendAttendanceDetailedReportEmail(proj.getName(), attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(), null,
-							//		cal.getTime(), summaryMap, shiftWiseSummary, siteWiseConsolidatedMap);
-						}else if(shiftAlert || onDemand) {
-							exportResult = exportUtil.writeMusterRollAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
-							//mailService.sendAttendanceDetailedReportEmail(proj.getName(), attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(), null,
-							//		cal.getTime(), summaryMap, shiftWiseSummary, siteWiseConsolidatedMap);
+						if(exportAllSites || exportMatchingSite) {
+							List<Shift> shifts = siteRepository.findShiftsBySite(site.getId());
 							
+							if(CollectionUtils.isNotEmpty(shifts)) {
+								for(Shift shift : shifts) {
+									shiftValues.append(shift.getStartTime()+" TO " + shift.getEndTime());
+									shiftValues.append("    ");
+								}
+							}
+							
+							siteAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()),
+									DateUtil.convertToSQLDate(dayEndcal.getTime()));
+							List<Long> empPresentList = new ArrayList<Long>();
+							if (CollectionUtils.isNotEmpty(siteAttnList)) {
+								for (EmployeeAttendanceReport empAttn : siteAttnList) {
+									empPresentList.add(empAttn.getEmpId());
+								}
+							}
+							List<Employee> empNotMarkedAttn = null;
+							if (CollectionUtils.isNotEmpty(empPresentList)) {
+								empNotMarkedAttn = employeeRepository.findNonMatchingBySiteId(site.getId(), empPresentList);
+							} else {
+								empNotMarkedAttn = employeeRepository.findBySiteId(site.getId());
+							}
+							if (CollectionUtils.isNotEmpty(empNotMarkedAttn)) {
+								//List<Shift> shifts = site.getShifts();
+								shifts = siteRepository.findShiftsBySite(site.getId());
+								for (Employee emp : empNotMarkedAttn) {
+									EmployeeShift empShift = null; 
+									for (Shift shift : shifts) {
+										String startTime = shift.getStartTime();
+										String[] startTimeUnits = startTime.split(":");
+										Calendar startCal = Calendar.getInstance();
+										startCal.setTime(fromDate);
+										//startCal.add(Calendar.DAY_OF_MONTH, -1);
+										startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
+										startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
+										startCal.set(Calendar.SECOND, 0);
+										startCal.set(Calendar.MILLISECOND, 0);
+										String endTime = shift.getEndTime();
+										String[] endTimeUnits = endTime.split(":");
+										Calendar endCal = Calendar.getInstance();
+										endCal.setTime(fromDate);
+										//endCal.add(Calendar.DAY_OF_MONTH, -1);
+										endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
+										endCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
+										endCal.set(Calendar.SECOND, 0);
+										endCal.set(Calendar.MILLISECOND, 0);
+										if(endCal.before(startCal)) {
+											endCal.add(Calendar.DAY_OF_MONTH, 1);
+										}
+										empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), emp.getId(), DateUtil.convertToTimestamp(startCal.getTime()), DateUtil.convertToTimestamp(endCal.getTime()));
+										if(empShift != null) {
+											break;
+										}
+									}
+									EmployeeAttendanceReport empAttnRep = new EmployeeAttendanceReport();
+									empAttnRep.setEmpId(emp.getId());
+									empAttnRep.setEmployeeId(emp.getEmpId());
+									empAttnRep.setName(emp.getName());
+									empAttnRep.setLastName(emp.getLastName());
+									empAttnRep.setDesignation(emp.getDesignation());
+									empAttnRep.setStatus(EmployeeAttendanceReport.ABSENT_STATUS);
+									empAttnRep.setSiteName(site.getName());
+									if(empShift != null) {
+										Timestamp startTime = empShift.getStartTime();
+										Calendar startCal = Calendar.getInstance();
+										startCal.setTimeInMillis(startTime.getTime());
+										empAttnRep.setShiftStartTime(startCal.get(Calendar.HOUR_OF_DAY) + ":" + startCal.get(Calendar.MINUTE));
+										Timestamp endTime = empShift.getEndTime();
+										Calendar endCal = Calendar.getInstance();
+										endCal.setTimeInMillis(endTime.getTime());
+										empAttnRep.setShiftEndTime(endCal.get(Calendar.HOUR_OF_DAY) + ":" + endCal.get(Calendar.MINUTE));
+									}else {
+										empAttnRep.setShiftStartTime("");
+										empAttnRep.setShiftEndTime("");
+									}
+									empAttnRep.setProjectName(proj.getName());
+									siteAttnList.add(empAttnRep);
+								}
+							}
 						}
+						
+						
+						if(exportAllSites || exportMatchingSite) {
+							
+							List<Setting> emailAlertTimeSettings = null;
+							// summary map
+							if(dayReport) {
+								settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_EMAILS, proj.getId());
+								emailAlertTimeSettings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_ALERT_TIME, proj.getId());
+							}
+							Setting attendanceReportEmails = null;
+							if (CollectionUtils.isNotEmpty(settings)) {
+								attendanceReportEmails = settings.get(0);
+							}
+							Setting attnDayWiseAlertTime = null;
+							if (CollectionUtils.isNotEmpty(emailAlertTimeSettings)) {
+								attnDayWiseAlertTime = emailAlertTimeSettings.get(0);
+							}
+		
+							//get total employee count
+							long projEmpCnt = employeeRepository.findCountByProjectId(proj.getId());
+		
+							content = new StringBuilder("Client Name - " + proj.getName() + Constants.LINE_SEPARATOR);
+							content.append("Total employees - " + projEmpCnt + Constants.LINE_SEPARATOR);
+							content.append("Present - " + projPresent + Constants.LINE_SEPARATOR);
+							content.append("Absent - " + (projEmpCnt - projPresent) + Constants.LINE_SEPARATOR);
+							log.debug("Project Name  - "+ proj.getName() + ", dayReport -" + dayReport);
+							// send reports in email.
+							if (attendanceReportEmails != null && projEmpCnt > 0) {
+								ExportResult exportResult = null;
+								String alertTime = attnDayWiseAlertTime !=null ? attnDayWiseAlertTime.getSettingValue() : null;
+								Calendar now = Calendar.getInstance();
+								now.set(Calendar.SECOND,  0);
+								now.set(Calendar.MILLISECOND, 0);
+								Calendar alertTimeCal = Calendar.getInstance();
+								if(StringUtils.isNotEmpty(alertTime)) {
+									try {
+										Date alertDateTime = DateUtil.parseToDateTime(alertTime);
+										alertTimeCal.setTime(alertDateTime);
+										alertTimeCal.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH));
+										alertTimeCal.set(Calendar.MONTH, now.get(Calendar.MONTH));
+										alertTimeCal.set(Calendar.YEAR, now.get(Calendar.YEAR));
+										alertTimeCal.set(Calendar.SECOND, 0);
+										alertTimeCal.set(Calendar.MILLISECOND, 0);
+									}catch (Exception e) {
+										log.error("Error while parsing attendance shift alert time configured for client : " + proj.getName() , e);
+									}
+								}
+								
+								if(dayReport && (attnDayWiseAlertTime == null ||  alertTimeCal.equals(now) || onDemand)) {
+									exportResult = exportUtil.writeMusterRollAttendanceReportToFile(proj.getName(), site.getName(), shiftValues.toString(), month, fromDate, toDate, siteAttnList, null, exportResult);
+									mailService.sendAttendanceMusterrollReportEmail(proj.getName(), attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(), null,
+											cal.getTime());
+								}
+							}
+						}
+						
+						if(exportMatchingSite) {
+							break;
+						}
+						
 					}
+					
+					
 					//}
+				}
+				if(exportMatchingSite) {
+					break;
 				}
 			}
 		}
