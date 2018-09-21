@@ -71,11 +71,22 @@
                <h2>Credit</h2>
                <ion-note item-end class="green">+ {{site.totalCreditAmount}}</ion-note>
              </ion-item>
-             <ion-item text-right>
+             <ion-item text-right *ngIf="site.totalBalanceAmount == 0 ">
                <ion-icon class="CircleIcon" item-start name="ios-briefcase-outline"></ion-icon>
                <h2>Balance</h2>
                <ion-note item-end class="dark">{{site.totalBalanceAmount}}</ion-note>
              </ion-item>
+             <ion-item text-right *ngIf="site.totalBalanceAmount > 0">
+               <ion-icon class="CircleIcon" item-start name="ios-briefcase-outline"></ion-icon>
+               <h2>Balance</h2>
+               <ion-note item-end class="green">{{site.totalBalanceAmount}}</ion-note>
+             </ion-item>
+             <ion-item text-right *ngIf="site.totalBalanceAmount < 0">
+               <ion-icon class="CircleIcon" item-start name="ios-briefcase-outline"></ion-icon>
+               <h2>Balance</h2>
+               <ion-note item-end class="red">{{site.totalBalanceAmount}}</ion-note>
+             </ion-item>
+
            </ion-list>
 
 

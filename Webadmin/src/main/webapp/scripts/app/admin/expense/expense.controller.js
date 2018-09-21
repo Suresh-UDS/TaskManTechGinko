@@ -71,6 +71,10 @@ angular.module('timeSheetApp')
                 })
             };
 
+			$scope.refresh = function () {
+                $scope.searchFilter();
+            }
+
 			//Loading Page go to top position
 			$scope.loadPageTop = function(){
 			    //alert("test");
