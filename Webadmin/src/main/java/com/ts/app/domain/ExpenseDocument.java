@@ -32,6 +32,8 @@ public class ExpenseDocument extends AbstractAuditingEntity implements Serializa
 
     private String file;
 
+    private String fileUrl;
+
     private String type;
 
     private Date uploadedDate;
@@ -91,5 +93,13 @@ public class ExpenseDocument extends AbstractAuditingEntity implements Serializa
 
     public void setExpense(Expense expense) {
         this.expense = expense;
+    }
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
     }
 }

@@ -21,7 +21,7 @@ angular.module('timeSheetApp')
                 });
             },
             findOne: function(id){
-                return $http.get('api/expense/search/'+id).then(function (response) {
+                return $http.get('api/expenses/'+id).then(function (response) {
                     return response.data;
                 });
             },
@@ -101,11 +101,11 @@ angular.module('timeSheetApp')
                 var fileFormData = new FormData();
 
                 fileFormData.append('title', expense.title);
-                fileFormData.append('assetId', expense.expenseId);
+                fileFormData.append('expenseId', expense.expenseId);
                 fileFormData.append('uploadFile', file);
                 fileFormData.append('type', expense.type);
 
-                return $http.post('api/expenses/uploadAssetPhoto', fileFormData, {
+                return $http.post('api/expenses/uploadExpensePhoto', fileFormData, {
                     transformRequest: angular.identity,
                     headers: {'Content-Type': undefined}
                 }).then(function (response) {
