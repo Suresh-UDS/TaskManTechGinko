@@ -212,7 +212,7 @@ public class PurchaseRequisitionService extends AbstractService {
 				if(itemEntity.getId() == itemDto.getId()) {
 					itemFound = true;
 					itemEntity.setQuantity(itemDto.getQuantity());
-					itemEntity.setApprovedQty(itemDto.getApprovedQty());
+					itemEntity.setApprovedQty(itemDto.getCurrentAprQty());
 					itemEntity.setUnitPrice(itemDto.getUnitPrice());
 					break;
 				}

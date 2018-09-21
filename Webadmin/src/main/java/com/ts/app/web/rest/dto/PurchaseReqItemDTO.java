@@ -22,6 +22,8 @@ public class PurchaseReqItemDTO extends BaseDTO {
 	
 	private long approvedQty;
 	
+	private long currentAprQty;
+	
 	private long pendingQty;
 
 	public long getId() {
@@ -112,8 +114,13 @@ public class PurchaseReqItemDTO extends BaseDTO {
 		this.pendingQty = pendingQty;
 	}
 
-	
-	
-	
+	public long getCurrentAprQty() {
+		return currentAprQty;
+	}
+
+	public void setCurrentAprQty(long currentAprQty) {
+		this.currentAprQty = currentAprQty;
+	}
+
 
 }

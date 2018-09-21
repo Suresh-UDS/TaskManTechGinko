@@ -37,6 +37,9 @@ public class JobMaterial extends AbstractAuditingEntity implements Serializable 
 	@Column(name = "material_stock")
 	private long materialStock;
 	
+	@Column(name = "material_quantity")
+	private long materialQuantity;
+	
 	@Column(name = "material_uom")
 	private String materialUom;
 	
@@ -106,6 +109,14 @@ public class JobMaterial extends AbstractAuditingEntity implements Serializable 
 
 	public void setJob(Job job) {
 		this.job = job;
+	}
+
+	public long getMaterialQuantity() {
+		return materialQuantity;
+	}
+
+	public void setMaterialQuantity(long materialQuantity) {
+		this.materialQuantity = materialQuantity;
 	}
 	
 	

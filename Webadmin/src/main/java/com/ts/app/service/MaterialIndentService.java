@@ -315,7 +315,7 @@ public class MaterialIndentService extends AbstractService {
 					Material materialItm = inventoryRepository.findOne(itemDto.getMaterialId());
 					if(itemEntity.getPendingQuantity() > 0) {   
 						Date dateofTransaction = new Date();
-						if(materialItm.getStoreStock() > itemDto.getIssuedQuantity()) {
+						if(materialItm.getStoreStock() > itemDto.getIssuedQuantity() && itemDto.getIssuedQuantity() > 0) {
 							long consumptionStock = materialItm.getStoreStock() - itemDto.getIssuedQuantity();
 							reducedQty = itemEntity.getPendingQuantity() - itemDto.getIssuedQuantity();  
 							addedQty = itemEntity.getIssuedQuantity() + itemDto.getIssuedQuantity(); 
@@ -424,6 +424,8 @@ public class MaterialIndentService extends AbstractService {
 		purchaseReqItemEntity.setPurchaseRequisition(purchaseReq);
 		purchaseReqItemEntity.setQuantity(material.getMaximumStock());
 		purchaseReqItemEntity.setUnitPrice(0);
+		purchaseReqItemEntity.setApprovedQty(0);
+		purchaseReqItemEntity.setPendingQty(material.getMaximumStock());
 		purchaseItem.add(purchaseReqItemEntity);
 		PurchaseRefGen purchaseRef = new PurchaseRefGen();
 

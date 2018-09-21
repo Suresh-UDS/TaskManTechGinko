@@ -20,6 +20,8 @@ public class MaterialIndentItemDTO extends BaseDTO {
 	
 	private long issuedQuantity;
 	
+	private long currentQuantity;
+	
 	private long pendingQuantity;
 	
 	public long getId() {
@@ -100,6 +102,14 @@ public class MaterialIndentItemDTO extends BaseDTO {
 
 	public void setPendingQuantity(long pendingQuantity) {
 		this.pendingQuantity = pendingQuantity;
+	}
+
+	public long getCurrentQuantity() {
+		return currentQuantity;
+	}
+
+	public void setCurrentQuantity(long currentQuantity) {
+		this.currentQuantity = currentQuantity;
 	} 
 	
 		

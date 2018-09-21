@@ -587,7 +587,15 @@ angular.module('timeSheetApp')
                     $scope.selectedRow = null;
                 },1000);
             }
-            	
+            
+            $scope.validateNumber = function(item, currentAprQty) { 
+//            	alert('validate');
+            	if(item.quantity > currentAprQty) {
+            		console.log(currentAprQty);
+            	}else{
+            		$scope.showNotifications('top','center','danger','Quantity cannot exceeds a required quantity');
+            	}
+            }
       
                 $scope.updatePurchaseReq = function(status) {
                 	console.log(status);
@@ -720,6 +728,7 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria = {};
                 $scope.searchRequestedDate = null;
                 $scope.searchApprovedDate = null;
+                $scope.selectedRequestStatus = null;
                 $scope.localStorage = null;
                 $rootScope.searchCriteriaSite = null;
                 $scope.pages = {

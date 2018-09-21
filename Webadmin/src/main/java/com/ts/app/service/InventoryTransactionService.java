@@ -169,7 +169,7 @@ public class InventoryTransactionService extends AbstractService{
 						long addedQty = 0;
 						Material materialItm = inventoryRepository.findOne(itemDto.getMaterialId());
 						if(itemEntity.getPendingQuantity() > 0) {
-							if(materialItm.getStoreStock() > itemDto.getIssuedQuantity()) {
+							if(materialItm.getStoreStock() > itemDto.getIssuedQuantity() && itemDto.getIssuedQuantity() > 0) {
 								long consumptionStock = materialItm.getStoreStock() - itemDto.getIssuedQuantity();
 								reducedQty = itemEntity.getPendingQuantity() - itemDto.getIssuedQuantity();   
 								addedQty = itemEntity.getIssuedQuantity() + itemDto.getIssuedQuantity();
@@ -216,6 +216,8 @@ public class InventoryTransactionService extends AbstractService{
 								purchaseReqItemEntity.setPurchaseRequisition(purchaseRequest);
 								purchaseReqItemEntity.setQuantity(materialItm.getMaximumStock());
 								purchaseReqItemEntity.setUnitPrice(0);
+								purchaseReqItemEntity.setApprovedQty(0);
+								purchaseReqItemEntity.setPendingQty(materialItm.getMaximumStock());
 								purchaseItem.add(purchaseReqItemEntity);
 								
 								Set<PurchaseRequisitionItem> materialItem = new HashSet<PurchaseRequisitionItem>();
@@ -312,18 +314,21 @@ public class InventoryTransactionService extends AbstractService{
 
 		}
 		
-		Set<MaterialIndentItem> materialItem = materialIndent.getItems();
-		boolean isPending = checkIfNoItems(materialItem);
-		if(isPending) { 
-			materialIndent = materialIndentRepository.findOne(materialIndent.getId());
-			materialIndent.setIndentStatus(IndentStatus.PENDING);
-			materialIndentRepository.save(materialIndent);
-		}else {
-			materialIndent = materialIndentRepository.findOne(materialIndent.getId());
-			materialIndent.setIndentStatus(IndentStatus.ISSUED);
-			materialIndentRepository.save(materialIndent);
-		}
 		
+		if(materialTransDTO.getTransactionType().equals(MaterialTransactionType.ISSUED)) {
+			Set<MaterialIndentItem> materialItem = materialIndent.getItems();
+			boolean isPending = checkIfNoItems(materialItem);
+			if(isPending) { 
+				materialIndent = materialIndentRepository.findOne(materialIndent.getId());
+				materialIndent.setIndentStatus(IndentStatus.PENDING);
+				materialIndentRepository.save(materialIndent);
+			}else {
+				materialIndent = materialIndentRepository.findOne(materialIndent.getId());
+				materialIndent.setIndentStatus(IndentStatus.ISSUED);
+				materialIndentRepository.save(materialIndent);
+			}
+		}
+	
 		materialTransDTO = mapperUtil.toModel(materialEntity, MaterialTransactionDTO.class);
 		return materialTransDTO;
 	

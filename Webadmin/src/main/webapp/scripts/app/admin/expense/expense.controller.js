@@ -138,6 +138,23 @@ angular.module('timeSheetApp')
                     $scope.search();
                 };
 
+                $scope.loadExpense = function () {
+
+                    console.log($stateParams.id);
+                    ExpenseComponent.findOne($stateParams.id).then(function (data) {
+                        console.log(data);
+                        $scope.expenseDetails = data;
+                    })
+
+                }
+
+                $scope.loadExpenseImage = function(image) {
+                    var eleId = 'photoStart';
+                    var ele = document.getElementById(eleId);
+                    ele.setAttribute('src',image);
+
+                };
+
                 $scope.expenseData = function(){
 
 
@@ -236,9 +253,10 @@ angular.module('timeSheetApp')
                 };
 
                 $scope.saveExpense = function(expenseDetails){
+                    console.log(expenseDetails);
                     ExpenseComponent.createExpense($scope.expenseDetails).then(function (data) {
                         console.log(data);
-
+                        $scope.expenseSuccessResponse = data;
                         if($scope.selectedFile){
                             $scope.expenseFileUpload(data);
                         }
@@ -246,6 +264,8 @@ angular.module('timeSheetApp')
                         if($scope.selectedPhotoFile){
                             $scope.uploadExpensePhotoFile(data);
                         }
+
+                        $scope.showNotifications('top','center','success',"Expense Saved successfully..");
 
 
                         $scope.cancelExpense();
@@ -307,7 +327,7 @@ angular.module('timeSheetApp')
 
                         if($scope.expenses && $scope.expenses.length > 0 ){
                             $scope.showCurrPage = data.currPage;
-                            $scope.pageEntries = $scope.slas.length;
+                            $scope.pageEntries = $scope.expenses.length;
                             $scope.totalCountPages = data.totalCount;
                             $scope.pageSort = 10;
                             $scope.noData = false;
@@ -430,7 +450,7 @@ angular.module('timeSheetApp')
 
                     console.log("file title - " + $scope.uploadExpenseFile.title + "file name -" + $scope.selectedFile);
 
-                    $scope.uploadExpenseFile.expenseId = expenseDetails.id;
+                    $scope.uploadExpenseFile.expenseId = $scope.expenseSuccessResponse.id;
 
                     $scope.uploadExpenseFile.uploadFile = $scope.selectedFile;
                     //$scope.uploadExpenseFile.assetId = 1;
@@ -467,21 +487,22 @@ angular.module('timeSheetApp')
 
         $scope.uploadExpensePhotoFile = function(expenseDetails) {
 
-            if(!$scope.assetVal.id && !$stateParams.id){
 
-                $scope.showNotifications('top','center','danger','Please create asset first..');
-
-            }else{
                 console.log($scope.selectedPhotoFile);
 
                 console.log($scope.uploadExpensePhoto.title);
+
+                console.log("Expense details - -------------------------------");
+
+                console.log(expenseDetails);
+                console.log(expenseDetails.id);
 
                 if($scope.selectedPhotoFile) {
                     console.log('selected asset file - ' + $scope.selectedPhotoFile);
 
                     $scope.uploadExpensePhoto.uploadFile = $scope.selectedPhotoFile;
 
-                    $scope.uploadExpenseFile.expenseId = expenseDetails.id;
+                    $scope.uploadExpensePhoto.expenseId = expenseDetails.id;
 
                     $scope.uploadExpensePhoto.type = 'image';
 
@@ -507,12 +528,11 @@ angular.module('timeSheetApp')
                         console.log(err);
                     }).catch(function(response){
                         $scope.loadingStop();
-                        $scope.showNotifications('top','center','danger','Unable to  upload file..');
+                        // $scope.showNotifications('top','center','danger','Unable to  upload file..');
                     });
                 } else {
                     console.log('select a file');
                 }
-            }
 
         }
 
