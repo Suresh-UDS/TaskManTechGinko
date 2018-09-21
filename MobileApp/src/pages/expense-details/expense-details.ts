@@ -35,11 +35,7 @@ export class ExpenseDetails {
     this.expense_type ='debit';
     this.loadDebit();
 
-    this.credit_list = [
-      {id:1,date:'09/08/2018',description:'Travel chennai to coimbatore',paymentType:'cash'},
-      {id:1,date:'09/08/2018',description:'Travel chennai to coimbatore',paymentType:'cash'},
-      {id:1,date:'09/08/2018',description:'Travel chennai to coimbatore',paymentType:'cash'}
-    ]
+    this.credit_list = [];
   }
 
   ionViewDidLoad() {}
@@ -74,6 +70,23 @@ export class ExpenseDetails {
 
   loadCredit(){
     console.log('Credit details');
+      var searchCriteria = {
+          fromDate:new Date(),
+          toDate: new Date(),
+          siteId:this.site.id
+      };
+
+      this.component.showLoader("Please Wait..");
+      this.expenseService.getCreditTransactions(searchCriteria).subscribe(response=>{
+          this.component.closeLoader();
+          console.log("expense by categories");
+          console.log(response);
+          this.credit_list = response;
+      },err=>{
+          this.component.closeLoader();
+          console.log("Error in getting expense category by site");
+          console.log(err);
+      })
   }
 
     viewTransaction(category,detail){

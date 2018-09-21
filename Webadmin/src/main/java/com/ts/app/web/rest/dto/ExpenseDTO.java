@@ -3,7 +3,10 @@ package com.ts.app.web.rest.dto;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
+import com.ts.app.domain.CategoryWiseExpense;
+import com.ts.app.domain.ExpenseDocument;
 import com.ts.app.domain.PaymentType;
 
 public class ExpenseDTO extends BaseDTO implements Serializable {
@@ -52,6 +55,15 @@ public class ExpenseDTO extends BaseDTO implements Serializable {
 
     private String documentType;
 
+    private double totalDebitAmount;
+
+    private double totalCreditAmount;
+
+    private double totalBalanceAmount;
+
+    private List<ExpenseDocument> expenseDocumentList;
+
+    private List<CategoryWiseExpense> categoryWiseExpenses;
 
     public long getId() {
         return id;
@@ -108,8 +120,6 @@ public class ExpenseDTO extends BaseDTO implements Serializable {
     public void setCurrency(String currency) {
         this.currency = currency;
     }
-
-
 
     public String getReceiptNumber() {
         return receiptNumber;
@@ -230,5 +240,45 @@ public class ExpenseDTO extends BaseDTO implements Serializable {
 
     public void setCreditedDate(Date creditedDate) {
         this.creditedDate = creditedDate;
+    }
+
+    public double getTotalDebitAmount() {
+        return totalDebitAmount;
+    }
+
+    public void setTotalDebitAmount(double totalDebitAmount) {
+        this.totalDebitAmount = totalDebitAmount;
+    }
+
+    public double getTotalCreditAmount() {
+        return totalCreditAmount;
+    }
+
+    public void setTotalCreditAmount(double totalCreditAmount) {
+        this.totalCreditAmount = totalCreditAmount;
+    }
+
+    public double getTotalBalanceAmount() {
+        return totalBalanceAmount;
+    }
+
+    public void setTotalBalanceAmount(double totalBalanceAmount) {
+        this.totalBalanceAmount = totalBalanceAmount;
+    }
+
+    public List<CategoryWiseExpense> getCategoryWiseExpenses() {
+        return categoryWiseExpenses;
+    }
+
+    public void setCategoryWiseExpenses(List<CategoryWiseExpense> categoryWiseExpenses) {
+        this.categoryWiseExpenses = categoryWiseExpenses;
+    }
+
+    public List<ExpenseDocument> getExpenseDocumentList() {
+        return expenseDocumentList;
+    }
+
+    public void setExpenseDocumentList(List<ExpenseDocument> expenseDocumentList) {
+        this.expenseDocumentList = expenseDocumentList;
     }
 }

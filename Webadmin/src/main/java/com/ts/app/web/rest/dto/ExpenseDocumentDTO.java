@@ -21,7 +21,7 @@ public class ExpenseDocumentDTO extends BaseDTO implements Serializable {
 
     private String type;
 
-    private String url;
+    private String fileUrl;
 
     private String extension;
 
@@ -69,14 +69,6 @@ public class ExpenseDocumentDTO extends BaseDTO implements Serializable {
         this.type = type;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
     public String getExtension() {
         return extension;
     }
@@ -92,5 +84,13 @@ public class ExpenseDocumentDTO extends BaseDTO implements Serializable {
 
     public void setExpenseId(long expenseId) {
         this.expenseId = expenseId;
+    }
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
     }
 }

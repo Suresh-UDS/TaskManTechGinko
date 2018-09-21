@@ -102,8 +102,14 @@ public class ExpenseManagementResource {
         return expenseManagementService.findLatestRecordBySite(siteId);
     }
 
+    @RequestMapping(value = "/expenses/{expenseId}", method = RequestMethod.GET)
+    public ExpenseDTO getExpenseDetails(@PathVariable("expenseId") long expenseId) {
+        log.info("--Invoked expense resource .get expense details -- "+expenseId);
+        return expenseManagementService.getExpenseDetails(expenseId);
+    }
+
     @RequestMapping(value = { "/expenses/uploadFile" }, method = RequestMethod.POST)
-    public ResponseEntity<?> uploadAssetFile(@RequestParam("title") String title, @RequestParam("expenseId") long expenseId,
+    public ResponseEntity<?> uploadExpenseFile(@RequestParam("title") String title, @RequestParam("expenseId") long expenseId,
                                              @RequestParam("uploadFile") MultipartFile file, @RequestParam("type") String type,
                                              ExpenseDocumentDTO expenseDocumentDTO) {
         expenseDocumentDTO.setExpenseId(expenseId);
@@ -123,11 +129,52 @@ public class ExpenseManagementResource {
         return new ResponseEntity<>(expenseDocumentDTO, HttpStatus.OK);
     }
 
+    @RequestMapping(value = { "/expenses/uploadExpensePhoto" }, method = RequestMethod.POST)
+    public ResponseEntity<?> uploadExpenseImage(@RequestParam("title") String title, @RequestParam("expenseId") long expenseId,
+                                              @RequestParam("uploadFile") MultipartFile file, @RequestParam("type") String type,
+                                              ExpenseDocumentDTO expenseDocumentDTO) {
+        expenseDocumentDTO.setExpenseId(expenseId);
+        expenseDocumentDTO.setTitle(title);
+        expenseDocumentDTO.setType(type);
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        log.debug("********file extension : "+extension);
+        String ext = env.getProperty("extensionImg");
+        log.debug("********** validation extension : "+ ext);
+        String[] arrExt = ext.split(",");
+        for (String exten : arrExt)
+        {
+            log.debug("**********file extension read : " + exten);
+            if (extension.equalsIgnoreCase(exten)) {
+                expenseDocumentDTO = expenseManagementService.uploadFile(expenseDocumentDTO, file);
+                expenseDocumentDTO.setExtension(extension);
+            }
+        }
+        return new ResponseEntity<>(expenseDocumentDTO, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/expenses/site/category", method = RequestMethod.POST)
-    public List<CategoryWiseExpense> getSiteAndCategoryWiseExpenses(@RequestBody SearchCriteria searchCriteria) {
+    public ExpenseDTO getSiteAndCategoryWiseExpenses(@RequestBody SearchCriteria searchCriteria) {
         log.info("--Invoked expense resource .getSiteAndCategoryWiseExpenses -- "+searchCriteria.getSiteId() + ", fromDate -" + searchCriteria.getFromDate() +" , toDate -"+ searchCriteria.getToDate());
         return expenseManagementService.findExpenseByCategories(searchCriteria.getSiteId(), searchCriteria.getFromDate(), searchCriteria.getToDate());
     }
 
+    @RequestMapping(value = "/expenses/getData/{siteId}", method = RequestMethod.GET)
+    public ExpenseDTO getData(@PathVariable("siteId") long siteId){
+        return expenseManagementService.getData(siteId);
+    }
 
-}
+    @RequestMapping(value = "/expenses/category", method = RequestMethod.POST)
+    public List<ExpenseDTO> getSiteAndCategoryExpenses(@RequestBody SearchCriteria searchCriteria) {
+        log.info("--Invoked expense resource .getSiteAndCategoryExpenses -- "+searchCriteria.getSiteId() + ", category - "+ searchCriteria.getExpenseCategory() +", fromDate -" + searchCriteria.getFromDate()+" , toDate -"+ searchCriteria.getToDate());
+        return expenseManagementService.findExpenseByCategory(searchCriteria.getSiteId(), searchCriteria.getExpenseCategory(), searchCriteria.getFromDate(), searchCriteria.getToDate());
+    }
+
+    @RequestMapping(value = "/expenses/credit", method = RequestMethod.POST)
+    public List<ExpenseDTO> getCreditTransactions(@RequestBody SearchCriteria searchCriteria) {
+        log.info("--Invoked expense resource .getSiteAndCategoryExpenses -- "+searchCriteria.getSiteId() + ", category - "+ searchCriteria.getExpenseMode() +", fromDate -" + searchCriteria.getFromDate()+" , toDate -"+ searchCriteria.getToDate());
+        return expenseManagementService.getCreditTransactions(searchCriteria.getSiteId(), searchCriteria.getExpenseMode(), searchCriteria.getFromDate(), searchCriteria.getToDate());
+    }
+
+
+
+    }

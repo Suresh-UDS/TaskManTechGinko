@@ -154,7 +154,7 @@ public class AmazonS3Utils {
             String nameOfFile = expenseId + "_" + fileName;
             fileUrl = amazonS3Service.uploadExpenseFileTos3bucket(nameOfFile, file);
             expenseDocumentDTO.setFile(nameOfFile);
-            expenseDocumentDTO.setUrl(fileUrl);
+            expenseDocumentDTO.setFileUrl(fileUrl);
             file.delete();
         } catch (Exception e) {
             e.printStackTrace();
