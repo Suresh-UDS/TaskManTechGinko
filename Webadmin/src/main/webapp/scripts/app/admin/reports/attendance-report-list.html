@@ -33,12 +33,13 @@
                 <div class="ripple-container"></div>
             </button>
 
-            <span ng-if="exportMsg()=='Download'">
-                 <a class="download-btn" href="{{exportFile()}}" download target="_self" ng-click="clsDownload()" ng-hide="downloaded">{{exportMsg()}}</a>
+            <span ng-if="exportMsg(0)=='Download'">
+                 <a class="download-btn" href="{{exportFile(0)}}" download target="_self" ng-click="clsDownload()" ng-hide="downloaded">{{exportMsg(0)}}</a>
                  <div class="downloader" ng-show="downloader"></div>
             </span>
-            <span ng-if="exportMsg()!='Download'">
-                 <a class="download-btn" href="javascript:void(0);">{{exportMsg()}}</a>
+            <span ng-if="exportMsg(0)!='Download'">
+                 <a class="download-btn" href="javascript:void(0);" >{{exportMsg(0)}}</a>
+
             </span>
         </div>
     </div>

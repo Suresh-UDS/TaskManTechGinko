@@ -34,9 +34,13 @@
                 <div class="ripple-container"></div>
             </button>
 
-            <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
-
-            <div class="downloaderMd" ng-show="downloader"></div>
+            <span ng-if="exportMsg(0)=='Download'">
+                 <a class="download-btn" href="{{exportFile(0)}}" download target="_self" ng-click="clsDownload()" ng-hide="downloaded">{{exportMsg(0)}}</a>
+                 <div class="downloaderMd" ng-show="downloader"></div>
+            </span>
+            <span ng-if="exportMsg(0)!='Download'">
+                 <a class="download-btn" href="javascript:void(0);">{{exportMsg(0)}}</a>
+            </span>
 
         </div>
     </div>
@@ -483,10 +487,10 @@
                                                     <!--</select>-->
                                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="selectedSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-change="loadSearchSite(selectedSite);loadFilterEmployee()" ng-click="loadSearchSite(selectedSite)">
+                                                    <ui-select ng-model="selectedSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-change="loadSearchSite(selectedSite);loadFilterEmployee()" >
                                                         <ui-select-match placeholder="Select Site...">{{sites.length == 0 ? 'Select Site' : selectedSite.searchStatus ? selectedSite.name?selectedSite.name:'Select Site' : hideSite ?clearField?'Select Site':selectedSite : 'Select Site' }}</ui-select-match>
                                                         <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
-                                                            <div ng-bind="site"></div>
+                                                            <div ng-bind="site" ng-click="loadSearchSite(selectedSite)"></div>
                                                         </ui-select-choices>
                                                     </ui-select>
                                                     <span ng-if="sites.length == 0 && !siteSpin"><p class="error-msg margin0">No sites</p></span>
