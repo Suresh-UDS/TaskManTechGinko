@@ -904,7 +904,6 @@ public class ExportUtil {
 				}
 				dayStartCell++;
 			}
-			dayStartCell++;
 			dataRow.getCell(dayStartCell).setCellValue(presentCnt);
 			
 			/*

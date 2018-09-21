@@ -373,7 +373,7 @@ public class MailService {
         context.setVariable("month", month);
         context.setVariable("reportData", reportData);
         String content = templateEngine.process("attendanceMusterrollReportEmail", context);
-        String subject = messageSource.getMessage("email.attendance.detailed.report.title", null, locale);
+        String subject = messageSource.getMessage("email.attendance.musterroll.report.title", null, locale);
         subject += " - " + siteName;
         sendEmail(emailIds, subject, content, true, true,file);
     }
