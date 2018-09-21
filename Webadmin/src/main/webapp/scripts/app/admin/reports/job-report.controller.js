@@ -25,11 +25,13 @@ angular.module('timeSheetApp')
         $scope.selectedChecklist;
         $scope.jobChecklistItems =[];
         $scope.pageSort = 10;
-        $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
+        //$scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
+        $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
         var d = new Date();
         d.setFullYear(2018, 0, 1);
-        $scope.selectedDateFromSer= d;
+        //$scope.selectedDateFromSer= d;
+        $scope.selectedDateFromSer= new Date();
         $scope.selectedDateToSer= new Date();
         $scope.pager = {};
         $scope.noData = false;
@@ -480,7 +482,7 @@ angular.module('timeSheetApp')
             	$scope.searchCriteria = searchCriteria;
         	//}
 
-                //$scope.searchCriteria.isReport = true;
+                $scope.searchCriteria.isReport = false;
 
                 $scope.searchCriteria.currPage = currPageVal;
                 $scope.searchCriteria.findAll = false;
@@ -595,9 +597,13 @@ angular.module('timeSheetApp')
         $scope.clearFilter = function() {
             $rootScope.exportStatusObj.exportMsg = '';
             $scope.downloader=false;
-            $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
+            $scope.siteFilterDisable = true;
+            $scope.sitesList = null;
+            //$scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
+            $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-            $scope.selectedDateFromSer = d;
+            //$scope.selectedDateFromSer = d;
+            $scope.selectedDateFromSer = new Date();
             $scope.selectedDateToSer = new Date();
             $scope.selectedProject = null;
             $scope.searchCriteria = {};
@@ -625,6 +631,7 @@ angular.module('timeSheetApp')
         		$scope.typeMsg = type;
                 $rootScope.exportStatusObj.exportMsg = '';
                 $scope.downloader=true;
+                $scope.searchCriteria.report = true;
 	        	JobComponent.exportAllData($scope.searchCriteria).then(function(data){
 	        		var result = data.results[0];
 	        		console.log(result);
@@ -703,6 +710,12 @@ angular.module('timeSheetApp')
 	    $scope.exportMsg = function() {
 	        return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportMsg : '');
 	    };
+
+	    $scope.downloaded = false;
+
+        $scope.clsDownload = function(){
+          $scope.downloaded = true;
+        }
 
 
 
