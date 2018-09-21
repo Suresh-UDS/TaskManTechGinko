@@ -16,7 +16,7 @@
 
 <ion-content class="greyBg">
 
-  <div *ngIf="(!listitem || listitem.length< 0) && !spinner ">
+  <div *ngIf="(!siteList || siteList.length< 0) && !spinner ">
     <ion-card>
       <ion-card-content>
         <img src="assets/imgs/warning.svg">
@@ -25,15 +25,15 @@
     </ion-card>
   </div>
 
-  <div *ngIf="(!listitem || listitem.length< 0)&& spinner"text-center class="margin-top25">
+  <div  *ngIf="(!siteList||siteList.length <= 0) && spinner" text-center class="margin-top25">
     <ion-spinner name="circles"></ion-spinner>
   </div>
 
      <div class="MainExpenseContainer">
 
-       <ion-card *ngFor="let items of listitem" (click)="viewExpenseDetails(items)">
+       <ion-card *ngFor="let site of siteList" (click)="viewExpenseDetails(site)">
          <ion-card-header text-center>
-           {{items.siteName}}
+           {{site.name}}
          </ion-card-header>
          <ion-card-content>
 
@@ -41,17 +41,17 @@
              <ion-item>
                <ion-icon class="CircleIcon" item-start name="ios-share-outline"></ion-icon>
                <h2>Debit</h2>
-               <ion-note item-end class="red">- {{items.debitAmount}}</ion-note>
+               <ion-note item-end class="red">- {{site.totalDebitAmount}}</ion-note>
              </ion-item>
              <ion-item>
                <ion-icon class="CircleIcon" item-start name="ios-download-outline"></ion-icon>
                <h2>Credit</h2>
-               <ion-note item-end class="green">+ {{items.creditAmount}}</ion-note>
+               <ion-note item-end class="green">+ {{site.totalCreditAmount}}</ion-note>
              </ion-item>
              <ion-item text-right>
                <ion-icon class="CircleIcon" item-start name="ios-briefcase-outline"></ion-icon>
                <h2>Balance</h2>
-               <ion-note item-end class="dark">{{items.balanceAmount}}</ion-note>
+               <ion-note item-end class="dark">{{site.totalBalanceAmount}}</ion-note>
              </ion-item>
            </ion-list>
 

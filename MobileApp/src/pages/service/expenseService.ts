@@ -63,4 +63,12 @@ export class ExpenseService {
             }
         )
     }
+
+    getCategoryWiseTransactions(searchCriteria):Observable<any>{
+        return this.http.post(this.config.Url+'api/expenses/category',searchCriteria).map(
+            response=>{
+                return response.json();
+            }
+        )
+    }
 }
