@@ -122,4 +122,9 @@ export class AddMaterial {
         console.log('selectProject:', event.value.name);
     }
 
+    dismissMaterial()
+    {
+        this.navCtrl.pop();
+    }
+
 }
