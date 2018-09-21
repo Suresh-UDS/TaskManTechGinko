@@ -30,7 +30,7 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>,JpaSpeci
     @Query("SELECT e FROM Expense e WHERE e.site.id = :siteId and e.expenseCategory = :category and e.expenseDate between :fromDate and :toDate" )
     List<Expense> getCategoryExpenseBySite(@Param("siteId") long siteId, @Param("category") String category, @Param("fromDate") Timestamp fromDate, @Param("toDate") Timestamp toDate);
 
-    @Query("SELECT e FROM Expense e WHERE e.site.id = :siteId and e.mode = :mode and e.expenseDate between :fromDate and :toDate" )
+    @Query("SELECT e FROM Expense e WHERE e.site.id = :siteId and e.mode = :mode and e.creditedDate between :fromDate and :toDate" )
     List<Expense> getCreditTransactions(@Param("siteId") long siteId, @Param("mode") String mode, @Param("fromDate") Timestamp fromDate, @Param("toDate") Timestamp toDate);
 
     @Query("SELECT e FROM Expense e WHERE e.site.id = :siteId and e.mode = :mode" )

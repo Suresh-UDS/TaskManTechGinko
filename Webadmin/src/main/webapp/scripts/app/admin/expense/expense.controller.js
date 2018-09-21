@@ -265,6 +265,8 @@ angular.module('timeSheetApp')
                             $scope.uploadExpensePhotoFile(data);
                         }
 
+                        $scope.showNotifications('top','center','success',"Expense Saved successfully..");
+
 
                         $scope.cancelExpense();
                     })
@@ -526,7 +528,7 @@ angular.module('timeSheetApp')
                         console.log(err);
                     }).catch(function(response){
                         $scope.loadingStop();
-                        $scope.showNotifications('top','center','danger','Unable to  upload file..');
+                        // $scope.showNotifications('top','center','danger','Unable to  upload file..');
                     });
                 } else {
                     console.log('select a file');

@@ -152,6 +152,25 @@ public class ExpenseManagementResource {
         return new ResponseEntity<>(expenseDocumentDTO, HttpStatus.OK);
     }
 
+    @RequestMapping(value = { "/expenses/uploadImage" }, method = RequestMethod.POST)
+    public ResponseEntity<?> uploadExpensePhoto(@RequestParam("title") String title, @RequestParam("expenseId") long expenseId,
+                                                @RequestParam("uploadFile") MultipartFile file, @RequestParam("type") String type,
+                                                ExpenseDocumentDTO expenseDocumentDTO) {
+        expenseDocumentDTO.setExpenseId(expenseId);
+        expenseDocumentDTO.setTitle(title);
+        expenseDocumentDTO.setType(type);
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        log.debug("********file extension : "+extension);
+        String ext = env.getProperty("extensionImg");
+        log.debug("********** validation extension : "+ ext);
+        String[] arrExt = ext.split(",");
+
+        expenseDocumentDTO = expenseManagementService.uploadFile(expenseDocumentDTO, file);
+        expenseDocumentDTO.setExtension(extension);
+
+        return new ResponseEntity<>(expenseDocumentDTO, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/expenses/site/category", method = RequestMethod.POST)
     public ExpenseDTO getSiteAndCategoryWiseExpenses(@RequestBody SearchCriteria searchCriteria) {
         log.info("--Invoked expense resource .getSiteAndCategoryWiseExpenses -- "+searchCriteria.getSiteId() + ", fromDate -" + searchCriteria.getFromDate() +" , toDate -"+ searchCriteria.getToDate());
