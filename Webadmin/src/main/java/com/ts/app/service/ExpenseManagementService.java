@@ -106,11 +106,11 @@ public class ExpenseManagementService extends AbstractService {
         expense.setReimbursable(expenseDTO.isReimbursable());
         expense.setDescription(expenseDTO.getDescription());
 //        expense.setBalanceAmount(expenseDTO.getBalanceAmount());
+        Double totalBalanceAmount  = (getData(expenseDTO.getSiteId()).getTotalCreditAmount() - getData(expenseDTO.getSiteId()).getTotalDebitAmount());
 
         if(Objects.equals(expenseDTO.getMode(), "debit")){
             expense.setExpenseCategory(expenseDTO.getExpenseCategory());
             log.debug("Balance amount ------- "+getData(expenseDTO.getSiteId()).getTotalBalanceAmount());
-            Double totalBalanceAmount  = (getData(expenseDTO.getSiteId()).getTotalCreditAmount() - getData(expenseDTO.getSiteId()).getTotalDebitAmount());
             expense.setDebitAmount(expenseDTO.getDebitAmount());
             expense.setBalanceAmount(totalBalanceAmount - expenseDTO.getDebitAmount());
 
@@ -119,7 +119,7 @@ public class ExpenseManagementService extends AbstractService {
 
 
         if (Objects.equals(expenseDTO.getMode(), "credit")){
-                expense.setBalanceAmount(getData(expenseDTO.getSiteId()).getBalanceAmount()+expenseDTO.getCreditAmount());
+                expense.setBalanceAmount(totalBalanceAmount + expenseDTO.getCreditAmount());
                 expense.setCreditAmount(expenseDTO.getCreditAmount());
 
         }
