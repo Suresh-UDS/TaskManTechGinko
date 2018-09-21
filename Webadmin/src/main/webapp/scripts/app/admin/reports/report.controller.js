@@ -12,11 +12,13 @@ angular.module('timeSheetApp')
         $scope.doNotMatch = null;
         $scope.errorEmployeeExists = null;
         $scope.searchCriteria = {};
-        $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
+        //$scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
+        $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
         var d = new Date();
         d.setFullYear(2018, 0, 1);
-        $scope.selectedDateFromSer= d;
+        //$scope.selectedDateFromSer= d;
+        $scope.selectedDateFromSer= new Date();
         $scope.selectedDateToSer= new Date();
         $scope.pager = {};
         $scope.noData = false;
@@ -130,8 +132,10 @@ angular.module('timeSheetApp')
         $scope.uiClient = [];
         $scope.getClient = function (search) {
             var newSupes = $scope.uiClient.slice();
-            if (search && newSupes.indexOf(search) === -1) {
-                newSupes.unshift(search);
+            if(search){
+                if (search && newSupes.indexOf(search) === -1) {
+                    newSupes.unshift(search);
+                }
             }
 
             return newSupes;
@@ -143,8 +147,10 @@ angular.module('timeSheetApp')
         $scope.uiSite = [];
         $scope.getSite = function (search) {
             var newSupes = $scope.uiSite.slice();
-            if (search && newSupes.indexOf(search) === -1) {
-                newSupes.unshift(search);
+            if(search){
+              if (search && newSupes.indexOf(search) === -1) {
+                  newSupes.unshift(search);
+              }
             }
             return newSupes;
         }
@@ -177,18 +183,24 @@ angular.module('timeSheetApp')
         //
 
         $scope.loadSearchProject = function (searchProject) {
+          if(searchProject){
             $scope.siteSpin = true;
             $scope.hideSite = false;
             $scope.clearField = false;
             $scope.uiSite.splice(0,$scope.uiSite.length)
             $scope.searchSite = null;
             $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)];
+          }
+
         }
 
 
         $scope.loadSearchSite = function (searchSite) {
-            $scope.hideSite = true;
-            $scope.searchSite = $scope.sites[$scope.uiSite.indexOf(searchSite)];
+            if(searchSite){
+               $scope.hideSite = true;
+               $scope.searchSite = $scope.sites[$scope.uiSite.indexOf(searchSite)];
+            }
+
         }
 
         //
@@ -539,7 +551,7 @@ angular.module('timeSheetApp')
             	$scope.searchCriteria = searchCriteria;
         	}
 
-            $scope.searchCriteria.isReport = true;
+            $scope.searchCriteria.isReport = false;
 
             $scope.searchCriteria.currPage = currPageVal;
             $scope.searchCriteria.findAll = false;
@@ -690,6 +702,7 @@ angular.module('timeSheetApp')
                   $scope.downloader=true;
                   $scope.searchCriteria.list = true;
                   $scope.searchCriteria.report = true;
+                  $scope.searchCriteria.isReport = true;
 	        	EmployeeComponent.exportAllData($scope.searchCriteria).then(function(data){
 	        		var result = data.results[0];
 	        		console.log(result);
@@ -761,6 +774,12 @@ angular.module('timeSheetApp')
         $scope.exportMsg = function() {
 	        return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportMsg : '');
         };
+
+        $scope.downloaded = false;
+
+        $scope.clsDownload = function(){
+          $scope.downloaded = true;
+        }
 
 
         $scope.checkOut = function(siteId,employeeEmpId,id){
@@ -836,9 +855,13 @@ angular.module('timeSheetApp')
         $scope.clearFilter = function() {
             $rootScope.exportStatusObj.exportMsg = '';
             $scope.downloader=false;
-            $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
+            $scope.siteFilterDisable = true;
+            $scope.sites = null;
+            //$scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
+            $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-            $scope.selectedDateFromSer = d;
+            //$scope.selectedDateFromSer = d;
+            $scope.selectedDateFromSer = new Date();
             $scope.selectedDateToSer =  new Date();
             $scope.selectedSite = null;
             $scope.selectedProject = null;

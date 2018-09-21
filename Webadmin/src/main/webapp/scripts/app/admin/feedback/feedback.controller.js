@@ -269,6 +269,8 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria = searchCriteria;
            // }
 
+           $scope.searchCriteria.isReport = false;
+
             $scope.searchCriteria.currPage = currPageVal;
             console.log('Selected feedback' + $scope.selectedLocation);
 
@@ -541,6 +543,7 @@ angular.module('timeSheetApp')
             $rootScope.exportStatusObj.exportMsg = '';
             $scope.typeMsg = type;
             $scope.downloader=true;
+            $scope.searchCriteria.isReport = true;
             FeedbackComponent.exportAllData($scope.searchCriteria).then(function(data){
                 var result = data.results[0];
                 console.log(result);
