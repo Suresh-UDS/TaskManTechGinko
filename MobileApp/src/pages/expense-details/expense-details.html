@@ -22,9 +22,7 @@
 
 
 <ion-content>
-      <ion-fab bottom right>
-        <button ion-fab color="primary" (click)="addExpenseModal()"><ion-icon name="ios-add-outline"></ion-icon></button>
-    </ion-fab>
+
 
   <div [ngSwitch]="expense_type">
     <div *ngSwitchCase="'debit'" class="MainExpenseContainer ExpenseDetailsPage">
