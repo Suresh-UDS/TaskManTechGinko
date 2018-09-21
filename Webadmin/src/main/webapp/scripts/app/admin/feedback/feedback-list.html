@@ -54,7 +54,7 @@
                 <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
                 <div class="ripple-container"></div>
             </button>
-            <a class="download-btn" href="{{exportFile()}}">{{exportMsg()}}</a>
+            <a class="download-btn" href="{{exportFile()}}" ng-click="clsDownload()" ng-hide="downloaded">{{exportMsg()}}</a>
             <div class="downloaderBig" ng-show="downloader"></div>
 
     </div>

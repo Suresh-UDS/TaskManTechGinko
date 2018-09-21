@@ -9,6 +9,7 @@ angular.module('timeSheetApp')
         $scope.averageRating ='0';
         $scope.feedbackCount ='0';
         $scope.readOnly = true;
+        $scope.downloaded = false;
         $scope.colors = ['#45b7cd', '#ff6384', '#ff8e72'];
         $scope.series = ['Series A'];
         $scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
@@ -619,6 +620,10 @@ angular.module('timeSheetApp')
 	    $scope.exportMsg = function() {
 	        return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportMsg : '');
 	    };
+
+	    $scope.clsDownload = function(){
+          $scope.downloaded = true;
+	    }
 
     });
 
