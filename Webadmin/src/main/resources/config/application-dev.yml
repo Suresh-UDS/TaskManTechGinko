@@ -85,6 +85,10 @@ attendance:
         path:  /opt/attendance
     template:
         path: /opt/template/Attendance_Report_Format.xlsx
+    musterroll:
+        report:
+            template:
+                path: /opt/template/ATTENDENCE_MUSTER_ROLL_FORMAT.xlsx        
 quotation:
     file:
         path:  /opt/quotation
@@ -224,6 +228,8 @@ scheduler:
       enabled: true
    feedbackreport:
       enabled: true
+   attendanceMusterRollReport:
+      enabled: true     
       
 default.user.password: uds12345
 
