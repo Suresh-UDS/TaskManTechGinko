@@ -414,9 +414,12 @@ angular.module('timeSheetApp')
 
 
         $scope.clearFilter = function() {
+            $scope.clearField = true;
+            $scope.filter = false;
             $scope.selectedSite = null;
             $scope.selectedProject = null;
             $scope.userLogin = null;
+            $scope.client = null;
             $scope.userFirstName = null;
             $scope.userLastName = null;
             $scope.userEmail = null;
