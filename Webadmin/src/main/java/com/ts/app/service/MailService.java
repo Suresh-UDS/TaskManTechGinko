@@ -363,14 +363,14 @@ public class MailService {
     }
     
     @Async
-    public void sendAttendanceMusterrollReportEmail(String siteName, String emailIds, String reportData, String file, String baseUrl, Date currDate 
+    public void sendAttendanceMusterrollReportEmail(String siteName, String emailIds, String reportData, String file, String baseUrl, String month 
     							) {
         log.debug("Sending attendance musterroll report e-mail to '{}'", emailIds);
         Locale locale = Locale.forLanguageTag("en-US");
         Context context = new Context(locale);
         context.setVariable("baseUrl", baseUrl);
         context.setVariable("fileName",file);
-        context.setVariable("date", DateUtil.formatToDateString(currDate));
+        context.setVariable("month", month);
         context.setVariable("reportData", reportData);
         String content = templateEngine.process("attendanceMusterrollReportEmail", context);
         String subject = messageSource.getMessage("email.attendance.detailed.report.title", null, locale);

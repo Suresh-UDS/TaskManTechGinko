@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="#{email.attendance.detailed.report.title}">TaskMan Attendance Musterroll Report</title>
+    <title th:text="#{email.attendance.musterroll.report.title}">TaskMan Attendance Musterroll Report</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
@@ -10,7 +10,7 @@
 </p>
 
 
-<p th:text="#{email.attendance.detailed.report.text1(${date})}">
+<p th:text="#{email.attendance.musterroll.report.text1(${month})}">
 
 </p>
 
@@ -20,7 +20,7 @@
 <br/>
 
 <p>
-    <span th:text="#{email.attendance.detailed.report.text2}">Regards,</span>
+    <span th:text="#{email.attendance.musterroll.report.text2}">Regards,</span>
     <br/>
     <em th:text="#{email.signature}">UDS.</em>
 </p>

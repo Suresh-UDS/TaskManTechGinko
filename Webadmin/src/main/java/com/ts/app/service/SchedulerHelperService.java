@@ -898,7 +898,7 @@ public class SchedulerHelperService extends AbstractService {
 								if(dayReport && (attnDayWiseAlertTime == null ||  alertTimeCal.equals(now) || onDemand)) {
 									exportResult = exportUtil.writeMusterRollAttendanceReportToFile(proj.getName(), site.getName(), shiftValues.toString(), month, fromDate, toDate, siteAttnList, null, exportResult);
 									mailService.sendAttendanceMusterrollReportEmail(proj.getName(), attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(), null,
-											cal.getTime());
+											month);
 								}
 							}
 						}
