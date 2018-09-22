@@ -1801,6 +1801,8 @@ angular.module('timeSheetApp')
                 $scope.loadStatusHistory();
             }else if($scope.searchModule == "Ticket"){
                 $scope.loadTicket();
+            }else if($scope.searchModule == "sparesHistory"){
+            	$scope.loadAssetSpares();
             }else{
                $scope.search();
             }
@@ -3394,6 +3396,28 @@ angular.module('timeSheetApp')
     $scope.backToView = function(){
   
         $location.path('view-asset/'+ $scope.scheduleObj.assetId);
+    }
+    
+    $scope.sparesHistories = [];
+    
+    $scope.loadAssetSpares = function() { 
+        $rootScope.loadingStart();
+        $rootScope.loadPageTop();
+    	$scope.searchObj = {};
+    	$scope.searchObj.assetId = $stateParams.id;
+    	$scope.searchObj.siteId = $scope.assetDetail.siteId;
+    	AssetComponent.getAssetMaterial($scope.searchObj).then(function(data) { 
+    		console.log('Asset Materials -' +JSON.stringify(data));
+    		$scope.jobList = data;
+    		if($scope.jobList.length > 0) { 
+    			for(var i in $scope.jobList) {
+    				for(var j in $scope.jobList[i].jobMaterials) {
+    					$scope.sparesHistories.push($scope.jobList[i].jobMaterials[j]);
+    				}
+    			}
+    		}
+    		$rootScope.loadingStop();
+    	});
     }
 
 

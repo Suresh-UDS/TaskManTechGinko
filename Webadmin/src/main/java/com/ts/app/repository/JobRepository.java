@@ -186,5 +186,8 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     
     @Query("SELECT j FROM Job j WHERE j.maintenanceType = :amcType")
 	List<Job> findAllAMCJobs(@Param("amcType") String amcType);
+
+    @Query("SELECT j FROM Job j WHERE j.asset.id = :assetId and j.site.id = :siteId ")
+	List<Job> findMaterialsByAssetId(@Param("siteId") long siteId, @Param("assetId") long assetId);
     
 }
