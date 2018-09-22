@@ -25,5 +25,13 @@ page-add-material {
   {
     max-width:100% !important;
   }
-
+  .text-input-md {
+    margin: 13px 8px !important;
+    padding: 0 !important;
+    width: calc(100% - 0px - 0px) !important;
+  }
+  .text-input
+  {
+    width: calc(100% - 0px) !important;
+  }
 }
