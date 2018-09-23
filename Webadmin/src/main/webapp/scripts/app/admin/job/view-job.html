@@ -51,7 +51,7 @@
 
                                                       <td>Site </td>
                                                       <td>
-                                                          {{job.siteName}}
+                                                          {{job.siteName | uppercase}}
                                                       </td>
 
                                                   </tr>
@@ -245,13 +245,13 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Completed Images </div>
                                     <div class="panel-body">
-                                        <div class="col-md-2" ng-repeat="image in completedImages">
+                                        <div class="col-md-2" ng-repeat="image in job.images">
                                             <!--{{image}}-->
                                             <!--<a id="{{ 'jobPhoto-' + $index }}" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImages(job.employeeEmpId,image.photoOut, $index)">-->
                                             <!--<img data-ng-src="/api/employee/{{job.employeeEmpId}}/checkInOut/{{image.photoOut}}" width="30px" height="30px"/>-->
                                             <!--</a>-->
-                                            <a onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(url)" >
-                                                <img src="{{url}}" width="150px" height="150px">
+                                            <a onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(image.url)" >
+                                                <img src="{{image.url}}" width="150px" height="150px">
 
                                             </a>
                                         </div>
@@ -269,6 +269,7 @@
                                         <tr>
                                             <th>Checklist Item </th>
                                             <th>Remarks</th>
+                                            <th>Status</th>
                                             <th>Images</th>
                                         </tr>
                                         <tr ng-repeat="checklist in job.checklistItems">
@@ -276,12 +277,15 @@
                                                 <span ng-if="checklist.completed" style="color:green">{{checklist.checklistItemName}}</span>
                                             </td>
                                             <td>
-                                                <span ng-if="!checklist.completed && checklist.remarks">{{checklist.remarks}}</span>
-                                                <span ng-if="checklist.completed">Completed</span>
-                                                <span ng-if="!checklist.remarks && !checklist.completed">No remarks added</span>
+                                                <span ng-if="checklist.remarks">{{checklist.remarks}}</span>
+                                                <span ng-if="!checklist.remarks">No remarks</span>
                                             </td>
                                             <td>
-                                                <span ng-if="!checklist.imageUrl_1">No Image added</span>
+                                                <span class="label label-success" ng-if="checklist.completed">Completed</span>
+                                                <span class="label label-warning" ng-if="!checklist.completed">Not Completed</span>
+                                            </td>
+                                            <td>
+                                                <span ng-if="!checklist.imageUrl_1">No image</span>
                                                 <a ng-if="checklist.imageUrl_1" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.imageUrl_1)" >
                                                     <img src="{{checklist.imageUrl_1}}" width="80px" height="80px">
                                                 </a>

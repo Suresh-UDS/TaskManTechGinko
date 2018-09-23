@@ -20,6 +20,7 @@ angular.module('timeSheetApp')
         $scope.noData = false;
         $scope.btnDisable = false;
         $scope.localStorage = null;
+        $scope.sitesList = null;
 
         //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -99,9 +100,11 @@ angular.module('timeSheetApp')
 
         $scope.selectSite = function(site)
         {
-            $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(site)]
-            $scope.hideSite = true;
-            console.log('Site dropdown list:',$scope.searchSite)
+             if(site){
+               $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(site)]
+               $scope.hideSite = true;
+               console.log('Site dropdown list:',$scope.searchSite)
+             }
         }
 
         $scope.addProject = function (selectedProject) {
@@ -195,6 +198,8 @@ angular.module('timeSheetApp')
 
         $rootScope.back = function (text) {
             if(text == 'cancel' || text == 'back'){
+                /** @reatin - retaining scope value.**/
+                $rootScope.retain=1;
                 $scope.cancelSite();
             }else if(text == 'save'){
                 $scope.saveSite($scope.valid);
@@ -312,11 +317,7 @@ angular.module('timeSheetApp')
 
         $scope.cancelSite = function () {
 
-                /** @reatin - retaining scope value.**/
-                $rootScope.retain=1;
-
         		$location.path('/sites');
-
 
         };
 
@@ -691,7 +692,10 @@ angular.module('timeSheetApp')
 
         $scope.clearFilter = function() {
             $scope.clearField = true;
+            $scope.filter = false;
+            $scope.siteFilterDisable = true;
         	$scope.selectedSite = null;
+        	$scope.sitesList = null;
         	$scope.selectedProject = null;
             $scope.searchProject = null;
             $scope.searchSite = null;

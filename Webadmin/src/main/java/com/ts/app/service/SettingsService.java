@@ -54,6 +54,12 @@ public class SettingsService extends AbstractService {
 
 	public static final String EMAIL_NOTIFICATION_FEEDBACK_EMAILS = "email.notification.feedback.emails";
 
+	public static final String EMAIL_NOTIFICATION_FEEDBACK_REPORT = "email.notification.feedback.report";
+
+	public static final String EMAIL_NOTIFICATION_FEEDBACK_REPORT_EMAILS = "email.notification.feedback.report.emails";
+	
+	public static final String EMAIL_NOTIFICATION_FEEDBACK_REPORT_TIME = "email.notification.feedback.report.time";
+
 	public static final String EMAIL_NOTIFICATION_QUOTATION = "email.notification.quotation";
 
 	public static final String EMAIL_NOTIFICATION_QUOTATION_EMAILS = "email.notification.quotation.emails";
@@ -272,6 +278,53 @@ public class SettingsService extends AbstractService {
 		feedbackEmailsSetting.setSiteId(settingsDto.getSiteId());
 		feedbackEmailsSetting.setSiteName(settingsDto.getSiteName());
 		feedbackEmailsSetting.setActive("Y");
+		
+		//feedback report setting
+		Setting feedbackReportSetting = null;
+		if(settingsDto.getFeedbackReportEmailAlertId() > 0) {
+			feedbackReportSetting = settingsRepository.findOne(settingsDto.getFeedbackReportEmailAlertId());
+		}else {
+			feedbackReportSetting = new Setting();
+		}
+		feedbackReportSetting.setSettingKey(EMAIL_NOTIFICATION_FEEDBACK_REPORT);
+		feedbackReportSetting.setSettingValue(String.valueOf(settingsDto.isFeedbackReportEmailAlert()));
+		feedbackReportSetting.setProjectId(settingsDto.getProjectId());
+		feedbackReportSetting.setProjectName(settingsDto.getProjectName());
+		feedbackReportSetting.setSiteId(settingsDto.getSiteId());
+		feedbackReportSetting.setSiteName(settingsDto.getSiteName());
+		feedbackReportSetting.setActive("Y");
+
+		Setting feedbackReportEmailsSetting = null;
+		if(settingsDto.getFeedbackReportEmailsId() > 0) {
+			feedbackReportEmailsSetting = settingsRepository.findOne(settingsDto.getFeedbackReportEmailsId());
+		}else {
+			feedbackReportEmailsSetting = new Setting();
+		}
+		feedbackReportEmailsSetting.setSettingKey(EMAIL_NOTIFICATION_FEEDBACK_REPORT_EMAILS);
+		if(CollectionUtils.isNotEmpty(settingsDto.getFeedbackReportEmailIds())) {
+			feedbackReportEmailsSetting.setSettingValue(CommonUtil.convertToString(settingsDto.getFeedbackReportEmailIds()));
+		}
+		feedbackReportEmailsSetting.setProjectId(settingsDto.getProjectId());
+		feedbackReportEmailsSetting.setProjectName(settingsDto.getProjectName());
+		feedbackReportEmailsSetting.setSiteId(settingsDto.getSiteId());
+		feedbackReportEmailsSetting.setSiteName(settingsDto.getSiteName());
+		feedbackReportEmailsSetting.setActive("Y");
+		
+		Setting feedbackReportTimeSetting = null;
+		if(settingsDto.getFeedbackReportTimeId() > 0) {
+			feedbackReportTimeSetting = settingsRepository.findOne(settingsDto.getFeedbackReportTimeId());
+		}else {
+			feedbackReportTimeSetting = new Setting();
+		}
+		feedbackReportTimeSetting.setSettingKey(EMAIL_NOTIFICATION_FEEDBACK_REPORT_TIME);
+		if(settingsDto.getFeedbackReportTime() != null) {
+			feedbackReportTimeSetting.setSettingValue(String.valueOf(settingsDto.getFeedbackReportTime()));
+		}
+		feedbackReportTimeSetting.setProjectId(settingsDto.getProjectId());
+		feedbackReportTimeSetting.setProjectName(settingsDto.getProjectName());
+		feedbackReportTimeSetting.setSiteId(settingsDto.getSiteId());
+		feedbackReportTimeSetting.setSiteName(settingsDto.getSiteName());
+		feedbackReportTimeSetting.setActive("Y");
 
 		//quotation notification setting
 		Setting quotationAlertSetting = null;
@@ -516,11 +569,20 @@ public class SettingsService extends AbstractService {
 		if(StringUtils.isNotEmpty(eodJobEmailsSetting.getSettingValue())) {
 			settingList.add(eodJobEmailsSetting);
 		}
+		if(StringUtils.isNotEmpty(feedbackEmailsSetting.getSettingValue())) {
+			settingList.add(feedbackEmailsSetting);
+		}
 		if(StringUtils.isNotEmpty(feedbackAlertSetting.getSettingValue())) {
 			settingList.add(feedbackAlertSetting);
 		}
-		if(StringUtils.isNotEmpty(feedbackEmailsSetting.getSettingValue())) {
-			settingList.add(feedbackEmailsSetting);
+		if(StringUtils.isNotEmpty(feedbackReportSetting.getSettingValue())) {
+			settingList.add(feedbackReportSetting);
+		}
+		if(StringUtils.isNotEmpty(feedbackReportEmailsSetting.getSettingValue())) {
+			settingList.add(feedbackReportEmailsSetting);
+		}
+		if(StringUtils.isNotEmpty(feedbackReportTimeSetting.getSettingValue())) {
+			settingList.add(feedbackReportTimeSetting);
 		}
 		if(StringUtils.isNotEmpty(quotationAlertSetting.getSettingValue())) {
 			settingList.add(quotationAlertSetting);
@@ -623,6 +685,15 @@ public class SettingsService extends AbstractService {
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_FEEDBACK_EMAILS)) {
 					settingDto.setFeedbackEmailsId(setting.getId());
 					settingDto.setFeedbackEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_FEEDBACK_REPORT)) {
+					settingDto.setFeedbackReportEmailAlertId(setting.getId());
+					settingDto.setFeedbackReportEmailAlert(Boolean.valueOf(setting.getSettingValue()));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_FEEDBACK_REPORT_EMAILS)) {
+					settingDto.setFeedbackReportEmailsId(setting.getId());
+					settingDto.setFeedbackReportEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_FEEDBACK_REPORT_TIME)) {
+					settingDto.setFeedbackReportTimeId(setting.getId());
+					settingDto.setFeedbackReportTime(StringUtils.isNotEmpty(setting.getSettingValue()) ? DateUtil.parseToDateTime(setting.getSettingValue()) : null);
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_QUOTATION)) {
 					settingDto.setQuotationEmailAlertId(setting.getId());
 					settingDto.setQuotationEmailAlert(Boolean.valueOf(setting.getSettingValue()));

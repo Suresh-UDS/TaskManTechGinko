@@ -18,6 +18,7 @@ angular.module('timeSheetApp')
     			eodJobEmailIds : [],
     			quotationEmailIds : [],
     			feedbackEmailIds : [],
+    			feedbackReportEmailIds : [],
     			ticketEmailIds : [],
     			readingEmailIds : [],
     			assetEmailIds : [],
@@ -47,6 +48,18 @@ angular.module('timeSheetApp')
             //$scope.selectedDayWiseAttnEmailTime= $filter('date')(e.date._d, 'yyyy-MM-dd HH:mm:ss');
             $scope.selectedDayWiseAttnEmailTime = e.date._d;
             $scope.settings.dayWiseAttendanceAlertTime = $scope.selectedDayWiseAttnEmailTime;
+
+        });
+        
+        $('input#feedbackReportTime').on('dp.change', function(e){
+            console.log(e.date);
+            console.log(e.date._d);
+            
+            $.notifyClose();
+             
+            //$scope.selectedDayWiseAttnEmailTime= $filter('date')(e.date._d, 'yyyy-MM-dd HH:mm:ss');
+            $scope.selectedFeedbackReportTime = e.date._d;
+            $scope.settings.feedbackReportTime = $scope.selectedFeedbackReportTime;
 
         });
         
@@ -142,6 +155,20 @@ angular.module('timeSheetApp')
 	    
 	    $scope.removeFeedbackEmail = function(ind) {
 	    		$scope.settings.feedbackEmailIds.splice(ind,1);
+	    }
+	    
+        $scope.addFeedbackReportEmail = function() {
+	        	var email = $scope.feedbackReportEmail;
+	        	if(!$scope.settings.feedbackReportEmailIds) {
+	        		$scope.settings.feedbackReportEmailIds = [];
+	        	}
+	        	$scope.settings.feedbackReportEmailIds.push(email);
+	    		$scope.feedbackReportEmail = '';
+	        	
+	    }
+	    
+	    $scope.removeFeedbackReportEmail = function(ind) {
+	    		$scope.settings.feedbackReportEmailIds.splice(ind,1);
 	    }
 	    
 	    $scope.addReadingEmail = function() {

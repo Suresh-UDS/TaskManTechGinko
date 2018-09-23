@@ -219,7 +219,9 @@ scheduler:
       enabled: true
    attendanceConsolidatedReport:
       enabled: true
-
+   feedbackreport:
+      enabled: true
+      
 default.user.password: uds12345
 
 google:

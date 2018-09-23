@@ -76,7 +76,7 @@ angular.module('timeSheetApp')
              });
         };
 
-        $rootScope.inits();
+
 
         $('#minimizeSidebar').click(function() {
 

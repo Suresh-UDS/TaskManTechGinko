@@ -36,9 +36,9 @@ angular.module('timeSheetApp')
         $scope.siteSpin = false;
         $scope.btnDisable = false;
 
-        $timeout(function () {
+        /*$timeout(function () {
             angular.element('[ng-model="name"]').focus();
-        });
+        });*/
 
         $scope.clientDisable = true;
 
@@ -95,6 +95,7 @@ angular.module('timeSheetApp')
          $scope.loadDepSites = function (selectedProject) {
              $scope.clearField = false;
              $scope.filter = false;
+             $scope.siteFilterDisable = true;
              $scope.uiSite.splice(0,$scope.uiSite.length);
              $scope.selectedProject = $scope.projectsList[$scope.uiClient.indexOf(selectedProject)]
              $scope.searchProject = $scope.projectsList[$scope.uiClient.indexOf(selectedProject)]
@@ -145,41 +146,47 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadDepBlocks = function (site) {
-            $scope.uiBlock.splice(0,$scope.uiBlock.length);
-            $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(site)]
-            $scope.show = false;
-            $scope.hideSite = true;
-            $scope.hideBlock = false;
-            if(jQuery.isEmptyObject($scope.selectedProject) == false) {
+             if(site){
+                 $scope.searchSite = '';
+                 $scope.uiBlock.splice(0,$scope.uiBlock.length);
+                 $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(site)];
+                 $scope.show = false;
+                 $scope.hideSite = true;
+                 $scope.hideBlock = false;
+                 if(jQuery.isEmptyObject($scope.selectedProject) == false) {
 
-                   var depProj=$scope.selectedProject.id;
-            }else if(jQuery.isEmptyObject($scope.searchProject) == false){
-                    var depProj=$scope.searchProject.id;
-            }else{
-                    var depProj=0;
-            }
-            if(jQuery.isEmptyObject($scope.selectedSite) == false) {
-                  console.log('selected project -' + $scope.selectedProject.id + ', site -' + $scope.selectedSite.id);
-                   var depSite=$scope.selectedSite.id;
-            }else if(jQuery.isEmptyObject($scope.searchSite) == false){
-                    var depSite=$scope.searchSite.id;
-            }else{
-                    var depSite=0;
-            }
-	    		LocationComponent.findBlocks(depProj,depSite).then(function (data) {
-	    			$scope.selectedBlock = null;
-	            $scope.blocksList = data;
+                        var depProj=$scope.selectedProject.id;
+                 }else if(jQuery.isEmptyObject($scope.searchProject) == false){
+                         var depProj=$scope.searchProject.id;
+                 }else{
+                         var depProj=0;
+                 }
+                 if(jQuery.isEmptyObject($scope.selectedSite) == false) {
+                       console.log('selected project -' + $scope.selectedProject.id + ', site -' + $scope.selectedSite.id);
+                        var depSite=$scope.selectedSite.id;
+                 }else if(jQuery.isEmptyObject($scope.searchSite) == false){
+                         var depSite=$scope.searchSite.id;
+                 }else{
+                         var depSite=0;
+                 }
+                    LocationComponent.findBlocks(depProj,depSite).then(function (data) {
+                        $scope.selectedBlock = null;
+                    $scope.blocksList = data;
 
-	            //
-                    for(var i=0;i<$scope.blocksList.length;i++)
-                    {
-                        $scope.uiBlock[i] = $scope.blocksList[i];
-                    }
-                    console.log($scope.uiBlock)
-                    $scope.blockDisable = false;
-                    $scope.blockSpin = false;
-                    $scope.blockFilterDisable = false;
-	        });
+                    //
+                         for(var i=0;i<$scope.blocksList.length;i++)
+                         {
+                             $scope.uiBlock[i] = $scope.blocksList[i];
+                         }
+                         console.log($scope.uiBlock)
+                         $scope.blockDisable = false;
+                         $scope.blockSpin = false;
+                         $scope.blockFilterDisable = false;
+                });
+             }else{
+                $scope.searchSite = '';
+             }
+
 	    };
 
         // Load Blocks for selectbox //
@@ -224,20 +231,22 @@ angular.module('timeSheetApp')
             }else{
                     var depBlock=null;
             }
-	    		LocationComponent.findFloors(depProj,depSite,depBlock).then(function (data) {
-	    		$scope.selectedFloor = null;
-	            $scope.floorsList = data;
-                //
-                    console.log($scope.floorsList)
-                    for(var i=0;i<$scope.floorsList.length;i++)
-                    {
-                        $scope.uiFloor[i] = $scope.floorsList[i];
-                    }
-                    console.log($scope.floorsList)
-                    $scope.floorDisable = false;
-                    $scope.floorSpin = false;
-                    $scope.floorFilterDisable = false;
-	        });
+            if(depBlock){
+                    LocationComponent.findFloors(depProj,depSite,depBlock).then(function (data) {
+                    $scope.selectedFloor = null;
+                    $scope.floorsList = data;
+                    //
+                        console.log($scope.floorsList)
+                        for(var i=0;i<$scope.floorsList.length;i++)
+                        {
+                            $scope.uiFloor[i] = $scope.floorsList[i];
+                        }
+                        console.log($scope.floorsList)
+                        $scope.floorDisable = false;
+                        $scope.floorSpin = false;
+                        $scope.floorFilterDisable = false;
+                });
+	        }
 	    };
 
         // Load Floors for selectbox //
@@ -289,20 +298,24 @@ angular.module('timeSheetApp')
             }else{
                     var depZone=null;
             }
-	    		LocationComponent.findZones(depProj,depSite,depBlock,depFloor).then(function (data) {
-	    		     $scope.selectedZone = null;
-	                 $scope.zonesList = data;
-                    //
-                    console.log($scope.zonesList)
-                    for(var i=0;i<$scope.zonesList.length;i++)
-                    {
-                        $scope.uiZone[i] = $scope.zonesList[i];
-                    }
-                    console.log($scope.zonesList)
-                    $scope.zoneDisable = false;
-                    $scope.zoneSpin = false;
-                    $scope.zoneFilterDisable = false;
-	        });
+            if(depBlock && depFloor){
+                LocationComponent.findZones(depProj,depSite,depBlock,depFloor).then(function (data) {
+                         $scope.selectedZone = null;
+                         $scope.zonesList = data;
+                        //
+                        console.log($scope.zonesList)
+                        for(var i=0;i<$scope.zonesList.length;i++)
+                        {
+                            $scope.uiZone[i] = $scope.zonesList[i];
+                        }
+                        console.log($scope.zonesList)
+                        $scope.zoneDisable = false;
+                        $scope.zoneSpin = false;
+                        $scope.zoneFilterDisable = false;
+                });
+
+            }
+
 	    };
 
         // Load Zones for selectbox //
@@ -631,6 +644,8 @@ angular.module('timeSheetApp')
         $scope.clearFilter = function() {
             $scope.clearField = true;
             $scope.filter = false;
+            $scope.siteFilterDisable = true;
+            $scope.sitesList = null;
             $scope.selectedSite = null;
             $scope.selectedProject = null;
             $scope.selectedBlock = null;
@@ -643,6 +658,9 @@ angular.module('timeSheetApp')
             $scope.searchZone = null;
             $scope.searchCriteria = {};
             $rootScope.searchCriteriaSite = null;
+            $("#collapseTwo").removeClass("in");
+            $("#collapseOne").addClass("in");
+            $("#collapseOne").css("height", "110px");
             $scope.pages = {
                 currPage: 1,
                 totalPages: 0

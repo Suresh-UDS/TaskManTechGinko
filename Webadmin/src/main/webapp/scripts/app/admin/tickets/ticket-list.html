@@ -669,7 +669,7 @@
                                 <div class="panel-body">
 
                                     <div class="row" >
-                                        <div class="col-xs-12 col-md-4">
+                                        <div class="col-xs-12 col-md-6">
                                             <div class="form-group" >
                                                 <div class="dropdown">
                                                     <label class="label-control">Client</label>
@@ -680,8 +680,9 @@
                                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable" ng-change="loadSearchProject(searchProject);
+                                                    loadFilterEmployee();loadDepSites()" ng-click="loadSearchProject(searchProject);
                                                     loadFilterEmployee();loadDepSites()">
-                                                        <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :clearField?'Select Client':searchProject}}</ui-select-match>
+                                                        <ui-select-match placeholder="Select client...">{{filter ? searchProject.name?searchProject.name:'Select client' :clearField?'Select Client':searchProject}}</ui-select-match>
                                                         <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
                                                             <div ng-bind="client"></div>
                                                         </ui-select-choices>
@@ -689,7 +690,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xs-12 col-md-4">
+                                        <div class="col-xs-12 col-md-6">
                                             <div class="dropdown">
                                                 <div class="form-group">
                                                     <label class="label-control">Site</label>
@@ -699,10 +700,10 @@
                                                     <!--</select>-->
                                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-change="loadSearchSite(searchSite);loadFilterEmployee()" ng-click="loadSearchSite(searchSite)">
+                                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-change="loadSearchSite(searchSite);loadFilterEmployee()">
                                                         <ui-select-match placeholder="Select Site...">{{sites.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?clearField?'Select Site':searchSite : 'Select Site' }}</ui-select-match>
                                                         <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
-                                                            <div ng-bind="site"></div>
+                                                            <div ng-bind="site"  ng-click="loadSearchSite(searchSite)"></div>
                                                         </ui-select-choices>
                                                     </ui-select>
                                                     <span ng-if="sites.length == 0 && !siteSpin"><p class="help-block">No sites</p></span>

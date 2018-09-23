@@ -92,6 +92,24 @@ public class ReportResource {
 		schedulerHelperService.autoCheckOutAttendance();
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/reports/attendance/musterroll", method = RequestMethod.GET)
+	public ResponseEntity<?> sendMusterrollAttendanceReport(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date attnDate, @RequestParam(value = "onDemand", required = false) boolean onDemand, @RequestParam(value = "siteId", required = false) long siteId) {
+		Calendar startCal = Calendar.getInstance();
+		Calendar endCal = Calendar.getInstance();
+		if(attnDate != null) {
+			startCal.setTime(attnDate);
+			endCal.setTime(attnDate);
+		}			
+		startCal.set(Calendar.DAY_OF_MONTH, 1);
+		startCal.set(Calendar.HOUR_OF_DAY, 0);
+		startCal.set(Calendar.MINUTE,0);
+		endCal.set(Calendar.DAY_OF_MONTH, endCal.getActualMaximum(Calendar.DAY_OF_MONTH));
+		endCal.set(Calendar.HOUR_OF_DAY,23);
+		endCal.set(Calendar.MINUTE,59);
+		schedulerHelperService.generateMusterRollAttendanceReport(siteId, startCal.getTime(), endCal.getTime() , true, onDemand);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 
 	
 	//    @CrossOrigin

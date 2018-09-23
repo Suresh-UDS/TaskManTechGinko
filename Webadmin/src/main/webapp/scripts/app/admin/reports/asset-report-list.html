@@ -33,8 +33,13 @@
                 <div class="ripple-container"></div>
             </button>
 
-            <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
-            <div class="downloaderMd" ng-show="downloader"></div>
+            <span ng-if="exportMsg(0)=='Download'">
+                 <a class="download-btn" href="{{exportFile(0)}}" download target="_self" ng-click="clsDownload()" ng-hide="downloaded">{{exportMsg(0)}}</a>
+                 <div class="downloaderMd" ng-show="downloader"></div>
+            </span>
+            <span ng-if="exportMsg(0)!='Download'">
+                 <a class="download-btn" href="javascript:void(0);">{{exportMsg(0)}}</a>
+            </span>
 
         </div>
     </div>
@@ -50,12 +55,12 @@
                     Site: {{searchCriteria.siteName || localStorage.siteName}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.acquiredDate || localStorage.acquiredDate">
-                    Acquired Date: {{searchCriteria.acquiredDate || localStorage.acquiredDate | date:'dd/MM/yyyy'}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.fromDate || localStorage.fromDate">
+                    From Date: {{searchCriteria.fromDate || localStorage.fromDate | date:'dd/MM/yyyy'}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.assetCreatedDate || localStorage.assetCreatedDate">
-                    CreatedDate: {{searchCriteria.assetCreatedDate || localStorage.assetCreatedDate | date:'dd/MM/yyyy'}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.toDate || localStorage.toDate">
+                    To Date: {{searchCriteria.toDate || localStorage.toDate | date:'dd/MM/yyyy'}}
                 </span>
 
             </span>
@@ -476,7 +481,7 @@
                                     <!--</select>-->
                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable" ng-change="loadSearchProject(searchProject);loadSites()" ng-click="loadSearchProject(searchProject);loadSites()">
+                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable" ng-change="loadSearchProject(searchProject);" ng-click="loadSearchProject(searchProject);">
                                         <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :clearField?'Select Client':searchProject}}</ui-select-match>
                                         <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
                                             <div ng-bind="client"></div>
@@ -494,11 +499,11 @@
                                     <!--<option value="">Select Site...</option>-->
                                     <!--</select>-->
                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                    <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-click="loadSearchSite(searchSite)">
-                                        <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?clearField?'Select Site':searchSite : 'Select Site' }}</ui-select-match>
+                                    <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon " ><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-change="loadSearchSite(searchSite)">
+                                        <ui-select-match placeholder="Select Site..." >{{sites.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?clearField?'Select Site':searchSite : 'Select Site' }}</ui-select-match>
                                         <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
-                                            <div ng-bind="site"></div>
+                                            <div ng-bind="site" ng-click="loadSearchSite(searchSite)"></div>
                                         </ui-select-choices>
                                     </ui-select>
                                     <span ng-if="sites.length == 0"><p class="help-block">No sites</p></span>

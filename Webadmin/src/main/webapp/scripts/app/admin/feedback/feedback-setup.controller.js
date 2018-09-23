@@ -271,6 +271,7 @@ angular.module('timeSheetApp')
 	    		if(!$scope.selectedProject && !$scope.selectedSite) {
 	    			$scope.searchCriteria.findAll = true;
 	    		}
+	    		$scope.searchCriteria.isList = true;
         		FeedbackComponent.searchFeedbackMaster($scope.searchCriteria).then(function(data) {
         			$scope.feedbackMasterList = data.transactions;
         		})
@@ -441,7 +442,8 @@ angular.module('timeSheetApp')
 
 
              $scope.searchCriteria.currPage = currPageVal;
-            $scope.searchCriteria.findAll = false;
+             $scope.searchCriteria.findAll = false;
+             $scope.searchCriteria.isList = false;
 
              if( !$scope.searchProject && !$scope.searchSite
                 &&  !$scope.searchBlock &&  !$scope.searchFloor &&  !$scope.searchZone) {
@@ -540,6 +542,9 @@ angular.module('timeSheetApp')
 
 
         $scope.clearFilter = function() {
+            $scope.clearField = true;
+            $scope.siteFilterDisable = true;
+            $scope.sites = null;
             $scope.searchSite = null;
             $scope.searchProject = null;
             $scope.searchBlock = null;
@@ -551,6 +556,9 @@ angular.module('timeSheetApp')
                 currPage: 1,
                 totalPages: 0
             }
+             $("#collapseTwo").removeClass("in");
+             $("#collapseOne").addClass("in");
+             $("#collapseOne").css("height", "110px");
             //$scope.search();
         };
 

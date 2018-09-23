@@ -61,19 +61,19 @@ export class ViewJobPage {
                 if(response.images.length>0){
                     console.log("Images available");
                     this.completedImages=[];
-                    for(let image of response.images){
-                        this.jobService.getCompletedImage(image.employeeEmpId,image.photoOut).subscribe(
-                            imageData=>{
-                                this.spinner=false;
-                                console.log(imageData);
-                                this.completedImages.push(imageData._body);
-                            },err=>{
-                                this.spinner=false;
-                                console.log("Error in getting images");
-                                console.log(err);
-                            }
-                        )
-                    }
+                    // for(let image of response.images){
+                    //     this.jobService.getCompletedImage(image.employeeEmpId,image.photoOut).subscribe(
+                    //         imageData=>{
+                    //             this.spinner=false;
+                    //             console.log(imageData);
+                    //             this.completedImages.push(imageData._body);
+                    //         },err=>{
+                    //             this.spinner=false;
+                    //             console.log("Error in getting images");
+                    //             console.log(err);
+                    //         }
+                    //     )
+                    // }
 
                 }
             }
@@ -91,7 +91,7 @@ export class ViewJobPage {
 
     viewImage(img)
     {
-        let popover = this.popoverCtrl.create(AttendancePopoverPage,{i:img},{cssClass:'view-img',showBackdrop:true});
+        let popover = this.popoverCtrl.create(AttendancePopoverPage,{i:img},{cssClass:'view-img',showBackdrop:false});
         popover.present({
         });
     }

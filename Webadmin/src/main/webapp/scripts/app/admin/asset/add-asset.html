@@ -1884,7 +1884,7 @@
                                                                             <div class="col-md-12">
                                                                                 <div class="form-group label-floating is-empty is-fileinput row">
                                                                                     <div class="col-md-6 pdng-top13">
-                                                                                        <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false" required  onchange="angular.element(this).scope().uploadfileValidation(this.files)">
+                                                                                        <input type="file" id="assetFilesUpload" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false" required  onchange="angular.element(this).scope().uploadfileValidation(this.files)">
                                                                                          <div ng-show="importClientForm.$submitted || importClientForm.clientFile.$touched">
                                                                                             <div
                                                                                                 ng-show="importClientForm.clientFile.$dirty || importClientForm.clientFile.$invalid">
@@ -1959,7 +1959,7 @@
                                                                            <div class="col-md-12">
                                                                                <div class="form-group label-floating is-empty is-fileinput row">
                                                                                    <div class="col-md-6 pdng-top13">
-                                                                                       <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedPhotoFile" name="clientFile1" tabindex="0" aria-invalid="false" onchange="angular.element(this).scope().uploadImage(this.files)" required>
+                                                                                       <input type="file" id="assetPohotsUpload" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedPhotoFile" name="clientFile1" tabindex="0" aria-invalid="false" onchange="angular.element(this).scope().uploadImage(this.files)" required>
                                                                                        <div ng-show="importClientForm1.$submitted || importClientForm1.clientFile1.$touched">
                                                                                             <div
                                                                                                 ng-show="importClientForm1.clientFile1.$dirty || importClientForm1.clientFile1.$invalid">

@@ -23,11 +23,13 @@ angular.module('timeSheetApp')
         $scope.selectedManager;
         $scope.selectedTicket;
         $scope.searchCriteriaTicket;
-        $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
+        //$scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
+        $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
         var d = new Date();
         d.setFullYear(2018, 0, 1);
-        $scope.selectedDateFromSer= d;
+        //$scope.selectedDateFromSer= d;
+        $scope.selectedDateFromSer= new Date();
         $scope.selectedDateToSer= new Date();
         $scope.pageSort = 10;
         $scope.pager = {};
@@ -132,7 +134,7 @@ angular.module('timeSheetApp')
             $scope.uiSite.splice(0,$scope.uiSite.length)
             $scope.searchSite = null;
             $scope.selectedProject = $scope.projects[$scope.uiClient.indexOf(searchProject)];
-            $scope.loadDepSites()
+            $scope.loadDepSites();
         }
         $scope.loadSearchSite = function (searchSite) {
             $scope.hideSite = true;
@@ -340,7 +342,7 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.ticketStatus = $scope.selectedStatus;
             $scope.searchCriteria.currPage = currPageVal;
             $scope.searchCriteria.findAll = false;
-            $scope.searchCriteria.isReport = true;
+            $scope.searchCriteria.isReport = false;
 
             console.log($scope.selectedProject , $scope.selectedSite)
              if( !$scope.selectedProject && !$scope.selectedSite
@@ -525,9 +527,13 @@ angular.module('timeSheetApp')
             $rootScope.exportStatusObj.exportMsg = '';
             $scope.downloader=false;
             $scope.clearField = true;
-            $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
+            $scope.siteFilterDisable = true;
+            $scope.sites = null;
+            //$scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
+            $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-            $scope.selectedDateFromSer = d;
+            //$scope.selectedDateFromSer = d;
+            $scope.selectedDateFromSer = new Date();
             $scope.selectedDateToSer =  new Date();
             $scope.selectedEmployee = null;
             $scope.selectedProject = null;
@@ -557,6 +563,7 @@ angular.module('timeSheetApp')
         $scope.exportAllData = function(type){
                 $rootScope.exportStatusObj.exportMsg = '';
                 $scope.downloader=true;
+                $scope.searchCriteria.isReport = true;
                 $scope.searchCriteria.exportType = type;
                 $scope.searchCriteria.report = true;
                 $scope.typeMsg = type;
@@ -668,9 +675,11 @@ angular.module('timeSheetApp')
 
         };
 
+        $scope.downloaded = false;
 
-
-
+        $scope.clsDownload = function(){
+          $scope.downloaded = true;
+        }
 
           //init load
         $scope.initLoad = function(){

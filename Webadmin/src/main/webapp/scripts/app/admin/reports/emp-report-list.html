@@ -18,8 +18,14 @@
                 <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
                 <div class="ripple-container"></div>
             </button>
-            <a class="download-btn" href="{{exportFile()}}">{{exportMsg()}}</a>
-            <div class="downloader" ng-show="downloader"></div>
+            <span ng-if="exportMsg()=='Download'">
+                 <a class="download-btn" href="{{exportFile()}}" download target="_self" ng-click="clsDownload()" ng-hide="downloaded">{{exportMsg()}}</a>
+                 <div class="downloader" ng-show="downloader"></div>
+            </span>
+            <span ng-if="exportMsg()!='Download'">
+                 <a class="download-btn" href="javascript:void(0);">{{exportMsg()}}</a>
+            </span>
+
         </div>
     </div>
     <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
@@ -215,8 +221,8 @@
 							   <td>{{employee.projectName}}</td>
 							   <td>{{employee.siteName}}</td>
 							   <td>{{employee.createdDate}}</td>
-							   <td><span ng-if='employee.active == y' class="label label-success">Yes</span>
-                                <span ng-if='employee.active == N' class="label label-danger">No</span></td>
+							   <td><span ng-if='employee.active == "Y"' class="label label-success">Yes</span>
+                                <span ng-if='employee.active == "N"' class="label label-danger">No</span></td>
                             </tr>
                             </tbody>
                         </table>
@@ -814,10 +820,10 @@
                                     <!--</select>-->
                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-change="loadSearchSite(searchSite)" ng-click="loadSearchSite(searchSite)">
+                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-change="loadSearchSite(searchSite)" >
                                         <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?searchSite : 'Select Site' }}</ui-select-match>
                                         <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
-                                            <div ng-bind="site"></div>
+                                            <div ng-bind="site" ng-click="loadSearchSite(searchSite)"></div>
                                         </ui-select-choices>
                                     </ui-select>
                                     <span ng-if="sites.length == 0"><p class="help-block">No sites</p></span>
@@ -831,6 +837,7 @@
 
                 </div>
                 <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger btn-simple" data-dismiss="modal" >Cancel</button>
                     <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>

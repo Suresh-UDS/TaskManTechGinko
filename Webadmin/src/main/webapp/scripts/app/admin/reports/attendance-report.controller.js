@@ -11,11 +11,13 @@ angular.module('timeSheetApp')
         $scope.errorMessage = null;
         $scope.doNotMatch = null;
         $scope.errorEmployeeExists = null;
-        $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
+        //$scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
+        $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
         var d = new Date();
         d.setFullYear(2018, 0, 1);
-        $scope.selectedDateFromSer= d;
+        //$scope.selectedDateFromSer= d;
+        $scope.selectedDateFromSer= new Date();
         $scope.selectedDateToSer =  new Date();
         $scope.pager = {};
         $scope.noData = false;
@@ -306,7 +308,7 @@ angular.module('timeSheetApp')
             	}
             	$scope.searchCriteria = searchCriteria;
         	}
-        	$scope.searchCriteria.isReport = true;
+        	$scope.searchCriteria.isReport = false;
     		console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaAttendances));
     		console.log('criteria in scope -'+JSON.stringify($scope.searchCriteria));
 
@@ -416,13 +418,18 @@ angular.module('timeSheetApp')
 
         };
 
+        $scope.loadImagesNew = function(imageUrl, enrollUrl) {
+	//          $scope.loadEnrImage(enrollId);
+	          //Attendance Image
+	          var eleId = 'photoOutImg';
+	          var ele = document.getElementById(eleId);
+	          ele.setAttribute('src',imageUrl);
 
+	//          var enrollImg = enrollUrl;
 
-        $scope.loadImagesNew = function( image) {
-            var eleId = 'photoOutImg';
-            var ele = document.getElementById(eleId);
-            ele.setAttribute('src',image);
-
+	          var eleId1 = 'photoEnrolled';
+	          var ele1 = document.getElementById(eleId1);
+	          ele1.setAttribute('src',enrollUrl);
         };
 
         $scope.initMap = function(container, latIn, lngIn, containerOut, latOut, lngOut) {
@@ -504,9 +511,13 @@ angular.module('timeSheetApp')
             $scope.clearField = true;
             $rootScope.exportStatusObj.exportMsg = '';
             $scope.downloader=false;
-            $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
+            $scope.siteFilterDisable = true;
+            $scope.sites = null;
+            //$scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
+            $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-            $scope.selectedDateFromSer = d;
+            //$scope.selectedDateFromSer = d;
+            $scope.selectedDateFromSer = new Date();
             $scope.selectedDateToSer =  new Date();
             $scope.selectedSite = null;
             $scope.selectedProject = null;
@@ -540,6 +551,7 @@ angular.module('timeSheetApp')
                 $rootScope.exportStatusObj.exportMsg = '';
                 $scope.typeMsg = type;
                 $scope.downloader=true;
+                $scope.searchCriteria.isReport = true;
     			AttendanceComponent.exportAllData($scope.searchCriteria).then(function(data){
 	        		var result = data.results[0];
 	        		console.log(result);
@@ -647,6 +659,12 @@ angular.module('timeSheetApp')
 	        	}
 
         };
+
+        $scope.downloaded = false;
+
+        $scope.clsDownload = function(){
+          $scope.downloaded = true;
+        }
 
         $scope.initCalender();
 

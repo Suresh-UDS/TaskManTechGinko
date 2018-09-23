@@ -363,6 +363,22 @@ public class MailService {
     }
     
     @Async
+    public void sendAttendanceMusterrollReportEmail(String siteName, String emailIds, String reportData, String file, String baseUrl, String month 
+    							) {
+        log.debug("Sending attendance musterroll report e-mail to '{}'", emailIds);
+        Locale locale = Locale.forLanguageTag("en-US");
+        Context context = new Context(locale);
+        context.setVariable("baseUrl", baseUrl);
+        context.setVariable("fileName",file);
+        context.setVariable("month", month);
+        context.setVariable("reportData", reportData);
+        String content = templateEngine.process("attendanceMusterrollReportEmail", context);
+        String subject = messageSource.getMessage("email.attendance.musterroll.report.title", null, locale);
+        subject += " - " + siteName;
+        sendEmail(emailIds, subject, content, true, true,file);
+    }
+    
+    @Async
     public void sendAttendanceExportEmail(String siteName, String emailIds, File file, Date currDate) {
         log.debug("Sending attendance export report e-mail to '{}'", emailIds);
         Locale locale = Locale.forLanguageTag("en-US");
@@ -398,6 +414,19 @@ public class MailService {
         sendEmail(emailIds, subject, content, true, true,file);
     }
 
+    @Async
+    public void sendFeedbackExportEmail(String siteName, String emailIds, File file, Date currDate) {
+        log.debug("Sending feedback export report e-mail to '{}'", emailIds);
+        Locale locale = Locale.forLanguageTag("en-US");
+        Context context = new Context(locale);
+        context.setVariable("date", DateUtil.formatToDateString(currDate));
+        String content = templateEngine.process("feedbackExportEmail", context);
+        String subject = messageSource.getMessage("email.feedback.detailed.report.title", null, locale);
+        subject += " - " + siteName;
+        sendEmail(emailIds, subject, content, true, true,file);
+    }
+
+    
     @Async
     public void sendJobReportEmailFile(String emailIds, String file,  String baseUrl, Date currDate) {
         log.debug("Sending job report e-mail to '{}'", emailIds);

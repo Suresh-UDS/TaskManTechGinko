@@ -708,6 +708,8 @@ angular
 
 			        $scope.clearFilter = function() {
 			        	$scope.clearField = true;
+			        	$scope.siteFilterDisable = true;
+                        $scope.sitesList = null;
 	        		    $scope.selectedProject = null;
 			            $scope.selectedSite = null;
 			            $scope.selectedStatus = null;

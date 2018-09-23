@@ -706,6 +706,20 @@ public class SchedulerService extends AbstractService {
 		cal.add(Calendar.DAY_OF_YEAR, -1);
 		schedulerHelperService.generateDetailedAttendanceReport(cal.getTime(), false, true, false);
 	}
+	
+//	@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report	
+	public void attendanceMusterrollReportSchedule() {
+		Calendar startCal = Calendar.getInstance();
+		startCal.set(Calendar.DAY_OF_MONTH, 1);
+		startCal.set(Calendar.HOUR_OF_DAY,0);
+		startCal.set(Calendar.MINUTE,0);
+		Calendar endCal = Calendar.getInstance();
+		endCal.set(Calendar.HOUR_OF_DAY,23);
+		endCal.set(Calendar.MINUTE,59);
+		endCal.set(Calendar.DAY_OF_MONTH, endCal.getActualMaximum(Calendar.DAY_OF_MONTH));
+		long siteId = 0;
+		schedulerHelperService.generateMusterRollAttendanceReport(siteId, startCal.getTime(), endCal.getTime(), true, false);
+	}
 
 	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
 	public void attendanceCheckOutTask() {
@@ -719,6 +733,13 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.sendScheduleAMCJobsAlert();
 	}
 
+	@Scheduled(cron="0 */5 * * * ?") // runs every 30 mins
+	public void feedbackDetailReportSchedule() {
+		Calendar cal = Calendar.getInstance();
+		//cal.add(Calendar.DAY_OF_YEAR, -1);
+		schedulerHelperService.feedbackDetailedReport();
+	}	
+	
 	@Transactional
 	public void createJobs(SchedulerConfig scheduledTask) {
 		if ("CREATE_JOB".equals(scheduledTask.getType())) {
