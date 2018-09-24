@@ -297,12 +297,15 @@
                                 <tr ng-repeat="questionRating in feedbackReport.questionRatings">
                                     <td>{{questionRating.location}}</td>
                                     <td>{{questionRating.question}}</td>
-                                    <td>{{questionRating.yesCount}}</td>
-                                    <td>{{questionRating.noCount}}</td>
+                                    <td><span ng-if="!questionRating.rating">{{questionRating.yesCount}}</span>
+                                        <span ng-if="questionRating.rating">NA</span></td>
+                                    <td><span ng-if="!questionRating.rating">{{questionRating.noCount}}</span>
+                                        <span ng-if="questionRating.rating">NA</span></td>
                                     <td>
-                                        <div ng-repeat ="(key, value) in questionRating.rating">
+                                        <div  ng-if="questionRating.rating" ng-repeat ="(key, value) in questionRating.rating">
                                             ({{value}}) <jk-rating-stars max-rating="5" rating="key" read-only="readOnly" ></jk-rating-stars>
                                         </div>
+                                        <span ng-if="!questionRating.rating">NA</span>
                                     </td>
                                 </tr>
                                 </thead>
