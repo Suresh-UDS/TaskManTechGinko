@@ -1720,13 +1720,7 @@ public class ExportUtil {
 					Row dataRow = xssfSheet.createRow(rowNum++);
 					dataRow.createCell(0).setCellValue(transaction.getSiteProjectName().toUpperCase());
 					dataRow.createCell(1).setCellValue(transaction.getSiteName().toUpperCase());
-					if(transaction.getBlock().equals("null")){
-                        dataRow.createCell(2).setCellValue("" + "-" + "" + "-" + "");
-
-                    }else{
-                        dataRow.createCell(2).setCellValue(transaction.getBlock() + "-" + transaction.getFloor() + "-" + transaction.getZone());
-
-                    }
+					dataRow.createCell(2).setCellValue(transaction.getBlock() + "-" + transaction.getFloor() + "-" + transaction.getZone());
 					dataRow.createCell(3).setCellValue(transaction.getId());
 					dataRow.createCell(4).setCellValue(transaction.getTitle().toUpperCase());
 					dataRow.createCell(5).setCellValue(transaction.getDescription());
