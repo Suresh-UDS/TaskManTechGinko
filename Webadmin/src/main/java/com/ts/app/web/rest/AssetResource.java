@@ -58,6 +58,7 @@ import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.ExportResponse;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImportResult;
+import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.TicketDTO;
@@ -829,6 +830,17 @@ public class AssetResource {
         }
 	    return result;
     }
+	
+	@RequestMapping(value = "/assets/jobmaterials", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<JobDTO> getAssetMaterials(@RequestBody SearchCriteria searchCriteria) { 
+		List<JobDTO> result = null;
+		try {
+			result = assetService.getAssetMaterials(searchCriteria);
+		} catch(Exception e) {
+			throw new TimesheetException("Error while get Asset Job Materials" +e); 
+		}
+		return result;
+	}
 
 
 
