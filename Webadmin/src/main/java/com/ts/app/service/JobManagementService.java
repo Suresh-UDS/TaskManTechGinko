@@ -1077,8 +1077,11 @@ public class JobManagementService extends AbstractService {
 		if(job.getAsset() != null) {
 			dto.setAssetId(job.getAsset().getId());
 		}
+		dto.setBlock(job.getBlock());
+		dto.setFloor(job.getFloor());
+		dto.setZone(job.getZone());
 		dto.setSiteId(job.getSite().getId());
-		dto.setSiteName(job.getSite().getName()); 
+		dto.setSiteName(job.getSite().getName());
 		dto.setSiteProjectId(String.valueOf(job.getSite().getProject().getId()));
 		dto.setSiteProjectName(job.getSite().getProject().getName());
 		dto.setDescription(job.getDescription());
