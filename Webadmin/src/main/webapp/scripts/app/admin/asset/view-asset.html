@@ -1018,9 +1018,12 @@
 
                                                             <thead>
                                                             <tr>
-                                                                <th width="15%">MaterialName</th>
-                                                                <th width="15%">MaterialCode</th>
-                                                                <th width="30%">MaterialGroup</th>
+                                                            
+                                                            	<th>JobId</th>
+                                                            	<th>JobTitle</th>
+                                                                <th>MaterialName</th>
+                                                                <th>MaterialCode</th>
+                                                                <th>MaterialGroup</th>
                                                                 <th>MaterialStock</th>
                                                                 <th>MaterialQty</th>
                                                                 <th>MaterialUom</th>
@@ -1031,8 +1034,9 @@
                                                             </thead>
 
                                                             <tbody>
-
                                                             <tr ng-repeat="spares in sparesHistories">
+                                                            	<td>{{spares.jobId}}</td>
+                                                            	<td>{{spares.jobTitle}}</td>
                                                                 <td>{{spares.materialName}}</td>
                                                                 <td>{{spares.materialCode}}</td>
                                                                 <td>{{spares.materialGroup}}</td>
@@ -1045,7 +1049,7 @@
                                                                 </td> -->
                                                             </tr>
                                                             <tr>
-                                                               <td colspan="5" align="center" ng-show="!sparesHistories.length">No Spares History Found</td>
+                                                               <td colspan="7" align="center" ng-show="!sparesHistories.length">No Spares History Found</td>
                                                             </tr>
 
                                                             </tbody>

@@ -3401,6 +3401,7 @@ angular.module('timeSheetApp')
     $scope.sparesHistories = [];
     
     $scope.loadAssetSpares = function() { 
+    	$scope.sparesHistories = [];
         $rootScope.loadingStart();
         $rootScope.loadPageTop();
     	$scope.searchObj = {};
