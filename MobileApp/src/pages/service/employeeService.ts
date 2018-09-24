@@ -7,6 +7,7 @@ import {Inject, Injectable} from "@angular/core";
 import {LoadingController, ToastController} from "ionic-angular";
 import {AppConfig, ApplicationConfig, MY_CONFIG_TOKEN} from "./app-config";
 import {ObserveOnMessage} from "rxjs/operators/observeOn";
+import {temporaryDeclaration} from "@angular/compiler/src/compiler_util/expression_converter";
 
 @Injectable()
 export class EmployeeService {
@@ -80,6 +81,15 @@ export class EmployeeService {
 
     getUserRolePermissions(searchCriteria): Observable<any>{
         return this.http.post(this.config.Url+'api/userRolePermission/search',searchCriteria).map(
+            response=>{
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
+    enrollFace(employee):Observable<any>{
+        return this.http.post(this.config.Url+'api/employee/enroll',employee).map(
             response=>{
                 console.log(response.json());
                 return response.json();

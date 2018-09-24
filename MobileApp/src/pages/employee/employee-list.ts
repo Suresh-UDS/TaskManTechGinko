@@ -183,7 +183,8 @@ export class EmployeeList {
     this.camera.getPicture(options).then((imageData) => {
       let base64Image = 'data:image/jpeg;base64,' + imageData;
       var employeeName = employee.fullName+employee.empId;
-        this.checkProximity(this.site.id,this.lattitude,this.longitude,base64Image,mode,attendanceMode,employee);
+        // this.checkProximity(this.site.id,this.lattitude,this.longitude,base64Image,mode,attendanceMode,employee);
+        this.enrollFace(employee,base64Image);
       // this.navCtrl.push(AttendanceViewPage,imageData)
     }, (err) => {
       console.log("Location error");
@@ -193,6 +194,17 @@ export class EmployeeList {
       var msg= "Please try again...";
       this.showSuccessToast(msg);
     })
+  }
+
+  enrollFace(employee,imageData){
+      var employeeName = employee.fullName+employee.empId;
+      employee.enrolled_face = imageData;
+      this.employeeService.enrollFace(employee).subscribe(
+          response=>{
+              console.log("Enroll face result");
+              console.log(response);
+          }
+      )
   }
 
   checkProximity(siteId,lat,lng,imageData,mode,attendanceMode,employee){
