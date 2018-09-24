@@ -809,10 +809,10 @@
 
 
     <ion-list *ngSwitchCase="'inventoryTransaction'" style="margin-top:18px">
-        <div  *ngIf="(!assetMaterial ||assetMaterial.length < 0) && spinner" text-center class="margin-top25">
+        <div  *ngIf="(!jobMaterials ||jobMaterials.length < 0) && spinner" text-center class="margin-top25">
             <ion-spinner name="circles"></ion-spinner>
         </div>
-        <div *ngIf="(!assetMaterial || assetMaterial.length < 0) && !spinner"  text-center>
+        <div *ngIf="(!jobMaterials || jobMaterials.length < 0) && !spinner"  text-center>
             <ion-card text-center>
                 <ion-card-content>
                     No Data found
