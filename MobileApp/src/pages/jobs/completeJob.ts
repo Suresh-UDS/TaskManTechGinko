@@ -69,7 +69,7 @@ export class CompleteJobPage {
         console.log("Job Material");
         this.takenImages = [];
         this.checkOutDetails={
-            employeeId:'',
+        employeeId:'',
         employeeEmpId:'',
         projectId:'',
         siteId:'',
@@ -78,7 +78,7 @@ export class CompleteJobPage {
         longitude:'',
         completeJob:false,
         id:null,
-            jobMaterials:[],
+        jobMaterials:[],
         };
 
         /*
@@ -173,7 +173,7 @@ export class CompleteJobPage {
         this.camera.getPicture(options).then((imageData) => {
 
             console.log('imageData -' +imageData);
-            imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
+            imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/");
 
             this.takenImages.push(imageData);
 
@@ -296,7 +296,10 @@ export class CompleteJobPage {
         }).catch((error)=>{
             this.latitude = 0;
             this.longitude = 0;
-        })
+        });
+        console.log("material in complete job");
+        console.log(material);
+        job.jobMaterials=material;
         this.jobService.saveJob(job).subscribe(
             response=>{
                 console.log(job);
@@ -309,6 +312,7 @@ export class CompleteJobPage {
                 this.checkOutDetails.latitudeOut = this.latitude;
                 this.checkOutDetails.longitude = this.longitude;
                 this.checkOutDetails.id=job.checkInOutId;
+                this.checkOutDetails.jobMaterials=material;
                 console.log(this.checkOutDetails);
                 this.jobService.updateJobImages(this.checkOutDetails).subscribe(
                     response=>{

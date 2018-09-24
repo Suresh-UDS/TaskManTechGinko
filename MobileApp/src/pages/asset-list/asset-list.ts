@@ -99,7 +99,7 @@ export class AssetList {
   ionViewDidLoad() {
 
       console.log('ionViewDidLoad AssetList');
-      // this.componentService.showLoader("Loading Assets");
+      this.componentService.showLoader("Loading Assets");
          this.open = true;
       // After Set Pagination
       // var searchCriteria={}
@@ -255,13 +255,15 @@ export class AssetList {
     this.spinner = true;
     this.assetService.searchAssets(searchCriteria).subscribe(
           response=>{
-            this.spinner= false;
-              // this.componentService.closeLoader()
+            // this.spinner= false;
+              this.componentService.closeLoader()
               console.log("Asset search filters response");
               console.log(response)
               this.assetList=response.transactions;
+              this.page = response.currPage;
+              this.totalPages = response.totalPages;
           },err=>{
-            this.spinner = false;
+            // this.spinner = false;
               this.componentService.closeLoader();
               console.log("Error in filtering assets");
               console.log(err);
@@ -356,7 +358,7 @@ export class AssetList {
     }
 
     // Scroll
-    doInfiniteTodaysJobs(infiniteScroll){
+    doInfiniteAssets(infiniteScroll){
         console.log('Begin async operation');
         console.log(infiniteScroll);
         console.log(this.totalPages);

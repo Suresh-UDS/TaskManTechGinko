@@ -80,10 +80,10 @@
           <!--<ion-icon name="md-eye"></ion-icon>-->
       <!--</button>-->
     </ion-item>
-      <!--<ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="doInfiniteAllJobs($event)">-->
-          <!--<ion-infinite-scroll-content></ion-infinite-scroll-content>-->
-      <!--</ion-infinite-scroll>-->
   </ion-list>
+    <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)=" doInfiniteAssets($event)">
+        <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
 
 
 </ion-content>
