@@ -94,7 +94,7 @@ public class ExportUtil {
 
 	private String[] EMP_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "DESIGNATION", "REPORTING TO", "CLIENT", "SITE",
 			"ACTIVE" };
-	private String[] JOB_HEADER = { "CLIENT", "SITE", "JOB ID", "TITLE", "DESCRIPTION", "TICKET ID", "TICKET TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
+	private String[] JOB_HEADER = { "CLIENT", "SITE", "LOCATION", "JOB ID", "TITLE", "DESCRIPTION", "TICKET ID", "TICKET TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
 			"STATUS", "CHECKLIST ITEMS", "CHECKLIST STATUS", "CHECKLIST REMARKS","CHECKLIST IMAGE LINK" };
 	private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT", "DURATION(In Hours) ",
 			 "SHIFT CONTINUED", "LATE CHECK IN","REMARKS" };
@@ -1720,16 +1720,17 @@ public class ExportUtil {
 					Row dataRow = xssfSheet.createRow(rowNum++);
 					dataRow.createCell(0).setCellValue(transaction.getSiteProjectName().toUpperCase());
 					dataRow.createCell(1).setCellValue(transaction.getSiteName().toUpperCase());
-					dataRow.createCell(2).setCellValue(transaction.getId());
-					dataRow.createCell(3).setCellValue(transaction.getTitle().toUpperCase());
-					dataRow.createCell(4).setCellValue(transaction.getDescription());
-					dataRow.createCell(5).setCellValue(transaction.getTicketId() > 0 ? transaction.getTicketId() +"" : "");
-					dataRow.createCell(6).setCellValue(transaction.getTicketName());
-					dataRow.createCell(7).setCellValue(transaction.getEmployeeName());
-					dataRow.createCell(8).setCellValue(String.valueOf(transaction.getJobType()));
-					dataRow.createCell(9).setCellValue(DateUtil.formatToDateTimeString(transaction.getPlannedStartTime()));
-					dataRow.createCell(10).setCellValue(DateUtil.formatToDateTimeString(transaction.getActualEndTime()));
-					dataRow.createCell(11)
+					dataRow.createCell(2).setCellValue(transaction.getBlock() + "-" + transaction.getFloor() + "-" + transaction.getZone());
+					dataRow.createCell(3).setCellValue(transaction.getId());
+					dataRow.createCell(4).setCellValue(transaction.getTitle().toUpperCase());
+					dataRow.createCell(5).setCellValue(transaction.getDescription());
+					dataRow.createCell(6).setCellValue(transaction.getTicketId() > 0 ? transaction.getTicketId() +"" : "");
+					dataRow.createCell(7).setCellValue(transaction.getTicketName());
+					dataRow.createCell(8).setCellValue(transaction.getEmployeeName());
+					dataRow.createCell(9).setCellValue(String.valueOf(transaction.getJobType()));
+					dataRow.createCell(10).setCellValue(DateUtil.formatToDateTimeString(transaction.getPlannedStartTime()));
+					dataRow.createCell(11).setCellValue(DateUtil.formatToDateTimeString(transaction.getActualEndTime()));
+					dataRow.createCell(12)
 							.setCellValue(transaction.getJobStatus() != null ? transaction.getJobStatus().name()
 									: JobStatus.OPEN.name());
 					if(CollectionUtils.isNotEmpty(transaction.getChecklistItems())) {
@@ -1738,24 +1739,25 @@ public class ExportUtil {
 						int cnt = 0;
 						for(JobChecklistDTO result : results) {
 							cnt++;
-							dataRow.createCell(12).setCellValue(result.getChecklistItemName());		
-							dataRow.createCell(13).setCellValue((result.isCompleted() ? "COMPLETED" : "NOT COMPLETED"));
-							dataRow.createCell(14).setCellValue((StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : ""));
-							dataRow.createCell(15).setCellValue((StringUtils.isNotEmpty(result.getImageUrl_1()) ? result.getImageUrl_1() : ""));
+							dataRow.createCell(13).setCellValue(result.getChecklistItemName());		
+							dataRow.createCell(14).setCellValue((result.isCompleted() ? "COMPLETED" : "NOT COMPLETED"));
+							dataRow.createCell(15).setCellValue((StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : ""));
+							dataRow.createCell(16).setCellValue((StringUtils.isNotEmpty(result.getImageUrl_1()) ? result.getImageUrl_1() : ""));
 							if(cnt < size) {
 								dataRow = xssfSheet.createRow(rowNum++);
 								dataRow.createCell(0).setCellValue(transaction.getSiteProjectName().toUpperCase());
 								dataRow.createCell(1).setCellValue(transaction.getSiteName().toUpperCase());
-								dataRow.createCell(2).setCellValue(transaction.getId());
-								dataRow.createCell(3).setCellValue(transaction.getTitle().toUpperCase());
-								dataRow.createCell(4).setCellValue(transaction.getDescription());
-								dataRow.createCell(5).setCellValue(transaction.getTicketId() > 0 ? transaction.getTicketId() +"" : "");
-								dataRow.createCell(6).setCellValue(transaction.getTicketName());
-								dataRow.createCell(7).setCellValue(transaction.getEmployeeName());
-								dataRow.createCell(8).setCellValue(String.valueOf(transaction.getJobType()));
-								dataRow.createCell(9).setCellValue(DateUtil.formatToDateTimeString(transaction.getPlannedStartTime()));
-								dataRow.createCell(10).setCellValue(DateUtil.formatToDateTimeString(transaction.getActualEndTime()));
-								dataRow.createCell(11)
+								dataRow.createCell(2).setCellValue(transaction.getBlock() + "-" + transaction.getFloor() + "-" + transaction.getZone());
+								dataRow.createCell(3).setCellValue(transaction.getId());
+								dataRow.createCell(4).setCellValue(transaction.getTitle().toUpperCase());
+								dataRow.createCell(5).setCellValue(transaction.getDescription());
+								dataRow.createCell(6).setCellValue(transaction.getTicketId() > 0 ? transaction.getTicketId() +"" : "");
+								dataRow.createCell(7).setCellValue(transaction.getTicketName());
+								dataRow.createCell(8).setCellValue(transaction.getEmployeeName());
+								dataRow.createCell(9).setCellValue(String.valueOf(transaction.getJobType()));
+								dataRow.createCell(10).setCellValue(DateUtil.formatToDateTimeString(transaction.getPlannedStartTime()));
+								dataRow.createCell(11).setCellValue(DateUtil.formatToDateTimeString(transaction.getActualEndTime()));
+								dataRow.createCell(12)
 										.setCellValue(transaction.getJobStatus() != null ? transaction.getJobStatus().name()
 												: JobStatus.OPEN.name());								
 							}
