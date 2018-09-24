@@ -806,13 +806,13 @@ public class JobManagementService extends AbstractService {
 		Job job = new Job();
 
 		jobDTO = validate(jobDTO, job);
-		
+
 		if(!StringUtils.isEmpty(jobDTO.getErrorMessage())) {
 			return jobDTO;
 		}
-		
+
 		mapToEntity(jobDTO, job);
-		
+
 
 		if(job.getStatus() == null) {
 			job.setStatus(JobStatus.ASSIGNED);
@@ -1077,18 +1077,9 @@ public class JobManagementService extends AbstractService {
 		if(job.getAsset() != null) {
 			dto.setAssetId(job.getAsset().getId());
 		}
-        if (job.getBlock().equals("null")) {
-
-		    dto.setBlock("");
-		    dto.setFloor("");
-		    dto.setZone("");
-
-        }else{
-            dto.setBlock(job.getBlock());
-            dto.setFloor(job.getFloor());
-            dto.setZone(job.getZone());
-
-        }
+		dto.setBlock(job.getBlock());
+		dto.setFloor(job.getFloor());
+		dto.setZone(job.getZone());
 		dto.setSiteId(job.getSite().getId());
 		dto.setSiteName(job.getSite().getName());
 		dto.setSiteProjectId(String.valueOf(job.getSite().getProject().getId()));
@@ -1127,7 +1118,7 @@ public class JobManagementService extends AbstractService {
 				String imageUrl_1 = !StringUtils.isEmpty(item.getImage_1()) ? cloudFrontUrl + bucketEnv + checkListpath + item.getImage_1() : "";
 				itemDto.setImage_1(item.getImage_1());
 				itemDto.setImageUrl_1(imageUrl_1);
-				
+
 				checklistDtos.add(itemDto);
 			}
 			dto.setChecklistItems(checklistDtos);
@@ -1433,7 +1424,7 @@ public class JobManagementService extends AbstractService {
 		}
 
 		mapToEntity(jobDTO, job);
-		
+
 
         log.debug("Ticket in job update ----"+jobDTO.getTicketId());
         Ticket ticket = null;
@@ -2120,20 +2111,20 @@ public class JobManagementService extends AbstractService {
 			checkResult = jobChecklistRepository.findAll(pageRequest);
 			jobchecklists = checkResult.getContent();
 		}
-		
+
 		return "Successfully upload checklist images";
 	}
-	
+
 	/*
 	 * Validate job date information
 	 */
 	private JobDTO validate(JobDTO jobDTO, Job job) {
-		
+
 		if(job.getStatus() != null && job.getStatus().equals(JobStatus.COMPLETED)) {
 			jobDTO.setErrorMessage("Job details cannot be updated in COMPLETED state");
 			return jobDTO;
 		}
-		
+
 		//Date Validation for job
 		if(jobDTO.getScheduleEndDate() != null) {
 			Calendar startCal = Calendar.getInstance();
@@ -2162,7 +2153,7 @@ public class JobManagementService extends AbstractService {
 				return jobDTO;
 			}
 		}
-		
+
 		//validate job completion time
 		if(jobDTO.getJobStatus() != null && jobDTO.getJobStatus().equals(JobStatus.COMPLETED)) {
 			Calendar now = Calendar.getInstance();
@@ -2173,7 +2164,7 @@ public class JobManagementService extends AbstractService {
 				jobDto.setErrorMessage("Cannot complete job before the scheduled job start time");
 				return jobDto;
 			}
-		}	
+		}
 		return jobDTO;
 	}
 }
