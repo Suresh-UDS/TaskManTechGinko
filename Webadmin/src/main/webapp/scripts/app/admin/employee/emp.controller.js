@@ -78,7 +78,8 @@ angular.module('timeSheetApp')
 
         $scope.pageSort = 10;
 
-        $scope.selectedDate = $filter('date')(new Date(), 'yyyy-MM-dd');
+        $scope.selectedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+        $scope.selectedDateSer = new Date();
 
         $scope.modifiedEmpShifts = [];
 
@@ -109,12 +110,14 @@ angular.module('timeSheetApp')
 
         $('#selectedDate').on('dp.change', function(e){
             //console.log(e.date);
-            $scope.selectedDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
+            $scope.selectedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.selectedDateSer = new Date(e.date._d);
         });
 
         $('#searchDate').on('dp.change', function(e){
             //console.log(e.date);
-            $scope.searchDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
+            $scope.searchDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.searchDateSer = new Date(e.date._d);
         });
 
         $scope.projectSiteList = [];
@@ -682,6 +685,7 @@ angular.module('timeSheetApp')
             $scope.searchCriteria = {};
             $scope.clearField = true;
             $scope.selectedDate = null;
+            $scope.selectedDateSer = null;
                 $scope.searchShift();
 
             }else{
@@ -1275,8 +1279,8 @@ angular.module('timeSheetApp')
                        $scope.searchCriteria.siteId = null;
                 }
 
-                if($scope.selectedDate){
-                      $scope.searchCriteria.fromDate = $scope.selectedDate;
+                if($scope.selectedDateSer){
+                      $scope.searchCriteria.fromDate = $scope.selectedDateSer;
                 }
 
 	            //-------
