@@ -1720,7 +1720,10 @@ public class ExportUtil {
 					Row dataRow = xssfSheet.createRow(rowNum++);
 					dataRow.createCell(0).setCellValue(transaction.getSiteProjectName().toUpperCase());
 					dataRow.createCell(1).setCellValue(transaction.getSiteName().toUpperCase());
-					dataRow.createCell(2).setCellValue(transaction.getBlock() + "-" + transaction.getFloor() + "-" + transaction.getZone());
+					String block = StringUtils.isNotEmpty(transaction.getBlock()) ? transaction.getBlock() : "";
+					String floor = StringUtils.isNotEmpty(transaction.getFloor()) ? transaction.getFloor() : "";
+					String zone = StringUtils.isNotEmpty(transaction.getZone()) ? transaction.getZone() : "";
+					dataRow.createCell(2).setCellValue(block + "-" + floor + "-" + zone);
 					dataRow.createCell(3).setCellValue(transaction.getId());
 					dataRow.createCell(4).setCellValue(transaction.getTitle().toUpperCase());
 					dataRow.createCell(5).setCellValue(transaction.getDescription());
@@ -1747,7 +1750,10 @@ public class ExportUtil {
 								dataRow = xssfSheet.createRow(rowNum++);
 								dataRow.createCell(0).setCellValue(transaction.getSiteProjectName().toUpperCase());
 								dataRow.createCell(1).setCellValue(transaction.getSiteName().toUpperCase());
-								dataRow.createCell(2).setCellValue(transaction.getBlock() + "-" + transaction.getFloor() + "-" + transaction.getZone());
+								block = StringUtils.isNotEmpty(transaction.getBlock()) ? transaction.getBlock() : "";
+								floor = StringUtils.isNotEmpty(transaction.getFloor()) ? transaction.getFloor() : "";
+								zone = StringUtils.isNotEmpty(transaction.getZone()) ? transaction.getZone() : "";
+								dataRow.createCell(2).setCellValue(block + "-" + floor + "-" + zone);
 								dataRow.createCell(3).setCellValue(transaction.getId());
 								dataRow.createCell(4).setCellValue(transaction.getTitle().toUpperCase());
 								dataRow.createCell(5).setCellValue(transaction.getDescription());
