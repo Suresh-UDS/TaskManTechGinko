@@ -39,18 +39,18 @@
          ng-show="!searchCriteria.findAll || localStorage">
 		<span class="AppliedFilterTxtCon">
             <span class="tag label label-info" style="margin-right: 10px"
-                ng-show="searchCriteria.projectName || localStorage.projectName">
+                ng-show="searchCriteria.projectId || localStorage.projectId">
 				Client: {{searchCriteria.projectName || localStorage.projectName}}
             </span>
 
 		    <span class="tag label label-info" style="margin-right: 10px"
-                ng-show="searchCriteria.siteName || localStorage.siteName">
+                ng-show="searchCriteria.siteId || localStorage.siteId">
 				Site: {{searchCriteria.siteName || localStorage.siteName}}
             </span>
 
             <span class="tag label label-info" style="margin-right: 10px"
-                  ng-show="searchCriteria.searchDate || localStorage.searchDate">
-				Site: {{searchCriteria.searchDate || localStorage.searchDate}}
+                  ng-show="searchCriteria.fromDate || localStorage.fromDate">
+				Date: {{searchCriteria.fromDate  || localStorage.fromDate | date:'dd/MM/yyyy'}}
             </span>
 		</span>
     </div>
@@ -347,8 +347,8 @@
 
 <!-- Modal -->
 <div class="modal right fade" id="ViewModal" tabindex="-1" role="dialog" aria-labelledby="ViewModal12">
-    <div class="modal-dialog" role="document" ng-init="initLoad()">
-        <div class="modal-content" ng-init="loadEmployee()">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
 
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -1096,12 +1096,12 @@
                                     class="material-icons">keyboard_arrow_down</i></span>
                                     <ui-select ng-model="searchProject"
                                                ng-disabled="clientFilterDisable"
-                                               ng-change="loadDepSites(searchProject)"
-                                               ng-click="loadDepSites(searchProject)"> <ui-select-match
+                                              > <ui-select-match
                                         placeholder="Select clients...">{{filter
                                         ? searchProject.name?searchProject.name:'Select Client'
                                         :clearField?'Select Client':searchProject}}</ui-select-match> <ui-select-choices
-                                        repeat="client in getClient($select.search) | filter: $select.search">
+                                        repeat="client in getClient($select.search) | filter: $select.search"
+                                        ng-click="loadDepSites(searchProject)">
                                         <div ng-bind="client"></div>
                                     </ui-select-choices> </ui-select>
                                 </div>
@@ -1122,14 +1122,13 @@
                                     class="material-icons">keyboard_arrow_down</i></span>
                                     <ui-select ng-model="searchSite"
                                                ng-disabled="siteFilterDisable || sites.length == 0"
-                                               ng-change="loadSearchSite(searchSite)"
                                               > <ui-select-match
                                         placeholder="Select Site...">{{sites.length
                                         == 0 ? 'Select Site' : searchSite.searchStatus ?
                                         searchSite.name?searchSite.name:'Select Site' : hideSite
                                         ?clearField?'Select Site':searchSite : 'Select Site' }}</ui-select-match> <ui-select-choices
-                                        repeat="site in getSite($select.search) | filter: $select.search">
-                                        <div ng-bind="site"  ng-click="loadSearchSite(searchSite)"></div>
+                                        repeat="site in getSite($select.search) | filter: $select.search" ng-click="loadSearchSite(searchSite)">
+                                        <div ng-bind="site"  ></div>
                                     </ui-select-choices> </ui-select>
                                     <span ng-if="sites.length == 0"><p
                                         class="help-block">No sites</p></span>
