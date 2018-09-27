@@ -130,6 +130,7 @@ angular.module('timeSheetApp')
             $scope.siteSpin = true;
             $scope.hideSite = false;
             $scope.clearField = false;
+            $scope.hideStatus = false;
             $scope.siteFilterDisable = true;
             $scope.uiSite.splice(0,$scope.uiSite.length)
             $scope.searchSite = null;
@@ -138,10 +139,11 @@ angular.module('timeSheetApp')
         }
         $scope.loadSearchSite = function (searchSite) {
             $scope.hideSite = true;
+            $scope.hideStatus = false;
             $scope.selectedSite = $scope.sites[$scope.uiSite.indexOf(searchSite)];
         }
         $scope.loadSearchStatus = function (searchStatus) {
-            // $scope.hideStatus = true;
+             $scope.hideStatus = true;
             $scope.clearField = false;
             $scope.selectedStatus = $scope.ticketStatuses[$scope.uiStatus.indexOf(searchStatus)]
         }

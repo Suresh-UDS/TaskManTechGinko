@@ -155,6 +155,7 @@ angular.module('timeSheetApp')
                         $scope.siteSpin = true;
                         $scope.hideSite = false;
                         $scope.clearField = false;
+                        $scope.hideStatus = false;
                         $scope.uiSite.splice(0,$scope.uiSite.length)
                         $scope.searchSite = null;
                         $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)];
