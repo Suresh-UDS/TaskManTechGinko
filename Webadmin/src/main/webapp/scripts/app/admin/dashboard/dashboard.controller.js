@@ -137,9 +137,10 @@ angular.module('timeSheetApp')
                 $scope.closedTicketsCountArray.push(response.closedTicketCounts["8-10"]);
                 $scope.closedTicketsTotalCount+=parseInt(response.closedTicketCounts["8-10"]);
                 $scope.closedTicketsLabels.push("8-10");
-                $scope.closedTicketsCountArray.push(response.closedTicketCounts["11-365"]);
-                $scope.closedTicketsTotalCount+=parseInt(response.closedTicketCounts["11-365"]);
+                $scope.closedTicketsCountArray.push(response.closedTicketCounts["> 11"]);
+                $scope.closedTicketsTotalCount+=parseInt(response.closedTicketCounts["> 11"]);
                 $scope.closedTicketsLabels.push(">-11");
+                $scope.overAllTicketsTotalCount=$scope.openTicketsTotalCount+$scope.closedTicketsTotalCount;
 
 
 
