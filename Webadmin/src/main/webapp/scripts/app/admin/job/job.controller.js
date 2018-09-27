@@ -219,18 +219,24 @@ angular.module('timeSheetApp')
                      var depProj=0;
                 }
 
-                        $scope.siteSpin = true;
-                        ProjectComponent.findSites(depProj).then(function (data) {
-                            $scope.searchSite = null;
-                            $scope.sitesList = data;
-                            console.log($scope.sitesList)
-                            for(var i=0;i<$scope.sitesList.length;i++)
-                            {
-                                $scope.uiSite[i] = $scope.sitesList[i].name;
-                            }
-                            $scope.siteFilterDisable = false;
-                            $scope.siteSpin = false;
-                        });
+                  $scope.siteFilterDisable = true;
+                  $scope.uiSite.splice(0,$scope.uiSite.length);
+                  $scope.clearField = false;
+                  $scope.searchSite = null;
+                  $scope.hideSite = false;
+
+                $scope.siteSpin = true;
+                ProjectComponent.findSites(depProj).then(function (data) {
+                    $scope.searchSite = null;
+                    $scope.sitesList = data;
+                    console.log($scope.sitesList)
+                    for(var i=0;i<$scope.sitesList.length;i++)
+                    {
+                        $scope.uiSite[i] = $scope.sitesList[i].name;
+                    }
+                    $scope.siteFilterDisable = false;
+                    $scope.siteSpin = false;
+                });
         };
         // Load Sites for selectbox //
         $scope.siteDisable = true;
@@ -425,6 +431,8 @@ angular.module('timeSheetApp')
                     $scope.loadSearchProject = function (searchProject) {
                         $scope.clearField = false;
                         $scope.hideSite = false;
+                        $scope.hideEmp = false;
+                        $scope.hideStatus = false;
                         $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
                         $scope.uiSite.splice(0,$scope.uiSite.length)
                     }
@@ -432,6 +440,7 @@ angular.module('timeSheetApp')
                         $scope.hideEmp = false;
                         $scope.empSpin = true;
                         $scope.hideSite = true;
+                        $scope.hideStatus = false;
                         $scope.uiEmployee.splice(0,$scope.uiEmployee.length);
                         $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)]
                     }
