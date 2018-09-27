@@ -285,7 +285,7 @@
                   </div>
               </div>
 
-              <div class="panel panel-default" has-permission="DashboardTickets:View" ng-if="selectedSite">
+              <div class="panel panel-default" has-permission="DashboardTickets:View" ng-if="selectedSite.id && selectedSite.id>0">
                   <div class="panel-heading">Open Call Tickets</div>
                   <div class="panel-body">
                       <div class="row">
@@ -341,7 +341,7 @@
                       </div>
                   </div>
               </div>
-              <div class="panel panel-default" has-permission="DashboardTickets:View" ng-if="selectedSite">
+              <div class="panel panel-default" has-permission="DashboardTickets:View" ng-if="selectedSite.id && selectedSite.id>0">
                   <div class="panel-heading"> Closed Call Tickets</div>
                   <div class="panel-body">
                       <div class="row">
@@ -401,7 +401,7 @@
                       </div>
                   </div>
               </div>
-              <div class="panel panel-default" has-permission="DashboardTickets:View" ng-if="selectedSite">
+              <div class="panel panel-default" has-permission="DashboardTickets:View" ng-if="selectedSite.id && selectedSite.id>0">
                   <div class="panel-heading">Overall Tickets</div>
                   <div class="panel-body">
                       <div class="row">
