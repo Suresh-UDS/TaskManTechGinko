@@ -73,7 +73,7 @@
                   <div class="panel-body">
 
                       <div class="row">
-                          <div class="col-lg-3 col-md-6 col-sm-6">
+                          <div class="col-lg-4 col-md-6 col-sm-6">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="orange">
                                       <i class="material-icons">domain</i>
@@ -88,7 +88,7 @@
                                   </div>
                               </div>
                           </div>
-                          <div class="col-lg-3 col-md-6 col-sm-6">
+                          <div class="col-lg-4 col-md-6 col-sm-6">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="rose">
                                       <i class="material-icons">location_city</i>
@@ -103,7 +103,7 @@
                                   </div>
                               </div>
                           </div>
-                          <div class="col-lg-3 col-md-6 col-sm-6">
+                          <div class="col-lg-4 col-md-6 col-sm-6">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="green">
                                       <i class="material-icons">people</i>
@@ -119,22 +119,22 @@
                                   </div>
                               </div>
                           </div>
-                          <div class="col-lg-3 col-md-6 col-sm-6" has-permission="Quotation:List">
-                              <div class="card card-stats">
-                                  <div class="card-header" data-background-color="blue">
-                                      <i class="material-icons">content_copy</i>
-                                  </div>
-                                  <div class="card-content">
-                                      <p class="category">Quotations</p>
-                                      <h3 class="card-title">{{quotationCount}}</h3>
-                                  </div>
-                                  <div class="card-footer">
-                                      <div class="stats">
-                                          <!-- <i class="material-icons">date_range</i> Last 24 Hours -->
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
+                          <!--<div class="col-lg-3 col-md-6 col-sm-6" has-permission="Quotation:List">-->
+                              <!--<div class="card card-stats">-->
+                                  <!--<div class="card-header" data-background-color="blue">-->
+                                      <!--<i class="material-icons">content_copy</i>-->
+                                  <!--</div>-->
+                                  <!--<div class="card-content">-->
+                                      <!--<p class="category">Quotations</p>-->
+                                      <!--<h3 class="card-title">{{quotationCount}}</h3>-->
+                                  <!--</div>-->
+                                  <!--<div class="card-footer">-->
+                                      <!--<div class="stats">-->
+                                          <!--&lt;!&ndash; <i class="material-icons">date_range</i> Last 24 Hours &ndash;&gt;-->
+                                      <!--</div>-->
+                                  <!--</div>-->
+                              <!--</div>-->
+                          <!--</div>-->
                       </div>
 
                   </div>
@@ -276,6 +276,63 @@
                                   <div class="card-footer">
                                       <div class="stats">
                                           <!-- <i class="material-icons">date_range</i> Last 24 Hours -->
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                  </div>
+              </div>
+
+              <div class="panel panel-default" has-permission="DashboardTickets:View">
+                  <div class="panel-heading">Tickets</div>
+                  <div class="panel-body">
+
+                      <div class="row">
+
+                          <div class="col-lg-4 col-md-6 col-sm-6">
+                              <div class="card card-stats">
+                                  <div class="card-header" data-background-color="orange">
+                                      <i class="material-icons">tab</i>
+                                  </div>
+                                  <div class="card-content">
+                                      <p class="category">Total Tickets</p>
+                                      <h3 class="card-title">{{overAllTicketsTotalCount}}</h3>
+                                  </div>
+                                  <div class="card-footer">
+                                      <div class="stats">
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-lg-4 col-md-6 col-sm-6">
+                              <div class="card card-stats">
+                                  <div class="card-header" data-background-color="red">
+                                      <i class="material-icons">tab</i>
+                                  </div>
+                                  <div class="card-content">
+                                      <p class="category">Open Tickets</p>
+                                      <h3 class="card-title">{{openTicketsTotalCount}}</h3>
+                                  </div>
+                                  <div class="card-footer">
+                                      <div class="stats">
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-lg-4 col-md-6 col-sm-6">
+                              <div class="card card-stats">
+                                  <div class="card-header" data-background-color="green">
+                                      <i class="material-icons">tab</i>
+                                  </div>
+                                  <div class="card-content">
+                                      <p class="category">Closed Tickets</p>
+                                      <h3 class="card-title">{{closedTicketsTotalCount}}</h3>
+                                  </div>
+                                  <div class="card-footer">
+                                      <div class="stats">
+                                          <!-- <i class="material-icons">local_offer</i> Tracked from Google Analytics -->
                                       </div>
                                   </div>
                               </div>
