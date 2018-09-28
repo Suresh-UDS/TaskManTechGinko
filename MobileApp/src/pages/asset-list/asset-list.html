@@ -41,7 +41,7 @@
 
 
 
-      <div *ngIf="(assetList?.length<0 || assetList == null) && !spinner">
+      <div *ngIf="(!assetList.length<0 || assetList != null) && !spinner">
           <ion-card>
               <ion-card-content>
                   <img src="assets/imgs/warning.svg">
