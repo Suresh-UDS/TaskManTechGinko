@@ -14,6 +14,8 @@ angular.module('timeSheetApp')
         $scope.series = ['Series A'];
         $scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+        $scope.selectedFromDateSer = new Date();
+        $scope.selectedToDateSer = new Date();
         $scope.pager = {};
 
 
@@ -87,16 +89,13 @@ angular.module('timeSheetApp')
         };
 
         $('#dateFilterFrom').on('dp.change', function(e){
-            console.log(e.date);
-            console.log(e.date._d);
-            $scope.selectedDateFrom=new Date(e.date._d);
+            $scope.selectedFromDateSer =new Date(e.date._d);
+            $scope.selectedFromDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
 
         });
         $('#dateFilterTo').on('dp.change', function(e){
-            console.log(e.date);
-
-            console.log(e.date._d);
-            $scope.selectedDateTo=new Date(e.date._d);
+            $scope.selectedToDateSer =new Date(e.date._d);
+            $scope.selectedToDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
 
         });
 
@@ -274,28 +273,16 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.currPage = currPageVal;
             console.log('Selected feedback' + $scope.selectedLocation);
 
-            if($scope.selectedDateFrom){
-                $scope.searchCriteria.checkInDateTimeFrom = $scope.selectedDateFrom;
+            if($scope.selectedFromDateSer){
+                $scope.searchCriteria.checkInDateTimeFrom = $scope.selectedFromDateSer;
                 console.log("From date found");
-                console.log($scope.searchCriteria.checkInDateTimeFrom)
-
-
-            }else{
-                $scope.searchCriteria.checkInDateTimeFrom = new Date();
-                console.log("From date not found")
-                console.log($scope.searchCriteria.checkInDateTimeFrom)
-
+                console.log($scope.searchCriteria.checkInDateTimeFrom);
             }
 
-            if($scope.selectedDateTo){
-                $scope.searchCriteria.checkInDateTimeTo = $scope.selectedDateTo;
-                console.log("To date found")
-                console.log($scope.searchCriteria.checkInDateTimeTo)
-
-            }else{
-                $scope.searchCriteria.checkInDateTimeTo= new Date();
-                console.log("To date not found")
-                console.log($scope.searchCriteria.checkInDateTimeTo)
+            if($scope.selectedToDateSer){
+                $scope.searchCriteria.checkInDateTimeTo = $scope.selectedToDateSer;
+                console.log("To date found");
+                console.log($scope.searchCriteria.checkInDateTimeTo);
             }
 
 
@@ -373,6 +360,7 @@ angular.module('timeSheetApp')
                         console.log('feedback report - ' + JSON.stringify($scope.feedbackReport));
                         $scope.averageRating = $scope.feedbackReport.overallRating;
                         $scope.feedbackCount = $scope.feedbackReport.feedbackCount;
+                        console.log('feedback report - ' + JSON.stringify($scope.averageRating));
 
 
                     $scope.hide = true;
@@ -506,6 +494,11 @@ angular.module('timeSheetApp')
             $scope.selectedSite = null;
             $scope.selectedProject = null;
             $scope.searchCriteria = {};
+            $scope.localStorage = null;
+            $scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+            $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+            $scope.selectedFromDateSer = new Date();
+            $scope.selectedToDateSer = new Date();
             //$rootScope.searchCriteriaSite = null;
             $scope.averageRating = '0';
             $scope.feedbackCount = '0';
@@ -586,7 +579,7 @@ angular.module('timeSheetApp')
 
 
 	    $scope.exportStatus = function() {
-	            console.log('$rootScope.exportStatusObj -'+$rootScope.exportStatusObj);
+	            console.log('$rootScope.exportStatusObj -' , $rootScope.exportStatusObj);
 
 	            FeedbackComponent.exportStatus($rootScope.exportStatusObj.fileName).then(function(data) {
 	                    console.log('feedback export status - data -' + JSON.stringify(data));
@@ -613,18 +606,18 @@ angular.module('timeSheetApp')
 	                        }
 	                    }
 
+	                    $scope.exportFile = ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportFile : '#');
+
+                        $scope.exportMsg = ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportMsg : '');
+
 	                });
 
+
+
 	    }
 
-	    $scope.exportFile = function() {
-	        return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportFile : '#');
-	    }
 
 
-	    $scope.exportMsg = function() {
-	        return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportMsg : '');
-	    };
 
 	    $scope.clsDownload = function(){
           $scope.downloaded = true;

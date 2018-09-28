@@ -310,17 +310,20 @@ angular
 
 			        //Searchsite
                     $scope.loadSearchSite = function (searchSite) {
-                        $scope.hideSite = false;
+
                         if($state.current.name == 'add-quotation')
                         {
-                            $scope.selectedSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)]
+                            $scope.selectedSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)];
+                            $scope.hideSite = false;
                         }
                         else if($state.current.name == 'edit-quotation')
                         {
-                            $scope.selectedSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)]
+                            $scope.selectedSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)];
+                            $scope.hideSite = false;
                         }
                         else {
-                            $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)]
+                            $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)];
+                            $scope.hideSite = true;
                         }
                         //console.log('<<<< Site >>>>',$scope.selectedSite);
 
@@ -339,51 +342,52 @@ angular
                     }
                     //
 			        $scope.loadDepSites = function (searchProject) {
+			           if(searchProject){
+			              $scope.siteSpin = true;
+                          $scope.hideSite = false;
+                          $scope.clearField = false;
 
-                        $scope.siteSpin = true;
-                        $scope.hideSite = true;
-                        $scope.clearField = false;
+                              $scope.uiSite.splice(0,$scope.uiSite.length)
 
-                            $scope.uiSite.splice(0,$scope.uiSite.length)
+                          if($state.current.name == 'add-quotation')
+                          {
+                              $scope.selectedProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
+                          }
+                          else if($state.current.name == 'edit-quotation')
+                          {
+                              $scope.selectedProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
+                          }
+                          else {
+                              $scope.searchSite = null;
+                              $scope.siteSpin = true;
+                              $scope.filter = false;
+                              $scope.clearField = false;
+                              $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
+                          }
 
-                        if($state.current.name == 'add-quotation')
-                        {
-                            $scope.selectedProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
+                        if(jQuery.isEmptyObject($scope.selectedProject) == false) {
+                               var depProj=$scope.selectedProject.id;
+                        }else if(jQuery.isEmptyObject($scope.searchProject) == false){
+                                var depProj=$scope.searchProject.id;
+                        }else{
+                                var depProj=0;
                         }
-                        else if($state.current.name == 'edit-quotation')
-                        {
-                            $scope.selectedProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
-                        }
-                        else {
+
+                        ProjectComponent.findSites(depProj).then(function (data) {
                             $scope.searchSite = null;
-                            $scope.siteSpin = true;
-                            $scope.filter = false;
-                            $scope.clearField = false;
-                            $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
-                        }
+                            $scope.sitesList = data;
 
-					    if(jQuery.isEmptyObject($scope.selectedProject) == false) {
-					           var depProj=$scope.selectedProject.id;
-					    }else if(jQuery.isEmptyObject($scope.searchProject) == false){
-					            var depProj=$scope.searchProject.id;
-					    }else{
-					            var depProj=0;
-					    }
-
-					    ProjectComponent.findSites(depProj).then(function (data) {
-					        $scope.searchSite = null;
-					        $scope.sitesList = data;
-
-					        //
-                            console.log($scope.sitesList)
-                            for(var i=0;i<$scope.sitesList.length;i++)
-                            {
-                                $scope.uiSite[i] = $scope.sitesList[i].name;
-                            }
-                            $scope.siteFilterDisable = false;
-                            $scope.siteDisable = false;
-                            $scope.siteSpin = false;
-					    });
+                            //
+                              console.log($scope.sitesList)
+                              for(var i=0;i<$scope.sitesList.length;i++)
+                              {
+                                  $scope.uiSite[i] = $scope.sitesList[i].name;
+                              }
+                              $scope.siteFilterDisable = false;
+                              $scope.siteDisable = false;
+                              $scope.siteSpin = false;
+                        });
+			           }
 					};
 
 					$scope.loadAllQuotations = function() {
@@ -511,6 +515,7 @@ angular
 						$scope.quotation.ticketId = $stateParams.ticketId;
 
 						console.log('Quotation details - ' + JSON.stringify($scope.quotation));
+
 						RateCardComponent.createQuotation($scope.quotation)
 								.then(function(response) {
                                     $scope.saveLoad = false;
@@ -707,6 +712,7 @@ angular
 			        };
 
 			        $scope.clearFilter = function() {
+			            $scope.noData = false;
 			        	$scope.clearField = true;
 			        	$scope.siteFilterDisable = true;
                         $scope.sitesList = null;

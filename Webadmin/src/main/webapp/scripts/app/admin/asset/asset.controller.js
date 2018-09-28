@@ -329,11 +329,14 @@ angular.module('timeSheetApp')
                     //
 
                     //
-
+                    $scope.hideType = false;
+                    $scope.hideGroup = false;
                     $scope.loadSearchProject = function (searchProject) {
                         $scope.filter = false;
                         $scope.siteSpin = true;
                         $scope.hideSite = false;
+                        $scope.hideType = false;
+                        $scope.hideGroup = false;
                         $scope.clearField = false;
                         $scope.uiSite.splice(0,$scope.uiSite.length)
                         $scope.searchSite = null;
@@ -343,18 +346,23 @@ angular.module('timeSheetApp')
 
                     $scope.loadSearchSite = function (searchSite) {
                         $scope.hideSite = true;
+                        $scope.hideType = false;
+                        $scope.hideGroup = false;
                         $scope.searchSite = $scope.sites[$scope.uiSite.indexOf(searchSite)];
                     }
 
                     $scope.loadSearchType = function (searchAssetType) {
                         $scope.filter = false;
                         $scope.clearField = false;
+                        $scope.hideType = true;
+                        $scope.hideGroup = false;
                         $scope.searchAssetType = $scope.assetTypes[$scope.uiType.indexOf(searchAssetType)];
                         console.log($scope.searchAssetType)
                     }
 
                     $scope.loadSearchGroup = function (searchAssetGroup) {
                         $scope.clearField = false;
+                        $scope.hideGroup = true;
                         $scope.searchAssetGroup = $scope.assetGroups[$scope.uiGroup.indexOf(searchAssetGroup)];
                     }
 
@@ -623,11 +631,15 @@ angular.module('timeSheetApp')
 
 
          $scope.loadAssetType = function () {
+             $scope.searchAssetType = null;
+             $scope.clearField = false;
+             $scope.uiType.splice(0,$scope.uiType.length);
             AssetTypeComponent.findAll().then(function (data) {
                 //console.log("Loading all AssetType -- " , data)
                  //$scope.selectedAssetType = null;
+                 $scope.searchAssetType = null;
                 $scope.assetTypes = data;
-                $scope.loadingStop();
+
                 //Filter
                 for(var i=0;i<$scope.assetTypes.length;i++)
                 {
@@ -639,10 +651,15 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadAssetGroup = function () {
+             $scope.searchAssetGroup = null;
+             $scope.clearField = false;
+             $scope.uiGroup.splice(0,$scope.uiGroup.length);
             AssetComponent.loadAssetGroup().then(function (data) {
                 //console.log("Loading all Asset Group -- " , data)
+                $scope.searchAssetGroup = null;
                 $scope.assetGroups = data;
                 $scope.loadingStop();
+
                 //Filter
                 console.log("=========",$scope.assetGroups)
                 for(var i=0;i<$scope.assetGroups.length;i++)
@@ -717,6 +734,11 @@ angular.module('timeSheetApp')
 
         $scope.loadDepSites = function () {
             if($scope.searchProject){
+                  $scope.siteFilterDisable = true;
+                  $scope.uiSite.splice(0,$scope.uiSite.length);
+                  $scope.clearField = false;
+                  $scope.searchSite = null;
+                  $scope.hideSite = false;
                 ProjectComponent.findSites($scope.searchProject.id).then(function (data) {
                     $scope.searchSite = null;
                     $scope.sites = data;

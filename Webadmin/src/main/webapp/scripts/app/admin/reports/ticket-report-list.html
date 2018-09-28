@@ -458,7 +458,7 @@
                                 <div class="panel-body">
 
                                     <div class="row" ng-init="loadProjectsList();loadSitesList();">
-                                        <div class="col-xs-12 col-md-4">
+                                        <div class="col-xs-12 col-md-6">
                                             <div class="form-group" >
                                                 <div class="dropdown">
                                                     <label class="label-control">Client</label>
@@ -468,16 +468,16 @@
                                                     <!--</select>-->
                                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="selectedProject" ng-disabled="clientFilterDisable" ng-change="loadSearchProject(selectedProject)"  ng-click="loadSearchProject(selectedProject)">
+                                                    <ui-select ng-model="selectedProject" ng-disabled="clientFilterDisable" >
                                                         <ui-select-match placeholder="Select clients...">{{filter ? selectedProject.name?selectedProject.name:'Select Client' :clearField?'Select Client':selectedProject}}</ui-select-match>
-                                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
+                                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search" ng-click="loadSearchProject(selectedProject)">
                                                             <div ng-bind="client"></div>
                                                         </ui-select-choices>
                                                     </ui-select>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xs-12 col-md-4">
+                                        <div class="col-xs-12 col-md-6">
                                             <div class="dropdown">
                                                 <div class="form-group">
                                                     <label class="label-control">Site</label>
@@ -487,10 +487,10 @@
                                                     <!--</select>-->
                                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="selectedSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-change="loadSearchSite(selectedSite);loadFilterEmployee()" >
+                                                    <ui-select ng-model="selectedSite" ng-disabled="siteFilterDisable || sites.length == 0"  >
                                                         <ui-select-match placeholder="Select Site...">{{sites.length == 0 ? 'Select Site' : selectedSite.searchStatus ? selectedSite.name?selectedSite.name:'Select Site' : hideSite ?clearField?'Select Site':selectedSite : 'Select Site' }}</ui-select-match>
-                                                        <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
-                                                            <div ng-bind="site" ng-click="loadSearchSite(selectedSite)"></div>
+                                                        <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search" ng-click="loadSearchSite(selectedSite);loadFilterEmployee()">
+                                                            <div ng-bind="site" ></div>
                                                         </ui-select-choices>
                                                     </ui-select>
                                                     <span ng-if="sites.length == 0 && !siteSpin"><p class="error-msg margin0">No sites</p></span>
@@ -545,9 +545,9 @@
                                                     <label class="label-control">Status</label>
                                                     <span ng-show="statusSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!statusSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="selectedStatus" ng-change="loadSearchStatus(selectedStatus)">
-                                                        <ui-select-match placeholder="Select Status...">{{ticketStatuses.length == 0 ? 'Select Status' : selectedStatus.searchStatus ? selectedStatus.name?selectedStatus.name:'Select Status' :clearField?'Select Status':selectedStatus  }}</ui-select-match>
-                                                        <ui-select-choices  repeat="status in getStatus($select.search) | filter: $select.search">
+                                                    <ui-select ng-model="selectedStatus" >
+                                                        <ui-select-match placeholder="Select Status...">{{ticketStatuses.length == 0 ? 'Select Status' : selectedStatus.searchStatus ? selectedStatus.name?selectedStatus.name:'Select Status' : hideStatus ?clearField?'Select Status':selectedStatus : 'Select Status' }}</ui-select-match>
+                                                        <ui-select-choices  repeat="status in getStatus($select.search) | filter: $select.search" ng-click="loadSearchStatus(selectedStatus)">
                                                             <div ng-bind="status"></div>
                                                         </ui-select-choices>
                                                     </ui-select>

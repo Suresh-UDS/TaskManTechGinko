@@ -1458,7 +1458,8 @@
                                                                     <td>{{ppmSchedules.startDate | date :  "dd-MM-y"}}</td>
                                                                     <td>{{ppmSchedules.endDate | date :  "dd-MM-y"}}</td>
                                                                     <td>{{ppmSchedules.employeeName}}</td>
-                                                                    <td>{{ppmSchedules.jobStartTime | date :'dd-MMM-yyyy @ hh:mm a'}}</td>{{ppmSchedules.plannedHours}}</td>
+                                                                    <td>{{ppmSchedules.jobStartTime | date :'dd-MMM-yyyy @ hh:mm a'}}</td>
+                                                                    <td>{{ppmSchedules.plannedHours}}</td>
                                                                     <td>{{ppmSchedules.frequencyPrefix}}&nbsp; {{ppmSchedules.frequencyDuration}}&nbsp; {{ppmSchedules.frequency}}</td>
                                                                     <!--<td class="text-right">-->
                                                                         <!--<a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>-->
@@ -1785,6 +1786,7 @@
                                                             <thead>
                                                             <tr>
                                                                 <th width="15%">Title</th>
+                                                                <th width="15%">Type</th>
                                                                 <th width="25%">Checklist</th>
                                                                 <th width="10%">From Date</th>
                                                                 <th width="10%">To Date</th>
@@ -1802,6 +1804,7 @@
                                                             <tbody>
                                                             <tr ng-repeat="amcSchedule in amcScheduleList">
                                                                 <td>{{amcSchedule.title}}</td>
+                                                                <td>{{amcSchedule.maintenanceType}}</td>
                                                                 <td class="hiddenCheckList"> <span class="leftTxt"> {{amcSchedule.checklistName}}</span>  <span class="infoIcon" ng-if="amcSchedule.checkListItems"><i class="material-icons">info</i>
                                                                    <div class="CheckListBx" ng-if="amcSchedule.checkListItems">
                                                                        <div class="bootstrap-tagsinput" ng-repeat="checkListItemAmc in amcSchedule.checkListItems">
@@ -1815,8 +1818,7 @@
                                                                 <td>{{amcSchedule.endDate | date :  "dd-MM-y"}}</td>
                                                                 <td>{{amcSchedule.employeeName}}</td>
                                                                 <td>{{amcSchedule.jobStartTime | date :'dd-MMM-yyyy @ hh:mm a'}}</td>
-                                                                <td>
-                                                                {{amcSchedule.plannedHours}}</td>
+                                                                <td>{{amcSchedule.plannedHours}}</td>
                                                                 <td>{{amcSchedule.frequencyPrefix}}&nbsp; {{amcSchedule.frequencyDuration}}&nbsp; {{amcSchedule.frequency}}</td>
 
 

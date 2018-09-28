@@ -120,36 +120,40 @@ angular.module('timeSheetApp')
         $scope.siteSpin = false;
 
         $scope.loadDepSites = function (searchProject) {
-            $scope.uiSite.splice(0,$scope.uiSite.length);
-            $scope.clearField = false;
-            $scope.searchSite = null;
-            $scope.hideSite = false;
-            if($scope.localStorage)
-            {
-                $scope.localStorage.siteName = null;
-            }
-            $scope.searchCriteria.siteName = null;
-            $scope.siteSpin = true;
-            $scope.filter = false;
-            $scope.searchProject = $scope.projectsList[$scope.uiClient.indexOf(searchProject)]
-            if(jQuery.isEmptyObject($scope.selectedProject) == false) {
-                   var depProj=$scope.selectedProject.id;
-            }else if(jQuery.isEmptyObject($scope.searchProject) == false){
-                    var depProj=$scope.searchProject.id;
-            }else{
-                    var depProj=0;
-            }
+        if(searchProject){
+          $scope.siteFilterDisable = true;
+          $scope.uiSite.splice(0,$scope.uiSite.length);
+          $scope.clearField = false;
+          $scope.searchSite = null;
+          $scope.hideSite = false;
+          if($scope.localStorage)
+          {
+              $scope.localStorage.siteName = null;
+          }
+          $scope.searchCriteria.siteName = null;
+          $scope.siteSpin = true;
+          $scope.filter = false;
+          $scope.searchProject = $scope.projectsList[$scope.uiClient.indexOf(searchProject)];
+          if(jQuery.isEmptyObject($scope.selectedProject) == false) {
+                 var depProj=$scope.selectedProject.id;
+          }else if(jQuery.isEmptyObject($scope.searchProject) == false){
+                  var depProj=$scope.searchProject.id;
+          }else{
+                  var depProj=0;
+          }
 
-            ProjectComponent.findSites(depProj).then(function (data) {
-                $scope.selectedSite = null;
-                $scope.sitesList = data;
-                for(var i=0;i<$scope.sitesList.length;i++)
-                {
-                    $scope.uiSite[i] = $scope.sitesList[i].name;
-                }
-                $scope.siteFilterDisable = false;
-                $scope.siteSpin = false;
-            });
+          ProjectComponent.findSites(depProj).then(function (data) {
+              $scope.selectedSite = null;
+              $scope.sitesList = data;
+              for(var i=0;i<$scope.sitesList.length;i++)
+              {
+                  $scope.uiSite[i] = $scope.sitesList[i].name;
+              }
+              $scope.siteFilterDisable = false;
+              $scope.siteSpin = false;
+          });
+        }
+
         };
 
         $scope.initCalender = function(){

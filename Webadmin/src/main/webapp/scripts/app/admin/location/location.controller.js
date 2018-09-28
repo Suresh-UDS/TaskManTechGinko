@@ -93,35 +93,38 @@ angular.module('timeSheetApp')
         // Load sites for selectbox//
          $scope.filter = false;
          $scope.loadDepSites = function (selectedProject) {
-             $scope.clearField = false;
-             $scope.filter = false;
-             $scope.siteFilterDisable = true;
-             $scope.uiSite.splice(0,$scope.uiSite.length);
-             $scope.selectedProject = $scope.projectsList[$scope.uiClient.indexOf(selectedProject)]
-             $scope.searchProject = $scope.projectsList[$scope.uiClient.indexOf(selectedProject)]
-             $scope.siteSpin = true;
-             $scope.siteDisable = true;
-             $scope.selectedSite = null;
-             $scope.hideSite = false;
-            if(jQuery.isEmptyObject($scope.selectedProject) == false) {
-                   var depProj=$scope.selectedProject.id;
-            }else if(jQuery.isEmptyObject($scope.searchProject) == false){
-                    var depProj=$scope.searchProject.id;
-            }else{
-                    var depProj=0;
-            }
-
-            ProjectComponent.findSites(depProj).then(function (data) {
+             if(selectedProject){
+                $scope.clearField = false;
+                $scope.filter = false;
+                $scope.siteFilterDisable = true;
+                $scope.uiSite.splice(0,$scope.uiSite.length);
+                $scope.selectedProject = $scope.projectsList[$scope.uiClient.indexOf(selectedProject)]
+                $scope.searchProject = $scope.projectsList[$scope.uiClient.indexOf(selectedProject)]
+                $scope.siteSpin = true;
+                $scope.siteDisable = true;
                 $scope.selectedSite = null;
-                $scope.sitesList = data;
-                for(var i=0;i<$scope.sitesList.length;i++)
-                {
-                    $scope.uiSite[i] = $scope.sitesList[i].name;
-                }
-                $scope.siteDisable = false;
-                $scope.siteSpin = false;
-                $scope.siteFilterDisable = false;
-            });
+                $scope.hideSite = false;
+               if(jQuery.isEmptyObject($scope.selectedProject) == false) {
+                      var depProj=$scope.selectedProject.id;
+               }else if(jQuery.isEmptyObject($scope.searchProject) == false){
+                       var depProj=$scope.searchProject.id;
+               }else{
+                       var depProj=0;
+               }
+
+               ProjectComponent.findSites(depProj).then(function (data) {
+                   $scope.selectedSite = null;
+                   $scope.sitesList = data;
+                   for(var i=0;i<$scope.sitesList.length;i++)
+                   {
+                       $scope.uiSite[i] = $scope.sitesList[i].name;
+                   }
+                   $scope.siteDisable = false;
+                   $scope.siteSpin = false;
+                   $scope.siteFilterDisable = false;
+               });
+             }
+
         };
 
 
