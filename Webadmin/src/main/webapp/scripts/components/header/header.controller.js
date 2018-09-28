@@ -52,28 +52,33 @@ angular.module('timeSheetApp')
 
         $rootScope.inits = function()
         {
-               Principal.identity().then(function(response)
-            {
-                //alert(response.firstName + response.lastName)
-                //console.log('current user' +JSON.stringify(response.firstName));
+            if($rootScope.isAuthenticated() == true){
 
-                if(response.firstName || response.lastName){
+              Principal.identity().then(function(response)
+              {
+                  //alert(response.firstName + response.lastName)
+                  //console.log('current user' +JSON.stringify(response.firstName));
 
-                    $rootScope.accountNames = response.firstName;
+                  if(response.firstName || response.lastName){
 
-                    if(response.lastName){
+                      $rootScope.accountNames = response.firstName;
 
-                     $rootScope.accountNames += " " + response.lastName;
-                    }
-                }
-                else{
+                      if(response.lastName){
 
-                    $rootScope.accountNames = response.login;
-                }
+                       $rootScope.accountNames += " " + response.lastName;
+                      }
+                  }
+                  else{
 
-                //alert($rootScope.accountName);
+                      $rootScope.accountNames = response.login;
+                  }
 
-             });
+                  //alert($rootScope.accountName);
+
+               });
+
+            }
+
         };
 
 
