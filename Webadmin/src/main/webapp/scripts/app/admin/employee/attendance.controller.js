@@ -189,30 +189,33 @@ angular.module('timeSheetApp')
         };
 
         $scope.loadDepSites = function (searchProject) {
-            $scope.clearField = false;
-            $scope.filter = false;
-            $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
-            $scope.uiSite.splice(0,$scope.uiSite.length)
-            $scope.hideSite = false;
-            if(jQuery.isEmptyObject($scope.selectedProject) == false) {
-                   var depProj=$scope.selectedProject.id;
-            }else if(jQuery.isEmptyObject($scope.searchProject) == false){
-                    var depProj=$scope.searchProject.id;
-            }else{
-                    var depProj=0;
-            }
-            $scope.siteSpin = true;
-            ProjectComponent.findSites(depProj).then(function (data) {
-                $scope.searchSite = null;
-                $scope.sites = data;
+            if(searchProject){
+              $scope.clearField = false;
+              $scope.filter = false;
+              $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
+              $scope.uiSite.splice(0,$scope.uiSite.length)
+              $scope.hideSite = false;
+              if(jQuery.isEmptyObject($scope.selectedProject) == false) {
+                     var depProj=$scope.selectedProject.id;
+              }else if(jQuery.isEmptyObject($scope.searchProject) == false){
+                      var depProj=$scope.searchProject.id;
+              }else{
+                      var depProj=0;
+              }
+              $scope.siteSpin = true;
+              ProjectComponent.findSites(depProj).then(function (data) {
+                  $scope.searchSite = null;
+                  $scope.sites = data;
 
-                for(var i=0;i<$scope.sites.length;i++)
-                {
-                    $scope.uiSite[i] = $scope.sites[i].name;
-                }
-                $scope.siteFilterDisable = false;
-                $scope.siteSpin = false;
-            });
+                  for(var i=0;i<$scope.sites.length;i++)
+                  {
+                      $scope.uiSite[i] = $scope.sites[i].name;
+                  }
+                  $scope.siteFilterDisable = false;
+                  $scope.siteSpin = false;
+              });
+            }
+
         };
 
         $scope.loadSearchSite = function (searchSite) {

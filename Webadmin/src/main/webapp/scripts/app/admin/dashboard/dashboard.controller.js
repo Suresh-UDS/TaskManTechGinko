@@ -75,6 +75,10 @@ angular.module('timeSheetApp')
             $scope.openTicketsDataArray = [];
             $scope.closedTicketsDataArray = [];
 
+            $scope.openTicketsTotalCount=0;
+            $scope.closedTicketsTotalCount =0;
+            $scope.overAllTicketsTotalCount = 0;
+
             // $scope.closedTicketsLabels = ['0-3 days', '3-5 days', '5-7 days', '7-10 days', '10 and Above'];
             // // $scope.openTicketsLabels = ['0-3 days', '3-5 days', '5-7 days', '7-10 days', '10 and Above'];
             // $scope.closedTicketsSeries = ['0-3 days', '3-5 days', '5-7 days', '7-10 days','Above 10'];
@@ -105,26 +109,38 @@ angular.module('timeSheetApp')
                 $scope.chartsDataResponse = response;
                 var openTicketsData = {};
                 $scope.openTicketsCountArray.push(response.openTicketCounts["0-3"]);
+                $scope.openTicketsTotalCount+=parseInt(response.openTicketCounts["0-3"]);
                 $scope.openTicketsLabels.push("0-3");
                 $scope.openTicketsCountArray.push(response.openTicketCounts["4-5"]);
+                $scope.openTicketsTotalCount+=parseInt(response.openTicketCounts["4-5"]);
                 $scope.openTicketsLabels.push("4-5");
                 $scope.openTicketsCountArray.push(response.openTicketCounts["6-7"]);
+                $scope.openTicketsTotalCount+=parseInt(response.openTicketCounts["6-7"]);
                 $scope.openTicketsLabels.push("6-7");
                 $scope.openTicketsCountArray.push(response.openTicketCounts["8-10"]);
+                $scope.openTicketsTotalCount+=parseInt(response.openTicketCounts["8-10"]);
                 $scope.openTicketsLabels.push("8-10");
                 $scope.openTicketsCountArray.push(response.openTicketCounts["11-365"]);
+                $scope.openTicketsTotalCount+=parseInt(response.openTicketCounts["11-365"]);
+                console.log("tickets total count - "+$scope.openTicketsTotalCount);
                 $scope.openTicketsLabels.push(">-11");
 
                 $scope.closedTicketsCountArray.push(response.closedTicketCounts["0-3"]);
+                $scope.closedTicketsTotalCount+=parseInt(response.closedTicketCounts["0-3"]);
                 $scope.closedTicketsLabels.push("0-3");
                 $scope.closedTicketsCountArray.push(response.closedTicketCounts["4-5"]);
+                $scope.closedTicketsTotalCount+=parseInt(response.closedTicketCounts["4-5"]);
                 $scope.closedTicketsLabels.push("4-5");
                 $scope.closedTicketsCountArray.push(response.closedTicketCounts["6-7"]);
+                $scope.closedTicketsTotalCount+=parseInt(response.closedTicketCounts["6-7"]);
                 $scope.closedTicketsLabels.push("6-7");
                 $scope.closedTicketsCountArray.push(response.closedTicketCounts["8-10"]);
+                $scope.closedTicketsTotalCount+=parseInt(response.closedTicketCounts["8-10"]);
                 $scope.closedTicketsLabels.push("8-10");
-                $scope.closedTicketsCountArray.push(response.closedTicketCounts["11-365"]);
+                $scope.closedTicketsCountArray.push(response.closedTicketCounts["> 11"]);
+                $scope.closedTicketsTotalCount+=parseInt(response.closedTicketCounts["> 11"]);
                 $scope.closedTicketsLabels.push(">-11");
+                $scope.overAllTicketsTotalCount=$scope.openTicketsTotalCount+$scope.closedTicketsTotalCount;
 
 
 

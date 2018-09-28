@@ -646,9 +646,9 @@
                                                <!--required-->
                                         <span ng-show="vendorFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                         <span ng-show="!vendorFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                        <ui-select ng-model="searchName" ng-disabled="vendorFilterDisable" ng-click="loadSearchVendor(searchName)">
+                                        <ui-select ng-model="searchName" ng-disabled="vendorFilterDisable" >
                                             <ui-select-match placeholder="Select Vendor...">{{ filter?searchName:clearField?'Select Vendor':searchName}}</ui-select-match>
-                                            <ui-select-choices  repeat="type in getType($select.search) | filter: $select.search track by $index">
+                                            <ui-select-choices  repeat="type in getType($select.search) | filter: $select.search track by $index" ng-click="loadSearchVendor(searchName)">
                                                 <div ng-bind="type"></div>
                                             </ui-select-choices>
                                         </ui-select>

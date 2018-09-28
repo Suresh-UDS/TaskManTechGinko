@@ -331,6 +331,8 @@ angular.module('timeSheetApp')
             $scope.clearField = false;
             $scope.hideSite = false;
             $scope.siteSpin = true;
+            $scope.hideEmp = false;
+            $scope.hideStatus=false;
             $scope.uiSite.splice(0,$scope.uiSite.length);
             $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
         }
@@ -338,20 +340,21 @@ angular.module('timeSheetApp')
             $scope.hideEmp = false;
             $scope.empSpin = true;
             $scope.hideSite = true;
+            $scope.hideStatus=false;
             $scope.uiEmployee.splice(0,$scope.uiEmployee.length);
             $scope.searchSite = $scope.sites[$scope.uiSite.indexOf(searchSite)]
             console.log($scope.uiEmployee)
         }
 
         $scope.loadSearchStatus = function (searchStatus) {
-            // $scope.hideStatus = true;
+             $scope.hideStatus = true;
             $scope.clearField = false;
             $scope.searchStatus = $scope.ticketStatuses[$scope.uiStatus.indexOf(searchStatus)]
         }
 
 
         $scope.loadSearchEmployee = function (searchEmployee) {
-            // $scope.hideStatus = true;
+             $scope.hideStatus = true;
             if(searchEmployee){
                console.log(searchEmployee)
                $scope.hideEmp = true;
