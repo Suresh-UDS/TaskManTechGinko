@@ -88,7 +88,7 @@
                                             <div class="col-md-4">
                                                 <div class="form-group">
 
-                                                    <!--<label class="control-label">Client</label>-->
+                                                    <label class="control-label">Client</label>
                                                     <span class="red-star">*</span>
                                                     <div class="dropdown">
 
@@ -104,9 +104,9 @@
                                                         <!--</select>-->
                                                         <span ng-show="clientDisable"  class="form-control-feedback  orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                         <span ng-show="!clientDisable" class="form-control-feedback  d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <ui-select ng-model="selectedProject" ng-disabled="clientDisable" ng-change="loadDepSites(selectedProject)">
+                                                        <ui-select ng-model="selectedProject" ng-disabled="clientDisable" >
                                                             <ui-select-match placeholder="Select clients...">{{ selectedProject.name?selectedProject.name:selectedProject}}</ui-select-match>
-                                                            <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
+                                                            <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search" ng-click="loadDepSites(selectedProject)">
                                                                 <div ng-bind="client"></div>
                                                             </ui-select-choices>
                                                         </ui-select>
@@ -134,8 +134,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
-                                                <div class="form-group label-floating">
-                                                    <!--<label class="control-label">Site</label>-->
+                                                <div class="form-group">
+                                                    <label class="control-label">Site</label>
                                                     <span class="red-star">*</span>
                                                     <div class="dropdown" >
                                                         <!--<input ng-focus="loadSites()" type="text" class="form-control"  ng-model="selectedSite" name="siteName" ng-value="selectedSite.name"-->
@@ -147,9 +147,9 @@
                                                         <!--</select>-->
                                                         <span ng-show="siteSpin"  class="form-control-feedback  orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                         <span ng-show="!siteSpin" class="form-control-feedback  d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <ui-select ng-model="selectedSite" ng-disabled="(!selectedSite) && (siteFilterDisable || sitesList.length == 0)" ng-change="loadSearchSite(selectedSite)" >
+                                                        <ui-select ng-model="selectedSite" ng-disabled="(!selectedSite) && (siteFilterDisable || sitesList.length == 0)"  >
                                                             <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : selectedSite?selectedSite.name?selectedSite.name:hideSite?'Select site':selectedSite:selectedSite }}</ui-select-match>
-                                                            <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
+                                                            <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search" ng-click="loadSearchSite(selectedSite)">
                                                                 <div ng-bind="site"></div>
                                                             </ui-select-choices>
                                                         </ui-select>
@@ -179,16 +179,17 @@
                                             </div>
 
                                             <div class="col-md-4">
-                                            	<div class="form-group label-floating" >
-						                                <div class="pdng-top13" >
-						                                    <input type="file"
-						                                           class="form-control" style="opacity:100;position:relative" file-model
-						                                           ng-model="selectedImageFile"
-						                                           name="ImageFile"
-						                                    />
-						                                </div>
+                                            	<div class="form-group" >
+
+                                                    <label class="control-label">File</label>
+                                                    <input type="file"
+                                                           class="form-control" style="opacity:100;position:relative" file-model
+                                                           ng-model="selectedImageFile"
+                                                           name="ImageFile"
+                                                    />
+
+                                                </div>
                                             </div>
-                                      		  </div>
 
 
 

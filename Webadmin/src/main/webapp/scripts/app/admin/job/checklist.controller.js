@@ -419,7 +419,7 @@ angular.module('timeSheetApp')
                          //init load
                         $scope.initLoad = function(){
 
-                             $scope.initPage();
+                             //$scope.initPage();
                              $scope.loadPageTop();
 
                          }

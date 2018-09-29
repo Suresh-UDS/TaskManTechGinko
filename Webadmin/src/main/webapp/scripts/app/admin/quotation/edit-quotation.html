@@ -90,7 +90,7 @@
                                             <div class="col-md-4">
                                                 <div class="form-group">
 
-                                                    <!--<label class="control-label">Client</label>-->
+                                                    <label class="control-label">Client</label>
                                                     <span class="red-star">*</span>
                                                     <div class="dropdown">
 
@@ -137,8 +137,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
-                                                <div class="form-group label-floating">
-                                                    <!--<label class="control-label">Site</label>-->
+                                                <div class="form-group">
+                                                    <label class="control-label">Site</label>
                                                     <span class="red-star">*</span>
                                                     <div class="dropdown" >
                                                         <!--<input ng-focus="loadSites()" type="text" class="form-control"  ng-model="selectedSite" name="siteName" ng-value="selectedSite.name"-->
@@ -183,12 +183,22 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group" >
 
-									</div>
+                                                        <label class="control-label">File</label>
+                                                        <input type="file"
+                                                               class="form-control" style="opacity:100;position:relative" file-model
+                                                               ng-model="selectedImageFile"
+                                                               name="ImageFile"
+                                                        />
+
+                                                </div>
+                                            </div>
+
+                                        </div>
 									</div>
 								</div>
-
-
 							</div>
 							<div class="col-md-12">
 
@@ -555,22 +565,9 @@
 											</div>
 										</div>
 									</div>
-
-
 								</div>
-
-
-
 							</div>
-
-
-
 						</div>
-
-
-
-
-
 						<div class='small-loading hidden' id='FormLoading'>Loading,
 							saving data...</div>
 

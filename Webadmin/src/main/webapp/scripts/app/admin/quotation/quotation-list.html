@@ -181,7 +181,7 @@
 
                                 <div class="HoverBx">
 
-                                    <a name="View" ng-class="{active: $state.includes('admin')}"  ui-sref="view-quotation({ id: quotation._id })"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+                                    <a name="View" ng-class="{active: $state.includes('admin')}"  has-permission="Quotation:View" ui-sref="view-quotation({ id: quotation._id })"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
 
                                     <a name="Edit" ng-if="!quotation.isSubmitted && !quotation.isApproved" has-permission="Quotation:Edit"  ng-class="{active: $state.includes('admin')}"  ui-sref="edit-quotation({ id: quotation._id })"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
 
@@ -192,7 +192,7 @@
                                     <button  title="Reject" ng-if="quotation.isSubmitted && !quotation.isApproved && !quotation.isRejected"    data-toggle="modal" data-target="#rejectQuotationModal" data-dismiss="#rejectQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like">
                                         <i class="material-icons">highlight_off</i> </button>
 
-                                    <a name="Delete" ng-if="quotation.isApproved || quotation.isDrafted" ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                    <a name="Delete" ng-if="quotation.isApproved || quotation.isDrafted" ng-class="{active: $state.includes('admin')}" has-permission="Quotation:Delete"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
 
                                 </div>
 
@@ -465,9 +465,9 @@
                                                     <!--</select>-->
                                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable || projectsList.length == 0" ng-change="loadDepSites(searchProject)" ng-click="loadDepSites(searchProject)">
+                                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable || projectsList.length == 0" ng-change="loadDepSites(searchProject)" >
                                                         <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :clearField?'Select Client':searchProject}}</ui-select-match>
-                                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
+                                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search" ng-click="loadDepSites(searchProject)">
                                                             <div ng-bind="client"></div>
                                                         </ui-select-choices>
                                                     </ui-select>
@@ -484,10 +484,10 @@
                                                     <!--</select>-->
                                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sitesList.length == 0" ng-change="loadSearchSite(searchSite)" >
-                                                        <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' :clearField?'Select Site':hideSite?'Select Site':searchSite }}</ui-select-match>
-                                                        <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search track by $index">
-                                                            <div ng-bind="site" ng-click="loadSearchSite(searchSite)"></div>
+                                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sitesList.length == 0" >
+                                                        <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select site' : hideSite ?clearField?'Select site':searchSite : 'Select Site' }}</ui-select-match>
+                                                        <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search" ng-click="loadSearchSite(searchSite)">
+                                                            <div ng-bind="site" ></div>
                                                         </ui-select-choices>
                                                     </ui-select>
                                                     <span ng-if="sites.length == 0"><p class="help-block">No sites</p></span>

@@ -94,7 +94,7 @@ public class ExportUtil {
 
 	private String[] EMP_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "DESIGNATION", "REPORTING TO", "CLIENT", "SITE",
 			"ACTIVE" };
-	private String[] JOB_HEADER = { "CLIENT", "SITE", "JOB ID", "TITLE", "DESCRIPTION", "TICKET ID", "TICKET TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
+	private String[] JOB_HEADER = { "CLIENT", "SITE", "LOCATION", "JOB ID", "TITLE", "DESCRIPTION", "TICKET ID", "TICKET TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
 			"STATUS", "CHECKLIST ITEMS", "CHECKLIST STATUS", "CHECKLIST REMARKS","CHECKLIST IMAGE LINK" };
 	private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT", "DURATION(In Hours) ",
 			 "SHIFT CONTINUED", "LATE CHECK IN","REMARKS" };
@@ -105,9 +105,9 @@ public class ExportUtil {
 	private String[] TICKET_HEADER = { "ID", "SITE", "ISSUE", "DESCRIPTION","STATUS", "PENDING STATUS","CATEGORY", "SEVERITY", "INITIATOR",
 			"INITIATED ON", "ASSIGNED TO", "ASSIGNED ON", "CLOSED BY", "CLOSED ON" };
 	private String[] ASSET_HEADER = { "ID", "ASSET CODE", "NAME", "ASSET TYPE", "ASSET GROUP", "CLIENT", "SITE", "BLOCK", "FLOOR", "ZONE", "STATUS"};
-	
+
 	private String[] VENDOR_HEADER = { "ID", "NAME", "CONTACT FIRSTNAME", "CONTACT LASTNAME", "PHONE", "EMAIL", "ADDRESSLINE1", "ADDRESSLINE2", "CITY", "COUNTRY", "STATE", "PINCODE"};
-	
+
 	private String[] FEEDBACK_HEADER = { "ID", "DATE", "REVIEWER NAME", "REVIEWER CODE", "CLIENT", "SITE", "FEEDBACK_NAME", "BLOCK", "FLOOR", "ZONE", "RATING", "REMARKS", "QUESTION", "ANSWER", "ITEM REMARKS" };
 
 	private final static String ATTENDANCE_REPORT = "ATTENDANCE_REPORT";
@@ -125,13 +125,13 @@ public class ExportUtil {
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
-	
+
 	@Inject
 	private GoogleSheetsUtil googleSheetsUtil;
-	
+
 	@Inject
 	private MailService mailService;
-	
+
 	@Inject
 	private SettingsRepository settingsRepository;
 
@@ -435,7 +435,7 @@ public class ExportUtil {
 		Thread writer_Thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-//				
+//
 //				List<EmployeeAttendanceReport> attendanceReportList = new ArrayList<EmployeeAttendanceReport>();
 //				if (CollectionUtils.isNotEmpty(transactions)) {
 //					for (AttendanceDTO attn : transactions) {
@@ -443,8 +443,8 @@ public class ExportUtil {
 //								attn.getSiteName(), null, attn.getCheckInTime(), attn.getCheckOutTime(), attn.getShiftStartTime(), attn.getShiftEndTime(), attn.getContinuedAttendanceId(), attn.isLate(), attn.getRemarks());
 //						attendanceReportList.add(reportData);
 //					}
-//				}				
-				
+//				}
+
 				String file_Path = env.getProperty("export.file.path");
 				FileSystem fileSystem = FileSystems.getDefault();
 //				if (StringUtils.isNotEmpty(emp.getEmpId())) {
@@ -488,7 +488,7 @@ public class ExportUtil {
 					dataRow.createCell(3).setCellValue("");
 					dataRow.createCell(4).setCellValue(attn.getCheckInTime() != null ? String.valueOf(attn.getCheckInTime()) : "");
 					dataRow.createCell(5).setCellValue(attn.getCheckOutTime() != null ? String.valueOf(attn.getCheckOutTime()) : "");
-					
+
 					long difference = 0;
 					long differenceInHours = 0;
 					long differenceInMinutes = 0;
@@ -510,10 +510,10 @@ public class ExportUtil {
 			            differenceText = "0";
 			        }
 			        boolean shiftContinued = (attn.getContinuedAttendanceId() > 0 ? true : false);
-			        
-			        
+
+
 					dataRow.createCell(6).setCellValue(attn.getCheckOutTime() != null ? String.valueOf(differenceText) : "");
-					
+
 					dataRow.createCell(7).setCellValue(shiftContinued ?  "SHIFT CONTINUED" : "");
 					dataRow.createCell(8).setCellValue(attn.isLate() ? "LATE CHECK IN" : "");
 					dataRow.createCell(9).setCellValue(attn.getRemarks() !=null ? attn.getRemarks() : "");
@@ -538,13 +538,13 @@ public class ExportUtil {
 					fileOutputStream = new FileOutputStream(file_Path);
 					xssfWorkbook.write(fileOutputStream);
 					fileOutputStream.close();
-					
+
 					//send attendance report in email.
 					String email = StringUtils.isNotEmpty(emp.getEmail()) ? emp.getEmail() : user.getEmail();
 					if(StringUtils.isNotEmpty(email)) {
 						File file = new File(file_Path);
 			    			mailService.sendAttendanceExportEmail(projName, email, file, new Date());
-					}	
+					}
 				} catch (IOException e) {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
@@ -742,13 +742,13 @@ public class ExportUtil {
 		result.setStatus(getExportStatus(fileName));
 		return result;
 	}
-	
+
 	public ExportResult writeMusterRollAttendanceReportToFile(String projName, String siteName, String shifts, String month, Date fromDate, Date toDate, List<EmployeeAttendanceReport> content, final String empId, ExportResult result) {
 		final String KEY_SEPARATOR = "::";
-		Map<String, Map<Integer,Boolean>> attnInfoMap = new TreeMap<String,Map<Integer,Boolean>>(); 
+		Map<String, Map<Integer,Boolean>> attnInfoMap = new TreeMap<String,Map<Integer,Boolean>>();
 		//Consolidate the attendance data against emp id.
 		if(CollectionUtils.isNotEmpty(content)) {
-			Calendar attnCal = Calendar.getInstance(); 
+			Calendar attnCal = Calendar.getInstance();
 			for(EmployeeAttendanceReport empAttnReport : content) {
 				if(empAttnReport.getCheckInTime() != null) {
 					attnCal.setTime(empAttnReport.getCheckInTime());
@@ -765,12 +765,12 @@ public class ExportUtil {
 				}else {
 					attnDayMap.put(attnDay, false);
 				}
-				attnInfoMap.put(empAttnReport.getEmployeeId() + KEY_SEPARATOR + empAttnReport.getName() 
+				attnInfoMap.put(empAttnReport.getEmployeeId() + KEY_SEPARATOR + empAttnReport.getName()
 										+ StringUtils.SPACE + empAttnReport.getLastName() + KEY_SEPARATOR + empAttnReport.getDesignation(), attnDayMap);
 			}
 		}
-		
-		
+
+
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend=" + isAppend);
 		if (result == null) {
@@ -851,20 +851,20 @@ public class ExportUtil {
 	    int rowNum = 8; //10
 	    Row headerRow = musterSheet.getRow(rowNum);
 	    Cell clientNameCell = headerRow.getCell(10);
-	    String clientNameCellVal = headerRow.getCell(10).getStringCellValue(); 
+	    String clientNameCellVal = headerRow.getCell(10).getStringCellValue();
 	    clientNameCell.setCellValue(clientNameCellVal + " " + projName);
 	    rowNum = 9;
 	    headerRow = musterSheet.getRow(rowNum);
 	    Cell siteNameCell = headerRow.getCell(5);
-	    String siteNameCellVal = headerRow.getCell(5).getStringCellValue(); 
+	    String siteNameCellVal = headerRow.getCell(5).getStringCellValue();
 	    siteNameCell.setCellValue(siteNameCellVal + " " + siteName);
-	    
+
 	    Cell shiftCell = headerRow.getCell(18);
-	    String shiftCellVal = headerRow.getCell(18).getStringCellValue(); 
+	    String shiftCellVal = headerRow.getCell(18).getStringCellValue();
 	    shiftCell.setCellValue(shiftCellVal + " " + shifts);
 
 	    Cell monthCell = headerRow.getCell(25);
-	    String monthCellVal = headerRow.getCell(25).getStringCellValue(); 
+	    String monthCellVal = headerRow.getCell(25).getStringCellValue();
 	    monthCell.setCellValue(monthCellVal + " " + month);
 
 	    rowNum = 11;
@@ -874,27 +874,27 @@ public class ExportUtil {
 		Calendar fromCal = Calendar.getInstance();
 		fromCal.setTime(fromDate);
 		int daysInMonth = fromCal.getActualMaximum(Calendar.DAY_OF_MONTH);
-		
+
 		for (Entry<String,Map<Integer,Boolean>> entry : entrySet) {
 
 			Row dataRow = musterSheet.getRow(rowNum++);
 
 			String key = entry.getKey();
 			Map<Integer,Boolean> attnMap = attnInfoMap.get(key);
-			
+
 			String[] keyArr = key.split(KEY_SEPARATOR);
 			dataRow.getCell(1).setCellValue(keyArr[0]);
 			dataRow.getCell(2).setCellValue(keyArr[1]);
-			//dataRow.getCell(3).setCellValue(); //father's name not available 
+			//dataRow.getCell(3).setCellValue(); //father's name not available
 			//dataRow.getCell(4).setCellValue(); //gender not available
 			dataRow.getCell(5).setCellValue(keyArr[2]);
-			
+
 			int dayStartCell = 6;
 			int presentCnt = 0;
 			for(int day=1;day <= daysInMonth;day++) {
 				if(attnMap.containsKey(day)) {
 					boolean attnVal = attnMap.get(day);
-					presentCnt += (attnVal ? 1 : 0); 
+					presentCnt += (attnVal ? 1 : 0);
 					dataRow.getCell(dayStartCell).setCellValue(attnVal ? "P" : "A");
 					if(attnVal) {
 						dataRow.getCell(dayStartCell).setCellStyle(style);
@@ -905,7 +905,7 @@ public class ExportUtil {
 				dayStartCell++;
 			}
 			dataRow.getCell(dayStartCell).setCellValue(presentCnt);
-			
+
 			/*
 			dataRow.getCell(0).setCellValue(transaction.getEmployeeIds());
 			dataRow.getCell(1).setCellValue(transaction.getName() + " " + transaction.getLastName());
@@ -921,7 +921,7 @@ public class ExportUtil {
 			*/
 		}
 
-		
+
 		log.info(filePath + " Excel file was created successfully !!!");
 		statusMap.put(filePath, "COMPLETED");
 
@@ -940,8 +940,8 @@ public class ExportUtil {
 		result.setStatus(getExportStatus(fileName));
 		return result;
 	}
-	
-	
+
+
 	public ExportResult write52WeekScheduleToFile(String siteName, List<AssetPPMScheduleEventDTO> content, ExportResult result) {
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend=" + isAppend);
@@ -991,9 +991,9 @@ public class ExportUtil {
 		} catch (IOException e1) {
 			log.error("Error while opening the attendance template file",e1);
 		}
-		
+
 		int rowNum = 3;
-		
+
 		XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(0);
 		long prevAssetIdInLoop = 0;
 		String freqCode = null;
@@ -1003,7 +1003,7 @@ public class ExportUtil {
 
 			if(scheduleEvent.getAssetId() != prevAssetIdInLoop || StringUtils.isEmpty(freqCode) || !freqCode.equalsIgnoreCase(currFreqCode)) {
 				dataRow = xssfSheet.getRow(rowNum++);
-	
+
 				dataRow.getCell(0).setCellValue(scheduleEvent.getTitle());
 				dataRow.getCell(1).setCellValue(scheduleEvent.getAssetTitle());
 				dataRow.getCell(2).setCellValue(scheduleEvent.getAssetCode());
@@ -1040,7 +1040,7 @@ public class ExportUtil {
 		result.setStatus(getExportStatus(fileName));
 		return result;
 	}
-	
+
 	private String getFrequencyCode(String frequency) {
 		String freqCode = "W";
 		Frequency freq = Frequency.fromValue(frequency);
@@ -1070,7 +1070,7 @@ public class ExportUtil {
 				freqCode = "Y";
 				break;
 			default:
-				
+
 		}
 		return freqCode;
 	}
@@ -1534,7 +1534,7 @@ public class ExportUtil {
 		}
 		return csvData;
 	}
-	
+
 	public byte[] readFeedbackExportFile(String empId, String fileName) {
 		// log.info("INSIDE OF readExportFILE **********");
 
@@ -1641,7 +1641,7 @@ public class ExportUtil {
 		}
 		return csvData;
 	}
-	
+
 	public ExportResult writeJobExcelReportToFile(String projName, List<JobDTO> content, User user, Employee emp, ExportResult result) {
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend = " + isAppend);
@@ -1720,16 +1720,20 @@ public class ExportUtil {
 					Row dataRow = xssfSheet.createRow(rowNum++);
 					dataRow.createCell(0).setCellValue(transaction.getSiteProjectName().toUpperCase());
 					dataRow.createCell(1).setCellValue(transaction.getSiteName().toUpperCase());
-					dataRow.createCell(2).setCellValue(transaction.getId());
-					dataRow.createCell(3).setCellValue(transaction.getTitle().toUpperCase());
-					dataRow.createCell(4).setCellValue(transaction.getDescription());
-					dataRow.createCell(5).setCellValue(transaction.getTicketId() > 0 ? transaction.getTicketId() +"" : "");
-					dataRow.createCell(6).setCellValue(transaction.getTicketName());
-					dataRow.createCell(7).setCellValue(transaction.getEmployeeName());
-					dataRow.createCell(8).setCellValue(String.valueOf(transaction.getJobType()));
-					dataRow.createCell(9).setCellValue(DateUtil.formatToDateTimeString(transaction.getPlannedStartTime()));
-					dataRow.createCell(10).setCellValue(DateUtil.formatToDateTimeString(transaction.getActualEndTime()));
-					dataRow.createCell(11)
+					String block = StringUtils.isNotEmpty(transaction.getBlock()) ? transaction.getBlock() : "";
+					String floor = StringUtils.isNotEmpty(transaction.getFloor()) ? transaction.getFloor() : "";
+					String zone = StringUtils.isNotEmpty(transaction.getZone()) ? transaction.getZone() : "";
+					dataRow.createCell(2).setCellValue(block + "-" + floor + "-" + zone);
+					dataRow.createCell(3).setCellValue(transaction.getId());
+					dataRow.createCell(4).setCellValue(transaction.getTitle().toUpperCase());
+					dataRow.createCell(5).setCellValue(transaction.getDescription());
+					dataRow.createCell(6).setCellValue(transaction.getTicketId() > 0 ? transaction.getTicketId() +"" : "");
+					dataRow.createCell(7).setCellValue(transaction.getTicketName());
+					dataRow.createCell(8).setCellValue(transaction.getEmployeeName());
+					dataRow.createCell(9).setCellValue(String.valueOf(transaction.getJobType()));
+					dataRow.createCell(10).setCellValue(DateUtil.formatToDateTimeString(transaction.getPlannedStartTime()));
+					dataRow.createCell(11).setCellValue(DateUtil.formatToDateTimeString(transaction.getActualEndTime()));
+					dataRow.createCell(12)
 							.setCellValue(transaction.getJobStatus() != null ? transaction.getJobStatus().name()
 									: JobStatus.OPEN.name());
 					if(CollectionUtils.isNotEmpty(transaction.getChecklistItems())) {
@@ -1738,29 +1742,33 @@ public class ExportUtil {
 						int cnt = 0;
 						for(JobChecklistDTO result : results) {
 							cnt++;
-							dataRow.createCell(12).setCellValue(result.getChecklistItemName());		
-							dataRow.createCell(13).setCellValue((result.isCompleted() ? "COMPLETED" : "NOT COMPLETED"));
-							dataRow.createCell(14).setCellValue((StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : ""));
-							dataRow.createCell(15).setCellValue((StringUtils.isNotEmpty(result.getImageUrl_1()) ? result.getImageUrl_1() : ""));
+							dataRow.createCell(13).setCellValue(result.getChecklistItemName());
+							dataRow.createCell(14).setCellValue((result.isCompleted() ? "COMPLETED" : "NOT COMPLETED"));
+							dataRow.createCell(15).setCellValue((StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : ""));
+							dataRow.createCell(16).setCellValue((StringUtils.isNotEmpty(result.getImageUrl_1()) ? result.getImageUrl_1() : ""));
 							if(cnt < size) {
 								dataRow = xssfSheet.createRow(rowNum++);
 								dataRow.createCell(0).setCellValue(transaction.getSiteProjectName().toUpperCase());
 								dataRow.createCell(1).setCellValue(transaction.getSiteName().toUpperCase());
-								dataRow.createCell(2).setCellValue(transaction.getId());
-								dataRow.createCell(3).setCellValue(transaction.getTitle().toUpperCase());
-								dataRow.createCell(4).setCellValue(transaction.getDescription());
-								dataRow.createCell(5).setCellValue(transaction.getTicketId() > 0 ? transaction.getTicketId() +"" : "");
-								dataRow.createCell(6).setCellValue(transaction.getTicketName());
-								dataRow.createCell(7).setCellValue(transaction.getEmployeeName());
-								dataRow.createCell(8).setCellValue(String.valueOf(transaction.getJobType()));
-								dataRow.createCell(9).setCellValue(DateUtil.formatToDateTimeString(transaction.getPlannedStartTime()));
-								dataRow.createCell(10).setCellValue(DateUtil.formatToDateTimeString(transaction.getActualEndTime()));
-								dataRow.createCell(11)
+								block = StringUtils.isNotEmpty(transaction.getBlock()) ? transaction.getBlock() : "";
+								floor = StringUtils.isNotEmpty(transaction.getFloor()) ? transaction.getFloor() : "";
+								zone = StringUtils.isNotEmpty(transaction.getZone()) ? transaction.getZone() : "";
+								dataRow.createCell(2).setCellValue(block + "-" + floor + "-" + zone);
+								dataRow.createCell(3).setCellValue(transaction.getId());
+								dataRow.createCell(4).setCellValue(transaction.getTitle().toUpperCase());
+								dataRow.createCell(5).setCellValue(transaction.getDescription());
+								dataRow.createCell(6).setCellValue(transaction.getTicketId() > 0 ? transaction.getTicketId() +"" : "");
+								dataRow.createCell(7).setCellValue(transaction.getTicketName());
+								dataRow.createCell(8).setCellValue(transaction.getEmployeeName());
+								dataRow.createCell(9).setCellValue(String.valueOf(transaction.getJobType()));
+								dataRow.createCell(10).setCellValue(DateUtil.formatToDateTimeString(transaction.getPlannedStartTime()));
+								dataRow.createCell(11).setCellValue(DateUtil.formatToDateTimeString(transaction.getActualEndTime()));
+								dataRow.createCell(12)
 										.setCellValue(transaction.getJobStatus() != null ? transaction.getJobStatus().name()
-												: JobStatus.OPEN.name());								
+												: JobStatus.OPEN.name());
 							}
 						}
-					}					
+					}
 				}
 
 				for (int i = 0; i < JOB_HEADER.length; i++) {
@@ -1774,7 +1782,7 @@ public class ExportUtil {
 					fileOutputStream = new FileOutputStream(file_Path);
 					xssfWorkbook.write(fileOutputStream);
 					fileOutputStream.close();
-					
+
 					//send job report in email.
 					String email = StringUtils.isNotEmpty(emp.getEmail()) ? emp.getEmail() : user.getEmail();
 					if(StringUtils.isNotEmpty(email)) {
@@ -1896,7 +1904,7 @@ public class ExportUtil {
 					fileOutputStream = new FileOutputStream(file_Path);
 					xssfWorkbook.write(fileOutputStream);
 					fileOutputStream.close();
-					
+
 					//send ticket report in email.
 					String email = StringUtils.isNotEmpty(emp.getEmail()) ? emp.getEmail() : user.getEmail();
 					if(StringUtils.isNotEmpty(email)) {
@@ -1918,8 +1926,8 @@ public class ExportUtil {
 		result.setStatus(getExportStatus(file_Name));
 		return result;
 	}
-	
-	
+
+
 	public ExportResult writeAssetExcelReportToFile(List<AssetDTO> content, String empId, ExportResult result) {
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend = " + isAppend);
@@ -2030,30 +2038,30 @@ public class ExportUtil {
 		result.setStatus(getExportStatus(file_Name));
 		return result;
 	}
-	
+
 	public byte[] readUploadedFile(long siteId, String fileName, String assetCode) {
 
 		 log.info("INSIDE OF readUploadedFILE **********");
 
 		String filePath = env.getProperty("asset.file.path");
-		
+
 		filePath += "/" + siteId;
-		
+
 		filePath += "/" + assetCode;
 
 		filePath += "/" + fileName;
 
 		log.debug("PATH OF THE READ FILE*********"+filePath);
 		File file = new File(filePath);
-		
+
 		 log.debug("NAME OF THE READ FILE*********"+file);
 
 		FileInputStream fileInputStream = null;
 		byte job_excelData[] = null;
 		String contentType = null;
-		
+
 		try {
-			
+
 			File readJobFile = new File(filePath);
 			contentType = Files.probeContentType(readJobFile.toPath());
 			log.debug("Showing a file extenstion" + contentType);
@@ -2062,7 +2070,7 @@ public class ExportUtil {
 			// read file into bytes[]
 			fileInputStream = new FileInputStream(file);
 			fileInputStream.read(job_excelData);
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -2191,7 +2199,7 @@ public class ExportUtil {
 		result.setStatus(getExportStatus(file_Name));
 		return result;
 	}
-	
+
 	public ExportResult writeFeedbackExcelReportToFile(String projName, List<FeedbackTransactionDTO> content, User user, Employee emp, ExportResult result) {
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend = " + isAppend);
@@ -2222,7 +2230,7 @@ public class ExportUtil {
 			lock = new Lock();
 		}
 		log.debug("Trying to acquire lock");
-		
+
 		try {
 			lock.lock();
 		} catch (InterruptedException e) {
@@ -2270,7 +2278,7 @@ public class ExportUtil {
 					for (FeedbackTransactionDTO transaction : content) {
 						log.debug("Feebdack Transaction DTO -" + transaction);
 						Row dataRow = xssfSheet.createRow(rowNum++);
-	
+
 						dataRow.createCell(0).setCellValue(transaction.getId());
 						ZonedDateTime dateTime = transaction.getCreatedDate();
 						Calendar feedbackDate = Calendar.getInstance();
@@ -2313,7 +2321,7 @@ public class ExportUtil {
 							}
 						}
 						log.debug("Rownum -" + rowNum);
-	
+
 					}
 				}
 				log.debug("Completed Writing feedback to excel file");
@@ -2328,7 +2336,7 @@ public class ExportUtil {
 					fileOutputStream = new FileOutputStream(file_Path);
 					xssfWorkbook.write(fileOutputStream);
 					fileOutputStream.close();
-					
+
 					//send job report in email.
 					String email = StringUtils.isNotEmpty(emp.getEmail()) ? emp.getEmail() : user.getEmail();
 					File file = new File(file_Path);

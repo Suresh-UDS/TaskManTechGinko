@@ -17,7 +17,18 @@
         </div>
 
         <div class="col-md-6 txt-align-rgt">
-
+            <button ng-show="feedbackCount > 0" class="btn btn-info add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':(downloader && typeMsg=='xlsx')}"   title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
+                <i class="material-icons">import_contacts</i> Export Excel
+                <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
+                <div class="ripple-container"></div>
+            </button>
+            <span ng-if="exportMsg =='Download'">
+                 <a class="download-btn" href="{{exportFile}}" download target="_self" ng-click="clsDownload()" ng-hide="downloaded">{{exportMsg}}</a>
+                 <div class="downloader" ng-show="downloader"></div>
+            </span>
+            <span ng-if="exportMsg !='Download'">
+                 <a class="download-btn" href="javascript:void(0);">{{exportMsg}}</a>
+            </span>
         </div>
 
     </div>
@@ -48,18 +59,6 @@
                     Zone: {{searchCriteria.zone || localStorage.zone}}
                 </span>
 
-            </span>
-            <button ng-show="feedbackCount > 0" class="btn btn-info add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':(downloader && typeMsg=='xlsx')}"   title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
-                <i class="material-icons">import_contacts</i> Export Excel
-                <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
-                <div class="ripple-container"></div>
-            </button>
-            <span ng-if="exportMsg()=='Download'">
-                 <a class="download-btn" href="{{exportFile()}}" download target="_self" ng-click="clsDownload()" ng-hide="downloaded">{{exportMsg()}}</a>
-                 <div class="downloader" ng-show="downloader"></div>
-            </span>
-            <span ng-if="exportMsg()!='Download'">
-                 <a class="download-btn" href="javascript:void(0);">{{exportMsg()}}</a>
             </span>
 
     </div>
@@ -217,7 +216,6 @@
 
                                             <!-- <jk-rating-stars max-rating="5" rating="feedbackReport.overallRating" read-only="readOnly" >
                                             </jk-rating-stars> -->
-
                                             <average-star-rating ng-model="averageRating" max="5"></average-star-rating>
 
 
@@ -297,12 +295,15 @@
                                 <tr ng-repeat="questionRating in feedbackReport.questionRatings">
                                     <td>{{questionRating.location}}</td>
                                     <td>{{questionRating.question}}</td>
-                                    <td>{{questionRating.yesCount}}</td>
-                                    <td>{{questionRating.noCount}}</td>
+                                    <td><span ng-if="!questionRating.rating">{{questionRating.yesCount}}</span>
+                                        <span ng-if="questionRating.rating">NA</span></td>
+                                    <td><span ng-if="!questionRating.rating">{{questionRating.noCount}}</span>
+                                        <span ng-if="questionRating.rating">NA</span></td>
                                     <td>
-                                        <div ng-repeat ="(key, value) in questionRating.rating">
+                                        <div  ng-if="questionRating.rating" ng-repeat ="(key, value) in questionRating.rating">
                                             ({{value}}) <jk-rating-stars max-rating="5" rating="key" read-only="readOnly" ></jk-rating-stars>
                                         </div>
+                                        <span ng-if="!questionRating.rating">NA</span>
                                     </td>
                                 </tr>
                                 </thead>
@@ -392,10 +393,10 @@
                                     <!--</select>-->
                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <ui-select ng-model="selectedProject" ng-disabled="clientFilterDisable" ng-change="loadSearchProject(selectedProject);loadSites()" ng-click="loadSearchProject(selectedProject);loadSites()">
+                                    <ui-select ng-model="selectedProject" ng-disabled="clientFilterDisable"  >
                                         <ui-select-match placeholder="Select client...">{{filter ? selectedProject.name?selectedProject.name:'Select client' :clearField?'Select Client':selectedProject}}</ui-select-match>
-                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
-                                            <div ng-bind="client"></div>
+                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search" ng-click="loadSearchProject(selectedProject);loadSites()">
+                                            <div ng-bind="client" ></div>
                                         </ui-select-choices>
                                     </ui-select>
                                 </div>
@@ -412,10 +413,10 @@
                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                     <!--<span class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                    <ui-select ng-model="selectedSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-change="loadSearchSite(selectedSite);searchLocations();loadFeedbackMasters();">
+                                    <ui-select ng-model="selectedSite" ng-disabled="siteFilterDisable || sites.length == 0" >
                                         <ui-select-match placeholder="Select site...">{{sites.length == 0 ? 'Select site' : selectedSite.searchStatus ? selectedSite.name?selectedSite.name:'Select Site' : hideSite ?clearField?'Select site':selectedSite : 'Select Site' }}</ui-select-match>
-                                        <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
-                                            <div ng-bind="site" ng-click="loadSearchSite(selectedSite);searchLocations();loadFeedbackMasters();"></div>
+                                        <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search"  ng-click="loadSearchSite(selectedSite);searchLocations();loadFeedbackMasters();">
+                                            <div ng-bind="site"></div>
                                         </ui-select-choices>
                                     </ui-select>
                                     <span ng-if="sites.length == 0"><p class="error-msg margin0">No sites</p></span>

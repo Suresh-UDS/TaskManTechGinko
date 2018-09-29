@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {NavController, NavParams, PopoverController} from "ionic-angular";
+import {NavController, NavParams, PopoverController,ViewController} from "ionic-angular";
 import {SiteService} from "../service/siteService";
 import {JobService} from "../service/jobService";
 import {Ticket} from "./ticket";
@@ -47,7 +47,8 @@ export class CreateTicket {
     assetDetails:any;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public siteService:SiteService,public camera:Camera,public popoverCtrl: PopoverController,
-                public jobService:JobService, public cs:componentService, public employeeService:EmployeeService,@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,private transfer: FileTransfer) {
+                public jobService:JobService, public cs:componentService, public employeeService:EmployeeService,@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
+                private transfer: FileTransfer,viewCtrl:ViewController) {
       this.sites=[];
       this.employee=[];
       this.severities = ['Low','Medium','High'];
@@ -264,7 +265,8 @@ export class CreateTicket {
 
         popover.onDidDismiss(data=>
         {
-            // this.takenImages.pop(data);
+
+            this.takenImages.pop(data);
         })
     }
 

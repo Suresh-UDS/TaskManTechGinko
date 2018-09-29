@@ -58,7 +58,13 @@
                                                   <tr>
 
                                                       <td>Location</td>
-                                                      <td>{{job.locationName}}</td>
+                                                      <td><span ng-if="job.block">{{job.block}},</span>
+                                                          <span ng-if="job.floor">{{job.floor}},</span>
+                                                          <span ng-if="job.zone">{{job.zone}}</span>
+                                                          <span ng-if="!job.block">-</span>
+                                                          <span ng-if="!job.floor">-</span>
+                                                          <span ng-if="!job.zone">-</span>
+                                                      </td>
 
                                                   </tr>
                                                   <tr>
@@ -225,6 +231,7 @@
                                                   <tr>
                                                       <td>Ticket Id</td>
                                                       <td>
+                                                          <span ng-if="!job.ticketId">-</span>
                                                           <a ng-if="(job.ticketId > 0)" ng-class="{active: $state.includes('admin')}" ui-sref="view-ticket({id : job.ticketId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View Ticket {{job.ticketId}}</a>
                                                           <a ng-if="(job.ticketId > 0) && job.jobStatus == 'COMPLETED' && ticketStatus != 'Closed'" ng-class="{active: $state.includes('admin')}"  ng-click="closeTicket(job.ticketId)"   onClick="$('#closeTicket').modal()"     class="btn btn-simple btn-info">Close Ticket {{job.ticketId}}</a>
                                                           <a ng-if="(job.ticketId > 0) && job.jobStatus == 'COMPLETED' && ticketStatus == 'Closed'" ng-class="{active: $state.includes('admin')}" class="btn btn-simple btn-info">Ticket# {{job.ticketId}} Closed </a>
@@ -251,7 +258,7 @@
                                             <!--<img data-ng-src="/api/employee/{{job.employeeEmpId}}/checkInOut/{{image.photoOut}}" width="30px" height="30px"/>-->
                                             <!--</a>-->
                                             <a onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(image.url)" >
-                                                <img src="{{image.url}}" width="150px" height="150px">
+                                                <img ng-src="{{image.url}}" width="150px" height="150px">
 
                                             </a>
                                         </div>
@@ -287,13 +294,13 @@
                                             <td>
                                                 <span ng-if="!checklist.imageUrl_1">No image</span>
                                                 <a ng-if="checklist.imageUrl_1" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.imageUrl_1)" >
-                                                    <img src="{{checklist.imageUrl_1}}" width="80px" height="80px">
+                                                    <img ng-src="{{checklist.imageUrl_1}}" width="80px" height="80px">
                                                 </a>
                                                 <a ng-if="checklist.imageUrl_2" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.imageUrl_2)" >
-                                                    <img src="{{checklist.imageUrl_2}}" width="80px" height="80px">
+                                                    <img ng-src="{{checklist.imageUrl_2}}" width="80px" height="80px">
                                                 </a>
                                                 <a ng-if="checklist.imageUrl_3" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.imageUrl_3)" >
-                                                    <img src="{{checklist.imageUrl_3}}" width="80px" height="80px">
+                                                    <img ng-src="{{checklist.imageUrl_3}}" width="80px" height="80px">
                                                 </a>
                                             </td>
                                         </tr>

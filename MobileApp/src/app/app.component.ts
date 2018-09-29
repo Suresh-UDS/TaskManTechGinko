@@ -55,7 +55,10 @@ export class MyApp {
 
   pages: Array<{title: string, component: any,active:any,icon:any,permission:any}>;
 
-  constructor(public platform: Platform,private ionicApp: IonicApp,public menuCtrl:MenuController,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion, private authService:authService) {
+  constructor(public platform: Platform,private ionicApp: IonicApp,public menuCtrl:MenuController,private backgroundMode: BackgroundMode,
+              public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController,
+              public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus,
+              private appVersion:AppVersion, private authService:authService) {
     this.initializeApp();
 
           //

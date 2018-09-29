@@ -195,7 +195,7 @@
                     Cancel</button>
                 <button type="button"
                         class="btn btn-danger delete-multiple-confirmation-button"
-                        data-target="http://localhost:81/grocery_crud/index.php/examples/customers_management/delete_multiple">
+                        >
                     Delete</button>
             </div>
         </div>
@@ -231,10 +231,10 @@
                                     <!--</select>-->
                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable" ng-change="loadDepSites(searchProject)" ng-click="loadDepSites(searchProject)">
+                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable">
                                         <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select client' :clearField?'Select client':searchProject}}</ui-select-match>
-                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
-                                            <div ng-bind="client"></div>
+                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search" ng-click="loadDepSites(searchProject)">
+                                            <div ng-bind="client" ></div>
                                         </ui-select-choices>
                                     </ui-select>
                                 </div>
@@ -251,10 +251,10 @@
                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                     <!--<span class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sitesList.length == 0" ng-change="selectSite(searchSite)">
+                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sitesList.length == 0">
                                         <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select site' : hideSite ?clearField?'Select site':searchSite : 'Select Site' }}</ui-select-match>
-                                        <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
-                                            <div ng-bind="site" ng-click="selectSite(searchSite)"></div>
+                                        <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search" ng-click="selectSite(searchSite)">
+                                            <div ng-bind="site"></div>
                                         </ui-select-choices>
                                     </ui-select>
                                     <span ng-if="sitesList.length == 0"><p class="error-msg margin0">No sites</p></span>
@@ -265,6 +265,7 @@
 
                 </div>
                 <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger btn-simple" data-dismiss="modal" >Cancel</button>
                     <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>

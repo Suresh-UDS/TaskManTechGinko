@@ -78,7 +78,8 @@ angular.module('timeSheetApp')
 
         $scope.pageSort = 10;
 
-        $scope.selectedDate = $filter('date')(new Date(), 'yyyy-MM-dd');
+        $scope.selectedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+        $scope.selectedDateSer = new Date();
 
         $scope.modifiedEmpShifts = [];
 
@@ -109,12 +110,14 @@ angular.module('timeSheetApp')
 
         $('#selectedDate').on('dp.change', function(e){
             //console.log(e.date);
-            $scope.selectedDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
+            $scope.selectedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.selectedDateSer = new Date(e.date._d);
         });
 
         $('#searchDate').on('dp.change', function(e){
             //console.log(e.date);
-            $scope.searchDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
+            $scope.searchDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.searchDateSer = new Date(e.date._d);
         });
 
         $scope.projectSiteList = [];
@@ -316,39 +319,45 @@ angular.module('timeSheetApp')
         };
 
         $scope.loadDepSites = function (searchProject) {
-            $scope.clearField = false;
-            $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
+             if(searchProject){
+                $scope.clearField = false;
+                $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
 
-            $scope.siteSpin = true;
-            $scope.hideSite = false;
-            $scope.siteFilterDisable = true;
-            if(jQuery.isEmptyObject($scope.selectedProject) == false) {
-                var depProj=$scope.selectedProject.id;
-            }else if(jQuery.isEmptyObject($scope.searchProject) == false){
-                var depProj=$scope.searchProject.id;
-            }else{
-                var depProj=0;
-            }
-            $scope.uiSite.splice(0,$scope.uiSite.length);
-            ProjectComponent.findSites(depProj).then(function (data) {
-                $scope.searchSite = null;
-                $scope.sites = data;
-                console.log("==================");
-                console.log($scope.sites)
-                for(var i=0;i<$scope.sites.length;i++)
-                {
-                    $scope.uiSite[i] = $scope.sites[i].name;
+                $scope.siteSpin = true;
+                $scope.hideSite = false;
+                $scope.siteFilterDisable = true;
+                if(jQuery.isEmptyObject($scope.selectedProject) == false) {
+                    var depProj=$scope.selectedProject.id;
+                }else if(jQuery.isEmptyObject($scope.searchProject) == false){
+                    var depProj=$scope.searchProject.id;
+                }else{
+                    var depProj=0;
                 }
-                $scope.siteDisable = false;
-                $scope.siteSpin = false;
-                $scope.siteFilterDisable = false;
-            });
+                $scope.uiSite.splice(0,$scope.uiSite.length);
+                ProjectComponent.findSites(depProj).then(function (data) {
+                    $scope.searchSite = null;
+                    $scope.sites = data;
+                    console.log("==================");
+                    console.log($scope.sites)
+                    for(var i=0;i<$scope.sites.length;i++)
+                    {
+                        $scope.uiSite[i] = $scope.sites[i].name;
+                    }
+                    $scope.siteDisable = false;
+                    $scope.siteSpin = false;
+                    $scope.siteFilterDisable = false;
+                });
+
+             }
+
         };
 
         $scope.loadSearchSite = function (searchSite) {
-            $scope.hideSite = true;
-            $scope.searchSite = $scope.sites[$scope.uiSite.indexOf(searchSite)]
-            console.log($scope.searchSite)
+            if(searchSite){
+              $scope.hideSite = true;
+              $scope.searchSite = $scope.sites[$scope.uiSite.indexOf(searchSite)]
+              console.log($scope.searchSite)
+            }
         }
 
         $scope.loadSelectedProject = function(projectId) {
@@ -566,7 +575,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.loadEmployeesShift = function () {
-            $scope.clearFilter();
+            $scope.refreshPage();
             $scope.searchShiftFilter();
         };
 
@@ -679,13 +688,28 @@ angular.module('timeSheetApp')
 
        $scope.refreshPage = function() {
         if($scope.curUrl =='employeeShifts'){
+            $scope.noData = false;
+            $scope.siteFilterDisable = true;
+            $scope.sitesList = null;
+            $scope.sites = null;
+            $scope.selectedSite = null;
+            $scope.selectedProject = null;
+            $scope.searchProject = null;
+            $scope.searchSite = null;
             $scope.searchCriteria = {};
             $scope.clearField = true;
             $scope.selectedDate = null;
+            $scope.selectedDateSer = null;
+            $scope.searchCriteria = {};
+            $scope.localStorage = null;
+            $scope.clearField = true;
+            $scope.pages = {
+                currPage: 1,
+                totalPages: 0
+            }
                 $scope.searchShift();
 
             }else{
-
                 $scope.loadEmployees();
             }
 
@@ -847,31 +871,37 @@ angular.module('timeSheetApp')
 
         $scope.deleteSite = function(empId,siteId,projectId) {
         	var employeeSites;
-        	EmployeeComponent.deleteEmployeeSite(empId,siteId).then(function(response){
-	        	$scope.success = 'OK';
-	        	employeeSites = response.data;
-	        	$scope.showNotifications('top','center','success','Employee Successfully deleted');
-	        	$location.path('/employees');
-        	}).catch(function (response) {
-                $scope.success = null;
-                console.log('Error - '+ response.data);
-                $scope.errorMessage = response.data.description;
-                $scope.error = 'ERROR';
-                $scope.showNotifications('top','center','danger',$scope.errorMessage);
+        	if(empId && siteId){
 
-            });
-        	if(!employeeSites && employeeSites.length > 0) {
-            	EmployeeComponent.deleteEmployeeProject(empId,projectId).then(function(){
-    	        	$scope.success = 'OK';
+                EmployeeComponent.deleteEmployeeSite(empId,siteId).then(function(response){
+                    $scope.success = 'OK';
+                    employeeSites = response.data;
                     $scope.showNotifications('top','center','success','Employee Successfully deleted');
                     $location.path('/employees');
-            	}).catch(function (response) {
+                }).catch(function (response) {
                     $scope.success = null;
                     console.log('Error - '+ response.data);
                     $scope.errorMessage = response.data.description;
                     $scope.error = 'ERROR';
                     $scope.showNotifications('top','center','danger',$scope.errorMessage);
+
                 });
+
+        	}
+            if(empId && projectId){
+                if(!employeeSites && employeeSites.length > 0) {
+                    EmployeeComponent.deleteEmployeeProject(empId,projectId).then(function(){
+                        $scope.success = 'OK';
+                        $scope.showNotifications('top','center','success','Employee Successfully deleted');
+                        $location.path('/employees');
+                    }).catch(function (response) {
+                        $scope.success = null;
+                        console.log('Error - '+ response.data);
+                        $scope.errorMessage = response.data.description;
+                        $scope.error = 'ERROR';
+                        $scope.showNotifications('top','center','danger',$scope.errorMessage);
+                    });
+                }
         	}
         };
 
@@ -1265,18 +1295,22 @@ angular.module('timeSheetApp')
 
 	            if($scope.searchProject) {
 	                    $scope.searchCriteria.projectId = $scope.searchProject.id;
+	                    $scope.searchCriteria.projectName = $scope.searchProject.name;
 	            }else{
                     $scope.searchCriteria.projectId = null;
+                    $scope.searchCriteria.projectName = null;
                 }
 
 	            if($scope.searchSite) {
 	                    $scope.searchCriteria.siteId = $scope.searchSite.id;
+	                    $scope.searchCriteria.siteName = $scope.searchSite.name;
 	            }else{
                        $scope.searchCriteria.siteId = null;
+                       $scope.searchCriteria.siteName = null;
                 }
 
-                if($scope.selectedDate){
-                      $scope.searchCriteria.fromDate = $scope.selectedDate;
+                if($scope.selectedDateSer){
+                      $scope.searchCriteria.fromDate = $scope.selectedDateSer;
                 }
 
 	            //-------
