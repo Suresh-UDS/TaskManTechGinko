@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.ts.app.domain.Employee;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -238,14 +239,15 @@ public class EmployeeResource {
     }
 
     @RequestMapping(value = "/employee/enroll", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> enrollEmployeeFace(@Valid @RequestBody EmployeeDTO employee, HttpServletRequest request) {
+    public EmployeeDTO enrollEmployeeFace(@Valid @RequestBody EmployeeDTO employee, HttpServletRequest request) {
         log.info("Inside Enroll" + employee.getName() + " , "+ employee.getProjectId());
+        EmployeeDTO employeeDTO = null;
         try {
-            employeeService.enrollFace(employee);
+             employeeDTO = employeeService.enrollFace(employee);
         }catch(Exception e) {
             throw new TimesheetException(e, employee);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return employeeDTO  ;
     }
 
     @RequestMapping(value = "/all/enroll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
