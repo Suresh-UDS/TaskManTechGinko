@@ -875,6 +875,8 @@ public class    EmployeeService extends AbstractService {
                             entity.setFaceAuthorised(false);
                             employeeRepository.saveAndFlush(entity);
                             employeeDTO = mapperUtil.toModel(entity, EmployeeDTO.class);
+                            return employeeDTO;
+
                         }else{
                             employeeDTO.setErrorMessage("Face not Enrolled");
                             employeeDTO.setErrorStatus(true);
