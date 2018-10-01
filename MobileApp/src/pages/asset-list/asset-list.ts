@@ -22,6 +22,9 @@ import {OfflineAsset} from "../offline-asset/offline-asset";
 import {ScanQRAsset} from "./scanQR-asset";
 import{AlertController} from "ionic-angular";
 
+
+declare  var demo;
+
 /**
  * Generated class for the AssetList page.
  *
@@ -121,13 +124,17 @@ export class AssetList {
 
           this.assetService.getAssetByCode(text).subscribe(
               response=>{
-                  this.componentService.showToastMessage('Asset found, navigating..','bottom')
-                  console.log("Search by asset code response");
-                  console.log(response);
-                  window.document.querySelector('ion-app').classList.add('transparentBody')
-                  // this.navCtrl.setRoot(AssetList,{assetDetails:response,qr:true});
-                  this.navCtrl.push(AssetView,{assetDetails:response}); //online
-                  // this.navCtrl.push(AssetView,{assetDetails:response[0]}); //offline
+                  if(response.errorStatus){
+                      demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                  }else{
+                      this.componentService.showToastMessage('Asset found, navigating..','bottom')
+                      console.log("Search by asset code response");
+                      console.log(response);
+                      window.document.querySelector('ion-app').classList.add('transparentBody')
+                      // this.navCtrl.setRoot(AssetList,{assetDetails:response,qr:true});
+                      this.navCtrl.push(AssetView,{assetDetails:response}); //online
+                      // this.navCtrl.push(AssetView,{assetDetails:response[0]}); //offline
+                  }
 
               },
               err=>{
@@ -151,9 +158,14 @@ export class AssetList {
             {
                 this.assetService.saveReading({name:readings[i].name,uom:readings[i].uom,initialValue:readings[i].initialValue,finalValue:readings[i].finalValue,consumption:readings[i].consumption,assetId:readings[i].assetId,assetParameterConfigId:readings[i].assetParameterConfigId}).subscribe(
                     response => {
-                        console.log("save reading sync to server");
-                        console.log(response);
-                        resolve("s")
+                        if(response.errorStatus){
+                            demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                        }else{
+                            console.log("save reading sync to server");
+                            console.log(response);
+                            resolve("s")
+                        }
+
                     },
                     error => {
                         console.log("save readings error sync to server");
@@ -305,9 +317,14 @@ export class AssetList {
           };
           this.assetService.searchAssets(searchCriteria).subscribe(
               response=>{
-                  this.componentService.closeLoader()
-                  console.log("Asset search filters response");
-                  console.log(response)
+                  if(response.errorStatus){
+                        this.componentService.closeAll();
+                      demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                  }else{
+                      this.componentService.closeLoader()
+                      console.log("Asset search filters response");
+                      console.log(response);
+                  }
               },err=>{
                   this.componentService.closeLoader();
                   console.log("Error in filtering assets");

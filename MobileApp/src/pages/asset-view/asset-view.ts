@@ -590,10 +590,17 @@ export class AssetView {
         // Online
         this.assetService.getAssetById(this.assetDetails.id).subscribe(
             response=>{
-                this.componentService.closeAll();
-                console.log("Asset by id");
-                console.log(response);
-                this.assetDetails = response;
+                if(response.errorStatus){
+                    this.componentService.closeAll();
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+
+                }else{
+                    this.componentService.closeAll();
+                    console.log("Asset by id");
+                    console.log(response);
+                    this.assetDetails = response;
+                }
+
             },err=>{
                 this.componentService.closeAll();
                 console.log("Error in getting asset by id");
@@ -623,11 +630,16 @@ export class AssetView {
         //Online
         this.assetService.getAssetPPMSchedule(this.assetDetails.id).subscribe(
             response=>{
-                this.spinner = false;
-                this.componentService.closeAll();
-                console.log("Get asset PPM response");
-                console.log(response);
-                this.assetDetails.ppms = response;
+                if(response.errorStatus){
+                    this.spinner=false;
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    this.spinner = false;
+                    console.log("Get asset PPM response");
+                    console.log(response);
+                    this.assetDetails.ppms = response;
+                }
+
             },
             error=>{
                 this.spinner = false;
@@ -659,11 +671,16 @@ export class AssetView {
         //Online
         this.assetService.getAssetAMCSchedule(this.assetDetails.id).subscribe(
             response=>{
-                this.spinner = false;
-                this.componentService.closeAll()
-                console.log("Get asset AMC response");
-                this.assetDetails.amcs = response;
-                console.log(this.assetDetails.amcs);
+                if(response.errorStatus){
+                    this.spinner=false;
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    this.spinner = false;
+                    this.componentService.closeAll()
+                    console.log("Get asset AMC response");
+                    this.assetDetails.amcs = response;
+                    console.log(this.assetDetails.amcs);
+                }
             },
             error=>{
                 this.spinner = false;
@@ -696,11 +713,17 @@ export class AssetView {
         console.log(this.assetDetails.config);
         this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
             response=>{
-                this.spinner = false;
-                this.componentService.closeAll();
-                console.log("Asset config");
-                console.log(response);
-                this.assetDetails.config = response;
+                if(response.errorStatus){
+                    this.spinner=false;
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    this.spinner = false;
+                    this.componentService.closeAll();
+                    console.log("Asset config");
+                    console.log(response);
+                    this.assetDetails.config = response;
+                }
+
             },err=>{
                 this.spinner = false;
                 this.componentService.closeAll();
@@ -783,10 +806,15 @@ export class AssetView {
                     handler: () => {
                         this.assetService.markBreakDown(asset).subscribe(
                             response=>{
-                                console.log("Updated successfully");
-                                console.log(response);
-                                // demo.showSwal('success-message-and-confirmation-ok','Asset Marked Broke Down');
-                                this.componentService.showToastMessage('Asset Marked Broke Down','center');
+                                if(response.errorStatus){
+                                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                                }else{
+                                    console.log("Updated successfully");
+                                    console.log(response);
+                                    // demo.showSwal('success-message-and-confirmation-ok','Asset Marked Broke Down');
+                                    this.componentService.showToastMessage('Asset Marked Broke Down','center');
+                                }
+
                             }
                         )
                     }
