@@ -87,5 +87,23 @@ export class EmployeeService {
         )
     }
 
+    enrollFace(employee):Observable<any>{
+        return this.http.post(this.config.Url+'api/employee/enroll',employee).map(
+            response=>{
+                console.log(response);
+                return response;
+            }
+        )
+    }
+
+    enrollAllFaces():Observable<any>{
+        return this.http.get(this.config.Url+'api/all/enroll').map(
+            response=>{
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
 
 }
