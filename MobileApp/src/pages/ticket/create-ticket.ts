@@ -10,6 +10,8 @@ import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 import {QuotationImagePopoverPage} from "../quotation/quotation-image-popover";
 
+declare var demo;
+
 
 /**
  * Generated class for the CreateTicket page.
@@ -154,40 +156,45 @@ export class CreateTicket {
 
               this.jobService.createTicket(this.newTicket).subscribe(
                   response=> {
-                      console.log(response);
+                      if(response.errorStatus){
+                          demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
+                      }else{
+                          console.log(response);
 
-                      //Ticket image upload on successfully creating ticket.
-                      if(this.takenImages.length>0){
-                          for(var i=0;i<this.takenImages.length;i++){
-                              let token_header=window.localStorage.getItem('session');
-                              let options: FileUploadOptions = {
-                                  fileKey: 'ticketFile',
-                                  fileName:response.employeeEmpId+'_ticketImage_'+response.id,
-                                  headers:{
-                                      'X-Auth-Token':token_header
-                                  },
-                                  params:{
-                                      ticketId:response.id
-                                  }
-                              };
+                          //Ticket image upload on successfully creating ticket.
+                          if(this.takenImages.length>0){
+                              for(var i=0;i<this.takenImages.length;i++){
+                                  let token_header=window.localStorage.getItem('session');
+                                  let options: FileUploadOptions = {
+                                      fileKey: 'ticketFile',
+                                      fileName:response.employeeEmpId+'_ticketImage_'+response.id,
+                                      headers:{
+                                          'X-Auth-Token':token_header
+                                      },
+                                      params:{
+                                          ticketId:response.id
+                                      }
+                                  };
 
-                              this.fileTransfer.upload(this.takenImages[i], this.config.Url+'api/ticket/image/upload', options)
-                                  .then((data) => {
-                                      console.log(data);
-                                      console.log("image upload");
-                                      this.cs.closeLoader();
-                                  }, (err) => {
-                                      console.log(err);
-                                      console.log("image upload fail");
-                                      this.cs.closeLoader();
-                                  })
+                                  this.fileTransfer.upload(this.takenImages[i], this.config.Url+'api/ticket/image/upload', options)
+                                      .then((data) => {
+                                          console.log(data);
+                                          console.log("image upload");
+                                          this.cs.closeLoader();
+                                      }, (err) => {
+                                          console.log(err);
+                                          console.log("image upload fail");
+                                          this.cs.closeLoader();
+                                      })
+                              }
+
+
                           }
 
-
+                          this.navCtrl.setRoot(Ticket);
                       }
+                      },
 
-                      this.navCtrl.setRoot(Ticket);
-                  },
                   error=>{
                       console.log(error);
                       if(error.type==3)

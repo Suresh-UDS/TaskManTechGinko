@@ -151,7 +151,7 @@ export class AssetService {
         return this.http.post(this.config.Url+'api/asset/breakDown',asset).map(
             response=>{
                 console.log(response);
-                return response
+                return response.json();
             }
         )
     }

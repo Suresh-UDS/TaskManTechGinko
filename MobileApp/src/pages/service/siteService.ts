@@ -16,7 +16,7 @@ export class SiteService {
     searchSite():Observable<any>{
         return this.http.get(this.config.Url+'api/site').map(
             (response)=>{
-                return response;
+                return response.json();
             },err=>{
                 return err
             }
@@ -62,7 +62,7 @@ export class SiteService {
     findSites(projectId): Observable<any>{
         return this.http.get(this.config.Url+'api/project/'+projectId+'/sites').map(
             response=>{
-                return response;
+                return response.json();
             }
         )
     }
@@ -78,7 +78,7 @@ export class SiteService {
     findZone(blockId): Observable<any>{
         return this.http.get(this.config.Url+'api/zone/'+blockId).map(
             response=>{
-                return response;
+                return response.json();
             }
         )
     }
@@ -86,7 +86,7 @@ export class SiteService {
     searchSiteEmployee(siteId):Observable<any>{
         return this.http.get(this.config.Url+'api/empAttendance/site/'+siteId).map(
             response=>{
-                return response;
+                return response.json();
             }
         )
     }
@@ -95,7 +95,7 @@ export class SiteService {
         return this.http.get(this.config.Url+'api/site/employee/'+employeeId).map(
             response=>{
                 console.log(response);
-                return response
+                return response.json();
             }
         )
     }
@@ -104,7 +104,7 @@ export class SiteService {
         return this.http.post(this.config.Url+'api/site',site).map(
             response=>{
                 console.log(response);
-                return response
+                return response.json();
             }
         )
     }

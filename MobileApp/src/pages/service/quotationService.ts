@@ -26,7 +26,7 @@ export class QuotationService {
         return this.http.get(this.config.Url+'api/rateCard/types').map(
             response=>{
                 console.log(response);
-                return response;
+                return response.json();
             }
         )
     }
@@ -35,7 +35,7 @@ export class QuotationService {
         return this.http.get(this.config.Url+'api/rateCard/uom').map(
             response=>{
                 console.log(response);
-                return response;
+                return response.json();
             }
         )
     }

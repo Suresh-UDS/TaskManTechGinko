@@ -17,7 +17,7 @@ export class AttendanceService
     getSiteAttendances(siteId): Observable<any>{
         return this.http.get(this.config.Url+'api/attendance/site/'+siteId).map(
             (response)=>{
-                return response;
+                return response.json();
             }
         )
     }
@@ -26,7 +26,7 @@ export class AttendanceService
         return this.http.post(this.config.Url+'api/attendance',{siteId:siteId,employeeEmpId:empId,latitudeIn:lat,longitudeIn:long,checkInImage:imageData}).map(
             (response)=>{
                 console.log(response);
-                return response;
+                return response.json();
             },(error)=>{
                 console.log(error);
                 return error;
@@ -38,7 +38,7 @@ export class AttendanceService
         return this.http.post(this.config.Url+'api/attendance/save',{siteId:siteId,employeeEmpId:empId,latitudeOut:lat,longitudeOut:long,checkOutImage:imageData,id:attendanceId}).map(
             (response)=>{
                 console.log(response);
-                return response;
+                return response.json();
             },(error)=>{
                 console.log(error);
                 return error;
@@ -59,7 +59,7 @@ export class AttendanceService
         return this.http.post(this.config.Url+'api/attendance/'+employeeId,{employeeId:employeeId}).map(
             (response=>{
                 console.log(response);
-                return response;
+                return response.json();
             })
         )
     }
@@ -91,7 +91,7 @@ export class AttendanceService
         return this.http.post(this.config.Url+'api/proximityCheck',siteDetails ).map(
             (response)=>{
                 console.log(response)
-                return response
+                return response.json();
             },error=>{
                 return error
             }
