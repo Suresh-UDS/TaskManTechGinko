@@ -9,6 +9,8 @@ import {AttendanceService} from "../service/attendanceService";
 import {SiteService} from "../service/siteService";
 import {EmployeeService} from "../service/employeeService";
 
+declare var demo;
+
 @Component({
   selector: 'page-job',
   templateUrl: 'add-job.html'
@@ -52,7 +54,11 @@ export class CreateJobPage {
         }
         this.jobService.loadCheckLists().subscribe(
             response=>{
-                console.log(response);
+                if(response.errorStatus){
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    console.log(response);
+                }
 
             }
         )
@@ -72,10 +78,16 @@ export class CreateJobPage {
         this.component.showLoader('Getting All Sites');
         this.siteService.searchSite().subscribe(
             response=>{
-                console.log('ionViewDidLoad Add jobs');
-                console.log(response.json());
-                this.sites=response.json();
-                this.component.closeAll();
+                if(response.errorStatus){
+                    this.component.closeAll();
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    console.log('ionViewDidLoad Add jobs');
+                    console.log(response);
+                    this.sites=response;
+                    this.component.closeAll();
+                }
+
             },
             error=>{
                 console.log('ionViewDidLoad SitePage:'+error);
@@ -164,9 +176,15 @@ export class CreateJobPage {
 
             this.jobService.createJob(this.newJob).subscribe(
                 response=> {
-                    this.component.closeAll();
-                console.log(response);
-                this.navCtrl.setRoot(JobsPage);
+                    if(response.errorStatus){
+                        this.component.closeAll();
+                        demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
+                    }else{
+                        this.component.closeAll();
+                        console.log(response);
+                        this.navCtrl.setRoot(JobsPage);
+                    }
+
                 },
                 error=>{
                     this.component.closeAll();
