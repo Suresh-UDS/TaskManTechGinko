@@ -64,7 +64,7 @@ export class LoginPage {
                 console.log(response);
                 console.log("user role");
                 console.log(response.user.userRoleName.toUpperCase());
-                if(response.json().user){
+                if(response.user){
                     console.log("user role found");
                     window.localStorage.setItem('userRole',response.user.userRoleName.toUpperCase());
                     if(response.user.userRole.rolePermissions){
@@ -90,7 +90,7 @@ export class LoginPage {
                 window.localStorage.setItem('employeeUserId', response.employee.userId);
                 window.localStorage.setItem('employeeDetails', JSON.stringify(response));
 
-                var employee = response.json().employee;
+                var employee = response.employee;
 
                 if (response.status == 200) {
                     window.location.reload();
