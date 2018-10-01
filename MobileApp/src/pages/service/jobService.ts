@@ -26,7 +26,7 @@ export class JobService {
     createJob(job): Observable<any> {
         return this.http.post(this.config.Url + 'api/job', job).map(
             response => {
-                return response;
+                return response.json();
             })
     }
 
