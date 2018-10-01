@@ -43,7 +43,7 @@ export class EmployeeService {
         return this.http.post(this.config.Url+'api/employee/enroll',{id:employee.id,enrolled_face:employee.imageData}).map(
             (response)=>{
                 console.log(response);
-                return response;
+                return response.json();
             },(error)=>{
                 console.log(error);
                 return error;
@@ -55,7 +55,7 @@ export class EmployeeService {
         return this.http.post(this.config.Url+'api/employee',employee).map(
             response=>{
                 console.log(response);
-                return response;
+                return response.json();
             }
         )
     }
