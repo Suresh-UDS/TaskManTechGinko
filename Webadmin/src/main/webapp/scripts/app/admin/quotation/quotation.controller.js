@@ -85,6 +85,8 @@ angular
 					$scope.searchApprovedBy = null;
 					$scope.searchStatus = null;
 					$scope.btnDisable = false;
+					$scope.ticketQuot = false;
+
 
 			        $scope.selectedSubmittedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
 			        $scope.selectedApprovedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
@@ -139,6 +141,7 @@ angular
                                 $scope.selectedProject = {id:data.projectId, name:data.projectName};
                                 $scope.selectedSite = {id:data.siteId,name:data.siteName};
                                 $scope.status = 1;
+                                $scope.ticketQuot = true;
 
                                 /*if(data.siteId){
                                     SiteComponent.findOne(data.siteID).then(function (data) {
