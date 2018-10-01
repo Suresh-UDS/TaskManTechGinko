@@ -92,7 +92,7 @@ export class LoginPage {
 
                 var employee = response.employee;
 
-                if (response.status == 200) {
+                if (response) {
                     window.location.reload();
                     this.navCtrl.setRoot(TabsPage);
                     this.component.closeLoader();
@@ -100,7 +100,7 @@ export class LoginPage {
 
                 else {
                     this.component.closeLoader();
-                    this.component.showToastMessage(this.msg,'center');
+                    // this.component.showToastMessage(this.msg,'center');
                 }
 
                 /*if(employee.userUserGroupName == "Admin"){
