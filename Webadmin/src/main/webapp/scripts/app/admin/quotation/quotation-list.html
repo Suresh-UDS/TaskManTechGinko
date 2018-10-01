@@ -181,7 +181,7 @@
 
                                 <div class="HoverBx">
 
-                                    <a name="View" ng-class="{active: $state.includes('admin')}"  ui-sref="view-quotation({ id: quotation._id })"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+                                    <a name="View" ng-class="{active: $state.includes('admin')}"  has-permission="Quotation:View" ui-sref="view-quotation({ id: quotation._id })"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
 
                                     <a name="Edit" ng-if="!quotation.isSubmitted && !quotation.isApproved" has-permission="Quotation:Edit"  ng-class="{active: $state.includes('admin')}"  ui-sref="edit-quotation({ id: quotation._id })"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
 
@@ -192,7 +192,7 @@
                                     <button  title="Reject" ng-if="quotation.isSubmitted && !quotation.isApproved && !quotation.isRejected"    data-toggle="modal" data-target="#rejectQuotationModal" data-dismiss="#rejectQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like">
                                         <i class="material-icons">highlight_off</i> </button>
 
-                                    <a name="Delete" ng-if="quotation.isApproved || quotation.isDrafted" ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                    <a name="Delete" ng-if="quotation.isApproved || quotation.isDrafted" ng-class="{active: $state.includes('admin')}" has-permission="Quotation:Delete"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
 
                                 </div>
 
