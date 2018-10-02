@@ -205,7 +205,7 @@ public class JobManagementResource {
     public ResponseEntity<?> completeJob(@PathVariable("id") Long id){
 		long userId = SecurityUtils.getCurrentUserId();
         JobDTO response = jobService.completeJob(id, userId);
-        if(response != null) {
+        if(response != null && !response.isErrorStatus()) {
             long siteId = response.getSiteId();
             List<User> users = userService.findUsers(siteId);
             if(CollectionUtils.isNotEmpty(users)) {
@@ -219,6 +219,8 @@ public class JobManagementResource {
                 pushService.send(userIds, message);
                 jobService.saveNotificationLog(id, SecurityUtils.getCurrentUserId(), users, siteId, message);
             }
+        }else {
+        		return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
@@ -227,6 +229,9 @@ public class JobManagementResource {
     public ResponseEntity<?> saveJobAndCheckList(@RequestBody JobDTO jobDTO, HttpServletRequest request){
     		long userId = SecurityUtils.getCurrentUserId();
         JobDTO response = jobService.saveJobAndCheckList(jobDTO, userId);
+        if(response.isErrorStatus()) {
+        		return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 

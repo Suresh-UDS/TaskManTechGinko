@@ -15,8 +15,6 @@ import java.util.TimeZone;
 
 import javax.inject.Inject;
 
-import com.ts.app.ext.api.FaceRecognitionService;
-import netscape.javascript.JSObject;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
@@ -48,6 +46,7 @@ import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.domain.UserRoleEnum;
+import com.ts.app.ext.api.FaceRecognitionService;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.CheckInOutRepository;
