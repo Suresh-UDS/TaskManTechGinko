@@ -911,16 +911,17 @@ public class    EmployeeService extends AbstractService {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         int i =0;
         for (Employee employee: employees){
-            if (employee.isFaceAuthorised() ){
+            if (employee.isFaceAuthorised() && StringUtils.isEmpty(employee.getFaceId())){
                 employeeDTO = mapperUtil.toModel(employee,EmployeeDTO.class);
                 Employee entity = employeeRepository.findOne(employeeDTO.getId());
                 String enrollImage = employeeDTO.getEnrolled_face();
                 log.debug("Employee image found");
                 long dateTime = new Date().getTime();
-                employeeDTO.setUrl(employeeDTO.getUrl());
-
+                String enroll_url = cloudFrontUrl + bucketEnv + enrollImagePath + employeeDTO.getEnrolled_face();
+                employeeDTO.setUrl(enroll_url);
 
                 log.debug("Enrolled face URL  -----------"+employeeDTO.getUrl());
+                log.debug("Enrolled face URL  -----------");
                 String faceRecognitionResponse[] = faceRecognitionService.detectImage(employeeDTO.getUrl());
 
                 if(faceRecognitionResponse.length>0){
@@ -982,7 +983,7 @@ public class    EmployeeService extends AbstractService {
         Employee employee = employeeRepository.findOne(employeeId);
         EmployeeDTO employeeDTO = new EmployeeDTO();
 
-        if (employee.isFaceAuthorised()){
+        if (employee.isFaceAuthorised() && StringUtils.isEmpty(employee.getFaceId())){
             employeeDTO = mapperUtil.toModel(employee,EmployeeDTO.class);
             Employee entity = employeeRepository.findOne(employeeDTO.getId());
             String enrollImage = employeeDTO.getEnrolled_face();
