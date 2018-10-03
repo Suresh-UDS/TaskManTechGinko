@@ -15,6 +15,7 @@ angular.module('timeSheetApp')
         $scope.noData = false;
         $scope.projectSitesCnt = 0;
         $scope.btnDisable = false;
+        $scope.relieversList = [];
 
         $scope.markLeftOptions = 'delete';
 
@@ -40,15 +41,21 @@ angular.module('timeSheetApp')
 
         $scope.selectedManager;
 
-        $scope.selectedReliever;
+        $scope.selectedReliever ={};
+
+        $scope.relievedEmployee = {};
 
         $scope.isReliever;
 
         $scope.relievers;
 
-        $scope.relieverDateTo;
+        $scope.relieverDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
 
-        $scope.relieverDateFrom;
+        $scope.relieverDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+
+        $scope.relieverDateFromSer = new Date();
+
+        $scope.relieverDateToSer = new Date();
 
         $scope.designation;
 
@@ -98,14 +105,30 @@ angular.module('timeSheetApp')
 
         }
 
+        $scope.initCalender();
+
+         $('#dateFilterFrom').datetimepicker().on('dp.show', function () {
+            return $(this).data('DateTimePicker').minDate(new Date());
+         });
+         $('#dateFilterTo').datetimepicker().on('dp.show', function () {
+             return $(this).data('DateTimePicker').minDate(new Date());
+          });
+
         $('#dateFilterFrom').on('dp.change', function(e){
             //console.log(e.date);
-            $scope.relieverDateFrom = e.date._d;
+            $scope.relieverDateTo = null;
+            $scope.relieverDateToSer = null;
+            $scope.relieverDateFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.relieverDateFromSer = new Date(e.date._d);
+            $('#dateFilterTo').datetimepicker().on('dp.show', function () {
+                return $(this).data('DateTimePicker').minDate($scope.relieverDateFromSer);
+             });
         });
 
         $('#dateFilterTo').on('dp.change', function(e){
             //console.log(e.date);
-            $scope.relieverDateTo = e.date._d;
+            $scope.relieverDateTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.relieverDateToSer = new Date(e.date._d);
         });
 
         $('#selectedDate').on('dp.change', function(e){
@@ -805,6 +828,8 @@ angular.module('timeSheetApp')
 
         };
 
+        $scope.empSites = null;
+
         $scope.getEmployeeDetails = function(id) {
             EmployeeComponent.findOne(id).then(function (data) {
                 $scope.employee = data;
@@ -814,7 +839,9 @@ angular.module('timeSheetApp')
                 $scope.loadSelectedSite($scope.employee.siteId);
                 $scope.loadSelectedManager($scope.employee.managerId);
                 $scope.loadSelectedRole($scope.employee.userRoleId);
-                $scope.sites = $scope.employee.projectSites;
+                $scope.Sites = $scope.employee.projectSites;
+                $scope.empSites = $scope.employee.projectSites;
+
             });
             EmployeeComponent.getEmployeeCurrentAttendance(id).then(function(data) {
                 console.log("Attendance Data");
@@ -982,21 +1009,74 @@ angular.module('timeSheetApp')
               $scope.relievers = response.data;
           })
         };
+        $scope.noRelData = false;
+        $scope.getRelieversDetails = function(employee){
+        var searchCriteria = {employeeId:employee};
+          EmployeeComponent.getRelievers(searchCriteria).then(function(response){
+              console.log("Response from relievers List");
+              console.log(response);
+              $scope.relieversList = response;
+              if($scope.relieversList.length == 0 ){
+                  $scope.noRelData = true;
+              }else{
+               $scope.noRelData = false;
+              }
 
-        $scope.assignReliever= function(employee){
-            console.log($scope.relieverDateTo);
-            console.log($scope.relieverDateFrom);
-            console.log($scope.selectedReliever);
-            var searchCriteria = {
-                fromDate : $scope.relieverDateFrom,
-                toDate: $scope.relieverDateTo
+          })
+        };
+
+        $scope.assignReliever= function(){
+            $('.relieverConfirmation.in').modal('hide');
+            if(!$scope.selectedReliever.id){
+              $scope.selectedReliever.id = null;
             }
-            EmployeeComponent.assignReliever(employee,$scope.selectedReliever,$scope.relieverDateFrom,$scope.reliev).then(function (response) {
-                console.log(response);
+            if(!$scope.selectedReliever.empId){
+               $scope.selectedReliever.empId = null;
+            }
+            if($scope.relieverOthName ==""){
+                $scope.relieverOthName = null;
+            }
+            if($scope.relieverOthMobile ==""){
+                $scope.relieverOthMobile = null;
+            }
+            var relieverDetails = {
+                fromDate : $scope.relieverDateFromSer,
+                toDate: $scope.relieverDateToSer,
+                employeeId:$scope.relievedEmployee.id,
+                employeeEmpId:$scope.relievedEmployee.empId,
+                relieverEmpId:$scope.selectedReliever.empId,
+                relieverId:$scope.selectedReliever.id,
+                relievedFromDate:$scope.relieverDateFromSer,
+                relievedToDate:$scope.relieverDateToSer,
+                siteId:$scope.relieverSite.id,
+                relieverName:$scope.relieverOthName,
+                relieverMobile:$scope.relieverOthMobile,
+            }
+            EmployeeComponent.assignReliever(relieverDetails).then(function (response) {
+                console.log('Reliever details',response);
+                $rootScope.retain=1;
+                $scope.search();
+                $scope.showNotifications('top','center','success','Reliever  updated successfully ');
+            }).catch(function(response){
+                $scope.showNotifications('top','center','danger','Failed to Reliever update');
             })
 
 
         };
+
+        $scope.cancelReliever = function(){
+
+          $('.relieverConfirmation.in').modal('hide');
+
+          $scope.relieverDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
+
+          $scope.relieverDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+
+          $scope.relieverDateFromSer = new Date();
+
+          $scope.relieverDateToSer = new Date();
+
+        }
 
         $scope.isActiveAsc = 'empId';
         $scope.isActiveDesc = '';
@@ -1569,7 +1649,7 @@ angular.module('timeSheetApp')
             })
         }
 
-        $scope.initCalender();
+
 
        //init load
         $scope.initLoad = function(){
@@ -1685,6 +1765,37 @@ angular.module('timeSheetApp')
         $scope.cancelEmployeeShiftUpdate = function(){
             $scope.empShift = {};
         }
+
+        // Reliever option types y/n and rating
+
+        $scope.reqEmp = false;
+        $scope.reqOth = false;
+
+        $scope.rType = function(){
+
+            var relieverType1 = $('#relieverEmp:checked').val();
+            var relieverType2 = $('#relieverOth:checked').val();
+
+            if(relieverType1 == 'Employee'){
+
+                $("#relieverEmpModal").addClass("in");
+                $("#relieverOthModal").removeClass("in", 2000);
+                $scope.reqEmp = true;
+                $scope.reqOth = false;
+
+            }else if(relieverType2 == 'Other'){
+
+                $("#relieverEmpModal").removeClass("in", 2000);
+                $("#relieverOthModal").addClass("in");
+                $scope.reqEmp = false;
+                $scope.reqOth = true;
+
+            }
+
+            //alert($('#answerType2:checked').val());
+        }
+
+        $scope.rType();
 
 
 
