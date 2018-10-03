@@ -858,7 +858,7 @@ public class JobManagementService extends AbstractService {
 		java.sql.Date endDate = new java.sql.Date(calEnd.getTimeInMillis());
 		*/
 		log.debug("Before saving new job -"+ job);
-		job.setActive(Job.ACTIVE_YES);
+//		job.setActive(Job.ACTIVE_YES);
 		//log.debug("start Date  -"+ startDate + ", end date -" + endDate);
 		List<Job> existingJobs = null;
 		if(job.getSchedule().equalsIgnoreCase("ONCE")) {
