@@ -910,20 +910,13 @@ public class    EmployeeService extends AbstractService {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         int i =0;
         for (Employee employee: employees){
-            if (employee.isFaceAuthorised() && StringUtils.isEmpty(employee.getFaceId())){
+            if (employee.isFaceAuthorised() ){
                 employeeDTO = mapperUtil.toModel(employee,EmployeeDTO.class);
                 Employee entity = employeeRepository.findOne(employeeDTO.getId());
                 String enrollImage = employeeDTO.getEnrolled_face();
                 log.debug("Employee image found");
                 long dateTime = new Date().getTime();
-
-                if(StringUtils.isEmpty(employeeDTO.getUrl())){
-                    employeeDTO = amazonS3utils.uploadEnrollImage(enrollImage, employeeDTO, dateTime);
-                    employeeDTO.setUrl(employeeDTO.getUrl());
-                }else{
-                    employeeDTO.setUrl(employeeDTO.getUrl());
-
-                }
+                employeeDTO.setUrl(employeeDTO.getUrl());
 
 
                 log.debug("Enrolled face URL  -----------"+employeeDTO.getUrl());
