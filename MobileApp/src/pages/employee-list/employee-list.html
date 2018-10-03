@@ -23,6 +23,24 @@
 
   <ion-list class="emp-list">
 
+    <div class="margin-top5">
+        <span class="tag label label-info" style="margin-right: 5px"  *ngIf="clientFilter">
+            Client: {{clientFilter.name}}
+        </span>
+      <span class="tag label label-info"   *ngIf="siteFilter">
+           Site: {{siteFilter.name}}
+        </span>
+    </div>
+
+    <div *ngIf=" (!employees || employees.length < 0) && !spinner ">
+      <ion-card>
+        <ion-card-content>
+          <img src="assets/imgs/warning.svg">
+          <span><p text-center>No Data Found</p></span>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
     <div *ngFor="let emp of employees;let i of index">
     <ion-item-sliding #slidingItem (ionDrag)="drag(menu,$event)">
       <ion-item #item  class="bottom-border emp padding-left0"  >
