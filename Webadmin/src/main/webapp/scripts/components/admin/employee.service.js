@@ -174,8 +174,8 @@ angular.module('timeSheetApp')
                 })
             },
 
-            getAllRelievers: function(){
-                return $http.get('api/employee/relievers').then(function (response) {
+            getAllRelievers: function(site){
+                return $http.get('api/employee/relievers/'+site).then(function (response) {
                     console.log(response);
                     return response;
                 })

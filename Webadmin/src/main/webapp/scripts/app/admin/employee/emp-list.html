@@ -288,7 +288,7 @@
                                                 has-permission="Employee:Edit" data-toggle="modal"
                                                 data-target="#relieverConfirmation"
                                                 data-dismiss="#relieverConfirmation"
-                                                ng-click="getEmployeeDetails(employee.id);getRelievers(employee)"
+                                                ng-click="getEmployeeDetails(employee.id);"
                                                 class="btn btn-simple btn-info btn-icon like">
                                             <i class="material-icons">assignment_ind</i>
                                         </button>
@@ -805,7 +805,7 @@
                                     <span class="form-control-feedback  d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                     <select
                                         class="form-control" ng-model="relieverSite" name="relieverSite"
-                                        ng-options="site as site.siteName for site in empSites" ng-required="true" autofocus ng-required="true" tabindex="1">
+                                        ng-options="site as site.siteName for site in empSites" ng-required="true" ng-change="getRelievers(employee,relieverSite)" autofocus ng-required="true" tabindex="1">
                                         <option value="">Select Site..</option>
                                     </select>
 

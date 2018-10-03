@@ -1000,14 +1000,18 @@ angular.module('timeSheetApp')
         	$state.reload();
         };
 
-        $scope.getRelievers = function(employee){
+        $scope.getRelievers = function(employee,relieverSite){
           console.log("Getting Relievers");
           $scope.relievedEmployee = employee;
-          EmployeeComponent.getAllRelievers().then(function(response){
+          var relieverSite = relieverSite;
+          if(relieverSite){
+            EmployeeComponent.getAllRelievers(relieverSite.siteId).then(function(response){
               console.log("Response from relievers");
               console.log(response.data);
               $scope.relievers = response.data;
-          })
+            })
+          }
+
         };
         $scope.noRelData = false;
         $scope.getRelieversDetails = function(employee){
