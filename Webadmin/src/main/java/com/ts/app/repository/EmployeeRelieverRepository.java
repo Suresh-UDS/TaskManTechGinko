@@ -13,12 +13,12 @@ import com.ts.app.domain.EmployeeReliever;
 
 public interface EmployeeRelieverRepository extends JpaRepository<EmployeeReliever, Long> {
 
-	@Query("SELECT es FROM EmployeeReliever er where er.employee.id = :employeeId and er.site.id = :siteId and er.startTime between :startTime and :endTime")
+	@Query("SELECT er FROM EmployeeReliever er where er.employee.id = :employeeId and er.site.id = :siteId and er.startTime between :startTime and :endTime")
 	public List<EmployeeReliever> findRelieversBySiteAndShift(@Param("employeeId") long employeeId, @Param("siteId") long siteId, @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 	
-	@Query("SELECT es FROM EmployeeReliever er where er.employee.id = :employeeId")
+	@Query("SELECT er FROM EmployeeReliever er where er.employee.id = :employeeId")
 	public List<EmployeeReliever> findRelievers(@Param("employeeId") long employeeId);
 
-	@Query("SELECT es FROM EmployeeReliever er where er.employee.id = :employeeId")
+	@Query("SELECT er FROM EmployeeReliever er where er.employee.id = :employeeId")
 	public Page<EmployeeReliever> findRelievers(@Param("employeeId") long employeeId, Pageable pageRequest);
 }
