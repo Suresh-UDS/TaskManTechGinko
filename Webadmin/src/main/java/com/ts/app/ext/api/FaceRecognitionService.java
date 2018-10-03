@@ -786,12 +786,23 @@ public class FaceRecognitionService {
                     JSONObject jsonObj = new JSONObject(jsonString);
                     boolean isIdentical = jsonObj.getBoolean("isIdentical");
                     Double confidence = jsonObj.getDouble("confidence");
-                    System.out.println(isIdentical);
-                    System.out.println(confidence);
+                    log.debug("is identical"+isIdentical);
+                    log.debug("concidence"+confidence);
 
-                    response[0] = "success";
-                    response[1] = ""+isIdentical;
-                    response[2] = ""+confidence;
+                    if(isIdentical){
+                        response[0] = "success";
+                        response[1] = ""+isIdentical;
+                        response[2] = ""+confidence;
+                    }else{
+                        log.debug("Response: code " + code);
+
+                        response[0] = "failed";
+                        response[1] = getErrorData(jsonString);
+                    }
+
+
+
+
 
                 } else {
                     log.debug("Response: code " + code);
