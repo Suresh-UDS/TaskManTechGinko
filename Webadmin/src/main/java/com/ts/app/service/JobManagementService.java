@@ -1520,61 +1520,83 @@ public class JobManagementService extends AbstractService {
 	}
 
 	public JobDTO completeJob(Long id, long userId) {
-		User currUser = userRepository.findOne(userId);
-		Hibernate.initialize(currUser.getEmployee());
-		Employee currUserEmp = currUser.getEmployee();
 		Job job = findJob(id);
-		job.setActualStartTime(job.getPlannedStartTime());
-		if(job.getStatus() != JobStatus.INPROGRESS){
-			throw new TimesheetException("Job cannot be completed, Current Status : "+job.getStatus());
+		JobDTO jobDTO = new JobDTO(); 
+		Calendar now = Calendar.getInstance();
+		Calendar plannedStartTime = Calendar.getInstance();
+		plannedStartTime.setTime(job.getPlannedStartTime());
+		if(plannedStartTime.before(now)) { //Future jobs cannot be completed. 
+			User currUser = userRepository.findOne(userId);
+			Hibernate.initialize(currUser.getEmployee());
+			Employee currUserEmp = currUser.getEmployee();
+			
+			job.setActualStartTime(job.getPlannedStartTime());
+			if(job.getStatus() != JobStatus.INPROGRESS){
+				throw new TimesheetException("Job cannot be completed, Current Status : "+job.getStatus());
+			}
+	
+			Date endDate = new Date();
+			int totalHours = Hours.hoursBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getHours();
+			int totalMinutes = Minutes.minutesBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getMinutes();
+			if(totalHours > 0) {
+				totalMinutes = totalMinutes % 60;
+			}
+	
+			job.setStatus(JobStatus.COMPLETED);
+			job.setActualEndTime(endDate);
+			job.setActualHours(totalHours);
+			jobRepository.save(job);
+			//send notifications if a ticket is raised
+			if(job.getTicket() != null) {
+				Ticket ticket = job.getTicket();
+				Map<String, String> data = new HashMap<String, String>();
+				String ticketUrl = env.getProperty("url.ticket-view");
+				data.put("url.ticket-view", ticketUrl);
+				String jobUrl = env.getProperty("url.job-view");
+				data.put("url.job-view", jobUrl);
+	
+				sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
+			}
+			jobDTO = mapperUtil.toModel(job, JobDTO.class);
+		}else { //if the job is in the future 
+			jobDTO = mapperUtil.toModel(job, JobDTO.class);
+			jobDTO.setErrorStatus(true);
+			jobDTO.setErrorMessage("Cannot complete a future job");
 		}
-
-		Date endDate = new Date();
-		int totalHours = Hours.hoursBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getHours();
-		int totalMinutes = Minutes.minutesBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getMinutes();
-		if(totalHours > 0) {
-			totalMinutes = totalMinutes % 60;
-		}
-
-		job.setStatus(JobStatus.COMPLETED);
-		job.setActualEndTime(endDate);
-		job.setActualHours(totalHours);
-		jobRepository.save(job);
-		//send notifications if a ticket is raised
-		if(job.getTicket() != null) {
-			Ticket ticket = job.getTicket();
-			Map<String, String> data = new HashMap<String, String>();
-			String ticketUrl = env.getProperty("url.ticket-view");
-			data.put("url.ticket-view", ticketUrl);
-			String jobUrl = env.getProperty("url.job-view");
-			data.put("url.job-view", jobUrl);
-
-			sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
-		}
-		return mapperUtil.toModel(job, JobDTO.class);
+		return jobDTO;
 
 	}
 
     public JobDTO saveJobAndCheckList(JobDTO jobDTO, long userId) {
         Job job = findJob(jobDTO.getId());
-        mapToEntity(jobDTO, job);
-        job = jobRepository.save(job);
-		User currUser = userRepository.findOne(userId);
-		Hibernate.initialize(currUser.getEmployee());
-		Employee currUserEmp = currUser.getEmployee();
-
-        //	send notifications if a ticket is raised
-		if(job.getStatus().equals(JobStatus.COMPLETED) && job.getTicket() != null) {
-			Ticket ticket = job.getTicket();
-			Map<String, String> data = new HashMap<String, String>();
-			String ticketUrl = env.getProperty("url.ticket-view");
-			data.put("url.ticket-view", ticketUrl);
-			String jobUrl = env.getProperty("url.job-view");
-			data.put("url.job-view", jobUrl);
-
-			sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
+		Calendar now = Calendar.getInstance();
+		Calendar plannedStartTime = Calendar.getInstance();
+		plannedStartTime.setTime(job.getPlannedStartTime());
+		if(plannedStartTime.before(now)) { //Future jobs cannot be completed. 
+	        mapToEntity(jobDTO, job);
+	        job = jobRepository.save(job);
+			User currUser = userRepository.findOne(userId);
+			Hibernate.initialize(currUser.getEmployee());
+			Employee currUserEmp = currUser.getEmployee();
+	
+	        //	send notifications if a ticket is raised
+			if(job.getStatus().equals(JobStatus.COMPLETED) && job.getTicket() != null) {
+				Ticket ticket = job.getTicket();
+				Map<String, String> data = new HashMap<String, String>();
+				String ticketUrl = env.getProperty("url.ticket-view");
+				data.put("url.ticket-view", ticketUrl);
+				String jobUrl = env.getProperty("url.job-view");
+				data.put("url.job-view", jobUrl);
+	
+				sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
+			}
+			jobDTO = mapperUtil.toModel(job, JobDTO.class);
+		}else {
+			jobDTO = mapperUtil.toModel(job, JobDTO.class);
+			jobDTO.setErrorStatus(true);
+			jobDTO.setErrorMessage("Cannot complete a future job");
 		}
-        return mapperUtil.toModel(job, JobDTO.class);
+        return jobDTO;
     }
 
 //    @Transactional
