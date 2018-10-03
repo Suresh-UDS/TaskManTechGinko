@@ -66,6 +66,8 @@ angular.module('timeSheetApp')
             demo.initFormExtendedDatetimepickers();
         };
 
+        $scope.initCalender();
+
         $scope.init = function() {
             $scope.loadJobStatuses();
             //$scope.loadJobs();
@@ -169,6 +171,8 @@ angular.module('timeSheetApp')
                 $scope.selectedJobDateSer = new Date(e.date._d);
         });
 
+
+
         $('input#selectedJobDateTo').on('dp.change', function(e){
 
             $scope.selectedJobDateTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
@@ -177,14 +181,23 @@ angular.module('timeSheetApp')
 
         $('input#searchJobDate').on('dp.change', function(e){
 
-                $scope.searchJobDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
-                $scope.searchJobDateSer = new Date(e.date._d);
+            $scope.searchJobDateTo = null;
+            $scope.searchJobDateToSer = null;
+
+            $scope.searchJobDateSer = new Date(e.date._d);
+            $scope.searchJobDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+
+
+             $('#searchJobDateTo').datetimepicker().on('dp.show', function () {
+                return $(this).data('DateTimePicker').minDate(e.date);
+            });
         });
 
         $('input#searchJobDateTo').on('dp.change', function(e){
 
-            $scope.searchJobDateTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $scope.searchJobDateToSer = new Date(e.date._d);
+            $scope.searchJobDateTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
+
         });
 
         //
@@ -879,6 +892,7 @@ angular.module('timeSheetApp')
                         $scope.saveLoad = false;
                         $scope.success = null;
                         $scope.disable = false;
+                        $scope.btnDisable = false;
                         $scope.showNotifications('top','center','danger','Failed to save job.' + response.data.errorMessage);
                         $scope.error = 'ERROR';
 	        			}else {
@@ -887,11 +901,13 @@ angular.module('timeSheetApp')
 		                	$scope.showNotifications('top','center','success',message);
 		            		$location.path('/jobs');
 		            		$scope.disable = false;
+		            		$scope.btnDisable = false;
 	        			}
 	        		}else if(err) {
                     $scope.saveLoad = false;
                     $scope.success = null;
                     $scope.disable = false;
+                    $scope.btnDisable = false;
                     console.log('Error - '+ err);
                     if (err.status === 400 && err.data.message === 'error.duplicateRecordError') {
                         $scope.errorProjectExists = 'ERROR';
@@ -1003,7 +1019,8 @@ angular.module('timeSheetApp')
 	        	console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaProject));
                 $scope.searchCriteria.findAll = false;
                  /*&& !$scope.selectedJob*/
-	        	if(!$scope.searchProject && !$scope.searchSite && !$scope.searchStatus && !$scope.searchEmployee && !$scope.searchJobId && !$scope.searchJobTitle){
+	        	if(!$scope.searchProject && !$scope.searchSite && !$scope.searchStatus
+	        	&& !$scope.searchEmployee && !$scope.searchJobId && !$scope.searchJobTitle && !$scope.searchJobDate && !$scope.searchJobDateTo){
 	        		$scope.searchCriteria.findAll = true;
 	        	}
 
@@ -1157,10 +1174,10 @@ angular.module('timeSheetApp')
             $scope.siteFilterDisable = true;
             $scope.sitesList = null;
             $scope.selectedJobDateSer = new Date();
-            $scope.searchJobDate = null;
-            $scope.searchJobDateSer = null;
             $scope.selectedJobDate = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedJobDateToSer = new Date();
+            $scope.searchJobDateSer = null;
+            $scope.searchJobDate = null;
             $scope.searchJobDateTo = null;
             $scope.searchJobDateToSer = null;
             $scope.selectedJobDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
@@ -1208,8 +1225,6 @@ angular.module('timeSheetApp')
 	        	}
         }
 
-
-        $scope.initCalender();
 
         //init load
         $scope.initLoad = function(){
