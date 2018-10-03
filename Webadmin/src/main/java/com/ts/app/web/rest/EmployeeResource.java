@@ -396,9 +396,10 @@ public class EmployeeResource {
     }
 
     @RequestMapping(value = "/employee/relievers", method = RequestMethod.GET)
-    public List<EmployeeDTO> findAllRelievers() {
+    public List<EmployeeDTO> findAllRelievers(@RequestParam("siteId") long siteId) {
         log.info("--Invoked EmployeeResource.findAll Relievers--");
-        return employeeService.findAllRelievers(SecurityUtils.getCurrentUserId());
+        List<EmployeeDTO> relievers = employeeService.findAllRelievers(SecurityUtils.getCurrentUserId(), siteId);
+        return relievers;
     }
     
     @RequestMapping(value = "/employee/relievers", method = RequestMethod.POST)

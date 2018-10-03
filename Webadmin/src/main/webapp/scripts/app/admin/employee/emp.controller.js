@@ -1004,6 +1004,7 @@ angular.module('timeSheetApp')
           console.log("Getting Relievers");
           $scope.relievedEmployee = employee;
           var relieverSite = relieverSite;
+          console.log('reliever site - ' + JSON.stringify(relieverSite));
           if(relieverSite){
             EmployeeComponent.getAllRelievers(relieverSite.siteId).then(function(response){
               console.log("Response from relievers");
@@ -1031,11 +1032,21 @@ angular.module('timeSheetApp')
 
         $scope.assignReliever= function(){
             $('.relieverConfirmation.in').modal('hide');
-            if(!$scope.selectedReliever.id){
-              $scope.selectedReliever.id = null;
+            if($scope.selectedReliever && !$scope.selectedReliever.id){
+            		$scope.selectedReliever.id = null;
+            }else {
+            		if(!$scope.selectedReliever) {
+                		$scope.selectedReliever = {};
+                		$scope.selectedReliever.id = null;
+            		}
             }
-            if(!$scope.selectedReliever.empId){
+            if($scope.selectedReliever && !$scope.selectedReliever.empId){
                $scope.selectedReliever.empId = null;
+            }else {
+	        		if(!$scope.selectedReliever) {
+	            		$scope.selectedReliever = {};
+	            		$scope.selectedReliever.id = null;
+	        		}
             }
             if($scope.relieverOthName ==""){
                 $scope.relieverOthName = null;

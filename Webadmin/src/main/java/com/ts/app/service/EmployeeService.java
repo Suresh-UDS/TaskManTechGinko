@@ -334,7 +334,7 @@ public class    EmployeeService extends AbstractService {
 		}
 		*/
 
-        employeeUpdate.setFullName(employee.getFullName());
+        employeeUpdate.setFullName(employee.getName());
         employeeUpdate.setName(employee.getName());
         employeeUpdate.setLastName(employee.getLastName());
         ZoneId  zone = ZoneId.of("Asia/Kolkata");
@@ -705,19 +705,9 @@ public class    EmployeeService extends AbstractService {
         return empList;
     }
 
-    public List<EmployeeDTO> findAllRelievers(long userId) {
-        User user = userRepository.findOne(userId);
+    public List<EmployeeDTO> findAllRelievers(long userId, long siteId) {
         List<Employee> entities = null;
-        if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
-            entities = employeeRepository.findAllRelievers();
-        }else {
-            Set<Long> subEmpIds = null;
-            int levelCnt = 1;
-            subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds, levelCnt);
-            List<Long> subEmpList = new ArrayList<Long>();
-            subEmpList.addAll(subEmpIds);
-            entities = employeeRepository.findAllRelieversByIds(subEmpList);
-        }
+        entities = employeeRepository.findAllRelievers(siteId);
         return mapperUtil.toModelList(entities, EmployeeDTO.class);
     }
     
