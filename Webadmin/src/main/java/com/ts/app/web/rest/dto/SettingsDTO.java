@@ -134,6 +134,14 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     private boolean warrantyEmailAlert;
     
     private List<String> warrantyEmailIds;
+    
+    private long dayWiseReportAlertTimeId;
+    
+    private Date dayWiseReportAlertTime;
+    
+    private List<String> dayWiseReportEmailIds;
+    
+    private boolean dayWiseReportEmailAlert;
 
     public long getSiteId() {
 		return siteId;
@@ -629,6 +637,38 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 
 	public void setFeedbackReportTime(Date feedbackReportTime) {
 		this.feedbackReportTime = feedbackReportTime;
+	}
+
+	public long getDayWiseReportAlertTimeId() {
+		return dayWiseReportAlertTimeId;
+	}
+
+	public void setDayWiseReportAlertTimeId(long dayWiseReportAlertTimeId) {
+		this.dayWiseReportAlertTimeId = dayWiseReportAlertTimeId;
+	}
+
+	public Date getDayWiseReportAlertTime() {
+		return dayWiseReportAlertTime;
+	}
+
+	public void setDayWiseReportAlertTime(Date dayWiseReportAlertTime) {
+		this.dayWiseReportAlertTime = dayWiseReportAlertTime;
+	}
+
+	public List<String> getDayWiseReportEmailIds() {
+		return dayWiseReportEmailIds;
+	}
+
+	public void setDayWiseReportEmailIds(List<String> dayWiseReportEmailIds) {
+		this.dayWiseReportEmailIds = dayWiseReportEmailIds;
+	}
+
+	public boolean isDayWiseReportEmailAlert() {
+		return dayWiseReportEmailAlert;
+	}
+
+	public void setDayWiseReportEmailAlert(boolean dayWiseReportEmailAlert) {
+		this.dayWiseReportEmailAlert = dayWiseReportEmailAlert;
 	}
 
 	
