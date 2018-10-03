@@ -36,7 +36,7 @@
               <p class="margin-auto">{{firstLetter}}</p>
             </ion-avatar>
           </ion-col>
-          <ion-col col-8 class="ver-center" (click)="viewEmployee(emp)">
+          <ion-col has-permission="EmployeeView" col-8 class="ver-center" (click)="viewEmployee(emp)">
               <p style="white-space:normal" text-left class="fnt-wt" text-capitalize>{{emp.name}} {{emp.lastName}}</p>
           </ion-col>
           <ion-col col-1 class="ver-center">
