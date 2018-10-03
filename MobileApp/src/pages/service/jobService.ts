@@ -6,6 +6,7 @@ import {map} from "rxjs/operator/map";
 import {Inject, Injectable} from "@angular/core";
 import {LoadingController, ToastController} from "ionic-angular";
 import {AppConfig, ApplicationConfig, MY_CONFIG_TOKEN} from "./app-config";
+import {ObserveOnSubscriber} from "rxjs/operators/observeOn";
 
 @Injectable()
 export class JobService {
@@ -51,20 +52,12 @@ export class JobService {
         return this.http.post(this.config.Url+'api/job/save',job).map(
             response=>{
                 console.log("SAve Job Success Response");
-                if(response.status==200){
-                    return response.json();
-                }else{
-                    var errorDetails={
-                        errorStatus:true,
-                        errorMessage:'Job Cannot be completed before',
-                    }
-                    return errorDetails;
-                }
+                return response.json();
 
-            },error=>{
+            }).catch(error=>{
                 console.log("Error in Save job");
                 console.log(error);
-                return error;
+                return Observable.throw(error.json()) ;
             }
         )
     }
