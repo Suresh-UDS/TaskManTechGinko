@@ -35,7 +35,8 @@ export class EmployeeListPage {
     totalPages:0;
     pageSort:15;
     count=0;
-
+clientFilter:any;
+siteFilter:any;
   constructor(public navCtrl: NavController,public component:componentService,public myService:authService, public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toast: Toast,
               private geoFence:Geofence, private employeeService: EmployeeService, private actionSheetCtrl: ActionSheetController,
@@ -223,7 +224,44 @@ export class EmployeeListPage {
     }
 
     presentModal() {
-        const modal = this.modalCtrl.create(EmployeeFilter);
+        let modal = this.modalCtrl.create(EmployeeFilter,{},{cssClass:'asset-filter',showBackdrop:true});
+       modal.onDidDismiss(data=>{
+           console.log("Modal Dismiss");
+           console.log(data);
+           this.clientFilter=data.project;
+           this.siteFilter=data.site;
+           this.applyFilter(data.project,data.site);
+       });
         modal.present();
     }
+
+
+    applyFilter(project,site)
+    {
+        this.component.showLoader("");
+        var searchCriteria = {
+            siteId:site.id,
+            projectId:project.id
+        };
+
+
+        this.employeeService.searchEmployees(searchCriteria).subscribe(
+            response=>{
+                this.component.closeAll();
+                console.log("successfully applied filter");
+                console.log(response);
+                this.employees=response.transactions;
+            },error=>{
+                this.component.closeAll();
+                console.log("error in applying filter");
+                console.log(error);
+            }
+        )
+
+
+
+    }
+
+
+
 }
