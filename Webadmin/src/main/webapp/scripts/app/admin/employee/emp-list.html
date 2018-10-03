@@ -437,11 +437,13 @@
                                             <td>Status</td>
                                             <td>
                                                 <button class="btn btn-primary btn-xs btn-warning"
-                                                        ng-if="employee.reliever">Reliever</button>
+                                                        ng-show="employee.reliever">Reliever</button>
+                                                <button class="btn btn-primary btn-xs btn-danger"
+                                                        ng-show="employee.relieved">Relieved</button>
                                                 <button class="btn btn-primary btn-xs btn-danger" disabled
-                                                        ng-if="employee.left">InActive</button>
+                                                        ng-show="employee.left">InActive</button>
                                                 <button class="btn btn-primary btn-xs btn-success"
-                                                        ng-if="!employee.left">Active</button>
+                                                        ng-show="!employee.left">Active</button>
                                             </td>
 
                                         </tr>
@@ -681,66 +683,84 @@
 	</div>
 </div>
 
-<div class="modal fade" id="relieverConfirmation" tabindex="-1"
+<div class="relieverConfirmation modal fade" id="relieverConfirmation" tabindex="-1"
 	role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-notice">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-hidden="true">
-					<i class="material-icons">clear</i>
-				</button>
-				<h5 class="modal-title">Assign Reliever</h5>
-			</div>
+    <form name="relieverForm" role="form" ng-submit="assignReliever()">
+        <div class="modal-dialog modal-notice">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h5 class="modal-title">Assign Reliever</h5>
+                </div>
 
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-md-6">
-						<div class="form-group">
-                            <label class="label-control">From date</label>
-							<span class="form-control-feedback calender-icon"><i
-								class="material-icons">date_range</i></span> <input id="dateFilterFrom"
-								type="text" class="form-control datepicker"
-								ng-model="relieverDateFrom" value={{now}}
-								placeholder="From Date" />
-						</div>
-					</div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="label-control">From date</label>
+                                <span class="form-control-feedback calender-icon"><i
+                                    class="material-icons">date_range</i></span> <input id="dateFilterFrom"
+                                    type="text" class="form-control datepicker"
+                                    ng-model="relieverDateFrom"
+                                    placeholder="DD/MM/YYYY" autocomplete="off" tabindex="1"/>
+                            </div>
+                        </div>
 
-					<div class="col-md-6">
-						<div class="form-group">
-                            <label class="label-control">To date</label>
-							<span class="form-control-feedback calender-icon"><i
-								class="material-icons">date_range</i></span> <input id="dateFilterTo"
-								type="text" class="form-control datepicker"
-								ng-model="relieverDateTo" value={{now}} placeholder="To Date" />
-						</div>
-					</div>
-				</div>
-				<div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="label-control">To date</label>
+                                <span class="form-control-feedback calender-icon"><i
+                                    class="material-icons">date_range</i></span> <input id="dateFilterTo"
+                                    type="text" class="form-control datepicker"
+                                    ng-model="relieverDateTo" placeholder="DD/MM/YYYY" autocomplete="off" tabindex="2"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
 
-					<div class="col-md-6">
-						<div class="form-group">
-							<div class="dropdown">
-								<input type="text" class="form-control "
-									placeholder="Search Reliever" ng-model="selectedReliever"
-									ng-value="selectedReliever.name"
-									uib-typeahead="employee as employee.fullName for employee in relievers | filter:$viewValue | limitTo:5" />
-							</div>
-						</div>
-					</div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="label-control">Reliever<span class="red-star">*</span></label>
+                                <div class="dropdown">
+                                    <!--<input type="text" class="form-control"
+                                        placeholder="Search Reliever" ng-model="selectedReliever"
+                                        ng-value="selectedReliever.name"
+                                        uib-typeahead="employee as employee.fullName for employee in relievers | filter:$viewValue | limitTo:5" />-->
+                                    <span class="form-control-feedback  d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <select
+                                        class="form-control" ng-model="selectedReliever" name="reliever"
+                                        ng-options="employee as employee.fullName for employee in relievers" ng-required="true" autofocus tabindex="3">
+                                        <option value="">Select Reliever..</option>
+                                    </select>
+                                    <div ng-show="relieverForm.$submitted || relieverForm.reliever.$touched">
+                                        <div ng-show="relieverForm.reliever.$dirty || relieverForm.reliever.$invalid">
+                                            <p class="help-block" style="color:maroon"
+                                               ng-show="relieverForm.reliever.$error.required">
+                                                Reliever is required.
+                                            </p>
 
-				</div>
-			</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-			<div class="modal-footer ">
-				<button type="button" class="btn btn-info btn-round btn-sucess"
-					data-dismiss="modal" ng-click="assignReliever(relievedEmployee)">Assign
-					Reliever</button>
-				<button type="button" class="btn btn-info btn-round btn-danger"
-					data-dismiss="modal">Cancel</button>
-			</div>
-		</div>
-	</div>
+                    </div>
+                </div>
+
+                <div class="modal-footer ">
+                    <button type="submit" class="btn btn-info btn-round btn-sucess"
+                          ng-disabled="relieverForm.$invalid" tabindex="4">Assign
+                        Reliever</button>
+                    <button type="button" class="btn btn-info btn-round btn-danger"
+                         ng-click="cancelReliever()" tabindex="5">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 
 <div class="container gc-container">
