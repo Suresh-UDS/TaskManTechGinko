@@ -294,6 +294,7 @@ export class CompleteJobPage {
     completeJob(job, takenImages){
         this.component.showLoader('Completing Job');
         this.geolocation.getCurrentPosition().then((response)=>{
+            this.component.closeAll();
             console.log("Current location");
             console.log(response);
             this.latitude = response.coords.latitude;
@@ -388,7 +389,9 @@ export class CompleteJobPage {
                         },
                        err=>{
                         this.component.closeLoader();
-                    }
+                           demo.showSwal('warning-message-and-confirmation-ok','Error in completing job');
+
+                       }
                 )
             }
         )
