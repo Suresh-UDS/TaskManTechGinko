@@ -983,6 +983,82 @@ public class    EmployeeService extends AbstractService {
         return employees;
     }
 
+    public EmployeeDTO enrollEmployeeToMicroSoft(long employeeId) throws JSONException {
+
+        Employee employee = employeeRepository.findOne(employeeId);
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+
+        if (employee.isFaceAuthorised() && StringUtils.isEmpty(employee.getFaceId())){
+            employeeDTO = mapperUtil.toModel(employee,EmployeeDTO.class);
+            Employee entity = employeeRepository.findOne(employeeDTO.getId());
+            String enrollImage = employeeDTO.getEnrolled_face();
+            log.debug("Employee image found");
+            long dateTime = new Date().getTime();
+
+            if(StringUtils.isEmpty(employeeDTO.getUrl())){
+                employeeDTO = amazonS3utils.uploadEnrollImage(enrollImage, employeeDTO, dateTime);
+                employeeDTO.setUrl(employeeDTO.getUrl());
+            }else{
+                employeeDTO.setUrl(employeeDTO.getUrl());
+
+            }
+
+
+            log.debug("Enrolled face URL  -----------"+employeeDTO.getUrl());
+            String faceRecognitionResponse[] = faceRecognitionService.detectImage(employeeDTO.getUrl());
+
+            if(faceRecognitionResponse.length>0){
+                log.debug("Face enroll response - " +faceRecognitionResponse[0]);
+                if (faceRecognitionResponse[0] == "success"){
+
+                    String persistedFaceId;
+
+                    String personName = employeeDTO.getSiteId()+"_"+employeeDTO.getEmpId()+"_"+employeeDTO.getName();
+                    if(StringUtils.isNotEmpty(employeeDTO.getFaceId())){
+                        persistedFaceId = employeeDTO.getFaceId();
+
+                    }else{
+                        JSONObject enrollPersonResponse = faceRecognitionService.enrollPerson(personName);
+                        log.debug("Person enroll "+enrollPersonResponse);
+                        persistedFaceId = (String) enrollPersonResponse.get("personId");
+                        log.debug("Face Id"+persistedFaceId);
+                    }
+
+
+                    if(StringUtils.isNotEmpty(persistedFaceId)){
+                        entity.setFaceId(persistedFaceId);
+                        JSONObject faceEnrollResponse = faceRecognitionService.EnrollImage(employeeDTO,persistedFaceId);
+                        String enrolledFaceId = (String) faceEnrollResponse.get("persistedFaceId");
+                        if(StringUtils.isNotEmpty(enrolledFaceId)){
+                            faceRecognitionService.TainGroup();
+                            faceRecognitionService.TrainedStatus();
+                            entity.setEnrolled_face(employeeDTO.getEnrolled_face());
+                            entity.setFaceIdEnrolled(true);
+                            entity.setFaceAuthorised(true);
+                            employeeRepository.saveAndFlush(entity);
+                            employeeDTO = mapperUtil.toModel(entity, EmployeeDTO.class);
+                        }else{
+
+                            log.debug("Face not Enrolled");
+                        }
+
+                    }else{
+                        log.debug("Unable to enroll Person");
+                    }
+
+                }else{
+                    log.debug("Face not Detected");
+                }
+            }else{
+                log.debug("Face not Detected");
+            }
+
+        }
+
+        return employeeDTO;
+
+    }
+
     public EmployeeDTO authorizeImage(EmployeeDTO employeeDTO){
         Employee entity = employeeRepository.findOne(employeeDTO.getId());
         if (StringUtils.isEmpty(entity.getEnrolled_face())) {

@@ -139,7 +139,6 @@ public class AttendanceService extends AbstractService {
         log.debug("longitude out"+attn.getLongitudeOut());
         //now.add(Calendar.DAY_OF_MONTH, 1); // added for checking nigth shift next day check out
         //now.set(Calendar.HOUR_OF_DAY,6);
-        dbAttn.setCheckOutTime(new java.sql.Timestamp(now.getTimeInMillis()));
         if(StringUtils.isEmpty(attn.getCheckOutImage())){
             log.debug("check in image not available");
         }else{
@@ -150,22 +149,32 @@ public class AttendanceService extends AbstractService {
 
             String faceRecognitionResponse[] = faceRecognitionService.detectImage(attnDto.getUrl());
             if(faceRecognitionResponse.length>0) {
-                if (faceRecognitionResponse[0].equals("success") ) {
+                if (faceRecognitionResponse[0] == "success" ) {
                     log.debug("Face Id -1 - "+emp.getFaceId());
                     log.debug("Face Id -2 - "+faceRecognitionResponse[1]);
                     String[] faceVerificationResponse = faceRecognitionService.verifyImage(emp.getFaceId(),faceRecognitionResponse[1]);
+                    log.debug("Face verification response"+faceVerificationResponse[0]);
+                    log.debug("Face verification response"+Boolean.parseBoolean(faceVerificationResponse[1]));
 
-                    boolean isIdentical = Boolean.parseBoolean(faceVerificationResponse[1]);
                     if(faceVerificationResponse[0].equals("success") ){
+                        log.debug("Face verification response"+faceVerificationResponse[1]);
+                        boolean isIdentical = Boolean.parseBoolean(faceVerificationResponse[1]);
+
                         if(isIdentical){
+                            log.debug("Verification success identical: "+isIdentical);
                             attnDto.setUrl(attnDto.getUrl());
                             attn.setCheckOutImage(attnDto.getCheckOutImage());
+                            dbAttn.setCheckOutTime(new java.sql.Timestamp(now.getTimeInMillis()));
+
                         }else{
+                            log.debug("Verification failed identical: "+isIdentical);
+
                             attnDto.setErrorStatus(true);
                             attnDto.setErrorMessage("Face not Verified");
                             return attnDto;
                         }
                     }else{
+                        log.debug("Verification failed ");
                         attnDto.setErrorStatus(true);
                         attnDto.setErrorMessage("Face not Verified");
                         return attnDto;
@@ -181,10 +190,6 @@ public class AttendanceService extends AbstractService {
                 attnDto.setErrorStatus(true);
                 return attnDto;
             }
-
-
-            attnDto.setUrl(attnDto.getUrl());
-            dbAttn.setCheckOutImage(attnDto.getCheckOutImage());
         }
         dbAttn.setLatitudeOut(attn.getLatitudeOut());
         dbAttn.setLongitudeOut(attn.getLongitudeOut());
@@ -195,6 +200,7 @@ public class AttendanceService extends AbstractService {
         }
         //findShiftTiming(false, attnDto, dbAttn);
 
+        log.debug("Saving attendance checkout");
         dbAttn = attendanceRepository.save(dbAttn);
         attnDto = mapperUtil.toModel(dbAttn, AttendanceDTO.class);
         return attnDto;
