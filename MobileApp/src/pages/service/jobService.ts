@@ -50,7 +50,21 @@ export class JobService {
     saveJob(job):Observable<any>{
         return this.http.post(this.config.Url+'api/job/save',job).map(
             response=>{
-                return response.json();
+                console.log("SAve Job Success Response");
+                if(response.status==200){
+                    return response.json();
+                }else{
+                    var errorDetails={
+                        errorStatus:true,
+                        errorMessage:'Job Cannot be completed before',
+                    }
+                    return errorDetails;
+                }
+
+            },error=>{
+                console.log("Error in Save job");
+                console.log(error);
+                return error;
             }
         )
     }
