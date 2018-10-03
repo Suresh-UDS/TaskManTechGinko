@@ -8,6 +8,8 @@
         <button color="primary" ion-button clear (click)="scanQR()" class="add-btn">
         <i class="fa fa-qrcode clr-orange fnt-24"></i>
         </button>
+            <button color="primary" ion-button clear has-permission="JobsCreate" class="add-btn" (click)="addJob()" ><ion-icon name="add"></ion-icon></button>
+
         </ion-buttons>
     </ion-navbar>
     <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800">
@@ -28,9 +30,9 @@
         <!--<button ion-fab color="primary" (click)="presentModal()"><ion-icon name="funnel"></ion-icon></button>-->
     <!--</ion-fab>-->
 
-    <ion-fab top right edge >
-    <button has-permission="JobsCreate" (click)="addJob()" ion-fab><ion-icon name="add"></ion-icon></button>
-    </ion-fab>
+    <!--<ion-fab top right edge >-->
+    <!--<button has-permission="JobsCreate" (click)="addJob()" ion-fab><ion-icon name="add"></ion-icon></button>-->
+    <!--</ion-fab>-->
 
     <div [ngSwitch]="categories">
         <ion-list *ngSwitchCase="'today'">
