@@ -907,6 +907,7 @@ public class    EmployeeService extends AbstractService {
 
     public List<Employee> enrollAllEmplloyee() throws JSONException {
         List<Employee> employees = employeeRepository.findEnrolledEmployees();
+        log.debug("Employee list length - "+employees.size());
         EmployeeDTO employeeDTO = new EmployeeDTO();
         int i =0;
         for (Employee employee: employees){
