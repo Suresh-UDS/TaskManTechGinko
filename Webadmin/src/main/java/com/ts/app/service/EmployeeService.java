@@ -76,6 +76,7 @@ import com.ts.app.web.rest.dto.DesignationDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.EmployeeHistoryDTO;
 import com.ts.app.web.rest.dto.EmployeeProjectSiteDTO;
+import com.ts.app.web.rest.dto.EmployeeRelieverDTO;
 import com.ts.app.web.rest.dto.EmployeeShiftDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImageDeleteRequest;
@@ -718,6 +719,17 @@ public class    EmployeeService extends AbstractService {
             entities = employeeRepository.findAllRelieversByIds(subEmpList);
         }
         return mapperUtil.toModelList(entities, EmployeeDTO.class);
+    }
+    
+    public List<EmployeeRelieverDTO> findRelievers(SearchCriteria searchCriteria) {
+        List<EmployeeReliever> entities = null;
+        Pageable pageRequest = null;
+        pageRequest = createPageSort(searchCriteria.getCurrPage(), orderByDESC("createdDate"));
+        Page<EmployeeReliever> result = employeeRelieverRepository.findRelievers(searchCriteria.getEmployeeId(), pageRequest);
+        if(result != null && CollectionUtils.isNotEmpty(result.getContent())) {
+        		entities = result.getContent();
+        }
+        return mapperUtil.toModelList(entities, EmployeeRelieverDTO.class);
     }
 
     public List<EmployeeDTO> findBySiteId(long userId,long siteId) {

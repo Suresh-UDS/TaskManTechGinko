@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import com.ts.app.domain.Employee;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +37,7 @@ import com.ts.app.web.rest.dto.CheckInOutImageDTO;
 import com.ts.app.web.rest.dto.DesignationDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.EmployeeHistoryDTO;
+import com.ts.app.web.rest.dto.EmployeeRelieverDTO;
 import com.ts.app.web.rest.dto.EmployeeShiftDTO;
 import com.ts.app.web.rest.dto.ExportResponse;
 import com.ts.app.web.rest.dto.ExportResult;
@@ -399,6 +399,12 @@ public class EmployeeResource {
     public List<EmployeeDTO> findAllRelievers() {
         log.info("--Invoked EmployeeResource.findAll Relievers--");
         return employeeService.findAllRelievers(SecurityUtils.getCurrentUserId());
+    }
+    
+    @RequestMapping(value = "/employee/relievers", method = RequestMethod.POST)
+    public List<EmployeeRelieverDTO> findRelievers(@RequestBody SearchCriteria searchCriteria) {
+        log.info("--Invoked EmployeeResource.findRelievers--");
+        return employeeService.findRelievers(searchCriteria);
     }
 
     @RequestMapping(value = "/employee/export",method = RequestMethod.POST)
