@@ -564,24 +564,34 @@ public class AssetManagementService extends AbstractService {
 			log.debug(">>> user <<<"+ user.getFirstName() +" and "+user.getId());
 //			Employee employee = user.getEmployee();
 
-			Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_ASSET);
+			List<Setting> settingList = settingRepository.findSettingByKeyAndSiteId(EMAIL_NOTIFICATION_ASSET, site.getId());
 			
-			log.debug("Setting Email list -" + setting);
+			log.debug("Setting Email list -" + settingList.size());
+			
+			if(CollectionUtils.isNotEmpty(settingList)) {
+				
+				for(Setting setting : settingList) {
+					
+					if(setting.getSettingValue().equalsIgnoreCase("true") ) {
 
-			if(setting.getSettingValue().equalsIgnoreCase("true") ) {
+						List<Setting> settingEntities = settingRepository.findSettingByKeyAndSiteId(EMAIL_NOTIFICATION_ASSET_EMAILS, site.getId());
 
-				Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_ASSET_EMAILS);
+						if(CollectionUtils.isNotEmpty(settingEntities)) {
+							
+							for(Setting settingEntity : settingEntities) { 
+								
+								List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+								
+								for(String email : emailLists) {
+									mailService.sendAssetBreakdownAlert(email, assetEntity.getTitle(), siteName, assetCode, user.getFirstName(), date);
+								}
+							}
 
-				if(settingEntity.getSettingValue().length() > 0) {
+						} else {
 
-					List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
-					for(String email : emailLists) {
-						mailService.sendAssetBreakdownAlert(email, assetEntity.getTitle(), siteName, assetCode, user.getFirstName(), date);
+							log.info("There is no email ids registered");
+						}
 					}
-
-				} else {
-
-					log.info("There is no email ids registered");
 				}
 			}
 		}
