@@ -67,19 +67,23 @@ export class EmployeeFilter {
       this.viewCtrl.dismiss(data);
     }
 
-    selectSite(project){
-        this.selectedProject=project;
-        this.scrollSite=true;
+    selectSite(project)
+    {
+        this.selectedSite = project;
+        this.scrollSite = true;
         this.siteService.findSitesByProject(project.id).subscribe(
             response=>{
-                console.log("site by project id");
+                this.component.closeLoader();
+                console.log("====Site By ProjectId======");
                 console.log(response);
                 this.siteList=response;
                 console.log(this.siteList);
             },
             error=>{
-                if(error.type==3){
-                    this.msg='server unreachable';
+                this.component.closeLoader();
+                if(error.type==3)
+                {
+                    this.msg='Server Unreachable'
                 }
                 this.component.showToastMessage(this.msg,'bottom');
             }
@@ -188,7 +192,7 @@ export class EmployeeFilter {
     }
 
     dismissFilter(){
-        this.viewCtrl.dismiss();
+        this.viewCtrl.dismiss({project:this.selectedProject,site:this.selectedSite});
     }
 
 

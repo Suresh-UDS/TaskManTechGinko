@@ -152,13 +152,20 @@ url:
     quotation-view: http://13.232.248.92:8088/#/view-quotation/
     job-view: http://13.232.248.92:8088/#/view-job/
 
+#facedetection:
+#    api:
+#        url: https://api.kairos.com/detect
+#        enrollUrl: https://api.kairos.com/enroll
+#        verifyUrl: https://api.kairos.com/verify
+#        apiKey: a6ae8363069107177e06c3ca3f76a66b
+#        apiId: 2f2877f2
+
 facedetection:
     api:
-        url: https://api.kairos.com/detect
-        enrollUrl: https://api.kairos.com/enroll
-        verifyUrl: https://api.kairos.com/verify
-        apiKey: a6ae8363069107177e06c3ca3f76a66b
-        apiId: 2f2877f2
+        url: https://centralindia.api.cognitive.microsoft.com/face/v1.0/
+        apiKey: 61fc8cb300e0431286708ae4c74f2860
+        groupId: employee-uat
+        personId: f77b54d1-2458-4887-badf-54bc06351ce3
 
 locationService:
 #   url: http://locahost:8000/api/site/location

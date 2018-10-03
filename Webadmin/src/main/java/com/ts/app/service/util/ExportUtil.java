@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
+import com.ts.app.repository.EmployeeRepository;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -96,8 +97,8 @@ public class ExportUtil {
 			"ACTIVE" };
 	private String[] JOB_HEADER = { "CLIENT", "SITE", "LOCATION", "JOB ID", "TITLE", "DESCRIPTION", "TICKET ID", "TICKET TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
 			"STATUS", "CHECKLIST ITEMS", "CHECKLIST STATUS", "CHECKLIST REMARKS","CHECKLIST IMAGE LINK" };
-	private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT", "DURATION(In Hours) ",
-			 "SHIFT CONTINUED", "LATE CHECK IN","REMARKS" };
+	private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME","RELIEVER", "SITE", "CLIENT", "CHECK IN", "CHECK OUT", "DURATION(In Hours) ",
+			 "SHIFT CONTINUED", "LATE CHECK IN","REMARKS" ,"CHECK IN IMAGE", "CHECK OUT IMAGE" };
 
 //    private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT",
 //        "SHIFT CONTINUED", "LATE CHECK IN" };
@@ -134,6 +135,9 @@ public class ExportUtil {
 
 	@Inject
 	private SettingsRepository settingsRepository;
+
+    @Inject
+    private EmployeeRepository employeeRepository;
 
 	public ExportResult writeConsolidatedJobReportToFile(String projName, List<ReportResult> content,
 			final String empId, ExportResult result) {
@@ -480,14 +484,15 @@ public class ExportUtil {
 				//for (EmployeeAttendanceReport transaction : attendanceReportList) {
 				for (AttendanceDTO attn : transactions) {
 					Row dataRow = xssfSheet.createRow(rowNum++);
+					Employee emp = employeeRepository.findByEmpId(attn.getEmployeeEmpId());
 
 					dataRow.createCell(0).setCellValue(attn.getEmployeeEmpId());
-//					dataRow.createCell(1).setCellValue(transaction.getName() + transaction.getLastName() !=null?transaction.getLastName() :"");
-					dataRow.createCell(1).setCellValue(attn.getEmployeeFullName());
-					dataRow.createCell(2).setCellValue(attn.getSiteName());
-					dataRow.createCell(3).setCellValue("");
-					dataRow.createCell(4).setCellValue(attn.getCheckInTime() != null ? String.valueOf(attn.getCheckInTime()) : "");
-					dataRow.createCell(5).setCellValue(attn.getCheckOutTime() != null ? String.valueOf(attn.getCheckOutTime()) : "");
+					dataRow.createCell(1).setCellValue(attn.getEmployeeName() +" " +attn.getEmployeeLastName() !=null?attn.getEmployeeLastName() :"");
+					dataRow.createCell(2).setCellValue(emp.isReliever()? "YES":"NO");
+					dataRow.createCell(3).setCellValue(attn.getSiteName());
+					dataRow.createCell(4).setCellValue("");
+					dataRow.createCell(5).setCellValue(attn.getCheckInTime() != null ? String.valueOf(attn.getCheckInTime()) : "");
+					dataRow.createCell(6).setCellValue(attn.getCheckOutTime() != null ? String.valueOf(attn.getCheckOutTime()) : "");
 
 					long difference = 0;
 					long differenceInHours = 0;
@@ -512,11 +517,13 @@ public class ExportUtil {
 			        boolean shiftContinued = (attn.getContinuedAttendanceId() > 0 ? true : false);
 
 
-					dataRow.createCell(6).setCellValue(attn.getCheckOutTime() != null ? String.valueOf(differenceText) : "");
+					dataRow.createCell(7).setCellValue(attn.getCheckOutTime() != null ? String.valueOf(differenceText) : "");
 
-					dataRow.createCell(7).setCellValue(shiftContinued ?  "SHIFT CONTINUED" : "");
-					dataRow.createCell(8).setCellValue(attn.isLate() ? "LATE CHECK IN" : "");
-					dataRow.createCell(9).setCellValue(attn.getRemarks() !=null ? attn.getRemarks() : "");
+					dataRow.createCell(8).setCellValue(shiftContinued ?  "SHIFT CONTINUED" : "");
+					dataRow.createCell(9).setCellValue(attn.isLate() ? "LATE CHECK IN" : "");
+					dataRow.createCell(10).setCellValue(attn.getRemarks() !=null ? attn.getRemarks() : "");
+					dataRow.createCell(11).setCellValue(attn.getCheckInImgUrl() !=null ? attn.getCheckInImgUrl() : "");
+					dataRow.createCell(12).setCellValue(attn.getCheckOutImgUrl() !=null ? attn.getCheckOutImgUrl() : "");
 					/*
 					 * Blob blob = null; byte[] img = blob.getBytes(1,(int)blob.length());
 					 * BufferedImage i = null; try { i = ImageIO.read(new
@@ -1886,9 +1893,9 @@ public class ExportUtil {
 					dataRow.createCell(7).setCellValue(transaction.getSeverity());
 					dataRow.createCell(8).setCellValue(transaction.getCreatedBy());
 					dataRow.createCell(9).setCellValue(DateUtil.formatToDateTimeString(Date.from(transaction.getCreatedDate().toInstant())));
-					dataRow.createCell(10).setCellValue(transaction.getAssignedToName());
+					dataRow.createCell(10).setCellValue(StringUtils.isNotBlank(transaction.getAssignedToName())  ? transaction.getAssignedToName() + " " + transaction.getAssignedToLastName() : "");
 					dataRow.createCell(11).setCellValue(transaction.getAssignedOn() != null ? DateUtil.formatToDateTimeString(transaction.getAssignedOn()) : "");
-					dataRow.createCell(12).setCellValue(transaction.getClosedByName());
+					dataRow.createCell(12).setCellValue(StringUtils.isNotBlank(transaction.getClosedByName()) ? transaction.getClosedByName() + " " + transaction.getClosedByLastName() : "");
 					dataRow.createCell(13).setCellValue(
 							transaction.getClosedOn() != null ? DateUtil.formatToDateTimeString(transaction.getClosedOn()) : "");
 				}

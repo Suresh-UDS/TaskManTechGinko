@@ -101,20 +101,30 @@ export class CreateQuotationPage2 {
         console.log(this.selectedSite);
         this.authService.getClientDetails(site.id).subscribe(
             response=>{
-                console.log(response);
-                this.sentToUserId = response.id;
-                this.sentToUserName = response.name;
-                this.clientEmailId = response.email;
+                if(response.errorStatus){
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    console.log(response);
+                    this.sentToUserId = response.id;
+                    this.sentToUserName = response.name;
+                    this.clientEmailId = response.email;
+                }
+
             }
         )
     }
 
     ionViewWillEnter(){
         this.siteService.searchSite().subscribe(response=>{
-            console.log(response.json());
-            this.allSites = response.json();
-            this.selectedSite=this.allSites[0].name;
-            this.siteDetails= this.allSites[0];
+            if(response.errorStatus){
+                demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+            }else{
+                console.log(response);
+                this.allSites = response;
+                this.selectedSite=this.allSites[0].name;
+                this.siteDetails= this.allSites[0];
+            }
+
         })
 
         this.getRateCardTypes();
@@ -122,23 +132,38 @@ export class CreateQuotationPage2 {
 
     getSiteEmployees(siteId){
         this.siteService.searchSiteEmployee(siteId).subscribe(response=>{
-            console.log(response.json());
-            this.siteEmployees = response.json();
+            if(response.errorStatus){
+                demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+            }else{
+                console.log(response);
+                this.siteEmployees = response;
+            }
+
         })
     }
 
     saveQuotation(quotation){
         console.log(quotation);
         this.quotationService.createQuotation(quotation).subscribe(response=>{
-            console.log(response);
+            if(response.errorStatus){
+                demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+            }else{
+                console.log(response);
+            }
+
         })
     }
 
     getRateCardTypes(){
         this.quotationService.getRateCardTypes().subscribe(response=>{
-            console.log("Rate Card types");
-            console.log(this.rateCardTypes);
-            this.rateCardTypes = response;
+            if(response.errorStatus){
+                demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+            }else{
+                console.log("Rate Card types");
+                console.log(this.rateCardTypes);
+                this.rateCardTypes = response;
+            }
+
         })
     }
 
@@ -344,43 +369,48 @@ export class CreateQuotationPage2 {
         console.log(quotationDetails);
         this.quotationService.createQuotation(quotationDetails).subscribe(
             response=>{
-                console.log(response);
-                if(this.takenImages.length>0){
-                    for(let i in this.takenImages) {
+                if(response.errorStatus){
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    console.log(response);
+                    if(this.takenImages.length>0){
+                        for(let i in this.takenImages) {
 
-                        console.log("image loop");
-                        console.log(i);
-                        console.log(this.takenImages[i]);
-                        console.log(this.takenImages[i].file);
-                        let token_header=window.localStorage.getItem('session');
-                        let options: FileUploadOptions = {
-                            fileKey: 'quotationFile',
-                            fileName:response._id+'_quotation',
-                            headers:{
-                                'X-Auth-Token':token_header
-                            },
-                            params:{
-                                quotationId:response._id,
-                            }
-                        };
+                            console.log("image loop");
+                            console.log(i);
+                            console.log(this.takenImages[i]);
+                            console.log(this.takenImages[i].file);
+                            let token_header=window.localStorage.getItem('session');
+                            let options: FileUploadOptions = {
+                                fileKey: 'quotationFile',
+                                fileName:response._id+'_quotation',
+                                headers:{
+                                    'X-Auth-Token':token_header
+                                },
+                                params:{
+                                    quotationId:response._id,
+                                }
+                            };
 
-                        this.fileTransfer.upload(this.takenImages[i], this.config.Url+'api/quotation/image/upload', options)
-                            .then((data) => {
-                                console.log(data);
-                                var data_response = JSON.parse(data.response);
-                                console.log(data_response);
-                                console.log("image upload");
-                            }, (err) => {
-                                console.log(err);
-                                console.log("image upload fail");
-                            })
+                            this.fileTransfer.upload(this.takenImages[i], this.config.Url+'api/quotation/image/upload', options)
+                                .then((data) => {
+                                    console.log(data);
+                                    var data_response = JSON.parse(data.response);
+                                    console.log(data_response);
+                                    console.log("image upload");
+                                }, (err) => {
+                                    console.log(err);
+                                    console.log("image upload fail");
+                                })
 
+                        }
                     }
-                }
-                this.componentService.showToastMessage('Quotation Successfully Drafted','bottom');
-                this.navCtrl.setRoot(QuotationPage);
+                    this.componentService.showToastMessage('Quotation Successfully Drafted','bottom');
+                    this.navCtrl.setRoot(QuotationPage);
 
-            },err=>{
+                }
+                },
+               err=>{
                 this.componentService.showToastMessage('Error in drafting quotation, your changes cannot be saved!','bottom');
             }
         )
@@ -412,7 +442,12 @@ export class CreateQuotationPage2 {
 
         this.quotationService.editQuotation(quotationDetails).subscribe(
             response=>{
-                console.log(response);
+                if(response.errorStatus){
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    console.log(response);
+                }
+
 
 
             }

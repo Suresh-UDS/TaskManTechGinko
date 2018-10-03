@@ -91,7 +91,7 @@ export class FeedbackService {
             response=>{
                 console.log("Feedback saved");
                 console.log(response);
-                return response;
+                return response.json();
             }
         )
     }

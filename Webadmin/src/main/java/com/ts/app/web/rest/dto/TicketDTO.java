@@ -22,6 +22,8 @@ public class TicketDTO extends BaseDTO {
     private long employeeId;
 
     private String employeeName;
+    
+    private String employeeLastName;
 
     private String employeeEmpId;
 
@@ -46,12 +48,16 @@ public class TicketDTO extends BaseDTO {
     private long assignedToId;
 
     private String assignedToName;
+    
+    private String assignedToLastName;
 
     private Date assignedOn;
 
     private long closedById;
 
     private String closedByName;
+    
+    private String closedByLastName;
 
     private Date closedOn;
 
@@ -343,6 +349,30 @@ public class TicketDTO extends BaseDTO {
 
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
+	}
+
+	public String getEmployeeLastName() {
+		return employeeLastName;
+	}
+
+	public void setEmployeeLastName(String employeeLastName) {
+		this.employeeLastName = employeeLastName;
+	}
+
+	public String getAssignedToLastName() {
+		return assignedToLastName;
+	}
+
+	public void setAssignedToLastName(String assignedToLastName) {
+		this.assignedToLastName = assignedToLastName;
+	}
+
+	public String getClosedByLastName() {
+		return closedByLastName;
+	}
+
+	public void setClosedByLastName(String closedByLastName) {
+		this.closedByLastName = closedByLastName;
 	}
 
 	

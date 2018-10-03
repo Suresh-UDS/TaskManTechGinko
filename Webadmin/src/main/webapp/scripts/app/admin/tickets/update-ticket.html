@@ -188,7 +188,7 @@
                                         <select
                                             name="employee"
                                             ng-model="selectedEmployee"
-                                            class="form-control searchable-input floatL" ng-options="emp as emp.fullName group by emp.designation for emp in employees track by emp.id">
+                                            class="form-control searchable-input floatL" ng-options="emp as emp.name + ' ' + emp.lastName group by emp.designation for emp in employees track by emp.id">
                                             <option value="">Select Employee</option>
 
                                         </select>

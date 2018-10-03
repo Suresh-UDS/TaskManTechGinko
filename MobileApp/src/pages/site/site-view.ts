@@ -15,6 +15,8 @@ import {SiteService} from "../service/siteService";
 import {ViewJobPage} from "../jobs/view-job";
 import {CompleteJobPage} from "../jobs/completeJob";
 
+declare var demo;
+
 @Component({
   selector: 'page-site-view',
   templateUrl: 'site-view.html'
@@ -236,26 +238,31 @@ export class SiteViewPage {
 
     this.siteService.searchSiteEmployee(this.siteDetail.id).subscribe(
         response=> {
-          console.log(response.json());
-          if(response.json().length !==0)
-          {
-            this.employee=response.json();
-            console.log("total Employees");
-            console.log(this.employee.length);
-            console.log(this.employee);
-            if(this.employee.length>1){
-                this.isAdmin = true;
+            if(response.errorStatus){
+                demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
             }else{
-                this.isAdmin = false;
-            }
-              this.component.closeLoader();
-          }
-          else
-          {
-            this.employee=[]
-            this.component.closeLoader();
+                console.log(response);
+                if(response.length !==0)
+                {
+                    this.employee=response;
+                    console.log("total Employees");
+                    console.log(this.employee.length);
+                    console.log(this.employee);
+                    if(this.employee.length>1){
+                        this.isAdmin = true;
+                    }else{
+                        this.isAdmin = false;
+                    }
+                    this.component.closeLoader();
+                }
+                else
+                {
+                    this.employee=[]
+                    this.component.closeLoader();
 
-          }
+                }
+            }
+
         },
         error=>{
           console.log(error);
@@ -295,37 +302,42 @@ export class SiteViewPage {
   getQuotations(){
     this.quotationService.getQuotations().subscribe(
         response=>{
-          console.log(response);
-
-          this.quotations=[];
-          this.quotations = response;
-          console.log(this.quotations)
-          for(var i=0; i<this.quotations.length;i++){
-            if(this.quotations[i].isDrafted == true){
-              console.log("drafted");
-              console.log(this.quotations[i].isDrafted)
-              this.draftedQuotationsCount++;
-              this.draftedQuotations.push(this.quotations[i]);
-            }else if(this.quotations[i].isArchived == true){
-              console.log("archived");
-              console.log(this.quotations[i].isArchived)
-              this.archivedQuotations.push(this.quotations[i]);
-              this.archivedQuotationsCount++;
-            }else if(this.quotations[i].isApproved == true){
-              console.log("approved");
-              console.log(this.quotations[i].isApproved)
-              this.approvedQuotations.push(this.quotations[i]);
-              this.approvedQuotationsCount++;
-            }else if(this.quotations[i].isSubmitted == true){
-              console.log("submitted");
-              console.log(this.quotations[i].isSubmitted)
-              this.submittedQuotations.push(this.quotations[i]);
-              this.submittedQuotationsCount++;
+            if(response.errorStatus){
+                demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
             }else{
-              console.log("all false");
-              console.log(this.quotations[i].isDrafted)
+                console.log(response);
+
+                this.quotations=[];
+                this.quotations = response;
+                console.log(this.quotations)
+                for(var i=0; i<this.quotations.length;i++){
+                    if(this.quotations[i].isDrafted == true){
+                        console.log("drafted");
+                        console.log(this.quotations[i].isDrafted)
+                        this.draftedQuotationsCount++;
+                        this.draftedQuotations.push(this.quotations[i]);
+                    }else if(this.quotations[i].isArchived == true){
+                        console.log("archived");
+                        console.log(this.quotations[i].isArchived)
+                        this.archivedQuotations.push(this.quotations[i]);
+                        this.archivedQuotationsCount++;
+                    }else if(this.quotations[i].isApproved == true){
+                        console.log("approved");
+                        console.log(this.quotations[i].isApproved)
+                        this.approvedQuotations.push(this.quotations[i]);
+                        this.approvedQuotationsCount++;
+                    }else if(this.quotations[i].isSubmitted == true){
+                        console.log("submitted");
+                        console.log(this.quotations[i].isSubmitted)
+                        this.submittedQuotations.push(this.quotations[i]);
+                        this.submittedQuotationsCount++;
+                    }else{
+                        console.log("all false");
+                        console.log(this.quotations[i].isDrafted)
+                    }
+                }
             }
-          }
+
         }
     )
   }

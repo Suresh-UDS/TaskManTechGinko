@@ -6,6 +6,7 @@ import {map} from "rxjs/operator/map";
 import {Inject, Injectable} from "@angular/core";
 import {LoadingController, ToastController} from "ionic-angular";
 import {AppConfig, ApplicationConfig, MY_CONFIG_TOKEN} from "./app-config";
+import {ObserveOnSubscriber} from "rxjs/operators/observeOn";
 
 @Injectable()
 export class JobService {
@@ -26,7 +27,7 @@ export class JobService {
     createJob(job): Observable<any> {
         return this.http.post(this.config.Url + 'api/job', job).map(
             response => {
-                return response;
+                return response.json();
             })
     }
 
@@ -50,7 +51,13 @@ export class JobService {
     saveJob(job):Observable<any>{
         return this.http.post(this.config.Url+'api/job/save',job).map(
             response=>{
+                console.log("SAve Job Success Response");
                 return response.json();
+
+            }).catch(error=>{
+                console.log("Error in Save job");
+                console.log(error);
+                return Observable.throw(error.json()) ;
             }
         )
     }

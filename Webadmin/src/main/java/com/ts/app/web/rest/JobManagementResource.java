@@ -92,7 +92,7 @@ public class JobManagementResource {
 
 	@Inject
 	private ReportUtil reportUtil;
-	
+
 	@Inject
 	private AmazonS3Service amazonService;
 
@@ -205,7 +205,7 @@ public class JobManagementResource {
     public ResponseEntity<?> completeJob(@PathVariable("id") Long id){
 		long userId = SecurityUtils.getCurrentUserId();
         JobDTO response = jobService.completeJob(id, userId);
-        if(response != null) {
+        if(response != null && !response.isErrorStatus()) {
             long siteId = response.getSiteId();
             List<User> users = userService.findUsers(siteId);
             if(CollectionUtils.isNotEmpty(users)) {
@@ -219,6 +219,8 @@ public class JobManagementResource {
                 pushService.send(userIds, message);
                 jobService.saveNotificationLog(id, SecurityUtils.getCurrentUserId(), users, siteId, message);
             }
+        }else {
+        		return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
@@ -227,6 +229,9 @@ public class JobManagementResource {
     public ResponseEntity<?> saveJobAndCheckList(@RequestBody JobDTO jobDTO, HttpServletRequest request){
     		long userId = SecurityUtils.getCurrentUserId();
         JobDTO response = jobService.saveJobAndCheckList(jobDTO, userId);
+        if(response.isErrorStatus()) {
+        		return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
@@ -360,7 +365,7 @@ public class JobManagementResource {
 	}
 
 
-    
+
 
 	@RequestMapping(path="/jobs/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ImportResult> importJobData(@RequestParam("jobFile") MultipartFile file){
@@ -414,6 +419,13 @@ public class JobManagementResource {
             searchCriteria.setReport(true);
             SearchResult<JobDTO> result = jobService.findBySearchCrieria(searchCriteria, true);
             List<JobDTO> results = result.getTransactions();
+            for (JobDTO job:result.getTransactions()){
+                    log.debug("Location from search result ------- "+job.getBlock());
+            }
+
+            for (JobDTO job: results){
+                log.debug("Location from list result ------- "+job.getBlock());
+            }
             resp.addResult(jobService.generateReport(results, searchCriteria));
 
            // log.debug("RESPONSE FOR OBJECT resp *************"+resp);
@@ -467,13 +479,13 @@ public class JobManagementResource {
         log.info("--Invoked findCheckInOut By JobId--"+jobId);
         return jobService.findCheckInOutByJob(jobId);
     }
-    
+
     @RequestMapping(value = "/job/uploadExisting/checklistImg", method = RequestMethod.POST)
     public String uploadExistingChecklist() {
     	log.debug("Existing checklist image upload to AWS s3");
-    	return jobService.uploadExistingChecklistImg(); 
+    	return jobService.uploadExistingChecklistImg();
     }
-    
+
     @RequestMapping(value = "/getFilesFromAws", method = RequestMethod.GET)
     public void getFilesFromS3() {
     	log.debug("Get All Files from AWS S3");

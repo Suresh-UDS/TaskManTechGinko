@@ -8,6 +8,8 @@
         <button color="primary" ion-button clear (click)="scanQR()" class="add-btn">
         <i class="fa fa-qrcode clr-orange fnt-24"></i>
         </button>
+            <button color="primary" ion-button clear has-permission="JobsCreate" class="add-btn" (click)="addJob()" ><ion-icon name="add"></ion-icon></button>
+
         </ion-buttons>
     </ion-navbar>
     <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800">
@@ -109,13 +111,13 @@
 
                     <ion-item-options class="ActionBtns" (click)="close(slidingItem)">
                         <div>
-                            <button ion-button clear color="primary"><ion-icon name="md-eye" (click)="viewJob(job)" class="fnt-24 act-btn-view"></ion-icon></button>
+                            <button has-permission="JobsView" ion-button clear color="primary"><ion-icon name="md-eye" (click)="viewJob(job)" class="fnt-24 act-btn-view"></ion-icon></button>
                         </div>
                         <!--<div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">-->
                         <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
                         <!--</div>-->
                         <div >
-                            <button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>
+                            <button has-permission="JobsEdit" ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>
                         </div>
                         <div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">
                             <button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24 act-btn-view"></ion-icon></button>
@@ -200,13 +202,13 @@
 
                 <ion-item-options class="ActionBtns" (click)="close(slidingItem)">
                     <div>
-                        <button ion-button clear color="primary" (click)="viewJob(job)"><ion-icon name="md-eye" class="fnt-24 act-btn-view"></ion-icon></button>
+                        <button has-permission="JobsView" ion-button clear color="primary" (click)="viewJob(job)"><ion-icon name="md-eye" class="fnt-24 act-btn-view"></ion-icon></button>
                     </div>
                     <!--<div>-->
                         <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
                     <!--</div>-->
                     <div>
-                        <button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>
+                        <button has-permission="JobsEdit" ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>
                     </div>
                     <!--<div>-->
                         <!--<button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>-->

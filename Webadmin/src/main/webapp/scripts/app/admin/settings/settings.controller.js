@@ -24,7 +24,8 @@ angular.module('timeSheetApp')
     			assetEmailIds : [],
     			ppmEmailIds : [],
     			amcEmailIds : [],
-    			warrantyEmailIds: []
+    			warrantyEmailIds: [],
+    			dayWiseReportEmailIds: []
     		};
     		
     	
@@ -48,6 +49,18 @@ angular.module('timeSheetApp')
             //$scope.selectedDayWiseAttnEmailTime= $filter('date')(e.date._d, 'yyyy-MM-dd HH:mm:ss');
             $scope.selectedDayWiseAttnEmailTime = e.date._d;
             $scope.settings.dayWiseAttendanceAlertTime = $scope.selectedDayWiseAttnEmailTime;
+
+        });
+        
+        $('input#dayWiseReportAlertTime').on('dp.change', function(e){
+            console.log(e.date);
+            console.log(e.date._d);
+            
+            $.notifyClose();
+             
+            //$scope.selectedDayWiseAttnEmailTime= $filter('date')(e.date._d, 'yyyy-MM-dd HH:mm:ss');
+            $scope.selectedDayWiseReportEmailTime = e.date._d;
+            $scope.settings.dayWiseReportAlertTime = $scope.selectedDayWiseReportEmailTime;
 
         });
         
@@ -239,6 +252,18 @@ angular.module('timeSheetApp')
     		$scope.settings.warrantyEmailIds.splice(index,1);
 	    }
 	    
+	    $scope.addDayWiseReportEmail = function() {
+        	var email = $scope.dayWiseReportEmail;
+        	if(!$scope.settings.dayWiseReportEmailIds) {
+        		$scope.settings.dayWiseReportEmailIds = [];
+        	}
+        	$scope.settings.dayWiseReportEmailIds.push(email);
+        	$scope.dayWiseReportEmail = '';
+	    }
+    
+	    $scope.removeDayWiseReportEmail = function(ind) {
+    		$scope.settings.dayWiseReportEmailIds.splice(ind,1);
+	    }
     		
         $scope.loadProjects = function () {
 			console.log("Loading all projects")
