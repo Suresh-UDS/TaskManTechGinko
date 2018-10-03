@@ -8,6 +8,8 @@ import {ViewTicket} from "../ticket/view-ticket";
 import{componentService} from "../service/componentService";
 import{Camera,CameraOptions} from "@ionic-native/camera";
 
+declare var demo;
+
 @Component({
   selector: 'page-view-job',
   templateUrl: 'view-job.html'
@@ -41,8 +43,13 @@ export class ViewJobPage {
             this.component.showLoader("Getting Job Details");
             this.jobService.getTicketDetails(this.jobDetails.ticketId).subscribe(
                 response=>{
-                    this.component.closeAll();
-                    this.ticketDetails = response;
+                    if(response.errorStatus){
+                        demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
+                    }else{
+                        this.component.closeAll();
+                        this.ticketDetails = response;
+                    }
+
                 },err=>
                 {
                     this.component.showToastMessage('Error in getting Job Details','bottom');
@@ -53,29 +60,34 @@ export class ViewJobPage {
 
         this.jobService.getJobDetails(this.jobDetails.id).subscribe(
             response=>{
-                this.spinner=false;
-                console.log("Response from job details");
-                console.log(response);
-                this.jobDetails = response;
-                this.checkListItems = this.jobDetails.checklistItems;
-                if(response.images.length>0){
-                    console.log("Images available");
-                    this.completedImages=[];
-                    // for(let image of response.images){
-                    //     this.jobService.getCompletedImage(image.employeeEmpId,image.photoOut).subscribe(
-                    //         imageData=>{
-                    //             this.spinner=false;
-                    //             console.log(imageData);
-                    //             this.completedImages.push(imageData._body);
-                    //         },err=>{
-                    //             this.spinner=false;
-                    //             console.log("Error in getting images");
-                    //             console.log(err);
-                    //         }
-                    //     )
-                    // }
+                if(response.errorStatus){
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
+                }else{
+                    this.spinner=false;
+                    console.log("Response from job details");
+                    console.log(response);
+                    this.jobDetails = response;
+                    this.checkListItems = this.jobDetails.checklistItems;
+                    if(response.images.length>0){
+                        console.log("Images available");
+                        this.completedImages=[];
+                        // for(let image of response.images){
+                        //     this.jobService.getCompletedImage(image.employeeEmpId,image.photoOut).subscribe(
+                        //         imageData=>{
+                        //             this.spinner=false;
+                        //             console.log(imageData);
+                        //             this.completedImages.push(imageData._body);
+                        //         },err=>{
+                        //             this.spinner=false;
+                        //             console.log("Error in getting images");
+                        //             console.log(err);
+                        //         }
+                        //     )
+                        // }
 
+                    }
                 }
+
             }
         )
     }
@@ -164,10 +176,16 @@ export class ViewJobPage {
         console.log(job)
         this.jobService.saveJob(job).subscribe(
             response => {
-                console.log("Save Job response");
-                this.component.closeLoader();
-                this.component.showToastMessage('Image Upload Successfully', 'bottom');
-                console.log(response);
+                if(response.errorStatus){
+                    this.component.closeAll();
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
+                }else{
+                    console.log("Save Job response");
+                    this.component.closeLoader();
+                    this.component.showToastMessage('Image Upload Successfully', 'bottom');
+                    console.log(response);
+                }
+
             }, err => {
                 console.log("Error in saving response");
                 console.log(err);

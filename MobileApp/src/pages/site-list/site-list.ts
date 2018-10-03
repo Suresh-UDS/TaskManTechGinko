@@ -9,6 +9,8 @@ import {AttendanceService} from "../service/attendanceService";
 import {SiteService} from "../service/siteService";
 import {componentService} from "../service/componentService";
 
+declare var demo;
+
 /**
  * Generated class for the SiteListPage page.
  *
@@ -59,8 +61,13 @@ export class SiteListPage {
 
     getAttendances(site){
         this.attendanceService.getSiteAttendances(site.id).subscribe(response=>{
-            console.log(response.json());
-            this.navCtrl.push(AttendanceListPage,{'attendances':response.json()});
+            if(response.errorStatus){
+                demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
+            }else{
+                console.log(response);
+                this.navCtrl.push(AttendanceListPage,{'attendances':response});
+            }
+
         })
     }
 

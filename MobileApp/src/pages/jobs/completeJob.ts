@@ -17,6 +17,8 @@ import{ImageViewerController} from "ionic-img-viewer";
 import {AttendancePopoverPage} from "../attendance/attendance-popover";
 // import { PhotoViewer } from '@ionic-native/photo-viewer';
 
+declare  var demo;
+
 @Component({
     selector: 'page-complete-job',
     templateUrl: 'completeJob.html'
@@ -95,30 +97,36 @@ export class CompleteJobPage {
         this.component.showLoader('Loading Job Details');
         this.jobService.getJobDetails(this.jobDetails.id).subscribe(
             response=>{
-                this.component.closeLoader();
-                console.log("Response on job details");
-                console.log(response);
-                this.jobDetails = response;
-                this.checkListItems = this.jobDetails.checklistItems;
-                if(response.images.length>0){
-                    this.component.showLoader('Getting saved images');
-                    console.log("Images available");
-                    this.completedImages=[];
-                    for(let image of response.images){
-                        this.jobService.getCompletedImage(image.employeeEmpId,image.photoOut).subscribe(
-                            imageData=>{
-                                this.component.closeLoader();
-                                console.log(imageData);
-                                this.completedImages.push(imageData._body);
-                            },err=>{
-                                this.component.closeLoader();
-                                console.log("Error in getting images");
-                                console.log(err);
-                            }
-                        )
-                    }
+                if(response.errorStatus){
+                    this.component.closeAll();
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    this.component.closeLoader();
+                    console.log("Response on job details");
+                    console.log(response);
+                    this.jobDetails = response;
+                    this.checkListItems = this.jobDetails.checklistItems;
+                    if(response.images.length>0){
+                        this.component.showLoader('Getting saved images');
+                        console.log("Images available");
+                        this.completedImages=[];
+                        for(let image of response.images){
+                            this.jobService.getCompletedImage(image.employeeEmpId,image.photoOut).subscribe(
+                                imageData=>{
+                                    this.component.closeLoader();
+                                    console.log(imageData);
+                                    this.completedImages.push(imageData._body);
+                                },err=>{
+                                    this.component.closeLoader();
+                                    console.log("Error in getting images");
+                                    console.log(err);
+                                }
+                            )
+                        }
 
+                    }
                 }
+
             },error=>{
                 this.component.closeLoader();
                 console.log("Error in getting job details");
@@ -181,35 +189,152 @@ export class CompleteJobPage {
         console.log(job)
         this.jobService.saveJob(job).subscribe(
             response=>{
-                console.log("Save Job response");
+                if(response.errorStatus){
+                    this.component.closeAll();
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    console.log("Save Job response");
+                    this.component.closeLoader();
+                    this.component.showToastMessage('Job Saved Successfully','bottom');
+                    console.log(response);
+                    console.log(job.checkInOutId);
+                    if(this.takenImages.length>0){
+                        this.component.showLoader('Uploading Images');
+                        this.checkOutDetails.employeeId = window.localStorage.getItem('employeeId');
+                        this.checkOutDetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
+                        this.checkOutDetails.projectId =job.siteProjectId;
+                        this.checkOutDetails.siteId = job.siteId;
+                        this.checkOutDetails.jobId = job.id;
+                        this.checkOutDetails.id=job.checkInOutId;
+                        this.jobService.updateJobImages(this.checkOutDetails).subscribe(
+                            response=>{
+                                // this.component.closeLoader();
+                                console.log("complete job response");
+                                console.log(response);
+                                console.log(job);
+                                // this.component.showToastMessage('Job Completed Successfully','bottom');
+                                // this.component.showLoader('Uploading Images');
+                                //TODO
+                                //File Upload after successful checkout
+                                for(let i in this.takenImages) {
+
+                                    console.log("image loop");
+                                    console.log(i);
+                                    console.log(this.takenImages[i]);
+                                    console.log(this.takenImages[i].file);
+                                    console.log(this.jobDetails.id);
+                                    console.log(this.jobDetails.id+i);
+                                    console.log(this.checkOutDetails.employeeId);
+                                    console.log(this.checkOutDetails.employeeEmpId);
+                                    console.log(this.checkOutDetails.projectId);
+                                    console.log(this.checkOutDetails.siteId);
+                                    console.log(this.checkOutDetails.jobId);
+                                    var employeeId=Number;
+                                    console.log(typeof employeeId);
+                                    employeeId=this.checkOutDetails.employeeId;
+                                    console.log(typeof employeeId);
+                                    console.log(employeeId);
+                                    console.log(typeof this.checkOutDetails.jobId);
+                                    console.log(typeof this.checkOutDetails.projectId);
+                                    console.log(typeof this.checkOutDetails.employeeEmpId);
+                                    console.log(typeof this.checkOutDetails.employeeId);
+                                    console.log(typeof response.transactionId);
+                                    let token_header=window.localStorage.getItem('session');
+                                    let options: FileUploadOptions = {
+                                        fileKey: 'photoOutFile',
+                                        fileName:this.checkOutDetails.employeeId+'_photoOutFile_'+response.transactionId,
+                                        headers:{
+                                            'X-Auth-Token':token_header
+                                        },
+                                        params:{
+                                            employeeEmpId: this.checkOutDetails.employeeEmpId,
+                                            employeeId: this.checkOutDetails.employeeId,
+                                            projectId:this.checkOutDetails.projectId,
+                                            siteId:this.checkOutDetails.siteId,
+                                            checkInOutId:response.transactionId,
+                                            jobId:this.checkOutDetails.jobId,
+                                            action:"OUT"
+                                        }
+                                    };
+
+                                    this.fileTransfer.upload(this.takenImages[i], this.config.Url+'api/employee/image/upload', options)
+                                        .then((data) => {
+                                            console.log(data);
+                                            console.log("image upload");
+                                            this.component.closeLoader();
+                                            this.navCtrl.pop();
+                                        }, (err) => {
+                                            console.log(err);
+                                            console.log("image upload fail");
+                                            this.component.closeLoader();
+                                        })
+
+                                }
+
+                            },err=>{
+                                this.component.closeLoader();
+                                // this.navCtrl.pop();
+                            }
+                        )
+                    }else{
+                        this.component.closeAll();
+                        this.navCtrl.pop();
+                    }
+                }
+                }
+                ,err=>{
+                console.log("Error in saving response");
+                console.log(err);
                 this.component.closeLoader();
-                this.component.showToastMessage('Job Saved Successfully','bottom');
-                console.log(response);
-                console.log(job.checkInOutId);
-                if(this.takenImages.length>0){
-                    this.component.showLoader('Uploading Images');
-                    this.checkOutDetails.employeeId = window.localStorage.getItem('employeeId');
-                    this.checkOutDetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
-                    this.checkOutDetails.projectId =job.siteProjectId;
-                    this.checkOutDetails.siteId = job.siteId;
-                    this.checkOutDetails.jobId = job.id;
-                    this.checkOutDetails.id=job.checkInOutId;
-                    this.jobService.updateJobImages(this.checkOutDetails).subscribe(
-                        response=>{
-                            // this.component.closeLoader();
+                this.component.showToastMessage('Error in saving job, please try again...','bottom');
+            }
+        )
+    }
+
+    completeJob(job, takenImages){
+        this.component.showLoader('Completing Job');
+        this.geolocation.getCurrentPosition().then((response)=>{
+            console.log("Current location");
+            console.log(response);
+            this.latitude = response.coords.latitude;
+            this.longitude = response.coords.longitude;
+        }).catch((error)=>{
+            this.latitude = 0;
+            this.longitude = 0;
+        })
+        this.jobService.saveJob(job).subscribe(
+            response=>{
+                console.log(job);
+                this.checkOutDetails.completeJob=true;
+                this.checkOutDetails.employeeId = window.localStorage.getItem('employeeId');
+                this.checkOutDetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
+                this.checkOutDetails.projectId =job.siteProjectId;
+                this.checkOutDetails.siteId = job.siteId;
+                this.checkOutDetails.jobId = job.id;
+                this.checkOutDetails.latitudeOut = this.latitude;
+                this.checkOutDetails.longitude = this.longitude;
+                this.checkOutDetails.id=job.checkInOutId;
+                console.log(this.checkOutDetails);
+                this.jobService.updateJobImages(this.checkOutDetails).subscribe(
+                    response=>{
+                        if(response.errorStatus){
+                            this.component.closeAll();
+                            demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                        }else{
+                            this.component.closeAll();
                             console.log("complete job response");
                             console.log(response);
                             console.log(job);
-                            // this.component.showToastMessage('Job Completed Successfully','bottom');
+                            this.component.showToastMessage('Job Completed Successfully','bottom');
                             // this.component.showLoader('Uploading Images');
                             //TODO
                             //File Upload after successful checkout
-                            for(let i in this.takenImages) {
+                            for(let i in takenImages) {
 
                                 console.log("image loop");
                                 console.log(i);
-                                console.log(this.takenImages[i]);
-                                console.log(this.takenImages[i].file);
+                                console.log(takenImages[i]);
+                                console.log(takenImages[i].file);
                                 console.log(this.jobDetails.id);
                                 console.log(this.jobDetails.id+i);
                                 console.log(this.checkOutDetails.employeeId);
@@ -245,12 +370,11 @@ export class CompleteJobPage {
                                     }
                                 };
 
-                                this.fileTransfer.upload(this.takenImages[i], this.config.Url+'api/employee/image/upload', options)
+                                this.fileTransfer.upload(takenImages[i], this.config.Url+'api/employee/image/upload', options)
                                     .then((data) => {
                                         console.log(data);
                                         console.log("image upload");
                                         this.component.closeLoader();
-                                        this.navCtrl.pop();
                                     }, (err) => {
                                         console.log(err);
                                         console.log("image upload fail");
@@ -258,115 +382,11 @@ export class CompleteJobPage {
                                     })
 
                             }
-
-                        },err=>{
-                            this.component.closeLoader();
-                            // this.navCtrl.pop();
-                        }
-                    )
-                }else{
-                    this.component.closeAll();
-                    this.navCtrl.pop();
-                }
-            },err=>{
-                console.log("Error in saving response");
-                console.log(err);
-                this.component.closeLoader();
-                this.component.showToastMessage('Error in saving job, please try again...','bottom');
-            }
-        )
-    }
-
-    completeJob(job, takenImages){
-        this.component.showLoader('Completing Job');
-        this.geolocation.getCurrentPosition().then((response)=>{
-            console.log("Current location");
-            console.log(response);
-            this.latitude = response.coords.latitude;
-            this.longitude = response.coords.longitude;
-        }).catch((error)=>{
-            this.latitude = 0;
-            this.longitude = 0;
-        })
-        this.jobService.saveJob(job).subscribe(
-            response=>{
-                console.log(job);
-                this.checkOutDetails.completeJob=true;
-                this.checkOutDetails.employeeId = window.localStorage.getItem('employeeId');
-                this.checkOutDetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
-                this.checkOutDetails.projectId =job.siteProjectId;
-                this.checkOutDetails.siteId = job.siteId;
-                this.checkOutDetails.jobId = job.id;
-                this.checkOutDetails.latitudeOut = this.latitude;
-                this.checkOutDetails.longitude = this.longitude;
-                this.checkOutDetails.id=job.checkInOutId;
-                console.log(this.checkOutDetails);
-                this.jobService.updateJobImages(this.checkOutDetails).subscribe(
-                    response=>{
-                        this.component.closeAll();
-                        console.log("complete job response");
-                        console.log(response);
-                        console.log(job);
-                        this.component.showToastMessage('Job Completed Successfully','bottom');
-                        // this.component.showLoader('Uploading Images');
-                        //TODO
-                        //File Upload after successful checkout
-                        for(let i in takenImages) {
-
-                            console.log("image loop");
-                            console.log(i);
-                            console.log(takenImages[i]);
-                            console.log(takenImages[i].file);
-                            console.log(this.jobDetails.id);
-                            console.log(this.jobDetails.id+i);
-                            console.log(this.checkOutDetails.employeeId);
-                            console.log(this.checkOutDetails.employeeEmpId);
-                            console.log(this.checkOutDetails.projectId);
-                            console.log(this.checkOutDetails.siteId);
-                            console.log(this.checkOutDetails.jobId);
-                            var employeeId=Number;
-                            console.log(typeof employeeId);
-                            employeeId=this.checkOutDetails.employeeId;
-                            console.log(typeof employeeId);
-                            console.log(employeeId);
-                            console.log(typeof this.checkOutDetails.jobId);
-                            console.log(typeof this.checkOutDetails.projectId);
-                            console.log(typeof this.checkOutDetails.employeeEmpId);
-                            console.log(typeof this.checkOutDetails.employeeId);
-                            console.log(typeof response.transactionId);
-                            let token_header=window.localStorage.getItem('session');
-                            let options: FileUploadOptions = {
-                                fileKey: 'photoOutFile',
-                                fileName:this.checkOutDetails.employeeId+'_photoOutFile_'+response.transactionId,
-                                headers:{
-                                    'X-Auth-Token':token_header
-                                },
-                                params:{
-                                    employeeEmpId: this.checkOutDetails.employeeEmpId,
-                                    employeeId: this.checkOutDetails.employeeId,
-                                    projectId:this.checkOutDetails.projectId,
-                                    siteId:this.checkOutDetails.siteId,
-                                    checkInOutId:response.transactionId,
-                                    jobId:this.checkOutDetails.jobId,
-                                    action:"OUT"
-                                }
-                            };
-
-                            this.fileTransfer.upload(takenImages[i], this.config.Url+'api/employee/image/upload', options)
-                                .then((data) => {
-                                    console.log(data);
-                                    console.log("image upload");
-                                    this.component.closeLoader();
-                                }, (err) => {
-                                    console.log(err);
-                                    console.log("image upload fail");
-                                    this.component.closeLoader();
-                                })
+                            this.navCtrl.setRoot(JobsPage);
 
                         }
-                        this.navCtrl.setRoot(JobsPage);
-
-                    },err=>{
+                        },
+                       err=>{
                         this.component.closeLoader();
                     }
                 )

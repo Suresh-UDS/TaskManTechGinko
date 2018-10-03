@@ -7,6 +7,8 @@ import {CreateJobPage} from "../jobs/add-job";
 import {QuotationImagePopoverPage} from "../quotation/quotation-image-popover";
 import{ViewJobPage} from "../jobs/view-job";
 
+declare var demo;
+
 
 /**
  * Generated class for the ViewTicket page.
@@ -41,17 +43,23 @@ export class ViewTicket {
       this.cs.showLoader("Getting Ticket Details");
       this.jobService.getTicketDetails(ticketDetails.id).subscribe(
           response=>{
-              this.cs.closeAll();
-              console.log(response);
-              this.ticketDetails = response;
-              if(this.ticketDetails.image){
-                    this.jobService.getTicketImages(response.id,response.image).subscribe(
-                        response=>{
-                            console.log(response);
-                            this.ticketImage = response._body;
-                        }
-                    )
+              if(response.errorStatus){
+                  this.cs.closeAll();
+                  demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
+              }else{
+                  this.cs.closeAll();
+                  console.log(response);
+                  this.ticketDetails = response;
+                  if(this.ticketDetails.image){
+                      this.jobService.getTicketImages(response.id,response.image).subscribe(
+                          response=>{
+                              console.log(response);
+                              this.ticketImage = response._body;
+                          }
+                      )
+                  }
               }
+
           }
       )
   }
@@ -61,10 +69,16 @@ export class ViewTicket {
       this.ticketDetails.status = "Closed";
       this.jobService.updateTicket(this.ticketDetails).subscribe(
           response=>{
-              console.log(response);
-              this.cs.closeLoader();
-              this.cs.showToastMessage('You have closed this ticket','bottom');
-              this.navCtrl.setRoot(Ticket);
+              if(response.errorStatus){
+                  this.cs.closeAll();
+                  demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
+              }else{
+                  console.log(response);
+                  this.cs.closeLoader();
+                  this.cs.showToastMessage('You have closed this ticket','bottom');
+                  this.navCtrl.setRoot(Ticket);
+              }
+
           },error=>{
               this.cs.closeLoader();
               this.cs.showToastMessage('Error in closing ticket','bottom');

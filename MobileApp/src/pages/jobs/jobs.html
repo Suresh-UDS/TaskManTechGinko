@@ -28,9 +28,9 @@
         <!--<button ion-fab color="primary" (click)="presentModal()"><ion-icon name="funnel"></ion-icon></button>-->
     <!--</ion-fab>-->
 
-    <!--<ion-fab top right edge >-->
-    <!--<button has-permission="JobsCreate" (click)="addJob()" ion-fab><ion-icon name="add"></ion-icon></button>-->
-    <!--</ion-fab>-->
+    <ion-fab top right edge >
+    <button has-permission="JobsCreate" (click)="addJob()" ion-fab><ion-icon name="add"></ion-icon></button>
+    </ion-fab>
 
     <div [ngSwitch]="categories">
         <ion-list *ngSwitchCase="'today'">

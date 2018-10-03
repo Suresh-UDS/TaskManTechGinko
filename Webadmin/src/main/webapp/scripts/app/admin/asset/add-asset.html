@@ -1786,6 +1786,7 @@
                                                             <thead>
                                                             <tr>
                                                                 <th width="15%">Title</th>
+                                                                <th width="15%">Type</th>
                                                                 <th width="25%">Checklist</th>
                                                                 <th width="10%">From Date</th>
                                                                 <th width="10%">To Date</th>
@@ -1803,6 +1804,7 @@
                                                             <tbody>
                                                             <tr ng-repeat="amcSchedule in amcScheduleList">
                                                                 <td>{{amcSchedule.title}}</td>
+                                                                <td>{{amcSchedule.maintenanceType}}</td>
                                                                 <td class="hiddenCheckList"> <span class="leftTxt"> {{amcSchedule.checklistName}}</span>  <span class="infoIcon" ng-if="amcSchedule.checkListItems"><i class="material-icons">info</i>
                                                                    <div class="CheckListBx" ng-if="amcSchedule.checkListItems">
                                                                        <div class="bootstrap-tagsinput" ng-repeat="checkListItemAmc in amcSchedule.checkListItems">

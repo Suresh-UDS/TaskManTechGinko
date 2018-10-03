@@ -85,6 +85,8 @@ angular
 					$scope.searchApprovedBy = null;
 					$scope.searchStatus = null;
 					$scope.btnDisable = false;
+					$scope.ticketQuot = false;
+
 
 			        $scope.selectedSubmittedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
 			        $scope.selectedApprovedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
@@ -139,6 +141,7 @@ angular
                                 $scope.selectedProject = {id:data.projectId, name:data.projectName};
                                 $scope.selectedSite = {id:data.siteId,name:data.siteName};
                                 $scope.status = 1;
+                                $scope.ticketQuot = true;
 
                                 /*if(data.siteId){
                                     SiteComponent.findOne(data.siteID).then(function (data) {
@@ -310,17 +313,20 @@ angular
 
 			        //Searchsite
                     $scope.loadSearchSite = function (searchSite) {
-                        $scope.hideSite = true;
+
                         if($state.current.name == 'add-quotation')
                         {
-                            $scope.selectedSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)]
+                            $scope.selectedSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)];
+                            $scope.hideSite = false;
                         }
                         else if($state.current.name == 'edit-quotation')
                         {
-                            $scope.selectedSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)]
+                            $scope.selectedSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)];
+                            $scope.hideSite = false;
                         }
                         else {
-                            $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)]
+                            $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(searchSite)];
+                            $scope.hideSite = true;
                         }
                         //console.log('<<<< Site >>>>',$scope.selectedSite);
 
@@ -512,6 +518,7 @@ angular
 						$scope.quotation.ticketId = $stateParams.ticketId;
 
 						console.log('Quotation details - ' + JSON.stringify($scope.quotation));
+
 						RateCardComponent.createQuotation($scope.quotation)
 								.then(function(response) {
                                     $scope.saveLoad = false;

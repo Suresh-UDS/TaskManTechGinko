@@ -43,7 +43,7 @@ export class EmployeeService {
         return this.http.post(this.config.Url+'api/employee/enroll',{id:employee.id,enrolled_face:employee.imageData}).map(
             (response)=>{
                 console.log(response);
-                return response;
+                return response.json();
             },(error)=>{
                 console.log(error);
                 return error;
@@ -55,7 +55,7 @@ export class EmployeeService {
         return this.http.post(this.config.Url+'api/employee',employee).map(
             response=>{
                 console.log(response);
-                return response;
+                return response.json();
             }
         )
     }
@@ -80,6 +80,24 @@ export class EmployeeService {
 
     getUserRolePermissions(searchCriteria): Observable<any>{
         return this.http.post(this.config.Url+'api/userRolePermission/search',searchCriteria).map(
+            response=>{
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
+    enrollFace(employee):Observable<any>{
+        return this.http.post(this.config.Url+'api/employee/enroll',employee).map(
+            response=>{
+                console.log(response);
+                return response;
+            }
+        )
+    }
+
+    enrollAllFaces():Observable<any>{
+        return this.http.get(this.config.Url+'api/all/enroll').map(
             response=>{
                 console.log(response.json());
                 return response.json();
