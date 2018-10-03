@@ -178,7 +178,7 @@
                                             required
                                             name="employee"
                                             ng-model="selectedEmployee"
-                                            class="form-control searchable-input floatL selectTxtCaps" ng-options="emp as emp.fullName group by emp.designation for emp in employees | filter: {designation : '!' + 'Client'} track by emp.id">
+                                            class="form-control searchable-input floatL selectTxtCaps" ng-options="emp as emp.fullName +' '+ emp.lastName group by emp.designation for emp in employees | filter: {designation : '!' + 'Client'} track by emp.id">
                                             <option value="">Select Employee</option>
 
                                         </select>

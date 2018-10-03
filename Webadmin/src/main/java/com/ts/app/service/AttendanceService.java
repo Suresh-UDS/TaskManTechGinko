@@ -464,14 +464,23 @@ public class AttendanceService extends AbstractService {
                         log.debug("Face Id -2 - "+faceRecognitionResponse[1]);
                         String[] faceVerificationResponse = faceRecognitionService.verifyImage(emp.getFaceId(),faceRecognitionResponse[1]);
 
+                        boolean isIdentical = Boolean.parseBoolean(faceVerificationResponse[1]);
                         log.debug("Face Verificatio response - "+faceVerificationResponse[0]);
                         log.debug("Face Verificatio response - "+faceVerificationResponse[1]);
                         log.debug("Face Verificatio response - "+faceVerificationResponse[2]);
 
                         if(faceVerificationResponse[0] == "success"){
 
-                            attnDto.setUrl(attnDto.getUrl());
-                            attn.setCheckInImage(attnDto.getCheckInImage());
+                            if(isIdentical){
+                                attnDto.setUrl(attnDto.getUrl());
+                                attn.setCheckInImage(attnDto.getCheckInImage());
+                            }else{
+                                attnDto.setErrorStatus(true);
+                                attnDto.setErrorMessage("Face not Verified");
+                                return attnDto;
+                            }
+
+
                         }else{
                             attnDto.setErrorStatus(true);
                             attnDto.setErrorMessage("Face not Verified");
