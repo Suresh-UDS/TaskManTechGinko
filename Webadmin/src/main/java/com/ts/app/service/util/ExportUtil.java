@@ -1893,9 +1893,9 @@ public class ExportUtil {
 					dataRow.createCell(7).setCellValue(transaction.getSeverity());
 					dataRow.createCell(8).setCellValue(transaction.getCreatedBy());
 					dataRow.createCell(9).setCellValue(DateUtil.formatToDateTimeString(Date.from(transaction.getCreatedDate().toInstant())));
-					dataRow.createCell(10).setCellValue(transaction.getAssignedToName());
+					dataRow.createCell(10).setCellValue(StringUtils.isNotBlank(transaction.getAssignedToName())  ? transaction.getAssignedToName() + " " + transaction.getAssignedToLastName() : "");
 					dataRow.createCell(11).setCellValue(transaction.getAssignedOn() != null ? DateUtil.formatToDateTimeString(transaction.getAssignedOn()) : "");
-					dataRow.createCell(12).setCellValue(transaction.getClosedByName());
+					dataRow.createCell(12).setCellValue(StringUtils.isNotBlank(transaction.getClosedByName()) ? transaction.getClosedByName() + " " + transaction.getClosedByLastName() : "");
 					dataRow.createCell(13).setCellValue(
 							transaction.getClosedOn() != null ? DateUtil.formatToDateTimeString(transaction.getClosedOn()) : "");
 				}
