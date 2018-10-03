@@ -535,7 +535,7 @@
                                                 <div class="dropdown">
                                                     <label class="label-control">From date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker" placeholder="DD/MM/YYYY" id="searchJobDate"  ng-model="searchJobDate" autocomplete="off" />
+                                                    <input type="text" class="form-control datepicker" placeholder="{{searchJobDate | date:'dd-MMM-yyyy'}}" id="searchJobDate"  ng-model="searchJobDate" autocomplete="off" />
                                                 </div>
                                             </div>
                                         </div>
@@ -545,7 +545,7 @@
                                                 <div class="dropdown">
                                                     <label class="label-control">To date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker" placeholder="DD/MM/YYYY"  id="searchJobDateTo"  ng-model="searchJobDateTo" autocomplete="off" />
+                                                    <input type="text" class="form-control datepicker" placeholder="{{searchJobDateTo | date:'dd-MMM-yyyy'}}"  id="searchJobDateTo"  ng-model="searchJobDateTo" autocomplete="off" />
                                                 </div>
                                             </div>
                                         </div>
