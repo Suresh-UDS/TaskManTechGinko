@@ -250,14 +250,14 @@ public class EmployeeResource {
         return employeeDTO  ;
     }
 
-    @RequestMapping(value = "/microsoft/employee/enroll", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public EmployeeDTO enrollEmployeeFaceMicrosoft(@Valid @RequestBody EmployeeDTO employee, HttpServletRequest request) {
-        log.info("Inside Enroll" + employee.getName() + " , "+ employee.getProjectId());
+    @RequestMapping(value = "/microsoft/employee/enroll/{employeeId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public EmployeeDTO enrollEmployeeFaceMicrosoft(@PathVariable("employeeId") long employeeId, HttpServletRequest request) {
+        log.info("Inside Enroll" +employeeId);
         EmployeeDTO employeeDTO = null;
         try {
-            employeeDTO = employeeService.enrollEmployeeToMicroSoft(employee.getId());
+            employeeDTO = employeeService.enrollEmployeeToMicroSoft(employeeId);
         }catch(Exception e) {
-            throw new TimesheetException(e, employee);
+//            throw new TimesheetException(e, employeeId);
         }
         return employeeDTO  ;
     }
