@@ -2,7 +2,9 @@ package com.ts.app.domain;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -66,6 +69,9 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "asset_id", nullable = true)
     private Asset asset;
+    
+    @OneToMany(mappedBy="ticket",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<TicketComment> commentHistory;
 
     private Date closedOn;
 
@@ -290,4 +296,14 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     public void setPendingAtClient(boolean pendingAtClient) {
         this.pendingAtClient = pendingAtClient;
     }
+
+	public List<TicketComment> getCommentHistory() {
+		return commentHistory;
+	}
+
+	public void setCommentHistory(List<TicketComment> commentHistory) {
+		this.commentHistory = commentHistory;
+	}
+    
+    
 }

@@ -39,6 +39,7 @@ import com.ts.app.domain.Project;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.Ticket;
+import com.ts.app.domain.TicketComment;
 import com.ts.app.domain.TicketStatus;
 import com.ts.app.domain.User;
 import com.ts.app.domain.UserRole;
@@ -50,6 +51,7 @@ import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.TicketCommentRepository;
 import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.AmazonS3Utils;
@@ -72,6 +74,9 @@ public class TicketManagementService extends AbstractService {
 
     @Inject
     private TicketRepository ticketRepository;
+
+    @Inject
+    private TicketCommentRepository ticketCommentRepository;
 
     @Inject
     private EmployeeRepository employeeRepository;
@@ -205,6 +210,7 @@ public class TicketManagementService extends AbstractService {
 
     public TicketDTO updateTicket(TicketDTO ticketDTO){
     		User user = userRepository.findOne(ticketDTO.getUserId());
+    		Employee ticketUpdater = user.getEmployee();
         Ticket ticket = ticketRepository.findOne(ticketDTO.getId());
         //validations
         //check if job or quotation exists
@@ -285,7 +291,7 @@ public class TicketManagementService extends AbstractService {
 	            ticket.setDescription(ticket.getDescription());
 	        }
 	        ticket.setSeverity(ticketDTO.getSeverity());
-	        ticket.setComments(ticketDTO.getComments());
+	        //ticket.setComments(ticketDTO.getComments());
 	        ticket.setCategory(ticketDTO.getCategory());
 	        if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Closed"))) {
 	        		ticket.setClosedBy(user.getEmployee());
@@ -305,7 +311,15 @@ public class TicketManagementService extends AbstractService {
 	        }
 
 	        ticket = ticketRepository.saveAndFlush(ticket);
-
+	        //update the comment history
+	        if(StringUtils.isNotEmpty(ticketDTO.getComments())) {
+		        TicketComment ticketComment = new TicketComment();
+		        ticketComment.setEmployee(ticketUpdater);
+		        ticketComment.setTicket(ticket);
+		        ticketComment.setComments(ticketDTO.getComments());
+		        ticketCommentRepository.save(ticketComment);
+	        }
+	        
 	        ticketDTO = mapperUtil.toModel(ticket, TicketDTO.class);
 	        //if(assignedTo != null) {
 	        		sendNotifications(ticketOwner, assignedTo, user.getEmployee(), ticket, site, false);

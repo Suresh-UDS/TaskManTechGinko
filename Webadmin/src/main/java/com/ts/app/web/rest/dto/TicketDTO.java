@@ -1,11 +1,19 @@
 package com.ts.app.web.rest.dto;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public class TicketDTO extends BaseDTO {
-    private long id;
+public class TicketDTO extends BaseDTO implements Serializable {
+    
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private long id;
 
     private String title;
 
@@ -78,6 +86,8 @@ public class TicketDTO extends BaseDTO {
     private String assetTitle;
     
     private long assetId;
+    
+    private List<TicketCommentDTO> commentHistory;
 
     public long getId() {
         return id;
@@ -373,6 +383,14 @@ public class TicketDTO extends BaseDTO {
 
 	public void setClosedByLastName(String closedByLastName) {
 		this.closedByLastName = closedByLastName;
+	}
+
+	public List<TicketCommentDTO> getCommentHistory() {
+		return commentHistory;
+	}
+
+	public void setCommentHistory(List<TicketCommentDTO> commentHistory) {
+		this.commentHistory = commentHistory;
 	}
 
 	
