@@ -461,11 +461,17 @@ public class EmployeeResource {
         log.info("Inside assign Reliever" + reliever.getEmployeeId() + " , "+ reliever.getRelieverId());
 
         EmployeeDTO selectedEmployee = employeeService.findByEmpId(reliever.getEmployeeEmpId());
-        EmployeeDTO selectedReliever = employeeService.findByEmpId(reliever.getRelieverEmpId());
+        EmployeeDTO selectedReliever = null;
+        if(StringUtils.isNotEmpty(reliever.getRelieverEmpId())) {
+        		selectedReliever = employeeService.findByEmpId(reliever.getRelieverEmpId());
+        }
         selectedEmployee.setRelieved(true);
         try {
             employeeService.updateEmployee(selectedEmployee,false);
-            jobService.assignReliever(selectedEmployee,selectedReliever, reliever.getRelievedFromDate(), reliever.getRelievedToDate());
+            if(selectedReliever != null) {
+            		jobService.assignReliever(selectedEmployee,selectedReliever, reliever.getRelievedFromDate(), reliever.getRelievedToDate(), reliever.getSiteId());
+            }
+            employeeService.updateReliever(selectedEmployee, selectedReliever, reliever);
         }catch(Exception e) {
             throw new TimesheetException(e, selectedEmployee);
         }

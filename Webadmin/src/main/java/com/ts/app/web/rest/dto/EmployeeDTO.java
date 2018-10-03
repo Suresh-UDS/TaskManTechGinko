@@ -65,6 +65,8 @@ public class EmployeeDTO extends BaseDTO {
     private List<EmployeeProjectSiteDTO> projectSites;
 
     private List<EmployeeLocationDTO> locations;
+    
+    private List<EmployeeRelieverDTO> relievers;
 
     private boolean isLeft;
 
@@ -212,23 +214,6 @@ public class EmployeeDTO extends BaseDTO {
 
     public void setCheckedIn(boolean checkedIn) {
         this.checkedIn = checkedIn;
-    }
-
-    @Override
-    public String toString() {
-        String details = "EmployeeDTO{" +
-            "name='" + name +
-            "managerID -" + (manager!=null ? manager.getId() : "")+
-            "managerName-"+ (manager!=null ? manager.getName() : "");
-        StringBuffer sb = new StringBuffer();
-        sb.append(details);
-        sb.append("userId-" + getUserId() +" ");
-        if(CollectionUtils.isNotEmpty(projectSites)) {
-            for(EmployeeProjectSiteDTO projSite : projectSites) {
-                sb.append(projSite);
-            }
-        }
-        return sb.toString();
     }
 
     public long getJobId() {
@@ -416,5 +401,31 @@ public class EmployeeDTO extends BaseDTO {
 
     public void setFaceId(String faceId) {
         this.faceId = faceId;
+    }
+
+	public List<EmployeeRelieverDTO> getRelievers() {
+		return relievers;
+	}
+
+	public void setRelievers(List<EmployeeRelieverDTO> relievers) {
+		this.relievers = relievers;
+	}
+    
+
+    @Override
+    public String toString() {
+        String details = "EmployeeDTO{" +
+            "name='" + name +
+            "managerID -" + (manager!=null ? manager.getId() : "")+
+            "managerName-"+ (manager!=null ? manager.getName() : "");
+        StringBuffer sb = new StringBuffer();
+        sb.append(details);
+        sb.append("userId-" + getUserId() +" ");
+        if(CollectionUtils.isNotEmpty(projectSites)) {
+            for(EmployeeProjectSiteDTO projSite : projectSites) {
+                sb.append(projSite);
+            }
+        }
+        return sb.toString();
     }
 }

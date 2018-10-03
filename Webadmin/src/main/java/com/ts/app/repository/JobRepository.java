@@ -126,6 +126,9 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     List<Job> findByStartDateAndEmployee(@Param("empId")Long empId,@Param("startDate") Date startDate);
 
     @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.employee.id = :empId and j.site.id = :siteId")
+    List<Job> findByStartDateSiteAndEmployee(@Param("siteId") long siteId, @Param("empId") long empId,@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+    @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.employee.id = :empId and j.site.id = :siteId")
     Page<Job> findByStartDateSiteAndEmployee(@Param("siteId") long siteId, @Param("empId") long empId,@Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
 
     @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.location.id=:locationId and j.employee.id = :empId and j.site.id = :siteId")

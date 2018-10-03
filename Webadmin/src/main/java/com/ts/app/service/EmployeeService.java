@@ -40,6 +40,7 @@ import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeHistory;
 import com.ts.app.domain.EmployeeLocation;
 import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.EmployeeReliever;
 import com.ts.app.domain.EmployeeShift;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.Project;
@@ -53,6 +54,7 @@ import com.ts.app.repository.CheckInOutRepository;
 import com.ts.app.repository.DesignationRepository;
 import com.ts.app.repository.DeviceRepository;
 import com.ts.app.repository.EmployeeHistoryRepository;
+import com.ts.app.repository.EmployeeRelieverRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.EmployeeShiftRepository;
 import com.ts.app.repository.JobRepository;
@@ -79,6 +81,7 @@ import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImageDeleteRequest;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.ProjectDTO;
+import com.ts.app.web.rest.dto.RelieverDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.SiteDTO;
@@ -162,6 +165,9 @@ public class    EmployeeService extends AbstractService {
 
     @Inject
     private EmployeeShiftRepository employeeShiftRepository;
+
+    @Inject
+    private EmployeeRelieverRepository employeeRelieverRepository;
 
     @Inject
     private Environment env;
@@ -279,6 +285,26 @@ public class    EmployeeService extends AbstractService {
         Designation designation= mapperUtil.toEntity(designationDTO, Designation.class);
         designationRepository.save(designation);
         return designationDTO;
+    }
+    
+    public EmployeeDTO updateReliever(EmployeeDTO employee, EmployeeDTO reliever, RelieverDTO relieverDetails) {
+    		EmployeeReliever employeeReliever = new EmployeeReliever();
+    		employeeReliever.setEmployee(employeeRepository.findOne(employee.getId()));
+    		if(reliever != null) {
+    			employeeReliever.setReliever(employeeRepository.findOne(reliever.getId()));
+    		}
+    		if(relieverDetails != null) {
+    			if(relieverDetails.getSiteId() > 0) {
+    				Site site = siteRepository.findOne(relieverDetails.getSiteId());
+    				employeeReliever.setSite(site);
+    			}
+    			employeeReliever.setStartTime(DateUtil.convertToTimestamp(relieverDetails.getRelievedFromDate()));
+    			employeeReliever.setEndTime(DateUtil.convertToTimestamp(relieverDetails.getRelievedToDate()));
+    			employeeReliever.setRelieverMobile(relieverDetails.getRelieverMobile());
+    			employeeReliever.setRelieverName(relieverDetails.getRelieverName());
+    		}
+    		employeeRelieverRepository.save(employeeReliever);
+    		return employee;
     }
 
     public EmployeeDTO updateEmployee(EmployeeDTO employee, boolean shouldUpdateActiveStatus) {

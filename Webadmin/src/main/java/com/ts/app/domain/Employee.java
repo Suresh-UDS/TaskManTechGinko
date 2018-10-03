@@ -87,6 +87,9 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     @OneToMany(mappedBy="employee",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<EmployeeLocation> locations;
 
+    @OneToMany(mappedBy="employee",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<EmployeeReliever> relievers;
+
     @NotNull
     @Column(length = 10, nullable = true)
     private long code;
@@ -193,16 +196,6 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
         this.subOrdinates = subOrdinates;
     }
 
-    @Override
-    public String toString() {
-        return "Employee{" +
-            "name='" + name +
-            "managerID -" + (manager != null ? manager.getId() : "")+
-            "managerName-"+ (manager != null ? manager.getName() : "")+
-            "}";
-    }
-
-
     public boolean isFaceAuthorised() {
         return isFaceAuthorised;
     }
@@ -298,7 +291,6 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
         this.client = client;
     }
 
-
     public String getFaceId() {
         return faceId;
     }
@@ -306,4 +298,24 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     public void setFaceId(String faceId) {
         this.faceId = faceId;
     }
+
+	public List<EmployeeReliever> getRelievers() {
+		return relievers;
+	}
+
+	public void setRelievers(List<EmployeeReliever> relievers) {
+		this.relievers = relievers;
+	}
+    
+    @Override
+    public String toString() {
+        return "Employee{" +
+            "name='" + name +
+            "managerID -" + (manager != null ? manager.getId() : "")+
+            "managerName-"+ (manager != null ? manager.getName() : "")+
+            "}";
+    }
+
+
+    
 }
