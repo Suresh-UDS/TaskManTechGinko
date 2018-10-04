@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import com.ts.app.domain.Employee;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +37,7 @@ import com.ts.app.web.rest.dto.CheckInOutImageDTO;
 import com.ts.app.web.rest.dto.DesignationDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.EmployeeHistoryDTO;
+import com.ts.app.web.rest.dto.EmployeeRelieverDTO;
 import com.ts.app.web.rest.dto.EmployeeShiftDTO;
 import com.ts.app.web.rest.dto.ExportResponse;
 import com.ts.app.web.rest.dto.ExportResult;
@@ -408,9 +408,16 @@ public class EmployeeResource {
     }
 
     @RequestMapping(value = "/employee/relievers", method = RequestMethod.GET)
-    public List<EmployeeDTO> findAllRelievers() {
+    public List<EmployeeDTO> findAllRelievers(@RequestParam("siteId") long siteId) {
         log.info("--Invoked EmployeeResource.findAll Relievers--");
-        return employeeService.findAllRelievers(SecurityUtils.getCurrentUserId());
+        List<EmployeeDTO> relievers = employeeService.findAllRelievers(SecurityUtils.getCurrentUserId(), siteId);
+        return relievers;
+    }
+    
+    @RequestMapping(value = "/employee/relievers", method = RequestMethod.POST)
+    public List<EmployeeRelieverDTO> findRelievers(@RequestBody SearchCriteria searchCriteria) {
+        log.info("--Invoked EmployeeResource.findRelievers--");
+        return employeeService.findRelievers(searchCriteria);
     }
 
     @RequestMapping(value = "/employee/export",method = RequestMethod.POST)
@@ -473,11 +480,17 @@ public class EmployeeResource {
         log.info("Inside assign Reliever" + reliever.getEmployeeId() + " , "+ reliever.getRelieverId());
 
         EmployeeDTO selectedEmployee = employeeService.findByEmpId(reliever.getEmployeeEmpId());
-        EmployeeDTO selectedReliever = employeeService.findByEmpId(reliever.getRelieverEmpId());
+        EmployeeDTO selectedReliever = null;
+        if(StringUtils.isNotEmpty(reliever.getRelieverEmpId())) {
+        		selectedReliever = employeeService.findByEmpId(reliever.getRelieverEmpId());
+        }
         selectedEmployee.setRelieved(true);
         try {
             employeeService.updateEmployee(selectedEmployee,false);
-            jobService.assignReliever(selectedEmployee,selectedReliever, reliever.getRelievedFromDate(), reliever.getRelievedToDate());
+            if(selectedReliever != null) {
+            		jobService.assignReliever(selectedEmployee,selectedReliever, reliever.getRelievedFromDate(), reliever.getRelievedToDate(), reliever.getSiteId());
+            }
+            employeeService.updateReliever(selectedEmployee, selectedReliever, reliever);
         }catch(Exception e) {
             throw new TimesheetException(e, selectedEmployee);
         }

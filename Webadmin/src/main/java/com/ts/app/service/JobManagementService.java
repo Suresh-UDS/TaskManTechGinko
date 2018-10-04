@@ -1884,7 +1884,7 @@ public class JobManagementService extends AbstractService {
     }
 
 
-    public List<Job> assignReliever(EmployeeDTO employee, EmployeeDTO reliever, Date startDate, Date endDate) {
+    public List<Job> assignReliever(EmployeeDTO employee, EmployeeDTO reliever, Date startDate, Date endDate, long siteId) {
 
         Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
         checkInDateFrom.setTime(startDate);
@@ -1904,7 +1904,7 @@ public class JobManagementService extends AbstractService {
 
         List<Job> allJobsList = new ArrayList<Job>();
 
-        allJobsList= jobRepository.findByDateRangeAndEmployee(employee.getId(), fromDt, toDt);
+        allJobsList= jobRepository.findByStartDateSiteAndEmployee( siteId, employee.getId(), fromDt, toDt);
         Employee relieverDetails = mapperUtil.toEntity(reliever,Employee.class);
         for(Job job: allJobsList){
             job.setRelieved(true);
