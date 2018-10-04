@@ -97,7 +97,7 @@ public class ExportUtil {
 	private String[] EMP_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "DESIGNATION", "REPORTING TO", "CLIENT", "SITE",
 			"ACTIVE" };
 	private String[] JOB_HEADER = { "CLIENT", "SITE", "LOCATION", "JOB ID", "TITLE", "DESCRIPTION", "TICKET ID", "TICKET TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
-			"STATUS", "CHECKLIST ITEMS", "CHECKLIST STATUS", "CHECKLIST REMARKS","CHECKLIST IMAGE LINK" };
+			"STATUS", "CHECKLIST ITEMS", "CHECKLIST STATUS", "CHECKLIST REMARKS","CHECKLIST IMAGE LINK", "RELIEVER", "RELIEVER ID", "RELIEVER NAME" };
 	private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME","RELIEVER", "SITE", "CLIENT", "CHECK IN", "CHECK OUT", "DURATION(In Hours) ",
 			 "SHIFT CONTINUED", "LATE CHECK IN","REMARKS" ,"CHECK IN IMAGE", "CHECK OUT IMAGE" };
 
@@ -1756,6 +1756,9 @@ public class ExportUtil {
 							dataRow.createCell(14).setCellValue((result.isCompleted() ? "COMPLETED" : "NOT COMPLETED"));
 							dataRow.createCell(15).setCellValue((StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : ""));
 							dataRow.createCell(16).setCellValue((StringUtils.isNotEmpty(result.getImageUrl_1()) ? result.getImageUrl_1() : ""));
+							dataRow.createCell(17).setCellValue(transaction.isRelieved());
+							dataRow.createCell(18).setCellValue(transaction.getRelieverId());
+							dataRow.createCell(19).setCellValue((StringUtils.isNotEmpty(transaction.getRelieverName()) ? transaction.getRelieverName() : ""));
 							if(cnt < size) {
 								dataRow = xssfSheet.createRow(rowNum++);
 								dataRow.createCell(0).setCellValue(transaction.getSiteProjectName().toUpperCase());
