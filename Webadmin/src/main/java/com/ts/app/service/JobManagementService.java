@@ -665,6 +665,12 @@ public class JobManagementService extends AbstractService {
 		        				allSites = siteRepository.findSiteByEmployeeId(user.getEmployee().getId());
 		        			}
 		        		}
+		        		if(CollectionUtils.isEmpty(allSites)) {
+		        			allSites = new ArrayList<Site>();
+		        			if(searchCriteria.getSiteId() > 0) {
+		        				allSites.add(siteRepository.findOne(searchCriteria.getSiteId()));
+		        			}
+		        		}
 		        		if(CollectionUtils.isNotEmpty(allSites)) {
 			        		for(Site site : allSites) {
 			        			if(searchCriteria.isGraphRequest()) {

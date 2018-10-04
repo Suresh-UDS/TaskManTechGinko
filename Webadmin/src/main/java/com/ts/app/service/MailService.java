@@ -632,7 +632,7 @@ public class MailService {
         sendEmail(email, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
 	}
 
-	public void sendDaywiseReportEmailFile(String emailIds, ArrayList<String> files, Date time, String summary) {
+	public void sendDaywiseReportEmailFile(String siteName, String emailIds, ArrayList<String> files, Date time, String summary) {
 		// TODO Auto-generated method stub
 		 log.debug("Sending job report e-mail to '{}'", emailIds);
 	        Locale locale = Locale.forLanguageTag("en-US");
@@ -640,7 +640,9 @@ public class MailService {
 	        context.setVariable("date", DateUtil.formatToDateString(time));
 	        context.setVariable("summary", summary);
 	        String content = templateEngine.process("dayWiseReportEmails", context);
-	        String subject = messageSource.getMessage("email.report.title", null, locale);
+	        Object[] values = new Object[1];
+	        values[0] = siteName;
+	        String subject = messageSource.getMessage("email.report.title", values, locale);
 	        ArrayList<String> fileNames = files;
 	        sendEmail(emailIds, subject, content, true, true,fileNames);
 		
