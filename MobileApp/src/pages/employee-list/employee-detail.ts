@@ -55,6 +55,10 @@ export class EmployeeDetailPage {
   archivedQuotationPage:ArchivedQuotationPage;
   draftedQuotationsPage:DraftedQuotationPage;
   submittedQuotationsPage:SubmittedQuotationPage;
+
+
+  page:1;
+  pageSort:15;
   constructor(public navCtrl: NavController,public myService:authService, public component:componentService,public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,
               private geoFence:Geofence, private jobService: JobService, private attendanceService: AttendanceService, private quotationService: QuotationService) {
@@ -202,7 +206,11 @@ export class EmployeeDetailPage {
   }
 
   getQuotations(){
-    this.quotationService.getQuotations().subscribe(
+      var searchCriteria={
+        currPage:this.page,
+          pageSort:this.pageSort
+      };
+    this.quotationService.getQuotations(searchCriteria).subscribe(
         response=>{
             if(response.errorStatus){
                 demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
