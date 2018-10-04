@@ -36,8 +36,8 @@
 
             <ion-col col-12>
                 <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='cost'}">
-                    <label class="control-label">Cost</label>
-                    <input class="form-control" type="number" [(ngModel)]="cost" id="cost" name="cost" #cst="ngModel" required [ngClass]="{'has-error': cst.errors || eMsg=='all'|| eMsg=='cost'}">
+                    <label class="control-label">Unit Price</label>
+                    <input class="form-control" type="number" [(ngModel)]="unitPrice" id="cost" name="unitPrice" #cst="ngModel" required [ngClass]="{'has-error': cst.errors || eMsg=='all'|| eMsg=='cost'}">
                     <div *ngIf="cst.errors && (cst.dirty || cst.touched)" class="error-msg">
 
                     </div>

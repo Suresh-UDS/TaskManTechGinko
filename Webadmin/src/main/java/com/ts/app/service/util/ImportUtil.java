@@ -576,7 +576,7 @@ public class ImportUtil {
 			Iterator<Row> iterator = datatypeSheet.iterator();
 			int lastRow = datatypeSheet.getLastRowNum();
 			int r = 1;
-			for (; r < lastRow; r++) {
+			for (; r <= lastRow; r++) {
 				log.debug("Current Row number -" + r+"Last Row : "+lastRow);
 				Row currentRow = datatypeSheet.getRow(r);
 				log.debug("cell type =" + currentRow.getCell(0).getStringCellValue()+"\t"+currentRow.getCell(9).getStringCellValue());
@@ -613,7 +613,7 @@ public class ImportUtil {
 			Iterator<Row> iterator = datatypeSheet.iterator();
 			int lastRow = datatypeSheet.getLastRowNum();
 			int r = 1;
-			for (; r < lastRow; r++) {
+			for (; r <= lastRow; r++) {
 				log.debug("Current Row number -" + r+"Last Row : "+lastRow);
 				Row currentRow = datatypeSheet.getRow(r);
 				LocationDTO locationDTO = new LocationDTO();

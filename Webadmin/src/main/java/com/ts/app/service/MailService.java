@@ -1,6 +1,7 @@
 package com.ts.app.service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
@@ -12,6 +13,7 @@ import javax.inject.Inject;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -628,6 +630,76 @@ public class MailService {
         String content = templateEngine.process("employeeAssignAlert", context);
         String subject = messageSource.getMessage("email.employeeAssignAlert.title", null, locale);
         sendEmail(email, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
+	}
+
+	public void sendDaywiseReportEmailFile(String siteName, String emailIds, ArrayList<String> files, Date time, String summary) {
+		// TODO Auto-generated method stub
+		 log.debug("Sending job report e-mail to '{}'", emailIds);
+	        Locale locale = Locale.forLanguageTag("en-US");
+	        Context context = new Context(locale);
+	        context.setVariable("date", DateUtil.formatToDateString(time));
+	        context.setVariable("summary", summary);
+	        String content = templateEngine.process("dayWiseReportEmails", context);
+	        Object[] values = new Object[1];
+	        values[0] = siteName;
+	        String subject = messageSource.getMessage("email.report.title", values, locale);
+	        ArrayList<String> fileNames = files;
+	        sendEmail(emailIds, subject, content, true, true,fileNames);
+		
+	}
+
+	private void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml, ArrayList<String> fileNames) {
+		// TODO Auto-generated method stub
+
+        log.debug("Send e-mail[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
+            isMultipart, isHtml, to, subject, content);
+
+        log.debug(javaMailSender.getHost() +" , " + javaMailSender.getPort() + ", " + javaMailSender.getUsername() + " , " + javaMailSender.getPassword());
+        Properties props = javaMailSender.getJavaMailProperties();
+        Enumeration<Object> keys = props.keys();
+        while(keys.hasMoreElements()) {
+        		String key = (String)keys.nextElement();
+        		log.debug(key + ", "+ props.getProperty(key));
+        }
+        //split the to address if more than 1
+        //trim leading and traling ','
+        StringBuilder sb = new StringBuilder(to);
+        if(to.startsWith(",")) {
+        		sb = sb.replace(0, 1, "");
+        		to = sb.toString();
+        }
+        if(to.endsWith(",")) {
+        		int ind = to.lastIndexOf(",");
+        		sb.replace(ind, ind+1, "");
+        }
+        to = sb.toString();
+        String[] toEmails = null;
+        if(!StringUtils.isEmpty(to)) {
+        		toEmails = to.split(",");
+        }
+        // Prepare message using a Spring helper
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        try {
+            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
+            message.setTo(toEmails);
+            message.setFrom(new InternetAddress(jHipsterProperties.getMail().getFrom()));
+            message.setSubject(subject);
+            message.setText(content, isHtml);
+            if(isMultipart){
+            	if(CollectionUtils.isNotEmpty(fileNames)) {
+            		for(String fileName : fileNames) {
+            			FileSystemResource file =new FileSystemResource(exportPath+"/" +fileName+".xlsx");
+    	                message.addAttachment(file.getFilename(),file, "text/html");
+            		}
+            	}
+            }
+            javaMailSender.send(mimeMessage);
+            log.debug("Sent e-mail to User '{}'", to);
+        } catch (Exception e) {
+//        	e.printStackTrace();
+            log.warn("E-mail could not be sent to user '{}', exception is: {}", to, e.getMessage());
+        }
+    
 	}
 
 	

@@ -67,6 +67,7 @@ import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
 import com.ts.app.web.rest.dto.FeedbackTransactionResultDTO;
 import com.ts.app.web.rest.dto.JobChecklistDTO;
 import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.QuotationDTO;
 import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.TicketDTO;
 import com.ts.app.web.rest.dto.VendorDTO;
@@ -96,7 +97,7 @@ public class ExportUtil {
 	private String[] EMP_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "DESIGNATION", "REPORTING TO", "CLIENT", "SITE",
 			"ACTIVE" };
 	private String[] JOB_HEADER = { "CLIENT", "SITE", "LOCATION", "JOB ID", "TITLE", "DESCRIPTION", "TICKET ID", "TICKET TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
-			"STATUS", "CHECKLIST ITEMS", "CHECKLIST STATUS", "CHECKLIST REMARKS","CHECKLIST IMAGE LINK" };
+			"STATUS", "CHECKLIST ITEMS", "CHECKLIST STATUS", "CHECKLIST REMARKS","CHECKLIST IMAGE LINK", "RELIEVER", "RELIEVER ID", "RELIEVER NAME" };
 	private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME","RELIEVER", "SITE", "CLIENT", "CHECK IN", "CHECK OUT", "DURATION(In Hours) ",
 			 "SHIFT CONTINUED", "LATE CHECK IN","REMARKS" ,"CHECK IN IMAGE", "CHECK OUT IMAGE" };
 
@@ -111,11 +112,14 @@ public class ExportUtil {
 
 	private String[] FEEDBACK_HEADER = { "ID", "DATE", "REVIEWER NAME", "REVIEWER CODE", "CLIENT", "SITE", "FEEDBACK_NAME", "BLOCK", "FLOOR", "ZONE", "RATING", "REMARKS", "QUESTION", "ANSWER", "ITEM REMARKS" };
 
+	private String[] QUOTATION_HEADER = { "ID", "CLIENT NAME", "SITE NAME", "QUOTATION NAME", "TITLE", "SENDBY USERNAME", "SUBMITTED DATE", "APPROVEDBY USERNAME", "APPROVED DATE", "STATUS", "MODE", "GRAND TOTAL"};
+
 	private final static String ATTENDANCE_REPORT = "ATTENDANCE_REPORT";
 	private final static String TICKET_REPORT = "TICKET_REPORT";
 	private final static String JOB_REPORT = "JOB_REPORT";
 	private final static String EMPLOYEE_REPORT = "EMPLOYEE_REPORT";
 	private final static String FEEDBACK_REPORT = "FEEDBACK_REPORT";
+	private final static String QUOTATION_REPORT = "QUOTATION_REPORT";
 
 	@Inject
 	private Environment env;
@@ -487,7 +491,8 @@ public class ExportUtil {
 					Employee emp = employeeRepository.findByEmpId(attn.getEmployeeEmpId());
 
 					dataRow.createCell(0).setCellValue(attn.getEmployeeEmpId());
-					dataRow.createCell(1).setCellValue(attn.getEmployeeName() +" " +attn.getEmployeeLastName() !=null?attn.getEmployeeLastName() :"");
+					String employeeLastName = StringUtils.isNotEmpty(attn.getEmployeeLastName())? attn.getEmployeeLastName(): "";
+					dataRow.createCell(1).setCellValue(attn.getEmployeeName() +" " +employeeLastName);
 					dataRow.createCell(2).setCellValue(emp.isReliever()? "YES":"NO");
 					dataRow.createCell(3).setCellValue(attn.getSiteName());
 					dataRow.createCell(4).setCellValue("");
@@ -1657,7 +1662,7 @@ public class ExportUtil {
 		}
 		String file_Name = null;
 		if (StringUtils.isEmpty(result.getFile())) {
-			if (StringUtils.isNotEmpty(emp.getEmpId())) {
+			if (emp != null && StringUtils.isNotEmpty(emp.getEmpId())) {
 				file_Name = JOB_REPORT + "_" + emp.getEmpId() + "_" + System.currentTimeMillis() + ".xlsx";
 			} else {
 				file_Name = JOB_REPORT + "_" + System.currentTimeMillis() + ".xlsx";
@@ -1753,6 +1758,9 @@ public class ExportUtil {
 							dataRow.createCell(14).setCellValue((result.isCompleted() ? "COMPLETED" : "NOT COMPLETED"));
 							dataRow.createCell(15).setCellValue((StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : ""));
 							dataRow.createCell(16).setCellValue((StringUtils.isNotEmpty(result.getImageUrl_1()) ? result.getImageUrl_1() : ""));
+							dataRow.createCell(17).setCellValue(transaction.isRelieved());
+							dataRow.createCell(18).setCellValue(transaction.getRelieverId());
+							dataRow.createCell(19).setCellValue((StringUtils.isNotEmpty(transaction.getRelieverName()) ? transaction.getRelieverName() : ""));
 							if(cnt < size) {
 								dataRow = xssfSheet.createRow(rowNum++);
 								dataRow.createCell(0).setCellValue(transaction.getSiteProjectName().toUpperCase());
@@ -1791,10 +1799,12 @@ public class ExportUtil {
 					fileOutputStream.close();
 
 					//send job report in email.
-					String email = StringUtils.isNotEmpty(emp.getEmail()) ? emp.getEmail() : user.getEmail();
-					if(StringUtils.isNotEmpty(email)) {
-						File file = new File(file_Path);
-			    			mailService.sendJobExportEmail(projName, email, file, new Date());
+					if(emp != null) {
+						String email = StringUtils.isNotEmpty(emp.getEmail()) ? emp.getEmail() : user.getEmail();
+						if(StringUtils.isNotEmpty(email)) {
+							File file = new File(file_Path);
+				    			mailService.sendJobExportEmail(projName, email, file, new Date());
+						}
 					}
 				} catch (IOException e) {
 					log.error("Error while flushing/closing  !!!");
@@ -1805,8 +1815,9 @@ public class ExportUtil {
 		});
 
 		writer_Thread.start();
-
-		result.setEmpId(emp.getEmpId());
+		if(emp != null) {
+			result.setEmpId(emp.getEmpId());
+		}
 		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
 		result.setStatus(getExportStatus(file_Name));
 		return result;
@@ -1820,7 +1831,7 @@ public class ExportUtil {
 		}
 		String file_Name = null;
 		if (StringUtils.isEmpty(result.getFile())) {
-			if (StringUtils.isNotEmpty(emp.getEmpId())) {
+			if (emp != null && StringUtils.isNotEmpty(emp.getEmpId())) {
 				file_Name = TICKET_REPORT + "_" +  emp.getEmpId() + "_" + System.currentTimeMillis() + ".xlsx";
 			} else {
 				file_Name = TICKET_REPORT + "_" + System.currentTimeMillis() + ".xlsx";
@@ -1913,10 +1924,12 @@ public class ExportUtil {
 					fileOutputStream.close();
 
 					//send ticket report in email.
-					String email = StringUtils.isNotEmpty(emp.getEmail()) ? emp.getEmail() : user.getEmail();
-					if(StringUtils.isNotEmpty(email)) {
-						File file = new File(file_Path);
-			    			mailService.sendTicketExportEmail(projName, email, file, new Date());
+					if(emp != null) {
+						String email = StringUtils.isNotEmpty(emp.getEmail()) ? emp.getEmail() : user.getEmail();
+						if(StringUtils.isNotEmpty(email)) {
+							File file = new File(file_Path);
+				    			mailService.sendTicketExportEmail(projName, email, file, new Date());
+						}
 					}
 				} catch (IOException e) {
 					log.error("Error while flushing/closing  !!!");
@@ -1928,7 +1941,9 @@ public class ExportUtil {
 
 		writer_Thread.start();
 
-		result.setEmpId(emp.getEmpId());
+		if(emp != null) {
+			result.setEmpId(emp.getEmpId());
+		}
 		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
 		result.setStatus(getExportStatus(file_Name));
 		return result;
@@ -2369,6 +2384,118 @@ public class ExportUtil {
 		writer_Thread.start();
 
 		result.setEmpId(emp.getEmpId());
+		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
+		result.setStatus(getExportStatus(file_Name));
+		return result;
+	}
+
+	public ExportResult writeQuotationExcelReportToFile(List<QuotationDTO> content, String empId, ExportResult result) {
+		boolean isAppend = (result != null);
+		log.debug("result = " + result + ", isAppend = " + isAppend);
+		if (result == null) {
+			result = new ExportResult();
+		}
+		String file_Name = null;
+		if (StringUtils.isEmpty(result.getFile())) {
+			if (StringUtils.isNotEmpty(empId)) {
+				file_Name = QUOTATION_REPORT + "_" + empId + System.currentTimeMillis() + ".xlsx";
+			} else {
+				file_Name = QUOTATION_REPORT + "_" + System.currentTimeMillis() + ".xlsx";
+			}
+		} else {
+			file_Name = result.getFile() + ".xlsx";
+		}
+
+		if (statusMap.containsKey((file_Name))) {
+			String status = statusMap.get(file_Name);
+			// log.debug("Current status for filename -" + file_Name + ", status -" +
+			// status);
+		} else {
+			statusMap.put(file_Name, "PROCESSING");
+		}
+
+		final String export_File_Name = file_Name;
+		if (lock == null) {
+			lock = new Lock();
+		}
+		try {
+			lock.lock();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		Thread writer_Thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String file_Path = env.getProperty("export.file.path");
+				FileSystem fileSystem = FileSystems.getDefault();
+//				if (StringUtils.isNotEmpty(empId)) {
+//					file_Path += "/" + empId;
+//				}
+				Path path = fileSystem.getPath(file_Path);
+				if (!Files.exists(path)) {
+					Path newEmpPath = Paths.get(file_Path);
+					try {
+						Files.createDirectory(newEmpPath);
+					} catch (IOException e) {
+						log.error("Error While Creating Path " + newEmpPath);
+					}
+				}
+
+				file_Path += "/" + export_File_Name;
+				// create workbook
+				XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+				// create worksheet with title
+				XSSFSheet xssfSheet = xssfWorkbook.createSheet("QUOTATION_HEADER");
+
+				Row headerRow = xssfSheet.createRow(0);
+
+				for (int i = 0; i < QUOTATION_HEADER.length; i++) {
+					Cell cell = headerRow.createCell(i);
+					cell.setCellValue(QUOTATION_HEADER[i]);
+				}
+
+				int rowNum = 1;
+
+				for (QuotationDTO transaction : content) {
+					Row dataRow = xssfSheet.createRow(rowNum++);
+					statusMap.put("length", dataRow.toString());
+					dataRow.createCell(0).setCellValue(transaction.getId());
+					dataRow.createCell(1).setCellValue(transaction.getProjectName());
+					dataRow.createCell(2).setCellValue(transaction.getSiteName());
+					dataRow.createCell(3).setCellValue(transaction.getQuotationFileName());
+					dataRow.createCell(4).setCellValue(transaction.getTitle());
+					dataRow.createCell(5).setCellValue(transaction.getSentByUserName());
+					dataRow.createCell(6).setCellValue(transaction.getSubmittedDate() != null ? "" + transaction.getSubmittedDate() : "");
+					dataRow.createCell(7).setCellValue(transaction.getApprovedByUserName());
+					dataRow.createCell(8).setCellValue(transaction.getApprovedDate() != null ? "" + transaction.getApprovedDate() : "");
+					dataRow.createCell(9).setCellValue(transaction.getStatus());
+					dataRow.createCell(10).setCellValue(transaction.getMode());
+					dataRow.createCell(11).setCellValue(transaction.getGrandTotal());
+				}
+
+				for (int i = 0; i < QUOTATION_HEADER.length; i++) {
+					xssfSheet.autoSizeColumn(i);
+				}
+				log.info(export_File_Name + " Quotation export file was created successfully !!!");
+				statusMap.put(export_File_Name, "COMPLETED");
+
+				FileOutputStream fileOutputStream = null;
+				try {
+					fileOutputStream = new FileOutputStream(file_Path);
+					xssfWorkbook.write(fileOutputStream);
+					fileOutputStream.close();
+				} catch (IOException e) {
+					log.error("Error while flushing/closing  !!!");
+					statusMap.put(export_File_Name, "FAILED");
+				}
+				lock.unlock();
+			}
+		});
+
+		writer_Thread.start();
+
+		result.setEmpId(empId);
 		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
 		result.setStatus(getExportStatus(file_Name));
 		return result;

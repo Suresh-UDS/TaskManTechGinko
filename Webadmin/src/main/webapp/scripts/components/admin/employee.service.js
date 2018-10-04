@@ -174,10 +174,10 @@ angular.module('timeSheetApp')
                 })
             },
 
-            getAllRelievers: function(){
-                return $http.get('api/employee/relievers').then(function (response) {
+            getAllRelievers: function(site){
+                return $http.get('api/employee/relievers?siteId='+site).then(function (response) {
                     console.log(response);
-                    return response;
+                    return response.data;
                 })
             },
 
@@ -200,16 +200,15 @@ angular.module('timeSheetApp')
                 });
             },
 
-            assignReliever: function (employee, reliever,fromDate, toDate) {
-                var relieveDetails = {
-                    employeeId:employee.id,
-                    employeeEmpId:employee.empId,
-                    relieverEmpId:reliever.empId,
-                    relieverId:reliever.id,
-                    relievedFromDate:fromDate,
-                    relievedToDate:toDate
-                }
-                return $http.post('api/employee/assignReliever',relieveDetails).then(function (response) {
+            assignReliever: function (relieverDetails) {
+
+                return $http.post('api/employee/assignReliever',relieverDetails).then(function (response) {
+                    return response.data;
+                })
+            },
+
+            getRelievers: function (emp) {
+                return $http.post('api/employee/relievers',emp).then(function (response) {
                     return response.data;
                 })
             },

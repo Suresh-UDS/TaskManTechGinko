@@ -36,6 +36,8 @@ export class QuotationPage {
     selectedProject:any;
     selectedSite:any;
     sites:any;
+    page:1;
+    pageSort:15;
 
   constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService, private quotationService: QuotationService,public events:Events,public siteService:SiteService) {
       this.draftedQuotationsCount= 0;
@@ -84,7 +86,12 @@ export class QuotationPage {
   }
 
   getQuotations(){
-      this.quotationService.getQuotations().subscribe(
+      var searchCriteria={
+         currPage:this.page,
+          pageSort:this.pageSort
+
+      };
+      this.quotationService.getQuotations(searchCriteria).subscribe(
           response=>{
               if(response.errorStatus){
                   demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
@@ -158,7 +165,7 @@ export class QuotationPage {
               }else{
                   this.allProjects = response;
                   this.selectedProject = response[0];
-                  this.getSites(this.selectedProject[0].id);
+                  this.getSites(this.selectedProject.id[0]);
               }
 
           }
@@ -168,9 +175,10 @@ export class QuotationPage {
   getSites(projectId){
       this.siteService.findSites(projectId).subscribe(
           response=>{
-              if(response.errorStstus){
+              if(response.errorStatus){
                   demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
               }else{
+                  console.log(response);
                   this.sites = response;
                   this.selectedSite = response[1];
               }
@@ -189,7 +197,7 @@ export class QuotationPage {
 
                   this.quotations=[];
                   this.quotations = response;
-                  console.log(this.quotations)
+                  console.log(this.quotations);
                   for(var i=0; i<this.quotations.length;i++){
                       if(this.quotations[i].isDrafted == true){
                           console.log("drafted");

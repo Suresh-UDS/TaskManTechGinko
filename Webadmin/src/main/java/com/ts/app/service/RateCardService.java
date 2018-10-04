@@ -1,9 +1,12 @@
 package com.ts.app.service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -499,8 +502,13 @@ public class RateCardService extends AbstractService {
         log.debug("get Quotations");
         Object quotationList = "";
 		User user = userRepository.findOne(searchCriteria.getUserId());
-		Employee employee = user.getEmployee();
-		List<EmployeeProjectSite> projectSites = employee.getProjectSites();
+		List<EmployeeProjectSite> projectSites = new ArrayList<EmployeeProjectSite>();
+		if(user != null) {
+			Employee employee = user.getEmployee();
+			if(employee != null) {
+				projectSites = employee.getProjectSites();
+			}
+		}
 		List<Long> siteIds = null;
 		if(searchCriteria.getSiteId() == 0) {
 			siteIds = new ArrayList<Long>();
@@ -529,6 +537,7 @@ public class RateCardService extends AbstractService {
             request.put("id",searchCriteria.getId());
             request.put("title",searchCriteria.getQuotationTitle());
             request.put("createdBy",searchCriteria.getQuotationCreatedBy());
+            request.put("createdDate", searchCriteria.getQuotationCreatedDate());
             request.put("approvedBy",searchCriteria.getQuotationApprovedBy());
             request.put("status",searchCriteria.getQuotationStatus());
             request.put("submittedDate", searchCriteria.getQuotationSubmittedDate());
@@ -545,6 +554,52 @@ public class RateCardService extends AbstractService {
 
         }catch(Exception e) {
             log.error("Error while calling location service ", e);
+            e.printStackTrace();
+        }
+
+//		List<RateCard> entities = new ArrayList<RateCard>();
+//		entities = rateCardRepository.findAll();
+//		return mapperUtil.toModelList(entities, RateCardDTO.class);
+        return  quotationList;
+    }
+	
+	public Object getQuotationSummary(SearchCriteria searchCriteria, List<Long> siteIds) {
+
+        log.debug("get Quotations");
+        Object quotationList = "";
+
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
+
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+
+            headers.setAll(map);
+
+            JSONObject request = new JSONObject();
+            TimeZone tz = TimeZone.getTimeZone("UTC");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+            df.setTimeZone(tz);
+            String createdDate = df.format(searchCriteria.getQuotationCreatedDate());
+            String toDate = df.format(searchCriteria.getToDate());
+            request.put("createdDate", createdDate);
+            request.put("toDate", toDate);
+            request.put("siteIds", siteIds);
+            log.debug("Request body " + request.toString());
+            HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);
+            log.debug("Rate card service end point"+quotationSvcEndPoint);
+            ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/quotation/summary", requestEntity, String.class);
+            log.debug("Response freom push service "+ response.getStatusCode());
+            log.debug("response from push service"+response.getBody());
+//            rateCardDTOList = (List<RateCardDTO>) response.getBody();
+            quotationList = response.getBody();
+
+        }catch(Exception e) {
+            log.error("Error while calling Quotations service ", e);
             e.printStackTrace();
         }
 
@@ -773,7 +828,6 @@ public class RateCardService extends AbstractService {
         result.setTransactions(transactions);
         return;
     }
-
 
 
 }
