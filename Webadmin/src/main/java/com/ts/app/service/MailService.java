@@ -632,12 +632,13 @@ public class MailService {
         sendEmail(email, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
 	}
 
-	public void sendDaywiseReportEmailFile(String emailIds, ArrayList<String> files, Date time) {
+	public void sendDaywiseReportEmailFile(String emailIds, ArrayList<String> files, Date time, String summary) {
 		// TODO Auto-generated method stub
 		 log.debug("Sending job report e-mail to '{}'", emailIds);
 	        Locale locale = Locale.forLanguageTag("en-US");
 	        Context context = new Context(locale);
 	        context.setVariable("date", DateUtil.formatToDateString(time));
+	        context.setVariable("summary", summary);
 	        String content = templateEngine.process("dayWiseReportEmails", context);
 	        String subject = messageSource.getMessage("email.report.title", null, locale);
 	        ArrayList<String> fileNames = files;

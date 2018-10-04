@@ -123,6 +123,9 @@ public class SchedulerHelperService extends AbstractService {
 	private JobManagementService jobManagementService;
 	
 	@Inject
+	private ReportService reportService;
+	
+	@Inject
 	private FeedbackTransactionService feedbackTransactionService;
 	
 	@Inject
@@ -1612,6 +1615,7 @@ public class SchedulerHelperService extends AbstractService {
 				
 				ArrayList<String> files =new ArrayList<String>();
 				
+				StringBuffer sb = new StringBuffer();
 				
 				ExportResult jobResult = new ExportResult();
 				if(env.getProperty("scheduler.dayWiseJobReport.enabled").equalsIgnoreCase("true")) {
@@ -1621,7 +1625,15 @@ public class SchedulerHelperService extends AbstractService {
 						if (eodReports != null && eodReports.getSettingValue().equalsIgnoreCase("true")) {
 							List<JobDTO> jobResults = jobManagementService.generateReport(sc, false);
 							if (CollectionUtils.isNotEmpty(jobResults)) {
-	
+								sb.append("Job Summary\n");
+								List<ReportResult> jobSummary = jobManagementService.generateConsolidatedReport(sc, false);
+								if(CollectionUtils.isNotEmpty(jobSummary)) {
+									ReportResult summary = jobSummary.get(0);
+									sb.append("\nTotal Jobs : "+ summary.getTotalJobCount() +"\n");
+									sb.append("\nAssigned : "+ summary.getAssignedJobCount() + "\n");
+									sb.append("\nCompleted : "+ summary.getCompletedJobCount() + "\n");
+									sb.append("\nOverdue : "+ summary.getOverdueJobCount() + "\n");
+								}
 								log.debug("send report");
 								jobResult = exportUtil.writeJobExcelReportToFile(proj.getName(), jobResults, null, null, jobResult);
 								files.add(jobResult.getFile());
@@ -1640,6 +1652,15 @@ public class SchedulerHelperService extends AbstractService {
 						// if report generation needed
 						log.debug("results exists");
 						if (eodReports != null && eodReports.getSettingValue().equalsIgnoreCase("true")) {
+							sb.append("Ticket Summary\n");
+							List<Long> siteIds = new ArrayList<Long>();
+							siteIds.add(site.getId());
+							ReportResult summary = reportService.getTicketStatsDateRange(0, siteIds, cal.getTime(), dayEndcal.getTime());
+							if(summary != null) {
+								sb.append("\nTotal Tickets : "+ summary.getTotalNewTicketCount() +"\n");
+								sb.append("\nClosed : "+ summary.getTotalClosedTicketCount() + "\n");
+								sb.append("\nPending : "+ summary.getTotalPendingTicketCount() + "\n");
+							}
 							log.debug("send report");
 							exportTicketResult = exportUtil.writeTicketExcelReportToFile(proj.getName(), ticketResults, null, null, exportTicketResult);
 							files.add(exportTicketResult.getFile());
@@ -1682,7 +1703,7 @@ public class SchedulerHelperService extends AbstractService {
 				}
 				
 				if (eodReportEmails != null && (DayWiseAlertTime == null ||  alertTimeCal.equals(now) || isOnDemand)) {
-					mailService.sendDaywiseReportEmailFile(eodReportEmails.getSettingValue(), files, cal.getTime());
+					mailService.sendDaywiseReportEmailFile(eodReportEmails.getSettingValue(), files, cal.getTime(), sb.toString());
 				}
 		
 			}
