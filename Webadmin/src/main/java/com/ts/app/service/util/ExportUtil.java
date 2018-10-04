@@ -1830,7 +1830,7 @@ public class ExportUtil {
 		}
 		String file_Name = null;
 		if (StringUtils.isEmpty(result.getFile())) {
-			if (StringUtils.isNotEmpty(emp.getEmpId())) {
+			if (emp != null && StringUtils.isNotEmpty(emp.getEmpId())) {
 				file_Name = TICKET_REPORT + "_" +  emp.getEmpId() + "_" + System.currentTimeMillis() + ".xlsx";
 			} else {
 				file_Name = TICKET_REPORT + "_" + System.currentTimeMillis() + ".xlsx";
