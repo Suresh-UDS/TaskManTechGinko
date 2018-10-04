@@ -228,6 +228,12 @@ scheduler:
       enabled: true
    feedbackreport:
       enabled: true
+   dayWiseJobReport:
+      enabled: true 
+   dayWiseTicketReport:
+      enabled: true
+   dayWiseQuotationReport:
+      enabled: true 
       
 default.user.password: uds12345
 

@@ -72,8 +72,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 //    @Query("SELECT e FROM Employee e , User u WHERE u.userGroup.id = :userGroupId and e.isReliever=true and e.active='Y' order by e.empId")
 //    List<Employee> findAllRelieversByGroupId(@Param("userGroupId") long userGroupId);
 
-    @Query("SELECT e FROM Employee e  WHERE  e.isReliever=true and e.active='Y' order by e.empId")
-    List<Employee> findAllRelievers();
+    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ps.site.id = :siteId and e.isReliever=true and e.active='Y' order by e.fullName")
+    List<Employee> findAllRelievers(@Param("siteId") long siteId);
 
     @Query("SELECT distinct e FROM Employee e  WHERE e.id IN :empIds and  e.isReliever=true and e.active='Y' order by e.empId")
     List<Employee> findAllRelieversByIds(@Param("empIds") List<Long> empIds);

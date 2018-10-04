@@ -233,7 +233,13 @@ scheduler:
    feedbackreport:
       enabled: true 
    attendanceMusterRollReport:
-      enabled: true     
+      enabled: true   
+   dayWiseJobReport:
+      enabled: true 
+   dayWiseTicketReport:
+      enabled: true
+   dayWiseQuotationReport:
+      enabled: true 
 
 default.user.password: uds12345
 

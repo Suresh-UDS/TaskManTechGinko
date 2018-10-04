@@ -499,8 +499,13 @@ public class RateCardService extends AbstractService {
         log.debug("get Quotations");
         Object quotationList = "";
 		User user = userRepository.findOne(searchCriteria.getUserId());
-		Employee employee = user.getEmployee();
-		List<EmployeeProjectSite> projectSites = employee.getProjectSites();
+		List<EmployeeProjectSite> projectSites = new ArrayList<EmployeeProjectSite>();
+		if(user != null) {
+			Employee employee = user.getEmployee();
+			if(employee != null) {
+				projectSites = employee.getProjectSites();
+			}
+		}
 		List<Long> siteIds = null;
 		if(searchCriteria.getSiteId() == 0) {
 			siteIds = new ArrayList<Long>();
@@ -529,6 +534,7 @@ public class RateCardService extends AbstractService {
             request.put("id",searchCriteria.getId());
             request.put("title",searchCriteria.getQuotationTitle());
             request.put("createdBy",searchCriteria.getQuotationCreatedBy());
+            request.put("createdDate", searchCriteria.getQuotationCreatedDate());
             request.put("approvedBy",searchCriteria.getQuotationApprovedBy());
             request.put("status",searchCriteria.getQuotationStatus());
             request.put("submittedDate", searchCriteria.getQuotationSubmittedDate());
@@ -773,7 +779,6 @@ public class RateCardService extends AbstractService {
         result.setTransactions(transactions);
         return;
     }
-
 
 
 }

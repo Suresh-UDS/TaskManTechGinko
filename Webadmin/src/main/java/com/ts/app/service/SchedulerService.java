@@ -76,7 +76,8 @@ public class SchedulerService extends AbstractService {
 
 	final Logger log = LoggerFactory.getLogger(SchedulerService.class);
 
-	private static final String FREQ_ONCE_EVERY_HOUR = "Once in an hour";
+	private static final String FREQ_ONCE_EVERY_HOUR = "1H";
+	private static final String FREQ_ONCE_EVERY_2_HOUR = "2H";
 
 	static final String LINE_SEPARATOR = "      \n\n";
 
@@ -1110,9 +1111,13 @@ public class SchedulerService extends AbstractService {
 		int eHr = cal.get(Calendar.HOUR_OF_DAY);
 		int eMin = cal.get(Calendar.MINUTE);
 		log.debug("End time hours =" + eHr + ", end time mins -" + eMin);
-		if (StringUtils.isNotEmpty(frequency) && frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_HOUR)) {
+		if (StringUtils.isNotEmpty(frequency)) {
 			endTime.set(Calendar.HOUR_OF_DAY, startTime.get(Calendar.HOUR_OF_DAY));
-			endTime.add(Calendar.HOUR_OF_DAY, 1);
+			if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_HOUR)) {
+				endTime.add(Calendar.HOUR_OF_DAY, 1);
+			}else if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_2_HOUR)) {
+				endTime.add(Calendar.HOUR_OF_DAY, 2);
+			}
 			endTime.set(Calendar.MINUTE, eMin);
 			endTime.set(Calendar.SECOND, 0);
 			endTime.getTime(); // to recalculate
@@ -1164,7 +1169,7 @@ public class SchedulerService extends AbstractService {
 		log.debug("JobDTO parent job id - " + job.getParentJobId());
 		log.debug("JobDTO Details before calling saveJob - " + job);
 		jobManagementService.saveJob(job);
-		if (StringUtils.isNotEmpty(frequency) && frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_HOUR)) {
+		if (StringUtils.isNotEmpty(frequency)) {
 			Calendar tmpCal = Calendar.getInstance();
 			tmpCal.set(Calendar.DAY_OF_MONTH, plannedEndTimeCal.get(Calendar.DAY_OF_MONTH));
 			tmpCal.set(Calendar.MONTH, plannedEndTimeCal.get(Calendar.MONTH));
@@ -1176,9 +1181,15 @@ public class SchedulerService extends AbstractService {
 			log.debug("planned end time after endTime " + tmpCal.getTime().after(endTime.getTime()));
 			if (tmpCal.getTime().after(endTime.getTime())) {
 				tmpCal.setTime(endTime.getTime());
-				tmpCal.add(Calendar.HOUR_OF_DAY, 1);
-				tmpCal.getTime(); // recalculate
-				createJob(parentJob, dataMap, jobDate, plannedEndTime, endTime.getTime(), tmpCal.getTime());
+				if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_HOUR)) {
+					tmpCal.add(Calendar.HOUR_OF_DAY, 1);
+					tmpCal.getTime(); // recalculate
+					createJob(parentJob, dataMap, jobDate, plannedEndTime, endTime.getTime(), tmpCal.getTime());
+				}else if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_2_HOUR)) {
+					tmpCal.add(Calendar.HOUR_OF_DAY, 2);
+					tmpCal.getTime(); // recalculate
+					createJob(parentJob, dataMap, jobDate, plannedEndTime, endTime.getTime(), tmpCal.getTime());
+				}
 			}
 		}
 		return job;
@@ -1359,4 +1370,14 @@ public class SchedulerService extends AbstractService {
 				}
 			}
 		}
-	}
+	
+	@Scheduled(cron="0 */30 * * * ?")
+	public void sendDaywiseReport() {
+		Calendar cal = Calendar.getInstance();
+		boolean isOnDemand = false;
+		schedulerHelperService.sendDaywiseReportEmail(cal.getTime(), isOnDemand);
+	}	
+	
+		
+	
+}

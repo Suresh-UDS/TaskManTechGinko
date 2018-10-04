@@ -696,5 +696,50 @@ public class TicketManagementService extends AbstractService {
 
 		return "Successfully upload existing ticket file to S3";
 	}
+	
+	public List<TicketDTO> generateReport(SearchCriteria searchCriteria, boolean b) {
+		List<TicketDTO> transactions = null;
+		if(log.isDebugEnabled()) {
+			log.debug("Search Criteria - " + searchCriteria);
+			}
+		User user = userRepository.findOne(searchCriteria.getUserId());
+		SearchResult<TicketDTO> result = new SearchResult<TicketDTO>();
+		if(searchCriteria != null) {
+		    //-----
+		Pageable pageRequest = null;
+		Page<Ticket> page = null;
+		List<Ticket> allTicketList = new ArrayList<Ticket>();
+		
+		Calendar startCal = Calendar.getInstance();
+		if (searchCriteria.getFromDate() != null) {
+		    startCal.setTime(searchCriteria.getFromDate());
+		}
+		startCal.set(Calendar.HOUR_OF_DAY, 0);
+		startCal.set(Calendar.MINUTE, 0);
+		startCal.set(Calendar.SECOND, 0);
+		Calendar endCal = Calendar.getInstance();
+		if (searchCriteria.getToDate() != null) {
+		    endCal.setTime(searchCriteria.getToDate());
+		}
+		endCal.set(Calendar.HOUR_OF_DAY, 23);
+		endCal.set(Calendar.MINUTE, 59);
+		endCal.set(Calendar.SECOND, 0);
+		//searchCriteria.setFromDate(startCal.getTime());
+		//searchCriteria.setToDate(endCal.getTime());
+		ZonedDateTime startDate = ZonedDateTime.ofInstant(startCal.toInstant(), ZoneId.systemDefault());
+		ZonedDateTime endDate = ZonedDateTime.ofInstant(endCal.toInstant(), ZoneId.systemDefault());
+		page = ticketRepository.findBySiteId(searchCriteria.getSiteId(), startDate, endDate, pageRequest);
+		allTicketList.addAll(page.getContent());
+		if(CollectionUtils.isNotEmpty(allTicketList)) {
+			if(transactions == null) {
+				transactions = new ArrayList<TicketDTO>();
+			}
+			for(Ticket ticket : allTicketList) {
+				transactions.add(mapperUtil.toModel(ticket, TicketDTO.class));
+			}
+		}
+		}
+		return transactions;
+	}
 
 }
