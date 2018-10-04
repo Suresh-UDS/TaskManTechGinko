@@ -11,25 +11,26 @@ public class EmployeeRelieverDTO extends BaseDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private long id;
-	
+
 	private long employeeId;
-	
+
 	private String employeeFullName;
-	
+
 	private long siteId;
-	
+
 	private String siteName;
 
 	private Date startTime;
-	
+
 	private Date endTime;
-	
-	private long relieverId;
-	
-	private String relieverFullName;
-	
+
+	private long relieverEmployeeId;
+
+
+    private String relieverEmployeeFullName;
+
 	private String relieverName;
-	
+
 	private String relieverMobile;
 
 	public long getId() {
@@ -88,22 +89,6 @@ public class EmployeeRelieverDTO extends BaseDTO implements Serializable {
 		this.endTime = endTime;
 	}
 
-	public long getRelieverId() {
-		return relieverId;
-	}
-
-	public void setRelieverId(long relieverId) {
-		this.relieverId = relieverId;
-	}
-
-	public String getRelieverFullName() {
-		return relieverFullName;
-	}
-
-	public void setRelieverFullName(String relieverFullName) {
-		this.relieverFullName = relieverFullName;
-	}
-
 	public String getRelieverName() {
 		return relieverName;
 	}
@@ -119,8 +104,25 @@ public class EmployeeRelieverDTO extends BaseDTO implements Serializable {
 	public void setRelieverMobile(String relieverMobile) {
 		this.relieverMobile = relieverMobile;
 	}
-	
 
 
-	
+    public long getRelieverEmployeeId() {
+        return relieverEmployeeId;
+    }
+
+    public void setRelieverEmployeeId(long relieverEmployeeId) {
+        this.relieverEmployeeId = relieverEmployeeId;
+    }
+
+    public String getRelieverEmployeeFullName() {
+        return relieverEmployeeFullName;
+    }
+
+    public void setRelieverEmployeeFullName(String relieverEmployeeFullName) {
+        this.relieverEmployeeFullName = relieverEmployeeFullName;
+    }
+
+
+
+
 }

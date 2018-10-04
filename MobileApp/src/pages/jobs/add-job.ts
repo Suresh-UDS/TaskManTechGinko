@@ -51,6 +51,7 @@ export class CreateJobPage {
         console.log(this.navParams.get('ticketDetails'));
         if(this.navParams.get('ticketDetails')){
             this.ticket = this.navParams.get('ticketDetails');
+            this.getEmployee(this.ticket.siteId)
         }
         this.jobService.loadCheckLists().subscribe(
             response=>{
@@ -134,6 +135,7 @@ export class CreateJobPage {
                 "employeeId":this.employ,
                 "userId":this.userId,
                 "locationId":1,
+                "active":'Y'
 
             };
 
@@ -150,7 +152,8 @@ export class CreateJobPage {
                     "employeeId":this.employ,
                     "userId":this.userId,
                     "locationId":1,
-                    "ticketId":this.ticket.id
+                    "ticketId":this.ticket.id,
+                    "active":'Y'
                 }
             }
             else if(this.assetDetails)
@@ -167,7 +170,8 @@ export class CreateJobPage {
                     "employeeId":this.employ,
                     "userId":this.userId,
                     "locationId":1,
-                    "assetId":this.assetDetails.id
+                    "assetId":this.assetDetails.id,
+                    "active":'Y'
                 }
             }
 
