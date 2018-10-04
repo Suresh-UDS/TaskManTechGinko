@@ -10,7 +10,7 @@ registerTemplates();
 
 
 function registerTemplates(){
-    var templateDir = path.join(__dirname+'../../', 'templates/');
+    var templateDir = path.join('/home/ec2-user/QuotationService/', 'templates/');
     // var templateDir = path.join('D:/usha/ionic/FMS-NEW/QuotationService/templates/');
 
     fs.readdirSync(templateDir).forEach(function (file) {
@@ -63,8 +63,7 @@ function sendMailWithAttachments(from,to,subject,template,data,attachments){
 var defaultFrom = config.mailer.from;
 module.exports = {
     submitQuotation: function(emailId, data) {
-        console.log("sending email ids:- ",emailId);
-        console.log("Data:- ",data._id);
+console.log("sending email ids:- ",emailId);         console.log("Data:- ",data._id);
         sendMailWithAttachments( config.mailer.from,
             emailId,
             'Quotation Submitted',
@@ -119,7 +118,7 @@ module.exports = {
                 path: './templates/output.pdf',
                 contentType: 'application/pdf'
             }]
-        });
+        }, (err, info) => {});
     }
 
 };

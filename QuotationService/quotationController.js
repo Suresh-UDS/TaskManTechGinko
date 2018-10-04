@@ -47,15 +47,18 @@ var _ = require('underscore');
             quotation.createdDate = date;
         }else{
             quotation.isDrafted = false;
+	    quotation.createdDate = date;
         }
 
         if(req.body.isSubmitted){
             quotation.isSubmitted = true;
             quotation.submittedDate = date;
+	    quotation.createdDate = date;
             quotation.processHistory.isSubmitted = date;
             quotation.status = 'Waiting for approval';
         }else{
             quotation.isSubmitted = false;
+            quotation.createdDate = date;
         }
 
         if(req.body.isApproved){
@@ -586,7 +589,7 @@ module.exports = {
 
           })
       }else if(req.body.siteIds) {
-          Quotation.find({siteId:{$in:req.body.siteIds}},function(err,quotations){
+          Quotation.find({siteId:{$in:req.body.siteIds}}).sort({'createdDate':-1}).exec(function(err,quotations){
 
               if(err){
                   console.log("Error in finding quotations");
@@ -701,6 +704,44 @@ module.exports = {
                 }
             }
         })
+    },
+
+    getSummary: function(req, res, next) {
+        var quotationSummary = {};
+        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate, isDrafted: true}).exec(function(err, res){ 
+            if(res.length > 0) {
+                quotationSummary.pending = res.length;
+            }else{
+                quotationSummary.pending = 0;
+            }
+        });
+
+        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate, isApproved: true}).exec(function(err, res){ 
+            if(res.length > 0) {
+                quotationSummary.approved = res.length;
+            }else{
+                quotationSummary.approved = 0;
+            }
+        });
+
+        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate, isSubmitted: true}).exec(function(err, res){ 
+            if(res.length > 0) {
+                quotationSummary.submitted = res.length;
+            }else{
+                quotationSummary.submitted = 0;
+            }
+        });
+
+        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate, isArchived: true}).exec(function(err, res){ 
+            if(res.length > 0) {
+                quotationSummary.archived = res.length;
+            }else{
+                quotationSummary.archived = 0;
+            }
+        });
+
+        res.send(200, quotationSummary);
+
     }
 
 

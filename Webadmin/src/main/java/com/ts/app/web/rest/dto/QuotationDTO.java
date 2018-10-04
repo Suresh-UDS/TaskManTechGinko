@@ -13,6 +13,8 @@ public class QuotationDTO extends BaseDTO implements Serializable {
     private String id;
 
     private String _id;
+    
+    private long serialId;
 
     private String title;
 
@@ -300,4 +302,14 @@ public class QuotationDTO extends BaseDTO implements Serializable {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+
+	public long getSerialId() {
+		return serialId;
+	}
+
+	public void setSerialId(long serialId) {
+		this.serialId = serialId;
+	}
+	
+	
 }

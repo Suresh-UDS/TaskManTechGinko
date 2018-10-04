@@ -40,6 +40,7 @@ import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeHistory;
 import com.ts.app.domain.EmployeeLocation;
 import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.EmployeeReliever;
 import com.ts.app.domain.EmployeeShift;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.Project;
@@ -53,6 +54,7 @@ import com.ts.app.repository.CheckInOutRepository;
 import com.ts.app.repository.DesignationRepository;
 import com.ts.app.repository.DeviceRepository;
 import com.ts.app.repository.EmployeeHistoryRepository;
+import com.ts.app.repository.EmployeeRelieverRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.EmployeeShiftRepository;
 import com.ts.app.repository.JobRepository;
@@ -74,11 +76,13 @@ import com.ts.app.web.rest.dto.DesignationDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.EmployeeHistoryDTO;
 import com.ts.app.web.rest.dto.EmployeeProjectSiteDTO;
+import com.ts.app.web.rest.dto.EmployeeRelieverDTO;
 import com.ts.app.web.rest.dto.EmployeeShiftDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImageDeleteRequest;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.ProjectDTO;
+import com.ts.app.web.rest.dto.RelieverDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.SiteDTO;
@@ -162,6 +166,9 @@ public class    EmployeeService extends AbstractService {
 
     @Inject
     private EmployeeShiftRepository employeeShiftRepository;
+
+    @Inject
+    private EmployeeRelieverRepository employeeRelieverRepository;
 
     @Inject
     private Environment env;
@@ -281,6 +288,26 @@ public class    EmployeeService extends AbstractService {
         return designationDTO;
     }
 
+    public EmployeeDTO updateReliever(EmployeeDTO employee, EmployeeDTO reliever, RelieverDTO relieverDetails) {
+    		EmployeeReliever employeeReliever = new EmployeeReliever();
+    		employeeReliever.setEmployee(employeeRepository.findOne(employee.getId()));
+    		if(reliever != null) {
+    			employeeReliever.setRelieverEmployee(employeeRepository.findOne(reliever.getId()));
+    		}
+    		if(relieverDetails != null) {
+    			if(relieverDetails.getSiteId() > 0) {
+    				Site site = siteRepository.findOne(relieverDetails.getSiteId());
+    				employeeReliever.setSite(site);
+    			}
+    			employeeReliever.setStartTime(DateUtil.convertToTimestamp(relieverDetails.getRelievedFromDate()));
+    			employeeReliever.setEndTime(DateUtil.convertToTimestamp(relieverDetails.getRelievedToDate()));
+    			employeeReliever.setRelieverMobile(relieverDetails.getRelieverMobile());
+    			employeeReliever.setRelieverName(relieverDetails.getRelieverName());
+    		}
+    		employeeRelieverRepository.save(employeeReliever);
+    		return employee;
+    }
+
     public EmployeeDTO updateEmployee(EmployeeDTO employee, boolean shouldUpdateActiveStatus) {
         log.debug("Inside Update");
         log.debug("Inside Update"+employee);
@@ -307,7 +334,7 @@ public class    EmployeeService extends AbstractService {
 		}
 		*/
 
-        employeeUpdate.setFullName(employee.getFullName());
+        employeeUpdate.setFullName(employee.getName());
         employeeUpdate.setName(employee.getName());
         employeeUpdate.setLastName(employee.getLastName());
         ZoneId  zone = ZoneId.of("Asia/Kolkata");
@@ -678,20 +705,21 @@ public class    EmployeeService extends AbstractService {
         return empList;
     }
 
-    public List<EmployeeDTO> findAllRelievers(long userId) {
-        User user = userRepository.findOne(userId);
+    public List<EmployeeDTO> findAllRelievers(long userId, long siteId) {
         List<Employee> entities = null;
-        if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
-            entities = employeeRepository.findAllRelievers();
-        }else {
-            Set<Long> subEmpIds = null;
-            int levelCnt = 1;
-            subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds, levelCnt);
-            List<Long> subEmpList = new ArrayList<Long>();
-            subEmpList.addAll(subEmpIds);
-            entities = employeeRepository.findAllRelieversByIds(subEmpList);
-        }
+        entities = employeeRepository.findAllRelievers(siteId);
         return mapperUtil.toModelList(entities, EmployeeDTO.class);
+    }
+
+    public List<EmployeeRelieverDTO> findRelievers(SearchCriteria searchCriteria) {
+        List<EmployeeReliever> entities = null;
+        Pageable pageRequest = null;
+        pageRequest = createPageSort(searchCriteria.getCurrPage(), orderByDESC("createdDate"));
+        Page<EmployeeReliever> result = employeeRelieverRepository.findRelievers(searchCriteria.getEmployeeId(), pageRequest);
+        if(result != null && CollectionUtils.isNotEmpty(result.getContent())) {
+        		entities = result.getContent();
+        }
+        return mapperUtil.toModelList(entities, EmployeeRelieverDTO.class);
     }
 
     public List<EmployeeDTO> findBySiteId(long userId,long siteId) {
