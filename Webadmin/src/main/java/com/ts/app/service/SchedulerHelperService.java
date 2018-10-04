@@ -1696,7 +1696,30 @@ public class SchedulerHelperService extends AbstractService {
 						// if report generation needed
 						log.debug("results exists");
 						if (eodReports != null && eodReports.getSettingValue().equalsIgnoreCase("true")) {
+							sb.append("<br/>Quotation Summary<br/>");
+							QuotationDTO quotationSummary = new QuotationDTO(); 
+							List<Long> siteIds = new ArrayList<Long>();
+							siteIds.add(site.getId());
+							Object quotationSum =  quotationService.getQuotationSummary(sc, siteIds);
+							ObjectMapper mapper = new ObjectMapper();
+							mapper.findAndRegisterModules();
+							mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+							mapper.configure(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE, false);
+							try {
+								quotationSummary = mapper.readValue((String)quotationSum, new TypeReference<QuotationDTO>() {});
+							} catch (IOException e) {
+								log.error("Error while converting quotation results to objects",e);
+							}
 							log.debug("send report");
+						
+							if(quotationSummary != null) {
+								sb.append("<table border=\"1\" cellpadding=\"5\"  style=\"border-collapse:collapse;margin-bottom:20px;\"><tr><td>Total Quotations : </td><td>"+ quotationSummary.getTotalCount() +"</td>");
+								sb.append("<tr><td>Approved : </td><td>"+ quotationSummary.getTotalApproved() + "</td>");
+								sb.append("<tr><td>Pending : </td><td>"+ quotationSummary.getTotalPending() + "</td>");
+								sb.append("<tr><td>Submitted : </td><td>"+ quotationSummary.getTotalSubmitted() + "</td>");
+								sb.append("<tr><td>Archived : </td><td>"+ quotationSummary.getTotalArchived() + "</td>");
+								sb.append("</tr></table>");
+							}
 							exportQuotationResult = exportUtil.writeQuotationExcelReportToFile(quotationResults, null, exportQuotationResult);
 							files.add(exportQuotationResult.getFile());
 						}

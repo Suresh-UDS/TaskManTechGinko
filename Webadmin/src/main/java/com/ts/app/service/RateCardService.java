@@ -559,6 +559,46 @@ public class RateCardService extends AbstractService {
 //		return mapperUtil.toModelList(entities, RateCardDTO.class);
         return  quotationList;
     }
+	
+	public Object getQuotationSummary(SearchCriteria searchCriteria, List<Long> siteIds) {
+
+        log.debug("get Quotations");
+        Object quotationList = "";
+
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
+
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+
+            headers.setAll(map);
+
+            JSONObject request = new JSONObject();
+            request.put("createdDate", searchCriteria.getQuotationCreatedDate());
+            request.put("siteIds", siteIds);
+            log.debug("Request body " + request.toString());
+            HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);
+            log.debug("Rate card service end point"+quotationSvcEndPoint);
+            ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/quotation/summary", requestEntity, String.class);
+            log.debug("Response freom push service "+ response.getStatusCode());
+            log.debug("response from push service"+response.getBody());
+//            rateCardDTOList = (List<RateCardDTO>) response.getBody();
+            quotationList = response.getBody();
+
+        }catch(Exception e) {
+            log.error("Error while calling Quotations service ", e);
+            e.printStackTrace();
+        }
+
+//		List<RateCard> entities = new ArrayList<RateCard>();
+//		entities = rateCardRepository.findAll();
+//		return mapperUtil.toModelList(entities, RateCardDTO.class);
+        return  quotationList;
+    }
 
     public Object approveQuotation(QuotationDTO quotation) {
         log.debug("Approve Quotations");

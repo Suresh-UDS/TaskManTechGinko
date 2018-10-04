@@ -708,47 +708,44 @@ module.exports = {
 
     getSummary: function(req, res, next) {
         var quotationSummary = {};
-        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate }).exec(function(err, res){ 
-            if(res.length > 0) {
-                quotationSummary.totalCount = res.length;
+        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate }).exec(function(err, result){ 
+            if(result.length > 0) {
+                quotationSummary.totalCount = result.length;
             }else{
                 quotationSummary.totalCount = 0;
             }
+            Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate, isDrafted: true}).exec(function(err, result){ 
+                if(result.length > 0) {
+                    quotationSummary.totalPending = result.length;
+                }else{
+                    quotationSummary.totalPending = 0;
+                }
+                Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate, isApproved: true}).exec(function(err, result){ 
+                    if(result.length > 0) {
+                        quotationSummary.totalApproved = result.length;
+                    }else{
+                        quotationSummary.totalApproved = 0;
+                    }
+                    Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate, isSubmitted: true}).exec(function(err, result){ 
+                        if(result.length > 0) {
+                            quotationSummary.totalSubmitted = result.length;
+                        }else{
+                            quotationSummary.totalSubmitted = 0;
+                        }
+                        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate, isArchived: true}).exec(function(err, result){ 
+                            if(result.length > 0) {
+                                quotationSummary.totalArchived = result.length;
+                            }else{
+                                quotationSummary.totalArchived = 0;
+                            }
+
+                            res.send(200, quotationSummary);
+                        });
+                    });
+                });
+            });
         });
 
-        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate, isDrafted: true}).exec(function(err, res){ 
-            if(res.length > 0) {
-                quotationSummary.totalPending = res.length;
-            }else{
-                quotationSummary.totalPending = 0;
-            }
-        });
-
-        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate, isApproved: true}).exec(function(err, res){ 
-            if(res.length > 0) {
-                quotationSummary.totalApproved = res.length;
-            }else{
-                quotationSummary.totalApproved = 0;
-            }
-        });
-
-        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate, isSubmitted: true}).exec(function(err, res){ 
-            if(res.length > 0) {
-                quotationSummary.totalSubmitted = res.length;
-            }else{
-                quotationSummary.totalSubmitted = 0;
-            }
-        });
-
-        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate, isArchived: true}).exec(function(err, res){ 
-            if(res.length > 0) {
-                quotationSummary.totalArchived = res.length;
-            }else{
-                quotationSummary.totalArchived = 0;
-            }
-        });
-
-        res.send(200, quotationSummary);
 
     }
 
