@@ -1660,7 +1660,7 @@ public class SchedulerHelperService extends AbstractService {
 							siteIds.add(site.getId());
 							ReportResult summary = reportService.getTicketStatsDateRange(0, siteIds, cal.getTime(), dayEndcal.getTime());
 							if(summary != null) {
-								sb.append("<table border=\"1\" cellpadding=\"5\"  style=\"border-collapse:collapse;margin-bottom:20px;\"><tr><td>Total Tickets : "+ summary.getTotalNewTicketCount() +"</td>");
+								sb.append("<table border=\"1\" cellpadding=\"5\"  style=\"border-collapse:collapse;margin-bottom:20px;\"><tr><td>Total Tickets : </td><td>"+ summary.getTotalNewTicketCount() +"</td>");
 								sb.append("<tr><td>Closed : </td><td>"+ summary.getTotalClosedTicketCount() + "</td>");
 								sb.append("<tr><td>Pending : </td><td>"+ summary.getTotalPendingTicketCount() + "</td>");
 								sb.append("</tr></table>");
