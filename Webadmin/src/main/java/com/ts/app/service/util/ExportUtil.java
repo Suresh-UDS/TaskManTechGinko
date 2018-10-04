@@ -1923,10 +1923,12 @@ public class ExportUtil {
 					fileOutputStream.close();
 
 					//send ticket report in email.
-					String email = StringUtils.isNotEmpty(emp.getEmail()) ? emp.getEmail() : user.getEmail();
-					if(StringUtils.isNotEmpty(email)) {
-						File file = new File(file_Path);
-			    			mailService.sendTicketExportEmail(projName, email, file, new Date());
+					if(emp != null) {
+						String email = StringUtils.isNotEmpty(emp.getEmail()) ? emp.getEmail() : user.getEmail();
+						if(StringUtils.isNotEmpty(email)) {
+							File file = new File(file_Path);
+				    			mailService.sendTicketExportEmail(projName, email, file, new Date());
+						}
 					}
 				} catch (IOException e) {
 					log.error("Error while flushing/closing  !!!");
