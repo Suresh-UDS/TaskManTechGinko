@@ -708,31 +708,34 @@ module.exports = {
 
     getSummary: function(req, res, next) {
         var quotationSummary = {};
-        Quotation.find({siteId: { $in:req.body.siteIds }, createdDate: { $gt: ISODate(req.body.createdDate), $lt: ISODate(req.body.toDate) }}).exec(function(err, result){ 
+        console.log(new Date(req.body.createdDate))
+        Quotation.find({siteId: { $in:req.body.siteIds }, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }}).exec(function(err, result){ 
+            console.log(result);
+            console.log(err);
             if(result && result.length > 0) {
                 quotationSummary.totalCount = result.length;
             }else{
                 quotationSummary.totalCount = 0;
             }
-            Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: ISODate(req.body.createdDate), $lt: ISODate((req.body.toDate) }, isDrafted: true}).exec(function(err, result){ 
+            Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date((req.body.toDate) }, isDrafted: true}).exec(function(err, result){ 
                 if(result && result.length > 0) {
                     quotationSummary.totalPending = result.length;
                 }else{
                     quotationSummary.totalPending = 0;
                 }
-                Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: ISODate(req.body.createdDate), $lt:ISODate(req.body.toDate) }, isApproved: true}).exec(function(err, result){ 
+                Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isApproved: true}).exec(function(err, result){ 
                     if(result && result.length > 0) {
                         quotationSummary.totalApproved = result.length;
                     }else{
                         quotationSummary.totalApproved = 0;
                     }
-                    Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: ISODate(req.body.createdDate), $lt: ISODate(req.body.toDate) }, isSubmitted: true}).exec(function(err, result){ 
+                    Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isSubmitted: true}).exec(function(err, result){ 
                         if(result && result.length > 0) {
                             quotationSummary.totalSubmitted = result.length;
                         }else{
                             quotationSummary.totalSubmitted = 0;
                         }
-                        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: ISODate(req.body.createdDate), $lt: ISODate(req.body.toDate) }, isArchived: true}).exec(function(err, result){ 
+                        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isArchived: true}).exec(function(err, result){ 
                             if(result && result.length > 0) {
                                 quotationSummary.totalArchived = result.length;
                             }else{
