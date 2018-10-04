@@ -434,6 +434,12 @@ angular.module('timeSheetApp')
             	return $http.post('api/assets/tickets', search).then(function(response) { 
             		return response.data;
             	});
+            },
+            
+            getAssetMaterial : function(search) {
+            	return $http.post('api/assets/jobmaterials', search).then(function(response) {
+            		return response.data;
+            	});
             }
             
            

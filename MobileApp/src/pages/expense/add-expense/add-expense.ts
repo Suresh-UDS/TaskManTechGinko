@@ -269,18 +269,21 @@ export class AddExpense {
                         let token_header = window.localStorage.getItem('session');
                         let options: FileUploadOptions = {
                             fileKey: 'uploadFile',
-                            fileName: new Date().getTime() + '_expenseFile',
+                            fileName: response.id+ '_expenseFile',
                             headers: {
                                 'X-Auth-Token': token_header
                             },
                             params: {
-                                title: new Date().getTime() + '_expenseFile',
+                                title: response.id+ '_expenseFile',
                                 expenseId: response.id,
                                 type: 'image',
                             }
                         };
+                        console.log(options);
+                        console.log("File details");
+                        console.log(this.takenImages[i]);
 
-                        this.fileTransfer.upload(this.takenImages[i], this.config.Url + 'api/expenses/uploadFile', options)
+                        this.fileTransfer.upload(this.takenImages[i], this.config.Url + 'api/expenses/uploadImage', options)
                             .then((data) => {
                                 console.log(data);
                                 console.log("image upload");

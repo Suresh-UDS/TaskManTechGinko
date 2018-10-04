@@ -41,7 +41,7 @@
 
 
 
-      <div *ngIf="(assetList?.length<0 || assetList == null) && !spinner">
+      <div *ngIf="(!assetList.length<0 || assetList != null) && !spinner">
           <ion-card>
               <ion-card-content>
                   <img src="assets/imgs/warning.svg">
@@ -80,10 +80,10 @@
           <!--<ion-icon name="md-eye"></ion-icon>-->
       <!--</button>-->
     </ion-item>
-      <!--<ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="doInfiniteAllJobs($event)">-->
-          <!--<ion-infinite-scroll-content></ion-infinite-scroll-content>-->
-      <!--</ion-infinite-scroll>-->
   </ion-list>
+    <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)=" doInfiniteAssets($event)">
+        <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
 
 
 </ion-content>

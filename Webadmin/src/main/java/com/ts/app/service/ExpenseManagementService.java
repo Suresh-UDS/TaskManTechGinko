@@ -106,24 +106,21 @@ public class ExpenseManagementService extends AbstractService {
         expense.setReimbursable(expenseDTO.isReimbursable());
         expense.setDescription(expenseDTO.getDescription());
 //        expense.setBalanceAmount(expenseDTO.getBalanceAmount());
+        Double totalBalanceAmount  = (getData(expenseDTO.getSiteId()).getTotalCreditAmount() - getData(expenseDTO.getSiteId()).getTotalDebitAmount());
 
         if(Objects.equals(expenseDTO.getMode(), "debit")){
             expense.setExpenseCategory(expenseDTO.getExpenseCategory());
-            log.debug("Balance amount ------- "+getData(expenseDTO.getSiteId()).getBalanceAmount());
-            expense.setBalanceAmount(getData(expenseDTO.getSiteId()).getBalanceAmount()-expenseDTO.getDebitAmount());
+            log.debug("Balance amount ------- "+getData(expenseDTO.getSiteId()).getTotalBalanceAmount());
             expense.setDebitAmount(expenseDTO.getDebitAmount());
+            expense.setBalanceAmount(totalBalanceAmount - expenseDTO.getDebitAmount());
+
             expense.setExpenseDate(new Date());
         }
 
 
         if (Objects.equals(expenseDTO.getMode(), "credit")){
-            if(getData(expenseDTO.getSiteId()).getBalanceAmount()>0){
-                expense.setBalanceAmount(getData(expenseDTO.getSiteId()).getBalanceAmount()+expenseDTO.getCreditAmount());
+                expense.setBalanceAmount(totalBalanceAmount + expenseDTO.getCreditAmount());
                 expense.setCreditAmount(expenseDTO.getCreditAmount());
-
-            }else{
-                expense.setCreditAmount(expenseDTO.getCreditAmount());
-            }
 
         }
 
@@ -316,12 +313,14 @@ public class ExpenseManagementService extends AbstractService {
 
 
     public List<ExpenseDTO> getCreditTransactions(long siteId, String mode, Date fromDate, Date toDate) {
+	    log.debug("Expense credit transactions functions");
         List<ExpenseDTO> expenses = null;
         if(fromDate != null) {
             toDate = (toDate == null ? fromDate : toDate);
             Timestamp fromTS = DateUtil.convertToTimestamp(fromDate);
             Timestamp toTS = DateUtil.convertToTimestamp(toDate);
-            List<Expense> expenseEntities = expenseRepository.getCreditTransactions(siteId, mode, fromTS, toTS);
+            List<Expense> expenseEntities = expenseRepository.getCreditTransactions(siteId, mode);
+            log.debug("Credit transactions list ----- "+expenseEntities.size());
             if(CollectionUtils.isNotEmpty(expenseEntities)) {
                 expenses = mapperUtil.toModelList(expenseEntities, ExpenseDTO.class);
                 for(ExpenseDTO expenseDTO:expenses){
@@ -393,6 +392,10 @@ public class ExpenseManagementService extends AbstractService {
 
         if(debitAmount!=null && creditAmount !=null){
             return creditAmount - debitAmount;
+        }else if(debitAmount !=null) {
+            return debitAmount;
+        } else if(creditAmount !=null) {
+            return creditAmount;
         }else{
             return 0.0;
         }

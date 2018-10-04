@@ -73,7 +73,8 @@ export class ExpenseDetails {
       var searchCriteria = {
           fromDate:new Date(),
           toDate: new Date(),
-          siteId:this.site.id
+          siteId:this.site.id,
+          expenseMode:'credit'
       };
 
       this.component.showLoader("Please Wait..");
@@ -94,9 +95,6 @@ export class ExpenseDetails {
         this.navCtrl.push(TransactionPage,{category:category,detail:detail});
     }
 
-    addExpenseModal() {
-        let modal = this.modalCtrl.create(AddExpense,{});
-        modal.present();
-    }
+
 
 }

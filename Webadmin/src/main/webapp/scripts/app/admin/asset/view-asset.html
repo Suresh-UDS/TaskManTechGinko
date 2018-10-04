@@ -54,7 +54,7 @@
                                        	ng-click="loadSubModule(loadStatusHistory)">StatusHistory</a></li>
                                        	
                                        	<li class=""><a href=".sparesHistory" data-toggle="tab"
-                                       	ng-click="loadSubModule(sparesHistory)">Spares</a></li>
+                                       	ng-click="loadAssetSpares()">Spares</a></li>
 
                                    </ul>
                                    <div class="tab-content TabsContent ViewTables" style="">
@@ -1018,10 +1018,14 @@
 
                                                             <thead>
                                                             <tr>
-                                                                <th width="15%">MaterialName</th>
-                                                                <th width="15%">MaterialCode</th>
-                                                                <th width="30%">MaterialGroup</th>
+                                                            
+                                                            	<th>JobId</th>
+                                                            	<th>JobTitle</th>
+                                                                <th>MaterialName</th>
+                                                                <th>MaterialCode</th>
+                                                                <th>MaterialGroup</th>
                                                                 <th>MaterialStock</th>
+                                                                <th>MaterialQty</th>
                                                                 <th>MaterialUom</th>
                                                                 <!-- <th>Frequency</th> -->
                                                                 <!-- <th align="right">Actions</th> -->
@@ -1030,12 +1034,14 @@
                                                             </thead>
 
                                                             <tbody>
-
                                                             <tr ng-repeat="spares in sparesHistories">
+                                                            	<td>{{spares.jobId}}</td>
+                                                            	<td>{{spares.jobTitle}}</td>
                                                                 <td>{{spares.materialName}}</td>
                                                                 <td>{{spares.materialCode}}</td>
                                                                 <td>{{spares.materialGroup}}</td>
                                                                 <td>{{spares.materialStock}}</td>
+                                                                <td>{{spares.materialQuantity}}</td>
                                                                 <td>{{spares.materialUom}}</td>
 
                                                                 <!-- <td class="text-right">
@@ -1043,7 +1049,7 @@
                                                                 </td> -->
                                                             </tr>
                                                             <tr>
-                                                               <td colspan="5" align="center" ng-show="!sparesHistories.length">No Spares History Found</td>
+                                                               <td colspan="7" align="center" ng-show="!sparesHistories.length">No Spares History Found</td>
                                                             </tr>
 
                                                             </tbody>
@@ -1053,7 +1059,7 @@
 
                                             <!-- Pagination directive start -->
 
-                                            <pagination-new></pagination-new>
+                                            <!-- <pagination-new></pagination-new> -->
 
                                             <!-- Pagination directive end -->
 

@@ -79,7 +79,7 @@ angular.module('timeSheetApp')
                 })
             },
 
-            uploadExpenseFile : function(expense) {
+                uploadExpenseFile : function(expense) {
                 var file = expense.uploadFile;
                 var fileFormData = new FormData();
 

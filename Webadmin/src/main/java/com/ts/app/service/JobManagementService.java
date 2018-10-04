@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -1124,6 +1125,7 @@ public class JobManagementService extends AbstractService {
 		if(CollectionUtils.isNotEmpty(job.getChecklistItems())) {
 			job.getChecklistItems().clear();
 		}
+		
 		if(CollectionUtils.isNotEmpty(jobDTO.getChecklistItems())) {
 			List<JobChecklistDTO> jobclDtoList = jobDTO.getChecklistItems();
 			List<JobChecklist> checklistItems = new ArrayList<JobChecklist>();
@@ -1164,17 +1166,20 @@ public class JobManagementService extends AbstractService {
 		
 		if(CollectionUtils.isNotEmpty(jobDTO.getJobMaterials())) {
 			List<JobMaterialDTO> jobMaterialDTO = jobDTO.getJobMaterials(); 
-			List<JobMaterial> jobMaterials = new ArrayList<JobMaterial>();
+			List<JobMaterial> jobMaterialItms = new ArrayList<JobMaterial>();
 			for(JobMaterialDTO material : jobMaterialDTO) { 
-				JobMaterial jobMaterialEntity = mapperUtil.toEntity(material, JobMaterial.class);
-				jobMaterialEntity.setJob(job);
-				jobMaterials.add(jobMaterialEntity);
+				JobMaterial jobMaterial = mapperUtil.toEntity(material, JobMaterial.class);
+				jobMaterial.setJob(job);
+				jobMaterialItms.add(jobMaterial);
 			}
-			if(job.getJobMaterials() != null) {
-				job.getJobMaterials().addAll(jobMaterials);
-			}else {
-				job.setJobMaterials(jobMaterials);
-			}
+//			if(job.getJobMaterials() != null) {
+//				job.getJobMaterials().addAll(jobMaterialItms);
+//			}else {
+//				job.setJobMaterials(jobMaterialItms);
+//			}
+			Set<JobMaterial> materialSetItm = job.getJobMaterials();
+			materialSetItm.addAll(jobMaterialItms);
+			job.setJobMaterials(materialSetItm);
 		}
 
 	}

@@ -35,7 +35,9 @@ export class CompleteJobPage {
         longitude:any;
         completeJob:any;
         id:any;
+        jobMaterials:any;
     };
+
     latitude:any;
     longitude:any;
 
@@ -50,6 +52,8 @@ export class CompleteJobPage {
     checkListItems:any;
     showIcon:any;
     index:any;
+    siteId:any;
+    material:any;
 
     constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService, @Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
                 private loadingCtrl:LoadingController, public camera: Camera,private geolocation:Geolocation, private jobService: JobService,
@@ -58,10 +62,14 @@ export class CompleteJobPage {
         this.checkListItems=[];
         this.takenImages=[];
         this.jobDetails=[];
+        this.material=[];
+
+
         this.jobDetails=this.navParams.get('job');
+        console.log("Job Material");
         this.takenImages = [];
         this.checkOutDetails={
-            employeeId:'',
+        employeeId:'',
         employeeEmpId:'',
         projectId:'',
         siteId:'',
@@ -69,8 +77,10 @@ export class CompleteJobPage {
         latitudeOut:'',
         longitude:'',
         completeJob:false,
-        id:null
+        id:null,
+        jobMaterials:[],
         };
+
         /*
         this.jobService.loadCheckLists().subscribe(
             response=>{
@@ -163,7 +173,7 @@ export class CompleteJobPage {
         this.camera.getPicture(options).then((imageData) => {
 
             console.log('imageData -' +imageData);
-            imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
+            imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/");
 
             this.takenImages.push(imageData);
 
@@ -172,9 +182,11 @@ export class CompleteJobPage {
 
     }
 
-    saveJob(job){
+    saveJob(job,material){
         this.component.showLoader('Saving Job');
-        console.log(job)
+        console.log(job);
+        console.log(material);
+        job.jobMaterials=material;
         this.jobService.saveJob(job).subscribe(
             response=>{
                 console.log("Save Job response");
@@ -190,6 +202,7 @@ export class CompleteJobPage {
                     this.checkOutDetails.siteId = job.siteId;
                     this.checkOutDetails.jobId = job.id;
                     this.checkOutDetails.id=job.checkInOutId;
+                    this.checkOutDetails.jobMaterials=material;
                     this.jobService.updateJobImages(this.checkOutDetails).subscribe(
                         response=>{
                             // this.component.closeLoader();
@@ -273,7 +286,7 @@ export class CompleteJobPage {
         )
     }
 
-    completeJob(job, takenImages){
+    completeJob(job, takenImages,material){
         this.component.showLoader('Completing Job');
         this.geolocation.getCurrentPosition().then((response)=>{
             console.log("Current location");
@@ -283,7 +296,10 @@ export class CompleteJobPage {
         }).catch((error)=>{
             this.latitude = 0;
             this.longitude = 0;
-        })
+        });
+        console.log("material in complete job");
+        console.log(material);
+        job.jobMaterials=material;
         this.jobService.saveJob(job).subscribe(
             response=>{
                 console.log(job);
@@ -296,6 +312,7 @@ export class CompleteJobPage {
                 this.checkOutDetails.latitudeOut = this.latitude;
                 this.checkOutDetails.longitude = this.longitude;
                 this.checkOutDetails.id=job.checkInOutId;
+                this.checkOutDetails.jobMaterials=material;
                 console.log(this.checkOutDetails);
                 this.jobService.updateJobImages(this.checkOutDetails).subscribe(
                     response=>{
@@ -428,7 +445,16 @@ export class CompleteJobPage {
 
     addMaterial()
     {
-        this.navCtrl.push(AddMaterial);
+        // this.navCtrl.push(AddMaterial,{job:this.jobDetails});
+        let profileModal = this.modalCtrl.create(AddMaterial, {job:this.jobDetails});
+        profileModal.onDidDismiss(data => {
+            console.log("data");
+            console.log(data);
+            console.log("Job Material in complete job page");
+            this.material=data.jobMaterial;
+            console.log(data.jobMaterial);
+        });
+        profileModal.present();
     }
 
 }

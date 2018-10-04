@@ -424,6 +424,8 @@ public class MaterialIndentService extends AbstractService {
 		purchaseReqItemEntity.setPurchaseRequisition(purchaseReq);
 		purchaseReqItemEntity.setQuantity(material.getMaximumStock());
 		purchaseReqItemEntity.setUnitPrice(0);
+		purchaseReqItemEntity.setApprovedQty(0);
+		purchaseReqItemEntity.setPendingQty(material.getMaximumStock());
 		purchaseItem.add(purchaseReqItemEntity);
 		PurchaseRefGen purchaseRef = new PurchaseRefGen();
 

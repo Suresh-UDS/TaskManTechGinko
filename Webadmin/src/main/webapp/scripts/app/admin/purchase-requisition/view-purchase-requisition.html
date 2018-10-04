@@ -83,6 +83,7 @@
                                         <th>Item Name</th>
                                         <th>Uom</th>
                                         <th>Required Qty</th>
+                                        <th>Qty Approved</th>
                                         <th width="10%">Approved Qty</th>
                                     </tr>
                                     </thead>
@@ -92,14 +93,15 @@
                                         <td>{{items.materialName}}</td>
                                         <td>{{items.materialUom}}</td>
                                         <td>{{items.quantity}}</td>
+                                        <td>{{items.approvedQty ? items.approvedQty : "Nil"}}</td>
                                         <td width="10%">
-                                            <input type="number" class="form-control" ng-model="items.approvedQty" name="approvedQty"  min="0" max="{{items.quantity}}">
+                                            <input type="number" class="form-control" ng-model="items.currentAprQty" name="currentAprQty"  ng-blur="validateNumber(items, items.currentAprQty)">
                                         </td>
                                     </tr>
                                     </tbody>
                                     <tfoot>
                                     <td colspan="3"></td>
-                                    <td colspan="2" class="text-right">
+                                    <td colspan="3" class="text-right">
                                         <button class="btn btn-success" ng-show="purchaseReqObj.requestStatus === 'PENDING'" ng-click="updatePurchaseReq('APPROVED')" type="button">
                                             Approve
                                         </button>

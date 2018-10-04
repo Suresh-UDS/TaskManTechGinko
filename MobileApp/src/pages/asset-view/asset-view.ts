@@ -68,6 +68,7 @@ export class AssetView {
     database:any;
     db:any;
     material:any;
+    assetMaterial:any;
 
 
     constructor(public dbService:DBService,public camera: Camera,@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
@@ -115,7 +116,9 @@ export class AssetView {
           currPage:this.page,
           pageSort: this.pageSort
       };
-      this.inventoryMaterial(searchCriteria);
+
+
+
   }
 
     getReadings(){
@@ -698,27 +701,39 @@ export class AssetView {
 
 
     statusHistory(assetId){
+        this.spinner=true;
         var search={
             assetId:assetId
         };
         this.assetService. statusHistory(search).subscribe(
             response=>{
+                this.spinner=false;
                 console.log("Status History");
                 console.log(response);
                 this.status=response.transactions;
+            },error=>{
+                this.spinner=false;
+                console.log("Error in getting status History");
+                console.log(error);
             }
         )
     }
 
     siteHistory(assetId){
+        this.spinner=true;
         var search={
             assetId:assetId
         };
         this.assetService.siteHistory(search).subscribe(
             response=>{
+                this.spinner=false;
                 console.log("Site Transfer History");
                 console.log(response);
                 this.site=response.transactions;
+            },error=>{
+                this.spinner=false;
+                console.log('Error in getting Site History');
+                console.log(error);
             }
         )
     }
@@ -762,19 +777,30 @@ export class AssetView {
 
     }
 
-    inventoryMaterial(searchCriteria){
-        this.inventoryService.getMaterials(searchCriteria).subscribe(
-            response=>{
-                console.log("Getting Inventory Materials");
-                console.log(response);
-                this.material=response;
-            },err=>{
-                console.log("Error in Getting Inventory Materials");
-                console.log(err);
+    getMaterials(assetId){
+        this.spinner=true;
+        var search={
+            assetId:this.assetDetails.id,
+            siteId:this.assetDetails.siteId,
+        };
 
+        this.assetService.getAssetMaterial(search).subscribe(
+            response=>{
+                this.spinner=false;
+                console.log("Getting Job Materials");
+                console.log(response);
+                this.assetMaterial=response;
+            },error=>{
+                this.spinner=false;
+                console.log("Error in Getting Job material");
+                console.log(error);
             }
         )
+
     }
+
+
+
 
 
 
