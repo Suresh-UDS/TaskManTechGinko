@@ -187,10 +187,10 @@ export class MyApp {
         console.log(this.appVersion.getPackageName());
         console.log(this.appVersion.getVersionCode());
         console.log(this.appVersion.getVersionNumber());
-      this.statusBar.styleDefault();
+      // this.statusBar.styleDefault();
       this.splashScreen.hide();
-     // this.statusBar.overlaysWebView(true);
-     // this.statusBar.backgroundColorByHexString("#25312C");
+      this.statusBar.overlaysWebView(false);
+      this.statusBar.backgroundColorByHexString("#e67817");
 
         this.oneSignal.startInit('647127c6-f890-4aad-b4e2-52379805f26c','1015991031299');
         this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);

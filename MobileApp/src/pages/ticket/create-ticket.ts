@@ -45,6 +45,19 @@ export class CreateTicket {
     takenImages:any;
     fileTransfer: FileTransferObject = this.transfer.create();
     assetDetails:any;
+    siteActive:any;
+    index:any;
+    employeeActive:any;
+    emp:any;
+    empIndex:any;
+    site:any;
+    severityActive:any;
+    sevIndex:any;
+    s:any;
+    empSpinner=false;
+    chooseSite=true;
+    showEmployees=false;
+
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public siteService:SiteService,public camera:Camera,public popoverCtrl: PopoverController,
                 public jobService:JobService, public cs:componentService, public employeeService:EmployeeService,@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,private transfer: FileTransfer) {
@@ -79,21 +92,29 @@ export class CreateTicket {
       )
   }
 
-    getEmployee(id)
+    getEmployee(site,i)
     {
-        if(id)
+        if(site)
         {
             console.log('ionViewDidLoad Add jobs employee');
-
-            window.localStorage.setItem('site',id);
+            this.index = i;
+            this.siteActive = true;
+            // this.siteName = site.name;
+            this.site = site;
+            this.empSpinner=true;
+            this.chooseSite=false;
+            this.showEmployees=false;
+            // window.localStorage.setItem('site',id);
             console.log(this.empSelect);
             var searchCriteria = {
                 currPage : 1,
-                siteId:id
+                siteId:this.site.id
             };
             this.employeeService.searchEmployees(searchCriteria).subscribe(
                 response=> {
                     console.log(response);
+                    this.empSpinner=false;
+                    this.showEmployees=true;
                     if(response.transactions!==0)
                     {
                         this.empSelect=false;
@@ -120,21 +141,37 @@ export class CreateTicket {
         }
     }
 
+    activeEmployee(emp,i)
+    {
+        this.empIndex = i;
+        this.employeeActive = true;
+        this.emp = emp;
+        console.log( this.emp);
+    }
+
+    activeSeverity(s,i)
+    {
+        this.sevIndex = i;
+        this.severityActive = true;
+        this.s = s;
+        console.log( this.s);
+    }
+
   createTicket(){
-          if(this.title && this.description && this.siteName && this.employ )
+          if(this.title && this.description && this.site && this.emp )
           {
               this.eMsg="";
-              this.siteId=window.localStorage.getItem('site')
+              // this.siteId=window.localStorage.getItem('site')
               console.log( this.siteId);
               this.userId=localStorage.getItem('employeeUserId')
               this.newTicket={
                   "title":this.title,
                   "description":this.description,
                   "comments":this.comments,
-                  "siteId":this.siteId,
-                  "employeeId":this.employ,
+                  "siteId":this.site.id,
+                  "employeeId":this.emp.id,
                   "userId":this.userId,
-                  "severity":this.severity,
+                  "severity":this.s,
 
               };
 

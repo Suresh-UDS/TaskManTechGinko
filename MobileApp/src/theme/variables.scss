@@ -42,7 +42,9 @@ $colors: (
   clr-blue:#00bcd4,
   grey:#EEEEEE,
   clr-orange:#ff9800,
-  green:green
+  green:green,
+  light-orange:#ffc107,
+  sky-blue:#00BCD4
 );
 
 $clr-white:#ffffff;
@@ -76,13 +78,16 @@ ion-label
 }
 .dark
 {
-  color: color($colors, dark);
+  color: color($colors, dark) !important;
 }
 .greyBg
 {
-  background:color($colors, grey);
+  background:color($colors, grey) !important;
 }
-
+.sky-blue
+{
+  color: color($colors, sky-blue) !important;
+}
 
 .font-size12 p
 {
@@ -100,14 +105,86 @@ ion-label
 {
   background-color: $clr-white !important;
 }
-ion-segment .segment-button.segment-activated
+ion-segment
 {
-  color: $clr-white !important;
-  background-color: $clr-black !important;
+  .segment-button
+  {
+    color: color($colors, primary) !important;
+  }
+  .segment-button.segment-activated
+  {
+    color: $clr-white !important;
+    background-color: color($colors, dark) !important;
+  }
 }
-ion-segment .segment-button
+.SitesScrollCon
 {
-  color: color($colors, primary) !important;
+  .scroll-item
+  {
+    background: transparent;
+    border-radius: 3px;
+    min-width: 120px;
+    min-height: 60px;
+    box-shadow: none;
+    border: 1px solid #ffc107;
+    padding:0;
+  }
+  .scroll-item.severity
+  {
+    min-width: 70px;
+    min-height: 40px;
+    p.siteName
+    {
+      width: 65px;
+    }
+  }
+  p.siteName
+  {
+    width: 110px;
+    padding-top: 10px !important;
+    font-size: 10px !important;
+  }
+}
+.CreateTicketPage
+{
+  button.button-md-primary, button.button-ios-primary
+  {
+    border: 1px solid color($colors, primary) !important;
+    background: color($colors, light-orange) !important;
+  }
+  .form-group
+  {
+    .form-control
+    {
+      border: 1px solid color($colors, grey) !important;
+      height: 40px;
+      /* padding-left: 10px; */
+      padding-left: 10px;
+      background-image: none !important;
+      border-radius:3px;
+    }
+    .form-control.commentsTxt
+    {
+      height: 70px;
+    }
+    label.control-label
+    {
+      padding-left: 10px;
+    }
+
+  }
+  .form-group.is-focused
+  {
+    .form-control
+    {
+      border: 1px solid color($colors, light-orange) !important;
+    }
+  }
+  .form-group.label-floating.is-focused label.control-label
+  {
+    padding-left: 0 !important;
+  }
+
 }
 
 
@@ -507,7 +584,7 @@ ion-app.md
     ion-card-header
     {
       color: color($colors, danger);
-      border-bottom:1px dotted color($colors, danger);
+      border-bottom:1px dotted color($colors, danger) !important;
     }
     ion-card-content
     {
@@ -528,7 +605,7 @@ ion-app.md
     ion-card-header
     {
       color: color($colors, green);
-      border-bottom:1px dotted color($colors, green);
+      border-bottom:1px dotted color($colors, green) !important;
     }
     ion-card-content
     {
@@ -547,7 +624,7 @@ ion-app.md
     ion-card-header
     {
       color: color($colors, dark);
-      border-bottom:1px dotted color($colors, grey);
+      border-bottom:1px dotted color($colors, grey) !important;
     }
     ion-card-content
     {
