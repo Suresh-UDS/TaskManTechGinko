@@ -111,7 +111,7 @@ public class ExportUtil {
 	private String[] VENDOR_HEADER = { "ID", "NAME", "CONTACT FIRSTNAME", "CONTACT LASTNAME", "PHONE", "EMAIL", "ADDRESSLINE1", "ADDRESSLINE2", "CITY", "COUNTRY", "STATE", "PINCODE"};
 
 	private String[] FEEDBACK_HEADER = { "ID", "DATE", "REVIEWER NAME", "REVIEWER CODE", "CLIENT", "SITE", "FEEDBACK_NAME", "BLOCK", "FLOOR", "ZONE", "RATING", "REMARKS", "QUESTION", "ANSWER", "ITEM REMARKS" };
-	
+
 	private String[] QUOTATION_HEADER = { "ID", "CLIENT NAME", "SITE NAME", "QUOTATION NAME", "TITLE", "SENDBY USERNAME", "SUBMITTED DATE", "APPROVEDBY USERNAME", "APPROVED DATE", "STATUS", "MODE", "GRAND TOTAL"};
 
 	private final static String ATTENDANCE_REPORT = "ATTENDANCE_REPORT";
@@ -491,7 +491,8 @@ public class ExportUtil {
 					Employee emp = employeeRepository.findByEmpId(attn.getEmployeeEmpId());
 
 					dataRow.createCell(0).setCellValue(attn.getEmployeeEmpId());
-					dataRow.createCell(1).setCellValue(attn.getEmployeeName() +" " +attn.getEmployeeLastName() !=null?attn.getEmployeeLastName() :"");
+					String employeeLastName = StringUtils.isNotEmpty(attn.getEmployeeLastName())? attn.getEmployeeLastName(): "";
+					dataRow.createCell(1).setCellValue(attn.getEmployeeName() +" " +employeeLastName);
 					dataRow.createCell(2).setCellValue(emp.isReliever()? "YES":"NO");
 					dataRow.createCell(3).setCellValue(attn.getSiteName());
 					dataRow.createCell(4).setCellValue("");
@@ -2387,7 +2388,7 @@ public class ExportUtil {
 		result.setStatus(getExportStatus(file_Name));
 		return result;
 	}
-	
+
 	public ExportResult writeQuotationExcelReportToFile(List<QuotationDTO> content, String empId, ExportResult result) {
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend = " + isAppend);
