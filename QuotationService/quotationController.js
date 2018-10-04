@@ -717,7 +717,7 @@ module.exports = {
             }else{
                 quotationSummary.totalCount = 0;
             }
-            Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date((req.body.toDate) }, isDrafted: true}).exec(function(err, result){ 
+            Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isDrafted: true}).exec(function(err, result){ 
                 if(result && result.length > 0) {
                     quotationSummary.totalPending = result.length;
                 }else{
