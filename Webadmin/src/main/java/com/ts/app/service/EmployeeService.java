@@ -287,12 +287,12 @@ public class    EmployeeService extends AbstractService {
         designationRepository.save(designation);
         return designationDTO;
     }
-    
+
     public EmployeeDTO updateReliever(EmployeeDTO employee, EmployeeDTO reliever, RelieverDTO relieverDetails) {
     		EmployeeReliever employeeReliever = new EmployeeReliever();
     		employeeReliever.setEmployee(employeeRepository.findOne(employee.getId()));
     		if(reliever != null) {
-    			employeeReliever.setReliever(employeeRepository.findOne(reliever.getId()));
+    			employeeReliever.setRelieverEmployee(employeeRepository.findOne(reliever.getId()));
     		}
     		if(relieverDetails != null) {
     			if(relieverDetails.getSiteId() > 0) {
@@ -710,7 +710,7 @@ public class    EmployeeService extends AbstractService {
         entities = employeeRepository.findAllRelievers(siteId);
         return mapperUtil.toModelList(entities, EmployeeDTO.class);
     }
-    
+
     public List<EmployeeRelieverDTO> findRelievers(SearchCriteria searchCriteria) {
         List<EmployeeReliever> entities = null;
         Pageable pageRequest = null;

@@ -24,27 +24,27 @@ public class EmployeeReliever extends AbstractAuditingEntity implements Serializ
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "employeeId")
 	private Employee employee;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "siteId")
 	private Site site;
 
 	private Timestamp startTime;
-	
+
 	private Timestamp endTime;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "relieverId")
-	private Employee reliever;
-	
+	private Employee relieverEmployee;
+
 	private String relieverName;
-	
+
 	private String relieverMobile;
-	
+
 
 	public Long getId() {
 		return id;
@@ -102,14 +102,11 @@ public class EmployeeReliever extends AbstractAuditingEntity implements Serializ
 		this.relieverMobile = relieverMobile;
 	}
 
-	public Employee getReliever() {
-		return reliever;
-	}
+    public Employee getRelieverEmployee() {
+        return relieverEmployee;
+    }
 
-	public void setReliever(Employee reliever) {
-		this.reliever = reliever;
-	}
-
-	
-	
+    public void setRelieverEmployee(Employee relieverEmployee) {
+        this.relieverEmployee = relieverEmployee;
+    }
 }
