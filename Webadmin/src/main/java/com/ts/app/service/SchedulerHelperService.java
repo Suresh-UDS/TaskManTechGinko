@@ -1631,10 +1631,10 @@ public class SchedulerHelperService extends AbstractService {
 								if(CollectionUtils.isNotEmpty(jobSummary)) {
 									ReportResult summary = jobSummary.get(0);
 									sb.append("<br/>Job Summary<br/>");
-									sb.append("<table border=\"1\"><tr><td>Total Jobs : </td><td>"+ summary.getTotalJobCount() +"</td>");
-									sb.append("<tr><td>Assigned : "+ summary.getAssignedJobCount() + "</td>");
-									sb.append("<tr><td>Completed : "+ summary.getCompletedJobCount() + "</td>");
-									sb.append("<tr><td>Overdue : "+ summary.getOverdueJobCount() + "</td>");
+									sb.append("<table border=\"1\" cellpadding=\"5\"  style=\"border-collapse:collapse;margin-bottom:20px;\"><tr><td>Total Jobs : </td><td>"+ summary.getTotalJobCount() +"</td>");
+									sb.append("<tr><td>Assigned : </td><td>"+ summary.getAssignedJobCount() + "</td>");
+									sb.append("<tr><td>Completed : </td><td>"+ summary.getCompletedJobCount() + "</td>");
+									sb.append("<tr><td>Overdue : </td><td>"+ summary.getOverdueJobCount() + "</td>");
 									sb.append("</tr></table>");
 								}
 								log.debug("send report");
@@ -1660,9 +1660,9 @@ public class SchedulerHelperService extends AbstractService {
 							siteIds.add(site.getId());
 							ReportResult summary = reportService.getTicketStatsDateRange(0, siteIds, cal.getTime(), dayEndcal.getTime());
 							if(summary != null) {
-								sb.append("<table border=\"1\"><tr><td>Total Tickets : "+ summary.getTotalNewTicketCount() +"</td>");
-								sb.append("<tr><td>Closed : "+ summary.getTotalClosedTicketCount() + "</td>");
-								sb.append("<tr><td>Pending : "+ summary.getTotalPendingTicketCount() + "</td>");
+								sb.append("<table border=\"1\" cellpadding=\"5\"  style=\"border-collapse:collapse;margin-bottom:20px;\"><tr><td>Total Tickets : "+ summary.getTotalNewTicketCount() +"</td>");
+								sb.append("<tr><td>Closed : </td><td>"+ summary.getTotalClosedTicketCount() + "</td>");
+								sb.append("<tr><td>Pending : </td><td>"+ summary.getTotalPendingTicketCount() + "</td>");
 								sb.append("</tr></table>");
 							}
 							log.debug("send report");
