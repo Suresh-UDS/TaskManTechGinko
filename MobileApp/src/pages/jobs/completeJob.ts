@@ -389,10 +389,14 @@ export class CompleteJobPage {
                         },
                        err=>{
                         this.component.closeLoader();
-                           demo.showSwal('warning-message-and-confirmation-ok','Error in completing job');
+                           demo.showSwal('warning-message-and-confirmation-ok','Error in Uploading images');
 
                        }
                 )
+            },error2 => {
+                this.component.closeLoader();
+                console.log(error2);
+                demo.showSwal('warning-message-and-confirmation-ok','Error in Completing Job',error2.errorMessage);
             }
         )
 
