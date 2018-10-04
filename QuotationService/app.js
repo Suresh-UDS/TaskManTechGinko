@@ -90,6 +90,7 @@ function startup(){
   app.get('/api/rateCardTypes',quotationController.getRateCardTypes);
   app.post('/api/rateCard/delete',quotationController.deleteRateCard);
   app.post('/api/quotation/uploadImage',quotationController.updateImages);
+  app.post('/api/quotation/summary', quotationController.getSummary);
 
   // app.post('/api/oneSignal/send',notificationService.sendNotification);
   // app.post('/api/oneSignal/subscribe', notificationService.subscribe);

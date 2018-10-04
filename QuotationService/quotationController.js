@@ -704,6 +704,44 @@ module.exports = {
                 }
             }
         })
+    },
+
+    getSummary: function(req, res, next) {
+        var quotationSummary = {};
+        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate, isDrafted: true}).exec(function(err, res){ 
+            if(res.length > 0) {
+                quotationSummary.pending = res.length;
+            }else{
+                quotationSummary.pending = 0;
+            }
+        });
+
+        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate, isApproved: true}).exec(function(err, res){ 
+            if(res.length > 0) {
+                quotationSummary.approved = res.length;
+            }else{
+                quotationSummary.approved = 0;
+            }
+        });
+
+        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate, isSubmitted: true}).exec(function(err, res){ 
+            if(res.length > 0) {
+                quotationSummary.submitted = res.length;
+            }else{
+                quotationSummary.submitted = 0;
+            }
+        });
+
+        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate, isArchived: true}).exec(function(err, res){ 
+            if(res.length > 0) {
+                quotationSummary.archived = res.length;
+            }else{
+                quotationSummary.archived = 0;
+            }
+        });
+
+        res.send(200, quotationSummary);
+
     }
 
 
