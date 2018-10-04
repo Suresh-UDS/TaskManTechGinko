@@ -1610,6 +1610,7 @@ public class SchedulerHelperService extends AbstractService {
 				SearchCriteria sc = new SearchCriteria();
 				sc.setCheckInDateTimeFrom(cal.getTime());
 				sc.setFromDate(cal.getTime());
+				sc.setToDate(dayEndcal.getTime());
 				sc.setQuotationCreatedDate(cal.getTime());
 				sc.setSiteId(site.getId());
 				
