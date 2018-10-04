@@ -53,6 +53,9 @@ export class SiteViewPage {
     jobsTotalPages:0;
     employeePage=1;
     employeeTotalpages=0;
+    page:1;
+    pageSort:15;
+
   constructor(public navCtrl: NavController,public component:componentService,private employeeService: EmployeeService,public navParams:NavParams,private siteService: SiteService,public myService:authService,public authService:authService, public toastCtrl: ToastController,
 
               private jobService:JobService, private attendanceService: AttendanceService, private quotationService: QuotationService, public events:Events) {
@@ -300,7 +303,11 @@ export class SiteViewPage {
   }
 
   getQuotations(){
-    this.quotationService.getQuotations().subscribe(
+      var searchCriteria={
+          currPage:this.page,
+          pageSort:this.pageSort,
+      };
+    this.quotationService.getQuotations(searchCriteria).subscribe(
         response=>{
             if(response.errorStatus){
                 demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
