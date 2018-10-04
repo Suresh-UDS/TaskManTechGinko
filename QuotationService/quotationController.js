@@ -708,6 +708,14 @@ module.exports = {
 
     getSummary: function(req, res, next) {
         var quotationSummary = {};
+        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate }).exec(function(err, res){ 
+            if(res.length > 0) {
+                quotationSummary.totalCount = res.length;
+            }else{
+                quotationSummary.totalCount = 0;
+            }
+        });
+
         Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate, isDrafted: true}).exec(function(err, res){ 
             if(res.length > 0) {
                 quotationSummary.pending = res.length;
