@@ -1359,4 +1359,12 @@ public class SchedulerService extends AbstractService {
 				}
 			}
 		}
-	}
+	
+	@Scheduled(cron="0 */30 * * * ?")
+	public void sendDaywiseReport() {
+		schedulerHelperService.sendDaywiseReportEmail();
+	}	
+	
+		
+	
+}

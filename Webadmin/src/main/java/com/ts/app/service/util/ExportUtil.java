@@ -67,6 +67,7 @@ import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
 import com.ts.app.web.rest.dto.FeedbackTransactionResultDTO;
 import com.ts.app.web.rest.dto.JobChecklistDTO;
 import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.QuotationDTO;
 import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.TicketDTO;
 import com.ts.app.web.rest.dto.VendorDTO;
@@ -110,6 +111,8 @@ public class ExportUtil {
 	private String[] VENDOR_HEADER = { "ID", "NAME", "CONTACT FIRSTNAME", "CONTACT LASTNAME", "PHONE", "EMAIL", "ADDRESSLINE1", "ADDRESSLINE2", "CITY", "COUNTRY", "STATE", "PINCODE"};
 
 	private String[] FEEDBACK_HEADER = { "ID", "DATE", "REVIEWER NAME", "REVIEWER CODE", "CLIENT", "SITE", "FEEDBACK_NAME", "BLOCK", "FLOOR", "ZONE", "RATING", "REMARKS", "QUESTION", "ANSWER", "ITEM REMARKS" };
+	
+	private String[] QUOTATION_HEADER = { "ID", "CLIENT NAME", "SITE NAME", "QUOTATION NAME", "TITLE", "SENDBY USERNAME", "SUBMITTED DATE", "APPROVEDBY USERNAME", "APPROVED DATE", "STATUS", "MODE", "GRAND TOTAL"};
 
 	private final static String ATTENDANCE_REPORT = "ATTENDANCE_REPORT";
 	private final static String TICKET_REPORT = "TICKET_REPORT";
@@ -2369,6 +2372,118 @@ public class ExportUtil {
 		writer_Thread.start();
 
 		result.setEmpId(emp.getEmpId());
+		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
+		result.setStatus(getExportStatus(file_Name));
+		return result;
+	}
+	
+	public ExportResult writeQuotationExcelReportToFile(List<QuotationDTO> content, String empId, ExportResult result) {
+		boolean isAppend = (result != null);
+		log.debug("result = " + result + ", isAppend = " + isAppend);
+		if (result == null) {
+			result = new ExportResult();
+		}
+		String file_Name = null;
+		if (StringUtils.isEmpty(result.getFile())) {
+			if (StringUtils.isNotEmpty(empId)) {
+				file_Name = empId + System.currentTimeMillis() + ".xlsx";
+			} else {
+				file_Name = System.currentTimeMillis() + ".xlsx";
+			}
+		} else {
+			file_Name = result.getFile() + ".xlsx";
+		}
+
+		if (statusMap.containsKey((file_Name))) {
+			String status = statusMap.get(file_Name);
+			// log.debug("Current status for filename -" + file_Name + ", status -" +
+			// status);
+		} else {
+			statusMap.put(file_Name, "PROCESSING");
+		}
+
+		final String export_File_Name = file_Name;
+		if (lock == null) {
+			lock = new Lock();
+		}
+		try {
+			lock.lock();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		Thread writer_Thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String file_Path = env.getProperty("export.file.path");
+				FileSystem fileSystem = FileSystems.getDefault();
+//				if (StringUtils.isNotEmpty(empId)) {
+//					file_Path += "/" + empId;
+//				}
+				Path path = fileSystem.getPath(file_Path);
+				if (!Files.exists(path)) {
+					Path newEmpPath = Paths.get(file_Path);
+					try {
+						Files.createDirectory(newEmpPath);
+					} catch (IOException e) {
+						log.error("Error While Creating Path " + newEmpPath);
+					}
+				}
+
+				file_Path += "/" + export_File_Name;
+				// create workbook
+				XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+				// create worksheet with title
+				XSSFSheet xssfSheet = xssfWorkbook.createSheet("QUOTATION_HEADER");
+
+				Row headerRow = xssfSheet.createRow(0);
+
+				for (int i = 0; i < QUOTATION_HEADER.length; i++) {
+					Cell cell = headerRow.createCell(i);
+					cell.setCellValue(QUOTATION_HEADER[i]);
+				}
+
+				int rowNum = 1;
+
+				for (QuotationDTO transaction : content) {
+					Row dataRow = xssfSheet.createRow(rowNum++);
+					statusMap.put("length", dataRow.toString());
+					dataRow.createCell(0).setCellValue(transaction.getId());
+					dataRow.createCell(1).setCellValue(transaction.getProjectName());
+					dataRow.createCell(2).setCellValue(transaction.getSiteName());
+					dataRow.createCell(3).setCellValue(transaction.getQuotationFileName());
+					dataRow.createCell(4).setCellValue(transaction.getTitle());
+					dataRow.createCell(5).setCellValue(transaction.getSentByUserName());
+					dataRow.createCell(6).setCellValue(transaction.getSubmittedDate());
+					dataRow.createCell(7).setCellValue(transaction.getApprovedByUserName());
+					dataRow.createCell(8).setCellValue(transaction.getApprovedDate());
+					dataRow.createCell(9).setCellValue(transaction.getStatus());
+					dataRow.createCell(10).setCellValue(transaction.getMode());
+					dataRow.createCell(11).setCellValue(transaction.getGrandTotal());
+				}
+
+				for (int i = 0; i < QUOTATION_HEADER.length; i++) {
+					xssfSheet.autoSizeColumn(i);
+				}
+				log.info(export_File_Name + " Quotation export file was created successfully !!!");
+				statusMap.put(export_File_Name, "COMPLETED");
+
+				FileOutputStream fileOutputStream = null;
+				try {
+					fileOutputStream = new FileOutputStream(file_Path);
+					xssfWorkbook.write(fileOutputStream);
+					fileOutputStream.close();
+				} catch (IOException e) {
+					log.error("Error while flushing/closing  !!!");
+					statusMap.put(export_File_Name, "FAILED");
+				}
+				lock.unlock();
+			}
+		});
+
+		writer_Thread.start();
+
+		result.setEmpId(empId);
 		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
 		result.setStatus(getExportStatus(file_Name));
 		return result;

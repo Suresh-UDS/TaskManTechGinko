@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,6 +58,7 @@ import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SchedulerConfigRepository;
 import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.TicketRepository;
 import com.ts.app.service.util.CommonUtil;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
@@ -67,9 +69,11 @@ import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
 import com.ts.app.web.rest.dto.JobChecklistDTO;
 import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.QuotationDTO;
 import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
+import com.ts.app.web.rest.dto.TicketDTO;
 
 /**
  * Service class for managing Device information.
@@ -123,6 +127,9 @@ public class SchedulerHelperService extends AbstractService {
 	private AssetRepository assetRepository;
 	
 	@Inject
+	private TicketManagementService ticketManagementService;
+	
+	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 
 	@Inject
@@ -145,6 +152,9 @@ public class SchedulerHelperService extends AbstractService {
 
 	@Inject
 	private SchedulerConfigRepository schedulerConfigRepository;
+	
+	@Inject
+	private RateCardService quotationService;
 
 	public void eodJobReport() {
 		if (env.getProperty("scheduler.eodJobReport.enabled").equalsIgnoreCase("true")) {
@@ -1521,5 +1531,137 @@ public class SchedulerHelperService extends AbstractService {
 		}
 		return job;
 	}
+
+	public void sendDaywiseReportEmail() {
+		// TODO Auto-generated method stub
+		dayWiseJQTReport();
+	}
+	
+	public void dayWiseJQTReport() {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		List<Project> projects = projectRepository.findAll();
+		for (Project proj : projects) {
+			Set<Site> sites = proj.getSite();
+			Iterator<Site> siteItr = sites.iterator();
+			while (siteItr.hasNext()) {
+				Site site = siteItr.next();
+				List<Setting> settings = null;
+				List<Setting> emailAlertTimeSettings = null;
+				settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId("email.notification.daywiseReports", site.getId(), proj.getId());
+				Setting eodReports = null;
+				if (CollectionUtils.isNotEmpty(settings)) {
+					eodReports = settings.get(0);
+				}
+				settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId("email.notification.daywiseReports.emails", site.getId(), proj.getId());
+				emailAlertTimeSettings = settingRepository.findSettingByKeyAndSiteIdOrProjectId("email.notification.dayWiseReportAlertTime", site.getId(), proj.getId());
+
+				Setting eodReportEmails = null;
+				if (CollectionUtils.isNotEmpty(settings)) {
+					eodReportEmails = settings.get(0);
+				}
+				
+				Setting DayWiseAlertTime = null;
+				if (CollectionUtils.isNotEmpty(emailAlertTimeSettings)) {
+					DayWiseAlertTime = emailAlertTimeSettings.get(0);
+				} 
+				
+				SearchCriteria sc = new SearchCriteria();
+				sc.setCheckInDateTimeFrom(cal.getTime());
+				sc.setQuotationCreatedDate(cal.getTime());
+				sc.setSiteId(site.getId());
+				
+				ArrayList<String> files =new ArrayList<String>();
+				
+				Calendar alertTimeCal = Calendar.getInstance();
+				Calendar now = Calendar.getInstance();
+				now.set(Calendar.SECOND,  0);
+				now.set(Calendar.MILLISECOND, 0);
+				
+				ExportResult jobResult = new ExportResult();
+				if(env.getProperty("scheduler.dayWiseJobReport.enabled").equalsIgnoreCase("true")) {
+					List<JobDTO> jobResults = jobManagementService.generateReport(sc, false);
+
+					if (CollectionUtils.isNotEmpty(jobResults)) {
+						// if report generation needed
+						log.debug("results exists");
+						String alertTime = DayWiseAlertTime !=null ? DayWiseAlertTime.getSettingValue() : null;
+						
+						if(StringUtils.isNotEmpty(alertTime)) {
+							try {
+								Date alertDateTime = DateUtil.parseToDateTime(alertTime);
+								alertTimeCal.setTime(alertDateTime);
+								alertTimeCal.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH));
+								alertTimeCal.set(Calendar.MONTH, now.get(Calendar.MONTH));
+								alertTimeCal.set(Calendar.YEAR, now.get(Calendar.YEAR));
+								alertTimeCal.set(Calendar.SECOND, 0);
+								alertTimeCal.set(Calendar.MILLISECOND, 0);
+							}catch (Exception e) {
+								log.error("Error while parsing attendance shift alert time configured for client : " + proj.getName() , e);
+							}
+						}
+						
+						if (eodReports != null && eodReports.getSettingValue().equalsIgnoreCase("true")) {
+							log.debug("send report");
+							jobResult = exportUtil.writeJobExcelReportToFile(proj.getName(), jobResults, null, null, jobResult);
+							files.add(jobResult.getFile());
+						}
+
+					} else {
+						log.debug("no jobs found on the daterange");
+					}
+				}
+				
+				ExportResult exportTicketResult = new ExportResult();
+				if(env.getProperty("scheduler.dayWiseTicketReport.enabled").equalsIgnoreCase("true")) {
+					List<TicketDTO> ticketResults = ticketManagementService.generateReport(sc, false);
+
+					if (CollectionUtils.isNotEmpty(ticketResults)) {
+						// if report generation needed
+						log.debug("results exists");
+						if (eodReports != null && eodReports.getSettingValue().equalsIgnoreCase("true")) {
+							log.debug("send report");
+							exportTicketResult = exportUtil.writeTicketExcelReportToFile(proj.getName(), ticketResults, null, null, exportTicketResult);
+							files.add(exportTicketResult.getFile());
+						}
+
+					} else {
+						log.debug("no tickets found on the daterange");
+					}
+				}
+				
+				ExportResult exportQuotationResult = new ExportResult();
+				if(env.getProperty("scheduler.dayWiseQuotationReport.enabled").equalsIgnoreCase("true")) {
+		
+					Object quotationObj = quotationService.getQuotations(sc);
+					List<Object> quotations = Arrays.asList(quotationObj);
+					
+					@SuppressWarnings("unchecked")
+					List<QuotationDTO> quotationResults = (List<QuotationDTO>)(Object)quotations;
+
+					if (CollectionUtils.isNotEmpty(quotationResults)) {
+						// if report generation needed
+						log.debug("results exists");
+						if (eodReports != null && eodReports.getSettingValue().equalsIgnoreCase("true")) {
+							log.debug("send report");
+							exportQuotationResult = exportUtil.writeQuotationExcelReportToFile(quotationResults, null, exportQuotationResult);
+							files.add(exportQuotationResult.getFile());
+						}
+
+					} else {
+						log.debug("no quotations found on the daterange");
+					}
+				}
+				
+				if (eodReportEmails != null && (DayWiseAlertTime == null ||  alertTimeCal.equals(now))) {
+					mailService.sendDaywiseReportEmailFile(eodReportEmails.getSettingValue(), files, cal.getTime());
+				}
+		
+			}
+		}
+		
+	}
+	
 
 }

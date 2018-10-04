@@ -698,9 +698,76 @@ public class JobManagementService extends AbstractService {
 		}
 		return reportResults;
 	}
+	
+	public List<JobDTO> generateReport(SearchCriteria searchCriteria, boolean isAdmin) {
+		List<JobDTO> transactions = null;
+		if(searchCriteria != null) {
+			User user = null;
+			if(searchCriteria.getUserId() > 0) {
+				Employee employee = employeeRepository.findByUserId(searchCriteria.getUserId());
+				user = userRepository.findOne(searchCriteria.getUserId());
+				isAdmin = user.isAdmin();
+				List<Long> subEmpIds = new ArrayList<Long>();
+				if(employee != null) {
+					searchCriteria.setDesignation(employee.getDesignation());
+					Hibernate.initialize(employee.getSubOrdinates());
+					int levelCnt = 1;
+					findAllSubordinates(employee, subEmpIds, levelCnt);
+					log.debug("List of subordinate ids -"+ subEmpIds);
+					if(CollectionUtils.isEmpty(subEmpIds)) {
+						subEmpIds.add(employee.getId());
+					}
+					searchCriteria.setSubordinateIds(subEmpIds);
+				}
+			}
+			log.debug("SearchCriteria ="+ searchCriteria);
+
+			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+			Page<Job> page = null;
+			List<Job> allJobsList = new ArrayList<Job>();
+
+			Date checkInDate = searchCriteria.getCheckInDateTimeFrom();
 
 
+            log.debug("JobSpecification toPredicate - searchCriteria checkInDateFrom -"+ checkInDate);
+        		if(checkInDate != null) {
+	        	    log.debug("check in date is not null");
+		        	Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+		        	checkInDateFrom.setTime(checkInDate);
 
+		        	checkInDateFrom.set(Calendar.HOUR_OF_DAY, 0);
+		        	checkInDateFrom.set(Calendar.MINUTE,0);
+		        	checkInDateFrom.set(Calendar.SECOND,0);
+		        	java.sql.Date fromDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateFrom));
+		        	//String fromDt = DateUtil.formatUTCToIST(checkInDateFrom);
+		        	Calendar checkInDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+		        	if(searchCriteria.getCheckInDateTimeTo() != null) {
+		        		checkInDateTo.setTime(searchCriteria.getCheckInDateTimeTo());
+		        	}else {
+		        		checkInDateTo.setTime(checkInDate);
+		        	}
+
+		        	checkInDateTo.set(Calendar.HOUR_OF_DAY, 23);
+		        	checkInDateTo.set(Calendar.MINUTE,59);
+		        	checkInDateTo.set(Calendar.SECOND,0);
+		        	java.sql.Date toDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateTo));
+
+		        	page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
+		        	allJobsList.addAll(page.getContent());
+		        	if(CollectionUtils.isNotEmpty(allJobsList)) {
+		        		if(transactions == null) {
+		    				transactions = new ArrayList<JobDTO>();
+		    			}
+		        		for(Job jobList : allJobsList) {
+		        			transactions.add(mapperUtil.toModel(jobList, JobDTO.class));
+		        		}
+		        	} 	
+	        	}
+        		
+			}
+		return transactions;
+		
+	}
 
 
     public SearchResult<JobDTO> findByDateSelected(SearchCriteria searchCriteria, boolean isAdmin) {

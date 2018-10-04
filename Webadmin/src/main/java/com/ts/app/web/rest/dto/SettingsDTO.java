@@ -135,6 +135,10 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     
     private List<String> warrantyEmailIds;
     
+    private long dayWiseReportEmailsId;
+    
+    private long dayWiseReportEmailAlertId;
+    
     private long dayWiseReportAlertTimeId;
     
     private Date dayWiseReportAlertTime;
@@ -669,6 +673,22 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 
 	public void setDayWiseReportEmailAlert(boolean dayWiseReportEmailAlert) {
 		this.dayWiseReportEmailAlert = dayWiseReportEmailAlert;
+	}
+
+	public long getDayWiseReportEmailsId() {
+		return dayWiseReportEmailsId;
+	}
+
+	public void setDayWiseReportEmailsId(long dayWiseReportEmailsId) {
+		this.dayWiseReportEmailsId = dayWiseReportEmailsId;
+	}
+
+	public long getDayWiseReportEmailAlertId() {
+		return dayWiseReportEmailAlertId;
+	}
+
+	public void setDayWiseReportEmailAlertId(long dayWiseReportEmailAlertId) {
+		this.dayWiseReportEmailAlertId = dayWiseReportEmailAlertId;
 	}
 
 	

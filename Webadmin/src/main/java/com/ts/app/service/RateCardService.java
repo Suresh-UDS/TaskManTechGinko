@@ -529,6 +529,7 @@ public class RateCardService extends AbstractService {
             request.put("id",searchCriteria.getId());
             request.put("title",searchCriteria.getQuotationTitle());
             request.put("createdBy",searchCriteria.getQuotationCreatedBy());
+            request.put("createdDate", searchCriteria.getQuotationCreatedDate());
             request.put("approvedBy",searchCriteria.getQuotationApprovedBy());
             request.put("status",searchCriteria.getQuotationStatus());
             request.put("submittedDate", searchCriteria.getQuotationSubmittedDate());
@@ -773,7 +774,6 @@ public class RateCardService extends AbstractService {
         result.setTransactions(transactions);
         return;
     }
-
 
 
 }
