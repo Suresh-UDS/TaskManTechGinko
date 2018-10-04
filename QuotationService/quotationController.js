@@ -47,15 +47,18 @@ var _ = require('underscore');
             quotation.createdDate = date;
         }else{
             quotation.isDrafted = false;
+	    quotation.createdDate = date;
         }
 
         if(req.body.isSubmitted){
             quotation.isSubmitted = true;
             quotation.submittedDate = date;
+	    quotation.createdDate = date;
             quotation.processHistory.isSubmitted = date;
             quotation.status = 'Waiting for approval';
         }else{
             quotation.isSubmitted = false;
+            quotation.createdDate = date;
         }
 
         if(req.body.isApproved){
@@ -586,7 +589,7 @@ module.exports = {
 
           })
       }else if(req.body.siteIds) {
-          Quotation.find({siteId:{$in:req.body.siteIds}},function(err,quotations){
+          Quotation.find({siteId:{$in:req.body.siteIds}}).sort({'createdDate':-1}).exec(function(err,quotations){
 
               if(err){
                   console.log("Error in finding quotations");
