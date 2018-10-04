@@ -1702,7 +1702,7 @@ public class SchedulerHelperService extends AbstractService {
 					}
 				}
 				
-				if (eodReportEmails != null && (DayWiseAlertTime == null ||  alertTimeCal.equals(now) || isOnDemand)) {
+				if (eodReportEmails != null && (alertTimeCal.equals(now) || isOnDemand)) {
 					mailService.sendDaywiseReportEmailFile(eodReportEmails.getSettingValue(), files, cal.getTime(), sb.toString());
 				}
 		

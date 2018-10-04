@@ -1940,7 +1940,9 @@ public class ExportUtil {
 
 		writer_Thread.start();
 
-		result.setEmpId(emp.getEmpId());
+		if(emp != null) {
+			result.setEmpId(emp.getEmpId());
+		}
 		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
 		result.setStatus(getExportStatus(file_Name));
 		return result;
