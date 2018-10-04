@@ -708,31 +708,31 @@ module.exports = {
 
     getSummary: function(req, res, next) {
         var quotationSummary = {};
-        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate }).exec(function(err, result){ 
+        Quotation.find({siteId: { $in:req.body.siteIds }, createdDate: { $gt: req.body.createdDate, $lt: req.body.toDate }}).exec(function(err, result){ 
             if(result.length > 0) {
                 quotationSummary.totalCount = result.length;
             }else{
                 quotationSummary.totalCount = 0;
             }
-            Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate, isDrafted: true}).exec(function(err, result){ 
+            Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: req.body.createdDate, $lt: req.body.toDate }, isDrafted: true}).exec(function(err, result){ 
                 if(result.length > 0) {
                     quotationSummary.totalPending = result.length;
                 }else{
                     quotationSummary.totalPending = 0;
                 }
-                Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate, isApproved: true}).exec(function(err, result){ 
+                Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: req.body.createdDate, $lt: req.body.toDate }, isApproved: true}).exec(function(err, result){ 
                     if(result.length > 0) {
                         quotationSummary.totalApproved = result.length;
                     }else{
                         quotationSummary.totalApproved = 0;
                     }
-                    Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate, isSubmitted: true}).exec(function(err, result){ 
+                    Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: req.body.createdDate, $lt: req.body.toDate }, isSubmitted: true}).exec(function(err, result){ 
                         if(result.length > 0) {
                             quotationSummary.totalSubmitted = result.length;
                         }else{
                             quotationSummary.totalSubmitted = 0;
                         }
-                        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: req.body.createdDate, isArchived: true}).exec(function(err, result){ 
+                        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: req.body.createdDate, $lt: req.body.toDate }, isArchived: true}).exec(function(err, result){ 
                             if(result.length > 0) {
                                 quotationSummary.totalArchived = result.length;
                             }else{

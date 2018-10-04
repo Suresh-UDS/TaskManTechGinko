@@ -1,9 +1,12 @@
 package com.ts.app.service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -578,7 +581,13 @@ public class RateCardService extends AbstractService {
             headers.setAll(map);
 
             JSONObject request = new JSONObject();
-            request.put("createdDate", searchCriteria.getQuotationCreatedDate());
+            TimeZone tz = TimeZone.getTimeZone("UTC");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+            df.setTimeZone(tz);
+            String createdDate = df.format(searchCriteria.getQuotationCreatedDate());
+            String toDate = df.format(searchCriteria.getToDate());
+            request.put("createdDate", createdDate);
+            request.put("toDate", toDate);
             request.put("siteIds", siteIds);
             log.debug("Request body " + request.toString());
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);
