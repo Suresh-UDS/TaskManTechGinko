@@ -110,6 +110,12 @@ public class ReportResource {
 		schedulerHelperService.generateMusterRollAttendanceReport(siteId, startCal.getTime(), endCal.getTime() , true, onDemand);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/reports/daily", method = RequestMethod.GET)
+	public ResponseEntity<?> generateDailyReport(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date reportDate) {
+		schedulerHelperService.sendDaywiseReportEmail(reportDate, true);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}	
 
 	
 	//    @CrossOrigin

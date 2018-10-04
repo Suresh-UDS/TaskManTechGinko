@@ -801,10 +801,10 @@ public class SettingsService extends AbstractService {
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_DAYWISE_REPORT)) {
 					settingDto.setDayWiseReportEmailAlertId(setting.getId());
 					settingDto.setDayWiseReportEmailAlert(Boolean.valueOf(setting.getSettingValue()));
-				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_EMAILS)) {
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_DAYWISE_REPORT_EMAILS)) {
 					settingDto.setDayWiseReportEmailsId(setting.getId());
 					settingDto.setDayWiseReportEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
-				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_ALERT_TIME)) {
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_DAYWISE_REPORT_ALERT_TIME)) {
 					settingDto.setDayWiseReportAlertTimeId(setting.getId());
 					settingDto.setDayWiseReportAlertTime(StringUtils.isNotEmpty(setting.getSettingValue()) ? DateUtil.parseToDateTime(setting.getSettingValue()) : null);
 				}

@@ -1362,7 +1362,9 @@ public class SchedulerService extends AbstractService {
 	
 	@Scheduled(cron="0 */30 * * * ?")
 	public void sendDaywiseReport() {
-		schedulerHelperService.sendDaywiseReportEmail();
+		Calendar cal = Calendar.getInstance();
+		boolean isOnDemand = false;
+		schedulerHelperService.sendDaywiseReportEmail(cal.getTime(), isOnDemand);
 	}	
 	
 		

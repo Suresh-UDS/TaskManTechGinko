@@ -1660,7 +1660,7 @@ public class ExportUtil {
 		}
 		String file_Name = null;
 		if (StringUtils.isEmpty(result.getFile())) {
-			if (StringUtils.isNotEmpty(emp.getEmpId())) {
+			if (emp != null && StringUtils.isNotEmpty(emp.getEmpId())) {
 				file_Name = JOB_REPORT + "_" + emp.getEmpId() + "_" + System.currentTimeMillis() + ".xlsx";
 			} else {
 				file_Name = JOB_REPORT + "_" + System.currentTimeMillis() + ".xlsx";
@@ -1797,10 +1797,12 @@ public class ExportUtil {
 					fileOutputStream.close();
 
 					//send job report in email.
-					String email = StringUtils.isNotEmpty(emp.getEmail()) ? emp.getEmail() : user.getEmail();
-					if(StringUtils.isNotEmpty(email)) {
-						File file = new File(file_Path);
-			    			mailService.sendJobExportEmail(projName, email, file, new Date());
+					if(emp != null) {
+						String email = StringUtils.isNotEmpty(emp.getEmail()) ? emp.getEmail() : user.getEmail();
+						if(StringUtils.isNotEmpty(email)) {
+							File file = new File(file_Path);
+				    			mailService.sendJobExportEmail(projName, email, file, new Date());
+						}
 					}
 				} catch (IOException e) {
 					log.error("Error while flushing/closing  !!!");
@@ -1811,8 +1813,9 @@ public class ExportUtil {
 		});
 
 		writer_Thread.start();
-
-		result.setEmpId(emp.getEmpId());
+		if(emp != null) {
+			result.setEmpId(emp.getEmpId());
+		}
 		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
 		result.setStatus(getExportStatus(file_Name));
 		return result;
@@ -2457,9 +2460,9 @@ public class ExportUtil {
 					dataRow.createCell(3).setCellValue(transaction.getQuotationFileName());
 					dataRow.createCell(4).setCellValue(transaction.getTitle());
 					dataRow.createCell(5).setCellValue(transaction.getSentByUserName());
-					dataRow.createCell(6).setCellValue(transaction.getSubmittedDate());
+					dataRow.createCell(6).setCellValue(transaction.getSubmittedDate() != null ? "" + transaction.getSubmittedDate() : "");
 					dataRow.createCell(7).setCellValue(transaction.getApprovedByUserName());
-					dataRow.createCell(8).setCellValue(transaction.getApprovedDate());
+					dataRow.createCell(8).setCellValue(transaction.getApprovedDate() != null ? "" + transaction.getApprovedDate() : "");
 					dataRow.createCell(9).setCellValue(transaction.getStatus());
 					dataRow.createCell(10).setCellValue(transaction.getMode());
 					dataRow.createCell(11).setCellValue(transaction.getGrandTotal());
