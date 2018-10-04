@@ -119,6 +119,7 @@ public class ExportUtil {
 	private final static String JOB_REPORT = "JOB_REPORT";
 	private final static String EMPLOYEE_REPORT = "EMPLOYEE_REPORT";
 	private final static String FEEDBACK_REPORT = "FEEDBACK_REPORT";
+	private final static String QUOTATION_REPORT = "QUOTATION_REPORT";
 
 	@Inject
 	private Environment env;
@@ -2392,9 +2393,9 @@ public class ExportUtil {
 		String file_Name = null;
 		if (StringUtils.isEmpty(result.getFile())) {
 			if (StringUtils.isNotEmpty(empId)) {
-				file_Name = empId + System.currentTimeMillis() + ".xlsx";
+				file_Name = QUOTATION_REPORT + "_" + empId + System.currentTimeMillis() + ".xlsx";
 			} else {
-				file_Name = System.currentTimeMillis() + ".xlsx";
+				file_Name = QUOTATION_REPORT + "_" + System.currentTimeMillis() + ".xlsx";
 			}
 		} else {
 			file_Name = result.getFile() + ".xlsx";
