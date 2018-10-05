@@ -1242,7 +1242,7 @@ public class JobManagementService extends AbstractService {
 		job.setEmployee(employee);
 		job.setComments(jobDTO.getComments());
 		job.setPlannedStartTime(jobDTO.getPlannedStartTime());
-		//if(jobDTO.getPlannedEndTime() == null) {
+		if(jobDTO.getPlannedEndTime() == null) {
 			Calendar endTimeCal = Calendar.getInstance();
 			endTimeCal.setTime(jobDTO.getPlannedStartTime());
 			endTimeCal.add(Calendar.HOUR_OF_DAY, jobDTO.getPlannedHours());
@@ -1252,9 +1252,9 @@ public class JobManagementService extends AbstractService {
 				endTimeCal.add(Calendar.DAY_OF_MONTH, 1);
 			}
 			job.setPlannedEndTime(endTimeCal.getTime());
-		//}else {
-		//	job.setPlannedEndTime(jobDTO.getPlannedEndTime());
-		//}
+		}else {
+			job.setPlannedEndTime(jobDTO.getPlannedEndTime());
+		}
 		job.setPlannedHours(jobDTO.getPlannedHours());
 
 		job.setActualStartTime(jobDTO.getActualStartTime());
