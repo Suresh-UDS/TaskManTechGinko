@@ -18,7 +18,9 @@ angular.module('timeSheetApp')
         $scope.btnDisable = false;
         $scope.saveLoad = false;
         $rootScope.conformText = null;
-        $scope.anyClient = {name: '-- Select Client --'};
+        $scope.clientGroup = {};
+        $scope.selectedClientGroup = {};
+
 
         //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -54,6 +56,9 @@ angular.module('timeSheetApp')
         	$scope.success =null;
         	$scope.errorProjectExists = null;
         	$scope.btnDisable = true;
+        	if($scope.selectedClientGroup.id) {
+        		$scope.project.clientGroup = $scope.selectedClientGroup.clientgroup;
+        	}
             ProjectComponent.createProject($scope.project).then(function () {
                 $scope.success = 'OK';
                 $scope.showNotifications('top','center','success','Client has been added successfully!!');
@@ -158,6 +163,7 @@ angular.module('timeSheetApp')
                     $scope.project.addressLng = data.addressLng
                     $scope.project.addressLat = data.addressLat;
                     $scope.project = data;
+                    $scope.selectedClientGroup ={clientgroup:$scope.project.clientGroup};
                     if(!$scope.project){
                        $location.path('/projects');
                     }
@@ -174,6 +180,9 @@ angular.module('timeSheetApp')
                 $rootScope.conformText = "";
                 $scope.loadingStart();
                 $scope.btnDisable = true;
+                if($scope.selectedClientGroup){
+                	$scope.project.clientGroup = $scope.selectedClientGroup.clientgroup;
+                }
                 ProjectComponent.updateProject($scope.project).then(function () {
                     $scope.success = 'OK';
                     $scope.showNotifications('top','center','success','Client has been updated successfully!!');
@@ -199,6 +208,46 @@ angular.module('timeSheetApp')
                $location.path('/projects');
             }
         };
+
+        $scope.loadClientGroup = function () {
+        	$scope.loadingStart();
+           ProjectComponent.loadClientGroup().then(function (data) {
+               console.log("Loading all Client Group -- " , data)
+               $scope.clientGroups = data;
+               $scope.loadingStop();
+           });
+       }
+
+        /* Add Client group */
+
+       $scope.addClientGroup = function () {
+           console.log($scope.clientGroup);
+            $scope.loadingStart();
+           if($scope.clientGroup){
+               console.log("client Group entered");
+               ProjectComponent.createClientGroup($scope.clientGroup).then(function (response) {
+                   console.log(response);
+                   if(response.data.status && response.data.status === "400") {
+                   	$scope.loadingStop();
+                   	$scope.showNotifications('top','center','danger','Client Group already exists.');
+                   }else{
+                   	  $scope.clientGroup = "";
+                         $scope.showNotifications('top','center','success','Client Group has been added Successfully!!');
+                         $scope.loadClientGroup();
+                   }
+
+               }).catch(function(){
+               $scope.loadingStop();
+               $scope.showNotifications('top','center','danger','Unable to Client group. Please try again later..');
+               $scope.error = 'ERROR';
+           });
+           }else{
+               console.log("Client Group not entered");
+           }
+
+
+       }
+
 
         $scope.deleteConfirm = function (project){
         	$scope.confirmProject = project;
