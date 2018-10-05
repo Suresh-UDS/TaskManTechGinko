@@ -36,7 +36,7 @@
                                                     <label class="control-label">Name<span class="red-star">*</span></label>
                                                     <input id='projectName' ng-model="project.name"
                                                            class='form-control InputTxtCapsAll' name='projectName' type='text' value=""
-                                                           ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                           ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" tabindex="1" autofocus required/>
                                                     <div ng-show="form.$submitted || form.projectName.$touched">
                                                         <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
                                                             <p class="help-block" style="color:maroon"
@@ -67,7 +67,7 @@
                                                     <input id='address' ng-model="project.address" class='form-control InputTxtCaps'
                                                            name='address' type='text' value=""
                                                            ng-maxlength=100
-                                                           ng-pattern="/^[A-Za-z0-9\s&-/]*$/" required/>
+                                                           ng-pattern="/^[A-Za-z0-9\s&-/]*$/" tabindex="4" required/>
                                                     <div ng-show="form.$submitted || form.address.$touched">
                                                         <div ng-show="form.address.$dirty || form.address.$invalid">
                                                              <p class="help-block" style="color:maroon"
@@ -88,7 +88,23 @@
                                             </div>
 
                                         </div>
+                                         <div class="row" ng-init="loadClientGroup()">
+                                            <div class="col-md-10 pad-r-0px">
+                                                 <label class="control-label">Client Group</label>
+                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                <select class="form-control" ng-model="selectedClientGroup" ng-options="clientgroup as (clientgroup.clientgroup | uppercase) for clientgroup in clientGroups track by clientgroup.clientgroup">
+                                                    <option value="">Select Client Group ..</option>
+                                                </select>
 
+                                            </div>
+
+                                            <div class="col-md-2 pdng-top25">
+                                               <!--  <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addGroup" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                    <i class="material-icons">add</i>
+                                                </a> -->
+                                                <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addGroup').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -107,7 +123,7 @@
                                                <div class="form-group ">
                                                    <label class="control-label">First Name</label>
                                                    <input id='projectContactFirstName' ng-model="project.contactFirstName"
-                                                          class='form-control InputTxtCaps' name='projectContactFirstName' type='text' value=""
+                                                          class='form-control InputTxtCaps' name='projectContactFirstName' tabindex="2" type='text' value=""
                                                           ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
                                                    <div ng-show="form.$submitted || form.projectContactFirstName.$touched">
                                                        <div ng-show="form.projectContactFirstName.$dirty || form.projectContactFirstName.$invalid">
@@ -136,7 +152,7 @@
                                                    <label class="control-label">Last Name</label>
                                                    <input id='projectContactLastName' ng-model="project.contactLastName"
                                                           class='form-control InputTxtCaps' name='projectContactLastName' type='text' value=""
-                                                          ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
+                                                          ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" tabindex="3" autofocus />
                                                    <div ng-show="form.$submitted || form.projectContactLastName.$touched">
                                                        <div ng-show="form.projectContactLastName.$dirty || form.projectContactLastName.$invalid">
                                                            <p class="help-block" style="color:maroon"
@@ -167,7 +183,7 @@
                                                    <label class="control-label">Phone</label>
                                                    <input id='phone' ng-model="project.phone"
                                                           class='form-control' name='phone' type='phone' value=""
-                                                          ng-minlength='10' ng-maxlength='13' ng-pattern="/^[0-9]*$/" autofocus />
+                                                          ng-minlength='10' ng-maxlength='13' ng-pattern="/^[0-9]*$/" tabindex="5" autofocus />
                                                    <div ng-show="form.$submitted || form.phone.$touched">
                                                        <div ng-show="form.phone.$dirty || form.phone.$invalid">
                                                            <p class="help-block" style="color:maroon"
@@ -195,7 +211,7 @@
                                                    <label class="control-label">Email</label>
                                                    <input id='email' ng-model="project.email"
                                                           class='form-control inputLowerCase' name='email' type='email' value=""  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
-                                                          ng-maxlength='50' autofocus />
+                                                          tabindex="6" ng-maxlength='50' autofocus />
                                                    <div ng-show="form.$submitted || form.email.$touched">
                                                        <div ng-show="form.email.$dirty || form.email.$invalid">
                                                            <p class="help-block" style="color:maroon"
@@ -226,7 +242,7 @@
                                   <div class="form-group">
 
                                       <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" type="submit"
-                                              id="form-button-save" ng-disabled="form.$invalid || btnDisable">
+                                              id="form-button-save" ng-disabled="form.$invalid || btnDisable" tabindex="7">
                                           <span class="btn-label"><i class="material-icons">check</i></span> Update
                                           <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                       </button>
@@ -238,7 +254,7 @@
                                       </button>-->
 
                                       <button class="btn btn-default" type="button"
-                                              ng-click="conform('back')" id="cancel-button" ng-disabled="btnDisable">
+                                              ng-click="conform('back')" id="cancel-button" tabindex="8" ng-disabled="btnDisable">
                                           Back
                                       </button>
 
@@ -452,3 +468,48 @@
     </div>
 
 </div>
+<!-- Add asset group dialog -->
+
+<div id="addGroup" class="add-input-modal modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Client Group</h4>
+            </div>
+            <div class="modal-body">
+
+                <form name="addGroupForm">
+                    <div class="row">
+                        <div class="col-md-12 txt-align-center">
+                            <input class="" id="assetgroupName" ng-model="clientGroup.clientgroup"   name="assetgroupName" type="text" value="" ng-required="true" ng-maxlength='250'
+                            ng-pattern="/^[A-Za-z0-9\s]*$/" />
+                            <div ng-show="addGroupForm.$submitted || addGroupForm.assetgroupName.$touched">
+                                <div ng-show="addGroupForm.assetgroupName.$dirty || addGroupForm.assetgroupName.$invalid">
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addGroupForm.assetgroupName.$error.required">
+                                       Client Group is required.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addGroupForm.assetgroupName.$error.maxlength">
+                                        Client Group cannot be longer than 250 characters.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addGroupForm.assetgroupName.$error.pattern">
+                                       Client Group can only contain letters, digits and space.
+                                    </p>
+                                </div>
+                            </div>
+                            <input type="submit" ng-click="addClientGroup()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addGroupForm.$invalid">
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Add asset group dialog -->

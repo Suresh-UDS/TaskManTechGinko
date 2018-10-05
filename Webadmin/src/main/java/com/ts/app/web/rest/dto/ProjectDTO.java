@@ -34,6 +34,8 @@ public class ProjectDTO extends BaseDTO {
 	
 	private float addressLat;
 	private float addressLng;
+	
+	private String clientGroup;
     
 
     public long getId() {
@@ -160,6 +162,14 @@ public class ProjectDTO extends BaseDTO {
 
 	public void setContactLastName(String contactLastName) {
 		this.contactLastName = contactLastName;
+	}
+
+	public String getClientGroup() {
+		return clientGroup;
+	}
+
+	public void setClientGroup(String clientGroup) {
+		this.clientGroup = clientGroup;
 	}
 	
 	
