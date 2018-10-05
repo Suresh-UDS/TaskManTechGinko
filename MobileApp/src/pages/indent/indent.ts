@@ -48,6 +48,15 @@ export class Indent {
     page:1;
     employeeId:any;
     purposeDetails:any;
+
+    chooseClient = true;
+    projectActive: any;
+    siteSpinner = false;
+    showSites = false;
+    projectindex: any;
+    index: any;
+    siteActive: any;
+
     constructor(public navCtrl: NavController, public navParams: NavParams, private component: componentService,
                 private siteService: SiteService, private inventoryService: InventoryService,
                 public viewCtrl:ViewController,public purchaseService:PurchaseRequisitionService) {
@@ -69,8 +78,8 @@ export class Indent {
                 console.log("project");
                 console.log(response);
                 this.clientList = response;
-                this.selectedProject = this.clientList[0];
-                this.selectSite(this.selectedProject);
+                // this.selectedProject = this.clientList[0];
+                // this.selectSite(this.selectedProject);
                 console.log('select default value:');
             },
             error => {
@@ -83,11 +92,22 @@ export class Indent {
         )
     }
 
-    selectSite(project) {
+    selectSite(project,i) {
+
+        this.projectActive=true;
+        this.projectindex = i;
+        this.siteSpinner= true;
+        this.chooseClient= false;
+        this.showSites = false;
+        this.selectedProject=project;
+
         this.selectedProject = project;
         this.scrollSite = true;
         this.siteService.findSitesByProject(project.id).subscribe(
             response => {
+              this.siteSpinner=false;
+              this.showSites = true;
+
                 console.log("Site By ProjectId");
                 console.log(response);
                 this.siteList = response;
@@ -161,8 +181,13 @@ export class Indent {
         this.selectedMaterial = m;
     }
 
-    searchMaterials(site)
+    searchMaterials(site,i)
     {
+
+      this.index = i;
+      this.projectActive = true;
+      this.siteActive = true;
+      this.selectedSite = site;
         var searchCriteria={
             currPage:this.page,
             pageSort: this.pageSort,
@@ -186,6 +211,7 @@ export class Indent {
         this.component.showLoader("Saving Indent Please Wait...")
             console.log("selected site");
             console.log(this.selectedSite);
+            console.log("selected project",this.selectedProject);
         var indentDetails = {
               siteId:this.selectedSite.id,
               projectId:this.selectedProject.id,
@@ -196,6 +222,7 @@ export class Indent {
               issuedQuantity:0,
               requestedDate:new Date()
         };
+        console.log("indentDetails",indentDetails);
         this.purchaseService.saveMaterialIndent(indentDetails).subscribe(
             response=>{
                 this.component.closeAll();

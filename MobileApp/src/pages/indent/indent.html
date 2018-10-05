@@ -21,7 +21,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content class="CreateTicketPage FormPage">
     <!--<ion-row no-margin>-->
         <!--<ion-col col-12>-->
             <!--<ion-item>-->
@@ -30,7 +30,61 @@
             <!--</ion-item>-->
         <!--</ion-col>-->
     <!--</ion-row>-->
-    <ion-row no-margin>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-content">
+          <ion-row>
+
+            <ion-col col-12>
+              <div class="form-group label-floating" [ngClass]="{'has-error':eMsg=='all'||eMsg=='purposeDetails'}">
+                <label class="control-label">Purpose</label>
+                <input class="form-control" type="text" [(ngModel)]="purposeDetails" #titl="ngModel" required [ngClass]="{'has-error': titl.errors || eMsg=='all' || eMsg=='title'}">
+                <div *ngIf="titl.errors && (titl.dirty || titl.touched)" class="error-msg">
+                </div>
+                <div *ngIf="titl.errors && (titl.untouched )" class="error-msg">
+                </div>
+                </div>
+            </ion-col>
+
+            <ion-col col-12>
+              <p text-center>Choose Client</p>
+              <div class="SitesScrollCon">
+                <ion-scroll scrollX="true">
+                  <button class="scroll-item" ion-button round *ngFor="let p of clientList; let i of index" (click)="selectSite(p,i)" [color]="projectActive && i==projectindex ? 'primary':'light'">
+                    <p class="siteName">{{p.name}}</p>
+                  </button>
+                </ion-scroll>
+              </div>
+            </ion-col>
+
+            <ion-col col-12>
+
+              <p text-center>Choose Site</p>
+
+              <div padding text-center *ngIf="siteSpinner">
+                <span><ion-spinner name="bubbles"></ion-spinner> <br> Loading...</span>
+              </div>
+
+              <div padding text-center *ngIf="chooseClient">
+                <strong>Please Select Client</strong>
+              </div>
+
+              <div class="SitesScrollCon" *ngIf="showSites">
+                <ion-scroll scrollX="true">
+                  <button class="scroll-item" ion-button round  *ngFor="let site of siteList;let i of index" (click)="searchMaterials(site,i)" [color]="siteActive && i==index ? 'primary' : 'light'">
+                    <p class="siteName">{{site.name}}</p>
+                  </button>
+                </ion-scroll>
+              </div>
+
+            </ion-col>
+
+
+
+
+
+    <!--<ion-row no-margin>
         <ion-col col-12>
             <ion-item>
                 <ion-label   text-capitalize class="client-label" text-left >Purpose:</ion-label>
@@ -57,7 +111,7 @@
         </ion-select>
       </ion-item>
     </ion-col>
-  </ion-row>
+  </ion-row>-->
     <!--<ion-row no-margin>-->
         <!--<ion-col>-->
             <!--<ion-input type="text" [(ngModel)]="searchText" (ionChange)='f(searchText)' class="txt-input" placeholder="Search Employees">-->
@@ -87,72 +141,87 @@
       <!--</ion-item>-->
     <!--</ion-col>-->
   <!--</ion-row>-->
-  <ion-row no-margin text-center>
-    <ion-col col-9>
+
       <!--<ion-item>-->
           <!--<ion-label text-capitalize class="client-label" text-left>Material:</ion-label>-->
           <!--<ion-select interface="popover" >-->
               <!--<ion-option text-center *ngFor="let m of inventoryMaterial;let i of index" (ionSelect)="selectMaterial(m)" >{{m.name}}</ion-option>-->
         <!--</ion-select>-->
       <!--</ion-item>-->
-        <ion-item>
-            <ion-label text-capitalize class="client-label" text-left>Material:</ion-label>
-            <select-searchable
-                    item-content
-                    [(ngModel)]="indentMaterial"
-                    [items]="inventoryMaterial"
-                    (ionSelect)="selectMaterial(m)"
-                    itemValueField="id"
-                    itemTextField="name"
-                    [canSearch]="true"
-                    (onChange)="portChange($event)">
-            </select-searchable>
-        </ion-item>
-    </ion-col>
-      <ion-col col-3 float-right>
-          <button class="btn btn-warning pull-right"  (click)="addIndent(indentMaterial)">Add</button>
-      </ion-col>
-  </ion-row>
-    <!--<ion-row no-margin>-->
+            <ion-col col-12>
+                  <ion-row no-margin text-center>
+                        <ion-col col-9>
+                          <ion-item>
+                              <ion-label text-capitalize class="client-label" text-left>Material:</ion-label>
+                              <select-searchable
+                                      item-content
+                                      [(ngModel)]="indentMaterial"
+                                      [items]="inventoryMaterial"
+                                      (ionSelect)="selectMaterial(m)"
+                                      itemValueField="id"
+                                      itemTextField="name"
+                                      [canSearch]="true"
+                                      (onChange)="portChange($event)">
+                              </select-searchable>
+                          </ion-item>
+                        </ion-col>
 
-    <!--</ion-row>-->
-    <ion-row no-margin *ngIf="selectedMaterial">
-        <ion-col col-12>
-            <ion-item text-center class="bg-gray">
-                <ion-label class="clr-orange bg-gray">Added Materials</ion-label>
-            </ion-item>
-        </ion-col>
-    </ion-row>
-  <ion-row no-margin class="white-bg" *ngFor="let t of indent">
-    <ion-col col-6>
-      <ion-list>
-        <ion-item style="padding-left:0px">
-            <ion-input type="text" value=""  placeholder="name" [(ngModel)]="t.materialName" disabled></ion-input>
-        </ion-item>
-      </ion-list>
-    </ion-col>
-    <ion-col col-2>
-      <ion-list>
-        <ion-item style="padding-left:0px">
-            <ion-input type="number" value=""  placeholder="Qty" [(ngModel)]="t.quantity" ></ion-input>
-        </ion-item>
-      </ion-list>
-    </ion-col>
-    <ion-col col-2>
-      <ion-list>
-        <ion-item style="padding-left:0px">
-          <ion-input type="text" value=""  placeholder="uom" [(ngModel)]="t.materialUom" disabled></ion-input>
-        </ion-item>
-      </ion-list>
-    </ion-col>
-    <ion-col col-2>
-      <button ion-fab mini color="dark" (click)="removeTransaction(i)">
-        <ion-icon name="md-close" class="clr-orange"></ion-icon>
-      </button>
-    </ion-col>
-  </ion-row>
+                          <ion-col col-3 float-right>
+                              <button class="btn btn-warning pull-right"  (click)="addIndent(indentMaterial)">Add</button>
+                        </ion-col>
+
+                  </ion-row>
+            </ion-col>
+
+            <ion-col col-12>
+              <ion-row no-margin *ngIf="selectedMaterial">
+                  <ion-col col-12>
+                      <ion-item text-center class="bg-gray">
+                          <ion-label class="clr-orange bg-gray">Added Materials</ion-label>
+                      </ion-item>
+                  </ion-col>
+              </ion-row>
+            </ion-col>
+
+            <ion-col col-12>
+              <ion-row no-margin class="white-bg" *ngFor="let t of indent">
+                <ion-col col-6>
+                  <ion-list>
+                    <ion-item style="padding-left:0px">
+                        <ion-input type="text" value=""  placeholder="name" [(ngModel)]="t.materialName" disabled></ion-input>
+                    </ion-item>
+                  </ion-list>
+                </ion-col>
+                <ion-col col-2>
+                  <ion-list>
+                    <ion-item style="padding-left:0px">
+                        <ion-input type="number" value=""  placeholder="Qty" [(ngModel)]="t.quantity" ></ion-input>
+                    </ion-item>
+                  </ion-list>
+                </ion-col>
+                <ion-col col-2>
+                  <ion-list>
+                    <ion-item style="padding-left:0px">
+                      <ion-input type="text" value=""  placeholder="uom" [(ngModel)]="t.materialUom" disabled></ion-input>
+                    </ion-item>
+                  </ion-list>
+                </ion-col>
+                <ion-col col-2>
+                  <button ion-fab mini color="dark" (click)="removeTransaction(i)">
+                    <ion-icon name="md-close" class="clr-orange"></ion-icon>
+                  </button>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+
+          </ion-row>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </ion-content>
+
 <ion-footer>
     <ion-toolbar text-center>
         <button class="btn btn-warning center width42" (click)="saveIndentMaterial()">
