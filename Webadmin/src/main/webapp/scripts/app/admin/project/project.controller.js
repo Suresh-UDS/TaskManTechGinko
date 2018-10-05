@@ -21,6 +21,7 @@ angular.module('timeSheetApp')
         $scope.clientGroup = {};
         $scope.selectedClientGroup = {};
 
+
         //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
         $scope.project = $scope.project || {};
@@ -106,6 +107,8 @@ angular.module('timeSheetApp')
         $scope.loadProjectsList = function () {
             ProjectComponent.findAll().then(function (data) {
                 $scope.projectsList = data;
+                $scope.projectsList.unshift($scope.anyClient);
+                console.log('Project List' , $scope.projectsList);
                 for(var i=0;i<$scope.projectsList.length;i++)
                 {
                     $scope.uiClient[i] = $scope.projectsList[i].name;
@@ -133,7 +136,8 @@ angular.module('timeSheetApp')
             $scope.filter = false;
             $scope.clearField = false;
             $scope.searchProject = $scope.projectsList[$scope.uiClient.indexOf(project)]
-            console.log('Project dropdown list:',$scope.searchProject)
+            console.log('Project dropdown list:',$scope.searchProject);
+
         }
 
         //
@@ -204,7 +208,7 @@ angular.module('timeSheetApp')
                $location.path('/projects');
             }
         };
-        
+
         $scope.loadClientGroup = function () {
         	$scope.loadingStart();
            ProjectComponent.loadClientGroup().then(function (data) {
@@ -287,6 +291,7 @@ angular.module('timeSheetApp')
 
 
         $scope.searchFilter = function () {
+            $('.BasicFilterModal.in').modal('hide');
             $scope.setPage(1);
             $scope.search();
          }

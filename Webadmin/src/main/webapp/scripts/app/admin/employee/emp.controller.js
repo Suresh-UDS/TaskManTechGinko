@@ -1635,6 +1635,7 @@ angular.module('timeSheetApp')
             $scope.noData = false;
             $rootScope.exportStatusObj.exportMsg = '';
             $scope.downloader=false;
+            $scope.downloaded = true;
             $scope.siteFilterDisable = true;
             $scope.sitesList = null;
             $scope.sites = null;
@@ -1743,6 +1744,7 @@ angular.module('timeSheetApp')
         $scope.exportAllData = function(){
 
                  $rootScope.exportStatusObj.exportMsg = '';
+                  $scope.downloaded = false;
                   $scope.downloader=true;
                   $scope.searchCriteria.list = true;
                   $scope.searchCriteria.report = true;
@@ -1817,6 +1819,12 @@ angular.module('timeSheetApp')
         $scope.exportMsg = function() {
             return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportMsg : '');
         };
+
+        $scope.downloaded = false;
+
+        $scope.clsDownload = function(){
+          $scope.downloaded = true;
+        }
 
         $scope.cancelEmployeeShiftUpdate = function(){
             $scope.empShift = {};
