@@ -1,6 +1,8 @@
 
 package com.ts.app.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -20,11 +22,15 @@ import javax.inject.Inject;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.hibernate.Hibernate;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +44,6 @@ import com.ts.app.config.Constants;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
 import com.ts.app.domain.Attendance;
-import com.ts.app.domain.Clientgroup;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.domain.EmployeeProjectSite;
@@ -162,6 +167,10 @@ public class SchedulerHelperService extends AbstractService {
 	
 	@Inject
 	private RateCardService quotationService;
+	
+    @Value("${export.file.path}")
+    private String exportPath;
+	
 
 	public void eodJobReport() {
 		if (env.getProperty("scheduler.eodJobReport.enabled").equalsIgnoreCase("true")) {
@@ -1753,7 +1762,10 @@ public class SchedulerHelperService extends AbstractService {
 						exportCnt.setSiteId(site.getId());
 						exportCnt.setSiteName(site.getName());
 						exportCnt.setSummary(sb.toString());
-						exportCnt.setFile(files);
+						exportCnt.setJobFile(jobResult.getFile());
+						exportCnt.setTicketFile(exportTicketResult.getFile());
+						exportCnt.setQuotationFile(exportQuotationResult.getFile());
+						//exportCnt.setFile(files);
 
 						if(clientContentMap.containsKey(proj.getName())) {
 							exportContents = clientContentMap.get(proj.getName());
@@ -1778,7 +1790,7 @@ public class SchedulerHelperService extends AbstractService {
 			}
 		}
 		
-		exportClientGroupEmail(clientGroupMap);
+		//exportClientGroupEmail(clientGroupMap);
 		
 	}
 
@@ -1792,24 +1804,87 @@ public class SchedulerHelperService extends AbstractService {
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
-		Map<String, Object> exportedContent = new HashMap<String, Object>();
+		//Map<String, Object> exportedContent = new HashMap<String, Object>();
 		for(Map.Entry<String, Map<String, List<ExportContent>>> entry : newMap.entrySet()) {
-			exportedContent.put("clientGroup", entry.getKey());
+			//exportedContent.put("clientGroup", entry.getKey());
 			Map<String, List<ExportContent>> values = entry.getValue();
-			for(Map.Entry<String, List<ExportContent>> contentEx : values.entrySet()) {
-				exportedContent.put("project", contentEx.getKey());
-				List<ExportContent> exportContents = contentEx.getValue();
-				exportedContent.put("email", exportContents.get(0).getEmail());
-				for(ExportContent contents : exportContents) { 
-					exportedContent.put("summary", contents.getSummary());
-					exportedContent.put("files", contents.getFile());
-					exportedContent.put("siteName", contents.getSiteName());
+			StringBuffer summary = new StringBuffer();
+			String emails = null;
+			FileOutputStream jobFos = null;
+			FileOutputStream ticketFos = null;
+			FileOutputStream quotationFos = null;
+			List<String> files = new ArrayList<String>();
+			try {
+				XSSFWorkbook xssfJobWorkbook = new XSSFWorkbook();
+				String jobReportFile = entry.getKey() + "_" + "JOB_REPORT";
+				String ticketReportFile = entry.getKey() + "_" + "TICKET_REPORT";
+				String quotationReportFile = entry.getKey() + "_" + "QUOTATION_REPORT";
+				jobFos = new FileOutputStream(exportPath+"/" + jobReportFile +".xlsx");
+				XSSFWorkbook xssfTicketWorkbook = new XSSFWorkbook();
+				ticketFos = new FileOutputStream(exportPath+"/" + ticketReportFile +".xlsx");
+				XSSFWorkbook xssfQuotationWorkbook = new XSSFWorkbook();
+				quotationFos = new FileOutputStream(exportPath+"/" + quotationReportFile +".xlsx");
+				for(Map.Entry<String, List<ExportContent>> contentEx : values.entrySet()) {
+					//exportedContent.put("project", contentEx.getKey());
+					List<ExportContent> exportContents = contentEx.getValue();
+					//exportedContent.put("email", exportContents.get(0).getEmail());
+					for(ExportContent content : exportContents) { 
+						//exportedContent.put("summary", contents.getSummary());
+						//exportedContent.put("files", contents.getFile());
+						//exportedContent.put("siteName", contents.getSiteName());
+						
+						emails = content.getEmail();
+						//append summary
+						summary.append("<br/>"+ content.getSiteName() +"<br/>");
+						summary.append(content.getSummary());
+	
+						if(content.getJobFile() != null) {
+							//copy the job report sheet to the master report file
+							XSSFWorkbook jobWorkBook = new XSSFWorkbook(exportPath+"/" +content.getJobFile()+".xlsx");
+							XSSFSheet newSheet = xssfJobWorkbook.createSheet(content.getSiteName());
+							newSheet = jobWorkBook.cloneSheet(0);
+		        				xssfJobWorkbook.write(jobFos);
+		        				files.add(jobReportFile);
+						}
+						
+	    					//copy the ticket report sheet to the master report file
+						if(content.getTicketFile() != null) {
+		    					XSSFWorkbook ticketWorkBook = new XSSFWorkbook(exportPath+"/" +content.getJobFile()+".xlsx");
+		    					XSSFSheet newTicketSheet = xssfTicketWorkbook.createSheet(content.getSiteName());
+		    					newTicketSheet = ticketWorkBook.cloneSheet(0);
+		            			xssfTicketWorkbook.write(ticketFos);
+		            			files.add(ticketReportFile);
+						}
+	            			//copy the quotation report sheet to the master report file
+						if(content.getQuotationFile() != null) {
+		    					XSSFWorkbook quotationWorkBook = new XSSFWorkbook(exportPath+"/" +content.getJobFile()+".xlsx");
+		    					XSSFSheet newQuotationSheet = xssfQuotationWorkbook.createSheet(content.getSiteName());
+							newQuotationSheet = quotationWorkBook.cloneSheet(0);
+		            			xssfQuotationWorkbook.write(ticketFos);
+		            			files.add(quotationReportFile);
+						}	
+					}
+				}
+			}catch (Exception e) {
+				log.error("Error while creating master report for job, ticket and quotation for client "+ entry.getKey() , e);
+			}finally  {
+				try {
+					jobFos.flush();
+					jobFos.close();
+					ticketFos.flush();
+					ticketFos.close();
+					quotationFos.flush();
+					quotationFos.close();
+				} catch (IOException e) {
+					log.error("Error while creating master report for job, ticket and quotation for client "+ entry.getKey() , e);
 				}
 			}
+			mailService.sendDaywiseReportEmailFile(entry.getKey(), emails, files, cal.getTime(), summary.toString());
+			
         }
-		if(exportedContent != null) {
-			mailService.sendDaywiseClientReportEmail(exportedContent, cal.getTime());
-		}
+		//if(exportedContent != null) {
+		//	mailService.sendDaywiseClientReportEmail(exportedContent, cal.getTime());
+		//}
 	}
 	
 

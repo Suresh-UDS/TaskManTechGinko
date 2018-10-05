@@ -14,6 +14,12 @@ public class ExportContent {
 	
 	private String summary;
 	
+	private String jobFile;
+	
+	private String ticketFile;
+	
+	private String quotationFile;
+	
 	private List<String> file;
 
 	public long getId() {
@@ -62,6 +68,30 @@ public class ExportContent {
 
 	public void setFile(List<String> file) {
 		this.file = file;
+	}
+
+	public String getJobFile() {
+		return jobFile;
+	}
+
+	public void setJobFile(String jobFile) {
+		this.jobFile = jobFile;
+	}
+
+	public String getTicketFile() {
+		return ticketFile;
+	}
+
+	public void setTicketFile(String ticketFile) {
+		this.ticketFile = ticketFile;
+	}
+
+	public String getQuotationFile() {
+		return quotationFile;
+	}
+
+	public void setQuotationFile(String quotationFile) {
+		this.quotationFile = quotationFile;
 	}
 
 	
