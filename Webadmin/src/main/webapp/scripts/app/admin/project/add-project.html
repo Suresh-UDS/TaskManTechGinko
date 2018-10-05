@@ -87,6 +87,29 @@
                                             </div>
 
                                         </div>
+                                        
+                                       <div class="form-group selectcon is-empty" ng-init="loadClientGroup()">
+
+                                               <div class="row">
+                                                   <div class="col-md-10 pad-r-0px">
+                                                        <label class="control-label">Group</label>
+                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                       <select class="form-control" ng-model="selectedClientGroup" ng-options="clientgroup as clientgroup.clientgroup | uppercase for clientgroup in clientGroups">
+                                                           <option value="">Select Client Group ..</option>
+                                                       </select>
+
+                                                   </div>
+
+                                                   <div class="col-md-2 pdng-top25">
+                                                      <!--  <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addGroup" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                           <i class="material-icons">add</i>
+                                                       </a> -->
+                                                       <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addGroup').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                   </div>
+                                               </div>
+
+                                      
+                                       </div>
 
                                     </div>
                                 </div>
@@ -457,5 +480,51 @@
         </div>
     </div>
 
-
 </div>
+
+
+<!-- Add asset group dialog -->
+
+<div id="addGroup" class="add-input-modal modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Client Group</h4>
+            </div>
+            <div class="modal-body">
+
+                <form name="addGroupForm">
+                    <div class="row">
+                        <div class="col-md-12 txt-align-center">
+                            <input class="" id="assetgroupName" ng-model="clientGroup.clientgroup"   name="assetgroupName" type="text" value="" ng-required="true" ng-maxlength='250'
+                            ng-pattern="/^[A-Za-z0-9\s]*$/" />
+                            <div ng-show="addGroupForm.$submitted || addGroupForm.assetgroupName.$touched">
+                                <div ng-show="addGroupForm.assetgroupName.$dirty || addGroupForm.assetgroupName.$invalid">
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addGroupForm.assetgroupName.$error.required">
+                                       Client Group is required.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addGroupForm.assetgroupName.$error.maxlength">
+                                        Client Group cannot be longer than 250 characters.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addGroupForm.assetgroupName.$error.pattern">
+                                       Client Group can only contain letters, digits and space.
+                                    </p>
+                                </div>
+                            </div>
+                            <input type="submit" ng-click="addClientGroup()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addGroupForm.$invalid">
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Add asset group dialog -->

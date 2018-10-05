@@ -144,6 +144,7 @@ public class ProjectService extends AbstractService {
 		project.setEmail(projectDTO.getEmail());
 		project.setPhone(projectDTO.getPhone());
 		project.setStartDate(projectDTO.getStartDate());
+		project.setClientGroup(projectDTO.getClientGroup());
 		project.setEndDate(projectDTO.getEndDate());
 		project.setContactFirstName(projectDTO.getContactFirstName());
 		project.setContactLastName(projectDTO.getContactLastName());
