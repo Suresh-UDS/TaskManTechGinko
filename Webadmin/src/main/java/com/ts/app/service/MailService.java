@@ -703,7 +703,7 @@ public class MailService {
     
 	}
 
-	public void sendDaywiseReportEmailFile(Map<String, Object> exportedContent, Date time) {
+	public void sendDaywiseClientReportEmail(Map<String, Object> exportedContent, Date time) {
 		// TODO Auto-generated method stub
 		 log.debug("Sending job report e-mail to '{}'", exportedContent.get("email"));
 	        Locale locale = Locale.forLanguageTag("en-US");

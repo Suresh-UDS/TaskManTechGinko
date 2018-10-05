@@ -1808,7 +1808,7 @@ public class SchedulerHelperService extends AbstractService {
 			}
         }
 		if(exportedContent != null) {
-			mailService.sendDaywiseReportEmailFile(exportedContent, cal.getTime());
+			mailService.sendDaywiseClientReportEmail(exportedContent, cal.getTime());
 		}
 	}
 	
