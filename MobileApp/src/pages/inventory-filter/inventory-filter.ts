@@ -29,6 +29,12 @@ export class InventoryFilter {
     searchCriteria:any;
     selectOptions:any;
 
+    projectActive: any;
+    projectindex:any;
+    chooseClient = true;
+    siteSpinner = false;
+    showSites = false;
+
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController,
@@ -47,8 +53,8 @@ export class InventoryFilter {
                 console.log("====project======");
                 console.log(response);
                 this.clientList=response;
-                this.selectedProject = this.clientList[0];
-                this.selectSite(this.selectedProject);
+                // this.selectedProject = this.clientList[0];
+                // this.selectSite(this.selectedProject);
                 console.log('select default value:');
             },
             error=>{
@@ -64,13 +70,23 @@ export class InventoryFilter {
 
     }
 
-    selectSite(project)
+    selectSite(project,i)
     {
+
+      this.projectActive=true;
+      this.projectindex = i;
+      this.siteSpinner= true;
+      this.chooseClient= false;
+      this.showSites = false;
         this.selectedSite = project;
+        this.selectedProject=project;
         this.scrollSite = true;
         this.siteService.findSitesByProject(project.id).subscribe(
             response=>{
-                this.component.closeLoader();
+              this.siteSpinner=false;
+              this.showSites = true;
+              // this.chooseSite = true;
+              // this.component.closeLoader();
                 console.log("====Site By ProjectId======");
                 console.log(response);
                 this.siteList=response;

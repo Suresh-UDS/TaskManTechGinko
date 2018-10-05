@@ -15,8 +15,57 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="bg-white">
-  <div class="InitFeedbackCon">
+<ion-content class="CreateTicketPage FormPage">
+  <div class="row">
+    <div class="col-sm-12 col-xs-12">
+      <div class="card">
+        <div class="card-content">
+
+          <ion-row>
+
+            <ion-col col-12>
+              <p text-center>Choose Client</p>
+              <div class="SitesScrollCon">
+                <ion-scroll scrollX="true">
+                  <button class="scroll-item" ion-button round *ngFor="let p of clientList;let i of index" (click)="selectSite(p,i)" [color]="projectActive && i==projectindex ? 'primary':'light'">
+                    <p class="siteName">{{p.name}}</p>
+                  </button>
+                </ion-scroll>
+              </div>
+            </ion-col>
+
+            <ion-col col-12>
+              <p text-center>Choose Site</p>
+              <div padding text-center *ngIf="siteSpinner">
+                <span><ion-spinner name="bubbles"></ion-spinner> <br> Loading...</span>
+              </div>
+
+              <div padding text-center *ngIf="chooseClient">
+                <strong>Please Select Client</strong>
+              </div>
+
+              <div class="SitesScrollCon" *ngIf="showSites">
+                <ion-scroll scrollX="true">
+                  <div *ngIf="siteList?.length==0" class="padding-top15">
+                    <p text-center class="clr-blk">No Data Found</p>
+                  </div>
+                  <button class="scroll-item" ion-button round *ngFor="let s of siteList;let i of index" (click)="highLightSite(i,s)" [color]="i==activeSite ? 'primary' : 'light'">
+                    <p class="siteName">{{s.name}}</p>
+                  </button>
+                </ion-scroll>
+              </div>
+            </ion-col>
+            <div class="clearfix"></div>
+
+
+          </ion-row>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--<div class="InitFeedbackCon">
     <div class="InputCon">
       <ion-item>
         <ion-label text-capitalize class="client-label">Client :</ion-label>
@@ -50,8 +99,9 @@
       </div>
 
     </div>
-  </div>
+  </div>-->
 </ion-content>
+
 <ion-footer>
   <ion-toolbar class="align-center">
     <button class="btn btn-warning center" (click)="dismiss()">
