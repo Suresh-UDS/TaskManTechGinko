@@ -328,6 +328,7 @@ angular.module('timeSheetApp')
             			currPage : currPageVal
             	}
             	$scope.searchCriteria = searchCriteria;
+
         	}
     		console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaAttendances));
     		console.log('criteria in scope -'+JSON.stringify($scope.searchCriteria));
@@ -336,6 +337,9 @@ angular.module('timeSheetApp')
         	console.log('Selected  date range -' + $scope.checkInDateTimeFrom + ", " + $scope.checkInDateTimeTo);
         	$scope.searchCriteria.currPage = currPageVal;
         	$scope.searchCriteria.findAll = false;
+        	$scope.searchCriteria.list = false;
+            $scope.searchCriteria.report = false;
+            $scope.searchCriteria.isReport = false;
 
                if($scope.selectedDateFrom) {
                     $scope.searchCriteria.checkInDateTimeFrom = $scope.selectedDateFromSer;
@@ -659,6 +663,7 @@ angular.module('timeSheetApp')
             $scope.clearField = true;
             $rootScope.exportStatusObj.exportMsg = '';
             $scope.downloader=false;
+            $scope.downloaded = true;
             $scope.siteFilterDisable = true;
             $scope.sites = null;
             $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
@@ -698,7 +703,12 @@ angular.module('timeSheetApp')
         };
 
         $scope.exportAllData = function(){
-
+             $rootScope.exportStatusObj.exportMsg = '';
+             $scope.downloaded = false;
+             $scope.downloader=true;
+             $scope.searchCriteria.list = true;
+             $scope.searchCriteria.report = true;
+             $scope.searchCriteria.isReport = true;
         	AttendanceComponent.exportAllData($scope.searchCriteria).then(function(data){
         		var result = data.results[0];
         		console.log(result);
@@ -749,6 +759,7 @@ angular.module('timeSheetApp')
                 		exportStatusObj.exportStatus = data.status;
                 		console.log('exportStatus - '+ exportStatusObj);
                 		exportStatusObj.exportMsg = data.msg;
+                		$scope.downloader=false;
                 		console.log('exportMsg - '+ exportStatusObj.exportMsg);
                 		if(exportStatusObj.exportStatus == 'COMPLETED'){
                     		exportStatusObj.exportFile = data.file;
@@ -800,6 +811,12 @@ angular.module('timeSheetApp')
 
         };
 
+        $scope.downloaded = false;
+
+        $scope.clsDownload = function(){
+          $scope.downloaded = true;
+        }
+
         $scope.showLoader = function(){
             console.log("Show Loader");
             $scope.loading = true;
@@ -843,7 +860,7 @@ angular.module('timeSheetApp')
             $scope.search();
         };
 
-        $scope.exportAllData = function(type){
+        /*$scope.exportAllData = function(type){
                 $scope.searchCriteria.exportType = type;
                 $scope.searchCriteria.report = true;
                 $rootScope.exportStatusObj.exportMsg = '';
@@ -865,7 +882,7 @@ angular.module('timeSheetApp')
                       console.log('error message for export all ')
                       console.log(err);
               });
-        };
+        };*/
 
      // store the interval promise in this variable
         var promise;

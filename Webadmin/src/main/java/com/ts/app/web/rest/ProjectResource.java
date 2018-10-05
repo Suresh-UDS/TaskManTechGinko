@@ -1,3 +1,4 @@
+
 package com.ts.app.web.rest;
 
 import java.util.Calendar;
@@ -33,6 +34,8 @@ import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.ProjectService;
 import com.ts.app.service.SiteService;
 import com.ts.app.service.util.ImportUtil;
+import com.ts.app.web.rest.dto.AssetgroupDTO;
+import com.ts.app.web.rest.dto.ClientgroupDTO;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.ProjectDTO;
 import com.ts.app.web.rest.dto.SiteDTO;
@@ -172,6 +175,27 @@ public class ProjectResource {
 			}
 		}
 		return result;
+	}
+    
+	@RequestMapping(value = "/clientgroup", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public ResponseEntity<?> saveAssetGroup(@Valid @RequestBody ClientgroupDTO clientgroupDTO,
+			HttpServletRequest request) {
+		log.info(">>> Inside the save clientgroup -");
+		log.info(">>> Inside Save clientgroup <<< " + clientgroupDTO.getClientgroup());
+		try {
+			clientgroupDTO.setUserId(SecurityUtils.getCurrentUserId());
+			clientgroupDTO = projectService.createClientGroup(clientgroupDTO);
+		} catch (Exception e) {
+			throw new TimesheetException(e, clientgroupDTO);
+		}
+		return new ResponseEntity<>(clientgroupDTO, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(value = "/clientgroup/findAll", method = RequestMethod.GET)
+	public List<ClientgroupDTO> findAllClientGroups() {
+		log.info("--Invoked ClientResource.findAllClientGroups --");
+		return projectService.findAllClientGroups();
 	}
 
 

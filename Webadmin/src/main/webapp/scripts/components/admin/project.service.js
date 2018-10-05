@@ -72,11 +72,32 @@ angular.module('timeSheetApp')
 	                });
 	        		
 	        },
+	        
 	        importStatus: function(fileName) {
                 	return $http.get('api/clients/import/'+fileName+"/status").then(function (response) {
                 		return response.data;
                 	});
-	        }
+	        },
+	        
+	        createClientGroup :function(clientGroup, callback){
+                var cb = callback || angular.noop;
+                return $http.post('api/clientgroup', clientGroup).then(
+                    function (response) {
+                        return response;
+                    }).catch(
+                    function (err) {
+                        console.log(JSON.stringify(err));
+                        return cb(err);
+                    })
+
+            },
+
+            loadClientGroup : function() {
+                return $http.get('api/clientgroup/findAll').then(function (response) {
+                    return response.data;
+                });
+
+            }
 
         };
     });
