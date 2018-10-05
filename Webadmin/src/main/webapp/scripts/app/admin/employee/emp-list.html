@@ -42,8 +42,13 @@
                 <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
                 <div class="ripple-container"></div>
             </button>
-
-            <a class="download-btn" href="{{exportFile()}}">{{exportMsg()}}</a>
+            <span ng-if="exportMsg()=='Download'">
+                 <a class="download-btn" href="{{exportFile()}}" download target="_self" ng-click="clsDownload()" ng-hide="downloaded">{{exportMsg()}}</a>
+                 <div class="downloaderMd" ng-show="downloader"></div>
+            </span>
+            <span ng-if="exportMsg()!='Download'">
+                 <a class="download-btn" href="javascript:void(0);">{{exportMsg()}}</a>
+            </span>
             <div class="downloader" ng-show="downloader"></div>
 
         </div>
