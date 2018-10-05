@@ -1001,7 +1001,8 @@ angular.module('timeSheetApp')
             }
 
             $scope.searchCriteria.currPage = currPageVal;
-            $scope.searchCriteria.isReport = true;
+            $scope.searchCriteria.isReport = false;
+
             console.log('Selected Asset' + $scope.searchAssetName);
 
             if(!$scope.searchAcquiredDate && !$scope.searchCreatedDate &&
@@ -1802,6 +1803,7 @@ angular.module('timeSheetApp')
             $scope.filter = false;
             $rootScope.exportStatusObj.exportMsg = '';
             $scope.downloader=false;
+            $scope.downloaded = true;
             $scope.siteFilterDisable = true;
             $scope.sites = null;
             $scope.selectedAsset = {};
@@ -3489,8 +3491,10 @@ angular.module('timeSheetApp')
          $scope.exportAllData = function(type){
                 $rootScope.exportStatusObj.exportMsg = '';
                 $scope.downloader=true;
+                $scope.downloaded = false;
                 $scope.searchCriteria.exportType = type;
                 $scope.searchCriteria.report = true;
+                $scope.searchCriteria.isReport = true;
                 $scope.typeMsg = type;
 
                 console.log('calling asset export api');
@@ -3599,6 +3603,12 @@ angular.module('timeSheetApp')
                 }
 
         };
+
+        $scope.downloaded = false;
+
+        $scope.clsDownload = function(){
+          $scope.downloaded = true;
+        }
 
       $scope.mulSel = function(){
 

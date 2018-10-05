@@ -598,6 +598,7 @@ angular.module('timeSheetApp')
         $scope.clearFilter = function() {
             $rootScope.exportStatusObj.exportMsg = '';
             $scope.downloader=false;
+            $scope.downloaded = true;
             $scope.siteFilterDisable = true;
             $scope.sitesList = null;
             //$scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
@@ -632,6 +633,7 @@ angular.module('timeSheetApp')
         		$scope.typeMsg = type;
                 $rootScope.exportStatusObj.exportMsg = '';
                 $scope.downloader=true;
+                $scope.downloaded = false;
                 $scope.searchCriteria.report = true;
 	        	JobComponent.exportAllData($scope.searchCriteria).then(function(data){
 	        		var result = data.results[0];
