@@ -9,13 +9,13 @@ public class TicketCommentDTO extends BaseDTO implements Serializable {
     private long id;
 
     private long employeeId;
-    
+
     private String employeeName;
-    
+
     private String employeeLastName;
 
     private long ticketId;
-    
+
     private String comments;
 
     public Long getId() {
@@ -56,10 +56,6 @@ public class TicketCommentDTO extends BaseDTO implements Serializable {
 
 	public void setTicketId(long ticketId) {
 		this.ticketId = ticketId;
-	}
-
-	public void setId(long id) {
-		this.id = id;
 	}
 
 	public String getComments() {
