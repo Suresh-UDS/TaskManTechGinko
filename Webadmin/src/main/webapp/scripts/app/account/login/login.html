@@ -60,7 +60,7 @@
         </span>
 
         <div class="col-lg-4 col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-4 col-lg-offset-4" style="margin-top: 6%;">
-            <form name="form" role="form" ng-submit="login($event)">
+            <form name="form" role="form" ng-submit="login($event)" novalidate>
                 <div class="card card-login card-hidden">
                     <div class="card-header text-center" data-background-color="orange">
                         <h4 class="card-title">Login</h4>
@@ -77,7 +77,15 @@
                                             </span>
                             <div class="form-group" >
                                 <label class="control-label">User Name</label>
-                                <input type="text" id="username"  ng-model="username" class="form-control" required>
+                                <input type="text" id="username" name="username"  ng-model="username" class="form-control" tabindex="1" autofocus="true" required>
+                                <div ng-show="form.$submitted || form.username.$touched">
+                                    <div ng-show="form.username.$dirty || form.username.$invalid">
+                                        <p class="help-block" style="color:maroon"
+                                           ng-show="form.username.$error.required">
+                                            Username is required.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -87,21 +95,29 @@
                                             </span>
                             <div class="form-group">
                                 <label class="control-label">Password</label>
-                                <input type="password" id="password"
-                                       ng-model="password" class="form-control" required>
+                                <input type="password" id="password" name="password"
+                                       ng-model="password" class="form-control" tabindex="2" autofocus="true" required>
+                                <div ng-show="form.$submitted || form.password.$touched">
+                                    <div ng-show="form.password.$dirty || form.password.$invalid">
+                                        <p class="help-block" style="color:maroon"
+                                           ng-show="form.password.$error.required">
+                                            Password is required.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="input-group">
                             <div class="form-group pad-btm0 rememberMe">
                                 <label for="rememberMe">
-                                    <input type="checkbox" id="rememberMe" ng-model="rememberMe" checked >
+                                    <input type="checkbox" id="rememberMe" ng-model="rememberMe" tabindex="3" checked >
                                     <span>Remember me</span>
                                 </label>
                             </div>
                         </div>
                     </div>
                     <div class="footer text-center">
-                        <button type="submit" class="btn btn-success btn-wd btn-lg">Sign in</button>
+                        <button type="submit" class="btn btn-success btn-wd btn-lg" tabindex="4">Sign in</button>
                     </div>
                 </div>
             </form>
