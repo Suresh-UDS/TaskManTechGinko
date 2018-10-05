@@ -38,10 +38,12 @@ import com.ts.app.config.Constants;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
 import com.ts.app.domain.Attendance;
+import com.ts.app.domain.Clientgroup;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.EmployeeShift;
+import com.ts.app.domain.ExportContent;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobChecklist;
 import com.ts.app.domain.JobStatus;
@@ -1562,6 +1564,8 @@ public class SchedulerHelperService extends AbstractService {
 		now.set(Calendar.SECOND,  0);
 		now.set(Calendar.MILLISECOND, 0);
 		
+		
+		Map<String, Map<String, List<ExportContent>>> clientGroupMap = new HashMap<String, Map<String, List<ExportContent>>>();
 
 		List<Project> projects = projectRepository.findAll();
 		for (Project proj : projects) {
@@ -1730,7 +1734,42 @@ public class SchedulerHelperService extends AbstractService {
 					}
 				}
 				
-				if (eodReportEmails != null && (alertTimeCal.equals(now) || isOnDemand)) {
+				if (eodReportEmails != null && (alertTimeCal.equals(now) || isOnDemand) && eodReportEmails.isClientGroupAlert()) {
+					
+					if(proj.getClientGroup() != null) {
+						
+						Map<String, List<ExportContent>> clientContentMap = null;
+						
+						if(clientGroupMap.containsKey(proj.getClientGroup())) {
+							clientContentMap = clientGroupMap.get(proj.getClientGroup());
+						}else {
+							clientContentMap = new HashMap<String, List<ExportContent>>();
+						}
+						
+						List<ExportContent> exportContents = null;
+						
+						ExportContent exportCnt = new ExportContent();
+						exportCnt.setEmail(eodReportEmails.getSettingValue());
+						exportCnt.setSiteId(site.getId());
+						exportCnt.setSiteName(site.getName());
+						exportCnt.setSummary(sb.toString());
+						exportCnt.setFile(files);
+
+						if(clientContentMap.containsKey(proj.getName())) {
+							exportContents = clientContentMap.get(proj.getName());
+						}else {
+							exportContents = new ArrayList<ExportContent>();
+						}
+						
+						exportContents.add(exportCnt);
+						
+						clientContentMap.put(proj.getName(), exportContents);
+						
+						clientGroupMap.put(proj.getClientGroup(), clientContentMap);
+			
+					}
+					
+				}else if(eodReportEmails != null && (alertTimeCal.equals(now) || isOnDemand)) {
 					if(CollectionUtils.isNotEmpty(files)) {
 						mailService.sendDaywiseReportEmailFile(site.getName(), eodReportEmails.getSettingValue(), files, cal.getTime(), sb.toString());
 					}
@@ -1739,6 +1778,38 @@ public class SchedulerHelperService extends AbstractService {
 			}
 		}
 		
+		exportClientGroupEmail(clientGroupMap);
+		
+	}
+
+	private void exportClientGroupEmail(Map<String, Map<String, List<ExportContent>>> newMap) {
+		// TODO Auto-generated method stub
+		Date date = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		//cal.add(Calendar.DAY_OF_MONTH, -1);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		Map<String, Object> exportedContent = new HashMap<String, Object>();
+		for(Map.Entry<String, Map<String, List<ExportContent>>> entry : newMap.entrySet()) {
+			exportedContent.put("clientGroup", entry.getKey());
+			Map<String, List<ExportContent>> values = entry.getValue();
+			for(Map.Entry<String, List<ExportContent>> contentEx : values.entrySet()) {
+				exportedContent.put("project", contentEx.getKey());
+				List<ExportContent> exportContents = contentEx.getValue();
+				exportedContent.put("email", exportContents.get(0).getEmail());
+				for(ExportContent contents : exportContents) { 
+					exportedContent.put("summary", contents.getSummary());
+					exportedContent.put("files", contents.getFile());
+					exportedContent.put("siteName", contents.getSiteName());
+				}
+			}
+        }
+		if(exportedContent != null) {
+			mailService.sendDaywiseReportEmailFile(exportedContent, cal.getTime());
+		}
 	}
 	
 

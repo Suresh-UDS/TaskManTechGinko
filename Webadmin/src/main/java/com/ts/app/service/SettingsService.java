@@ -552,6 +552,7 @@ public class SettingsService extends AbstractService {
 		}
 		dayWiseReportAlertSetting.setSettingKey(EMAIL_NOTIFICATION_DAYWISE_REPORT);
 		dayWiseReportAlertSetting.setSettingValue(String.valueOf(settingsDto.isDayWiseReportEmailAlert()));
+		dayWiseReportAlertSetting.setClientGroupAlert(settingsDto.isClientGroupEmailAlert());
 		dayWiseReportAlertSetting.setProjectId(settingsDto.getProjectId());
 		dayWiseReportAlertSetting.setProjectName(settingsDto.getProjectName());
 		dayWiseReportAlertSetting.setSiteId(settingsDto.getSiteId());
