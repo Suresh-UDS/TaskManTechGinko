@@ -20,15 +20,20 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.AssetGroup;
+import com.ts.app.domain.Clientgroup;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.repository.ClientGroupRepository;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ClientgroupDTO;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.ProjectDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
@@ -51,6 +56,9 @@ public class ProjectService extends AbstractService {
 
 	@Inject
 	private SiteService siteService;
+	
+	@Inject
+	private ClientGroupRepository clientGroupRepository;
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
@@ -77,6 +85,18 @@ public class ProjectService extends AbstractService {
         log.debug("Create user information"+projectDto.getUserId());
 		Project project = mapperUtil.toEntity(projectDto, Project.class);
 		project.setActive(project.ACTIVE_YES);
+		
+		//create client group if does not exist
+		if(!StringUtils.isEmpty(project.getClientGroup())) {
+			Clientgroup clientGroup = clientGroupRepository.findByName(project.getClientGroup());
+			if(clientGroup == null) {
+				clientGroup = new Clientgroup();
+				clientGroup.setClientgroup(project.getClientGroup());
+				clientGroup.setActive("Y");
+				clientGroupRepository.save(clientGroup);
+			}
+		}
+		
 		project = projectRepository.save(project);
 		log.debug("Created Information for Project: {}", project);
 		projectDto = mapperUtil.toModel(project, ProjectDTO.class);
@@ -305,6 +325,27 @@ public class ProjectService extends AbstractService {
 			er.setStatus(status);
 		}
 		return er;
+	}
+
+	public ClientgroupDTO createClientGroup(ClientgroupDTO clientGroupDTO) {
+		Clientgroup clientgroup = mapperUtil.toEntity(clientGroupDTO, Clientgroup.class);
+		Clientgroup existingGroup = clientGroupRepository.findByName(clientGroupDTO.getClientgroup());
+		if(existingGroup == null) { 
+			clientgroup.setActive(Clientgroup.ACTIVE_YES);
+			clientGroupRepository.save(clientgroup);
+			clientGroupDTO = mapperUtil.toModel(clientgroup, ClientgroupDTO.class);
+		}else {
+			clientGroupDTO.setErrorMessage("Already same asset group exists.");
+			clientGroupDTO.setStatus("400");
+			clientGroupDTO.setErrorStatus(true);
+		}
+		return clientGroupDTO;
+
+	}
+
+	public List<ClientgroupDTO> findAllClientGroups() {
+		List<Clientgroup> clientgroup = clientGroupRepository.findAll();
+		return mapperUtil.toModelList(clientgroup, ClientgroupDTO.class);
 	}
 
 }
