@@ -1911,9 +1911,9 @@ public class ExportUtil {
 							transaction.getClosedOn() != null ? DateUtil.formatToDateTimeString(transaction.getClosedOn()) : "");
 				}
 
-				for (int i = 0; i < TICKET_HEADER.length; i++) {
-					xssfSheet.autoSizeColumn(i);
-				}
+//				for (int i = 0; i < TICKET_HEADER.length; i++) {
+//					xssfSheet.autoSizeColumn(i);
+//				}
 				log.info(export_File_Name + " Ticket export file was created successfully !!!");
 				statusMap.put(export_File_Name, "COMPLETED");
 
