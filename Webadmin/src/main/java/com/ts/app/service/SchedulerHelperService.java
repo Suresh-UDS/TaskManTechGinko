@@ -2,6 +2,7 @@
 package com.ts.app.service;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -1744,7 +1745,7 @@ public class SchedulerHelperService extends AbstractService {
 					}
 				}
 				
-				if (eodReportEmails != null && (alertTimeCal.equals(now) || isOnDemand) && eodReportEmails.isClientGroupAlert()) {
+				if (eodReportEmails != null &&  (alertTimeCal.equals(now)|| isOnDemand) && eodReportEmails.isClientGroupAlert()) {
 					
 					if(proj.getClientGroup() != null) {
 						
@@ -1843,7 +1844,7 @@ public class SchedulerHelperService extends AbstractService {
 	
 						if(content.getJobFile() != null) {
 							//copy the job report sheet to the master report file
-							XSSFWorkbook jobWorkBook = new XSSFWorkbook(exportPath+"/" +content.getJobFile()+".xlsx");
+							XSSFWorkbook jobWorkBook = new XSSFWorkbook(new FileInputStream(exportPath+"/" +content.getJobFile()+".xlsx"));
 							XSSFSheet newSheet = xssfJobWorkbook.createSheet(content.getSiteName());
 							newSheet = jobWorkBook.cloneSheet(0);
 		        				xssfJobWorkbook.write(jobFos);
@@ -1852,7 +1853,8 @@ public class SchedulerHelperService extends AbstractService {
 						
 	    					//copy the ticket report sheet to the master report file
 						if(content.getTicketFile() != null) {
-		    					XSSFWorkbook ticketWorkBook = new XSSFWorkbook(exportPath+"/" +content.getTicketFile()+".xlsx");
+							
+		    					XSSFWorkbook ticketWorkBook = new XSSFWorkbook(new FileInputStream(exportPath+"/" +content.getTicketFile()+".xlsx"));
 		    					XSSFSheet newTicketSheet = xssfTicketWorkbook.createSheet(content.getSiteName());
 		    					newTicketSheet = ticketWorkBook.cloneSheet(0);
 		            			xssfTicketWorkbook.write(ticketFos);
@@ -1860,10 +1862,10 @@ public class SchedulerHelperService extends AbstractService {
 						}
 	            			//copy the quotation report sheet to the master report file
 						if(content.getQuotationFile() != null) {
-		    					XSSFWorkbook quotationWorkBook = new XSSFWorkbook(exportPath+"/" +content.getQuotationFile()+".xlsx");
+		    					XSSFWorkbook quotationWorkBook = new XSSFWorkbook(new FileInputStream(exportPath+"/" +content.getQuotationFile()+".xlsx"));
 		    					XSSFSheet newQuotationSheet = xssfQuotationWorkbook.createSheet(content.getSiteName());
 							newQuotationSheet = quotationWorkBook.cloneSheet(0);
-		            			xssfQuotationWorkbook.write(ticketFos);
+		            			xssfQuotationWorkbook.write(quotationFos);
 		            			files.add(quotationReportFile);
 						}	
 					}
