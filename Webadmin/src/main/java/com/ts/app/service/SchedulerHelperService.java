@@ -20,6 +20,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -1790,7 +1791,9 @@ public class SchedulerHelperService extends AbstractService {
 			}
 		}
 		
-		//exportClientGroupEmail(clientGroupMap);
+		if(MapUtils.isNotEmpty(clientGroupMap)) {
+			exportClientGroupEmail(clientGroupMap);
+		}
 		
 	}
 
@@ -1849,7 +1852,7 @@ public class SchedulerHelperService extends AbstractService {
 						
 	    					//copy the ticket report sheet to the master report file
 						if(content.getTicketFile() != null) {
-		    					XSSFWorkbook ticketWorkBook = new XSSFWorkbook(exportPath+"/" +content.getJobFile()+".xlsx");
+		    					XSSFWorkbook ticketWorkBook = new XSSFWorkbook(exportPath+"/" +content.getTicketFile()+".xlsx");
 		    					XSSFSheet newTicketSheet = xssfTicketWorkbook.createSheet(content.getSiteName());
 		    					newTicketSheet = ticketWorkBook.cloneSheet(0);
 		            			xssfTicketWorkbook.write(ticketFos);
@@ -1857,7 +1860,7 @@ public class SchedulerHelperService extends AbstractService {
 						}
 	            			//copy the quotation report sheet to the master report file
 						if(content.getQuotationFile() != null) {
-		    					XSSFWorkbook quotationWorkBook = new XSSFWorkbook(exportPath+"/" +content.getJobFile()+".xlsx");
+		    					XSSFWorkbook quotationWorkBook = new XSSFWorkbook(exportPath+"/" +content.getQuotationFile()+".xlsx");
 		    					XSSFSheet newQuotationSheet = xssfQuotationWorkbook.createSheet(content.getSiteName());
 							newQuotationSheet = quotationWorkBook.cloneSheet(0);
 		            			xssfQuotationWorkbook.write(ticketFos);
@@ -1879,12 +1882,14 @@ public class SchedulerHelperService extends AbstractService {
 					log.error("Error while creating master report for job, ticket and quotation for client "+ entry.getKey() , e);
 				}
 			}
-			mailService.sendDaywiseReportEmailFile(entry.getKey(), emails, files, cal.getTime(), summary.toString());
+			
+			if(CollectionUtils.isNotEmpty(files)) {
+				mailService.sendDaywiseReportEmailFile(entry.getKey(), emails, files, cal.getTime(), summary.toString());	
+			}
+			
 			
         }
-		//if(exportedContent != null) {
-		//	mailService.sendDaywiseClientReportEmail(exportedContent, cal.getTime());
-		//}
+		
 	}
 	
 
