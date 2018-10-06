@@ -539,9 +539,9 @@ public class ExportUtil {
 
 				}
 
-				for (int i = 0; i < ATTD_HEADER.length; i++) {
-					xssfSheet.autoSizeColumn(i);
-				}
+//				for (int i = 0; i < ATTD_HEADER.length; i++) {
+//					xssfSheet.autoSizeColumn(i);
+//				}
 				log.info(export_File_Name + " Excel file was created successfully !!!");
 				statusMap.put(export_File_Name, "COMPLETED");
 
@@ -733,9 +733,9 @@ public class ExportUtil {
 			dataRow.getCell(10).setCellValue(StringUtils.isNotEmpty(transaction.getRemarks())  ? transaction.getRemarks() : "");
 		}
 
-		for (int i = 0; i < ATTD_HEADER.length; i++) {
-			xssfSheet.autoSizeColumn(i);
-		}
+//		for (int i = 0; i < ATTD_HEADER.length; i++) {
+//			xssfSheet.autoSizeColumn(i);
+//		}
 		log.info(filePath + " Excel file was created successfully !!!");
 		statusMap.put(filePath, "COMPLETED");
 
@@ -1284,9 +1284,9 @@ public class ExportUtil {
 					dataRow.createCell(6).setCellValue(transaction.getActive());
 				}
 
-				for (int i = 0; i < EMP_HEADER.length; i++) {
-					xssfSheet.autoSizeColumn(i);
-				}
+//				for (int i = 0; i < EMP_HEADER.length; i++) {
+//					xssfSheet.autoSizeColumn(i);
+//				}
 				// log.info(exportFileName + " Excel file was created successfully !!!");
 				statusMap.put(exportFileName, "COMPLETED");
 
@@ -1786,9 +1786,9 @@ public class ExportUtil {
 					}
 				}
 
-				for (int i = 0; i < JOB_HEADER.length; i++) {
-					xssfSheet.autoSizeColumn(i);
-				}
+//				for (int i = 0; i < JOB_HEADER.length; i++) {
+//					xssfSheet.autoSizeColumn(i);
+//				}
 				log.info(export_File_Name + " Excel file was created successfully !!!");
 				statusMap.put(export_File_Name, "COMPLETED");
 
@@ -2034,9 +2034,9 @@ public class ExportUtil {
 					dataRow.createCell(10).setCellValue(transaction.getStatus());
 				}
 
-				for (int i = 0; i < ASSET_HEADER.length; i++) {
-					xssfSheet.autoSizeColumn(i);
-				}
+//				for (int i = 0; i < ASSET_HEADER.length; i++) {
+//					xssfSheet.autoSizeColumn(i);
+//				}
 				log.info(export_File_Name + " Asset export file was created successfully !!!");
 				statusMap.put(export_File_Name, "COMPLETED");
 
@@ -2195,9 +2195,9 @@ public class ExportUtil {
 					dataRow.createCell(11).setCellValue(transaction.getPincode());
 				}
 
-				for (int i = 0; i < VENDOR_HEADER.length; i++) {
-					xssfSheet.autoSizeColumn(i);
-				}
+//				for (int i = 0; i < VENDOR_HEADER.length; i++) {
+//					xssfSheet.autoSizeColumn(i);
+//				}
 				log.info(export_File_Name + " Vendor export file was created successfully !!!");
 				statusMap.put(export_File_Name, "COMPLETED");
 
@@ -2347,9 +2347,9 @@ public class ExportUtil {
 					}
 				}
 				log.debug("Completed Writing feedback to excel file");
-				for (int i = 0; i < FEEDBACK_HEADER.length; i++) {
-					xssfSheet.autoSizeColumn(i);
-				}
+//				for (int i = 0; i < FEEDBACK_HEADER.length; i++) {
+//					xssfSheet.autoSizeColumn(i);
+//				}
 				log.info(export_File_Name + " Feebdack Excel file created successfully !!!");
 				statusMap.put(export_File_Name, "COMPLETED");
 
