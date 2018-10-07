@@ -1970,8 +1970,12 @@ public class SchedulerHelperService extends AbstractService {
 
 						emails = content.getEmail();
 						// append summary
-						summary.append("<br/>" + content.getSiteName() + "<br/>");
-						summary.append(content.getSummary());
+						summary.append("<br/><b>" + content.getSiteName() + "</b><br/>");
+						if(StringUtils.isNotEmpty(content.getSummary())) {
+							summary.append(content.getSummary());
+						}else {
+							summary.append("<br/>Nothing to report<br/>");
+						}
 
 						if (content.getJobFile() != null) {
 							// copy the job report sheet to the master report file
