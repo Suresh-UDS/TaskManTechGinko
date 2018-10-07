@@ -203,6 +203,7 @@ public class    EmployeeService extends AbstractService {
         log.debug("Empid "+employeeDTO.getEmpId());
         SearchCriteria criteria = new SearchCriteria();
         criteria.setEmployeeEmpId(employeeDTO.getEmpId());
+        criteria.setUserId(employeeDTO.getUserId());
         SearchResult<EmployeeDTO> searchResults = findBySearchCrieria(criteria);
         if(searchResults != null && CollectionUtils.isNotEmpty(searchResults.getTransactions())) {
             return true;
@@ -1191,9 +1192,13 @@ public class    EmployeeService extends AbstractService {
 
             boolean isClient = false;
 
-            UserRole role = user.getUserRole();
+            UserRole role = null;
             
-            if(user != null && role != null) {
+            if(user != null) {
+            		role = user.getUserRole();
+            }
+            
+            if(role != null) {
                 isClient = role.getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue());
             }
 
@@ -1285,7 +1290,7 @@ public class    EmployeeService extends AbstractService {
                 List<Employee> empList =  page.getContent();
                 if(CollectionUtils.isNotEmpty(empList)) {
                     for(Employee emp : empList) {
-                    		if(employeeFilter.filterByDesignationForRole(searchCriteria.getModule(), searchCriteria.getAction(), role.getName(), emp.getDesignation())) {
+                    		if(role != null && employeeFilter.filterByDesignationForRole(searchCriteria.getModule(), searchCriteria.getAction(), role.getName(), emp.getDesignation())) {
                     			transactions.add(mapToModel(emp));
                     		}
                     }
