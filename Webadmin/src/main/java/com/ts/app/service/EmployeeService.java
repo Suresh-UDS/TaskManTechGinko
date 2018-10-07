@@ -46,6 +46,7 @@ import com.ts.app.domain.Job;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
+import com.ts.app.domain.UserRole;
 import com.ts.app.domain.UserRoleEnum;
 import com.ts.app.ext.api.FaceRecognitionService;
 import com.ts.app.repository.AttendanceRepository;
@@ -62,6 +63,7 @@ import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.repository.UserRoleRepository;
+import com.ts.app.rule.EmployeeFilter;
 import com.ts.app.service.util.AmazonS3Utils;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
@@ -175,6 +177,9 @@ public class    EmployeeService extends AbstractService {
 
     @Inject
     private AmazonS3Utils amazonS3utils;
+    
+    @Inject
+    private EmployeeFilter employeeFilter;
 
     @Value("${AWS.s3-cloudfront-url}")
     private String cloudFrontUrl;
@@ -1186,8 +1191,10 @@ public class    EmployeeService extends AbstractService {
 
             boolean isClient = false;
 
-            if(user != null && user.getUserRole() != null) {
-                isClient = user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue());
+            UserRole role = user.getUserRole();
+            
+            if(user != null && role != null) {
+                isClient = role.getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue());
             }
 
             if((searchCriteria.getSiteId() != 0 && searchCriteria.getProjectId() != 0)) {
@@ -1278,7 +1285,9 @@ public class    EmployeeService extends AbstractService {
                 List<Employee> empList =  page.getContent();
                 if(CollectionUtils.isNotEmpty(empList)) {
                     for(Employee emp : empList) {
-                        transactions.add(mapToModel(emp));
+                    		if(employeeFilter.filterByDesignationForRole(searchCriteria.getModule(), searchCriteria.getAction(), role.getName(), emp.getDesignation())) {
+                    			transactions.add(mapToModel(emp));
+                    		}
                     }
                 }
                 if(CollectionUtils.isNotEmpty(transactions)) {
