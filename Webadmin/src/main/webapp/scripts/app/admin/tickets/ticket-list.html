@@ -296,8 +296,9 @@
                 <div class="titleCon margn-btm-12">
                     <h3>{{listTitle | uppercase}}</h3>
                 </div>
-
-                <div class="panel panel-default">
+                <div class="row">
+                    <div class="col-md-12">
+                      <div class="panel panel-default">
 
                     <div class="panel-heading">Ticket id - {{listId}}</div>
 
@@ -391,6 +392,52 @@
                         </div>
                     </div>
 
+                </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Comments History</div>
+                            <div class="panel-body">
+                                <ul class="timeline">
+                                    <li class="timeline-inverted">
+                                        <div class="timeline-badge danger">
+                                            <i class="material-icons">card_travel</i>
+                                        </div>
+                                        <div class="timeline-panel">
+                                            <div class="timeline-heading">
+                                                <span class="label label-danger">Admin{{listModified}}</span>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <p>Whats the root cause{{listComments}}</p>
+                                            </div>
+                                            <h6>
+                                                <i class="ti-time">12-04-2018 04:32:04 {{listTime}}</i>
+                                            </h6>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="timeline-badge success">
+                                            <i class="material-icons">extension</i>
+                                        </div>
+                                        <div class="timeline-panel">
+                                            <div class="timeline-heading">
+                                                <span class="label label-success">User{{listModified}}</span>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <p>Power not supply{{listComments}}</p>
+                                            </div>
+                                            <h6>
+                                                <i class="ti-time">12-04-2018 05:32:04 {{listTime}}</i>
+                                            </h6>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="txt-align-rgt">

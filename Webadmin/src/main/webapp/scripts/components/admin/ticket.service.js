@@ -71,9 +71,9 @@ angular.module('timeSheetApp')
                 return response.data;
             })
         },
-        
-        getTicketsByAssetId : function(id) { 
-	        	return $http.get('api/ticket/'+id+'/view').then(function(response) { 
+
+        getTicketsByAssetId : function(id) {
+	        	return $http.get('api/ticket/'+id+'/view').then(function(response) {
 	        		console.log(response);
 	        		return response.data;
 	        	});
@@ -81,7 +81,8 @@ angular.module('timeSheetApp')
 
         upload: function(ticketId,ticketImage) {
              var fileFormData = new FormData();
-             fileFormData.append('ticketFile', ticketImage);
+             var file = ticketImage;
+             fileFormData.append('ticketFile', file);
              fileFormData.append('ticketId', ticketId);
              return $http.post('api/ticket/image/upload', fileFormData, {
                  transformRequest: angular.identity,

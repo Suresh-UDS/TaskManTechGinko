@@ -53,5 +53,22 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		resolve : {
 
 		}
-	});
+	}).state('comments', {
+      		parent : 'manage',
+      		url : '/comments/:id',
+      		controller : 'TicketController',
+      		data : {
+      			authorities : [],
+      			pageTitle : 'Ticket comments'
+      		},
+      		views : {
+      			'content@' : {
+      				templateUrl : 'scripts/app/admin/tickets/comments.html',
+      				controller : 'TicketController'
+      			}
+      		},
+      		resolve : {
+
+      		}
+      	});
 });

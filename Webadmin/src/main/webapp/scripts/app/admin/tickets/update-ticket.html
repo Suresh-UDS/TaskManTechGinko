@@ -1,354 +1,393 @@
-
-
 <div class="crud-form"
-     data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="loadPageTop();loadingStart();">
-    <div class="col-md-8">
-        <!--<h3 class="title">Edit ticket</h3>-->
+     data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="loadPageTop();loadingStart();editTicket();loadSites();">
+    <div class="titleCon">
+        <h3>{{tickets.title | uppercase}}</h3>
     </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-container table-container">
+               <div class="TabsCon editTicketCon">
+                   <div class="panel panel-default TabsContainer assetsTabs">
+                    <!--<div class="panel-heading">Panel Heading</div>-->
+                    <div class="panel-body">
+                        <ul class="nav nav-pills nav-pills-warning">
+                            <li class="active">
+                                <a href=".General" data-toggle="tab" > General</a>
+                            </li>
+                            <li>
+                                <a href=".Comments" data-toggle="tab"> Comments</a>
+                            </li>
+                        </ul>
+                       <div class="tab-content TabsContent" style="">
+                           <div class="tab-pane fade in active General" id="General">
+                              <form ng-show="!success" name="form" role="form" novalidate
+                              ng-submit="conform('update')"  >
+                                  <div class="row">
+                                       <div class="col-md-6">
+                                           <div class="panel panel-default">
+                                               <div class="panel-heading">Ticket Details</div>
+                                               <div class="panel-body">
+                                                   <div class="row">
+                                                       <div class="col-md-12">
+                                                           <div class="form-group">
+                                                               <label class="control-label">Title<span class="red-star">*</span> </label>
 
-    <div ng-controller="TicketController" ng-init="editTicket();loadSites();">
-            <div class="cardsCon editTicketCon">
-                <form ng-show="!success" name="form" role="form" novalidate
-                      ng-submit="conform('update')"  >
+                                                               <input type="text" class="form-control InputTxtCapsAll"   name='title'
+                                                                      ng-model="tickets.title" ng-minlength=1 ng-maxlength=100
+                                                                      autofocus  required autocomplete="off"/>
+                                                               <div ng-show="form.$submitted || form.title.$touched">
+                                                                   <div ng-show="form.title.$dirty || form.title.$invalid">
+                                                                       <p class="help-block" style="color:maroon"
+                                                                          ng-show="form.title.$error.required">
+                                                                           Title is required.
+                                                                       </p>
 
-					<div class="row">
+                                                                   </div>
+                                                               </div>
 
-                       <div class="col-md-6">
 
+                                                           </div>
+                                                       </div>
+                                                       <div class="col-md-12">
+                                                           <div class="form-group">
+                                                               <label class="control-label">Description<span class="red-star">*</span> </label>
+                                                               <input id='description' ng-model="tickets.description" class='form-control InputTxtCaps'
+                                                                      name='description' type='text' value=""
+                                                                       autofocus required/>
+                                                               <div ng-show="form.$submitted || form.description.$touched">
+                                                                   <div ng-show="form.description.$dirty || form.description.$invalid">
+                                                                       <p class="help-block" style="color:maroon"
+                                                                          ng-show="form.description.$error.required">
+                                                                           Description is required.
+                                                                       </p>
 
-                           <div class="panel panel-default">
-                               <div class="panel-heading">Ticket Details</div>
-                               <div class="panel-body">
+                                                                   </div>
+                                                               </div>
+                                                           </div>
+                                                       </div>
+                                                       <div class="col-md-5">
+                                                           <div class="form-group">
+                                                               <label class="control-label">Category<span class="red-star">*</span> </label>
+                                                               <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                               <select
+                                                                   required
+                                                                   name="category"
+                                                                   ng-model="tickets.category"
+                                                                   class="form-control searchable-input floatL">
+                                                                   <option value=''>Select Category</option>
+                                                                   <option>HOUSEKEEPING</option>
+                                                                   <option>ELECTRICAL</option>
+                                                                   <option>HVAC</option>
+                                                                   <option>CARPENTRY</option>
+                                                                   <option>PESTCONTROL</option>
+                                                                   <option>PLUMBING</option>
+                                                                   <option>MAINTENANCE</option>
+                                                                   <option>CIVIL</option>
+                                                                   <option>GENERAL</option>
+                                                                   <option>PANTRYSERVICES</option>
+                                                                   <option>ADMIN</option>
+                                                               </select>
+                                                               <div ng-show="form.$submitted || form.category.$touched">
+                                                                   <div
+                                                                       ng-show="form.category.$dirty || form.category.$invalid">
 
-                                   <div class="row">
+                                                                       <p class="help-block" style="color:maroon"
+                                                                          ng-show="form.category.$error.required">
+                                                                           Required
+                                                                   </div>
+                                                               </div>
+                                                           </div>
 
-                                       <div class="col-md-12">
-                                           <div class="form-group">
-                                               <label class="control-label">Title<span class="red-star">*</span> </label>
+                                                       </div>
+                                                       <div class="col-md-6">
+                                                          <div class="form-group">
+                                                            <label class="control-label">Severity<span class="red-star">*</span> </label>
+                                                            <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                            <select
+                                                                required
+                                                                name="severity"
+                                                                ng-model="tickets.severity"
+                                                                class="form-control searchable-input floatL">
+                                                                <option value=''>Select severity</option>
+                                                                <option value='Low' selected>Low</option>
+                                                                <option value='Medium'>Medium</option>
+                                                                <option value='High'>High</option>
 
-                                               <input type="text" class="form-control InputTxtCapsAll"   name='title'
-                                                      ng-model="tickets.title" ng-minlength=1 ng-maxlength=100
-                                                      autofocus  required autocomplete="off"/>
-                                               <div ng-show="form.$submitted || form.title.$touched">
-                                                   <div ng-show="form.title.$dirty || form.title.$invalid">
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.title.$error.required">
-                                                           Title is required.
-                                                       </p>
+                                                            </select>
+
+                                                            <div ng-show="form.$submitted || form.severity.$touched">
+                                                                <div
+                                                                    ng-show="form.severity.$dirty || form.severity.$invalid">
+
+                                                                    <p class="help-block" style="color:maroon"
+                                                                       ng-show="form.severity.$error.required">
+                                                                        Required
+                                                                </div>
+                                                            </div>
+                                                          </div>
+
+                                                        </div>
 
                                                    </div>
-                                               </div>
 
+                                                   <div class="row">
+                                                       <div class="col-md-4">
+                                                           <div class="radio">
+                                                               <label>
+                                                                   <input type="radio" name="optionsRadios" ng-model="tickets.pendingStatus" value="pendingAtUDS" ng-checked="tickets.pendingAtUDS" > Pending At UDS
+                                                               </label>
+                                                           </div>
+                                                       </div>
 
-                                           </div>
-                                       </div>
-                                       <div class="col-md-12">
-                                           <div class="form-group">
-                                               <label class="control-label">Description<span class="red-star">*</span> </label>
-                                               <input id='description' ng-model="tickets.description" class='form-control InputTxtCaps'
-                                                      name='description' type='text' value=""
-                                                       autofocus required/>
-                                               <div ng-show="form.$submitted || form.description.$touched">
-                                                   <div ng-show="form.description.$dirty || form.description.$invalid">
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.description.$error.required">
-                                                           Description is required.
-                                                       </p>
-
+                                                       <div class="col-md-4">
+                                                           <div class="radio">
+                                                               <label>
+                                                                   <input type="radio" name="optionsRadios" ng-model="tickets.pendingStatus" value="pendingAtClient" > Pending At {{tickets.siteProjectName}}
+                                                               </label>
+                                                           </div>
+                                                       </div>
                                                    </div>
+
+
+
                                                </div>
                                            </div>
-                                       </div>
-                                       <div class="col-md-5">
-                                           <div class="form-group">
-                                               <label class="control-label">Category<span class="red-star">*</span> </label>
-                                               <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                               <select
-                                                   required
-                                                   name="category"
-                                                   ng-model="tickets.category"
-                                                   class="form-control searchable-input floatL">
-                                                   <option value=''>Select Category</option>
-                                                   <option>HOUSEKEEPING</option>
-                                                   <option>ELECTRICAL</option>
-                                                   <option>HVAC</option>
-                                                   <option>CARPENTRY</option>
-                                                   <option>PESTCONTROL</option>
-                                                   <option>PLUMBING</option>
-                                                   <option>MAINTENANCE</option>
-                                                   <option>CIVIL</option>
-                                                   <option>GENERAL</option>
-                                                   <option>PANTRYSERVICES</option>
-                                                   <option>ADMIN</option>
-                                               </select>
-                                               <div ng-show="form.$submitted || form.category.$touched">
-                                                   <div
-                                                       ng-show="form.category.$dirty || form.category.$invalid">
-
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.category.$error.required">
-                                                           Required
-                                                   </div>
-                                               </div>
-                                           </div>
-
                                        </div>
                                        <div class="col-md-6">
-                                          <div class="form-group">
-                                            <label class="control-label">Severity<span class="red-star">*</span> </label>
-                                            <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select
-                                                required
-                                                name="severity"
-                                                ng-model="tickets.severity"
-                                                class="form-control searchable-input floatL">
-                                                <option value=''>Select severity</option>
-                                                <option value='Low' selected>Low</option>
-                                                <option value='Medium'>Medium</option>
-                                                <option value='High'>High</option>
+                                        <div class="panel panel-default">
+                                              <div class="panel-heading">Site & Employee</div>
+                                          <div class="panel-body">
+                                           <div class="row">
+                                           <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Site<span class="red-star">*</span> </label>
+                                                        <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <select
+                                                            required
+                                                            ng-model="selectedSite"
+                                                            name="site"
+                                                            ng-change="loadEmployees();loadAssets()"
+                                                            class="form-control searchable-input floatL" ng-options="site as site.name for site in sites track by site.id">
+                                                            <option value="">Select Site</option>
 
-                                            </select>
 
-                                            <div ng-show="form.$submitted || form.severity.$touched">
-                                                <div
-                                                    ng-show="form.severity.$dirty || form.severity.$invalid">
+                                                        </select>
 
-                                                    <p class="help-block" style="color:maroon"
-                                                       ng-show="form.severity.$error.required">
-                                                        Required
+                                                        <div ng-show="form.$submitted || form.site.$touched">
+                                                            <div
+                                                                ng-show="form.site.$dirty || form.site.$invalid">
+
+                                                                <p class="help-block" style="color:maroon"
+                                                                   ng-show="form.site.$error.required" >
+                                                                    Required
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                 </div>
-                                            </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Employee </label>
+                                                        <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <select
+                                                            name="employee"
+                                                            ng-model="selectedEmployee"
+                                                            class="form-control searchable-input floatL" ng-options="emp as emp.name + ' ' + emp.lastName group by emp.designation for emp in employees track by emp.id">
+                                                            <option value="">Select Employee</option>
+
+                                                        </select>
+
+                                                        <div ng-show="form.$submitted || form.employee.$touched">
+                                                            <div
+                                                                ng-show="form.employee.$dirty || form.employee.$invalid">
+
+                                                                <p class="help-block" style="color:maroon"
+                                                                   ng-show="form.employee.$error.required">
+                                                                    Required
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                           </div>
                                           </div>
+                                         </div>
+                                       </div>
+                                       <div class="col-md-6">
+                                          <div class="panel panel-default">
+                                              <div class="panel-heading">Assets</div>
+                                              <div class="panel-body">
+                                                  <div class="row">
+                                                      <div class="col-md-12">
+                                                          <div class="form-group">
+                                                              <label class="control-label">Name of Asset</label>
+                                                              <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                              <select
+                                                                  required
+                                                                  name="asset"
+                                                                  ng-model="selectedAsset"
+                                                                  class="form-control searchable-input floatL" ng-options="asset as asset.title for asset in assets | orderBy:'title' track by asset.id">
+                                                                  <option value="">Select Asset</option>
+                                                              </select>
+                                                              <!--  <input id='assetId' ng-model="assetObj.title" class='form-control' ng-show="assetObj"
+                                                                             name='description' type='text' value="assetName"
+                                                                              readOnly/> -->
 
-                                        </div>
+                                                          </div>
+
+                                                      </div>
+
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="col-md-12">
+                                          <div class="panel panel-default">
+                                              <div class="panel-heading">Upload Document/Image</div>
+                                              <div class="panel-body">
+                                                  <div class="row">
+                                                      <div class="col-md-6">
+                                                          <div class="form-group label-floating" >
+                                                              <div class="pdng-top13" >
+                                                                  <div class="pull-left" >
+                                                                      <input type="file"
+                                                                             class="form-control" style="opacity:100;position:relative" file-model
+                                                                             ng-model="selectedImageFile"
+                                                                             name="ImageFile"
+                                                                      />
+                                                                  </div>
+                                                                  <div class="pull-right" ng-if="tickets.image">
+                                                                      <a id="images" href="javascript:void(0);" onClick="$('#myModalNew').modal()" ng-show="extension == 'jpg' || extension == 'jpeg' || extension == 'png'" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="loadTicketImage(ticketImage,tickets.id)">
+                                                                          <img ng-src={{ticketImage}} width="100px" download target="_self" height="100px"/>
+                                                                      </a>
+
+                                                                      <a id="images" href="{{ticketImage}}" ng-if="extension != 'jpg' || extension != 'jpeg' || extension != 'png'">
+                                                                          <img ng-src="assets/img/{{extension}}.png" download target="_self" width="100px" height="100px"/>
+                                                                      </a>
+                                                                  </div>
+                                                                  <div class="clearfix"></div>
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                   </div>
+                                  <div class="row">
 
                                    </div>
+                                  <div class="row">
+                                        <div class="col-md-12">
+                                            <button type="button" ng-click="conform('cancel')"
+                                                    id="cancel-button"   class="btn btn-danger pull-right" ng-disabled="btnDisable"> <i class="material-icons">close</i> Cancel</button>
 
+                                            <!--<button type="submit" type="submit"-->
+                                                    <!--id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">-->
+                                                        <!--<i class="material-icons">check</i>-->
+                                                    <!--</span>Update ticket</button>-->
+
+                                            <button class="btn btn-success ld ld-over-inverse pull-right" ng-class="{'running':saveLoad}"
+                                                    type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisable">
+                                                <span class="btn-label"><i class="material-icons">check</i></span> Update ticket
+                                                <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                                            </button>
+
+
+                                            <div class="clearfix"></div>
+                                        </div>
+
+                                    </div>
+                              </form>
+                           </div>
+                           <div class="tab-pane fade Comments" id="Comments">
+                               <form ng-show="!success" name="commentsForm" role="form" novalidate
+                                     ng-submit="conform('comment')"  >
                                    <div class="row">
-                                       <div class="col-md-4">
-                                           <div class="radio">
-                                               <label>
-                                                   <input type="radio" name="optionsRadios" ng-model="tickets.pendingStatus" value="pendingAtUDS" ng-checked="tickets.pendingAtUDS" > Pending At UDS
-                                               </label>
+                                       <div class="container-fluid">
+                                           <div class="row">
+                                               <div class="col-md-12">
+                                                   <div class="panel panel-default">
+                                                       <div class="panel-heading">Ticket Comment</div>
+                                                       <div class="panel-body">
+                                                           <div class="row">
+                                                               <div class="col-md-6">
+                                                                   <div class="form-group">
+                                                                       <label class="control-label">Comment</label>
+                                                                       <textarea ng-model="tickets.comments" class="form-control"></textarea>
+                                                                   </div>
+                                                               </div>
+                                                               <div class="col-md-6">
+                                                                   <button class="btn btn-success ld ld-over-inverse pull-left" style="margin-top: 29px;" ng-class="{'running':saveLoad}"
+                                                                           type="submit" id="form-button-save" ng-disabled="commentsForm.$invalid">
+                                                                       <span class="btn-label"><i class="material-icons">check</i></span> Submit
+                                                                       <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                                                                   </button>
+                                                                   <button type="button" ng-click="conform('cancel')"
+                                                                           id="cancel-button"   class="btn btn-danger pull-left" style="margin-top: 29px;" ng-disabled="btnDisable">
+                                                                       <i class="material-icons">close</i> Cancel
+                                                                   </button>
+                                                                   <div class="clearfix"></div>
+                                                               </div>
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                               </div>
                                            </div>
-                                       </div>
-
-                                       <div class="col-md-4">
-                                           <div class="radio">
-                                               <label>
-                                                   <input type="radio" name="optionsRadios" ng-model="tickets.pendingStatus" value="pendingAtClient" > Pending At {{tickets.siteProjectName}}
-                                               </label>
+                                           <div class="row">
+                                               <div class="col-md-12">
+                                                   <div class="panel panel-default">
+                                                       <div class="panel-heading">Comments History</div>
+                                                       <div class="panel-body">
+                                                           <ul class="timeline">
+                                                               <li class="timeline-inverted">
+                                                                   <div class="timeline-badge danger">
+                                                                       <i class="material-icons">card_travel</i>
+                                                                   </div>
+                                                                   <div class="timeline-panel">
+                                                                       <div class="timeline-heading">
+                                                                           <span class="label label-danger">Admin{{listModified}}</span>
+                                                                       </div>
+                                                                       <div class="timeline-body">
+                                                                           <p>Whats the root cause{{listComments}}</p>
+                                                                       </div>
+                                                                       <h6>
+                                                                           <i class="ti-time">12-04-2018 04:32:04 {{listTime}}</i>
+                                                                       </h6>
+                                                                   </div>
+                                                               </li>
+                                                               <li>
+                                                                   <div class="timeline-badge success">
+                                                                       <i class="material-icons">extension</i>
+                                                                   </div>
+                                                                   <div class="timeline-panel">
+                                                                       <div class="timeline-heading">
+                                                                           <span class="label label-success">User{{listModified}}</span>
+                                                                       </div>
+                                                                       <div class="timeline-body">
+                                                                           <p>Power not supply{{listComments}}</p>
+                                                                       </div>
+                                                                       <h6>
+                                                                           <i class="ti-time">12-04-2018 05:32:04 {{listTime}}</i>
+                                                                       </h6>
+                                                                   </div>
+                                                               </li>
+                                                           </ul>
+                                                       </div>
+                                                   </div>
+                                               </div>
                                            </div>
                                        </div>
                                    </div>
-
-
-
-                               </div>
+                               </form>
                            </div>
-
-
                        </div>
-                       <div class="col-md-6">
-                        <div class="panel panel-default">
-                              <div class="panel-heading">Site & Employee</div>
-                          <div class="panel-body">
-                           <div class="row">
-                           <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">Site<span class="red-star">*</span> </label>
-                                        <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                        <select
-                                            required
-                                            ng-model="selectedSite"
-                                            name="site"
-                                            ng-change="loadEmployees();loadAssets()"
-                                            class="form-control searchable-input floatL" ng-options="site as site.name for site in sites track by site.id">
-                                            <option value="">Select Site</option>
-
-
-                                        </select>
-
-                                        <div ng-show="form.$submitted || form.site.$touched">
-                                            <div
-                                                ng-show="form.site.$dirty || form.site.$invalid">
-
-                                                <p class="help-block" style="color:maroon"
-                                                   ng-show="form.site.$error.required" >
-                                                    Required
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">Employee </label>
-                                        <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                        <select
-                                            name="employee"
-                                            ng-model="selectedEmployee"
-                                            class="form-control searchable-input floatL" ng-options="emp as emp.name + ' ' + emp.lastName group by emp.designation for emp in employees track by emp.id">
-                                            <option value="">Select Employee</option>
-
-                                        </select>
-
-                                        <div ng-show="form.$submitted || form.employee.$touched">
-                                            <div
-                                                ng-show="form.employee.$dirty || form.employee.$invalid">
-
-                                                <p class="help-block" style="color:maroon"
-                                                   ng-show="form.employee.$error.required">
-                                                    Required
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                           </div>
-                          </div>
-                         </div>
-                       </div>
-
-                       <div class="col-md-6">
-                        <div class="panel panel-default">
-                              <div class="panel-heading">Assets</div>
-                          <div class="panel-body">
-                           <div class="row">
-                           <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label class="control-label">Name of Asset</label>
-                                        <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                        <select
-                                            required
-                                            name="asset"
-                                            ng-model="selectedAsset"
-                                            class="form-control searchable-input floatL" ng-options="asset as asset.title for asset in assets | orderBy:'title' track by asset.id">
-                                            <option value="">Select Asset</option>
-                                        </select>
-                                       <!--  <input id='assetId' ng-model="assetObj.title" class='form-control' ng-show="assetObj"
-                                                      name='description' type='text' value="assetName"
-                                                       readOnly/> -->
-
-                                    </div>
-
-                                </div>
-
-                           </div>
-                          </div>
-                         </div>
-                       </div>
-                   </div>
-                   <div class="row">
-
-                     <div class="col-md-6">
-                        <div class="panel panel-default">
-
-                          <div class="panel-heading">Comments</div>
-                          <div class="panel-body">
-                            <div class="row">
-
-                             <div class="col-md-6">
-                                 <div class="form-group">
-                                     <label class="control-label">Comments</label>
-                                     <input type="text" ng-model="tickets.comments" class="form-control">
-                                 </div>
-                             </div>
-                           </div>
-
-                         </div>
-                        </div>
-                     </div>
-
-                     <div class="col-md-6">
-                        <div class="panel panel-default">
-
-                          <div class="panel-heading">Upload Image</div>
-                          <div class="panel-body">
-                            <div class="row">
-
-			                     <div class="col-md-6">
-			                      <div class="form-group label-floating" >
-			                      	<div class="pdng-top13" >
-			                          <input type="file"
-			                                 class="form-control" style="opacity:100;position:relative" file-model
-			                                 ng-model="selectedImageFile"
-			                                 name="ImageFile"
-			                          />
-
-
-              							<a id="images" href="#" onClick="$('#myModalNew').modal()" ng-show="extension === 'jpg' || extension === 'jpeg' || extension === 'png'" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="loadTicketImage(ticketImage,tickets.id)">
-                 							<img src={{ticketImage}} width="100px" style="margin-top: 15px;" height="100px"/>
-             							</a>
-
-             							<a id="images" href="{{ticketImage}}" ng-hide="extension === 'jpg' || extension === 'jpeg' || extension === 'png'">
-                 							<img ng-src="assets/img/{{extension}}.png" style="margin-top: 15px;" width="100px" height="100px"/>
-             							</a>
-
-
-
-			                      	</div>
-			                       </div>
-			                     </div>
-			                </div>
-						</div>
-					</div>
-                   </div>
-                   </div>
-                    <div class="row">
-
-                        <div class="col-md-12">
-
-
-                            <button type="button" ng-click="conform('cancel')"
-                                    id="cancel-button"   class="btn btn-danger pull-right" ng-disabled="btnDisable"> <i class="material-icons">close</i> Cancel</button>
-
-                            <!--<button type="submit" type="submit"-->
-                                    <!--id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">-->
-                                        <!--<i class="material-icons">check</i>-->
-                                    <!--</span>Update ticket</button>-->
-
-                            <button class="btn btn-success ld ld-over-inverse pull-right" ng-class="{'running':saveLoad}"
-                                    type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisable">
-                                <span class="btn-label"><i class="material-icons">check</i></span> Update ticket
-                                <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
-                            </button>
-
-
-                            <div class="clearfix"></div>
-                        </div>
-
                     </div>
-                </form>
-            </div>
-    </div>
-</div>
-
-<div class="container">
-    <div class="row">
-        <div class="col-mod-12">
-            <div class="alert alert-success" ng-show="success">
-                <strong>Ticket saved!</strong>
-            </div>
-            <div class="alert alert-danger" ng-show="errorTicketsExists">
-                <strong>Ticket already registered!</strong> Please choose another one.
-            </div>
-            <div class="alert alert-danger" ng-show="error">
-                <strong>Ticket Not Saved!</strong> Please try again later.
-            </div>
-            <div class="alert alert-danger" ng-show="errorProject">
-                <strong>Invalid Client</strong> Please choose another one.
+                </div>
+               </div>
             </div>
         </div>
-        <div class="col-md-12">
-
-
-
-        </div>
-
     </div>
-</div>
-
 
 <div id="myModalNew" class="modal fade" data-backdrop="false" tabindex="-1" role="dialog"
          aria-labelledby="myModalLabel" aria-hidden="true" >
