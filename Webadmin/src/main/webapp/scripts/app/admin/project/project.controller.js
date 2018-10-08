@@ -107,8 +107,6 @@ angular.module('timeSheetApp')
         $scope.loadProjectsList = function () {
             ProjectComponent.findAll().then(function (data) {
                 $scope.projectsList = data;
-                $scope.projectsList.unshift($scope.anyClient);
-                console.log('Project List' , $scope.projectsList);
                 for(var i=0;i<$scope.projectsList.length;i++)
                 {
                     $scope.uiClient[i] = $scope.projectsList[i].name;
