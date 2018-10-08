@@ -431,6 +431,7 @@ public class ExportUtil {
 		}
 
 		final String export_File_Name = file_Name;
+		/*
 		if (lock == null) {
 			lock = new Lock();
 		}
@@ -439,6 +440,7 @@ public class ExportUtil {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		*/
 
 		Thread writer_Thread = new Thread(new Runnable() {
 			@Override
@@ -561,7 +563,7 @@ public class ExportUtil {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
 				}
-				lock.unlock();
+				//lock.unlock();
 			}
 		});
 
@@ -1680,6 +1682,7 @@ public class ExportUtil {
 		}
 
 		final String export_File_Name = file_Name;
+		/*
 		if (lock == null) {
 			lock = new Lock();
 		}
@@ -1688,6 +1691,7 @@ public class ExportUtil {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		*/
 
 		Thread writer_Thread = new Thread(new Runnable() {
 			@Override
@@ -1810,7 +1814,7 @@ public class ExportUtil {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
 				}
-				lock.unlock();
+				//lock.unlock();
 			}
 		});
 
@@ -1824,6 +1828,9 @@ public class ExportUtil {
 	}
 
 	public ExportResult writeTicketExcelReportToFile(String projName, List<TicketDTO> content, User user, Employee emp,  ExportResult result) {
+		if(log.isDebugEnabled()) {
+			log.debug("Exporting ticket report to excel");
+		}
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend = " + isAppend);
 		if (result == null) {
@@ -1849,6 +1856,7 @@ public class ExportUtil {
 		}
 
 		final String export_File_Name = file_Name;
+		/*
 		if (lock == null) {
 			lock = new Lock();
 		}
@@ -1857,6 +1865,7 @@ public class ExportUtil {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		*/
 
 		Thread writer_Thread = new Thread(new Runnable() {
 			@Override
@@ -1935,7 +1944,7 @@ public class ExportUtil {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
 				}
-				lock.unlock();
+				//lock.unlock();
 			}
 		});
 
@@ -1976,6 +1985,7 @@ public class ExportUtil {
 		}
 
 		final String export_File_Name = file_Name;
+		/*
 		if (lock == null) {
 			lock = new Lock();
 		}
@@ -1984,6 +1994,7 @@ public class ExportUtil {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		*/
 
 		Thread writer_Thread = new Thread(new Runnable() {
 			@Override
@@ -2049,7 +2060,7 @@ public class ExportUtil {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
 				}
-				lock.unlock();
+				//lock.unlock();
 			}
 		});
 
@@ -2136,6 +2147,7 @@ public class ExportUtil {
 		}
 
 		final String export_File_Name = file_Name;
+		/*
 		if (lock == null) {
 			lock = new Lock();
 		}
@@ -2144,6 +2156,7 @@ public class ExportUtil {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		*/
 
 		Thread writer_Thread = new Thread(new Runnable() {
 			@Override
@@ -2210,7 +2223,7 @@ public class ExportUtil {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
 				}
-				lock.unlock();
+				//lock.unlock();
 			}
 		});
 
@@ -2248,6 +2261,7 @@ public class ExportUtil {
 		}
 
 		final String export_File_Name = file_Name;
+		/*
 		if (lock == null) {
 			lock = new Lock();
 		}
@@ -2258,6 +2272,7 @@ public class ExportUtil {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		*/
 		log.debug("lock acquired");
 		Thread writer_Thread = new Thread(new Runnable() {
 			@Override
@@ -2377,7 +2392,7 @@ public class ExportUtil {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
 				}
-				lock.unlock();
+				//lock.unlock();
 			}
 		});
 
@@ -2415,6 +2430,7 @@ public class ExportUtil {
 		}
 
 		final String export_File_Name = file_Name;
+		/*
 		if (lock == null) {
 			lock = new Lock();
 		}
@@ -2423,6 +2439,7 @@ public class ExportUtil {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		*/
 
 		Thread writer_Thread = new Thread(new Runnable() {
 			@Override
@@ -2489,7 +2506,7 @@ public class ExportUtil {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
 				}
-				lock.unlock();
+				//lock.unlock();
 			}
 		});
 
