@@ -512,12 +512,65 @@ public class TicketManagementService extends AbstractService {
 	            		}
 
                 }
+            }	
+	    		if(log.isDebugEnabled()) {
+	    			log.debug("Ticket Search Result size -" + (page.getContent() != null ? page.getContent().size() :  null));
+	    		}
+            List<Ticket> entities = page.getContent();
+            if(CollectionUtils.isNotEmpty(entities)) {
+            		transactions = new ArrayList<TicketDTO>();
+            		for(Ticket ticket : entities) {
+            			transactions.add(mapToModel(ticket));
+            		}
             }
-            transactions = mapperUtil.toModelList(page.getContent(), TicketDTO.class);
+	    		
+            //transactions = mapperUtil.toModelList(page.getContent(), TicketDTO.class);
             buildSearchResult(searchCriteria, page, transactions, result);
-
+	    		if(log.isDebugEnabled()) {
+	    			log.debug("Ticket Search Completed");
+	    		}
         }
         return result;
+    }
+    
+    private TicketDTO mapToModel(Ticket ticket) {
+    		TicketDTO dto = new TicketDTO();
+    		dto.setActive(ticket.getActive());
+    		dto.setId(ticket.getId());
+    		Site site = ticket.getSite();
+    		dto.setSiteId(site.getId());
+    		dto.setSiteName(site.getName());
+    		dto.setTitle(ticket.getTitle());
+    		dto.setDescription(ticket.getDescription());
+    		dto.setStatus(ticket.getStatus());
+    		dto.setPendingAtClient(ticket.isPendingAtClient());
+    		dto.setPendingAtUDS(ticket.isPendingAtUDS());
+    		dto.setCategory(ticket.getCategory());
+    		dto.setSeverity(ticket.getSeverity());
+    		dto.setCreatedBy(ticket.getCreatedBy());
+    		dto.setCreatedDate(ticket.getCreatedDate());
+    		dto.setAssignedOn(ticket.getAssignedOn());
+    		dto.setAssignedToId(ticket.getAssignedTo() != null ? ticket.getAssignedTo().getId() : 0);
+    		dto.setAssignedToName(ticket.getAssignedTo() != null ? ticket.getAssignedTo().getName() : null);
+    		dto.setAssignedToLastName(ticket.getAssignedTo() != null ? ticket.getAssignedTo().getLastName() : null);
+    		dto.setClosedOn(ticket.getClosedOn());
+    		dto.setClosedById(ticket.getClosedBy() != null ? ticket.getClosedBy().getId() : 0);
+    		dto.setClosedByName(ticket.getClosedBy() != null ? ticket.getClosedBy().getName() : null);
+    		dto.setClosedByLastName(ticket.getClosedBy() != null ? ticket.getClosedBy().getLastName() : null);
+    		Asset asset = ticket.getAsset();
+    		if(asset != null) {
+	    		dto.setAssetId(asset.getId());
+	    		dto.setAssetTitle(asset.getTitle());
+    		}
+    		Job job = ticket.getJob();
+    		if(job != null) {
+    			dto.setJobId(job.getId());
+    			dto.setJobName(job.getTitle());
+    		}
+    		dto.setComments(ticket.getComments());
+    		dto.setImage(ticket.getImage());
+    		dto.setQuotationId(ticket.getQuotationId());
+    		return dto;
     }
 
 	private void buildSearchResult(SearchCriteria searchCriteria, Page<Ticket> page, List<TicketDTO> transactions, SearchResult<TicketDTO> result) {
