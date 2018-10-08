@@ -513,9 +513,15 @@ public class TicketManagementService extends AbstractService {
 
                 }
             }
+	    		if(log.isDebugEnabled()) {
+	    			log.debug("Ticket Search Result size -" + (page.getContent() != null ? page.getContent().size() :  null));
+	    		}
+            
             transactions = mapperUtil.toModelList(page.getContent(), TicketDTO.class);
             buildSearchResult(searchCriteria, page, transactions, result);
-
+	    		if(log.isDebugEnabled()) {
+	    			log.debug("Ticket Search Completed");
+	    		}
         }
         return result;
     }
