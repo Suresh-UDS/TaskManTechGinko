@@ -1177,7 +1177,7 @@ public class SchedulerService extends AbstractService {
 		log.debug("JobDTO parent job id - " + parentJob.getId());
 		log.debug("JobDTO parent job id - " + job.getParentJobId());
 		log.debug("JobDTO Details before calling saveJob - " + job);
-		jobManagementService.saveJob(job);
+		jobManagementService.saveScheduledJob(job);
 		if (StringUtils.isNotEmpty(frequency)) {
 			Calendar tmpCal = Calendar.getInstance();
 			tmpCal.set(Calendar.DAY_OF_MONTH, plannedEndTimeCal.get(Calendar.DAY_OF_MONTH));
@@ -1388,7 +1388,7 @@ public class SchedulerService extends AbstractService {
 			}
 		}
 	
-	//@Scheduled(cron="0 */30 * * * ?")
+	@Scheduled(cron="0 */30 * * * ?")
 	public void sendDaywiseReport() {
 		Calendar cal = Calendar.getInstance();
 		boolean isOnDemand = false;

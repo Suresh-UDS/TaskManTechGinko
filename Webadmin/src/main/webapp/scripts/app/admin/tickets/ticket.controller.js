@@ -486,6 +486,8 @@ angular.module('timeSheetApp')
            if($scope.selectedSite){
                    $scope.searchCriteria.siteId = $scope.selectedSite.id;
                    $scope.searchCriteria.list = true;
+                   $scope.searchCriteria.module = 'Ticket';
+                   $scope.searchCriteria.action = 'Add';
                    EmployeeComponent.search($scope.searchCriteria).then(function (data) {
                        //$scope.selectedEmployee = null;
                    $scope.employees = data.transactions;
