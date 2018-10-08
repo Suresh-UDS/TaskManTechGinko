@@ -873,6 +873,31 @@ public class JobManagementService extends AbstractService {
 		result.setTransactions(transactions);
 		return;
 	}
+	
+	public JobDTO saveScheduledJob(JobDTO jobDTO) {
+		Job job = new Job();
+
+		jobDTO = validate(jobDTO, job);
+
+		if(!StringUtils.isEmpty(jobDTO.getErrorMessage())) {
+			return jobDTO;
+		}
+
+		mapToEntity(jobDTO, job);
+
+
+		if(job.getStatus() == null) {
+			job.setStatus(JobStatus.ASSIGNED);
+		}
+		
+		if(jobDTO.getParentJobId()>0){
+		    Job parentJob = jobRepository.findOne(jobDTO.getParentJobId());
+		    job.setParentJob(parentJob);
+        }
+		Job newScheduledJob = jobRepository.saveAndFlush(job);
+		
+		return mapperUtil.toModel(job, JobDTO.class);
+	}
 
 	public JobDTO saveJob(JobDTO jobDTO) {
 
