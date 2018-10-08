@@ -252,17 +252,13 @@
                                     <!--</select>-->
                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <!--<ui-select ng-model="country.selected" theme="bootstrap" ng-disabled="disabled" style="width: 300px;">
-                                        <ui-select-match placeholder="Select or search a country in the list...">{{$select.selected.name}}</ui-select-match>
-                                        <ui-select-choices repeat="country in countries | filter: $select.search" null-option="anyCountry">
-                                            <span ng-bind-html="country.name | highlight: $select.search"></span>
-                                            <small ng-bind-html="country.code | highlight: $select.search"></small>
-                                        </ui-select-choices>
-                                    </ui-select>-->
-                                    <ui-select ng-model="searchProject" ng-disabled="disabled"  required>
+                                    <ui-select ng-model="searchProject"   required>
                                         <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :clearField?'Select Client':searchProject}}</ui-select-match>
-                                        <ui-select-choices  repeat="client in projectsList | filter: $select.search" null-option="anyCountry" >
-                                            <span ng-bind-html="client.name | highlight: $select.search" ></span>
+                                        <ui-select-no-choice>
+                                            --No--
+                                        </ui-select-no-choice>
+                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search" ng-click="selectProject(searchProject)">
+                                            <div ng-bind="client"></div>
                                         </ui-select-choices>
                                     </ui-select>
                                 </div>
