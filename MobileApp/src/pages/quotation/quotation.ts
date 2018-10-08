@@ -15,8 +15,10 @@ import {SiteService} from "../service/siteService";
   templateUrl: 'quotation.html'
 })
 export class QuotationPage {
+  siteActive: boolean;
+  index: any;
 
-    quotations:any;
+  quotations:any;
     approvedQuotations:any;
     submittedQuotations:any;
     draftedQuotations:any;
@@ -34,7 +36,15 @@ export class QuotationPage {
     selectedProject:any;
     selectedSite:any;
     sites:any;
+    projectActive: any;
+    projectindex: any;
+    chooseClient = true;
+    siteSpinner = false;
+    showSites = false;
 
+  empSpinner=false;
+  chooseSite=true;
+  showEmployees=false;
   constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService, private quotationService: QuotationService,public events:Events,public siteService:SiteService) {
       this.draftedQuotationsCount= 0;
       this.approvedQuotationsCount=0;
@@ -143,22 +153,37 @@ export class QuotationPage {
           response=>{
               this.allProjects = response;
               this.selectedProject = response[0];
-              this.getSites(this.selectedProject[0].id);
+              // this.getSites(this.selectedProject[0].id);
 
           }
       )
   }
 
-  getSites(projectId){
+  getSites(projectId,i){
+
+    this.projectActive = true;
+    this.projectindex = i;
+    this.siteSpinner=true;
+    this.chooseClient = false;
+    this.showSites = false;
+
+
       this.siteService.findSites(projectId).subscribe(
           response=>{
+            this.siteSpinner=false;
+            this.showSites = true;
+            this.showEmployees=false;
+            this.chooseSite = true;
               this.sites = response.json();
               this.selectedSite = response[1];
           }
       )
   }
 
-  searchQuotations(siteId){
+  searchQuotations(siteId,i){
+    this.index = i;
+    this.projectActive = true;
+    this.siteActive = true;
       this.quotationService.searchQuotations({siteId:siteId}).subscribe(
           response=>{
 
