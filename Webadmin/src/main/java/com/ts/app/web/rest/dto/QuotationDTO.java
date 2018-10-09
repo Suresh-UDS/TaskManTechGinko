@@ -55,6 +55,16 @@ public class QuotationDTO extends BaseDTO implements Serializable {
     private boolean approved;
 
     private boolean archived;
+    
+    private long totalPending;
+
+    private long totalSubmitted;
+
+    private long totalApproved;
+
+    private long totalArchived;
+    
+    private long totalCount;
 
     private Date submittedDate;
 
@@ -309,6 +319,46 @@ public class QuotationDTO extends BaseDTO implements Serializable {
 
 	public void setSerialId(long serialId) {
 		this.serialId = serialId;
+	}
+
+	public long getTotalPending() {
+		return totalPending;
+	}
+
+	public void setTotalPending(long totalPending) {
+		this.totalPending = totalPending;
+	}
+
+	public long getTotalSubmitted() {
+		return totalSubmitted;
+	}
+
+	public void setTotalSubmitted(long totalSubmitted) {
+		this.totalSubmitted = totalSubmitted;
+	}
+
+	public long getTotalApproved() {
+		return totalApproved;
+	}
+
+	public void setTotalApproved(long totalApproved) {
+		this.totalApproved = totalApproved;
+	}
+
+	public long getTotalArchived() {
+		return totalArchived;
+	}
+
+	public void setTotalArchived(long totalArchived) {
+		this.totalArchived = totalArchived;
+	}
+
+	public long getTotalCount() {
+		return totalCount;
+	}
+
+	public void setTotalCount(long totalCount) {
+		this.totalCount = totalCount;
 	}
 	
 	

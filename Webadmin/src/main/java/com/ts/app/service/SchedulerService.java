@@ -78,6 +78,9 @@ public class SchedulerService extends AbstractService {
 
 	private static final String FREQ_ONCE_EVERY_HOUR = "1H";
 	private static final String FREQ_ONCE_EVERY_2_HOUR = "2H";
+	private static final String FREQ_ONCE_EVERY_3_HOUR = "3H";
+	private static final String FREQ_ONCE_EVERY_4_HOUR = "4H";
+	private static final String FREQ_ONCE_EVERY_5_HOUR = "5H";
 
 	static final String LINE_SEPARATOR = "      \n\n";
 
@@ -567,7 +570,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(initialDelay = 60000, fixedRate = 900000) // Runs every 15 mins
+	//@Scheduled(initialDelay = 60000, fixedRate = 900000) // Runs every 15 mins
 	public void overDueTaskCheck() {
 		schedulerHelperService.overdueJobReport();
 	}
@@ -694,14 +697,14 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-//	@Scheduled(cron = "0 */30 * * * ?")
+	//@Scheduled(cron = "0 */30 * * * ?")
 	public void attendanceShiftReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		schedulerHelperService.generateDetailedAttendanceReport(cal.getTime(), true, false, false);
 	}
 
 
-//	@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
+	//@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
 	public void attendanceDetailReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_YEAR, -1);
@@ -722,19 +725,19 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.generateMusterRollAttendanceReport(siteId, startCal.getTime(), endCal.getTime(), true, false);
 	}
 
-//	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
+	//@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
 	public void attendanceCheckOutTask() {
 		schedulerHelperService.autoCheckOutAttendance();
 	}
 
-//	@Scheduled(cron="0 0 9 * * ?")
+	//@Scheduled(cron="0 0 9 * * ?")
 	public void warrantyExpireAlert() {
 		schedulerHelperService.sendWarrantyExpireAlert();
 		schedulerHelperService.sendSchedulePPMJobsAlert();
 		schedulerHelperService.sendScheduleAMCJobsAlert();
 	}
 
-	@Scheduled(cron="0 */5 * * * ?") // runs every 30 mins
+	//@Scheduled(cron="0 */5 * * * ?") // runs every 30 mins
 	public void feedbackDetailReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		//cal.add(Calendar.DAY_OF_YEAR, -1);
@@ -1117,6 +1120,12 @@ public class SchedulerService extends AbstractService {
 				endTime.add(Calendar.HOUR_OF_DAY, 1);
 			}else if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_2_HOUR)) {
 				endTime.add(Calendar.HOUR_OF_DAY, 2);
+			}else if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_3_HOUR)) {
+				endTime.add(Calendar.HOUR_OF_DAY, 3);
+			}else if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_4_HOUR)) {
+				endTime.add(Calendar.HOUR_OF_DAY, 4);
+			}else if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_5_HOUR)) {
+				endTime.add(Calendar.HOUR_OF_DAY, 5);
 			}
 			endTime.set(Calendar.MINUTE, eMin);
 			endTime.set(Calendar.SECOND, 0);
@@ -1168,7 +1177,7 @@ public class SchedulerService extends AbstractService {
 		log.debug("JobDTO parent job id - " + parentJob.getId());
 		log.debug("JobDTO parent job id - " + job.getParentJobId());
 		log.debug("JobDTO Details before calling saveJob - " + job);
-		jobManagementService.saveJob(job);
+		jobManagementService.saveScheduledJob(job);
 		if (StringUtils.isNotEmpty(frequency)) {
 			Calendar tmpCal = Calendar.getInstance();
 			tmpCal.set(Calendar.DAY_OF_MONTH, plannedEndTimeCal.get(Calendar.DAY_OF_MONTH));
@@ -1184,12 +1193,20 @@ public class SchedulerService extends AbstractService {
 				if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_HOUR)) {
 					tmpCal.add(Calendar.HOUR_OF_DAY, 1);
 					tmpCal.getTime(); // recalculate
-					createJob(parentJob, dataMap, jobDate, plannedEndTime, endTime.getTime(), tmpCal.getTime());
 				}else if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_2_HOUR)) {
 					tmpCal.add(Calendar.HOUR_OF_DAY, 2);
 					tmpCal.getTime(); // recalculate
-					createJob(parentJob, dataMap, jobDate, plannedEndTime, endTime.getTime(), tmpCal.getTime());
+				}else if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_3_HOUR)) {
+					tmpCal.add(Calendar.HOUR_OF_DAY, 3);
+					tmpCal.getTime(); // recalculate
+				}else if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_4_HOUR)) {
+					tmpCal.add(Calendar.HOUR_OF_DAY, 4);
+					tmpCal.getTime(); // recalculate
+				}else if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_5_HOUR)) {
+					tmpCal.add(Calendar.HOUR_OF_DAY, 5);
+					tmpCal.getTime(); // recalculate
 				}
+				createJob(parentJob, dataMap, jobDate, plannedEndTime, endTime.getTime(), tmpCal.getTime());
 			}
 		}
 		return job;
@@ -1371,7 +1388,7 @@ public class SchedulerService extends AbstractService {
 			}
 		}
 	
-	@Scheduled(cron="0 */30 * * * ?")
+	//@Scheduled(cron="0 */30 * * * ?")
 	public void sendDaywiseReport() {
 		Calendar cal = Calendar.getInstance();
 		boolean isOnDemand = false;

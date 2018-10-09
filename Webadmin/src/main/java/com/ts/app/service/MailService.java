@@ -632,7 +632,7 @@ public class MailService {
         sendEmail(email, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
 	}
 
-	public void sendDaywiseReportEmailFile(String siteName, String emailIds, ArrayList<String> files, Date time, String summary) {
+	public void sendDaywiseReportEmailFile(String siteName, String emailIds, List<String> files, Date time, String summary) {
 		// TODO Auto-generated method stub
 		 log.debug("Sending job report e-mail to '{}'", emailIds);
 	        Locale locale = Locale.forLanguageTag("en-US");
@@ -643,12 +643,13 @@ public class MailService {
 	        Object[] values = new Object[1];
 	        values[0] = siteName;
 	        String subject = messageSource.getMessage("email.report.title", values, locale);
-	        ArrayList<String> fileNames = files;
+	        List<String> fileNames = files;
 	        sendEmail(emailIds, subject, content, true, true,fileNames);
 		
 	}
 
-	private void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml, ArrayList<String> fileNames) {
+	@Async
+	private void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml, List<String> fileNames) {
 		// TODO Auto-generated method stub
 
         log.debug("Send e-mail[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",

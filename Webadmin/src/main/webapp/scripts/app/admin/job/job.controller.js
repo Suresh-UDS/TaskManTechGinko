@@ -1018,6 +1018,7 @@ angular.module('timeSheetApp')
 	        	console.log('Selected  employee -' + $scope.selectedEmployee);
 	        	console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaProject));
                 $scope.searchCriteria.findAll = false;
+                $scope.searchCriteria.isReport = false;
                  /*&& !$scope.selectedJob*/
 	        	if(!$scope.searchProject && !$scope.searchSite && !$scope.searchStatus
 	        	&& !$scope.searchEmployee && !$scope.searchJobId && !$scope.searchJobTitle && !$scope.searchJobDate && !$scope.searchJobDateTo){
@@ -1167,10 +1168,11 @@ angular.module('timeSheetApp')
 	        	});
 
         };
-                    $scope.clearField = false;
+         $scope.clearField = false;
         $scope.clearFilter = function() {
             $rootScope.exportStatusObj.exportMsg = '';
             $scope.downloader=false;
+            $scope.downloaded = true;
             $scope.siteFilterDisable = true;
             $scope.sitesList = null;
             $scope.selectedJobDateSer = new Date();
@@ -1307,6 +1309,8 @@ angular.module('timeSheetApp')
                 $rootScope.exportStatusObj.exportMsg = '';
                 $scope.typeMsg = type;
                 $scope.downloader=true;
+                $scope.downloaded = false;
+                $scope.searchCriteria.isReport = true;
                 JobComponent.exportAllData($scope.searchCriteria).then(function(data){
                     var result = data.results[0];
                     console.log(result);
@@ -1385,6 +1389,12 @@ angular.module('timeSheetApp')
         $scope.exportMsg = function() {
             return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportMsg : '');
         };
+
+        $scope.downloaded = false;
+
+        $scope.clsDownload = function(){
+          $scope.downloaded = true;
+        }
 
         $scope.cancel = function () {
 

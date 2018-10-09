@@ -18,7 +18,8 @@ export class ViewQuotationPage {
     grandTotal=0;
     rates:any;
 
-    constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService, private navParams: NavParams, private componentService:componentService, private quotationService: QuotationService) {
+    constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService,
+                private navParams: NavParams, private componentService:componentService, private quotationService: QuotationService) {
         this.quotation = this.navParams.get('quotationDetails');
         console.log(this.quotation);
         this.rates =[];
@@ -45,14 +46,14 @@ export class ViewQuotationPage {
 
     }
 
-    addTotal(i,no,cost)
+    addTotal(i,qty,cost)
     {
         this.index=i;
         console.log("add total");
         this.grandTotal = Math.abs(this.grandTotal-this.rates[i].total);
-        this.rates[i].total=no*cost;
+        this.rates[i].total=qty*cost;
         console.log(this.rates[i].total);
-        console.log(no+" * "+cost );
+        console.log(qty+" * "+cost );
         console.log(this.grandTotal);
         this.grandTotal =this.grandTotal+this.rates[i].total ;
         console.log("add total-------:"+this.grandTotal);
@@ -72,6 +73,7 @@ export class ViewQuotationPage {
                 this.componentService.showToastMessage('Quotation Sent Successfully','bottom');
                 this.navCtrl.setRoot(QuotationPage);
             },err=>{
+                console.log(err);
                 console.log("Unable to send quotation, please try again later")
                 this.componentService.showToastMessage('Error in sending Quotation, Please try again later','bottom');
             }
@@ -81,6 +83,7 @@ export class ViewQuotationPage {
     approveQuotation(quotation){
         this.quotationService.approveQuotation(quotation).subscribe(
             response=>{
+                console.log(response);
                 this.componentService.showToastMessage('Quotation Approved','bottom');
                 this.navCtrl.setRoot(QuotationPage);
             },err=>{

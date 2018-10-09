@@ -70,8 +70,8 @@
                             <td width="10%" class="clr-orange">Action</td>
                         </tr>
                         <tr>
-                            <td class=""><p>{{rate.cost}}</p></td>
-                            <td class=""><p><input type="number" class="form-control align-center width15" [(ngModel)]="rate.no" (change)="addTotal(i,rate.no,rate.cost)"></p></td>
+                            <td class=""><p>{{rate.unitPrice}}</p></td>
+                            <td class=""><p><input type="number" class="form-control align-center width15" [(ngModel)]="rate.qty" (change)="addTotal(i,rate.qty,rate.unitPrice)"></p></td>
                             <td class=""><p>{{rate.uom}}</p></td>
                             <td> <p><i class="material-icons clr-red" (click)="remove(i)">close</i></p></td>
                         </tr>

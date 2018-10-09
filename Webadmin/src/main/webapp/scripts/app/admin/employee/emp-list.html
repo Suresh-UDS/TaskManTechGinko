@@ -32,7 +32,7 @@
             </button>
 
             <button class="btn btn-info add-btn margn-tb0"
-                    ui-sref="employee-location" tabindex="0">
+                    ui-sref="employee-location" tabindex="0" has-permission="Employee:View">
                 <i class="material-icons">location_on</i> Map
                 <div class="ripple-container"></div>
             </button>
@@ -42,8 +42,13 @@
                 <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
                 <div class="ripple-container"></div>
             </button>
-
-            <a class="download-btn" href="{{exportFile()}}">{{exportMsg()}}</a>
+            <span ng-if="exportMsg()=='Download'">
+                 <a class="download-btn" href="{{exportFile()}}" download target="_self" ng-click="clsDownload()" ng-hide="downloaded">{{exportMsg()}}</a>
+                 <div class="downloaderMd" ng-show="downloader"></div>
+            </span>
+            <span ng-if="exportMsg()!='Download'">
+                 <a class="download-btn" href="javascript:void(0);">{{exportMsg()}}</a>
+            </span>
             <div class="downloader" ng-show="downloader"></div>
 
         </div>
@@ -288,7 +293,7 @@
                                                 has-permission="Employee:Edit" data-toggle="modal"
                                                 data-target="#relieverConfirmation"
                                                 data-dismiss="#relieverConfirmation"
-                                                ng-click="getEmployeeDetails(employee.id);"
+                                                ng-click="getRelieveEmpDetails(employee.id);"
                                                 class="btn btn-simple btn-info btn-icon like">
                                             <i class="material-icons">assignment_ind</i>
                                         </button>
@@ -495,18 +500,8 @@
                                             </th>
 
                                             </th>
-                                            <!--<th style="width: 15%">Name
 
-                                                &lt;!&ndash;<span class="sortingIcons">
-                                                <span ng-click="columnAscOrder('relieverName')" ng-class="isActiveAsc == 'relieverName' ? 'active' : ''" >
-                                                    <i  class="fa fa-caret-up"></i>
-                                                </span>
-                                                <span ng-click="columnDescOrder('relieverName')" ng-class="isActiveDesc == 'relieverName' ? 'active' : ''">
-                                                     <i  ng-class="class" class="fa fa-caret-down"></i>
-                                                </span>
-                                                </span>&ndash;&gt;
-                                            </th>-->
-                                            <th style="width: 15%">Name
+                                            <th style="width: 15%">Employee
 
                                                 <!--<span class="sortingIcons">
                                                 <span ng-click="columnAscOrder('relieverFullName')" ng-class="isActiveAsc == 'relieverFullName' ? 'active' : ''" >
@@ -517,7 +512,18 @@
                                                 </span>
                                                 </span>-->
                                             </th>
-                                            <th style="width: 15%">Mobile
+                                            <th style="width: 15%">Non employee
+
+                                                <!--&lt;!&ndash;<span class="sortingIcons">
+                                                <span ng-click="columnAscOrder('relieverName')" ng-class="isActiveAsc == 'relieverName' ? 'active' : ''" >
+                                                    <i  class="fa fa-caret-up"></i>
+                                                </span>
+                                                <span ng-click="columnDescOrder('relieverName')" ng-class="isActiveDesc == 'relieverName' ? 'active' : ''">
+                                                     <i  ng-class="class" class="fa fa-caret-down"></i>
+                                                </span>
+                                                </span>&ndash;&gt;-->
+                                            </th>
+                                            <th style="width: 10%">Mobile
 
                                                 <!--<span class="sortingIcons">
                                                 <span ng-click="columnAscOrder('relieverMobile')" ng-class="isActiveAsc == 'relieverMobile' ? 'active' : ''" >
@@ -528,8 +534,8 @@
                                                 </span>
                                                 </span>-->
                                             </th>
-                                            <th  style="width: 15%">Start Date</th>
-                                            <th  style="width: 15%">End Date</th>
+                                            <th  style="width: 10%">Start Date</th>
+                                            <th  style="width: 10%">End Date</th>
 
                                         </tr>
                                         </thead>
@@ -537,14 +543,35 @@
                                         <tr ng-repeat="reliever in relieversList">
                                             <td>{{reliever.siteId}}</td>
                                             <td>{{reliever.siteName}}</td>
-                                            <!--<td>{{reliever.relieverName}}</td>-->
-                                            <td>{{reliever.relieverFullName}}</td>
-                                            <td>{{reliever.relieverMobile}}</td>
+                                            <td>
+                                                <span ng-if="reliever.relieverEmployeeFullName">
+                                                {{reliever.relieverEmployeeFullName}}
+                                                </span>
+                                                <span ng-if="!reliever.relieverEmployeeFullName">
+                                                -
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span ng-if="reliever.relieverName">
+                                                {{reliever.relieverName}}
+                                                </span>
+                                                <span ng-if="!reliever.relieverName">
+                                                -
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span ng-if="reliever.relieverMobile">
+                                                {{reliever.relieverMobile}}
+                                                </span>
+                                                <span ng-if="!reliever.relieverMobile">
+                                                -
+                                                </span>
+                                            </td>
                                             <td><label ng-bind="reliever.startTime  | date :'dd-MMM-yyyy @ hh:mm a'"/></td>
                                             <td><label ng-bind="reliever.endTime  | date :'dd-MMM-yyyy @ hh:mm a'"/></td>
                                         </tr>
                                         <tr ng-show="noRelData">
-                                            <td colspan="6" class="txt-align-center"><p>No data Found</p></td>
+                                            <td colspan="7" class="txt-align-center"><p>No data Found</p></td>
                                         </tr>
 
                                         </tbody>
@@ -786,7 +813,7 @@
 <div class="relieverConfirmation modal fade" id="relieverConfirmation" tabindex="-1"
      role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
-    <form name="relieverForm" role="form" ng-submit="assignReliever()">
+    <form name="relieverForm" role="form" ng-submit="assignReliever()" novalidate>
         <div class="modal-dialog modal-notice">
             <div class="modal-content">
                 <div class="modal-header">
@@ -807,7 +834,7 @@
                                     <span class="form-control-feedback  d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                     <select
                                         class="form-control" ng-model="relieverSite" name="relieverSite"
-                                        ng-options="site as site.siteName for site in empSites" ng-required="true" ng-change="getRelievers(employee,relieverSite)" autofocus  tabindex="1">
+                                        ng-options="site as site.siteName for site in empSites" ng-required="true" ng-click="getRelievers(employee)" autofocus="on"  tabindex="1">
                                         <option value="">Select Site..</option>
                                     </select>
 
@@ -856,7 +883,7 @@
                                     </div>
                                     <div class="radio radio-inline" >
                                         <label>
-                                            <input type="radio" name="relieverOth" id="relieverOth"  ng-model="relType" ng-click="rType()"   value="Other"  tabindex="5"> Other
+                                            <input type="radio" name="relieverOth" id="relieverOth"  ng-model="relType" ng-click="rType()"   value="Other"  tabindex="5"> Non employee
                                         </label>
                                     </div>
                                 </div>
@@ -878,13 +905,13 @@
                                         <span class="form-control-feedback  d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                         <select
                                             class="form-control" ng-model="selectedReliever" name="relieverEmp"
-                                            ng-options="employee as employee.fullName for employee in relievers" ng-required="reqEmp" autofocus tabindex="6">
+                                            ng-options="emp as emp.fullName for emp in relieversEmp" ng-required="reqEmp"   tabindex="6">
                                             <option value="">Select Reliever..</option>
                                         </select>
-                                        <div ng-show="relieverForm.$submitted || relieverForm.relieverEmp.$touched || relieverForm.relieverEmp.$dirty">
-                                            <div ng-show="relieverForm.relieverEmp.$dirty || relieverForm.relieverEmp.$invalid">
+                                        <div ng-show="!selectedReliever.id || relieverForm.$submitted || relieverForm.relieverEmp.$touched">
+                                            <div ng-show="!selectedReliever.id || relieverForm.relieverEmp.$dirty || relieverForm.relieverEmp.$invalid">
                                                 <p class="help-block" style="color:maroon"
-                                                   ng-show="relieverForm.relieverEmp.$error.required">
+                                                   ng-show="!selectedReliever.id || relieverForm.relieverEmp.$error.required">
                                                     Reliever is required.
                                                 </p>
 

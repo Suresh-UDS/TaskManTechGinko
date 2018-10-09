@@ -111,7 +111,7 @@ public class ExportUtil {
 	private String[] VENDOR_HEADER = { "ID", "NAME", "CONTACT FIRSTNAME", "CONTACT LASTNAME", "PHONE", "EMAIL", "ADDRESSLINE1", "ADDRESSLINE2", "CITY", "COUNTRY", "STATE", "PINCODE"};
 
 	private String[] FEEDBACK_HEADER = { "ID", "DATE", "REVIEWER NAME", "REVIEWER CODE", "CLIENT", "SITE", "FEEDBACK_NAME", "BLOCK", "FLOOR", "ZONE", "RATING", "REMARKS", "QUESTION", "ANSWER", "ITEM REMARKS" };
-	
+
 	private String[] QUOTATION_HEADER = { "ID", "CLIENT NAME", "SITE NAME", "QUOTATION NAME", "TITLE", "SENDBY USERNAME", "SUBMITTED DATE", "APPROVEDBY USERNAME", "APPROVED DATE", "STATUS", "MODE", "GRAND TOTAL"};
 
 	private final static String ATTENDANCE_REPORT = "ATTENDANCE_REPORT";
@@ -431,6 +431,7 @@ public class ExportUtil {
 		}
 
 		final String export_File_Name = file_Name;
+		/*
 		if (lock == null) {
 			lock = new Lock();
 		}
@@ -439,6 +440,7 @@ public class ExportUtil {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		*/
 
 		Thread writer_Thread = new Thread(new Runnable() {
 			@Override
@@ -491,7 +493,8 @@ public class ExportUtil {
 					Employee emp = employeeRepository.findByEmpId(attn.getEmployeeEmpId());
 
 					dataRow.createCell(0).setCellValue(attn.getEmployeeEmpId());
-					dataRow.createCell(1).setCellValue(attn.getEmployeeName() +" " +attn.getEmployeeLastName() !=null?attn.getEmployeeLastName() :"");
+					String employeeLastName = StringUtils.isNotEmpty(attn.getEmployeeLastName())? attn.getEmployeeLastName(): "";
+					dataRow.createCell(1).setCellValue(attn.getEmployeeName() +" " +employeeLastName);
 					dataRow.createCell(2).setCellValue(emp.isReliever()? "YES":"NO");
 					dataRow.createCell(3).setCellValue(attn.getSiteName());
 					dataRow.createCell(4).setCellValue("");
@@ -538,9 +541,9 @@ public class ExportUtil {
 
 				}
 
-				for (int i = 0; i < ATTD_HEADER.length; i++) {
-					xssfSheet.autoSizeColumn(i);
-				}
+//				for (int i = 0; i < ATTD_HEADER.length; i++) {
+//					xssfSheet.autoSizeColumn(i);
+//				}
 				log.info(export_File_Name + " Excel file was created successfully !!!");
 				statusMap.put(export_File_Name, "COMPLETED");
 
@@ -560,7 +563,7 @@ public class ExportUtil {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
 				}
-				lock.unlock();
+				//lock.unlock();
 			}
 		});
 
@@ -732,9 +735,9 @@ public class ExportUtil {
 			dataRow.getCell(10).setCellValue(StringUtils.isNotEmpty(transaction.getRemarks())  ? transaction.getRemarks() : "");
 		}
 
-		for (int i = 0; i < ATTD_HEADER.length; i++) {
-			xssfSheet.autoSizeColumn(i);
-		}
+//		for (int i = 0; i < ATTD_HEADER.length; i++) {
+//			xssfSheet.autoSizeColumn(i);
+//		}
 		log.info(filePath + " Excel file was created successfully !!!");
 		statusMap.put(filePath, "COMPLETED");
 
@@ -1283,9 +1286,9 @@ public class ExportUtil {
 					dataRow.createCell(6).setCellValue(transaction.getActive());
 				}
 
-				for (int i = 0; i < EMP_HEADER.length; i++) {
-					xssfSheet.autoSizeColumn(i);
-				}
+//				for (int i = 0; i < EMP_HEADER.length; i++) {
+//					xssfSheet.autoSizeColumn(i);
+//				}
 				// log.info(exportFileName + " Excel file was created successfully !!!");
 				statusMap.put(exportFileName, "COMPLETED");
 
@@ -1679,6 +1682,7 @@ public class ExportUtil {
 		}
 
 		final String export_File_Name = file_Name;
+		/*
 		if (lock == null) {
 			lock = new Lock();
 		}
@@ -1687,6 +1691,7 @@ public class ExportUtil {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		*/
 
 		Thread writer_Thread = new Thread(new Runnable() {
 			@Override
@@ -1785,9 +1790,9 @@ public class ExportUtil {
 					}
 				}
 
-				for (int i = 0; i < JOB_HEADER.length; i++) {
-					xssfSheet.autoSizeColumn(i);
-				}
+//				for (int i = 0; i < JOB_HEADER.length; i++) {
+//					xssfSheet.autoSizeColumn(i);
+//				}
 				log.info(export_File_Name + " Excel file was created successfully !!!");
 				statusMap.put(export_File_Name, "COMPLETED");
 
@@ -1809,7 +1814,7 @@ public class ExportUtil {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
 				}
-				lock.unlock();
+				//lock.unlock();
 			}
 		});
 
@@ -1823,6 +1828,9 @@ public class ExportUtil {
 	}
 
 	public ExportResult writeTicketExcelReportToFile(String projName, List<TicketDTO> content, User user, Employee emp,  ExportResult result) {
+		if(log.isDebugEnabled()) {
+			log.debug("Exporting ticket report to excel");
+		}
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend = " + isAppend);
 		if (result == null) {
@@ -1848,6 +1856,7 @@ public class ExportUtil {
 		}
 
 		final String export_File_Name = file_Name;
+		/*
 		if (lock == null) {
 			lock = new Lock();
 		}
@@ -1856,6 +1865,7 @@ public class ExportUtil {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		*/
 
 		Thread writer_Thread = new Thread(new Runnable() {
 			@Override
@@ -1910,9 +1920,9 @@ public class ExportUtil {
 							transaction.getClosedOn() != null ? DateUtil.formatToDateTimeString(transaction.getClosedOn()) : "");
 				}
 
-				for (int i = 0; i < TICKET_HEADER.length; i++) {
-					xssfSheet.autoSizeColumn(i);
-				}
+//				for (int i = 0; i < TICKET_HEADER.length; i++) {
+//					xssfSheet.autoSizeColumn(i);
+//				}
 				log.info(export_File_Name + " Ticket export file was created successfully !!!");
 				statusMap.put(export_File_Name, "COMPLETED");
 
@@ -1934,7 +1944,7 @@ public class ExportUtil {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
 				}
-				lock.unlock();
+				//lock.unlock();
 			}
 		});
 
@@ -1975,6 +1985,7 @@ public class ExportUtil {
 		}
 
 		final String export_File_Name = file_Name;
+		/*
 		if (lock == null) {
 			lock = new Lock();
 		}
@@ -1983,6 +1994,7 @@ public class ExportUtil {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		*/
 
 		Thread writer_Thread = new Thread(new Runnable() {
 			@Override
@@ -2033,9 +2045,9 @@ public class ExportUtil {
 					dataRow.createCell(10).setCellValue(transaction.getStatus());
 				}
 
-				for (int i = 0; i < ASSET_HEADER.length; i++) {
-					xssfSheet.autoSizeColumn(i);
-				}
+//				for (int i = 0; i < ASSET_HEADER.length; i++) {
+//					xssfSheet.autoSizeColumn(i);
+//				}
 				log.info(export_File_Name + " Asset export file was created successfully !!!");
 				statusMap.put(export_File_Name, "COMPLETED");
 
@@ -2048,7 +2060,7 @@ public class ExportUtil {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
 				}
-				lock.unlock();
+				//lock.unlock();
 			}
 		});
 
@@ -2135,6 +2147,7 @@ public class ExportUtil {
 		}
 
 		final String export_File_Name = file_Name;
+		/*
 		if (lock == null) {
 			lock = new Lock();
 		}
@@ -2143,6 +2156,7 @@ public class ExportUtil {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		*/
 
 		Thread writer_Thread = new Thread(new Runnable() {
 			@Override
@@ -2194,9 +2208,9 @@ public class ExportUtil {
 					dataRow.createCell(11).setCellValue(transaction.getPincode());
 				}
 
-				for (int i = 0; i < VENDOR_HEADER.length; i++) {
-					xssfSheet.autoSizeColumn(i);
-				}
+//				for (int i = 0; i < VENDOR_HEADER.length; i++) {
+//					xssfSheet.autoSizeColumn(i);
+//				}
 				log.info(export_File_Name + " Vendor export file was created successfully !!!");
 				statusMap.put(export_File_Name, "COMPLETED");
 
@@ -2209,7 +2223,7 @@ public class ExportUtil {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
 				}
-				lock.unlock();
+				//lock.unlock();
 			}
 		});
 
@@ -2247,6 +2261,7 @@ public class ExportUtil {
 		}
 
 		final String export_File_Name = file_Name;
+		/*
 		if (lock == null) {
 			lock = new Lock();
 		}
@@ -2257,6 +2272,7 @@ public class ExportUtil {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		*/
 		log.debug("lock acquired");
 		Thread writer_Thread = new Thread(new Runnable() {
 			@Override
@@ -2346,9 +2362,9 @@ public class ExportUtil {
 					}
 				}
 				log.debug("Completed Writing feedback to excel file");
-				for (int i = 0; i < FEEDBACK_HEADER.length; i++) {
-					xssfSheet.autoSizeColumn(i);
-				}
+//				for (int i = 0; i < FEEDBACK_HEADER.length; i++) {
+//					xssfSheet.autoSizeColumn(i);
+//				}
 				log.info(export_File_Name + " Feebdack Excel file created successfully !!!");
 				statusMap.put(export_File_Name, "COMPLETED");
 
@@ -2376,7 +2392,7 @@ public class ExportUtil {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
 				}
-				lock.unlock();
+				//lock.unlock();
 			}
 		});
 
@@ -2387,7 +2403,7 @@ public class ExportUtil {
 		result.setStatus(getExportStatus(file_Name));
 		return result;
 	}
-	
+
 	public ExportResult writeQuotationExcelReportToFile(List<QuotationDTO> content, String empId, ExportResult result) {
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend = " + isAppend);
@@ -2414,6 +2430,7 @@ public class ExportUtil {
 		}
 
 		final String export_File_Name = file_Name;
+		/*
 		if (lock == null) {
 			lock = new Lock();
 		}
@@ -2422,6 +2439,7 @@ public class ExportUtil {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		*/
 
 		Thread writer_Thread = new Thread(new Runnable() {
 			@Override
@@ -2488,7 +2506,7 @@ public class ExportUtil {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
 				}
-				lock.unlock();
+				//lock.unlock();
 			}
 		});
 

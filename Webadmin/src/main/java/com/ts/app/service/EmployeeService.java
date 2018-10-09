@@ -46,6 +46,7 @@ import com.ts.app.domain.Job;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
+import com.ts.app.domain.UserRole;
 import com.ts.app.domain.UserRoleEnum;
 import com.ts.app.ext.api.FaceRecognitionService;
 import com.ts.app.repository.AttendanceRepository;
@@ -62,6 +63,7 @@ import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.repository.UserRoleRepository;
+import com.ts.app.rule.EmployeeFilter;
 import com.ts.app.service.util.AmazonS3Utils;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
@@ -175,6 +177,9 @@ public class    EmployeeService extends AbstractService {
 
     @Inject
     private AmazonS3Utils amazonS3utils;
+    
+    @Inject
+    private EmployeeFilter employeeFilter;
 
     @Value("${AWS.s3-cloudfront-url}")
     private String cloudFrontUrl;
@@ -198,6 +203,7 @@ public class    EmployeeService extends AbstractService {
         log.debug("Empid "+employeeDTO.getEmpId());
         SearchCriteria criteria = new SearchCriteria();
         criteria.setEmployeeEmpId(employeeDTO.getEmpId());
+        criteria.setUserId(employeeDTO.getUserId());
         SearchResult<EmployeeDTO> searchResults = findBySearchCrieria(criteria);
         if(searchResults != null && CollectionUtils.isNotEmpty(searchResults.getTransactions())) {
             return true;
@@ -287,12 +293,12 @@ public class    EmployeeService extends AbstractService {
         designationRepository.save(designation);
         return designationDTO;
     }
-    
+
     public EmployeeDTO updateReliever(EmployeeDTO employee, EmployeeDTO reliever, RelieverDTO relieverDetails) {
     		EmployeeReliever employeeReliever = new EmployeeReliever();
     		employeeReliever.setEmployee(employeeRepository.findOne(employee.getId()));
     		if(reliever != null) {
-    			employeeReliever.setReliever(employeeRepository.findOne(reliever.getId()));
+    			employeeReliever.setRelieverEmployee(employeeRepository.findOne(reliever.getId()));
     		}
     		if(relieverDetails != null) {
     			if(relieverDetails.getSiteId() > 0) {
@@ -386,7 +392,7 @@ public class    EmployeeService extends AbstractService {
                 employee.setClient(true); //mark the employee as client employee
             }
         }
-
+        employeeUpdate.setDesignation(employee.getDesignation());
         employeeRepository.saveAndFlush(employeeUpdate);
         employee = mapperUtil.toModel(employeeUpdate, EmployeeDTO.class);
         return employee;
@@ -710,7 +716,7 @@ public class    EmployeeService extends AbstractService {
         entities = employeeRepository.findAllRelievers(siteId);
         return mapperUtil.toModelList(entities, EmployeeDTO.class);
     }
-    
+
     public List<EmployeeRelieverDTO> findRelievers(SearchCriteria searchCriteria) {
         List<EmployeeReliever> entities = null;
         Pageable pageRequest = null;
@@ -1186,8 +1192,14 @@ public class    EmployeeService extends AbstractService {
 
             boolean isClient = false;
 
-            if(user != null && user.getUserRole() != null) {
-                isClient = user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue());
+            UserRole role = null;
+            
+            if(user != null) {
+            		role = user.getUserRole();
+            }
+            
+            if(role != null) {
+                isClient = role.getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue());
             }
 
             if((searchCriteria.getSiteId() != 0 && searchCriteria.getProjectId() != 0)) {
@@ -1278,7 +1290,15 @@ public class    EmployeeService extends AbstractService {
                 List<Employee> empList =  page.getContent();
                 if(CollectionUtils.isNotEmpty(empList)) {
                     for(Employee emp : empList) {
-                        transactions.add(mapToModel(emp));
+                    		User empUser = emp.getUser();
+                    		if(empUser != null) {
+                    			UserRole userRole = empUser.getUserRole();
+                    			if(userRole != null) {
+		                    		if(role != null && employeeFilter.filterByRole(searchCriteria.getModule(), searchCriteria.getAction(), role.getName(), userRole.getName())) {
+		                    			transactions.add(mapToModel(emp));
+		                    		}
+                    			}
+                    		}
                     }
                 }
                 if(CollectionUtils.isNotEmpty(transactions)) {

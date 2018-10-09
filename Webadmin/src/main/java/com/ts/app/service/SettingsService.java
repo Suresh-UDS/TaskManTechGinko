@@ -90,6 +90,8 @@ public class SettingsService extends AbstractService {
 	
 	public static final String EMAIL_NOTIFICATION_DAYWISE_REPORT = "email.notification.daywiseReports";
 	
+	public static final String EMAIL_NOTIFICATION_DAYWISE_REPORT_CLIENT_GROUP_ALERT = "email.notification.daywiseReports.client.group.alert";
+	
 	public static final String EMAIL_NOTIFICATION_DAYWISE_REPORT_EMAILS = "email.notification.daywiseReports.emails";
 	
 	public static final String EMAIL_NOTIFICATION_DAYWISE_REPORT_ALERT_TIME = "email.notification.dayWiseReportAlertTime";
@@ -552,11 +554,27 @@ public class SettingsService extends AbstractService {
 		}
 		dayWiseReportAlertSetting.setSettingKey(EMAIL_NOTIFICATION_DAYWISE_REPORT);
 		dayWiseReportAlertSetting.setSettingValue(String.valueOf(settingsDto.isDayWiseReportEmailAlert()));
+		dayWiseReportAlertSetting.setClientGroupAlert(settingsDto.isClientGroupEmailAlert());
 		dayWiseReportAlertSetting.setProjectId(settingsDto.getProjectId());
 		dayWiseReportAlertSetting.setProjectName(settingsDto.getProjectName());
 		dayWiseReportAlertSetting.setSiteId(settingsDto.getSiteId());
 		dayWiseReportAlertSetting.setSiteName(settingsDto.getSiteName());
 		dayWiseReportAlertSetting.setActive("Y");
+		
+		Setting dayWiseReportClientGroupAlertSetting = null;
+		if(settingsDto.getDayWiseReportClientGroupEmailAlertId() > 0) {
+			dayWiseReportClientGroupAlertSetting = settingsRepository.findOne(settingsDto.getDayWiseReportClientGroupEmailAlertId());
+		}else {
+			dayWiseReportClientGroupAlertSetting = new Setting();
+		}
+		dayWiseReportClientGroupAlertSetting.setSettingKey(EMAIL_NOTIFICATION_DAYWISE_REPORT_CLIENT_GROUP_ALERT);
+		dayWiseReportClientGroupAlertSetting.setSettingValue(String.valueOf(settingsDto.isClientGroupEmailAlert()));
+		dayWiseReportClientGroupAlertSetting.setClientGroupAlert(settingsDto.isClientGroupEmailAlert());
+		dayWiseReportClientGroupAlertSetting.setProjectId(settingsDto.getProjectId());
+		dayWiseReportClientGroupAlertSetting.setProjectName(settingsDto.getProjectName());
+		dayWiseReportClientGroupAlertSetting.setSiteId(settingsDto.getSiteId());
+		dayWiseReportClientGroupAlertSetting.setSiteName(settingsDto.getSiteName());
+		dayWiseReportClientGroupAlertSetting.setActive("Y");
 
 		Setting dayWiseReportEmailsSetting = null;
 		if(settingsDto.getDayWiseReportEmailsId() > 0) {
@@ -682,6 +700,10 @@ public class SettingsService extends AbstractService {
 		if(StringUtils.isNotEmpty(dayWiseReportAlertSetting.getSettingValue())) {
 			settingList.add(dayWiseReportAlertSetting);
 		}
+
+		if(StringUtils.isNotEmpty(dayWiseReportClientGroupAlertSetting.getSettingValue())) {
+			settingList.add(dayWiseReportClientGroupAlertSetting);
+		}
 		if(StringUtils.isNotEmpty(dayWiseReportEmailsSetting.getSettingValue())) {
 			settingList.add(dayWiseReportEmailsSetting);
 		}
@@ -801,6 +823,9 @@ public class SettingsService extends AbstractService {
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_DAYWISE_REPORT)) {
 					settingDto.setDayWiseReportEmailAlertId(setting.getId());
 					settingDto.setDayWiseReportEmailAlert(Boolean.valueOf(setting.getSettingValue()));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_DAYWISE_REPORT_CLIENT_GROUP_ALERT)) {
+					settingDto.setDayWiseReportClientGroupEmailAlertId(setting.getId());
+					settingDto.setClientGroupEmailAlert(Boolean.valueOf(setting.getSettingValue()));
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_DAYWISE_REPORT_EMAILS)) {
 					settingDto.setDayWiseReportEmailsId(setting.getId());
 					settingDto.setDayWiseReportEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));

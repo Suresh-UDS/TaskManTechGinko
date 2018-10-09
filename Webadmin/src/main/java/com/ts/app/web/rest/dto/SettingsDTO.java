@@ -139,6 +139,8 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     
     private long dayWiseReportEmailAlertId;
     
+    private long dayWiseReportClientGroupEmailAlertId;
+    
     private long dayWiseReportAlertTimeId;
     
     private Date dayWiseReportAlertTime;
@@ -146,6 +148,8 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     private List<String> dayWiseReportEmailIds;
     
     private boolean dayWiseReportEmailAlert;
+    
+    private boolean clientGroupEmailAlert;
 
     public long getSiteId() {
 		return siteId;
@@ -689,6 +693,22 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 
 	public void setDayWiseReportEmailAlertId(long dayWiseReportEmailAlertId) {
 		this.dayWiseReportEmailAlertId = dayWiseReportEmailAlertId;
+	}
+
+	public boolean isClientGroupEmailAlert() {
+		return clientGroupEmailAlert;
+	}
+
+	public void setClientGroupEmailAlert(boolean clientGroupEmailAlert) {
+		this.clientGroupEmailAlert = clientGroupEmailAlert;
+	}
+
+	public long getDayWiseReportClientGroupEmailAlertId() {
+		return dayWiseReportClientGroupEmailAlertId;
+	}
+
+	public void setDayWiseReportClientGroupEmailAlertId(long dayWiseReportClientGroupEmailAlertId) {
+		this.dayWiseReportClientGroupEmailAlertId = dayWiseReportClientGroupEmailAlertId;
 	}
 
 	
