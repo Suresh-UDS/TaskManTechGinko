@@ -209,6 +209,9 @@ public class AssetManagementService extends AbstractService {
 
 	@Inject
 	private AssetSiteHistoryRepository assetSiteHistoryRepository;
+	
+	@Inject
+	private TicketManagementService ticketMgmtservice;
 
 	public static final String EMAIL_NOTIFICATION_READING = "email.notification.reading";
 
@@ -563,6 +566,16 @@ public class AssetManagementService extends AbstractService {
 			User user = userRepository.findOne(assetDTO.getUserId());
 			log.debug(">>> user <<<"+ user.getFirstName() +" and "+user.getId());
 //			Employee employee = user.getEmployee();
+			
+			TicketDTO ticketDto = new TicketDTO();
+			ticketDto.setAssetId(assetEntity.getId());
+			ticketDto.setActive(Ticket.ACTIVE_YES);
+			ticketDto.setTitle(assetDTO.getStatus());
+			ticketDto.setSiteId(site.getId());
+			ticketDto.setUserId(user.getId());
+			ticketDto.setCategory("MAINTENANCE");
+			ticketDto.setDescription(assetDTO.getStatus() + " by " + user.getFirstName());
+			ticketMgmtservice.saveTicket(ticketDto);
 
 			List<Setting> settingList = settingRepository.findSettingByKeyAndSiteId(EMAIL_NOTIFICATION_ASSET, site.getId());
 			
