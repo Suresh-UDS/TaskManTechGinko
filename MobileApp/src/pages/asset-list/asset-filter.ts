@@ -34,6 +34,14 @@ export class AssetFilter {
     assetType:any;
     selectedAssetType:any;
 
+    chooseClient = true;
+    projectActive: any;
+    siteSpinner = false;
+    showSites = false;
+    projectindex: any;
+    index: any;
+    siteActive: any;
+
     constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public component:componentService,
                 public siteService:SiteService, public assetService:AssetService) {
 
@@ -51,7 +59,7 @@ export class AssetFilter {
                 console.log(response);
                 this.clientList=response;
                 this.selectedProject = this.clientList[0];
-                this.selectSite(this.selectedProject);
+                // this.selectSite(this.selectedProject);
                 console.log('select default value:');
                 this.component.closeLoader();
             },
@@ -92,12 +100,20 @@ export class AssetFilter {
 
     }
 
-    selectSite(project)
+    selectSite(project,i)
     {
-        this.selectedProject = project;
+      this.projectActive=true;
+      this.projectindex = i;
+      this.siteSpinner= true;
+      this.chooseClient= false;
+      this.showSites = false;
+
+      this.selectedProject = project;
         this.scrollSite = true;
         this.siteService.findSitesByProject(project.id).subscribe(
             response=>{
+              this.siteSpinner=false;
+              this.showSites = true;
                 console.log("====Site By ProjectId======");
                 console.log(response);
                 this.siteList=response;
@@ -113,10 +129,14 @@ export class AssetFilter {
         )
     }
 
-    highLightSite(index,site){
+    highLightSite(i,site){
+      this.index = i;
+      this.projectActive = true;
+      this.siteActive = true;
+      this.selectedSite = site;
         console.log("Selected Site");
         console.log(site);
-        this.activeSite= index;
+        // this.activeSite= index;
         this.selectedSite = site;
     }
 
@@ -135,6 +155,8 @@ export class AssetFilter {
     }
 
     filterAssets(){
+      console.log("selected project",this.selectedProject);
+      console.log("selected site",this.selectedSite);
         this.searchCriteria={};
         // this.searchCriteria = {
         //     siteId:this.selectedSite.id,

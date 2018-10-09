@@ -99,7 +99,6 @@ export class Indent {
         this.siteSpinner= true;
         this.chooseClient= false;
         this.showSites = false;
-        this.selectedProject=project;
 
         this.selectedProject = project;
         this.scrollSite = true;

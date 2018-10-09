@@ -73,4 +73,18 @@ page-add-inventory-transaction {
     padding: 9px !important;
     background-color: white !important;
   }
+  .card{
+    margin: 0px 0 15px 0 !important;
+  }
+  .card-md
+  {
+    width:100% !important;
+  }
+  .card .card-content {
+    padding: 5px 10px !important;
+    position: relative;
+  }
+  .padding-inventory {
+    padding: 0;
+  }
 }

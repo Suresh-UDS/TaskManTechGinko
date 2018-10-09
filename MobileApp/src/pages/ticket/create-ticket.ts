@@ -23,7 +23,8 @@ import {QuotationImagePopoverPage} from "../quotation/quotation-image-popover";
   templateUrl: 'create-ticket.html',
 })
 export class CreateTicket {
-
+    projectindex: any;
+    allProjects: any;
     sites:any;
     private title: any;
     private description: any;
@@ -54,9 +55,16 @@ export class CreateTicket {
     severityActive:any;
     sevIndex:any;
     s:any;
+
+    chooseClient = true;
+    projectActive: any;
+    siteSpinner = false;
+    showSites = false;
+
     empSpinner=false;
     chooseSite=true;
     showEmployees=false;
+    selectedProject: any;
 
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public siteService:SiteService,public camera:Camera,public popoverCtrl: PopoverController,
@@ -73,22 +81,53 @@ export class CreateTicket {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CreateTicket');
-    this.getSites();
+
+    this.getProjects();
+
+    // this.getSites();
 
   }
+  getProjects(){
+    this.siteService.getAllProjects().subscribe(
+      response=>{
+        this.allProjects = response;
+        this.selectedProject = response[0];
+        // this.getSites(this.selectedProject[0].id);
+      }
+    )
+  }
 
-  getSites(){
+  getSites(projectId,i){
       var search={
           currPage:1
       };
-      this.cs.showLoader('Loading Sites..');
-      this.siteService.searchSite().subscribe(
+      // this.cs.showLoader('Loading Sites..');
+      /*this.siteService.searchSite().subscribe(
           response=>{
               this.sites = response.json();
               this.cs.closeLoader();
           },error=>{
               this.cs.closeLoader();
           }
+      )*/
+      this.projectActive=true;
+      this.projectindex = i;
+      this.siteSpinner= true;
+      this.chooseClient= false;
+      this.showSites = false;
+
+    console.log("projectID",projectId);
+      this.siteService.findSites(projectId).subscribe(
+        response=>{
+          this.siteSpinner=false;
+          this.showSites = true;
+          this.showEmployees=false;
+          this.chooseSite = true;
+          this.sites = response.json();
+          this.cs.closeLoader();
+        },error=>{
+          this.cs.closeLoader();
+        }
       )
   }
 
@@ -98,6 +137,7 @@ export class CreateTicket {
         {
             console.log('ionViewDidLoad Add jobs employee');
             this.index = i;
+            this.projectActive = true;
             this.siteActive = true;
             // this.siteName = site.name;
             this.site = site;
@@ -112,7 +152,7 @@ export class CreateTicket {
             };
             this.employeeService.searchEmployees(searchCriteria).subscribe(
                 response=> {
-                    console.log(response);
+                    console.log("response",response);
                     this.empSpinner=false;
                     this.showEmployees=true;
                     if(response.transactions!==0)
@@ -120,7 +160,7 @@ export class CreateTicket {
                         this.empSelect=false;
                         this.empPlace="Employee";
                         this.employee=response.transactions;
-                        console.log(this.employee);
+                        console.log("employeeresponse",this.employee);
                     }
                     else
                     {
@@ -133,7 +173,6 @@ export class CreateTicket {
                     console.log(error);
                     console.log(this.employee);
             })
-
         }
         else
         {

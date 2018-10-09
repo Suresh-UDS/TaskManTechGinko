@@ -42,7 +42,14 @@ export class AddInventoryTransaction {
     selectedMaterial: any;
     inventoryTransaction:any;
     indentList: any;
-  quantity: any;
+    quantity: any;
+    chooseClient = true;
+    projectActive: any;
+    siteSpinner = false;
+    showSites = false;
+    projectindex: any;
+    index: any;
+    siteActive: any;
 
 
     constructor(public navCtrl: NavController, public navParams: NavParams,private component:componentService,
@@ -67,7 +74,7 @@ export class AddInventoryTransaction {
                 console.log(response);
                 this.clientList = response;
                 this.selectedProject = this.clientList[0];
-                this.selectSite(this.selectedProject);
+                // this.selectSite(this.selectedProject);
                 console.log('select default value:');
             },
             error => {
@@ -80,11 +87,18 @@ export class AddInventoryTransaction {
         )
     }
 
-    selectSite(project) {
+    selectSite(project,i) {
+      this.projectActive=true;
+      this.projectindex = i;
+      this.siteSpinner= true;
+      this.chooseClient= false;
+      this.showSites = false;
         this.selectedProject = project;
         this.scrollSite = true;
         this.siteService.findSitesByProject(project.id).subscribe(
             response => {
+              this.siteSpinner=false;
+              this.showSites = true;
                 console.log("Site By ProjectId");
                 console.log(response);
                 this.siteList = response;
@@ -114,8 +128,12 @@ export class AddInventoryTransaction {
         )
     }
 
-    getIndents(site){
+    getIndents(site,i){
 
+      this.index = i;
+      this.projectActive = true;
+      this.siteActive = true;
+      this.selectedSite = site;
         var searchCriteria = {
             siteId:site.id,
             list:true

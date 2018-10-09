@@ -18,8 +18,52 @@
 </ion-header>
 
 
-<ion-content padding>
-    <ion-row no-margin>
+<ion-content class="padding-inventory">
+
+  <div class="row">
+    <div class="col-md-8">
+    <div class="card">
+        <div class="card-content">
+          <ion-row>
+
+            <ion-col col-12>
+              <p text-center>Choose Client</p>
+              <div class="SitesScrollCon">
+                <ion-scroll scrollX="true">
+                  <button class="scroll-item" ion-button round *ngFor="let p of clientList; let i of index" (click)="selectSite(p,i)" [color]="projectActive && i==projectindex ? 'primary':'light'">
+                    <p class="siteName">{{p.name}}</p>
+                  </button>
+                </ion-scroll>
+              </div>
+            </ion-col>
+
+            <ion-col col-12>
+
+              <p text-center>Choose Site</p>
+
+              <div padding text-center *ngIf="siteSpinner">
+                <span><ion-spinner name="bubbles"></ion-spinner> <br> Loading...</span>
+              </div>
+
+              <div padding text-center *ngIf="chooseClient">
+                <strong>Please Select Client</strong>
+              </div>
+
+              <div class="SitesScrollCon" *ngIf="showSites">
+                <ion-scroll scrollX="true">
+                  <button class="scroll-item" ion-button round  *ngFor="let site of siteList;let i of index" (click)="getIndents(site,i)" [color]="siteActive && i==index ? 'primary' : 'light'">
+                    <p class="siteName">{{site.name}}</p>
+                  </button>
+                </ion-scroll>
+              </div>
+
+            </ion-col>
+
+
+
+
+
+            <!--<ion-row no-margin>
         <ion-col col-12>
             <ion-item>
                 <ion-label text-capitalize class="client-label" text-left>Client :</ion-label>
@@ -38,7 +82,11 @@
                 </ion-select>
             </ion-item>
         </ion-col>
-    </ion-row>
+    </ion-row>-->
+
+
+
+
     <!--<ion-row no-margin>
         &lt;!&ndash;<ion-col col-12>&ndash;&gt;
         &lt;!&ndash;<ion-item>&ndash;&gt;
@@ -70,7 +118,7 @@
             </ul>
         </div>
     </ion-row>-->
-
+<ion-col col-12>
   <ion-row no-margin>
     <ion-col col-12>
       <ion-item>
@@ -81,6 +129,7 @@
       </ion-item>
     </ion-col>
   </ion-row>
+</ion-col>
 
    <!-- <ion-row no-margin>
         <ion-col col-12>
@@ -92,7 +141,8 @@
             </ion-item>
         </ion-col>
     </ion-row>-->
-    <ion-row no-margin >
+    <ion-col col-12>
+            <ion-row no-margin >
                 <ion-col col-9>
                     <ion-item>
                         <ion-label text-capitalize class="client-label" text-left>Material:</ion-label>
@@ -109,6 +159,7 @@
                   </ion-list>
                 </ion-col>
     </ion-row>
+    </ion-col>
 
   <ion-toolbar text-center>
     <button class="btn btn-warning center width42" (click)="addTransactionMaterial()">
@@ -124,7 +175,8 @@
     </ion-col>
   </ion-row>-->
 
-    <ion-row no-margin class="white-bg" *ngFor="let t of transactionMaterials">
+          <ion-col col-12>
+            <ion-row no-margin class="white-bg" *ngFor="let t of transactionMaterials">
         <ion-col col-6>
             <ion-list>
                 <ion-item>
@@ -152,5 +204,11 @@
             </button>
         </ion-col>-->
     </ion-row>
+          </ion-col>
+          </ion-row>
+        </div>
+    </div>
+    </div>
+  </div>
 </ion-content>
 

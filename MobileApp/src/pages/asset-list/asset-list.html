@@ -9,7 +9,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title text-center>Asset List</ion-title>
+    <ion-title text-center class="title-font">Asset List</ion-title>
       <ion-buttons right>
           <button ion-button class="fnt-black" icon-only (click)="openFilters()" class="padding-right10" *ngIf="open">
               <i class="fa fa-filter fnt-24"></i>
@@ -19,7 +19,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
 
     <button ion-button full *ngIf="assetList" (click)="setDataSync()">Data Sync</button>
 
@@ -31,7 +31,7 @@
         <button ion-fab color="primary"> <i class="fa fa-qrcode clr-white fnt-24"></i></button>
     </ion-fab>
 
-  <ion-list>
+  <ion-list class="asset-padding">
 
 
 
@@ -62,8 +62,8 @@
         <ion-thumbnail *ngIf="!asset.url" item-start class="">
             <img src="assets/imgs/placeholder.png" imageViewer/>
         </ion-thumbnail>
-        <p text-left="" class="padding-bottom5">{{asset.title}}</p>
-        <p text-left="" class="fnt-12">{{asset.code}}</p>
+        <p text-left="" class="padding-bottom5 text-font">{{asset.title}}</p>
+        <p text-left="" class="fnt-12 text-font">{{asset.code}}</p>
         <button ion-button clear item-end  >
             <ion-icon name="md-eye"></ion-icon>
         </button>
@@ -81,7 +81,7 @@
       <!--</button>-->
     </ion-item>
   </ion-list>
-    <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)=" doInfiniteAssets($event)">
+    <ion-infinite-scroll distance="5%" class="asset-padding" *ngIf="page<totalPages"  (ionInfinite)=" doInfiniteAssets($event)">
         <ion-infinite-scroll-content></ion-infinite-scroll-content>
     </ion-infinite-scroll>
 

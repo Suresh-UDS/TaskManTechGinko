@@ -37,7 +37,7 @@
           <ion-row>
 
             <ion-col col-12>
-              <div class="form-group label-floating" [ngClass]="{'has-error':eMsg=='all'||eMsg=='purposeDetails'}">
+              <div class="form-group label-floating indent-padding " [ngClass]="{'has-error':eMsg=='all'||eMsg=='purposeDetails'}">
                 <label class="control-label">Purpose</label>
                 <input class="form-control" type="text" [(ngModel)]="purposeDetails" #titl="ngModel" required [ngClass]="{'has-error': titl.errors || eMsg=='all' || eMsg=='title'}">
                 <div *ngIf="titl.errors && (titl.dirty || titl.touched)" class="error-msg">

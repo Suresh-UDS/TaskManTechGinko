@@ -45,9 +45,30 @@
 
                         </ion-col>
 
+                      <ion-col col-12>
+                        <p text-center>Choose Client</p>
+                        <div class="SitesScrollCon">
+                          <ion-scroll scrollX="true">
+                            <button class="scroll-item" ion-button round *ngFor="let p of allProjects; let i of index" (click)="getSites(p.id,i)" [color]="projectActive && i==projectindex ? 'primary':'light'">
+                              <p class="siteName">{{p.name}}</p>
+                            </button>
+                          </ion-scroll>
+                        </div>
+                      </ion-col>
+
                         <ion-col col-12>
-                            <p text-center>Choose Site</p>
-                            <div class="SitesScrollCon">
+
+                          <p text-center>Choose Site</p>
+
+                          <div padding text-center *ngIf="siteSpinner">
+                            <span><ion-spinner name="bubbles"></ion-spinner> <br> Loading...</span>
+                          </div>
+
+                          <div padding text-center *ngIf="chooseClient">
+                            <strong>Please Select Client</strong>
+                          </div>
+
+                            <div class="SitesScrollCon" *ngIf="showSites">
                                 <ion-scroll scrollX="true">
                                     <button class="scroll-item" ion-button round  *ngFor="let site of sites;let i of index" (click)="getEmployee(site,i)" [color]="siteActive && i==index ? 'primary' : 'light'">
                                         <p class="siteName">{{site.name}}</p>
