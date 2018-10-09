@@ -21,6 +21,8 @@ import{TicketFilter} from "./ticket-filter/ticket-filter";
 export class Ticket {
 
     tickets:any;
+    clientFilter:any;
+    siteFilter:any;
   constructor(public navCtrl: NavController, public navParams: NavParams, private cs:componentService, private jobService:JobService, public modalCtrl:ModalController) {
       this.tickets = [];
   }
@@ -30,15 +32,17 @@ export class Ticket {
     this.cs.showLoader('Loading Tickets..');
     var searchCriteria={
         currPage:1
-    }
+    };
     this.jobService.searchTickets(searchCriteria).subscribe(
         response=>{
+            this.cs.closeLoader();
             console.log("Getting tickets");
             console.log(response);
             this.tickets=response.transactions;
-            this.cs.closeLoader();
+
         },error=>{
             this.cs.closeLoader();
+            console.log(error);
         }
     )
   }
@@ -52,8 +56,38 @@ export class Ticket {
     }
 
     presentModal() {
-        const modal = this.modalCtrl.create(TicketFilter);
+        let modal = this.modalCtrl.create(TicketFilter,{},{cssClass:'asset-filter',showBackdrop:true});
+        modal.onDidDismiss(data=>{
+            console.log("Modal Dismiss");
+            console.log(data);
+            this.clientFilter=data.project;
+            this.siteFilter=data.site;
+            this.applyFilter(data.project,data.site);
+        });
         modal.present();
+    }
+
+
+    applyFilter(project,site){
+        this.cs.showLoader("");
+        var searchCriteria={
+            siteId:site.id,
+            projectId:project.id,
+        };
+
+        this.jobService.searchTickets(searchCriteria).subscribe(
+            response=>{
+                this.cs.closeAll();
+                console.log("Filtering Tickets");
+                console.log(response);
+                this.tickets=response.transactions;
+            },error=>{
+                this.cs.closeAll();
+                console.log("Error in filtering tickets");
+                console.log(error);
+            }
+        )
+
     }
 
 }

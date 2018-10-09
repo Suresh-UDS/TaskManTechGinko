@@ -18,15 +18,25 @@
 
 <ion-content padding>
 
-    <!--<ion-fab  bottom right>-->
-        <!--<button ion-fab color="primary" (click)="presentModal()"><ion-icon name="funnel"></ion-icon></button>-->
-    <!--</ion-fab>-->
+    <ion-fab  bottom right>
+        <button ion-fab color="primary" (click)="presentModal()"><ion-icon name="funnel"></ion-icon></button>
+    </ion-fab>
 
     <ion-fab top right edge>
         <button has-permission="TicketsCreate" (click)="createTicket()" ion-fab><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 
-    <div  class="white-bg" *ngFor="let ticket of tickets" (click)="viewTicket(ticket)">
+    <div class="margin-top5">
+        <span class="tag label label-info" style="margin-right: 5px"  *ngIf="clientFilter">
+            Client: {{clientFilter.name}}
+        </span>
+        <span class="tag label label-info"   *ngIf="siteFilter">
+           Site: {{siteFilter.name}}
+        </span>
+    </div>
+
+    <div  class="white-bg padding-top5" *ngFor="let ticket of tickets" (click)="viewTicket(ticket)">
+
         <div class="padding-left16 padding-top5">
             <ion-row class="margin0">
 
@@ -67,7 +77,7 @@
 
     </div>
 
-    <ion-list *ngIf="tickets.length<=0">
+    <ion-list *ngIf="tickets.length<=0" class="margin-top5">
         <ion-item>
             <ion-card padding>
                 <ion-card-header no-padding>
