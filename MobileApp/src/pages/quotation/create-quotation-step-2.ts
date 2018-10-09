@@ -38,7 +38,7 @@ export class CreateQuotationPage2 {
     siteDetails:any;
     showRateInformation:any;
     quotation:any;
-    rates:any
+    rates:any;
 
     clientEmailId:any;
     sentByUserId:any;
