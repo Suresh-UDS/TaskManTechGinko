@@ -1957,9 +1957,10 @@ public class SchedulerHelperService extends AbstractService {
 					}
 				}
 				sb.append("</tr>");
+			
 				if (eodReportEmails != null && (alertTimeCal.equals(now) || isOnDemand)
 						&& (eodReportClientGroupAlert != null
-								&& eodReportClientGroupAlert.getSettingValue().equalsIgnoreCase("true"))) {
+						&& eodReportClientGroupAlert.getSettingValue().equalsIgnoreCase("true"))) {
 
 					if (proj.getClientGroup() != null) {
 
@@ -1997,7 +1998,6 @@ public class SchedulerHelperService extends AbstractService {
 						exportContents.add(exportCnt);
 
 						clientContentMap.put(proj.getName(), exportContents);
-						
 						if(StringUtils.isNotEmpty(clientGrp.getSummary())) {
 							clientGrp.setSummary(clientGrp.getSummary() + sb.toString());
 						}else {
@@ -2051,10 +2051,14 @@ public class SchedulerHelperService extends AbstractService {
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
+		StringBuffer clientSummary = new StringBuffer(); 
 		// Map<String, Object> exportedContent = new HashMap<String, Object>();
 		for (Map.Entry<String, ClientgroupDTO> entry : newMap.entrySet()) {
 			// exportedContent.put("clientGroup", entry.getKey());
 			ClientgroupDTO clientGrp = entry.getValue();
+			clientSummary.append(clientGrp.getSummary());
+			clientSummary.append("</table>");
+			clientSummary.append("<br/>");
 			Map<String, List<ExportContent>> values = clientGrp.getContents();
 			//StringBuffer summary = new StringBuffer();
 			StringBuffer emails = new StringBuffer();
@@ -2153,7 +2157,7 @@ public class SchedulerHelperService extends AbstractService {
 
 			if (CollectionUtils.isNotEmpty(files)) {
 				mailService.sendDaywiseReportEmailFile(entry.getKey(), emails.toString(), files, cal.getTime(),
-						clientGrp.getSummary());
+						clientSummary.toString());
 			}
 
 		}
