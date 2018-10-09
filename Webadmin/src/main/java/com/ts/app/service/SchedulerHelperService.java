@@ -2059,7 +2059,7 @@ public class SchedulerHelperService extends AbstractService {
 			ClientgroupDTO clientGrp = entry.getValue();
 			Map<String, List<ExportContent>> values = clientGrp.getContents();
 			//StringBuffer summary = new StringBuffer();
-			String emails = null;
+			StringBuffer emails = new StringBuffer();
 			FileOutputStream jobFos = null;
 			FileOutputStream ticketFos = null;
 			FileOutputStream quotationFos = null;
@@ -2083,7 +2083,7 @@ public class SchedulerHelperService extends AbstractService {
 						// exportedContent.put("files", contents.getFile());
 						// exportedContent.put("siteName", contents.getSiteName());
 
-						emails = content.getEmail();
+						emails.append(content.getEmail() + ",");
 						// append summary
 						 //summary.append("<br/><b>" + content.getSiteName() + "</b><br/>");
 						 //if(StringUtils.isNotEmpty(content.getSummary())) {
@@ -2154,7 +2154,7 @@ public class SchedulerHelperService extends AbstractService {
 			}
 
 			if (CollectionUtils.isNotEmpty(files)) {
-				mailService.sendDaywiseReportEmailFile(entry.getKey(), emails, files, cal.getTime(),
+				mailService.sendDaywiseReportEmailFile(entry.getKey(), emails.toString(), files, cal.getTime(),
 						clientGrp.getSummary());
 			}
 
