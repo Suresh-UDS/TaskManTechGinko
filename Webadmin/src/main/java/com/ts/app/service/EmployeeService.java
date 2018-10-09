@@ -1290,8 +1290,14 @@ public class    EmployeeService extends AbstractService {
                 List<Employee> empList =  page.getContent();
                 if(CollectionUtils.isNotEmpty(empList)) {
                     for(Employee emp : empList) {
-                    		if(role != null && employeeFilter.filterByDesignationForRole(searchCriteria.getModule(), searchCriteria.getAction(), role.getName(), emp.getDesignation())) {
-                    			transactions.add(mapToModel(emp));
+                    		User empUser = emp.getUser();
+                    		if(empUser != null) {
+                    			UserRole userRole = empUser.getUserRole();
+                    			if(userRole != null) {
+		                    		if(role != null && employeeFilter.filterByRole(searchCriteria.getModule(), searchCriteria.getAction(), role.getName(), userRole.getName())) {
+		                    			transactions.add(mapToModel(emp));
+		                    		}
+                    			}
                     		}
                     }
                 }
