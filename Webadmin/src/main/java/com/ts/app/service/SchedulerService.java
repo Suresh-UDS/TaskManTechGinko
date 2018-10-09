@@ -1388,7 +1388,7 @@ public class SchedulerService extends AbstractService {
 			}
 		}
 	
-	@Scheduled(cron="0 */30 * * * ?")
+	//@Scheduled(cron="0 */30 * * * ?")
 	public void sendDaywiseReport() {
 		Calendar cal = Calendar.getInstance();
 		boolean isOnDemand = false;
