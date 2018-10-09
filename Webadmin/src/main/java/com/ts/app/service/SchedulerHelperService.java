@@ -46,6 +46,7 @@ import com.ts.app.config.Constants;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
 import com.ts.app.domain.Attendance;
+import com.ts.app.domain.Clientgroup;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.domain.EmployeeProjectSite;
@@ -76,6 +77,7 @@ import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ClientgroupDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
 import com.ts.app.web.rest.dto.JobChecklistDTO;
@@ -1674,13 +1676,45 @@ public class SchedulerHelperService extends AbstractService {
 		now.set(Calendar.SECOND, 0);
 		now.set(Calendar.MILLISECOND, 0);
 
-		Map<String, Map<String, List<ExportContent>>> clientGroupMap = new HashMap<String, Map<String, List<ExportContent>>>();
+		Map<String, ClientgroupDTO> clientGroupMap = new HashMap<String, ClientgroupDTO>();
 
 		List<Project> projects = projectRepository.findAll();
 		for (Project proj : projects) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("<table border=\"1\" cellpadding=\"5\"  style=\"border-collapse:collapse;margin-bottom:20px;\">");
+			sb.append("<tr><th>Site</th>");
+			sb.append("<th colspan=\"5\">Job</th>");
+			sb.append("<th colspan=\"5\">Ticket</th>");
+			sb.append("<th colspan=\"5\">Quotation</th>");
+			sb.append("</tr>");
+			sb.append("<tr>");
+			sb.append("<td>" + proj.getName() + "</td>");
+			sb.append("<td>Open</td>");
+			sb.append("<td>Assigned</td>");
+			sb.append("<td>Completed</td>");
+			sb.append("<td>Overdue</td>");
+			sb.append("<td>Total</td>");
+			sb.append("<td>Open</td>");
+			sb.append("<td>Assigned</td>");
+			sb.append("<td>Pending</td>");
+			sb.append("<td>Closed</td>");
+			sb.append("<td>Total</td>");
+			sb.append("<td>Pending</td>");
+			sb.append("<td>Waiting for Approval</td>");
+			sb.append("<td>Approved</td>");
+			sb.append("<td>Rejected</td>");
+			sb.append("<td>Total</td>");
+			sb.append("</tr>");
 			Set<Site> sites = proj.getSite();
 			Iterator<Site> siteItr = sites.iterator();
+			Setting eodReportEmails = null;
+			Setting eodReportClientGroupAlert = null;
+			Setting dayWiseAlertTime = null;
+			Calendar alertTimeCal = Calendar.getInstance();
+			List<String> files = new ArrayList<String>();
+
 			while (siteItr.hasNext()) {
+				sb.append("<tr>");
 				Site site = siteItr.next();
 				List<Setting> settings = null;
 				List<Setting> emailAlertTimeSettings = null;
@@ -1698,24 +1732,22 @@ public class SchedulerHelperService extends AbstractService {
 				emailAlertTimeSettings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(
 						"email.notification.dayWiseReportAlertTime", site.getId(), proj.getId());
 
-				Setting eodReportEmails = null;
 				if (CollectionUtils.isNotEmpty(emailSettings)) {
 					eodReportEmails = emailSettings.get(0);
 				}
 
-				Setting eodReportClientGroupAlert = null;
 				if (CollectionUtils.isNotEmpty(clientGroupAlertSettings)) {
 					eodReportClientGroupAlert = clientGroupAlertSettings.get(0);
 				}
 
-				Setting DayWiseAlertTime = null;
 				if (CollectionUtils.isNotEmpty(emailAlertTimeSettings)) {
-					DayWiseAlertTime = emailAlertTimeSettings.get(0);
+					dayWiseAlertTime = emailAlertTimeSettings.get(0);
 				}
 
 				// get the alert time
-				String alertTime = DayWiseAlertTime != null ? DayWiseAlertTime.getSettingValue() : null;
-				Calendar alertTimeCal = Calendar.getInstance();
+				String alertTime = null;
+
+				alertTime = dayWiseAlertTime != null ? dayWiseAlertTime.getSettingValue() : null;
 
 				if (StringUtils.isNotEmpty(alertTime)) {
 					try {
@@ -1739,10 +1771,9 @@ public class SchedulerHelperService extends AbstractService {
 				sc.setQuotationCreatedDate(cal.getTime());
 				sc.setSiteId(site.getId());
 
-				ArrayList<String> files = new ArrayList<String>();
 
-				StringBuffer sb = new StringBuffer();
-
+				
+				sb.append("<td>" + site.getName() + "</td>");
 				ExportResult jobResult = new ExportResult();
 				if (env.getProperty("scheduler.dayWiseJobReport.enabled").equalsIgnoreCase("true")) {
 
@@ -1756,6 +1787,7 @@ public class SchedulerHelperService extends AbstractService {
 							sc.setConsolidated(false);
 							if (CollectionUtils.isNotEmpty(jobSummary)) {
 								ReportResult summary = jobSummary.get(0);
+								/*
 								sb.append("<br/>Job Summary<br/>");
 								sb.append(
 										"<table border=\"1\" cellpadding=\"5\"  style=\"border-collapse:collapse;margin-bottom:20px;\"><tr><td>Total Jobs : </td><td>"
@@ -1764,6 +1796,12 @@ public class SchedulerHelperService extends AbstractService {
 								sb.append("<tr><td>Completed : </td><td>" + summary.getCompletedJobCount() + "</td>");
 								sb.append("<tr><td>Overdue : </td><td>" + summary.getOverdueJobCount() + "</td>");
 								sb.append("</tr></table>");
+								*/
+								sb.append("<td></td>");
+								sb.append("<td>" + summary.getAssignedJobCount() + "</td>");
+								sb.append("<td>" + summary.getCompletedJobCount() + "</td>");
+								sb.append("<td>" + summary.getOverdueJobCount() + "</td>");
+								sb.append("<td>" + summary.getTotalJobCount() + "</td>");
 							}
 							log.debug("send report");
 							jobResult = exportUtil.writeJobExcelReportToFile(proj.getName(), jobResults, null, null,
@@ -1771,7 +1809,18 @@ public class SchedulerHelperService extends AbstractService {
 							files.add(jobResult.getFile());
 						} else {
 							log.debug("no jobs found on the daterange");
+							sb.append("<td></td>");
+							sb.append("<td>0</td>");
+							sb.append("<td>0</td>");
+							sb.append("<td>0</td>");
+							sb.append("<td>0</td>");
 						}
+					}else {
+						sb.append("<td></td>");
+						sb.append("<td></td>");
+						sb.append("<td>0</td>");
+						sb.append("<td>0</td>");
+						sb.append("<td>0</td>");		
 					}
 
 				}
@@ -1784,28 +1833,44 @@ public class SchedulerHelperService extends AbstractService {
 						// if report generation needed
 						log.debug("results exists");
 						if (eodReports != null && eodReports.getSettingValue().equalsIgnoreCase("true")) {
-							sb.append("<br/>Ticket Summary<br/>");
+							//sb.append("<br/>Ticket Summary<br/>");
 							List<Long> siteIds = new ArrayList<Long>();
 							siteIds.add(site.getId());
 							ReportResult summary = reportService.getTicketStatsDateRange(0, siteIds, cal.getTime(),
 									dayEndcal.getTime());
 							if (summary != null) {
-								sb.append(
-										"<table border=\"1\" cellpadding=\"5\"  style=\"border-collapse:collapse;margin-bottom:20px;\"><tr><td>Total Tickets : </td><td>"
-												+ summary.getTotalNewTicketCount() + "</td>");
-								sb.append("<tr><td>Closed : </td><td>" + summary.getTotalClosedTicketCount() + "</td>");
-								sb.append(
-										"<tr><td>Pending : </td><td>" + summary.getTotalPendingTicketCount() + "</td>");
-								sb.append("</tr></table>");
+//								sb.append(
+//										"<table border=\"1\" cellpadding=\"5\"  style=\"border-collapse:collapse;margin-bottom:20px;\"><tr><td>Total Tickets : </td><td>"
+//												+ summary.getTotalNewTicketCount() + "</td>");
+//								sb.append("<tr><td>Closed : </td><td>" + summary.getTotalClosedTicketCount() + "</td>");
+//								sb.append(
+//										"<tr><td>Pending : </td><td>" + summary.getTotalPendingTicketCount() + "</td>");
+//								sb.append("</tr></table>");
+								sb.append("<td></td>");
+								sb.append("<td></td>");
+								sb.append("<td>" + summary.getTotalPendingTicketCount() + "</td>");
+								sb.append("<td>" + summary.getTotalClosedTicketCount() + "</td>");
+								sb.append("<td>" + summary.getTotalNewTicketCount() + "</td>");
 							}
 							log.debug("send report");
 							exportTicketResult = exportUtil.writeTicketExcelReportToFile(proj.getName(), ticketResults,
 									null, null, exportTicketResult);
 							files.add(exportTicketResult.getFile());
+						}else {
+							sb.append("<td></td>");
+							sb.append("<td></td>");
+							sb.append("<td>0</td>");
+							sb.append("<td>0</td>");
+							sb.append("<td>0</td>");		
 						}
 
 					} else {
 						log.debug("no tickets found on the daterange");
+						sb.append("<td></td>");
+						sb.append("<td></td>");
+						sb.append("<td>0</td>");
+						sb.append("<td>0</td>");
+						sb.append("<td>0</td>");						
 					}
 				}
 
@@ -1832,7 +1897,7 @@ public class SchedulerHelperService extends AbstractService {
 						// if report generation needed
 						log.debug("results exists");
 						if (eodReports != null && eodReports.getSettingValue().equalsIgnoreCase("true")) {
-							sb.append("<br/>Quotation Summary<br/>");
+							//sb.append("<br/>Quotation Summary<br/>");
 							QuotationDTO quotationSummary = new QuotationDTO();
 							List<Long> siteIds = new ArrayList<Long>();
 							siteIds.add(site.getId());
@@ -1851,6 +1916,7 @@ public class SchedulerHelperService extends AbstractService {
 							log.debug("send report");
 
 							if (quotationSummary != null) {
+								/*
 								sb.append(
 										"<table border=\"1\" cellpadding=\"5\"  style=\"border-collapse:collapse;margin-bottom:20px;\"><tr><td>Total Quotations : </td><td>"
 												+ quotationSummary.getTotalCount() + "</td>");
@@ -1862,28 +1928,51 @@ public class SchedulerHelperService extends AbstractService {
 								sb.append(
 										"<tr><td>Archived : </td><td>" + quotationSummary.getTotalArchived() + "</td>");
 								sb.append("</tr></table>");
+								*/
+								sb.append("<td>"+ quotationSummary.getTotalPending() +"</td>");
+								sb.append("<td>"+ quotationSummary.getTotalSubmitted() +"</td>");
+								sb.append("<td>" + quotationSummary.getTotalApproved() + "</td>");
+								sb.append("<td></td>");
+								sb.append("<td>" + quotationSummary.getTotalCount() + "</td>");
+
 							}
 							exportQuotationResult = exportUtil.writeQuotationExcelReportToFile(quotationResults, null,
 									exportQuotationResult);
 							files.add(exportQuotationResult.getFile());
+						}else {
+							sb.append("<td></td>");
+							sb.append("<td></td>");
+							sb.append("<td>0</td>");
+							sb.append("<td>0</td>");
+							sb.append("<td>0</td>");		
 						}
 
 					} else {
 						log.debug("no quotations found on the daterange");
+						sb.append("<td>0</td>");
+						sb.append("<td>0</td>");
+						sb.append("<td>0</td>");
+						sb.append("<td></td>");
+						sb.append("<td>0</td>");
 					}
 				}
-
+				sb.append("</tr>");
 				if (eodReportEmails != null && (alertTimeCal.equals(now) || isOnDemand)
 						&& (eodReportClientGroupAlert != null
 								&& eodReportClientGroupAlert.getSettingValue().equalsIgnoreCase("true"))) {
 
 					if (proj.getClientGroup() != null) {
 
+						ClientgroupDTO clientGrp = null;
 						Map<String, List<ExportContent>> clientContentMap = null;
 
+						
 						if (clientGroupMap.containsKey(proj.getClientGroup())) {
-							clientContentMap = clientGroupMap.get(proj.getClientGroup());
+							clientGrp = clientGroupMap.get(proj.getClientGroup());
+							clientContentMap = clientGrp.getContents();
 						} else {
+							clientGrp = new ClientgroupDTO();
+							clientGrp.setClientgroup(proj.getClientGroup());
 							clientContentMap = new HashMap<String, List<ExportContent>>();
 						}
 
@@ -1893,7 +1982,7 @@ public class SchedulerHelperService extends AbstractService {
 						exportCnt.setEmail(eodReportEmails.getSettingValue());
 						exportCnt.setSiteId(site.getId());
 						exportCnt.setSiteName(site.getName());
-						exportCnt.setSummary(sb.toString());
+						//exportCnt.setSummary(sb.toString());
 						exportCnt.setJobFile(jobResult.getFile());
 						exportCnt.setTicketFile(exportTicketResult.getFile());
 						exportCnt.setQuotationFile(exportQuotationResult.getFile());
@@ -1908,19 +1997,44 @@ public class SchedulerHelperService extends AbstractService {
 						exportContents.add(exportCnt);
 
 						clientContentMap.put(proj.getName(), exportContents);
+						
+						if(StringUtils.isNotEmpty(clientGrp.getSummary())) {
+							clientGrp.setSummary(clientGrp.getSummary() + sb.toString());
+						}else {
+							clientGrp.setSummary(sb.toString());
+						}
+						
+						clientGrp.setContents(clientContentMap);
 
-						clientGroupMap.put(proj.getClientGroup(), clientContentMap);
+						clientGroupMap.put(proj.getClientGroup(), clientGrp);
 
 					}
 
-				} else if (eodReportEmails != null && (alertTimeCal.equals(now) || isOnDemand)) {
-					if (CollectionUtils.isNotEmpty(files)) {
-						mailService.sendDaywiseReportEmailFile(site.getName(), eodReportEmails.getSettingValue(), files,
-								cal.getTime(), sb.toString());
-					}
-				}
+				} 
+//				else if (eodReportEmails != null && (alertTimeCal.equals(now) || isOnDemand)) {
+//					if (CollectionUtils.isNotEmpty(files)) {
+//						mailService.sendDaywiseReportEmailFile(site.getName(), eodReportEmails.getSettingValue(), files,
+//								cal.getTime(), sb.toString());
+//					}
+//				}
 
 			}
+			sb.append("</table>");
+			sb.append("<br/>");
+			sb.append("<br/>");
+			
+			if (eodReportEmails != null && (alertTimeCal.equals(now) || isOnDemand)
+				 &&	(eodReportClientGroupAlert == null
+					|| eodReportClientGroupAlert.getSettingValue().equalsIgnoreCase("true"))) {
+				if (CollectionUtils.isNotEmpty(files)) {
+					mailService.sendDaywiseReportEmailFile(proj.getName(), eodReportEmails.getSettingValue(), files,
+							cal.getTime(), sb.toString());
+				}
+			}
+			
+			
+
+
 		}
 
 		if (MapUtils.isNotEmpty(clientGroupMap)) {
@@ -1929,7 +2043,7 @@ public class SchedulerHelperService extends AbstractService {
 
 	}
 
-	private void exportClientGroupEmail(Map<String, Map<String, List<ExportContent>>> newMap) {
+	private void exportClientGroupEmail(Map<String, ClientgroupDTO> newMap) {
 		// TODO Auto-generated method stub
 		Date date = new Date();
 		Calendar cal = Calendar.getInstance();
@@ -1940,10 +2054,11 @@ public class SchedulerHelperService extends AbstractService {
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		// Map<String, Object> exportedContent = new HashMap<String, Object>();
-		for (Map.Entry<String, Map<String, List<ExportContent>>> entry : newMap.entrySet()) {
+		for (Map.Entry<String, ClientgroupDTO> entry : newMap.entrySet()) {
 			// exportedContent.put("clientGroup", entry.getKey());
-			Map<String, List<ExportContent>> values = entry.getValue();
-			StringBuffer summary = new StringBuffer();
+			ClientgroupDTO clientGrp = entry.getValue();
+			Map<String, List<ExportContent>> values = clientGrp.getContents();
+			//StringBuffer summary = new StringBuffer();
 			String emails = null;
 			FileOutputStream jobFos = null;
 			FileOutputStream ticketFos = null;
@@ -1970,12 +2085,12 @@ public class SchedulerHelperService extends AbstractService {
 
 						emails = content.getEmail();
 						// append summary
-						 summary.append("<br/><b>" + content.getSiteName() + "</b><br/>");
-						 if(StringUtils.isNotEmpty(content.getSummary())) {
-							 summary.append(content.getSummary());
-						 }else {
-							 summary.append("<br/>Nothing to report<br/>");
-						 }
+						 //summary.append("<br/><b>" + content.getSiteName() + "</b><br/>");
+						 //if(StringUtils.isNotEmpty(content.getSummary())) {
+						//	 summary.append(content.getSummary());
+						// }else {
+						//	 summary.append("<br/>Nothing to report<br/>");
+						 //}
 
 						if (content.getJobFile() != null) {
 							// copy the job report sheet to the master report file
@@ -2040,7 +2155,7 @@ public class SchedulerHelperService extends AbstractService {
 
 			if (CollectionUtils.isNotEmpty(files)) {
 				mailService.sendDaywiseReportEmailFile(entry.getKey(), emails, files, cal.getTime(),
-						summary.toString());
+						clientGrp.getSummary());
 			}
 
 		}

@@ -392,7 +392,7 @@ public class    EmployeeService extends AbstractService {
                 employee.setClient(true); //mark the employee as client employee
             }
         }
-
+        employeeUpdate.setDesignation(employee.getDesignation());
         employeeRepository.saveAndFlush(employeeUpdate);
         employee = mapperUtil.toModel(employeeUpdate, EmployeeDTO.class);
         return employee;
