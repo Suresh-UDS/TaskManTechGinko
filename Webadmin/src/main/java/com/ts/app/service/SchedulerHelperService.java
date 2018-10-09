@@ -46,6 +46,7 @@ import com.ts.app.config.Constants;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
 import com.ts.app.domain.Attendance;
+import com.ts.app.domain.Clientgroup;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.domain.EmployeeProjectSite;
@@ -76,6 +77,7 @@ import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ClientgroupDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
 import com.ts.app.web.rest.dto.JobChecklistDTO;
@@ -1674,11 +1676,11 @@ public class SchedulerHelperService extends AbstractService {
 		now.set(Calendar.SECOND, 0);
 		now.set(Calendar.MILLISECOND, 0);
 
-		Map<String, Map<String, List<ExportContent>>> clientGroupMap = new HashMap<String, Map<String, List<ExportContent>>>();
+		Map<String, ClientgroupDTO> clientGroupMap = new HashMap<String, ClientgroupDTO>();
 
 		List<Project> projects = projectRepository.findAll();
-		StringBuffer sb = new StringBuffer();
 		for (Project proj : projects) {
+			StringBuffer sb = new StringBuffer();
 			sb.append("<table border=\"1\" cellpadding=\"5\"  style=\"border-collapse:collapse;margin-bottom:20px;\">");
 			sb.append("<tr><th>Site</th>");
 			sb.append("<th colspan=\"5\">Job</th>");
@@ -1961,11 +1963,16 @@ public class SchedulerHelperService extends AbstractService {
 
 					if (proj.getClientGroup() != null) {
 
+						ClientgroupDTO clientGrp = null;
 						Map<String, List<ExportContent>> clientContentMap = null;
 
+						
 						if (clientGroupMap.containsKey(proj.getClientGroup())) {
-							clientContentMap = clientGroupMap.get(proj.getClientGroup());
+							clientGrp = clientGroupMap.get(proj.getClientGroup());
+							clientContentMap = clientGrp.getContents();
 						} else {
+							clientGrp = new ClientgroupDTO();
+							clientGrp.setClientgroup(proj.getClientGroup());
 							clientContentMap = new HashMap<String, List<ExportContent>>();
 						}
 
@@ -1990,8 +1997,16 @@ public class SchedulerHelperService extends AbstractService {
 						exportContents.add(exportCnt);
 
 						clientContentMap.put(proj.getName(), exportContents);
+						
+						if(StringUtils.isNotEmpty(clientGrp.getSummary())) {
+							clientGrp.setSummary(clientGrp.getSummary() + sb.toString());
+						}else {
+							clientGrp.setSummary(sb.toString());
+						}
+						
+						clientGrp.setContents(clientContentMap);
 
-						clientGroupMap.put(proj.getClientGroup(), clientContentMap);
+						clientGroupMap.put(proj.getClientGroup(), clientGrp);
 
 					}
 
@@ -2023,12 +2038,12 @@ public class SchedulerHelperService extends AbstractService {
 		}
 
 		if (MapUtils.isNotEmpty(clientGroupMap)) {
-			exportClientGroupEmail(clientGroupMap, sb.toString());
+			exportClientGroupEmail(clientGroupMap);
 		}
 
 	}
 
-	private void exportClientGroupEmail(Map<String, Map<String, List<ExportContent>>> newMap, String summary) {
+	private void exportClientGroupEmail(Map<String, ClientgroupDTO> newMap) {
 		// TODO Auto-generated method stub
 		Date date = new Date();
 		Calendar cal = Calendar.getInstance();
@@ -2039,9 +2054,10 @@ public class SchedulerHelperService extends AbstractService {
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		// Map<String, Object> exportedContent = new HashMap<String, Object>();
-		for (Map.Entry<String, Map<String, List<ExportContent>>> entry : newMap.entrySet()) {
+		for (Map.Entry<String, ClientgroupDTO> entry : newMap.entrySet()) {
 			// exportedContent.put("clientGroup", entry.getKey());
-			Map<String, List<ExportContent>> values = entry.getValue();
+			ClientgroupDTO clientGrp = entry.getValue();
+			Map<String, List<ExportContent>> values = clientGrp.getContents();
 			//StringBuffer summary = new StringBuffer();
 			String emails = null;
 			FileOutputStream jobFos = null;
@@ -2139,7 +2155,7 @@ public class SchedulerHelperService extends AbstractService {
 
 			if (CollectionUtils.isNotEmpty(files)) {
 				mailService.sendDaywiseReportEmailFile(entry.getKey(), emails, files, cal.getTime(),
-						summary);
+						clientGrp.getSummary());
 			}
 
 		}
