@@ -2023,7 +2023,9 @@ public class SchedulerHelperService extends AbstractService {
 			sb.append("<br/>");
 			sb.append("<br/>");
 			
-			if (eodReportEmails != null && (alertTimeCal.equals(now) || isOnDemand)) {
+			if (eodReportEmails != null && (alertTimeCal.equals(now) || isOnDemand)
+				 &&	(eodReportClientGroupAlert == null
+					|| eodReportClientGroupAlert.getSettingValue().equalsIgnoreCase("false"))) {
 				if (CollectionUtils.isNotEmpty(files)) {
 					mailService.sendDaywiseReportEmailFile(proj.getName(), eodReportEmails.getSettingValue(), files,
 							cal.getTime(), sb.toString());
