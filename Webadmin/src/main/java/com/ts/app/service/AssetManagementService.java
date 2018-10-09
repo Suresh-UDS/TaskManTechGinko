@@ -570,11 +570,12 @@ public class AssetManagementService extends AbstractService {
 			TicketDTO ticketDto = new TicketDTO();
 			ticketDto.setAssetId(assetEntity.getId());
 			ticketDto.setActive(Ticket.ACTIVE_YES);
-			ticketDto.setTitle(assetDTO.getStatus());
+			ticketDto.setTitle("ASSET -" + assetDTO.getStatus() + " - "+ assetCode);
 			ticketDto.setSiteId(site.getId());
 			ticketDto.setUserId(user.getId());
+			ticketDto.setSeverity("High");
 			ticketDto.setCategory("MAINTENANCE");
-			ticketDto.setDescription(assetDTO.getStatus() + " by " + user.getFirstName());
+			ticketDto.setDescription("ASSET -" +assetDTO.getStatus() + " by " + user.getFirstName());
 			ticketMgmtservice.saveTicket(ticketDto);
 
 			List<Setting> settingList = settingRepository.findSettingByKeyAndSiteId(EMAIL_NOTIFICATION_ASSET, site.getId());
