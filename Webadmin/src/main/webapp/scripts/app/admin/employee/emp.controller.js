@@ -996,6 +996,10 @@ angular.module('timeSheetApp')
             		$scope.showNotifications('top','center','danger','Client and Site are required');
             		return;
             	}
+            	
+            	if($scope.SelectedDesig) {
+            		$scope.employee.designation = $scope.SelectedDesig.designation;
+            	}
 
 	        	EmployeeComponent.updateEmployee($scope.employee).then(function(){
                     $scope.saveLoad = false;

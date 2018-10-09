@@ -1682,13 +1682,13 @@ public class SchedulerHelperService extends AbstractService {
 		for (Project proj : projects) {
 			StringBuffer sb = new StringBuffer();
 			sb.append("<table border=\"1\" cellpadding=\"5\"  style=\"border-collapse:collapse;margin-bottom:20px;\">");
-			sb.append("<tr><th>Site</th>");
+			sb.append("<tr bgcolor=\"FFD966\"><th>Site</th>");
 			sb.append("<th colspan=\"5\">Job</th>");
 			sb.append("<th colspan=\"5\">Ticket</th>");
 			sb.append("<th colspan=\"5\">Quotation</th>");
 			sb.append("</tr>");
-			sb.append("<tr>");
-			sb.append("<td>" + proj.getName() + "</td>");
+			sb.append("<tr bgcolor=\"F8CBAD\">");
+			sb.append("<td><b>" + proj.getName() + "</b></td>");
 			sb.append("<td>Open</td>");
 			sb.append("<td>Assigned</td>");
 			sb.append("<td>Completed</td>");
@@ -1703,7 +1703,7 @@ public class SchedulerHelperService extends AbstractService {
 			sb.append("<td>Waiting for Approval</td>");
 			sb.append("<td>Approved</td>");
 			sb.append("<td>Rejected</td>");
-			sb.append("<td>Total</td>");
+			sb.append("<td><b>Total</b></td>");
 			sb.append("</tr>");
 			Set<Site> sites = proj.getSite();
 			Iterator<Site> siteItr = sites.iterator();
@@ -1714,7 +1714,7 @@ public class SchedulerHelperService extends AbstractService {
 			List<String> files = new ArrayList<String>();
 
 			while (siteItr.hasNext()) {
-				sb.append("<tr>");
+				sb.append("<tr bgcolor=\"FFD966\">");
 				Site site = siteItr.next();
 				List<Setting> settings = null;
 				List<Setting> emailAlertTimeSettings = null;
@@ -1773,7 +1773,7 @@ public class SchedulerHelperService extends AbstractService {
 
 
 				
-				sb.append("<td>" + site.getName() + "</td>");
+				sb.append("<td><b>" + site.getName() + "</b></td>");
 				ExportResult jobResult = new ExportResult();
 				if (env.getProperty("scheduler.dayWiseJobReport.enabled").equalsIgnoreCase("true")) {
 
@@ -1801,7 +1801,7 @@ public class SchedulerHelperService extends AbstractService {
 								sb.append("<td>" + summary.getAssignedJobCount() + "</td>");
 								sb.append("<td>" + summary.getCompletedJobCount() + "</td>");
 								sb.append("<td>" + summary.getOverdueJobCount() + "</td>");
-								sb.append("<td>" + summary.getTotalJobCount() + "</td>");
+								sb.append("<td><b>" + summary.getTotalJobCount() + "</b></td>");
 							}
 							log.debug("send report");
 							jobResult = exportUtil.writeJobExcelReportToFile(proj.getName(), jobResults, null, null,
@@ -1813,14 +1813,14 @@ public class SchedulerHelperService extends AbstractService {
 							sb.append("<td>0</td>");
 							sb.append("<td>0</td>");
 							sb.append("<td>0</td>");
-							sb.append("<td>0</td>");
+							sb.append("<td><b>0</b></td>");
 						}
 					}else {
 						sb.append("<td></td>");
 						sb.append("<td></td>");
 						sb.append("<td>0</td>");
 						sb.append("<td>0</td>");
-						sb.append("<td>0</td>");		
+						sb.append("<td><b>0</b></td>");		
 					}
 
 				}
@@ -1850,7 +1850,7 @@ public class SchedulerHelperService extends AbstractService {
 								sb.append("<td></td>");
 								sb.append("<td>" + summary.getTotalPendingTicketCount() + "</td>");
 								sb.append("<td>" + summary.getTotalClosedTicketCount() + "</td>");
-								sb.append("<td>" + summary.getTotalNewTicketCount() + "</td>");
+								sb.append("<td><b>" + summary.getTotalNewTicketCount() + "</b></td>");
 							}
 							log.debug("send report");
 							exportTicketResult = exportUtil.writeTicketExcelReportToFile(proj.getName(), ticketResults,
@@ -1861,7 +1861,7 @@ public class SchedulerHelperService extends AbstractService {
 							sb.append("<td></td>");
 							sb.append("<td>0</td>");
 							sb.append("<td>0</td>");
-							sb.append("<td>0</td>");		
+							sb.append("<td><b>0</b></td>");		
 						}
 
 					} else {
@@ -1870,7 +1870,7 @@ public class SchedulerHelperService extends AbstractService {
 						sb.append("<td></td>");
 						sb.append("<td>0</td>");
 						sb.append("<td>0</td>");
-						sb.append("<td>0</td>");						
+						sb.append("<td><b>0</b></td>");						
 					}
 				}
 
@@ -1933,7 +1933,7 @@ public class SchedulerHelperService extends AbstractService {
 								sb.append("<td>"+ quotationSummary.getTotalSubmitted() +"</td>");
 								sb.append("<td>" + quotationSummary.getTotalApproved() + "</td>");
 								sb.append("<td></td>");
-								sb.append("<td>" + quotationSummary.getTotalCount() + "</td>");
+								sb.append("<td><b>" + quotationSummary.getTotalCount() + "</b></td>");
 
 							}
 							exportQuotationResult = exportUtil.writeQuotationExcelReportToFile(quotationResults, null,
@@ -1944,7 +1944,7 @@ public class SchedulerHelperService extends AbstractService {
 							sb.append("<td></td>");
 							sb.append("<td>0</td>");
 							sb.append("<td>0</td>");
-							sb.append("<td>0</td>");		
+							sb.append("<td><b>0</b></td>");		
 						}
 
 					} else {
@@ -1953,13 +1953,14 @@ public class SchedulerHelperService extends AbstractService {
 						sb.append("<td>0</td>");
 						sb.append("<td>0</td>");
 						sb.append("<td></td>");
-						sb.append("<td>0</td>");
+						sb.append("<td><b>0</b></td>");
 					}
 				}
 				sb.append("</tr>");
+			
 				if (eodReportEmails != null && (alertTimeCal.equals(now) || isOnDemand)
 						&& (eodReportClientGroupAlert != null
-								&& eodReportClientGroupAlert.getSettingValue().equalsIgnoreCase("true"))) {
+						&& eodReportClientGroupAlert.getSettingValue().equalsIgnoreCase("true"))) {
 
 					if (proj.getClientGroup() != null) {
 
@@ -1997,7 +1998,6 @@ public class SchedulerHelperService extends AbstractService {
 						exportContents.add(exportCnt);
 
 						clientContentMap.put(proj.getName(), exportContents);
-						
 						if(StringUtils.isNotEmpty(clientGrp.getSummary())) {
 							clientGrp.setSummary(clientGrp.getSummary() + sb.toString());
 						}else {
@@ -2024,8 +2024,8 @@ public class SchedulerHelperService extends AbstractService {
 			sb.append("<br/>");
 			
 			if (eodReportEmails != null && (alertTimeCal.equals(now) || isOnDemand)
-				 &&	(eodReportClientGroupAlert == null
-					|| eodReportClientGroupAlert.getSettingValue().equalsIgnoreCase("true"))) {
+					&& (eodReportClientGroupAlert != null
+					&& eodReportClientGroupAlert.getSettingValue().equalsIgnoreCase("false"))) {
 				if (CollectionUtils.isNotEmpty(files)) {
 					mailService.sendDaywiseReportEmailFile(proj.getName(), eodReportEmails.getSettingValue(), files,
 							cal.getTime(), sb.toString());
@@ -2033,8 +2033,6 @@ public class SchedulerHelperService extends AbstractService {
 			}
 			
 			
-
-
 		}
 
 		if (MapUtils.isNotEmpty(clientGroupMap)) {
@@ -2053,13 +2051,17 @@ public class SchedulerHelperService extends AbstractService {
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
+		StringBuffer clientSummary = new StringBuffer(); 
 		// Map<String, Object> exportedContent = new HashMap<String, Object>();
 		for (Map.Entry<String, ClientgroupDTO> entry : newMap.entrySet()) {
 			// exportedContent.put("clientGroup", entry.getKey());
 			ClientgroupDTO clientGrp = entry.getValue();
+			clientSummary.append(clientGrp.getSummary());
+			clientSummary.append("</table>");
+			clientSummary.append("<br/>");
 			Map<String, List<ExportContent>> values = clientGrp.getContents();
 			//StringBuffer summary = new StringBuffer();
-			String emails = null;
+			StringBuffer emails = new StringBuffer();
 			FileOutputStream jobFos = null;
 			FileOutputStream ticketFos = null;
 			FileOutputStream quotationFos = null;
@@ -2083,7 +2085,7 @@ public class SchedulerHelperService extends AbstractService {
 						// exportedContent.put("files", contents.getFile());
 						// exportedContent.put("siteName", contents.getSiteName());
 
-						emails = content.getEmail();
+						emails.append(content.getEmail() + ",");
 						// append summary
 						 //summary.append("<br/><b>" + content.getSiteName() + "</b><br/>");
 						 //if(StringUtils.isNotEmpty(content.getSummary())) {
@@ -2154,8 +2156,8 @@ public class SchedulerHelperService extends AbstractService {
 			}
 
 			if (CollectionUtils.isNotEmpty(files)) {
-				mailService.sendDaywiseReportEmailFile(entry.getKey(), emails, files, cal.getTime(),
-						clientGrp.getSummary());
+				mailService.sendDaywiseReportEmailFile(entry.getKey(), emails.toString(), files, cal.getTime(),
+						clientSummary.toString());
 			}
 
 		}

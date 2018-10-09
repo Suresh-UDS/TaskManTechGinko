@@ -19,8 +19,11 @@ export class QuotationService {
                 console.log("Get Rate Card Types");
                 console.log(response);
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error In Getting Rate card Types");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     getRateTypes(): Observable<any>{
@@ -29,8 +32,11 @@ export class QuotationService {
                 console.log("Rate Card Type");
                 console.log(response);
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error in rate card types");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     getUOMTypes(): Observable<any>{
@@ -39,8 +45,11 @@ export class QuotationService {
                 console.log("Get UOM Type");
                 console.log(response);
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error in getting UOM type");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     createRateCard(rateCard):Observable<any>{
