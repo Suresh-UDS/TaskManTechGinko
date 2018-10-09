@@ -1365,7 +1365,7 @@ public class JobManagementService extends AbstractService {
 					jobclDto.setImageUrl_3(Imageurl_3);
 
 				}
-                log.debug("Job checklist remarks"+checklist.getImage_1());
+                //log.debug("Job checklist remarks"+checklist.getImage_1());
                 checklist.setJob(job);
 				checklistItems.add(checklist);
 			}
