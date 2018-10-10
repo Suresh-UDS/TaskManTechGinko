@@ -21,6 +21,7 @@ import {ScanQR} from "../jobs/scanQR";
 import {OfflineAsset} from "../offline-asset/offline-asset";
 import {ScanQRAsset} from "./scanQR-asset";
 import{AlertController} from "ionic-angular";
+import{JobService} from "../service/jobService";
 
 
 declare  var demo;
@@ -51,13 +52,17 @@ export class AssetList {
     asset:any;
     db:any;
     fileTransfer: FileTransferObject = this.transfer.create();
+    clientFilter:any;
+    siteFilter:any;
+    assetGroup:any;
+    assetType:any;
 
 
     constructor(@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,private transfer: FileTransfer,
                 public modalCtrl:ModalController,private diagnostic: Diagnostic,private sqlite: SQLite,
                 public componentService:componentService, public navCtrl: NavController, public navParams: NavParams,
                 public modalController:ModalController, public qrScanner:QRScanner, public assetService:AssetService,
-                public dbService:DBService,private network:Network,private alertCtrl:AlertController) {
+                public dbService:DBService,private network:Network,private alertCtrl:AlertController,private jobService:JobService) {
     this.assetList = [];
     this.test = [];
     this.searchCriteria = {};
@@ -295,6 +300,8 @@ export class AssetList {
               console.log("Asset search filters response");
               console.log(response);
               this.assetList=response.transactions;
+              this.page = response.currPage;
+              this.totalPages = response.totalPages;
           },err=>{
               this.componentService.closeAll();
               console.log("Error in filtering assets");
@@ -303,43 +310,82 @@ export class AssetList {
       )
   }
 
-  openFilters(){
-      this.open = false;
-      console.log("Opening filter modal");
-      let modal = this.modalController.create(AssetFilter,{},{cssClass : 'asset-filter',showBackdrop : true});
-      modal.onDidDismiss(data=>{
-          console.log("Modal dismissed");
-          this.open = true;
-          console.log(data);
-          var searchCriteria = {
-              siteId:data.siteId,
-              projectId:data.projectId,
-          };
-          this.assetService.searchAssets(searchCriteria).subscribe(
-              response=>{
-                  this.componentService.closeAll();
-                  console.log("Asset Search Filter Response");
-                  console.log(response);
-                  // if(response.errorStatus){
-                  //       this.componentService.closeAll();
-                  //     demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
-                  // }else{
-                  //     this.componentService.closeLoader();
-                  //     console.log("Asset search filters response");
-                  //     console.log(response);
-                  // }
-              },err=>{
-                  this.componentService.closeLoader();
-                  console.log("Error in filtering assets");
-                  console.log(err);
-              }
-          )
-          // this.getAsset(searchCriteria);
+  // openFilters(){
+  //     this.open = false;
+  //     console.log("Opening filter modal");
+  //     let modal = this.modalController.create(AssetFilter,{},{cssClass : 'asset-filter',showBackdrop : true});
+  //     modal.onDidDismiss(data=>{
+  //         console.log("Modal dismissed");
+  //         this.open = true;
+  //         console.log(data);
+  //         var searchCriteria = {
+  //             siteId:data.siteId,
+  //             projectId:data.projectId,
+  //         };
+  //         this.assetService.searchAssets(searchCriteria).subscribe(
+  //             response=>{
+  //                 this.componentService.closeAll();
+  //                 console.log("Asset Search Filter Response");
+  //                 console.log(response);
+  //                 // if(response.errorStatus){
+  //                 //       this.componentService.closeAll();
+  //                 //     demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+  //                 // }else{
+  //                 //     this.componentService.closeLoader();
+  //                 //     console.log("Asset search filters response");
+  //                 //     console.log(response);
+  //                 // }
+  //             },err=>{
+  //                 this.componentService.closeLoader();
+  //                 console.log("Error in filtering assets");
+  //                 console.log(err);
+  //             }
+  //         )
+  //         // this.getAsset(searchCriteria);
+  //
+  //     });
+  //     modal.present();
+  //
+  // }
 
-      });
-      modal.present();
+    openFilters() {
+        let modal = this.modalCtrl.create(AssetFilter,{},{cssClass:'asset-filter',showBackdrop:true});
+        modal.onDidDismiss(data=>{
+            console.log("Modal Dismiss Asset");
+            console.log(data);
+            this.clientFilter=data.projectId;
+            this.siteFilter=data.siteId;
+            this.assetGroup=data.assetGroup;
+            this.assetType=data.assetType;
+            this.applyFilter(data.projectId,data.siteId,data.assetGroup,data.assetType);
+        });
+        modal.present();
+    }
 
-  }
+
+    applyFilter(project,site,group,type){
+        this.componentService.showLoader("");
+        var searchCriteria={
+            siteId:site.id,
+            projectId:project.id,
+            assetGroupName:group,
+            assetTypeName:type,
+        };
+
+        this.assetService.searchAssets(searchCriteria).subscribe(
+            response=>{
+                this.componentService.closeAll();
+                console.log("Filtering Assets");
+                console.log(response);
+                this.assetList=response.transactions;
+            },error=>{
+                this.componentService.closeAll();
+                console.log("Error in filtering Assets");
+                console.log(error);
+            }
+        )
+
+    }
 
   scanQRCode(){
       window.document.querySelector('ion-app').classList.add('transparentBody')
