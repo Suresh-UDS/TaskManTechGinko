@@ -10,6 +10,9 @@ import {FeedbackZone} from "./feedbackZone";
 import {SelectFeedbackPage} from "./select-feedback";
 import {WizardFeedbackEntry} from "./wizard-feedback-entry";
 import {FeedbackGridPage} from "./feedback-grid";
+
+declare  var demo ;
+
 @Component({
     selector: 'page-init-feedback-zone',
     templateUrl: 'init-feedback-zone.html'
@@ -101,8 +104,13 @@ export class InitFeedbackZone {
         this.feedbackService.searchFeedbackMappings(searchCriteria).subscribe(
             response=>{
                 console.log(response.transactions);
-                this.feedbacks=response.transactions;
-                this.start(response.transactions[0],this.navParams.data.site,this.navParams.data.project,this.navParams.data.location);
+                if(response.transactions && response.transactions.length >0){
+                    this.feedbacks=response.transactions;
+                    this.start(response.transactions[0],this.navParams.data.site,this.navParams.data.project,this.navParams.data.location);
+                }else{
+                    demo.showSwal('warning-message-and-confirmation-ok','Failed to List','No feedback mappings found');
+                }
+
             }
         )
 
