@@ -300,6 +300,8 @@ export class AssetList {
               console.log("Asset search filters response");
               console.log(response);
               this.assetList=response.transactions;
+              this.page = response.currPage;
+              this.totalPages = response.totalPages;
           },err=>{
               this.componentService.closeAll();
               console.log("Error in filtering assets");
