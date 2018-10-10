@@ -700,6 +700,8 @@ angular.module('timeSheetApp')
                  $scope.downloader = true;
                  $scope.downloaded = false;
                  $rootScope.exportStatusObj.exportMsg = '';
+                 $scope.exportMsg ='';
+                 $scope.exportFile ='';
                   $scope.downloader=true;
                   $scope.searchCriteria.list = true;
                   $scope.searchCriteria.report = true;
