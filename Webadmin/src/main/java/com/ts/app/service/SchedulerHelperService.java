@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -2066,6 +2067,7 @@ public class SchedulerHelperService extends AbstractService {
 			FileOutputStream ticketFos = null;
 			FileOutputStream quotationFos = null;
 			List<String> files = new ArrayList<String>();
+			Set<String> set = new LinkedHashSet<>();
 			try {
 				XSSFWorkbook xssfJobWorkbook = new XSSFWorkbook();
 				String jobReportFile = entry.getKey() + "_" + "JOB_REPORT";
@@ -2084,8 +2086,9 @@ public class SchedulerHelperService extends AbstractService {
 						// exportedContent.put("summary", contents.getSummary());
 						// exportedContent.put("files", contents.getFile());
 						// exportedContent.put("siteName", contents.getSiteName());
-
-						emails.append(content.getEmail() + ",");
+//						emails.append(content.getEmail() + ",");
+						set.add(content.getEmail());
+						emails.append(set);
 						// append summary
 						 //summary.append("<br/><b>" + content.getSiteName() + "</b><br/>");
 						 //if(StringUtils.isNotEmpty(content.getSummary())) {
@@ -2191,5 +2194,6 @@ public class SchedulerHelperService extends AbstractService {
 			//System.out.println();
 		}
 	}
+	
 
 }
