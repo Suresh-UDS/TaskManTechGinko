@@ -851,6 +851,25 @@ ion-input
   top: 88px;
 }
 
+.indent-padding{
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.create-padding{
+  padding: 5px;
+}
+
+.q-mail-round{
+  width: 10% !important;
+  height: 70% !important;
+  border-radius: 50% !important;
+  /* border: 1px solid #ff9800; */
+}
+.asset-padding{
+  padding: 5px !important;
+}
+
 // App iOS Variables
 // --------------------------------------------------
 // iOS only Sass variables can go here
