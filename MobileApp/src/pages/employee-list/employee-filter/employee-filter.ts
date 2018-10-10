@@ -63,8 +63,7 @@ export class EmployeeFilter {
 
     dismiss()
     {
-      let data={'foo':'bar'};
-      this.viewCtrl.dismiss(data);
+      this.viewCtrl.dismiss();
     }
 
     selectSite(project)
