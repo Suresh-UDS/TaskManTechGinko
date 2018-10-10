@@ -24,6 +24,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.http.util.TextUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -1999,11 +2000,6 @@ public class SchedulerHelperService extends AbstractService {
 						exportContents.add(exportCnt);
 
 						clientContentMap.put(proj.getName(), exportContents);
-						if(StringUtils.isNotEmpty(clientGrp.getSummary())) {
-							clientGrp.setSummary(clientGrp.getSummary() + sb.toString());
-						}else {
-							clientGrp.setSummary(sb.toString());
-						}
 						
 						clientGrp.setContents(clientContentMap);
 
@@ -2023,6 +2019,18 @@ public class SchedulerHelperService extends AbstractService {
 			sb.append("</table>");
 			sb.append("<br/>");
 			sb.append("<br/>");
+			
+			if (proj.getClientGroup() != null && clientGroupMap.containsKey(proj.getClientGroup())) {
+				
+				ClientgroupDTO clientGrp = clientGroupMap.get(proj.getClientGroup());
+				if(clientGrp != null) {
+					if(StringUtils.isNotEmpty(clientGrp.getSummary())) {
+						clientGrp.setSummary(clientGrp.getSummary() + sb.toString());
+					}else {
+						clientGrp.setSummary(sb.toString());
+					}
+				}
+			}
 			
 			if (eodReportEmails != null && (alertTimeCal.equals(now) || isOnDemand)
 					&& (eodReportClientGroupAlert != null
@@ -2062,12 +2070,12 @@ public class SchedulerHelperService extends AbstractService {
 			clientSummary.append("<br/>");
 			Map<String, List<ExportContent>> values = clientGrp.getContents();
 			//StringBuffer summary = new StringBuffer();
-			StringBuffer emails = new StringBuffer();
+			//StringBuffer emails = new StringBuffer();
 			FileOutputStream jobFos = null;
 			FileOutputStream ticketFos = null;
 			FileOutputStream quotationFos = null;
 			List<String> files = new ArrayList<String>();
-			Set<String> set = new LinkedHashSet<>();
+			Set<String> emailSet = new LinkedHashSet<>();
 			try {
 				XSSFWorkbook xssfJobWorkbook = new XSSFWorkbook();
 				String jobReportFile = entry.getKey() + "_" + "JOB_REPORT";
@@ -2087,8 +2095,13 @@ public class SchedulerHelperService extends AbstractService {
 						// exportedContent.put("files", contents.getFile());
 						// exportedContent.put("siteName", contents.getSiteName());
 //						emails.append(content.getEmail() + ",");
-						set.add(content.getEmail());
-						emails.append(set);
+						String[] emailArr = StringUtils.isNotBlank(content.getEmail()) ? content.getEmail().split(",") : null;
+						if(emailArr != null) {
+							for(String email : emailArr) {
+								emailSet.add(email);
+							}
+						}
+						//emails.append(set);
 						// append summary
 						 //summary.append("<br/><b>" + content.getSiteName() + "</b><br/>");
 						 //if(StringUtils.isNotEmpty(content.getSummary())) {
@@ -2159,8 +2172,14 @@ public class SchedulerHelperService extends AbstractService {
 			}
 
 			if (CollectionUtils.isNotEmpty(files)) {
-				mailService.sendDaywiseReportEmailFile(entry.getKey(), emails.toString(), files, cal.getTime(),
-						clientSummary.toString());
+				if(CollectionUtils.isNotEmpty(emailSet)) {
+					String[] emailArr = new String[emailSet.size()];
+					emailArr = emailSet.toArray(emailArr);
+					String emails = String.join(",", emailArr);
+					mailService.sendDaywiseReportEmailFile(entry.getKey(), emails, files, cal.getTime(),
+							clientSummary.toString());
+				}
+
 			}
 
 		}
