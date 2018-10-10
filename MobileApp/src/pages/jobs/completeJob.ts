@@ -194,7 +194,7 @@ export class CompleteJobPage {
                     demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
                 }else{
                     console.log("Save Job response");
-                    this.component.closeLoader();
+                    // this.component.closeLoader();
                     this.component.showToastMessage('Job Saved Successfully','bottom');
                     console.log(response);
                     console.log(job.checkInOutId);
@@ -259,14 +259,14 @@ export class CompleteJobPage {
 
                                     this.fileTransfer.upload(this.takenImages[i], this.config.Url+'api/employee/image/upload', options)
                                         .then((data) => {
+                                            this.component.closeAll();
                                             console.log(data);
                                             console.log("image upload");
-                                            this.component.closeLoader();
                                             this.navCtrl.pop();
                                         }, (err) => {
+                                            this.component.closeAll();
                                             console.log(err);
                                             console.log("image upload fail");
-                                            this.component.closeLoader();
                                         })
 
                                 }

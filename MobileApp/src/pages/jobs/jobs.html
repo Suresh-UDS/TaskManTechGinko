@@ -48,7 +48,7 @@
             </div>
             <div  class="white-bg" *ngFor="let job of todaysJobs" >
 
-                <div class="padding-left16 padding-top5">
+                <div class="padding-left16 padding-top5" *ngIf="job.parentJobId <=0">
                     <ion-row class="margin0">
 
                         <ion-col col-2 class="ver-center">
@@ -140,7 +140,7 @@
             </ion-refresher>
 
             <div  class="white-bg" *ngFor="let job of allJobs" >
-                <div class="padding-left16 padding-top5" *ngIf="job.schedule == 'ONCE' || job.schedule==null ">
+                <div class="padding-left16 padding-top5" *ngIf="job.schedule == 'ONCE' || job.schedule==null ||job.parentJobId <=0">
                 <ion-row class="margin0">
 
                     <ion-col col-2 class="ver-center">

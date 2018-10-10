@@ -293,8 +293,8 @@ export class AssetList {
           response=>{
               this.componentService.closeAll();
               console.log("Asset search filters response");
-              console.log(response)
-              this.assetList=response.transactions
+              console.log(response);
+              this.assetList=response.transactions;
           },err=>{
               this.componentService.closeAll();
               console.log("Error in filtering assets");
@@ -317,14 +317,17 @@ export class AssetList {
           };
           this.assetService.searchAssets(searchCriteria).subscribe(
               response=>{
-                  if(response.errorStatus){
-                        this.componentService.closeAll();
-                      demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
-                  }else{
-                      this.componentService.closeLoader()
-                      console.log("Asset search filters response");
-                      console.log(response);
-                  }
+                  this.componentService.closeAll();
+                  console.log("Asset Search Filter Response");
+                  console.log(response);
+                  // if(response.errorStatus){
+                  //       this.componentService.closeAll();
+                  //     demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                  // }else{
+                  //     this.componentService.closeLoader();
+                  //     console.log("Asset search filters response");
+                  //     console.log(response);
+                  // }
               },err=>{
                   this.componentService.closeLoader();
                   console.log("Error in filtering assets");

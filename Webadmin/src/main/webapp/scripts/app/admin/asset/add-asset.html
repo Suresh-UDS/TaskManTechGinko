@@ -67,9 +67,9 @@
                                                     </ul>
                                                 </div>
                                                 <div class="tab-content">
-                                                    <div class="tab-pane fade in active  general" id="general">
+                                                    <div class="tab-pane fade general active in " id="general">
                                                         <form name="form" role="form" novalidate
-                                                          class="form-horizontal" >
+                                                          class="form-horizontal" ng-submit="conform('save')">
                                                         <div class="row" >
 
                                                             <div class="col-md-6">
@@ -90,7 +90,7 @@
                                                                                        type='text' value=""
                                                                                        ng-minlength='5'
                                                                                        ng-maxlength='250'
-                                                                                       ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                                                       ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus="true"
                                                                                        required />
 
 
@@ -125,7 +125,7 @@
                                                                                                 <label class="control-label">Type <span class="red-star">*</span></label>
                                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
         	                                                                                    <select class="form-control" ng-model="selectedAssetType" ng-options="assetype as assetype.name | uppercase for assetype in assetTypes" name="assetTypeName"
-                                                                                                required>
+                                                                                                required >
         	                                                                                        <option value="">Select Asset Type ..</option>
         	                                                                                    </select>
 
@@ -134,7 +134,7 @@
                                                                                                     <p class="help-block" style="color:maroon"
                                                                                                          ng-show="form.assetTypeName.$error.required">
                                                                                                                 Asset Type is required.
-                                                                                                        </p>
+                                                                                                    </p>
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
@@ -162,7 +162,7 @@
                                                                                         <div class="col-md-10 pad-r-0px">
                                                                                              <label class="control-label">Group</label>
                                                                                              <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                            <select class="form-control" ng-model="selectedAssetGroup" ng-options="assetgroup as assetgroup.assetgroup | uppercase for assetgroup in assetGroups">
+                                                                                            <select class="form-control" ng-model="selectedAssetGroup" ng-options="assetgroup as assetgroup.assetgroup | uppercase for assetgroup in assetGroups" >
                                                                                                 <option value="">Select Asset Group ..</option>
                                                                                             </select>
 
@@ -282,7 +282,7 @@
                                                                                     <label class="control-label">Floor </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                     <select class="form-control " ng-model="selectedFloor" ng-options="(floor | uppercase)  for floor in floors track by floor" name="AssetFloor" ng-change="loadZones()" >
-                                                                                        <option value="">Please select Floor ...</option>
+                                                                                        <option value="">Select Floor ...</option>
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
@@ -619,7 +619,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">From Date</label>
                                                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                    <input type="text" class="form-control datepicker"  id="warFromDate" ng-model ="warFromDate1" placeholder="{{warFromDate1 | date:'dd/MM/yyyy'}}" name="warFromDate"/>
+                                                                                    <input type="text" class="form-control datepicker"  id="warFromDate" ng-model ="warFromDate1" placeholder="DD/MM/YYYY" name="warFromDate" autocomplete="off"/>
                                                                                     <!-- <div ng-show="form.$submitted || form.warFromDate.$touched"> -->
                                                                                         <!-- <div
                                                                                             ng-show="form.warFromDate.$dirty || form.warFromDate.$invalid">
@@ -644,7 +644,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">To Date</label>
                                                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                    <input type="text" class="form-control datepicker"  id="warToDate" name="warToDate" ng-model ="warToDate1"  placeholder="{{warToDate1 | date:'dd/MM/yyyy'}}" autocomplete="off"/>
+                                                                                    <input type="text" class="form-control datepicker"  id="warToDate" name="warToDate" ng-model ="warToDate1"  placeholder="DD/MM/YYYY" autocomplete="off"/>
                                                                                     <!-- <div ng-show="form.$submitted || form.warToDate.$touched"> -->
                                                                                          <!-- <div
                                                                                             ng-show="form.warToDate.$dirty || form.warToDate.$invalid">
@@ -665,6 +665,28 @@
                                                                                 </div>
 
                                                                             </div>
+                                                                        </div>
+                                                                        <div class="row" >
+
+                                                                            <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
+                                                                                <!--<button class="btn btn-success" type="submit" ng-hide="assetVal.id"-->
+                                                                                <!--id="form-button-save" ng-disabled="form.$invalid || btnDisabled || warFromMsg || warToMsg" ng-click="saveAsset()" >-->
+                                                                                <!--<span class="btn-label">-->
+                                                                                <!--<i class="material-icons">check</i>-->
+                                                                                <!--</span> Save &amp; Continue-->
+                                                                                <!--</button>-->
+                                                                                <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" ng-if="!assetVal.id"
+                                                                                        type="submit"  id="form-button-save" ng-disabled="form.$invalid || btnDisabled" >
+                                                                                    <span class="btn-label"><i class="material-icons">check</i></span>  Save &amp; Continue
+                                                                                    <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                                                                                </button>
+                                                                                <!--<button class="btn btn-info" type="submit"-->
+                                                                                <!--id="save-and-go-back-button" ng-disabled="form.$invalid">-->
+                                                                                <!--<i class="material-icons">rotate_left</i> Save and go back to list-->
+                                                                                <!--</button>-->
+
+                                                                            </div>
+
                                                                         </div>
 
 
@@ -1132,7 +1154,7 @@
                                                                                                 </td> -->
                                                                                                 <td class="text-right">
                                                                                                     <a  ng-click="getParameterConfigDetails(assetParam.id ,'edit')"  has-permission="Config:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                                                                                   <a  has-permission="Config:Delete" ui-sref="" class="btn btn-simple btn-danger" ng-click="deleteConfigConfirm(assetParam.id)" onClick="$('#deleteModalConfig').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
+                                                                                                   <a  has-permission="Config:Delete" href="javascript:void(0);" class="btn btn-simple btn-danger" ng-click="deleteConfigConfirm(assetParam.id)" onClick="$('#deleteModalConfig').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
                                                                                                 </td>
 
                                                                                             </tr>
@@ -2094,7 +2116,7 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="wizard-footer"  ng-show="assetVal.id">
+                                                <div class="wizard-footer"  ng-if="assetVal.id">
                                                     <div class="pull-right">
                                                         <input type='button' class='btn btn-next btn-fill btn-default btn-wd' name='next' value='Next'  />
                                                         <!-- <input type='button' class='btn btn-finish btn-fill btn-success btn-wd' name='finish' value='Finish' /> -->
@@ -2113,24 +2135,14 @@
                             <div class="row" >
 
                                 <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
-                                    <!--<button class="btn btn-success" type="submit" ng-hide="assetVal.id"-->
-                                            <!--id="form-button-save" ng-disabled="form.$invalid || btnDisabled || warFromMsg || warToMsg" ng-click="saveAsset()" >-->
-                                                <!--<span class="btn-label">-->
-                                        				<!--<i class="material-icons">check</i>-->
-                                    				<!--</span> Save &amp; Continue-->
-                                    <!--</button>-->
-                                    <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" ng-hide="assetVal.id"
-                                            type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisabled" ng-click="conform('save')">
-                                        <span class="btn-label"><i class="material-icons">check</i></span>  Save &amp; Continue
-                                        <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
-                                    </button>
-                                    <!--<button class="btn btn-info" type="submit"-->
-                                    <!--id="save-and-go-back-button" ng-disabled="form.$invalid">-->
-                                    <!--<i class="material-icons">rotate_left</i> Save and go back to list-->
-                                    <!--</button>-->
-                                    <button class="btn btn-danger" type="button"
+
+                                    <button class="btn btn-danger" type="button" ng-if="!assetVal.id"
                                             ng-disabled="btnDisabled" ng-click="conform('cancel');" id="cancel-button">
                                         <i class="material-icons">close</i> Cancel
+                                    </button>
+                                    <button class="btn btn-default" type="button" ng-if="assetVal.id"
+                                            ng-disabled="btnDisabled" ng-click="conform('back')" id="cancel-button">
+                                        Back
                                     </button>
                                 </div>
 
