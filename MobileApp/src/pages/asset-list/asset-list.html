@@ -31,17 +31,33 @@
         <button ion-fab color="primary"> <i class="fa fa-qrcode clr-white fnt-24"></i></button>
     </ion-fab>
 
+    <div class="margin-top5">
+        <span class="tag label label-info" style="margin-right: 5px"  *ngIf="clientFilter">
+            Client: {{clientFilter.name}}
+        </span>
+        <span class="tag label label-info"   *ngIf="siteFilter">
+           Site: {{siteFilter.name}}
+        </span>
+        <span class="tag label label-info"   *ngIf="assetGroup" style="margin-right: 5px">
+           Group: {{assetGroup}}
+        </span>
+        <span class="tag label label-info"   *ngIf="assetType">
+           Type: {{assetType}}
+        </span>
+    </div>
+
   <ion-list>
 
 
 
-      <ion-refresher (ionRefresh)="doRefresh($event)">
-          <ion-refresher-content></ion-refresher-content>
-      </ion-refresher>
-      <div *ngIf="assetList?.length<0">
+      <!--<ion-refresher (ionRefresh)="doRefresh($event)">-->
+          <!--<ion-refresher-content></ion-refresher-content>-->
+      <!--</ion-refresher>-->
+      <div *ngIf="!assetList || assetList?.length<0">
           <ion-card>
               <ion-card-content>
-                  No Asset
+                  <img src="assets/imgs/warning.svg">
+                  <span><p text-center>No Data Found</p></span>
               </ion-card-content>
           </ion-card>
       </div>

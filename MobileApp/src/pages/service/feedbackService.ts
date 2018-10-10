@@ -112,12 +112,13 @@ export class FeedbackService {
             response=>{
                 console.log("Feedback saved");
                 console.log(response);
-                return response.json();
-            }).catch(error=>{
-                console.log("Error in Feedback");
-                console.log(error);
-                return Observable.throw(error.json());
-        })
+                return response;
+            }
+        ).catch(error=> {
+            console.log("Error In Feedback Reports");
+            console.log(error);
+            return Observable.throw(error.json());
+        });
     }
 
     generateFeedback(searchCriteria):Observable<any>{

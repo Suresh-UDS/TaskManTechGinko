@@ -632,6 +632,8 @@ angular.module('timeSheetApp')
         		$scope.searchCriteria.exportType = type;
         		$scope.typeMsg = type;
                 $rootScope.exportStatusObj.exportMsg = '';
+                $scope.exportMsg ='';
+                $scope.exportFile ='';
                 $scope.downloader=true;
                 $scope.downloaded = false;
                 $scope.searchCriteria.report = true;

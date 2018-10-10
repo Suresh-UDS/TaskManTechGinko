@@ -996,7 +996,7 @@ angular.module('timeSheetApp')
             		$scope.showNotifications('top','center','danger','Client and Site are required');
             		return;
             	}
-            	
+
             	if($scope.SelectedDesig) {
             		$scope.employee.designation = $scope.SelectedDesig.designation;
             	}
@@ -1748,6 +1748,8 @@ angular.module('timeSheetApp')
         $scope.exportAllData = function(){
 
                  $rootScope.exportStatusObj.exportMsg = '';
+                  $scope.exportMsg ='';
+                  $scope.exportFile ='';
                   $scope.downloaded = false;
                   $scope.downloader=true;
                   $scope.searchCriteria.list = true;

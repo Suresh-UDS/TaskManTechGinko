@@ -836,6 +836,10 @@ export class AssetView {
                 console.log("Status History");
                 console.log(response);
                 this.status=response.transactions;
+            },err=>{
+                this.spinner=false;
+                console.log("Error in Status History");
+                console.log(err);
             }
         )
     }
@@ -851,6 +855,10 @@ export class AssetView {
                 console.log("Site Transfer History");
                 console.log(response);
                 this.site=response.transactions;
+            },err=>{
+                this.spinner=false;
+                console.log("Error in Site Transfer History");
+                console.log(err);
             }
         )
     }
