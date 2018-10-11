@@ -74,7 +74,7 @@
                                                 <label class="control-label">Region</label>
                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                 <select name='region'
-                                                        class="form-control " ng-model="selectedRegion"  ng-options="region.name for region in regionList" tabindex="7"    >
+                                                        class="form-control " ng-model="selectedRegion" ng-change="loadBranch(selectedProject.id)"  ng-options="region.name for region in regionList" tabindex="7"    >
                                                     <option value="">Select Region...</option>
                                                 </select>
                                                 <!--<div ng-show="form.$submitted || form.region.$touched">-->

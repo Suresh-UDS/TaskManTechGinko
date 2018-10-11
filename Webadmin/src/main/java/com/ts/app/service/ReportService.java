@@ -394,6 +394,68 @@ public class ReportService extends AbstractService {
         return reportResult;
     }
 
+
+    public ReportResult getAttendanceStatsByRegion(long userId, Long projectId,String region, Date selectedDate, Date endDate) {
+        log.info("Attendance report params : projectId - "+ projectId + ", selectedDate - " + selectedDate + ", endDate -" + endDate );
+        Calendar startCal = DateUtils.toCalendar(selectedDate);
+        startCal.set(Calendar.HOUR_OF_DAY, 0);
+        startCal.set(Calendar.MINUTE, 0);
+        Calendar endCal = DateUtils.toCalendar(endDate);
+        endCal.set(Calendar.HOUR_OF_DAY, 23);
+        endCal.set(Calendar.MINUTE, 59);
+
+        java.sql.Date sqlDate = new java.sql.Date(startCal.getTimeInMillis());
+        java.sql.Date sqlEndDate = new java.sql.Date(endCal.getTimeInMillis());
+        long totalEmployeeCount = 0;
+        long presentEmployeeCount = 0;
+        long absentEmployeeCount = 0;
+        if(projectId > 0) {
+            List<Long> siteIds = siteRepository.findByRegion(projectId,region);
+            if(siteIds.size()>0){
+                totalEmployeeCount = employeeRepository.findTotalCountBySites(siteIds);
+                presentEmployeeCount = attendanceRepository.findCountBySiteAndCheckInTime(projectId, sqlDate, sqlEndDate);
+            }
+        }
+        absentEmployeeCount = totalEmployeeCount - presentEmployeeCount;
+        ReportResult reportResult = new ReportResult();
+        reportResult.setProjectId(projectId);
+        reportResult.setTotalEmployeeCount(totalEmployeeCount);
+        reportResult.setPresentEmployeeCount(presentEmployeeCount);
+        reportResult.setAbsentEmployeeCount(absentEmployeeCount);
+        return reportResult;
+    }
+
+    public ReportResult getAttendanceStatsByBranch(long userId, Long projectId,String region,String branch, Date selectedDate, Date endDate) {
+        log.info("Attendance report params : projectId - "+ projectId + ", selectedDate - " + selectedDate + ", endDate -" + endDate );
+        Calendar startCal = DateUtils.toCalendar(selectedDate);
+        startCal.set(Calendar.HOUR_OF_DAY, 0);
+        startCal.set(Calendar.MINUTE, 0);
+        Calendar endCal = DateUtils.toCalendar(endDate);
+        endCal.set(Calendar.HOUR_OF_DAY, 23);
+        endCal.set(Calendar.MINUTE, 59);
+
+        java.sql.Date sqlDate = new java.sql.Date(startCal.getTimeInMillis());
+        java.sql.Date sqlEndDate = new java.sql.Date(endCal.getTimeInMillis());
+        long totalEmployeeCount = 0;
+        long presentEmployeeCount = 0;
+        long absentEmployeeCount = 0;
+        if(projectId > 0) {
+            List<Long> siteIds = siteRepository.findByRegionAndBranch(projectId,region,branch);
+            if(siteIds.size()>0){
+                totalEmployeeCount = employeeRepository.findTotalCountBySites(siteIds);
+                presentEmployeeCount = attendanceRepository.findCountBySiteAndCheckInTime(projectId, sqlDate, sqlEndDate);
+            }
+        }
+        absentEmployeeCount = totalEmployeeCount - presentEmployeeCount;
+        ReportResult reportResult = new ReportResult();
+        reportResult.setProjectId(projectId);
+        reportResult.setTotalEmployeeCount(totalEmployeeCount);
+        reportResult.setPresentEmployeeCount(presentEmployeeCount);
+        reportResult.setAbsentEmployeeCount(absentEmployeeCount);
+        return reportResult;
+    }
+
+
     public ReportResult getAttendanceStatsDateRange(Long siteId) {
         log.info("Attendance report params : siteId - "+ siteId);
         Calendar toCal = Calendar.getInstance();
@@ -545,6 +607,124 @@ public class ReportService extends AbstractService {
 
         return reportResult;
     }
+
+    public ReportResult getTicketStatsDateRangeByRegion(long userId,long projectId, String region, Date selectedDate, Date endDate) {
+        log.info("Ticket report params : projectId - " + projectId + ", selectedDate - " + selectedDate + ", endDate -" + endDate);
+        List<Long> siteIds = siteRepository.findByRegion(projectId, region);
+
+        return getTicketStatsDateRangeByBranchorRegion(siteIds,selectedDate,endDate);
+    }
+
+    public ReportResult getTicketStatsDateRangeByBranch(long userId, long projectId, String region, String branch, Date selectedDate, Date endDate) {
+        List<Long> siteIds = siteRepository.findByRegionAndBranch(projectId,region,branch);
+        return getTicketStatsDateRangeByBranchorRegion(siteIds,selectedDate,endDate);
+    }
+
+    public ReportResult getTicketStatsDateRangeByBranchorRegion(List<Long> siteIds,Date selectedDate, Date endDate){
+
+        Calendar startCal = DateUtils.toCalendar(selectedDate);
+        startCal.set(Calendar.HOUR_OF_DAY, 0);
+        startCal.set(Calendar.MINUTE, 0);
+        //startCal.setTimeZone(TimeZone.getDefault());
+        Calendar endCal = DateUtils.toCalendar(endDate);
+        endCal.set(Calendar.HOUR_OF_DAY, 23);
+        endCal.set(Calendar.MINUTE, 59);
+        //endCal.setTimeZone(TimeZone.getDefault());
+        //java.sql.Date sqlDate = new java.sql.Date(startCal.getTimeInMillis());
+        Timestamp sqlDate = DateUtil.convertToTimestamp(startCal.getTime());
+        ZoneId  zone = ZoneId.of("Asia/Kolkata");
+        ZonedDateTime startZDate = sqlDate.toLocalDateTime().atZone(zone).withHour(0).withMinute(0);
+
+        //java.sql.Date sqlEndDate = new java.sql.Date(endCal.getTimeInMillis());
+        Timestamp sqlEndDate = DateUtil.convertToTimestamp(endCal.getTime());
+        ZonedDateTime endZDate = sqlEndDate.toLocalDateTime().atZone(zone).withHour(23).withMinute(59);
+        long totalNewTicketCount = 0;
+        long totalClosedTicketCount = 0;
+        long totalPendingTicketCount = 0;
+        long totalPendingDueToClientTicketCount = 0;
+        long totalPendingDueToCompanyTicketCount = 0;
+        log.info("Ticket report params : siteId - "+ siteIds + ", startZDate - " + startZDate + ", endZDate -" + endZDate );
+
+        totalNewTicketCount = ticketRepository.findCountBySiteIdAndDateRange(siteIds, startZDate, endZDate);
+
+        totalPendingTicketCount = ticketRepository.findOpenCountBySiteIdAndDateRange(siteIds, startZDate, endZDate);
+
+        totalClosedTicketCount = ticketRepository.findCountBySiteIdStatusAndDateRange(siteIds, "Closed", startZDate, endZDate);
+
+        totalPendingDueToClientTicketCount = ticketRepository.findOpenCountBySiteIdAndDateRangeDueToClient(siteIds, startZDate, endZDate);
+
+        totalPendingDueToCompanyTicketCount = ticketRepository.findOpenCountBySiteIdAndDateRangeDueToCompany(siteIds, startZDate, endZDate);
+
+        //open ticket counts for different day range
+        Map<String, Long> openTicketCounts = new HashMap<String, Long>();
+        int min = 0;
+        int max = 3;
+        String range = min +"-"+max;
+
+
+        openTicketCounts.put(range, getPendingTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
+        min = 4;
+        max = 5;
+        range = min +"-"+max;
+        openTicketCounts.put(range, getPendingTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
+        min = 6;
+        max = 7;
+        range = min +"-"+max;
+        openTicketCounts.put(range, getPendingTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
+        min = 8;
+        max = 10;
+        range = min +"-"+max;
+        openTicketCounts.put(range, getPendingTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
+        min = 11;
+        max = 365;
+        range = min +"-"+max;
+        openTicketCounts.put(range, getPendingTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
+
+        //closed ticket counts for different day range
+        Map<String, Long> closedTicketCounts = new HashMap<String, Long>();
+
+        min = 0;
+        max = 3;
+        range = min +"-"+max;
+        closedTicketCounts.put(range, getClosedTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
+        min = 4;
+        max = 5;
+        range = min +"-"+max;
+        closedTicketCounts.put(range, getClosedTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
+        min = 6;
+        max = 7;
+        range = min +"-"+max;
+        closedTicketCounts.put(range, getClosedTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
+        min = 8;
+        max = 10;
+        range = min +"-"+max;
+        closedTicketCounts.put(range, getClosedTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
+        min = 11;
+        max = 365;
+        range = "> " + min;
+        closedTicketCounts.put(range, getClosedTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
+
+
+        ReportResult reportResult = new ReportResult();
+        //reportResult.setSiteId(siteId);
+        reportResult.setTotalNewTicketCount(totalNewTicketCount);
+        reportResult.setTotalPendingTicketCount(totalPendingTicketCount);
+        reportResult.setTotalClosedTicketCount(totalClosedTicketCount);
+        reportResult.setTotalPendingDueToClientTicketCount(totalPendingDueToClientTicketCount);
+        reportResult.setTotalPendingDueToCompanyTicketCount(totalPendingDueToCompanyTicketCount);
+
+        reportResult.setOpenTicketCounts(openTicketCounts);
+
+        reportResult.setClosedTicketCounts(closedTicketCounts);
+
+        //site name and project name
+        long siteId = siteIds.get(0);
+        Site site = siteRepository.findOne(siteId);
+        reportResult.setProjectName(site.getProject().getName());
+
+        return reportResult;
+    }
+
 
     private Long getPendingTicketCountByDayRange(List<Long> siteIds, int min, int max, Date sqlDate, Date sqlEndDate) {
         Query query = manager.createNativeQuery("select sum(cnt) from (select timediff, count(id) as cnt from (SELECT datediff(now(),t.created_date) as timediff, t.id as id from ticket t where t.site_id IN (:siteIds) and t.status <> 'Closed'  and t.created_date between :startDate and :endDate) as timediffresult group by timediff) as result where timediff >= :min and timediff <= :max ");

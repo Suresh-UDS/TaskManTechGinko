@@ -309,8 +309,8 @@ angular.module('timeSheetApp')
 	        		$scope.site.projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
 	        		console.log('shifts - ' + JSON.stringify($scope.shiftItems));
 	        		$scope.site.shifts = $scope.shiftItems;
-	        		$scope.site.region = $scope.selectedRegion!=null?$scope.selectedRegion:" ";
-	        		$scope.site.branch = $scope.selectedBranch!=null?$scope.selectedBranch:" "
+	        		$scope.site.region = $scope.selectedRegion!=null?$scope.selectedRegion.name:" ";
+	        		$scope.site.branch = $scope.selectedBranch!=null?$scope.selectedBranch.name:" "
                     console.log($scope.site);
                     SiteComponent.createSite($scope.site).then(function() {
 	                    $scope.success = 'OK';
@@ -556,8 +556,8 @@ angular.module('timeSheetApp')
                     console.log($scope.site);
                     $scope.site.projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
                     $scope.site.shifts = $scope.shiftItems;
-                    $scope.site.region = $scope.selectedRegion!=null?$scope.selectedRegion:" ";
-                    $scope.site.branch = $scope.selectedBranch!=null?$scope.selectedBranch:" "
+                    $scope.site.region = $scope.selectedRegion!=null?$scope.selectedRegion.name:" ";
+                    $scope.site.branch = $scope.selectedBranch!=null?$scope.selectedBranch.name:" "
                     SiteComponent.updateSite($scope.site).then(function() {
                         $scope.success = 'OK';
                         $scope.showNotifications('top','center','success','Site has been updated successfully!!');
