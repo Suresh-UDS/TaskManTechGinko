@@ -2064,7 +2064,6 @@ public class SchedulerHelperService extends AbstractService {
 		for (Map.Entry<String, ClientgroupDTO> entry : newMap.entrySet()) {
 			StringBuffer clientSummary = new StringBuffer(); 
 			// exportedContent.put("clientGroup", entry.getKey());
-			StringBuffer clientSummary = new StringBuffer(); 
 			ClientgroupDTO clientGrp = entry.getValue();
 			clientSummary.append(clientGrp.getSummary());
 			//clientSummary.append("</table>");
