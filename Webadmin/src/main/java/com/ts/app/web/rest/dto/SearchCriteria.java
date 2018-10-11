@@ -184,6 +184,8 @@ public class SearchCriteria extends Paginator {
 	
 	private String action;
 	
+	private long jobId;
+	
 	public String getModule() {
 		return module;
 	}
@@ -960,6 +962,14 @@ public class SearchCriteria extends Paginator {
 
 	public void setRoleLevel(int roleLevel) {
 		this.roleLevel = roleLevel;
+	}
+
+	public long getJobId() {
+		return jobId;
+	}
+
+	public void setJobId(long jobId) {
+		this.jobId = jobId;
 	}
 
 

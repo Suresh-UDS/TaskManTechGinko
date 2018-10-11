@@ -1170,7 +1170,7 @@ angular.module('timeSheetApp')
         };
          $scope.clearField = false;
         $scope.clearFilter = function() {
-            $rootScope.exportStatusObj.exportMsg = '';
+            $rootScope.exportStatusObj = {};
             $scope.downloader=false;
             $scope.downloaded = true;
             $scope.siteFilterDisable = true;
@@ -1306,9 +1306,7 @@ angular.module('timeSheetApp')
 
         $scope.exportAllData = function(type){
                 $scope.searchCriteria.exportType = type;
-                $rootScope.exportStatusObj.exportMsg = '';
-                $scope.exportMsg ='';
-                $scope.exportFile ='';
+                $rootScope.exportStatusObj = {};
                 $scope.typeMsg = type;
                 $scope.downloader=true;
                 $scope.downloaded = false;
@@ -1396,6 +1394,7 @@ angular.module('timeSheetApp')
 
         $scope.clsDownload = function(){
           $scope.downloaded = true;
+          $rootScope.exportStatusObj = {};
         }
 
         $scope.cancel = function () {
