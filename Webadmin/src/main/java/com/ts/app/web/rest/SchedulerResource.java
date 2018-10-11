@@ -94,8 +94,11 @@ public class SchedulerResource {
 
 	
 	@RequestMapping(value = "/scheduler/job/daily", method = RequestMethod.GET)
-	public ResponseEntity<?> runDailyJobSchedule() {
-		schedulerService.createDailyTask();
+	public ResponseEntity<?> runDailyJobSchedule(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date jobDate) {
+		if(jobDate == null) {
+			jobDate = new Date();
+		}
+		schedulerService.createDailyTask(jobDate);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
