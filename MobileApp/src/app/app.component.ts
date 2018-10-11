@@ -143,7 +143,7 @@ export class MyApp {
       { title: 'Assets', component: AssetList,active:false,icon:'build',permission:'AssetsList'},
       { title: 'Tickets', component: Ticket,active:false,icon:'description',permission:'TicketsList'},
         { title: 'Attendance', component: SiteListPage,active:false,icon:'content_paste',permission:'AttendanceList'},
-        { title: 'Rate Card', component: RateCardPage,active:false,icon:'description',permission:'RateCardList'},
+        // { title: 'Rate Card', component: RateCardPage,active:false,icon:'description',permission:'RateCardList'},
       { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt',permission:'QuotationList'},
        { title: 'Feedback', component: InitFeedbackPage,active:false,icon:'feedback',permission:'FeedbackList'},
        { title: 'ChangePassword', component:ChangePassword,active:false,icon:'feedback',permission:'FeedbackList'},

@@ -848,11 +848,11 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'statusHistory'" style="margin-top:18px">
-        <div  *ngIf="(!assetDetails.statusHistory || assetDetails.statusHistory.length == 0) && spinner" text-center class="margin-top25">
+        <div  *ngIf="(!status|| status.length == 0) && spinner" text-center class="margin-top25">
             <ion-spinner name="circles"></ion-spinner>
         </div>
 
-        <div *ngIf="(!assetDetails.statusHistory && assetDetails.statusHistory< 0) && !spinner"  text-center>
+        <div *ngIf="(!status || status< 0) && !spinner"  text-center>
             <ion-card text-center>
                 <ion-card-content>
                     No Data found
@@ -888,11 +888,11 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'siteHistory'" style="margin-top:18px">
-        <div  *ngIf="(!assetDetails.history || assetDetails.history.length == 0) && spinner" text-center class="margin-top25">
+        <div  *ngIf="(!assetDetails.site || assetDetails.site.length == 0) && spinner" text-center class="margin-top25">
             <ion-spinner name="circles"></ion-spinner>
         </div>
 
-        <div *ngIf="(!assetDetails.history && assetDetails.history< 0) && !spinner"  text-center>
+        <div *ngIf="(!site || site.length< 0) && !spinner"  text-center>
             <ion-card text-center>
                 <ion-card-content>
                     No Data found
