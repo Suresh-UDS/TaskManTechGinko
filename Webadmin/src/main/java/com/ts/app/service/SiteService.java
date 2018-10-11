@@ -10,6 +10,9 @@ import java.util.TreeSet;
 
 import javax.inject.Inject;
 
+import com.ts.app.domain.*;
+import com.ts.app.repository.*;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
@@ -21,22 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.Shift;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.User;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.ImportResult;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
-import com.ts.app.web.rest.dto.ShiftDTO;
-import com.ts.app.web.rest.dto.SiteDTO;
 
 /**
  * Service class for managing Site information.
@@ -55,6 +44,12 @@ public class SiteService extends AbstractService {
 
 	@Inject
 	private ProjectRepository projectRespository;
+
+	@Inject
+    private RegionRepository regionRepository;
+
+	@Inject
+    private BranchRepository branchRepository;
 
 //	@Inject
 //	private JobManagementService jobService;
@@ -81,6 +76,8 @@ public class SiteService extends AbstractService {
         		shifts.add(shift);
         }
         site.setShifts(shifts);
+        site.setRegion(siteDto.getRegion());
+        site.setBranch(siteDto.getBranch());
 		site = siteRepository.save(site);
 		log.debug("Created Information for Site: {}", site);
 		//update the site location by calling site location service
@@ -109,6 +106,8 @@ public class SiteService extends AbstractService {
 		site.setStartDate(siteDTO.getStartDate());
 		site.setEndDate(siteDTO.getEndDate());
 		site.setRadius(siteDTO.getRadius());
+		site.setRegion(siteDTO.getRegion());
+		site.setBranch(siteDTO.getBranch());
 		List<Shift> shiftEntities = site.getShifts();
 		if(CollectionUtils.isNotEmpty(shiftEntities)) {
 			shiftEntities.clear();
@@ -446,5 +445,44 @@ public class SiteService extends AbstractService {
         }
     }
 
+
+    public RegionDTO createRegion(RegionDTO regionDTO) {
+	    log.debug("name - "+regionDTO.getName());
+	    log.debug("project Id - "+regionDTO.getProjectId());
+        Region region= mapperUtil.toEntity(regionDTO, Region.class);
+        regionRepository.save(region);
+        return regionDTO;
+    }
+
+    public BranchDTO createBranch(BranchDTO branchDTO) {
+        Branch branch= mapperUtil.toEntity(branchDTO, Branch.class);
+        branchRepository.save(branch);
+        return branchDTO;
+    }
+
+    public List<RegionDTO> findAllRegions() {
+//        User user = userRepository.findOne(userId);
+        List<Region> regions = regionRepository.findAll();
+
+        return mapperUtil.toModelList(regions, RegionDTO.class);
+    }
+
+    public List<BranchDTO> findAllBranches() {
+//        User user = userRepository.findOne(userId);
+        List<Branch> branches = branchRepository.findAll();
+        return mapperUtil.toModelList(branches, BranchDTO.class);
+    }
+
+    public List<RegionDTO> findRegionByProject(long projectId){
+	    List<Region> regions = regionRepository.findRegionByProject(projectId);
+
+	    return mapperUtil.toModelList(regions, RegionDTO.class);
+    }
+
+    public List<BranchDTO> findBranchByProject(long projectId,long regionId){
+        List<Branch> branches = branchRepository.findBranchByProjectAndRegion(projectId,regionId);
+
+        return mapperUtil.toModelList(branches, BranchDTO.class);
+    }
 
 }

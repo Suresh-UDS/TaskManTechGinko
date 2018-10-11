@@ -25,7 +25,7 @@ angular.module('timeSheetApp')
 					  return response.data;
 				  });
 			},
-			
+
 			findShifts: function(id,date){
 				  return $http.get('api/site/'+id + '/shifts/' + date).then(function (response) {
 					  return response.data;
@@ -85,6 +85,42 @@ angular.module('timeSheetApp')
 					return $http.get('api/site/import/'+fileName+"/status").then(function (response) {
 						return response.data;
 					});
-			}
+			},
+
+            addRegion: function (region) {
+                return $http.post('api/region',region).then(function (response) {
+                    return response.data;
+                })
+            },
+
+            addBranch: function(branch){
+			    return $http.post('api/branch',branch).then(function (response) {
+                    return response.data;
+                })
+            },
+
+            getAllRegions : function () {
+                return $http.get('api/region').then(function (response) {
+                    return response.data;
+                })
+            },
+
+            getAllBranches : function () {
+                return $http.get('api/branch').then(function (response) {
+                    return response.data;
+                })
+            },
+
+            getRegionByProject:function(projectId){
+			    return $http.get('api/region/projectId/'+projectId).then(function (response) {
+                    return response.data;
+                })
+            },
+
+            getBranchByProject: function (projectId,regionId) {
+                return $http.get('api/branch/projectId/'+projectId+'/region/'+regionId).then(function (response) {
+                    return response.data;
+                })
+            }
 		};
 	});

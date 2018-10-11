@@ -11,10 +11,18 @@ angular.module('timeSheetApp')
         $scope.doNotMatch = null;
         $scope.errorSitesExists = null;
         $scope.selectedProject = null;
+        $scope.selectedRegion = null;
+        $scope.selectedBranch = null;
         $scope.selectedSite = null;
         $scope.searchProject = null;
+        $scope.searchRegion = null;
+        $scope.searchBranch = null;
         $scope.searchSite = null;
+        $scope.regionList = null;
+        $scope.branchList = null;
         $scope.searchCriteria = {};
+        $scope.regionDetails = {};
+        $scope.branchDetails = {};
         $scope.pages = { currPage : 1};
         $scope.pager = {};
         $scope.noData = false;
@@ -75,13 +83,15 @@ angular.module('timeSheetApp')
             }
 
             return newSupes;
-        }
+        };
+
+
 
         $scope.selectProject = function(project)
         {
-            $scope.searchProject = $scope.projectsList[$scope.uiClient.indexOf(project)]
+            $scope.searchProject = $scope.projectsList[$scope.uiClient.indexOf(project)];
             console.log('Project dropdown list:',$scope.searchProject)
-        }
+        };
 
         //
 
@@ -101,22 +111,72 @@ angular.module('timeSheetApp')
         $scope.selectSite = function(site)
         {
              if(site){
-               $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(site)]
+               $scope.searchSite = $scope.sitesList[$scope.uiSite.indexOf(site)];
                $scope.hideSite = true;
                console.log('Site dropdown list:',$scope.searchSite)
              }
         }
 
         $scope.addProject = function (selectedProject) {
+            console.log(selectedProject);
             $scope.selectedProject = $scope.projectsList[$scope.uiClient.indexOf(selectedProject)]
             $scope.edit = false;
+            console.log($scope.selectedProject);
+            $scope.loadRegions($scope.selectedProject.id);
+            // $scope.loadBranch($scope.selectedProject.id);
         }
+        //
+
+        //Load Regions for selectbox
+
+        $scope.regionDisable = true;
+        $scope.uiRegion = [];
+
+        $scope.getRegion = function (search) {
+            var newSupes = $scope.uiRegion.slice();
+            if (search && newSupes.indexOf(search) === -1) {
+                newSupes.unshift(search);
+            }
+
+            return newSupes;
+        };
+
+        $scope.selectRegion = function (region) {
+            $scope.selectedRegion = $scope.regionsList[$scope.uiRegion.indexOf(region)];
+            console.log('Region dropdown list:',$scope.searchRegion)
+        }
+
+        //
+
+        //Load Branches for selectbox
+
+        $scope.branchDisable = true;
+        $scope.uiBranch = [];
+
+        $scope.getBranch = function (search) {
+            var newSupes = $scope.uiBranch.slice();
+            if (search && newSupes.indexOf(search) === -1) {
+                newSupes.unshift(search);
+            }
+
+            return newSupes;
+        };
+
+        $scope.selectBranch = function (branch) {
+            $scope.selectedBranch = $scope.branchList[$scope.uiBranch.indexOf(branch)];
+            console.log('Branch dropdown list:',$scope.searchBranch)
+        }
+
         //
 
         //Filter
         $scope.filter = false;
         $scope.clientFilterDisable = true;
+        $scope.regionFilterDisable = true;
+        $scope.branchFilterDisable = true;
         $scope.siteFilterDisable = true;
+        $scope.regionSpin = false;
+        $scope.branchSpin = false;
         $scope.siteSpin = false;
 
         $scope.loadDepSites = function (searchProject) {
@@ -124,13 +184,21 @@ angular.module('timeSheetApp')
           $scope.siteFilterDisable = true;
           $scope.uiSite.splice(0,$scope.uiSite.length);
           $scope.clearField = false;
+          $scope.searchRegion = null;
+          $scope.searchBranch = null;
           $scope.searchSite = null;
+          $scope.hideRegion = false;
+          $scope.hideBranch = false;
           $scope.hideSite = false;
           if($scope.localStorage)
           {
+              $scope.localStorage.region = null;
+              $scope.localStorage.branch = null;
               $scope.localStorage.siteName = null;
           }
           $scope.searchCriteria.siteName = null;
+          $scope.searchCriteria.region = null;
+          $scope.searchCriteria.branch = null;
           $scope.siteSpin = true;
           $scope.filter = false;
           $scope.searchProject = $scope.projectsList[$scope.uiClient.indexOf(searchProject)];
@@ -141,6 +209,13 @@ angular.module('timeSheetApp')
           }else{
                   var depProj=0;
           }
+
+
+          SiteComponent.getRegionByProject(depProj).then(function (data) {
+              console.log("Regions of project "+depProj);
+              console.log(data);
+
+          });
 
           ProjectComponent.findSites(depProj).then(function (data) {
               $scope.selectedSite = null;
@@ -229,10 +304,14 @@ angular.module('timeSheetApp')
 	        	if(!$scope.selectedProject){
 	        		$scope.errorProject = "true";
 	        	}else{
+	        	    console.log($scope.selectedRegion!=null?$scope.selectedRegion:" ");
 	        	    $scope.btnDisable = true;
 	        		$scope.site.projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
 	        		console.log('shifts - ' + JSON.stringify($scope.shiftItems));
 	        		$scope.site.shifts = $scope.shiftItems;
+	        		$scope.site.region = $scope.selectedRegion!=null?$scope.selectedRegion:" ";
+	        		$scope.site.branch = $scope.selectedBranch!=null?$scope.selectedBranch:" "
+                    console.log($scope.site);
                     SiteComponent.createSite($scope.site).then(function() {
 	                    $scope.success = 'OK';
                         $scope.saveLoad = false;
@@ -477,6 +556,8 @@ angular.module('timeSheetApp')
                     console.log($scope.site);
                     $scope.site.projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
                     $scope.site.shifts = $scope.shiftItems;
+                    $scope.site.region = $scope.selectedRegion!=null?$scope.selectedRegion:" ";
+                    $scope.site.branch = $scope.selectedBranch!=null?$scope.selectedBranch:" "
                     SiteComponent.updateSite($scope.site).then(function() {
                         $scope.success = 'OK';
                         $scope.showNotifications('top','center','success','Site has been updated successfully!!');
@@ -742,5 +823,108 @@ angular.module('timeSheetApp')
                $scope.search();
 
         };
+
+        $scope.loadRegions = function (projectId) {
+            SiteComponent.getRegionByProject(projectId).then(function (response) {
+                console.log(response);
+                $scope.regionList = response;
+            })
+        };
+
+        $scope.loadBranch = function (projectId) {
+
+            if($scope.selectedProject){
+
+                if($scope.selectedRegion){
+                    console.log($scope.selectedRegion);
+                    SiteComponent.getBranchByProject(projectId,$scope.selectedRegion.id).then(function (response) {
+                        console.log(response);
+                        $scope.branchList = response;
+                    })
+
+                }else{
+                    $scope.showNotifications('top','center','danger','Please Select Region to continue...');
+
+                }
+
+            }else{
+                $scope.showNotifications('top','center','success','Please select Project to continue...');
+
+            }
+
+
+        };
+
+        $scope.addRegion = function () {
+            if($scope.selectedProject){
+
+                if($scope.regionDetails && $scope.regionDetails.name){
+                    console.log("Region entered");
+                    console.log($scope.regionDetails);
+                    var region ={
+                        name:$scope.regionDetails.name,
+                        projectId:$scope.selectedProject.id
+                    };
+                    SiteComponent.addRegion(region).then(function (response) {
+                        console.log(response);
+                        $scope.designation= null;
+                        $scope.showNotifications('top','center','success','Region Added Successfully');
+                        $scope.loadRegions($scope.selectedProject.id);
+
+                    })
+                }else{
+                    console.log("Desgination not entered")
+                    $scope.showNotifications('top','center','danger','Please enter Region Name...');
+
+                }
+            }else{
+                $scope.showNotifications('top','center','danger','Please select Client to continue...');
+            }
+
+
+        };
+
+
+        $scope.addBranch = function () {
+            if($scope.selectedProject){
+
+                if($scope.selectedRegion){
+                    console.log($scope.selectedRegion);
+
+                    if($scope.branchDetails && $scope.branchDetails.name){
+                        console.log("Region entered");
+                        console.log($scope.branchDetails);
+                        var branch ={
+                            name:$scope.branchDetails.name,
+                            projectId:$scope.selectedProject.id,
+                            regionId: $scope.selectedRegion.id
+                        };
+                        SiteComponent.addBranch(branch).then(function (response) {
+                            console.log(response);
+                            $scope.branch= null;
+                            $scope.showNotifications('top','center','success','Branch Added Successfully');
+                            $scope.loadBranch($scope.selectedProject.id);
+
+                        })
+                    }else{
+                        console.log("Branch not entered");
+                        $scope.showNotifications('top','center','danger','Please enter Branch Name...');
+
+                    }
+
+                }else{
+
+                    $scope.showNotifications('top','center','danger','Please select Region to continue...');
+
+                }
+
+            }else{
+                $scope.showNotifications('top','center','danger','Please select Client to continue...');
+            }
+
+
+        };
+
+
 
     });

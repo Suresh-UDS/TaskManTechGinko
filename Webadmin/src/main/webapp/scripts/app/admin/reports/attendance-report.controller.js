@@ -11,6 +11,10 @@ angular.module('timeSheetApp')
         $scope.errorMessage = null;
         $scope.doNotMatch = null;
         $scope.errorEmployeeExists = null;
+        $scope.regionList=null;
+        $scope.branchList=null;
+        $scope.selectedRegion=null;
+        $scope.selectedBranch = null;
         //$scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy');
         $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
@@ -160,7 +164,42 @@ angular.module('timeSheetApp')
             $scope.uiSite.splice(0,$scope.uiSite.length)
             $scope.searchSite = null;
             $scope.searchProject = $scope.projects[$scope.uiClient.indexOf(searchProject)];
-        }
+            console.log($scope.searchProject);
+            $scope.loadRegions($scope.searchProject.id);
+            // $scope.loadBranch($scope.searchProject.id);
+        };
+
+        $scope.loadRegions = function (projectId) {
+            SiteComponent.getRegionByProject(projectId).then(function (response) {
+                console.log(response);
+                $scope.regionList = response;
+            })
+        };
+
+        $scope.loadBranch = function (projectId) {
+            console.log(projectId);
+
+            if($scope.searchProject){
+
+                if($scope.selectedRegion){
+                    console.log($scope.selectedRegion);
+                    SiteComponent.getBranchByProject(projectId,$scope.selectedRegion.id).then(function (response) {
+                        console.log(response);
+                        $scope.branchList = response;
+                    })
+
+                }else{
+                    $scope.showNotifications('top','center','danger','Please Select Region to continue...');
+
+                }
+
+            }else{
+                $scope.showNotifications('top','center','success','Please select Project to continue...');
+
+            }
+
+
+        };
 
 
         $scope.loadSearchSite = function (searchSite) {
@@ -324,7 +363,8 @@ angular.module('timeSheetApp')
                     $scope.searchCriteria.checkInDateTimeTo = $scope.selectedDateToSer;
                 }
 
-
+                $scope.searchCriteria.region = $scope.selectedRegion!=null?$scope.selectedRegion.name:"";
+                $scope.searchCriteria.branch = $scope.selectedBranch!=null?$scope.selectedBranch.name:"";
 //          if($scope.selectedEmployee){
 //              console.log($scope.selectedEmployee);
 //                $scope.searchCriteria.employeeEmpId = $scope.selectedEmployee.empId;

@@ -143,47 +143,55 @@ public class SearchCriteria extends Paginator {
 	private Date quotationSubmittedDate;
 
 	private Date quotationApprovedDate;
-	
+
 	private long manufacturerId;
-	
+
 	private String manufacturerName;
-	
+
 	private String assetTypeName;
-	
+
 	private String warrantyTypeName;
-	
+
 	private String assetGroupName;
-	
+
 	private String assetName;
-	
+
 	private String vendorName;
-	
+
 	private long assetId;
-	
+
 	private List<Long> siteIds;
 
 	private boolean notCheckedOut;
-	
+
 	private String maintenanceType;
-	
+
 	private String assetCode;
-	
+
 	private Date acquiredDate;
-	
+
 	private ZonedDateTime readingFromDate;
-	
+
 	private ZonedDateTime readingToDate;
-	
+
 	private String paramName;
-	
+
 	private Date assetCreatedDate;
-	
+
 	private int roleLevel;
-	
+
 	private String module;
-	
+
 	private String action;
-	
+
+	private String branch;
+
+	private String region;
+
+	private long branchId;
+
+	private long regionId;
+
 	public String getModule() {
 		return module;
 	}
@@ -895,8 +903,8 @@ public class SearchCriteria extends Paginator {
 	public void setAssetId(long assetId) {
 		this.assetId = assetId;
 	}
-    
-	
+
+
 	public List<Long> getSiteIds() {
 		return siteIds;
 	}
@@ -963,6 +971,35 @@ public class SearchCriteria extends Paginator {
 	}
 
 
-	
-	
+    public String getBranch() {
+        return branch;
+    }
+
+    public void setBranch(String branch) {
+        this.branch = branch;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public long getBranchId() {
+        return branchId;
+    }
+
+    public void setBranchId(long branchId) {
+        this.branchId = branchId;
+    }
+
+    public long getRegionId() {
+        return regionId;
+    }
+
+    public void setRegionId(long regionId) {
+        this.regionId = regionId;
+    }
 }
