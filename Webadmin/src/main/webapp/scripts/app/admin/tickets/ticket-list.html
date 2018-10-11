@@ -24,13 +24,30 @@
 
         </div>
         <div class="col-md-6 txt-align-rgt">
-
-
-
             <button class="btn btn-success add-btn margn-tb0"  ui-sref="create-ticket"  has-permission="Tickets:Create" ng-class="{active: $state.includes('admin')}" tabindex="0">
                 <i class="material-icons">add</i> Add
                 <div class="ripple-container"></div>
             </button>
+
+            <!--<button class="btn btn-success add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':(downloader && typeMsg=='html')}" ng-show="tickets.length" type="button" title="Export HTML"  ng-click=exportAllData('html') ng-class="{active: $state.includes('admin')}" tabindex="0">
+                <i class="material-icons">description</i>Export HTML
+                <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
+                <div class="ripple-container"></div>
+            </button>-->
+
+            <button class="btn btn-info add-btn margn-tb0  ld ld-over-inverse" ng-class="{'running':(downloader && typeMsg=='xlsx')}" ng-show="tickets.length" type="button" title="Export Excel"  ng-click=exportAllData('xlsx') ng-class="{active: $state.includes('admin')}" tabindex="0">
+                <i class="material-icons">import_contacts</i>Export Excel
+                <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
+                <div class="ripple-container"></div>
+            </button>
+
+            <span ng-if="exportMsg(0)=='Download'">
+                 <a class="download-btn" href="{{exportFile(0)}}" download target="_self" ng-click="clsDownload()" ng-hide="downloaded">{{exportMsg(0)}}</a>
+                 <div class="downloaderMd" ng-show="downloader"></div>
+            </span>
+            <span ng-if="exportMsg(0)!='Download'">
+                 <a class="download-btn" href="javascript:void(0);">{{exportMsg(0)}}</a>
+            </span>
 
         </div>
     </div>
