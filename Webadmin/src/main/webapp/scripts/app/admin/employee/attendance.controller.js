@@ -661,7 +661,7 @@ angular.module('timeSheetApp')
         $scope.clearFilter = function() {
             $scope.noData = false;
             $scope.clearField = true;
-            $rootScope.exportStatusObj.exportMsg = '';
+            $rootScope.exportStatusObj = {};
             $scope.downloader=false;
             $scope.downloaded = true;
             $scope.siteFilterDisable = true;
@@ -703,9 +703,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.exportAllData = function(){
-             $rootScope.exportStatusObj.exportMsg = '';
-             $scope.exportMsg ='';
-             $scope.exportFile ='';
+             $rootScope.exportStatusObj = {};
              $scope.downloaded = false;
              $scope.downloader=true;
              $scope.searchCriteria.list = true;

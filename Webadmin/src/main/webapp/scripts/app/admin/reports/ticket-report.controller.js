@@ -526,7 +526,7 @@ angular.module('timeSheetApp')
         }
 
         $scope.clearFilter = function() {
-            $rootScope.exportStatusObj.exportMsg = '';
+            $rootScope.exportStatusObj = {};
             $scope.downloader=false;
             $scope.downloaded = true;
             $scope.clearField = true;
@@ -613,9 +613,7 @@ angular.module('timeSheetApp')
 
         $scope.exportStatus = function() {
             //console.log('empId='+$scope.empId);
-            $rootScope.exportStatusObj.exportMsg = '';
-            $scope.exportMsg ='';
-            $scope.exportFile ='';
+            $rootScope.exportStatusObj = {};
             console.log('exportStatusMap length -'+$scope.exportStatusMap.length);
             angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
                 if(!exportStatusObj.empId) {

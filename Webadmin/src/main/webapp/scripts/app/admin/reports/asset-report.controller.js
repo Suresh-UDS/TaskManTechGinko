@@ -503,7 +503,7 @@ angular.module('timeSheetApp')
         }
 
         $scope.clearFilter = function() {
-            $rootScope.exportStatusObj.exportMsg = '';
+            $rootScope.exportStatusObj = {};
             $scope.downloader=false;
             $scope.downloaded = true;
             $scope.clearField = true;
@@ -543,9 +543,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.exportAllData = function(type){
-                $rootScope.exportStatusObj.exportMsg = '';
-                $scope.exportMsg ='';
-                $scope.exportFile ='';
+                $rootScope.exportStatusObj = {};
                 $scope.downloader=true;
                 $scope.downloaded = false;
                 $scope.searchCriteria.isReport = true;

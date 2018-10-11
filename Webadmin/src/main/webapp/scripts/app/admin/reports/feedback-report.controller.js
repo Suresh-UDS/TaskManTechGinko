@@ -257,6 +257,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.clearFilter = function() {
+            $rootScope.exportStatusObj = {};
             $scope.downloaded = true;
             $scope.selectedSite = null;
             $scope.selectedProject = null;
@@ -275,6 +276,7 @@ angular.module('timeSheetApp')
 
         $scope.exportAllData = function(type){
     			$scope.searchCriteria.exportType = type;
+    			$rootScope.exportStatusObj = {};
                 $scope.downloaded = false;
     			AttendanceComponent.exportAllData($scope.searchCriteria).then(function(data){
 	        		var result = data.results[0];
