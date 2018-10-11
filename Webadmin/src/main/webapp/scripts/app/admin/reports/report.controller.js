@@ -699,9 +699,7 @@ angular.module('timeSheetApp')
         $scope.exportAllData = function(){
                  $scope.downloader = true;
                  $scope.downloaded = false;
-                 $rootScope.exportStatusObj.exportMsg = '';
-                 $scope.exportMsg ='';
-                 $scope.exportFile ='';
+                 $rootScope.exportStatusObj = {};
                   $scope.downloader=true;
                   $scope.searchCriteria.list = true;
                   $scope.searchCriteria.report = true;
@@ -782,6 +780,7 @@ angular.module('timeSheetApp')
 
         $scope.clsDownload = function(){
           $scope.downloaded = true;
+          $rootScope.exportStatusObj ={};
         }
 
 
@@ -856,7 +855,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.clearFilter = function() {
-            $rootScope.exportStatusObj.exportMsg = '';
+            $rootScope.exportStatusObj = {};
             $scope.downloader=false;
             $scope.downloaded = true;
             $scope.siteFilterDisable = true;

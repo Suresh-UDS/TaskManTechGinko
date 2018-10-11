@@ -1960,7 +1960,7 @@ public class SchedulerHelperService extends AbstractService {
 				}
 				sb.append("</tr>");
 			
-				if (eodReportEmails != null && (alertTimeCal.equals(now) || isOnDemand)
+				if (eodReports != null && (alertTimeCal.equals(now) || isOnDemand)
 						&& (eodReportClientGroupAlert != null
 						&& eodReportClientGroupAlert.getSettingValue().equalsIgnoreCase("true"))) {
 
@@ -1982,7 +1982,7 @@ public class SchedulerHelperService extends AbstractService {
 						List<ExportContent> exportContents = null;
 
 						ExportContent exportCnt = new ExportContent();
-						exportCnt.setEmail(eodReportEmails.getSettingValue());
+						exportCnt.setEmail(eodReportEmails !=null ? eodReportEmails.getSettingValue() : StringUtils.EMPTY);
 						exportCnt.setSiteId(site.getId());
 						exportCnt.setSiteName(site.getName());
 						//exportCnt.setSummary(sb.toString());
@@ -2060,13 +2060,13 @@ public class SchedulerHelperService extends AbstractService {
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
-		StringBuffer clientSummary = new StringBuffer(); 
 		// Map<String, Object> exportedContent = new HashMap<String, Object>();
 		for (Map.Entry<String, ClientgroupDTO> entry : newMap.entrySet()) {
 			// exportedContent.put("clientGroup", entry.getKey());
+			StringBuffer clientSummary = new StringBuffer(); 
 			ClientgroupDTO clientGrp = entry.getValue();
 			clientSummary.append(clientGrp.getSummary());
-			clientSummary.append("</table>");
+			//clientSummary.append("</table>");
 			clientSummary.append("<br/>");
 			Map<String, List<ExportContent>> values = clientGrp.getContents();
 			//StringBuffer summary = new StringBuffer();

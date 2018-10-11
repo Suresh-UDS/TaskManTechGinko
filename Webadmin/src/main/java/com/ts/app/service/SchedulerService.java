@@ -209,9 +209,11 @@ public class SchedulerService extends AbstractService {
 		if (env.getProperty("scheduler.dailyJob.enabled").equalsIgnoreCase("true")) {
             log.debug("Daily jobs enabled");
             Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DAY_OF_MONTH, 1);
 			cal.set(Calendar.HOUR_OF_DAY, 0);
 			cal.set(Calendar.MINUTE, 0);
 			Calendar endCal = Calendar.getInstance();
+			endCal.add(Calendar.DAY_OF_MONTH, 1);
 			endCal.set(Calendar.HOUR_OF_DAY, 23);
 			endCal.set(Calendar.MINUTE, 59);
             Calendar nextDay = Calendar.getInstance();
@@ -222,32 +224,47 @@ public class SchedulerService extends AbstractService {
 			java.sql.Date startDate = new java.sql.Date(cal.getTimeInMillis());
 			java.sql.Date endDate = new java.sql.Date(endCal.getTimeInMillis());
 			java.sql.Date tomorrow = new java.sql.Date(nextDay.getTimeInMillis());
-			List<SchedulerConfig> dailyTasks = schedulerConfigRepository.getDailyTask(cal.getTime());
-			log.debug("Found {} Daily Tasks", dailyTasks.size());
-			ExecutorService executorService = Executors.newFixedThreadPool(50); //Executes job creation task for each schedule asynchronously
-			List<Future> futures = new ArrayList<Future>();
-			if (CollectionUtils.isNotEmpty(dailyTasks)) {
-				for (SchedulerConfig dailyTask : dailyTasks) {
-					long parentJobId = dailyTask.getJob().getId();
-					if(log.isDebugEnabled()) {
-						log.debug("Parent job id - "+parentJobId);
-						log.debug("Parent job date - "+startDate);
-						log.debug("Parent job date - "+endDate);
-					}
-					JobCreationThread jobThrd = new JobCreationThread(dailyTask, parentJobId, cal, endCal, jobRepository);
-					futures.add(executorService.submit(jobThrd));
-				}
-				for(Future future : futures) {
-					try {
-						future.get();
-					} catch (InterruptedException | ExecutionException e) {
-						log.error("Error while running the job creation thread executor task ",e);
-					}
-				}
-				executorService.shutdown();
-			}
-			schedulerConfigRepository.save(dailyTasks);
+			createDailyTask(cal.getTime());
 		}
+	}
+	
+	public void createDailyTask(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		Calendar endCal = Calendar.getInstance();
+		endCal.setTime(date);
+		endCal.set(Calendar.HOUR_OF_DAY, 23);
+		endCal.set(Calendar.MINUTE, 59);
+		java.sql.Date startDate = new java.sql.Date(cal.getTimeInMillis());
+		java.sql.Date endDate = new java.sql.Date(endCal.getTimeInMillis());
+		
+		List<SchedulerConfig> dailyTasks = schedulerConfigRepository.getDailyTask(cal.getTime());
+		log.debug("Found {} Daily Tasks", dailyTasks.size());
+		ExecutorService executorService = Executors.newFixedThreadPool(50); //Executes job creation task for each schedule asynchronously
+		List<Future> futures = new ArrayList<Future>();
+		if (CollectionUtils.isNotEmpty(dailyTasks)) {
+			for (SchedulerConfig dailyTask : dailyTasks) {
+				long parentJobId = dailyTask.getJob().getId();
+				if(log.isDebugEnabled()) {
+					log.debug("Parent job id - "+parentJobId);
+					log.debug("Parent job date - "+startDate);
+					log.debug("Parent job date - "+endDate);
+				}
+				JobCreationThread jobThrd = new JobCreationThread(dailyTask, parentJobId, cal, endCal, jobRepository);
+				futures.add(executorService.submit(jobThrd));
+			}
+			for(Future future : futures) {
+				try {
+					future.get();
+				} catch (InterruptedException | ExecutionException e) {
+					log.error("Error while running the job creation thread executor task ",e);
+				}
+			}
+			executorService.shutdown();
+		}
+		schedulerConfigRepository.save(dailyTasks);
 	}
 	
 	final class JobCreationThread implements Runnable {
