@@ -270,9 +270,9 @@ Tip 2: you can also add an image using data-image tag
 
                 <div [ngSwitch]="categories">
                         <ion-list *ngSwitchCase="'overdue'">
-                            <ion-refresher (ionRefresh)="doRefresh($event,all)">
-                                <ion-refresher-content></ion-refresher-content>
-                            </ion-refresher>
+                            <!--<ion-refresher (ionRefresh)="doRefresh($event,all)">-->
+                                <!--<ion-refresher-content></ion-refresher-content>-->
+                            <!--</ion-refresher>-->
 
                             <div *ngIf="overdueCount == 0 || !allJobs" class="align-center">
                                 <ion-card>
@@ -369,9 +369,9 @@ Tip 2: you can also add an image using data-image tag
 
 
                     <ion-list *ngSwitchCase="'upcoming'">
-                        <ion-refresher (ionRefresh)="doRefresh($event,all)">
-                            <ion-refresher-content></ion-refresher-content>
-                        </ion-refresher>
+                        <!--<ion-refresher (ionRefresh)="doRefresh($event,all)">-->
+                            <!--<ion-refresher-content></ion-refresher-content>-->
+                        <!--</ion-refresher>-->
 
                         <div *ngIf="upcomingCount == 0 || !allJobs"  class="align-center">
                             <ion-card>
@@ -463,9 +463,9 @@ Tip 2: you can also add an image using data-image tag
 
 
                     <ion-list *ngSwitchCase="'completed'">
-                        <ion-refresher (ionRefresh)="doRefresh($event,all)">
-                            <ion-refresher-content></ion-refresher-content>
-                        </ion-refresher>
+                        <!--<ion-refresher (ionRefresh)="doRefresh($event,all)">-->
+                            <!--<ion-refresher-content></ion-refresher-content>-->
+                        <!--</ion-refresher>-->
 
                         <div *ngIf="completeCount == 0 || !allJobs"  class="align-center">
                             <ion-card>
