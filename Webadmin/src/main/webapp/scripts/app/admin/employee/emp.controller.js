@@ -1828,6 +1828,7 @@ angular.module('timeSheetApp')
 
         $scope.clsDownload = function(){
           $scope.downloaded = true;
+          $rootScope.exportStatusObj = {};
         }
 
         $scope.cancelEmployeeShiftUpdate = function(){

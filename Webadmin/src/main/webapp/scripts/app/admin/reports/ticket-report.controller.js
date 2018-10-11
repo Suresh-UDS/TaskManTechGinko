@@ -564,7 +564,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.exportAllData = function(type){
-                $rootScope.exportStatusObj.exportMsg = '';
+                $rootScope.exportStatusObj = {};
                 $scope.downloader=true;
                 $scope.downloaded = false;
                 $scope.searchCriteria.isReport = true;
@@ -684,6 +684,7 @@ angular.module('timeSheetApp')
 
         $scope.clsDownload = function(){
           $scope.downloaded = true;
+          $rootScope.exportStatusObj = {};
         }
 
           //init load
