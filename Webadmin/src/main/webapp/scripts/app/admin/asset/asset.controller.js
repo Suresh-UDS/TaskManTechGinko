@@ -992,6 +992,7 @@ angular.module('timeSheetApp')
         }
 
         $scope.searchFilter = function () {
+            $('.AdvancedFilterModal.in').modal('hide');
             $scope.setPage(1);
             $scope.search();
          }
@@ -1817,6 +1818,8 @@ angular.module('timeSheetApp')
 
 
         $scope.clearFilter = function() {
+            $('input#searchAcquiredDate').data('DateTimePicker').clear();
+            $('input#searchCreatedDate').data('DateTimePicker').clear();
             $scope.clearField = true;
             $scope.filter = false;
             $rootScope.exportStatusObj = {};
