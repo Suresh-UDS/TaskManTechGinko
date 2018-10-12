@@ -87,8 +87,8 @@ public class DatabaseConfiguration {
 					jHipsterProperties.getDatasource().getPrepStmtCacheSize());
 			config.addDataSourceProperty("prepStmtCacheSqlLimit",
 					jHipsterProperties.getDatasource().getPrepStmtCacheSqlLimit());
-			config.setMaximumPoolSize(40);
-			//config.setMinimumIdle(3);
+			config.setMaximumPoolSize(90);
+			config.setMinimumIdle(3);
 		}
 		if (metricRegistry != null) {
 			config.setMetricRegistry(metricRegistry);
