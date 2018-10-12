@@ -454,7 +454,7 @@
                                     </h4>
                                 </a>
                             </div>
-                            <div id="collapseOne" class="panel-collapse collapse collapseOne in" role="tabpanel" aria-labelledby="headingOne" aria-expanded="true" style="height: 110px;">
+                            <div id="collapseOne" class="panel-collapse collapse collapseOne in" role="tabpanel" aria-labelledby="headingOne" aria-expanded="true" style="height: 180px;">
                                 <div class="panel-body">
 
                                     <div class="row" ng-init="loadProjectsList();loadSitesList();">
@@ -470,12 +470,35 @@
                                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <ui-select ng-model="selectedProject" ng-disabled="clientFilterDisable" >
                                                         <ui-select-match placeholder="Select clients...">{{filter ? selectedProject.name?selectedProject.name:'Select Client' :clearField?'Select Client':selectedProject}}</ui-select-match>
-                                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search" ng-click="loadSearchProject(selectedProject)">
+                                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search" ng-click="loadSearchProject(selectedProject);loadRegions()">
                                                             <div ng-bind="client"></div>
                                                         </ui-select-choices>
                                                     </ui-select>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="col-xs-12 col-md-6">
+                                                <div class="dropdown ">
+                                                    <label class="label-control">Select Region</label>
+                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <select class="form-control " ng-model="selectedRegion" ng-change="loadBranch()" ng-options="region as region.name for region in regionList">
+                                                        <option value="">Please select Region...</option>
+                                                    </select>
+                                                </div>
+                                                <span ng-if="regionList.length == 0 && !siteSpin"><p class="error-msg margin0">No Region</p></span>
+                                        </div>
+                                    </div>
+                                    <div class="row" >
+                                        <div class="col-xs-12 col-md-6">
+                                            <div class="dropdown ">
+                                                <label class="label-control">Select Branch</label>
+                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                <select class="form-control " ng-model="selectedBranch" ng-change="loadSites()"  ng-options="branch as branch.name for branch in branchList">
+                                                    <option value="">Please select Branch...</option>
+                                                </select>
+                                            </div>
+                                            <span ng-if="branchList.length == 0 && !siteSpin"><p class="error-msg margin0">No Branch</p></span>
+
                                         </div>
                                         <div class="col-xs-12 col-md-6">
                                             <div class="dropdown">

@@ -212,6 +212,17 @@ public class SiteResource {
         return siteService.findBranchByProject(projectId,regionId);
     }
 
+    @RequestMapping(value = "/project/region/{region}/projectId/{projectId}", method = RequestMethod.POST)
+    public List<SiteDTO> findSitesByRegion( @PathVariable("region") String region, @PathVariable("projectId") long projectId){
+        log.debug("find by project id and region - "+projectId+" - "+region);
+        return siteService.findSitesByRegion(projectId,region);
+    }
+
+    @RequestMapping(value = "/project/branch/{branch}/region/{region}/projectId/{projectId}", method = RequestMethod.GET)
+    public List<SiteDTO> findSitesByRegionAndBranch(@PathVariable("branch") String branch, @PathVariable("region") String region,  @PathVariable("projectId") long projectId){
+        return siteService.findSitesByRegionAndBranch(projectId,region,branch);
+    }
+
     @RequestMapping(value = "/site/import/{fileId}/status",method = RequestMethod.GET)
 	public ImportResult importStatus(@PathVariable("fileId") String fileId) {
 		log.debug("ImportStatus -  fileId -"+ fileId);

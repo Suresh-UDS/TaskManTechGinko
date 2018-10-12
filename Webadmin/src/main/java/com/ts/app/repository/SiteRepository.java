@@ -76,4 +76,11 @@ public interface SiteRepository extends JpaRepository<Site, Long> {
     @Query("SELECT s FROM Shift s where s.site.id = :siteId order by CAST(substring(s.startTime,1,locate(':',s.startTime)-1)  as int)")
     List<Shift> findShiftsBySite(@Param("siteId") long siteId);
 
+    @Query("SELECT s FROM Site s WHERE s.project.id=:projectId and s.region =:region and s.active='Y'")
+    List<Site> findSitesByRegion(@Param("projectId") long projectId, @Param("region") String region);
+
+    @Query("SELECT s FROM Site s WHERE s.project.id=:projectId and s.region =:region and s.branch =:branch and s.active='Y'")
+    List<Site> findSitesByRegionAndBranch(@Param("projectId") long projectId, @Param("region") String region, @Param("branch") String branch);
+
+
 }
