@@ -1172,7 +1172,7 @@ public class JobManagementService extends AbstractService {
 			data.append("&plannedEndTime="+plannedEndTime.getTime());
 			data.append("&plannedHours="+assetPpmScheduleDTO.getPlannedHours());
 			//data.append("&location="+assetPpmScheduleDTO.getLocationId());
-			data.append("&frequency="+assetPpmScheduleDTO.getFrequency());
+			//data.append("&frequency="+assetPpmScheduleDTO.getFrequency());
 			data.append("&duration="+assetPpmScheduleDTO.getFrequencyDuration());
 			data.append("&assetId="+assetPpmScheduleDTO.getAssetId());
 			//data.append("&schedule="+Frequency.valueOf(assetPpmScheduleDTO.getFrequency()).getTypeFrequency());
@@ -2185,7 +2185,7 @@ public class JobManagementService extends AbstractService {
 			data.append("&plannedEndTime="+plannedEndTime.getTime());
 			data.append("&plannedHours="+assetAMCScheduleDTO.getPlannedHours());
 			//data.append("&location="+assetPpmScheduleDTO.getLocationId());
-			data.append("&frequency="+assetAMCScheduleDTO.getFrequency());
+			//data.append("&frequency="+assetAMCScheduleDTO.getFrequency());
 			data.append("&duration="+assetAMCScheduleDTO.getFrequencyDuration());
 			schConfDto.setData(data.toString());
 			schConfDto.setSchedule(Frequency.valueOf(assetAMCScheduleDTO.getFrequency()).getValue());
