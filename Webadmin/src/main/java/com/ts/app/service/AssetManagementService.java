@@ -1347,7 +1347,7 @@ public class AssetManagementService extends AbstractService {
 		assetPPMSchedule.setActive(AssetPPMSchedule.ACTIVE_YES);
 
 		List<AssetPPMSchedule> assetPPMSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(asset.getId(), assetPpmScheduleDTO.getTitle(), 
-										MaintenanceType.PPM.getValue(), assetPPMSchedule.getJobStartTime(), assetPPMSchedule.getJobStartTime());
+										MaintenanceType.PPM.getValue(), assetPPMSchedule.getStartDate(), assetPPMSchedule.getJobStartTime(), assetPPMSchedule.getJobStartTime());
 		log.debug("Existing schedule -" + assetPPMSchedule);
 		if (CollectionUtils.isEmpty(assetPPMSchedules)) {
 			assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);

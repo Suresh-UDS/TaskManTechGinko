@@ -22,5 +22,5 @@ public interface AssetPpmScheduleRepository extends JpaRepository<AssetPPMSchedu
     Page<AssetPPMSchedule> findAllPPMSchedule(@Param("assetId") long assetId, Pageable pageRequest);
 	 
 	 @Query("SELECT a from AssetPPMSchedule a where a.title = :title and a.asset.id = :assetId and a.maintenanceType = :type and a.jobStartTime between :fromDate and :toDate")
-	 List<AssetPPMSchedule> findAssetPPMScheduleByTitle(@Param("assetId") long assetId, @Param("title") String title, @Param("type") String maintenanceType, @Param("fromDate") ZonedDateTime fromDate, @Param("toDate") ZonedDateTime toDate);
+	 List<AssetPPMSchedule> findAssetPPMScheduleByTitle(@Param("assetId") long assetId, @Param("title") String title, @Param("type") String maintenanceType, @Param("startDate") Date startDate, @Param("fromDate") ZonedDateTime fromDate, @Param("toDate") ZonedDateTime toDate);
 }
