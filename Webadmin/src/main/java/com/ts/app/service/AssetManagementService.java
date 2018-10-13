@@ -354,7 +354,10 @@ public class AssetManagementService extends AbstractService {
 
 	public boolean isDuplicatePPMSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
 	    log.debug("Asset Title "+assetPpmScheduleDTO.getTitle());
-		List<AssetPPMSchedule> assetPPMSchedule = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(assetPpmScheduleDTO.getAssetId(), assetPpmScheduleDTO.getTitle());
+	    java.sql.Date startDate = DateUtil.convertToSQLDate(assetPpmScheduleDTO.getStartDate());
+		List<AssetPPMSchedule> assetPPMSchedule = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(assetPpmScheduleDTO.getAssetId(), 
+																assetPpmScheduleDTO.getTitle(), MaintenanceType.PPM.getValue(), startDate,
+																assetPpmScheduleDTO.getJobStartTime(), assetPpmScheduleDTO.getJobStartTime());
 		if(assetPPMSchedule != null) {
 			return true;
 		}
