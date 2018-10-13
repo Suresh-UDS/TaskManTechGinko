@@ -329,7 +329,7 @@
 
 <!-- Pagination directive end -->
 <!-- Modal -->
-<div class="modal right fade" id="ViewModal" tabindex="-1" role="dialog"
+<div class="modal right fade" id="ViewModal" role="dialog"
      aria-labelledby="ViewModal12">
     <div class="modal-dialogNew" role="document" ng-init="initLoad()">
         <div class="modal-content" ng-init="loadEmployee()">
@@ -600,7 +600,7 @@
     <!-- modal-dialog -->
 </div>
 <!-- modal -->
-<div class="modal fade" id="noticeModal" tabindex="-1" role="dialog"
+<div class="modal fade" id="noticeModal"  role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-notice">
         <div class="modal-content">
@@ -653,7 +653,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="leftModal" tabindex="-1" role="dialog"
+<div class="modal fade" id="leftModal"  role="dialog"
      aria-labelledby="leftModal" aria-hidden="true">
     <div class="modal-dialog modal-notice">
         <div class="modal-content">
@@ -697,7 +697,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="siteTransferModal" tabindex="-1"
+<div class="modal fade" id="siteTransferModal"
      role="dialog" aria-labelledby="leftModal" aria-hidden="true">
     <div class="modal-dialog modal-notice">
         <div class="modal-content">
@@ -778,7 +778,7 @@
 </div>
 
 <div id="enrollImageModal" class="modal fade" data-backdrop="false"
-     tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -810,7 +810,7 @@
     </div>
 </div>
 
-<div class="relieverConfirmation modal fade" id="relieverConfirmation" tabindex="-1"
+<div class="relieverConfirmation modal fade" id="relieverConfirmation"
      role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
     <form name="relieverForm" role="form" ng-submit="assignReliever()" novalidate>
@@ -1687,11 +1687,11 @@
 <!--&lt;!&ndash;  End Modal &ndash;&gt;-->
 <!-- Filter New -->
 <div class="modal fade AdvancedFilterModal FilterModalCon" id="Filter"
-     tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm" novalidate>
+            <form name="searchForm" role="form" ng-submit="searchFilter()"  novalidate>
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"
@@ -1799,7 +1799,7 @@
                                             <div class="form-group" style="padding-top: 20px;">
                                                 <div class="dropdown">
                                                     <input type="text" class="form-control border-bottom-input"
-                                                           placeholder="Employee Id" ng-model="searchEmployeeId" />
+                                                           placeholder="Employee Id" ng-model="searchEmployeeId" tabindex="1" />
                                                 </div>
                                             </div>
                                         </div>
@@ -1807,7 +1807,7 @@
                                             <div class="form-group" style="padding-top: 20px;">
                                                 <div class="dropdown">
                                                     <input type="text" class="form-control border-bottom-input"
-                                                           placeholder="Employee Name" ng-model="searchEmployeeName" />
+                                                           placeholder="Employee Name" ng-model="searchEmployeeName" tabindex="2" />
                                                 </div>
                                             </div>
                                         </div>
@@ -1818,11 +1818,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-danger btn-simple"
-                            data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger btn-simple"
+                            data-dismiss="modal" tabindex="3">Cancel</button>
                     <button type="submit" class="btn btn-success btn-simple"
-                            ng-click="searchFilter1()" data-dismiss="modal"
-                            ng-disabled="searchForm.$invalid">Apply Filter</button>
+                            ng-disabled="searchForm.$invalid" tabindex="4">Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>

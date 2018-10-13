@@ -1160,6 +1160,7 @@ angular.module('timeSheetApp')
         }
 
          $scope.searchFilter = function () {
+            $('.AdvancedFilterModal.in').modal('hide');
             $scope.setPage(1);
             $scope.search();
          }

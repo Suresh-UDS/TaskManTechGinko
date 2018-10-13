@@ -77,39 +77,19 @@ angular.module('timeSheetApp')
          $rootScope.initScrollBar();
 
         $('input#dateFilterFrom').on('dp.change', function(e){
-            console.log(e.date);
-            console.log(e.date._d);
             $scope.selectedDateFromSer= e.date._d;
-
-            $.notifyClose();
-
+            $scope.selectedDateFrom= $filter('date')(e.date._d, 'dd/MM/yyyy');
             if($scope.selectedDateFromSer > $scope.selectedDateToSer) {
-
-                    $scope.showNotifications('top','center','danger','From date cannot be greater than To date');
-                    $scope.selectedDateFrom =$filter('date')(new Date(), 'dd/MM/yyyy');
-                    return false;
-            }else {
-               $scope.selectedDateFrom= $filter('date')(e.date._d, 'dd/MM/yyyy');
-               // $scope.refreshReport();
+                $scope.selectedDateToSer=null;
+                scope.selectedDateTo=null;
             }
-
-
-
         });
         $('input#dateFilterTo').on('dp.change', function(e){
-            console.log(e.date);
-            console.log(e.date._d);
             $scope.selectedDateToSer= e.date._d;
-
-            $.notifyClose();
-
+            $scope.selectedDateTo= $filter('date')(e.date._d, 'dd/MM/yyyy');
             if($scope.selectedDateFromSer > $scope.selectedDateToSer) {
-                    $scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
-                    $scope.selectedDateTo=$filter('date')(new Date(), 'dd/MM/yyyy');
-                    return false;
-            }else {
-                $scope.selectedDateTo= $filter('date')(e.date._d, 'dd/MM/yyyy');
-                //$scope.refreshReport();
+                 $scope.selectedDateFromSer = null;
+                 $scope.selectedDateFrom = null;
             }
 
         });
@@ -857,8 +837,8 @@ angular.module('timeSheetApp')
         }
 
 
-        $scope.isActiveAsc = 'id';
-        $scope.isActiveDesc = '';
+        $scope.isActiveAsc = '';
+        $scope.isActiveDesc = 'id';
 
         $scope.columnAscOrder = function(field){
             $scope.selectedColumn = field;
@@ -883,6 +863,7 @@ angular.module('timeSheetApp')
             $scope.search();
          }
          $scope.searchFilter1 = function () {
+             $('.AdvancedFilterModal.in').modal('hide');
              $scope.clearField = false;
             // $scope.searchEmployee = null;
             // $scope.searchTitle = '';
