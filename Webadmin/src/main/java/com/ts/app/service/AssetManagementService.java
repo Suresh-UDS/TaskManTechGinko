@@ -354,7 +354,10 @@ public class AssetManagementService extends AbstractService {
 
 	public boolean isDuplicatePPMSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
 	    log.debug("Asset Title "+assetPpmScheduleDTO.getTitle());
-		List<AssetPPMSchedule> assetPPMSchedule = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(assetPpmScheduleDTO.getAssetId(), assetPpmScheduleDTO.getTitle());
+	    java.sql.Date startDate = DateUtil.convertToSQLDate(assetPpmScheduleDTO.getStartDate());
+		List<AssetPPMSchedule> assetPPMSchedule = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(assetPpmScheduleDTO.getAssetId(), 
+																assetPpmScheduleDTO.getTitle(), MaintenanceType.PPM.getValue(), startDate,
+																assetPpmScheduleDTO.getJobStartTime(), assetPpmScheduleDTO.getJobStartTime());
 		if(assetPPMSchedule != null) {
 			return true;
 		}
@@ -1346,7 +1349,8 @@ public class AssetManagementService extends AbstractService {
 		assetPPMSchedule.setAsset(asset);
 		assetPPMSchedule.setActive(AssetPPMSchedule.ACTIVE_YES);
 
-		List<AssetPPMSchedule> assetPPMSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(asset.getId(), assetPpmScheduleDTO.getTitle());
+		List<AssetPPMSchedule> assetPPMSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(asset.getId(), assetPpmScheduleDTO.getTitle(), 
+										MaintenanceType.PPM.getValue(), assetPPMSchedule.getStartDate(), assetPPMSchedule.getJobStartTime(), assetPPMSchedule.getJobStartTime());
 		log.debug("Existing schedule -" + assetPPMSchedule);
 		if (CollectionUtils.isEmpty(assetPPMSchedules)) {
 			assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);
