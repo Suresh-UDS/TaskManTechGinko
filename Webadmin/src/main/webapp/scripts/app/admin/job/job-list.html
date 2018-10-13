@@ -442,10 +442,10 @@
 
 <!-- Filter New -->
 
-<div class="modal fade AdvancedFilterModal FilterModalCon" id="Filter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade AdvancedFilterModal FilterModalCon" id="Filter"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm"   novalidate >
+            <form name="searchForm" ng-submit="searchFilter()"  novalidate >
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -460,7 +460,7 @@
 
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="headingOne">
-                                <a role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="collapsed">
+                                <a role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne" aria-expanded="true"  aria-controls="collapseOne" class="collapsed">
                                     <h4 class="panel-title">
                                         Basic Filter
                                         <i class="material-icons">keyboard_arrow_down</i>
@@ -483,7 +483,7 @@
                                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable || loadFilter" >
                                                         <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :clearField?'Select Client':searchProject}}</ui-select-match>
-                                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search" ng-click="loadSearchProject(searchProject);loadDepSites()">
+                                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search" ng-click="loadSearchProject(searchProject);loadDepSites();" >
                                                             <div ng-bind="client"></div>
                                                         </ui-select-choices>
                                                     </ui-select>
@@ -539,7 +539,7 @@
                                                 <div class="dropdown">
                                                     <label class="label-control">From date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker" placeholder="DD/MM/YYYY"  id="searchJobDate"  ng-model="searchJobDate" autocomplete="off" />
+                                                    <input type="text" class="form-control datepicker" placeholder="DD/MM/YYYY"  id="searchJobDate"  ng-model="searchJobDate" autocomplete="off" tabindex="1" />
                                                 </div>
                                             </div>
                                         </div>
@@ -549,7 +549,7 @@
                                                 <div class="dropdown">
                                                     <label class="label-control">To date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker" placeholder="DD/MM/YYYY"  id="searchJobDateTo"  ng-model="searchJobDateTo" autocomplete="off" />
+                                                    <input type="text" class="form-control datepicker" placeholder="DD/MM/YYYY"  id="searchJobDateTo"  ng-model="searchJobDateTo" autocomplete="off" tabindex="2" />
                                                 </div>
                                             </div>
                                         </div>
@@ -602,7 +602,7 @@
                                                     <input type="text"
                                                            class="form-control border-bottom-input"
                                                            placeholder="Job id"
-                                                           ng-model="searchJobId"
+                                                           ng-model="searchJobId" tabindex="3"
                                                     />
 
                                                 </div>
@@ -615,7 +615,7 @@
                                                     <input type="text"
                                                            class="form-control border-bottom-input"
                                                            placeholder="Job title"
-                                                           ng-model="searchJobTitle"
+                                                           ng-model="searchJobTitle" tabindex="4"
                                                     />
 
                                                 </div>
@@ -635,8 +635,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-danger btn-simple" data-dismiss="modal" >Cancel</button>
-                    <button type="submit" class="btn btn-success btn-simple" ng-click ="searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal" tabindex="5">Cancel</button>
+                    <button type="submit" class="btn btn-success btn-simple"  ng-disabled="searchForm.$invalid" tabindex="6">Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>

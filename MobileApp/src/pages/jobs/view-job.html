@@ -75,7 +75,7 @@
                 <ion-spinner name="circles"></ion-spinner>
             </div>
 
-            <div *ngIf="!checkListItems" >
+            <div *ngIf="(!checkListItems || checkListItems.length<=0)&& !spinner" >
                 <ion-card>
                     <ion-card-content>
                         <img src="assets/imgs/warning.svg">

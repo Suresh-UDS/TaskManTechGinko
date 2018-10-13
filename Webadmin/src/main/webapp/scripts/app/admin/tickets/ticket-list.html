@@ -657,10 +657,10 @@
 
 
 <!-- Filter New -->
-<div class="modal fade AdvancedFilterModal FilterModalCon" id="Filter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade AdvancedFilterModal FilterModalCon" id="Filter"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm"   novalidate >
+            <form name="searchForm" role="form" ng-submit ="searchFilter1()" novalidate >
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -754,7 +754,7 @@
                                                 <div class="form-group">
                                                     <label class="label-control">From date</label>
                                                     <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedDateFrom" />
+                                                    <input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedDateFrom" tabindex="1" autocomplete="off" />
 
                                                 </div>
                                             </div>
@@ -766,7 +766,7 @@
                                                 <div class="form-group">
                                                     <label class="label-control">To date</label>
                                                     <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker"  id="dateFilterTo"   ng-model="selectedDateTo"/>
+                                                    <input type="text" class="form-control datepicker"  id="dateFilterTo"   ng-model="selectedDateTo" tabindex="2" autocomplete="off" />
 
                                                 </div>
 
@@ -800,11 +800,10 @@
                                             <div class="dropdown" >
                                                 <div class="form-group">
                                                     <input type="text"
-                                                           class="form-control searchable-input floatL border-bottom-input"
-                                                           placeholder="Search ticket title" ng-model="searchTitle"
-
+                                                           class="form-control border-bottom-input"
+                                                           placeholder="Ticket title" ng-model="searchTitle"
                                                            name="ticketId"
-                                                           uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5" />
+                                                            tabindex="3"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -812,11 +811,10 @@
                                             <div class="dropdown" >
                                                 <div class="form-group">
                                                     <input type="text"
-                                                           class="form-control searchable-input floatL border-bottom-input"
-                                                           placeholder="Search ticket description"
+                                                           class="form-control border-bottom-input"
+                                                           placeholder="Ticket description"
                                                            ng-model="searchDescription"
-                                                           ng-value="searchCriteria.ticketName"
-                                                           uib-typeahead="ticket as ticket.name for ticket in allTickets | filter:$viewValue | limitTo:5"/>
+                                                            tabindex="4"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -853,8 +851,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-danger btn-simple" data-dismiss="modal" >Cancel</button>
-                    <button type="submit" class="btn btn-success btn-simple" ng-click ="searchFilter1()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal" tabindex="5">Cancel</button>
+                    <button type="submit" class="btn btn-success btn-simple"  ng-disabled="searchForm.$invalid" tabindex="6">Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>
