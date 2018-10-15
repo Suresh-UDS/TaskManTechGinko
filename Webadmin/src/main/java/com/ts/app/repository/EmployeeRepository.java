@@ -24,7 +24,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("SELECT e FROM Employee e WHERE e.empId = :empId")
 	Employee findByEmpId(@Param("empId") String empId);
 
-	@Query("SELECT e FROM Employee e join e.projectSites s WHERE s.site.id = :siteId and e.active='Y' and e.isLeft = FALSE order by e.name")
+	@Query("SELECT e FROM Employee e join e.projectSites s WHERE s.site.id = :siteId and e.active='Y' and e.isLeft = FALSE order by e.designation")
 	List<Employee> findBySiteId(@Param("siteId") long siteId);
 
     @Query("SELECT e FROM Employee e join e.projectSites s WHERE s.site.id = :siteId and e.active='Y' and e.isLeft = FALSE order by e.name")
@@ -173,7 +173,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	//@Query("SELECT count(e) FROM Employee e join e.projectSites eps join eps.shifts es  WHERE eps.employee.id = e.id and eps.id = es.employeeProjectSite.id and eps.site.id = :siteId and es.startTime = :startTime and es.endTime = :endTime and e.active = 'Y' and e.isLeft = FALSE")
 	//long findEmployeeCountBySiteAndShift(@Param("siteId") long siteId, @Param("startTime") String startTime, @Param("endTime") String endTime);
 
-	@Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE ps.site.id = :siteId and e.id NOT IN :empIds and e.active='Y' and e.isLeft = FALSE order by e.name")
+	@Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE ps.site.id = :siteId and e.id NOT IN :empIds and e.active='Y' and e.isLeft = FALSE order by e.designation")
 	List<Employee> findNonMatchingBySiteId(@Param("siteId") long siteId, @Param("empIds") List<Long> empIds);
 
 	@Query("SELECT emp FROM Employee emp WHERE emp.enrolled_face is not null")

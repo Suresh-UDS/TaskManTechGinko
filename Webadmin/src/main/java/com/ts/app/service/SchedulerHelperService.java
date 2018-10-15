@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -853,14 +854,19 @@ public class SchedulerHelperService extends AbstractService {
 							exportAllSites = true;
 						}
 						StringBuilder shiftValues = new StringBuilder();
+						Map<Map<String, String>, String> shiftSlot = new HashMap<Map<String,String>, String>();
 
 						if (exportAllSites || exportMatchingSite) {
 							List<Shift> shifts = siteRepository.findShiftsBySite(site.getId());
-
+							int i = 1;
 							if (CollectionUtils.isNotEmpty(shifts)) {
 								for (Shift shift : shifts) {
+									Map<String, String> shiftTime = new HashMap<String, String>();
 									shiftValues.append(shift.getStartTime() + " TO " + shift.getEndTime());
 									shiftValues.append("    ");
+									shiftTime.put(shift.getStartTime(), shift.getEndTime());
+									shiftSlot.put(shiftTime, "S"+i);
+									i++;
 								}
 							}
 
@@ -914,6 +920,7 @@ public class SchedulerHelperService extends AbstractService {
 											break;
 										}
 									}
+									
 									EmployeeAttendanceReport empAttnRep = new EmployeeAttendanceReport();
 									empAttnRep.setEmpId(emp.getId());
 									empAttnRep.setEmployeeId(emp.getEmpId());
@@ -933,6 +940,7 @@ public class SchedulerHelperService extends AbstractService {
 										endCal.setTimeInMillis(endTime.getTime());
 										empAttnRep.setShiftEndTime(
 												endCal.get(Calendar.HOUR_OF_DAY) + ":" + endCal.get(Calendar.MINUTE));
+										
 									} else {
 										empAttnRep.setShiftStartTime("");
 										empAttnRep.setShiftEndTime("");
@@ -1000,7 +1008,7 @@ public class SchedulerHelperService extends AbstractService {
 										&& (attnDayWiseAlertTime == null || alertTimeCal.equals(now) || onDemand)) {
 									exportResult = exportUtil.writeMusterRollAttendanceReportToFile(proj.getName(),
 											site.getName(), shiftValues.toString(), month, fromDate, toDate,
-											siteAttnList, null, exportResult);
+											siteAttnList, null, exportResult, shiftSlot);
 									mailService.sendAttendanceMusterrollReportEmail(proj.getName(),
 											attendanceReportEmails.getSettingValue(), content.toString(),
 											exportResult.getFile(), null, month);
