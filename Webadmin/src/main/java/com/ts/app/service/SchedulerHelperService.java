@@ -683,15 +683,16 @@ public class SchedulerHelperService extends AbstractService {
 										break;
 									}
 								}
-								EmployeeAttendanceReport empAttnRep = new EmployeeAttendanceReport();
-								empAttnRep.setEmpId(emp.getId());
-								empAttnRep.setEmployeeId(emp.getEmpId());
-								empAttnRep.setName(emp.getName());
-								empAttnRep.setLastName(emp.getLastName());
-								empAttnRep.setDesignation(emp.getDesignation());
-								empAttnRep.setStatus(EmployeeAttendanceReport.ABSENT_STATUS);
-								empAttnRep.setSiteName(site.getName());
-								if (empShift != null) {
+
+								if (empShift != null) { //only if a matching shift is found for the employee the employee detail needs to be added to the report
+									EmployeeAttendanceReport empAttnRep = new EmployeeAttendanceReport();
+									empAttnRep.setEmpId(emp.getId());
+									empAttnRep.setEmployeeId(emp.getEmpId());
+									empAttnRep.setName(emp.getName());
+									empAttnRep.setLastName(emp.getLastName());
+									empAttnRep.setDesignation(emp.getDesignation());
+									empAttnRep.setStatus(EmployeeAttendanceReport.ABSENT_STATUS);
+									empAttnRep.setSiteName(site.getName());
 									Timestamp startTime = empShift.getStartTime();
 									Calendar startCal = Calendar.getInstance();
 									startCal.setTimeInMillis(startTime.getTime());
@@ -702,12 +703,9 @@ public class SchedulerHelperService extends AbstractService {
 									endCal.setTimeInMillis(endTime.getTime());
 									empAttnRep.setShiftEndTime(
 											endCal.get(Calendar.HOUR_OF_DAY) + ":" + endCal.get(Calendar.MINUTE));
-								} else {
-									empAttnRep.setShiftStartTime("");
-									empAttnRep.setShiftEndTime("");
-								}
-								empAttnRep.setProjectName(proj.getName());
-								siteAttnList.add(empAttnRep);
+									empAttnRep.setProjectName(proj.getName());
+									siteAttnList.add(empAttnRep);
+								} 
 							}
 						}
 						log.debug("send detailed report");
@@ -1968,7 +1966,7 @@ public class SchedulerHelperService extends AbstractService {
 				}
 				sb.append("</tr>");
 			
-				if (eodReportEmails != null && (alertTimeCal.equals(now) || isOnDemand)
+				if (eodReports != null && (alertTimeCal.equals(now) || isOnDemand)
 						&& (eodReportClientGroupAlert != null
 						&& eodReportClientGroupAlert.getSettingValue().equalsIgnoreCase("true"))) {
 
@@ -1990,7 +1988,7 @@ public class SchedulerHelperService extends AbstractService {
 						List<ExportContent> exportContents = null;
 
 						ExportContent exportCnt = new ExportContent();
-						exportCnt.setEmail(eodReportEmails.getSettingValue());
+						exportCnt.setEmail(eodReportEmails !=null ? eodReportEmails.getSettingValue() : StringUtils.EMPTY);
 						exportCnt.setSiteId(site.getId());
 						exportCnt.setSiteName(site.getName());
 						//exportCnt.setSummary(sb.toString());

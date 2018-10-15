@@ -181,22 +181,28 @@ angular.module('timeSheetApp')
 
         $('input#searchJobDate').on('dp.change', function(e){
 
-            $scope.searchJobDateTo = null;
-            $scope.searchJobDateToSer = null;
-
             $scope.searchJobDateSer = new Date(e.date._d);
             $scope.searchJobDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
 
+            if($scope.searchJobDateSer > $scope.searchJobDateToSer){
+               $scope.searchJobDateTo = null;
+               $scope.searchJobDateToSer = null;
+            }
 
-             $('#searchJobDateTo').datetimepicker().on('dp.show', function () {
+             /*$('#searchJobDateTo').datetimepicker().on('dp.show', function () {
                 return $(this).data('DateTimePicker').minDate(e.date);
-            });
+            });*/
         });
 
         $('input#searchJobDateTo').on('dp.change', function(e){
 
             $scope.searchJobDateToSer = new Date(e.date._d);
             $scope.searchJobDateTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
+
+            if($scope.searchJobDateSer > $scope.searchJobDateToSer){
+              $scope.searchJobDate = null;
+              $scope.searchJobDateSer = null;
+            }
 
         });
 
@@ -986,6 +992,7 @@ angular.module('timeSheetApp')
 
 
          $scope.searchFilter = function () {
+            $('.AdvancedFilterModal.in').modal('hide');
             $scope.setPage(1);
             $scope.search();
          }
@@ -1170,7 +1177,9 @@ angular.module('timeSheetApp')
         };
          $scope.clearField = false;
         $scope.clearFilter = function() {
-            $rootScope.exportStatusObj.exportMsg = '';
+            $('input#searchJobDate').data('DateTimePicker').clear();
+            $('input#searchJobDateTo').data('DateTimePicker').clear();
+            $rootScope.exportStatusObj = {};
             $scope.downloader=false;
             $scope.downloaded = true;
             $scope.siteFilterDisable = true;
@@ -1306,9 +1315,7 @@ angular.module('timeSheetApp')
 
         $scope.exportAllData = function(type){
                 $scope.searchCriteria.exportType = type;
-                $rootScope.exportStatusObj.exportMsg = '';
-                $scope.exportMsg ='';
-                $scope.exportFile ='';
+                $rootScope.exportStatusObj = {};
                 $scope.typeMsg = type;
                 $scope.downloader=true;
                 $scope.downloaded = false;
@@ -1396,6 +1403,7 @@ angular.module('timeSheetApp')
 
         $scope.clsDownload = function(){
           $scope.downloaded = true;
+          $rootScope.exportStatusObj = {};
         }
 
         $scope.cancel = function () {
