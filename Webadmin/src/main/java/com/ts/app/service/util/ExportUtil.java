@@ -766,20 +766,20 @@ public class ExportUtil {
 		return result;
 	}
 	
-	public class SortbyDesignation implements Comparator<String> 
+	public class SortbyDesignation implements Comparator<EmployeeAttendanceReport> 
 	{ 
-	    public int compare(String a, String b) 
+	    public int compare(EmployeeAttendanceReport a, EmployeeAttendanceReport b) 
 	    { 
-	    	String[] key1 = a.split("::");
-	    	String[] key2 = b.split("::");
-	        return key1[2].compareTo(key2[2]); 
+	        return a.getEmployeeId().compareTo(b.getEmployeeId()); 
 	    } 
 	} 
 	  
 
 	public ExportResult writeMusterRollAttendanceReportToFile(String projName, String siteName, String shifts, String month, Date fromDate, Date toDate, List<EmployeeAttendanceReport> content, final String empId, ExportResult result, Map<Map<String,String>, String> shiftSlots) {
+		
 		final String KEY_SEPARATOR = "::";
-		Map<String, Map<Integer,Boolean>> attnInfoMap = new TreeMap<String,Map<Integer,Boolean>>();
+		
+		Map<EmployeeAttendanceReport, Map<Integer,Boolean>> attnInfoMap = new TreeMap<EmployeeAttendanceReport,Map<Integer,Boolean>>(new SortbyDesignation());
 				
 		//Consolidate the attendance data against emp id.
 		if(CollectionUtils.isNotEmpty(content)) {
@@ -790,8 +790,8 @@ public class ExportUtil {
 				}
 				Integer attnDay = attnCal.get(Calendar.DAY_OF_MONTH);
 				Map<Integer, Boolean> attnDayMap = null;
-				if(attnInfoMap.containsKey(empAttnReport.getEmployeeId())) {
-					attnDayMap = attnInfoMap.get(empAttnReport.getEmployeeId());
+				if(attnInfoMap.containsKey(empAttnReport)) {
+					attnDayMap = attnInfoMap.get(empAttnReport);
 				}else {
 					attnDayMap = new TreeMap<Integer, Boolean>();
 				}
@@ -802,6 +802,7 @@ public class ExportUtil {
 				String shiftKeyMap = null;
 				if(shiftSlots.containsKey(mapKey)) {
 					shiftKeyMap = shiftSlots.get(mapKey);
+					empAttnReport.setShiftKey(shiftKeyMap);
 				}
 				
 				if(empAttnReport.getCheckInTime() != null) {
@@ -809,12 +810,10 @@ public class ExportUtil {
 				}else {
 					attnDayMap.put(attnDay, false);
 				}
-				attnInfoMap.put(empAttnReport.getEmployeeId() + KEY_SEPARATOR + empAttnReport.getName()
-										+ StringUtils.SPACE + empAttnReport.getLastName() + KEY_SEPARATOR + empAttnReport.getDesignation() + KEY_SEPARATOR + shiftKeyMap, attnDayMap);
+				attnInfoMap.put(empAttnReport, attnDayMap);
 			}
 		}
-		
-
+				
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend=" + isAppend);
 		if (result == null) {
@@ -915,7 +914,7 @@ public class ExportUtil {
 	    	    
 	    rowNum = 12;
 
-		Set<Entry<String,Map<Integer,Boolean>>> entrySet = attnInfoMap.entrySet();
+		Set<Entry<EmployeeAttendanceReport,Map<Integer,Boolean>>> entrySet = attnInfoMap.entrySet();
 		
 		//get the max date of month
 		Calendar fromCal = Calendar.getInstance();
@@ -998,19 +997,19 @@ public class ExportUtil {
  		totalCell.setCellStyle(leftRowStyle);
 		
  	
-		for (Entry<String,Map<Integer,Boolean>> entry : entrySet) {
+		for (Entry<EmployeeAttendanceReport,Map<Integer,Boolean>> entry : entrySet) {
 
 			Row dataRow = musterSheet.getRow(rowNum++);
 
-			String key = entry.getKey();
+			EmployeeAttendanceReport key = entry.getKey();
 			Map<Integer,Boolean> attnMap = attnInfoMap.get(key);
 
-			String[] keyArr = key.split(KEY_SEPARATOR);
-			dataRow.getCell(1).setCellValue(keyArr[0]);
-			dataRow.getCell(2).setCellValue(keyArr[1]);
+//			String[] keyArr = key.split(KEY_SEPARATOR);
+			dataRow.getCell(1).setCellValue(key.getEmployeeId());
+			dataRow.getCell(2).setCellValue(key.getName()+ " " + key.getLastName() );
 			//dataRow.getCell(3).setCellValue(); //father's name not available
 			//dataRow.getCell(4).setCellValue(); //gender not available
-			dataRow.getCell(5).setCellValue(keyArr[2]);
+			dataRow.getCell(5).setCellValue(key.getDesignation());
 			
 			Map<String, Map<String, Integer>> shiftCountMap = new HashMap<String,Map<String, Integer>>();
 
@@ -1018,7 +1017,7 @@ public class ExportUtil {
 			int presentCnt = 0;
 			int offCounts = 0;
 			for(int day=1;day <= daysInMonth;day++) {
-				String sh = keyArr[3];
+				String sh = key.getShiftKey();
 				Map<String, Integer> shiftCounts = null;
 				String week = weeks.get(day - 1);
 				log.debug("Week of the day is -" +week);
@@ -1026,15 +1025,15 @@ public class ExportUtil {
 					boolean attnVal = attnMap.get(day);
 					presentCnt += (attnVal ? 1 : 0);
 					dataRow.getCell(dayStartCell).setCellValue(attnVal ? sh : "A");
-					if(shiftCountMap.containsKey(keyArr[0])) {
-						shiftCounts = shiftCountMap.get(keyArr[0]);
+					if(shiftCountMap.containsKey(key.getEmployeeId())) {
+						shiftCounts = shiftCountMap.get(key.getEmployeeId());
 					}else {
 						shiftCounts = new HashMap<String, Integer>();
 					}
 					
 					if(attnVal) {
 						shiftCounts.put(sh, presentCnt);
-						shiftCountMap.put(keyArr[0], shiftCounts);
+						shiftCountMap.put(key.getEmployeeId(), shiftCounts);
 						dataRow.getCell(dayStartCell).setCellStyle(leftRowStyle);
 					}
 				}else {
@@ -1043,13 +1042,13 @@ public class ExportUtil {
 				if(week.equalsIgnoreCase("SUN")) {
 					offCounts += 1;
 					dataRow.getCell(dayStartCell).setCellValue("O");
-					if(shiftCountMap.containsKey(keyArr[0])) {
-						shiftCounts = shiftCountMap.get(keyArr[0]);
+					if(shiftCountMap.containsKey(key.getEmployeeId())) {
+						shiftCounts = shiftCountMap.get(key.getEmployeeId());
 					}else {
 						shiftCounts = new HashMap<String, Integer>();
 					}
 					shiftCounts.put("off", offCounts);
-					shiftCountMap.put(keyArr[0], shiftCounts);
+					shiftCountMap.put(key.getEmployeeId(), shiftCounts);
 				}
 				dayStartCell++;
 			}
@@ -1071,8 +1070,8 @@ public class ExportUtil {
 				offCountRow.setCellStyle(leftRowStyle);
 				totalCountRow.setCellStyle(leftRowStyle);
 
-				if(shiftCountMap.containsKey(keyArr[0])) {
-					Map<String, Integer> shiftCounts = shiftCountMap.get(keyArr[0]);
+				if(shiftCountMap.containsKey(key.getEmployeeId())) {
+					Map<String, Integer> shiftCounts = shiftCountMap.get(key.getEmployeeId());
 					
 					if(shiftCounts.containsKey(value)) {
 						shiftCnt = shiftCounts.get(value);

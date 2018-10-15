@@ -60,6 +60,8 @@ public class EmployeeAttendanceReport implements Serializable {
     private String differenceText;
 
     private String remarks;
+    
+    private String shiftKey;
 
     public EmployeeAttendanceReport() {
 
@@ -291,6 +293,16 @@ public class EmployeeAttendanceReport implements Serializable {
 
 	public void setDesignation(String designation) {
 		this.designation = designation;
+	}
+
+
+	public String getShiftKey() {
+		return shiftKey;
+	}
+
+
+	public void setShiftKey(String shiftKey) {
+		this.shiftKey = shiftKey;
 	}
     
 }
