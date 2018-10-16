@@ -1359,11 +1359,15 @@ angular.module('timeSheetApp')
         	 		$scope.modifiedEmpShifts.push(empShift);
                     $scope.modified = true;
         	 		$scope.searchCriteria.siteId = selectedShiftSite.id;
-
-                     SiteComponent.findShifts($scope.searchCriteria.siteId, $scope.searchCriteria.fromDate).then(function(data){
-                            $scope.shifts = data;
-                            console.log(JSON.stringify($scope.shifts));
-                    });
+                     if($scope.searchCriteria.siteId && $scope.searchCriteria.fromDate){
+                    	 
+                    	 SiteComponent.findShifts($scope.searchCriteria.siteId, $filter('date')($scope.searchCriteria.fromDate, 'yyyy-MM-dd')).then(function(data){
+                             $scope.shifts = data;
+                             console.log(JSON.stringify($scope.shifts));
+                     }); 
+                    	 
+                     }
+                    
                 }else{
                     empShift.siteId = null;
                     empShift.siteName = null;
@@ -1508,11 +1512,16 @@ angular.module('timeSheetApp')
                     }
 
 	            });
+	             if($scope.searchCriteria.siteId && $scope.searchCriteria.fromDate){
+	            	 
+	            	 SiteComponent.findShifts($scope.searchCriteria.siteId,  $filter('date')($scope.searchCriteria.fromDate, 'yyyy-MM-dd')).then(function(data){
+		            		$scope.shifts = data;
+		            		console.log(JSON.stringify($scope.shifts));
+		            });
+	            	 
+	             }
 
-	            SiteComponent.findShifts($scope.searchCriteria.siteId, $scope.searchCriteria.fromDate).then(function(data){
-	            		$scope.shifts = data;
-	            		console.log(JSON.stringify($scope.shifts));
-	            });
+	            
 
 
 

@@ -29,6 +29,19 @@ angular.module('timeSheetApp')
         $scope.btnDisable = false;
         $scope.localStorage = null;
         $scope.sitesList = null;
+        
+        /** Ui-select scopes **/
+        $scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
+        $scope.client = {};
+        $scope.clients = [];
+        $scope.allSites = {id:0 , name: '-- ALL SITES --'};
+        $scope.sitesListOne = {};
+        $scope.sitesLists = [];
+        $scope.sitesListOne.selected =  null;
+        //$scope.SelectClientsNull = {id:0 , name: '-- SELECT CLIENT --'};
+        $scope.SelectClient = {};
+        $scope.SelectClients = [];
+        
 
         //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -56,10 +69,27 @@ angular.module('timeSheetApp')
         $scope.loadProjectsList = function () {
         	ProjectComponent.findAll().then(function (data) {
                 $scope.projectsList = data;
+                /** Ui-select scope **/
+                $scope.clients[0] = $scope.allClients;
+                //$scope.SelectClients[0] = $scope.SelectClientsNull;
+                
                  $scope.loadingStop();
-                for(var i=0;i<$scope.projectsList.length;i++)
+               /* for(var i=0;i<$scope.projectsList.length;i++)
                 {
                     $scope.uiClient[i] = $scope.projectsList[i].name;
+                    
+                }*/
+                for(var i=0;i<$scope.projectsList.length;i++)
+                {
+                    $scope.SelectClients[i] = $scope.projectsList[i];
+                    
+                }
+                
+                /** Ui-select scope **/
+                for(var i=0;i<$scope.projectsList.length;i++)
+                {
+                    $scope.clients[i+1] = $scope.projectsList[i];
+                    
                 }
                 $scope.clientDisable = false;
                 $scope.clientFilterDisable = false;
@@ -179,7 +209,7 @@ angular.module('timeSheetApp')
         $scope.branchSpin = false;
         $scope.siteSpin = false;
 
-        $scope.loadDepSites = function (searchProject) {
+        /*$scope.loadDepSites = function (searchProject) {
         if(searchProject){
           $scope.siteFilterDisable = true;
           $scope.uiSite.splice(0,$scope.uiSite.length);
@@ -229,7 +259,56 @@ angular.module('timeSheetApp')
           });
         }
 
-        };
+        };*/
+        
+        /** Ui-select function **/
+        
+        $scope.loadDepSitesList = function (searchProject) {
+            if(searchProject){
+              $scope.siteSpin = true;
+              $scope.searchProject = searchProject;
+              if(jQuery.isEmptyObject($scope.searchProject) == false && $scope.searchProject.id == 0){
+            	  ProjectComponent.findAll().then(function (data) {
+	                  $scope.selectedSite = null;
+	                  $scope.sitesList = data;
+	                  $scope.sitesLists = [];
+	                  $scope.sitesListOne.selected = null;
+	                  $scope.sitesLists[0] = $scope.allSites;
+	                  
+	                  for(var i=0;i<$scope.sitesList.length;i++)
+	                  {
+	                      $scope.sitesLists[i+1] = $scope.sitesList[i];
+	                  }
+	                  $scope.siteFilterDisable = false;
+	                  $scope.siteSpin = false;
+	              });
+              }else{
+	              if(jQuery.isEmptyObject($scope.selectedProject) == false) {
+	                     var depProj=$scope.selectedProject.id;
+	              }else if(jQuery.isEmptyObject($scope.searchProject) == false){
+	                      var depProj=$scope.searchProject.id;
+	              }else{
+	                      var depProj=0;
+	              }
+	
+	              ProjectComponent.findSites(depProj).then(function (data) {
+	                  $scope.selectedSite = null;
+	                  $scope.sitesList = data;
+	                  $scope.sitesLists = [];
+	                  $scope.sitesListOne.selected = null;
+	                  $scope.sitesLists[0] = $scope.allSites;
+	                  
+	                  for(var i=0;i<$scope.sitesList.length;i++)
+	                  {
+	                      $scope.sitesLists[i+1] = $scope.sitesList[i];
+	                  }
+	                  $scope.siteFilterDisable = false;
+	                  $scope.siteSpin = false;
+	              });
+              }
+            }
+
+            };
 
         $scope.initCalender = function(){
             demo.initFormExtendedDatetimepickers();
@@ -301,6 +380,11 @@ angular.module('timeSheetApp')
 	        	$scope.success = null;
 	        	$scope.errorSitesExists = null;
 	        	$scope.errorProject = null;
+	        	if($scope.SelectClient.selected){
+	        		$scope.selectedProject = $scope.SelectClient.selected;
+	        	}else{
+	        	   $scope.selectedProject = null;
+	        	}
 	        	if(!$scope.selectedProject){
 	        		$scope.errorProject = "true";
 	        	}else{
@@ -422,6 +506,7 @@ angular.module('timeSheetApp')
                       if($scope.site){
                         console.log('$scope.site.shifts - '+$scope.site.shifts);
                         $scope.selectedProject = {id:$scope.site.projectId,name:$scope.site.projectName};
+                        $scope.SelectClient.selected = $scope.selectedProject;
                         $scope.shiftItems = $scope.site.shifts;
                         console.log('Selected project' , $scope.selectedProject);
 
@@ -554,6 +639,9 @@ angular.module('timeSheetApp')
                     $scope.btnDisable = true;
                     console.log("update site");
                     console.log($scope.site);
+                    if($scope.SelectClient.selected){
+    	        		$scope.selectedProject = $scope.SelectClient.selected;
+    	        	}
                     $scope.site.projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
                     $scope.site.shifts = $scope.shiftItems;
                     $scope.site.region = $scope.selectedRegion!=null?$scope.selectedRegion.name:" ";
@@ -646,6 +734,17 @@ angular.module('timeSheetApp')
         	}
 
         	$scope.searchCriteria.currPage = currPageVal;
+        	
+        	if($scope.client.selected && $scope.client.selected.id !=0){
+        		$scope.searchProject = $scope.client.selected;
+        	}else{
+        	   $scope.searchProject = null;
+        	}
+        	if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
+        		$scope.searchSite = $scope.sitesListOne.selected;
+        	}else{
+        	   $scope.searchSite = null;
+        	}
         	console.log('Selected  project -' , JSON.stringify($scope.searchProject) + '' +$scope.searchSite);
 
 
@@ -667,7 +766,8 @@ angular.module('timeSheetApp')
 		        	}
 		        	console.log('selected site id ='+ $scope.searchCriteria.siteId);
 	        	}else {
-	        		$scope.searchCriteria.siteId = null;
+	        		$scope.searchCriteria.siteId = 0;
+	        		$scope.searchCriteria.siteName = null;
 	        	}
 
 	        	if($scope.searchProject) {
@@ -679,7 +779,8 @@ angular.module('timeSheetApp')
 		        	}
 		        	console.log('selected project id ='+ $scope.searchCriteria.projectId);
 	        	}else {
-	        		$scope.searchCriteria.projectId = null;
+	        		$scope.searchCriteria.projectId = 0;
+	        		$scope.searchCriteria.projectName = null;
 	        	}
 
         	}
@@ -715,13 +816,17 @@ angular.module('timeSheetApp')
                             $scope.pages.currPage = $scope.localStorage.currPage;
                             if($scope.localStorage.projectId){
                                $scope.searchProject = {id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
+                               $scope.client.selected = $scope.searchProject;
                             }else{
                                $scope.searchProject = null;
+                               $scope.client.selected = $scope.allClients;
                             }
                             if($scope.localStorage.siteId){
                               $scope.searchSite = {id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
+                              $scope.sitesListOne.selected = $scope.searchSite;
                             }else{
                                $scope.searchSite = null;
+                               $scope.sitesListOne.selected = $scope.allSites;
                             }
 
                     }
@@ -782,6 +887,12 @@ angular.module('timeSheetApp')
             $scope.siteFilterDisable = true;
         	$scope.selectedSite = null;
         	$scope.sitesList = null;
+        	
+        	/** Ui-select scopes **/
+        	$scope.client.selected = null;
+        	$scope.sitesLists =  [];
+        	$scope.sitesListOne.selected =  null;
+        	
         	$scope.selectedProject = null;
             $scope.searchProject = null;
             $scope.searchSite = null;

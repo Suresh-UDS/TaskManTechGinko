@@ -36,13 +36,19 @@
                                                     <!--<option value="">Select Client...</option>-->
                                                 <!--</select>-->
                                                 <span ng-show="!clientDisable" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                <ui-select ng-model="selectedProject"  ng-disabled="clientDisable"  ng-change="addProject(selectedProject)" tabindex="1"   ng-require="true" autofocus="true">
+                                                <!-- <ui-select ng-model="selectedProject"  ng-disabled="clientDisable"  ng-change="addProject(selectedProject)" tabindex="1"   ng-require="true" autofocus="true">
                                                     <ui-select-match placeholder="Select clients...">{{selectedProject.name ? selectedProject.name : selectedProject}}</ui-select-match>
                                                     <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
                                                         <div >{{ client }}</div>
                                                     </ui-select-choices>
 
-                                                </ui-select>
+                                                </ui-select> -->
+                                                <ui-select ng-model="SelectClient.selected"  name="projectName" ng-disabled="clientDisable" ng-required="true">
+												  <ui-select-match placeholder="Select clients...">{{$select.selected.name}}</ui-select-match>
+												  <ui-select-choices repeat="SelectClient in SelectClients | filter: $select.search" >
+												    <span ng-bind-html="SelectClient.name | highlight: $select.search"></span>
+												  </ui-select-choices>
+												</ui-select>
                                                 <div ng-show="form.$submitted || form.projectName.$touched">
                                                     <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
                                                         <p class="help-block" style="color:maroon"
