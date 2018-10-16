@@ -10,10 +10,15 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -32,10 +37,14 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.hibernate.Hibernate;
@@ -756,10 +765,22 @@ public class ExportUtil {
 		result.setStatus(getExportStatus(fileName));
 		return result;
 	}
+	
+	public class SortbyDesignation implements Comparator<EmployeeAttendanceReport> 
+	{ 
+	    public int compare(EmployeeAttendanceReport a, EmployeeAttendanceReport b) 
+	    { 
+	        return a.getEmployeeId().compareTo(b.getEmployeeId()); 
+	    } 
+	} 
+	  
 
-	public ExportResult writeMusterRollAttendanceReportToFile(String projName, String siteName, String shifts, String month, Date fromDate, Date toDate, List<EmployeeAttendanceReport> content, final String empId, ExportResult result) {
+	public ExportResult writeMusterRollAttendanceReportToFile(String projName, String siteName, String shifts, String month, Date fromDate, Date toDate, List<EmployeeAttendanceReport> content, final String empId, ExportResult result, Map<Map<String,String>, String> shiftSlots) {
+		
 		final String KEY_SEPARATOR = "::";
-		Map<String, Map<Integer,Boolean>> attnInfoMap = new TreeMap<String,Map<Integer,Boolean>>();
+		
+		Map<EmployeeAttendanceReport, Map<Integer,Boolean>> attnInfoMap = new TreeMap<EmployeeAttendanceReport,Map<Integer,Boolean>>(new SortbyDesignation());
+				
 		//Consolidate the attendance data against emp id.
 		if(CollectionUtils.isNotEmpty(content)) {
 			Calendar attnCal = Calendar.getInstance();
@@ -769,22 +790,30 @@ public class ExportUtil {
 				}
 				Integer attnDay = attnCal.get(Calendar.DAY_OF_MONTH);
 				Map<Integer, Boolean> attnDayMap = null;
-				if(attnInfoMap.containsKey(empAttnReport.getEmployeeId())) {
-					attnDayMap = attnInfoMap.get(empAttnReport.getEmployeeId());
+				if(attnInfoMap.containsKey(empAttnReport)) {
+					attnDayMap = attnInfoMap.get(empAttnReport);
 				}else {
 					attnDayMap = new TreeMap<Integer, Boolean>();
 				}
+				
+				Map<String, String> mapKey = new HashMap<String, String>();
+				mapKey.put(empAttnReport.getShiftStartTime(), empAttnReport.getShiftEndTime());
+				
+				String shiftKeyMap = null;
+				if(shiftSlots.containsKey(mapKey)) {
+					shiftKeyMap = shiftSlots.get(mapKey);
+					empAttnReport.setShiftKey(shiftKeyMap);
+				}
+				
 				if(empAttnReport.getCheckInTime() != null) {
 					attnDayMap.put(attnDay, true);
 				}else {
 					attnDayMap.put(attnDay, false);
 				}
-				attnInfoMap.put(empAttnReport.getEmployeeId() + KEY_SEPARATOR + empAttnReport.getName()
-										+ StringUtils.SPACE + empAttnReport.getLastName() + KEY_SEPARATOR + empAttnReport.getDesignation(), attnDayMap);
+				attnInfoMap.put(empAttnReport, attnDayMap);
 			}
 		}
-
-
+				
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend=" + isAppend);
 		if (result == null) {
@@ -880,45 +909,191 @@ public class ExportUtil {
 	    Cell monthCell = headerRow.getCell(25);
 	    String monthCellVal = headerRow.getCell(25).getStringCellValue();
 	    monthCell.setCellValue(monthCellVal + " " + month);
+	    
+	    Row weekDayRow = musterSheet.createRow(11);	    
+	    	    
+	    rowNum = 12;
 
-	    rowNum = 11;
-
-		Set<Entry<String,Map<Integer,Boolean>>> entrySet = attnInfoMap.entrySet();
+		Set<Entry<EmployeeAttendanceReport,Map<Integer,Boolean>>> entrySet = attnInfoMap.entrySet();
+		
 		//get the max date of month
 		Calendar fromCal = Calendar.getInstance();
 		fromCal.setTime(fromDate);
 		int daysInMonth = fromCal.getActualMaximum(Calendar.DAY_OF_MONTH);
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(fromDate);
+		cal.set(Calendar.DAY_OF_MONTH, 1); 
+		int weekInDays=cal.get(Calendar.MONTH);
 
-		for (Entry<String,Map<Integer,Boolean>> entry : entrySet) {
+	    SimpleDateFormat df = new SimpleDateFormat("EE");
+	    List<String> weeks = new ArrayList<>();
+	    String wDay = null;
+	    
+		while (weekInDays==cal.get(Calendar.MONTH)) {
+		  System.out.print(df.format(cal.getTime()).toString().toUpperCase());
+		  wDay = df.format(cal.getTime()).toString();
+		  weeks.add(wDay.toUpperCase());
+		  cal.add(Calendar.DAY_OF_MONTH, 1);
+		}
+		
+		int cellRow = 6;
+		for(String weekDay : weeks) { 
+		    XSSFFont weekFont= xssfWorkbook.createFont();
+	        XSSFRichTextString rt = new XSSFRichTextString(weekDay);
+	        CellStyle dayStyle = xssfWorkbook.createCellStyle();
+	        dayStyle.setBorderLeft(CellStyle.BORDER_THIN);
+	        dayStyle.setBorderRight(CellStyle.BORDER_THIN);
+	        weekFont.setBold(true);
+	        rt.applyFont(weekFont);
+			Cell cell = weekDayRow.createCell(cellRow);
+			cell.setCellValue(rt);
+			cell.setCellStyle(dayStyle);
+			cellRow++;
+		}
+		
+		int shiftCellRow = 37;
+		Row shiftRowNum = musterSheet.getRow(10);
+		XSSFFont shiftFont = xssfWorkbook.createFont();
+ 		for(Map.Entry<Map<String, String>, String> ent : shiftSlots.entrySet()) { 
+ 		    CellStyle shiftStyle = xssfWorkbook.createCellStyle();
+ 		    shiftStyle.setBorderTop(CellStyle.BORDER_THIN);
+ 		    shiftStyle.setBorderBottom(CellStyle.BORDER_THIN);
+ 		    shiftStyle.setBorderLeft(CellStyle.BORDER_THIN);
+ 		    shiftStyle.setBorderRight(CellStyle.BORDER_THIN);
+			String value = ent.getValue();
+			XSSFRichTextString rt = new XSSFRichTextString(value);
+		    shiftFont.setBold(true);
+		    rt.applyFont(shiftFont);
+			Cell shiftRow = shiftRowNum.getCell(shiftCellRow);
+			if(shiftRow == null) {
+				shiftRow = shiftRowNum.createCell(shiftCellRow);
+			}
+			shiftRow.setCellValue(rt);
+			shiftRow.setCellStyle(shiftStyle);
+			shiftCellRow++;
+		}
+ 		 		
+ 	    CellStyle leftRowStyle = xssfWorkbook.createCellStyle();
+ 	    leftRowStyle.setBorderTop(CellStyle.BORDER_THIN);
+ 	    leftRowStyle.setBorderBottom(CellStyle.BORDER_THIN);
+ 	    leftRowStyle.setBorderLeft(CellStyle.BORDER_THIN);
+ 	    leftRowStyle.setBorderRight(CellStyle.BORDER_THIN);
+ 		
+ 		int offRow = shiftCellRow;
+ 		Cell offCell = shiftRowNum.createCell(offRow);
+ 		XSSFRichTextString rt = new XSSFRichTextString("Off");
+ 		shiftFont.setBold(true);
+ 		rt.applyFont(shiftFont);
+ 		offCell.setCellValue(rt);
+ 		offCell.setCellStyle(leftRowStyle);
+ 		
+ 		int totalRow = offRow + 1;
+ 		Cell totalCell = shiftRowNum.createCell(totalRow);
+ 		XSSFRichTextString tot = new XSSFRichTextString("Total Pay");
+ 		shiftFont.setBold(true);
+ 		tot.applyFont(shiftFont);
+ 		totalCell.setCellValue(tot);
+ 		totalCell.setCellStyle(leftRowStyle);
+		
+ 	
+		for (Entry<EmployeeAttendanceReport,Map<Integer,Boolean>> entry : entrySet) {
 
 			Row dataRow = musterSheet.getRow(rowNum++);
 
-			String key = entry.getKey();
+			EmployeeAttendanceReport key = entry.getKey();
 			Map<Integer,Boolean> attnMap = attnInfoMap.get(key);
 
-			String[] keyArr = key.split(KEY_SEPARATOR);
-			dataRow.getCell(1).setCellValue(keyArr[0]);
-			dataRow.getCell(2).setCellValue(keyArr[1]);
+//			String[] keyArr = key.split(KEY_SEPARATOR);
+			dataRow.getCell(1).setCellValue(key.getEmployeeId());
+			dataRow.getCell(2).setCellValue(key.getName()+ " " + key.getLastName() );
 			//dataRow.getCell(3).setCellValue(); //father's name not available
 			//dataRow.getCell(4).setCellValue(); //gender not available
-			dataRow.getCell(5).setCellValue(keyArr[2]);
+			dataRow.getCell(5).setCellValue(key.getDesignation());
+			
+			Map<String, Map<String, Integer>> shiftCountMap = new HashMap<String,Map<String, Integer>>();
 
 			int dayStartCell = 6;
 			int presentCnt = 0;
+			int offCounts = 0;
 			for(int day=1;day <= daysInMonth;day++) {
+				String sh = key.getShiftKey();
+				Map<String, Integer> shiftCounts = null;
+				String week = weeks.get(day - 1);
+				log.debug("Week of the day is -" +week);
 				if(attnMap.containsKey(day)) {
 					boolean attnVal = attnMap.get(day);
 					presentCnt += (attnVal ? 1 : 0);
-					dataRow.getCell(dayStartCell).setCellValue(attnVal ? "P" : "A");
+					dataRow.getCell(dayStartCell).setCellValue(attnVal ? sh : "A");
+					if(shiftCountMap.containsKey(key.getEmployeeId())) {
+						shiftCounts = shiftCountMap.get(key.getEmployeeId());
+					}else {
+						shiftCounts = new HashMap<String, Integer>();
+					}
+					
 					if(attnVal) {
-						dataRow.getCell(dayStartCell).setCellStyle(style);
+						shiftCounts.put(sh, presentCnt);
+						shiftCountMap.put(key.getEmployeeId(), shiftCounts);
+						dataRow.getCell(dayStartCell).setCellStyle(leftRowStyle);
 					}
 				}else {
 					dataRow.getCell(dayStartCell).setCellValue("A");
 				}
+				if(week.equalsIgnoreCase("SUN")) {
+					offCounts += 1;
+					dataRow.getCell(dayStartCell).setCellValue("O");
+					if(shiftCountMap.containsKey(key.getEmployeeId())) {
+						shiftCounts = shiftCountMap.get(key.getEmployeeId());
+					}else {
+						shiftCounts = new HashMap<String, Integer>();
+					}
+					shiftCounts.put("off", offCounts);
+					shiftCountMap.put(key.getEmployeeId(), shiftCounts);
+				}
 				dayStartCell++;
 			}
-			dataRow.getCell(dayStartCell).setCellValue(presentCnt);
+			
+//			dataRow.getCell(dayStartCell).setCellValue(presentCnt);
+			
+			int sumCount = dayStartCell;
+			int sumOffCount = offRow;
+			int sumTotCount = sumOffCount + 1;	
+//			int totalValue = 0;
+			for(Map.Entry<Map<String, String>, String> ent : shiftSlots.entrySet()) {
+				String value = ent.getValue();
+				int shiftCnt = 0;
+				int offCnt = 0;
+				Cell shiftCountRow = dataRow.createCell(sumCount);
+				Cell offCountRow = dataRow.createCell(sumOffCount);
+				Cell totalCountRow = dataRow.createCell(sumTotCount);
+				shiftCountRow.setCellStyle(leftRowStyle);
+				offCountRow.setCellStyle(leftRowStyle);
+				totalCountRow.setCellStyle(leftRowStyle);
+
+				if(shiftCountMap.containsKey(key.getEmployeeId())) {
+					Map<String, Integer> shiftCounts = shiftCountMap.get(key.getEmployeeId());
+					
+					if(shiftCounts.containsKey(value)) {
+						shiftCnt = shiftCounts.get(value);
+					}
+					if(shiftCounts.containsKey("off")) {
+						offCnt = shiftCounts.get("off");
+					}
+					shiftCountRow = dataRow.getCell(sumCount);
+					offCountRow = dataRow.getCell(sumOffCount);
+					totalCountRow = dataRow.getCell(sumTotCount);
+//					totalValue += shiftCnt + offCnt;
+				}
+				
+				shiftCountRow.setCellValue(shiftCnt);
+				offCountRow.setCellValue(offCnt);
+				
+				totalCountRow.setCellValue(shiftCountRow.getNumericCellValue() + offCountRow.getNumericCellValue());
+				sumCount++;
+			}
+			
+			
+			
 
 			/*
 			dataRow.getCell(0).setCellValue(transaction.getEmployeeIds());

@@ -414,7 +414,10 @@ public class ImportUtil {
 			long projectId = (long) projectRow.getCell(2).getNumericCellValue();
 			r++;
 			Row siteRow = datatypeSheet.getRow(r);
-			long siteId = (long) siteRow.getCell(2).getNumericCellValue();
+			long siteId = 0;
+			if(siteRow.getCell(2) != null) {
+				siteId = (long) siteRow.getCell(2).getNumericCellValue();
+			}
 			r++;
 			Row managerRow = datatypeSheet.getRow(r);
 			String managerId = String.valueOf(managerRow.getCell(2).getNumericCellValue());
@@ -424,9 +427,12 @@ public class ImportUtil {
 				log.debug("Current Row number -" + r);
 				Row currentRow = datatypeSheet.getRow(r);
 				JobDTO jobDto = new JobDTO();
-				jobDto.setTitle(currentRow.getCell(0).getStringCellValue());
-				jobDto.setDescription(currentRow.getCell(1).getStringCellValue());
+				if(siteId == 0) {
+					siteId = (long) currentRow.getCell(0).getNumericCellValue();
+				}
 				jobDto.setSiteId(siteId);
+				jobDto.setTitle(currentRow.getCell(1).getStringCellValue());
+				jobDto.setDescription(currentRow.getCell(2).getStringCellValue());
 //				long location = (long)currentRow.getCell(2).getNumericCellValue();
 //				Location loc = locationRepo.findByName(location);
 //				if (loc == null) {
@@ -436,20 +442,19 @@ public class ImportUtil {
 //					loc = locationRepo.save(loc);
 //				}
 
-				String jobType = currentRow.getCell(3).getStringCellValue();
+				String jobType = currentRow.getCell(4).getStringCellValue();
 				String empId = null;
-				log.debug("cell type =" + currentRow.getCell(5).getCellType());
-				if (currentRow.getCell(5).getCellType() == CellFormatType.NUMBER.ordinal()) {
+				if (currentRow.getCell(6).getCellType() == CellFormatType.NUMBER.ordinal()) {
 					try {
-						empId = String.valueOf((long)currentRow.getCell(5).getNumericCellValue());
+						empId = String.valueOf((long)currentRow.getCell(6).getNumericCellValue());
 					} catch (IllegalStateException ise) {
-						empId = currentRow.getCell(5).getStringCellValue();
+						empId = currentRow.getCell(6).getStringCellValue();
 					}
 				} else {
 					try {
-						empId = currentRow.getCell(5).getStringCellValue();
+						empId = currentRow.getCell(6).getStringCellValue();
 					} catch (IllegalStateException ise) {
-						empId = String.valueOf((long)currentRow.getCell(5).getNumericCellValue());
+						empId = String.valueOf((long)currentRow.getCell(6).getNumericCellValue());
 					}
 
 				}
@@ -461,21 +466,21 @@ public class ImportUtil {
 					jobDto.setEmployeeName(emp.getFullName());
 					jobDto.setStatus(JobStatus.ASSIGNED.name());
 					jobDto.setJobType(JobType.valueOf(jobType));
-					String schedule = currentRow.getCell(6).getStringCellValue();
+					String schedule = currentRow.getCell(7).getStringCellValue();
 					jobDto.setSchedule(schedule);
-					Date startDate = currentRow.getCell(7).getDateCellValue();
-					Date startTime = currentRow.getCell(9).getDateCellValue();
-					Date endDate = currentRow.getCell(8).getDateCellValue();
-					Date endTime = currentRow.getCell(10).getDateCellValue();
+					Date startDate = currentRow.getCell(8).getDateCellValue();
+					Date startTime = currentRow.getCell(10).getDateCellValue();
+					Date endDate = currentRow.getCell(9).getDateCellValue();
+					Date endTime = currentRow.getCell(11).getDateCellValue();
 					jobDto.setPlannedStartTime(DateUtil.convertToDateTime(startDate, startTime));
 					jobDto.setPlannedEndTime(DateUtil.convertToDateTime(startDate, endTime));
 					jobDto.setScheduleEndDate(DateUtil.convertToDateTime(endDate, endTime));
-					if(currentRow.getCell(11)!=null){
-                        jobDto.setFrequency(currentRow.getCell(11).getStringCellValue());
+					if(currentRow.getCell(12)!=null){
+                        jobDto.setFrequency(currentRow.getCell(12).getStringCellValue());
                     }
 					jobDto.setActive("Y");
-					if(currentRow.getCell(12) != null) {
-						String checkListName = currentRow.getCell(12).getStringCellValue();
+					if(currentRow.getCell(13) != null) {
+						String checkListName = currentRow.getCell(13).getStringCellValue();
 						if(StringUtils.isNotBlank(checkListName)) {
 							SearchCriteria searchCriteria = new SearchCriteria();
 							searchCriteria.setName(checkListName);
@@ -497,10 +502,10 @@ public class ImportUtil {
 							}
 						}
 					}
-					if((currentRow.getCell(13)!=null)&&(currentRow.getCell(14)!=null)&&currentRow.getCell(15)!=null){
-					    String block = currentRow.getCell(13).getStringCellValue();
-					    String floor = currentRow.getCell(14).getStringCellValue();
-					    String zone = currentRow.getCell(15).getStringCellValue();
+					if((currentRow.getCell(14)!=null)&&(currentRow.getCell(15)!=null)&&currentRow.getCell(16)!=null){
+					    String block = currentRow.getCell(14).getStringCellValue();
+					    String floor = currentRow.getCell(15).getStringCellValue();
+					    String zone = currentRow.getCell(16).getStringCellValue();
                         jobDto.setBlock(block);
                         jobDto.setFloor(floor);
                         jobDto.setZone(zone);
@@ -517,8 +522,8 @@ public class ImportUtil {
                         }
 
                     }
-					if(currentRow.getCell(16) != null) {
-						boolean isScheduleExcludeWeeknd = currentRow.getCell(16).getBooleanCellValue();
+					if(currentRow.getCell(17) != null) {
+						boolean isScheduleExcludeWeeknd = currentRow.getCell(17).getBooleanCellValue();
 						jobDto.setScheduleDailyExcludeWeekend(isScheduleExcludeWeeknd);
 					}
 					jobService.saveJob(jobDto);
