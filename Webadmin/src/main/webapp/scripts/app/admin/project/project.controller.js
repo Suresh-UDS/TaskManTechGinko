@@ -20,6 +20,9 @@ angular.module('timeSheetApp')
         $rootScope.conformText = null;
         $scope.clientGroup = {};
         $scope.selectedClientGroup = {};
+        $scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
+        $scope.client = {};
+        $scope.clients = [];
 
 
         //$timeout(function (){angular.element('[ng-model="name"]').focus();});
@@ -107,9 +110,12 @@ angular.module('timeSheetApp')
         $scope.loadProjectsList = function () {
             ProjectComponent.findAll().then(function (data) {
                 $scope.projectsList = data;
+                $scope.clients[0] = $scope.allClients;
                 for(var i=0;i<$scope.projectsList.length;i++)
                 {
-                    $scope.uiClient[i] = $scope.projectsList[i].name;
+                    //$scope.uiClient[i] = $scope.projectsList[i].name;
+                    $scope.clients[i+1] = $scope.projectsList[i];
+                    console.log('Client array',$scope.clients);
                 }
                 $scope.clientFilterDisable = false;
             });
@@ -305,9 +311,14 @@ angular.module('timeSheetApp')
         	}
 
         	$scope.searchCriteria.currPage = currPageVal;
-        	console.log('Selected  project -' + $scope.searchProject);
-        	console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaProject));
-
+        	if($scope.client.selected && $scope.client.selected.id !=0){
+        		$scope.searchProject = $scope.client.selected;
+        	}else{
+        	   $scope.searchProject = null;
+        	}
+        	console.log('Selected  project -' , $scope.searchProject);
+        	console.log('search criteria - ', JSON.stringify($rootScope.searchCriteriaProject));
+        	
         	if(!$scope.searchProject) {
         		if($rootScope.searchCriteriaProject) {
             		$scope.searchCriteria = $rootScope.searchCriteriaProject;
@@ -320,7 +331,7 @@ angular.module('timeSheetApp')
 		        	$scope.searchCriteria.projectId = $scope.searchProject.id;
 		        	if(!$scope.searchCriteria.projectId) {
 		        		$scope.searchCriteria.projectName = $scope.searchProject.name;
-		        		console.log('selected project name ='+ $scope.searchProject.name + ', ' +$scope.searchCriteria.projectName);
+		        		console.log('selected project name =', $scope.searchProject.name + ', ' +$scope.searchCriteria.projectName);
 		        	}else {
 			        	$scope.searchCriteria.projectName = $scope.searchProject.name;
 		        	}
@@ -366,8 +377,10 @@ angular.module('timeSheetApp')
                         $scope.filter = true;
                         if($scope.localStorage.projectId){
                              $scope.searchProject ={id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
+                             $scope.client.selected = $scope.searchProject;
                         }else{
                              $scope.searchProject = null;
+                             $scope.client.selected = $scope.allClients;
                         }
 
                     }
@@ -429,6 +442,7 @@ angular.module('timeSheetApp')
             $scope.selectedProject = null;
             $scope.searchProject = null;
             $scope.searchCriteria = {};
+            $scope.client.selected = $scope.allClients;
             $scope.localStorage = null;
             $rootScope.searchCriteriaProject = null;
             $scope.pages = {
