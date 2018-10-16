@@ -14,6 +14,9 @@ public interface SchedulerConfigRepository extends JpaRepository<SchedulerConfig
 	@Query("select s from SchedulerConfig s, Job j where s.job.id = j.id and s.schedule='DAY' and (s.lastRun is null or s.lastRun < :date) and (s.startDate is NULL or s.startDate <= :date) and s.scheduleEndDate >= :date and j.active='Y' and s.active='Y' ")
 	public List<SchedulerConfig> getDailyTask(@Param("date") Date currentDate);
 
+	@Query("select s from SchedulerConfig s, Job j where s.job.id = j.id and j.site.id in ( :siteIds) and s.schedule='DAY' and (s.lastRun is null or s.lastRun < :date) and (s.startDate is NULL or s.startDate <= :date) and s.scheduleEndDate >= :date and j.active='Y' and s.active='Y' ")
+	public List<SchedulerConfig> getDailyTask(@Param("date") Date currentDate, @Param("siteIds") List<Long> siteIds);
+
 	@Query("select s from SchedulerConfig s, Job j where s.job.id = j.id and s.schedule='WEEK' and (s.lastRun is null or s.lastRun < :date) and (s.startDate is NULL or s.startDate <= :date) and s.scheduleEndDate >= :date and j.active='Y' and s.active='Y' ")
 	public List<SchedulerConfig> getWeeklyTask(@Param("date") Date currentDate);
 
