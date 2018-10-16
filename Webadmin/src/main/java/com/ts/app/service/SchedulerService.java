@@ -843,7 +843,7 @@ public class SchedulerService extends AbstractService {
 						}
 					}
 				}else {
-					currDate = new DateTime(parentJob.getPlannedStartTime().getTime());
+					//currDate = new DateTime(parentJob.getPlannedStartTime().getTime());
 					if((currDate.isAfter(today) || currDate.isEqual(today)) && currDate.isBefore(endDate)) {
 						jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate(), jobDtos);
 						if(CollectionUtils.isNotEmpty(jobDtos)) {
