@@ -231,12 +231,18 @@
                                     <!--</select>-->
                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                     <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable">
+                                    <!-- <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable">
                                         <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select client' :clearField?'Select client':searchProject}}</ui-select-match>
                                         <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search" ng-click="loadDepSites(searchProject)">
                                             <div ng-bind="client" ></div>
                                         </ui-select-choices>
-                                    </ui-select>
+                                    </ui-select> -->
+                                    <ui-select ng-model="client.selected"  ng-disabled="disabled">
+									  <ui-select-match placeholder="Select clients...">{{$select.selected.name}}</ui-select-match>
+									  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected)" null-option="allClients" loose-null>
+									    <span ng-bind-html="client.name | highlight: $select.search"></span>
+									  </ui-select-choices>
+									</ui-select>
                                 </div>
                             </div>
                         </div>
@@ -251,13 +257,20 @@
                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                     <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                     <!--<span class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sitesList.length == 0">
+                                    <!-- <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable ||sitesList.length == 0">
                                         <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select site' : hideSite ?clearField?'Select site':searchSite : 'Select Site' }}</ui-select-match>
                                         <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search" ng-click="selectSite(searchSite)">
                                             <div ng-bind="site"></div>
                                         </ui-select-choices>
                                     </ui-select>
-                                    <span ng-if="sitesList.length == 0"><p class="error-msg margin0">No sites</p></span>
+                                    <span ng-if="sitesList.length == 0"><p class="error-msg margin0">No sites</p></span> -->
+                                    <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
+									  <ui-select-match placeholder="Select site...">{{$select.selected.name}}</ui-select-match>
+									  <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search" null-option="allSites" loose-null>
+									    <span ng-bind-html="sitesListOne.name | highlight: $select.search"></span>
+									  </ui-select-choices>
+									</ui-select>
+									<span ng-if="sitesLists.length == 1"><p class="error-msg margin0">No sites</p></span>
                                 </div>
                             </div>
                         </div>
