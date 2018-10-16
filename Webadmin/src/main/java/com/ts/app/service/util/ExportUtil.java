@@ -916,6 +916,26 @@ public class ExportUtil {
 
 		Set<Entry<EmployeeAttendanceReport,Map<Integer,Boolean>>> entrySet = attnInfoMap.entrySet();
 		
+		 List<Entry<EmployeeAttendanceReport, Map<Integer,Boolean>>> list = new ArrayList<Entry<EmployeeAttendanceReport, Map<Integer,Boolean>>>(entrySet);
+		    Collections.sort( list, new Comparator<Map.Entry<EmployeeAttendanceReport, Map<Integer,Boolean>>>()
+		    {
+				@Override
+				public int compare(Entry<EmployeeAttendanceReport, Map<Integer, Boolean>> o1,
+						Entry<EmployeeAttendanceReport, Map<Integer, Boolean>> o2) {
+					// TODO Auto-generated method stub
+					String ekey1 = null;
+					String ekey2 = null;
+					if(o1.getKey() != null && o2.getKey() != null) { 
+						ekey1 = o1.getKey().getDesignation();
+						ekey2 = o2.getKey().getDesignation();
+					};
+					return ekey1.compareTo(ekey2);
+					
+				}
+		    });
+		
+		    log.debug("Showing a sorted designation" +list);
+		    
 		//get the max date of month
 		Calendar fromCal = Calendar.getInstance();
 		fromCal.setTime(fromDate);
@@ -997,7 +1017,7 @@ public class ExportUtil {
  		totalCell.setCellStyle(leftRowStyle);
 		
  	
-		for (Entry<EmployeeAttendanceReport,Map<Integer,Boolean>> entry : entrySet) {
+		for (Entry<EmployeeAttendanceReport,Map<Integer,Boolean>> entry : list) {
 
 			Row dataRow = musterSheet.getRow(rowNum++);
 
@@ -1006,7 +1026,7 @@ public class ExportUtil {
 
 //			String[] keyArr = key.split(KEY_SEPARATOR);
 			dataRow.getCell(1).setCellValue(key.getEmployeeId());
-			dataRow.getCell(2).setCellValue(key.getName()+ " " + key.getLastName() );
+			dataRow.getCell(2).setCellValue(key.getName()+ " " + key.getLastName());
 			//dataRow.getCell(3).setCellValue(); //father's name not available
 			//dataRow.getCell(4).setCellValue(); //gender not available
 			dataRow.getCell(5).setCellValue(key.getDesignation());
