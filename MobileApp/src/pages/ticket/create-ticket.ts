@@ -59,6 +59,11 @@ export class CreateTicket {
       this.assetDetails = this.navParams.get('assetDetails')
       this.empPlace="Employee"
 
+        if(this.assetDetails && this.assetDetails.id>0){
+          this.siteName = this.assetDetails.siteName;
+          this.getEmployee(this.assetDetails.siteId);
+        }
+
     }
 
   ionViewDidLoad() {
@@ -151,7 +156,7 @@ export class CreateTicket {
 
               if(this.assetDetails)
               {
-                  this.newTicket.assetId = this.assetDetails.assetId;
+                  this.newTicket.assetId = this.assetDetails.id;
               }
 
               this.jobService.createTicket(this.newTicket).subscribe(

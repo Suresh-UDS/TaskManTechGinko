@@ -163,7 +163,7 @@ public class AttendanceService extends AbstractService {
                         if(isIdentical){
                             log.debug("Verification success identical: "+isIdentical);
                             attnDto.setUrl(attnDto.getUrl());
-                            attn.setCheckOutImage(attnDto.getCheckOutImage());
+                            dbAttn.setCheckOutImage(attnDto.getCheckOutImage());
                             dbAttn.setCheckOutTime(new java.sql.Timestamp(now.getTimeInMillis()));
 
                         }else{

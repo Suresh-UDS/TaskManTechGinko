@@ -641,7 +641,7 @@
                                                                                             <div class="form-group">
                                                                                                 <label class="control-label">From Date</label>
                                                                                                 <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                                <input type="text" class="form-control datepicker"  id="warFromDate" ng-model ="assetEdit.warFromDate1" placeholder="{{warFromDate | date:'dd/MMM/yyyy'}}" name="warFromDate"/>
+                                                                                                <input type="text" class="form-control datepicker"  id="warFromDate" ng-model ="assetEdit.warFromDate1" placeholder="DD/MM/YYYY" name="warFromDate" autocomplete="off"/>
                                                                                                 <!-- <div ng-show="form.$submitted || form.warFromDate.$touched"> -->
                                                                                                     <!-- <div
                                                                                                         ng-show="form.warFromDate.$dirty || form.warFromDate.$invalid">
@@ -666,7 +666,7 @@
                                                                                             <div class="form-group">
                                                                                                 <label class="control-label">To Date</label>
                                                                                                 <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                                <input type="text" class="form-control datepicker"  id="warToDate" ng-model ="assetEdit.warToDate1" name="warToDate" placeholder="{{warToDate | date:'dd/MMM/yyyy'}}"/>
+                                                                                                <input type="text" class="form-control datepicker"  id="warToDate" ng-model ="assetEdit.warToDate1" name="warToDate" placeholder="DD/MM/YYYY" autocomplete="off"/>
                                                                                                <!--  <div ng-show="form.$submitted || form.warToDate.$touched"> -->
                                                                                                     <!-- <div
                                                                                                         ng-show="form.warToDate.$dirty || form.warToDate.$invalid">
@@ -733,7 +733,7 @@
 
                                                                     <div class="form-group is-empty">
                                                                         <label class="control-label">Asset Code </label>
-                                                                        <input id="assetcode" ng-model="assetQr.assetCode" class="form-control" name="assetcode" type="text" value="" ng-minlength="1" ng-maxlength="10" ng-pattern="/^[A-Za-z0-9]*$/" autofocus="" required="" tabindex="0" aria-required="true" aria-invalid="true" autocomplete="off">
+                                                                        <input id="assetcode" ng-model="assetQr.assetCode" class="form-control" name="assetcode" type="text" value="" ng-minlength="1" ng-maxlength="20" ng-pattern="/^[A-Za-z0-9]*$/" autofocus="" required="" tabindex="0" aria-required="true" aria-invalid="true" autocomplete="off">
 
 
 
@@ -1946,8 +1946,8 @@
                                                                                          </div>
                                                                                      </td> -->
                                                                                     <td class="text-right">
-                                                                                        <a  ng-click="getParameterConfigDetails(assetParam.id ,'edit')"  has-permission="Config:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                                                                        <a  has-permission="Config:Delete" ui-sref="" class="btn btn-simple btn-danger" ng-click="deleteConfigConfirm(assetParam.id)"><i class="material-icons" onClick="$('#deleteModalConfig').modal()" data-target="#myModal">delete_forever</i><div class="ripple-container"></div></a>
+                                                                                        <a  ng-click="getParameterConfigDetails(assetParam.id ,'edit')" href="javascript:void(0);"  has-permission="Config:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                                                                        <a  has-permission="Config:Delete" href="javascript:void(0);" class="btn btn-simple btn-danger" ng-click="deleteConfigConfirm(assetParam.id)"><i class="material-icons" onClick="$('#deleteModalConfig').modal()" data-target="#myModal">delete_forever</i><div class="ripple-container"></div></a>
                                                                                     </td>
 
                                                                                 </tr>
@@ -2160,7 +2160,7 @@
                                                                        <i class="material-icons">cloud_download</i>
                                                                     </a>
                                                                    </div>
-                                                                   <a href="#" id="loop">
+                                                                   <a href="javascript:void(0);" id="loop">
                                                                        <img ng-src="assets/img/{{uploadFile.extension}}.png" alt="docs" title="Download"  />
                                                                    </a>
                                                                    <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadFile.title}}</p>
@@ -2200,7 +2200,7 @@
                                                                         <i class="material-icons">cloud_download</i>
                                                                         </a>
                                                                     </div>
-                                                                    <a href="#" id="loop2">
+                                                                    <a href="javascript:void(0);" id="loop2">
                                                                         <!-- <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" ng-click="showFile(uploadPhoto.id, uploadPhoto.file)"/> -->
                                                                         <img ng-src="assets/img/{{uploadPhoto.extension}}.png" alt="photo" title="Download" />
                                                                     </a>

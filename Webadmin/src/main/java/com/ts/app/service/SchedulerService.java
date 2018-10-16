@@ -26,6 +26,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Splitter;
@@ -208,9 +209,11 @@ public class SchedulerService extends AbstractService {
 		if (env.getProperty("scheduler.dailyJob.enabled").equalsIgnoreCase("true")) {
             log.debug("Daily jobs enabled");
             Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DAY_OF_MONTH, 1);
 			cal.set(Calendar.HOUR_OF_DAY, 0);
 			cal.set(Calendar.MINUTE, 0);
 			Calendar endCal = Calendar.getInstance();
+			endCal.add(Calendar.DAY_OF_MONTH, 1);
 			endCal.set(Calendar.HOUR_OF_DAY, 23);
 			endCal.set(Calendar.MINUTE, 59);
             Calendar nextDay = Calendar.getInstance();
@@ -221,32 +224,47 @@ public class SchedulerService extends AbstractService {
 			java.sql.Date startDate = new java.sql.Date(cal.getTimeInMillis());
 			java.sql.Date endDate = new java.sql.Date(endCal.getTimeInMillis());
 			java.sql.Date tomorrow = new java.sql.Date(nextDay.getTimeInMillis());
-			List<SchedulerConfig> dailyTasks = schedulerConfigRepository.getDailyTask(cal.getTime());
-			log.debug("Found {} Daily Tasks", dailyTasks.size());
-			ExecutorService executorService = Executors.newFixedThreadPool(50); //Executes job creation task for each schedule asynchronously
-			List<Future> futures = new ArrayList<Future>();
-			if (CollectionUtils.isNotEmpty(dailyTasks)) {
-				for (SchedulerConfig dailyTask : dailyTasks) {
-					long parentJobId = dailyTask.getJob().getId();
-					if(log.isDebugEnabled()) {
-						log.debug("Parent job id - "+parentJobId);
-						log.debug("Parent job date - "+startDate);
-						log.debug("Parent job date - "+endDate);
-					}
-					JobCreationThread jobThrd = new JobCreationThread(dailyTask, parentJobId, cal, endCal, jobRepository);
-					futures.add(executorService.submit(jobThrd));
-				}
-				for(Future future : futures) {
-					try {
-						future.get();
-					} catch (InterruptedException | ExecutionException e) {
-						log.error("Error while running the job creation thread executor task ",e);
-					}
-				}
-				executorService.shutdown();
-			}
-			schedulerConfigRepository.save(dailyTasks);
+			createDailyTask(cal.getTime());
 		}
+	}
+	
+	public void createDailyTask(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		Calendar endCal = Calendar.getInstance();
+		endCal.setTime(date);
+		endCal.set(Calendar.HOUR_OF_DAY, 23);
+		endCal.set(Calendar.MINUTE, 59);
+		java.sql.Date startDate = new java.sql.Date(cal.getTimeInMillis());
+		java.sql.Date endDate = new java.sql.Date(endCal.getTimeInMillis());
+		
+		List<SchedulerConfig> dailyTasks = schedulerConfigRepository.getDailyTask(cal.getTime());
+		log.debug("Found {} Daily Tasks", dailyTasks.size());
+		ExecutorService executorService = Executors.newFixedThreadPool(50); //Executes job creation task for each schedule asynchronously
+		List<Future> futures = new ArrayList<Future>();
+		if (CollectionUtils.isNotEmpty(dailyTasks)) {
+			for (SchedulerConfig dailyTask : dailyTasks) {
+				long parentJobId = dailyTask.getJob().getId();
+				if(log.isDebugEnabled()) {
+					log.debug("Parent job id - "+parentJobId);
+					log.debug("Parent job date - "+startDate);
+					log.debug("Parent job date - "+endDate);
+				}
+				JobCreationThread jobThrd = new JobCreationThread(dailyTask, parentJobId, cal, endCal, jobRepository);
+				futures.add(executorService.submit(jobThrd));
+			}
+			for(Future future : futures) {
+				try {
+					future.get();
+				} catch (InterruptedException | ExecutionException e) {
+					log.error("Error while running the job creation thread executor task ",e);
+				}
+			}
+			executorService.shutdown();
+		}
+		schedulerConfigRepository.save(dailyTasks);
 	}
 	
 	final class JobCreationThread implements Runnable {
@@ -744,7 +762,7 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.feedbackDetailedReport();
 	}	
 	
-	@Transactional
+	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void createJobs(SchedulerConfig scheduledTask) {
 		if ("CREATE_JOB".equals(scheduledTask.getType())) {
 			String creationPolicy = env.getProperty("scheduler.job.creationPolicy");
@@ -761,7 +779,15 @@ public class SchedulerService extends AbstractService {
 			}
 			DateTime endDate = DateTime.now().withYear(scheduledEndDate.get(Calendar.YEAR)).withMonthOfYear(scheduledEndDate.get(Calendar.MONTH) + 1)
 					.withDayOfMonth(scheduledEndDate.get(Calendar.DAY_OF_MONTH)).withHourOfDay(scheduledEndDate.get(Calendar.HOUR_OF_DAY)).withMinuteOfHour(scheduledEndDate.get(Calendar.MINUTE));
-
+			List<JobDTO> jobDtos = new ArrayList<JobDTO>();
+			//change the creationPolicy based on the frequency
+			Map<String, String> dataMap = Splitter.on("&").withKeyValueSeparator("=").split(scheduledTask.getData());
+			if(dataMap != null && dataMap.containsKey("frequency") 
+					&& (dataMap.get("frequency").equals(FREQ_ONCE_EVERY_HOUR) || dataMap.get("frequency").equals(FREQ_ONCE_EVERY_2_HOUR) ||
+							dataMap.get("frequency").equals(FREQ_ONCE_EVERY_3_HOUR) || dataMap.get("frequency").equals(FREQ_ONCE_EVERY_4_HOUR) ||	
+							dataMap.get("frequency").equals(FREQ_ONCE_EVERY_5_HOUR) )) {
+				creationPolicy = "daily";
+			}
 			if (creationPolicy.equalsIgnoreCase("monthly")) { // if the creation policy is set to monthly, create jobs for the rest of the
 																// month
 				DateTime currDate = DateTime.now();
@@ -778,18 +804,24 @@ public class SchedulerService extends AbstractService {
 					if(prevJob.getPlannedStartTime().before(currDate.toDate())){
 						while ((currDate.isBefore(lastDate) || currDate.isEqual(lastDate))) { //create task for future dates.
 							if(currDate.isAfter(today)) {
-								jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate());
+								jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate(), jobDtos);
 							}
 							currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
 						}
+						if(CollectionUtils.isNotEmpty(jobDtos)) {
+							jobManagementService.saveScheduledJob(jobDtos);
+						}						
 					}
 				}else {
 					currDate = new DateTime(parentJob.getPlannedStartTime().getTime());
 					while ((currDate.isBefore(lastDate) || currDate.isEqual(lastDate))) { // create task for future dates.
 						if(currDate.isAfter(today) || currDate.isEqual(today)) {
-							jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate());
+							jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate(), jobDtos);
 						}
 						currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
+					}
+					if(CollectionUtils.isNotEmpty(jobDtos)) {
+						jobManagementService.saveScheduledJob(jobDtos);
 					}
 				}
 			} else if (creationPolicy.equalsIgnoreCase("daily")) {
@@ -799,13 +831,19 @@ public class SchedulerService extends AbstractService {
 					currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
 					if(prevJob.getPlannedStartTime().before(currDate.toDate())){
 						if(currDate.isAfter(today) && currDate.isBefore(endDate)) {
-							jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate());
+							jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate(), jobDtos);
+							if(CollectionUtils.isNotEmpty(jobDtos)) {
+								jobManagementService.saveScheduledJob(jobDtos);
+							}							
 						}
 					}
 				}else {
 					currDate = new DateTime(parentJob.getPlannedStartTime().getTime());
 					if((currDate.isAfter(today) || currDate.isEqual(today)) && currDate.isBefore(endDate)) {
-						jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate());
+						jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate(), jobDtos);
+						if(CollectionUtils.isNotEmpty(jobDtos)) {
+							jobManagementService.saveScheduledJob(jobDtos);
+						}						
 					}
 				}
 			}
@@ -1046,7 +1084,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	private void jobCreationTask(SchedulerConfig scheduledTask, Job parentJob, String data, Date jobDate) {
+	private void jobCreationTask(SchedulerConfig scheduledTask, Job parentJob, String data, Date jobDate, List<JobDTO> jobs) {
 		log.debug("Creating Job : " + data);
 		Map<String, String> dataMap = Splitter.on("&").withKeyValueSeparator("=").split(data);
 		String sTime = dataMap.get("plannedStartTime");
@@ -1069,7 +1107,7 @@ public class SchedulerService extends AbstractService {
 				if (shouldProcess) {
 					List<Job> job = jobRepository.findJobsByParentJobIdAndDate(parentJob.getId(), DateUtil.convertToSQLDate(jobDate), DateUtil.convertToSQLDate(jobDate));
 					if (CollectionUtils.isEmpty(job)) {
-						createJob(parentJob, dataMap, jobDate, eHrs, sHrs, eHrs);
+						createJob(parentJob, dataMap, jobDate, eHrs, sHrs, eHrs, jobs);
 					}
 				}
 			} catch (Exception ex) {
@@ -1081,7 +1119,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	private JobDTO createJob(Job parentJob, Map<String, String> dataMap, Date jobDate, Date plannedEndTime, Date sHrs, Date eHrs) {
+	private JobDTO createJob(Job parentJob, Map<String, String> dataMap, Date jobDate, Date plannedEndTime, Date sHrs, Date eHrs, List<JobDTO> jobs) {
 		JobDTO job = new JobDTO();
 		job.setTitle(dataMap.get("title"));
 		job.setDescription(dataMap.get("description"));
@@ -1177,7 +1215,8 @@ public class SchedulerService extends AbstractService {
 		log.debug("JobDTO parent job id - " + parentJob.getId());
 		log.debug("JobDTO parent job id - " + job.getParentJobId());
 		log.debug("JobDTO Details before calling saveJob - " + job);
-		jobManagementService.saveScheduledJob(job);
+		//jobManagementService.saveScheduledJob(job);
+		jobs.add(job);
 		if (StringUtils.isNotEmpty(frequency)) {
 			Calendar tmpCal = Calendar.getInstance();
 			tmpCal.set(Calendar.DAY_OF_MONTH, plannedEndTimeCal.get(Calendar.DAY_OF_MONTH));
@@ -1206,7 +1245,7 @@ public class SchedulerService extends AbstractService {
 					tmpCal.add(Calendar.HOUR_OF_DAY, 5);
 					tmpCal.getTime(); // recalculate
 				}
-				createJob(parentJob, dataMap, jobDate, plannedEndTime, endTime.getTime(), tmpCal.getTime());
+				createJob(parentJob, dataMap, jobDate, plannedEndTime, endTime.getTime(), tmpCal.getTime(), jobs);
 			}
 		}
 		return job;

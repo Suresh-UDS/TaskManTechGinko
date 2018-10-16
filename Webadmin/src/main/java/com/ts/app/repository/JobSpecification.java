@@ -39,6 +39,9 @@ public class JobSpecification implements Specification<Job> {
         @Override
         public Predicate toPredicate(Root<Job> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
             List<Predicate> predicates = new ArrayList<>();
+            if(searchCriteria.getJobId()!=0){
+                predicates.add(builder.equal(root.get("id"), searchCriteria.getJobId()));
+        }
             log.debug("JobSpecification toPredicate - searchCriteria projectid -"+ searchCriteria.getProjectId());
             if(searchCriteria.getProjectId()!=0){
                     predicates.add(builder.equal(root.get("site").get("project").get("id"), searchCriteria.getProjectId()));

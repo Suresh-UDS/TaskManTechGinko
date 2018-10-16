@@ -997,6 +997,10 @@ angular.module('timeSheetApp')
             		return;
             	}
 
+            	if($scope.SelectedDesig) {
+            		$scope.employee.designation = $scope.SelectedDesig.designation;
+            	}
+
 	        	EmployeeComponent.updateEmployee($scope.employee).then(function(){
                     $scope.saveLoad = false;
 		        	$scope.success = 'OK';
@@ -1156,6 +1160,7 @@ angular.module('timeSheetApp')
         }
 
          $scope.searchFilter = function () {
+            $('.AdvancedFilterModal.in').modal('hide');
             $scope.setPage(1);
             $scope.search();
          }
@@ -1633,7 +1638,7 @@ angular.module('timeSheetApp')
 
         $scope.clearFilter = function() {
             $scope.noData = false;
-            $rootScope.exportStatusObj.exportMsg = '';
+            $rootScope.exportStatusObj = {};
             $scope.downloader=false;
             $scope.downloaded = true;
             $scope.siteFilterDisable = true;
@@ -1743,7 +1748,7 @@ angular.module('timeSheetApp')
 
         $scope.exportAllData = function(){
 
-                 $rootScope.exportStatusObj.exportMsg = '';
+                  $rootScope.exportStatusObj = {};
                   $scope.downloaded = false;
                   $scope.downloader=true;
                   $scope.searchCriteria.list = true;
@@ -1824,6 +1829,7 @@ angular.module('timeSheetApp')
 
         $scope.clsDownload = function(){
           $scope.downloaded = true;
+          $rootScope.exportStatusObj = {};
         }
 
         $scope.cancelEmployeeShiftUpdate = function(){

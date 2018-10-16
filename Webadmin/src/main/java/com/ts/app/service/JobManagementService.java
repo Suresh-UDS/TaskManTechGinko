@@ -874,6 +874,28 @@ public class JobManagementService extends AbstractService {
 		return;
 	}
 	
+	public void saveScheduledJob(List<JobDTO> jobDTOs) {
+		if(CollectionUtils.isNotEmpty(jobDTOs)) {
+			List<Job> jobs = new ArrayList<Job>();
+			for(JobDTO jobDTO : jobDTOs) {
+				Job job = new Job();
+	
+				mapToEntity(jobDTO, job);
+	
+				if(job.getStatus() == null) {
+					job.setStatus(JobStatus.ASSIGNED);
+				}
+				
+				if(jobDTO.getParentJobId()>0){
+				    Job parentJob = jobRepository.findOne(jobDTO.getParentJobId());
+				    job.setParentJob(parentJob);
+		        }
+				jobs.add(job);
+			}
+			jobRepository.save(jobs);
+		}
+	}
+	
 	public JobDTO saveScheduledJob(JobDTO jobDTO) {
 		Job job = new Job();
 
@@ -1150,7 +1172,7 @@ public class JobManagementService extends AbstractService {
 			data.append("&plannedEndTime="+plannedEndTime.getTime());
 			data.append("&plannedHours="+assetPpmScheduleDTO.getPlannedHours());
 			//data.append("&location="+assetPpmScheduleDTO.getLocationId());
-			data.append("&frequency="+assetPpmScheduleDTO.getFrequency());
+			//data.append("&frequency="+assetPpmScheduleDTO.getFrequency());
 			data.append("&duration="+assetPpmScheduleDTO.getFrequencyDuration());
 			data.append("&assetId="+assetPpmScheduleDTO.getAssetId());
 			//data.append("&schedule="+Frequency.valueOf(assetPpmScheduleDTO.getFrequency()).getTypeFrequency());
@@ -1343,7 +1365,7 @@ public class JobManagementService extends AbstractService {
 					jobclDto.setImageUrl_3(Imageurl_3);
 
 				}
-                log.debug("Job checklist remarks"+checklist.getImage_1());
+                //log.debug("Job checklist remarks"+checklist.getImage_1());
                 checklist.setJob(job);
 				checklistItems.add(checklist);
 			}
@@ -2163,7 +2185,7 @@ public class JobManagementService extends AbstractService {
 			data.append("&plannedEndTime="+plannedEndTime.getTime());
 			data.append("&plannedHours="+assetAMCScheduleDTO.getPlannedHours());
 			//data.append("&location="+assetPpmScheduleDTO.getLocationId());
-			data.append("&frequency="+assetAMCScheduleDTO.getFrequency());
+			//data.append("&frequency="+assetAMCScheduleDTO.getFrequency());
 			data.append("&duration="+assetAMCScheduleDTO.getFrequencyDuration());
 			schConfDto.setData(data.toString());
 			schConfDto.setSchedule(Frequency.valueOf(assetAMCScheduleDTO.getFrequency()).getValue());

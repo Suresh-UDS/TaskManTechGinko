@@ -209,6 +209,9 @@ public class AssetManagementService extends AbstractService {
 
 	@Inject
 	private AssetSiteHistoryRepository assetSiteHistoryRepository;
+	
+	@Inject
+	private TicketManagementService ticketMgmtservice;
 
 	public static final String EMAIL_NOTIFICATION_READING = "email.notification.reading";
 
@@ -351,7 +354,10 @@ public class AssetManagementService extends AbstractService {
 
 	public boolean isDuplicatePPMSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
 	    log.debug("Asset Title "+assetPpmScheduleDTO.getTitle());
-		List<AssetPPMSchedule> assetPPMSchedule = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(assetPpmScheduleDTO.getAssetId(), assetPpmScheduleDTO.getTitle());
+	    java.sql.Date startDate = DateUtil.convertToSQLDate(assetPpmScheduleDTO.getStartDate());
+		List<AssetPPMSchedule> assetPPMSchedule = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(assetPpmScheduleDTO.getAssetId(), 
+																assetPpmScheduleDTO.getTitle(), MaintenanceType.PPM.getValue(), startDate,
+																assetPpmScheduleDTO.getJobStartTime(), assetPpmScheduleDTO.getJobStartTime());
 		if(assetPPMSchedule != null) {
 			return true;
 		}
@@ -563,6 +569,17 @@ public class AssetManagementService extends AbstractService {
 			User user = userRepository.findOne(assetDTO.getUserId());
 			log.debug(">>> user <<<"+ user.getFirstName() +" and "+user.getId());
 //			Employee employee = user.getEmployee();
+			
+			TicketDTO ticketDto = new TicketDTO();
+			ticketDto.setAssetId(assetEntity.getId());
+			ticketDto.setActive(Ticket.ACTIVE_YES);
+			ticketDto.setTitle("ASSET -" + assetDTO.getStatus() + " - "+ assetCode);
+			ticketDto.setSiteId(site.getId());
+			ticketDto.setUserId(user.getId());
+			ticketDto.setSeverity("High");
+			ticketDto.setCategory("MAINTENANCE");
+			ticketDto.setDescription("ASSET -" +assetDTO.getStatus() + " by " + user.getFirstName());
+			ticketMgmtservice.saveTicket(ticketDto);
 
 			List<Setting> settingList = settingRepository.findSettingByKeyAndSiteId(EMAIL_NOTIFICATION_ASSET, site.getId());
 			
@@ -1332,7 +1349,8 @@ public class AssetManagementService extends AbstractService {
 		assetPPMSchedule.setAsset(asset);
 		assetPPMSchedule.setActive(AssetPPMSchedule.ACTIVE_YES);
 
-		List<AssetPPMSchedule> assetPPMSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(asset.getId(), assetPpmScheduleDTO.getTitle());
+		List<AssetPPMSchedule> assetPPMSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(asset.getId(), assetPpmScheduleDTO.getTitle(), 
+										MaintenanceType.PPM.getValue(), assetPPMSchedule.getStartDate(), assetPPMSchedule.getJobStartTime(), assetPPMSchedule.getJobStartTime());
 		log.debug("Existing schedule -" + assetPPMSchedule);
 		if (CollectionUtils.isEmpty(assetPPMSchedules)) {
 			assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);

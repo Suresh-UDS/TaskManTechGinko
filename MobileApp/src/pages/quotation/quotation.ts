@@ -39,7 +39,8 @@ export class QuotationPage {
     page:1;
     pageSort:15;
 
-  constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService, private quotationService: QuotationService,public events:Events,public siteService:SiteService) {
+  constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService,
+              private quotationService: QuotationService,public events:Events,public siteService:SiteService) {
       this.draftedQuotationsCount= 0;
       this.approvedQuotationsCount=0;
       this.submittedQuotationsCount=0;

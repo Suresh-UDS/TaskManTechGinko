@@ -584,7 +584,8 @@ angular.module('timeSheetApp')
         }
 
         $scope.clearFilter = function() {
-            $rootScope.exportStatusObj.exportMsg = '';
+            $rootScope.exportStatusObj = {};
+            $scope.exportStatusMap = [];
             $scope.downloader=false;
             $scope.downloaded = true;
             $scope.clearField = true;
@@ -622,7 +623,8 @@ angular.module('timeSheetApp')
         };
 
         $scope.exportAllData = function(type){
-                $rootScope.exportStatusObj.exportMsg = '';
+                $rootScope.exportStatusObj = {};
+                $scope.exportStatusMap = [];
                 $scope.downloader=true;
                 $scope.downloaded = false;
                 $scope.searchCriteria.isReport = true;
@@ -671,6 +673,7 @@ angular.module('timeSheetApp')
 
         $scope.exportStatus = function() {
             //console.log('empId='+$scope.empId);
+            $rootScope.exportStatusObj = {};
             console.log('exportStatusMap length -'+$scope.exportStatusMap.length);
             angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
                 if(!exportStatusObj.empId) {
@@ -741,6 +744,8 @@ angular.module('timeSheetApp')
 
         $scope.clsDownload = function(){
           $scope.downloaded = true;
+          $rootScope.exportStatusObj = {};
+          $scope.exportStatusMap = [];
         }
 
           //init load
