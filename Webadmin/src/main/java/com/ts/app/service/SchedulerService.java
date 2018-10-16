@@ -224,11 +224,11 @@ public class SchedulerService extends AbstractService {
 			java.sql.Date startDate = new java.sql.Date(cal.getTimeInMillis());
 			java.sql.Date endDate = new java.sql.Date(endCal.getTimeInMillis());
 			java.sql.Date tomorrow = new java.sql.Date(nextDay.getTimeInMillis());
-			createDailyTask(cal.getTime());
+			createDailyTask(cal.getTime(), null);
 		}
 	}
 	
-	public void createDailyTask(Date date) {
+	public void createDailyTask(Date date, List<Long> siteIds) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
 		cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -240,7 +240,12 @@ public class SchedulerService extends AbstractService {
 		java.sql.Date startDate = new java.sql.Date(cal.getTimeInMillis());
 		java.sql.Date endDate = new java.sql.Date(endCal.getTimeInMillis());
 		
-		List<SchedulerConfig> dailyTasks = schedulerConfigRepository.getDailyTask(cal.getTime());
+		List<SchedulerConfig> dailyTasks = null;
+		if(CollectionUtils.isNotEmpty(siteIds)) {
+			dailyTasks = schedulerConfigRepository.getDailyTask(cal.getTime(), siteIds);
+		}else {
+			dailyTasks = schedulerConfigRepository.getDailyTask(cal.getTime());
+		}
 		log.debug("Found {} Daily Tasks", dailyTasks.size());
 		ExecutorService executorService = Executors.newFixedThreadPool(50); //Executes job creation task for each schedule asynchronously
 		List<Future> futures = new ArrayList<Future>();
