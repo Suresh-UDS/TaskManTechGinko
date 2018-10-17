@@ -1020,6 +1020,7 @@ public class ExportUtil {
  		String prevDesignation = null;
 		String currDesignation = null;
 		int desigSum = 0;
+		Map<String, Integer> designationMap = new HashMap<String, Integer>();
 		for (Entry<EmployeeAttendanceReport,Map<Integer,Boolean>> entry : list) {
 			
 			Row dataRow = musterSheet.getRow(rowNum++);
@@ -1082,14 +1083,16 @@ public class ExportUtil {
 			int sumOffCount = offRow;
 			int sumTotCount = sumOffCount + 1;	
 			int designationWiseTotal = sumTotCount + 1;
-		
+			int totalValue = 0;
+			
+			Cell totalCountRow = dataRow.createCell(sumTotCount);
+
 			for(Map.Entry<Map<String, String>, String> ent : shiftSlots.entrySet()) {
 				String value = ent.getValue();
 				int shiftCnt = 0;
 				int offCnt = 0;
 				Cell shiftCountRow = dataRow.createCell(sumCount);
 				Cell offCountRow = dataRow.createCell(sumOffCount);
-				Cell totalCountRow = dataRow.createCell(sumTotCount);
 				shiftCountRow.setCellStyle(leftRowStyle);
 				offCountRow.setCellStyle(leftRowStyle);
 				totalCountRow.setCellStyle(leftRowStyle);
@@ -1106,34 +1109,39 @@ public class ExportUtil {
 					shiftCountRow = dataRow.getCell(sumCount);
 					offCountRow = dataRow.getCell(sumOffCount);
 					totalCountRow = dataRow.getCell(sumTotCount);
-//					totalValue += shiftCnt + offCnt;
+					totalValue += shiftCnt;
 				}
 				
 				shiftCountRow.setCellValue(shiftCnt);
 				offCountRow.setCellValue(offCnt);
 				
-				totalCountRow.setCellValue(shiftCountRow.getNumericCellValue() + offCountRow.getNumericCellValue());
-				
-				if(StringUtils.isNotEmpty(prevDesignation)) { 
-					currDesignation = key.getDesignation();
-					if(!prevDesignation.equals(currDesignation)) {
-						prevDesignation = currDesignation;
-						int preVal = dataRow.getRowNum() - 1;
-						Row prevRow = musterSheet.getRow(preVal);
-						Cell dRow = prevRow.createCell(designationWiseTotal);
-						dRow.setCellValue(desigSum);
-						prevRow.getCell(designationWiseTotal).setCellStyle(leftRowStyle);
-					}
-				}else {
-					prevDesignation = key.getDesignation();
-					int sumVal = (int)Math.round(totalCountRow.getNumericCellValue()); 
-					log.debug("" +sumVal);
-					desigSum = sumVal;
-				}
+				totalCountRow.setCellValue(totalValue + offCnt);
+								
 				sumCount++;
 			}
 			
+			if(StringUtils.isNotEmpty(prevDesignation)) {  // branchManager  // care taker // client // client
+				currDesignation = key.getDesignation();  // care taker   // client  // client  // client
+				if(!prevDesignation.equals(currDesignation)) {  // success  // success
+					int preVal = dataRow.getRowNum() - 1;
+					Row prevRow = musterSheet.getRow(preVal);
+					Cell dRow = prevRow.createCell(designationWiseTotal);
+					dRow.setCellValue(desigSum);  // 4  // 6
+					prevRow.getCell(designationWiseTotal).setCellStyle(leftRowStyle);
+					prevDesignation = currDesignation;
+					desigSum = (int)Math.round(totalCountRow.getNumericCellValue());  // 6  // 4
+				}else {
+					desigSum += (int)Math.round(totalCountRow.getNumericCellValue());  // 4 + 4 + 4
+					log.debug("Designation wise sum" + desigSum);
+				}
+			}else {
+				prevDesignation = key.getDesignation();
+				int sumVal = (int)Math.round(totalCountRow.getNumericCellValue()); 
+				log.debug("" +sumVal);
+				desigSum = sumVal;  // 4
+			}
 			
+			log.debug("Designation wise sum" + designationMap);
 			
 
 			/*
