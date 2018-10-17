@@ -193,7 +193,7 @@ angular.module('timeSheetApp')
               $scope.siteSpin = true;
               $scope.searchProject = searchProject;
               if(jQuery.isEmptyObject($scope.searchProject) == false && $scope.searchProject.id == 0){
-            	  ProjectComponent.findAll().then(function (data) {
+            	  SiteComponent.findAll().then(function (data) {
 	                  $scope.selectedSite = null;
 	                  $scope.sitesList = data;
 	                  $scope.sitesLists = [];

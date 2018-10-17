@@ -190,25 +190,73 @@ export class EmployeeList {
     }
 
     checkProximity(siteId,lat,lng,imageData,mode,attendanceMode,employee){
-        this.attendanceService.checkSiteProximity(siteId,lat,lng).subscribe(
-            response=> {
-                this.component.closeAll();
-                this.component.showLoader('Verifying Location..');
-                this.verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData);
 
-            },error=>{
-                console.log("errors");
-                this.component.closeAll();
-                this.verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData);
+        this.component.showLoader('Getting Location..');
 
-            })
+        var options={
+            timeout:3000
+        };
+        this.geolocation.getCurrentPosition(options).then((response)=>{
+            this.component.closeAll();
+            this.component.showLoader('Verifying Location..');
+            console.log("Current location");
+            console.log(response);
+            console.log(response.coords.latitude);
+            console.log(response.coords.longitude);
+            this.lattitude = response.coords.latitude;
+            this.longitude = response.coords.longitude;
+
+            this.attendanceService.checkSiteProximity(siteId,this.lattitude,this.longitude).subscribe(
+                response=> {
+                    this.component.closeAll();
+                    this.verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData);
+
+                },error=>{
+                    console.log("errors");
+                    this.component.closeAll();
+                    // demo.showSwal('warning-message-and-confirmation-ok',"Location Error", "Please check-in/out from site location   ");
+                    this.verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData);
+
+                })
+
+
+        }).catch((error)=>{
+            console.log("error in getting current location");
+            // demo.showSwal('warning-message-and-confirmation-ok',"Location Error", "Error in getting location..");
+            this.verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData);
+
+        });
+
+
+        // var config: BackgroundGeolocationConfig = {
+        //
+        //     desiredAccuracy: 10,
+        //     stationaryRadius: 20,
+        //     distanceFilter: 30,
+        //     debug: true,
+        //     stopOnTerminate: false,
+        // };
+        //
+        // this.backgroundGeolocation.configure(config)
+        //     .subscribe((location: BackgroundGeolocationResponse) => {
+        //
+        //         console.log(location);
+        //
+        //     });
+        //
+        // this.backgroundGeolocation.getStationaryLocation().then(
+        //     response=>{
+        //         console.log(response);
+        //     }
+        // )
+
+
     }
 
     verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData){
         let base64Image = 'data:image/jpeg;base64,' + imageData;
         var employeeName = employee.fullName+employee.empId;
         this.component.showLoader('Detecting Face');
-
         if(mode === 'enroll'){
             this.component.closeAll();
             this.component.showLoader('Enrolling Face Id');
