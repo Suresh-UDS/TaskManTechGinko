@@ -916,6 +916,7 @@ public class ExportUtil {
 
 		Set<Entry<EmployeeAttendanceReport,Map<Integer,Boolean>>> entrySet = attnInfoMap.entrySet();
 		
+		/* Designation wise sorting */
 		 List<Entry<EmployeeAttendanceReport, Map<Integer,Boolean>>> list = new ArrayList<Entry<EmployeeAttendanceReport, Map<Integer,Boolean>>>(entrySet);
 		    Collections.sort( list, new Comparator<Map.Entry<EmployeeAttendanceReport, Map<Integer,Boolean>>>()
 		    {
@@ -1016,9 +1017,11 @@ public class ExportUtil {
  		totalCell.setCellValue(tot);
  		totalCell.setCellStyle(leftRowStyle);
 		
- 	
+ 		String prevDesignation = null;
+		String currDesignation = null;
+		int desigSum = 0;
 		for (Entry<EmployeeAttendanceReport,Map<Integer,Boolean>> entry : list) {
-
+			
 			Row dataRow = musterSheet.getRow(rowNum++);
 
 			EmployeeAttendanceReport key = entry.getKey();
@@ -1078,7 +1081,8 @@ public class ExportUtil {
 			int sumCount = dayStartCell;
 			int sumOffCount = offRow;
 			int sumTotCount = sumOffCount + 1;	
-//			int totalValue = 0;
+			int designationWiseTotal = sumTotCount + 1;
+		
 			for(Map.Entry<Map<String, String>, String> ent : shiftSlots.entrySet()) {
 				String value = ent.getValue();
 				int shiftCnt = 0;
@@ -1109,6 +1113,23 @@ public class ExportUtil {
 				offCountRow.setCellValue(offCnt);
 				
 				totalCountRow.setCellValue(shiftCountRow.getNumericCellValue() + offCountRow.getNumericCellValue());
+				
+				if(StringUtils.isNotEmpty(prevDesignation)) { 
+					currDesignation = key.getDesignation();
+					if(!prevDesignation.equals(currDesignation)) {
+						prevDesignation = currDesignation;
+						int preVal = dataRow.getRowNum() - 1;
+						Row prevRow = musterSheet.getRow(preVal);
+						Cell dRow = prevRow.createCell(designationWiseTotal);
+						dRow.setCellValue(desigSum);
+						prevRow.getCell(designationWiseTotal).setCellStyle(leftRowStyle);
+					}
+				}else {
+					prevDesignation = key.getDesignation();
+					int sumVal = (int)Math.round(totalCountRow.getNumericCellValue()); 
+					log.debug("" +sumVal);
+					desigSum = sumVal;
+				}
 				sumCount++;
 			}
 			
@@ -1139,6 +1160,7 @@ public class ExportUtil {
 			fileOutputStream = new FileOutputStream(filePath);
 			xssfWorkbook.write(fileOutputStream);
 			fileOutputStream.close();
+//			xssfWorkbook = new XSSFWorkbook(fis);
 		} catch (IOException e) {
 			log.error("Error while flushing/closing  !!!");
 			statusMap.put(filePath, "FAILED");
