@@ -1364,6 +1364,56 @@ input.InputFirstCaps::first-letter
 {
   border-radius: 0;
 }
+
+/* Dashboard New changes */
+
+.cardWithbg
+{
+    min-height: 150px;
+    color: #fff;
+}
+.cardWithbg .card-header
+{
+    text-align: center;
+
+    min-height: 60px;
+}
+.cardWithbg .card-header i
+{
+    font-size: 40px;
+}
+.cardWithbg .card-content
+{
+    text-align: center;
+}
+.cardWithbg .card-content h3,h4
+{
+    margin: 5px 0;
+}
+
+.blueBg
+{
+    background: #20a8d8;
+}
+.skyblueBg
+{
+    background: #63c2de;
+}
+.yellowBg
+{
+    background: #ffc107;
+}
+.lightRedBg
+{
+    background: #f86c6b;
+}
+.greenBg
+{
+    background: yellowgreen;
+}
+
+
+
 .label-on-left
 {
   padding-top: 20px;
