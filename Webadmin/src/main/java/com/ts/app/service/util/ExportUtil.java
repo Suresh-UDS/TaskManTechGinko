@@ -40,7 +40,9 @@ import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFFont;
@@ -889,6 +891,10 @@ public class ExportUtil {
 		Font font = xssfWorkbook.createFont();
 	    font.setColor(HSSFColor.DARK_GREEN.index);
 	    style.setFillBackgroundColor(HSSFColor.DARK_GREEN.index);
+	    
+	    CellStyle rowStyle = xssfWorkbook.createCellStyle();
+	    rowStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+	    rowStyle.setFillPattern(CellStyle.BIG_SPOTS);
 	    //style.setFont(font);
 	    //fill the header fields
 	    int rowNum = 8; //10
@@ -898,10 +904,14 @@ public class ExportUtil {
 	    clientNameCell.setCellValue(clientNameCellVal + " " + projName);
 	    rowNum = 9;
 	    headerRow = musterSheet.getRow(rowNum);
+	    headerRow.setRowStyle(rowStyle);
 	    Cell siteNameCell = headerRow.getCell(5);
 	    String siteNameCellVal = headerRow.getCell(5).getStringCellValue();
 	    siteNameCell.setCellValue(siteNameCellVal + " " + siteName);
 
+	    Row dayHeader = musterSheet.getRow(10);
+	    dayHeader.setRowStyle(rowStyle);
+	    
 	    Cell shiftCell = headerRow.getCell(18);
 	    String shiftCellVal = headerRow.getCell(18).getStringCellValue();
 	    shiftCell.setCellValue(shiftCellVal + " " + shifts);
@@ -910,7 +920,8 @@ public class ExportUtil {
 	    String monthCellVal = headerRow.getCell(25).getStringCellValue();
 	    monthCell.setCellValue(monthCellVal + " " + month);
 	    
-	    Row weekDayRow = musterSheet.createRow(11);	    
+	    Row weekDayRow = musterSheet.createRow(11);	  
+	    weekDayRow.setRowStyle(rowStyle);
 	    	    
 	    rowNum = 12;
 
@@ -965,6 +976,8 @@ public class ExportUtil {
 	        CellStyle dayStyle = xssfWorkbook.createCellStyle();
 	        dayStyle.setBorderLeft(CellStyle.BORDER_THIN);
 	        dayStyle.setBorderRight(CellStyle.BORDER_THIN);
+	        dayStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+	        dayStyle.setFillPattern(CellStyle.BIG_SPOTS);
 	        weekFont.setBold(true);
 	        rt.applyFont(weekFont);
 			Cell cell = weekDayRow.createCell(cellRow);
@@ -1020,7 +1033,13 @@ public class ExportUtil {
  		String prevDesignation = null;
 		String currDesignation = null;
 		int desigSum = 0;
+		int serialId = 1;
+		int lastRow = 0;
+		int overAllSum = 0;
 		Map<String, Integer> designationMap = new HashMap<String, Integer>();
+		CellStyle desigStyle = xssfWorkbook.createCellStyle();
+		log.debug("Employee list length" +list.size());
+		int employeeList = list.size() + (rowNum - 1);
 		for (Entry<EmployeeAttendanceReport,Map<Integer,Boolean>> entry : list) {
 			
 			Row dataRow = musterSheet.getRow(rowNum++);
@@ -1029,6 +1048,8 @@ public class ExportUtil {
 			Map<Integer,Boolean> attnMap = attnInfoMap.get(key);
 
 //			String[] keyArr = key.split(KEY_SEPARATOR);
+			
+			dataRow.getCell(0).setCellValue(serialId);
 			dataRow.getCell(1).setCellValue(key.getEmployeeId());
 			dataRow.getCell(2).setCellValue(key.getName()+ " " + key.getLastName());
 			//dataRow.getCell(3).setCellValue(); //father's name not available
@@ -1120,16 +1141,33 @@ public class ExportUtil {
 				sumCount++;
 			}
 			
-			if(StringUtils.isNotEmpty(prevDesignation)) {  // branchManager  // care taker // client // client
-				currDesignation = key.getDesignation();  // care taker   // client  // client  // client
-				if(!prevDesignation.equals(currDesignation)) {  // success  // success
+			if(StringUtils.isNotEmpty(prevDesignation)) { 
+				currDesignation = key.getDesignation();  
+				if(!prevDesignation.equals(currDesignation)) {  
+				    desigStyle.setBorderTop(CellStyle.BORDER_MEDIUM);
+				    desigStyle.setBorderBottom(CellStyle.BORDER_MEDIUM);
+				    desigStyle.setBorderLeft(CellStyle.BORDER_MEDIUM);
+				    desigStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
+				    desigStyle.setFillForegroundColor(IndexedColors.GREEN.getIndex());
+				    desigStyle.setFillPattern(CellStyle.BIG_SPOTS);
+					
 					int preVal = dataRow.getRowNum() - 1;
 					Row prevRow = musterSheet.getRow(preVal);
 					Cell dRow = prevRow.createCell(designationWiseTotal);
 					dRow.setCellValue(desigSum);  // 4  // 6
-					prevRow.getCell(designationWiseTotal).setCellStyle(leftRowStyle);
+					dRow.setCellStyle(desigStyle);
+					overAllSum += desigSum;
+					prevRow.getCell(designationWiseTotal).setCellStyle(desigStyle);
 					prevDesignation = currDesignation;
 					desigSum = (int)Math.round(totalCountRow.getNumericCellValue());  // 6  // 4
+					if(employeeList == dataRow.getRowNum()) {
+						Cell lastRowCell = dataRow.createCell(designationWiseTotal);
+						lastRowCell.setCellValue(desigSum);
+						lastRowCell.setCellStyle(desigStyle);
+						overAllSum += desigSum;
+						dataRow.getCell(designationWiseTotal).setCellStyle(desigStyle);
+					}
+					
 				}else {
 					desigSum += (int)Math.round(totalCountRow.getNumericCellValue());  // 4 + 4 + 4
 					log.debug("Designation wise sum" + desigSum);
@@ -1142,8 +1180,8 @@ public class ExportUtil {
 			}
 			
 			log.debug("Designation wise sum" + designationMap);
-			
-
+			lastRow = dataRow.getRowNum();
+			serialId++;
 			/*
 			dataRow.getCell(0).setCellValue(transaction.getEmployeeIds());
 			dataRow.getCell(1).setCellValue(transaction.getName() + " " + transaction.getLastName());
@@ -1158,8 +1196,13 @@ public class ExportUtil {
 			dataRow.getCell(10).setCellValue(StringUtils.isNotEmpty(transaction.getRemarks())  ? transaction.getRemarks() : "");
 			*/
 		}
-
-
+		
+		Row overAllRow = musterSheet.getRow(lastRow + 1);
+		Cell lastCell = overAllRow.createCell(totalRow + 1);
+		lastCell.setCellValue(overAllSum);
+		lastCell.setCellStyle(desigStyle);
+		
+		
 		log.info(filePath + " Excel file was created successfully !!!");
 		statusMap.put(filePath, "COMPLETED");
 
