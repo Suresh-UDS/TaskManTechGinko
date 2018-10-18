@@ -578,6 +578,7 @@ public class ImportUtil {
 				SiteDTO siteDTO = new SiteDTO();
 				siteDTO.setProjectId(Long.valueOf(currentRow.getCell(0).getStringCellValue()));
 				siteDTO.setName(currentRow.getCell(0).getStringCellValue());
+				log.debug("REgion and branch - "+ currentRow.getCell(7).getStringCellValue()+" - "+currentRow.getCell(8).getStringCellValue());
                 if(org.apache.commons.lang3.StringUtils.isNotEmpty(currentRow.getCell(7).getStringCellValue())){
                     Region region = siteService.isRegionSaved(currentRow.getCell(7).getStringCellValue(),siteDTO.getProjectId());
                     if(region!=null && region.getId()>0){
