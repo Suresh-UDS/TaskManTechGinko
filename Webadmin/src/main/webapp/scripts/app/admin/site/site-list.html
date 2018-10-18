@@ -237,7 +237,7 @@
                                             <div ng-bind="client" ></div>
                                         </ui-select-choices>
                                     </ui-select> -->
-                                    <ui-select ng-model="client.selected"  ng-disabled="disabled">
+                                    <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
 									  <ui-select-match placeholder="Select clients...">{{$select.selected.name}}</ui-select-match>
 									  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected)" null-option="allClients" loose-null>
 									    <span ng-bind-html="client.name | highlight: $select.search"></span>
