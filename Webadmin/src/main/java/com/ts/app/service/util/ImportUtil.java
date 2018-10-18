@@ -578,7 +578,9 @@ public class ImportUtil {
 				SiteDTO siteDTO = new SiteDTO();
 				siteDTO.setProjectId(Long.valueOf(currentRow.getCell(0).getStringCellValue()));
 				siteDTO.setName(currentRow.getCell(0).getStringCellValue());
+				log.debug("REgion and branch - "+ currentRow.getCell(7).getStringCellValue()+" - "+currentRow.getCell(8).getStringCellValue());
                 if(org.apache.commons.lang3.StringUtils.isNotEmpty(currentRow.getCell(7).getStringCellValue())){
+                    log.debug("REgion from site import - "+currentRow.getCell(7).getStringCellValue());
                     Region region = siteService.isRegionSaved(currentRow.getCell(7).getStringCellValue(),siteDTO.getProjectId());
                     if(region!=null && region.getId()>0){
                         siteDTO.setRegion(region.getName());
@@ -590,6 +592,7 @@ public class ImportUtil {
                         }
                     }
                 }
+                log.debug("site DTO region and branch - "+siteDTO.getRegion()+" - "+siteDTO.getBranch());
 				siteDTO.setAddressLat(Double.valueOf(currentRow.getCell(9).getStringCellValue()));
 				siteDTO.setAddressLng(Double.valueOf(currentRow.getCell(10).getStringCellValue()));
 				siteDTO.setRadius(Double.valueOf(currentRow.getCell(11).getStringCellValue()));
