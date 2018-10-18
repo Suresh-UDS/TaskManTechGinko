@@ -581,11 +581,15 @@ public class ImportUtil {
 				log.debug("REgion and branch - "+ currentRow.getCell(7).getStringCellValue()+" - "+currentRow.getCell(8).getStringCellValue());
                 if(org.apache.commons.lang3.StringUtils.isNotEmpty(currentRow.getCell(7).getStringCellValue())){
                     log.debug("REgion from site import - "+currentRow.getCell(7).getStringCellValue());
-                    Region region = siteService.isRegionSaved(currentRow.getCell(7).getStringCellValue(),siteDTO.getProjectId());
+                    String regionName = currentRow.getCell(7).getStringCellValue()
+                    Region region = siteService.isRegionSaved(regionName,siteDTO.getProjectId());
+
                     if(region!=null && region.getId()>0){
                         siteDTO.setRegion(region.getName());
                         if(org.apache.commons.lang3.StringUtils.isNotEmpty(currentRow.getCell(8).getStringCellValue())){
-                            Branch branch = siteService.isBranchSaved(currentRow.getCell(8).getStringCellValue(),siteDTO.getProjectId(),region.getId());
+
+                            String branchName = currentRow.getCell(8).getStringCellValue();
+                            Branch branch = siteService.isBranchSaved(branchName,siteDTO.getProjectId(),region.getId());
                             if(branch!=null && branch.getId()>0){
                                 siteDTO.setBranch(branch.getName());
                             }
