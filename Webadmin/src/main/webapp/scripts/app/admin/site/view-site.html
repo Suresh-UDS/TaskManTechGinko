@@ -28,6 +28,16 @@
                                                 <td>Client Name</td>
                                                 <td  ng-if="site.projectName">{{site.projectName | uppercase}}</td>
                                             </tr>
+
+                                            <tr ng-if="site.region">
+                                                <td>Region</td>
+                                                <td  ng-if="site.region">{{site.region | uppercase}}</td>
+                                            </tr>
+
+                                            <tr ng-if="site.branch">
+                                                <td>Branch</td>
+                                                <td  ng-if="site.branch">{{site.branch | uppercase}}</td>
+                                            </tr>
                                             <tr>
                                                 <td>Site Name</td>
                                                 <td  ng-if="site.name"> {{site.name | uppercase}}</td>

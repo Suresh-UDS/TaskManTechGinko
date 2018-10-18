@@ -29,7 +29,7 @@ angular.module('timeSheetApp')
         $scope.btnDisable = false;
         $scope.localStorage = null;
         $scope.sitesList = null;
-        
+
         /** Ui-select scopes **/
         $scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
         $scope.client = {};
@@ -41,7 +41,7 @@ angular.module('timeSheetApp')
         //$scope.SelectClientsNull = {id:0 , name: '-- SELECT CLIENT --'};
         $scope.SelectClient = {};
         $scope.SelectClients = [];
-        
+
 
         //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -72,24 +72,24 @@ angular.module('timeSheetApp')
                 /** Ui-select scope **/
                 $scope.clients[0] = $scope.allClients;
                 //$scope.SelectClients[0] = $scope.SelectClientsNull;
-                
+
                  $scope.loadingStop();
                /* for(var i=0;i<$scope.projectsList.length;i++)
                 {
                     $scope.uiClient[i] = $scope.projectsList[i].name;
-                    
+
                 }*/
                 for(var i=0;i<$scope.projectsList.length;i++)
                 {
                     $scope.SelectClients[i] = $scope.projectsList[i];
-                    
+
                 }
-                
+
                 /** Ui-select scope **/
                 for(var i=0;i<$scope.projectsList.length;i++)
                 {
                     $scope.clients[i+1] = $scope.projectsList[i];
-                    
+
                 }
                 $scope.clientDisable = false;
                 $scope.clientFilterDisable = false;
@@ -260,9 +260,9 @@ angular.module('timeSheetApp')
         }
 
         };*/
-        
+
         /** Ui-select function **/
-        
+
         $scope.loadDepSitesList = function (searchProject) {
             if(searchProject){
               $scope.siteSpin = true;
@@ -274,7 +274,7 @@ angular.module('timeSheetApp')
 	                  $scope.sitesLists = [];
 	                  $scope.sitesListOne.selected = null;
 	                  $scope.sitesLists[0] = $scope.allSites;
-	                  
+
 	                  for(var i=0;i<$scope.sitesList.length;i++)
 	                  {
 	                      $scope.sitesLists[i+1] = $scope.sitesList[i];
@@ -290,14 +290,14 @@ angular.module('timeSheetApp')
 	              }else{
 	                      var depProj=0;
 	              }
-	
+
 	              ProjectComponent.findSites(depProj).then(function (data) {
 	                  $scope.selectedSite = null;
 	                  $scope.sitesList = data;
 	                  $scope.sitesLists = [];
 	                  $scope.sitesListOne.selected = null;
 	                  $scope.sitesLists[0] = $scope.allSites;
-	                  
+
 	                  for(var i=0;i<$scope.sitesList.length;i++)
 	                  {
 	                      $scope.sitesLists[i+1] = $scope.sitesList[i];
@@ -508,6 +508,7 @@ angular.module('timeSheetApp')
                         $scope.selectedProject = {id:$scope.site.projectId,name:$scope.site.projectName};
                         $scope.SelectClient.selected = $scope.selectedProject;
                         $scope.shiftItems = $scope.site.shifts;
+                        $scope.loadRegions($scope.site.projectId);
                         console.log('Selected project' , $scope.selectedProject);
 
 
@@ -734,7 +735,7 @@ angular.module('timeSheetApp')
         	}
 
         	$scope.searchCriteria.currPage = currPageVal;
-        	
+
         	if($scope.client.selected && $scope.client.selected.id !=0){
         		$scope.searchProject = $scope.client.selected;
         	}else{
@@ -887,12 +888,12 @@ angular.module('timeSheetApp')
             $scope.siteFilterDisable = true;
         	$scope.selectedSite = null;
         	$scope.sitesList = null;
-        	
+
         	/** Ui-select scopes **/
         	$scope.client.selected = null;
         	$scope.sitesLists =  [];
         	$scope.sitesListOne.selected =  null;
-        	
+
         	$scope.selectedProject = null;
             $scope.searchProject = null;
             $scope.searchSite = null;

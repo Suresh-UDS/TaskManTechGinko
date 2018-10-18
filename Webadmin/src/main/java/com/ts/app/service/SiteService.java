@@ -76,8 +76,24 @@ public class SiteService extends AbstractService {
         		shifts.add(shift);
         }
         site.setShifts(shifts);
-        site.setRegion(siteDto.getRegion());
-        site.setBranch(siteDto.getBranch());
+        if(org.apache.commons.lang3.StringUtils.isNotEmpty(siteDto.getRegion())){   //Branch not Available
+
+            Region region = isRegionSaved(siteDto.getRegion(),siteDto.getProjectId());
+
+            if(region!=null && region.getId()>0){
+                siteDto.setRegion(region.getName());
+
+                if(org.apache.commons.lang3.StringUtils.isNotEmpty(siteDto.getBranch())){
+                    Branch branch = isBranchSaved(siteDto.getBranch(),siteDto.getProjectId(),region.getId());
+
+                    if(branch!=null && branch.getId()>0){
+                        siteDto.setBranch(branch.getName());
+                    }
+                }
+            }
+
+        }
+
 		site = siteRepository.save(site);
 		log.debug("Created Information for Site: {}", site);
 		//update the site location by calling site location service
@@ -90,6 +106,7 @@ public class SiteService extends AbstractService {
 		log.debug("Inside Update");
 		Site siteUpdate = siteRepository.findOne(site.getId());
 		mapToEntity(site,siteUpdate);
+		log.debug("REgion and branch in update site - "+siteUpdate.getBranch()+" - "+siteUpdate.getRegion());
 		siteUpdate.setProject(projectRespository.findOne(site.getProjectId()));
 		siteRepository.saveAndFlush(siteUpdate);
         //update the site location by calling site location service
@@ -106,8 +123,21 @@ public class SiteService extends AbstractService {
 		site.setStartDate(siteDTO.getStartDate());
 		site.setEndDate(siteDTO.getEndDate());
 		site.setRadius(siteDTO.getRadius());
-		site.setRegion(siteDTO.getRegion());
-		site.setBranch(siteDTO.getBranch());
+		log.debug("Site region and branch - "+siteDTO.getRegion() + " - "+siteDTO.getBranch());
+        if(org.apache.commons.lang3.StringUtils.isNotEmpty(siteDTO.getRegion())){   //Branch not Available
+            log.debug("site and region found");
+
+            Region region = isRegionSaved(siteDTO.getRegion(),siteDTO.getProjectId());
+            if(region!=null && region.getId()>0){
+                site.setRegion(region.getName());
+                if(org.apache.commons.lang3.StringUtils.isNotEmpty(siteDTO.getBranch())){
+                    Branch branch = isBranchSaved(siteDTO.getBranch(),siteDTO.getProjectId(),region.getId());
+                    if(branch!=null && branch.getId()>0){
+                        site.setBranch(branch.getName());
+                    }
+                }
+            }
+        }
 		List<Shift> shiftEntities = site.getShifts();
 		if(CollectionUtils.isNotEmpty(shiftEntities)) {
 			shiftEntities.clear();
@@ -497,6 +527,40 @@ public class SiteService extends AbstractService {
         return mapperUtil.toModelList(sites,SiteDTO.class);
     }
 
+    public Region isRegionSaved(String region, Long projectId){
+        Region region1 = regionRepository.findByName(region,projectId);
+
+        if(region1!=null && region1.getId()>0){
+            return region1;
+
+        }else{
+            RegionDTO regionDTO = null;
+            regionDTO.setName(region);
+            regionDTO.setProjectId(projectId);
+            RegionDTO regionDTO1 = createRegion(regionDTO);
+
+            return mapperUtil.toEntity(regionDTO1,Region.class);
+        }
+
+    }
+
+    public Branch isBranchSaved(String branch, Long projectId, Long regionId){
+        Branch branch1 = branchRepository.findByName(branch,projectId,regionId);
+
+        if(branch1!=null && branch1.getId()>0){
+            return branch1;
+
+        }else{
+            BranchDTO branchDTO = null;
+            branchDTO.setName(branch);
+            branchDTO.setProjectId(projectId);
+            branchDTO.setRegionId(regionId);
+            BranchDTO branchDTO1 = createBranch(branchDTO);
+
+            return mapperUtil.toEntity(branchDTO1,Branch.class);
+        }
+
+    }
 
 
 }
