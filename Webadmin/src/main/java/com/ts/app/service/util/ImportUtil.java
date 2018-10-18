@@ -24,6 +24,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
+import com.ts.app.domain.*;
+import com.ts.app.service.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -41,16 +43,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.EmployeeProjectSite;
-import com.ts.app.domain.EmployeeShift;
-import com.ts.app.domain.JobStatus;
-import com.ts.app.domain.JobType;
-import com.ts.app.domain.Location;
-import com.ts.app.domain.Project;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.User;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.EmployeeShiftRepository;
 import com.ts.app.repository.LocationRepository;
@@ -59,11 +51,6 @@ import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.repository.UserRoleRepository;
 import com.ts.app.security.SecurityUtils;
-import com.ts.app.service.AssetManagementService;
-import com.ts.app.service.ChecklistService;
-import com.ts.app.service.JobManagementService;
-import com.ts.app.service.SiteLocationService;
-import com.ts.app.service.UserService;
 import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
@@ -136,6 +123,9 @@ public class ImportUtil {
 	private SiteLocationService siteLocationService;
 
 	@Inject
+    private SiteService siteService;
+
+	@Inject
 	private ChecklistService checklistService;
 
 	@Inject
@@ -143,10 +133,10 @@ public class ImportUtil {
 
 	@Inject
 	private EmployeeShiftRepository empShiftRepo;
-	
+
 	@Inject
 	private AssetManagementService assetManagementService;
-	
+
 	public ImportResult importJobData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
 		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  JOB_FOLDER;
@@ -243,7 +233,7 @@ public class ImportUtil {
 		return result;
 
 	}
-	
+
 	public ImportResult importAssetData(MultipartFile file, long dateTime, boolean isPPM, boolean isAMC) {
         String fileName = dateTime + ".xlsx";
 		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  ASSET_FOLDER;
@@ -268,8 +258,8 @@ public class ImportUtil {
 		result.setStatus("PROCESSING");
 		return result;
 	}
-	
-	
+
+
 	public ImportResult importChecklistData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
 		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  CHECKLIST_FOLDER;
@@ -588,9 +578,21 @@ public class ImportUtil {
 				SiteDTO siteDTO = new SiteDTO();
 				siteDTO.setProjectId(Long.valueOf(currentRow.getCell(0).getStringCellValue()));
 				siteDTO.setName(currentRow.getCell(0).getStringCellValue());
-				siteDTO.setAddressLat(Double.valueOf(currentRow.getCell(7).getStringCellValue()));
-				siteDTO.setAddressLng(Double.valueOf(currentRow.getCell(8).getStringCellValue()));
-				siteDTO.setRadius(Double.valueOf(currentRow.getCell(9).getStringCellValue()));
+                if(org.apache.commons.lang3.StringUtils.isNotEmpty(currentRow.getCell(7).getStringCellValue())){
+                    Region region = siteService.isRegionSaved(currentRow.getCell(7).getStringCellValue(),siteDTO.getProjectId());
+                    if(region!=null && region.getId()>0){
+                        siteDTO.setRegion(region.getName());
+                        if(org.apache.commons.lang3.StringUtils.isNotEmpty(currentRow.getCell(8).getStringCellValue())){
+                            Branch branch = siteService.isBranchSaved(currentRow.getCell(8).getStringCellValue(),siteDTO.getProjectId(),region.getId());
+                            if(branch!=null && branch.getId()>0){
+                                siteDTO.setBranch(branch.getName());
+                            }
+                        }
+                    }
+                }
+				siteDTO.setAddressLat(Double.valueOf(currentRow.getCell(9).getStringCellValue()));
+				siteDTO.setAddressLng(Double.valueOf(currentRow.getCell(10).getStringCellValue()));
+				siteDTO.setRadius(Double.valueOf(currentRow.getCell(11).getStringCellValue()));
 				siteDTO.setAddress(currentRow.getCell(6).getStringCellValue());
 				siteDTO.setUserId(SecurityUtils.getCurrentUserId());
 				Site site = mapperUtil.toEntity(siteDTO, Site.class);
@@ -697,7 +699,7 @@ public class ImportUtil {
 			//Iterator<Row> iterator = datatypeSheet.iterator();
 			int lastRow = datatypeSheet.getLastRowNum();
 			int r = 1;
-			
+
 			log.debug("Last Row number -" + lastRow);
 			for (; r <= lastRow; r++) {
 				log.debug("Current Row number -" + r);
@@ -731,7 +733,7 @@ public class ImportUtil {
 				assetDTO.setCode(getCellValue(currentRow.getCell(19)));
 				assetDTO.setStatus(getCellValue(currentRow.getCell(20)));
 				assetManagementService.saveAsset(assetDTO);
-				
+
 			}
 
 		} catch (FileNotFoundException e) {
@@ -739,8 +741,8 @@ public class ImportUtil {
 		} catch (IOException e) {
 			log.error("Error while reading the job data file for import", e);
 		}
-	}	
-	
+	}
+
 	private void importAssetPPMFromFile(String path) {
 		try {
 
@@ -750,12 +752,12 @@ public class ImportUtil {
 			//Iterator<Row> iterator = datatypeSheet.iterator();
 			int lastRow = datatypeSheet.getLastRowNum();
 			int r = 1;
-			
+
 			log.debug("Last Row number -" + lastRow);
 			for (; r <= lastRow; r++) {
 				log.debug("Current Row number -" + r);
 				Row currentRow = datatypeSheet.getRow(r);
-				
+
 				AssetPpmScheduleDTO assetPPMDto = new AssetPpmScheduleDTO();
 				String assetCode = getCellValue(currentRow.getCell(0));
 				AssetDTO assetDTO = assetManagementService.findByAssetCode(assetCode);
@@ -767,7 +769,7 @@ public class ImportUtil {
 				if(startDate != null) {
 					assetPPMDto.setStartDate(startDate);
 				}
-				
+
 				Date endDate = currentRow.getCell(7) != null ? currentRow.getCell(7).getDateCellValue() : null;
 				if(endDate != null) {
 					assetPPMDto.setEndDate(endDate);
@@ -776,13 +778,13 @@ public class ImportUtil {
 				if(startDateTime != null) {
 					assetPPMDto.setJobStartTime(DateUtil.convertToZDT(startDateTime));
 				}
-				
+
 				assetPPMDto.setPlannedHours(Integer.parseInt(getCellValue(currentRow.getCell(9))));
-				
+
 				assetPPMDto.setEmpId(Long.parseLong(getCellValue(currentRow.getCell(10))));
-				
+
 				assetManagementService.createAssetPpmSchedule(assetPPMDto);
-				
+
 			}
 
 		} catch (FileNotFoundException e) {
@@ -791,7 +793,7 @@ public class ImportUtil {
 			log.error("Error while reading the asset ppm schedule data file for import", e);
 		}
 	}
-	
+
 	private void importAssetAMCFromFile(String path) {
 		try {
 
@@ -801,12 +803,12 @@ public class ImportUtil {
 			//Iterator<Row> iterator = datatypeSheet.iterator();
 			int lastRow = datatypeSheet.getLastRowNum();
 			int r = 1;
-			
+
 			log.debug("Last Row number -" + lastRow);
 			for (; r <= lastRow; r++) {
 				log.debug("Current Row number -" + r);
 				Row currentRow = datatypeSheet.getRow(r);
-				
+
 				AssetAMCScheduleDTO assetAMCDto = new AssetAMCScheduleDTO();
 				String assetCode = getCellValue(currentRow.getCell(0));
 				AssetDTO assetDTO = assetManagementService.findByAssetCode(assetCode);
@@ -818,7 +820,7 @@ public class ImportUtil {
 				if(startDate != null) {
 					assetAMCDto.setStartDate(startDate);
 				}
-				
+
 				Date endDate = currentRow.getCell(7) != null ? currentRow.getCell(7).getDateCellValue() : null;
 				if(endDate != null) {
 					assetAMCDto.setEndDate(endDate);
@@ -827,14 +829,14 @@ public class ImportUtil {
 				if(startDateTime != null) {
 					assetAMCDto.setJobStartTime(DateUtil.convertToZDT(startDateTime));
 				}
-				
+
 				assetAMCDto.setPlannedHours(Integer.parseInt(getCellValue(currentRow.getCell(9))));
-				
+
 				assetAMCDto.setEmpId(Long.parseLong(getCellValue(currentRow.getCell(10))));
 				assetAMCDto.setFrequencyPrefix("Every");
 				assetAMCDto.setMaintenanceType(getCellValue(currentRow.getCell(11)));
 				assetManagementService.createAssetAMCSchedule(assetAMCDto);
-				
+
 			}
 
 		} catch (FileNotFoundException e) {
@@ -843,7 +845,7 @@ public class ImportUtil {
 			log.error("Error while reading the asset amc schedule data file for import", e);
 		}
 	}
-	
+
 	private void importEmployeeFromFile(String path) {
 		try {
 
