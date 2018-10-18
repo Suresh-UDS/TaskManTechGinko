@@ -591,6 +591,7 @@ public class ImportUtil {
                         }
                     }
                 }
+                log.debug("site DTO region and branch - "+siteDTO.getRegion()+" - "+siteDTO.getBranch());
 				siteDTO.setAddressLat(Double.valueOf(currentRow.getCell(9).getStringCellValue()));
 				siteDTO.setAddressLng(Double.valueOf(currentRow.getCell(10).getStringCellValue()));
 				siteDTO.setRadius(Double.valueOf(currentRow.getCell(11).getStringCellValue()));
