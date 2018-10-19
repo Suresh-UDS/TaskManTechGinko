@@ -53,6 +53,7 @@ import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.AmazonS3Utils;
+import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.MapperUtil;
@@ -781,7 +782,12 @@ public class TicketManagementService extends AbstractService {
 		//searchCriteria.setToDate(endCal.getTime());
 		ZonedDateTime startDate = ZonedDateTime.ofInstant(startCal.toInstant(), ZoneId.systemDefault());
 		ZonedDateTime endDate = ZonedDateTime.ofInstant(endCal.toInstant(), ZoneId.systemDefault());
-		page = ticketRepository.findBySiteId(searchCriteria.getSiteId(), startDate, endDate, pageRequest);
+		
+        //create sql dates
+        java.sql.Date sqlFromDate = DateUtil.convertToSQLDate(startCal.getTime());
+        java.sql.Date sqlToDate = DateUtil.convertToSQLDate(endCal.getTime());
+
+		page = ticketRepository.findBySiteIdAndDateRange(searchCriteria.getSiteId(), startDate, endDate, sqlFromDate, sqlToDate, pageRequest);
 		allTicketList.addAll(page.getContent());
 		if(CollectionUtils.isNotEmpty(allTicketList)) {
 			if(transactions == null) {
