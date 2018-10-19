@@ -1854,8 +1854,8 @@ public class SchedulerHelperService extends AbstractService {
 //								sb.append(
 //										"<tr><td>Pending : </td><td>" + summary.getTotalPendingTicketCount() + "</td>");
 //								sb.append("</tr></table>");
-								sb.append("<td></td>");
-								sb.append("<td></td>");
+								sb.append("<td>" + summary.getTotalOpenTicketCount() +  "</td>");
+								sb.append("<td>"+ summary.getTotalAssignedTicketCount() +"</td>");
 								sb.append("<td>" + summary.getTotalPendingTicketCount() + "</td>");
 								sb.append("<td>" + summary.getTotalClosedTicketCount() + "</td>");
 								sb.append("<td><b>" + summary.getTotalNewTicketCount() + "</b></td>");
@@ -2026,7 +2026,7 @@ public class SchedulerHelperService extends AbstractService {
 			sb.append("<br/>");
 			sb.append("<br/>");
 			
-			if (proj.getClientGroup() != null && clientGroupMap.containsKey(proj.getClientGroup())) {
+			if (StringUtils.isNotEmpty(proj.getClientGroup()) && clientGroupMap.containsKey(proj.getClientGroup())) {
 				
 				ClientgroupDTO clientGrp = clientGroupMap.get(proj.getClientGroup());
 				if(clientGrp != null) {
@@ -2039,8 +2039,7 @@ public class SchedulerHelperService extends AbstractService {
 			}
 			
 			if (eodReportEmails != null && (alertTimeCal.equals(now) || isOnDemand)
-					&& (eodReportClientGroupAlert != null
-					&& eodReportClientGroupAlert.getSettingValue().equalsIgnoreCase("false"))) {
+					&& StringUtils.isEmpty(proj.getClientGroup())) {
 				if (CollectionUtils.isNotEmpty(files)) {
 					mailService.sendDaywiseReportEmailFile(proj.getName(), eodReportEmails.getSettingValue(), files,
 							cal.getTime(), sb.toString());
