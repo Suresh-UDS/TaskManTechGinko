@@ -1697,14 +1697,14 @@ public class SchedulerHelperService extends AbstractService {
 			sb.append("</tr>");
 			sb.append("<tr bgcolor=\"F8CBAD\">");
 			sb.append("<td><b>" + proj.getName() + "</b></td>");
-			sb.append("<td>Open</td>");
+			//sb.append("<td>Open</td>");
 			sb.append("<td>Assigned</td>");
 			sb.append("<td>Completed</td>");
 			sb.append("<td>Overdue</td>");
 			sb.append("<td>Total</td>");
 			sb.append("<td>Open</td>");
 			sb.append("<td>Assigned</td>");
-//			sb.append("<td>Pending</td>");
+			//sb.append("<td>Pending</td>");
 			sb.append("<td>Closed</td>");
 			sb.append("<td>Total</td>");
 			sb.append("<td>Pending</td>");
@@ -1805,7 +1805,7 @@ public class SchedulerHelperService extends AbstractService {
 								sb.append("<tr><td>Overdue : </td><td>" + summary.getOverdueJobCount() + "</td>");
 								sb.append("</tr></table>");
 								*/
-//								sb.append("<td></td>");
+								//sb.append("<td></td>");
 								sb.append("<td>" + summary.getAssignedJobCount() + "</td>");
 								sb.append("<td>" + summary.getCompletedJobCount() + "</td>");
 								sb.append("<td>" + summary.getOverdueJobCount() + "</td>");
@@ -1856,9 +1856,9 @@ public class SchedulerHelperService extends AbstractService {
 //								sb.append("</tr></table>");
 								sb.append("<td>" + summary.getTotalOpenTicketCount() +  "</td>");
 								sb.append("<td>"+ summary.getTotalAssignedTicketCount() +"</td>");
-//								sb.append("<td>" + summary.getTotalPendingTicketCount() + "</td>");
+								//sb.append("<td>" + summary.getTotalPendingTicketCount() + "</td>");
 								sb.append("<td>" + summary.getTotalClosedTicketCount() + "</td>");
-								sb.append("<td><b>" + summary.getTotalNewTicketCount() + "</b></td>");
+								sb.append("<td><b>" + summary.getTotalTicketCount() + "</b></td>");
 							}
 							log.debug("send report");
 							exportTicketResult = exportUtil.writeTicketExcelReportToFile(proj.getName(), ticketResults,
