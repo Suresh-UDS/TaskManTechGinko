@@ -600,6 +600,7 @@ public class ReportService extends AbstractService {
 
         ReportResult reportResult = new ReportResult();
         //reportResult.setSiteId(siteId);
+        reportResult.setTotalTicketCount(totalOpenTicketCount + totalAssignedTicketCount + totalClosedTicketCount);
         reportResult.setTotalNewTicketCount(totalNewTicketCount);
         reportResult.setTotalOpenTicketCount(totalOpenTicketCount);
         reportResult.setTotalAssignedTicketCount(totalAssignedTicketCount);

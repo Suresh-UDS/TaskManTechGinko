@@ -50,7 +50,8 @@ public class ReportResult {
 	
 	Map<java.sql.Date,Long> overdueCountMap;
 	
-    long totalNewTicketCount;
+	long totalTicketCount;
+	long totalNewTicketCount;
     long totalOpenTicketCount;
     long totalAssignedTicketCount;
     long totalClosedTicketCount;
@@ -309,6 +310,14 @@ public class ReportResult {
 
 	public void setTotalOpenTicketCount(long totalOpenTicketCount) {
 		this.totalOpenTicketCount = totalOpenTicketCount;
+	}
+
+	public long getTotalTicketCount() {
+		return totalTicketCount;
+	}
+
+	public void setTotalTicketCount(long totalTicketCount) {
+		this.totalTicketCount = totalTicketCount;
 	}
     
     
