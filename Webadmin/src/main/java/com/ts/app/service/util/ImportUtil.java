@@ -574,9 +574,9 @@ public class ImportUtil {
 			for (; r <= lastRow; r++) {
 				log.debug("Current Row number -" + r+"Last Row : "+lastRow);
 				Row currentRow = datatypeSheet.getRow(r);
-				log.debug("cell type =" + currentRow.getCell(0).getStringCellValue()+"\t"+currentRow.getCell(9).getStringCellValue());
+				log.debug("cell type =" + currentRow.getCell(0).getNumericCellValue()+"\t"+currentRow.getCell(9).getNumericCellValue());
 				SiteDTO siteDTO = new SiteDTO();
-				siteDTO.setProjectId(Long.valueOf(currentRow.getCell(0).getStringCellValue()));
+				siteDTO.setProjectId((int)currentRow.getCell(0).getNumericCellValue());
 				siteDTO.setName(currentRow.getCell(1).getStringCellValue());
 				log.debug("REgion and branch - "+ currentRow.getCell(7).getStringCellValue()+" - "+currentRow.getCell(8).getStringCellValue());
                 if(org.apache.commons.lang3.StringUtils.isNotEmpty(currentRow.getCell(7).getStringCellValue())){
@@ -593,9 +593,9 @@ public class ImportUtil {
                     }
                 }
                 log.debug("site DTO region and branch - "+siteDTO.getRegion()+" - "+siteDTO.getBranch());
-				siteDTO.setAddressLat(Double.valueOf(currentRow.getCell(9).getStringCellValue()));
-				siteDTO.setAddressLng(Double.valueOf(currentRow.getCell(10).getStringCellValue()));
-				siteDTO.setRadius(Double.valueOf(currentRow.getCell(11).getStringCellValue()));
+				siteDTO.setAddressLat(Double.valueOf(currentRow.getCell(9).getNumericCellValue()));
+				siteDTO.setAddressLng(Double.valueOf(currentRow.getCell(10).getNumericCellValue()));
+				siteDTO.setRadius(Double.valueOf(currentRow.getCell(11).getNumericCellValue()));
 				siteDTO.setAddress(currentRow.getCell(6).getStringCellValue());
 				siteDTO.setUserId(SecurityUtils.getCurrentUserId());
 				Site site = mapperUtil.toEntity(siteDTO, Site.class);
