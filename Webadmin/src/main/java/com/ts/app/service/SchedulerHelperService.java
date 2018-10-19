@@ -1691,8 +1691,8 @@ public class SchedulerHelperService extends AbstractService {
 			StringBuffer sb = new StringBuffer();
 			sb.append("<table border=\"1\" cellpadding=\"5\"  style=\"border-collapse:collapse;margin-bottom:20px;\">");
 			sb.append("<tr bgcolor=\"FFD966\"><th>Site</th>");
-			sb.append("<th colspan=\"5\">Job</th>");
-			sb.append("<th colspan=\"5\">Ticket</th>");
+			sb.append("<th colspan=\"4\">Job</th>");
+			sb.append("<th colspan=\"4\">Ticket</th>");
 			sb.append("<th colspan=\"5\">Quotation</th>");
 			sb.append("</tr>");
 			sb.append("<tr bgcolor=\"F8CBAD\">");
@@ -1704,7 +1704,7 @@ public class SchedulerHelperService extends AbstractService {
 			sb.append("<td>Total</td>");
 			sb.append("<td>Open</td>");
 			sb.append("<td>Assigned</td>");
-			sb.append("<td>Pending</td>");
+//			sb.append("<td>Pending</td>");
 			sb.append("<td>Closed</td>");
 			sb.append("<td>Total</td>");
 			sb.append("<td>Pending</td>");
@@ -1805,7 +1805,7 @@ public class SchedulerHelperService extends AbstractService {
 								sb.append("<tr><td>Overdue : </td><td>" + summary.getOverdueJobCount() + "</td>");
 								sb.append("</tr></table>");
 								*/
-								sb.append("<td></td>");
+//								sb.append("<td></td>");
 								sb.append("<td>" + summary.getAssignedJobCount() + "</td>");
 								sb.append("<td>" + summary.getCompletedJobCount() + "</td>");
 								sb.append("<td>" + summary.getOverdueJobCount() + "</td>");
@@ -1817,14 +1817,14 @@ public class SchedulerHelperService extends AbstractService {
 							files.add(jobResult.getFile());
 						} else {
 							log.debug("no jobs found on the daterange");
-							sb.append("<td></td>");
+//							sb.append("<td></td>");
 							sb.append("<td>0</td>");
 							sb.append("<td>0</td>");
 							sb.append("<td>0</td>");
 							sb.append("<td><b>0</b></td>");
 						}
 					}else {
-						sb.append("<td></td>");
+//						sb.append("<td></td>");
 						sb.append("<td></td>");
 						sb.append("<td>0</td>");
 						sb.append("<td>0</td>");
@@ -1856,7 +1856,7 @@ public class SchedulerHelperService extends AbstractService {
 //								sb.append("</tr></table>");
 								sb.append("<td>" + summary.getTotalOpenTicketCount() +  "</td>");
 								sb.append("<td>"+ summary.getTotalAssignedTicketCount() +"</td>");
-								sb.append("<td>" + summary.getTotalPendingTicketCount() + "</td>");
+//								sb.append("<td>" + summary.getTotalPendingTicketCount() + "</td>");
 								sb.append("<td>" + summary.getTotalClosedTicketCount() + "</td>");
 								sb.append("<td><b>" + summary.getTotalNewTicketCount() + "</b></td>");
 							}
@@ -1867,7 +1867,7 @@ public class SchedulerHelperService extends AbstractService {
 						}else {
 							sb.append("<td></td>");
 							sb.append("<td></td>");
-							sb.append("<td>0</td>");
+//							sb.append("<td>0</td>");
 							sb.append("<td>0</td>");
 							sb.append("<td><b>0</b></td>");		
 						}
@@ -1876,7 +1876,7 @@ public class SchedulerHelperService extends AbstractService {
 						log.debug("no tickets found on the daterange");
 						sb.append("<td></td>");
 						sb.append("<td></td>");
-						sb.append("<td>0</td>");
+//						sb.append("<td>0</td>");
 						sb.append("<td>0</td>");
 						sb.append("<td><b>0</b></td>");						
 					}
