@@ -70,7 +70,7 @@ angular.module('timeSheetApp')
 			importSiteFile: function(file){
 				var fileFormData = new FormData();
 				fileFormData.append('siteFile', file);
-				return $http.post('api/site/import', fileFormData, {
+				return $http.post('api/import/site', fileFormData, {
 					transformRequest: angular.identity,
 					headers: {'Content-Type': undefined}
 
