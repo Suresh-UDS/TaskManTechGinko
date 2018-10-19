@@ -534,7 +534,7 @@ public class SiteService extends AbstractService {
             return region1;
 
         }else{
-            RegionDTO regionDTO = null;
+            RegionDTO regionDTO = new RegionDTO();
             regionDTO.setName(region);
             regionDTO.setProjectId(projectId);
             RegionDTO regionDTO1 = createRegion(regionDTO);
@@ -551,7 +551,7 @@ public class SiteService extends AbstractService {
             return branch1;
 
         }else{
-            BranchDTO branchDTO = null;
+            BranchDTO branchDTO = new BranchDTO();
             branchDTO.setName(branch);
             branchDTO.setProjectId(projectId);
             branchDTO.setRegionId(regionId);
