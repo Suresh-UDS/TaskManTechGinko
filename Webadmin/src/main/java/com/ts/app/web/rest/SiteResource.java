@@ -146,7 +146,7 @@ public class SiteResource {
 
 
 
-    @RequestMapping(value = "/site/import", method = RequestMethod.POST)
+    @RequestMapping(value = "/import/site", method = RequestMethod.POST)
     public ResponseEntity<ImportResult> importJobData(@RequestParam("siteFile") MultipartFile file){
     	log.info("--Invoked Site Import --");
 		Calendar cal = Calendar.getInstance();
