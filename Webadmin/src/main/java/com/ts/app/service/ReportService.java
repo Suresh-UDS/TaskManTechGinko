@@ -521,7 +521,13 @@ public class ReportService extends AbstractService {
         //java.sql.Date sqlEndDate = new java.sql.Date(endCal.getTimeInMillis());
         Timestamp sqlEndDate = DateUtil.convertToTimestamp(endCal.getTime());
         ZonedDateTime endZDate = sqlEndDate.toLocalDateTime().atZone(zone).withHour(23).withMinute(59);
+        //create sql dates
+        java.sql.Date sqlFromDate = DateUtil.convertToSQLDate(startCal.getTime());
+        java.sql.Date sqlToDate = DateUtil.convertToSQLDate(endCal.getTime());
+        
         long totalNewTicketCount = 0;
+        long totalOpenTicketCount = 0;
+        long totalAssignedTicketCount = 0;
         long totalClosedTicketCount = 0;
         long totalPendingTicketCount = 0;
         long totalPendingDueToClientTicketCount = 0;
@@ -529,10 +535,14 @@ public class ReportService extends AbstractService {
         log.info("Ticket report params : siteId - "+ siteIds + ", startZDate - " + startZDate + ", endZDate -" + endZDate );
 
         totalNewTicketCount = ticketRepository.findCountBySiteIdAndDateRange(siteIds, startZDate, endZDate);
+        
+        totalOpenTicketCount = ticketRepository.findOpenTicketsBySiteIdAndDateRange(siteIds, startZDate, endZDate);
 
         totalPendingTicketCount = ticketRepository.findOpenCountBySiteIdAndDateRange(siteIds, startZDate, endZDate);
+        
+        totalAssignedTicketCount = ticketRepository.findAssignedCountBySiteIdStatusAndDateRange(siteIds, startZDate, endZDate);
 
-        totalClosedTicketCount = ticketRepository.findCountBySiteIdStatusAndDateRange(siteIds, "Closed", startZDate, endZDate);
+        totalClosedTicketCount = ticketRepository.findClosedCountBySiteIdStatusAndDateRange(siteIds, sqlFromDate, sqlToDate);
 
         totalPendingDueToClientTicketCount = ticketRepository.findOpenCountBySiteIdAndDateRangeDueToClient(siteIds, startZDate, endZDate);
 
@@ -591,6 +601,8 @@ public class ReportService extends AbstractService {
         ReportResult reportResult = new ReportResult();
         //reportResult.setSiteId(siteId);
         reportResult.setTotalNewTicketCount(totalNewTicketCount);
+        reportResult.setTotalOpenTicketCount(totalOpenTicketCount);
+        reportResult.setTotalAssignedTicketCount(totalAssignedTicketCount);
         reportResult.setTotalPendingTicketCount(totalPendingTicketCount);
         reportResult.setTotalClosedTicketCount(totalClosedTicketCount);
         reportResult.setTotalPendingDueToClientTicketCount(totalPendingDueToClientTicketCount);
