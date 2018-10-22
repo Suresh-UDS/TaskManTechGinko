@@ -640,6 +640,18 @@ demo = {
                 type: "success",
             }).catch(swal.noop)
 
+        }else if(type == 'success-message-and-ok'){
+
+            swal({
+                title: title,
+                text: txt,
+                type: 'success',
+                showCancelButton: false,
+                confirmButtonClass: 'btn btn-danger',
+                cancelButtonClass: 'btn btn-danger',
+                confirmButtonText: 'Ok',
+                buttonsStyling: false
+            }).catch(swal.noop)
         }else if (type == 'feedback-success') {
               swal({
                   title: title,

@@ -256,7 +256,7 @@ export class EmployeeList {
     verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData){
         let base64Image = 'data:image/jpeg;base64,' + imageData;
         var employeeName = employee.fullName+employee.empId;
-        this.component.showLoader('Detecting Face');
+        // this.component.showLoader('Detecting Face');
         if(mode === 'enroll'){
             this.component.closeAll();
             this.component.showLoader('Enrolling Face Id');
@@ -280,7 +280,7 @@ export class EmployeeList {
             })
 
         }else{
-
+            this.component.closeAll();
             if(attendanceMode == 'checkIn'){
 
                 this.markAttendance(employee,imageData);
@@ -295,36 +295,43 @@ export class EmployeeList {
     }
 
     markAttendance(employee,imageData){
-
+        this.component.showLoader("Marking Attendance...");
         this.attendanceService.markAttendanceCheckIn(this.site.id,employee.empId,this.lattitude,this.longitude,imageData).subscribe(response=>{
-            console.log(response.json());
             this.component.closeAll();
-            if(response && response.status === 200){
+            this.getEmployees();
+            if(response.errorStatus){
                 var msg='Face Verified and Attendance marked Successfully';
-                this.component.showToastMessage(msg,'bottom');
+                demo.showSwal('warning-message-and-confirmation-ok','Error in Marking Attendance',response.errorMessage);
+            }else{
+                demo.showSwal('success','Success','Face Verified and Attendance marked Successfully');
+
             }
         },error=>{
-            var msg = 'Attendance Not Marked';
-            console.log(error);
-            this.component.showToastMessage(msg,'bottom');
             this.component.closeAll();
+            var msg = 'Attendance Not Marked';
+            demo.showSwal('warning-message-and-confirmation-ok','Error in Marking Attendance',msg);
+            console.log(error);
+
         })
     }
 
     markAttendanceCheckOut(employee,imageData){
+        this.component.showLoader("Marking Attendance...");
         this.attendanceService.markAttendanceCheckOut(this.site.id,employee.empId,this.lattitude,this.longitude,imageData,employee.attendanceId).subscribe(response=>{
-            console.log(response.json());
-            this.getEmployees();
             this.component.closeAll();
-            if(response && response.status === 200){
+            this.getEmployees();
+            if(response.errorStatus){
                 var msg='Face Verified and Attendance marked Successfully';
-                this.component.showToastMessage(msg,'bottom');
+                demo.showSwal('warning-message-and-confirmation-ok','Error in Marking Attendance',response.errorMessage);
+            }else{
+                demo.showSwal('success','Success','Face Verified and Attendance marked Successfully');
+
             }
         },error=>{
-            var msg = 'Attendance Not Marked';
-            console.log(error);
-            this.component.showToastMessage(msg,'bottom');
             this.component.closeAll();
+            var msg = 'Attendance Not Marked';
+            demo.showSwal('warning-message-and-confirmation-ok','Error in Marking Attendance',msg);
+            console.log(error);
         })
     }
 
