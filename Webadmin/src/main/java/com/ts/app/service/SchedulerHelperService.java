@@ -1788,11 +1788,10 @@ public class SchedulerHelperService extends AbstractService {
 					// if report generation needed
 
 					if (eodReports != null && eodReports.getSettingValue().equalsIgnoreCase("true")) {
+						sc.setConsolidated(true);
 						List<JobDTO> jobResults = jobManagementService.generateReport(sc, false);
 						if (CollectionUtils.isNotEmpty(jobResults)) {
-							sc.setConsolidated(true);
 							List<ReportResult> jobSummary = jobManagementService.generateConsolidatedReport(sc, false);
-							sc.setConsolidated(false);
 							if (CollectionUtils.isNotEmpty(jobSummary)) {
 								ReportResult summary = jobSummary.get(0);
 								/*
