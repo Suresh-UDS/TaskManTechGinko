@@ -897,6 +897,7 @@ public class ExportUtil {
 	    rowStyle.setFillPattern(CellStyle.BIG_SPOTS);
 	    //style.setFont(font);
 	    //fill the header fields
+
 	    int rowNum = 8; //10
 	    Row headerRow = musterSheet.getRow(rowNum);
 	    Cell clientNameCell = headerRow.getCell(10);
@@ -987,6 +988,14 @@ public class ExportUtil {
 		}
 		
 		int shiftCellRow = 37;
+		
+	    int firstRow = 5;
+	    Row headerFirstRow = musterSheet.getRow(firstRow);
+	    Cell headerCell;
+	    
+	    CellStyle headerStyle = xssfWorkbook.createCellStyle();
+		headerStyle.setBorderTop(CellStyle.BORDER_MEDIUM);
+	    
 		Row shiftRowNum = musterSheet.getRow(10);
 		XSSFFont shiftFont = xssfWorkbook.createFont();
  		for(Map.Entry<Map<String, String>, String> ent : shiftSlots.entrySet()) { 
@@ -999,12 +1008,19 @@ public class ExportUtil {
 			XSSFRichTextString rt = new XSSFRichTextString(value);
 		    shiftFont.setBold(true);
 		    rt.applyFont(shiftFont);
+		    headerCell = headerFirstRow.createCell(shiftCellRow);
 			Cell shiftRow = shiftRowNum.getCell(shiftCellRow);
 			if(shiftRow == null) {
-				shiftRow = shiftRowNum.createCell(shiftCellRow);
+				shiftRow = shiftRowNum.createCell(shiftCellRow);				
+			}
+			if(headerCell == null) {
+				headerCell = headerFirstRow.createCell(shiftCellRow);
 			}
 			shiftRow.setCellValue(rt);
 			shiftRow.setCellStyle(shiftStyle);
+		
+			headerCell.setCellStyle(headerStyle);
+			
 			shiftCellRow++;
 		}
  		 		
@@ -1015,6 +1031,9 @@ public class ExportUtil {
  	    leftRowStyle.setBorderRight(CellStyle.BORDER_THIN);
  		
  		int offRow = shiftCellRow;
+ 		headerCell = headerFirstRow.createCell(offRow);
+ 		headerCell.setCellStyle(headerStyle);
+ 		
  		Cell offCell = shiftRowNum.createCell(offRow);
  		XSSFRichTextString rt = new XSSFRichTextString("Off");
  		shiftFont.setBold(true);
@@ -1023,12 +1042,27 @@ public class ExportUtil {
  		offCell.setCellStyle(leftRowStyle);
  		
  		int totalRow = offRow + 1;
+ 		CellStyle lastRowStyle = xssfWorkbook.createCellStyle();
+ 		Cell lastHeaderCell = headerFirstRow.createCell(totalRow);
+ 		lastRowStyle.setBorderTop(CellStyle.BORDER_MEDIUM);
+ 		lastRowStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
+ 		lastHeaderCell.setCellStyle(lastRowStyle);
+ 		
  		Cell totalCell = shiftRowNum.createCell(totalRow);
  		XSSFRichTextString tot = new XSSFRichTextString("Total Pay");
  		shiftFont.setBold(true);
  		tot.applyFont(shiftFont);
  		totalCell.setCellValue(tot);
  		totalCell.setCellStyle(leftRowStyle);
+ 		
+ 		int length = 10;
+ 		for(int i=6; i < length; i++) { 
+ 			 Row headerLastRow = musterSheet.getRow(i);
+ 			 Cell createLastCell = headerLastRow.createCell(totalRow);
+ 			 CellStyle lastStyle = xssfWorkbook.createCellStyle();
+ 			 lastStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
+ 			 createLastCell.setCellStyle(lastStyle);
+ 		}
 		
  		String prevDesignation = null;
 		String currDesignation = null;
@@ -1150,6 +1184,9 @@ public class ExportUtil {
 				    desigStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
 				    desigStyle.setFillForegroundColor(IndexedColors.GREEN.getIndex());
 				    desigStyle.setFillPattern(CellStyle.BIG_SPOTS);
+				    shiftFont.setBold(true);
+				    shiftFont.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
+				    desigStyle.setFont(shiftFont);
 					
 					int preVal = dataRow.getRowNum() - 1;
 					Row prevRow = musterSheet.getRow(preVal);
