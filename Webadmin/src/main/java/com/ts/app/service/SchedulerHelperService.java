@@ -830,8 +830,8 @@ public class SchedulerHelperService extends AbstractService {
 				Iterator<Site> siteItr = sites.iterator();
 				List<Setting> settings = null;
 				if (dayReport) {
-					settings = settingRepository.findSettingByKeyAndProjectId(
-							SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE, proj.getId());
+					settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(
+							SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE, siteItr.next().getId(), proj.getId());
 				}
 				Setting attendanceReports = null;
 				if (CollectionUtils.isNotEmpty(settings)) {
@@ -954,10 +954,10 @@ public class SchedulerHelperService extends AbstractService {
 							List<Setting> emailAlertTimeSettings = null;
 							// summary map
 							if (dayReport) {
-								settings = settingRepository.findSettingByKeyAndProjectId(
-										SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_EMAILS, proj.getId());
-								emailAlertTimeSettings = settingRepository.findSettingByKeyAndProjectId(
-										SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_ALERT_TIME, proj.getId());
+								settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(
+										SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_EMAILS, site.getId(), proj.getId());
+								emailAlertTimeSettings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(
+										SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_ALERT_TIME, site.getId(), proj.getId());
 							}
 							Setting attendanceReportEmails = null;
 							if (CollectionUtils.isNotEmpty(settings)) {
