@@ -22,6 +22,7 @@ import {CompleteJobPage} from "../jobs/completeJob";
 export class SiteViewPage {
 
   siteName:any;
+  siteId: any;
   siteDetail:any;
   categories:any;
   jobs:any;
@@ -58,6 +59,7 @@ export class SiteViewPage {
     this.siteDetail=this.navParams.get('site')
     console.log('ionViewDidLoad SiteViewPage');
     console.log(this.siteDetail.name);
+    this.siteId = this.siteDetail.id;
     this.isAdmin = true;
     this.draftedQuotationsCount= 0;
     this.approvedQuotationsCount=0;
@@ -293,7 +295,8 @@ export class SiteViewPage {
   }
 
   getQuotations(){
-    this.quotationService.getQuotations().subscribe(
+    console.log("Quotation SiteId",this.siteId);
+    this.quotationService.searchQuotations( {siteId: this.siteId}).subscribe(
         response=>{
           console.log(response);
 

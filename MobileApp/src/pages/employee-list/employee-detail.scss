@@ -15,4 +15,7 @@ page-employee-detail
       width:100% !important;
     }
   }
+  .title:first-letter{
+    text-transform: capitalize;
+  }
 }

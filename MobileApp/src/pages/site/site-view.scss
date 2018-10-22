@@ -1,3 +1,10 @@
-page-home {
-
+page-site-view {
+.card-md{
+  margin: 10px;
+  border-radius: 2px;
+  width: calc(100% - 20px);
+  font-size: 1.4rem;
+  background: #fff;
+  box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.14), 0 0px 0px 0px rgba(0, 0, 0, 0.2), 0 0px 0px 0 rgba(0, 0, 0, 0.12) !important;
+}
 }

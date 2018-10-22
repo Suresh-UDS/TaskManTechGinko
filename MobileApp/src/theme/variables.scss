@@ -870,6 +870,49 @@ ion-input
   padding: 5px !important;
 }
 
+.new-card-md{
+    box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.14), 0 0px 0px 0px rgba(0, 0, 0, 0.2), 0 0px 0px 0 rgba(0, 0, 0, 0.12) !important;
+}
+
+.scroll-card{
+  margin: 5px 0 0px 0 !important;
+  border-radius: 0px !important;
+}
+
+.scroll-heading{
+  font-weight: 400;
+}
+.selece-client{
+  font-weight: 500;
+}
+
+.no-data{
+    ion-card img {
+      width: 100% !important;
+      height:100px !important;
+    }
+    ion-card-content {
+      padding: 0px 32px !important;
+      position: relative !important;
+      vertical-align: center !important;
+    }
+    .card-md
+    {
+      width:100% !important;
+    }
+
+}
+.todate-align{
+  text-align: center;
+  border-left: 1px solid #dfdfdf;
+}
+
+.cards-header{
+  border-bottom: 1px dotted #dfdfdf;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+}
+
 // App iOS Variables
 // --------------------------------------------------
 // iOS only Sass variables can go here

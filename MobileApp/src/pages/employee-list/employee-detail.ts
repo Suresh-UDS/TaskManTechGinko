@@ -18,6 +18,8 @@ import {ArchivedQuotationPage} from "../quotation/archivedQuotations";
 import {DraftedQuotationPage} from "../quotation/draftedQuotations";
 import {SubmittedQuotationPage} from "../quotation/submittedQuotations";
 import {QuotationService} from "../service/quotationService";
+import {ViewJobPage} from "../jobs/view-job";
+import {CompleteJobPage} from "../jobs/completeJob";
 
 /**
  * Generated class for the EmployeeList page.
@@ -261,5 +263,17 @@ export class EmployeeDetailPage {
     item.setElementClass("active-sliding", false);
     item.setElementClass("active-slide", false);
     item.setElementClass("active-options-right", false);
+  }
+
+  viewJob(job)
+  {
+    console.log("========view job ===========");
+    console.log(job);
+    this.navCtrl.push(ViewJobPage,{job:job})
+  }
+
+  compeleteJob(job)
+  {
+    this.navCtrl.push(CompleteJobPage,{job:job})
   }
 }

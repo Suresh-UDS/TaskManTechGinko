@@ -114,10 +114,31 @@ page-asset-view {
   }
   .card{
     margin: 0px 0 0px 0 !important;
-  }
-  .card-md
-  {
     width:100% !important;
   }
+  .cardWithRadius
+  {
+
+    .item
+    {
+      background: transparent !important;
+      .item-inner
+      {
+        border-bottom: none !important;
+      }
+    }
+
+  }
+
+  .ticket-card{
+
+    .card{
+      margin: 5px 0 0px 0 !important;
+      width: 100% !important;
+    }
+
+  }
+
+
 
 }

@@ -138,7 +138,7 @@
     <!--</ion-fab>-->
 
 <div [ngSwitch]="categories" margin-top>
-    <ion-list *ngSwitchCase="'details'" class="assetview-padding " >
+    <ion-list *ngSwitchCase="'details'" class="assetview-padding" >
         <!--<ion-fab left bottom mini (click)="addAssetImage()"   >-->
             <!--<ion-label color="light" class="margin0 bg-orange " padding-right padding-left>Add</ion-label>-->
             <!--<button ion-fab color="primary" class="margin-auto margin-top5">-->
@@ -146,36 +146,40 @@
             <!--</button>-->
         <!--</ion-fab>-->
       <div class="card">
-         <div class="panel-heading card-header-md-clr-orange">Asset Details</div>
+         <div class="panel-heading card-header-md-clr-orange cards-header">Asset Details</div>
 
           <div class="card-content table-responsive padding-top0">
               <ion-row class="margin0 white-bg">
                   <ion-col col-6 class="label-on-left" no-padding>Name</ion-col>
                   <ion-col col-6 no-padding>
+                      <p text-right *ngIf="assetDetails.title==null">N/A</p>
                       <p text-right>{{assetDetails.title}}</p>
                   </ion-col>
                   <ion-col col-6 class="label-on-left" no-padding>Code</ion-col>
                   <ion-col col-6 no-padding="">
-                      <p text-right>{{assetDetails.code}}</p>
+                    <p text-right *ngIf="assetDetails.code==null">N/A</p>
+                    <p text-right>{{assetDetails.code}}</p>
                   </ion-col>
                   <ion-col col-6 class="label-on-left" no-padding="">
                       Group
                   </ion-col>
                   <ion-col col-6 no-padding="">
-                      <p text-right>{{assetDetails.assetGroup}}</p>
+                    <p text-right *ngIf="assetDetails.assetGroup==null">N/A</p>
+                    <p text-right>{{assetDetails.assetGroup}}</p>
                   </ion-col>
                   <ion-col col-6 class="label-on-left" no-padding="">
                       Type
                   </ion-col>
                   <ion-col col-6 no-padding="">
-                      <p text-right>{{assetDetails.assetType}}</p>
+                    <p text-right *ngIf="assetDetails.assetType==null">N/A</p>
+                    <p text-right>{{assetDetails.assetType}}</p>
                   </ion-col>
               </ion-row>
           </div>
       </div>
 
       <div class="card">
-          <div class="panel-heading card-header-md-clr-orange">Asset Location</div>
+          <div class="panel-heading card-header-md-clr-orange cards-header">Asset Location</div>
 
           <div class="card-content table-responsive padding-top0">
               <ion-row class="margin0 white-bg">
@@ -189,100 +193,114 @@
                       Site
                   </ion-col>
                   <ion-col col-6 no-padding="">
-                      <p text-right>{{assetDetails.siteName}}</p>
+                    <p text-right *ngIf="assetDetails.siteName==null">N/A</p>
+                    <p text-right>{{assetDetails.siteName}}</p>
                   </ion-col>
                   <ion-col col-6 class="label-on-left" no-padding="">
                       Block
                   </ion-col>
                   <ion-col col-6 no-padding="">
-                      <p text-right>{{assetDetails.block}}</p>
+                    <p text-right *ngIf="assetDetails.block==null">N/A</p>
+                    <p text-right>{{assetDetails.block}}</p>
                   </ion-col>
                   <ion-col col-6 class="label-on-left" no-padding="">
                       Floor
                   </ion-col>
                   <ion-col col-6 no-padding="">
-                      <p text-right>{{assetDetails.floor}}</p>
+                    <p text-right *ngIf="assetDetails.floor==null">N/A</p>
+                    <p text-right>{{assetDetails.floor}}</p>
                   </ion-col>
                   <ion-col col-6 class="label-on-left" no-padding="">
                       Zone
                   </ion-col>
                   <ion-col col-6 no-padding="">
-                      <p text-right>{{assetDetails.zone}}</p>
+                    <p text-right *ngIf="assetDetails.zone==null">N/A</p>
+                    <p text-right>{{assetDetails.zone}}</p>
                   </ion-col>
               </ion-row>
           </div>
       </div>
 
       <div class="card">
-          <div class="panel-heading card-header-md-clr-orange">Manufacturer Details</div>
+          <div class="panel-heading card-header-md-clr-orange cards-header">Manufacturer Details</div>
           <div class="card-content table-responsive padding-top0">
               <ion-row class="margin0 white-bg">
                   <ion-col col-6 class="label-on-left" no-padding="">
                       Manufacturer
                   </ion-col>
                   <ion-col col-6 no-padding="">
-                      <p text-right>{{assetDetails.manufacturerName}}</p>
+                    <p text-right *ngIf="assetDetails.manufacturerName==null">N/A</p>
+                    <p text-right>{{assetDetails.manufacturerName}}</p>
                   </ion-col>
                   <ion-col col-6 class="label-on-left" no-padding="">
                       Model Number
                   </ion-col>
                   <ion-col col-6 no-padding="">
-                      <p text-right>{{assetDetails.modelNumber}}</p>
+                    <p text-right *ngIf="assetDetails.modelNumber==null">N/A</p>
+                    <p text-right>{{assetDetails.modelNumber}}</p>
                   </ion-col>
                   <ion-col col-6 class="label-on-left" no-padding="">
                       Serial
                   </ion-col>
                   <ion-col col-6 no-padding="">
-                      <p text-right>{{assetDetails.serialNumber}}</p>
+                    <p text-right *ngIf="assetDetails.serialNumber==null">N/A</p>
+                    <p text-right>{{assetDetails.serialNumber}}</p>
                   </ion-col>
                   <ion-col col-5 class="label-on-left" no-padding="">
                       Acquired Date
                   </ion-col>
                   <ion-col col-7 no-padding="">
-                      <p text-right>{{assetDetails.acquiredDate | date:'MMM d, y, h:mm a' }}</p>
+                    <p text-right *ngIf="assetDetails.acquiredDate==null">N/A</p>
+                    <p text-right>{{assetDetails.acquiredDate | date:'MMM d, y, h:mm a' }}</p>
                   </ion-col>
                   <ion-col col-6 class="label-on-left" no-padding="">
                       Purchase Price
                   </ion-col>
                   <ion-col col-6 no-padding="">
-                      <p text-right>{{assetDetails.purchasePrice}}</p>
+                    <p text-right *ngIf="assetDetails.purchasePrice==null">N/A</p>
+                    <p text-right>{{assetDetails.purchasePrice}}</p>
                   </ion-col>
                   <ion-col col-6 class="label-on-left" no-padding="">
                       Current Price
                   </ion-col>
                   <ion-col col-6 no-padding="">
-                      <p text-right>{{assetDetails.currentPrice}}</p>
+                    <p text-right *ngIf="assetDetails.currentPrice==null">N/A</p>
+                    <p text-right>{{assetDetails.currentPrice}}</p>
                   </ion-col>
                   <ion-col col-6 class="label-on-left" no-padding="">
                       Estimated Dispose Price
                   </ion-col>
                   <ion-col col-6 no-padding="">
-                      <p text-right>{{assetDetails.estimatedDisposePrice}}</p>
+                    <p text-right *ngIf="assetDetails.estimatedDisposePrice==null">N/A</p>
+                    <p text-right>{{assetDetails.estimatedDisposePrice}}</p>
                   </ion-col>
               </ion-row>
           </div>
       </div>
       <div class="card">
-          <div class="panel-heading card-header-md-clr-orange">AMC Vendor Details</div>
+          <div class="panel-heading card-header-md-clr-orange cards-header">AMC Vendor Details</div>
           <div class="card-content table-responsive padding-top0">
                   <ion-row class="margin0 white-bg">
                       <ion-col col-6 class="label-on-left" no-padding="jk">
                           Vendor
                       </ion-col>
                       <ion-col col-6 no-padding="">
-                          <p text-right>{{assetDetails.warrantyType}}</p>
+                        <p text-right *ngIf="assetDetails.warrantyType==null">N/A</p>
+                        <p text-right>{{assetDetails.warrantyType}}</p>
                       </ion-col>
                       <ion-col col-6 class="label-on-left" no-padding="jk">
                           Warranty Type
                       </ion-col>
                       <ion-col col-6 no-padding="">
-                          <p text-right>{{assetDetails.warrantyType}}</p>
+                        <p text-right *ngIf="assetDetails.warrantyType==null">N/A</p>
+                        <p text-right>{{assetDetails.warrantyType}}</p>
                       </ion-col>
                       <ion-col col-5 class="label-on-left" no-padding="">
                           Warranty End Date
                       </ion-col>
                       <ion-col col-7 no-padding="">
-                          <p text-right>{{assetDetails.warrantyExpiryDate | date:'MMM d, y, h:mm a' }}</p>
+                        <p text-right *ngIf="assetDetails.warrantyExpiryDate==null">N/A</p>
+                        <p text-right>{{assetDetails.warrantyExpiryDate | date:'MMM d, y, h:mm a' }}</p>
                       </ion-col>
                   </ion-row>
           </div>
@@ -302,16 +320,9 @@
             <ion-spinner name="circles"></ion-spinner>
         </div>
 
-        <div text-center="" *ngIf=" (!assetDetails.ppms || assetDetails.ppms.length < 0) && !spinner ">
-            <ion-card text-center style="border-radius: 6px" class="assetview-padding" >
-                <ion-card-content>
-                    No Data found
-                </ion-card-content>
-            </ion-card>
-        </div>
 
-      <div class="card">
-        <div  class="white-bg" *ngFor="let ppm of assetDetails.ppms;let k=index" >
+        <div class="card cardWithRadius">
+        <div  *ngFor="let ppm of assetDetails.ppms;let k=index" >
 
             <div class="padding-left16 padding-top5" >
                 <ion-row class="margin0 margin-top40">
@@ -335,7 +346,7 @@
                 </ion-row>
             </div>
 
-            <ion-item #item class="item-fnt padding-left0" >
+            <ion-item class="item-fnt padding-left0 item-md" >
                 <!--<div class="padding-left16">-->
 
                 <div text-capitalize >
@@ -358,6 +369,13 @@
         </div>
         </div>
 
+      <div text-center="" class="no-data" *ngIf=" (!assetDetails.ppms || assetDetails.ppms.length < 0) && !spinner ">
+        <ion-card>
+          <img src="assets/imgs/warning.svg">
+          <span><p text-center>No Data Found</p></span>
+        </ion-card>
+      </div>
+
     </ion-list>
 
     <ion-list *ngSwitchCase="'amc'" class="assetview-padding">
@@ -376,7 +394,7 @@
             </ion-card>
         </div>
 
-        <div  class="white-bg" *ngFor="let amc of assetDetails.amcs;let k=index" >
+        <div  class="card cardWithRadius" *ngFor="let amc of assetDetails.amcs;let k=index" >
 
             <div class="padding-left16 padding-top5" >
                 <ion-row class="margin0 margin-top40">
@@ -439,7 +457,7 @@
             </ion-card>
         </div>
 
-        <div class="white-bg border-btm" *ngFor=" let config of assetDetails.config;let i=index; " >
+        <div class="card cardWithRadius border-btm" *ngFor=" let config of assetDetails.config;let i=index; " >
             <div class="padding-top5">
                 <ion-row class="margin0">
                     <ion-col col-2 class="ver-center">
@@ -545,7 +563,7 @@
                             <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>
                         </button>
                     </ion-col>
-                    <ion-col col-6 class="padding-left5">
+                    <ion-col col-8 class="padding-left5">
                         <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>
                             <p text-left class="margin0">{{job.title}}</p>
                             <p text-left class="margin0">{{job.employeeName}}</p>
@@ -625,7 +643,7 @@
 
     </ion-list>
 
-    <ion-list *ngSwitchCase="'tickets'" style="margin-top : 56px" class="assetview-padding">
+    <ion-list *ngSwitchCase="'tickets'" style="margin-top : 55px !important;" class="assetview-padding ticket-card">
 
         <div  *ngIf="(assetDetails.tickets?.length == 0) && spinner" text-center class="margin-top25">
             <ion-spinner name="circles"></ion-spinner>
@@ -645,7 +663,7 @@
             </ion-refresher-content>
         </ion-refresher>
 
-        <div  class="white-bg" *ngFor="let ticket of assetDetails.tickets" (click)="viewTicket(ticket)">
+        <div  class="card cardWithRadius" *ngFor="let ticket of assetDetails.tickets" (click)="viewTicket(ticket)">
             <div class="padding-left16 padding-top5">
                 <ion-row class="margin0 border-btm">
                     <ion-col col-3 class="ver-center">
@@ -662,7 +680,7 @@
                 </ion-row>
             </div>
 
-            <ion-item #item class="item-fnt padding-left0" >
+            <ion-item #item class="item-fnt padding-left0">
                 <!--<div class="padding-left16">-->
                 <div text-capitalize >
                     <ion-row class="margin0">
@@ -685,7 +703,7 @@
 
     </ion-list>
 
-    <ion-list *ngSwitchCase="'readings'" class="assetview-padding" style="margin-top:56px !important;">
+    <ion-list *ngSwitchCase="'readings'" class="assetview-padding" style="margin-top:55px !important;">
 
         <div  *ngIf="(!assetDetails.reading || assetDetails.reading.length < 0) && spinner" text-center class="margin-top25">
             <ion-spinner name="circles"></ion-spinner>
@@ -698,9 +716,53 @@
             </ion-card>
         </div>
 
+      <div *ngIf="assetDetails.reading">
+        <ion-card *ngFor="let readings of assetDetails.reading">
+          <ion-row>
+            <ion-col col-6 style="text-align: center;">
+              <p style="color: #ff9800">Date</p>
+              <p>{{readings.createdDate|date:'dd/MM/YY'}}</p>
+              <p>{{readings.createdDate|date : 'hh:mm a'}}</p>
+            </ion-col>
+            <ion-col col-6  style="text-align: center;">
+              <p style="color: #ff9800">Type</p>
+              <p>{{readings.name}}</p>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col col-12 style="text-align: center; font-weight: 400 ; color: #ff9800">Consumption</ion-col>
+            <ion-col col-6  style="text-align: center;">
+              <p style="color: #ff9800">Initial Value</p>
+              <p>{{readings.initialValue}}</p>
+            </ion-col>
+            <ion-col col-6  style="text-align: center;">
+              <p style="color: #ff9800">Final Value</p>
+              <p>{{readings.finalValue}}</p>
+            </ion-col>
+            <ion-col col-12  style="text-align: center;">
+              <p *ngIf="readings.consumption">{{readings.consumption}}</p>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col col-6  style="text-align: center;">
+              <p style="color: #ff9800">Readings</p>
+              <p *ngIf="readings.value>0">NA</p>
+              <p>{{readings.value}}</p>
+            </ion-col>
+            <ion-col col-6  style="text-align: center;">
+              <p style="color: #ff9800">UOM</p>
+              <p>{{readings.uom}}</p>
+            </ion-col>
+          </ion-row>
+        </ion-card>
 
-        <div *ngIf="assetDetails.reading">
-            <div class="card-content white-bg" >
+      </div>
+
+
+
+
+       <!-- <div *ngIf="assetDetails.reading">
+            <div class="card-content card cardWithRadius" >
                 <div class="table-responsive">
                     <table class="table table-scroll">
                         <thead>
@@ -730,7 +792,7 @@
                 </div>
                 </div>
 
-            </div>
+            </div>-->
         <ion-infinite-scroll *ngIf="page<totalPages" (ionInfinite)="readingScroll($event)">
             <ion-infinite-scroll-content></ion-infinite-scroll-content>
         </ion-infinite-scroll>
@@ -747,6 +809,9 @@
                 </ion-card-content>
             </ion-card>
         </div>
+      <div>
+        <p style="text-align: center">Status History</p>
+      </div>
         <div *ngFor="let statusHistory of status">
             <ion-card class="shadow brdr-radius card">
                 <ion-card-content style="margin-top: 8px !important;">
@@ -785,6 +850,9 @@
                 </ion-card-content>
             </ion-card>
         </div>
+      <div>
+        <p style="text-align: center">Site Transfer History</p>
+      </div>
         <div *ngFor="let history of site">
             <ion-card class="shadow brdr-radius card">
                 <ion-card-content>
