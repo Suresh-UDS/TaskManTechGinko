@@ -138,8 +138,8 @@ public class ReportResource {
 	}
 
 	@RequestMapping(value = "/reports/daily", method = RequestMethod.GET)
-	public ResponseEntity<?> generateDailyReport(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date reportDate) {
-		schedulerHelperService.sendDaywiseReportEmail(reportDate, true);
+	public ResponseEntity<?> generateDailyReport(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date reportDate, @RequestParam(value="projectId", required=false) long projectId) {
+		schedulerHelperService.sendDaywiseReportEmail(reportDate, true, projectId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
