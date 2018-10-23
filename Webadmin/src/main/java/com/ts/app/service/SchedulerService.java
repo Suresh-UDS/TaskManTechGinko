@@ -1436,7 +1436,7 @@ public class SchedulerService extends AbstractService {
 	public void sendDaywiseReport() {
 		Calendar cal = Calendar.getInstance();
 		boolean isOnDemand = false;
-		schedulerHelperService.sendDaywiseReportEmail(cal.getTime(), isOnDemand);
+		schedulerHelperService.sendDaywiseReportEmail(cal.getTime(), isOnDemand, 0);
 	}	
 	
 		
