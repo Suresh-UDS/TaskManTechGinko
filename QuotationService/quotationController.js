@@ -750,6 +750,18 @@ module.exports = {
         });
 
 
+    },
+
+    newSearchQuotation: function(req,res,next){
+      if(req.body.siteId && req.body.siteId>0 && req.body.title && req.body.status && req.body.createdBy && req.body.approvedBy && req.body.createdDate){
+
+      }else if(req.body.siteId && req.body.siteId>0 && req.body.title && req.body.status && req.body.createdBy && req.body.approvedBy){
+
+      }else if(req.body.siteId && req.body.siteId>0 && req.body.title && req.body.status && req.body.createdDate && req.body.approvedBy){
+
+      }else if(req.body.siteId && req.body.siteId>0 && req.body.title && req.body.status && req.body.created){
+
+      }
     }
 
 
