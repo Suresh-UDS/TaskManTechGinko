@@ -93,16 +93,16 @@ public class RateCardService extends AbstractService {
 
 	@Inject
 	private FileUploadHelper fileUploadHelper;
-	
+
 	@Inject
 	private AmazonS3Utils amazonS3Utils;
-	
+
 	@Value("${AWS.s3-cloudfront-url}")
 	private String cloudFrontUrl;
-	
+
 	@Value("${AWS.s3-bucketEnv}")
 	private String bucketEnv;
-	
+
 	@Value("${AWS.s3-quotation-path}")
 	private String quotationFilePath;
 
@@ -347,7 +347,7 @@ public class RateCardService extends AbstractService {
 
             log.debug("quotation save  end point"+quotationSvcEndPoint);
             String url = quotationSvcEndPoint+"/quotation/create";
-            
+
 	    		Setting quotationAlertSetting = null;
 			List<Setting> settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_QUOTATION, quotationDto.getSiteId());
 			if(CollectionUtils.isNotEmpty(settings)) {
@@ -374,7 +374,7 @@ public class RateCardService extends AbstractService {
             if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("edit")) {
             		url = quotationSvcEndPoint+"/quotation/edit";
             }else if(quotationDto.getMode().equalsIgnoreCase("submit")) {
-            		if(!StringUtils.isEmpty(quotationDto.get_id())) { 
+            		if(!StringUtils.isEmpty(quotationDto.get_id())) {
             			url = quotationSvcEndPoint+"/quotation/send";
             		}else {
 	    	        		quotationDto.setCreatedByUserId(currUserId);
@@ -529,6 +529,10 @@ public class RateCardService extends AbstractService {
             Map<String, String> map = new HashMap<String, String>();
             map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 
+            TimeZone tz = TimeZone.getTimeZone("UTC");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+            df.setTimeZone(tz);
+
             headers.setAll(map);
 
             JSONObject request = new JSONObject();
@@ -537,7 +541,7 @@ public class RateCardService extends AbstractService {
             request.put("id",searchCriteria.getId());
             request.put("title",searchCriteria.getQuotationTitle());
             request.put("createdBy",searchCriteria.getQuotationCreatedBy());
-            request.put("createdDate", searchCriteria.getQuotationCreatedDate());
+            request.put("createdDate", df.format(searchCriteria.getQuotationCreatedDate()));
             request.put("approvedBy",searchCriteria.getQuotationApprovedBy());
             request.put("status",searchCriteria.getQuotationStatus());
             request.put("submittedDate", searchCriteria.getQuotationSubmittedDate());
@@ -562,7 +566,7 @@ public class RateCardService extends AbstractService {
 //		return mapperUtil.toModelList(entities, RateCardDTO.class);
         return  quotationList;
     }
-	
+
 	public Object getQuotationSummary(SearchCriteria searchCriteria, List<Long> siteIds) {
 
         log.debug("get Quotations");
