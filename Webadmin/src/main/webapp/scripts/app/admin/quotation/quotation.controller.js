@@ -911,6 +911,8 @@ angular
 	                    var searchCriteras  = $scope.searchCriteria;
 	                 }
 
+	                 $scope.searchCriteria.quotationCreatedDate = new Date();
+	                 $scope.searchCriteria.toDate = new Date();
 	                 /* Localstorage (Retain old values while edit page to list) end */
 
 
