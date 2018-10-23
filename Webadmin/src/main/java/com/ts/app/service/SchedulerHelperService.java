@@ -1778,7 +1778,7 @@ public class SchedulerHelperService extends AbstractService {
 					}
 				}
 				
-				if(alertTimeCal.equals(now)) {
+				if(alertTimeCal.equals(now) || isOnDemand) {
 					log.info("Site daily report alert time matches ");
 					log.info("Generating daily report for site -"+ site.getName());
 					generateReport = true;
