@@ -1977,7 +1977,7 @@ public class SchedulerHelperService extends AbstractService {
 						}
 						sb.append("</tr>");
 					
-						if (eodReports != null && (alertTimeCal.equals(now) || isOnDemand)
+						if (eodReports != null && (generateReport || isOnDemand)
 								&& (eodReportClientGroupAlert != null
 								&& eodReportClientGroupAlert.getSettingValue().equalsIgnoreCase("true"))) {
 		
