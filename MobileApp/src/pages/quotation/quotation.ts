@@ -184,6 +184,7 @@ export class QuotationPage {
     this.index = i;
     this.projectActive = true;
     this.siteActive = true;
+    console.log("siteId",siteId);
       this.quotationService.searchQuotations({siteId:siteId}).subscribe(
           response=>{
 

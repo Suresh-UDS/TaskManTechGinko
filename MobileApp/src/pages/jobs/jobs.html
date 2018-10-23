@@ -5,8 +5,8 @@
         </button>
         <ion-title>Jobs</ion-title>
         <ion-buttons right>
-        <button color="primary" ion-button clear (click)="scanQR()" class="add-btn">
-        <i class="fa fa-qrcode clr-orange fnt-24"></i>
+        <button ion-button class="fnt-black" icon-only (click)="presentModal()" class="padding-right10">
+          <ion-icon name="funnel"></ion-icon>
         </button>
         </ion-buttons>
     </ion-navbar>
@@ -24,8 +24,8 @@
 </ion-header>
 
 <ion-content>
-    <ion-fab  bottom right  >
-        <button ion-fab color="primary" (click)="presentModal()"><ion-icon name="funnel"></ion-icon></button>
+    <ion-fab  bottom right (click)="scanQR()" >
+        <button ion-fab color="primary" ><i class="fa fa-qrcode clr-white fnt-24"></i></button>
     </ion-fab>
 
     <!--<ion-fab top right edge >-->

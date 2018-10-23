@@ -11,6 +11,11 @@
             <ion-icon name="menu"></ion-icon>
         </button>
         <ion-title>Tickets</ion-title>
+      <ion-buttons right>
+        <button ion-button class="fnt-black" icon-only (click)="presentModal()" class="padding-right10">
+          <ion-icon name="funnel"></ion-icon>
+        </button>
+      </ion-buttons>
     </ion-navbar>
 
 </ion-header>
@@ -18,11 +23,11 @@
 
 <ion-content>
 
-    <ion-fab  bottom right>
+    <!--<ion-fab  >
         <button ion-fab color="primary" (click)="presentModal()"><ion-icon name="funnel"></ion-icon></button>
-    </ion-fab>
+    </ion-fab>-->
 
-    <ion-fab top right edge>
+    <ion-fab bottom right>
         <button has-permission="TicketsCreate" (click)="createTicket()" ion-fab><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 

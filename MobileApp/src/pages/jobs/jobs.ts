@@ -9,6 +9,8 @@ import {CompleteJobPage} from "./completeJob";
 import {JobService} from "../service/jobService";
 import{ModalController} from "ionic-angular";
 import{JobFilter} from "./job-filter/job-filter";
+import {ScanQR} from "./scanQR";
+
 
 @Component({
   selector: 'page-jobs',
@@ -356,6 +358,10 @@ export class JobsPage {
     presentModal() {
         const modal = this.modalCtrl.create(JobFilter);
         modal.present();
+    }
+
+    scanQR(){
+      this.navCtrl.push(ScanQR);
     }
 
 }
