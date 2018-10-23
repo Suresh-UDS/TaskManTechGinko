@@ -31,6 +31,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.OnDelete;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1659,12 +1660,12 @@ public class SchedulerHelperService extends AbstractService {
 		return job;
 	}
 
-	public void sendDaywiseReportEmail(Date date, boolean isOnDemand, long siteId) {
+	public void sendDaywiseReportEmail(Date date, boolean isOnDemand, long projectId) {
 		// TODO Auto-generated method stub
-		dayWiseJQTReport(date, isOnDemand, siteId);
+		dayWiseJQTReport(date, isOnDemand, projectId);
 	}
 
-	public void dayWiseJQTReport(Date date, boolean isOnDemand, long siteId) {
+	public void dayWiseJQTReport(Date date, boolean isOnDemand, long projectId) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		// cal.add(Calendar.DAY_OF_MONTH, -1);
@@ -1689,6 +1690,12 @@ public class SchedulerHelperService extends AbstractService {
 		List<Project> projects = projectRepository.findAll();
 		for (Project proj : projects) {
 			log.info("Generating daily report for client -"+ proj.getName());
+			
+			if(projectId > 0 && projectId != proj.getId()) {
+				continue;
+			}
+
+			
 			StringBuffer sb = new StringBuffer();
 			sb.append("<table border=\"1\" cellpadding=\"5\"  style=\"border-collapse:collapse;margin-bottom:20px;\">");
 			sb.append("<tr bgcolor=\"FFD966\"><th>Site</th>");
@@ -1726,9 +1733,6 @@ public class SchedulerHelperService extends AbstractService {
 				sb.append("<tr bgcolor=\"FFD966\">");
 				Site site = siteItr.next();
 				
-				if(siteId > 0 && siteId != site.getId()) {
-					continue;
-				}
 				
 				List<Setting> settings = null;
 				List<Setting> emailAlertTimeSettings = null;
