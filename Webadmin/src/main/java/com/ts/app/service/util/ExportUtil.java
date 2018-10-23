@@ -916,6 +916,7 @@ public class ExportUtil {
 	    Cell shiftCell = headerRow.getCell(18);
 	    String shiftCellVal = headerRow.getCell(18).getStringCellValue();
 	    shiftCell.setCellValue(shiftCellVal + " " + shifts);
+	    musterSheet.autoSizeColumn(18);
 
 	    Cell monthCell = headerRow.getCell(25);
 	    String monthCellVal = headerRow.getCell(25).getStringCellValue();
@@ -1045,7 +1046,7 @@ public class ExportUtil {
  		CellStyle lastRowStyle = xssfWorkbook.createCellStyle();
  		Cell lastHeaderCell = headerFirstRow.createCell(totalRow);
  		lastRowStyle.setBorderTop(CellStyle.BORDER_MEDIUM);
- 		lastRowStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
+// 		lastRowStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
  		lastHeaderCell.setCellStyle(lastRowStyle);
  		
  		Cell totalCell = shiftRowNum.createCell(totalRow);
@@ -1055,10 +1056,26 @@ public class ExportUtil {
  		totalCell.setCellValue(tot);
  		totalCell.setCellStyle(leftRowStyle);
  		
+ 		int totalDesigRow = totalRow + 1;
+ 		CellStyle desigRowStyle = xssfWorkbook.createCellStyle();
+ 		headerCell = headerFirstRow.createCell(totalDesigRow);
+ 		desigRowStyle.setBorderTop(CellStyle.BORDER_MEDIUM);
+ 		desigRowStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
+ 		headerCell.setCellStyle(desigRowStyle);
+ 		
+ 		Cell totalDesigCell = shiftRowNum.createCell(totalRow + 1);
+ 		XSSFRichTextString totDesig = new XSSFRichTextString("Designation Total");
+ 		musterSheet.setColumnWidth(totalDesigRow, 4000);
+ 		leftRowStyle.setWrapText(true);
+ 		shiftFont.setBold(true);
+ 		totDesig.applyFont(shiftFont);
+ 		totalDesigCell.setCellValue(totDesig);
+ 		totalDesigCell.setCellStyle(leftRowStyle);
+ 		
  		int length = 10;
  		for(int i=6; i < length; i++) { 
  			 Row headerLastRow = musterSheet.getRow(i);
- 			 Cell createLastCell = headerLastRow.createCell(totalRow);
+ 			 Cell createLastCell = headerLastRow.createCell(totalDesigRow);
  			 CellStyle lastStyle = xssfWorkbook.createCellStyle();
  			 lastStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
  			 createLastCell.setCellStyle(lastStyle);
