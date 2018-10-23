@@ -830,8 +830,8 @@ public class SchedulerHelperService extends AbstractService {
 				Iterator<Site> siteItr = sites.iterator();
 				List<Setting> settings = null;
 				if (dayReport) {
-					settings = settingRepository.findSettingByKeyAndProjectId(
-							SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE, proj.getId());
+					settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(
+							SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE, siteItr.next().getId(), proj.getId());
 				}
 				Setting attendanceReports = null;
 				if (CollectionUtils.isNotEmpty(settings)) {
@@ -954,10 +954,10 @@ public class SchedulerHelperService extends AbstractService {
 							List<Setting> emailAlertTimeSettings = null;
 							// summary map
 							if (dayReport) {
-								settings = settingRepository.findSettingByKeyAndProjectId(
-										SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_EMAILS, proj.getId());
-								emailAlertTimeSettings = settingRepository.findSettingByKeyAndProjectId(
-										SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_ALERT_TIME, proj.getId());
+								settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(
+										SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_EMAILS, site.getId(), proj.getId());
+								emailAlertTimeSettings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(
+										SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_ALERT_TIME, site.getId(), proj.getId());
 							}
 							Setting attendanceReportEmails = null;
 							if (CollectionUtils.isNotEmpty(settings)) {
@@ -1795,14 +1795,13 @@ public class SchedulerHelperService extends AbstractService {
 					ExportResult jobResult = new ExportResult();
 					if (env.getProperty("scheduler.dayWiseJobReport.enabled").equalsIgnoreCase("true")) {
 	
-						// if report generation needed
-	
+					// if report generation needed
+
 						if (eodReports != null && eodReports.getSettingValue().equalsIgnoreCase("true")) {
+							sc.setConsolidated(true);
 							List<JobDTO> jobResults = jobManagementService.generateReport(sc, false);
 							if (CollectionUtils.isNotEmpty(jobResults)) {
-								sc.setConsolidated(true);
 								List<ReportResult> jobSummary = jobManagementService.generateConsolidatedReport(sc, false);
-								sc.setConsolidated(false);
 								if (CollectionUtils.isNotEmpty(jobSummary)) {
 									ReportResult summary = jobSummary.get(0);
 									/*
@@ -1849,187 +1848,189 @@ public class SchedulerHelperService extends AbstractService {
 	
 						if (CollectionUtils.isNotEmpty(ticketResults)) {
 							// if report generation needed
-							log.debug("results exists");
-							if (eodReports != null && eodReports.getSettingValue().equalsIgnoreCase("true")) {
-								//sb.append("<br/>Ticket Summary<br/>");
-								List<Long> siteIds = new ArrayList<Long>();
-								siteIds.add(site.getId());
-								ReportResult summary = reportService.getTicketStatsDateRange(0, siteIds, cal.getTime(),
-										dayEndcal.getTime());
-								if (summary != null) {
-	//								sb.append(
-	//										"<table border=\"1\" cellpadding=\"5\"  style=\"border-collapse:collapse;margin-bottom:20px;\"><tr><td>Total Tickets : </td><td>"
-	//												+ summary.getTotalNewTicketCount() + "</td>");
-	//								sb.append("<tr><td>Closed : </td><td>" + summary.getTotalClosedTicketCount() + "</td>");
-	//								sb.append(
-	//										"<tr><td>Pending : </td><td>" + summary.getTotalPendingTicketCount() + "</td>");
-	//								sb.append("</tr></table>");
-									sb.append("<td>" + summary.getTotalOpenTicketCount() +  "</td>");
-									sb.append("<td>"+ summary.getTotalAssignedTicketCount() +"</td>");
-									//sb.append("<td>" + summary.getTotalPendingTicketCount() + "</td>");
-									sb.append("<td>" + summary.getTotalClosedTicketCount() + "</td>");
-									sb.append("<td><b>" + summary.getTotalTicketCount() + "</b></td>");
+		
+								// if report generation needed
+								log.debug("results exists");
+								if (eodReports != null && eodReports.getSettingValue().equalsIgnoreCase("true")) {
+									//sb.append("<br/>Ticket Summary<br/>");
+									List<Long> siteIds = new ArrayList<Long>();
+									siteIds.add(site.getId());
+									ReportResult summary = reportService.getTicketStatsDateRange(0, siteIds, cal.getTime(),
+											dayEndcal.getTime());
+									if (summary != null) {
+		//								sb.append(
+		//										"<table border=\"1\" cellpadding=\"5\"  style=\"border-collapse:collapse;margin-bottom:20px;\"><tr><td>Total Tickets : </td><td>"
+		//												+ summary.getTotalNewTicketCount() + "</td>");
+		//								sb.append("<tr><td>Closed : </td><td>" + summary.getTotalClosedTicketCount() + "</td>");
+		//								sb.append(
+		//										"<tr><td>Pending : </td><td>" + summary.getTotalPendingTicketCount() + "</td>");
+		//								sb.append("</tr></table>");
+										sb.append("<td>" + summary.getTotalOpenTicketCount() +  "</td>");
+										sb.append("<td>"+ summary.getTotalAssignedTicketCount() +"</td>");
+										//sb.append("<td>" + summary.getTotalPendingTicketCount() + "</td>");
+										sb.append("<td>" + summary.getTotalClosedTicketCount() + "</td>");
+										sb.append("<td><b>" + summary.getTotalTicketCount() + "</b></td>");
+									}
+									log.debug("send report");
+									exportTicketResult = exportUtil.writeTicketExcelReportToFile(proj.getName(), ticketResults,
+											null, null, exportTicketResult);
+									files.add(exportTicketResult.getFile());
+								}else {
+									sb.append("<td></td>");
+									sb.append("<td></td>");
+		//							sb.append("<td>0</td>");
+									sb.append("<td>0</td>");
+									sb.append("<td><b>0</b></td>");		
 								}
-								log.debug("send report");
-								exportTicketResult = exportUtil.writeTicketExcelReportToFile(proj.getName(), ticketResults,
-										null, null, exportTicketResult);
-								files.add(exportTicketResult.getFile());
-							}else {
+		
+							} else {
+								log.debug("no tickets found on the daterange");
 								sb.append("<td></td>");
 								sb.append("<td></td>");
-	//							sb.append("<td>0</td>");
+		//						sb.append("<td>0</td>");
 								sb.append("<td>0</td>");
-								sb.append("<td><b>0</b></td>");		
-							}
-	
-						} else {
-							log.debug("no tickets found on the daterange");
-							sb.append("<td></td>");
-							sb.append("<td></td>");
-	//						sb.append("<td>0</td>");
-							sb.append("<td>0</td>");
-							sb.append("<td><b>0</b></td>");						
-						}
-					}
-	
-					ExportResult exportQuotationResult = new ExportResult();
-					if (env.getProperty("scheduler.dayWiseQuotationReport.enabled").equalsIgnoreCase("true")) {
-						List<QuotationDTO> quotationResults = new ArrayList<QuotationDTO>();
-	
-						Object quotationObj = quotationService.getQuotations(sc);
-						if (quotationObj != null) {
-							ObjectMapper mapper = new ObjectMapper();
-							mapper.findAndRegisterModules();
-							mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-							mapper.configure(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE, false);
-							try {
-								quotationResults = mapper.readValue((String) quotationObj,
-										new TypeReference<List<QuotationDTO>>() {
-										});
-							} catch (IOException e) {
-								log.error("Error while converting quotation results to objects", e);
+								sb.append("<td><b>0</b></td>");						
 							}
 						}
-	
-						if (CollectionUtils.isNotEmpty(quotationResults)) {
-							// if report generation needed
-							log.debug("results exists");
-							if (eodReports != null && eodReports.getSettingValue().equalsIgnoreCase("true")) {
-								//sb.append("<br/>Quotation Summary<br/>");
-								QuotationDTO quotationSummary = new QuotationDTO();
-								List<Long> siteIds = new ArrayList<Long>();
-								siteIds.add(site.getId());
-								Object quotationSum = quotationService.getQuotationSummary(sc, siteIds);
+		
+						ExportResult exportQuotationResult = new ExportResult();
+						if (env.getProperty("scheduler.dayWiseQuotationReport.enabled").equalsIgnoreCase("true")) {
+							List<QuotationDTO> quotationResults = new ArrayList<QuotationDTO>();
+		
+							Object quotationObj = quotationService.getQuotations(sc);
+							if (quotationObj != null) {
 								ObjectMapper mapper = new ObjectMapper();
 								mapper.findAndRegisterModules();
 								mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 								mapper.configure(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE, false);
 								try {
-									quotationSummary = mapper.readValue((String) quotationSum,
-											new TypeReference<QuotationDTO>() {
+									quotationResults = mapper.readValue((String) quotationObj,
+											new TypeReference<List<QuotationDTO>>() {
 											});
 								} catch (IOException e) {
 									log.error("Error while converting quotation results to objects", e);
 								}
-								log.debug("send report");
-	
-								if (quotationSummary != null) {
-									/*
-									sb.append(
-											"<table border=\"1\" cellpadding=\"5\"  style=\"border-collapse:collapse;margin-bottom:20px;\"><tr><td>Total Quotations : </td><td>"
-													+ quotationSummary.getTotalCount() + "</td>");
-									sb.append(
-											"<tr><td>Approved : </td><td>" + quotationSummary.getTotalApproved() + "</td>");
-									sb.append("<tr><td>Pending : </td><td>" + quotationSummary.getTotalPending() + "</td>");
-									sb.append("<tr><td>Submitted : </td><td>" + quotationSummary.getTotalSubmitted()
-											+ "</td>");
-									sb.append(
-											"<tr><td>Archived : </td><td>" + quotationSummary.getTotalArchived() + "</td>");
-									sb.append("</tr></table>");
-									*/
-									sb.append("<td>"+ quotationSummary.getTotalPending() +"</td>");
-									sb.append("<td>"+ quotationSummary.getTotalSubmitted() +"</td>");
-									sb.append("<td>" + quotationSummary.getTotalApproved() + "</td>");
+							}
+		
+							if (CollectionUtils.isNotEmpty(quotationResults)) {
+								// if report generation needed
+								log.debug("results exists");
+								if (eodReports != null && eodReports.getSettingValue().equalsIgnoreCase("true")) {
+									//sb.append("<br/>Quotation Summary<br/>");
+									QuotationDTO quotationSummary = new QuotationDTO();
+									List<Long> siteIds = new ArrayList<Long>();
+									siteIds.add(site.getId());
+									Object quotationSum = quotationService.getQuotationSummary(sc, siteIds);
+									ObjectMapper mapper = new ObjectMapper();
+									mapper.findAndRegisterModules();
+									mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+									mapper.configure(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE, false);
+									try {
+										quotationSummary = mapper.readValue((String) quotationSum,
+												new TypeReference<QuotationDTO>() {
+												});
+									} catch (IOException e) {
+										log.error("Error while converting quotation results to objects", e);
+									}
+									log.debug("send report");
+		
+									if (quotationSummary != null) {
+										/*
+										sb.append(
+												"<table border=\"1\" cellpadding=\"5\"  style=\"border-collapse:collapse;margin-bottom:20px;\"><tr><td>Total Quotations : </td><td>"
+														+ quotationSummary.getTotalCount() + "</td>");
+										sb.append(
+												"<tr><td>Approved : </td><td>" + quotationSummary.getTotalApproved() + "</td>");
+										sb.append("<tr><td>Pending : </td><td>" + quotationSummary.getTotalPending() + "</td>");
+										sb.append("<tr><td>Submitted : </td><td>" + quotationSummary.getTotalSubmitted()
+												+ "</td>");
+										sb.append(
+												"<tr><td>Archived : </td><td>" + quotationSummary.getTotalArchived() + "</td>");
+										sb.append("</tr></table>");
+										*/
+										sb.append("<td>"+ quotationSummary.getTotalPending() +"</td>");
+										sb.append("<td>"+ quotationSummary.getTotalSubmitted() +"</td>");
+										sb.append("<td>" + quotationSummary.getTotalApproved() + "</td>");
+										sb.append("<td></td>");
+										sb.append("<td><b>" + quotationSummary.getTotalCount() + "</b></td>");
+		
+									}
+									exportQuotationResult = exportUtil.writeQuotationExcelReportToFile(quotationResults, null,
+											exportQuotationResult);
+									files.add(exportQuotationResult.getFile());
+								}else {
 									sb.append("<td></td>");
-									sb.append("<td><b>" + quotationSummary.getTotalCount() + "</b></td>");
-	
+									sb.append("<td></td>");
+									sb.append("<td>0</td>");
+									sb.append("<td>0</td>");
+									sb.append("<td><b>0</b></td>");		
 								}
-								exportQuotationResult = exportUtil.writeQuotationExcelReportToFile(quotationResults, null,
-										exportQuotationResult);
-								files.add(exportQuotationResult.getFile());
-							}else {
-								sb.append("<td></td>");
-								sb.append("<td></td>");
+		
+							} else {
+								log.debug("no quotations found on the daterange");
 								sb.append("<td>0</td>");
 								sb.append("<td>0</td>");
-								sb.append("<td><b>0</b></td>");		
+								sb.append("<td>0</td>");
+								sb.append("<td></td>");
+								sb.append("<td><b>0</b></td>");
 							}
-	
-						} else {
-							log.debug("no quotations found on the daterange");
-							sb.append("<td>0</td>");
-							sb.append("<td>0</td>");
-							sb.append("<td>0</td>");
-							sb.append("<td></td>");
-							sb.append("<td><b>0</b></td>");
 						}
-					}
-					sb.append("</tr>");
-				
-					if (eodReports != null && (alertTimeCal.equals(now) || isOnDemand)
-							&& (eodReportClientGroupAlert != null
-							&& eodReportClientGroupAlert.getSettingValue().equalsIgnoreCase("true"))) {
-	
-						if (proj.getClientGroup() != null) {
-	
-							ClientgroupDTO clientGrp = null;
-							Map<String, List<ExportContent>> clientContentMap = null;
-	
-							
-							if (clientGroupMap.containsKey(proj.getClientGroup())) {
-								clientGrp = clientGroupMap.get(proj.getClientGroup());
-								clientContentMap = clientGrp.getContents();
-							} else {
-								clientGrp = new ClientgroupDTO();
-								clientGrp.setClientgroup(proj.getClientGroup());
-								clientContentMap = new HashMap<String, List<ExportContent>>();
+						sb.append("</tr>");
+					
+						if (eodReports != null && (alertTimeCal.equals(now) || isOnDemand)
+								&& (eodReportClientGroupAlert != null
+								&& eodReportClientGroupAlert.getSettingValue().equalsIgnoreCase("true"))) {
+		
+							if (proj.getClientGroup() != null) {
+		
+								ClientgroupDTO clientGrp = null;
+								Map<String, List<ExportContent>> clientContentMap = null;
+		
+								
+								if (clientGroupMap.containsKey(proj.getClientGroup())) {
+									clientGrp = clientGroupMap.get(proj.getClientGroup());
+									clientContentMap = clientGrp.getContents();
+								} else {
+									clientGrp = new ClientgroupDTO();
+									clientGrp.setClientgroup(proj.getClientGroup());
+									clientContentMap = new HashMap<String, List<ExportContent>>();
+								}
+		
+								List<ExportContent> exportContents = null;
+		
+								ExportContent exportCnt = new ExportContent();
+								exportCnt.setEmail(eodReportEmails !=null ? eodReportEmails.getSettingValue() : StringUtils.EMPTY);
+								exportCnt.setSiteId(site.getId());
+								exportCnt.setSiteName(site.getName());
+								//exportCnt.setSummary(sb.toString());
+								exportCnt.setJobFile(jobResult.getFile());
+								exportCnt.setTicketFile(exportTicketResult.getFile());
+								exportCnt.setQuotationFile(exportQuotationResult.getFile());
+								// exportCnt.setFile(files);
+		
+								if (clientContentMap.containsKey(proj.getName())) {
+									exportContents = clientContentMap.get(proj.getName());
+								} else {
+									exportContents = new ArrayList<ExportContent>();
+								}
+		
+								exportContents.add(exportCnt);
+		
+								clientContentMap.put(proj.getName(), exportContents);
+								
+								clientGrp.setContents(clientContentMap);
+		
+								clientGroupMap.put(proj.getClientGroup(), clientGrp);
+		
 							}
-	
-							List<ExportContent> exportContents = null;
-	
-							ExportContent exportCnt = new ExportContent();
-							exportCnt.setEmail(eodReportEmails !=null ? eodReportEmails.getSettingValue() : StringUtils.EMPTY);
-							exportCnt.setSiteId(site.getId());
-							exportCnt.setSiteName(site.getName());
-							//exportCnt.setSummary(sb.toString());
-							exportCnt.setJobFile(jobResult.getFile());
-							exportCnt.setTicketFile(exportTicketResult.getFile());
-							exportCnt.setQuotationFile(exportQuotationResult.getFile());
-							// exportCnt.setFile(files);
-	
-							if (clientContentMap.containsKey(proj.getName())) {
-								exportContents = clientContentMap.get(proj.getName());
-							} else {
-								exportContents = new ArrayList<ExportContent>();
-							}
-	
-							exportContents.add(exportCnt);
-	
-							clientContentMap.put(proj.getName(), exportContents);
-							
-							clientGrp.setContents(clientContentMap);
-	
-							clientGroupMap.put(proj.getClientGroup(), clientGrp);
-	
-						}
-	
-					} 
-	//				else if (eodReportEmails != null && (alertTimeCal.equals(now) || isOnDemand)) {
-	//					if (CollectionUtils.isNotEmpty(files)) {
-	//						mailService.sendDaywiseReportEmailFile(site.getName(), eodReportEmails.getSettingValue(), files,
-	//								cal.getTime(), sb.toString());
-	//					}
-	//				}
+		
+						} 
+		//				else if (eodReportEmails != null && (alertTimeCal.equals(now) || isOnDemand)) {
+		//					if (CollectionUtils.isNotEmpty(files)) {
+		//						mailService.sendDaywiseReportEmailFile(site.getName(), eodReportEmails.getSettingValue(), files,
+		//								cal.getTime(), sb.toString());
+		//					}
+		//				}
 				}	
 
 			}
