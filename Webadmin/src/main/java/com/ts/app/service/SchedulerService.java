@@ -760,7 +760,7 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.sendScheduleAMCJobsAlert();
 	}
 
-	//@Scheduled(cron="0 */5 * * * ?") // runs every 30 mins
+	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
 	public void feedbackDetailReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		//cal.add(Calendar.DAY_OF_YEAR, -1);
