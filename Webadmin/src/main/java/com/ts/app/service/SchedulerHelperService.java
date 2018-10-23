@@ -31,6 +31,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.OnDelete;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1778,7 +1779,7 @@ public class SchedulerHelperService extends AbstractService {
 					}
 				}
 				
-				if(alertTimeCal.equals(now)) {
+				if(alertTimeCal.equals(now) || isOnDemand) {
 					log.info("Site daily report alert time matches ");
 					log.info("Generating daily report for site -"+ site.getName());
 					generateReport = true;
