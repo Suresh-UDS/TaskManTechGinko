@@ -26,6 +26,7 @@ import javax.transaction.Transactional;
 
 import com.ts.app.domain.*;
 import com.ts.app.service.*;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -51,21 +52,6 @@ import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.repository.UserRoleRepository;
 import com.ts.app.security.SecurityUtils;
-import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
-import com.ts.app.web.rest.dto.AssetDTO;
-import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.ChecklistDTO;
-import com.ts.app.web.rest.dto.ChecklistItemDTO;
-import com.ts.app.web.rest.dto.ImportResult;
-import com.ts.app.web.rest.dto.JobChecklistDTO;
-import com.ts.app.web.rest.dto.JobDTO;
-import com.ts.app.web.rest.dto.LocationDTO;
-import com.ts.app.web.rest.dto.ProjectDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
-import com.ts.app.web.rest.dto.SiteDTO;
-import com.ts.app.web.rest.dto.UserDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
 
 
@@ -194,6 +180,28 @@ public class ImportUtil {
 		result.setStatus("PROCESSING");
 		return result;
 	}
+
+	public ImportResult changeEmployeeSite(MultipartFile file, long dateTime){
+	    String fileName = "changeEmployee"+dateTime + ".xlsx";
+	    String filePath = env.getProperty(NEW_IMPORT_FOLDER)+SEPARATOR+SITE_FOLDER;
+	    String uploadFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
+	    String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER)+SEPARATOR+SITE_FOLDER;
+	    String fileKey = fileName.substring(0,fileName.indexOf(".xlsx"));
+
+	    if(statusMap.containsKey(fileKey)){
+	        String status = statusMap.get(fileKey);
+	        log.debug("Current status for filename - "+fileKey+" ,status - "+status);
+        }else{
+	        statusMap.put(fileKey,"PROCESSING");
+        }
+
+        importNewFiles("siteEmployeeChange",filePath,fileName,targetFilePath);
+	    ImportResult result = new ImportResult();
+	    result.setFile(fileKey);
+	    result.setStatus("PROCESSING");
+	    return result;
+
+    }
 
 	public ImportResult importLocationData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
@@ -342,6 +350,9 @@ public class ImportUtil {
 					case "assetAMC" :
 						importAssetAMCFromFile(fileObj.getPath());
 						break;
+
+                    case "siteEmployeeChange" :
+                        changeSiteEmployee(fileObj.getPath());
 				}
 				statusMap.put(fileKey, "COMPLETED");
 				FileSystem fileSystem = FileSystems.getDefault();
@@ -945,6 +956,36 @@ public class ImportUtil {
 			log.error("Error while reading the job data file for import", e);
 		}
 	}
+
+	private void changeSiteEmployee(String path){
+
+	    try{
+	        FileInputStream excelFile = new FileInputStream(new File(path));
+	        Workbook workbook = new XSSFWorkbook(excelFile);
+	        Sheet datatypeSheet = workbook.getSheetAt(0);
+	        int lastRow = datatypeSheet.getLastRowNum();
+	        int r =1;
+	        log.debug("Last Row number - "+r);
+	        boolean canSave = true;
+	        for (;r<=lastRow;r++){
+	            log.debug("Current Row Number - "+lastRow);
+                Row currentRow = datatypeSheet.getRow(r);
+                SiteDTO siteDTO = new SiteDTO();
+                EmployeeDTO employeeDTO = new EmployeeDTO();
+                EmployeeProjectSiteDTO employeeProjectSiteDTO = new EmployeeProjectSiteDTO();
+                String empId  = currentRow.getCell(1).getStringCellValue();
+                Long siteId = Long.valueOf(getCellValue(currentRow.getCell(0)));
+
+                Employee employee = employeeRepo.findByEmpId(empId);
+                log.debug("Employee found - "+employee.getName());
+
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 	private void importEmployeeShiftMasterFromFile(String path) {
 		try {
