@@ -55,12 +55,11 @@
     </div>
 
     <ion-item *ngFor="let asset of assetList" (click)="viewAsset(asset)" class="">
-
         <ion-thumbnail *ngIf="asset.url" item-start class="">
-            <img [src]=asset.url imageViewer/>
+            <img class="thumbnail" [src]=asset.url imageViewer/>
         </ion-thumbnail>
         <ion-thumbnail *ngIf="!asset.url" item-start class="">
-            <img src="assets/imgs/placeholder.png" imageViewer/>
+            <img class="thumbnail" src="assets/imgs/placeholder.png" imageViewer/>
         </ion-thumbnail>
         <p text-left="" class="padding-bottom5 text-font">{{asset.title}}</p>
         <p text-left="" class="fnt-12 text-font">{{asset.code}}</p>

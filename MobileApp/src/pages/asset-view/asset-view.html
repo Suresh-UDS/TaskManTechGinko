@@ -35,33 +35,41 @@
     </ion-toolbar>
     <div [ngSwitch]="true">
 
-        <ion-list *ngSwitchCase=" categories === 'jobs' || categories === 'tickets' ||categories === 'readings'" no-margin="" style="background: wheat;">
+        <ion-list *ngSwitchCase=" categories === 'jobs' || categories === 'tickets' ||categories === 'readings'" no-margin="" style="background-color:#dfdfdf; ">
 
-            <ion-row no-margin class="" no-padding="" >
-                <ion-col col-5 class="ver-center  margin-right15" (click)="selectFromDate()">
-                    <ion-col col-2  class="ver-center padding-bottom1">
-                        <ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 clr-orange"></ion-icon>
-                    </ion-col>
-                    <ion-col col-10 class="ver-center padding-top-bottom0">
-                        <ion-label *ngIf="!fromDate" class="bg-trans padding-bottom0" no-margin="">From date</ion-label>
+          <div class="card scroll-card">
+            <div class="card-content" style="padding: 5px 20px !important;">
+              <ion-row>
+                <ion-col col-12>
+                  <ion-row no-margin class="" no-padding="" >
+                    <ion-col col-5 class="margin-right15 row" style="text-align: left" (click)="selectFromDate()">
+                      <ion-col col-2  class="padding-bottom1 ">
+                        <ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 green"></ion-icon>
+                      </ion-col>
+                      <ion-col col-10 class="padding-top-bottom0">
+                        <p padding-left no-margin class="scroll-heading">From date</p>
                         <p padding-left no-margin="">{{ fromDate | date:'dd/MM/yyyy' }}</p>
+                      </ion-col>
                     </ion-col>
-                </ion-col>
-                <ion-col col-5 (click)="selectToDate()" class="ver-center">
-                    <ion-col col-2 class="ver-center padding-bottom1">
-                        <ion-icon ios="ios-calendar" md="md-calendar" class="fnt-24 clr-orange"></ion-icon>
-                    </ion-col>
-                    <ion-col col-10 class="ver-center padding-top-bottom0">
-                        <ion-label *ngIf="!toDate" class="bg-trans padding-bottom0" no-margin="">To date</ion-label>
+                    <ion-col col-5 class="margin-right-15 row todate-align"  (click)="selectToDate()">
+                      <ion-col col-2  class="padding-bottom1">
+                        <ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 red"></ion-icon>
+                      </ion-col>
+                      <ion-col col-10 class="padding-top-bottom0">
+                        <p padding-left no-margin class="scroll-heading">To date</p>
                         <p padding-left no-margin="">{{ toDate | date:'dd/MM/yyyy' }}</p>
+                      </ion-col>
                     </ion-col>
-                </ion-col>
-                <ion-col col-2 class=" ver-center padding-top-bottom0">
-                    <button ion-button round class="color-white" (click)="dateSearch(fromDate,toDate,categories)" [disabled]="!viewButton">
+                    <ion-col col-2 class="">
+                      <button ion-button round class="color-white" (click)="dateSearch(fromDate,toDate,categories)" [disabled]="!viewButton">
                         <ion-icon name="search" class="fnt-30"></ion-icon>
-                    </button>
+                      </button>
+                    </ion-col>
+                  </ion-row>
                 </ion-col>
-            </ion-row>
+              </ion-row>
+            </div>
+          </div>
         </ion-list>
 
     </div>
@@ -524,7 +532,7 @@
 
     </ion-list>
 
-    <ion-list *ngSwitchCase="'jobs'"  class="assetview-padding" style="margin-top: 56px !important">
+    <ion-list *ngSwitchCase="'jobs'"  class="assetview-padding" style="margin-top: 90px !important">
 
 
         <!--<ion-fab left bottom mini (click)="createJob()"  margin>-->
@@ -643,7 +651,7 @@
 
     </ion-list>
 
-    <ion-list *ngSwitchCase="'tickets'" style="margin-top : 55px !important;" class="assetview-padding ticket-card">
+    <ion-list *ngSwitchCase="'tickets'" style="margin-top : 90px !important;" class="assetview-padding ticket-card">
 
         <div  *ngIf="(assetDetails.tickets?.length == 0) && spinner" text-center class="margin-top25">
             <ion-spinner name="circles"></ion-spinner>
@@ -663,7 +671,25 @@
             </ion-refresher-content>
         </ion-refresher>
 
-        <div  class="card cardWithRadius" *ngFor="let ticket of assetDetails.tickets" (click)="viewTicket(ticket)">
+      <div class="TicketsListCon">
+
+        <ion-list>
+          <ion-item  *ngFor="let ticket of assetDetails.tickets" (click)="viewTicket(ticket)" text-capitalize>
+            <ion-icon *ngIf="ticket.status=='Open'"  class="sky-blue"  name="ios-alert-outline" item-start></ion-icon>
+            <ion-icon *ngIf="ticket.status=='Closed'" style="color:green" name="ios-checkmark-circle-outline" item-start></ion-icon>
+            <ion-icon *ngIf="ticket.status=='OnGoing' || ticket.status =='Assigned'" style="color: orangered" name="ios-help-circle-outline" item-start></ion-icon>
+
+            <h2 text-left>{{ticket.title}}</h2>
+            <p text-left class="TicketPara">{{ticket.createdDate | date:'MMM d, y, h:mm a' }}  <br> Created by <strong>{{ticket.createdBy}} </strong> </p>
+            <ion-note item-end>
+              {{ticket.status}}
+            </ion-note>
+          </ion-item>
+        </ion-list>
+
+      </div>
+
+        <!--<div  class="card cardWithRadius" *ngFor="let ticket of assetDetails.tickets" (click)="viewTicket(ticket)">
             <div class="padding-left16 padding-top5">
                 <ion-row class="margin0 border-btm">
                     <ion-col col-3 class="ver-center">
@@ -680,8 +706,8 @@
                 </ion-row>
             </div>
 
-            <ion-item #item class="item-fnt padding-left0">
-                <!--<div class="padding-left16">-->
+           &lt;!&ndash; <ion-item #item class="item-fnt padding-left0">
+                &lt;!&ndash;<div class="padding-left16">&ndash;&gt;
                 <div text-capitalize >
                     <ion-row class="margin0">
                         <ion-col col-6 class="padding-right5">
@@ -696,14 +722,14 @@
                         </ion-col>
                     </ion-row>
                 </div>
-                <!--</div>-->
-            </ion-item>
+                &lt;!&ndash;</div>&ndash;&gt;
+            </ion-item>&ndash;&gt;
 
-        </div>
+        </div>-->
 
     </ion-list>
 
-    <ion-list *ngSwitchCase="'readings'" class="assetview-padding" style="margin-top:55px !important;">
+    <ion-list *ngSwitchCase="'readings'" class="assetview-padding" style="margin-top:90px !important;">
 
         <div  *ngIf="(!assetDetails.reading || assetDetails.reading.length < 0) && spinner" text-center class="margin-top25">
             <ion-spinner name="circles"></ion-spinner>

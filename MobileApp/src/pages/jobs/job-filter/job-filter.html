@@ -27,6 +27,35 @@
     <div class="card-content">
       <ion-row>
         <ion-col col-12>
+          <ion-row no-margin class="" no-padding="" >
+            <ion-col col-6 class="margin-right15 row" style="text-align: left" (click)="selectFromDate()">
+              <ion-col col-2  class="padding-bottom1 primary-border-bottom">
+                <ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 green"></ion-icon>
+              </ion-col>
+              <ion-col col-10 class="padding-top-bottom0 primary-border-bottom">
+              <p padding-left no-margin class="scroll-heading">From date</p>
+              <p padding-left no-margin="">{{ fromDate | date:'dd/MM/yyyy' }}</p>
+              </ion-col>
+            </ion-col>
+            <ion-col col-6 class="margin-right-15 row todate-align"  (click)="selectToDate()">
+              <ion-col col-2  class="padding-bottom1 primary-border-bottom">
+                <ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 red"></ion-icon>
+              </ion-col>
+              <ion-col col-10 class="padding-top-bottom0 primary-border-bottom">
+              <p padding-left no-margin class="scroll-heading">To date</p>
+              <p padding-left no-margin="">{{ toDate | date:'dd/MM/yyyy' }}</p>
+              </ion-col>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+
+  <div class="card scroll-card">
+    <div class="card-content">
+      <ion-row>
+        <ion-col col-12>
           <p class="scroll-heading" text-center>Choose Client</p>
           <div class="SitesScrollCon">
             <ion-scroll scrollX="true">
@@ -141,24 +170,7 @@
                 </ion-select>
             </ion-item>
         </div>-->
-        <div class="card scroll-card">
-          <div class="card-content">
-            <ion-row>
-              <ion-col col-12>
-                <ion-row no-margin class="" no-padding="" >
-                    <ion-col col-6 class="margin-right15" style="text-align: center" (click)="selectFromDate()">
-                      <p padding-left no-margin class="scroll-heading">From date</p>
-                      <p padding-left no-margin="">{{ fromDate | date:'dd/MM/yyyy' }}</p>
-                    </ion-col>
-                    <ion-col col-6 class="todate-align" (click)="selectToDate()">
-                      <p padding-left no-margin class="scroll-heading">To date</p>
-                      <p padding-left no-margin="">{{ toDate | date:'dd/MM/yyyy' }}</p>
-                    </ion-col>
-                </ion-row>
-              </ion-col>
-            </ion-row>
-          </div>
-        </div>
+
 
 
 

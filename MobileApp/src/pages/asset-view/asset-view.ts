@@ -799,6 +799,10 @@ export class AssetView {
 
     }
 
+  viewTicket(ticket){
+    this.navCtrl.push(ViewTicket,{ticket:ticket});
+  }
+
 
 
 

@@ -12,14 +12,17 @@
     <button has-permission="QuotationCreate" (click)="createQuotation()" ion-fab color="dark"><ion-icon name="add" class="clr-orange"></ion-icon></button>
   </ion-fab>
 
-  <div class="row">
+  <!--<div class="row">
     <div class="col-md-8">
       <div class="card">
         <div class="card-content">
 
 
-          <ion-row>
+          <ion-row>-->
 
+   <div class="card scroll-card">
+     <div class="card-content">
+       <ion-row>
             <ion-col col-12>
               <p text-center>Choose Client</p>
               <div class="SitesScrollCon">
@@ -29,20 +32,22 @@
                   </button>
                 </ion-scroll>
               </div>
-            </ion-col>
+           </ion-col>
+       </ion-row>
+     </div>
+  </div>
 
+   <div class="card scroll-card">
+      <div class="card-content">
+        <ion-row>
             <ion-col col-12>
-
               <p text-center>Choose Site</p>
-
               <div padding text-center *ngIf="siteSpinner">
                 <span><ion-spinner name="bubbles"></ion-spinner> <br> Loading...</span>
               </div>
-
               <div padding text-center *ngIf="chooseClient">
                 <strong>Please Select Client</strong>
               </div>
-
               <div class="SitesScrollCon" *ngIf="showSites">
                 <ion-scroll scrollX="true">
                   <div *ngIf="sites?.length==0" class="padding-top15">
@@ -55,6 +60,9 @@
               </div>
 
             </ion-col>
+        </ion-row>
+      </div>
+   </div>
 
 
     <!--<ion-card class="width100">
@@ -81,6 +89,9 @@
         </ion-row>
 
     </ion-card>-->
+   <div class="card scroll-card">
+     <div class="card-content">
+       <ion-row>
                 <ion-col col-12>
                   <ion-row class="margin0 white-bg border-btm-dotted padding10 paddding-top20" (click)="gotoDraftedQuotation()">
                         <ion-col col-2 class="ver-center">
@@ -104,7 +115,7 @@
                   </ion-row>
                   <ion-row class="margin0 white-bg border-btm-dotted padding10" (click)="gotoSubmittedQuotation()">
                       <ion-col col-2 class="ver-center">
-                          <div class="q-round ver-center">
+                          <div class="q-round ver-center icon-round">
                               <button ion-button clear color="primary" class="q-round icon-round-blue">
                                   <ion-icon name="arrow-round-forward" class="fnt-24"></ion-icon>
                               </button>
@@ -124,7 +135,7 @@
                   </ion-row>
                 <ion-row class="margin0 white-bg border-btm-dotted padding10" (click)="gotoApprovedQuotation()">
                   <ion-col col-2 class="ver-center">
-                    <div class="q-round ver-center">
+                    <div class="q-round ver-center icon-round">
                       <button ion-button clear color="primary" class="q-round icon-round-green">
                         <ion-icon name="checkmark" class="fnt-24"></ion-icon>
                       </button>
@@ -144,7 +155,7 @@
                 </ion-row>
                 <ion-row class="margin0 white-bg border-btm padding10" (click)="gotoArchivedQuotation()">
                   <ion-col col-2 class="ver-center">
-                    <div class="q-round ver-center">
+                    <div class="q-round ver-center icon-round">
                       <button ion-button clear color="primary" class="q-round icon-round-red">
                           <i class="material-icons">archive</i>
                       </button>
@@ -164,12 +175,9 @@
                 </ion-row>
               </ion-col>
 
-          </ion-row>
-
-        </div>
-      </div>
-    </div>
-  </div>
+       </ion-row>
+     </div>
+   </div>
 
     <!--<button class="btn btn-warning btn-simple btn-wd btn-lg" (click)="createPDF()">PDF</button>-->
 <!--
