@@ -499,7 +499,7 @@ public class RateCardService extends AbstractService {
 
 	public Object getQuotations(SearchCriteria searchCriteria) {
 
-        log.debug("get Quotations");
+        log.debug("get Quotations"+searchCriteria);
         Object quotationList = "";
 		User user = userRepository.findOne(searchCriteria.getUserId());
 		List<EmployeeProjectSite> projectSites = new ArrayList<EmployeeProjectSite>();
@@ -535,6 +535,8 @@ public class RateCardService extends AbstractService {
 
             headers.setAll(map);
 
+            log.debug("Parameters - "+searchCriteria.isQuotationIsApproved() + " "+searchCriteria.isQuotationIsArchived()+ " "+ searchCriteria.isQuotationIsDrafted());
+            
             JSONObject request = new JSONObject();
             request.put("projectId",searchCriteria.getProjectId());
             request.put("siteId",searchCriteria.getSiteId());
@@ -546,6 +548,11 @@ public class RateCardService extends AbstractService {
             request.put("status",searchCriteria.getQuotationStatus());
             request.put("submittedDate", searchCriteria.getQuotationSubmittedDate());
             request.put("approvedDate", searchCriteria.getQuotationApprovedDate());
+            request.put("isSubmitted", searchCriteria.isQuotationIsSubmitted());
+            request.put("isArchived", searchCriteria.isQuotationIsArchived());
+            request.put("isRejected", searchCriteria.isQuotationIsRejected());
+            request.put("isDrafted", searchCriteria.isQuotationIsDrafted());
+            request.put("isApproved", searchCriteria.isQuotationIsApproved());
             request.put("siteIds", siteIds);
             log.debug("Request body " + request.toString());
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);

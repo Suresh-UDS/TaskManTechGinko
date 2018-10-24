@@ -763,7 +763,9 @@ angular
 			            //$scope.loadTickets();
 			        }
 
+			        
 			        $scope.searchFilter = function () {
+			            $('.AdvancedFilterModal.in').modal('hide');
 			            //$scope.setPage(1);
 			            $scope.search();
 			         }
@@ -823,6 +825,23 @@ angular
 
 			        	if($scope.searchStatus){
 			        		$scope.searchCriteria.quotationStatus = $scope.searchStatus;
+			        		
+			        		$scope.searchCriteria.quotationIsSubmitted = false;
+			        		$scope.searchCriteria.quotationIsArchived = false;
+			        		$scope.searchCriteria.quotationIsRejected = false;
+			        		$scope.searchCriteria.quotationIsDrafted = false;
+			        		$scope.searchCriteria.quotationIsApproved = false;
+			        		
+			        		switch($scope.searchStatus){
+			        		
+				        		case "Waiting for approval" : $scope.searchCriteria.quotationIsSubmitted = true; break;
+				        		case "Archived" : $scope.searchCriteria.quotationIsArchived = true; break;
+				        		case "Rejected" : $scope.searchCriteria.quotationIsRejected = true; break;
+				        		case "Pending" : $scope.searchCriteria.quotationIsDrafted = true; break;
+				        		case "Approved" : $scope.searchCriteria.quotationIsApproved = true; break;
+				        		//default:
+			        		
+			        		}
 			        }else{
 			        	$scope.searchCriteria.quotationStatus = null;
 			        }
