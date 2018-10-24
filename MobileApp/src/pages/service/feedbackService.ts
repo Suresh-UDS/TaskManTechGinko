@@ -21,8 +21,11 @@ export class FeedbackService {
                 console.log(response);
                 console.log(response.json())
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error in Feedback Response");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     findFeedback(id):Observable<any>{
@@ -32,8 +35,11 @@ export class FeedbackService {
             response=>{
                 console.log("Feedback");
                 console.log(response.json());
-            }
-        )
+            }).catch(error=>{
+                console.log("Error in Feedback");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     loadBlocks(projectId, siteId):Observable<any>{
@@ -42,8 +48,11 @@ export class FeedbackService {
                 console.log("Blocks");
                 console.log(response.json());
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error in Blocks");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     loadFloors(projectId, siteId, block):Observable<any>{
@@ -52,8 +61,11 @@ export class FeedbackService {
                 console.log("Floor");
                 console.log(response.json());
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error in Floor");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     loadZones(projectId, siteId, block, floor): Observable<any>{
@@ -62,8 +74,11 @@ export class FeedbackService {
                 console.log("Zones");
                 console.log(response.json());
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error in zone");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     loadLocations(search):Observable<any>{
@@ -72,8 +87,11 @@ export class FeedbackService {
                 console.log("Loading locations");
                 console.log(response.json());
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error in loading location");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     searchFeedbackMappings(search):Observable<any>{
@@ -82,8 +100,11 @@ export class FeedbackService {
                 console.log("Getting feedbacks");
                 console.log(response.json());
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error in getting Feedback");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     saveFeedback(transactionData):Observable<any>{
@@ -93,7 +114,11 @@ export class FeedbackService {
                 console.log(response);
                 return response;
             }
-        )
+        ).catch(error=> {
+            console.log("Error In Feedback Reports");
+            console.log(error);
+            return Observable.throw(error.json());
+        });
     }
 
     generateFeedback(searchCriteria):Observable<any>{
@@ -102,8 +127,11 @@ export class FeedbackService {
                 console.log("Feedback reports");
                 console.log(response.json());
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error In Feedback Reports");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     getImage(imageId,id){
@@ -112,8 +140,11 @@ export class FeedbackService {
                 console.log(response);
                 console.log(response.text());
                 return response.text();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error In Getting Image");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
 }

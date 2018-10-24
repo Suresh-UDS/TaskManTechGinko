@@ -14,7 +14,8 @@ export class DraftedQuotationPage {
 
     quotations:any;
 
-    constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService, private navParams: NavParams, private componentService: componentService) {
+    constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService,
+                private navParams: NavParams, private componentService: componentService) {
         this.quotations = this.navParams.get('quotations');
         console.log(this.quotations);
     }

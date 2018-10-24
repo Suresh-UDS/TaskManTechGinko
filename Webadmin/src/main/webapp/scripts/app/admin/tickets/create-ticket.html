@@ -1,6 +1,6 @@
 <div class="crud-form"
      data-unique-hash="a2ad475d60b22954085c657a73309b8f">
-    <div ng-controller="TicketController" ng-init="loadSites();loadEmployees();loadingStart();">
+    <div  ng-init="loadSites();loadingStart();">
 
 
         <div class="col-md-8">
@@ -15,7 +15,7 @@
 
            <div class="cardsCon addTicketCon">
                <form ng-show="!success" name="form" role="form" novalidate
-                     ng-submit="saveTicket()">
+                     ng-submit="conform('save')">
 
                    <div class="row">
 
@@ -32,7 +32,7 @@
                                            <div class="form-group">
                                                <label class="control-label">Issue<span class="red-star">*</span> </label>
 
-                                               <input type="text" class="form-control InputTxtCaps"   name='title'
+                                               <input type="text" class="form-control InputTxtCapsAll"   name='title'
                                                       ng-model="tickets.title" ng-minlength=1 ng-maxlength=50
                                                       autofocus  required autocomplete="off" ng-keypress="keyPressHandler($event)"/>
                                                <div ng-show="form.$submitted || form.title.$touched">
@@ -154,7 +154,7 @@
                                             <option value="">Select Site</option>
 
                                         </select>
-                                        <input id='assetId' ng-model="siteObj.name" class='form-control' ng-show="assetObj"
+                                        <input id='siteId' ng-model="siteObj.name" class='form-control' ng-show="assetObj"
                                                       name='description' type='text' value="siteName"
                                                        readOnly/>
 
@@ -172,13 +172,13 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="control-label">Employee </label>
+                                        <label class="control-label">Employee <span class="red-star">*</span> </label>
                                         <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                         <select
                                             required
                                             name="employee"
                                             ng-model="selectedEmployee"
-                                            class="form-control searchable-input floatL" ng-options="emp as emp.fullName group by emp.designation for emp in employees | filter: {designation : '!' + 'Client'} track by emp.id">
+                                            class="form-control searchable-input floatL selectTxtCaps" ng-options="emp as emp.fullName +' '+ emp.lastName group by emp.designation for emp in employees | filter: {designation : '!' + 'Client'} track by emp.id">
                                             <option value="">Select Employee</option>
 
                                         </select>
@@ -200,7 +200,7 @@
                          </div>
                        </div>
 
-                       <div class="col-md-6">
+                       <div class="col-md-6" has-permission="Asset:List">
                         <div class="panel panel-default">
                               <div class="panel-heading">Assets</div>
                           <div class="panel-body">
@@ -211,7 +211,7 @@
                                         <span ng-show="!assetObj" class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                         <select ng-show="!assetObj"
                                             ng-model="selectedAsset"
-                                            class="form-control searchable-input floatL" ng-options="asset as asset.title for asset in assets | orderBy:'title' track by asset.id">
+                                            class="form-control searchable-input floatL" ng-options="asset as asset.title +' - '+ asset.code for asset in assets | orderBy:'title' track by asset.id">
                                             <option value="">Select Asset</option>
                                         </select>
                                         <input id='assetId' ng-model="assetObj.title" class='form-control' ng-show="assetObj"
@@ -238,7 +238,7 @@
                           <div class="panel-body">
                             <div class="row">
 
-                             <div class="col-md-6">
+                             <div class="col-md-12">
                                  <div class="form-group">
                                      <label class="control-label">Comments</label>
                                      <textarea ng-model="tickets.comments" class="form-control InputTxtCaps"></textarea>
@@ -277,13 +277,19 @@
                        <div class="col-md-12">
 
 
-                           <button type="submit" ng-click="cancelTicket()"
-                                   id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
+                           <button  type="button"  ng-click="conform('cancel')"
+                                   id="cancel-button"   class="btn btn-danger pull-right" ng-disabled="btnDisable"> <i class="material-icons">close</i> Cancel</button>
 
-                           <button type="submit" id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right">
-                               <span class="btn-label">
-                                   <i class="material-icons">check</i>
-                               </span>Create ticket</button>
+                           <!--<button type="submit" id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right">-->
+                               <!--<span class="btn-label">-->
+                                   <!--<i class="material-icons">check</i>-->
+                               <!--</span>Create ticket</button>-->
+
+                           <button class="btn btn-success ld ld-over-inverse pull-right" ng-class="{'running':saveLoad}"
+                                   type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisable">
+                               <span class="btn-label"><i class="material-icons">check</i></span>  Create ticket
+                               <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                           </button>
 
                            <div class="clearfix"></div>
                        </div>

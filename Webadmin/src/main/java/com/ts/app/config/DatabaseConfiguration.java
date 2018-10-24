@@ -20,7 +20,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -88,12 +87,14 @@ public class DatabaseConfiguration {
 					jHipsterProperties.getDatasource().getPrepStmtCacheSize());
 			config.addDataSourceProperty("prepStmtCacheSqlLimit",
 					jHipsterProperties.getDatasource().getPrepStmtCacheSqlLimit());
+			config.setMaximumPoolSize(90);
+			config.setMinimumIdle(3);
 		}
 		if (metricRegistry != null) {
 			config.setMetricRegistry(metricRegistry);
 		}
 		return new HikariDataSource(config);
-		// return dataSource;
+		//return dataSource;
 	}
 
 	/**
@@ -144,7 +145,7 @@ public class DatabaseConfiguration {
 
 	private Properties hibProperties() {
 		Properties properties = new Properties();
-		properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5InnoDBDialect");
+		properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
 		properties.put("hibernate.show_sql", true);
 		properties.put("hibernate.hbm2ddl.auto", "update");
 		properties.put("hibernate.ejb.naming_strategy", "org.hibernate.cfg.ImprovedNamingStrategy");

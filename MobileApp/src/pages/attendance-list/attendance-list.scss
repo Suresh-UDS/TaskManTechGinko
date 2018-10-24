@@ -1,3 +1,49 @@
 page-attendance-list {
+  .bordr-btm
+  {
+    border:1px solid #ccc !important;
+  }
+  .white-bg
+  {
+    background-color:white !important;
+  }
+  ion-card img {
+    width: 100% !important;
+    height:100px !important;
+  }
+  ion-card-content {
+    padding: 0px 32px !important;
+    position: relative !important;
+    vertical-align: center !important;
+  }
+  .card-md
+  {
+    width:100% !important;
+  }
+  .fakeItem {
+    h2, h3, p,ion-icon {
+      background-color: lightgrey;
+      opacity: 0.5;
+      height: 1em;
+      margin-top: 10px;
+    }
 
+    h2 {
+      width: 35%;
+    }
+
+    h3 {
+      width: 40%;
+    }
+
+    p {
+      width: 60%;
+    }
+
+    ion-icon{
+      font-size: 2.8rem !important;
+      width:10% !important;
+    }
+
+  }
 }

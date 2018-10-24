@@ -14,7 +14,7 @@ angular.module('timeSheetApp')
 
         $scope.pages = { currPage : 1};
 
-        $timeout(function (){angular.element('[ng-model="name"]').focus();});
+        //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
 //        $scope.saveUserGroup = function () {
 //        	$scope.error ='';

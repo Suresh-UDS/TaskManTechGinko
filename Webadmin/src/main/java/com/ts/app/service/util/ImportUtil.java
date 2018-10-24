@@ -24,6 +24,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
+import com.ts.app.domain.*;
+import com.ts.app.service.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -41,16 +43,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.EmployeeProjectSite;
-import com.ts.app.domain.EmployeeShift;
-import com.ts.app.domain.JobStatus;
-import com.ts.app.domain.JobType;
-import com.ts.app.domain.Location;
-import com.ts.app.domain.Project;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.User;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.EmployeeShiftRepository;
 import com.ts.app.repository.LocationRepository;
@@ -59,11 +51,6 @@ import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.repository.UserRoleRepository;
 import com.ts.app.security.SecurityUtils;
-import com.ts.app.service.AssetManagementService;
-import com.ts.app.service.ChecklistService;
-import com.ts.app.service.JobManagementService;
-import com.ts.app.service.SiteLocationService;
-import com.ts.app.service.UserService;
 import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
@@ -136,6 +123,9 @@ public class ImportUtil {
 	private SiteLocationService siteLocationService;
 
 	@Inject
+    private SiteService siteService;
+
+	@Inject
 	private ChecklistService checklistService;
 
 	@Inject
@@ -143,10 +133,10 @@ public class ImportUtil {
 
 	@Inject
 	private EmployeeShiftRepository empShiftRepo;
-	
+
 	@Inject
 	private AssetManagementService assetManagementService;
-	
+
 	public ImportResult importJobData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
 		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  JOB_FOLDER;
@@ -243,7 +233,7 @@ public class ImportUtil {
 		return result;
 
 	}
-	
+
 	public ImportResult importAssetData(MultipartFile file, long dateTime, boolean isPPM, boolean isAMC) {
         String fileName = dateTime + ".xlsx";
 		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  ASSET_FOLDER;
@@ -268,8 +258,8 @@ public class ImportUtil {
 		result.setStatus("PROCESSING");
 		return result;
 	}
-	
-	
+
+
 	public ImportResult importChecklistData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
 		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  CHECKLIST_FOLDER;
@@ -414,7 +404,10 @@ public class ImportUtil {
 			long projectId = (long) projectRow.getCell(2).getNumericCellValue();
 			r++;
 			Row siteRow = datatypeSheet.getRow(r);
-			long siteId = (long) siteRow.getCell(2).getNumericCellValue();
+			long siteId = 0;
+			if(siteRow.getCell(2) != null) {
+				siteId = (long) siteRow.getCell(2).getNumericCellValue();
+			}
 			r++;
 			Row managerRow = datatypeSheet.getRow(r);
 			String managerId = String.valueOf(managerRow.getCell(2).getNumericCellValue());
@@ -424,9 +417,12 @@ public class ImportUtil {
 				log.debug("Current Row number -" + r);
 				Row currentRow = datatypeSheet.getRow(r);
 				JobDTO jobDto = new JobDTO();
-				jobDto.setTitle(currentRow.getCell(0).getStringCellValue());
-				jobDto.setDesc(currentRow.getCell(1).getStringCellValue());
+				if(siteId == 0) {
+					siteId = (long) currentRow.getCell(0).getNumericCellValue();
+				}
 				jobDto.setSiteId(siteId);
+				jobDto.setTitle(currentRow.getCell(1).getStringCellValue());
+				jobDto.setDescription(currentRow.getCell(2).getStringCellValue());
 //				long location = (long)currentRow.getCell(2).getNumericCellValue();
 //				Location loc = locationRepo.findByName(location);
 //				if (loc == null) {
@@ -436,20 +432,19 @@ public class ImportUtil {
 //					loc = locationRepo.save(loc);
 //				}
 
-				String jobType = currentRow.getCell(3).getStringCellValue();
+				String jobType = currentRow.getCell(4).getStringCellValue();
 				String empId = null;
-				log.debug("cell type =" + currentRow.getCell(5).getCellType());
-				if (currentRow.getCell(5).getCellType() == CellFormatType.NUMBER.ordinal()) {
+				if (currentRow.getCell(6).getCellType() == CellFormatType.NUMBER.ordinal()) {
 					try {
-						empId = String.valueOf((long)currentRow.getCell(5).getNumericCellValue());
+						empId = String.valueOf((long)currentRow.getCell(6).getNumericCellValue());
 					} catch (IllegalStateException ise) {
-						empId = currentRow.getCell(5).getStringCellValue();
+						empId = currentRow.getCell(6).getStringCellValue();
 					}
 				} else {
 					try {
-						empId = currentRow.getCell(5).getStringCellValue();
+						empId = currentRow.getCell(6).getStringCellValue();
 					} catch (IllegalStateException ise) {
-						empId = String.valueOf((long)currentRow.getCell(5).getNumericCellValue());
+						empId = String.valueOf((long)currentRow.getCell(6).getNumericCellValue());
 					}
 
 				}
@@ -461,21 +456,21 @@ public class ImportUtil {
 					jobDto.setEmployeeName(emp.getFullName());
 					jobDto.setStatus(JobStatus.ASSIGNED.name());
 					jobDto.setJobType(JobType.valueOf(jobType));
-					String schedule = currentRow.getCell(6).getStringCellValue();
+					String schedule = currentRow.getCell(7).getStringCellValue();
 					jobDto.setSchedule(schedule);
-					Date startDate = currentRow.getCell(7).getDateCellValue();
-					Date startTime = currentRow.getCell(9).getDateCellValue();
-					Date endDate = currentRow.getCell(8).getDateCellValue();
-					Date endTime = currentRow.getCell(10).getDateCellValue();
+					Date startDate = currentRow.getCell(8).getDateCellValue();
+					Date startTime = currentRow.getCell(10).getDateCellValue();
+					Date endDate = currentRow.getCell(9).getDateCellValue();
+					Date endTime = currentRow.getCell(11).getDateCellValue();
 					jobDto.setPlannedStartTime(DateUtil.convertToDateTime(startDate, startTime));
 					jobDto.setPlannedEndTime(DateUtil.convertToDateTime(startDate, endTime));
 					jobDto.setScheduleEndDate(DateUtil.convertToDateTime(endDate, endTime));
-					if(currentRow.getCell(11)!=null){
-                        jobDto.setFrequency(currentRow.getCell(11).getStringCellValue());
+					if(currentRow.getCell(12)!=null){
+                        jobDto.setFrequency(currentRow.getCell(12).getStringCellValue());
                     }
 					jobDto.setActive("Y");
-					if(currentRow.getCell(12) != null) {
-						String checkListName = currentRow.getCell(12).getStringCellValue();
+					if(currentRow.getCell(13) != null) {
+						String checkListName = currentRow.getCell(13).getStringCellValue();
 						if(StringUtils.isNotBlank(checkListName)) {
 							SearchCriteria searchCriteria = new SearchCriteria();
 							searchCriteria.setName(checkListName);
@@ -490,17 +485,17 @@ public class ImportUtil {
 									jobChecklistDto.setChecklistId(String.valueOf(checklistDto.getId()));
 									jobChecklistDto.setChecklistName(checklistDto.getName());
 									jobChecklistDto.setChecklistItemId(String.valueOf(checklistItemDto.getId()));
-									jobChecklistDto.setChecklistItemName(checklistItemDto.getName());
+									jobChecklistDto.setChecklistItemName(String.valueOf(checklistItemDto.getName()));
 									jobCheckListItems.add(jobChecklistDto);
 								}
 								jobDto.setChecklistItems(jobCheckListItems);
 							}
 						}
 					}
-					if((currentRow.getCell(13)!=null)&&(currentRow.getCell(14)!=null)&&currentRow.getCell(15)!=null){
-					    String block = currentRow.getCell(13).getStringCellValue();
-					    String floor = currentRow.getCell(14).getStringCellValue();
-					    String zone = currentRow.getCell(15).getStringCellValue();
+					if((currentRow.getCell(14)!=null)&&(currentRow.getCell(15)!=null)&&currentRow.getCell(16)!=null){
+					    String block = currentRow.getCell(14).getStringCellValue();
+					    String floor = currentRow.getCell(15).getStringCellValue();
+					    String zone = currentRow.getCell(16).getStringCellValue();
                         jobDto.setBlock(block);
                         jobDto.setFloor(floor);
                         jobDto.setZone(zone);
@@ -517,6 +512,10 @@ public class ImportUtil {
                         }
 
                     }
+					if(currentRow.getCell(17) != null) {
+						boolean isScheduleExcludeWeeknd = currentRow.getCell(17).getBooleanCellValue();
+						jobDto.setScheduleDailyExcludeWeekend(isScheduleExcludeWeeknd);
+					}
 					jobService.saveJob(jobDto);
 
 				}
@@ -572,16 +571,31 @@ public class ImportUtil {
 			Iterator<Row> iterator = datatypeSheet.iterator();
 			int lastRow = datatypeSheet.getLastRowNum();
 			int r = 1;
-			for (; r < lastRow; r++) {
+			for (; r <= lastRow; r++) {
 				log.debug("Current Row number -" + r+"Last Row : "+lastRow);
 				Row currentRow = datatypeSheet.getRow(r);
-				log.debug("cell type =" + currentRow.getCell(0).getStringCellValue()+"\t"+currentRow.getCell(9).getStringCellValue());
+				log.debug("cell type =" + currentRow.getCell(0).getNumericCellValue()+"\t"+currentRow.getCell(9).getNumericCellValue());
 				SiteDTO siteDTO = new SiteDTO();
-				siteDTO.setProjectId(Long.valueOf(currentRow.getCell(0).getStringCellValue()));
-				siteDTO.setName(currentRow.getCell(0).getStringCellValue());
-				siteDTO.setAddressLat(Double.valueOf(currentRow.getCell(7).getStringCellValue()));
-				siteDTO.setAddressLng(Double.valueOf(currentRow.getCell(8).getStringCellValue()));
-				siteDTO.setRadius(Double.valueOf(currentRow.getCell(9).getStringCellValue()));
+				siteDTO.setProjectId((int)currentRow.getCell(0).getNumericCellValue());
+				siteDTO.setName(currentRow.getCell(1).getStringCellValue());
+				log.debug("REgion and branch - "+ currentRow.getCell(7).getStringCellValue()+" - "+currentRow.getCell(8).getStringCellValue());
+                if(org.apache.commons.lang3.StringUtils.isNotEmpty(currentRow.getCell(7).getStringCellValue())){
+                    log.debug("REgion from site import - "+currentRow.getCell(7).getStringCellValue());
+                    Region region = siteService.isRegionSaved(currentRow.getCell(7).getStringCellValue(),siteDTO.getProjectId());
+                    if(region!=null && region.getId()>0){
+                        siteDTO.setRegion(region.getName());
+                        if(org.apache.commons.lang3.StringUtils.isNotEmpty(currentRow.getCell(8).getStringCellValue())){
+                            Branch branch = siteService.isBranchSaved(currentRow.getCell(8).getStringCellValue(),siteDTO.getProjectId(),region.getId());
+                            if(branch!=null && branch.getId()>0){
+                                siteDTO.setBranch(branch.getName());
+                            }
+                        }
+                    }
+                }
+                log.debug("site DTO region and branch - "+siteDTO.getRegion()+" - "+siteDTO.getBranch());
+				siteDTO.setAddressLat(Double.valueOf(currentRow.getCell(9).getNumericCellValue()));
+				siteDTO.setAddressLng(Double.valueOf(currentRow.getCell(10).getNumericCellValue()));
+				siteDTO.setRadius(Double.valueOf(currentRow.getCell(11).getNumericCellValue()));
 				siteDTO.setAddress(currentRow.getCell(6).getStringCellValue());
 				siteDTO.setUserId(SecurityUtils.getCurrentUserId());
 				Site site = mapperUtil.toEntity(siteDTO, Site.class);
@@ -609,7 +623,7 @@ public class ImportUtil {
 			Iterator<Row> iterator = datatypeSheet.iterator();
 			int lastRow = datatypeSheet.getLastRowNum();
 			int r = 1;
-			for (; r < lastRow; r++) {
+			for (; r <= lastRow; r++) {
 				log.debug("Current Row number -" + r+"Last Row : "+lastRow);
 				Row currentRow = datatypeSheet.getRow(r);
 				LocationDTO locationDTO = new LocationDTO();
@@ -688,7 +702,7 @@ public class ImportUtil {
 			//Iterator<Row> iterator = datatypeSheet.iterator();
 			int lastRow = datatypeSheet.getLastRowNum();
 			int r = 1;
-			
+
 			log.debug("Last Row number -" + lastRow);
 			for (; r <= lastRow; r++) {
 				log.debug("Current Row number -" + r);
@@ -722,7 +736,7 @@ public class ImportUtil {
 				assetDTO.setCode(getCellValue(currentRow.getCell(19)));
 				assetDTO.setStatus(getCellValue(currentRow.getCell(20)));
 				assetManagementService.saveAsset(assetDTO);
-				
+
 			}
 
 		} catch (FileNotFoundException e) {
@@ -730,8 +744,8 @@ public class ImportUtil {
 		} catch (IOException e) {
 			log.error("Error while reading the job data file for import", e);
 		}
-	}	
-	
+	}
+
 	private void importAssetPPMFromFile(String path) {
 		try {
 
@@ -741,12 +755,12 @@ public class ImportUtil {
 			//Iterator<Row> iterator = datatypeSheet.iterator();
 			int lastRow = datatypeSheet.getLastRowNum();
 			int r = 1;
-			
+
 			log.debug("Last Row number -" + lastRow);
 			for (; r <= lastRow; r++) {
 				log.debug("Current Row number -" + r);
 				Row currentRow = datatypeSheet.getRow(r);
-				
+
 				AssetPpmScheduleDTO assetPPMDto = new AssetPpmScheduleDTO();
 				String assetCode = getCellValue(currentRow.getCell(0));
 				AssetDTO assetDTO = assetManagementService.findByAssetCode(assetCode);
@@ -758,7 +772,7 @@ public class ImportUtil {
 				if(startDate != null) {
 					assetPPMDto.setStartDate(startDate);
 				}
-				
+
 				Date endDate = currentRow.getCell(7) != null ? currentRow.getCell(7).getDateCellValue() : null;
 				if(endDate != null) {
 					assetPPMDto.setEndDate(endDate);
@@ -767,13 +781,13 @@ public class ImportUtil {
 				if(startDateTime != null) {
 					assetPPMDto.setJobStartTime(DateUtil.convertToZDT(startDateTime));
 				}
-				
+
 				assetPPMDto.setPlannedHours(Integer.parseInt(getCellValue(currentRow.getCell(9))));
-				
+
 				assetPPMDto.setEmpId(Long.parseLong(getCellValue(currentRow.getCell(10))));
-				
+
 				assetManagementService.createAssetPpmSchedule(assetPPMDto);
-				
+
 			}
 
 		} catch (FileNotFoundException e) {
@@ -782,7 +796,7 @@ public class ImportUtil {
 			log.error("Error while reading the asset ppm schedule data file for import", e);
 		}
 	}
-	
+
 	private void importAssetAMCFromFile(String path) {
 		try {
 
@@ -792,12 +806,12 @@ public class ImportUtil {
 			//Iterator<Row> iterator = datatypeSheet.iterator();
 			int lastRow = datatypeSheet.getLastRowNum();
 			int r = 1;
-			
+
 			log.debug("Last Row number -" + lastRow);
 			for (; r <= lastRow; r++) {
 				log.debug("Current Row number -" + r);
 				Row currentRow = datatypeSheet.getRow(r);
-				
+
 				AssetAMCScheduleDTO assetAMCDto = new AssetAMCScheduleDTO();
 				String assetCode = getCellValue(currentRow.getCell(0));
 				AssetDTO assetDTO = assetManagementService.findByAssetCode(assetCode);
@@ -809,7 +823,7 @@ public class ImportUtil {
 				if(startDate != null) {
 					assetAMCDto.setStartDate(startDate);
 				}
-				
+
 				Date endDate = currentRow.getCell(7) != null ? currentRow.getCell(7).getDateCellValue() : null;
 				if(endDate != null) {
 					assetAMCDto.setEndDate(endDate);
@@ -818,14 +832,14 @@ public class ImportUtil {
 				if(startDateTime != null) {
 					assetAMCDto.setJobStartTime(DateUtil.convertToZDT(startDateTime));
 				}
-				
+
 				assetAMCDto.setPlannedHours(Integer.parseInt(getCellValue(currentRow.getCell(9))));
-				
+
 				assetAMCDto.setEmpId(Long.parseLong(getCellValue(currentRow.getCell(10))));
 				assetAMCDto.setFrequencyPrefix("Every");
 				assetAMCDto.setMaintenanceType(getCellValue(currentRow.getCell(11)));
 				assetManagementService.createAssetAMCSchedule(assetAMCDto);
-				
+
 			}
 
 		} catch (FileNotFoundException e) {
@@ -834,7 +848,7 @@ public class ImportUtil {
 			log.error("Error while reading the asset amc schedule data file for import", e);
 		}
 	}
-	
+
 	private void importEmployeeFromFile(String path) {
 		try {
 

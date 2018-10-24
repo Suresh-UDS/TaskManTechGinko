@@ -14,7 +14,7 @@ public class EmployeeAttendanceReport implements Serializable {
      *
      */
     private static final long serialVersionUID = 1L;
-    
+
     public static final String PRESENT_STATUS = "PRESENT";
     public static final String ABSENT_STATUS = "ABSENT";
 
@@ -22,12 +22,14 @@ public class EmployeeAttendanceReport implements Serializable {
     //private final byte[] Image;
 
     private long empId;
-    
+
     private String employeeId;
 
     private String name;
 
     private String lastName;
+    
+    private String designation;
 
     private String siteName;
 
@@ -38,36 +40,66 @@ public class EmployeeAttendanceReport implements Serializable {
     private Date checkOutTime;
 
     private String shiftStartTime;
-    
+
     private String shiftEndTime;
-    
+
     private String status = "PRESENT";
-    
+
     private boolean shiftContinued;
-    
+
     private String continuedShiftTime;
-    
+
     private boolean late;
+
+    private long difference;
+
+    private long differenceInHours;
+
+    private long differenceInMinutes;
+
+    private String differenceText;
+
+    private String remarks;
     
+    private String shiftKey;
+
     public EmployeeAttendanceReport() {
-    	
+
     }
 
 
-    public EmployeeAttendanceReport(long empId, String employeeId, String name, String lastName, String siteName, 
-    								String projectName, Date checkInTime, Date checkOutTime, String shiftStartTime, String shiftEndTime, 
-    								Long continuedAttendance, boolean isLate) {
+    public EmployeeAttendanceReport(long empId, String employeeId, String name, String lastName, String designation, String siteName,
+    								String projectName, Date checkInTime, Date checkOutTime, String shiftStartTime, String shiftEndTime,
+    								Long continuedAttendance, boolean isLate, String remarks) {
        // this.Image = image;
     		this.empId = empId;
         this.employeeId = employeeId;
         this.name = name;
         this.lastName = lastName;
+        this.designation = designation;
         this.siteName = siteName;
         this.projectName = projectName;
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;
         this.shiftStartTime = shiftStartTime;
         this.shiftEndTime = shiftEndTime;
+        this.remarks = remarks;
+        if(this.checkOutTime!=null){
+            this.difference = this.checkOutTime.getTime() - this.checkInTime.getTime();
+            this.differenceInHours = this.difference/ (60 * 60 * 1000);//Converting duration in hours
+            this.differenceInMinutes = this.difference / (60 * 1000) % 60;//Converting duration in Minutes
+            if(this.differenceInHours<9 && this.differenceInMinutes<9){
+                this.differenceText = '0'+String.valueOf(this.differenceInHours)+':'+'0'+String.valueOf(this.differenceInMinutes);
+            }else if(this.differenceInHours<9 ){
+                this.differenceText = '0'+String.valueOf(this.differenceInHours)+':'+String.valueOf(this.differenceInMinutes);
+            }else if(this.differenceInMinutes<9){
+                this.differenceText = String.valueOf(this.differenceInHours)+':'+'0'+String.valueOf(this.differenceInMinutes);
+            }else{
+                this.differenceText = String.valueOf(this.differenceInHours)+':'+String.valueOf(this.differenceInMinutes);
+            }
+        }else{
+            this.differenceText = "0";
+        }
         if(continuedAttendance != null) {
         		shiftContinued = (continuedAttendance > 0 ? true : false);
         }
@@ -214,5 +246,63 @@ public class EmployeeAttendanceReport implements Serializable {
 		this.late = late;
 	}
 
+
+    public long getDifference() {
+        return difference;
+    }
+
+    public void setDifference(long difference) {
+        this.difference = difference;
+    }
+
+    public long getDifferenceInHours() {
+        return differenceInHours;
+    }
+
+    public void setDifferenceInHours(long differenceInHours) {
+        this.differenceInHours = differenceInHours;
+    }
+
+    public long getDifferenceInMinutes() {
+        return differenceInMinutes;
+    }
+
+    public void setDifferenceInMinutes(long differenceInMinutes) {
+        this.differenceInMinutes = differenceInMinutes;
+    }
+
+    public String getDifferenceText() {
+        return differenceText;
+    }
+
+    public void setDifferenceText(String differenceText) {
+        this.differenceText = differenceText;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+	public String getDesignation() {
+		return designation;
+	}
+
+	public void setDesignation(String designation) {
+		this.designation = designation;
+	}
+
+
+	public String getShiftKey() {
+		return shiftKey;
+	}
+
+
+	public void setShiftKey(String shiftKey) {
+		this.shiftKey = shiftKey;
+	}
     
 }

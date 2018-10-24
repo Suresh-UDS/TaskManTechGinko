@@ -49,6 +49,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 				controller : 'TicketController'
 			}
 		},
+		params :{qid: null, status: null},
 		resolve : {
 
 		}

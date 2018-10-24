@@ -24,7 +24,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("SELECT e FROM Employee e WHERE e.empId = :empId")
 	Employee findByEmpId(@Param("empId") String empId);
 
-	@Query("SELECT e FROM Employee e join e.projectSites s WHERE s.site.id = :siteId and e.active='Y' and e.isLeft = FALSE order by e.name")
+	@Query("SELECT e FROM Employee e join e.projectSites s WHERE s.site.id = :siteId and e.active='Y' and e.isLeft = FALSE order by e.designation")
 	List<Employee> findBySiteId(@Param("siteId") long siteId);
 
     @Query("SELECT e FROM Employee e join e.projectSites s WHERE s.site.id = :siteId and e.active='Y' and e.isLeft = FALSE order by e.name")
@@ -48,6 +48,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("SELECT distinct e FROM Employee e WHERE e.empId IN :empIds and e.active='Y' and e.isLeft = FALSE and (client = :isClient or client = FALSE) order by e.empId ")
 	Page<Employee> findAllByEmpCodes(@Param("empIds") List<String> empIds, @Param("isClient") boolean isClient, Pageable pageRequest);
 
+	@Query("SELECT distinct e FROM Employee e join e.projectSites p WHERE p.site.id IN (:siteIds) and e.empId IN :empIds and e.active='Y' and e.isLeft = FALSE and (client = :isClient or client = FALSE) order by e.empId ")
+	Page<Employee> findAllBySiteIdsAndEmpCodes(@Param("siteIds") List<Long> siteIds,@Param("empIds") List<String> empIds, @Param("isClient") boolean isClient, Pageable pageRequest);
+
 	@Query("SELECT distinct e FROM Employee e WHERE e.id IN :empIds and e.active='Y' and e.isLeft = FALSE and (client = :isClient or client = FALSE) order by e.empId ")
 	Page<Employee> findAllByEmpIds(@Param("empIds") List<Long> empIds, @Param("isClient") boolean isClient, Pageable PageRequest);
 
@@ -69,8 +72,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 //    @Query("SELECT e FROM Employee e , User u WHERE u.userGroup.id = :userGroupId and e.isReliever=true and e.active='Y' order by e.empId")
 //    List<Employee> findAllRelieversByGroupId(@Param("userGroupId") long userGroupId);
 
-    @Query("SELECT e FROM Employee e  WHERE  e.isReliever=true and e.active='Y' order by e.empId")
-    List<Employee> findAllRelievers();
+    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ps.site.id = :siteId and e.isReliever=true and e.active='Y' order by e.fullName")
+    List<Employee> findAllRelievers(@Param("siteId") long siteId);
 
     @Query("SELECT distinct e FROM Employee e  WHERE e.id IN :empIds and  e.isReliever=true and e.active='Y' order by e.empId")
     List<Employee> findAllRelieversByIds(@Param("empIds") List<Long> empIds);
@@ -120,8 +123,11 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE ps.project.id = :projectId and e.name like '%' || :empName || '%' and e.active='Y' and e.isLeft = FALSE and (client = :isClient or client = FALSE) order by e.empId")
 	Page<Employee> findByProjectAndEmployeeName(@Param("projectId") long projectId, @Param("empName") String empName, @Param("isClient") boolean isClient, Pageable pageRequest);
 
-    @Query("SELECT e FROM Employee e WHERE e.name like '%' || :empName || '%' and e.active='Y' and (client = :isClient or client = FALSE) order by e.empId")
-	Page<Employee> findByEmployeeName(@Param("empName") String empName, @Param("isClient") boolean isClient, Pageable pageRequest);
+    @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE  e.name like '%' || :empName || '%' and ps.site.id in (:siteIds) and e.active='Y' and (client = :isClient or client = FALSE) order by e.empId")
+	Page<Employee> findByEmployeeName(@Param("siteIds") List<Long> siteIds, @Param("empName") String empName, @Param("isClient") boolean isClient, Pageable pageRequest);
+
+    @Query("SELECT distinct e FROM Employee e  WHERE  e.name like '%' || :empName || '%' and e.active='Y' and (client = :isClient or client = FALSE) order by e.empId")
+	Page<Employee> findByEmployeeName( @Param("empName") String empName, @Param("isClient") boolean isClient, Pageable pageRequest);
 
     /*
     @Query("SELECT e FROM Employee e , User u WHERE ((e.id = :employeeId and e.project.id = :projectId) or e.site.id = :siteId) and e.user.id = u.id and u.userGroup.id = :userGroupId and e.active='Y' order by e.empId")
@@ -167,7 +173,13 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	//@Query("SELECT count(e) FROM Employee e join e.projectSites eps join eps.shifts es  WHERE eps.employee.id = e.id and eps.id = es.employeeProjectSite.id and eps.site.id = :siteId and es.startTime = :startTime and es.endTime = :endTime and e.active = 'Y' and e.isLeft = FALSE")
 	//long findEmployeeCountBySiteAndShift(@Param("siteId") long siteId, @Param("startTime") String startTime, @Param("endTime") String endTime);
 
-	@Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE ps.site.id = :siteId and e.id NOT IN :empIds and e.active='Y' and e.isLeft = FALSE order by e.name")
+	@Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE ps.site.id = :siteId and e.id NOT IN :empIds and e.active='Y' and e.isLeft = FALSE order by e.designation")
 	List<Employee> findNonMatchingBySiteId(@Param("siteId") long siteId, @Param("empIds") List<Long> empIds);
+
+	@Query("SELECT emp FROM Employee emp WHERE emp.enrolled_face is not null")
+	Page<Employee> findByImage(Pageable pageRequest);
+
+    @Query("SELECT distinct e FROM Employee e WHERE e.isFaceIdEnrolled = TRUE and e.active='Y'")
+    List<Employee> findEnrolledEmployees();
 
 }

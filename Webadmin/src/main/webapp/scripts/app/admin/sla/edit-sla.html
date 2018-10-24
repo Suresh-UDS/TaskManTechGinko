@@ -56,7 +56,7 @@
                                         <div class="form-group no-padding" >
                                             <div class="dropdown">
                                                 <div class="form-group">
-                                                    <label class="control-label">Select Process Type  <span class="red-star">*</span></label>
+                                                    <label class="control-label">Select Process Type<span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <select ng-model = "sla.processType" ng-change = "editSla()" class="form-control">
                                                         <option value="Tickets">Tickets</option>
@@ -162,20 +162,14 @@
                                                         <a ng-click = "removeSla($index)" ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                                                     </td>
                                                 </tr>
-
                                                 </tbody>
                                             </table>
-
                                         </div>
                                     </div>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
-
-
                 </div>
 
 
@@ -183,8 +177,12 @@
 
                     <div class="col-md-12">
 
-                        <button type="submit" ng-click="cancelsla()"
-                                id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
+                        <!--<button type="submit" ng-click="cancelsla()"
+                                id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>-->
+                                
+                                <button id="cancel-button" class="btn btn-danger pull-right" type="button" ui-sref="sla-list" id="cancel-button">
+                         Cancel
+                         </button>
 
                         <button type="submit" ng-click = "updateSla()"
                                 id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
@@ -235,7 +233,7 @@
 <div class="modal fade AdvancedFilterModal FilterModalCon" id="AddEscalationLevel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm"   novalidate >
+            <form name="searchForm" novalidate >
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -315,7 +313,7 @@
                                              <span class="tag label label-default">{{esc.email}}</span>
                                          </td>
                                          <td class="text-right">
-                                             <a  ng-click = "" ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                             <a  ng-click = "" ng-class="{active: $state.includes('admin')}" class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
                                              <a ng-click = "removeEscalation($index)" ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                                          </td>
                                 </tr>

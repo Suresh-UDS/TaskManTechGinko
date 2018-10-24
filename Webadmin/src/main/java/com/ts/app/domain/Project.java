@@ -77,6 +77,9 @@ public class Project extends AbstractAuditingEntity implements Serializable {
 	
 	@OneToMany(mappedBy="project", fetch = FetchType.LAZY)
 	private List<Shift> shifts;
+	
+	@Column(name = "client_group", nullable = true)
+	private String clientGroup;
 
 	public Long getId() {
 		return id;
@@ -276,6 +279,18 @@ public class Project extends AbstractAuditingEntity implements Serializable {
 
 	public void setEmployeeProjSites(Set<EmployeeProjectSite> employeeProjSites) {
 		this.employeeProjSites = employeeProjSites;
+	}
+
+
+
+	public String getClientGroup() {
+		return clientGroup;
+	}
+
+
+
+	public void setClientGroup(String clientGroup) {
+		this.clientGroup = clientGroup;
 	}
 
 	

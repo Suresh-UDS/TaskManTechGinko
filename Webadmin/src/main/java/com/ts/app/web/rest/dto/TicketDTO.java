@@ -15,9 +15,15 @@ public class TicketDTO extends BaseDTO {
 
     private String siteName;
 
+    private long projectId;
+
+    private String projectName;
+
     private long employeeId;
 
     private String employeeName;
+    
+    private String employeeLastName;
 
     private String employeeEmpId;
 
@@ -42,12 +48,16 @@ public class TicketDTO extends BaseDTO {
     private long assignedToId;
 
     private String assignedToName;
+    
+    private String assignedToLastName;
 
     private Date assignedOn;
 
     private long closedById;
 
     private String closedByName;
+    
+    private String closedByLastName;
 
     private Date closedOn;
 
@@ -68,7 +78,6 @@ public class TicketDTO extends BaseDTO {
     private String assetTitle;
     
     private long assetId;
-
 
     public long getId() {
         return id;
@@ -325,4 +334,47 @@ public class TicketDTO extends BaseDTO {
 	public void setAssetId(long assetId) {
 		this.assetId = assetId;
 	}
+
+	public long getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(long projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getEmployeeLastName() {
+		return employeeLastName;
+	}
+
+	public void setEmployeeLastName(String employeeLastName) {
+		this.employeeLastName = employeeLastName;
+	}
+
+	public String getAssignedToLastName() {
+		return assignedToLastName;
+	}
+
+	public void setAssignedToLastName(String assignedToLastName) {
+		this.assignedToLastName = assignedToLastName;
+	}
+
+	public String getClosedByLastName() {
+		return closedByLastName;
+	}
+
+	public void setClosedByLastName(String closedByLastName) {
+		this.closedByLastName = closedByLastName;
+	}
+
+	
+	
 }

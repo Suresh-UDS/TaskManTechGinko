@@ -24,12 +24,18 @@ public interface FeedbackMappingRepository extends JpaRepository<FeedbackMapping
 	Page<FeedbackMapping> findByLocation(@Param("siteId") long siteId, @Param("block") String block, @Param("floor") String floor, @Param("zone") String zone, Pageable pageRequest);
 
 	@Query("SELECT ft FROM FeedbackMapping ft WHERE ft.site.id = :siteId and ft.block = :block and ft.floor = :floor and ft.zone = :zone")
-	FeedbackMapping findOneByLocation(@Param("siteId") long siteId, @Param("block") String block, @Param("floor") String floor, @Param("zone") String zone);
+	List<FeedbackMapping> findOneByLocation(@Param("siteId") long siteId, @Param("block") String block, @Param("floor") String floor, @Param("zone") String zone);
 	
+	@Query("SELECT ft FROM FeedbackMapping ft WHERE ft.feedback.id = :feedbackId and ft.site.id = :siteId and ft.block = :block and ft.floor = :floor and ft.zone = :zone order by ft.id desc")
+	Page<FeedbackMapping> findOneByLocation(@Param("feedbackId") long feedbackId, @Param("siteId") long siteId, @Param("block") String block, @Param("floor") String floor, @Param("zone") String zone, Pageable pageRequest);
+
 	@Query("SELECT ft FROM FeedbackMapping ft WHERE ft.site.id = :siteId")
 	FeedbackMapping findSiteByLocation(@Param("siteId") long siteId);
 
 	@Query("SELECT ft FROM FeedbackMapping ft WHERE ft.site.id in (:siteIds)")
 	Page<FeedbackMapping> findBySites(@Param("siteIds") List<Long> siteIds, Pageable pageRequest);
+
+	@Query("SELECT ft FROM FeedbackMapping ft WHERE ft.project.id = :projectId and ft.site.id = :siteId")
+	Page<FeedbackMapping> findByClientAndSite(@Param("projectId") long projectId, @Param("siteId") long siteId, Pageable pageRequest);
 
 }

@@ -3,6 +3,8 @@ import {LoadingController, NavController, NavParams} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {QuotationService} from "../service/quotationService";
 
+declare var demo;
+
 @Component({
   selector: 'page-create-rate-card',
   templateUrl: 'create-rate-card.html'
@@ -16,6 +18,7 @@ export class CreateRateCardPage {
         title:any;
         cost:any;
         uom:any;
+        number:any;
     };
 
     uom:any;
@@ -26,7 +29,8 @@ export class CreateRateCardPage {
             type:'',
             title:'',
             cost:'',
-            uom:''
+            uom:'',
+            number:''
         }
     }
 
@@ -36,9 +40,14 @@ export class CreateRateCardPage {
 
     ionViewWillEnter(){
         this.quotationService.getRateCardTypes().subscribe(response=>{
-            console.log("Rate Card types");
-            console.log(response);
-            this.rateCardTypes = response;
+            if(response.errorStatus){
+                demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
+            }else{
+                console.log("Rate Card types");
+                console.log(response);
+                this.rateCardTypes = response;
+            }
+
         })
     }
 
@@ -49,8 +58,13 @@ export class CreateRateCardPage {
 
             rateCard.uom = this.uom;
             this.quotationService.createRateCard(rateCard).subscribe(response => {
-                console.log(response);
-                this.navCtrl.pop();
+                if(response.errorStatus){
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
+                }else{
+                    console.log(response);
+                    this.navCtrl.pop();
+                }
+
             })
         }
         else

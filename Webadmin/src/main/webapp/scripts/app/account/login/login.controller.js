@@ -7,45 +7,58 @@ angular.module('timeSheetApp')
             $(".content").addClass("remove-mr");
             $(".main-panel").addClass("remove-hght");
         }
+
         $scope.user = {};
         $scope.errors = {};
         $scope.rememberMe = true;
         $scope.oldPassword='';
         $scope.newPassword='';
-        $timeout(function (){angular.element('[ng-model="username"]').focus();});
+
+        //$timeout(function (){angular.element('[ng-model="username"]').focus();});
+
         $scope.login = function (event) {
+
             event.preventDefault();
+
             Auth.login({
+
                 username: $scope.username,
                 password: $scope.password,
                 rememberMe: $scope.rememberMe
+
             }).then(function () {
+
                 $scope.authenticationError = false;
                 if ($rootScope.previousStateName === 'register') {
                     $rootScope.isLoggedIn = true;
                     $state.go('dashboard');
                 } else {
                     $rootScope.isLoggedIn = true;
-                    $rootScope.back();
+                    $rootScope.retainUrl();
                 }
                 $rootScope.resLoader=true;
                 $rootScope.inits();
 
             }).catch(function () {
+
                 $scope.authenticationError = true;
                 $rootScope.resLoader=false;
             });
+
             $rootScope.resLoader=true;
         };
 
-         //Loading Page go to top position
+
+        //Loading Page go to top position
+
         $scope.loadPageTop = function(){
             //alert("test");
             //$("#loadPage").scrollTop();
-            $("#loadPage").animate({scrollTop: 0}, 2000);
+            $("#loadPage").animate({scrollTop: 0}, 0);
         };
 
         $scope.showNotifications= function(position,alignment,color,msg){
+
             demo.showNotification(position,alignment,color,msg);
         }
 
@@ -55,12 +68,17 @@ angular.module('timeSheetApp')
                 newPassword:this.newPassword,
                 oldPassword:this.oldPassword
             }
+
             Auth.changeNewPassword(changePasswordData).then(function (response) {
+
                 console.log("Password successfully  changed");
                 $scope.showNotifications('top','center','success','Password Successfully Changed..');
+
             }).catch(function (err) {
+
                 $scope.showNotifications('top','center','failure','Password Successfully Changed..');
                 console.log("Error in change password");
+
             })
 
         };
@@ -68,27 +86,30 @@ angular.module('timeSheetApp')
 
         // Username and Password validations
 
-        	var msg="";
-        	var elements = document.getElementsByTagName("INPUT");
+    	var msg="";
+    	var elements = document.getElementsByTagName("INPUT");
 
-        	for (var i = 0; i < elements.length; i++) {
-        	   elements[i].oninvalid =function(e) {
-        	        if (!e.target.validity.valid) {
+    	for (var i = 0; i < elements.length; i++) {
+
+    	   elements[i].oninvalid =function(e) {
+
+    	        if (!e.target.validity.valid) {
+
         	        switch(e.target.id){
         	            case 'password' :
         	            e.target.setCustomValidity("Password cannot be blank");break;
         	            case 'username' :
         	            e.target.setCustomValidity("Username cannot be blank");break;
-        	        default : e.target.setCustomValidity("");break;
+        	            default : e.target.setCustomValidity("");break;
 
-        	        }
-        	       }
-        	    };
-        	   elements[i].oninput = function(e) {
-        	        e.target.setCustomValidity(msg);
-        	    };
-        	}
+    	            }
 
+    	        }
 
+    	    };
 
+    	   elements[i].oninput = function(e) {
+    	        e.target.setCustomValidity(msg);
+    	    };
+    	}
     });

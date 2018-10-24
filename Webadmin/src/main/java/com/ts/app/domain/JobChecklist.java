@@ -2,7 +2,6 @@ package com.ts.app.domain;
 
 import java.io.Serializable;
 
-import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,9 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "job_checklist")
@@ -79,20 +75,20 @@ public class JobChecklist extends AbstractAuditingEntity implements Serializable
 		this.checklistId = checklistId;
 	}
 
-	public String getChecklistName() {
-		return checklistName;
-	}
-
-	public void setChecklistName(String checklistName) {
-		this.checklistName = checklistName;
-	}
-
 	public String getChecklistItemId() {
 		return checklistItemId;
 	}
 
 	public void setChecklistItemId(String checklistItemId) {
 		this.checklistItemId = checklistItemId;
+	}
+
+	public String getChecklistName() {
+		return checklistName;
+	}
+
+	public void setChecklistName(String checklistName) {
+		this.checklistName = checklistName;
 	}
 
 	public String getChecklistItemName() {

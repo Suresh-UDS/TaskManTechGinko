@@ -12,7 +12,11 @@ public enum JobType {
     PESTCONTROL(5), 
     PLUMBING(6),
     MAINTENANCE(7),
-    ADMIN(8);
+    ADMIN(8),
+    HVAC(9),
+    CIVIL(10),
+    GENERAL(11),
+    PANTRYSERVICES(12);
 
 	private int value;
     
@@ -46,6 +50,18 @@ public enum JobType {
 				break;
 			case "ADMIN" :
 				result = ADMIN;
+				break;
+			case "HVAC" :
+				result = HVAC;
+				break;
+			case "CIVIL" :
+				result = CIVIL;
+				break;
+			case "GENERAL" :
+				result = GENERAL;
+				break;
+			case "PANTRYSERVICES" :
+				result = PANTRYSERVICES;
 				break;
 				
 			default:

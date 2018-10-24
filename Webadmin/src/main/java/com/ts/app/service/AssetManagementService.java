@@ -1,5 +1,7 @@
 package com.ts.app.service;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -7,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -206,6 +209,9 @@ public class AssetManagementService extends AbstractService {
 
 	@Inject
 	private AssetSiteHistoryRepository assetSiteHistoryRepository;
+	
+	@Inject
+	private TicketManagementService ticketMgmtservice;
 
 	public static final String EMAIL_NOTIFICATION_READING = "email.notification.reading";
 
@@ -323,6 +329,9 @@ public class AssetManagementService extends AbstractService {
 				assetParamConfig.setActive("Y");
 				assetParamConfig.setAsset(asset);
 				assetParamConfig.setAssetType(assetDTO.getAssetType());
+				assetParamConfig.setAlertRequired(parameterConfig.isAlertRequired());
+				assetParamConfig.setRule(parameterConfig.getRule());
+				assetParamConfig.setThreshold(parameterConfig.getThreshold());
 				assetParamConfig.setConsumptionMonitoringRequired(parameterConfig.isConsumptionMonitoringRequired());
 				assetParamConfig.setName(parameterConfig.getName());
 				assetParamConfig.setUom(parameterConfig.getUom());
@@ -345,7 +354,10 @@ public class AssetManagementService extends AbstractService {
 
 	public boolean isDuplicatePPMSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
 	    log.debug("Asset Title "+assetPpmScheduleDTO.getTitle());
-		List<AssetPPMSchedule> assetPPMSchedule = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(assetPpmScheduleDTO.getAssetId(), assetPpmScheduleDTO.getTitle());
+	    java.sql.Date startDate = DateUtil.convertToSQLDate(assetPpmScheduleDTO.getStartDate());
+		List<AssetPPMSchedule> assetPPMSchedule = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(assetPpmScheduleDTO.getAssetId(), 
+																assetPpmScheduleDTO.getTitle(), MaintenanceType.PPM.getValue(), startDate,
+																assetPpmScheduleDTO.getJobStartTime(), assetPpmScheduleDTO.getJobStartTime());
 		if(assetPPMSchedule != null) {
 			return true;
 		}
@@ -444,7 +456,7 @@ public class AssetManagementService extends AbstractService {
 
 		//update status history
 		if(!StringUtils.isEmpty(assetDTO.getStatus())
-				&& assetDTO.getStatus().equalsIgnoreCase(asset.getStatus())) {
+				&& !assetDTO.getStatus().equalsIgnoreCase(asset.getStatus())) {
 			AssetStatusHistory assetStatusHistory = new AssetStatusHistory();
 			assetStatusHistory.setStatus(AssetStatus.valueOf(assetDTO.getStatus()).getStatus());
 			assetStatusHistory.setActive("Y");
@@ -452,8 +464,12 @@ public class AssetManagementService extends AbstractService {
 			List<AssetStatusHistory> assetStatusHistoryList = asset.getAssetStatusHistory();
 			if(CollectionUtils.isEmpty(assetStatusHistoryList)) {
 				assetStatusHistoryList = new ArrayList<AssetStatusHistory>();
+				assetStatusHistoryList.add(assetStatusHistory);
+				asset.setAssetStatusHistory(assetStatusHistoryList);
+			}else { 
+				assetStatusHistoryList.add(assetStatusHistory);
 			}
-			asset.setAssetStatusHistory(assetStatusHistoryList);
+			
 		}
 
 		asset.setAssetGroup(assetDTO.getAssetGroup());
@@ -507,11 +523,11 @@ public class AssetManagementService extends AbstractService {
 
 
 		}
-		if (assetDTO.getManufacturerId() != asset.getManufacturer().getId()) {
+		if (assetDTO.getManufacturerId() > 0) {
 			Manufacturer manufacturer = getManufacturer(assetDTO.getManufacturerId());
 			asset.setManufacturer(manufacturer);
 		}
-		if (assetDTO.getVendorId() != asset.getAmcVendor().getId()) {
+		if (assetDTO.getVendorId() > 0) {
 			Vendor vendor = getVendor(assetDTO.getVendorId());
 			asset.setAmcVendor(vendor);
 		}
@@ -553,23 +569,46 @@ public class AssetManagementService extends AbstractService {
 			User user = userRepository.findOne(assetDTO.getUserId());
 			log.debug(">>> user <<<"+ user.getFirstName() +" and "+user.getId());
 //			Employee employee = user.getEmployee();
+			
+			TicketDTO ticketDto = new TicketDTO();
+			ticketDto.setAssetId(assetEntity.getId());
+			ticketDto.setActive(Ticket.ACTIVE_YES);
+			ticketDto.setTitle("ASSET -" + assetDTO.getStatus() + " - "+ assetCode);
+			ticketDto.setSiteId(site.getId());
+			ticketDto.setUserId(user.getId());
+			ticketDto.setSeverity("High");
+			ticketDto.setCategory("MAINTENANCE");
+			ticketDto.setDescription("ASSET -" +assetDTO.getStatus() + " by " + user.getFirstName());
+			ticketMgmtservice.saveTicket(ticketDto);
 
-			Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_ASSET);
+			List<Setting> settingList = settingRepository.findSettingByKeyAndSiteId(EMAIL_NOTIFICATION_ASSET, site.getId());
+			
+			log.debug("Setting Email list -" + settingList.size());
+			
+			if(CollectionUtils.isNotEmpty(settingList)) {
+				
+				for(Setting setting : settingList) {
+					
+					if(setting.getSettingValue().equalsIgnoreCase("true") ) {
 
-			if(setting.getSettingValue().equalsIgnoreCase("true") ) {
+						List<Setting> settingEntities = settingRepository.findSettingByKeyAndSiteId(EMAIL_NOTIFICATION_ASSET_EMAILS, site.getId());
 
-				Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_ASSET_EMAILS);
+						if(CollectionUtils.isNotEmpty(settingEntities)) {
+							
+							for(Setting settingEntity : settingEntities) { 
+								
+								List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+								
+								for(String email : emailLists) {
+									mailService.sendAssetBreakdownAlert(email, assetEntity.getTitle(), siteName, assetCode, user.getFirstName(), date);
+								}
+							}
 
-				if(settingEntity.getSettingValue().length() > 0) {
+						} else {
 
-					List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
-					for(String email : emailLists) {
-						mailService.sendAssetBreakdownAlert(email, assetEntity.getTitle(), siteName, assetCode, user.getFirstName(), date);
+							log.info("There is no email ids registered");
+						}
 					}
-
-				} else {
-
-					log.info("There is no email ids registered");
 				}
 			}
 		}
@@ -661,6 +700,11 @@ public class AssetManagementService extends AbstractService {
 		}else {
 			assetAMC.setChecklist(null);
 		}
+		
+		if(assetAMCScheduleDTO.getEmpId() > 0) {
+			Employee employee = employeeRepository.findOne(assetAMCScheduleDTO.getEmpId());
+			assetAMCScheduleDTO.setEmployeeName(employee.getName());
+		}
 		Asset asset = assetRepository.findOne(assetAMCScheduleDTO.getAssetId());
 		assetAMC.setAsset(asset);
 		assetAMC.setActive(AssetAMCSchedule.ACTIVE_YES);
@@ -720,6 +764,8 @@ public class AssetManagementService extends AbstractService {
 		if (CollectionUtils.isNotEmpty(assetAMCSchedules)) {
 			assetAMCScheduleDTOs = mapperUtil.toModelList(assetAMCSchedules, AssetAMCScheduleDTO.class);
 			for(AssetAMCScheduleDTO assetAMC : assetAMCScheduleDTOs) {
+				Employee employee = employeeRepository.findOne(assetAMC.getEmpId());
+				assetAMC.setEmployeeName(employee.getName());
 				if(assetAMC.getChecklistId() > 0) {
 					List<ChecklistItem> checkList = checklistRespository.findByChecklistId(assetAMC.getChecklistId());
 					List<ChecklistItemDTO> cheklistItemDTO = mapperUtil.toModelList(checkList, ChecklistItemDTO.class);
@@ -743,6 +789,8 @@ public class AssetManagementService extends AbstractService {
 		if (CollectionUtils.isNotEmpty(assetPpmSchedules)) {
 			assetPpmScheduleDTOs = mapperUtil.toModelList(assetPpmSchedules, AssetPpmScheduleDTO.class);
 			for(AssetPpmScheduleDTO assetPPM : assetPpmScheduleDTOs) {
+				Employee employee = employeeRepository.findOne(assetPPM.getEmpId());
+				assetPPM.setEmployeeName(employee.getName());
 				if(assetPPM.getChecklistId() > 0) {
 					List<ChecklistItem> checkList = checklistRespository.findByChecklistId(assetPPM.getChecklistId());
 					List<ChecklistItemDTO> cheklistItemDTO = mapperUtil.toModelList(checkList, ChecklistItemDTO.class);
@@ -808,13 +856,10 @@ public class AssetManagementService extends AbstractService {
 		List<AssetPPMSchedule> assetPpmSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByAssetId(assetId, type);
 		if (CollectionUtils.isNotEmpty(assetPpmSchedules)) {
 			assetPPMScheduleEventDTOs = new ArrayList<AssetPPMScheduleEventDTO>();
-			Calendar currCal = Calendar.getInstance();
-			currCal.setTime(startDate);
-			currCal.set(Calendar.HOUR_OF_DAY, 0);
-			currCal.set(Calendar.MINUTE, 0);
+			
 			Calendar lastDate = Calendar.getInstance();
 			if(endDate == null) {
-				lastDate.add(Calendar.DAY_OF_MONTH,  lastDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+				lastDate.add(Calendar.DAY_OF_MONTH,  lastDate.getMaximum(Calendar.DAY_OF_MONTH));
 			}else {
 				lastDate.setTime(endDate);
 			}
@@ -822,13 +867,20 @@ public class AssetManagementService extends AbstractService {
 			lastDate.set(Calendar.MINUTE, 59);
 
 			for(AssetPPMSchedule ppmSchedule : assetPpmSchedules) {
+				Calendar currCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+				currCal.setTime(startDate);
+				currCal.set(Calendar.HOUR_OF_DAY, 0);
+				currCal.set(Calendar.MINUTE, 0);
 				Date schStartDate = ppmSchedule.getStartDate();
 				Date schEndDate = ppmSchedule.getEndDate();
 				Calendar schStartCal = Calendar.getInstance();
 				schStartCal.setTime(schStartDate);
 				Calendar schEndCal = Calendar.getInstance();
 				schEndCal.setTime(schEndDate);
-				while((currCal.before(schStartCal) || schStartCal.equals(currCal)) && !currCal.after(lastDate)) { //if ppm schedule starts before current date and not after the last date of the month.
+				if(schStartCal.after(currCal)) {
+					currCal.setTime(schStartCal.getTime());
+				}
+				while(((currCal.after(schStartCal) || schStartCal.equals(currCal)) || !schStartCal.after(lastDate)) && !currCal.after(lastDate)) { //if ppm schedule starts before current date and not after the last date of the month.
 					AssetPPMScheduleEventDTO assetPPMScheduleEvent = new AssetPPMScheduleEventDTO();
 					assetPPMScheduleEvent.setId(ppmSchedule.getId());
 					assetPPMScheduleEvent.setTitle(ppmSchedule.getTitle());
@@ -839,6 +891,7 @@ public class AssetManagementService extends AbstractService {
 					assetPPMScheduleEvent.setFrequency(ppmSchedule.getFrequency());
 					assetPPMScheduleEvent.setFrequencyDuration(ppmSchedule.getFrequencyDuration());
 					assetPPMScheduleEvent.setFrequencyPrefix(ppmSchedule.getFrequencyPrefix());
+					currCal.add(Calendar.MILLISECOND, TimeZone.getTimeZone("Asia/Kolkata").getRawOffset());
 					assetPPMScheduleEvent.setStart(currCal.getTime());
 					assetPPMScheduleEvent.setAllDay(true);
 					assetPPMScheduleEvent.setWeek(currCal.get(Calendar.WEEK_OF_YEAR));
@@ -1179,8 +1232,18 @@ public class AssetManagementService extends AbstractService {
 
 	public AssetgroupDTO createAssetGroup(AssetgroupDTO assetGroupDTO) {
 		AssetGroup assetgroup = mapperUtil.toEntity(assetGroupDTO, AssetGroup.class);
-		assetGroupRepository.save(assetgroup);
+		AssetGroup existingGroup = assetGroupRepository.findByName(assetGroupDTO.getAssetgroup());
+		if(existingGroup == null) { 
+			assetgroup.setActive(AssetGroup.ACTIVE_YES);
+			assetGroupRepository.save(assetgroup);
+			assetGroupDTO = mapperUtil.toModel(assetgroup, AssetgroupDTO.class);
+		}else {
+			assetGroupDTO.setErrorMessage("Already same asset group exists.");
+			assetGroupDTO.setStatus("400");
+			assetGroupDTO.setErrorStatus(true);
+		}
 		return assetGroupDTO;
+
 	}
 
 	public List<AssetgroupDTO> findAllAssetGroups() {
@@ -1271,17 +1334,23 @@ public class AssetManagementService extends AbstractService {
 
 		AssetPPMSchedule assetPPMSchedule = mapperUtil.toEntity(assetPpmScheduleDTO, AssetPPMSchedule.class);
 		assetPPMSchedule.setMaintenanceType(MaintenanceType.PPM.getValue());
+		log.debug("asset ppm schedule checklist Id - "+assetPpmScheduleDTO.getChecklistId());
 		if(assetPpmScheduleDTO.getChecklistId() > 0) {
 			Checklist checklist = checklistRepository.findOne(assetPpmScheduleDTO.getChecklistId());
 			assetPPMSchedule.setChecklist(checklist);
 		}else {
 			assetPPMSchedule.setChecklist(null);
 		}
+		if(assetPpmScheduleDTO.getEmpId() > 0) { 
+			Employee employee = employeeRepository.findOne(assetPpmScheduleDTO.getEmpId());
+			assetPPMSchedule.setEmployeeName(employee.getName());
+		}
 		Asset asset = assetRepository.findOne(assetPpmScheduleDTO.getAssetId());
 		assetPPMSchedule.setAsset(asset);
 		assetPPMSchedule.setActive(AssetPPMSchedule.ACTIVE_YES);
 
-		List<AssetPPMSchedule> assetPPMSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(asset.getId(), assetPpmScheduleDTO.getTitle());
+		List<AssetPPMSchedule> assetPPMSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(asset.getId(), assetPpmScheduleDTO.getTitle(), 
+										MaintenanceType.PPM.getValue(), assetPPMSchedule.getStartDate(), assetPPMSchedule.getJobStartTime(), assetPPMSchedule.getJobStartTime());
 		log.debug("Existing schedule -" + assetPPMSchedule);
 		if (CollectionUtils.isEmpty(assetPPMSchedules)) {
 			assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);
@@ -1933,7 +2002,7 @@ public class AssetManagementService extends AbstractService {
 
 		Pageable pageRequest = null;
 		if(searchCriteria != null) {
-			
+
 			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
 				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
 				log.debug("Sorting object" + sort);
@@ -1992,7 +2061,7 @@ public class AssetManagementService extends AbstractService {
 
 		Pageable pageRequest = null;
 		if(searchCriteria != null) {
-			
+
 			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
 				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
 				log.debug("Sorting object" + sort);
@@ -2053,7 +2122,7 @@ public class AssetManagementService extends AbstractService {
 
         Pageable pageRequest = null;
         if(searchCriteria != null) {
-        	
+
         	if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
 				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
 				log.debug("Sorting object" + sort);

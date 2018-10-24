@@ -39,6 +39,10 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     
     private boolean feedbackEmailAlert;
 
+    private long feedbackReportEmailAlertId;
+    
+    private boolean feedbackReportEmailAlert;
+
     private long quotationEmailAlertId;
     
     private boolean quotationEmailAlert;
@@ -74,6 +78,14 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     private long feedbackEmailsId;
     
     private List<String> feedbackEmailIds;
+    
+    private long feedbackReportEmailsId;
+    
+    private List<String> feedbackReportEmailIds;
+
+    private long feedbackReportTimeId;
+    
+    private Date feedbackReportTime;
 
     private long quotationEmailsId;
     
@@ -122,6 +134,22 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     private boolean warrantyEmailAlert;
     
     private List<String> warrantyEmailIds;
+    
+    private long dayWiseReportEmailsId;
+    
+    private long dayWiseReportEmailAlertId;
+    
+    private long dayWiseReportClientGroupEmailAlertId;
+    
+    private long dayWiseReportAlertTimeId;
+    
+    private Date dayWiseReportAlertTime;
+    
+    private List<String> dayWiseReportEmailIds;
+    
+    private boolean dayWiseReportEmailAlert;
+    
+    private boolean clientGroupEmailAlert;
 
     public long getSiteId() {
 		return siteId;
@@ -569,6 +597,118 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 
 	public void setWarrantyEmailIds(List<String> warrantyEmailIds) {
 		this.warrantyEmailIds = warrantyEmailIds;
+	}
+
+	public long getFeedbackReportEmailAlertId() {
+		return feedbackReportEmailAlertId;
+	}
+
+	public void setFeedbackReportEmailAlertId(long feedbackReportEmailAlertId) {
+		this.feedbackReportEmailAlertId = feedbackReportEmailAlertId;
+	}
+
+	public boolean isFeedbackReportEmailAlert() {
+		return feedbackReportEmailAlert;
+	}
+
+	public void setFeedbackReportEmailAlert(boolean feedbackReportEmailAlert) {
+		this.feedbackReportEmailAlert = feedbackReportEmailAlert;
+	}
+
+	public long getFeedbackReportEmailsId() {
+		return feedbackReportEmailsId;
+	}
+
+	public void setFeedbackReportEmailsId(long feedbackReportEmailsId) {
+		this.feedbackReportEmailsId = feedbackReportEmailsId;
+	}
+
+	public List<String> getFeedbackReportEmailIds() {
+		return feedbackReportEmailIds;
+	}
+
+	public void setFeedbackReportEmailIds(List<String> feedbackReportEmailIds) {
+		this.feedbackReportEmailIds = feedbackReportEmailIds;
+	}
+
+	public long getFeedbackReportTimeId() {
+		return feedbackReportTimeId;
+	}
+
+	public void setFeedbackReportTimeId(long feedbackReportTimeId) {
+		this.feedbackReportTimeId = feedbackReportTimeId;
+	}
+
+	public Date getFeedbackReportTime() {
+		return feedbackReportTime;
+	}
+
+	public void setFeedbackReportTime(Date feedbackReportTime) {
+		this.feedbackReportTime = feedbackReportTime;
+	}
+
+	public long getDayWiseReportAlertTimeId() {
+		return dayWiseReportAlertTimeId;
+	}
+
+	public void setDayWiseReportAlertTimeId(long dayWiseReportAlertTimeId) {
+		this.dayWiseReportAlertTimeId = dayWiseReportAlertTimeId;
+	}
+
+	public Date getDayWiseReportAlertTime() {
+		return dayWiseReportAlertTime;
+	}
+
+	public void setDayWiseReportAlertTime(Date dayWiseReportAlertTime) {
+		this.dayWiseReportAlertTime = dayWiseReportAlertTime;
+	}
+
+	public List<String> getDayWiseReportEmailIds() {
+		return dayWiseReportEmailIds;
+	}
+
+	public void setDayWiseReportEmailIds(List<String> dayWiseReportEmailIds) {
+		this.dayWiseReportEmailIds = dayWiseReportEmailIds;
+	}
+
+	public boolean isDayWiseReportEmailAlert() {
+		return dayWiseReportEmailAlert;
+	}
+
+	public void setDayWiseReportEmailAlert(boolean dayWiseReportEmailAlert) {
+		this.dayWiseReportEmailAlert = dayWiseReportEmailAlert;
+	}
+
+	public long getDayWiseReportEmailsId() {
+		return dayWiseReportEmailsId;
+	}
+
+	public void setDayWiseReportEmailsId(long dayWiseReportEmailsId) {
+		this.dayWiseReportEmailsId = dayWiseReportEmailsId;
+	}
+
+	public long getDayWiseReportEmailAlertId() {
+		return dayWiseReportEmailAlertId;
+	}
+
+	public void setDayWiseReportEmailAlertId(long dayWiseReportEmailAlertId) {
+		this.dayWiseReportEmailAlertId = dayWiseReportEmailAlertId;
+	}
+
+	public boolean isClientGroupEmailAlert() {
+		return clientGroupEmailAlert;
+	}
+
+	public void setClientGroupEmailAlert(boolean clientGroupEmailAlert) {
+		this.clientGroupEmailAlert = clientGroupEmailAlert;
+	}
+
+	public long getDayWiseReportClientGroupEmailAlertId() {
+		return dayWiseReportClientGroupEmailAlertId;
+	}
+
+	public void setDayWiseReportClientGroupEmailAlertId(long dayWiseReportClientGroupEmailAlertId) {
+		this.dayWiseReportClientGroupEmailAlertId = dayWiseReportClientGroupEmailAlertId;
 	}
 
 	

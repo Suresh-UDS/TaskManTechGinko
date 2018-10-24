@@ -8,6 +8,9 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.ts.app.domain.Branch;
+import com.ts.app.domain.Region;
+import com.ts.app.web.rest.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -27,12 +30,6 @@ import com.codahale.metrics.annotation.Timed;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.SiteService;
 import com.ts.app.service.util.ImportUtil;
-import com.ts.app.web.rest.dto.EmployeeDTO;
-import com.ts.app.web.rest.dto.ImportResult;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
-import com.ts.app.web.rest.dto.ShiftDTO;
-import com.ts.app.web.rest.dto.SiteDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
 import com.ts.app.web.rest.util.TokenUtils;
 
@@ -115,7 +112,7 @@ public class SiteResource {
 		// .map((entity) -> new ResponseEntity<>(entity, HttpStatus.OK))
 		// .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
-	
+
 	@RequestMapping(value = "/site/{id}/shifts/{date}", method = RequestMethod.GET)
 	public List<ShiftDTO> getShifts(@PathVariable("id") long id, @PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd") Date date) {
 		return siteService.findShifts(id, date);
@@ -149,7 +146,7 @@ public class SiteResource {
 
 
 
-    @RequestMapping(value = "/site/import", method = RequestMethod.POST)
+    @RequestMapping(value = "/import/site", method = RequestMethod.POST)
     public ResponseEntity<ImportResult> importJobData(@RequestParam("siteFile") MultipartFile file){
     	log.info("--Invoked Site Import --");
 		Calendar cal = Calendar.getInstance();
@@ -167,6 +164,63 @@ public class SiteResource {
         		return new ResponseEntity<String>(result,HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<String>(result,HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/region",method = RequestMethod.POST)
+    public ResponseEntity<?> saveRegion(@RequestBody RegionDTO region){
+        long userId = SecurityUtils.getCurrentUserId();
+        try {
+            RegionDTO regionDTO= siteService.createRegion(region);
+        }catch(Exception e) {
+            throw new TimesheetException(e, region);
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
+
+    }
+
+    @RequestMapping(value = "/branch",method = RequestMethod.POST)
+    public ResponseEntity<?> saveBranch(@RequestBody BranchDTO branchDTO){
+        long userId = SecurityUtils.getCurrentUserId();
+        try {
+            BranchDTO branchDTO1= siteService.createBranch(branchDTO);
+        }catch(Exception e) {
+            throw new TimesheetException(e, branchDTO);
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
+
+    }
+
+    @RequestMapping(value = "/branch", method = RequestMethod.GET)
+    public List<BranchDTO> findAllBranches() {
+        log.info("--Invoked site service.find all branches--");
+        return siteService.findAllBranches();
+    }
+
+    @RequestMapping(value = "/region", method = RequestMethod.GET)
+    public List<RegionDTO> findAllRegions() {
+        log.info("--Invoked site service.find all Regions--");
+        return siteService.findAllRegions();
+    }
+
+    @RequestMapping(value = "/region/projectId/{projectId}", method = RequestMethod.GET)
+    public List<RegionDTO> findRegionsByProject(@PathVariable("projectId") long projectId){
+        return siteService.findRegionByProject(projectId);
+    }
+
+    @RequestMapping(value = "/branch/projectId/{projectId}/region/{regionId}", method = RequestMethod.GET)
+    public List<BranchDTO> findBranchByProject(@PathVariable("projectId") long projectId, @PathVariable("regionId") long regionId){
+        return siteService.findBranchByProject(projectId,regionId);
+    }
+
+    @RequestMapping(value = "/project/region/{region}/projectId/{projectId}", method = RequestMethod.POST)
+    public List<SiteDTO> findSitesByRegion( @PathVariable("region") String region, @PathVariable("projectId") long projectId){
+        log.debug("find by project id and region - "+projectId+" - "+region);
+        return siteService.findSitesByRegion(projectId,region);
+    }
+
+    @RequestMapping(value = "/project/branch/{branch}/region/{region}/projectId/{projectId}", method = RequestMethod.GET)
+    public List<SiteDTO> findSitesByRegionAndBranch(@PathVariable("branch") String branch, @PathVariable("region") String region,  @PathVariable("projectId") long projectId){
+        return siteService.findSitesByRegionAndBranch(projectId,region,branch);
     }
 
     @RequestMapping(value = "/site/import/{fileId}/status",method = RequestMethod.GET)

@@ -29,7 +29,7 @@
 				<div class="form-container table-container">
 					<label>* Mantatory Field</label>
 					<form ng-show="!success" name="form" role="form" novalidate
-						ng-submit="saveUser()" show-validation class="form-horizontal">
+						ng-submit="conform('save')" show-validation class="form-horizontal">
 
                        <div class="row">
                            <div class="col-md-12">
@@ -46,7 +46,7 @@
                                                           <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
                                                           <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                                           <!--required >-->
-                                                   <select class="form-control " ng-model="selectedRole"  ng-options="role as role.name for role in userRoles">
+                                                   <select class="form-control " ng-model="selectedRole"  ng-options="role as (role.name | uppercase) for role in userRoles">
                                                        <option value="">Please select Roles...</option>
                                                    </select>
 
@@ -243,14 +243,20 @@
 
                                            <div class="col-sm-12 txt-align-rgt">
                                                <div class="form-group">
-                                                   <button class="btn btn-success" type="submit"
-                                                           id="form-button-save">
-                                                      <span class="btn-label">
-                                            <i class="material-icons">check</i>
-                                        </span> Save
+                                                   <!--<button class="btn btn-success" type="submit"-->
+                                                           <!--id="form-button-save">-->
+                                                      <!--<span class="btn-label">-->
+                                            <!--<i class="material-icons">check</i>-->
+                                        <!--</span> Save-->
+                                                   <!--</button>-->
+
+                                                   <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" ng-click="conform('save')" ng-disabled="btnDisable"
+                                                           type="submit" id="form-button-save" >
+                                                       <span class="btn-label"><i class="material-icons">check</i></span> Save
+                                                       <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                                    </button>
                                                    <button class="btn btn-danger" type="button"
-                                                           ng-click="cancelUser()" id="cancel-button">
+                                                           ng-click="conform('cancel')" ng-disabled="btnDisable" id="cancel-button">
                                                        <i class="material-icons">close</i>Cancel
                                                    </button>
                                                </div>

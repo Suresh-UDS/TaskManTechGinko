@@ -11,7 +11,7 @@ angular.module('timeSheetApp')
                     pageTitle: 'Sign in'
                 },
                 views: {
-                    'content@': {
+                    'login@': {
                         templateUrl: 'scripts/app/account/login/login.html',
                         controller: 'LoginController'
                     }
@@ -19,21 +19,5 @@ angular.module('timeSheetApp')
                 resolve: {
 
                 }
-            }).state('changePassword',{
-                parent:'account',
-                url:'/change-password',
-                data:{
-                    authorities:[],
-                    pageTitle:'Change Password'
-                },
-                views:{
-                    'content@':{
-                        templateUrl:'scripts/app/account/login/change-password.html',
-                        controller:'LoginController'
-                    }
-                },
-                resolve:{
-
-                }
-        });
+            });
     });

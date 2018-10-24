@@ -55,6 +55,8 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
 
 	private boolean late;
 
+	private String remarks;
+
 	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.REFRESH})
 	@JoinColumn(name = "siteId", nullable = false)
 	private Site site;
@@ -72,7 +74,7 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "continuedAttendanceId", referencedColumnName = "id", nullable = true)
 	private Attendance continuedAttendance;
-	
+
 	private boolean lateAttendance;
 
 	public Long getId() {
@@ -232,4 +234,11 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
         this.late = late;
     }
 
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
 }

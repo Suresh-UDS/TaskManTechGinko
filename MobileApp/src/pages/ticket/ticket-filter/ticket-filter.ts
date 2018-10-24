@@ -63,8 +63,7 @@ export class TicketFilter {
   }
 
   dismiss(){
-      let data={'foo':'bar'};
-      this.viewCtrl.dismiss(data);
+      this.viewCtrl.dismiss({project:this.selectedProject,site:this.selectedSite});
   }
   selectSite(project){
       this.selectedProject=project;

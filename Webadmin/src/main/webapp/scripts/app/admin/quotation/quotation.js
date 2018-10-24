@@ -5,7 +5,7 @@ angular.module('timeSheetApp')
         $stateProvider
             .state('add-quotation', {
                 parent: 'manage',
-                url: '/add-quotation:ticketId',
+                url: '/add-quotation/:ticketId',
                 controller: 'QuotationController',
                 data: {
                     authorities: [],
@@ -23,7 +23,7 @@ angular.module('timeSheetApp')
             })
             .state('edit-quotation', {
                 parent: 'manage',
-                url: '/edit-quotation:id',
+                url: '/edit-quotation/:id',
                 controller: 'QuotationController',
                 data: {
                     authorities: [],
@@ -41,7 +41,7 @@ angular.module('timeSheetApp')
                 }
             }).state('view-quotation', {
             parent: 'manage',
-            url: '/view-quotation:id',
+            url: '/view-quotation/:id',
             controller: 'QuotationController',
             data: {
                 authorities: [],

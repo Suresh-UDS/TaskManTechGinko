@@ -11,8 +11,9 @@ angular.module('timeSheetApp')
         $scope.validationErrorMsg = null;
         $scope.authorities = ["User", "Admin"];
         $scope.noData = false;
+        $scope.isEdit = false;
 
-        $timeout(function (){angular.element('[ng-model="name"]').focus();});
+        //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
         $scope.pages = { currPage : 1};
 
@@ -23,39 +24,72 @@ angular.module('timeSheetApp')
         $scope.checklists;
 
         $scope.selectedChecklist;
-        
+
         $scope.checklist;
-        
+
         $scope.moduleId;
         $scope.moduleName;
-        
+
         $scope.checklistItems=[];
-        
+
         $scope.newChecklistItem = {};
-        
+
+        $scope.checklistError = false;
+
         $scope.addChecklistItem = function() {
-        	console.log('new checklist item - ' + $scope.newChecklistItem);
-        	$scope.checklistItems.push($scope.newChecklistItem);
-        	$scope.newChecklistItem = {};
+            if(jQuery.isEmptyObject($scope.newChecklistItem) == false){
+            	console.log('new checklist item - ' + $scope.newChecklistItem);
+            	$scope.checklistItems.push($scope.newChecklistItem);
+            	$scope.newChecklistItem = {};
+                $scope.checklistError = false;
+            }else{
+                $scope.checklistError = true;
+            }
         }
-        
+
+        $scope.conform = function(text)
+        {
+            console.log($scope.selectedProject)
+            $rootScope.conformText = text;
+            $('#conformationModal').modal();
+
+        }
+        $rootScope.back = function (text) {
+
+            $scope.isEdit = false;
+
+            if(text == 'cancel')
+            {
+                $scope.cancelChecklist();
+            }
+            else if(text == 'save')
+            {
+                $scope.saveChecklist();
+            }
+        };
+
+
         $scope.removeItem = function(ind) {
         	$scope.checklistItems.splice(ind,1);
         }
 
         $scope.saveChecklist = function () {
-        	console.log('checklist -'+ JSON.stringify($scope.checklist));
-        	console.log('checklist -'+ JSON.stringify($scope.checklistItems));
-        	$scope.checklist.items = $scope.checklistItems 
-        	
-        	console.log('checklist after adding items - ' + JSON.stringify($scope.checklist));
-        	ChecklistComponent.createChecklist($scope.checklist).then(function () {
+            $scope.saveLoad = true;
+        	console.log('checklist -' , JSON.stringify($scope.checklist));
+        	console.log('checklist -' , JSON.stringify($scope.checklistItems));
+        	$scope.checklist.items = $scope.checklistItems;
+
+        	console.log('checklist after adding items - ' , JSON.stringify($scope.checklist));
+            var post = $scope.isEdit == true ? ChecklistComponent.updateChecklist($scope.checklist) : ChecklistComponent.createChecklist($scope.checklist);
+        	post.then(function () {
+                $scope.saveLoad = false;
             	$scope.success = 'OK';
             	$scope.checklistItems = [];
             	$scope.checklist = {};
             	$scope.loadChecklists();
             	$location.path('/checklists');
             }).catch(function (response) {
+                $scope.saveLoad = false;
                 $scope.success = null;
                 console.log(response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
@@ -72,7 +106,7 @@ angular.module('timeSheetApp')
         $scope.cancelChecklist = function () {
         	$scope.checklistItems = [];
         	$scope.checklist = {};
-        	$scope.loadPageTop(); 
+        	$scope.loadPageTop();
         };
 
         $scope.loadChecklists = function () {
@@ -86,28 +120,29 @@ angular.module('timeSheetApp')
 
 
 
-        $scope.loadChecklist = function(id) {
+        $scope.loadChecklist = function(id,action) {
+            $scope.isEdit = (action == 'edit') ? true : false;
         	console.log('loadChecklist -' + id);
         	ChecklistComponent.findOne(id).then(function (data) {
         		$scope.checklist = data;
                 for(var i in data.items) {
-                	$scope.checklistItems.push(data.items[i]);	
+                	$scope.checklistItems.push(data.items[i]);
                 }
-                
+
             });
-        	
+
         	// Page Loader Function
 
             $('.pageCenter').show();$('.overlay').show();
             $scope.loader = function(){
-                
+
                 console.log("Calling loader");
                 $('.pageCenter').hide();$('.overlay').hide();
-                        
+
             }
-            
+
             $scope.loadPageTop();
-        	
+
         	$timeout(function() {
                 $scope.loader() ;
               }, 8000);
@@ -382,11 +417,11 @@ angular.module('timeSheetApp')
                         }
 
                          //init load
-                        $scope.initLoad = function(){ 
-                             
-                             $scope.initPage(); 
-                             $scope.loadPageTop(); 
-                          
+                        $scope.initLoad = function(){
+
+                             //$scope.initPage();
+                             $scope.loadPageTop();
+
                          }
 
                        //Loading Page go to top position

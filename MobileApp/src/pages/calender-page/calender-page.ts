@@ -17,6 +17,7 @@ declare const $: any;
   templateUrl: 'calender-page.html',
 })
 export class CalenderPage {
+    spinner:any;
 date:any;
 assetDetails:any;
 searchCriteria:any;
@@ -33,6 +34,7 @@ ppmSchedule:any;
   }
 
   getCalendarSchedule(){
+      this.spinner=true;
       var date = new Date(), y = date.getFullYear(), m = date.getMonth();
       var firstDay = new Date(y, m, 1);
       var lastDay = new Date(y, m + 1, 0);
@@ -43,6 +45,7 @@ ppmSchedule:any;
       };
       this.assetService.getPPMScheduleCalendar(this.assetDetails.id,search).subscribe(
           response=>{
+              this.spinner=false;
               console.log("PPM calendar schedule");
               console.log(response);
               if(response.length>0){
@@ -53,6 +56,7 @@ ppmSchedule:any;
                   });
                   this.loadCalendar();
               }else{
+                  this.spinner=false;
                   console.log('Error Response');
               }
 

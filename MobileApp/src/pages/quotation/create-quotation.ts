@@ -22,7 +22,8 @@ export class CreateQuotationPage {
                 type:any,
                 uom:any,
                 name:any;
-                cost:any
+                cost:any;
+                number:any;
             }
             ]
     };
@@ -60,7 +61,8 @@ export class CreateQuotationPage {
                     type:'',
                     uom:'',
                     name:'',
-                    cost:''
+                    cost:'',
+                    number:''
                 }
             ]
         };
@@ -142,7 +144,8 @@ export class CreateQuotationPage {
             type:'',
             uom:'',
             name:'',
-            cost:''
+            cost:'',
+            number:''
         };
 
         rateCard.type = type.name;

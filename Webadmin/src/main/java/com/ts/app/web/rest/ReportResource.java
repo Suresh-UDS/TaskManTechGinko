@@ -9,9 +9,11 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.ReportService;
 import com.ts.app.service.SchedulerHelperService;
-import com.ts.app.service.SchedulerService;
 import com.ts.app.web.rest.dto.ReportResult;
 
 
@@ -36,11 +37,9 @@ public class ReportResource {
 
 	@Inject
 	private ReportService reportService;
-	
+
 	@Inject
-	private SchedulerService schedulerService;
-	
-	@Inject
+	@Lazy
 	private SchedulerHelperService schedulerHelperService;
 
 
@@ -49,13 +48,25 @@ public class ReportResource {
 		long userId = SecurityUtils.getCurrentUserId();
 		return reportService.getAttendanceStatsDateRange(userId, siteId, selectedDate, selectedDate);
 	}
-	
+
+    @RequestMapping(value = "/reports/attendance/region/{region}/project/{projectId}/selectedDate/{selectedDate}", method = RequestMethod.GET)
+    public ReportResult getAttendanceStatusByRegion(@PathVariable String region, @PathVariable Long projectId, @PathVariable("selectedDate") Date selectedDate) {
+        long userId = SecurityUtils.getCurrentUserId();
+        return reportService.getAttendanceStatsByRegion(userId, projectId, region, selectedDate, selectedDate);
+    }
+
+    @RequestMapping(value = "/reports/attendance/branch/{branch}/region/{region}/project/{projectId}/selectedDate/{selectedDate}", method = RequestMethod.GET)
+    public ReportResult getAttendanceStatusByBranch(@PathVariable String branch, @PathVariable String region, @PathVariable Long projectId, @PathVariable("selectedDate") Date selectedDate) {
+        long userId = SecurityUtils.getCurrentUserId();
+        return reportService.getAttendanceStatsByBranch(userId, projectId,region,branch, selectedDate, selectedDate);
+    }
+
 	@RequestMapping(value = "/reports/attendance/project/{projectId}/selectedDate/{selectedDate}", method = RequestMethod.GET)
 	public ReportResult getAttendanceStatusByProject(@PathVariable Long projectId, @PathVariable("selectedDate") Date selectedDate) {
 		long userId = SecurityUtils.getCurrentUserId();
 		return reportService.getAttendanceStatsByProjectIdDateRange(userId, projectId, selectedDate, selectedDate);
 	}
-	
+
 	@RequestMapping(value = "/reports/ticket/site/{siteId}/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
 	public ReportResult getTicketStatsBySite(@PathVariable Long siteId, @PathVariable("fromDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date fromDate,@PathVariable("toDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date toDate) {
 		long userId = SecurityUtils.getCurrentUserId();
@@ -63,19 +74,33 @@ public class ReportResource {
 		siteIds.add(siteId);
 		return reportService.getTicketStatsDateRange(userId, siteIds, fromDate, toDate);
 	}
-	
+
+    @RequestMapping(value = "/reports/ticket/region/{region}/project/{projectId}/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
+    public ReportResult getTicketStatsByRegion(@PathVariable String region,@PathVariable Long projectId, @PathVariable("fromDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date fromDate, @PathVariable("toDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date toDate) {
+        long userId = SecurityUtils.getCurrentUserId();
+
+        return reportService.getTicketStatsDateRangeByRegion(userId, projectId, region, fromDate, toDate);
+    }
+
+    @RequestMapping(value = "/reports/ticket/branch/{branch}/region/{region}/project/{projectId}/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
+    public ReportResult getTicketStatsByBranch(@PathVariable String branch,@PathVariable String region,@PathVariable Long projectId, @PathVariable("fromDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date fromDate,@PathVariable("toDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date toDate) {
+        long userId = SecurityUtils.getCurrentUserId();
+        return reportService.getTicketStatsDateRangeByBranch(userId, projectId, region,branch, fromDate, toDate);
+    }
+
 	@RequestMapping(value = "/reports/ticket/project/{projectId}/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
 	public ReportResult getTicketStatsByProject(@PathVariable Long projectId, @PathVariable("fromDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date fromDate,@PathVariable("toDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date toDate) {
 		long userId = SecurityUtils.getCurrentUserId();
 		return reportService.getTicketStatsByProjectAndDateRange(userId, projectId, fromDate, toDate);
 	}
-	
+
 	@RequestMapping(value = "/reports/attendance/consolidated", method = RequestMethod.GET)
 	public ResponseEntity<?> sendConsolidatedAttendanceReport() {
-		schedulerService.attendanceShiftReportSchedule();
+		Calendar cal = Calendar.getInstance();
+		schedulerHelperService.generateDetailedAttendanceReport(cal.getTime(), true, false, false);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/reports/attendance/detailed", method = RequestMethod.GET)
 	public ResponseEntity<?> sendDetailedAttendanceReport(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date attnDate, @RequestParam(value = "onDemand", required = false) boolean onDemand) {
 		if(attnDate == null) {
@@ -83,19 +108,42 @@ public class ReportResource {
 			currCal.set(Calendar.HOUR_OF_DAY, 0);
 			currCal.set(Calendar.MINUTE,0);
 			attnDate = currCal.getTime();
-		}		
+		}
 		schedulerHelperService.generateDetailedAttendanceReport(attnDate, false, true, onDemand);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/reports/attendance/checkout", method = RequestMethod.GET)
 	public ResponseEntity<?> autocheckoutAttendance() {
-		
-		schedulerService.attendanceCheckOutTask();
+		schedulerHelperService.autoCheckOutAttendance();
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	
+	@RequestMapping(value = "/reports/attendance/musterroll", method = RequestMethod.GET)
+	public ResponseEntity<?> sendMusterrollAttendanceReport(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date attnDate, @RequestParam(value = "onDemand", required = false) boolean onDemand, @RequestParam(value = "siteId", required = false) long siteId) {
+		Calendar startCal = Calendar.getInstance();
+		Calendar endCal = Calendar.getInstance();
+		if(attnDate != null) {
+			startCal.setTime(attnDate);
+			endCal.setTime(attnDate);
+		}
+		startCal.set(Calendar.DAY_OF_MONTH, 1);
+		startCal.set(Calendar.HOUR_OF_DAY, 0);
+		startCal.set(Calendar.MINUTE,0);
+		endCal.set(Calendar.DAY_OF_MONTH, endCal.getActualMaximum(Calendar.DAY_OF_MONTH));
+		endCal.set(Calendar.HOUR_OF_DAY,23);
+		endCal.set(Calendar.MINUTE,59);
+		schedulerHelperService.generateMusterRollAttendanceReport(siteId, startCal.getTime(), endCal.getTime() , true, onDemand);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/reports/daily", method = RequestMethod.GET)
+	public ResponseEntity<?> generateDailyReport(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date reportDate) {
+		schedulerHelperService.sendDaywiseReportEmail(reportDate, true);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+
 	//    @CrossOrigin
 //    @RequestMapping(value = "/reports/site/{siteId}/selectedDate/{selectedDate}", method = RequestMethod.GET)
 //    public ReportResult getJobStatusBySite(@PathVariable Long siteId, @PathVariable("selectedDate") Date selectedDate) {

@@ -36,7 +36,11 @@ public class SiteDTO extends BaseDTO {
 	private double addressLng;
 
 	private double radius;
-	
+
+	private String branch;
+
+	private String region;
+
 	private List<ShiftDTO> shifts;
 
 	public long getId() {
@@ -164,6 +168,21 @@ public class SiteDTO extends BaseDTO {
 	public void setShifts(List<ShiftDTO> shifts) {
 		this.shifts = shifts;
 	}
-    
-    
+
+
+    public String getBranch() {
+        return branch;
+    }
+
+    public void setBranch(String branch) {
+        this.branch = branch;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
 }

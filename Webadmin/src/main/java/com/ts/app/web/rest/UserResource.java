@@ -290,11 +290,15 @@ public class UserResource {
     @RequestMapping(value = "/user/change_password", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changeNewPassword(@RequestBody KeyAndPasswordDTO keyAndPasswordDTO){
         User user = userRepository.findOne(SecurityUtils.getCurrentUserId());
+        UserDTO userDto = null;
         if(user !=null){
-            user = userService.changeNewPassword(SecurityUtils.getCurrentUserId(), keyAndPasswordDTO.getNewPassword());
-            return new ResponseEntity<Object>("Username changed",HttpStatus.OK);
+            userDto = userService.changeNewPassword(SecurityUtils.getCurrentUserId(), keyAndPasswordDTO.getNewPassword());
+            userDto.setMessage("Username Changed");
+             
+            return new ResponseEntity<Object>(userDto,HttpStatus.OK);
         }
-        return new ResponseEntity<Object>("Username not found",HttpStatus.SERVICE_UNAVAILABLE);
+         
+        return new ResponseEntity<Object>(userDto,HttpStatus.SERVICE_UNAVAILABLE);
     }
 
 

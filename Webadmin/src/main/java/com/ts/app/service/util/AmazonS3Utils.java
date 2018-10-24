@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ts.app.domain.Employee;
 import com.ts.app.service.AmazonS3Service;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
@@ -110,14 +111,14 @@ public class AmazonS3Utils {
 		return quotationDTO;
     } 
     
-    public TicketDTO uploadTicketFile(long ticketId, MultipartFile mulitipartfile, long dateTime, TicketDTO ticketDTO) {
+    public TicketDTO uploadTicketFile(long ticketId, MultipartFile mulitipartfile, TicketDTO ticketDTO) {
     	String fileUrl = "";
-        String name = ticketId + "_" + dateTime + ".jpg";
         try { 
         	File file = convertMultiPartToFile(mulitipartfile);
-        	String fileName = name;
-        	fileUrl = amazonS3Service.uploadTicketFileToS3(fileName, file);
-        	ticketDTO.setImage(fileName);
+        	String fileName = generateFileName(mulitipartfile);
+        	String nameOfFile = ticketId + "_" + fileName;
+        	fileUrl = amazonS3Service.uploadTicketFileToS3(nameOfFile, file);
+        	ticketDTO.setImage(nameOfFile);
         	ticketDTO.setUrl(fileUrl);
         } catch(Exception e) { 
         	e.printStackTrace();
@@ -200,8 +201,14 @@ public class AmazonS3Utils {
 
 	public String uploadCheckListImage(String checkListImg, String checklistItemName, long jobId, String img) {
 		log.debug("Upload checklist in-out image to s3 bucket");
-		String filename = jobId +"_"+ checklistItemName +"_"+ img +".png";
+		String filename = "";
     	try {
+    		if(checklistItemName.contains("/")) {
+    			String renamedFile = checklistItemName.replace("/", "-");
+    			filename = jobId +"_"+ renamedFile +"_"+ img +".png";
+    		}else {
+    			filename = jobId +"_"+ checklistItemName +"_"+ img +".png";
+    		}
     		String fileUrl = amazonS3Service.uploadCheckListImageToS3(filename, checkListImg);
     	} catch(Exception e) { 
     		e.printStackTrace();
@@ -226,6 +233,34 @@ public class AmazonS3Utils {
     	}
     	
 		return locDTO;
+	}
+
+	public TicketDTO uploadExistingTicketFile(long ticketId, String image, long dateTime, TicketDTO ticketModel) {
+	   	String fileUrl = "";
+        String name = ticketId + "_" + dateTime + ".jpg";
+        try { 
+        	String fileName = name;
+        	fileUrl = amazonS3Service.uploadExistingTicketToS3(fileName, image);
+        	ticketModel.setImage(fileName);
+        	ticketModel.setUrl(fileUrl);
+        } catch(Exception e) { 
+        	e.printStackTrace();
+        }
+        return ticketModel;
+	}
+
+	public Employee uploadExistingEnrollImage(String enrolled_face, Employee employee, long dateTime) {
+		String filename = "enrollImage_"+ dateTime +".png";
+    	String fileUrl = "";
+    	try {
+	        fileUrl = amazonS3Service.uploadEnrollImageToS3(filename, enrolled_face);
+	        employee.setEnrolled_face(filename);
+	        log.debug(fileUrl);
+    	} catch(Exception e) { 
+    		e.printStackTrace();
+    	}
+    	
+		return employee;
 	}
     
   

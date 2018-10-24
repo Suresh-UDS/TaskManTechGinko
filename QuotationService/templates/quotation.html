@@ -97,20 +97,10 @@
                  <table cellpadding="5" cellspacing="0" border="0">
                      <tr>
                          <td style="border: none;font-weight: bold">Quote</td>
-                         <td style="border: none">0034</td>
+                         <td style="border: none">{{serialId}}</td>
                      </tr>
-                     <tr>
-                         <td style="border: none;font-weight: bold">Date</td>
-                         <td style="border: none">01/03/2018</td>
-                     </tr>
-                     <tr>
-                         <td style="border: none;font-weight: bold">P.O.C</td>
-                         <td style="border: none">01/03/2018</td>
-                     </tr>
-                     <tr>
-                         <td style="border: none;font-weight: bold">P.O.C</td>
-                         <td style="border: none">01/03/2018</td>
-                     </tr>
+                     
+
                  </table>
 
 
@@ -137,9 +127,9 @@
                   <tr>
                       <td>{{type}}</td>
                       <td>{{title}}</td>
+                      <td>{{unitPrice}}</td>
+                      <td>{{qty}}</td>
                       <td>{{cost}}</td>
-                      <td align="right">{{qty}}</td>
-                      <td align="right">{{unitPrice}}</td>
                   </tr>
                   {{/rateCardDetails}}
 
@@ -150,7 +140,7 @@
                           <td style="border: none;"></td>
                           <td style="border: none;"></td>
                           <td align="right" style="font-weight: bold">Total</td>
-                          <td align="right" style="font-weight: bold;background: #dfdfdf;">{{grandTotal}}</td>
+                          <td style="font-weight: bold;background: #dfdfdf;">{{grandTotal}}</td>
                       </tr>
                   </tfoot>
 

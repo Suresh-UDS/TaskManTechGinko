@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>Angular.js Star Rating Directive</title>  
+  
+  
+  <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css'>
+<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css'>
+
+      <style>
+      /* NOTE: The styles were added inline because Prefixfree needs access to your styles and they must be inlined if they are on local disk! */
+      .rating {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+.rating li {
+  padding: 1px;
+  color: #ddd;
+  font-size: 20px;
+  text-shadow: .05em .05em #aaa;
+  list-style-type: none;
+  display: inline-block;
+  cursor: pointer;
+}
+.rating li.filled {
+  color: #fd0;
+}
+.rating.readonly li.filled {
+  color: #666;
+}
+
+.average-rating-container {
+  position: relative;
+  height: 31px;
+  width: 103px;
+  overflow: hidden;
+}
+.average-rating-container .background,
+.average-rating-container .foreground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+
+</head>
+
+<body>
+
+  <div ng-app="app" ng-controller="RatingCtrl" class="container">
+  <h1>Angular Star Rating Directive</h1>
+  Average Rating: {{ averageRating }}
+  <div class="average">
+    <average-star-rating ng-model="averageRating" max="5"><average-star-rating>    
+  </div>
+  User 1 rating <star-rating ng-model="user1" ></star-rating><br/>
+  User 2 rating <star-rating ng-model="user2" ></star-rating><br/>
+  User 3 rating <star-rating ng-model="user3" ></star-rating><br/>
+
+  <div><strong>Rating 1:</strong> {{user1.rating}}</div>
+  <div><strong>Rating 2:</strong> {{user2.rating}}</div>
+  <div><strong>Rating 2:</strong> {{user3.rating}}</div>
+</div>
+  <script src='http://ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular.min.js'></script>
+
+  
+
+    <script  src="js/index.js"></script>
+
+
+
+
+</body>
+
+</html>

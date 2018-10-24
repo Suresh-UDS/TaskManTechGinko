@@ -4,16 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
-import com.ts.app.domain.*;
-import com.ts.app.service.util.AmazonS3Utils;
-import com.ts.app.service.util.FileUploadHelper;
-import com.ts.app.service.util.QRCodeUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -22,11 +21,26 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeLocation;
+import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.Feedback;
+import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.Location;
+import com.ts.app.domain.Project;
+import com.ts.app.domain.Site;
+import com.ts.app.domain.User;
+import com.ts.app.domain.UserRoleEnum;
 import com.ts.app.repository.LocationRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.AmazonS3Utils;
+import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.service.util.QRCodeUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmployeeLocationDTO;
 import com.ts.app.web.rest.dto.ImportResult;
@@ -66,6 +80,9 @@ public class LocationService extends AbstractService {
 	
 	@Inject
 	private AmazonS3Utils s3ServiceUtils;
+	
+	@Inject
+	private UserRepository userRepository;
 
 	public LocationDTO saveLocation(LocationDTO locationDto) {
 
@@ -152,6 +169,42 @@ public class LocationService extends AbstractService {
 	public SearchResult<LocationDTO>  findBySearchCrieria(SearchCriteria searchCriteria) {
 		SearchResult<LocationDTO> result = new SearchResult<LocationDTO>();
 		if(searchCriteria != null) {
+			log.debug("findBYSearchCriteria search criteria -"+ (searchCriteria.getJobStatus() != null && searchCriteria.getJobStatus().equals(JobStatus.OVERDUE)));
+
+			User user = userRepository.findOne(searchCriteria.getUserId());
+			Employee employee = user.getEmployee();
+
+			//log.debug(""+employee.getEmpId());
+
+			Set<Long> subEmpIds = new TreeSet<Long>();
+			if(employee != null && !user.isAdmin()) {
+				searchCriteria.setDesignation(employee.getDesignation());
+				Hibernate.initialize(employee.getSubOrdinates());
+				/*
+				Set<Employee> subs = employee.getSubOrdinates();
+				log.debug("List of subordinates -"+ subs);
+				if(CollectionUtils.isNotEmpty(subs)){
+					subEmpIds = new ArrayList<Long>();
+				}
+				for(Employee sub : subs) {
+					subEmpIds.add(sub.getId());
+				}
+				*/
+				int levelCnt = 1;
+				findAllSubordinates(employee, subEmpIds, levelCnt);
+	        		List<Long> subEmpList = new ArrayList<Long>();
+	        		subEmpList.addAll(subEmpIds);
+				
+				log.debug("List of subordinate ids -"+ subEmpIds);
+				if(CollectionUtils.isEmpty(subEmpList)) {
+					subEmpList.add(employee.getId());
+				}
+				searchCriteria.setSubordinateIds(subEmpList);
+			}else if(user.isAdmin()){
+				searchCriteria.setAdmin(true);
+			}
+			log.debug("SearchCriteria ="+ searchCriteria);
+		if(searchCriteria != null) {
 
 		    //----
             Pageable pageRequest = null;
@@ -180,11 +233,11 @@ public class LocationService extends AbstractService {
 			List<LocationDTO> transitems = null;
 			if(!searchCriteria.isFindAll()) {
 				if(StringUtils.isNotEmpty(searchCriteria.getZone())) {
-					page = locationRepository.findByZone(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), pageRequest);
+					page = locationRepository.findByZone(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), pageRequest);
 				}else if(StringUtils.isNotEmpty(searchCriteria.getFloor())) {
-					page = locationRepository.findByFloor(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), pageRequest);
+					page = locationRepository.findByFloor(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), pageRequest);
 				}else if(StringUtils.isNotEmpty(searchCriteria.getBlock())) {
-					page = locationRepository.findByBlock(searchCriteria.getSiteId(), searchCriteria.getBlock(), pageRequest);
+					page = locationRepository.findByBlock(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getBlock(), pageRequest);
 				}else if(searchCriteria.getSiteId() > 0) {
 					if(searchCriteria.getEmployeeId() > 0) {
 						List<EmployeeLocation> empLocs  = locationRepository.findBySiteAndEmployee(searchCriteria.getSiteId(), searchCriteria.getEmployeeId());
@@ -209,7 +262,16 @@ public class LocationService extends AbstractService {
 					page = locationRepository.findByProject(searchCriteria.getProjectId(), pageRequest);
 				}
 			}else {
-				page = locationRepository.findAll(pageRequest);
+				if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
+					page = locationRepository.findAll(pageRequest);
+				}else {
+					List<Long> siteIds = new ArrayList<Long>();
+	            		List<EmployeeProjectSite> sites = employee.getProjectSites();
+	            		for(EmployeeProjectSite site : sites) {
+	            			siteIds.add(site.getSite().getId());
+	            		}
+	            		page = locationRepository.findBySites(siteIds, pageRequest);
+				}
 			}
 			if(page != null) {
 				transitems = mapperUtil.toModelList(page.getContent(), LocationDTO.class);
@@ -218,6 +280,7 @@ public class LocationService extends AbstractService {
 				}
 			}
 		}
+	}
 		return result;
 	}
 
@@ -267,9 +330,8 @@ public class LocationService extends AbstractService {
 //        String qrCodeBase64 = null;
         Map<String, Object> qrCodeObject = new HashMap<>();
         if (loc != null) {
-            String codeName = String.valueOf(location);
-            codeName = siteId+"_"+codeName;
-            qrCodeImage = QRCodeUtil.generateQRCode(codeName);
+        		String codeName = siteId+"_"+loc.getBlock()+"_"+loc.getFloor()+"_"+loc.getZone();
+        		qrCodeImage = QRCodeUtil.generateQRCode(codeName);
             String qrCodePath = env.getProperty("AWS.s3-locationqr-path");
 //            String imageFileName = null;
             if (org.apache.commons.lang3.StringUtils.isNotEmpty(qrCodePath)) {

@@ -87,6 +87,12 @@ public class AttendanceResource {
 
     }
 
+    @RequestMapping(value = "/attendance/{id}/addRemarks", method = RequestMethod.POST)
+    public AttendanceDTO addRemarks(@PathVariable("id") long attendanceId,@RequestBody String remarks) {
+
+	    return attendanceService.addRemarks(attendanceId,remarks);
+    }
+
     @RequestMapping(value = "/attendance/image/upload", method = RequestMethod.POST)
     public ResponseEntity<?> upload(@RequestParam("employeeEmpId") String employeeEmpId, @RequestParam("employeeId") long employeeId, @RequestParam("attendanceId") long attendanceId, @RequestParam("action") String action, @RequestParam("photoOutFile") MultipartFile file) {
        log.debug("Request Params for attendance"+employeeId+" "+ attendanceId+" "+action+ " "+employeeEmpId);
@@ -246,5 +252,6 @@ public class AttendanceResource {
 		}
 		return new ResponseEntity<>(result, HttpStatus.CREATED);
 	}
+
 
 }

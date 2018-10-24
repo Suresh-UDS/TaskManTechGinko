@@ -12,7 +12,7 @@
                             <div class="panel-body">
                                <!--  ng-show="!success" -->
 							<form  name="form" role="form" novalidate
-										ng-submit="saveParameterConfig()"
+										ng-submit="conform('save')"
 										onClick="" class="form-horizontal">
 
                                 <div class="row" >
@@ -23,10 +23,10 @@
                                                 <div class="col-md-10 pad-r-0px">
                                                     <label class="control-label">Asset Type<span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control" ng-model="selectedAssetType" ng-options="assetype as assetype.name for assetype in assetTypes track by assetype.name" required>
+                                                    <select class="form-control" name="selectedAssetType" ng-model="selectedAssetType" ng-options="assetype as assetype.name for assetype in assetTypes track by assetype.name" required>
                                                         <option value="">Select Asset Type ..</option>
                                                     </select>
-                                                    <div ng-show="form.$submitted || form.selectedAssetType.$touched">
+                                                    <div ng-show="form.$submitted  || form.selectedAssetType.$touched">
                                                         <div ng-show="form.selectedAssetType.$dirty || form.selectedAssetType.$invalid">
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.selectedAssetType.$error.required">
@@ -175,16 +175,26 @@
                                     </div>
 
                                     <div class="col-md-6 txt-align-rgt" ng-switch="isEdit">
-                                        <button class="btn btn-success" type="submit" ng-switch-when="false"
-                                                id="form-button-add"  ng-disabled="form.$invalid || btnDisabled">
-                                            <span class="btn-label"><i class="material-icons">add</i></span> Add
+                                        <!--<button class="btn btn-success" type="submit" ng-switch-when="false"-->
+                                                <!--id="form-button-add"  ng-disabled="form.$invalid || btnDisabled">-->
+                                            <!--<span class="btn-label"><i class="material-icons">add</i></span> Add-->
+                                        <!--</button>-->
+                                        <button class="btn btn-success ld ld-over-inverse" ng-switch-when="false" ng-class="{'running':saveLoad}"
+                                                type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisabled">
+                                            <span class="btn-label"><i class="material-icons">check</i></span> Save
+                                            <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                         </button>
-                                        <button class="btn btn-success" type="submit" ng-switch-when="true"
-                                                id="form-button-add"  ng-disabled="form.$invalid || btnDisabled">
-                                            <span class="btn-label"><i class="material-icons">save</i></span> Update
+                                        <!--<button class="btn btn-success" type="submit" ng-switch-when="true"-->
+                                                <!--id="form-button-add"  ng-disabled="form.$invalid || btnDisabled">-->
+                                            <!--<span class="btn-label"><i class="material-icons">save</i></span> Update-->
+                                        <!--</button>-->
+                                        <button class="btn btn-success ld ld-over-inverse" ng-switch-when="true" ng-class="{'running':saveLoad}"
+                                                type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisabled">
+                                            <span class="btn-label"><i class="material-icons">check</i></span> Update
+                                            <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                         </button>
                                         <button class="btn btn-danger" type="button"
-                                                ng-click="cancel();" id="cancel-button">
+                                                ng-disabled="btnDisabled"  ng-click="conform('cancel')" id="cancel-button">
                                             <i class="material-icons">close</i> Cancel
                                         </button>
                                     </div>
@@ -232,8 +242,8 @@
                                                 </div>
                                              </td>
 			                                 <td class="text-right">
-                                                <a  ng-click="getParameterConfigDetails(parameterConfig.id ,'edit')"  has-permission="Config:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-			                                 	<a  has-permission="Config:Delete" class="btn btn-simple btn-danger" ng-click="deleteConfirm(parameterConfig.id)" onClick="$('#deleteModal').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container" ></div></a>
+                                                <a  ng-click="getParameterConfigDetails(parameterConfig.id ,'edit')"  has-permission="Config:Edit"  title="Edit"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+			                                 	<a  has-permission="Config:Delete" class="btn btn-simple btn-danger" ng-click="deleteConfirm(parameterConfig.id)" title="Delete" onClick="$('#deleteModal').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container" ></div></a>
 			                                 </td>
 
 										</tr>
@@ -263,7 +273,7 @@
                     </div>
 
                 </div>
-                
+
                 <div class="card margin-TB-5 txt-align-center" ng-show="noData">
 
                     <div class="card-content">

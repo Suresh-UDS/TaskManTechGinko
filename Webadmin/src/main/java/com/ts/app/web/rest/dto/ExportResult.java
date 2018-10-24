@@ -16,6 +16,9 @@ public class ExportResult {
 	
 	private String webContentLink;
 	
+	private long siteId;
+	
+	private long projectId;
 	
 
 	public String getMsg() {
@@ -72,6 +75,22 @@ public class ExportResult {
 
 	public void setWebContentLink(String webContentLink) {
 		this.webContentLink = webContentLink;
+	}
+
+	public long getSiteId() {
+		return siteId;
+	}
+
+	public void setSiteId(long siteId) {
+		this.siteId = siteId;
+	}
+
+	public long getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(long projectId) {
+		this.projectId = projectId;
 	}
 	
 	

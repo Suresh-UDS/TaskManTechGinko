@@ -8,6 +8,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
      'angular-star-rating-new','paginations','excelGrid'])
 
     .run(function ($rootScope, $location, $window, $http, $state,  Auth, Principal, ENV, VERSION,$timeout) {
+
         $rootScope.isAuthenticated = Principal.isAuthenticated;
         $rootScope.loginView = true;
         $rootScope.ENV = ENV;
@@ -15,7 +16,9 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
         $rootScope.stateValue ="";
         $rootScope.resLoader=false;
         $rootScope.searchCriterias={};
-        /** @reatin - retaining scope value.**/ 
+
+        /** @reatin - retaining scope value.**/
+
         $rootScope.retain=0;
 
        /* Principal.identity().then(function(response)
@@ -23,11 +26,13 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
                  console.log('current user' +JSON.stringify(response.login));
                  $rootScope.accountName = response.login;
              });*/
+
         $rootScope.logout = function () {
             Auth.logout();
             $state.go('login');
             $rootScope.resLoader=false;
         };
+
         $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
             $rootScope.toState = toState;
             $rootScope.toStateParams = toStateParams;
@@ -39,11 +44,13 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
             }
 
         });
+
         console.log('current state - ' +JSON.stringify($state));
         $rootScope.isLoggedIn = true;
 
         $rootScope.stateDetails = $state;
         $rootScope.pageTile;
+
         $rootScope.logoutUser = function () {
             Auth.logout();
             $rootScope.isLoggedIn = false;
@@ -86,10 +93,10 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
 
         });
 
-        $rootScope.back = function() {
+        $rootScope.retainUrl = function() {
             // If previous state is 'activate' or do not exist go to 'home'
             if ($rootScope.previousStateName === 'activate' || $state.get($rootScope.previousStateName) === null) {
-
+                $rootScope.inits();
                 if($rootScope.stateValue != ""){
                     $rootScope.stateValue;
                     $(".content").removeClass("remove-mr");
@@ -106,6 +113,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
                 $state.go($rootScope.previousStateName, $rootScope.previousStateParams);
             }
         };
+
         $rootScope.noscroll = false;
 
         // Page Loader Function
@@ -161,13 +169,15 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
 
         //Perfect scroll bar INIT
 
-        // $rootScope.initScrollBar = function(){
-        //
-        //     console.log("-- Calling scrollbar -- ");
-        //
-        //     $('.sidebar .sidebar-wrapper').perfectScrollbar();
-        // }
-        //
+         $rootScope.initScrollBar = function(){
+
+            console.log("-- Calling scrollbar -- ");
+
+             $('.sidebar .sidebar-wrapper').perfectScrollbar();
+         }
+
+
+
         // $rootScope.initScrollBar();
 
     })
@@ -224,6 +234,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
         $httpProvider.defaults.cache = false;
 
     })
+
     .config(['$urlMatcherFactoryProvider', function($urlMatcherFactory) {
         $urlMatcherFactory.type('boolean', {
             name : 'boolean',
@@ -234,6 +245,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
             pattern: /bool|true|0|1/
         });
     }])
+
     .filter('trusted', ['$sce', function ($sce) {
 	    return function(url) {
 	        return $sce.trustAsResourceUrl(url);

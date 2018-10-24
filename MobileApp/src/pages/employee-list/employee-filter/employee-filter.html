@@ -9,7 +9,7 @@
   <ion-navbar>
     <ion-title>employee-filter</ion-title>
     <ion-buttons end>
-      <button ion-button (click)="dismiss()">
+      <button ion-button (click)="  dismiss()()">
         <ion-icon name="md-close"></ion-icon>
       </button>
     </ion-buttons>
@@ -41,7 +41,7 @@
                     <div *ngIf="siteList?.length==0" class="padding-top15">
                       <h4 text-center class="clr-blk">No Data Found</h4>
                     </div>
-                    <button class="siteBtn scroll-item" ion-button round  *ngFor="let s of siteList;let i of index" (click)="highLightSite(i,s)" [color]="i==activeSite ? 'primary' : 'light'">
+                    <button  class="siteBtn scroll-item" ion-button round  *ngFor="let s of siteList;let i of index" (click)="highLightSite(i,s)" [color]="i==activeSite ? 'primary' : 'light'">
                       <p class="siteName">{{s.name}}</p>
                     </button>
                   </ion-scroll>
@@ -64,34 +64,34 @@
               <!--</div>-->
             </div>
           </div>
-          <ion-item>
-            <ion-label class="clr-blk">Employee</ion-label>
-            <ion-select [(ngModel)]="employ" [disabled]="empSelect" class="max-w100 padding-left0" interface="popover" >
-              <ion-option  *ngFor="let emp of employee" [value]="emp.id" >{{emp.fullName}} - {{emp.designation}}</ion-option>
-            </ion-select>
-          </ion-item>
+          <!--<ion-item>-->
+            <!--<ion-label class="clr-blk">Employee</ion-label>-->
+            <!--<ion-select [(ngModel)]="employ" [disabled]="empSelect" class="max-w100 padding-left0" interface="popover" >-->
+              <!--<ion-option  *ngFor="let emp of employee" [value]="emp.id" >{{emp.fullName}} - {{emp.designation}}</ion-option>-->
+            <!--</ion-select>-->
+          <!--</ion-item>-->
         </div>
 
-        <ion-row no-margin class no-padding>
-          <ion-col col-5 class="ver-center  margin-right15" (click)="selectFromDate()">
-            <ion-col col-2  class="ver-center padding-bottom1 primary-border-bottom">
-              <ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 clr-orange"></ion-icon>
-            </ion-col>
-            <ion-col col-10 class="ver-center padding-top-bottom0 primary-border-bottom">
-              <ion-label *ngIf="!fromDate" class="bg-grey" no-margin="">From date</ion-label>
-              <p padding-left no-margin="">{{ fromDate | date:'dd/MM/yyyy' }}</p>
-            </ion-col>
-          </ion-col>
-          <ion-col col-5 (click)="selectToDate()" class="ver-center">
-            <ion-col col-2 class="ver-center padding-bottom1 primary-border-bottom">
-              <ion-icon ios="ios-calendar" md="md-calendar" class="fnt-24 clr-orange"></ion-icon>
-            </ion-col>
-            <ion-col col-10 class="ver-center padding-top-bottom0 primary-border-bottom">
-              <ion-label *ngIf="!toDate" class="bg-grey" no-margin="">To date</ion-label>
-              <p padding-left no-margin="">{{ toDate | date:'dd/MM/yyyy' }}</p>
-            </ion-col>
-          </ion-col>
-        </ion-row>
+        <!--<ion-row no-margin class no-padding>-->
+          <!--<ion-col col-5 class="ver-center  margin-right15" (click)="selectFromDate()">-->
+            <!--<ion-col col-2  class="ver-center padding-bottom1 primary-border-bottom">-->
+              <!--<ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 clr-orange"></ion-icon>-->
+            <!--</ion-col>-->
+            <!--<ion-col col-10 class="ver-center padding-top-bottom0 primary-border-bottom">-->
+              <!--<ion-label *ngIf="!fromDate" class="bg-grey" no-margin="">From date</ion-label>-->
+              <!--<p padding-left no-margin="">{{ fromDate | date:'dd/MM/yyyy' }}</p>-->
+            <!--</ion-col>-->
+          <!--</ion-col>-->
+          <!--<ion-col col-5 (click)="selectToDate()" class="ver-center">-->
+            <!--<ion-col col-2 class="ver-center padding-bottom1 primary-border-bottom">-->
+              <!--<ion-icon ios="ios-calendar" md="md-calendar" class="fnt-24 clr-orange"></ion-icon>-->
+            <!--</ion-col>-->
+            <!--<ion-col col-10 class="ver-center padding-top-bottom0 primary-border-bottom">-->
+              <!--<ion-label *ngIf="!toDate" class="bg-grey" no-margin="">To date</ion-label>-->
+              <!--<p padding-left no-margin="">{{ toDate | date:'dd/MM/yyyy' }}</p>-->
+            <!--</ion-col>-->
+          <!--</ion-col>-->
+        <!--</ion-row>-->
 
 
 

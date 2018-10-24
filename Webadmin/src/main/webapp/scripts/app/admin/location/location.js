@@ -40,7 +40,7 @@ angular.module('timeSheetApp')
                 }
             }).state('location-qr-print', {
             parent: 'manage',
-            url: '/location-qr-print:location',
+            url: '/location-qr-print/:location',
             controller: 'LocationController',
             data: {
                 authorities: [],

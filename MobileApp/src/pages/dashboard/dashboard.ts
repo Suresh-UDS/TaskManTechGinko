@@ -143,23 +143,8 @@ export class DashboardPage {
     //     }
     // )
 
-    this.siteService.searchSite().subscribe(
-        response=>{
-          console.log('ionViewDidLoad SitePage:');
-          console.log(response.json()
-          );
-          this.sites=response.json();
-          this.spinner=false;
-          // this.empSpinner=true;
-          this.component.closeLoader();
-        },
-        error=>{
-          console.log('ionViewDidLoad SitePage:'+error);
-            this.component.closeLoader();
-            // this.navCtrl.push(LoginPage);
-
-        }
-    );
+    this.searchSites();
+      
     this.searchCriteria={
         checkInDateTimeFrom:new Date()
     }
@@ -229,6 +214,50 @@ export class DashboardPage {
               this.component.closeLoader();
           }
       )
+  }
+  
+  searchSite(){
+      this.siteService.searchSite().subscribe(
+          response=>{
+              console.log('ionViewDidLoad SitePage:');
+              console.log(response);
+              this.sites=response.json();
+              this.spinner=false;
+              // this.empSpinner=true;
+              this.component.closeLoader();
+          },
+          error=>{
+              console.log('ionViewDidLoad SitePage:'+error);
+              this.component.closeLoader();
+              // this.navCtrl.push(LoginPage);
+
+          }
+      );
+
+
+  }
+
+  searchSites(){
+      var searchCriteria = {
+          findAll:true,
+          currPage:1,
+          sort:10,
+          sortByAsc:true,
+          report:true
+      }
+
+      this.siteService.searchSites(searchCriteria).subscribe(
+          response=>{
+              this.sites=response.transactions;
+              this.spinner=false;
+              this.component.closeLoader();
+          },
+          error=> {
+              console.log('ionViewDidLoad SitePage:' + error);
+              this.component.closeLoader();
+
+          }
+          );
   }
 
 
@@ -301,12 +330,15 @@ export class DashboardPage {
         };
         this.searchJobs(this.searchCriteria);
         this.empSpinner=true;
-        this.siteService.searchSiteEmployee(id).subscribe(
-            response=> {
-                console.log(response.json());
-                if(response.json().length !==0)
+        var searchCriteria = {
+
+            siteId:id,
+            list:true
+        };
+        this.attendanceService.searchEmpAttendances(searchCriteria).subscribe(response=>{
+                if(response.transactions && response.transactions.length !==0)
                 {
-                    this.employee=response.json();
+                    this.employee=response.transactions;
                     this.empSpinner=false;
                     this.empSelect=false;
                     this.selectSite=true;
@@ -528,7 +560,7 @@ export class DashboardPage {
                                 })
                         }
                         else {
-                            this.attendanceService.markAttendanceCheckOut(data[i].siteId, data[i].employeeId, data[i].latitudeIn, data[i].longitudeIn, data[i].checkOutImage, data[i].attendanceId).subscribe(
+                            this.attendanceService.markAttendanceCheckOut(data[i].siteId, data[i].employeeEmpId, data[i].latitudeIn, data[i].longitudeIn, data[i].checkOutImage, data[i].attendanceId).subscribe(
                                 response => {
                                     resolve("ssss")
                                     console.log("Offline attendance data synced to server");

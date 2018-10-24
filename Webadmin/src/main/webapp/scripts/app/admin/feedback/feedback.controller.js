@@ -9,10 +9,13 @@ angular.module('timeSheetApp')
         $scope.averageRating ='0';
         $scope.feedbackCount ='0';
         $scope.readOnly = true;
+        $scope.downloaded = false;
         $scope.colors = ['#45b7cd', '#ff6384', '#ff8e72'];
         $scope.series = ['Series A'];
         $scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+        $scope.selectedFromDateSer = new Date();
+        $scope.selectedToDateSer = new Date();
         $scope.pager = {};
 
 
@@ -57,9 +60,9 @@ angular.module('timeSheetApp')
 
         $scope.searchCriteria = {};
 
-        $scope.selectedProject = {};
+        $scope.selectedProject = null;
 
-        $scope.selectedSite = {};
+        $scope.selectedSite = null;
 
         $scope.selectedBlock = null;
 
@@ -75,6 +78,10 @@ angular.module('timeSheetApp')
 
         $scope.now = new Date()
 
+        $rootScope.exportStatusObj = {};
+        $scope.checkStatus = 0;
+
+
         $scope.initCalender = function(){
 
             demo.initFormExtendedDatetimepickers();
@@ -82,16 +89,13 @@ angular.module('timeSheetApp')
         };
 
         $('#dateFilterFrom').on('dp.change', function(e){
-            console.log(e.date);
-            console.log(e.date._d);
-            $scope.selectedDateFrom=e.date._d;
+            $scope.selectedFromDateSer =new Date(e.date._d);
+            $scope.selectedFromDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
 
         });
         $('#dateFilterTo').on('dp.change', function(e){
-            console.log(e.date);
-
-            console.log(e.date._d);
-            $scope.selectedDateTo=e.date._d;
+            $scope.selectedToDateSer =new Date(e.date._d);
+            $scope.selectedToDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
 
         });
 
@@ -101,22 +105,98 @@ angular.module('timeSheetApp')
             $scope.loadProjects();
         };
 
+
         $scope.loadProjects = function () {
                 ProjectComponent.findAll().then(function (data) {
                 $scope.projects = data;
+                    //
+                    for(var i=0;i<$scope.projects.length;i++)
+                    {
+                        $scope.uiClient[i] = $scope.projects[i].name;
+                    }
+                    $scope.clientFilterDisable = false;
+
             });
         };
 
         $scope.loadSites = function () {
-                ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
+        if($scope.selectedProject){
+               ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
                     $scope.selectedSite = null;
-                $scope.sites = data;
-            });
+                    $scope.sites = data;
+                        // //
+                        for(var i=0;i<$scope.sites.length;i++)
+                        {
+                            $scope.uiSite[i] = $scope.sites[i].name;
+                        }
+                        $scope.siteSpin = false;
+                        $scope.siteFilterDisable = false;
+                        //
+
+               });
+            }
         };
 
-        $scope.searchLocations = function () {
 
-                $scope.searchCriteria.siteId = $scope.selectedSite.id;
+        //Filter
+        // Load Clients for selectbox //
+        $scope.clientFilterDisable = true;
+        $scope.uiClient = [];
+        $scope.getClient = function (search) {
+            var newSupes = $scope.uiClient.slice();
+            if (search && newSupes.indexOf(search) === -1) {
+                newSupes.unshift(search);
+            }
+            return newSupes;
+        }
+
+        //Load Sites for selectbox //
+        $scope.siteFilterDisable = true;
+        $scope.uiSite = [];
+        $scope.getSite = function (search) {
+
+            var newSupes = $scope.uiSite.slice();
+            if (search && newSupes.indexOf(search) === -1) {
+                newSupes.unshift(search);
+            }
+            return newSupes;
+        }
+
+        //
+        $scope.loadSearchProject = function (searchProject) {
+            $scope.clearField = false;
+            $scope.hideSite = false;
+            $scope.siteSpin = true;
+            $scope.uiSite.splice(0,$scope.uiSite.length);
+            if(searchProject){
+              $scope.selectedProject = $scope.projects[$scope.uiClient.indexOf(searchProject)]
+            }
+
+        }
+        $scope.loadSearchSite = function (searchSite) {
+            if(searchSite){
+              $scope.hideSite = true;
+              $scope.selectedSite = $scope.sites[$scope.uiSite.indexOf(searchSite)]
+              $scope.show = false;
+            }
+
+        }
+
+        //
+
+        $scope.searchLocations = function () {
+            $scope.searchCriteria.block = null;
+            $scope.searchCriteria.floor = null;
+            $scope.searchCriteria.zone = null;
+                if($scope.selectedSite){
+                     $scope.searchCriteria.siteId = $scope.selectedSite.id;
+                     $scope.searchCriteria.findAll = false;
+                }else{
+                    $scope.searchCriteria.siteId = 0;
+                    $scope.searchCriteria.findAll = false;
+                }
+
+
                 LocationComponent.search($scope.searchCriteria).then(function (data) {
                     $scope.filteredLocations = data.transactions;
                     console.log('searchLocations- ', $scope.filteredLocations);
@@ -126,25 +206,39 @@ angular.module('timeSheetApp')
 
 
         $scope.loadBlocks = function () {
-                console.log('selected project -' + $scope.selectedProject.id + ', site -' + $scope.selectedSite.id)
-                LocationComponent.findBlocks($scope.selectedProject.id,$scope.selectedSite.id).then(function (data) {
+                var projectId = $scope.selectedProject.id ? $scope.selectedProject.id  : 0;
+                var siteId = $scope.selectedSite.id ? $scope.selectedSite.id  : 0;
+                console.log('selected project -' + projectId + ', site -' + siteId);
+                LocationComponent.findBlocks(projectId,siteId).then(function (data) {
                     $scope.selectedBlock = null;
                 $scope.blocks = data;
+
             });
         };
 
         $scope.loadFloors = function () {
-                LocationComponent.findFloors($scope.selectedProject.id,$scope.selectedSite.id,$scope.selectedBlock).then(function (data) {
+                   var projectId = $scope.selectedProject.id ? $scope.selectedProject.id  : 0;
+                   var siteId = $scope.selectedSite.id ? $scope.selectedSite.id  : 0;
+                   var block = $scope.selectedBlock ? $scope.selectedBlock  : null;
+                LocationComponent.findFloors(projectId,siteId,block).then(function (data) {
                     $scope.selectedFloor = null;
                 $scope.floors = data;
+
+
             });
         };
 
         $scope.loadZones = function () {
-                console.log('load zones - ' + $scope.selectedProject.id +',' +$scope.selectedSite.id +',' +$scope.selectedBlock +','+$scope.selectedFloor);
-                LocationComponent.findZones($scope.selectedProject.id,$scope.selectedSite.id,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
+                           var projectId = $scope.selectedProject.id ? $scope.selectedProject.id  : 0;
+                           var siteId = $scope.selectedSite.id ? $scope.selectedSite.id  : 0;
+                           var block = $scope.selectedBlock ? $scope.selectedBlock  : null;
+                           var floor = $scope.selectedFloor ? $scope.selectedFloor  : null;
+                console.log('load zones - ' + projectId +',' + siteId +',' + block +','+ floor);
+                LocationComponent.findZones(projectId,siteId,block,floor).then(function (data) {
                     $scope.selectedZone = null;
                 $scope.zones = data;
+
+
             });
         };
 
@@ -168,7 +262,7 @@ angular.module('timeSheetApp')
 
                 //document.getElementById('searchForm').submit();
 
-                $scope.search();
+                //$scope.search();
         };
 
         $scope.feedbackListLoader = true;
@@ -183,36 +277,25 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria = searchCriteria;
            // }
 
+           $scope.searchCriteria.isReport = false;
+
             $scope.searchCriteria.currPage = currPageVal;
-             $scope.searchCriteria.findAll = false;
             console.log('Selected feedback' + $scope.selectedLocation);
 
-            if($scope.selectedDateFrom){
-                $scope.searchCriteria.checkInDateTimeFrom = $scope.selectedDateFrom;
+            if($scope.selectedFromDateSer){
+                $scope.searchCriteria.checkInDateTimeFrom = $scope.selectedFromDateSer;
                 console.log("From date found");
-                console.log($scope.searchCriteria.checkInDateTimeFrom)
-
-
-            }else{
-                $scope.searchCriteria.checkInDateTimeFrom = new Date();
-                console.log("From date not found")
-                console.log($scope.searchCriteria.checkInDateTimeFrom)
-
+                console.log($scope.searchCriteria.checkInDateTimeFrom);
             }
 
-            if($scope.selectedDateTo){
-                $scope.searchCriteria.checkInDateTimeTo = $scope.selectedDateTo;
-                console.log("To date found")
-                console.log($scope.searchCriteria.checkInDateTimeTo)
-
-            }else{
-                $scope.searchCriteria.checkInDateTimeTo= new Date();
-                console.log("To date not found")
-                console.log($scope.searchCriteria.checkInDateTimeTo)
+            if($scope.selectedToDateSer){
+                $scope.searchCriteria.checkInDateTimeTo = $scope.selectedToDateSer;
+                console.log("To date found");
+                console.log($scope.searchCriteria.checkInDateTimeTo);
             }
 
 
-            if(!$scope.selectedProject) {
+            if(!$scope.selectedProject && !$scope.selectedSite) {
                 /*if($rootScope.searchCriteriaFeedback) {
                     $scope.searchCriteria = $rootScope.searchCriteriaFeedback;
                 }else {*/
@@ -220,9 +303,12 @@ angular.module('timeSheetApp')
                 /*}*/
 
             }else {
+                $scope.searchCriteria.findAll = false;
+
                 if($scope.selectedProject.id) {
 
                     $scope.searchCriteria.projectId = $scope.selectedProject.id;
+                    $scope.searchCriteria.projectName = $scope.selectedProject.name;
                 }
                 else if($scope.clientId){
 
@@ -231,8 +317,9 @@ angular.module('timeSheetApp')
                 else {
                     $scope.searchCriteria.projectId = 0;
                 }
-                if($scope.selectedSite.id) {
+                if($scope.selectedSite && $scope.selectedSite.id) {
                      $scope.searchCriteria.siteId = $scope.selectedSite.id;
+                    $scope.searchCriteria.siteName = $scope.selectedSite.name;
                 }
                 else if($scope.siteId){
                      $scope.searchCriteria.siteId = $scope.siteId ;
@@ -262,7 +349,7 @@ angular.module('timeSheetApp')
             }
 
 
-              $scope.feedbackReport = {};
+              $scope.feedbackReport = "";
               $scope.feedbackListLoader = false;
               $scope.feedbackListData = false;
               $rootScope.loadingStart();
@@ -271,101 +358,111 @@ angular.module('timeSheetApp')
                     $scope.feedbackReport = data;
                     $scope.feedbackListLoader = true;
                     $rootScope.loadingStop();
-                    var qLength = ($scope.feedbackReport.questionRatings).length;
-                    if(qLength > 0){
+                    if($scope.feedbackReport.questionRatings){
 
-                        $scope.feedbackListData = true;
+                        var qLength = ($scope.feedbackReport.questionRatings).length;
+                        if(qLength > 0){
+
+                            $scope.feedbackListData = true;
+                        }
+                    }
+                        console.log('feedback report - ' + JSON.stringify($scope.feedbackReport));
+                        $scope.averageRating = $scope.feedbackReport.overallRating;
+                        $scope.feedbackCount = $scope.feedbackReport.feedbackCount;
+                        console.log('feedback report - ' + JSON.stringify($scope.averageRating));
+
+
+                    $scope.hide = true;
+                    //console.log('weeklyZone data - ' + $scope.feedbackReport.weeklyZone.length);
+                    $scope.labels = [];
+                    $scope.data = [];
+                    $scope.label = [];
+                    $scope.datas = [];
+
+
+                    if($scope.feedbackReport.weeklyZone && $scope.feedbackReport.weeklyZone.length > 0) {
+
+                        // Line chart data
+
+                        var lineZoneDateWiseRating = $scope.feedbackReport.weeklyZone;
+                        //var chartZoneDateWiseDataArr = [];
+                        for(var i =0;i<lineZoneDateWiseRating.length; i++) {
+                                $scope.labels.push(lineZoneDateWiseRating[i].date);
+                                $scope.data.push(lineZoneDateWiseRating[i].rating);
+                        }
+
+                        //$scope.data.push(chartZoneDateWiseDataArr);
+                        //$scope.data = chartZoneDateWiseDataArr;
+
+                        console.log('Line chart labels - ' + JSON.stringify($scope.labels));
+                        console.log('Line chart data - ' + JSON.stringify($scope.data));
+
+                         // Doughnut chart data
+
+                        var doughnutZoneDateWiseRating = $scope.feedbackReport.weeklyZone;
+                        for(var i =0;i<doughnutZoneDateWiseRating.length; i++) {
+                                $scope.label.push(doughnutZoneDateWiseRating[i].date);
+                                $scope.datas.push(doughnutZoneDateWiseRating[i].rating);
+                        }
+
+                        $scope.chartOptions = { legend: { display: true } };
+
+
+
+                        console.log('Doughnut chart labels - ' + JSON.stringify($scope.label));
+                        console.log('Doughnut chart data - ' + JSON.stringify($scope.datas));
+
+
+                    }else {
+
+                        // Line chart data
+
+                        var lineZoneWiseRating = $scope.feedbackReport.weeklySite;
+                        //var chartZoneWiseDataArr = [];
+                        if(lineZoneWiseRating){
+                            for(var i =0;i<lineZoneWiseRating.length; i++) {
+                                    $scope.labels.push(lineZoneWiseRating[i].zoneName);
+                                    $scope.data.push(lineZoneWiseRating[i].rating);
+                            }
+                        }
+
+
+                        //$scope.data.push(chartZoneWiseDataArr);
+                        //$scope.data = chartZoneWiseDataArr;
+
+                        console.log('Line chart labels - ' + JSON.stringify($scope.labels));
+                        console.log('Line chart data - ' + JSON.stringify($scope.data));
+
+                         // Doughnut chart data
+
+                        var doughnutZoneWiseRating = $scope.feedbackReport.weeklySite;
+                        //var doughnutZoneWiseDataArr = [];
+                        if(doughnutZoneWiseRating){
+                          for(var i =0;i<doughnutZoneWiseRating.length; i++) {
+                                  $scope.label.push(doughnutZoneWiseRating[i].zoneName);
+                                  $scope.datas.push(doughnutZoneWiseRating[i].rating);
+                          }
+                        }
+
+
+                        //$scope.datas.push(zoneDateWiseDataArr);
+
+                         $scope.chartOptions = { legend: { display: true } };
+
+                        console.log('Doughnut chart labels - ' + JSON.stringify($scope.label));
+                        console.log('Doughnut chart data - ' + JSON.stringify($scope.datas));
+
+
+
+
                     }
 
-                    console.log('feedback report - ' + JSON.stringify($scope.feedbackReport));
-                    $scope.averageRating = $scope.feedbackReport.overallRating;
-                    $scope.feedbackCount = $scope.feedbackReport.feedbackCount;
+                //}
 
-
-
-                $scope.hide = true;
-                //console.log('weeklyZone data - ' + $scope.feedbackReport.weeklyZone.length);
-                $scope.labels = [];
-                $scope.data = [];
-                $scope.label = [];
-                $scope.datas = [];
-
-
-                if($scope.feedbackReport.weeklyZone && $scope.feedbackReport.weeklyZone.length > 0) {
-
-                    // Line chart data
-
-                    var lineZoneDateWiseRating = $scope.feedbackReport.weeklyZone;
-                    //var chartZoneDateWiseDataArr = [];
-                    for(var i =0;i<lineZoneDateWiseRating.length; i++) {
-                            $scope.labels.push(lineZoneDateWiseRating[i].date);
-                            $scope.data.push(lineZoneDateWiseRating[i].rating);
-                    }
-
-                    //$scope.data.push(chartZoneDateWiseDataArr);
-                    //$scope.data = chartZoneDateWiseDataArr;
-
-                    console.log('Line chart labels - ' + JSON.stringify($scope.labels));
-                    console.log('Line chart data - ' + JSON.stringify($scope.data));
-
-                     // Doughnut chart data
-
-                    var doughnutZoneDateWiseRating = $scope.feedbackReport.weeklyZone;
-                    for(var i =0;i<doughnutZoneDateWiseRating.length; i++) {
-                            $scope.label.push(doughnutZoneDateWiseRating[i].date);
-                            $scope.datas.push(doughnutZoneDateWiseRating[i].rating);
-                    }
-
-                    $scope.chartOptions = { legend: { display: true } };
-
-
-
-                    console.log('Doughnut chart labels - ' + JSON.stringify($scope.label));
-                    console.log('Doughnut chart data - ' + JSON.stringify($scope.datas));
-
-
-                }else {
-
-                    // Line chart data
-
-                    var lineZoneWiseRating = $scope.feedbackReport.weeklySite;
-                    //var chartZoneWiseDataArr = [];
-
-                    for(var i =0;i<lineZoneWiseRating.length; i++) {
-                            $scope.labels.push(lineZoneWiseRating[i].zoneName);
-                            $scope.data.push(lineZoneWiseRating[i].rating);
-                    }
-
-                    //$scope.data.push(chartZoneWiseDataArr);
-                    //$scope.data = chartZoneWiseDataArr;
-
-                    console.log('Line chart labels - ' + JSON.stringify($scope.labels));
-                    console.log('Line chart data - ' + JSON.stringify($scope.data));
-
-                     // Doughnut chart data
-
-                    var doughnutZoneWiseRating = $scope.feedbackReport.weeklySite;
-                    //var doughnutZoneWiseDataArr = [];
-                    for(var i =0;i<doughnutZoneWiseRating.length; i++) {
-                            $scope.label.push(doughnutZoneWiseRating[i].zoneName);
-                            $scope.datas.push(doughnutZoneWiseRating[i].rating);
-                    }
-
-                    //$scope.datas.push(zoneDateWiseDataArr);
-
-                     $scope.chartOptions = { legend: { display: true } };
-
-                    console.log('Doughnut chart labels - ' + JSON.stringify($scope.label));
-                    console.log('Doughnut chart data - ' + JSON.stringify($scope.datas));
-
-
-
-
-                }
             }).catch(function(res){
                 $rootScope.loadingStop();
                 $scope.feedbackListLoader = true;
-                $scope.showNotifications('top','center','danger','Cannot Load Feedback');
+                //$scope.showNotifications('top','center','danger','Cannot Load Feedback');
             });
 
         };
@@ -399,12 +496,24 @@ angular.module('timeSheetApp')
 
 
         $scope.clearFilter = function() {
-            $scope.selectedSite = {};
-            $scope.selectedProject = {};
+            $rootScope.exportStatusObj = {};
+            $scope.downloaded = true;
+            $scope.clearField = true;
+            $scope.siteFilterDisable = true;
+            $scope.sites = null;
+            $scope.clientId = null;
+            $scope.siteId = null;
+            $scope.selectedSite = null;
+            $scope.selectedProject = null;
             $scope.searchCriteria = {};
+            $scope.localStorage = null;
+            $scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+            $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+            $scope.selectedFromDateSer = new Date();
+            $scope.selectedToDateSer = new Date();
             //$rootScope.searchCriteriaSite = null;
             $scope.averageRating = '0';
-            $scope.feedbackCount ='0';
+            $scope.feedbackCount = '0';
             $scope.selectedBlock = null;
             $scope.selectedFloor = null;
             $scope.selectedZone  = null;
@@ -416,7 +525,8 @@ angular.module('timeSheetApp')
                 currPage: 1,
                 totalPages: 0
             }
-            $scope.search();
+            $scope.searchLocations();
+            //$scope.search();
         };
 
         $scope.cancelFeedback = function () {
@@ -427,11 +537,105 @@ angular.module('timeSheetApp')
 
         //init load
         $scope.initLoad = function(){
+            console.log("***************************")
              $scope.loadPageTop();
              $scope.init();
 
 
          }
+
+
+        $scope.exportAllData = function(type){
+            $scope.downloaded = false;
+            $scope.searchCriteria.exportType = type;
+            $rootScope.exportStatusObj = {};
+            $scope.typeMsg = type;
+            $scope.downloader=true;
+            $scope.searchCriteria.isReport = true;
+            FeedbackComponent.exportAllData($scope.searchCriteria).then(function(data){
+                var result = data.results[0];
+                console.log(result);
+                console.log(result.file + ', ' + result.status + ',' + result.msg);
+                var exportAllStatus = {
+                        fileName : result.file,
+                        exportMsg : 'Exporting All...',
+                        url: result.url
+                };
+                $rootScope.exportStatusObj = exportAllStatus;
+                console.log('exportStatusObj size - ' + $rootScope.exportStatusObj.length);
+                $scope.start();
+              },function(err){
+                  console.log('error message for export all ')
+                  //console.log(err);
+                  $scope.start();
+              });
+	    };
+
+	 // store the interval promise in this variable
+	    var promise;
+
+	 // starts the interval
+	    $scope.start = function() {
+	      // stops any running interval to avoid two intervals running at the same time
+	      $scope.stop();
+
+	      // store the interval promise
+	      promise = $interval($scope.exportStatus, 5000);
+	      console.log('promise -'+promise);
+	    };
+
+	    // stops the interval
+	    $scope.stop = function() {
+	      $interval.cancel(promise);
+	    };
+
+
+
+	    $scope.exportStatus = function() {
+	            console.log('$rootScope.exportStatusObj -' , $rootScope.exportStatusObj);
+
+	            FeedbackComponent.exportStatus($rootScope.exportStatusObj.fileName).then(function(data) {
+	                    console.log('feedback export status - data -' + JSON.stringify(data));
+	                    if(data) {
+	                        $rootScope.exportStatusObj.exportStatus = data.status;
+	                        console.log('exportStatus - '+ JSON.stringify($rootScope.exportStatusObj));
+	                        $rootScope.exportStatusObj.exportMsg = data.msg;
+	                        $scope.downloader=false;
+	                        console.log('exportMsg - '+ $rootScope.exportStatusObj.exportMsg);
+	                        if($rootScope.exportStatusObj.exportStatus == 'COMPLETED'){
+	                            if($rootScope.exportStatusObj.url) {
+	                                $rootScope.exportStatusObj.exportFile = $rootScope.exportStatusObj.url;
+	                            }else {
+	                                $rootScope.exportStatusObj.exportFile = data.file;
+	                            }
+	                            console.log('exportFile - '+ $rootScope.exportStatusObj.exportFile);
+	                            $scope.stop();
+	                        }else if($rootScope.exportStatusObj.exportStatus == 'FAILED'){
+	                            $scope.stop();
+	                        }else if(!$rootScope.exportStatusObj.exportStatus){
+	                            $scope.stop();
+	                        }else {
+	                            $rootScope.exportStatusObj.exportFile = '#';
+	                        }
+	                    }
+
+	                    $scope.exportFile = ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportFile : '#');
+
+                        $scope.exportMsg = ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportMsg : '');
+
+	                });
+
+
+
+	    }
+
+
+
+
+	    $scope.clsDownload = function(){
+          $scope.downloaded = true;
+          $rootScope.exportStatusObj = {};
+	    }
 
     });
 

@@ -74,7 +74,7 @@ export class TabsPage {
 
     this.authService.getCurrentVersion('Android').subscribe(
         response=>{
-            var currentVersion = response.json()[0];
+            var currentVersion = response[0];
             console.log(currentVersion.applicationVersion);
             console.log(this.appVersionNumber);
             if(this.appVersionNumber && this.appVersionNumber != currentVersion.applicationVersion ){
@@ -116,7 +116,7 @@ export class TabsPage {
 
   createLocalDB(){
       this.siteService.searchSite().subscribe(response=>{
-          var siteList = response.json();
+          var siteList = response;
           this.callSqlLite(siteList)
       })
   }
@@ -129,11 +129,11 @@ export class TabsPage {
         })
             .then((db: SQLiteObject) => {
 
-                // db.executeSql('DROP TABLE assetList',{})
-                //
-                // db.executeSql('create table IF NOT EXISTS assetList(id INT,name VARCHAR(32))', {})
-                //     .then(() => console.log('Executed SQL'))
-                //     .catch(e => console.log(e));
+                db.executeSql('DROP TABLE assetList',[])
+
+                db.executeSql('create table IF NOT EXISTS assetList(id INT,name VARCHAR(32))', [])
+                    .then(() => console.log('Executed SQL'))
+                    .catch(e => console.log(e));
 
 
                 for (var i = 0; i < siteList.length; i++) {

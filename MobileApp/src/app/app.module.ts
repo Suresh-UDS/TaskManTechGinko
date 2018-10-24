@@ -60,7 +60,7 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { File } from '@ionic-native/file';
 import{TicketFilter} from "../pages/ticket/ticket-filter/ticket-filter";
 import{InventoryMaster} from "../pages/inventory-master/inventory-master";
-
+import {ForgotPassword} from "../pages/forgot-password/forgot-password";
 import {SQLitePorter} from "@ionic-native/sqlite-porter";
 
 import {CreateEmployeePage} from "../pages/employee-list/create-employee";
@@ -105,7 +105,7 @@ import {DatePicker} from "@ionic-native/date-picker";
 import{GetAssetReading} from "../pages/asset-view/get-asset-reading";
 import{GetAssetReadings} from "../pages/asset-view/get-asset-readings/get-asset-readings";
 import{CalenderPage} from "../pages/calender-page/calender-page";
-
+import{UpdateApp} from "../pages/update-app/update-app";
 import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-filter";
 import {JobFilter} from "../pages/jobs/job-filter/job-filter";
 import{SQLite,SQLiteObject} from "@ionic-native/sqlite";
@@ -122,6 +122,9 @@ import{OfflineGetassetreadings} from "../pages/offline-getassetreadings/offline-
 import {OfflineAttendance} from "../pages/employee/offline-attendance";
 import{ChangePassword} from "../pages/change-password/change-password";
 import{LocationAccuracy} from "@ionic-native/location-accuracy";
+// import { PhotoViewer } from '@ionic-native/photo-viewer';
+
+// import{IonicImageViewerModule} from "ionic-img-viewer";
 
 @NgModule({
   declarations: [
@@ -203,7 +206,10 @@ import{LocationAccuracy} from "@ionic-native/location-accuracy";
       OfflineGetassetreadings,
       OfflineAttendance,
       ChangePassword,
-      InventoryMaster
+      InventoryMaster,
+      UpdateApp,
+      ForgotPassword,
+      // PhotoViewer
   ],
   imports: [
     BrowserModule,
@@ -216,6 +222,7 @@ import{LocationAccuracy} from "@ionic-native/location-accuracy";
         iconMode: 'md'
     }),
     IonicImageViewerModule,
+      // PhotoViewer,
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
@@ -296,7 +303,9 @@ import{LocationAccuracy} from "@ionic-native/location-accuracy";
       OfflineGetassetreadings,
       OfflineAttendance,
       ChangePassword,
-      InventoryMaster
+      InventoryMaster,
+      UpdateApp,
+      ForgotPassword
 
 
   ],

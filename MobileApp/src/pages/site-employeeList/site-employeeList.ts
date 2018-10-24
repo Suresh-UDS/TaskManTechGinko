@@ -9,6 +9,8 @@ import {AttendanceService} from "../service/attendanceService";
 import {SiteService} from "../service/siteService";
 import {EmployeeService} from "../service/employeeService";
 
+declare var demo;
+
 /**
  * Generated class for the EmployeeSiteListPage page.
  *
@@ -77,8 +79,13 @@ export class EmployeeSiteListPage {
 
   getAttendances(site){
     this.attendanceService.getSiteAttendances(site.id).subscribe(response=>{
-      console.log(response.json());
-      this.navCtrl.push(AttendanceListPage,{'attendances':response.json()});
+        if(response.errorStatus){
+            demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
+        }else{
+            console.log(response);
+            this.navCtrl.push(AttendanceListPage,{'attendances':response});
+        }
+
     })
   }
 
@@ -89,31 +96,36 @@ export class EmployeeSiteListPage {
   ionViewWillEnter(){
 
       this.siteService.searchSite().subscribe(response=>{
-        console.log(response.json());
-        this.siteList = response.json();
-        this.userGroup = window.localStorage.getItem('userGroup');
-        this.employeeId = window.localStorage.getItem('employeeId');
-        this.employeeFullName = window.localStorage.getItem('employeeFullName');
-        this.employeeEmpId = window.localStorage.getItem('employeeEmpId');
-        var employeeDetails = JSON.parse(window.localStorage.getItem('employeeDetails'));
-        this.employee = employeeDetails.employee;
-        console.log("Employee details from localstorage");
-        console.log(this.employee.userId);
-        // this.attendanceService.getAttendances(this.employeeId, this.site).subscribe(
-        //   response =>{
-        //     console.log(response.json());
-        //     var result = response.json()
-        //     if(result[0]){
-        //       console.log("already checked in ");
-        //       this.checkedIn = true;
-        //       this.attendanceId=result[0].id;
-        //
-        //     }else{
-        //       console.log("Not yet checked in ");
-        //       this.checkedIn = false;
-        //     }
-        //   }
-        // );
+          if(response.errorStatus){
+              demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
+          }else{
+              console.log(response);
+              this.siteList = response;
+              this.userGroup = window.localStorage.getItem('userGroup');
+              this.employeeId = window.localStorage.getItem('employeeId');
+              this.employeeFullName = window.localStorage.getItem('employeeFullName');
+              this.employeeEmpId = window.localStorage.getItem('employeeEmpId');
+              var employeeDetails = JSON.parse(window.localStorage.getItem('employeeDetails'));
+              this.employee = employeeDetails.employee;
+              console.log("Employee details from localstorage");
+              console.log(this.employee.userId);
+              // this.attendanceService.getAttendances(this.employeeId, this.site).subscribe(
+              //   response =>{
+              //     console.log(response.json());
+              //     var result = response.json()
+              //     if(result[0]){
+              //       console.log("already checked in ");
+              //       this.checkedIn = true;
+              //       this.attendanceId=result[0].id;
+              //
+              //     }else{
+              //       console.log("Not yet checked in ");
+              //       this.checkedIn = false;
+              //     }
+              //   }
+              // );
+          }
+
       })
 
 
@@ -142,8 +154,8 @@ export class EmployeeSiteListPage {
         this.showLoader('Enrolling Face');
         this.authService.enrollFace(employeeName,imageData).subscribe(response=>{
           console.log("Face verification response");
-          console.log(response.json());
-          var verificationResponse = response.json();
+          console.log(response);
+          var verificationResponse = response;
           this.employee.imageData = imageData;
           this.employeeService.markEnrolled(this.employee).subscribe(response=>{
             console.log("face marked to database");
@@ -177,12 +189,12 @@ export class EmployeeSiteListPage {
             response => {
               this.closeLoader();
               this.showLoader('');
-              console.log(response.json());
+              console.log(response);
 
               this.authService.detectFace(employeeName, imageData).subscribe(response => {
                   console.log("response in site list");
-                  console.log(response.json());
-                  var detectResponse = response.json();
+                  console.log(response);
+                  var detectResponse = response;
 
                   if (detectResponse.images && detectResponse.images[0].status === 'Complete') {
                     this.closeLoader();
@@ -191,8 +203,8 @@ export class EmployeeSiteListPage {
                       this.showLoader('Verifying Face');
                       this.authService.verifyUser(employeeName, imageData).subscribe(response => {
                         console.log("Face verification response");
-                        console.log(response.json());
-                        var verificationResponse = response.json();
+                        console.log(response);
+                        var verificationResponse = response;
                         if (verificationResponse && verificationResponse.images) {
                           if (verificationResponse.images[0].transaction.confidence >= 0.75) {
                             console.log(this.lattitude);
@@ -200,7 +212,7 @@ export class EmployeeSiteListPage {
                             this.closeLoader();
                             this.showLoader('Marking Attendance');
                             this.attendanceService.markAttendanceCheckIn(siteId, this.employeeEmpId, this.lattitude, this.longitude, imageData).subscribe(response => {
-                              console.log(response.json());
+                              console.log(response);
                               this.closeLoader();
                               if (response && response.status === 200) {
                                 var msg = 'Face Verified and Attendance marked Successfully';
@@ -229,8 +241,8 @@ export class EmployeeSiteListPage {
                       this.showLoader('Verifying Face');
                       this.authService.verifyUser(employeeName, imageData).subscribe(response => {
                         console.log("Face verification response");
-                        console.log(response.json());
-                        var verificationResponse = response.json();
+                        console.log(response);
+                        var verificationResponse = response;
                         if (verificationResponse && verificationResponse.images) {
                           if (verificationResponse.images[0].transaction.confidence >= 0.75) {
                             console.log(this.lattitude);
@@ -239,7 +251,7 @@ export class EmployeeSiteListPage {
                             this.showLoader('Marking Attendance');
 
                             this.attendanceService .markAttendanceCheckOut(siteId, this.employeeEmpId, this.lattitude, this.longitude, imageData, this.attendanceId).subscribe(response => {
-                              console.log(response.json());
+                              console.log(response);
                               this.closeLoader();
                               if (response && response.status === 200) {
                                 var msg = 'Face Verified and Attendance marked Successfully';
@@ -275,8 +287,8 @@ export class EmployeeSiteListPage {
 
                 }, error => {
                   console.log("errors")
-                  console.log(error.json());
-                  if (error.json().status == "false") {
+                  console.log(error);
+                  if (error.status == "false") {
                     var msg = "You are currently not at the site location";
                     this.showSuccessToast(msg);
                     this.closeLoader();
@@ -286,8 +298,8 @@ export class EmployeeSiteListPage {
             }, error => {
               console.log("errors");
               console.log("errors")
-              console.log(error.json());
-              if (error.json().status === "false") {
+              console.log(error);
+              if (error.status === "false") {
                 var msg = "You are currently not at the site location";
                 this.showSuccessToast(msg);
                 this.closeLoader();

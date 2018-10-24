@@ -16,11 +16,11 @@ angular.module('timeSheetApp')
         $scope.searchCriteria = {};
         $scope.pages = { currPage : 1};
         $scope.isEdit = !!$stateParams.id;
-        
+
         $scope.parameterConfig = {};
-        
+
         $scope.assetType = {};
-        
+
         $scope.assetParam = {};
 
         $scope.parameterUOM = {};
@@ -29,15 +29,32 @@ angular.module('timeSheetApp')
         $scope.selectedParameter = {};
         $scope.selectedParameterUOM = {};
         $scope.selectedRule ="";
-        
+
         $scope.consumptionMonitoringRequired = {value:false};
         $scope.alertRequired = {value: true};
         $scope.validationRequired = {value: true};
-        
+
         $scope.selectedThreshold;
         $scope.btnDisabled = false;
         $scope.noData = false;
 
+
+                    $scope.conform = function(text)
+                    {
+                        console.log($scope.selectedProject)
+                        $rootScope.conformText = text;
+                        $('#conformationModal').modal();
+                    }
+                    $rootScope.back = function (text) {
+                        if(text == 'cancel')
+                        {
+                            $scope.cancel();
+                        }
+                        else if(text == 'save')
+                        {
+                            $scope.saveParameterConfig();
+                        }
+                    };
         console.log($stateParams)
                     var that =  $scope;
 
@@ -75,7 +92,7 @@ angular.module('timeSheetApp')
 
 
         $scope.initMaterialWizard();
-        
+
         $scope.loadAssetTypes = function() {
 
         		AssetTypeComponent.findAll().then(function (data) {
@@ -89,7 +106,7 @@ angular.module('timeSheetApp')
         }
 
         $scope.addAssetType = function () {
- 
+
             console.log($scope.assetType);
             $scope.loadingStart();
             if($scope.assetType){
@@ -99,7 +116,7 @@ angular.module('timeSheetApp')
                     $scope.assetType = {};
                     $scope.showNotifications('top','center','success','Asset Type Added Successfully');
                     $scope.loadAssetTypes();
-                    
+
 
                 }).catch(function(){
                    $scope.loadingStop();
@@ -110,9 +127,9 @@ angular.module('timeSheetApp')
 
 
         }
-        
-      
-        
+
+
+
         $scope.loadAssetParams = function() {
         		ParameterComponent.findAll().then(function (data) {
 	            $scope.selectedParameter = null;
@@ -120,7 +137,7 @@ angular.module('timeSheetApp')
 	            $scope.loadingStop();
 	        });
 	    }
-	    
+
 	    $scope.addAssetParam = function () {
 	        console.log($scope.assetParam.name);
              $scope.loadingStart();
@@ -131,7 +148,7 @@ angular.module('timeSheetApp')
 	                $scope.parameter = null;
 	                $scope.showNotifications('top','center','success','Parameter Added Successfully');
 	                $scope.loadAssetParams();
-	
+
 	            }).catch(function(){
                     $scope.loadingStop();
                 });
@@ -139,7 +156,7 @@ angular.module('timeSheetApp')
 	            console.log("Parameter not entered");
 	        }
 	    }
-	    
+
         $scope.loadAssetParamUoms = function() {
 	    		ParameterUOMComponent.findAll().then(function (data) {
 	            $scope.selectedParameterUOM = null;
@@ -147,7 +164,7 @@ angular.module('timeSheetApp')
 	            $scope.loadingStop();
 	        });
 	    }
-	    
+
 	    $scope.addParameterUOM = function () {
 	        console.log($scope.parameterUOM.name);
              $scope.loadingStart();
@@ -158,7 +175,7 @@ angular.module('timeSheetApp')
 	                $scope.parameterUOM = null;
 	                $scope.showNotifications('top','center','success','Parameter UOM Added Successfully');
 	                $scope.loadAssetParamUoms();
-	
+
 	            }).catch(function(){
                     $scope.loadingStop();
                 });
@@ -166,7 +183,7 @@ angular.module('timeSheetApp')
 	            console.log("Parameter UOM not entered");
 	        }
 	    };
-        
+
         $scope.getParameterConfigDetails = function(id, mode) {
                 $rootScope.loadPageTop();
                 $rootScope.loadingStart();
@@ -193,7 +210,7 @@ angular.module('timeSheetApp')
 	        		console.log($scope.parameterConfig);
 	        	})
         };
-        
+
         $scope.loadParameterConfigs = function(){
             $scope.clearFilter();
         	$scope.search();
@@ -209,7 +226,7 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.currPage = currPageVal;
             $scope.searchCriteria.findAll = true;
 
-            
+
             console.log("search criteria",$scope.searchCriteria);
                      $scope.parameterConfigs = '';
                      $scope.parameterConfigsLoader = false;
@@ -241,11 +258,11 @@ angular.module('timeSheetApp')
                 }else{
                      $scope.noData = true;
                 }
-           
+
 
             });
 
-       
+
         }
 
 
@@ -266,6 +283,7 @@ angular.module('timeSheetApp')
 
         $scope.saveParameterConfig = function () {
                 $scope.btnDisabled = true;
+                $scope.saveLoad = true;
 	        	$scope.error = null;
 	        	$scope.success =null;
 	        	if($scope.selectedAssetType){
@@ -290,9 +308,10 @@ angular.module('timeSheetApp')
 	        	console.log('parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
 	        	var post = $scope.isEdit ? ParameterConfigComponent.update : ParameterConfigComponent.create
                 post($scope.parameterConfig).then(function () {
-            
+
 	        	//ParameterConfigComponent.create($scope.parameterConfig).then(function () {
 	                $scope.success = 'OK';
+                    $scope.saveLoad = false;
                     if(!$scope.isEdit){
 
                     $scope.showNotifications('top','center','success','Parameter Configuration Saved Successfully');
@@ -302,7 +321,7 @@ angular.module('timeSheetApp')
                     $scope.showNotifications('top','center','success','Parameter Configuration Updated Successfully');
 
                     }
-	                
+
                     $scope.loadParameterConfigs();
                     $scope.parameterConfig = {};
                     $scope.selectedAssetType ={};
@@ -316,6 +335,7 @@ angular.module('timeSheetApp')
 
 	                //$location.path('/parameter-config');
 	            }).catch(function (response) {
+                    $scope.saveLoad = false;
                     $scope.btnDisabled = false;
 	                $scope.success = null;
 	                console.log('Error - '+ response.data);
@@ -351,14 +371,14 @@ angular.module('timeSheetApp')
 	        	});
         }
 
-      
+
         $scope.loadAllRules = function() {
         	AssetComponent.getAllRules().then(function(data) {
         		console.log('Reading rules--',data);
         		$scope.readingRules = data;
         	});
         }
-        
+
 
         $scope.clearFilter = function() {
             $scope.selectedProject = null;
@@ -373,7 +393,7 @@ angular.module('timeSheetApp')
         }
 
          $scope.cancel = function() {
-                $scope.selectedAssetType = {};
+                $scope.selectedAssetType = "";
                 $scope.selectedParameter = {};
                 $scope.selectedParameterUOM = {};
                 $scope.selectedRule = "";
@@ -385,31 +405,31 @@ angular.module('timeSheetApp')
         }
 
         // init load
-        $scope.initLoad = function(){ 
-             $scope.loadPageTop(); 
-             $scope.initPage(); 
-          
+        $scope.initLoad = function(){
+             $scope.loadPageTop();
+             $scope.initPage();
+
          }
-        
+
         var nottifShow = true ;
 
         $scope.showNotifications= function(position,alignment,color,msg){
-           
+
             if(nottifShow == true){
                nottifShow = false ;
                demo.showNotification(position,alignment,color,msg);
-               
+
             }else if(nottifShow == false){
                 $timeout(function() {
                   nottifShow = true ;
                 }, 8000);
 
             }
-            
+
         }
 
          /*
-        
+
         ** Pagination init function **
         @Param:integer
 
@@ -425,5 +445,5 @@ angular.module('timeSheetApp')
             $scope.search();
         }
 
-        
+
     });

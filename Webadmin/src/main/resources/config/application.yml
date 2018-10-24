@@ -1,0 +1,54 @@
+# ===================================================================
+# Spring Boot configuration.
+#
+# This configuration will be overriden by the Spring profile you use,
+# for example application-dev.yml if you use the "dev" profile.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+spring:
+    jpa:
+        open-in-view: false
+        hibernate:
+            ddl-auto: create
+            naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
+    messages:
+        basename: classpath:/i18n/messages
+    mvc:
+        favicon:
+            enabled: false
+    thymeleaf:
+        mode: XHTML
+
+security:
+    basic:
+        enabled: false
+
+# ===================================================================
+# JHipster specific properties
+# ===================================================================
+
+jhipster:
+    async:
+        corePoolSize: 2
+        maxPoolSize: 50
+        queueCapacity: 10000
+    mail:
+        from: TimeSheet@localhost
+    security:
+        rememberme:
+            # security key (this key should be unique for your application, and kept secret)
+            key: d47e7750412bedeed5e0f27eb27cb13aa57116c6
+    swagger:
+        title: TimeSheet API
+        description: TimeSheet API documentation
+        version: 0.0.1
+        termsOfServiceUrl:
+        contact:
+        license:
+        licenseUrl:

@@ -81,16 +81,12 @@
                                     <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
 
                                    <div class="HoverBx">
-                                        <button  title="View" has-authority="ROLE_ADMIN"  ui-sref="view-sla"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
+                                        <button  title="View" has-authority="ROLE_ADMIN" ng-class="{active: $state.includes('admin')}" ui-sref="view-sla({ id: slalist.id })" class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
                                         <a ng-model = "selectedSla" ng-class="{active: $state.includes('admin')}" ui-sref="edit-sla({ id: slalist.id })"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
-                                        <a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                        <a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(slalist)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                                     </div>
-
-
                                 </td>
                             </tr>
-                           
                             </tbody>
                         </table>
 
@@ -149,7 +145,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="button"
+                    <button type="button" ng-click="deleteSla({ id: slalist.id })"
                             class="btn btn-danger delete-confirmation-button">Delete</button>
                 </div>
             </div>

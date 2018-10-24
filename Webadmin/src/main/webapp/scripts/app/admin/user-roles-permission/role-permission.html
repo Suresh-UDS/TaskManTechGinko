@@ -19,7 +19,7 @@
                             <div class="form-group">
                                 <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                 <select ng-model="selectedUserRole" ng-change="selectRole()"  class="form-control" data-style="btn btn-primary" title="Select Role" data-size="7"
-                                ng-options="role as role.name for role in userRoles">
+                                ng-options="role as (role.name | uppercase) for role in userRoles">
                                     <option value="">Select Roles...</option>
                                 </select>
 
@@ -67,9 +67,9 @@
                             </thead>
                             <tbody>
                             <tr ng-repeat=" moduleAction in moduleActions">
-                               <td>{{moduleAction.name}}</td>
+                               <td>{{moduleAction.name | uppercase}}</td>
                                <td>
-                                   <div class="checkbox checkbox-inline" style="width:18%;" ng-repeat=" action in moduleAction.moduleActions">
+                                   <div class="checkbox checkbox-inline" style="width:12%;margin: 0;" ng-repeat=" action in moduleAction.moduleActions">
                                        <label>
                                            <input ng-model="action.selected" type="checkbox" name="action"   value="action.id" ng-change="checkPermission(moduleAction.id, moduleAction.name, action.id, action.name)" >{{action.name}}
                                        </label>
@@ -101,7 +101,7 @@
         </div>
     </div>
 
-    
+
 
 
     <!-- <div class="row">

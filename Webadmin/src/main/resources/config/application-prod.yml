@@ -1,0 +1,216 @@
+# ===================================================================
+# Spring Boot configuration for the "dev" profile.
+#
+# This configuration overrides the application.yml file.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+spring:
+    profiles:
+        active: prod
+    devtools:
+        restart:
+            enabled: true
+        livereload:
+            enabled: false # we use Grunt + BrowserSync for livereload
+    datasource:
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://udstaskmanclus.cluster-c6curboj4o20.ap-south-1.rds.amazonaws.com:3306/PRODTASKMAN?useUnicode=true&characterEncoding=utf8
+        name:
+        username: UDSTaskMan
+        password: Rd32018Uds
+    jpa:
+        database-platform: org.hibernate.dialect.MySQLInnoDBDialect
+        database: MYSQL
+        show_sql: true
+        properties:
+            hibernate.cache.use_second_level_cache: true
+            hibernate.cache.use_query_cache: true
+            hibernate.generate_statistics: false
+            hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        username: timesheettestuser1@gmail.com
+        password: Test123#
+        properties:
+            mail.transport.protocol: smtp
+            mail.smtp.auth: true
+            mail.smtp.starttls.enable: true
+            mail.smtp.port: 587
+            mail.debug: true
+
+    messages:
+        cache-seconds: 1
+    thymeleaf:
+        cache: false
+
+liquibase:
+    contexts: dev
+    enabled: false
+
+server:
+    port: 8088
+
+upload:
+    file:
+         path: /opt/uploads
+export:
+    file:
+         path: /opt/exports
+qrcode:
+    file:
+         path: /opt/qrcode
+
+locationQRCode:
+    file:
+        path: /opt/location/qrcode
+attendance:
+    shiftStartLeadTime: 1
+    shiftEndLeadTime: 1
+    shiftStartGraceTime: 1
+    shiftEndGraceTime: 1
+    file:
+        path:  /opt/attendance
+    template:
+        path: /opt/template/Attendance_Report_Format.xlsx
+quotation:
+    file:
+        path:  /opt/quotation
+ticket:
+    file:
+        path:  /opt/ticket
+import:
+    file:
+        path:
+            new: /opt/imports/new
+            completed: /opt/imports/completed
+max:
+    user: 10
+    userGroup: 2
+    device: 30
+
+email:
+    notification:
+        overdue: true
+        eodReports: true
+        enabled: true
+        schedule1: 0 0 9 * * ?
+        schedule2: 0 0 18 * * ?
+        url: http://localhost:8088/
+    activation:
+        title: Account activation
+    reset:
+        title: Account password reset
+    report:
+        title: Job reports
+    overdue:
+        report:
+            title: Overdue job report
+    compleed:
+        report:
+            title: Completed job report
+
+reports:
+    job-report:
+        url: https://taskmanadmin.uds.in/#/job-reports
+        #url: http://ec2-13-127-100-174.ap-south-1.compute.amazonaws.com:8088/#/job-reports
+    attendance-report:
+        url: https://taskmanadmin.uds.in/#/attendance-reports
+        #url: http://ec2-13-127-100-174.ap-south-1.compute.amazonaws.com:8088/#/attendance-reports
+    feedback-report:
+        url: https://taskmanadmin.uds.in/#/feedbacks
+    ticket-report:
+        url: https://taskmanadmin.uds.in/#/ticket-reports
+
+url:
+    ticket-view: https://taskmanadmin.uds.in#/view-ticket/
+    quotation-view: https://taskmanadmin.uds.in#/view-quotation/
+    job-view: https://taskmanadmin.uds.in#/view-job/
+
+facedetection:
+    api:
+        url: https://api.kairos.com/detect
+        enrollUrl: https://api.kairos.com/enroll
+        verifyUrl: https://api.kairos.com/verify
+        apiKey: a6ae8363069107177e06c3ca3f76a66b
+        apiId: 2f2877f2
+
+locationService:
+   url: http://localhost:8000/api/site/location
+   proximityUrl: http://localhost:8000/api/site/nearby
+#   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
+
+quotationService:
+#   url: http://locahost:8000/api/site/location
+#   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
+   url: http://localhost:8001/api
+
+pushService:
+   url: http://localhost:9000/
+
+AWS:
+   s3-url: https://s3.ap-south-1.amazonaws.com
+   s3-accessKey: AKIAJJQEB7US7QOAV2LQ
+   s3-secretKey: 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
+   s3-bucketName: fms-taskman
+   s3-cloudfront-url: http://d1wn8hrsdttztl.cloudfront.net/
+   s3-bucketEnv: prod/
+   s3-asset-path: assets/
+   s3-qrcode-path: qrcode/
+   s3-attendance-path: attendance/
+   s3-ticket-path : tickets/
+   s3-quotation-path : quotations/
+   s3-enroll-path : employeeEnroll/
+   s3-checkin-path : attendanceCheckIn/
+   s3-checkout-path : attendanceCheckOut/
+
+scheduler:
+   job:
+      creationPolicy: monthly
+   dailyJob:
+      enabled: true
+      creation: monthly
+   weeklyJob:
+      enabled: true
+      creation: monthly
+   monthlyJob:
+      enabled: true
+      creation: yearly
+   overdueJob:
+      enabled: false
+   eodJobReport:
+      enabled: false
+   attendanceDetailReport:
+      enabled: true
+   attendanceConsolidatedReport:
+      enabled: true
+
+default.user.password: uds12345
+# ===================================================================
+# JHipster specific properties
+# ===================================================================
+
+jhipster:
+    cache: # Hibernate 2nd level cache, used by CacheConfiguration
+        timeToLiveSeconds: 3600
+        ehcache:
+            maxBytesLocalHeap: 512M
+    mail: # specific JHipster mail property, for standard properties see MailProperties
+        from: no-reply@taskmanadmin.uds.in
+    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
+        jmx.enabled: true
+        spark:
+            enabled: false
+            host: localhost
+            port: 9999
+        graphite:
+            enabled: false
+            host: localhost
+            port: 2003
+            prefix: TimeSheet
