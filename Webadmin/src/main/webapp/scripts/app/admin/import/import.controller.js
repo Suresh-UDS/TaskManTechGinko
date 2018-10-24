@@ -290,6 +290,17 @@ angular.module('timeSheetApp')
 			    	return ($rootScope.siteImportStatusLoad ? $rootScope.siteImportStatusLoad : '');
 			};
 
+			$scope.uploadSiteEmployeeFile = function(){
+			    if($scope.selectedSiteEmployeeFile){
+			        SiteComponent.employeeSiteChange($scope.selectedSiteEmployeeFile).then(function (data) {
+                        console.log(data);
+                    },function (err) {
+			            console.log("Error in saving employee");
+                        console.log(err);
+                    })
+                }
+            }
+
 			 // upload Location File start
 		     $scope.uploadLocationsFile = function(){
 		    	 if($scope.selectedLocationFile){

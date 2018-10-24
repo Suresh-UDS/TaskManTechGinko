@@ -1985,6 +1985,10 @@ public class SchedulerHelperService extends AbstractService {
 								&& (eodReportClientGroupAlert != null
 								&& eodReportClientGroupAlert.getSettingValue().equalsIgnoreCase("true"))) {
 		
+							if(StringUtils.isEmpty(proj.getClientGroup())) {
+								proj.setClientGroup(proj.getName());
+							}
+							
 							if (proj.getClientGroup() != null) {
 		
 								ClientgroupDTO clientGrp = null;
