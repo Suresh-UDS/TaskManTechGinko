@@ -105,10 +105,10 @@ angular.module('timeSheetApp')
 	    	console.log('$rootScope.jobImportStatus message - '+ JSON.stringify($rootScope.jobImportStatus));
 		return (' Job msg - '+$rootScope.jobImportStatus ? $rootScope.jobImportStatus.importMsg : '');
 	    };
-	    $scope.jobImportStatusLoad = function(){
+	    /*$scope.jobImportStatusLoad = function(){
 	    	console.log('$rootScope.jobImportStatusLoad message '+ $rootScope.jobImportStatusLoad);
 	    	return ($rootScope.jobImportStatusLoad ? $rootScope.jobImportStatusLoad : '');
-	    };
+	    };*/
 	    // Job end
 
 
@@ -166,10 +166,10 @@ angular.module('timeSheetApp')
 	  $scope.employeeImportMsg = function() {
         return ('employeeMsg - '+$rootScope.employeeImportStatus ? $rootScope.employeeImportStatus.importMsg : '');
 	  };
-	  $scope.empImportStatusLoad = function(){
+	  /*$scope.empImportStatusLoad = function(){
 	    	console.log('$scope.empImportStatusLoad message '+ $rootScope.empImportStatusLoad);
 	    	return ($rootScope.empImportStatusLoad ? $rootScope.empImportStatusLoad : '');
-	   };
+	   };*/
 	  //Employee end
 
       //client upload file start
@@ -227,10 +227,10 @@ angular.module('timeSheetApp')
 	    $scope.clientImportMsg = function() {
 		   return ($rootScope.clientImportStatus ? $rootScope.clientImportStatus.importMsg : '');
 		};
-		$scope.clientImportStatusLoad = function(){
+		/*$scope.clientImportStatusLoad = function(){
 		    	console.log('$scope.clientImportStatusLoad message '+ $rootScope.clientImportStatusLoad);
 		    	return ($rootScope.clientImportStatusLoad ? $rootScope.clientImportStatusLoad : '');
-		};
+		};*/
 	   // client upload end
 
 		 // upload Site File start
@@ -285,10 +285,10 @@ angular.module('timeSheetApp')
 	     /*$scope.siteImportMsg = function() {
 			   return ($rootScope.siteImportStatus ? $rootScope.siteImportStatus.importMsg : '');
 			};  */
-			$scope.siteImportStatusLoad = function(){
+			/*$scope.siteImportStatusLoad = function(){
 			    	console.log('$scope.siteImportStatusLoad message '+ $rootScope.siteImportStatusLoad);
 			    	return ($rootScope.siteImportStatusLoad ? $rootScope.siteImportStatusLoad : '');
-			};
+			};*/
 
 			 // upload Location File start
 		     $scope.uploadLocationsFile = function(){
@@ -342,10 +342,10 @@ angular.module('timeSheetApp')
 		     /*$scope.locationImportMsg = function() {
 				   return ($rootScope.locationImportStatus ? $rootScope.locationImportStatus.importMsg : '');
 				};  */
-				$scope.locationImportStatusLoad = function(){
+				/*$scope.locationImportStatusLoad = function(){
 				    	console.log('$scope.locationImportStatusLoad message '+ $rootScope.locationImportStatusLoad);
 				    	return ($rootScope.locationImportStatusLoad ? $rootScope.locationImportStatusLoad : '');
-				};
+				};*/
 
 
 
@@ -407,10 +407,10 @@ angular.module('timeSheetApp')
     }
 
 
-	   $scope.checklistImportStatusLoad = function(){
+	   /*$scope.checklistImportStatusLoad = function(){
 		   	console.log('$scope.checklistImportStatusLoad message '+ $rootScope.checklistImportStatusLoad);
 		   	return ($rootScope.checklistImportStatusLoad ? $rootScope.checklistImportStatusLoad : '');
-	   };
+	   };*/
 
 	   //Employee shift upload file start
 	    $scope.uploadEmployeeShift = function() {
@@ -465,10 +465,10 @@ angular.module('timeSheetApp')
 	    }
 
 
-	   $scope.employeeShiftImportStatusLoad = function(){
+	   /*$scope.employeeShiftImportStatusLoad = function(){
 		   	console.log('$scope.employeeShiftImportStatusLoad message '+ $rootScope.employeeShiftImportStatusLoad);
 		   	return ($rootScope.employeeShiftImportStatusLoad ? $rootScope.employeeShiftImportStatusLoad : '');
-	   };
+	   };*/
 
 
 
@@ -525,10 +525,10 @@ angular.module('timeSheetApp')
 	    }
 
 
-	   $scope.assetImportStatusLoad = function(){
+	   /*$scope.assetImportStatusLoad = function(){
 		   	console.log('$scope.assetImportStatusLoad message '+ $rootScope.assetImportStatusLoad);
 		   	return ($rootScope.assetImportStatusLoad ? $rootScope.assetImportStatusLoad : '');
-	   };
+	   };*/
 
 
 	   //Asset PPM upload file start
@@ -584,10 +584,10 @@ angular.module('timeSheetApp')
 	    }
 
 
-	   $scope.assetPPMImportStatusLoad = function(){
+        /*	$scope.assetPPMImportStatusLoad = function(){
 		   	console.log('$scope.assetPPMImportStatusLoad message '+ $rootScope.assetPPMImportStatusLoad);
 		   	return ($rootScope.assetPPMImportStatusLoad ? $rootScope.assetPPMImportStatusLoad : '');
-	   };
+	   };*/
 
 	 //Asset AMC upload file start
 	    $scope.uploadAssetAMC = function() {
@@ -642,10 +642,10 @@ angular.module('timeSheetApp')
 	    }
 
 
-	   $scope.assetAMCImportStatusLoad = function(){
+	   /*$scope.assetAMCImportStatusLoad = function(){
 		   	console.log('$scope.assetAMCImportStatusLoad message '+ $rootScope.assetAMCImportStatusLoad);
 		   	return ($rootScope.assetAMCImportStatusLoad ? $rootScope.assetAMCImportStatusLoad : '');
-	   };
+	   };*/
 
 
 	 // store the interval promise in this variable
