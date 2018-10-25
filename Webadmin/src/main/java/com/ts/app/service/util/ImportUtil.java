@@ -973,10 +973,12 @@ public class ImportUtil {
                 SiteDTO siteDTO = new SiteDTO();
                 EmployeeDTO employeeDTO = new EmployeeDTO();
                 EmployeeProjectSiteDTO employeeProjectSiteDTO = new EmployeeProjectSiteDTO();
-                String empId  = getCellValue(currentRow.getCell(1));
                 Long siteId = Long.valueOf(getCellValue(currentRow.getCell(0)));
+                String empId  = getCellValue(currentRow.getCell(1));
+                Long projectId= Long.valueOf(getCellValue(currentRow.getCell(2)));
 
                 Employee employee = employeeRepo.findByEmpId(empId);
+
                 log.debug("Employee found - "+employee.getName());
 
             }
