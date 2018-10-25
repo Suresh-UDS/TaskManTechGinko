@@ -1413,6 +1413,52 @@ input.InputFirstCaps::first-letter
 }
 
 
+/* Highcharts Custom css */
+
+.highcharts-container
+{
+    width: 100% !important;
+}
+.highcharts-root
+{
+    width: 100% !important;
+}
+
+
+.highcharts-color-1
+{
+    color: #f86c6b !important;
+    fill:#f86c6b !important;
+}
+.highcharts-color-1 rect
+{
+    fill:#f86c6b !important;
+}
+
+
+/*.JobsDashContainer .highcharts-color-2*/
+/*{*/
+    /*fill:yellowgreen !important;*/
+/*}*/
+/*.JobsDashContainer .highcharts-color-0*/
+/*{*/
+    /*fill:#ffc107 !important;*/
+/*}*/
+/*.JobsDashContainer .highcharts-color-0 rect*/
+/*{*/
+    /*fill:#ffc107 !important;*/
+/*}*/
+
+/*.JobsDashContainer .highcharts-color-2 rect*/
+/*{*/
+    /*fill:yellowgreen !important;*/
+/*}*/
+
+
+
+
+/* End Highcharts Custom css */
+
 
 .label-on-left
 {

@@ -1,6 +1,6 @@
 <!--<script src="bower_components/jquery/dist/jquery.js"></script>-->
 
-<div ng-cloak ng-init="loadPageTop()">
+<div ng-cloak ng-init="loadPageTop();initCharts();init();">
 
     <!--Print option at top of the page-->
     <!--<div class="txt-align-rgt margn-btm-8">-->
@@ -15,7 +15,7 @@
             <!--<div class="panel-heading">Panel Heading</div>-->
             <div class="panel-body">
 
-                <div class="row" ng-init="init()">
+                <div class="row">
 
                     <div class="col-md-4">
 
@@ -101,7 +101,7 @@
                 <div id="collapseOne"
                      class="panel-collapse collapse collapseOne in" role="tabpanel"
                      aria-labelledby="headingOne" aria-expanded="true"
-                     style="height: 350px;">
+                     style="height: 250px;">
                     <div class="panel-body">
 
                         <div class="row">
@@ -156,18 +156,9 @@
 
                         </div>
 
-                        <h3>Charts</h3>
 
-                        <div class="row">
 
-                            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
 
-                            </div>
-                            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
-
-                            </div>
-
-                        </div>
 
                     </div>
                 </div>
@@ -185,10 +176,10 @@
                 <div id="collapseTwo" class="panel-collapse collapse"
                      role="tabpanel" aria-labelledby="headingTwo"
                      aria-expanded="false" style="height: 0px;">
-                    <div class="panel-body">
+                    <div class="panel-body JobsDashContainer">
                         <div class="row">
 
-                            <div class="col-md-3 col-lg-3 col-sm-4">
+                            <div class="col-md-3 col-lg-3 col-sm-4 col-xs-6">
                                 <div class="card skyblueBg cardWithbg">
                                     <div class="card-header">
                                         <i class="material-icons">business_center</i>
@@ -199,7 +190,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-lg-3 col-sm-4">
+                            <div class="col-md-3 col-lg-3 col-sm-4 col-xs-6">
                                 <div class="card yellowBg cardWithbg">
                                     <div class="card-header">
                                         <i class="material-icons">how_to_reg</i>
@@ -210,7 +201,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-lg-3 col-sm-4">
+                            <div class="col-md-3 col-lg-3 col-sm-4 col-xs-6">
                                 <div class="card greenBg cardWithbg">
                                     <div class="card-header">
                                         <i class="material-icons">
@@ -223,7 +214,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-lg-3 col-sm-4">
+                            <div class="col-md-3 col-lg-3 col-sm-4 col-xs-6">
                                 <div class="card lightRedBg cardWithbg">
                                     <div class="card-header">
                                         <i class="material-icons">error_outline</i>
@@ -237,6 +228,22 @@
 
 
                         </div>
+
+                        <div class="row" style="padding-top: 30px;">
+
+                            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12" style="border-right: 1px solid #dfdfdf;">
+
+                                <div id="jobStackedCharts" style="min-width:  530px; height: 400px; margin: 0 auto"></div>
+
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12" style="">
+
+                                <hc-pie-chart title="All Jobs" data="pieData" style="width:100% ;" >Placeholder for pie chart</hc-pie-chart>
+
+                            </div>
+
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -305,6 +312,18 @@
 
 
                         </div>
+
+                        <div class="row" style="padding-top: 30px;">
+
+                            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+
+                                <div id="AttendanceStackedCharts" style="min-width:  530px; height: 400px; margin: 0 auto"></div>
+
+                            </div>
+
+
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -327,22 +346,22 @@
                             <div class="col-md-3 col-lg-3 col-sm-4">
                                 <div class="card blueBg cardWithbg">
                                     <div class="card-header">
-                                        <i class="material-icons">domain</i>
+                                        <i class="material-icons">list</i>
                                     </div>
                                     <div class="card-content">
-                                        <h4>Clients</h4>
-                                        <h3>{{projectCount ? projectCount : 0}}</h3>
+                                        <h4>Total tickets</h4>
+                                        <h3>{{overAllTicketsTotalCount}}</h3>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-3 col-lg-3 col-sm-4">
                                 <div class="card skyblueBg cardWithbg">
                                     <div class="card-header">
-                                        <i class="material-icons">location_city</i>
+                                        <i class="material-icons">open_in_browser</i>
                                     </div>
                                     <div class="card-content">
-                                        <h4>Sites</h4>
-                                        <h3>{{siteCount ? siteCount : 0}}</h3>
+                                        <h4>Open</h4>
+                                        <h3>{{openTicketsTotalCount}}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -350,29 +369,53 @@
                                 <div class="card yellowBg cardWithbg">
                                     <div class="card-header">
                                         <i class="material-icons">
-                                            people_outline
+                                            how_to_reg
                                         </i>
                                     </div>
                                     <div class="card-content">
-                                        <h4>Employees</h4>
-                                        <h3>{{totalEmployeeCount ? totalEmployeeCount : 0}}</h3>
+                                        <h4>Assigned</h4>
+                                        <h3>
+                                            {{closedTicketsTotalCount}}</h3>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-3 col-lg-3 col-sm-4">
                                 <div class="card lightRedBg cardWithbg">
                                     <div class="card-header">
-                                        <i class="material-icons">domain</i>
+                                        <i class="material-icons">highlight_off</i>
                                     </div>
                                     <div class="card-content">
-                                        <h4>Jobs</h4>
-                                        <h3>{{result.totalJobCount ? result.totalJobCount : 0}}</h3>
+                                        <h4>Closed</h4>
+                                        <h3>
+                                            {{closedTicketsTotalCount}}</h3>
                                     </div>
                                 </div>
                             </div>
 
 
                         </div>
+
+                        <div class="row" style="padding-top: 30px;">
+
+                            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12" style="border-right: 1px solid #dfdfdf;">
+
+                                <div id="ticketSingleStackedCharts" style="min-width: 530px; height: 400px; margin: 0 auto"></div>
+
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12" style="">
+
+                                <div id="ticketStackedCharts" style="min-width:  530px; height: 400px; margin: 0 auto"></div>
+
+                            </div>
+
+                            <div class="col-md-12 col-lg-12" style="padding-top: 30px;">
+
+                                <div id="catgAgeTicketsCharts" style="min-width: 530px; height: 400px; margin: 0 auto"></div>
+
+                            </div>
+
+                        </div>
+
                     </div>
                 </div>
             </div>
