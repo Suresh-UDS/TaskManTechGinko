@@ -791,9 +791,9 @@ module.exports = {
       }if(req.body.createdDate){
         quotCriterias.createdDate = new Date(req.body.createdDate);
       }if(req.body.toDate){
-          quotCriterias.toDate = new Date(req.body.toDate);
+          quotCriterias.lastModifiedDate = { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) };
         }else{
-          quotCriterias.toDate = new Date();
+          quotCriterias.lastModifiedDate = { $gt: new Date(req.body.createdDate), $lt: new Date() };
         }
 
       //console.log("Search criteria",quotCriterias);
