@@ -553,6 +553,8 @@ public class RateCardService extends AbstractService {
             request.put("isRejected", searchCriteria.isQuotationIsRejected());
             request.put("isDrafted", searchCriteria.isQuotationIsDrafted());
             request.put("isApproved", searchCriteria.isQuotationIsApproved());
+            request.put("currPage", searchCriteria.getCurrPage());
+            request.put("sort", searchCriteria.getSort());
             request.put("siteIds", siteIds);
             log.debug("Request body " + request.toString());
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);

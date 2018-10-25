@@ -792,13 +792,18 @@ module.exports = {
         quotCriterias.createdDate = 
 
       }*/
-      //console.log("Search criteria",quotCriterias);
-      Quotation.find(quotCriterias).sort({'createdDate':-1}).exec(function(err,quotations){
+      
+      console.log("currPage",req.body.currPage-1 +"sort"+ req.body.sort);
+      var quotQuery = Quotation.find(quotCriterias).sort({'createdDate':-1}).skip((req.body.currPage-1)*10).limit(req.body.sort);
+      var quotQueryCount = Quotation.find(quotCriterias).count().exec();
+      quotQuery.exec(function(err,quotations){
       if(err){
           //console.log("Error in finding quotations");
           res.send(400,"No quotation found");
       }else{
           //console.log("result",quotations);
+          quotations.totalCount = quotQueryCount;
+          console.log("count",quotations.totalCount);
           res.send(200,quotations);
       }
     });
