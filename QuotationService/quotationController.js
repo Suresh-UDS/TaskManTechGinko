@@ -788,21 +788,35 @@ module.exports = {
         quotCriterias.isDrafted=req.body.isDrafted;
       }if(req.body.isApproved){
         quotCriterias.isApproved=req.body.isApproved;
-      }/*if(req.body.createdDate){
-        quotCriterias.createdDate = 
-
-      }*/
-      
+      }if(req.body.createdDate){
+        quotCriterias.createdDate = new Date(req.body.createdDate);
+      }if(req.body.toDate){
+          quotCriterias.lastModifiedDate = { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) };
+      }else{
+          quotCriterias.lastModifiedDate = { $gt: new Date(req.body.createdDate), $lt: new Date() };
+      }
+   
       console.log("currPage",req.body.currPage-1 +"sort"+ req.body.sort);
       var quotQuery = Quotation.find(quotCriterias).sort({'createdDate':-1}).skip((req.body.currPage-1)*10).limit(req.body.sort);
-      var quotQueryCount = Quotation.find(quotCriterias).count().exec();
+      var quotQueryCount = Quotation.find(quotCriterias).count();
       quotQuery.exec(function(err,quotations){
+
       if(err){
           //console.log("Error in finding quotations");
           res.send(400,"No quotation found");
       }else{
           //console.log("result",quotations);
-          quotations.totalCount = quotQueryCount;
+          quotQueryCount.exec(function(err,quotationsCount){
+              if(err){
+                  //console.log("Error in finding quotations");
+                  var quotQueryCountVal = 0;
+              }else{
+                  //console.log("result",quotations);
+                  var quotQueryCountVal = quotationsCount;
+                  
+              }
+          });
+          quotations.totalCount = quotQueryCountVal;
           console.log("count",quotations.totalCount);
           res.send(200,quotations);
       }
