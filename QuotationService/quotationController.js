@@ -765,8 +765,8 @@ module.exports = {
     }*/
 
     newSearchQuotation: function(req,res,next){
-        console.log("Search criteria");
-        console.log(req.body);
+        //console.log("Search criteria");
+        //console.log(req.body);
         var quotCriterias = {};
       if(req.body.siteId && req.body.siteId>0){
         quotCriterias.siteId=req.body.siteId;
@@ -791,17 +791,11 @@ module.exports = {
       }/*if(req.body.createdDate){
         quotCriterias.createdDate = 
 
-
       }*/
-
-      var page ={
-        size:10,
-        currPage:1
-      }
-      console.log("Search criteria",quotCriterias);
-      Quotation.find(quotCriterias).sort({'createdDate':-1}).skip((page.currPage-1)*10).limit(page.size).exec(function(err,quotations){
+      //console.log("Search criteria",quotCriterias);
+      Quotation.find(quotCriterias).sort({'createdDate':-1}).exec(function(err,quotations){
       if(err){
-          console.log("Error in finding quotations");
+          //console.log("Error in finding quotations");
           res.send(400,"No quotation found");
       }else{
           //console.log("result",quotations);
