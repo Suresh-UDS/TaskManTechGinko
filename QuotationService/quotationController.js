@@ -765,8 +765,8 @@ module.exports = {
     }*/
 
     newSearchQuotation: function(req,res,next){
-        //console.log("Search criteria");
-        //console.log(req.body);
+        console.log("Search criteria");
+        console.log(req.body);
         var quotCriterias = {};
       if(req.body.siteId && req.body.siteId>0){
         quotCriterias.siteId=req.body.siteId;
@@ -777,7 +777,7 @@ module.exports = {
       }if(req.body.createdBy){
         quotCriterias.createdByUserName={$regex:'^'+req.body.createdBy,$options:"si"};
       }if(req.body.approvedBy){
-        quotCriterias.approvedByUserName={$regex:'^'+req.body.approvedBy,$options:"si"}; 
+        quotCriterias.approvedByUserName={$regex:'^'+req.body.approvedBy,$options:"si"};
       }if(req.body.isSubmitted){
         quotCriterias.isSubmitted=req.body.isSubmitted;
       }if(req.body.isArchived){
@@ -789,35 +789,27 @@ module.exports = {
       }if(req.body.isApproved){
         quotCriterias.isApproved=req.body.isApproved;
       }if(req.body.createdDate){
-        quotCriterias.createdDate = new Date(req.body.createdDate);
-      }if(req.body.toDate){
-          quotCriterias.lastModifiedDate = { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) };
-      }else{
-          quotCriterias.lastModifiedDate = { $gt: new Date(req.body.createdDate), $lt: new Date() };
+          var startDate = new Date(req.body.createdDate);
+          startDate.setHours(0,0,0);
+          quotCriterias.lastModifiedDate = { $gt: startDate, $lt: endDate };
+            if(req.body.toDate){
+                var endDate = new Date(req.body.toDate);
+                endDate.setHours(23,59,59);
+                quotCriterias.lastModifiedDate = { $gt: startDate, $lt: endDate };
+            }else{
+                var endDate = new Date();
+                endDate.setHours(23,59,59);
+                quotCriterias.lastModifiedDate = { $gt: startDate, $lt: endDate };
+            }
       }
-   
-      console.log("currPage",req.body.currPage-1 +"sort"+ req.body.sort);
-      var quotQuery = Quotation.find(quotCriterias).sort({'createdDate':-1}).skip((req.body.currPage-1)*10).limit(req.body.sort);
-      var quotQueryCount = Quotation.find(quotCriterias).count();
-      quotQuery.exec(function(err,quotations){
 
+      console.log("Search criteria",quotCriterias);
+      Quotation.find(quotCriterias).sort({'createdDate':-1}).exec(function(err,quotations){
       if(err){
           //console.log("Error in finding quotations");
           res.send(400,"No quotation found");
       }else{
           //console.log("result",quotations);
-          quotQueryCount.exec(function(err,quotationsCount){
-              if(err){
-                  //console.log("Error in finding quotations");
-                  var quotQueryCountVal = 0;
-              }else{
-                  //console.log("result",quotations);
-                  var quotQueryCountVal = quotationsCount;
-                  
-              }
-          });
-          quotations.totalCount = quotQueryCountVal;
-          console.log("count",quotations.totalCount);
           res.send(200,quotations);
       }
     });
