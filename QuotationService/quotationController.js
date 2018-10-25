@@ -788,10 +788,14 @@ module.exports = {
         quotCriterias.isDrafted=req.body.isDrafted;
       }if(req.body.isApproved){
         quotCriterias.isApproved=req.body.isApproved;
-      }/*if(req.body.createdDate){
-        quotCriterias.createdDate = 
+      }if(req.body.createdDate){
+        quotCriterias.createdDate = new Date(req.body.createdDate);
+      }if(req.body.toDate){
+          quotCriterias.toDate = new Date(req.body.toDate);
+        }else{
+          quotCriterias.toDate = new Date();
+        }
 
-      }*/
       //console.log("Search criteria",quotCriterias);
       Quotation.find(quotCriterias).sort({'createdDate':-1}).exec(function(err,quotations){
       if(err){

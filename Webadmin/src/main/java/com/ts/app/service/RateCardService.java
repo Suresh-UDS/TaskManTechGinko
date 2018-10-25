@@ -536,14 +536,41 @@ public class RateCardService extends AbstractService {
             headers.setAll(map);
 
             log.debug("Parameters - "+searchCriteria.isQuotationIsApproved() + " "+searchCriteria.isQuotationIsArchived()+ " "+ searchCriteria.isQuotationIsDrafted());
-            
+
             JSONObject request = new JSONObject();
             request.put("projectId",searchCriteria.getProjectId());
             request.put("siteId",searchCriteria.getSiteId());
             request.put("id",searchCriteria.getId());
             request.put("title",searchCriteria.getQuotationTitle());
             request.put("createdBy",searchCriteria.getQuotationCreatedBy());
-            request.put("createdDate", df.format(searchCriteria.getQuotationCreatedDate()));
+
+            if(searchCriteria.getQuotationCreatedDate()!=null){
+                df.setTimeZone(tz);
+                String createdDate = df.format(searchCriteria.getQuotationCreatedDate());
+                String toDate = df.format(searchCriteria.getToDate());
+                request.put("createdDate", df.format(createdDate));
+                request.put("toDate", df.format(toDate));
+
+            }
+
+            if(searchCriteria.getFromDate()!=null){
+                df.setTimeZone(tz);
+                String createdDate = df.format(searchCriteria.getQuotationCreatedDate());
+                String toDate = df.format(searchCriteria.getToDate());
+                request.put("createdDate", df.format(createdDate));
+                request.put("toDate", df.format(toDate));
+
+            }
+
+            if(searchCriteria.getCheckInDateTimeFrom()!=null){
+                df.setTimeZone(tz);
+                String createdDate = df.format(searchCriteria.getQuotationCreatedDate());
+                String toDate = df.format(searchCriteria.getToDate());
+                request.put("createdDate", df.format(createdDate));
+                request.put("toDate", df.format(toDate));
+
+            }
+
             request.put("approvedBy",searchCriteria.getQuotationApprovedBy());
             request.put("status",searchCriteria.getQuotationStatus());
             request.put("submittedDate", searchCriteria.getQuotationSubmittedDate());
