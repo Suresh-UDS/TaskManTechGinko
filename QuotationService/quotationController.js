@@ -765,8 +765,8 @@ module.exports = {
     }*/
 
     newSearchQuotation: function(req,res,next){
-        //console.log("Search criteria");
-        //console.log(req.body);
+        console.log("Search criteria");
+        console.log(req.body);
         var quotCriterias = {};
       if(req.body.siteId && req.body.siteId>0){
         quotCriterias.siteId=req.body.siteId;
@@ -788,17 +788,17 @@ module.exports = {
         quotCriterias.isDrafted=req.body.isDrafted;
       }if(req.body.isApproved){
         quotCriterias.isApproved=req.body.isApproved;
-      }if(req.body.createdDate){
+      }/*if(req.body.createdDate){
         quotCriterias.createdDate = new Date(req.body.createdDate);
       }if(req.body.toDate){
           quotCriterias.lastModifiedDate = { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) };
       }else{
           quotCriterias.lastModifiedDate = { $gt: new Date(req.body.createdDate), $lt: new Date() };
-      }
+      }*/
    
       console.log("currPage",req.body.currPage-1 +"sort"+ req.body.sort);
       var quotQuery = Quotation.find(quotCriterias).sort({'createdDate':-1}).skip((req.body.currPage-1)*10).limit(req.body.sort);
-      var quotQueryCount = Quotation.find(quotCriterias).count();
+      //var quotQueryCount = Quotation.find(quotCriterias).count();
       quotQuery.exec(function(err,quotations){
 
       if(err){
