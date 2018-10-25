@@ -773,18 +773,29 @@ module.exports = {
       }if(req.body.title){
         quotCriterias.title={$regex:'^'+req.body.title,$options:"si"};
       }if(req.body.status){
-        quotCriterias.status={$regex:'^'+req.body.status,$options:"si"};
+        //quotCriterias.status={$regex:'^'+req.body.status,$options:"si"};
       }if(req.body.createdBy){
         quotCriterias.createdByUserName={$regex:'^'+req.body.createdBy,$options:"si"};
       }if(req.body.approvedBy){
         quotCriterias.approvedByUserName={$regex:'^'+req.body.approvedBy,$options:"si"}; 
+      }if(req.body.isSubmitted){
+        quotCriterias.isSubmitted=req.body.isSubmitted;
+      }if(req.body.isArchived){
+        quotCriterias.isArchived=req.body.isArchived;
+      }if(req.body.isRejected){
+        quotCriterias.isRejected=req.body.isRejected;
+      }if(req.body.isDrafted){
+        quotCriterias.isDrafted=req.body.isDrafted;
+      }if(req.body.isApproved){
+        quotCriterias.isApproved=req.body.isApproved;
       }/*if(req.body.createdDate){
         quotCriterias.createdDate = 
 
       }*/
+      //console.log("Search criteria",quotCriterias);
       Quotation.find(quotCriterias).sort({'createdDate':-1}).exec(function(err,quotations){
       if(err){
-          console.log("Error in finding quotations");
+          //console.log("Error in finding quotations");
           res.send(400,"No quotation found");
       }else{
           //console.log("result",quotations);

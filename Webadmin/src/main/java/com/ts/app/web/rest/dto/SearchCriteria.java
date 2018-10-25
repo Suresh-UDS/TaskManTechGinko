@@ -193,6 +193,16 @@ public class SearchCriteria extends Paginator {
 	private long regionId;
 
 	private long jobId;
+	
+	private boolean quotationIsSubmitted;
+	
+	private boolean quotationIsArchived;
+	
+	private boolean quotationIsRejected;
+	
+	private boolean quotationIsDrafted;
+	
+	private boolean quotationIsApproved;
 
 	public String getModule() {
 		return module;
@@ -1012,4 +1022,48 @@ public class SearchCriteria extends Paginator {
     public void setRegionId(long regionId) {
         this.regionId = regionId;
     }
+
+	public boolean isQuotationIsSubmitted() {
+		return quotationIsSubmitted;
+	}
+
+	public void setQuotationIsSubmitted(boolean quotationIsSubmitted) {
+		this.quotationIsSubmitted = quotationIsSubmitted;
+	}
+
+	public boolean isQuotationIsArchived() {
+		return quotationIsArchived;
+	}
+
+	public void setQuotationIsArchived(boolean quotationIsArchived) {
+		this.quotationIsArchived = quotationIsArchived;
+	}
+
+	public boolean isQuotationIsRejected() {
+		return quotationIsRejected;
+	}
+
+	public void setQuotationIsRejected(boolean quotationIsRejected) {
+		this.quotationIsRejected = quotationIsRejected;
+	}
+
+	public boolean isQuotationIsDrafted() {
+		return quotationIsDrafted;
+	}
+
+	public void setQuotationIsDrafted(boolean quotationIsDrafted) {
+		this.quotationIsDrafted = quotationIsDrafted;
+	}
+
+	public boolean isQuotationIsApproved() {
+		return quotationIsApproved;
+	}
+
+	public void setQuotationIsApproved(boolean quotationIsApproved) {
+		this.quotationIsApproved = quotationIsApproved;
+	}
+
+	
+    
+    
 }
