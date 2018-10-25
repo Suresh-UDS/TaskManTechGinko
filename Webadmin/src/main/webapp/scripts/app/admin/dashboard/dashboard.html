@@ -419,6 +419,103 @@
                     </div>
                 </div>
             </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingFive">
+                    <a class="collapsed" role="button" data-toggle="collapse"
+                       data-parent="#accordion" data-target="#collapseFive"
+                       aria-expanded="false" aria-controls="collapseFive">
+                        <h4 class="panel-title">
+                            Quotation <i class="material-icons">keyboard_arrow_down</i>
+                        </h4>
+                    </a>
+                </div>
+                <div id="collapseFive" class="panel-collapse collapse"
+                     role="tabpanel" aria-labelledby="headingTwo"
+                     aria-expanded="false" style="height: 0px;">
+                    <div class="panel-body">
+                        <div class="row">
+
+                            <div class="col-md-3 col-lg-3 col-sm-4">
+                                <div class="card blueBg cardWithbg">
+                                    <div class="card-header">
+                                        <i class="material-icons">list</i>
+                                    </div>
+                                    <div class="card-content">
+                                        <h4>Total tickets</h4>
+                                        <h3>{{overAllTicketsTotalCount}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-lg-3 col-sm-4">
+                                <div class="card skyblueBg cardWithbg">
+                                    <div class="card-header">
+                                        <i class="material-icons">open_in_browser</i>
+                                    </div>
+                                    <div class="card-content">
+                                        <h4>Waiting for Approval</h4>
+                                        <h3>{{openTicketsTotalCount}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-lg-2 col-sm-4">
+                                <div class="card yellowBg cardWithbg">
+                                    <div class="card-header">
+                                        <i class="material-icons">
+                                            how_to_reg
+                                        </i>
+                                    </div>
+                                    <div class="card-content">
+                                        <h4>Pending</h4>
+                                        <h3>
+                                            {{closedTicketsTotalCount}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-lg-2 col-sm-4">
+                                <div class="card greenBg cardWithbg">
+                                    <div class="card-header">
+                                        <i class="material-icons">check_circle_outline</i>
+                                    </div>
+                                    <div class="card-content">
+                                        <h4>Approved</h4>
+                                        <h3>
+                                            {{closedTicketsTotalCount}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-lg-2 col-sm-4">
+                                <div class="card lightRedBg cardWithbg">
+                                    <div class="card-header">
+                                        <i class="material-icons">highlight_off</i>
+                                    </div>
+                                    <div class="card-content">
+                                        <h4>Rejected</h4>
+                                        <h3>
+                                            {{closedTicketsTotalCount}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="row" style="padding-top: 30px;">
+
+
+                            <div class="col-md-12 col-lg-12" style="padding-top: 30px;">
+
+                                <div id="quotationStackedCharts" style="min-width: 530px; height: 400px; margin: 0 auto"></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
         </div>
 
 

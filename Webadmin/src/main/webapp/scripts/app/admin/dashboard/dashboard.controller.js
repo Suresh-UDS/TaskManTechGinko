@@ -1340,6 +1340,70 @@ angular.module('timeSheetApp')
 
 
 
+        Highcharts.chart('quotationStackedCharts', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Quotation Status'
+            },
+            xAxis: {
+                categories: ['15/10/2018', '16/10/2018', '17/10/2018', '18/10/2018', '19/10/2018', '20/10/2018', '21/10/2018', '22/10/2018', '23/10/2018',]
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Quotation Count'
+                },
+                stackLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                    }
+                }
+            },
+            legend: {
+                align: 'right',
+                x: -30,
+                verticalAlign: 'top',
+                y: 25,
+                floating: true,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                borderColor: '#CCC',
+                borderWidth: 1,
+                shadow: false
+            },
+            tooltip: {
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true,
+                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                    }
+                }
+            },
+            series: [{
+                name: 'Waiting for Approval',
+                data: [8, 3, 4, 7, 2,5, 3, 4, 7]
+            }, {
+                name: 'Rejected',
+                data: [7, 2, 3, 2, 1,5, 3, 4, 7]
+            }, {
+                name: 'Approved',
+                data: [6, 2, 3, 2, 1,5, 3, 4, 7]
+            }, {
+                name: 'Pending',
+                data: [8, 4, 4, 2, 5,5, 3, 4, 7]
+            }]
+        });
+
+
+
 
 
 
