@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 import com.ts.app.domain.*;
+import com.ts.app.repository.*;
 import com.ts.app.service.*;
 import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
@@ -44,13 +45,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ts.app.repository.EmployeeRepository;
-import com.ts.app.repository.EmployeeShiftRepository;
-import com.ts.app.repository.LocationRepository;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.repository.UserRoleRepository;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.web.rest.errors.TimesheetException;
 
@@ -92,6 +86,9 @@ public class ImportUtil {
 
 	@Autowired
 	private EmployeeRepository employeeRepo;
+
+    @Autowired
+    private TicketRepository ticketRepository;
 
 	@Autowired
 	private ProjectRepository projectRepo;
@@ -887,7 +884,7 @@ public class ImportUtil {
 
 				}
 				else {*/
-				
+
 				if(currentRow.getCell(2).getStringCellValue() != null) {
 					Employee existingEmployee = employeeRepo.findByEmpId(currentRow.getCell(2).getStringCellValue().trim());
 					if(existingEmployee != null) {
@@ -904,7 +901,7 @@ public class ImportUtil {
 						projectSite.setProject(newProj);
 						projectSite.setSite(newSite);
 						projectSite.setEmployee(existingEmployee);
-						
+
 						if(CollectionUtils.isNotEmpty(projSites)) {
 							projSites.add(projectSite);
 						}
@@ -912,7 +909,7 @@ public class ImportUtil {
 						log.debug("Update Employee Information with new site info: {}");
 					}else {
 						Employee employee = new Employee();
-						
+
 						Project newProj = projectRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(0))));
 						Site newSite = siteRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(1))));
 						employee.setEmpId(getCellValue(currentRow.getCell(2)));
@@ -978,8 +975,8 @@ public class ImportUtil {
 
 					}
 				}
-				
-				
+
+
 
 			/*}*/
 			}
@@ -1004,14 +1001,53 @@ public class ImportUtil {
 	        for (;r<=lastRow;r++){
 	            log.debug("Current Row Number - "+lastRow);
                 Row currentRow = datatypeSheet.getRow(r);
-                SiteDTO siteDTO = new SiteDTO();
-                EmployeeDTO employeeDTO = new EmployeeDTO();
-                EmployeeProjectSiteDTO employeeProjectSiteDTO = new EmployeeProjectSiteDTO();
-                String empId  = currentRow.getCell(1).getStringCellValue();
+                EmployeeProjectSite employeeProjectSite =new EmployeeProjectSite();
                 Long siteId = Long.valueOf(getCellValue(currentRow.getCell(0)));
+                log.debug("Site id - "+siteId);
+                String empId  = getCellValue(currentRow.getCell(1));
+                log.debug("Employee id - "+empId);
+                Long projectId= Long.valueOf(getCellValue(currentRow.getCell(2)));
+                log.debug("Project id - "+projectId);
 
                 Employee employee = employeeRepo.findByEmpId(empId);
-                log.debug("Employee found - "+employee.getName());
+
+                Site site = siteRepo.getOne(siteId);
+
+                Project project = projectRepo.findOne(projectId);
+
+                if(employee!=null){
+//                    List<Ticket> tickets = ticketRepository.findByEmployee(employee.getId());
+//                    log.debug("Ticket - "+tickets.size());
+//                    if(tickets.size()>0){
+//                        for (Ticket ticket : tickets){
+//                            ticket.setSite(site);
+//                            log.debug("Ticket site id after change - "+ticket.getSite().getId());
+//                            Ticket ticket1 = ticketRepository.save(ticket);
+//                            log.debug("Ticket after changing site Id - "+ticket1.getSite().getId());
+//                        }
+//                    }
+                    employeeProjectSite.setProject(project);
+                    employeeProjectSite.setSite(site);
+                    employeeProjectSite.setEmployee(employee);
+                    List<EmployeeProjectSite> employeeProjectSites = employee.getProjectSites();
+//                    employeeProjectSites.clear();
+                    log.debug("Employee project sites count - "+employeeProjectSites.size());
+                    employeeProjectSites.add(employeeProjectSite);
+                    log.debug("Employee project sites count after - "+employeeProjectSites.size());
+                    log.debug("Employee project sites count after - "+site.getName() +" - "+project.getName());
+
+                    employee.setProjectSites(employeeProjectSites);
+
+//                    for(EmployeeProjectSite employeeProjectSite1:employeeProjectSites){
+//                        log.debug("Employee - "+employeeProjectSite1.getProject().getName());
+//                    }
+                    employeeRepo.save(employee);
+
+//                    log.debug("Employee found - "+employee.getName());
+                }else{
+                    log.debug("Employee null");
+                }
+
 
             }
         } catch (FileNotFoundException e) {
