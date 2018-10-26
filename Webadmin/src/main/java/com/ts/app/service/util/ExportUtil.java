@@ -1045,6 +1045,17 @@ public class ExportUtil {
 					secondRowStyle.setFillForegroundColor(IndexedColors.TAN.getIndex());
 					secondRowStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
 					mergeHeader.createCell(j).setCellStyle(secondRowStyle);
+				}else if(i==1){
+					CellStyle secondRowsStyle = xssfWorkbook.createCellStyle();
+					secondRowsStyle.setBorderTop(CellStyle.BORDER_MEDIUM);
+					secondRowsStyle.setFillForegroundColor(IndexedColors.TAN.getIndex());
+					secondRowsStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+					mergeHeader.createCell(j).setCellStyle(secondRowsStyle);
+				}else {
+					CellStyle thirdRowsStyle = xssfWorkbook.createCellStyle();
+					thirdRowsStyle.setFillForegroundColor(IndexedColors.TAN.getIndex());
+					thirdRowsStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+					mergeHeader.createCell(j).setCellStyle(thirdRowsStyle);
 				}
 				
 			}
