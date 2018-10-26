@@ -19,6 +19,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -777,7 +778,7 @@ public class ExportUtil {
 	} 
 	  
 
-	public ExportResult writeMusterRollAttendanceReportToFile(String projName, String siteName, String shifts, String month, Date fromDate, Date toDate, List<EmployeeAttendanceReport> content, final String empId, ExportResult result, Map<Map<String,String>, String> shiftSlots) {
+	public ExportResult writeMusterRollAttendanceReportToFile(String projName, String siteName, String shifts, String month, Date fromDate, Date toDate, List<EmployeeAttendanceReport> content, final String empId, ExportResult result, LinkedHashMap<Map<String,String>, String> shiftSlots) {
 		
 		final String KEY_SEPARATOR = "::";
 		
