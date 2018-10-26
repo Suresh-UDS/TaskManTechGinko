@@ -378,12 +378,33 @@ angular.module('timeSheetApp')
             })
         };
 
-        $scope.loadSites = function(projectId){
-        		console.log('projectid - ' + projectId);
-            DashboardComponent.loadSites(projectId).then(function(data){
-                console.log('sites ' + JSON.stringify(data));
-                $scope.sites = data;
-            })
+        $scope.loadSites = function(projectId,region,branch){
+
+            if(branch){
+
+                SiteComponent.getSitesByBranch(projectId,region,branch).then(function (data) {
+                    console.log('Sites - ');
+                    console.log(data);
+                    $scope.sites = data;
+                });
+
+            }else if(region){
+
+                SiteComponent.getSitesByRegion(projectId,region).then(function (data) {
+                    $scope.sites = data;
+                    console.log("Sites - ");
+                    console.log(data);
+                })
+
+            }else if(projectId >0){
+                console.log('projectid - ' + projectId);
+                DashboardComponent.loadSites(projectId).then(function(data){
+                    console.log('sites ' + JSON.stringify(data));
+                    $scope.sites = data;
+                })
+            }
+
+
         };
 
         $scope.loadAllSites = function () {
@@ -456,16 +477,19 @@ angular.module('timeSheetApp')
 
                 }else if($scope.selectedBranch){
                     $scope.refreshReportByBranch();
+                    $scope.loadSites($scope.selectedProject.id,$scope.selectedRegion.name,$scope.selectedBranch.name);
                     $scope.loadChartData($scope.selectedProject.id,$scope.selectedRegion.name,$scope.selectedBranch.name,null);
 
                 }else if($scope.selectedRegion){
                     $scope.refreshReportByRegion();
                     $scope.loadBranch($scope.selectedProject.id);
+                    $scope.loadSites($scope.selectedProject.id,$scope.selectedRegion.name,null);
                     $scope.loadChartData($scope.selectedProject.id,$scope.selectedRegion.name,null,null);
 
                 }else if($scope.selectedProject) {
         			$scope.refreshReportByProject();
         			$scope.loadRegions($scope.selectedProject.id);
+        			$scope.loadSites($scope.selectedProject.id,null,null);
                     $scope.loadChartData($scope.selectedProject.id,null,null,null);
 
                 }
