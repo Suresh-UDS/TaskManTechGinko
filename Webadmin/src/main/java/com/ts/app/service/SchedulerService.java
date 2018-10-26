@@ -593,7 +593,8 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(initialDelay = 60000, fixedRate = 900000) // Runs every 15 mins
+	//@Scheduled(initialDelay = 60000, fixedRate = 900000) // Runs every 15 mins
+	@Scheduled(cron = "0 */15 * * * ?")
 	public void overDueTaskCheck() {
 		schedulerHelperService.overdueJobReport();
 	}
