@@ -913,7 +913,12 @@ public class ExportUtil {
 	    
 	    Cell shiftCell = headerRow.getCell(9);
 	    String shiftCellVal = headerRow.getCell(9).getStringCellValue();
-	    shiftCell.setCellValue(shiftCellVal + " " + shifts);
+	    XSSFFont shiftCellFont= xssfWorkbook.createFont();
+        XSSFRichTextString richTxt = new XSSFRichTextString(shifts);
+        shiftCellFont.setBold(true);
+        shiftCellFont.setFontHeight(5);
+        richTxt.applyFont(shiftCellFont);
+	    shiftCell.setCellValue(shiftCellVal + " " + richTxt);
 //	    musterSheet.autoSizeColumn(18);
 
 	    Cell monthCell = headerRow.getCell(24);
@@ -976,6 +981,7 @@ public class ExportUtil {
 	        CellStyle dayStyle = xssfWorkbook.createCellStyle();
 	        dayStyle.setBorderLeft(CellStyle.BORDER_THIN);
 	        dayStyle.setBorderRight(CellStyle.BORDER_THIN);
+	        dayStyle.setAlignment(CellStyle.ALIGN_CENTER);
 	        weekFont.setBold(true);
 	        rt.applyFont(weekFont);
 			Cell cell = weekDayRow.createCell(cellRow);
@@ -999,6 +1005,7 @@ public class ExportUtil {
  	    leftRowStyle.setBorderBottom(CellStyle.BORDER_MEDIUM);
  	    leftRowStyle.setBorderLeft(CellStyle.BORDER_MEDIUM);
  	    leftRowStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
+ 	    leftRowStyle.setAlignment(CellStyle.ALIGN_CENTER);
  		
  		int offRow = shiftCellRow + shiftLength; 		
  		Cell offCell = shiftRowNum.createCell(offRow);
@@ -1069,6 +1076,7 @@ public class ExportUtil {
  		    shiftStyle.setBorderBottom(CellStyle.BORDER_MEDIUM);
  		    shiftStyle.setBorderLeft(CellStyle.BORDER_MEDIUM);
  		    shiftStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
+ 		    shiftStyle.setAlignment(CellStyle.ALIGN_CENTER);
 			String value = ent.getValue();
 			XSSFRichTextString rt = new XSSFRichTextString(value);
 		    shiftFont.setBold(true);
@@ -1106,6 +1114,13 @@ public class ExportUtil {
 			shiftStyle.setBorderBottom(CellStyle.BORDER_THIN);
 			shiftStyle.setBorderLeft(CellStyle.BORDER_THIN);
 			shiftStyle.setBorderRight(CellStyle.BORDER_THIN);
+			shiftStyle.setAlignment(CellStyle.ALIGN_CENTER);
+			
+			CellStyle shiftStyle_2 = xssfWorkbook.createCellStyle();
+			shiftStyle_2.setBorderTop(CellStyle.BORDER_THIN);
+			shiftStyle_2.setBorderBottom(CellStyle.BORDER_THIN);
+			shiftStyle_2.setBorderLeft(CellStyle.BORDER_THIN);
+			shiftStyle_2.setBorderRight(CellStyle.BORDER_THIN);
 			
 			if(rowNum == 9) {
 				int numClmn = list.size() - 1;
@@ -1126,10 +1141,15 @@ public class ExportUtil {
 			EmployeeAttendanceReport key = entry.getKey();
 			Map<Integer,Boolean> attnMap = attnInfoMap.get(key);
 			dataRow.getCell(0).setCellValue(serialId);
+			dataRow.getCell(0).setCellStyle(shiftStyle);
 			dataRow.getCell(1).setCellValue(key.getEmployeeId());
+			dataRow.getCell(1).setCellStyle(shiftStyle_2);
 			dataRow.getCell(2).setCellValue(key.getName()+ " " + key.getLastName());
+			dataRow.getCell(2).setCellStyle(shiftStyle_2);
 			dataRow.getCell(3).setCellValue("");
+			dataRow.getCell(3).setCellStyle(shiftStyle);
 			dataRow.getCell(4).setCellValue(key.getDesignation());
+			dataRow.getCell(4).setCellStyle(shiftStyle_2);
 			
 			Map<String, Map<String, Integer>> shiftCountMap = new HashMap<String,Map<String, Integer>>();
 
@@ -1141,6 +1161,7 @@ public class ExportUtil {
 				Map<String, Integer> shiftCounts = null;
 				String week = weeks.get(day - 1);
 				log.debug("Week of the day is -" +week);
+				dataRow.getCell(dayStartCell).setCellStyle(shiftStyle);
 				if(attnMap.containsKey(day)) {
 					boolean attnVal = attnMap.get(day);
 					presentCnt += (attnVal ? 1 : 0);
@@ -1230,6 +1251,7 @@ public class ExportUtil {
 				    desigStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
 				    desigStyle.setFillForegroundColor(IndexedColors.TAN.getIndex());
 				    desigStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+				    desigStyle.setAlignment(CellStyle.ALIGN_CENTER);
 				    shiftFont.setBold(true);
 				    shiftFont.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
 				    desigStyle.setFont(shiftFont);
