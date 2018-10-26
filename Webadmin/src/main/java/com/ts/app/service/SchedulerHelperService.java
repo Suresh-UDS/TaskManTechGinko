@@ -340,6 +340,7 @@ public class SchedulerHelperService extends AbstractService {
 				ExportResult exportResult = new ExportResult();
 				exportResult = exportUtil.writeJobReportToFile(overDueJobs, exportResult);
 				for (Job job : overDueJobs) {
+					/*
 					long siteId = job.getSite().getId();
 					long projId = job.getSite().getProject().getId();
 					if (siteId > 0) {
@@ -372,6 +373,7 @@ public class SchedulerHelperService extends AbstractService {
 							alertEmailIds = overdueEmails.getSettingValue();
 						}
 					}
+					*/
 					try {
 						/*
 						List<Long> pushAlertUserIds = new ArrayList<Long>();
