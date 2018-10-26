@@ -87,6 +87,19 @@ angular.module('timeSheetApp')
 					});
 			},
 
+            employeeSiteChange: function(file){
+                var fileFormData = new FormData();
+                fileFormData.append('siteFile', file);
+                return $http.post('api/change/site/employee', fileFormData, {
+                    transformRequest: angular.identity,
+                    headers: {'Content-Type': undefined}
+
+                }).then(function (response) {
+                    return response.data;
+                });
+
+            },
+
             addRegion: function (region) {
                 return $http.post('api/region',region).then(function (response) {
                     return response.data;

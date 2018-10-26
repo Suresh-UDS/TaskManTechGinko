@@ -1985,6 +1985,10 @@ public class SchedulerHelperService extends AbstractService {
 								&& (eodReportClientGroupAlert != null
 								&& eodReportClientGroupAlert.getSettingValue().equalsIgnoreCase("true"))) {
 		
+							if(StringUtils.isEmpty(proj.getClientGroup())) {
+								proj.setClientGroup(proj.getName());
+							}
+							
 							if (proj.getClientGroup() != null) {
 		
 								ClientgroupDTO clientGrp = null;
@@ -2055,7 +2059,8 @@ public class SchedulerHelperService extends AbstractService {
 			}
 			
 			if (eodReportEmails != null && (generateReport || isOnDemand)
-					&& StringUtils.isEmpty(proj.getClientGroup())) {
+					&& (eodReportClientGroupAlert == null
+							|| eodReportClientGroupAlert.getSettingValue().equalsIgnoreCase("false"))) {
 				if (CollectionUtils.isNotEmpty(files)) {
 					log.info("Sending daily report email for client - "+ proj.getName());
 					mailService.sendDaywiseReportEmailFile(proj.getName(), eodReportEmails.getSettingValue(), files,
