@@ -547,8 +547,8 @@ public class SettingsService extends AbstractService {
 		warrantyEmailsSetting.setActive("Y");
 		
 		Setting dayWiseReportAlertSetting = null;
-		if(settingsDto.getDayWiseReportAlertTimeId() > 0) {
-			dayWiseReportAlertSetting = settingsRepository.findOne(settingsDto.getDayWiseReportAlertTimeId());
+		if(settingsDto.getDayWiseReportEmailAlertId() > 0) {
+			dayWiseReportAlertSetting = settingsRepository.findOne(settingsDto.getDayWiseReportEmailAlertId());
 		}else {
 			dayWiseReportAlertSetting = new Setting();
 		}

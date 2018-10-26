@@ -373,6 +373,7 @@ public class SchedulerHelperService extends AbstractService {
 						}
 					}
 					try {
+						/*
 						List<Long> pushAlertUserIds = new ArrayList<Long>();
 						Employee assignee = job.getEmployee();
 						if (assignee.getUser() != null) {
@@ -413,7 +414,9 @@ public class SchedulerHelperService extends AbstractService {
 						} catch (Exception e) {
 							log.error("Error while sending push and email notification for overdue job alerts", e);
 						}
+						
 						job.setOverdueAlertCount(alertCnt);
+						*/
 						job.setStatus(JobStatus.OVERDUE);
 						jobRepository.save(job);
 
@@ -1726,12 +1729,12 @@ public class SchedulerHelperService extends AbstractService {
 			sb.append("<tr bgcolor=\"F8CBAD\">");
 			sb.append("<td><b>" + proj.getName() + "</b></td>");
 			//sb.append("<td>Open</td>");
-			sb.append("<td>Assigned</td>");
+			sb.append("<td>Pending</td>");
 			sb.append("<td>Completed</td>");
 			sb.append("<td>Overdue</td>");
 			sb.append("<td>Total</td>");
 			sb.append("<td>Open</td>");
-			sb.append("<td>Assigned</td>");
+			sb.append("<td>Pending</td>");
 			//sb.append("<td>Pending</td>");
 			sb.append("<td>Closed</td>");
 			sb.append("<td>Total</td>");
