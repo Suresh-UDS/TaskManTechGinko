@@ -1304,6 +1304,8 @@ public class ExportUtil {
 			
 		}
 		int totalLastRow = totalRow + 1;
+		Row prevLastRow = musterSheet.getRow(lastRow + 1);
+		prevLastRow.createCell(totalLastRow).setCellStyle(rowStyle);
 		Cell lastCell = overAllRow.createCell(totalLastRow);
 		lastCell.setCellValue(overAllSum);
 		lastCell.setCellStyle(desigStyle);
