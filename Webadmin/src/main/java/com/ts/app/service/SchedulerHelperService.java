@@ -1835,7 +1835,7 @@ public class SchedulerHelperService extends AbstractService {
 	
 	
 					
-					sb.append("<td><b>" + site.getName() + "</b></td>");
+					sb.append("<td><b>" + StringUtils.capitalize(site.getName()) + "</b></td>");
 					ExportResult jobResult = new ExportResult();
 					if (env.getProperty("scheduler.dayWiseJobReport.enabled").equalsIgnoreCase("true")) {
 	
