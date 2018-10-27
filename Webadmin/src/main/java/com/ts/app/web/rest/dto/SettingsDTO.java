@@ -150,6 +150,14 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     private boolean dayWiseReportEmailAlert;
     
     private boolean clientGroupEmailAlert;
+    
+    private long musterRollEmailsId;
+    
+    private long musterRollEmailAlertId;
+    
+    private boolean musterRollEmailAlert;
+    
+    private List<String> musterRollEmailIds;
 
     public long getSiteId() {
 		return siteId;
@@ -709,6 +717,38 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 
 	public void setDayWiseReportClientGroupEmailAlertId(long dayWiseReportClientGroupEmailAlertId) {
 		this.dayWiseReportClientGroupEmailAlertId = dayWiseReportClientGroupEmailAlertId;
+	}
+
+	public long getMusterRollEmailsId() {
+		return musterRollEmailsId;
+	}
+
+	public void setMusterRollEmailsId(long musterRollEmailsId) {
+		this.musterRollEmailsId = musterRollEmailsId;
+	}
+
+	public long getMusterRollEmailAlertId() {
+		return musterRollEmailAlertId;
+	}
+
+	public void setMusterRollEmailAlertId(long musterRollEmailAlertId) {
+		this.musterRollEmailAlertId = musterRollEmailAlertId;
+	}
+
+	public boolean isMusterRollEmailAlert() {
+		return musterRollEmailAlert;
+	}
+
+	public void setMusterRollEmailAlert(boolean musterRollEmailAlert) {
+		this.musterRollEmailAlert = musterRollEmailAlert;
+	}
+
+	public List<String> getMusterRollEmailIds() {
+		return musterRollEmailIds;
+	}
+
+	public void setMusterRollEmailIds(List<String> musterRollEmailIds) {
+		this.musterRollEmailIds = musterRollEmailIds;
 	}
 
 	
