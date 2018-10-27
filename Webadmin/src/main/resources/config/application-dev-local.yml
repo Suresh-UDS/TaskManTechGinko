@@ -223,7 +223,7 @@ scheduler:
       enabled: true
       creation: yearly
    overdueJob:
-      enabled: false
+      enabled: true
    eodJobReport:
       enabled: true
    attendanceDetailReport:
