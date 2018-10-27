@@ -20,6 +20,8 @@ public class ExportContent {
 	
 	private String quotationFile;
 	
+	private String attendanceFile;
+	
 	private List<String> file;
 
 	public long getId() {
@@ -92,6 +94,14 @@ public class ExportContent {
 
 	public void setQuotationFile(String quotationFile) {
 		this.quotationFile = quotationFile;
+	}
+
+	public String getAttendanceFile() {
+		return attendanceFile;
+	}
+
+	public void setAttendanceFile(String attendanceFile) {
+		this.attendanceFile = attendanceFile;
 	}
 
 	
