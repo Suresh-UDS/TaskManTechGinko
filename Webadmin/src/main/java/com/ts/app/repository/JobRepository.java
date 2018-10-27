@@ -48,7 +48,7 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     @Query("SELECT new map(j.plannedStartTime as date ,count(j.id) as count) from Job j where j.site.id = :siteId and (j.plannedStartTime between :selDate and :endDate) group by j.plannedStartTime order by j.plannedStartTime")
     Map<Date, Long> findTotalJobCountByDateForReports(@Param("siteId") Long siteId, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
 
-    @Query("SELECT j from Job j where (j.plannedEndTime < :currDateTime) and (j.status < 3 or j.status = 4) ")
+    @Query("SELECT j from Job j where (j.plannedEndTime < :currDateTime) and (j.status < 3) ")
     List<Job> findOverdueJobsByStatusAndEndDateTime(@Param("currDateTime") java.util.Date endDate);
 
     @Query("SELECT new map(type as jobType ,count(j.id) as count) from Job j where j.site.id = :siteId and j.plannedStartTime = :selDate group by j.type")
