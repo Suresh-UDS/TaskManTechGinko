@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -877,14 +878,14 @@ public class SchedulerHelperService extends AbstractService {
 							exportAllSites = true;
 						}
 						StringBuilder shiftValues = new StringBuilder();
-						Map<Map<String, String>, String> shiftSlot = new HashMap<Map<String,String>, String>();
+						LinkedHashMap<Map<String, String>, String> shiftSlot = new LinkedHashMap<Map<String,String>, String>();
 
 						if (exportAllSites || exportMatchingSite) {
 							List<Shift> shifts = siteRepository.findShiftsBySite(site.getId());
 							int i = 1;
 							if (CollectionUtils.isNotEmpty(shifts)) {
 								for (Shift shift : shifts) {
-									Map<String, String> shiftTime = new HashMap<String, String>();
+									Map<String, String> shiftTime = new LinkedHashMap<String, String>();
 									shiftValues.append(shift.getStartTime() + " TO " + shift.getEndTime());
 									shiftValues.append("    ");
 									shiftTime.put(shift.getStartTime(), shift.getEndTime());
