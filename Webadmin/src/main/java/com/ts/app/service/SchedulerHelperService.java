@@ -857,7 +857,7 @@ public class SchedulerHelperService extends AbstractService {
 				List<Setting> settings = null;
 				if (dayReport) {
 					settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(
-							SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE, siteItr.next().getId(), proj.getId());
+							SettingsService.EMAIL_NOTIFICATION_MUSTER_ROLL, siteItr.next().getId(), proj.getId());
 				}
 				Setting attendanceReports = null;
 				if (CollectionUtils.isNotEmpty(settings)) {
@@ -981,18 +981,18 @@ public class SchedulerHelperService extends AbstractService {
 							// summary map
 							if (dayReport) {
 								settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(
-										SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_EMAILS, site.getId(), proj.getId());
-								emailAlertTimeSettings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(
-										SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_ALERT_TIME, site.getId(), proj.getId());
+										SettingsService.EMAIL_NOTIFICATION_MUSTER_ROLL_EMAILS, site.getId(), proj.getId());
+//								emailAlertTimeSettings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(
+//										SettingsService.EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_ALERT_TIME, site.getId(), proj.getId());
 							}
 							Setting attendanceReportEmails = null;
 							if (CollectionUtils.isNotEmpty(settings)) {
 								attendanceReportEmails = settings.get(0);
 							}
-							Setting attnDayWiseAlertTime = null;
-							if (CollectionUtils.isNotEmpty(emailAlertTimeSettings)) {
-								attnDayWiseAlertTime = emailAlertTimeSettings.get(0);
-							}
+//							Setting attnDayWiseAlertTime = null;
+//							if (CollectionUtils.isNotEmpty(emailAlertTimeSettings)) {
+//								attnDayWiseAlertTime = emailAlertTimeSettings.get(0);
+//							}
 
 							// get total employee count
 							long projEmpCnt = employeeRepository.findCountByProjectId(proj.getId());
@@ -1005,8 +1005,7 @@ public class SchedulerHelperService extends AbstractService {
 							// send reports in email.
 							if (attendanceReportEmails != null && projEmpCnt > 0) {
 								ExportResult exportResult = null;
-								String alertTime = attnDayWiseAlertTime != null ? attnDayWiseAlertTime.getSettingValue()
-										: null;
+								String alertTime = null;
 								Calendar now = Calendar.getInstance();
 								now.set(Calendar.SECOND, 0);
 								now.set(Calendar.MILLISECOND, 0);
@@ -1028,8 +1027,7 @@ public class SchedulerHelperService extends AbstractService {
 									}
 								}
 
-								if (dayReport
-										&& (attnDayWiseAlertTime == null || alertTimeCal.equals(now) || onDemand)) {
+								if (dayReport && (alertTimeCal.equals(now) || onDemand)) {
 									exportResult = exportUtil.writeMusterRollAttendanceReportToFile(proj.getName(),
 											site.getName(), shiftValues.toString(), month, fromDate, toDate,
 											siteAttnList, null, exportResult, shiftSlot);
