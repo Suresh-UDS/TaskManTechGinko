@@ -240,6 +240,8 @@ scheduler:
       enabled: true
    dayWiseQuotationReport:
       enabled: true 
+   dayWiseAttendanceReport:
+      enabled: true 
 
 default.user.password: uds12345
 
