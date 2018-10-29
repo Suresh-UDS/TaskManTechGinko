@@ -87,7 +87,10 @@ attendance:
     musterroll:
         report:
             template:
-                path: /opt/template/ATTENDENCE_MUSTER_ROLL_FORMAT.xlsx    
+                path: /opt/template/ATTENDENCE_MUSTER_ROLL_FORMAT.xlsx
+    generalShift: 
+        startTime: 09:00
+        endTime: 17:00                    
 quotation:
     file:
         path:  /opt/quotation
