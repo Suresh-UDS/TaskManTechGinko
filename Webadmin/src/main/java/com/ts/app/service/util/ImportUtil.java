@@ -527,6 +527,7 @@ public class ImportUtil {
 					jobService.saveJob(jobDto);
 
 				}
+				siteId  = 0;
 			}
 
 		} catch (FileNotFoundException e) {
