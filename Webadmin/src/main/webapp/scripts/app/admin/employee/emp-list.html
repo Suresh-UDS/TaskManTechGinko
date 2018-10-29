@@ -1,4 +1,4 @@
-<div ng-init="loadPageTop()">
+<div ng-init="loadPageTop();loadProjectsList();">
     <div class="row"
          ng-init="loadEmployees();loadProjects();loadAllEmployees();loadSites()">
         <div class="col-md-6 txt-align-lft">
@@ -209,6 +209,17 @@
 									</span>
 
                                 </th>
+                                <th>Site <span class="sortingIcons"> <span
+                                    ng-click="columnAscOrder('projectSites.site.name')"
+                                    ng-class="isActiveAsc == 'projectSites.site.name' ? 'active' : ''">
+												<i class="fa fa-caret-up"></i>
+										</span> <span ng-click="columnDescOrder('projectSites.site.name')"
+                                                      ng-class="isActiveDesc == 'projectSites.site.name' ? 'active' : ''">
+												<i ng-class="class" class="fa fa-caret-down"></i>
+										</span>
+									</span>
+
+                                </th>
                                 <th>Enrolled Face Id</th>
                                 <th has-permission="Employee:Edit">Authorize Face Id</th>
                                 <th>Status</th>
@@ -221,6 +232,7 @@
                                 <td>{{employee.empId}}</td>
                                 <td>{{employee.name | uppercase}} {{employee.lastName | uppercase}}</td>
                                 <td>{{employee.projectName | uppercase}}</td>
+                                <td>{{employee.siteName | uppercase}}</td>
                                 <td ng-if="employee.enrolled_face"><a id="images" href="#"
                                                                       onClick="$('#enrollImageModal').modal()"
                                                                       data-target="#enrollImageModal"
@@ -1716,13 +1728,13 @@
                             <div id="collapseOne"
                                  class="panel-collapse collapse collapseOne in" role="tabpanel"
                                  aria-labelledby="headingOne" aria-expanded="true"
-                                 style="height: 110px;">
+                                 style="height: 210px;">
                                 <div class="panel-body">
 
 
                                     <div class="row">
 
-                                        <div class="col-xs-12 col-md-6">
+                                        <div class="col-xs-12 col-md-6 col-lg-6" >
                                             <div class="form-group">
                                                 <div class="dropdown">
                                                     <label class="label-control">Client</label>
@@ -1736,19 +1748,51 @@
                                                     ng-show="!clientFilterDisable"
                                                     class="form-control-feedback d-big-arrow-icon "><i
                                                     class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchProject"
+                                                    <!-- <ui-select ng-model="client.selected"
                                                                ng-disabled="clientFilterDisable"
                                                     > <ui-select-match
-                                                        placeholder="Select clients...">{{filter
-                                                        ? searchProject.name?searchProject.name:'Select Client'
-                                                        :clearField?'Select Client':searchProject}}</ui-select-match> <ui-select-choices
-                                                        repeat="client in getClient($select.search) | filter: $select.search" ng-click="loadDepSites(searchProject)">
+                                                        placeholder="Select clients...">{{$select.selected.name}}</ui-select-match> 
+                                                        <ui-select-choices
+                                                        repeat="client in getClient($select.search) | filter: $select.search" ng-click="loadDepSites(client.selected);loadRegions(client.selected.id);">
                                                         <div ng-bind="client"></div>
-                                                    </ui-select-choices> </ui-select>
+                                                    </ui-select-choices> </ui-select> -->
+                                                    <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
+					                                    <ui-select-match placeholder="Select clients...">{{$select.selected.name}}</ui-select-match>
+					                                    <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSites(client.selected);loadRegions(client.selected.id)" null-option="allClients" loose-null>
+					                                        <span ng-bind-html="client.name | highlight: $select.search"></span>
+					                                    </ui-select-choices>
+					                                </ui-select>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xs-12 col-md-6">
+                                        
+                                        <div class="col-xs-12 col-md-6 col-lg-6">
+				                            <div class="form-group" >
+				
+				                                    <div class="dropdown">
+				                                        <label class="label-control">Select Region</label>
+				                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+				                                        <select class="form-control " ng-model="selectedRegion" ng-change="loadBranch(client.selected.id)" ng-options="region as region.name for region in regionList">
+				                                            <option value="">Please select Region...</option>
+				                                        </select>
+				                                    </div>
+				                            </div>
+				                        </div>
+                                   </div>
+                                   
+                                   <div class="row">
+                                   		<div class="col-xs-12 col-md-6 col-lg-6">
+				                            <div class="dropdown">
+				                                <label class="label-control">Select Branch</label>
+				                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+				                                <select class="form-control " ng-model="selectedBranch" ng-change="getSitesBYRegionOrBranch(client.selected.id,selectedRegion.name,selectedBranch.name)" ng-options="branch as branch.name for branch in branchList">
+				                                    <option value="">Please select Branch...</option>
+				                                </select>
+				                            </div>
+				                        </div>
+                                        
+                                        
+                                        <div class="col-xs-12 col-md-6 col-lg-6">
                                             <div class="dropdown">
                                                 <div class="form-group">
                                                     <label class="label-control">Site</label>
@@ -1761,7 +1805,7 @@
                                                         class="ld ld-ring ld-spin"></i></span> <span ng-show="!siteSpin"
                                                                                                      class="form-control-feedback d-big-arrow-icon "><i
                                                     class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchSite"
+                                                    <!-- <ui-select ng-model="searchSite"
                                                                ng-disabled="siteFilterDisable || sites.length == 0"
                                                     > <ui-select-match
                                                         placeholder="Select Site...">{{sites.length
@@ -1770,7 +1814,13 @@
                                                         ?clearField?'Select Site':searchSite : 'Select Site' }}</ui-select-match> <ui-select-choices
                                                         repeat="site in getSite($select.search) | filter: $select.search" ng-click="loadSearchSite(searchSite)">
                                                         <div ng-bind="site" ></div>
-                                                    </ui-select-choices> </ui-select>
+                                                    </ui-select-choices> </ui-select> -->
+                                                    <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
+													  <ui-select-match placeholder="Select site...">{{$select.selected.name}}</ui-select-match>
+													  <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search" null-option="allSites" loose-null>
+													    <span ng-bind-html="sitesListOne.name | highlight: $select.search"></span>
+													  </ui-select-choices>
+													</ui-select>
                                                     <span ng-if="sites.length == 0"><p
                                                         class="help-block">No sites</p></span>
                                                 </div>

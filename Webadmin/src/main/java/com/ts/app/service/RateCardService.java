@@ -93,16 +93,16 @@ public class RateCardService extends AbstractService {
 
 	@Inject
 	private FileUploadHelper fileUploadHelper;
-	
+
 	@Inject
 	private AmazonS3Utils amazonS3Utils;
-	
+
 	@Value("${AWS.s3-cloudfront-url}")
 	private String cloudFrontUrl;
-	
+
 	@Value("${AWS.s3-bucketEnv}")
 	private String bucketEnv;
-	
+
 	@Value("${AWS.s3-quotation-path}")
 	private String quotationFilePath;
 
@@ -347,7 +347,7 @@ public class RateCardService extends AbstractService {
 
             log.debug("quotation save  end point"+quotationSvcEndPoint);
             String url = quotationSvcEndPoint+"/quotation/create";
-            
+
 	    		Setting quotationAlertSetting = null;
 			List<Setting> settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_QUOTATION, quotationDto.getSiteId());
 			if(CollectionUtils.isNotEmpty(settings)) {
@@ -374,7 +374,7 @@ public class RateCardService extends AbstractService {
             if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("edit")) {
             		url = quotationSvcEndPoint+"/quotation/edit";
             }else if(quotationDto.getMode().equalsIgnoreCase("submit")) {
-            		if(!StringUtils.isEmpty(quotationDto.get_id())) { 
+            		if(!StringUtils.isEmpty(quotationDto.get_id())) {
             			url = quotationSvcEndPoint+"/quotation/send";
             		}else {
 	    	        		quotationDto.setCreatedByUserId(currUserId);
@@ -499,7 +499,7 @@ public class RateCardService extends AbstractService {
 
 	public Object getQuotations(SearchCriteria searchCriteria) {
 
-        log.debug("get Quotations");
+        log.debug("get Quotations"+searchCriteria);
         Object quotationList = "";
 		User user = userRepository.findOne(searchCriteria.getUserId());
 		List<EmployeeProjectSite> projectSites = new ArrayList<EmployeeProjectSite>();
@@ -529,7 +529,13 @@ public class RateCardService extends AbstractService {
             Map<String, String> map = new HashMap<String, String>();
             map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 
+            TimeZone tz = TimeZone.getTimeZone("UTC");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+            df.setTimeZone(tz);
+
             headers.setAll(map);
+
+            log.debug("Parameters - "+searchCriteria.isQuotationIsApproved() + " "+searchCriteria.isQuotationIsArchived()+ " "+ searchCriteria.isQuotationIsDrafted());
 
             JSONObject request = new JSONObject();
             request.put("projectId",searchCriteria.getProjectId());
@@ -537,16 +543,50 @@ public class RateCardService extends AbstractService {
             request.put("id",searchCriteria.getId());
             request.put("title",searchCriteria.getQuotationTitle());
             request.put("createdBy",searchCriteria.getQuotationCreatedBy());
-            request.put("createdDate", searchCriteria.getQuotationCreatedDate());
+
+            if(searchCriteria.getQuotationCreatedDate()!=null){
+                df.setTimeZone(tz);
+                String createdDate = df.format(searchCriteria.getQuotationCreatedDate());
+                String toDate = df.format(searchCriteria.getToDate());
+                request.put("createdDate", df.format(createdDate));
+                request.put("toDate", df.format(toDate));
+
+            }
+
+            if(searchCriteria.getFromDate()!=null){
+                df.setTimeZone(tz);
+                String createdDate = df.format(searchCriteria.getQuotationCreatedDate());
+                String toDate = df.format(searchCriteria.getToDate());
+                request.put("createdDate", df.format(createdDate));
+                request.put("toDate", df.format(toDate));
+
+            }
+
+            if(searchCriteria.getCheckInDateTimeFrom()!=null){
+                df.setTimeZone(tz);
+                String createdDate = df.format(searchCriteria.getQuotationCreatedDate());
+                String toDate = df.format(searchCriteria.getToDate());
+                request.put("createdDate", df.format(createdDate));
+                request.put("toDate", df.format(toDate));
+
+            }
+
             request.put("approvedBy",searchCriteria.getQuotationApprovedBy());
             request.put("status",searchCriteria.getQuotationStatus());
             request.put("submittedDate", searchCriteria.getQuotationSubmittedDate());
             request.put("approvedDate", searchCriteria.getQuotationApprovedDate());
+            request.put("isSubmitted", searchCriteria.isQuotationIsSubmitted());
+            request.put("isArchived", searchCriteria.isQuotationIsArchived());
+            request.put("isRejected", searchCriteria.isQuotationIsRejected());
+            request.put("isDrafted", searchCriteria.isQuotationIsDrafted());
+            request.put("isApproved", searchCriteria.isQuotationIsApproved());
+            request.put("currPage", searchCriteria.getCurrPage());
+            request.put("sort", searchCriteria.getSort());
             request.put("siteIds", siteIds);
             log.debug("Request body " + request.toString());
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);
             log.debug("Rate card service end point"+quotationSvcEndPoint);
-            ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/quotation", requestEntity, String.class);
+                ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/quotation", requestEntity, String.class);
             log.debug("Response freom push service "+ response.getStatusCode());
             log.debug("response from push service"+response.getBody());
 //            rateCardDTOList = (List<RateCardDTO>) response.getBody();
@@ -562,7 +602,7 @@ public class RateCardService extends AbstractService {
 //		return mapperUtil.toModelList(entities, RateCardDTO.class);
         return  quotationList;
     }
-	
+
 	public Object getQuotationSummary(SearchCriteria searchCriteria, List<Long> siteIds) {
 
         log.debug("get Quotations");

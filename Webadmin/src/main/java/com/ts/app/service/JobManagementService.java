@@ -757,9 +757,9 @@ public class JobManagementService extends AbstractService {
 		        	checkInDateTo.set(Calendar.MINUTE,59);
 		        	checkInDateTo.set(Calendar.SECOND,0);
 		        	java.sql.Date toDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateTo));
-
-		        	page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
-		        	allJobsList.addAll(page.getContent());
+		  
+		        	allJobsList = jobRepository.findByStartDateAndSiteReport(searchCriteria.getSiteId(), fromDt, toDt);
+//		        	allJobsList.addAll(page.getContent());
 		        	if(CollectionUtils.isNotEmpty(allJobsList)) {
 		        		if(transactions == null) {
 		    				transactions = new ArrayList<JobDTO>();
@@ -1024,7 +1024,7 @@ public class JobManagementService extends AbstractService {
 			data.append("&plannedEndTime="+job.getPlannedEndTime());
 			data.append("&plannedHours="+jobDTO.getPlannedHours());
 			data.append("&location="+jobDTO.getLocationId());
-			data.append("&frequency="+jobDTO.getFrequency());
+			data.append("&frequency="+ (StringUtils.isEmpty(jobDTO.getFrequency()) ? "" : jobDTO.getFrequency()));
 			data.append("&duration="+(StringUtils.isEmpty(jobDTO.getDuration()) ? "1" : jobDTO.getDuration()));
 			schConfDto.setData(data.toString());
 			schConfDto.setStartDate(jobDTO.getPlannedStartTime());
