@@ -739,15 +739,16 @@ public class ExportUtil {
 
 			dataRow.getCell(0).setCellValue(transaction.getEmployeeIds());
 			dataRow.getCell(1).setCellValue(transaction.getName() + " " + transaction.getLastName());
-			dataRow.getCell(2).setCellValue(transaction.getSiteName());
-			dataRow.getCell(3).setCellValue((StringUtils.isNotEmpty(transaction.getShiftStartTime()) ? StringUtil.formatShiftTime(transaction.getShiftStartTime()) : "") + "-" + (StringUtils.isNotEmpty(transaction.getShiftEndTime()) ? StringUtil.formatShiftTime(transaction.getShiftEndTime()) : ""));
-			dataRow.getCell(4).setCellValue(transaction.getCheckInTime() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getCheckInTime()) : "");
-			dataRow.getCell(5).setCellValue(transaction.getCheckOutTime() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getCheckOutTime()) : "");
-			dataRow.getCell(6).setCellValue(StringUtils.isNotEmpty(transaction.getDifferenceText())  ? transaction.getDifferenceText() : "");
-			dataRow.getCell(7).setCellValue(transaction.getStatus());
-			dataRow.getCell(8).setCellValue(transaction.isShiftContinued() ? "SHIFT CONTINUED" : "");
-			dataRow.getCell(9).setCellValue(transaction.isLate() ? "LATE CHECK IN" : "");
-			dataRow.getCell(10).setCellValue(StringUtils.isNotEmpty(transaction.getRemarks())  ? transaction.getRemarks() : "");
+			dataRow.getCell(2).setCellValue(transaction.isReliever() ? "YES" : "NO");
+			dataRow.getCell(3).setCellValue(transaction.getSiteName());
+			dataRow.getCell(4).setCellValue((StringUtils.isNotEmpty(transaction.getShiftStartTime()) ? StringUtil.formatShiftTime(transaction.getShiftStartTime()) : "") + "-" + (StringUtils.isNotEmpty(transaction.getShiftEndTime()) ? StringUtil.formatShiftTime(transaction.getShiftEndTime()) : ""));
+			dataRow.getCell(5).setCellValue(transaction.getCheckInTime() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getCheckInTime()) : "");
+			dataRow.getCell(6).setCellValue(transaction.getCheckOutTime() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getCheckOutTime()) : "");
+			dataRow.getCell(7).setCellValue(StringUtils.isNotEmpty(transaction.getDifferenceText())  ? transaction.getDifferenceText() : "");
+			dataRow.getCell(8).setCellValue(transaction.getStatus());
+			dataRow.getCell(9).setCellValue(transaction.isShiftContinued() ? "SHIFT CONTINUED" : "");
+			dataRow.getCell(10).setCellValue(transaction.isLate() ? "LATE CHECK IN" : "");
+			dataRow.getCell(11).setCellValue(StringUtils.isNotEmpty(transaction.getRemarks())  ? transaction.getRemarks() : "");
 		}
 
 //		for (int i = 0; i < ATTD_HEADER.length; i++) {

@@ -792,6 +792,7 @@ public class SchedulerHelperService extends AbstractService {
 					empAttnRep.setEmployeeId(emp.getEmpId());
 					empAttnRep.setName(emp.getName());
 					empAttnRep.setLastName(emp.getLastName());
+					empAttnRep.setReliever(emp.isReliever());
 					empAttnRep.setDesignation(emp.getDesignation());
 					empAttnRep.setStatus(EmployeeAttendanceReport.ABSENT_STATUS);
 					empAttnRep.setSiteName(site.getName());
