@@ -548,8 +548,8 @@ public class RateCardService extends AbstractService {
                 df.setTimeZone(tz);
                 String createdDate = df.format(searchCriteria.getQuotationCreatedDate());
                 String toDate = df.format(searchCriteria.getToDate());
-                request.put("createdDate", df.format(createdDate));
-                request.put("toDate", df.format(toDate));
+                request.put("createdDate", createdDate);
+                request.put("toDate", toDate);
 
             }
 
@@ -557,8 +557,8 @@ public class RateCardService extends AbstractService {
                 df.setTimeZone(tz);
                 String createdDate = df.format(searchCriteria.getQuotationCreatedDate());
                 String toDate = df.format(searchCriteria.getToDate());
-                request.put("createdDate", df.format(createdDate));
-                request.put("toDate", df.format(toDate));
+                request.put("createdDate", createdDate);
+                request.put("toDate", toDate);
 
             }
 
@@ -566,8 +566,8 @@ public class RateCardService extends AbstractService {
                 df.setTimeZone(tz);
                 String createdDate = df.format(searchCriteria.getQuotationCreatedDate());
                 String toDate = df.format(searchCriteria.getToDate());
-                request.put("createdDate", df.format(createdDate));
-                request.put("toDate", df.format(toDate));
+                request.put("createdDate", createdDate);
+                request.put("toDate", toDate);
 
             }
 

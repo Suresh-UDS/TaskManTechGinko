@@ -222,6 +222,9 @@ angular.module('timeSheetApp')
             console.log('Branch dropdown list:',$scope.searchBranch)
         }
 
+        $scope.markSelection = function (project) {
+        		$scope.selectedProject = project;
+        }
         //
 
         //Filter
@@ -532,8 +535,10 @@ angular.module('timeSheetApp')
                         console.log('$scope.site.shifts - '+$scope.site.shifts);
                         $scope.selectedProject = {id:$scope.site.projectId,name:$scope.site.projectName};
                         $scope.SelectClient.selected = $scope.selectedProject;
-                        $scope.shiftItems = $scope.site.shifts;
                         $scope.loadRegions($scope.site.projectId);
+                        $scope.selectRegion($scope.site.region);
+                        $scope.selectBranch($scope.site.branch);
+                        $scope.shiftItems = $scope.site.shifts;
                         console.log('Selected project' , $scope.selectedProject);
 
 
@@ -970,7 +975,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.loadBranch = function (projectId) {
-
+        		
             if(projectId){
 
                 if($scope.selectedRegion){

@@ -54,7 +54,7 @@
                                                </ui-select> -->
                                                <ui-select ng-model="SelectClient.selected"  name="projectName" ng-disabled="clientDisable" ng-required="true">
 												  <ui-select-match placeholder="Select clients...">{{$select.selected.name}}</ui-select-match>
-												  <ui-select-choices repeat="SelectClient in SelectClients | filter: $select.search" >
+												  <ui-select-choices repeat="SelectClient in SelectClients | filter: $select.search" ng-click="markSelection(SelectClient.selected);loadRegions(SelectClient.selected.id);">
 												    <span ng-bind-html="SelectClient.name | highlight: $select.search"></span>
 												  </ui-select-choices>
 												</ui-select>
@@ -89,7 +89,7 @@
                                                <label class="control-label">Region</label>
                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                <select name='region'
-                                                       class="form-control " ng-model="selectedRegion" ng-change="loadBranch(selectedProject.id)"  ng-options="region.name for region in regionList" tabindex="7"    >
+                                                       class="form-control " ng-model="selectedRegion" ng-change="loadBranch(SelectClient.selected.id)"  ng-options="region.name for region in regionList" tabindex="7"    >
                                                    <option value="">Select Region...</option>
                                                </select>
                                                <!--<div ng-show="form.$submitted || form.region.$touched">-->
@@ -121,7 +121,7 @@
                                                <label class="control-label">Branch</label>
                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                <select name='branch'
-                                                       class="form-control " ng-model="selectedBranch"  ng-options="branch.name for branch in branchList" tabindex="7"    >
+                                                       class="form-control " ng-model="selectedBranch"  ng-options="branch.name for branch in branchList" tabindex="7" >
                                                    <option value="">Select Branch...</option>
                                                </select>
                                                <!--<div ng-show="form.$submitted || form.region.$touched">-->
