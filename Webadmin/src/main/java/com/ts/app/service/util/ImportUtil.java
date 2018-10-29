@@ -426,7 +426,12 @@ public class ImportUtil {
 				Row currentRow = datatypeSheet.getRow(r);
 				JobDTO jobDto = new JobDTO();
 				if(siteId == 0) {
-					siteId = (long) currentRow.getCell(0).getNumericCellValue();
+					if(currentRow.getCell(0) != null) {
+						siteId = (long) currentRow.getCell(0).getNumericCellValue();
+					}
+					if(siteId == 0 && siteRow.getCell(2) != null) {
+						siteId = (long) siteRow.getCell(2).getNumericCellValue();
+					}
 				}
 				jobDto.setSiteId(siteId);
 				jobDto.setTitle(currentRow.getCell(1).getStringCellValue());
