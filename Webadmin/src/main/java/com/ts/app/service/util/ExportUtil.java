@@ -1281,12 +1281,27 @@ public class ExportUtil {
 				}else {
 					desigSum += (int)Math.round(totalCountRow.getNumericCellValue());  // 4 + 4 + 4
 					log.debug("Designation wise sum" + desigSum);
+					if(employeeList == dataRow.getRowNum()) {
+						Cell lastRowCell = dataRow.createCell(designationWiseTotal);
+						lastRowCell.setCellValue(desigSum);
+						lastRowCell.setCellStyle(desigStyle);
+						overAllSum += desigSum;
+						dataRow.getCell(designationWiseTotal).setCellStyle(desigStyle);
+					}
 				}
 			}else {
 				prevDesignation = key.getDesignation();
 				int sumVal = (int)Math.round(totalCountRow.getNumericCellValue()); 
 				log.debug("" +sumVal);
 				desigSum = sumVal;  // 4
+				
+				if(employeeList == dataRow.getRowNum()) {
+					Cell lastRowCell = dataRow.createCell(designationWiseTotal);
+					lastRowCell.setCellValue(desigSum);
+					lastRowCell.setCellStyle(desigStyle);
+					overAllSum += desigSum;
+					dataRow.getCell(designationWiseTotal).setCellStyle(desigStyle);
+				}
 			}
 //			
 			log.debug("Designation wise sum" + designationMap);

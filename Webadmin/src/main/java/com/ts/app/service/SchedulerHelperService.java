@@ -857,8 +857,13 @@ public class SchedulerHelperService extends AbstractService {
 				Iterator<Site> siteItr = sites.iterator();
 				List<Setting> settings = null;
 				if (dayReport) {
-					settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(
-							SettingsService.EMAIL_NOTIFICATION_MUSTER_ROLL, siteItr.next().getId(), proj.getId());
+					if(siteItr.hasNext()) {
+						Site siteItrId = siteItr.next();
+						if(siteItrId != null) {
+							settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(
+									SettingsService.EMAIL_NOTIFICATION_MUSTER_ROLL, siteItrId.getId(), proj.getId());
+						}
+					}
 				}
 				Setting attendanceReports = null;
 				if (CollectionUtils.isNotEmpty(settings)) {
@@ -893,6 +898,14 @@ public class SchedulerHelperService extends AbstractService {
 									shiftSlot.put(shiftTime, "S"+i);
 									i++;
 								}
+							} else {
+								Map<String, String> shiftTime = new LinkedHashMap<String, String>();
+								String startTime = env.getProperty("attendance.generalShift.startTime");
+								String endTime = env.getProperty("attendance.generalShift.endTime");
+//								shiftValues.append(startTime+ " TO " + endTime);
+								shiftValues.append(" ");
+								shiftTime.put(startTime, endTime);
+								shiftSlot.put(shiftTime, "S"+i);
 							}
 
 							siteAttnList = attendanceRepository.findBySiteId(site.getId(),
@@ -967,8 +980,8 @@ public class SchedulerHelperService extends AbstractService {
 												endCal.get(Calendar.HOUR_OF_DAY) + ":" + endCal.get(Calendar.MINUTE));
 										
 									} else {
-										empAttnRep.setShiftStartTime("");
-										empAttnRep.setShiftEndTime("");
+										empAttnRep.setShiftStartTime("attendance.generalShift.startTime");
+										empAttnRep.setShiftEndTime("attendance.generalShift.endTime");
 									}
 									empAttnRep.setProjectName(proj.getName());
 									siteAttnList.add(empAttnRep);
@@ -1011,6 +1024,8 @@ public class SchedulerHelperService extends AbstractService {
 								now.set(Calendar.SECOND, 0);
 								now.set(Calendar.MILLISECOND, 0);
 								Calendar alertTimeCal = Calendar.getInstance();
+								alertTimeCal.set(Calendar.SECOND, 0);
+								alertTimeCal.set(Calendar.MILLISECOND, 0);
 								if (StringUtils.isNotEmpty(alertTime)) {
 									try {
 										Date alertDateTime = DateUtil.parseToDateTime(alertTime);
@@ -1027,8 +1042,14 @@ public class SchedulerHelperService extends AbstractService {
 												e);
 									}
 								}
+								
+								log.debug("This site not having employees ", siteAttnList);
+								
+								if(siteAttnList.isEmpty()) {
+									log.debug("This site not having employees ", siteAttnList);
+								}
 
-								if (dayReport && (alertTimeCal.equals(now) || onDemand)) {
+								if (dayReport && !siteAttnList.isEmpty() || onDemand) {
 									exportResult = exportUtil.writeMusterRollAttendanceReportToFile(proj.getName(),
 											site.getName(), shiftValues.toString(), month, fromDate, toDate,
 											siteAttnList, null, exportResult, shiftSlot);
