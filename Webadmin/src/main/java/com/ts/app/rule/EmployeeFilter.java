@@ -21,7 +21,7 @@ public class EmployeeFilter implements DataFilter {
 				if(StringUtils.isNotEmpty(roleName) && StringUtils.containsIgnoreCase(roleName, "Client") 
 						&& StringUtils.isNotEmpty(filteredRoles) && (StringUtils.containsIgnoreCase(filteredRoles, "Branch") || StringUtils.containsIgnoreCase(filteredRoles, "Helpdesk"))) {
 					isValid = true;		
-				}else if(StringUtils.isNotEmpty(roleName) && StringUtils.containsIgnoreCase(roleName, "Branch") 
+				}else if(StringUtils.isNotEmpty(roleName) && (StringUtils.containsIgnoreCase(roleName, "Branch") || StringUtils.containsIgnoreCase(roleName, "Ticket"))
 						&& StringUtils.isNotEmpty(filteredRoles) && StringUtils.containsIgnoreCase(filteredRoles, "Helpdesk")) {
 					isValid = true;
 				}else if(StringUtils.isNotEmpty(roleName) && StringUtils.containsIgnoreCase(roleName, "Helpdesk") 
@@ -29,7 +29,8 @@ public class EmployeeFilter implements DataFilter {
 					isValid = true;
 				}else if(StringUtils.isNotEmpty(roleName) && !StringUtils.containsIgnoreCase(roleName, "Client")
 							&& !StringUtils.containsIgnoreCase(roleName, "Branch")
-							&& !StringUtils.containsIgnoreCase(roleName, "Helpdesk")) {
+							&& !StringUtils.containsIgnoreCase(roleName, "Helpdesk")
+							&& !StringUtils.containsIgnoreCase(roleName, "Ticket")) {
 					isValid = true;
 				}
 			}else {
