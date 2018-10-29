@@ -266,7 +266,8 @@ public class FeedbackTransactionService extends AbstractService {
        			remarks.append(feedbackTransDto.getRemarks());
        		}
 			String feedbackReportUrl = env.getProperty("reports.feedback-report.url");
-			mailService.sendFeedbackAlert(alertEmailIds, feedbackTransDto.getZone(), feedbackLocation.toString(), givenBy.toString(), remarks.toString(), new Date(), feedbackAlertItems, feedbackReportUrl);
+			String feedbackUrl = feedbackReportUrl+"/"+feedbackTransDto.getProjectId()+"/"+feedbackTransDto.getSiteId()+"/"+feedbackTransDto.getBlock()+"/"+feedbackTransDto.getFloor()+"/"+feedbackTransDto.getZone();
+			mailService.sendFeedbackAlert(alertEmailIds, feedbackTransDto.getZone(), feedbackLocation.toString(), givenBy.toString(), remarks.toString(), new Date(), feedbackAlertItems, feedbackUrl);
 		}	
 	}
 
