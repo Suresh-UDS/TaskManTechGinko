@@ -27,7 +27,9 @@ public class EmployeeFilter implements DataFilter {
 				}else if(StringUtils.isNotEmpty(roleName) && StringUtils.containsIgnoreCase(roleName, "Helpdesk") 
 						&& StringUtils.isNotEmpty(filteredRoles) && StringUtils.containsIgnoreCase(filteredRoles, "Ticket")) {
 					isValid = true;
-				}else {
+				}else if(StringUtils.isNotEmpty(roleName) && !StringUtils.containsIgnoreCase(roleName, "Client")
+							&& !StringUtils.containsIgnoreCase(roleName, "Branch")
+							&& !StringUtils.containsIgnoreCase(roleName, "Helpdesk")) {
 					isValid = true;
 				}
 			}else {
