@@ -45,7 +45,7 @@
                                                 </ui-select> -->
                                                 <ui-select ng-model="SelectClient.selected"  name="projectName" ng-disabled="clientDisable" ng-required="true">
 												  <ui-select-match placeholder="Select clients...">{{$select.selected.name}}</ui-select-match>
-												  <ui-select-choices repeat="SelectClient in SelectClients | filter: $select.search" >
+												  <ui-select-choices repeat="SelectClient in SelectClients | filter: $select.search" ng-click="markSelection(SelectClient.selected);loadRegions(SelectClient.selected.id);">
 												    <span ng-bind-html="SelectClient.name | highlight: $select.search"></span>
 												  </ui-select-choices>
 												</ui-select>
