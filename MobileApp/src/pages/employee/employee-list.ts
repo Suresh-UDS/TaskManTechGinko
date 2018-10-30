@@ -13,6 +13,7 @@ import {componentService} from "../service/componentService";
 import {AttendanceViewPage} from "../attendance-view/attendance-view";
 import {Diagnostic} from "@ionic-native/diagnostic";
 import {LocationAccuracy} from "@ionic-native/location-accuracy";
+import {LocationProvider} from "../../providers/location-provider";
 
 declare  var demo ;
 
@@ -49,7 +50,8 @@ export class EmployeeList {
     fakeEmployeeList: Array<any> = new Array(12);
     constructor(public navCtrl: NavController,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
                 private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,private locationAccuracy:LocationAccuracy,
-                private geoFence:Geofence, private employeeService: EmployeeService, private jobService: JobService, private siteService:SiteService, private attendanceService:AttendanceService, private diagonistic:Diagnostic) {
+                private geoFence:Geofence, private employeeService: EmployeeService, private jobService: JobService, private siteService:SiteService, private attendanceService:AttendanceService,
+                private diagonistic:Diagnostic, public locationProvider: LocationProvider) {
 
         this.lattitude = 0;
         this.longitude = 0;
@@ -71,11 +73,30 @@ export class EmployeeList {
         })
     }
 
+    getLocation(){
+        console.log("Location on enter");
+        console.log(this.locationProvider.lat);
+        console.log(this.locationProvider.lng);
+
+        this.locationProvider.startTracking().subscribe(response=>{
+            console.log(response);
+        });
+    }
+
+    stop(){
+        this.locationProvider.stopTracking();
+    }
+
     ionViewDidLoad() {
+
+        console.log("Location on enter");
+        console.log(this.locationProvider.lat);
+        console.log(this.locationProvider.lng);
+
         console.log('ionViewDidLoad SiteListPage');
         var options={
             timeout:3000
-        }
+        };
         this.geolocation.getCurrentPosition(options).then((response)=>{
             console.log("Current location");
             console.log(response);

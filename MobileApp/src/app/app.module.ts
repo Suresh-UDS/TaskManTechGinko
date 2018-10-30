@@ -122,6 +122,8 @@ import{OfflineGetassetreadings} from "../pages/offline-getassetreadings/offline-
 import {OfflineAttendance} from "../pages/employee/offline-attendance";
 import{ChangePassword} from "../pages/change-password/change-password";
 import{LocationAccuracy} from "@ionic-native/location-accuracy";
+import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
+import {LocationProvider} from "../providers/location-provider";
 // import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 // import{IonicImageViewerModule} from "ionic-img-viewer";
@@ -345,7 +347,9 @@ import{LocationAccuracy} from "@ionic-native/location-accuracy";
       Network,
       Market,
       LocationAccuracy,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+      BackgroundGeolocation,
+      LocationProvider,
+      {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]
 })
