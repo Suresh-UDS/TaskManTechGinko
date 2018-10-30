@@ -265,8 +265,14 @@ public class FeedbackTransactionService extends AbstractService {
        		if(StringUtils.isNotBlank(feedbackTransDto.getRemarks())) {
        			remarks.append(feedbackTransDto.getRemarks());
        		}
+       		
+       		String pattern = "MM-dd-yyyy";
+       		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+       		String date = simpleDateFormat.format(new Date());
+       		
 			String feedbackReportUrl = env.getProperty("reports.feedback-report.url");
-			String feedbackUrl = feedbackReportUrl+"/"+feedbackTransDto.getProjectId()+"/"+feedbackTransDto.getSiteId()+"/"+feedbackTransDto.getBlock()+"/"+feedbackTransDto.getFloor()+"/"+feedbackTransDto.getZone();
+			String feedbackUrl = feedbackReportUrl+"/"+feedbackTransDto.getProjectId()+"&"+feedbackTransDto.getProjectName()+"&"+feedbackTransDto.getSiteId()+"&"+feedbackTransDto.getSiteName()+"&"+
+									feedbackTransDto.getBlock()+"&"+feedbackTransDto.getFloor()+"&"+feedbackTransDto.getZone()+"&"+date;
 			mailService.sendFeedbackAlert(alertEmailIds, feedbackTransDto.getZone(), feedbackLocation.toString(), givenBy.toString(), remarks.toString(), new Date(), feedbackAlertItems, feedbackUrl);
 		}	
 	}
