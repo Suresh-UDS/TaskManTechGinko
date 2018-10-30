@@ -220,7 +220,7 @@ angular.module('timeSheetApp')
 	                  $scope.selectedSite = null;
 	                  $scope.sitesList = data;
 	                  $scope.sitesLists = [];
-	                  $scope.sitesListOne.selected = null;
+	                  //$scope.sitesListOne.selected = null;
 	                  $scope.sitesLists[0] = $scope.allSites;
 	                  
 	                  for(var i=0;i<$scope.sitesList.length;i++)
@@ -430,14 +430,14 @@ angular.module('timeSheetApp')
                         $scope.SelectClient.selected = $scope.selectedProject;
                         $scope.shiftItems = $scope.site.shifts;
                         console.log('Selected project' , $scope.selectedProject);
-
+                        $scope.title = $scope.site.name;
 
                         // Shift time HH:MM
                         console.log(data);
                         for(var i=0;i<$scope.shiftItems.length;i++) {
                             console.log($scope.shiftItems[i].startTime.length);
                             var start = $scope.shiftItems[i].startTime.split(':');
-                            console.log(start)
+                            console.log(start);
                             if(start[0].length == 1)
                             {
                                 console.log("Yes");
@@ -736,16 +736,18 @@ angular.module('timeSheetApp')
                             if($scope.localStorage.projectId){
                                $scope.searchProject = {id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
                                $scope.client.selected = $scope.searchProject;
+                               $scope.loadDepSitesList($scope.client.selected);
                             }else{
                                $scope.searchProject = null;
-                               $scope.client.selected = $scope.allClients;
+                               $scope.client.selected = $scope.searchProject;
                             }
                             if($scope.localStorage.siteId){
                               $scope.searchSite = {id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
                               $scope.sitesListOne.selected = $scope.searchSite;
+                              $scope.siteFilterDisable=false;
                             }else{
                                $scope.searchSite = null;
-                               $scope.sitesListOne.selected = $scope.allSites;
+                               $scope.sitesListOne.selected = $scope.searchSite;
                             }
 
                     }
