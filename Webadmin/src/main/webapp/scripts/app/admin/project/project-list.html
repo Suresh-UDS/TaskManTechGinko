@@ -34,8 +34,8 @@
     </div>
     <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
             <span class="AppliedFilterTxtCon">
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.projectName || localStorage.projectName">
-                    {{searchCriteria.projectName || localStorage.projectName}}
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="client.selected.id !=0 && client.selected.id !=null">
+                    {{client.selected.name}}
                 </span>
             </span>
     </div>
@@ -251,7 +251,7 @@
                                     <!--<option value="">Select Client...</option>-->
                                     <!--</select>-->
                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                    <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                    <!--  <ui-select ng-model="searchProject"   required>
                                         <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :clearField?'Select Client':searchProject}}</ui-select-match>
                                         <ui-select-no-choice>
@@ -262,7 +262,7 @@
                                         </ui-select-choices>
                                     </ui-select> -->
                                     <ui-select ng-model="client.selected"  ng-disabled="disabled">
-									  <ui-select-match placeholder="Select clients...">{{$select.selected.name}}</ui-select-match>
+									  <ui-select-match placeholder="Select clients..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
 									  <ui-select-choices repeat="client in clients | filter: $select.search" null-option="allClients" loose-null>
 									    <span ng-bind-html="client.name | highlight: $select.search"></span>
 									  </ui-select-choices>
