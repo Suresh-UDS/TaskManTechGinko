@@ -3,7 +3,7 @@
 <div class="crud-form"
      data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="loadPageTop();loadingStart();loadProjectsList();loadSite();">
     <div class="titleCon">
-            <h3>{{site.name | uppercase}}</h3>
+            <h3>{{title | uppercase}}</h3>
     </div>
 
     <div>
@@ -23,29 +23,16 @@
 
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <!-- <label class="control-label">Client Name </label>
-
-                                                <input type="text" class="form-control"   name='projectName'
-                                                       ng-model="selectedProject.name" uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"
-                                                       ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/"
-                                                       autofocus  required autocomplete="off"/> -->
-
+                                                
                                                 <label class="control-label">Select Client<span class="red-star">*</span> </label>
-                                                 <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                <!--<select class="form-control " ng-model="selectedProject"  ng-options="project as project.name for project in projectsList track by project.name">-->
-                                                    <!--<option value="">Select Client...</option>-->
-                                                <!--</select>-->
-                                                <span ng-show="!clientDisable" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                <!-- <ui-select ng-model="selectedProject"  ng-disabled="clientDisable"  ng-change="addProject(selectedProject)" tabindex="1"   ng-require="true" autofocus="true">
-                                                    <ui-select-match placeholder="Select clients...">{{selectedProject.name ? selectedProject.name : selectedProject}}</ui-select-match>
-                                                    <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
-                                                        <div >{{ client }}</div>
-                                                    </ui-select-choices>
-
-                                                </ui-select> -->
+                                               
+                                                <span ng-show="!clientDisable && !SelectClient.selected" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                                
                                                 <ui-select ng-model="SelectClient.selected"  name="projectName" ng-disabled="clientDisable" ng-required="true">
-												  <ui-select-match placeholder="Select clients...">{{$select.selected.name}}</ui-select-match>
-												  <ui-select-choices repeat="SelectClient in SelectClients | filter: $select.search" ng-click="markSelection(SelectClient.selected);loadRegions(SelectClient.selected.id);">
+
+												  <ui-select-match placeholder="Select clients..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
+												  <ui-select-choices repeat="SelectClient in SelectClients | filter: $select.search" ng-click="markSelection(SelectClient.selected);loadRegions(SelectClient.selected.id);" >
+
 												    <span ng-bind-html="SelectClient.name | highlight: $select.search"></span>
 												  </ui-select-choices>
 												</ui-select>
