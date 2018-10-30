@@ -94,7 +94,7 @@
                                                    <div class="col-md-10 pad-r-0px">
                                                         <label class="control-label">Group</label>
                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                       <select class="form-control" ng-model="selectedClientGroup" ng-options="clientgroup as clientgroup.clientgroup | uppercase for clientgroup in clientGroups">
+                                                       <select class="form-control" ng-model="selectedClientGroup" ng-options="clientgroup as clientgroup.clientgroup | uppercase for clientgroup in clientGroups"  tabindex="7">
                                                            <option value="">Select Client Group ..</option>
                                                        </select>
 
@@ -247,7 +247,7 @@
                               <div class="col-md-4 col-md-offset-8 txt-align-rgt">
                                   <div class="form-group">
                                       <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" type="submit"
-                                              id="form-button-save" ng-disabled="form.$invalid || btnDisable" tabindex="7">
+                                              id="form-button-save" ng-disabled="form.$invalid || btnDisable" tabindex="8">
                                           <span class="btn-label"><i class="material-icons">check</i></span> Save
                                           <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                       </button>
@@ -264,7 +264,7 @@
                                       </button>-->
 
                                       <button class="btn btn-danger" type="button"
-                                              ng-click="conform('cancel')" id="cancel-button" ng-disabled="btnDisable" tabindex="8">
+                                              ng-click="conform('cancel')" id="cancel-button" ng-disabled="btnDisable" tabindex="9">
                                               <i class="material-icons">close</i> Cancel
                                       </button>
 
