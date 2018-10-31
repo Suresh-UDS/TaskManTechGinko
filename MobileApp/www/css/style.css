@@ -88,13 +88,14 @@
   font-weight: 400;
 }
 p.siteName {
-    font-size: 12px !important;
+    font-size: 11px !important;
     color: #000 !important;
     padding-top: 0 !important;
     white-space: pre-line !important;
     text-transform: capitalize;
     line-height: 15px;
     width:70px;
+    font-weight: 400;
 }
 .scrollCon .label
 {
@@ -118,6 +119,13 @@ button.siteBtn
   padding: 5px 10px !important;
   margin: 0 8px;
   border-top: 3px solid #FFC107;
+}
+
+
+
+.sidebar .nav li>a:hover, .sidebar .nav li>a:focus
+{
+    /*background-color: orange !important;*/
 }
 .sidebar .nav li.active>a, .sidebar .nav li.active>a i
 {
@@ -722,6 +730,10 @@ span.EmpNameTxt
 {
     float: left;
 }
+.clearfix
+{
+    clear: both;
+}
 .InputCon ion-label
 {
     color: #444444;
@@ -867,10 +879,11 @@ span.EmpNameTxt
 {
   font-weight: 300 !important;
 }
-.bottom-border
+.fnt-wt-400
 {
-  border-bottom: 1px solid #eeeeee !important;
+   font-weight: 400 !important;
 }
+
 .login-bg-img
 {
  /* background: url('img/login.jpeg'); */
@@ -1738,6 +1751,7 @@ ion-grid .row:before
 .p-r-30{
     padding-right:30px !important;
 }
+<<<<<<< HEAD
     .fab[mini] {
         width: 32px !important;
         height: 32px;
@@ -1745,6 +1759,16 @@ ion-grid .row:before
         margin-left: 4px !important;
     }
 
+=======
+.mrgn-auto
+{
+    margin:auto !important;
+}
+.width30
+{
+    width:30% !important;
+}
+>>>>>>> Release-2.0-Inventory
 }
 
 

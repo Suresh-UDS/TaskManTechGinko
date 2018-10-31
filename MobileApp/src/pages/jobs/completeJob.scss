@@ -215,7 +215,10 @@ page-complete-job
     border: 1px solid #dedede;
     border-radius: 5px;
     background-color: rgb(238, 238, 238);
+<<<<<<< HEAD
     height:100% !important;
+=======
+>>>>>>> Release-2.0-Inventory
   }
   .text-item .item-inner
   {
@@ -243,9 +246,26 @@ page-complete-job
   {
     padding-left:0px !important;
   }
+<<<<<<< HEAD
 
   .clr-green
   {
     color:green !important;
   }
+=======
+  .txt-hide
+  {
+   overflow:hidden !important;
+  }
+  ion-select
+  {
+    max-width:100% !important;
+  }
+  .list-md {
+    margin: -1px 0 -25px;
+  }
+
+
+
+>>>>>>> Release-2.0-Inventory
 }

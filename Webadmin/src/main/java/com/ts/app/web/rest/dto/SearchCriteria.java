@@ -2,8 +2,12 @@ package com.ts.app.web.rest.dto;
 
 import com.ts.app.domain.AssetStatus;
 import com.ts.app.domain.AssetType;
+import com.ts.app.domain.IndentStatus;
 import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.MaterialTransactionType;
+import com.ts.app.domain.PurchaseRequestStatus;
 
+import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
@@ -178,7 +182,6 @@ public class SearchCriteria extends Paginator {
 
 	private Date assetCreatedDate;
 
-	private int roleLevel;
 
 	private String module;
 
@@ -192,16 +195,14 @@ public class SearchCriteria extends Paginator {
 
 	private long regionId;
 
-	private long jobId;
-	
 	private boolean quotationIsSubmitted;
-	
+
 	private boolean quotationIsArchived;
-	
+
 	private boolean quotationIsRejected;
-	
+
 	private boolean quotationIsDrafted;
-	
+
 	private boolean quotationIsApproved;
 
 	public String getModule() {
@@ -219,6 +220,56 @@ public class SearchCriteria extends Paginator {
 	public void setAction(String action) {
 		this.action = action;
 	}
+
+	private String materialName;
+
+	private String itemCode;
+
+	private Date materialCreatedDate;
+
+	private Timestamp transactionDate;
+
+	private String itemGroup;
+
+	private MaterialTransactionType transactionType;
+
+	private int roleLevel;
+
+	private long materialId;
+
+	private Timestamp transactionFromDate;
+
+	private Timestamp transactionToDate;
+
+	private Timestamp requestedDate;
+
+	private Timestamp issuedDate;
+
+	private String indentRefNumber;
+
+	private String purchaseRefNumber;
+
+	private Timestamp approvedDate;
+
+	private long jobId;
+
+	private PurchaseRequestStatus requestStatus;
+
+	private IndentStatus indentStatus;
+
+	private String expenseCategory;
+
+	private long expenseId;
+
+	private String expenseMode;
+
+	private Timestamp expenseFromDate;
+
+	private Timestamp expenseToDate;
+
+	private Timestamp creditedFromDate;
+
+	private Timestamp creditedToDate;
 
 	public String getWarrantyTypeName() {
 		return warrantyTypeName;
@@ -974,6 +1025,54 @@ public class SearchCriteria extends Paginator {
 		this.assetCreatedDate = assetCreatedDate;
 	}
 
+	public String getMaterialName() {
+		return materialName;
+	}
+
+	public void setMaterialName(String materialName) {
+		this.materialName = materialName;
+	}
+
+	public String getItemCode() {
+		return itemCode;
+	}
+
+	public void setItemCode(String itemCode) {
+		this.itemCode = itemCode;
+	}
+
+	public Date getMaterialCreatedDate() {
+		return materialCreatedDate;
+	}
+
+	public void setMaterialCreatedDate(Date materialCreatedDate) {
+		this.materialCreatedDate = materialCreatedDate;
+	}
+
+	public Timestamp getTransactionDate() {
+		return transactionDate;
+	}
+
+	public void setTransactionDate(Timestamp transactionDate) {
+		this.transactionDate = transactionDate;
+	}
+
+	public MaterialTransactionType getTransactionType() {
+		return transactionType;
+	}
+
+	public void setTransactionType(MaterialTransactionType transactionType) {
+		this.transactionType = transactionType;
+	}
+
+	public String getItemGroup() {
+		return itemGroup;
+	}
+
+	public void setItemGroup(String itemGroup) {
+		this.itemGroup = itemGroup;
+	}
+
 	public int getRoleLevel() {
 		return roleLevel;
 	}
@@ -981,15 +1080,6 @@ public class SearchCriteria extends Paginator {
 	public void setRoleLevel(int roleLevel) {
 		this.roleLevel = roleLevel;
 	}
-
-	public long getJobId() {
-		return jobId;
-	}
-
-	public void setJobId(long jobId) {
-		this.jobId = jobId;
-	}
-
 
     public String getBranch() {
         return branch;
@@ -1063,7 +1153,148 @@ public class SearchCriteria extends Paginator {
 		this.quotationIsApproved = quotationIsApproved;
 	}
 
-	
-    
-    
+	public long getMaterialId() {
+		return materialId;
+	}
+
+	public void setMaterialId(long materialId) {
+		this.materialId = materialId;
+	}
+
+	public Timestamp getTransactionFromDate() {
+		return transactionFromDate;
+	}
+
+	public void setTransactionFromDate(Timestamp transactionFromDate) {
+		this.transactionFromDate = transactionFromDate;
+	}
+
+	public Timestamp getTransactionToDate() {
+		return transactionToDate;
+	}
+
+	public void setTransactionToDate(Timestamp transactionToDate) {
+		this.transactionToDate = transactionToDate;
+	}
+
+	public String getIndentRefNumber() {
+		return indentRefNumber;
+	}
+
+	public void setIndentRefNumber(String indentRefNumber) {
+		this.indentRefNumber = indentRefNumber;
+	}
+
+	public Timestamp getRequestedDate() {
+		return requestedDate;
+	}
+
+	public void setRequestedDate(Timestamp requestedDate) {
+		this.requestedDate = requestedDate;
+	}
+
+	public Timestamp getIssuedDate() {
+		return issuedDate;
+	}
+
+	public void setIssuedDate(Timestamp issuedDate) {
+		this.issuedDate = issuedDate;
+	}
+
+	public String getPurchaseRefNumber() {
+		return purchaseRefNumber;
+	}
+
+	public void setPurchaseRefNumber(String purchaseRefNumber) {
+		this.purchaseRefNumber = purchaseRefNumber;
+	}
+
+	public Timestamp getApprovedDate() {
+		return approvedDate;
+	}
+
+	public void setApprovedDate(Timestamp approvedDate) {
+		this.approvedDate = approvedDate;
+	}
+
+	public long getJobId() {
+		return jobId;
+	}
+
+	public void setJobId(long jobId) {
+		this.jobId = jobId;
+	}
+
+	public PurchaseRequestStatus getRequestStatus() {
+		return requestStatus;
+	}
+
+	public void setRequestStatus(PurchaseRequestStatus requestStatus) {
+		this.requestStatus = requestStatus;
+	}
+
+	public IndentStatus getIndentStatus() {
+		return indentStatus;
+	}
+
+	public void setIndentStatus(IndentStatus indentStatus) {
+		this.indentStatus = indentStatus;
+	}
+
+
+    public String getExpenseCategory() {
+        return expenseCategory;
+    }
+
+    public void setExpenseCategory(String expenseCategory) {
+        this.expenseCategory = expenseCategory;
+    }
+
+    public long getExpenseId() {
+        return expenseId;
+    }
+
+    public void setExpenseId(long expenseId) {
+        this.expenseId = expenseId;
+    }
+
+    public String getExpenseMode() {
+        return expenseMode;
+    }
+
+    public void setExpenseMode(String expenseMode) {
+        this.expenseMode = expenseMode;
+    }
+
+    public Timestamp getExpenseFromDate() {
+        return expenseFromDate;
+    }
+
+    public void setExpenseFromDate(Timestamp expenseFromDate) {
+        this.expenseFromDate = expenseFromDate;
+    }
+
+    public Timestamp getExpenseToDate() {
+        return expenseToDate;
+    }
+
+    public void setExpenseToDate(Timestamp expenseToDate) {
+        this.expenseToDate = expenseToDate;
+    }
+
+    public Timestamp getCreditedFromDate() {
+        return creditedFromDate;
+    }
+
+    public void setCreditedFromDate(Timestamp creditedFromDate) {
+        this.creditedFromDate = creditedFromDate;
+    }
+
+    public Timestamp getCreditedToDate() {
+        return creditedToDate;
+    }
+
+    public void setCreditedToDate(Timestamp creditedToDate) {
+        this.creditedToDate = creditedToDate;
+    }
 }

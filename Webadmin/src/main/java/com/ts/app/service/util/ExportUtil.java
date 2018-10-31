@@ -63,6 +63,10 @@ import com.ts.app.domain.Frequency;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.Setting;
+import com.ts.app.domain.MaterialTransactionType;
+import com.ts.app.domain.PurchaseRequestStatus;
+import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.AssetPPMScheduleEventDTO;
 import com.ts.app.domain.Ticket;
 import com.ts.app.domain.User;
 import com.ts.app.domain.util.StringUtil;
@@ -80,7 +84,11 @@ import com.ts.app.web.rest.dto.FeedbackTransactionResultDTO;
 import com.ts.app.web.rest.dto.JobChecklistDTO;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.QuotationDTO;
+import com.ts.app.web.rest.dto.MaterialDTO;
+import com.ts.app.web.rest.dto.MaterialTransactionDTO;
+import com.ts.app.web.rest.dto.PurchaseReqDTO;
 import com.ts.app.web.rest.dto.ReportResult;
+import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.TicketDTO;
 import com.ts.app.web.rest.dto.VendorDTO;
 
@@ -124,6 +132,12 @@ public class ExportUtil {
 	private String[] ASSET_HEADER = { "ID", "ASSET CODE", "NAME", "ASSET TYPE", "ASSET GROUP", "CLIENT", "SITE", "BLOCK", "FLOOR", "ZONE", "STATUS"};
 
 	private String[] VENDOR_HEADER = { "ID", "NAME", "CONTACT FIRSTNAME", "CONTACT LASTNAME", "PHONE", "EMAIL", "ADDRESSLINE1", "ADDRESSLINE2", "CITY", "COUNTRY", "STATE", "PINCODE"};
+
+	private String[] PR_HEADER = { "ID", "REFNUMBER", "CLIENT", "SITE", "REQUESTED DATE", "REQUESTED BY", "APPROVED DATE", "APPROVED BY", "PO NUMBER", "STATUS"};
+
+	private String[] INVENTORY_HEADER = { "ID", "ITEM NAME", "ITEM CODE", "ITEM GROUP", "CLIENT", "SITE", "MANUFACTURE NAME", "STORE STOCK", "UOM", "MINIMUM STOCK", "MAXIMUM STOCK", "DESCRIPTION"};
+
+	private String[] INVENTORY_TRANS_HEADER = { "ID", "ITEM NAME", "ITEM CODE", "CLIENT", "SITE", "STORE STOCK", "UOM", "QUANTITY", "INDENT NUMBER", "PURCHASE NUMBER", "TRANSACTION DATE", "STATUS"};
 
 	private String[] FEEDBACK_HEADER = { "ID", "DATE", "REVIEWER NAME", "REVIEWER CODE", "CLIENT", "SITE", "FEEDBACK_NAME", "BLOCK", "FLOOR", "ZONE", "RATING", "REMARKS", "QUESTION", "ANSWER", "ITEM REMARKS" };
 
@@ -772,22 +786,22 @@ public class ExportUtil {
 		result.setStatus(getExportStatus(fileName));
 		return result;
 	}
-	
-	public class SortbyDesignation implements Comparator<EmployeeAttendanceReport> 
-	{ 
-	    public int compare(EmployeeAttendanceReport a, EmployeeAttendanceReport b) 
-	    { 
-	        return a.getEmployeeId().compareTo(b.getEmployeeId()); 
-	    } 
-	} 
-	  
+
+	public class SortbyDesignation implements Comparator<EmployeeAttendanceReport>
+	{
+	    public int compare(EmployeeAttendanceReport a, EmployeeAttendanceReport b)
+	    {
+	        return a.getEmployeeId().compareTo(b.getEmployeeId());
+	    }
+	}
+
 
 	public ExportResult writeMusterRollAttendanceReportToFile(String projName, String siteName, String shifts, String month, Date fromDate, Date toDate, List<EmployeeAttendanceReport> content, final String empId, ExportResult result, LinkedHashMap<Map<String,String>, String> shiftSlots) {
-		
+
 		final String KEY_SEPARATOR = "::";
-		
+
 		Map<EmployeeAttendanceReport, Map<Integer,Boolean>> attnInfoMap = new TreeMap<EmployeeAttendanceReport,Map<Integer,Boolean>>(new SortbyDesignation());
-				
+
 		//Consolidate the attendance data against emp id.
 		if(CollectionUtils.isNotEmpty(content)) {
 			Calendar attnCal = Calendar.getInstance();
@@ -802,16 +816,16 @@ public class ExportUtil {
 				}else {
 					attnDayMap = new TreeMap<Integer, Boolean>();
 				}
-				
+
 				Map<String, String> mapKey = new HashMap<String, String>();
 				mapKey.put(empAttnReport.getShiftStartTime(), empAttnReport.getShiftEndTime());
-				
+
 				String shiftKeyMap = null;
 				if(shiftSlots.containsKey(mapKey)) {
 					shiftKeyMap = shiftSlots.get(mapKey);
 					empAttnReport.setShiftKey(shiftKeyMap);
 				}
-				
+
 				if(empAttnReport.getCheckInTime() != null) {
 					attnDayMap.put(attnDay, true);
 				}else {
@@ -820,7 +834,7 @@ public class ExportUtil {
 				attnInfoMap.put(empAttnReport, attnDayMap);
 			}
 		}
-				
+
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend=" + isAppend);
 		if (result == null) {
@@ -896,7 +910,7 @@ public class ExportUtil {
 		Font font = xssfWorkbook.createFont();
 	    font.setColor(HSSFColor.DARK_GREEN.index);
 	    style.setFillBackgroundColor(HSSFColor.DARK_GREEN.index);
-	    
+
 	    CellStyle rowStyle = xssfWorkbook.createCellStyle();
 	    rowStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
 //	    rowStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
@@ -915,7 +929,7 @@ public class ExportUtil {
 	    Cell siteNameCell = headerRow.getCell(4);
 	    String siteNameCellVal = headerRow.getCell(4).getStringCellValue();
 	    siteNameCell.setCellValue(siteNameCellVal + " " + siteName);
-	    
+
 	    Cell shiftCell = headerRow.getCell(9);
 	    String shiftCellVal = headerRow.getCell(9).getStringCellValue();
 	    XSSFFont shiftCellFont= xssfWorkbook.createFont();
@@ -929,14 +943,14 @@ public class ExportUtil {
 	    Cell monthCell = headerRow.getCell(24);
 	    String monthCellVal = headerRow.getCell(24).getStringCellValue();
 	    monthCell.setCellValue(monthCellVal + " " + month);
-	    
+
 	    Row weekDayRow = musterSheet.getRow(7);
 //	    weekDayRow.setRowStyle(rowStyle);
-	    	    
+
 	    rowNum = 8;
 
 		Set<Entry<EmployeeAttendanceReport,Map<Integer,Boolean>>> entrySet = attnInfoMap.entrySet();
-		
+
 		/* Designation wise sorting */
 		 List<Entry<EmployeeAttendanceReport, Map<Integer,Boolean>>> list = new ArrayList<Entry<EmployeeAttendanceReport, Map<Integer,Boolean>>>(entrySet);
 		    Collections.sort( list, new Comparator<Map.Entry<EmployeeAttendanceReport, Map<Integer,Boolean>>>()
@@ -947,40 +961,40 @@ public class ExportUtil {
 					// TODO Auto-generated method stub
 					String ekey1 = null;
 					String ekey2 = null;
-					if(o1.getKey() != null && o2.getKey() != null) { 
+					if(o1.getKey() != null && o2.getKey() != null) {
 						ekey1 = o1.getKey().getDesignation();
 						ekey2 = o2.getKey().getDesignation();
 					};
 					return ekey1.compareTo(ekey2);
-					
+
 				}
 		    });
-		
+
 		    log.debug("Showing a sorted designation" +list);
-		    
+
 		//get the max date of month
 		Calendar fromCal = Calendar.getInstance();
 		fromCal.setTime(fromDate);
 		int daysInMonth = fromCal.getActualMaximum(Calendar.DAY_OF_MONTH);
-		
+
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(fromDate);
-		cal.set(Calendar.DAY_OF_MONTH, 1); 
+		cal.set(Calendar.DAY_OF_MONTH, 1);
 		int weekInDays=cal.get(Calendar.MONTH);
 
 	    SimpleDateFormat df = new SimpleDateFormat("EE");
 	    List<String> weeks = new ArrayList<>();
 	    String wDay = null;
-	    
+
 		while (weekInDays==cal.get(Calendar.MONTH)) {
 		  System.out.print(df.format(cal.getTime()).toString().toUpperCase());
 		  wDay = df.format(cal.getTime()).toString();
 		  weeks.add(wDay.toUpperCase());
 		  cal.add(Calendar.DAY_OF_MONTH, 1);
 		}
-		
+
 		int cellRow = 5;
-		for(String weekDay : weeks) { 
+		for(String weekDay : weeks) {
 		    XSSFFont weekFont= xssfWorkbook.createFont();
 	        XSSFRichTextString rt = new XSSFRichTextString(weekDay);
 	        CellStyle dayStyle = xssfWorkbook.createCellStyle();
@@ -994,32 +1008,32 @@ public class ExportUtil {
 			cell.setCellStyle(dayStyle);
 			cellRow++;
 		}
-		
+
 		int shiftCellRow = 36;
-	    
+
 		Row shiftRowNum = musterSheet.getRow(6);
 	    musterSheet.setColumnWidth(2, 8000);
 	    musterSheet.setColumnWidth(4, 8000);
 
 		XSSFFont shiftFont = xssfWorkbook.createFont();
-		
+
 		int shiftLength = shiftSlots.entrySet().size();
-		
+
 		CellStyle leftRowStyle = xssfWorkbook.createCellStyle();
  	    leftRowStyle.setBorderTop(CellStyle.BORDER_MEDIUM);
  	    leftRowStyle.setBorderBottom(CellStyle.BORDER_MEDIUM);
  	    leftRowStyle.setBorderLeft(CellStyle.BORDER_MEDIUM);
  	    leftRowStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
  	    leftRowStyle.setAlignment(CellStyle.ALIGN_CENTER);
- 		
- 		int offRow = shiftCellRow + shiftLength; 		
+
+ 		int offRow = shiftCellRow + shiftLength;
  		Cell offCell = shiftRowNum.createCell(offRow);
  		XSSFRichTextString rtr = new XSSFRichTextString("Off");
  		shiftFont.setBold(true);
  		rtr.applyFont(shiftFont);
  		offCell.setCellValue(rtr);
  		offCell.setCellStyle(leftRowStyle);
- 		
+
  		int totalRow = offRow + 1;
  		Cell totalCell = shiftRowNum.createCell(totalRow);
  		XSSFRichTextString tot = new XSSFRichTextString("Total Pay");
@@ -1027,7 +1041,7 @@ public class ExportUtil {
  		tot.applyFont(shiftFont);
  		totalCell.setCellValue(tot);
  		totalCell.setCellStyle(leftRowStyle);
- 		
+
  		int totalDesigRow = totalRow + 1;
  		weekDayRow.createCell(totalDesigRow).setCellStyle(rowStyle);
  		Cell totalDesigCell = shiftRowNum.createCell(totalRow + 1);
@@ -1038,10 +1052,10 @@ public class ExportUtil {
  		totDesig.applyFont(shiftFont);
  		totalDesigCell.setCellValue(totDesig);
  		totalDesigCell.setCellStyle(leftRowStyle);
-		
+
 		log.debug("Shift count length" + shiftLength);
-		
-		for(int i=1; i<6; i++) { 
+
+		for(int i=1; i<6; i++) {
 			Row mergeHeader = musterSheet.getRow(i);
 			for(int j=shiftCellRow; j<totalDesigRow+1; j++) {
 				if(i==1 && j==totalDesigRow) {
@@ -1069,13 +1083,13 @@ public class ExportUtil {
 					thirdRowsStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
 					mergeHeader.createCell(j).setCellStyle(thirdRowsStyle);
 				}
-				
+
 			}
 		}
-		
-		musterSheet.addMergedRegion(new CellRangeAddress(1, 5, totalRow, totalDesigRow)); 
-		
- 		for(Map.Entry<Map<String, String>, String> ent : shiftSlots.entrySet()) { 
+
+		musterSheet.addMergedRegion(new CellRangeAddress(1, 5, totalRow, totalDesigRow));
+
+ 		for(Map.Entry<Map<String, String>, String> ent : shiftSlots.entrySet()) {
  		    CellStyle shiftStyle = xssfWorkbook.createCellStyle();
  		    shiftStyle.setBorderTop(CellStyle.BORDER_MEDIUM);
  		    shiftStyle.setBorderBottom(CellStyle.BORDER_MEDIUM);
@@ -1088,17 +1102,17 @@ public class ExportUtil {
 		    rt.applyFont(shiftFont);
 			Cell shiftRow = shiftRowNum.getCell(shiftCellRow);
 			if(shiftRow == null) {
-				shiftRow = shiftRowNum.createCell(shiftCellRow);				
+				shiftRow = shiftRowNum.createCell(shiftCellRow);
 			}
 
 			shiftRow.setCellValue(rt);
 			shiftRow.setCellStyle(shiftStyle);
-				
+
 			shiftCellRow++;
 		}
- 		 		
- 	    
-		
+
+
+
  		String prevDesignation = null;
 		String currDesignation = null;
 		int desigSum = 0;
@@ -1109,24 +1123,24 @@ public class ExportUtil {
 		CellStyle desigStyle = xssfWorkbook.createCellStyle();
 		log.debug("Employee list length" +list.size());
 		int employeeList = list.size() + (rowNum - 1);
-		
+
 		for (Entry<EmployeeAttendanceReport,Map<Integer,Boolean>> entry : list) {
-			
+
 			Row dataRow = musterSheet.getRow(rowNum);
-			
+
 			CellStyle shiftStyle = xssfWorkbook.createCellStyle();
 			shiftStyle.setBorderTop(CellStyle.BORDER_THIN);
 			shiftStyle.setBorderBottom(CellStyle.BORDER_THIN);
 			shiftStyle.setBorderLeft(CellStyle.BORDER_THIN);
 			shiftStyle.setBorderRight(CellStyle.BORDER_THIN);
 			shiftStyle.setAlignment(CellStyle.ALIGN_CENTER);
-			
+
 			CellStyle shiftStyle_2 = xssfWorkbook.createCellStyle();
 			shiftStyle_2.setBorderTop(CellStyle.BORDER_THIN);
 			shiftStyle_2.setBorderBottom(CellStyle.BORDER_THIN);
 			shiftStyle_2.setBorderLeft(CellStyle.BORDER_THIN);
 			shiftStyle_2.setBorderRight(CellStyle.BORDER_THIN);
-			
+
 			if(rowNum == 9) {
 				int numClmn = list.size() - 1;
 				musterSheet.shiftRows(rowNum, 11, numClmn, true, true);
@@ -1135,14 +1149,14 @@ public class ExportUtil {
 					dataRow.createCell(i).setCellStyle(shiftStyle);
 				}
 			}
-			
+
 			if(dataRow == null) {
 				dataRow = musterSheet.createRow(rowNum);
 				for(int i=0; i<totalRow; i++) {
 					dataRow.createCell(i).setCellStyle(shiftStyle);
 				}
 			}
-				
+
 			EmployeeAttendanceReport key = entry.getKey();
 			Map<Integer,Boolean> attnMap = attnInfoMap.get(key);
 			dataRow.getCell(0).setCellValue(serialId);
@@ -1155,7 +1169,7 @@ public class ExportUtil {
 			dataRow.getCell(3).setCellStyle(shiftStyle);
 			dataRow.getCell(4).setCellValue(key.getDesignation());
 			dataRow.getCell(4).setCellStyle(shiftStyle_2);
-			
+
 			Map<String, Map<String, Integer>> shiftCountMap = new HashMap<String,Map<String, Integer>>();
 
 			int dayStartCell = 5;
@@ -1176,7 +1190,7 @@ public class ExportUtil {
 					}else {
 						shiftCounts = new HashMap<String, Integer>();
 					}
-					
+
 					if(attnVal) {
 						shiftCounts.put(sh, presentCnt);
 						shiftCountMap.put(key.getEmployeeId(), shiftCounts);
@@ -1198,15 +1212,15 @@ public class ExportUtil {
 				}
 				dayStartCell++;
 			}
-			
+
 //			dataRow.getCell(dayStartCell).setCellValue(presentCnt);
-			
+
 			int sumCount = dayStartCell;
 			int sumOffCount = offRow;
-			int sumTotCount = sumOffCount + 1;	
+			int sumTotCount = sumOffCount + 1;
 			int designationWiseTotal = sumTotCount + 1;
 			int totalValue = 0;
-			
+
 			Cell totalCountRow = dataRow.createCell(sumTotCount);
 
 			for(Map.Entry<Map<String, String>, String> ent : shiftSlots.entrySet()) {
@@ -1221,7 +1235,7 @@ public class ExportUtil {
 
 				if(shiftCountMap.containsKey(key.getEmployeeId())) {
 					Map<String, Integer> shiftCounts = shiftCountMap.get(key.getEmployeeId());
-					
+
 					if(shiftCounts.containsKey(value)) {
 						shiftCnt = shiftCounts.get(value);
 					}
@@ -1233,23 +1247,23 @@ public class ExportUtil {
 					totalCountRow = dataRow.getCell(sumTotCount);
 					totalValue += shiftCnt;
 				}
-				
+
 				shiftCountRow.setCellValue(shiftCnt);
 				offCountRow.setCellValue(offCnt);
-				
+
 				totalCountRow.setCellValue(totalValue + offCnt);
-								
+
 				sumCount++;
 			}
-			
+
 			CellStyle desig_style = xssfWorkbook.createCellStyle();
 			desig_style.setBorderRight(CellStyle.BORDER_MEDIUM);
 			Cell desig_cell = dataRow.createCell(designationWiseTotal);
 			desig_cell.setCellStyle(desig_style);
-			
-			if(StringUtils.isNotEmpty(prevDesignation)) { 
-				currDesignation = key.getDesignation();  
-				if(!prevDesignation.equals(currDesignation)) {  
+
+			if(StringUtils.isNotEmpty(prevDesignation)) {
+				currDesignation = key.getDesignation();
+				if(!prevDesignation.equals(currDesignation)) {
 				    desigStyle.setBorderTop(CellStyle.BORDER_MEDIUM);
 				    desigStyle.setBorderBottom(CellStyle.BORDER_MEDIUM);
 				    desigStyle.setBorderLeft(CellStyle.BORDER_MEDIUM);
@@ -1260,7 +1274,7 @@ public class ExportUtil {
 				    shiftFont.setBold(true);
 				    shiftFont.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
 				    desigStyle.setFont(shiftFont);
-					
+
 					int preVal = dataRow.getRowNum() - 1;
 					Row prevRow = musterSheet.getRow(preVal);
 					Cell dRow = prevRow.createCell(designationWiseTotal);
@@ -1277,7 +1291,7 @@ public class ExportUtil {
 						overAllSum += desigSum;
 						dataRow.getCell(designationWiseTotal).setCellStyle(desigStyle);
 					}
-					
+
 				}else {
 					desigSum += (int)Math.round(totalCountRow.getNumericCellValue());  // 4 + 4 + 4
 					log.debug("Designation wise sum" + desigSum);
@@ -1291,10 +1305,10 @@ public class ExportUtil {
 				}
 			}else {
 				prevDesignation = key.getDesignation();
-				int sumVal = (int)Math.round(totalCountRow.getNumericCellValue()); 
+				int sumVal = (int)Math.round(totalCountRow.getNumericCellValue());
 				log.debug("" +sumVal);
 				desigSum = sumVal;  // 4
-				
+
 				if(employeeList == dataRow.getRowNum()) {
 					Cell lastRowCell = dataRow.createCell(designationWiseTotal);
 					lastRowCell.setCellValue(desigSum);
@@ -1303,7 +1317,7 @@ public class ExportUtil {
 					dataRow.getCell(designationWiseTotal).setCellStyle(desigStyle);
 				}
 			}
-//			
+//
 			log.debug("Designation wise sum" + designationMap);
 			lastRow = dataRow.getRowNum();
 			rowNum++;
@@ -1322,12 +1336,12 @@ public class ExportUtil {
 //			dataRow.getCell(10).setCellValue(StringUtils.isNotEmpty(transaction.getRemarks())  ? transaction.getRemarks() : "");
 //			*/
 		}
-		
+
 		int mergeLstRow = lastRow + 2;
 		int mergeNxtRow = mergeLstRow + 1;
 		Row overAllRow = musterSheet.getRow(lastRow + 2);
 		if(overAllRow == null) {
-			overAllRow = musterSheet.createRow(lastRow + 2); 
+			overAllRow = musterSheet.createRow(lastRow + 2);
 		}
 		for(int i=shiftCellRow; i<totalRow + 1 ; i++) {
 			CellStyle overall_style_2 = xssfWorkbook.createCellStyle();
@@ -1336,14 +1350,14 @@ public class ExportUtil {
 			overall_style_2.setFillPattern(CellStyle.SOLID_FOREGROUND);
 			Row mergedLstRow = musterSheet.getRow(mergeLstRow);
 			mergedLstRow.createCell(i).setCellStyle(overall_style_2);
-			
+
 			CellStyle overall_style_3 = xssfWorkbook.createCellStyle();
 			overall_style_3.setBorderBottom(CellStyle.BORDER_MEDIUM);
 			overall_style_3.setFillForegroundColor(IndexedColors.TAN.getIndex());
 			overall_style_3.setFillPattern(CellStyle.SOLID_FOREGROUND);
 			Row mergedNxtRow = musterSheet.getRow(mergeNxtRow);
 			mergedNxtRow.createCell(i).setCellStyle(overall_style_3);
-			
+
 		}
 		int totalLastRow = totalRow + 1;
 		Row prevLastRow = musterSheet.getRow(lastRow + 1);
@@ -1359,9 +1373,9 @@ public class ExportUtil {
 		merge_nxt.createCell(totalLastRow).setCellStyle(overall_style);
 		musterSheet.addMergedRegion(new CellRangeAddress(mergeLstRow, mergeNxtRow, totalDesigRow, totalDesigRow));
 
-		
-		
-		
+
+
+
 		log.info(filePath + " Excel file was created successfully !!!");
 		statusMap.put(filePath, "COMPLETED");
 
@@ -2944,4 +2958,358 @@ public class ExportUtil {
 		result.setStatus(getExportStatus(file_Name));
 		return result;
 	}
+
+	public ExportResult writePRExcelReportToFile(List<PurchaseReqDTO> content, String empId, ExportResult result) {
+		boolean isAppend = (result != null);
+		log.debug("result = " + result + ", isAppend = " + isAppend);
+		if (result == null) {
+			result = new ExportResult();
+		}
+		String file_Name = null;
+		if (StringUtils.isEmpty(result.getFile())) {
+			if (StringUtils.isNotEmpty(empId)) {
+				file_Name = empId + System.currentTimeMillis() + ".xlsx";
+			} else {
+				file_Name = System.currentTimeMillis() + ".xlsx";
+			}
+		} else {
+			file_Name = result.getFile() + ".xlsx";
+		}
+
+		if (statusMap.containsKey((file_Name))) {
+			String status = statusMap.get(file_Name);
+			// log.debug("Current status for filename -" + file_Name + ", status -" +
+			// status);
+		} else {
+			statusMap.put(file_Name, "PROCESSING");
+		}
+
+		final String export_File_Name = file_Name;
+		if (lock == null) {
+			lock = new Lock();
+		}
+		try {
+			lock.lock();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		Thread writer_Thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String file_Path = env.getProperty("export.file.path");
+				FileSystem fileSystem = FileSystems.getDefault();
+				if (StringUtils.isNotEmpty(empId)) {
+					file_Path += "/" + empId;
+				}
+				Path path = fileSystem.getPath(file_Path);
+				if (!Files.exists(path)) {
+					Path newEmpPath = Paths.get(file_Path);
+					try {
+						Files.createDirectory(newEmpPath);
+					} catch (IOException e) {
+						log.error("Error While Creating Path " + newEmpPath);
+					}
+				}
+
+				file_Path += "/" + export_File_Name;
+				// create workbook
+				XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+				// create worksheet with title
+				XSSFSheet xssfSheet = xssfWorkbook.createSheet("PR_REPORT");
+
+				Row headerRow = xssfSheet.createRow(0);
+
+				for (int i = 0; i < PR_HEADER.length; i++) {
+					Cell cell = headerRow.createCell(i);
+					cell.setCellValue(PR_HEADER[i]);
+				}
+
+				int rowNum = 1;
+
+				for (PurchaseReqDTO transaction : content) {
+					Row dataRow = xssfSheet.createRow(rowNum++);
+					statusMap.put("length", dataRow.toString());
+					dataRow.createCell(0).setCellValue(transaction.getId());
+					dataRow.createCell(1).setCellValue(transaction.getPurchaseRefGenNumber());
+					dataRow.createCell(2).setCellValue(transaction.getProjectName());
+					dataRow.createCell(3).setCellValue(transaction.getSiteName());
+					dataRow.createCell(4).setCellValue(transaction.getRequestedDate() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getRequestedDate()) : "");
+					dataRow.createCell(5).setCellValue(transaction.getRequestedByName());
+					dataRow.createCell(6).setCellValue(transaction.getApprovedDate() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getApprovedDate()) : "");
+					dataRow.createCell(7).setCellValue(transaction.getApprovedByName());
+					dataRow.createCell(8).setCellValue(transaction.getPurchaseOrderNumber());
+					if(transaction.getRequestStatus() == PurchaseRequestStatus.APPROVED) {
+						dataRow.createCell(9).setCellValue("APPROVED");
+					}
+					if(transaction.getRequestStatus() == PurchaseRequestStatus.PENDING) {
+						dataRow.createCell(9).setCellValue("PENDING");
+					}
+					if(transaction.getRequestStatus() == PurchaseRequestStatus.REJECTED) {
+						dataRow.createCell(9).setCellValue("REJECTED");
+					}
+					if(transaction.getRequestStatus() == PurchaseRequestStatus.PURCHASERAISED) {
+						dataRow.createCell(9).setCellValue("PURCHASERAISED");
+					}
+
+				}
+
+				for (int i = 0; i < PR_HEADER.length; i++) {
+					xssfSheet.autoSizeColumn(i);
+				}
+				log.info(export_File_Name + " PR export file was created successfully !!!");
+				statusMap.put(export_File_Name, "COMPLETED");
+
+				FileOutputStream fileOutputStream = null;
+				try {
+					fileOutputStream = new FileOutputStream(file_Path);
+					xssfWorkbook.write(fileOutputStream);
+					fileOutputStream.close();
+				} catch (IOException e) {
+					log.error("Error while flushing/closing  !!!");
+					statusMap.put(export_File_Name, "FAILED");
+				}
+				lock.unlock();
+			}
+		});
+
+		writer_Thread.start();
+
+		result.setEmpId(empId);
+		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
+		result.setStatus(getExportStatus(file_Name));
+		return result;
+	}
+
+	public ExportResult writeInventoryExcelReportToFile(List<MaterialDTO> content, String empId, ExportResult result) {
+		boolean isAppend = (result != null);
+		log.debug("result = " + result + ", isAppend = " + isAppend);
+		if (result == null) {
+			result = new ExportResult();
+		}
+		String file_Name = null;
+		if (StringUtils.isEmpty(result.getFile())) {
+			if (StringUtils.isNotEmpty(empId)) {
+				file_Name = empId + System.currentTimeMillis() + ".xlsx";
+			} else {
+				file_Name = System.currentTimeMillis() + ".xlsx";
+			}
+		} else {
+			file_Name = result.getFile() + ".xlsx";
+		}
+
+		if (statusMap.containsKey((file_Name))) {
+			String status = statusMap.get(file_Name);
+			// log.debug("Current status for filename -" + file_Name + ", status -" +
+			// status);
+		} else {
+			statusMap.put(file_Name, "PROCESSING");
+		}
+
+		final String export_File_Name = file_Name;
+		if (lock == null) {
+			lock = new Lock();
+		}
+		try {
+			lock.lock();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		Thread writer_Thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String file_Path = env.getProperty("export.file.path");
+				FileSystem fileSystem = FileSystems.getDefault();
+				if (StringUtils.isNotEmpty(empId)) {
+					file_Path += "/" + empId;
+				}
+				Path path = fileSystem.getPath(file_Path);
+				if (!Files.exists(path)) {
+					Path newEmpPath = Paths.get(file_Path);
+					try {
+						Files.createDirectory(newEmpPath);
+					} catch (IOException e) {
+						log.error("Error While Creating Path " + newEmpPath);
+					}
+				}
+
+				file_Path += "/" + export_File_Name;
+				// create workbook
+				XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+				// create worksheet with title
+				XSSFSheet xssfSheet = xssfWorkbook.createSheet("INVENTORY_REPORT");
+
+				Row headerRow = xssfSheet.createRow(0);
+
+				for (int i = 0; i < INVENTORY_HEADER.length; i++) {
+					Cell cell = headerRow.createCell(i);
+					cell.setCellValue(INVENTORY_HEADER[i]);
+				}
+
+				int rowNum = 1;
+
+				for (MaterialDTO transaction : content) {
+					Row dataRow = xssfSheet.createRow(rowNum++);
+					statusMap.put("length", dataRow.toString());
+					dataRow.createCell(0).setCellValue(transaction.getId());
+					dataRow.createCell(1).setCellValue(transaction.getName());
+					dataRow.createCell(2).setCellValue(transaction.getItemCode());
+					dataRow.createCell(3).setCellValue(transaction.getItemGroup());
+					dataRow.createCell(4).setCellValue(transaction.getProjectName());
+					dataRow.createCell(5).setCellValue(transaction.getSiteName());
+					dataRow.createCell(6).setCellValue(transaction.getManufacturerName());
+					dataRow.createCell(7).setCellValue(transaction.getStoreStock());
+					dataRow.createCell(8).setCellValue(transaction.getUom());
+					dataRow.createCell(9).setCellValue(transaction.getMinimumStock());
+					dataRow.createCell(10).setCellValue(transaction.getMaximumStock());
+					dataRow.createCell(11).setCellValue(transaction.getDescription());
+				}
+
+				for (int i = 0; i < INVENTORY_HEADER.length; i++) {
+					xssfSheet.autoSizeColumn(i);
+				}
+				log.info(export_File_Name + " Inventory export file was created successfully !!!");
+				statusMap.put(export_File_Name, "COMPLETED");
+
+				FileOutputStream fileOutputStream = null;
+				try {
+					fileOutputStream = new FileOutputStream(file_Path);
+					xssfWorkbook.write(fileOutputStream);
+					fileOutputStream.close();
+				} catch (IOException e) {
+					log.error("Error while flushing/closing  !!!");
+					statusMap.put(export_File_Name, "FAILED");
+				}
+				lock.unlock();
+			}
+		});
+
+		writer_Thread.start();
+
+		result.setEmpId(empId);
+		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
+		result.setStatus(getExportStatus(file_Name));
+		return result;
+	}
+
+	public ExportResult writeTransactionExcelReportToFile(List<MaterialTransactionDTO> results, String empId, ExportResult result) {
+		boolean isAppend = (result != null);
+		log.debug("result = " + result + ", isAppend = " + isAppend);
+		if (result == null) {
+			result = new ExportResult();
+		}
+		String file_Name = null;
+		if (StringUtils.isEmpty(result.getFile())) {
+			if (StringUtils.isNotEmpty(empId)) {
+				file_Name = empId + System.currentTimeMillis() + ".xlsx";
+			} else {
+				file_Name = System.currentTimeMillis() + ".xlsx";
+			}
+		} else {
+			file_Name = result.getFile() + ".xlsx";
+		}
+
+		if (statusMap.containsKey((file_Name))) {
+			String status = statusMap.get(file_Name);
+			// log.debug("Current status for filename -" + file_Name + ", status -" +
+			// status);
+		} else {
+			statusMap.put(file_Name, "PROCESSING");
+		}
+
+		final String export_File_Name = file_Name;
+		if (lock == null) {
+			lock = new Lock();
+		}
+		try {
+			lock.lock();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		Thread writer_Thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String file_Path = env.getProperty("export.file.path");
+				FileSystem fileSystem = FileSystems.getDefault();
+				if (StringUtils.isNotEmpty(empId)) {
+					file_Path += "/" + empId;
+				}
+				Path path = fileSystem.getPath(file_Path);
+				if (!Files.exists(path)) {
+					Path newEmpPath = Paths.get(file_Path);
+					try {
+						Files.createDirectory(newEmpPath);
+					} catch (IOException e) {
+						log.error("Error While Creating Path " + newEmpPath);
+					}
+				}
+
+				file_Path += "/" + export_File_Name;
+				// create workbook
+				XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+				// create worksheet with title
+				XSSFSheet xssfSheet = xssfWorkbook.createSheet("INVENTORY_TRANS_REPORT");
+
+				Row headerRow = xssfSheet.createRow(0);
+
+				for (int i = 0; i < INVENTORY_TRANS_HEADER.length; i++) {
+					Cell cell = headerRow.createCell(i);
+					cell.setCellValue(INVENTORY_TRANS_HEADER[i]);
+				}
+
+				int rowNum = 1;
+
+				for (MaterialTransactionDTO transaction : results) {
+					Row dataRow = xssfSheet.createRow(rowNum++);
+					statusMap.put("length", dataRow.toString());
+					dataRow.createCell(0).setCellValue(transaction.getId());
+					dataRow.createCell(1).setCellValue(transaction.getMaterialName());
+					dataRow.createCell(2).setCellValue(transaction.getMaterialItemCode());
+					dataRow.createCell(3).setCellValue(transaction.getProjectName());
+					dataRow.createCell(4).setCellValue(transaction.getSiteName());
+					dataRow.createCell(5).setCellValue(transaction.getStoreStock());
+					dataRow.createCell(6).setCellValue(transaction.getUom());
+					dataRow.createCell(7).setCellValue(transaction.getIssuedQuantity());
+					dataRow.createCell(8).setCellValue(transaction.getMaterialIndentRefNumber());
+					dataRow.createCell(9).setCellValue(transaction.getPurchaseRefNumber());
+					dataRow.createCell(10).setCellValue(transaction.getTransactionDate() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getTransactionDate()) : "");
+					if(transaction.getTransactionType().equals(MaterialTransactionType.ISSUED)) {
+						dataRow.createCell(11).setCellValue("ISSUED");
+					}
+					if(transaction.getTransactionType().equals(MaterialTransactionType.RECEIVED)) {
+						dataRow.createCell(11).setCellValue("RECEIVED");
+					}
+
+
+				}
+
+				for (int i = 0; i < INVENTORY_HEADER.length; i++) {
+					xssfSheet.autoSizeColumn(i);
+				}
+				log.info(export_File_Name + " Inventory Transaction export file was created successfully !!!");
+				statusMap.put(export_File_Name, "COMPLETED");
+
+				FileOutputStream fileOutputStream = null;
+				try {
+					fileOutputStream = new FileOutputStream(file_Path);
+					xssfWorkbook.write(fileOutputStream);
+					fileOutputStream.close();
+				} catch (IOException e) {
+					log.error("Error while flushing/closing  !!!");
+					statusMap.put(export_File_Name, "FAILED");
+				}
+				lock.unlock();
+			}
+		});
+
+		writer_Thread.start();
+
+		result.setEmpId(empId);
+		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
+		result.setStatus(getExportStatus(file_Name));
+		return result;
+	}
+
 }

@@ -24,6 +24,7 @@ declare var demo;
 export class SiteViewPage {
 
   siteName:any;
+  siteId: any;
   siteDetail:any;
   categories:any;
   jobs:any;
@@ -63,6 +64,7 @@ export class SiteViewPage {
     this.siteDetail=this.navParams.get('site')
     console.log('ionViewDidLoad SiteViewPage');
     console.log(this.siteDetail.name);
+    this.siteId = this.siteDetail.id;
     this.isAdmin = true;
     this.draftedQuotationsCount= 0;
     this.approvedQuotationsCount=0;
@@ -303,11 +305,16 @@ export class SiteViewPage {
   }
 
   getQuotations(){
+<<<<<<< HEAD
       var searchCriteria={
           currPage:this.page,
           pageSort:this.pageSort,
       };
     this.quotationService.getQuotations(searchCriteria).subscribe(
+=======
+    console.log("Quotation SiteId",this.siteId);
+    this.quotationService.searchQuotations( {siteId: this.siteId}).subscribe(
+>>>>>>> Release-2.0-Inventory
         response=>{
             if(response.errorStatus){
                 demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)

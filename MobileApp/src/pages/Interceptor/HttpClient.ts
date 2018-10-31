@@ -63,6 +63,23 @@ export class HttpClient
     });
   }
 
+  put(url):Observable<any>
+  {
+    let token_header = window.localStorage.getItem('session');
+
+    let headers = new Headers({'X-Auth-Token':token_header});
+
+    let options = new RequestOptions({headers: headers});
+
+    return this.http.put(url,options).map(
+        response=>{
+            console.log('returning from interceptor');
+            return response;
+        }
+    )
+
+  }
+
   kairosPost(url,data):Observable<any>
   {
     console.log(url);

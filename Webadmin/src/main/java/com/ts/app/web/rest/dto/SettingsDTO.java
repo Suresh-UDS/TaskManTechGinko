@@ -7,157 +7,164 @@ import java.util.List;
 public class SettingsDTO extends BaseDTO implements Serializable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
     private long siteId;
-    
+
     private String siteName;
 
     private long projectId;
-    
-    private String projectName; 
-    
+
+    private String projectName;
+
     private long shiftWiseAttendanceEmailAlertId;
-    
+
     private boolean shiftWiseAttendanceEmailAlert;
 
     private long dayWiseAttendanceEmailAlertId;
-    
+
     private boolean dayWiseAttendanceEmailAlert;
 
     private long overdueEmailAlertId;
-    
+
     private boolean overdueEmailAlert;
-    
+
     private long eodJobEmailAlertId;
-    
+
     private boolean eodJobEmailAlert;
-    
+
     private long feedbackEmailAlertId;
-    
+
     private boolean feedbackEmailAlert;
 
     private long feedbackReportEmailAlertId;
-    
+
     private boolean feedbackReportEmailAlert;
 
     private long quotationEmailAlertId;
-    
+
     private boolean quotationEmailAlert;
 
     private long ticketEmailAlertId;
-    
+
     private boolean ticketEmailAlert;
 
     private long shiftWiseAttendanceEmailsId;
-    
+
     private List<String> shiftWiseAttendanceEmailIds;
-    
+
     private long dayWiseAttendanceAlertTimeId;
-    
+
     private Date dayWiseAttendanceAlertTime;
-	
+
     private long lateAttendanceGraceTimeId;
-	
+
     private int lateAttendanceGraceTime;
 
     private long dayWiseAttendanceEmailsId;
-    
+
     private List<String> dayWiseAttendanceEmailIds;
 
     private long overdueEmailsId;
-    
+
     private List<String> overdueEmailIds;
-    
+
     private long eodJobEmailsId;
-    
+
     private List<String> eodJobEmailIds;
 
     private long feedbackEmailsId;
-    
+
     private List<String> feedbackEmailIds;
-    
+
     private long feedbackReportEmailsId;
-    
+
     private List<String> feedbackReportEmailIds;
 
     private long feedbackReportTimeId;
-    
+
     private Date feedbackReportTime;
 
     private long quotationEmailsId;
-    
+
     private List<String> quotationEmailIds;
-    
+
     private long ticketEmailsId;
-    
+
     private List<String> ticketEmailIds;
-    
+
     private long readingEmailsId;
-    
+
     private long readingEmailAlertId;
-    
+
     private boolean readingEmailAlert;
-    
+
     private List<String> readingEmailIds;
-    
+
     private long assetEmailsId;
-    
+
     private long assetEmailAlertId;
-    
+
     private boolean assetEmailAlert;
-    
+
     private List<String> assetEmailIds;
-    
+
     private long ppmEmailsId;
-    
+
     private long ppmEmailAlertId;
-    
+
     private boolean ppmEmailAlert;
-    
+
     private List<String> ppmEmailIds;
-    
+
     private long amcEmailsId;
-    
+
     private long amcEmailAlertId;
-    
+
     private boolean amcEmailAlert;
-    
+
     private List<String> amcEmailIds;
-    
+
     private long warrantyEmailsId;
-    
+
     private long warrantyEmailAlertId;
-    
+
     private boolean warrantyEmailAlert;
-    
+
     private List<String> warrantyEmailIds;
-    
+
     private long dayWiseReportEmailsId;
-    
+
     private long dayWiseReportEmailAlertId;
-    
+
     private long dayWiseReportClientGroupEmailAlertId;
-    
+
     private long dayWiseReportAlertTimeId;
-    
+
     private Date dayWiseReportAlertTime;
-    
+
     private List<String> dayWiseReportEmailIds;
-    
+
     private boolean dayWiseReportEmailAlert;
-    
+
     private boolean clientGroupEmailAlert;
-    
+
     private long musterRollEmailsId;
-    
+
     private long musterRollEmailAlertId;
-    
+
     private boolean musterRollEmailAlert;
-    
+
     private List<String> musterRollEmailIds;
+    private long purchaseReqEmailsId;
+
+    private long purchaseReqEmailAlertId;
+
+    private boolean purchaseReqEmailAlert;
+
+    private List<String> purchaseReqEmailIds;
 
     public long getSiteId() {
 		return siteId;
@@ -478,7 +485,7 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 	public void setDayWiseAttendanceEmailIds(List<String> dayWiseAttendanceEmailIds) {
 		this.dayWiseAttendanceEmailIds = dayWiseAttendanceEmailIds;
 	}
-	
+
 	public long getDayWiseAttendanceAlertTimeId() {
 		return dayWiseAttendanceAlertTimeId;
 	}
@@ -748,8 +755,39 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 	}
 
 	public void setMusterRollEmailIds(List<String> musterRollEmailIds) {
-		this.musterRollEmailIds = musterRollEmailIds;
+        this.musterRollEmailIds = musterRollEmailIds;
+    }
+	public long getPurchaseReqEmailsId() {
+		return purchaseReqEmailsId;
 	}
 
-	
+	public void setPurchaseReqEmailsId(long purchaseReqEmailsId) {
+		this.purchaseReqEmailsId = purchaseReqEmailsId;
+	}
+
+	public long getPurchaseReqEmailAlertId() {
+		return purchaseReqEmailAlertId;
+	}
+
+	public void setPurchaseReqEmailAlertId(long purchaseReqEmailAlertId) {
+		this.purchaseReqEmailAlertId = purchaseReqEmailAlertId;
+	}
+
+	public boolean isPurchaseReqEmailAlert() {
+		return purchaseReqEmailAlert;
+	}
+
+	public void setPurchaseReqEmailAlert(boolean purchaseReqEmailAlert) {
+		this.purchaseReqEmailAlert = purchaseReqEmailAlert;
+	}
+
+	public List<String> getPurchaseReqEmailIds() {
+		return purchaseReqEmailIds;
+	}
+
+	public void setPurchaseReqEmailIds(List<String> purchaseReqEmailIds) {
+		this.purchaseReqEmailIds = purchaseReqEmailIds;
+	}
+
+
 }

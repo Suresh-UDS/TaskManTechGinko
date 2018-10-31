@@ -68,8 +68,12 @@ export class QuotationService {
     getRateCards(): Observable<any>{
         return this.http.get(this.config.Url+'api/rateCard').map(
             response=>{
+<<<<<<< HEAD
                 console.log("Get Rate Cards");
                 console.log(response.json());
+=======
+                console.log(response);
+>>>>>>> Release-2.0-Inventory
                 return response.json();
             }).catch(error=>{
                 console.log("error in getting rate cards");
@@ -81,8 +85,12 @@ export class QuotationService {
     searchQuotations(search):Observable<any>{
         return this.http.post(this.config.Url+'api/rateCard/quotation/search',search).map(
             response=>{
+<<<<<<< HEAD
                 console.log("Search Quotation");
                 console.log(response.json());
+=======
+                console.log(response);
+>>>>>>> Release-2.0-Inventory
                 return response.json();
             }).catch(error=>{
                 console.log("error in search quotation");
@@ -94,6 +102,7 @@ export class QuotationService {
     getQuotations(searchCriteria): Observable<any>{
         return this.http.post(this.config.Url+'api/rateCard/quotation/search',searchCriteria).map(
             response=>{
+<<<<<<< HEAD
                 console.log("Get Quotation");
                 console.log(response);
                 return response.json();
@@ -102,6 +111,12 @@ export class QuotationService {
                 console.log(error);
                 return Observable.throw(error.json());
         })
+=======
+                console.log(response.json());
+                return response.jso();
+            }
+        )
+>>>>>>> Release-2.0-Inventory
     }
 
     createQuotation(quotation): Observable<any>{

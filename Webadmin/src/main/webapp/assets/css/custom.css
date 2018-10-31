@@ -372,6 +372,14 @@ li ul.nav.SubNav li a p
   margin-top:0;
 }
 
+.TableListinput table .form-group
+{
+    padding-bottom: 0 !important;
+}
+.min-hgt100
+{
+  min-height:100px;
+}
 h2.title
 {
   margin: 5px 0;
@@ -458,6 +466,7 @@ span.calender-big-icon
     padding: 0 10px;
     font-size: 26px;
     color: #686868;
+    padding: 5px 3px 0 0;
 }
 span.d-sm-arrow-icon
 {
@@ -687,13 +696,16 @@ span.filterdTxt
     padding: 5px;
     margin: 5px;
 }
-
 h3.HeadingTxt
 {
     background: #f9f9f9;
     padding: 5px;
     font-size: 20px;
     font-weight: 400;
+    border: 1px solid #efefef;
+    border-left: 4px solid #7b7c7b;
+    border-right: 4px solid #7b7c7b;
+    border-radius: 5px;
 }
 .titleCon
 {
@@ -709,6 +721,10 @@ h3.HeadingTxt
     border-right: 4px solid #ff9800;
     min-height: 35px;
 
+}
+.disableInput
+{
+    background: #f9f9f9 !important;
 }
 .titleCon h3
 {
@@ -2101,4 +2117,8 @@ div.bouncing-container .arrow-down {
       box-shadow: 0 14px 26px -12px rgba(76, 175, 80, 0.42),
                   0 4px 23px 0px rgba(0, 0, 0, 0.12),
                   0 8px 10px -5px rgba(76, 175, 80, 0)!important;
+}
+.highlight-text {
+    background-color:#8BCB8D;
+    font-weight:bold;
 }

@@ -39,7 +39,20 @@ page-site-list {
   {
     width:100% !important;
   }
+<<<<<<< HEAD
 
+=======
+  ion-list
+  {
+    ion-item
+    {
+      .item-inner
+      {
+        margin-left: 0 !important;
+      }
+    }
+  }
+>>>>>>> Release-2.0-Inventory
 
 
 }

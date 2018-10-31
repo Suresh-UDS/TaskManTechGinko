@@ -67,7 +67,7 @@ export class DashboardPage {
               private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService, public events:Events, private actionSheetCtrl:ActionSheetController, private alertController:AlertController, private dbService:DBService) {
 
 
-      this.rateCard=CreateQuotationPage;
+      this.rateCard=CreateRateCardPage;
       this.addJob=CreateJobPage;
       this.addQuotation=CreateQuotationPage;
       this.addEmployee=CreateEmployeePage;
@@ -330,13 +330,12 @@ export class DashboardPage {
         };
         this.searchJobs(this.searchCriteria);
         this.empSpinner=true;
-        var searchCriteria = {
-
-            siteId:id,
-            list:true
-        };
-        this.attendanceService.searchEmpAttendances(searchCriteria).subscribe(response=>{
-                if(response.transactions && response.transactions.length !==0)
+        var  searchCriteria={currentPage:1,pageSort:15};
+        // this.siteService.searchSiteEmployee(id).subscribe(
+        this.employeeService.searchEmployees(this.searchCriteria).subscribe(
+            response=> {
+                console.log(response.transactions);
+                if(response.transactions.length !==0)
                 {
                     this.employee=response.transactions;
                     this.empSpinner=false;

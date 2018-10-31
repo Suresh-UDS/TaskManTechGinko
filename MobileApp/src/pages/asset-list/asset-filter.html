@@ -96,7 +96,49 @@
     <!--<div class="bg-orange">-->
         <!--<h5 text-center="" class="clr-white" no-margin="">Asset Filter</h5>-->
     <!--</div>-->
-    <div class="InitFeedbackCon">
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-content">
+          <ion-row>
+
+            <ion-col col-12>
+              <p text-center>Choose Client</p>
+              <div class="SitesScrollCon">
+                <ion-scroll scrollX="true">
+                  <button effect="fade" class="scroll-item" ion-button round *ngFor="let p of clientList; let i of index" (click)="selectSite(p,i)" [color]="projectActive && i==projectindex ? 'primary':'light'">
+                    <p class="siteName">{{p.name}}</p>
+                  </button>
+                </ion-scroll>
+              </div>
+            </ion-col>
+
+            <ion-col col-12>
+
+              <p text-center>Choose Site</p>
+
+              <div padding text-center *ngIf="siteSpinner">
+                <span><ion-spinner name="bubbles"></ion-spinner> <br> Loading...</span>
+              </div>
+
+              <div padding text-center *ngIf="chooseClient">
+                <strong>Please Select Client</strong>
+              </div>
+
+              <div class="SitesScrollCon" *ngIf="showSites">
+                <ion-scroll scrollX="true">
+                  <button class="scroll-item" ion-button round  *ngFor="let site of siteList;let i of index" (click)="highLightSite(i,site)" [color]="siteActive && i==index ? 'primary' : 'light'">
+                    <p class="siteName">{{site.name}}</p>
+                  </button>
+                </ion-scroll>
+              </div>
+
+            </ion-col>
+
+
+
+    <!--<div class="InitFeedbackCon">
         <div class="InputCon">
 
                 <ion-item>
@@ -123,9 +165,10 @@
                             </ion-row>
                         </div>
                     </div>
-                </div>
+                </div>-->
 
 
+            <ion-col col-12>
                 <div padding="" class="height30">
                     <ion-list >
                         <h5 class="clr-orange" text-center>Asset Type</h5>
@@ -136,7 +179,9 @@
                             </ion-item>
                     </ion-list>
                 </div>
+            </ion-col>
 
+            <ion-col col-12>
                 <div margin-top  padding>
                     <ion-list>
                         <h5 class="clr-orange" text-center>Asset Group</h5>
@@ -146,9 +191,13 @@
                         </ion-item>
                     </ion-list>
                 </div>
+            </ion-col>
 
+          </ion-row>
         </div>
+      </div>
     </div>
+  </div>
 </ion-content>
 <ion-footer>
     <ion-toolbar class="align-center">

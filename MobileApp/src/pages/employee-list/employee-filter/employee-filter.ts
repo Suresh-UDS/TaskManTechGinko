@@ -32,6 +32,13 @@ export class EmployeeFilter {
     viewButton:any;
     clientList:any;
 
+  chooseClient = true;
+  projectActive: any;
+  siteSpinner = false;
+  showSites = false;
+  projectindex: any;
+  chooseSite = true;
+
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,public siteService:SiteService,public component:componentService,
             public  employeeService:EmployeeService,public datePicker:DatePicker) {
   }
@@ -45,7 +52,7 @@ export class EmployeeFilter {
               console.log(response);
               this.clientList=response;
               this.selectedProject = this.clientList[0];
-              this.selectSite(this.selectedProject);
+              // this.selectSite(this.selectedProject);
               console.log('select default value:');
               this.component.closeLoader();
           },
@@ -66,6 +73,7 @@ export class EmployeeFilter {
       this.viewCtrl.dismiss();
     }
 
+<<<<<<< HEAD
     selectSite(project)
     {
         this.selectedSite = project;
@@ -74,6 +82,23 @@ export class EmployeeFilter {
             response=>{
                 this.component.closeLoader();
                 console.log("====Site By ProjectId======");
+=======
+    selectSite(project,i){
+
+      this.projectActive=true;
+      this.projectindex = i;
+      this.siteSpinner= true;
+      this.chooseClient= false;
+      this.showSites = false;
+        this.selectedProject=project;
+        this.scrollSite=true;
+        this.siteService.findSitesByProject(project.id).subscribe(
+            response=>{
+              this.siteSpinner=false;
+              this.showSites = true;
+              this.chooseSite = true;
+                console.log("site by project id");
+>>>>>>> Release-2.0-Inventory
                 console.log(response);
                 this.siteList=response;
                 console.log(this.siteList);

@@ -15,6 +15,7 @@ import {CreateEmployeePage} from "./create-employee";
 import {EmployeeService} from "../service/employeeService";
 import {Toast} from "@ionic-native/toast";
 import{EmployeeFilter} from "./employee-filter/employee-filter";
+import {ImageViewerController} from "ionic-img-viewer";
 
 /**
  * Generated class for the EmployeeList page.
@@ -37,7 +38,8 @@ export class EmployeeListPage {
     count=0;
 clientFilter:any;
 siteFilter:any;
-  constructor(public navCtrl: NavController,public component:componentService,public myService:authService, public navParams: NavParams, private  authService: authService, public camera: Camera,
+
+  constructor(public navCtrl: NavController,public component:componentService,public myService:authService, public navParams: NavParams, private  authService: authService, public camera: Camera,public imageViewerCtrl: ImageViewerController,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toast: Toast,
               private geoFence:Geofence, private employeeService: EmployeeService, private actionSheetCtrl: ActionSheetController,
               private modalCtrl:ModalController) {
@@ -45,6 +47,11 @@ siteFilter:any;
       this.employees = [];
 
   }
+
+    onClick(imageToView) {
+        const viewer = this.imageViewerCtrl.create(imageToView)
+        viewer.present();
+    }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad Employee list');

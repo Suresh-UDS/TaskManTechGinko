@@ -390,7 +390,7 @@
 
                         </div>
                     </div>
-                    
+
                     <div class="checkbox">
                         <label>
                             Send Daily Feedback Reports <input type="checkbox" name="terms" ng-model="settings.feedbackReportEmailAlert">
@@ -442,19 +442,19 @@
                             </div>
 
                         </div>
-                        
+
                         <div class="row">
 
 	                        <div class="col-md-9">
-	
+
 	                            <div class="form-group pdng-top15">
 	                                <label class="control-label">Feedback Report Time</label>
 	                                <input  type="text" class="form-control timepicker" id="feedbackReportTime" ng-model="settings.feedbackReportTime | date:'dd-MMM-yyyy hh:mm a'" />
 	                            </div>
-	
+
 	                        </div>
-	
-	
+
+
 	                    </div>
                     </div>
 
@@ -833,14 +833,14 @@
 
                         </div>
                     </div>
-                    
-                    
+
+
                     <div class="checkbox">
                         <label>
                             Send DayWise Report Email  <input type="checkbox" name="terms" ng-model="settings.dayWiseReportEmailAlert">
                         </label>
                     </div>
-                    
+
                     <div class="checkbox">
                         <label>
                             Client Group Email  <input type="checkbox" name="terms" ng-model="settings.clientGroupEmailAlert">
@@ -860,6 +860,12 @@
 
                     </div>
 
+                    <div class="checkbox">
+                        <label>
+                            Send Purchase Requisition Alerts <input type="checkbox" name="terms" ng-model="settings.purchaseReqEmailAlert">
+                        </label>
+                    </div>
+
                     <div class="MailList">
                         <div class="row">
 
@@ -868,16 +874,20 @@
                                 <div class="form-group pdng-top15">
                                     <label class="control-label">DayWise Report Email List</label>
                                     <input type="text" class="form-control" ng-model="dayWiseReportEmail">
+                                    <label class="control-label">Email List</label>
+                                    <input type="text" class="form-control" ng-model="purchaseReqEmail">
                                 </div>
 
                             </div>
                             <div class="col-md-3">
 
                                 <button class="btn btn-success margn-top30" ng-click="addDayWiseReportEmail()">
+                                <button class="btn btn-success margn-top30" ng-click="addPREmail()">
                                 <span class="btn-label">
                                     <i class="material-icons">add</i>
                                 </span>
                                     Add
+                                </button>
                                 </button>
 
                             </div>
@@ -902,7 +912,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="checkbox">
                         <label>
                             Send Muster Roll Alerts <input type="checkbox" name="terms" ng-model="settings.musterRollEmailAlert">
@@ -945,6 +955,10 @@
                                     		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.musterRollEmailIds" ng-bind-html-unsafe="emailId">
 		                                    {{emailId}}
 		                                    <span class="badge badge-default badge-pill" ng-click="removeMusterEmail($index)"><i class="material-icons">remove_circle</i></span>
+
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.purchaseReqEmailIds" ng-bind-html-unsafe="emailId">
+		                                    {{emailId}}
+		                                    <span class="badge badge-default badge-pill" ng-click="removePREmail($index)"><i class="material-icons">remove_circle</i></span>
 		                                </li>
 
 

@@ -13,7 +13,7 @@
         <button mini has-permission="RateCardCreate" (click)="createRate()"  ion-fab><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 
-    <div class="table-responsive">
+    <div class="table-responsive" *ngIf="rateCards">
 
         <table class="table">
             <thead>
@@ -34,6 +34,14 @@
             </tbody>
         </table>
 
+    </div>
+    <div *ngIf="!rateCards" >
+        <ion-card>
+            <ion-card-content>
+               <img src="assets/imgs/warning.svg">
+               <span><p text-center>No Data Found</p></span>
+            </ion-card-content>
+        </ion-card>
     </div>
 
     <!--<button class="btn btn-fill" onclick="demo.showSwal('success-message','Welcome','You clicked Button')">Try me!</button>-->

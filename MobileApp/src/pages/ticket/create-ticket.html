@@ -7,13 +7,13 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>create-ticket</ion-title>
+    <ion-title>Create ticket</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content class="CreateTicketPage FormPage">
     <div class="row">
         <div class="col-md-8">
             <div class="card">
@@ -45,61 +45,135 @@
 
                         </ion-col>
 
+                      <ion-col col-12>
+                        <p text-center>Choose Client</p>
+                        <div class="SitesScrollCon">
+                          <ion-scroll scrollX="true">
+                            <button class="scroll-item" ion-button round *ngFor="let p of allProjects; let i of index" (click)="getSites(p.id,i)" [color]="projectActive && i==projectindex ? 'primary':'light'">
+                              <p class="siteName">{{p.name}}</p>
+                            </button>
+                          </ion-scroll>
+                        </div>
+                      </ion-col>
+
                         <ion-col col-12>
 
+<<<<<<< HEAD
                             <div class="form-group label-floating ">
                                 <label class="control-label" *ngIf="siteName">Site</label>
                                 <ion-select  [(ngModel)]="siteName" class="select-box padding-left0" id="siteName" placeholder="Choose Site" name="siteName" #site="ngModel" interface="popover" required [ngClass]="{'select-error': eMsg=='siteName'}">
                                     <ion-option *ngFor="let site of sites" [value]="site.name" (ionSelect)="getEmployee(site.id)">{{site.name}}</ion-option>
                                 </ion-select>
+=======
+                          <p text-center>Choose Site</p>
+>>>>>>> Release-2.0-Inventory
 
-                                <div *ngIf="site.errors && (site.dirty || site.touched)" class="error-msg">
+                          <div padding text-center *ngIf="siteSpinner">
+                            <span><ion-spinner name="bubbles"></ion-spinner> <br> Loading...</span>
+                          </div>
 
-                                </div>
+                          <div padding text-center *ngIf="chooseClient">
+                            <strong>Please Select Client</strong>
+                          </div>
 
-                                <div *ngIf="site.errors && (site.untouched )" class="error-msg">
-
-                                </div>
-                            </div>
-
-
-                        </ion-col>
-
-                        <ion-col col-12>
-
-                            <div class="form-group label-floating">
-                                <label class="control-label" *ngIf="employ">Employee</label>
-                                <ion-select [(ngModel)]="employ" [disabled]="empSelect" class="select-box padding-left0" id="employ" name="employ" [placeholder]="empPlace" #emp="ngModel" required [ngClass]="{'select-error': eMsg=='employ'}" interface="popover">
-                                    <ion-option  *ngFor="let emp of employee" [value]="emp.id" >{{emp.fullName}} - {{emp.designation}}</ion-option>
-                                </ion-select>
-
-                                <div *ngIf="emp.errors && (emp.dirty || emp.touched)" class="error-msg">
-
-                                </div>
-
-                                <div *ngIf="emp.errors && (emp.untouched )" class="error-msg">
-
-                                </div>
+                            <div class="SitesScrollCon" *ngIf="showSites">
+                                <ion-scroll scrollX="true">
+                                    <button class="scroll-item" ion-button round  *ngFor="let site of sites;let i of index" (click)="getEmployee(site,i)" [color]="siteActive && i==index ? 'primary' : 'light'">
+                                        <p class="siteName">{{site.name}}</p>
+                                    </button>
+                                </ion-scroll>
                             </div>
 
                         </ion-col>
 
                         <ion-col col-12>
+                            <p text-center>Choose Employee</p>
+                            <div padding text-center *ngIf="empSpinner">
+                                <span><ion-spinner name="bubbles"></ion-spinner> <br> Loading...</span>
+                            </div>
 
-                            <div class="form-group label-floating">
-                                <label class="control-label" >Severity</label>
-                                <ion-select [(ngModel)]="severity" class="select-box padding-left0" id="severity" name="severity" interface="popover" [placeholder]="empPlace" >
-                                    <ion-option grou *ngFor="let s of severities" [value]="s" >{{s}}</ion-option>
-                                </ion-select>
+                            <div padding text-center *ngIf="chooseSite">
+                                <strong>Please Select site</strong>
+                            </div>
 
+                            <div class="SitesScrollCon" *ngIf="showEmployees">
+                                <ion-scroll scrollX="true">
+                                    <button class="scroll-item"  ion-button round  *ngFor="let emp of employee;let i of index" (click)="activeEmployee(emp,i)" [color]="employeeActive && i==empIndex ? 'primary' : 'light'">
+                                        <p class="siteName">{{emp.fullName}} <br> <strong>{{emp.designation}}</strong></p>
+                                    </button>
+                                </ion-scroll>
                             </div>
 
                         </ion-col>
+
+                        <ion-col col-12>
+                            <p text-center>Severity</p>
+                            <div class="SitesScrollCon" text-center>
+                                <ion-scroll scrollX="true">
+                                    <button class="scroll-item severity" ion-button round  *ngFor="let s of severities;let i of index" (click)="activeSeverity(s,i)" [color]="severityActive && i==sevIndex ? 'primary' : 'light'">
+                                        <p class="siteName">{{s}}</p>
+                                    </button>
+                                </ion-scroll>
+                            </div>
+
+                        </ion-col>
+
+                        <!--<ion-col col-12>-->
+
+                            <!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<label class="control-label" *ngIf="siteName">Site</label>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<ion-select [(ngModel)]="siteName" class="select-box padding-left0" id="siteName" placeholder="Choose Site" name="siteName" #site="ngModel" interface="popover" required [ngClass]="{'select-error': eMsg=='siteName'}">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<ion-option *ngFor="let site of sites" [value]="site.name" (ionSelect)="getEmployee(site.id)">{{site.name}}</ion-option>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</ion-select>&ndash;&gt;-->
+
+                                <!--&lt;!&ndash;<div *ngIf="site.errors && (site.dirty || site.touched)" class="error-msg">&ndash;&gt;-->
+
+                                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+                                <!--&lt;!&ndash;<div *ngIf="site.errors && (site.untouched )" class="error-msg">&ndash;&gt;-->
+
+                                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+
+                        <!--&lt;!&ndash;</ion-col>&ndash;&gt;-->
+
+                        <!--<ion-col col-12>-->
+
+                            <!--<div class="form-group label-floating">-->
+                                <!--<label class="control-label" *ngIf="employ">Employee</label>-->
+                                <!--<ion-select [(ngModel)]="employ" [disabled]="empSelect" class="select-box padding-left0" id="employ" name="employ" [placeholder]="empPlace" #emp="ngModel" required [ngClass]="{'select-error': eMsg=='employ'}" interface="popover">-->
+                                    <!--<ion-option  *ngFor="let emp of employee" [value]="emp.id" >{{emp.fullName}} - {{emp.designation}}</ion-option>-->
+                                <!--</ion-select>-->
+
+                                <!--<div *ngIf="emp.errors && (emp.dirty || emp.touched)" class="error-msg">-->
+
+                                <!--</div>-->
+
+                                <!--<div *ngIf="emp.errors && (emp.untouched )" class="error-msg">-->
+
+                                <!--</div>-->
+                            <!--</div>-->
+
+                        <!--</ion-col>-->
+
+                        <!--<ion-col col-12>-->
+
+                            <!--<div class="form-group label-floating">-->
+                                <!--<label class="control-label" >Severity</label>-->
+                                <!--<ion-select [(ngModel)]="severity" class="select-box padding-left0" id="severity" name="severity" interface="popover" [placeholder]="empPlace" >-->
+                                    <!--<ion-option grou *ngFor="let s of severities" [value]="s" >{{s}}</ion-option>-->
+                                <!--</ion-select>-->
+
+                            <!--</div>-->
+
+                        <!--</ion-col>-->
 
                         <ion-col col-12>
                             <div>
                                 <label class="control-label">Comments</label>
-                                <input class="form-control" type="text" [(ngModel)]="comments" >
+                                <textarea rows="4" cols="50" name="comment" class="form-control commentsTxt" [(ngModel)]="comments"></textarea>
+
                             </div>
                         </ion-col>
 

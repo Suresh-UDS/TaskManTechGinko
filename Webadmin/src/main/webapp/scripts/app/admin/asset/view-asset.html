@@ -52,6 +52,9 @@
 
                                         <li class=""><a href=".StatusHistory" data-toggle="tab"
                                        	ng-click="loadSubModule(loadStatusHistory)">StatusHistory</a></li>
+                                       	
+                                       	<li class=""><a href=".sparesHistory" data-toggle="tab"
+                                       	ng-click="loadAssetSpares()">Spares</a></li>
 
                                    </ul>
                                    <div class="tab-content TabsContent ViewTables" style="">
@@ -1012,6 +1015,60 @@
                                             <!-- Pagination directive start -->
 
                                             <pagination-new></pagination-new>
+
+                                            <!-- Pagination directive end -->
+
+                                       </div>
+                                       
+                                       <div class="tab-pane fade sparesHistory" id="sparesHistory" >
+
+                                           <div class="table-responsive tablecard">
+                                                        <table class="table table-hover tdWidthAuto">
+
+                                                            <thead>
+                                                            <tr>
+                                                            
+                                                            	<th>JobId</th>
+                                                            	<th>JobTitle</th>
+                                                                <th>MaterialName</th>
+                                                                <th>MaterialCode</th>
+                                                                <th>MaterialGroup</th>
+                                                                <th>MaterialStock</th>
+                                                                <th>MaterialQty</th>
+                                                                <th>MaterialUom</th>
+                                                                <!-- <th>Frequency</th> -->
+                                                                <!-- <th align="right">Actions</th> -->
+                                                            </tr>
+
+                                                            </thead>
+
+                                                            <tbody>
+                                                            <tr ng-repeat="spares in sparesHistories">
+                                                            	<td>{{spares.jobId}}</td>
+                                                            	<td>{{spares.jobTitle}}</td>
+                                                                <td>{{spares.materialName}}</td>
+                                                                <td>{{spares.materialCode}}</td>
+                                                                <td>{{spares.materialGroup}}</td>
+                                                                <td>{{spares.materialStock}}</td>
+                                                                <td>{{spares.materialQuantity}}</td>
+                                                                <td>{{spares.materialUom}}</td>
+
+                                                                <!-- <td class="text-right">
+                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
+                                                                </td> -->
+                                                            </tr>
+                                                            <tr>
+                                                               <td colspan="7" align="center" ng-show="!sparesHistories.length">No Spares History Found</td>
+                                                            </tr>
+
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+
+                                            <!-- Pagination directive start -->
+
+                                            <!-- <pagination-new></pagination-new> -->
 
                                             <!-- Pagination directive end -->
 

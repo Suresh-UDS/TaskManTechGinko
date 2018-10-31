@@ -22,7 +22,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
+  <ion-list *ngIf="employeeList">
     <ion-item *ngFor="let employee of employeeList;let i of index" class="bottom-border" >
 
       <p><span class="EmpNameTxt" style="float:left" (click)="getEmployeeAttendance(employee.empId)" >{{employee.name}} {{employee.lastName}}</span>
@@ -39,6 +39,15 @@
       </p>
     </ion-item>
   </ion-list>
+  <ion-list *ngIf="!employeeList">
+      <ion-card>
+          <ion-card-content>
+              <img src="assets/imgs/warning.svg">
+              <span><p text-center>No Data Found</p></span>
+          </ion-card-content>
+      </ion-card>
+  </ion-list>
+
   <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
   </ion-infinite-scroll>

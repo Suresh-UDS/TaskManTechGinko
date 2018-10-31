@@ -16,6 +16,9 @@ body {
 {
   width:100%;
 }
+.margin-top10{
+    margin-top:10px !important;
+}
 
 .angular-google-map-container {
 	height:200px;

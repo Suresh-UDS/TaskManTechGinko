@@ -1,0 +1,126 @@
+<!--
+  Generated template for the InventoryFilter page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-toolbar>
+    <ion-title text-center>Inventory Filter</ion-title>
+    <ion-buttons right>
+      <button ion-button color="fnt-black" icon-only (click)="dismiss()" class="padding-right10">
+        <ion-icon ios="ios-close" md="md-close" class="fnt-24"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="CreateTicketPage FormPage">
+  <ion-fab right bottom>
+    <button  (click)=" dismissFilter()" ion-fab><ion-icon name="checkmark"></ion-icon></button>
+  </ion-fab>
+  <!--<div class="row">
+    <div class="col-sm-12 col-xs-12">
+      <div class="card">
+        <div class="card-content">
+
+          <ion-row>-->
+  <div class="card scroll-card">
+    <div class="card-content">
+      <ion-row>
+            <ion-col col-12>
+              <p text-center>Choose Client</p>
+              <div class="SitesScrollCon">
+                <ion-scroll scrollX="true">
+                  <button class="scroll-item" ion-button round *ngFor="let p of clientList;let i of index" (click)="selectSite(p,i)" [color]="projectActive && i==projectindex ? 'primary':'light'">
+                    <p class="siteName">{{p.name}}</p>
+                  </button>
+                </ion-scroll>
+              </div>
+            </ion-col>
+      </ion-row>
+    </div>
+  </div>
+        <div class="card scroll-card">
+          <div class="card-content">
+            <ion-row>
+            <ion-col col-12>
+              <p text-center>Choose Site</p>
+              <div padding text-center *ngIf="siteSpinner">
+                <span><ion-spinner name="bubbles"></ion-spinner> <br> Loading...</span>
+              </div>
+
+              <div padding text-center *ngIf="chooseClient">
+                <strong>Please Select Client</strong>
+              </div>
+
+              <div class="SitesScrollCon" *ngIf="showSites">
+                <ion-scroll scrollX="true">
+                  <div *ngIf="siteList?.length==0" class="padding-top15">
+                    <p text-center class="clr-blk">No Data Found</p>
+                  </div>
+                  <button class="scroll-item" ion-button round *ngFor="let s of siteList;let i of index" (click)="highLightSite(i,s)" [color]="i==activeSite ? 'primary' : 'light'">
+                    <p class="siteName">{{s.name}}</p>
+                  </button>
+                </ion-scroll>
+              </div>
+            </ion-col>
+            </ion-row>
+          </div>
+        </div>
+            <div class="clearfix"></div>
+
+
+         <!-- </ion-row>
+
+        </div>
+      </div>
+    </div>
+  </div>-->
+
+<!--<div class="InitFeedbackCon">
+    <div class="InputCon">
+      <ion-item>
+        <ion-label text-capitalize class="client-label">Client :</ion-label>
+        <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedProject">
+          <ion-option *ngFor="let p of clientList;let i=index" [value]="p" (ionSelect)="selectSite(p)"> {{p.name}}</ion-option>
+        </ion-select>
+      </ion-item>
+
+      <div class="SiteAndBlockCOn"  *ngIf="scrollSite">
+        <div class="SiteCon">
+          <div class="scrollCon">
+            <ion-row no-margin>
+              <ion-item no-lines>
+                <ion-scroll scrollX="true">
+                  <div *ngIf="siteList?.length==0" class="padding-top15">
+                    <ion-card>
+                      <ion-card-content>
+                        <img src="assets/imgs/warning.svg">
+                        <span><p text-center>No Data Found</p></span>
+                      </ion-card-content>
+                    </ion-card>
+                  </div>
+                  <button class="siteBtn scroll-item" ion-button round  *ngFor="let s of siteList;let i of index" (click)="highLightSite(i,s)" [color]="i==activeSite ? 'primary' : 'light'">
+                    <p class="siteName">{{s.name}}</p>
+                  </button>
+                </ion-scroll>
+              </ion-item>
+            </ion-row>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>-->
+</ion-content>
+
+<!--
+<ion-footer>
+  <ion-toolbar class="align-center">
+    <button class="btn btn-warning center" (click)="dismiss()">
+      Apply
+    </button>
+  </ion-toolbar>
+</ion-footer>
+-->

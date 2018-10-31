@@ -13,19 +13,28 @@ import { File } from '@ionic-native/file';
 import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
 import{ModalController} from "ionic-angular";
 import{Checklist} from "../checklist/checklist";
+<<<<<<< HEAD
 import{ImageViewerController} from "ionic-img-viewer";
 import {AttendancePopoverPage} from "../attendance/attendance-popover";
 // import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 declare  var demo;
+=======
+import {AddInventoryTransaction} from "../add-inventory-transaction/add-inventory-transaction";
+import{AddMaterial} from "../add-material/add-material";
+>>>>>>> Release-2.0-Inventory
 
 @Component({
     selector: 'page-complete-job',
     templateUrl: 'completeJob.html'
 })
 export class CompleteJobPage {
+<<<<<<< HEAD
     _imageViewerCtrl: ImageViewerController;
 
+=======
+    categories:any;
+>>>>>>> Release-2.0-Inventory
     jobDetails:any;
     jobPhotos:any;
     takenImages:any;
@@ -39,7 +48,9 @@ export class CompleteJobPage {
         longitude:any;
         completeJob:any;
         id:any;
+        jobMaterials:any;
     };
+
     latitude:any;
     longitude:any;
 
@@ -50,6 +61,7 @@ export class CompleteJobPage {
     completedImages:any;
     fileTransfer: FileTransferObject = this.transfer.create();
 
+<<<<<<< HEAD
     checkListItems:any;
     showIcon:any;
     index:any;
@@ -62,14 +74,33 @@ export class CompleteJobPage {
                 private file: File,private modalCtrl:ModalController,imageViewerCtrl: ImageViewerController) {
         this._imageViewerCtrl = imageViewerCtrl;
         this.spinner=true;
+=======
+
+    checkListItems:any;
+    showIcon:any;
+    index:any;
+    siteId:any;
+    material:any;
+
+    constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService, @Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
+                private loadingCtrl:LoadingController, public camera: Camera,private geolocation:Geolocation, private jobService: JobService,
+                private attendanceService: AttendanceService,public popoverCtrl: PopoverController, private component:componentService,private transfer: FileTransfer, private file: File,private modalCtrl:ModalController) {
+>>>>>>> Release-2.0-Inventory
         this.categories = 'details';
         this.checkListItems=[];
         this.takenImages=[];
         this.jobDetails=[];
+<<<<<<< HEAD
+=======
+        this.material=[];
+
+
+>>>>>>> Release-2.0-Inventory
         this.jobDetails=this.navParams.get('job');
+        console.log("Job Material");
         this.takenImages = [];
         this.checkOutDetails={
-            employeeId:'',
+        employeeId:'',
         employeeEmpId:'',
         projectId:'',
         siteId:'',
@@ -77,8 +108,10 @@ export class CompleteJobPage {
         latitudeOut:'',
         longitude:'',
         completeJob:false,
-        id:null
+        id:null,
+        jobMaterials:[],
         };
+
         /*
         this.jobService.loadCheckLists().subscribe(
             response=>{
@@ -97,6 +130,7 @@ export class CompleteJobPage {
         this.component.showLoader('Loading Job Details');
         this.jobService.getJobDetails(this.jobDetails.id).subscribe(
             response=>{
+<<<<<<< HEAD
                 if(response.errorStatus){
                     this.component.closeAll();
                     demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
@@ -123,6 +157,30 @@ export class CompleteJobPage {
                                 }
                             )
                         }
+=======
+                this.component.closeAll();
+                console.log("Response on job details");
+                console.log(response);
+                this.jobDetails = response;
+                this.checkListItems = this.jobDetails.checklistItems;
+                if(response.images.length>0){
+                    this.component.showLoader('Getting saved images');
+                    console.log("Images available");
+                    this.completedImages=[];
+                    for(let image of response.images){
+                        this.jobService.getCompletedImage(image.employeeEmpId,image.photoOut).subscribe(
+                            imageData=>{
+                                this.component.closeAll();
+                                console.log(imageData);
+                                this.completedImages.push(imageData._body);
+                            },err=>{
+                                this.component.closeAll();
+                                console.log("Error in getting images");
+                                console.log(err);
+                            }
+                        )
+                    }
+>>>>>>> Release-2.0-Inventory
 
                     }
                 }
@@ -133,6 +191,7 @@ export class CompleteJobPage {
                 console.log(error);
             }
         )
+
     }
     viewImage(index,img)
     {
@@ -175,7 +234,7 @@ export class CompleteJobPage {
         this.camera.getPicture(options).then((imageData) => {
 
             console.log('imageData -' +imageData);
-            imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
+            imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/");
 
             this.takenImages.push(imageData);
 
@@ -184,9 +243,11 @@ export class CompleteJobPage {
 
     }
 
-    saveJob(job){
+    saveJob(job,material){
         this.component.showLoader('Saving Job');
-        console.log(job)
+        console.log(job);
+        console.log(material);
+        job.jobMaterials=material;
         this.jobService.saveJob(job).subscribe(
             response=>{
                 if(response.errorStatus){
@@ -286,6 +347,7 @@ export class CompleteJobPage {
                 console.log("Error in saving response");
                 console.log(err);
                 this.component.closeLoader();
+<<<<<<< HEAD
                 this.component.showToastMessage('Error in saving job, please try again...','bottom');
             }
         )
@@ -323,6 +385,23 @@ export class CompleteJobPage {
                             demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
                         }else{
                             this.component.closeAll();
+=======
+                this.component.showToastMessage('Job Saved Successfully','bottom');
+                console.log(response);
+                console.log(job.checkInOutId);
+                if(this.takenImages.length>0){
+                    this.component.showLoader('Uploading Images');
+                    this.checkOutDetails.employeeId = window.localStorage.getItem('employeeId');
+                    this.checkOutDetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
+                    this.checkOutDetails.projectId =job.siteProjectId;
+                    this.checkOutDetails.siteId = job.siteId;
+                    this.checkOutDetails.jobId = job.id;
+                    this.checkOutDetails.id=job.checkInOutId;
+                    this.checkOutDetails.jobMaterials=material;
+                    this.jobService.updateJobImages(this.checkOutDetails).subscribe(
+                        response=>{
+                            // this.component.closeLoader();
+>>>>>>> Release-2.0-Inventory
                             console.log("complete job response");
                             console.log(response);
                             console.log(job);
@@ -383,7 +462,119 @@ export class CompleteJobPage {
                                     })
 
                             }
+<<<<<<< HEAD
                             this.navCtrl.setRoot(JobsPage);
+=======
+
+                        },err=>{
+                            this.component.closeLoader();
+                            // this.navCtrl.pop();
+                        }
+                    )
+                }else{
+                    this.component.closeAll();
+                    this.navCtrl.pop();
+                }
+            },err=>{
+                console.log("Error in saving response");
+                console.log(err);
+                this.component.closeLoader();
+                this.component.showToastMessage('Error in saving job, please try again...','bottom');
+            }
+        )
+    }
+
+    completeJob(job, takenImages,material){
+        this.component.showLoader('Completing Job');
+        this.geolocation.getCurrentPosition().then((response)=>{
+            console.log("Current location");
+            console.log(response);
+            this.latitude = response.coords.latitude;
+            this.longitude = response.coords.longitude;
+        }).catch((error)=>{
+            this.latitude = 0;
+            this.longitude = 0;
+        });
+        console.log("material in complete job");
+        console.log(material);
+        job.jobMaterials=material;
+        this.jobService.saveJob(job).subscribe(
+            response=>{
+                console.log(job);
+                this.checkOutDetails.completeJob=true;
+                this.checkOutDetails.employeeId = window.localStorage.getItem('employeeId');
+                this.checkOutDetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
+                this.checkOutDetails.projectId =job.siteProjectId;
+                this.checkOutDetails.siteId = job.siteId;
+                this.checkOutDetails.jobId = job.id;
+                this.checkOutDetails.latitudeOut = this.latitude;
+                this.checkOutDetails.longitude = this.longitude;
+                this.checkOutDetails.id=job.checkInOutId;
+                this.checkOutDetails.jobMaterials=material;
+                console.log(this.checkOutDetails);
+                this.jobService.updateJobImages(this.checkOutDetails).subscribe(
+                    response=>{
+                        this.component.closeAll();
+                        this.component.showToastMessage('Job Completed Successfully','bottom');
+                        console.log("complete job response");
+                        console.log(response);
+                        console.log(job);
+
+                        // this.component.showLoader('Uploading Images');
+                        //TODO
+                        //File Upload after successful checkout
+                        for(let i in takenImages) {
+
+                            console.log("image loop");
+                            console.log(i);
+                            console.log(takenImages[i]);
+                            console.log(takenImages[i].file);
+                            console.log(this.jobDetails.id);
+                            console.log(this.jobDetails.id+i);
+                            console.log(this.checkOutDetails.employeeId);
+                            console.log(this.checkOutDetails.employeeEmpId);
+                            console.log(this.checkOutDetails.projectId);
+                            console.log(this.checkOutDetails.siteId);
+                            console.log(this.checkOutDetails.jobId);
+                            var employeeId=Number;
+                            console.log(typeof employeeId);
+                            employeeId=this.checkOutDetails.employeeId;
+                            console.log(typeof employeeId);
+                            console.log(employeeId);
+                            console.log(typeof this.checkOutDetails.jobId);
+                            console.log(typeof this.checkOutDetails.projectId);
+                            console.log(typeof this.checkOutDetails.employeeEmpId);
+                            console.log(typeof this.checkOutDetails.employeeId);
+                            console.log(typeof response.transactionId);
+                            let token_header=window.localStorage.getItem('session');
+                            let options: FileUploadOptions = {
+                                fileKey: 'photoOutFile',
+                                fileName:this.checkOutDetails.employeeId+'_photoOutFile_'+response.transactionId,
+                                headers:{
+                                    'X-Auth-Token':token_header
+                                },
+                                params:{
+                                    employeeEmpId: this.checkOutDetails.employeeEmpId,
+                                    employeeId: this.checkOutDetails.employeeId,
+                                    projectId:this.checkOutDetails.projectId,
+                                    siteId:this.checkOutDetails.siteId,
+                                    checkInOutId:response.transactionId,
+                                    jobId:this.checkOutDetails.jobId,
+                                    action:"OUT"
+                                }
+                            };
+
+                            this.fileTransfer.upload(takenImages[i], this.config.Url+'api/employee/image/upload', options)
+                                .then((data) => {
+                                    console.log(data);
+                                    console.log("image upload");
+                                    this.component.closeLoader();
+                                }, (err) => {
+                                    console.log(err);
+                                    console.log("image upload fail");
+                                    this.component.closeLoader();
+                                })
+>>>>>>> Release-2.0-Inventory
 
                         }
                         },
@@ -433,6 +624,7 @@ export class CompleteJobPage {
     }
 
 
+<<<<<<< HEAD
     viewCameraCheckList(i) {
         console.log(i);
         const options: CameraOptions = {
@@ -477,6 +669,16 @@ export class CompleteJobPage {
 
     }
 
+=======
+    openTransaction()
+    {
+        let modal = this.modalCtrl.create(AddInventoryTransaction, {});
+        modal.present();
+
+    }
+
+
+>>>>>>> Release-2.0-Inventory
     resetRemarks(i,completed){
         console.log(i);
         console.log(completed);
@@ -485,12 +687,17 @@ export class CompleteJobPage {
         }
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> Release-2.0-Inventory
     show(show,i)
     {
         this.showIcon = !show;
         this.index = i;
     }
 
+<<<<<<< HEAD
     // openImage(imageToView){ const viewer =  this._imageViewerCtrl .create(imageToView)
     //     viewer.present(); }
 
@@ -506,4 +713,20 @@ export class CompleteJobPage {
         popover.present({
         });
     }
+=======
+    addMaterial()
+    {
+        // this.navCtrl.push(AddMaterial,{job:this.jobDetails});
+        let profileModal = this.modalCtrl.create(AddMaterial, {job:this.jobDetails});
+        profileModal.onDidDismiss(data => {
+            console.log("data");
+            console.log(data);
+            console.log("Job Material in complete job page");
+            this.material=data.jobMaterial;
+            console.log(data.jobMaterial);
+        });
+        profileModal.present();
+    }
+
+>>>>>>> Release-2.0-Inventory
 }

@@ -18,7 +18,14 @@ import { DatePicker } from '@ionic-native/date-picker';
   templateUrl: 'ticket-filter.html',
 })
 export class TicketFilter {
-    selectedProject:any;
+  emp: any;
+  employeeActive: any;
+  empIndex: any;
+  siteActive: any;
+  site: any;
+  index: any;
+  projectindex: any;
+  selectedProject:any;
     scrollSite:any;
     siteList:any;
     msg:any;
@@ -32,9 +39,19 @@ export class TicketFilter {
     viewButton:any;
     clientList:any;
 
+    projectActive:any;
+    siteSpinner =false;
+    chooseClient = true;
+    showSites = false;
+
+  empSpinner=false;
+  chooseSite=true;
+  showEmployees=false;
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,public siteService:SiteService,public component:componentService,
               public employeeService:EmployeeService,public datePicker:DatePicker) {
-      this.empPlace='Employee';
+    this.siteList=[];
+    this.employee=[];
+    this.empPlace='Employee';
   }
 
   ionViewDidLoad() {
@@ -46,7 +63,7 @@ export class TicketFilter {
               console.log(response);
               this.clientList=response;
               this.selectedProject = this.clientList[0];
-              this.selectSite(this.selectedProject);
+              // this.selectSite(this.selectedProject);
               console.log('select default value:');
               this.component.closeLoader();
           },
@@ -63,16 +80,33 @@ export class TicketFilter {
   }
 
   dismiss(){
+<<<<<<< HEAD
       this.viewCtrl.dismiss({project:this.selectedProject,site:this.selectedSite});
+=======
+      // let data={'foo':'bar'};
+      this.viewCtrl.dismiss();
+>>>>>>> Release-2.0-Inventory
   }
-  selectSite(project){
+  selectSite(project,i){
+
+      this.projectActive = true;
+      this.projectindex=i;
+      this.siteSpinner =true;
+      this.chooseClient = false;
+      this.showSites = false;
+
       this.selectedProject=project;
       this.scrollSite=true;
+      console.log("projectID",project);
       this.siteService.findSitesByProject(project.id).subscribe(
           response=>{
               console.log("site by project id");
               console.log(response);
               this.siteList=response;
+              this.siteSpinner= false;
+            this.showSites = true;
+            this.showEmployees=false;
+            this.chooseSite = true;
               console.log(this.siteList);
           },
           error=>{
@@ -84,53 +118,73 @@ export class TicketFilter {
       )
   }
 
-    highLightSite(index,site){
-      console.log('Selected Site in ticket-filter');
+    highLightSite(site,i){
+    /*  console.log('Selected Site in ticket-filter');
       console.log(site);
       this.activeSite=index;
       this.selectedSite=site;
-        this.getEmployee(site.id);
+        this.getEmployee(site.id);*/
+
+      if(site)
+      {
+        console.log('ionViewDidLoad Add jobs employee');
+        // window.localStorage.setItem('site',site);
+        // console.log(this.empSelect);
+        this.index = i;
+        this.projectActive = true;
+        this.siteActive = true;
+        // this.siteName = site.name;
+        this.site = site;
+        this.empSpinner=true;
+        this.chooseSite=false;
+        this.showEmployees=false;
+        var search={
+          currPage:1,
+          siteId:this.site.id
+        }
+        this.employeeService.searchEmployees(search).subscribe(
+          response=> {
+            console.log("employeeRespons",response);
+            this.empSpinner=false;
+            this.showEmployees=true;
+            if(response.transactions!==0)
+            {
+              this.empSelect=false;
+              this.empPlace="Employee"
+              this.employee=response.transactions;
+              console.log(this.employee);
+            }
+            else
+            {
+              this.empSelect=true;
+              this.empPlace="No Employee"
+              this.employee=[]
+            }
+          },
+          error=>{
+            console.log(error);
+            console.log(this.employee);
+          })
+
+      }
+      else
+      {
+        this.employee=[];
+      }
+
     }
+
+  activeEmployee(emp,i)
+  {
+    this.empIndex = i;
+    this.employeeActive = true;
+    this.emp = emp;
+    console.log( this.emp);
+  }
 
     getEmployee(id)
     {
-        if(id)
-        {
-            console.log('ionViewDidLoad Add jobs employee');
 
-            window.localStorage.setItem('site',id);
-            console.log(this.empSelect);
-            var search={
-                currPage:1,
-                siteId:id
-            }
-            this.employeeService.searchEmployees(search).subscribe(
-                response=> {
-                    console.log(response);
-                    if(response.transactions!==null)
-                    {
-                        this.empSelect=false;
-                        this.empPlace="Employee"
-                        this.employee=response.transactions;
-                        console.log(this.employee);
-                    }
-                    else
-                    {
-                        this.empSelect=true;
-                        this.empPlace="No Employee"
-                        this.employee=[]
-                    }
-                },
-                error=>{
-                    console.log(error);
-                    console.log(this.employee);
-                })
-
-        }
-        else
-        {
-            this.employee=[];
-        }
     }
 
     selectFromDate()
@@ -171,11 +225,9 @@ export class TicketFilter {
                     console.log('view button true');
                     this.viewButton=true;
                 }
-
             },
             err => console.log('Error occurred while getting date: ', err)
         );
-
     }
 
     dateSearch(fromDate,toDate) {

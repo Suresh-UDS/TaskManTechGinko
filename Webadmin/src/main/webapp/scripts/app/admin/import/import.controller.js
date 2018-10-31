@@ -658,6 +658,64 @@ angular.module('timeSheetApp')
 		   	return ($rootScope.assetAMCImportStatusLoad ? $rootScope.assetAMCImportStatusLoad : '');
 	   };
 
+	   //Inventory Master upload file start
+	    $scope.uploadInventoryMaster = function() {
+		    	if($scope.selectedMasterFile){
+		    		$rootScope.inventoryImportStatusLoad = true;
+	   		console.log('************************selected asset file - ' + $scope.selectedMasterFile);
+	   		InventoryComponent.importInventoryFile($scope.selectedMasterFile).then(function(data){
+	   			console.log(data);
+	   			var result = data;
+	   			console.log(result.file + ', ' + result.status + ',' + result.msg);
+	   			var importStatus = {
+	       				fileName : result.file,
+	       				importMsg : result.msg
+	       		};
+	       		$rootScope.inventoryImportStatus = importStatus;
+	       		$rootScope.start('inventory');
+	        },function(err){
+	           	  console.log('Inventory Import error')
+	           	  console.log(err);
+	        });
+
+		  }
+	   }
+
+	    $scope.inventoryImportStatus = function() {
+	    		console.log('$rootScope.assetImportStatus -'+JSON.stringify($rootScope.inventoryImportStatus));
+     		InventoryComponent.importInventoryStatus($rootScope.inventoryImportStatus.fileName).then(function(data) {
+         		if(data) {
+         			$rootScope.inventoryImportStatus.importStatus = data.status;
+             		console.log('*****************importStatus - '+ JSON.stringify($rootScope.inventoryImportStatus));
+             		$rootScope.inventoryImportStatus.importMsg = data.msg;
+             		console.log('**************importMsg - '+ $rootScope.inventoryImportStatus.importMsg);
+             		if($rootScope.inventoryImportStatus.importStatus == 'COMPLETED'){
+             			$rootScope.inventoryImportStatus.fileName = data.file;
+                 		console.log('importFile - '+ $rootScope.inventoryImportStatus.fileName);
+                 		$scope.stop('inventory');
+                 		$rootScope.inventoryImportStatusLoad = false;
+                 		$timeout(function() {
+                 			$rootScope.inventoryImportStatus = {};
+                 	    }, 3000);
+             		}else if($rootScope.inventoryImportStatus.importStatus == 'FAILED'){
+                 		$scope.stop('inventory');
+             		}else if(!$rootScope.inventoryImportStatus.importStatus){
+             			$scope.stop('inventory');
+             		}else {
+             			$rootScope.inventoryImportStatus.fileName = '#';
+             		}
+         		}
+
+         	});
+
+	    }
+
+
+	   $scope.inventoryImportStatusLoad = function(){
+		   	console.log('$scope.assetImportStatusLoad message '+ $rootScope.inventoryImportStatusLoad);
+		   	return ($rootScope.inventoryImportStatusLoad ? $rootScope.inventoryImportStatusLoad : '');
+	   };
+
 
 	 // store the interval promise in this variable
 	 var promiseJob;
@@ -671,103 +729,113 @@ angular.module('timeSheetApp')
 	 var promiseAssetAMC;
 	 // starts the interval
 	    $rootScope.start = function(typeImport) {
-	      // stops any running interval to avoid two intervals running at the same time
-	    	//$rootScope.stop('job');
+            // stops any running interval to avoid two intervals running at the same time
+            //$rootScope.stop('job');
 
-	      // store the interval promise
-	    	if(typeImport == 'job'){
-	    		$rootScope.stop('job');
-	    		console.log('Import Job Start Method');
-	    		promiseJob = $interval($scope.jobImportStatus, 5000);
-	    		console.log('promise -'+promiseJob);
-	    	}
-	    	if(typeImport == 'employee'){
-	    		$rootScope.stop('employee');
-	    		console.log('Import Employee Start Method');
-	    		promiseEmployee = $interval($scope.employeeImportStatus, 5000);
-	    		console.log('promise -'+promiseEmployee);
-	    	}
-	    	if(typeImport == 'client'){
-	    		$rootScope.stop('client');
-	    		console.log('Import Client Start Method');
-	    		promiseClient = $interval($scope.clientImportStatus, 5000);
-	    		console.log('promise -'+promiseClient);
-	    	}
-	    	if(typeImport == 'site'){
-	    		$rootScope.stop('site');
-	    		console.log('Import Site Start Method');
-	    		promiseSite = $interval($scope.siteImportStatus, 5000);
-	    		console.log('promise -'+promiseSite);
-	    	}
-	    	if(typeImport == 'checklist'){
-	    		$rootScope.stop('checklist');
-	    		console.log('Import checklist Start Method');
-	    		promiseChecklist = $interval($scope.checklistImportStatus, 5000);
-	    		console.log('promise -'+promiseChecklist);
-	    	}
-	    	if(typeImport == 'employeeShift'){
-	    		$rootScope.stop('employeeShift');
-	    		console.log('Import employeeShift Start Method');
-	    		promiseEmployeeShift = $interval($scope.employeeShiftImportStatus, 5000);
-	    		console.log('promise -'+promiseEmployeeShift);
-	    	}
-	    	if(typeImport == 'asset'){
-	    		$rootScope.stop('asset');
-	    		console.log('Import asset Start Method');
-	    		promiseAsset = $interval($scope.assetImportStatus, 5000);
-	    		console.log('promise -'+promiseAsset);
-	    	}
-	    	if(typeImport == 'assetPPM'){
-	    		$rootScope.stop('assetPPM');
-	    		console.log('Import asset PPM Start Method');
-	    		promiseAssetPPM = $interval($scope.assetPPMImportStatus, 5000);
-	    		console.log('promise -'+promiseAssetPPM);
-	    	}
-	    	if(typeImport == 'assetAMC'){
-	    		$rootScope.stop('assetAMC');
-	    		console.log('Import asset AMC Start Method');
-	    		promiseAssetAMC = $interval($scope.assetAMCImportStatus, 5000);
-	    		console.log('promise -'+promiseAssetAMC);
-	    	}
-	    };
-	    // stops the interval
-	    $rootScope.stop = function(stopInterval) {
-	      if(stopInterval == 'job'){
-	    	  $interval.cancel(promiseJob);
-	      }
-	      if(stopInterval == 'employee'){
-	    	  $interval.cancel(promiseEmployee);
-	      }
-	      if(stopInterval == 'client'){
-	    	  $interval.cancel(promiseClient);
-	      }
-	      if(stopInterval == 'site'){
-	    	  $interval.cancel(promiseSite);
-	      }
-	      if(stopInterval == 'checklist'){
-	    	  $interval.cancel(promiseChecklist);
-	      }
-	      if(stopInterval == 'employeeShift'){
-	    	  	$interval.cancel(promiseEmployeeShift);
-	      }
-	      if(stopInterval == 'asset'){
-	    	  	$interval.cancel(promiseAsset);
-	      }
-	      if(stopInterval == 'assetPPM'){
-	    	  	$interval.cancel(promiseAssetPPM);
-	      }
-	      if(stopInterval == 'assetAMC'){
-	    	  	$interval.cancel(promiseAssetAMC);
-	      }
-	    };
+            // store the interval promise
+            if (typeImport == 'job') {
+                $rootScope.stop('job');
+                console.log('Import Job Start Method');
+                promiseJob = $interval($scope.jobImportStatus, 5000);
+                console.log('promise -' + promiseJob);
+            }
+            if (typeImport == 'employee') {
+                $rootScope.stop('employee');
+                console.log('Import Employee Start Method');
+                promiseEmployee = $interval($scope.employeeImportStatus, 5000);
+                console.log('promise -' + promiseEmployee);
+            }
+            if (typeImport == 'client') {
+                $rootScope.stop('client');
+                console.log('Import Client Start Method');
+                promiseClient = $interval($scope.clientImportStatus, 5000);
+                console.log('promise -' + promiseClient);
+            }
+            if (typeImport == 'site') {
+                $rootScope.stop('site');
+                console.log('Import Site Start Method');
+                promiseSite = $interval($scope.siteImportStatus, 5000);
+                console.log('promise -' + promiseSite);
+            }
+            if (typeImport == 'checklist') {
+                $rootScope.stop('checklist');
+                console.log('Import checklist Start Method');
+                promiseChecklist = $interval($scope.checklistImportStatus, 5000);
+                console.log('promise -' + promiseChecklist);
+            }
+            if (typeImport == 'employeeShift') {
+                $rootScope.stop('employeeShift');
+                console.log('Import employeeShift Start Method');
+                promiseEmployeeShift = $interval($scope.employeeShiftImportStatus, 5000);
+                console.log('promise -' + promiseEmployeeShift);
+            }
+            if (typeImport == 'asset') {
+                $rootScope.stop('asset');
+                console.log('Import asset Start Method');
+                promiseAsset = $interval($scope.assetImportStatus, 5000);
+                console.log('promise -' + promiseAsset);
+            }
+            if (typeImport == 'assetPPM') {
+                $rootScope.stop('assetPPM');
+                console.log('Import asset PPM Start Method');
+                promiseAssetPPM = $interval($scope.assetPPMImportStatus, 5000);
+                console.log('promise -' + promiseAssetPPM);
+            }
+            if (typeImport == 'assetAMC') {
+                $rootScope.stop('assetAMC');
+                console.log('Import asset AMC Start Method');
+                promiseAssetAMC = $interval($scope.assetAMCImportStatus, 5000);
+                console.log('promise -' + promiseAssetAMC);
+            }
+            if (typeImport == 'inventory') {
+                $rootScope.stop('inventory');
+                console.log('Import inventory start method');
+                promiseInventory = $inventory($scope.inventoryImportStatus, 5000);
+                console.log('promise -' + promiseInventory);
+            }
+            // stops the interval
+            $rootScope.stop = function (stopInterval) {
+                if (stopInterval == 'job') {
+                    $interval.cancel(promiseJob);
+                }
+                if (stopInterval == 'employee') {
+                    $interval.cancel(promiseEmployee);
+                }
+                if (stopInterval == 'client') {
+                    $interval.cancel(promiseClient);
+                }
+                if (stopInterval == 'site') {
+                    $interval.cancel(promiseSite);
+                }
+                if (stopInterval == 'checklist') {
+                    $interval.cancel(promiseChecklist);
+                }
+                if (stopInterval == 'employeeShift') {
+                    $interval.cancel(promiseEmployeeShift);
+                }
+                if (stopInterval == 'asset') {
+                    $interval.cancel(promiseAsset);
+                }
+                if (stopInterval == 'assetPPM') {
+                    $interval.cancel(promiseAssetPPM);
+                }
+                if (stopInterval == 'assetAMC') {
+                    $interval.cancel(promiseAssetAMC);
+                }
+            };
 
 
-         //init load
-        $scope.initLoad = function(){
-             $scope.loadPageTop();
-             //$scope.initPage();
+            if (stopInterval == 'inventory') {
+                $inventory.cancel(promiseInventory);
+            }
 
-         }
 
+            //init load
+            $scope.initLoad = function () {
+                $scope.loadPageTop();
+                //$scope.initPage();
+
+            }
+        }
 
     });

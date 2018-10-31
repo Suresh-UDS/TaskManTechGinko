@@ -61,6 +61,8 @@ import { File } from '@ionic-native/file';
 import{TicketFilter} from "../pages/ticket/ticket-filter/ticket-filter";
 import{InventoryMaster} from "../pages/inventory-master/inventory-master";
 import {ForgotPassword} from "../pages/forgot-password/forgot-password";
+import{ExpenseDetails} from"../pages/expense-details/expense-details";
+
 import {SQLitePorter} from "@ionic-native/sqlite-porter";
 
 import {CreateEmployeePage} from "../pages/employee-list/create-employee";
@@ -106,9 +108,10 @@ import{GetAssetReading} from "../pages/asset-view/get-asset-reading";
 import{GetAssetReadings} from "../pages/asset-view/get-asset-readings/get-asset-readings";
 import{CalenderPage} from "../pages/calender-page/calender-page";
 import{UpdateApp} from "../pages/update-app/update-app";
+import{AddExpense} from "../pages/expense/add-expense/add-expense";
 import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-filter";
 import {JobFilter} from "../pages/jobs/job-filter/job-filter";
-import{SQLite,SQLiteObject} from "@ionic-native/sqlite";
+import{SQLite} from "@ionic-native/sqlite";
 import {DBService} from "../pages/service/dbService";
 import {Network} from "@ionic-native/network";
 import {Diagnostic} from "@ionic-native/diagnostic";
@@ -125,6 +128,21 @@ import{LocationAccuracy} from "@ionic-native/location-accuracy";
 // import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 // import{IonicImageViewerModule} from "ionic-img-viewer";
+import{InventoryFilter} from "../pages/inventory-filter/inventory-filter";
+import{AddInventoryTransaction} from "../pages/add-inventory-transaction/add-inventory-transaction";
+import {InventoryService} from "../pages/service/inventoryService";
+import {ExpenseService} from "../pages/service/expenseService";
+import{AutoCompleteModule} from "ionic2-auto-complete";
+import {PurchaseRequisitionService} from "../pages/service/PurchaseRequisitionService";
+import {ExpensePage} from "../pages/expense/expense";
+import {TransactionPage} from "../pages/expense/transaction";
+import {Indent} from "../pages/indent/indent";
+import{IndentView} from "../pages/indent-view/indent-view";
+import {InventoryTransaction} from "../pages/inventorytransaction/inventorytransaction";
+import{IndentList} from "../pages/indent-list/indent-list";
+import{IndentIssue} from "../pages/indent-issue/indent-issue";
+import{AddMaterial} from "../pages/add-material/add-material";
+import{SelectSearchableModule} from "ionic-select-searchable";
 
 @NgModule({
   declarations: [
@@ -210,14 +228,30 @@ import{LocationAccuracy} from "@ionic-native/location-accuracy";
       UpdateApp,
       ForgotPassword,
       // PhotoViewer
+      InventoryFilter,
+      AddInventoryTransaction,
+    ExpensePage,
+    TransactionPage,
+      Indent,
+      IndentView,
+    InventoryTransaction,
+      IndentList,
+      IndentIssue,
+      ExpenseDetails,
+      AddExpense,
+    AddMaterial
+
   ],
   imports: [
     BrowserModule,
     HttpModule,
     DatePickerModule,
     BrowserAnimationsModule,
+    SelectSearchableModule,
+
     IonicModule.forRoot(MyApp,{
-        backButtonText: '',
+        backButtonText
+            : '',
         backButtonIcon: 'ios-arrow-back',
         iconMode: 'md'
     }),
@@ -305,8 +339,21 @@ import{LocationAccuracy} from "@ionic-native/location-accuracy";
       ChangePassword,
       InventoryMaster,
       UpdateApp,
-      ForgotPassword
+      ForgotPassword,
+      InventoryFilter,
+      AddInventoryTransaction,
+    ExpensePage,
+    TransactionPage,
+      Indent,
+      IndentView,
+    InventoryTransaction,
+      IndentList,
+      IndentIssue,
+      ExpenseDetails,
+      AddExpense,
+    AddMaterial
 
+    // WheelSelector
 
   ],
   providers: [
@@ -345,6 +392,9 @@ import{LocationAccuracy} from "@ionic-native/location-accuracy";
       Network,
       Market,
       LocationAccuracy,
+      InventoryService,
+    ExpenseService,
+      PurchaseRequisitionService,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]

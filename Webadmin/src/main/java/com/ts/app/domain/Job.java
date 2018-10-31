@@ -3,6 +3,7 @@ package com.ts.app.domain;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -119,6 +120,9 @@ public class Job extends AbstractAuditingEntity implements Serializable{
     private String zone;
     
     private String maintenanceType;
+    
+    @OneToMany(mappedBy="job", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<JobMaterial> jobMaterials;
 
 	public String getDuration() {
 		return duration;
@@ -422,5 +426,12 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	public void setEscalationStatus(int escalationStatus) {
 		this.escalationStatus = escalationStatus;
 	}
+	public Set<JobMaterial> getJobMaterials() {
+		return jobMaterials;
+	}
+	public void setJobMaterials(Set<JobMaterial> jobMaterials) {
+		this.jobMaterials = jobMaterials;
+	}
+	
     
 }

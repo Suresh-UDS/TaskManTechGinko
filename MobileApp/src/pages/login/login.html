@@ -7,7 +7,7 @@
 
 
 <ion-content class="login">
-    <div class="wrapper wrapper-full-page LoginPageCon">
+    <div class="wrapper wrapper-full-page LoginPageCon ">
         <div class="full-page login-page" filter-color="black">
             <!--   you can change the color of the filter page using: data-color="blue | purple | green | orange | red | rose " -->
             <div class="content padding-top40">
@@ -21,13 +21,15 @@
                                   </div>
 
                                   <div class="card card-login">
-                                    <div class="card-header text-center" data-background-color="orange">
-                                      <h4 class="card-title">Login</h4>
+                                    <div class="card-header text-center login-new card-signin" >
+                                      <i class="material-icons" style="margin: 0 auto;font-size: 40px; min-width: 100%;padding-top: 5px; color: #000;">
+                                        perm_identity
+                                      </i>
                                     </div>
                                     <div class="card-content padding-top25">
                                       <div class="input-group">
                                           <span class="input-group-addon">
-                                              <i class="material-icons">face</i>
+                                              <i class="material-icons">perm_identity</i>
                                           </span>
                                         <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='username'}">
                                           <label class="control-label">User Name</label>
@@ -57,8 +59,8 @@
                                         </div>
                                       </div>
                                     </div>
-                                    <div class="footer text-center">
-                                      <button class="btn btn-warning btn-simple btn-wd btn-lg" (click)="signin()">Sign In</button>
+                                    <div class="footer text-center ">
+                                      <button class="btn  btn-wd btn-lg btn-signin" (click)="signin()">Sign In</button>
                                     </div>
                                   </div>
 
@@ -71,7 +73,7 @@
                         </form>
                     </div>
                 </div>
-            </div>
+              </div>
              </div>
         </div>
     </div>

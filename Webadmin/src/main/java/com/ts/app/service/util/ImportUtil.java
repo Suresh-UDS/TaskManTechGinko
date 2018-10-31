@@ -46,6 +46,28 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.AssetManagementService;
+import com.ts.app.service.ChecklistService;
+import com.ts.app.service.InventoryManagementService;
+import com.ts.app.service.JobManagementService;
+import com.ts.app.service.SiteLocationService;
+import com.ts.app.service.UserService;
+import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
+import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
+import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ChecklistDTO;
+import com.ts.app.web.rest.dto.ChecklistItemDTO;
+import com.ts.app.web.rest.dto.ImportResult;
+import com.ts.app.web.rest.dto.JobChecklistDTO;
+import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.LocationDTO;
+import com.ts.app.web.rest.dto.MaterialDTO;
+import com.ts.app.web.rest.dto.ProjectDTO;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
+import com.ts.app.web.rest.dto.SiteDTO;
+import com.ts.app.web.rest.dto.UserDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
 
 
@@ -64,6 +86,7 @@ public class ImportUtil {
 	private static final String CLIENT_FOLDER = "client";
 	private static final String SITE_FOLDER = "site";
 	private static final String LOCATION_FOLDER = "location";
+	private static final String INVENTORY_FOLDER = "inventory";
 	private static final String COMPLETED_IMPORT_FOLDER = "import.file.path.completed";
 	private static final String SEPARATOR = System.getProperty("file.separator");
 
@@ -119,6 +142,9 @@ public class ImportUtil {
 
 	@Inject
 	private AssetManagementService assetManagementService;
+
+	@Inject
+	private InventoryManagementService inventoryManagementService;
 
 	public ImportResult importJobData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
@@ -347,9 +373,11 @@ public class ImportUtil {
 					case "assetAMC" :
 						importAssetAMCFromFile(fileObj.getPath());
 						break;
-
                     case "siteEmployeeChange" :
                         changeSiteEmployee(fileObj.getPath());
+					case "inventory" :
+						importInventoryMaster(fileObj.getPath());
+						break;
 				}
 				statusMap.put(fileKey, "COMPLETED");
 				FileSystem fileSystem = FileSystems.getDefault();
@@ -366,6 +394,43 @@ public class ImportUtil {
 			}
 		//}
 		//result.setEmpId(empId);
+	}
+
+	private void importInventoryMaster(String path) {
+		try {
+
+			FileInputStream excelFile = new FileInputStream(new File(path));
+			Workbook workbook = new XSSFWorkbook(excelFile);
+			Sheet datatypeSheet = workbook.getSheetAt(0);
+			//Iterator<Row> iterator = datatypeSheet.iterator();
+			int lastRow = datatypeSheet.getLastRowNum();
+			int r = 1;
+
+			log.debug("Last Row number -" + lastRow);
+			for (; r <= lastRow; r++) {
+				log.debug("Current Row number -" + r);
+				Row currentRow = datatypeSheet.getRow(r);
+				MaterialDTO materialDTO = new MaterialDTO();
+				materialDTO.setName(getCellValue(currentRow.getCell(0)));
+				materialDTO.setItemCode(getCellValue(currentRow.getCell(1)));
+				materialDTO.setItemGroup(getCellValue(currentRow.getCell(2)));
+				materialDTO.setUom(getCellValue(currentRow.getCell(3)).toUpperCase());
+				materialDTO.setProjectId(Long.valueOf(getCellValue(currentRow.getCell(4))));
+				materialDTO.setSiteId(Long.valueOf(getCellValue(currentRow.getCell(5))));
+				materialDTO.setDescription(getCellValue(currentRow.getCell(6)));
+				materialDTO.setMinimumStock(Long.valueOf(getCellValue(currentRow.getCell(7))));
+				materialDTO.setMaximumStock(Long.valueOf(getCellValue(currentRow.getCell(7))));
+				materialDTO.setStoreStock(Long.valueOf((getCellValue(currentRow.getCell(8)))));
+				materialDTO.setManufacturerId(Long.valueOf(getCellValue(currentRow.getCell(9))));
+				inventoryManagementService.createInventory(materialDTO);
+			}
+
+		} catch (FileNotFoundException e) {
+			log.error("Error while reading the inventory data file for import", e);
+		} catch (IOException e) {
+			log.error("Error while reading the inventory data file for import", e);
+		}
+
 	}
 
 	public String getImportStatus(String fileName) {
@@ -1146,6 +1211,31 @@ public class ImportUtil {
 	            break;
 		}
 		return value;
+	}
+
+	public ImportResult importInventoryMaster(MultipartFile file, long dateTime, boolean isMaterialTransaction, boolean isMaterialIndent) {
+		String fileName = dateTime + ".xlsx";
+		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  INVENTORY_FOLDER;
+		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
+		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  INVENTORY_FOLDER;
+		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
+		if(statusMap.containsKey(fileKey)) {
+			String status = statusMap.get(fileKey);
+			log.debug("Current status for filename -"+fileKey+", status -" + status);
+		}else {
+			statusMap.put(fileKey, "PROCESSING");
+		}
+		if(isMaterialTransaction) {
+			importNewFiles("inventoryTransaction",filePath, fileName, targetFilePath);
+		}else if(isMaterialIndent) {
+			importNewFiles("inventoryIndent",filePath, fileName, targetFilePath);
+		}else {
+			importNewFiles("inventory",filePath, fileName, targetFilePath);
+		}
+		ImportResult result = new ImportResult();
+		result.setFile(fileKey);
+		result.setStatus("PROCESSING");
+		return result;
 	}
 
 }

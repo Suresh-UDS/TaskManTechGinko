@@ -305,15 +305,51 @@
                                             </td>
                                         </tr>
                                         </tbody>
-                    </table>
-                    <div></div>
-                    <div></div>
+                    			</table>
+                    		<div></div>
+                    	<div></div>
 
-                </div>
+                	</div>
 
-            </div>
+            	</div>
 
-        </div>
+        	</div>
+        	
+        	              <div class="row">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Materials</div>
+                                <div class="panel-body">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr>
+                                            <th>Item Name</th>
+                                            <th>Item Code</th>
+                                            <th>Item Group</th>
+                                            <th>Store Stock</th>
+                                            <th>Quantity</th>
+                                            <th>UOM</th>
+                                        </tr>
+                                        <tr ng-repeat="material in job.jobMaterials">
+                                       		<td>{{material.materialName}}</td>
+                                       		<td>{{material.materialCode}}</td>
+                                       		<td>{{material.materialGroup}}</td>
+                                       		<td>{{material.materialStock}}</td>
+                                       		<td>{{material.materialQuantity}}</td>
+                                       		<td>{{material.materialUom}}</td>
+                                        </tr>
+                                         <tr>
+                                            <td colspan="5" align="center" ng-show="!job.jobMaterials.length">No Materials Used</td>
+                                         </tr>
+                                        </tbody>
+                    			</table>
+                    		<div></div>
+                    	<div></div>
+
+                	</div>
+
+            	</div>
+
+        	</div>
 
 
 

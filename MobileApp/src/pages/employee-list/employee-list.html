@@ -9,7 +9,12 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Employee List</ion-title>
+    <ion-title>Employees</ion-title>
+    <ion-buttons right>
+      <button ion-button class="fnt-black" icon-only (click)="presentModal()">
+        <ion-icon name="funnel"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -17,9 +22,9 @@
   <!--<ion-fab right top edge>-->
       <!--<button has-permission="EmployeeCreate" (click)="createEmployee($event)" ion-fab><ion-icon name="add"></ion-icon></button>-->
   <!--</ion-fab>-->
-  <ion-fab bottom right>
+  <!--<ion-fab bottom right>
       <button ion-fab color="primary" (click)="presentModal()"><ion-icon name="funnel"></ion-icon></button>
-  </ion-fab>
+  </ion-fab>-->
 
   <ion-list class="emp-list">
 
@@ -47,7 +52,7 @@
         <ion-row class="margin0">
           <ion-col col-2>
             <ion-avatar item-start *ngIf="emp.url" >
-              <img  [src]="emp.url" >
+              <img  [src]="emp.url" imageViewer >
             </ion-avatar>
             <p *ngIf="!emp.url && first(emp.name)"></p>
             <ion-avatar item-start *ngIf="!emp.url" class="emp-round">

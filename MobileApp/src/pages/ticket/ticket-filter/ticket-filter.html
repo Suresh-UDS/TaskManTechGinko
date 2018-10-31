@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>ticket-filter</ion-title>
+    <ion-title>Ticket Filter</ion-title>
 
       <ion-buttons end>
           <button ion-button (click)=" dismissFilter()">
@@ -20,21 +20,120 @@
 </ion-header>
 
 
-<ion-content>
+<ion-content class="CreateTicketPage FormPage">
     <ion-fab right bottom>
         <button  (click)=" dismiss()" ion-fab><ion-icon name="checkmark"></ion-icon></button>
     </ion-fab>
-    <div class="InitFeedbackCon">
-        <div class="InputCon">
-            <ion-list>
-                <ion-item>
+
+
+
+
+                <div class="card scroll-card">
+                  <div class="card-content">
+                    <ion-row>
+                      <ion-col col-12>
+                        <ion-row no-margin class="" no-padding="" >
+                          <ion-col col-6 class="margin-right15 row" style="text-align: left" (click)="selectFromDate()">
+                            <ion-col col-2  class="padding-bottom1 primary-border-bottom">
+                              <ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 green"></ion-icon>
+                            </ion-col>
+                            <ion-col col-10 class="padding-top-bottom0 primary-border-bottom">
+                              <p padding-left no-margin class="scroll-heading">From date</p>
+                              <p padding-left no-margin="">{{ fromDate | date:'dd/MM/yyyy' }}</p>
+                            </ion-col>
+                          </ion-col>
+                          <ion-col col-6 class="margin-right-15 row todate-align"  (click)="selectToDate()">
+                            <ion-col col-2  class="padding-bottom1 primary-border-bottom">
+                              <ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 red"></ion-icon>
+                            </ion-col>
+                            <ion-col col-10 class="padding-top-bottom0 primary-border-bottom">
+                              <p padding-left no-margin class="scroll-heading">To date</p>
+                              <p padding-left no-margin="">{{ toDate | date:'dd/MM/yyyy' }}</p>
+                            </ion-col>
+                          </ion-col>
+                        </ion-row>
+                      </ion-col>
+                    </ion-row>
+                  </div>
+                </div>
+
+          <div class="card scroll-card">
+            <div class="card-content">
+              <ion-row>
+                <ion-col col-12>
+                  <p text-center>Choose Client</p>
+                  <div class="SitesScrollCon">
+                  <ion-scroll scrollX="true">
+                    <button class="scroll-item"  ion-button round  *ngFor="let p of clientList;let i of index" (click)="selectSite(p,i)"  [color]="projectActive && i==projectindex? 'primary' : 'light'">
+                      <p class="siteName">{{p.name}}</p>
+                    </button>
+                  </ion-scroll>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </div>
+          </div>
+
+                <div class="card scroll-card">
+                  <div class="card-content">
+                    <ion-row>
+                      <ion-col col-12>
+                        <p text-center>Choose Site</p>
+                        <div padding text-center *ngIf="siteSpinner">
+                          <span><ion-spinner name="bubbles"></ion-spinner> <br> Loading...</span>
+                        </div>
+                        <div padding text-center *ngIf="chooseClient">
+                          <strong>Please Select Client</strong>
+                        </div>
+                        <div class="SitesScrollCon" *ngIf="showSites">
+                        <ion-scroll scrollX="true">
+                          <div *ngIf="siteList?.length==0" class="padding-top15">
+                            <h4 text-center class="clr-blk">No Data Found</h4>
+                          </div>
+                          <button class="scroll-item"  ion-button round *ngFor="let s of siteList;let i of index" (click)="highLightSite(s,i)" [color]="siteActive && i==index?'primary':'light'">
+                            <p class="siteName">{{s.name}}</p>
+                          </button>
+                        </ion-scroll>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </div>
+                </div>
+
+
+                      <div class="card scroll-card">
+                        <div class="card-content">
+                          <ion-row>
+                            <ion-col col-12>
+                              <p text-center>Choose Employee</p>
+                              <div padding text-center *ngIf="empSpinner">
+                                <span><ion-spinner name="bubbles"></ion-spinner> <br> Loading...</span>
+                              </div>
+
+                              <div padding text-center *ngIf="chooseSite">
+                                <strong>Please Select site</strong>
+                              </div>
+
+                              <div class="SitesScrollCon" *ngIf="showEmployees">
+                                <ion-scroll scrollX="true">
+                                  <button class="scroll-item"  ion-button round  *ngFor="let emp of employee;let i of index" (click)="activeEmployee(emp,i)" [color]="employeeActive && i==empIndex ? 'primary' : 'light'">
+                                    <p class="siteName">{{emp.fullName}} <br> <strong>{{emp.designation}}</strong></p>
+                                  </button>
+                                </ion-scroll>
+                              </div>
+                            </ion-col>
+                          </ion-row>
+                        </div>
+                      </div>
+
+                <!--<ion-item>
                     <ion-label>Client</ion-label>
                     <ion-select  interface="popover" [(ngModel)]="selectedProject">
                         <ion-option *ngFor="let p of clientList;let i=index" [value]="p" (ionSelect)="selectSite(p)"> {{p.name}}</ion-option>
                     </ion-select>
-                </ion-item>
+                </ion-item>-->
 
-                <div class="SiteAndBlockCOn"  *ngIf="scrollSite">
+                <!--<div class="SiteAndBlockCOn"  *ngIf="scrollSite">
                     <div class="SiteCon">
                         <div class="scrollCon">
                             <ion-row no-margin>
@@ -50,21 +149,22 @@
                                 </ion-item>
                             </ion-row>
 
-                            <!--<div class="form-group label-floating">-->
-                            <!--<label class="control-label" *ngIf="employ">Employee</label>-->
-                            <!--<ion-select [(ngModel)]="employ" [disabled]="empSelect" class="select-box padding-left0" interface="popover"  id="employ" name="employ" [placeholder]="empPlace" #emp="ngModel" required [ngClass]="{'select-error': eMsg=='employ'}">-->
-                            <!--<ion-option  *ngFor="let emp of employee" [value]="emp.id" >{{emp.fullName}} - {{emp.designation}}</ion-option>-->
-                            <!--</ion-select>-->
+                            &lt;!&ndash;<div class="form-group label-floating">&ndash;&gt;
+                            &lt;!&ndash;<label class="control-label" *ngIf="employ">Employee</label>&ndash;&gt;
+                            &lt;!&ndash;<ion-select [(ngModel)]="employ" [disabled]="empSelect" class="select-box padding-left0" interface="popover"  id="employ" name="employ" [placeholder]="empPlace" #emp="ngModel" required [ngClass]="{'select-error': eMsg=='employ'}">&ndash;&gt;
+                            &lt;!&ndash;<ion-option  *ngFor="let emp of employee" [value]="emp.id" >{{emp.fullName}} - {{emp.designation}}</ion-option>&ndash;&gt;
+                            &lt;!&ndash;</ion-select>&ndash;&gt;
 
-                            <!--<div *ngIf="emp.errors && (emp.dirty || emp.touched)" class="error-msg">-->
+                            &lt;!&ndash;<div *ngIf="emp.errors && (emp.dirty || emp.touched)" class="error-msg">&ndash;&gt;
 
-                            <!--</div>-->
+                            &lt;!&ndash;</div>&ndash;&gt;
 
-                            <!--<div *ngIf="emp.errors && (emp.untouched )" class="error-msg">-->
+                            &lt;!&ndash;<div *ngIf="emp.errors && (emp.untouched )" class="error-msg">&ndash;&gt;
 
-                            <!--</div>-->
-                            <!--</div>-->
+                            &lt;!&ndash;</div>&ndash;&gt;
+                            &lt;!&ndash;</div>&ndash;&gt;
                         </div>
+<<<<<<< HEAD
                     </div>
                     <!--<ion-item>-->
                         <!--<ion-label class="clr-blk">Employee</ion-label>-->
@@ -73,6 +173,17 @@
                         <!--</ion-select>-->
                     <!--</ion-item>-->
                 </div>
+=======
+                    </div>-->
+                   <!-- <ion-item>
+                        <ion-label class="clr-blk">Employee</ion-label>
+                        <ion-select [(ngModel)]="employ" [disabled]="empSelect" class="max-w100 padding-left0" interface="popover" >
+                            <ion-option  *ngFor="let emp of employee" [value]="emp.id" >{{emp.fullName}} - {{emp.designation}}</ion-option>
+                        </ion-select>
+                    </ion-item>-->
+
+                <!--<ion-col col-12>
+>>>>>>> Release-2.0-Inventory
 
                 <!--<ion-row no-margin class="" no-padding="" >-->
                     <!--<ion-col col-5 class="ver-center  margin-right15" (click)="selectFromDate()">-->
@@ -95,16 +206,13 @@
                     <!--</ion-col>-->
                 <!--</ion-row>-->
 
-
-
-            </ion-list>
+               </ion-col>-->
+          <div class="clearfix"></div>
             <!--<ion-item *ngFor="let ag of assetGroup">-->
             <!--<ion-label>{{ag.name}}</ion-label>-->
             <!--<ion-checkbox [(ngModel)]="selectedAssetGroup"></ion-checkbox>-->
             <!--</ion-item>-->
 
-        </div>
-    </div>
 
 
 </ion-content>

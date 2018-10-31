@@ -13,13 +13,16 @@
         <div *ngIf="quotations?.length==0" class="align-center margin-top20">
             <ion-card>
                 <ion-card-content>
-                    <p class="clr-orange">No Data Found</p>
+                    <img src="assets/imgs/warning.svg">
+                    <span><p text-center>No Data Found</p></span>
                 </ion-card-content>
             </ion-card>
         </div>
-        <ion-item *ngFor="let quotation of quotations;let i of index" class="bottom-border emp QuotationListContent" (click)="viewQuotation(quotation)">
+        <ion-item *ngFor="let quotation of quotations;let i of index" class="border-btm-dotted emp QuotationListContent" (click)="viewQuotation(quotation)">
             <ion-icon name="checkmark" class="green" item-start></ion-icon>
            {{quotation.title}}
+          <ion-icon class="grey fnt-24" name="ios-arrow-forward-outline" item-end></ion-icon>
+
         </ion-item>
     </ion-list>
 </ion-content>

@@ -9,10 +9,14 @@ import {componentService} from "../service/componentService";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { Toast } from '@ionic-native/toast';
 import {EmployeeService} from "../service/employeeService";
-import{SQLite,SQLiteObject} from "@ionic-native/sqlite";
+import{SQLite} from "@ionic-native/sqlite";
 
+<<<<<<< HEAD
 declare var demo;
 
+=======
+// import{SQLite,SQLitePorter} from "@ionic-native/sqlite-porter";
+>>>>>>> Release-2.0-Inventory
 /**
  * Generated class for the LoginPage page.
  *

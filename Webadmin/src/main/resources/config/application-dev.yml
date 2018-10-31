@@ -88,10 +88,10 @@ attendance:
     musterroll:
         report:
             template:
-                path: /opt/template/ATTENDENCE_MUSTER_ROLL_FORMAT.xlsx    
-    generalShift: 
+                path: /opt/template/ATTENDENCE_MUSTER_ROLL_FORMAT.xlsx
+    generalShift:
         startTime: 09:00
-        endTime: 17:00    
+        endTime: 17:00
 quotation:
     file:
         path:  /opt/quotation
@@ -153,6 +153,10 @@ reports:
         url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/asset-report
     vendor-report:
         url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/vendor-report
+    pr-report:
+        url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/pr-report
+    inventory-report:
+        url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/inventory-report
 
 url:
     ticket-view: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/view-ticket/
@@ -206,6 +210,7 @@ AWS:
    s3-checkinout-path : checkInOutImages/
    s3-checklist-path : checkListImages/
    s3-locationqr-path : locationQrCodes/
+   s3-expenseDocument-path: expenseDocuments/
 
 scheduler:
    job:
@@ -239,14 +244,14 @@ scheduler:
    feedbackreport:
       enabled: true
    attendanceMusterRollReport:
-      enabled: true     
+      enabled: true
    dayWiseJobReport:
-      enabled: true 
+      enabled: true
    dayWiseTicketReport:
       enabled: true
    dayWiseQuotationReport:
-      enabled: true 
-      
+      enabled: true
+
 default.user.password: uds12345
 
 google:

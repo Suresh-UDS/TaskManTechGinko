@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,6 +45,7 @@ import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Frequency;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobChecklist;
+import com.ts.app.domain.JobMaterial;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.JobType;
 import com.ts.app.domain.Location;
@@ -90,6 +92,7 @@ import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.JobChecklistDTO;
 import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.JobMaterialDTO;
 import com.ts.app.web.rest.dto.LocationDTO;
 import com.ts.app.web.rest.dto.NotificationLogDTO;
 import com.ts.app.web.rest.dto.PriceDTO;
@@ -1338,6 +1341,7 @@ public class JobManagementService extends AbstractService {
 		if(CollectionUtils.isNotEmpty(job.getChecklistItems())) {
 			job.getChecklistItems().clear();
 		}
+		
 		if(CollectionUtils.isNotEmpty(jobDTO.getChecklistItems())) {
 			List<JobChecklistDTO> jobclDtoList = jobDTO.getChecklistItems();
 			List<JobChecklist> checklistItems = new ArrayList<JobChecklist>();
@@ -1374,6 +1378,24 @@ public class JobManagementService extends AbstractService {
 			}else {
 				job.setChecklistItems(checklistItems);
 			}
+		}
+		
+		if(CollectionUtils.isNotEmpty(jobDTO.getJobMaterials())) {
+			List<JobMaterialDTO> jobMaterialDTO = jobDTO.getJobMaterials(); 
+			List<JobMaterial> jobMaterialItms = new ArrayList<JobMaterial>();
+			for(JobMaterialDTO material : jobMaterialDTO) { 
+				JobMaterial jobMaterial = mapperUtil.toEntity(material, JobMaterial.class);
+				jobMaterial.setJob(job);
+				jobMaterialItms.add(jobMaterial);
+			}
+//			if(job.getJobMaterials() != null) {
+//				job.getJobMaterials().addAll(jobMaterialItms);
+//			}else {
+//				job.setJobMaterials(jobMaterialItms);
+//			}
+			Set<JobMaterial> materialSetItm = job.getJobMaterials();
+			materialSetItm.addAll(jobMaterialItms);
+			job.setJobMaterials(materialSetItm);
 		}
 
 	}

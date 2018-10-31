@@ -6,10 +6,10 @@ Tip 2: you can also add an image using data-image tag
 Tip 3: you can change the color of the sidebar with data-background-color="white | black"
 -->
     <div class="logo">
-        <a ui-sref="dashboard" class="simple-text logo-mini LogoTxt">
+        <a href="#" class="simple-text logo-mini LogoTxt">
            UDS
         </a>
-        <a ui-sref="dashboard" class="simple-text logo-normal LogoCon">
+        <a href="#" class="simple-text logo-normal LogoCon">
             <img src="assets/img/logo/logo.png" class="LoginLogo" alt="UDS Logo">
         </a>
     </div>
@@ -42,7 +42,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 </a>
             </li>
             <li ui-sref-active="active" has-permission="Employee:List">
-				<a data-toggle="collapse" data-target="#formsExamples" href="javascript:void(0);">
+				<a data-toggle="collapse" data-target="#formsExamples" href="#">
                     <i class="material-icons">content_paste</i>
                     <p> Employee
                         <b class="caret"></b>
@@ -66,7 +66,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 </div>
             </li>
             <li ui-sref-active="active" has-permission="Assets:List">
-                <a  data-toggle="collapse" data-target="#AssetSubMenus">
+                <a ui-sref="#" data-toggle="collapse" data-target="#AssetSubMenus">
                     <i class="material-icons">assessment</i>
                     <p>Assets  <b class="caret"></b></p>
                 </a>
@@ -99,7 +99,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     </ul>
                 </div>
             </li>
-            <li ui-sref-active="active" has-permission="Checklist:List">
+            <li ui-sref-active="active" has-permission="Checklist1:List">
                 <a ui-sref="checklists">
                     <i class="material-icons">playlist_add_check</i>
                     <p>Checklist</p>
@@ -135,9 +135,9 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     <p>Tickets</p>
                 </a>
             </li>
-            <!-- <li  ng-class="{active: $state.includes('admin')}">
+            <li  ng-class="{active: $state.includes('admin')}">
                 <a data-toggle="collapse" data-target="#Inventory" href="#">
-                    <i class="material-icons">location_city</i>
+                    <i class="material-icons">widgets</i>
                     <p> Inventory
                         <b class="caret"></b>
                     </p>
@@ -147,29 +147,90 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
 
                         <li ui-sref-active="active"  >
                             <a ui-sref="inventory-list">
-                                <i class="material-icons">location_city</i>
-                                <p>Inventory Master</p>
+                                <i class="material-icons">widgets</i>
+                                <p>Master</p>
                             </a>
                         </li>
                         <li ui-sref-active="active"  >
                             <a ui-sref="inventory-transaction-list">
-                                <i class="material-icons">location_city</i>
-                                <p>Inventory Transaction</p>
+                                <i class="material-icons">widgets</i>
+                                <p>Issued / Received</p>
                             </a>
                         </li>
 
 
                     </ul>
                 </div>
-            </li> -->
-            <!-- <li ui-sref-active="active">
+            </li>
+            <li ui-sref-active="active">
                 <a ui-sref="sla-list">
                     <i class="material-icons">contact_mail</i>
                     <p>SLA Management</p>
                 </a>
-            </li> -->
+            </li>
+
+            <li ui-sref-active="active"  >
+                <a ui-sref="expense-list">
+                    <i class="material-icons">pie_chart</i>
+                    <p>Expense Transaction</p>
+                </a>
+            </li>
+            <!--<li ui-sref-active="active">-->
+                <!--<a  data-toggle="collapse" data-target="#Expense" href="#">-->
+                    <!--<i class="material-icons">pie_chart</i>-->
+                    <!--<p>Expense Management  <b class="caret"></b> </p>-->
+                <!--</a>-->
+                <!--<div class="collapse" id="Expense" >-->
+                    <!--<ul class="nav SubNav">-->
+
+                        <!--<li ui-sref-active="active">-->
+                            <!--<a ui-sref="budget-list">-->
+                                <!--<i class="material-icons">pie_chart</i>-->
+                                <!--<p>Budget Master</p>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <!--<li ui-sref-active="active"  >-->
+                            <!--<a ui-sref="expense-list">-->
+                                <!--<i class="material-icons">pie_chart</i>-->
+                                <!--<p>Expense Transaction</p>-->
+                            <!--</a>-->
+                        <!--</li>-->
+
+
+                    <!--</ul>-->
+                <!--</div>-->
+
+            <!--</li>-->
+
+            <li ui-sref-active="active">
+                <a  data-toggle="collapse" data-target="#Purchase" href="#">
+                    <i class="material-icons">shopping_cart</i>
+                    <p>Purchase <b class="caret"></b> </p>
+                </a>
+                <div class="collapse" id="Purchase" >
+                    <ul class="nav SubNav">
+
+                        <li ui-sref-active="active">
+                            <a ui-sref="indent-list">
+                                <i class="material-icons">shopping_cart</i>
+                                <p>Indent</p>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active"  >
+                            <a ui-sref="purchase-requisition-list">
+                                <i class="material-icons">shopping_cart</i>
+                                <p>Purchase Requisition</p>
+                            </a>
+                        </li>
+
+
+                    </ul>
+                </div>
+
+            </li>
+
             <li has-permission="Reports:List" ng-class="{active: $state.includes('reports')}">
-                <a data-toggle="collapse" data-target="#formsExamplesReport" href="javascript:void(0);">
+                <a data-toggle="collapse" data-target="#formsExamplesReport" href="#">
                     <i class="material-icons">content_paste</i>
                     <p> Reports
                         <b class="caret"></b>
@@ -196,14 +257,14 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="feedbackReports" has-permission="FeedbackReports:List">
+                            <a ui-sref="feedbackReports" has-permission="Feedback:List">
                                 <i class="material-icons">feedback</i>
                                 <p>Feedback</p>
                             </a>
                         </li>
                         <li ui-sref-active="active">
                             <a ui-sref="ticketReports" has-permission="TicketReports:List">
-                                <i class="material-icons">tab</i>
+                                <i class="material-icons">description</i>
                                 <p>Ticket</p>
                             </a>
                         </li>
@@ -243,7 +304,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
             </li>
 
             <li has-permission="Feedback:List" ng-class="{active: $state.includes('admin')}">
-                <a data-toggle="collapse" data-target="#formsExamples2" href="javascript:void(0);">
+                <a data-toggle="collapse" data-target="#formsExamples2" href="#">
                     <i class="material-icons">feedback</i>
                     <p> Feedback
                         <b class="caret"></b>
@@ -276,7 +337,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
             </li>
 
             <li has-permission="Administrator:List" ng-class="{active: $state.includes('admin')}">
-                <a data-toggle="collapse" data-target="#formsExamples1" href="javascript:void(0);">
+                <a data-toggle="collapse" data-target="#formsExamples1" href="#">
                     <i class="material-icons">content_paste</i>
                     <p> Administrator
                         <b class="caret"></b>

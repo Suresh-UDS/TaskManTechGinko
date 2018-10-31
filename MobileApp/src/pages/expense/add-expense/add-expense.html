@@ -1,0 +1,168 @@
+<!--
+  Generated template for the AddExpense page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Add Expense</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="dismiss()">
+        <ion-icon name="md-close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+
+  <div class="AddExpensePageCon white-bg" padding>
+
+      <div class="form-group label-floating">
+        <ion-row no-margin class="" no-padding="" >
+          <ion-col class="ver-center  margin-right15" (click)="showCalendar()">
+            <ion-col col-2  class="ver-center padding-bottom1">
+              <ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 clr-orange"></ion-icon>
+            </ion-col>
+            <ion-col col-10 class="ver-center padding-top-bottom0">
+              <label *ngIf="!selectDate" padding-left no-margin="">Date</label>
+              <p padding-left no-margin="">{{ selectDate | date:'dd/MM/yyyy' }}</p>
+            </ion-col>
+          </ion-col>
+        </ion-row>
+      </div>
+
+          <!--<label class="control-label">Client :</label>-->
+
+      <ion-item class="border-btm">
+        <ion-label  text-capitalize class="client-label" text-left>Client:</ion-label>
+        <select-searchable
+          item-content
+          [(ngModel)]="selectedProject"
+          [items]="clientList"
+          itemValueField="id"
+          itemTextField="name"
+          [canSearch]="true"
+          (onChange)="siteChange($event)">
+        </select-searchable>
+      </ion-item>
+
+
+          <!--<ion-select class="select-box padding-left0" [selectOptions]="selectOptions" placeholder="Choose Client"  name="Client" interface="popover" [(ngModel)]="selectedProject" text-lowercase>
+            <ion-option *ngFor="let p of clientList;let i=index"  (ionSelect)="selectSite(p)" text-center text-lowercase>{{p.name}}</ion-option>
+          </ion-select>-->
+
+
+      <ion-item>
+        <ion-label  text-capitalize class="client-label" text-left>Site:</ion-label>
+        <select-searchable
+          item-content
+          [(ngModel)]="selectedSite"
+          [items]="siteList"
+          itemValueField="id"
+          itemTextField="name"
+          [canSearch]="true"
+          (onChange)="portChange($event)">
+        </select-searchable>
+      </ion-item>
+
+         <!-- <label class="control-label">Site:</label>
+          <ion-select class="select-box padding-left0" [selectOptions]="selectOptions" placeholder="Choose site" name="Site" interface="popover" [(ngModel)]="selectedSite" text-lowercase>
+            <ion-option  *ngFor="let s of siteList;let i of index" (ionSelect)="getLatestRecordBySite(s)" text-center text-lowercase>{{s.name}}</ion-option>
+          </ion-select>-->
+
+    <div class="form-group label-floating">
+      <label class="control-label">Transaction type</label>
+      <ion-select  class="select-box padding-left0" id="transactionType" [(ngModel)]="transactionMode" placeholder="Choose Transaction type" name="transactionType"  interface="popover" required>
+        <ion-option value="credit">Credit</ion-option>
+        <ion-option value="debit">Debit</ion-option>
+      </ion-select>
+    </div>
+
+    <div class="form-group label-floating">
+      <label class="control-label">Payment type</label>
+      <ion-select  class="select-box padding-left0" id="paymentType" [(ngModel)]="selectedPaymentType" placeholder="Choose Payment type" name="paymentType"  interface="popover" required>
+        <ion-option value="CASH">Cash</ion-option>
+        <ion-option value="CARD">Card</ion-option>
+        <ion-option value="NETBANKING">Net Banking</ion-option>
+        <ion-option value="CHEQUE">Cheque</ion-option>
+      </ion-select>
+    </div>
+
+    <div class="form-group label-floating">
+      <label class="control-label">Amount</label>
+      <input type="Number" class="form-control" [(ngModel)]="selectedAmount" >
+    </div>
+
+    <div class="form-group label-floating" *ngIf="transactionMode == 'debit' ">
+        <label class="control-label">Receipt No</label>
+        <input type="Number" class="form-control" [(ngModel)]="receiptNumber" >
+      </div>
+
+
+
+      <div class="form-group" *ngIf="transactionMode == 'debit' " >
+          <label class="control-label">Expense type</label>
+          <ion-select  class="select-box padding-left0" id="expenseType" [(ngModel)]="selectedCategory" placeholder="Choose Expense type" name="expenseType"  interface="popover" required>
+              <ion-option *ngFor="let e of expense_type" text-center text-lowercase>{{e.name}}</ion-option>
+          </ion-select>
+
+      </div>
+
+      <div class="form-group" *ngIf="transactionMode == 'debit' " >
+
+          <ion-list>
+                <ion-item class="check-style">
+                    <ion-label>Billable</ion-label>
+                    <ion-checkbox color="primary" [(ngModel)]="billable" checked="true"></ion-checkbox>
+                </ion-item>
+              <ion-item class="check-style">
+                  <ion-label>Reimbursable</ion-label>
+                  <ion-checkbox color="primary" [(ngModel)]="reimbursable"></ion-checkbox>
+              </ion-item>
+          </ion-list>
+
+          <div class="clearfix"></div>
+
+
+      </div>
+
+    <div class="form-group label-floating">
+      <label class="control-label">Description</label>
+      <input type="text" class="form-control" [(ngModel)]="description">
+
+    </div>
+
+    <div class="form-group label-floating" *ngIf="transactionMode == 'debit' ">
+      <ion-row class="margin0">
+        <ion-col col-6 class="label-on-left">
+          <p class="line-height">Upload Image</p>
+        </ion-col>
+        <ion-col col-6 text-right>
+          <button class="ion-button camera-btn" round (click)="viewCamera()">
+            <ion-icon name="ios-camera"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row>
+
+
+    <ion-row>
+      <ion-col col-3 *ngFor="let image of takenImages;let i of index">
+        <img [src]="image" class="job-img margin-bottom25" (click)="viewImage(i,image)">
+      </ion-col>
+    </ion-row>
+    </div>
+  </div>
+
+</ion-content>
+<ion-footer>
+    <ion-toolbar class="align-center" >
+        <button class="btn btn-warning center margin-auto" type="submit" (click)="saveExpense()" >
+            Add
+        </button>
+    </ion-toolbar>
+</ion-footer>

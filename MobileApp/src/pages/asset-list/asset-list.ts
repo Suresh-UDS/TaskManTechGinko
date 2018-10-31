@@ -57,6 +57,7 @@ export class AssetList {
     assetGroup:any;
     assetType:any;
 
+    spinner:any;
 
     constructor(@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,private transfer: FileTransfer,
                 public modalCtrl:ModalController,private diagnostic: Diagnostic,private sqlite: SQLite,
@@ -71,23 +72,26 @@ export class AssetList {
 
   }
 
-  ionViewWillEnter()
-  {
-
-      if(this.navParams.get('text'))
-      {
-
-
-      }else{
-
+  ionViewWillEnter() {
+      if (this.navParams.get('text')) {
           console.log("Check Network Connection");
+          this.spinner = true;
           // this.componentService.showLoader("Loading Assets");
-
-          var searchCriteria ={
-              currPage:this.page+1
+          var searchCriteria = {
+              currPage: this.page + 1
           };
+          if (this.network.type != 'none') {
 
-          this.getAsset(searchCriteria)
+          } else {
+
+              console.log("Check Network Connection");
+              // this.componentService.showLoader("Loading Assets");
+
+              var searchCriteria = {
+                  currPage: this.page + 1
+              };
+
+              this.getAsset(searchCriteria)
 
               //     //offline
               // setTimeout(() => {
@@ -103,15 +107,16 @@ export class AssetList {
               //         })
               // },3000);
 
+          }
+
+
       }
-
-
   }
 
   ionViewDidLoad() {
 
       console.log('ionViewDidLoad AssetList');
-      // this.componentService.showLoader("Loading Assets");
+      this.componentService.showLoader("Loading Assets");
          this.open = true;
       // After Set Pagination
       // var searchCriteria={}
@@ -184,9 +189,11 @@ export class AssetList {
 
     setDataSync()
     {
-        this.componentService.showLoader("Data Sync");
+      this.spinner = true;
+        // this.componentService.showLoader("Data Sync");
         this.dbService.getReading().then(
             response=> {
+              this.spinner = false;
                 console.log(response)
                     this.saveReadingToServer(response).then(
                         response=>{
@@ -214,7 +221,8 @@ export class AssetList {
 
                          },
                          error=>{
-                            this.componentService.closeLoader();
+                          this.spinner = false;
+                            // this.componentService.closeLoader();
                              this.componentService.showToastMessage("Error server sync","bottom")
                          })
             },error=>{
@@ -294,11 +302,13 @@ export class AssetList {
   getAsset(searchCriteria)
   {
       this.componentService.showLoader("Loading Assets");
+      this.spinner = true;
       this.assetService.searchAssets(searchCriteria).subscribe(
           response=>{
               this.componentService.closeAll();
               console.log("Asset search filters response");
               console.log(response);
+              this.spinner= false;
               this.assetList=response.transactions;
               this.page = response.currPage;
               this.totalPages = response.totalPages;
@@ -348,7 +358,7 @@ export class AssetList {
   //
   // }
 
-    openFilters() {
+    openFilters(){
         let modal = this.modalCtrl.create(AssetFilter,{},{cssClass:'asset-filter',showBackdrop:true});
         modal.onDidDismiss(data=>{
             console.log("Modal Dismiss Asset");
@@ -424,9 +434,7 @@ export class AssetList {
       // });
   }
 
-  searchAssets(){
 
-  }
 
     viewAsset(asset){
       console.log("asset");
@@ -437,14 +445,14 @@ export class AssetList {
     // Pull to refresh
     doRefresh(refresher)
     {
-        this.componentService.showLoader("");
+        // this.componentService.showLoader("");
         var searchCriteria={};
         this.getAsset(searchCriteria);
         refresher.complete()
     }
 
     // Scroll
-    doInfiniteAsset(infiniteScroll){
+    doInfiniteAssets(infiniteScroll){
         console.log('Begin async operation');
         console.log(infiniteScroll);
         console.log(this.totalPages);

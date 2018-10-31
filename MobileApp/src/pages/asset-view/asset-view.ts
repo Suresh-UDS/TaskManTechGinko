@@ -18,6 +18,9 @@ import {DBService} from "../service/dbService";
 import {FileTransferObject, FileUploadOptions, FileTransfer} from "@ionic-native/file-transfer";
 import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
 import{AlertController} from "ionic-angular";
+import{AddInventoryTransaction} from "../add-inventory-transaction/add-inventory-transaction";
+import {InventoryFilter} from "../inventory-filter/inventory-filter";
+import{InventoryService} from "../service/inventoryService";
 
 
 declare var demo ;
@@ -43,6 +46,7 @@ export class AssetView {
 
     totalPages:0;
     page:1;
+    // open:any;
 
     PPMJobs:any;
     AMCJobs:any;
@@ -59,10 +63,23 @@ export class AssetView {
     fileTransfer: FileTransferObject = this.transfer.create();
 
 
+    qr:any;
+    pageSort:15;
+
+
+
+    database:any;
+    db:any;
+    material:any;
+    assetMaterial:any;
+
+
     constructor(public dbService:DBService,public camera: Camera,@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
                 private transfer: FileTransfer,private modalCtrl:ModalController,private datePicker: DatePicker,
                 private componentService:componentService,public navCtrl: NavController, public navParams: NavParams,
-                public jobService:JobService, public assetService:AssetService,public alertCtrl: AlertController) {
+                public jobService:JobService, public assetService:AssetService,public alertCtrl: AlertController,
+                private inventoryService:InventoryService
+                ) {
 
     this.assetDetails = this.navParams.data.assetDetails;
     this.categories = 'details';
@@ -99,6 +116,14 @@ export class AssetView {
           assetId:this.assetDetails.id
       };
       this.getAssetById();
+
+      var searchCriteria={
+          currPage:this.page,
+          pageSort: this.pageSort
+      };
+
+
+
   }
 
     getReadings(){
@@ -173,12 +198,12 @@ export class AssetView {
     //             .then((data) => {
     //                 console.log(data.response);
     //                 console.log("image upload");
-    //                 this.componentService.closeLoader();
+    //                 this.componentService.closeAll();
     //                 this.navCtrl.pop();
     //             }, (err) => {
     //                 console.log(err);
     //                 console.log("image upload fail");
-    //                 this.componentService.closeLoader();
+    //                 this.componentService.closeAll();
     //             })
     //
     //
@@ -230,7 +255,7 @@ export class AssetView {
         //offline
         // this.dbService.getJobs(this.assetDetails.id).then(
         //     (res)=>{
-        //         this.componentService.closeLoader()
+        //         this.componentService.closeAll()
         //         console.log(res)
         //         this.assetDetails.jobs = res;
         //     },
@@ -601,6 +626,10 @@ export class AssetView {
                     this.assetDetails = response;
                 }
 
+                this.componentService.closeAll();
+                console.log("Asset by id");
+                console.log(response);
+                this.assetDetails = response;
             },err=>{
                 this.componentService.closeAll();
                 console.log("Error in getting asset by id");
@@ -640,6 +669,11 @@ export class AssetView {
                     this.assetDetails.ppms = response;
                 }
 
+                this.spinner = false;
+                this.componentService.closeAll();
+                console.log("Get asset PPM response");
+                console.log(response);
+                this.assetDetails.ppms = response;
             },
             error=>{
                 this.spinner = false;
@@ -681,6 +715,11 @@ export class AssetView {
                     this.assetDetails.amcs = response;
                     console.log(this.assetDetails.amcs);
                 }
+                this.spinner = false;
+                this.componentService.closeAll()
+                console.log("Get asset AMC response");
+                this.assetDetails.amcs = response;
+                console.log(this.assetDetails.amcs);
             },
             error=>{
                 this.spinner = false;
@@ -724,6 +763,11 @@ export class AssetView {
                     this.assetDetails.config = response;
                 }
 
+                this.spinner = false;
+                this.componentService.closeAll()
+                console.log("Asset config");
+                console.log(response);
+                this.assetDetails.config = response;
             },err=>{
                 this.spinner = false;
                 this.componentService.closeAll();
@@ -863,8 +907,69 @@ export class AssetView {
         )
     }
 
+    openFilter()
+    {
+        // this.open = false;
+        console.log("Opening filter modal");
+        let modal = this. modalCtrl.create(InventoryFilter,{},{cssClass : 'asset-filter',showBackdrop : true});
+        modal.onDidDismiss(data=>{
+            console.log("Modal dismissed");
+            // this.open = true;
+            console.log(data);
+            var searchCriteria = {
+                siteId:data.siteId,
+                projectId:data.projectId,
+            };
+            this.assetService.searchAssets(searchCriteria).subscribe(
+                response=>{
+                    this.componentService.closeLoader();
+                    console.log("Asset search filters response");
+                    console.log(response)
+                },err=>{
+                    this.componentService.closeLoader();
+                    console.log("Error in filtering assets");
+                    console.log(err);
+                }
+            )
+            // this.getAsset(searchCriteria);
+
+        });
+        modal.present();
+
+    }
 
 
+    openTransaction()
+    {
+        let modal = this.modalCtrl.create(AddInventoryTransaction, {});
+        modal.present();
 
+    }
+
+    getMaterials(assetId){
+        this.spinner=true;
+        var search={
+            assetId:this.assetDetails.id,
+            siteId:this.assetDetails.siteId,
+        };
+
+        this.assetService.getAssetMaterial(search).subscribe(
+            response=>{
+                this.spinner=false;
+                console.log("Getting Job Materials");
+                console.log(response);
+                this.assetMaterial=response;
+            },error=>{
+                this.spinner=false;
+                console.log("Error in Getting Job material");
+                console.log(error);
+            }
+        )
+
+    }
+
+  viewTicket(ticket){
+    this.navCtrl.push(ViewTicket,{ticket:ticket});
+  }
 
 }

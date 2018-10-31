@@ -17,8 +17,10 @@ declare var demo;
   templateUrl: 'quotation.html'
 })
 export class QuotationPage {
+  siteActive: boolean;
+  index: any;
 
-    quotations:any;
+  quotations:any;
     approvedQuotations:any;
     submittedQuotations:any;
     draftedQuotations:any;
@@ -36,11 +38,24 @@ export class QuotationPage {
     selectedProject:any;
     selectedSite:any;
     sites:any;
+<<<<<<< HEAD
     page:1;
     pageSort:15;
 
   constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService,
               private quotationService: QuotationService,public events:Events,public siteService:SiteService) {
+=======
+    projectActive: any;
+    projectindex: any;
+    chooseClient = true;
+    siteSpinner = false;
+    showSites = false;
+
+  empSpinner=false;
+  chooseSite=true;
+  showEmployees=false;
+  constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService, private quotationService: QuotationService,public events:Events,public siteService:SiteService) {
+>>>>>>> Release-2.0-Inventory
       this.draftedQuotationsCount= 0;
       this.approvedQuotationsCount=0;
       this.submittedQuotationsCount=0;
@@ -161,6 +176,7 @@ export class QuotationPage {
   getProjects(){
       this.siteService.getAllProjects().subscribe(
           response=>{
+<<<<<<< HEAD
               if(response.errorStatus){
                   demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
               }else{
@@ -168,14 +184,28 @@ export class QuotationPage {
                   this.selectedProject = response[0];
                   this.getSites(this.selectedProject.id[0]);
               }
+=======
+              this.allProjects = response;
+              this.selectedProject = response[0];
+              // this.getSites(this.selectedProject[0].id);
+>>>>>>> Release-2.0-Inventory
 
           }
       )
   }
 
-  getSites(projectId){
+  getSites(projectId,i){
+
+    this.projectActive = true;
+    this.projectindex = i;
+    this.siteSpinner=true;
+    this.chooseClient = false;
+    this.showSites = false;
+
+
       this.siteService.findSites(projectId).subscribe(
           response=>{
+<<<<<<< HEAD
               if(response.errorStatus){
                   demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
               }else{
@@ -184,11 +214,23 @@ export class QuotationPage {
                   this.selectedSite = response[1];
               }
 
+=======
+            this.siteSpinner=false;
+            this.showSites = true;
+            this.showEmployees=false;
+            this.chooseSite = true;
+              this.sites = response.json();
+              this.selectedSite = response[1];
+>>>>>>> Release-2.0-Inventory
           }
       )
   }
 
-  searchQuotations(siteId){
+  searchQuotations(siteId,i){
+    this.index = i;
+    this.projectActive = true;
+    this.siteActive = true;
+    console.log("siteId",siteId);
       this.quotationService.searchQuotations({siteId:siteId}).subscribe(
           response=>{
               if(response.errorStatus){

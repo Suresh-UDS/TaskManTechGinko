@@ -23,6 +23,7 @@ declare var demo;
     templateUrl: 'site-list.html',
 })
 export class SiteListPage {
+<<<<<<< HEAD
     isLoading:boolean;
     siteList:any;
     userGroup:any;
@@ -124,6 +125,75 @@ export class SiteListPage {
     //     encodingType: this.camera.EncodingType.JPEG,
     //     mediaType: this.camera.MediaType.PICTURE
     //   };
+=======
+  isLoading:boolean;
+  siteList:any;
+  userGroup:any;
+  employeeId:any;
+  employeeFullName: any;
+  employeeEmpId:any;
+  lattitude:any;
+  longitude:any;
+  checkedIn:any;
+
+  fakeSiteList: Array<any> = new Array(12);
+
+    constructor(public navCtrl: NavController,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
+              private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController, private attendanceService: AttendanceService, private siteService: SiteService) {
+
+    this.geolocation.getCurrentPosition().then((response)=>{
+      console.log("Current location");
+      console.log(response);
+      this.lattitude = response.coords.latitude;
+      this.longitude = response.coords.longitude;
+    }).catch((error)=>{
+      this.lattitude = 0;
+      this.longitude = 0;
+    })
+
+  }
+
+  viewList(i)
+  {
+      this.navCtrl.push(AttendanceListPage);
+  }
+
+  showSuccessToast(msg){
+      this.component.showToastMessage(msg,'bottom');
+  }
+
+  getAttendances(site){
+        this.attendanceService.getSiteAttendances(site.id).subscribe(response=>{
+        console.log(response.json());
+        this.navCtrl.push(AttendanceListPage,{'attendances':response.json()});
+    })
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad SiteListPage');
+  }
+
+  ionViewWillEnter(){
+        this.isLoading=true;
+        this.siteService.searchSite().subscribe(response=>{
+        this.isLoading=false;
+        console.log(response.json());
+        this.siteList = response.json();
+        this.userGroup = window.localStorage.getItem('userGroup');
+        this.employeeId = window.localStorage.getItem('employeeId');
+        this.employeeFullName = window.localStorage.getItem('employeeFullName');
+        this.employeeEmpId = window.localStorage.getItem('employeeEmpId');
+        console.log(window.localStorage.getItem('responseImageDetails'));
+      })
+
+    // this.attendanceService.getAttendances(this.employeeId).subscribe(
+    //   response =>{
+    //     console.log(response.json());
+    //     var result = response.json()
+    //     if(result[0]){
+    //       console.log("already checked in ");
+    //       this.checkedIn = true;
+>>>>>>> Release-2.0-Inventory
     //
     //   this.camera.getPicture(options).then((imageData) => {
     //     let loader = this.loadingCtrl.create({

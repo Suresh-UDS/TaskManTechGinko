@@ -14,6 +14,7 @@ declare var demo;
 export class RateCardPage {
 
     rateCards:any;
+    fakeRateCards: Array<any> = new Array(12);
 
     constructor(public navCtrl: NavController,public component:componentService, public authService: authService, private loadingCtrl:LoadingController, private quotationService: QuotationService) {
 

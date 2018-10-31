@@ -12,14 +12,27 @@ import {SiteService} from "../service/siteService";
 export class SitePage {
 
     isLoading:boolean;
+<<<<<<< HEAD
 
     userId:any;
     employeeId: any;
     sites:any;
     msg:any;
+=======
+
+  userId:any;
+  employeeId: any;
+  sites:any;
+  msg:any;
 
     fakeUsers: Array<any> = new Array(12);
 
+  constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService) {
+>>>>>>> Release-2.0-Inventory
+
+    fakeUsers: Array<any> = new Array(12);
+
+<<<<<<< HEAD
     constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService) {
 
     }
@@ -31,6 +44,35 @@ export class SitePage {
         // this.component.showLoader('Getting All Sites');
         this.searchSites();
     }
+=======
+  ionViewDidLoad() {
+      this.isLoading=true;
+    this.employeeId=window.localStorage.getItem('employeeId');
+    console.log('ionViewDidLoad SitePage');
+    // this.component.showLoader('Getting All Sites');
+    this.siteService.searchSite().subscribe(
+      response=>{
+          this.isLoading=false;
+        console.log('ionViewDidLoad SitePage:');
+
+        console.log(response.json()
+        );
+        this.sites=response.json();
+          // this.component.closeLoader();
+      },
+      error=>{
+        console.log('ionViewDidLoad SitePage:'+error);
+          // this.component.closeLoader();
+          if(error.type==3)
+          {
+              this.msg='Server Unreachable'
+          }
+
+          this.component.showToastMessage(this.msg,'bottom');
+      }
+    )
+  }
+>>>>>>> Release-2.0-Inventory
 
     viewSite(site)
     {

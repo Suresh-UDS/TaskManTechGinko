@@ -11,21 +11,27 @@
             <ion-icon name="menu"></ion-icon>
         </button>
         <ion-title>Tickets</ion-title>
+      <ion-buttons right>
+        <button ion-button class="fnt-black" icon-only (click)="presentModal()" class="padding-right10">
+          <ion-icon name="funnel"></ion-icon>
+        </button>
+      </ion-buttons>
     </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
 
-    <ion-fab  bottom right>
+    <!--<ion-fab  >
         <button ion-fab color="primary" (click)="presentModal()"><ion-icon name="funnel"></ion-icon></button>
-    </ion-fab>
+    </ion-fab>-->
 
-    <ion-fab top right edge>
+    <ion-fab bottom right>
         <button has-permission="TicketsCreate" (click)="createTicket()" ion-fab><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 
+<<<<<<< HEAD
     <div class="margin-top5">
         <span class="tag label label-info" style="margin-right: 5px"  *ngIf="clientFilter">
             Client: {{clientFilter.name}}
@@ -73,10 +79,44 @@
 
                 </div>
                 <!--</div>-->
+=======
+    <div *ngIf="(tickets && tickets.length <= 0) && !spinner" >
+        <ion-card>
+            <ion-card-content>
+                <img src="assets/imgs/warning.svg">
+                <span><p text-center>No Data Found</p></span>
+            </ion-card-content>
+        </ion-card>
+    </div>
+
+    <div  *ngIf="(!tickets || tickets.length < 0) && spinner" text-center class="margin-top25">
+        <ion-spinner name="circles"></ion-spinner>
+    </div>
+
+
+
+<div *ngIf="tickets">
+
+    <div class="TicketsListCon">
+
+        <ion-list>
+            <ion-item  *ngFor="let ticket of tickets" (click)="viewTicket(ticket)" text-capitalize>
+                <ion-icon *ngIf="ticket.status=='Open'"  class="sky-blue"  name="ios-alert-outline" item-start></ion-icon>
+                <ion-icon *ngIf="ticket.status=='Closed'" style="color:green" name="ios-checkmark-circle-outline" item-start></ion-icon>
+                <ion-icon *ngIf="ticket.status=='OnGoing' || ticket.status =='Assigned'" style="color: orangered" name="ios-help-circle-outline" item-start></ion-icon>
+
+                <h2 text-left>{{ticket.title}}</h2>
+                <p text-left class="TicketPara">{{ticket.createdDate | date:'MMM d, y, h:mm a' }}  <br> Created by <strong>{{ticket.createdBy}} </strong> </p>
+                <ion-note item-end>
+                    {{ticket.status}}
+                </ion-note>
+>>>>>>> Release-2.0-Inventory
             </ion-item>
+        </ion-list>
 
     </div>
 
+<<<<<<< HEAD
     <ion-list *ngIf="!tickets || tickets.length<=0" class="margin-top5">
         <ion-item>
             <ion-card padding>
@@ -87,7 +127,17 @@
                 <!--<div class="card-subtitle">Create new Tickets using the + icon at bottom</div>-->
             </ion-card>
         </ion-item>
+=======
+>>>>>>> Release-2.0-Inventory
 
+</div>
+
+
+    <ion-list *ngIf="!tickets">
+            <ion-card>
+                    <img src="assets/imgs/warning.svg">
+                    <span><p text-center>No Data Found</p></span>
+            </ion-card>
     </ion-list>
 
 </ion-content>

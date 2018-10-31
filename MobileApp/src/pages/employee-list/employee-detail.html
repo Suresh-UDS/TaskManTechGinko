@@ -20,9 +20,9 @@
       <ion-segment-button value="jobs" (click)="getJobs(false)">
         Jobs
       </ion-segment-button>
-      <ion-segment-button value="quotation" (click)="getQuotations()">
+      <!--<ion-segment-button value="quotation" (click)="getQuotations()">
         Quotation
-      </ion-segment-button>
+      </ion-segment-button>-->
       <ion-segment-button value="attendance" (click)="getAttendance(false)">
         Attendance
       </ion-segment-button>
@@ -31,7 +31,7 @@
 
 </ion-header>
 
-<ion-content>
+<ion-content class="ViewJobsCon cardListCon cardListCon">
 
 
 
@@ -102,21 +102,55 @@
       </div>
 -->
 
+      <ion-row class="margin0">
+        <ion-col col-6>
+          <ion-card class="new-card-md">
+            <ion-card-header>
+              Employee ID
+            </ion-card-header>
+            <ion-card-content>
+              {{empDetail.empId}}
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col col-6>
+          <ion-card class="new-card-md">
+            <ion-card-header>
+              Designation
+            </ion-card-header>
+            <ion-card-content>
 
-      <ion-row class="margin0 white-bg padding10">
+                    <span>
+                        {{empDetail.designation}}
+                    </span>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+
+      <ion-card class="new-card-md">
+        <ion-card-header>
+          Name
+        </ion-card-header>
+        <ion-card-content>
+          {{empDetail.fullName}}
+        </ion-card-content>
+      </ion-card>
+
+      <!--<ion-row class="margin0 white-bg padding10">
         <ion-col col-6 class="label-on-left">Employee ID</ion-col>
         <ion-col col-6>
           <p text-right>{{empDetail.empId}}</p>
         </ion-col>
         <ion-col col-6 class="label-on-left">Name</ion-col>
         <ion-col col-6>
-          <p text-right>{{empDetail.fullName}}</p>
+          <p class="title" text-right>{{empDetail.fullName}}</p>
         </ion-col>
         <ion-col col-6 class="label-on-left">Designation</ion-col>
         <ion-col col-6>
           <p text-right>{{empDetail.designation}}</p>
         </ion-col>
-      </ion-row>
+      </ion-row>-->
 
       <ion-row class="margin0 white-bg padding10" *ngIf="empDetail.manager">
         <ion-col col-6 class="label-on-left">Manager Name</ion-col>
@@ -214,12 +248,11 @@
             </div>
             <div>
               <button  ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>
+              <button ion-button clear color="primary" ><ion-icon name="md-eye" class="fnt-24" (click)="viewJob(job)"></ion-icon></button>
             </div>
+
             <div>
               <button has-permission="JobsEdit" ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24"></ion-icon></button>
-            </div>
-            <div>
-              <button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>
             </div>
           </ion-item-options>
         </ion-item-sliding>
@@ -314,11 +347,10 @@
         <ion-refresher-content></ion-refresher-content>
       </ion-refresher>
 
-      <div *ngIf="attendances?.length==0" text-center="">
-        <ion-card text-center="">
-          <ion-card-content>
-            No data found
-          </ion-card-content>
+      <div *ngIf="attendances?.length==0" text-center="" class="no-data">
+        <ion-card>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
         </ion-card>
       </div>
       <ion-row class="margin0 white-bg padding10 margin-bottom25 width98 margin-side-auto" *ngFor="let a of attendances">
