@@ -254,6 +254,18 @@ ul.checkList li
 {
     color:#000;
 }
+/*  UI Select */
+.ui-select-bootstrap .ui-select-toggle > a.btn
+{
+	height: 22px;
+    right: 0px;
+    color: #000;
+    background: none;
+    box-shadow: none;
+    font-weight: none;
+    font-size:14px;
+    padding-right: 0;
+}
 .navbar .dropdown-menu li a:hover, .navbar .dropdown-menu li a:focus, .navbar .dropdown-menu li a:active, .navbar.navbar-default .dropdown-menu li a:hover, .navbar.navbar-default .dropdown-menu li a:focus, .navbar.navbar-default .dropdown-menu li a:active
 {
     background-color: #ff9800;
