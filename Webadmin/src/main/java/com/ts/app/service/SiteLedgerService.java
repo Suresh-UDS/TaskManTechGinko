@@ -74,7 +74,7 @@ public class SiteLedgerService extends AbstractService {
 
 	private SiteLedgerDTO mapToModel(SiteLedger siteLedger, boolean includeShifts) {
 		SiteLedgerDTO siteLedgerDTO = new SiteLedgerDTO();
-		
+
 		return siteLedgerDTO;
 	}
 
@@ -90,7 +90,7 @@ public class SiteLedgerService extends AbstractService {
 		}
 		return mapperUtil.toModel(entity, SiteLedgerDTO.class);
 	}
-	
+
 	public SearchResult<SiteLedgerDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 		User user = userRepository.findOne(searchCriteria.getUserId());
 		Hibernate.initialize(user.getEmployee());
@@ -155,7 +155,7 @@ public class SiteLedgerService extends AbstractService {
 		subEmpIds.add(empId);
 		if(employee != null) {
 			Hibernate.initialize(employee.getSubOrdinates());
-			subEmpIds.addAll(findAllSubordinates(employee, subEmpIds));
+			//subEmpIds.addAll(findAllSubordinates(employee, subEmpIds));
 			log.debug("List of subordinate ids -"+ subEmpIds);
 
 		}

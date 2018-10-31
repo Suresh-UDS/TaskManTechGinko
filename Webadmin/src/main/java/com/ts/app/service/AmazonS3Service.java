@@ -73,12 +73,9 @@ public class AmazonS3Service {
     @Value("${AWS.s3-asset-path}")
     private String assetFilePath;
 
-<<<<<<< HEAD
-=======
     @Value("${AWS.s3-expenseDocument-path}")
     private String expenseDocumentPath;
 
->>>>>>> Release-2.0-Inventory
     @Value("${AWS.s3-qrcode-path}")
     private String qrCodePath;
 
@@ -186,8 +183,6 @@ public class AmazonS3Service {
 
     	return prefixUrl;
 
-<<<<<<< HEAD
-=======
     }
 
     public String uploadExpenseFileTos3bucket(String fileName, File file) {
@@ -218,7 +213,6 @@ public class AmazonS3Service {
 
         return prefixUrl;
 
->>>>>>> Release-2.0-Inventory
     }
 
 	public String uploadQrToS3bucket(String filename, String qrCodeImage) {
@@ -440,17 +434,10 @@ public class AmazonS3Service {
 		String key = bucketEnv + checkListPath + filename;
 		String prefixUrl = "";
 		try {
-<<<<<<< HEAD
-			
 			log.debug(checkListImg);
 			byte[] bI = org.apache.commons.codec.binary.Base64.decodeBase64((checkListImg.substring(checkListImg.indexOf(",")+1)).getBytes());
 			log.debug("Image Strings -" +bI);
-			
-=======
 
-			byte[] bI = org.apache.commons.codec.binary.Base64.decodeBase64((checkListImg.substring(checkListImg.indexOf(",")+1)).getBytes());
-			log.debug("Image Strings -" +bI);
->>>>>>> Release-2.0-Inventory
 			InputStream fis = new ByteArrayInputStream(bI);
 
 			ObjectMetadata metadata = new ObjectMetadata();
@@ -497,7 +484,6 @@ public class AmazonS3Service {
 		 return prefixUrl;
 	}
 
-<<<<<<< HEAD
 	public String uploadExistingTicketToS3(String fileName, String image) {
 		String key = bucketEnv + ticketPath + fileName;
 		String prefixUrl = "";
@@ -584,7 +570,6 @@ public class AmazonS3Service {
 
 
 
-=======
 	public void uploadExistingCheckin() {
 		log.debug("Calling AWS S3 for Checklist Images upload");
 		String key = "prod/checkListImages/";
@@ -618,6 +603,5 @@ public class AmazonS3Service {
 	}
 
 
->>>>>>> Release-2.0-Inventory
 
 }

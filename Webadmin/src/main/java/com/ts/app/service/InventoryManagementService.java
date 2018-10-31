@@ -377,16 +377,4 @@ public class InventoryManagementService extends AbstractService{
 	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 }

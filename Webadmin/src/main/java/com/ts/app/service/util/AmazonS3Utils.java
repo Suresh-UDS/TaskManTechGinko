@@ -105,10 +105,8 @@ public class AmazonS3Utils {
 		return quotationDTO;
     }
 
-
-    public TicketDTO uploadTicketFile(long ticketId, MultipartFile mulitipartfile, long dateTime, TicketDTO ticketDTO) {
+    public TicketDTO uploadTicketFile(long ticketId, MultipartFile mulitipartfile, TicketDTO ticketDTO) {
     	String fileUrl = "";
-        String name = ticketId + "_" + dateTime + ".jpg";
         try {
         	File file = convertMultiPartToFile(mulitipartfile);
         	String fileName = generateFileName(mulitipartfile);
