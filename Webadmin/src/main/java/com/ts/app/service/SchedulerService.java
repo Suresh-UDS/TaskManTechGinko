@@ -204,7 +204,7 @@ public class SchedulerService extends AbstractService {
 
 //	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
 	// @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
-	@Scheduled(cron = "0 0 23 1/1 * ?")
+	//@Scheduled(cron = "0 0 23 1/1 * ?")
 	public void createDailyTask() {
 		if (env.getProperty("scheduler.dailyJob.enabled").equalsIgnoreCase("true")) {
             log.debug("Daily jobs enabled");
@@ -227,7 +227,7 @@ public class SchedulerService extends AbstractService {
 			createDailyTask(cal.getTime(), null);
 		}
 	}
-	
+
 	public void createDailyTask(Date date, List<Long> siteIds) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -239,7 +239,7 @@ public class SchedulerService extends AbstractService {
 		endCal.set(Calendar.MINUTE, 59);
 		java.sql.Date startDate = new java.sql.Date(cal.getTimeInMillis());
 		java.sql.Date endDate = new java.sql.Date(endCal.getTimeInMillis());
-		
+
 		List<SchedulerConfig> dailyTasks = null;
 		if(CollectionUtils.isNotEmpty(siteIds)) {
 			dailyTasks = schedulerConfigRepository.getDailyTask(cal.getTime(), siteIds);
@@ -271,17 +271,17 @@ public class SchedulerService extends AbstractService {
 		}
 		schedulerConfigRepository.save(dailyTasks);
 	}
-	
+
 	final class JobCreationThread implements Runnable {
-		
+
 		private final Logger logger = LoggerFactory.getLogger(JobCreationThread.class);
-		
+
 		private long parentJobId;
 		private Calendar startTimeCal;
 		private Calendar endTimeCal;
 		private SchedulerConfig schedulerConfig;
 		private JobRepository jobRepository;
-		
+
 		public JobCreationThread(SchedulerConfig schConfig, long parentJobId, Calendar startCal, Calendar endCal, JobRepository jobRepo) {
 			this.parentJobId = parentJobId;
 			this.startTimeCal = startCal;
@@ -320,12 +320,12 @@ public class SchedulerService extends AbstractService {
 			}
 
 		}
-		
+
 	}
 
 //	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
 	// @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
-	@Scheduled(cron = "0 0 23 1/1 * ?")
+	//@Scheduled(cron = "0 0 23 1/1 * ?")
 	public void createWeeklyTask() {
 		if (env.getProperty("scheduler.weeklyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -422,7 +422,7 @@ public class SchedulerService extends AbstractService {
 
 //	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
 	// @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
-	@Scheduled(cron = "0 0 23 1/1 * ?")
+	//@Scheduled(cron = "0 0 23 1/1 * ?")
 	public void createMonthlyTask() {
 		if (env.getProperty("scheduler.monthlyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -464,7 +464,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(cron = "0 0 23 1/1 * ?")
+	//@Scheduled(cron = "0 0 23 1/1 * ?")
 	public void createFortnightlyTask() {
 		if (env.getProperty("scheduler.fortnightlyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -497,7 +497,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(cron = "0 0 23 1/1 * ?")
+	//@Scheduled(cron = "0 0 23 1/1 * ?")
 	public void createQuarterlyTask() {
 		if (env.getProperty("scheduler.quarterlyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -529,7 +529,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(cron = "0 0 23 1/1 * ?")
+	//@Scheduled(cron = "0 0 23 1/1 * ?")
 	public void createHalfYearlyTask() {
 		if (env.getProperty("scheduler.halfyearlyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -561,7 +561,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(cron = "0 0 23 1/1 * ?")
+	//@Scheduled(cron = "0 0 23 1/1 * ?")
 	public void createYearlyTask() {
 		if (env.getProperty("scheduler.yearlyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -594,7 +594,6 @@ public class SchedulerService extends AbstractService {
 	}
 
 	//@Scheduled(initialDelay = 60000, fixedRate = 900000) // Runs every 15 mins
-	@Scheduled(cron = "0 */15 * * * ?")
 	public void overDueTaskCheck() {
 		schedulerHelperService.overdueJobReport();
 	}
@@ -728,15 +727,14 @@ public class SchedulerService extends AbstractService {
 	}
 
 
-	//@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
+	@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
 	public void attendanceDetailReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_YEAR, -1);
 		schedulerHelperService.generateDetailedAttendanceReport(cal.getTime(), false, true, false);
 	}
-	
-	//@Scheduled(cron = "0 0 9 1 * ?") // send muster roll attendance report - runs at 9 AM every day	
-	//@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
+
+	@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
 	public void attendanceMusterrollReportSchedule() {
 		Calendar startCal = Calendar.getInstance();
 		startCal.set(Calendar.DAY_OF_MONTH, 1);
@@ -750,7 +748,7 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.generateMusterRollAttendanceReport(siteId, startCal.getTime(), endCal.getTime(), true, false);
 	}
 
-	//@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
+	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
 	public void attendanceCheckOutTask() {
 		schedulerHelperService.autoCheckOutAttendance();
 	}
@@ -762,13 +760,13 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.sendScheduleAMCJobsAlert();
 	}
 
-	//@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
+	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
 	public void feedbackDetailReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		//cal.add(Calendar.DAY_OF_YEAR, -1);
 		schedulerHelperService.feedbackDetailedReport();
-	}	
-	
+	}
+
 	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void createJobs(SchedulerConfig scheduledTask) {
 		if ("CREATE_JOB".equals(scheduledTask.getType())) {
@@ -789,9 +787,9 @@ public class SchedulerService extends AbstractService {
 			List<JobDTO> jobDtos = new ArrayList<JobDTO>();
 			//change the creationPolicy based on the frequency
 			Map<String, String> dataMap = Splitter.on("&").withKeyValueSeparator("=").split(scheduledTask.getData());
-			if(dataMap != null && dataMap.containsKey("frequency") 
+			if(dataMap != null && dataMap.containsKey("frequency")
 					&& (dataMap.get("frequency").equals(FREQ_ONCE_EVERY_HOUR) || dataMap.get("frequency").equals(FREQ_ONCE_EVERY_2_HOUR) ||
-							dataMap.get("frequency").equals(FREQ_ONCE_EVERY_3_HOUR) || dataMap.get("frequency").equals(FREQ_ONCE_EVERY_4_HOUR) ||	
+							dataMap.get("frequency").equals(FREQ_ONCE_EVERY_3_HOUR) || dataMap.get("frequency").equals(FREQ_ONCE_EVERY_4_HOUR) ||
 							dataMap.get("frequency").equals(FREQ_ONCE_EVERY_5_HOUR) )) {
 				creationPolicy = "daily";
 			}
@@ -817,7 +815,7 @@ public class SchedulerService extends AbstractService {
 						}
 						if(CollectionUtils.isNotEmpty(jobDtos)) {
 							jobManagementService.saveScheduledJob(jobDtos);
-						}						
+						}
 					}
 				}else {
 					currDate = new DateTime(parentJob.getPlannedStartTime().getTime());
@@ -841,7 +839,7 @@ public class SchedulerService extends AbstractService {
 							jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate(), jobDtos);
 							if(CollectionUtils.isNotEmpty(jobDtos)) {
 								jobManagementService.saveScheduledJob(jobDtos);
-							}							
+							}
 						}
 					}
 				}else {
@@ -850,7 +848,7 @@ public class SchedulerService extends AbstractService {
 						jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate(), jobDtos);
 						if(CollectionUtils.isNotEmpty(jobDtos)) {
 							jobManagementService.saveScheduledJob(jobDtos);
-						}						
+						}
 					}
 				}
 			}
@@ -1433,14 +1431,14 @@ public class SchedulerService extends AbstractService {
 				}
 			}
 		}
-	
-	//@Scheduled(cron="0 */30 * * * ?")
+
+	@Scheduled(cron="0 */30 * * * ?")
 	public void sendDaywiseReport() {
 		Calendar cal = Calendar.getInstance();
 		boolean isOnDemand = false;
 		schedulerHelperService.sendDaywiseReportEmail(cal.getTime(), isOnDemand, 0);
-	}	
-	
-		
-	
+	}
+
+
+
 }
