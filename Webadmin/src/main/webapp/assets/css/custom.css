@@ -1520,7 +1520,11 @@ input.InputFirstCaps::first-letter
   padding-top: 10px;
   margin-top: 12px;
 }
-
+.inputDescBox
+{
+    width: 79%;
+    padding: 8px;
+}
 .table>thead>tr>th, .table>tbody>tr>th
 {
   font-size: 15px;

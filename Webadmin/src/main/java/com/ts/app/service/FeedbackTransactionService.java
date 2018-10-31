@@ -270,9 +270,31 @@ public class FeedbackTransactionService extends AbstractService {
        		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
        		String date = simpleDateFormat.format(new Date());
        		
+       		String block = feedbackTransDto.getBlock();
+       		String floor = feedbackTransDto.getFloor();
+       		String zone = feedbackTransDto.getZone();
+       		String projectName = feedbackTransDto.getProjectName();
+       		String siteName = feedbackTransDto.getSiteName();
+       		if(feedbackTransDto.getBlock().contains(" ")) {
+       			block = feedbackTransDto.getBlock().replaceAll(" ", "%20");
+       		}
+       		if(feedbackTransDto.getFloor().contains(" ")) {
+       			floor = feedbackTransDto.getFloor().replaceAll(" ", "%20");
+       		}
+       		if(feedbackTransDto.getZone().contains(" ")) {
+       			zone = feedbackTransDto.getZone().replaceAll(" ", "%20");
+       		}
+       		if(feedbackTransDto.getProjectName().contains(" ")) {
+       			projectName = feedbackTransDto.getProjectName().replaceAll(" ", "%20");
+       		}
+       		if(feedbackTransDto.getSiteName().contains(" ")) {
+       			siteName = feedbackTransDto.getSiteName().replaceAll(" ", "%20");
+       		}
+       		
+       		
+       		
 			String feedbackReportUrl = env.getProperty("reports.feedback-report.url");
-			String feedbackUrl = feedbackReportUrl+"/"+feedbackTransDto.getProjectId()+"&"+feedbackTransDto.getProjectName()+"&"+feedbackTransDto.getSiteId()+"&"+feedbackTransDto.getSiteName()+"&"+
-									feedbackTransDto.getBlock()+"&"+feedbackTransDto.getFloor()+"&"+feedbackTransDto.getZone()+"&"+date;
+			String feedbackUrl = feedbackReportUrl+"/"+feedbackTransDto.getProjectId()+"/"+projectName+"/"+feedbackTransDto.getSiteId()+"/"+siteName+"/"+block+"/"+floor+"/"+zone+"/"+date;
 			mailService.sendFeedbackAlert(alertEmailIds, feedbackTransDto.getZone(), feedbackLocation.toString(), givenBy.toString(), remarks.toString(), new Date(), feedbackAlertItems, feedbackUrl);
 		}	
 	}
