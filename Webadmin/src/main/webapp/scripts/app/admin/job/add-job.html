@@ -47,7 +47,7 @@
                                                            type='text' value=""
                                                            ng-minlength='5'
                                                            ng-maxlength='250'
-                                                           ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                           ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus  tabindex="1"
                                                            required/>
 
                                                     <div ng-show="form.$submitted || form.jobName.$touched">
@@ -81,7 +81,7 @@
                                                 class='form-control InputTxtCaps'
                                                 name='jobDesc'
                                                 ng-maxlength='2500'
-                                                ng-pattern="/^[a-zA-Z0-9 _\\\/.’'\-,#:]+$/"
+                                                ng-pattern="/^[a-zA-Z0-9 _\\\/.’'\-,#:]+$/" tabindex="3"
                                                 required
                                             ></textarea>
 
@@ -117,8 +117,8 @@
                                                         <!--uib-typeahead="checklist as checklist.name for checklist in checklists | filter:$viewValue | limitTo:5"-->
                                                         <!--autocomplete="off" />-->
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control " ng-model="selectedChecklist"  ng-options="checklist as checklist.name for checklist in checklists">
-                                                            <option value="">Please select Checklist...</option>
+                                                        <select class="form-control " ng-model="selectedChecklist"  ng-options="checklist as checklist.name for checklist in checklists" tabindex="7">
+                                                            <option value="">Select Checklist...</option>
                                                         </select>
 
 
@@ -139,10 +139,9 @@
                                                         <!--autocomplete="off" />-->
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                        <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" ng-click="checkSite()" required>
+                                                        <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" ng-click="checkSite()" tabindex="8" required>
 
-
-                                                            <option value="">Please select Employees...</option>
+                                                            <option value="">Select Employees...</option>
                                                         </select>
 
                                                         <div ng-show="form.$submitted || form.employeeName.$touched">
@@ -217,7 +216,7 @@
 
 
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control " ng-model="selectedSite" ng-change="loadEmployees();loadBlocks();" ng-options="site as site.name for site in sites track by site.id" name="siteName" required>
+                                                        <select class="form-control " ng-model="selectedSite" ng-change="loadEmployees();loadBlocks();" ng-options="site as site.name for site in sites track by site.id" name="siteName" tabindex="2" required>
                                                             <option value="">Select Site...</option>
                                                         </select>
                                                         <!--<span ng-show="siteSpin"  class="form-control-feedback d-sm-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>-->
@@ -249,7 +248,7 @@
                                                     <label class="control-label">Block <!-- <span class="red-star">*</span> --></label>
                                                     <div class="dropdown">
                                                      <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                       <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as (block | uppercase) for  block in  blocks track by block" name="block" >
+                                                       <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as (block | uppercase) for  block in  blocks track by block" name="block" tabindex="4">
                                                         	<option value="">Select Block...</option>
                                                     	  </select>
                                                         <!--<span ng-show="blockSpin"  class="form-control-feedback d-sm-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>-->
@@ -280,7 +279,7 @@
                                                     <label class="control-label">Floor <!-- <span class="red-star">*</span> --> </label>
                                                     <div class="dropdown">
                                                      <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as (floor | uppercase) for floor in floors track by floor" name="floor" >
+													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as (floor | uppercase) for floor in floors track by floor" name="floor" tabindex="5">
                                                         <option value="">Select Floor...</option>
                                                     	</select>
 
@@ -313,7 +312,7 @@
                                                     <label class="control-label">Zone<!--  <span class="red-star">*</span> --> </label>
                                                     <div class="dropdown">
                                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-													<select class="form-control " ng-model="selectedZone" ng-change="getLocationDetails(selectedBlock,selectedFloor,selectedZone)"  ng-options="zone as (zone | uppercase) for zone in zones track by zone" name="zone">
+													<select class="form-control " ng-model="selectedZone" ng-change="getLocationDetails(selectedBlock,selectedFloor,selectedZone)"  ng-options="zone as (zone | uppercase) for zone in zones track by zone" name="zone" tabindex="6">
                                                         <option value="">Select Zone...</option>
                                                     </select>
                                                    	 <div ng-show="form.$submitted || form.floor.$touched">
@@ -347,7 +346,7 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Start date<span class="red-star">*</span></label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datetimepicker"  id="jobStartDate"  ng-model="selectPlannedStartTime" placeholder="{{SelectPlannedStartTime | date:'dd/MMM/yyyy hh:mm a'}}" autocomplete="off"  required/>
+                                                    <input type="text" class="form-control datetimepicker"  id="jobStartDate"  ng-model="selectPlannedStartTime" placeholder="{{SelectPlannedStartTime | date:'dd/MMM/yyyy hh:mm a'}}" autocomplete="off" tabindex="9" required/>
 
                                                 </div>
                                                 <!--<div class="form-group label-floating">-->
@@ -395,7 +394,7 @@
                                                         type="number"
                                                      	   value="1"
                                                      	   min="1"
-                                                        ng-model="job.plannedHours"
+                                                        ng-model="job.plannedHours" tabindex="14"
                                                         required
                                                     >
 
@@ -449,7 +448,7 @@
                                                     <select
                                                         required
                                                         name="jobType"
-                                                        ng-model="job.jobType"
+                                                        ng-model="job.jobType" tabindex="15"
                                                         class="form-control searchable-input floatL">
                                                         <option value="">Select Type...</option>
                                                         <option>HOUSEKEEPING</option>
@@ -490,7 +489,7 @@
                                                 ng-model="job.comments"
                                                 class='form-control'
                                                 name='jobComments'
-                                                ng-maxlength='2500'
+                                                ng-maxlength='2500' tabindex="24"
                                             ></textarea>
 
                                                     <div ng-show="form.$submitted || form.jobComments.$touched">
@@ -534,23 +533,23 @@
                                                     <div>
                                                         <div class="radio radio-inline">
                                                             <label>
-                                                                <input type="radio" id="schedule" name="schedule" ng-model="job.schedule" value="ONCE" ng-click="resetDate();" checked="checked" required> Once
+                                                                <input type="radio" id="scheduleOnce" name="schedule" ng-model="job.schedule" value="ONCE" ng-click="resetDate();" checked="checked" tabindex="10" required> Once
                                                             </label>
 
                                                         </div>
                                                         <div class="radio radio-inline">
                                                             <label>
-                                                                <input type="radio" id="schedule" name="schedule" ng-model="job.schedule" value="DAY" required > Daily
+                                                                <input type="radio" id="scheduleDay" name="schedule" ng-model="job.schedule" value="DAY" tabindex="11" required > Daily
                                                             </label>
                                                         </div>
                                                         <div class="radio radio-inline">
                                                             <label>
-                                                                <input type="radio" id="schedule" name="shedule" ng-model="job.schedule" value="WEEK" required> Weekly
+                                                                <input type="radio" id="scheduleWeek" name="shedule" ng-model="job.schedule" value="WEEK" tabindex="12" required> Weekly
                                                             </label>
                                                         </div>
                                                         <div class="radio radio-inline">
                                                             <label>
-                                                                <input type="radio" id="schedule" name="shedule" ng-model="job.schedule" value="MONTH" required> Monthly
+                                                                <input type="radio" id="scheduleMonth" name="shedule" ng-model="job.schedule" value="MONTH" tabindex="13" required> Monthly
                                                             </label>
                                                         </div>
                                                         <div ng-show="form.$submitted || form.schedule.$touched">
@@ -577,44 +576,44 @@
                                                     <div class="" ng-if="job.schedule == 'DAY'">
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" id="dailyExclusion" name="dailyExclusion" ng-model="job.scheduleDailyExcludeWeekend" value="true" checked="job.scheduleDailyExcludeWeekend">Exclude weekends
+                                                                <input type="checkbox" id="dailyExclusion" name="dailyExclusion" ng-model="job.scheduleDailyExcludeWeekend" value="true" checked="job.scheduleDailyExcludeWeekend" tabindex="16">Exclude weekends
                                                             </label>
                                                         </div>
                                                     </div>
                                                     <div class="" ng-if="job.schedule == 'WEEK'">
                                                         <div class="checkbox checkbox-inline">
                                                             <label>
-                                                                <input type="checkbox" id="weeklySunday" name="weeklySunday" ng-model="job.scheduleWeeklySunday" value="true" checked="job.scheduleWeeklySunday">Sun
+                                                                <input type="checkbox" id="weeklySunday" name="weeklySunday" ng-model="job.scheduleWeeklySunday" value="true" checked="job.scheduleWeeklySunday" tabindex="17">Sun
                                                             </label>
                                                         </div>
                                                         <div class="checkbox checkbox-inline">
                                                             <label>
-                                                                <input type="checkbox" id="weeklyMonday" name="weeklyMonday" ng-model="job.scheduleWeeklyMonday" value="true" checked="job.scheduleWeeklyMonday">Mon
+                                                                <input type="checkbox" id="weeklyMonday" name="weeklyMonday" ng-model="job.scheduleWeeklyMonday" value="true" checked="job.scheduleWeeklyMonday" tabindex="18">Mon
                                                             </label>
                                                         </div>
                                                         <div class="checkbox checkbox-inline">
                                                             <label>
-                                                                <input type="checkbox"  id="weeklyTuesday" name="weeklyTuesday" ng-model="job.scheduleWeeklyTuesday" value="true" checked="job.scheduleWeeklyTuesday">Tue
+                                                                <input type="checkbox"  id="weeklyTuesday" name="weeklyTuesday" ng-model="job.scheduleWeeklyTuesday" value="true" checked="job.scheduleWeeklyTuesday" tabindex="19">Tue
                                                             </label>
                                                         </div>
                                                         <div class="checkbox checkbox-inline">
                                                             <label>
-                                                                <input type="checkbox"  id="weeklyWednesday" name="weeklyWednesday" ng-model="job.scheduleWeeklyWednesday" value="true" checked="job.scheduleWeeklyWednesday">Wed
+                                                                <input type="checkbox"  id="weeklyWednesday" name="weeklyWednesday" ng-model="job.scheduleWeeklyWednesday" value="true" checked="job.scheduleWeeklyWednesday" tabindex="20">Wed
                                                             </label>
                                                         </div>
                                                         <div class="checkbox checkbox-inline">
                                                             <label>
-                                                                <input type="checkbox" id="weeklyThursday" name="weeklyThursday" ng-model="job.scheduleWeeklyThursday" value="true" checked="job.scheduleWeeklyThursday">Thu
+                                                                <input type="checkbox" id="weeklyThursday" name="weeklyThursday" ng-model="job.scheduleWeeklyThursday" value="true" checked="job.scheduleWeeklyThursday" tabindex="21">Thu
                                                             </label>
                                                         </div>
                                                         <div class="checkbox checkbox-inline">
                                                             <label>
-                                                                <input type="checkbox" id="weeklyFriday" name="weeklyFriday" ng-model="job.scheduleWeeklyFriday" value="true" checked="job.scheduleWeeklyFriday">Fri
+                                                                <input type="checkbox" id="weeklyFriday" name="weeklyFriday" ng-model="job.scheduleWeeklyFriday" value="true" checked="job.scheduleWeeklyFriday" tabindex="22">Fri
                                                             </label>
                                                         </div>
                                                         <div class="checkbox checkbox-inline">
                                                             <label>
-                                                                <input type="checkbox" id="weeklySaturday" name="weeklySaturday" ng-model="job.scheduleWeeklySaturday" value="true" checked="job.scheduleWeeklySaturday">Sat
+                                                                <input type="checkbox" id="weeklySaturday" name="weeklySaturday" ng-model="job.scheduleWeeklySaturday" value="true" checked="job.scheduleWeeklySaturday" tabindex="23">Sat
                                                             </label>
                                                         </div>
                                                     </div>
@@ -622,7 +621,7 @@
                                                     <div class="" ng-if="job.schedule == 'MONTH'">
                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                     		<select class="form-control " ng-model="job.scheduleMonthlyDay"  ng-options="day as day for day in monthDays">
-                                                            <option value="">Please select the day of month...</option>
+                                                            <option value="">Select the day of month...</option>
                                                          </select>
 
                                                     </div>
@@ -660,7 +659,7 @@
                                     </span>
                                                     </p> -->
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datetimepicker" ng-model="selectScheduleEndDate" name='scheduleEndDate' autocomplete="off" id="scheduleEndDate" ng-disabled="job.schedule == 'ONCE'" />
+                                                    <input type="text" class="form-control datetimepicker" ng-model="selectScheduleEndDate" name='scheduleEndDate' autocomplete="off" id="scheduleEndDate" ng-disabled="job.schedule == 'ONCE'"  tabindex="25"/>
 
 
                                                     <div ng-show="form.$submitted || form.scheduleEndDate.$touched">
@@ -686,12 +685,12 @@
                                                     <div>
                                                         <div class="radio radio-inline">
                                                             <label>
-                                                                <input type="radio" id="active" name="active" ng-model="job.active" value="Y" checked="checked" required>Yes
+                                                                <input type="radio" id="active" name="active" ng-model="job.active" value="Y" checked="checked" required tabindex="26">Yes
                                                             </label>
                                                         </div>
                                                         <div class="radio radio-inline">
                                                             <label>
-                                                                <input type="radio" id="active" name="active" ng-model="job.active" value="N" required >No
+                                                                <input type="radio" id="inActive" name="active" ng-model="job.active" value="N" required tabindex="27">No
                                                             </label>
                                                         </div>
                                                     </div>
@@ -722,7 +721,7 @@
                                     <!--</button>-->
 
                                     <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}"
-                                            type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisable">
+                                            type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisable" tabindex="28">
                                         <span class="btn-label"><i class="material-icons">check</i></span> Save
                                         <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                     </button>
@@ -733,7 +732,7 @@
                                             <i class="fa fa-rotate-left" ></i> Save and go back to list
                                         </button> -->
                                     <button class="btn btn-danger" type="button"
-                                            ng-disabled="btnDisable" ng-click="conform('cancel')" id="cancel-button">
+                                            ng-disabled="btnDisable" ng-click="conform('cancel')" id="cancel-button" tabindex="29">
                                         <i class="material-icons">close</i> Cancel
                                     </button>
                                 </div>
