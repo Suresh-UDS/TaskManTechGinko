@@ -19,7 +19,7 @@ angular.module('timeSheetApp')
         $scope.searchBranch = null;
         $scope.searchSite = null;
         $scope.regionList = null;
-        $scope.branchList = null;
+        $scope.branchList = [];
         $scope.searchCriteria = {};
         $scope.regionDetails = {};
         $scope.branchDetails = {};
@@ -196,9 +196,10 @@ angular.module('timeSheetApp')
             return newSupes;
         };
 
-        $scope.selectRegion = function (region) {
-            $scope.selectedRegion = $scope.regionsList[$scope.uiRegion.indexOf(region)];
+        $scope.selectRegion = function (region, callback) {
+            $scope.selectedRegion = $scope.regionList[$scope.uiRegion.indexOf(region)];
             console.log('Region dropdown list:',$scope.searchRegion)
+            callback();
         }
 
         //
@@ -535,10 +536,14 @@ angular.module('timeSheetApp')
                         console.log('$scope.site.shifts - '+$scope.site.shifts);
                         $scope.selectedProject = {id:$scope.site.projectId,name:$scope.site.projectName};
                         $scope.SelectClient.selected = $scope.selectedProject;
-                        $scope.loadRegions($scope.site.projectId);
-                        $scope.selectRegion($scope.site.region);
-                        $scope.selectBranch($scope.site.branch);
                         $scope.shiftItems = $scope.site.shifts;
+                        $scope.loadRegions($scope.site.projectId, function(resp) {
+                            $scope.selectRegion($scope.site.region, function(resp) {
+                            		$scope.loadBranch($scope.site.projectId, function(resp) {
+                            			$scope.selectBranch($scope.site.branch);
+                            		})
+                            });
+                        });
                         console.log('Selected project' , $scope.selectedProject);
 
 
@@ -966,15 +971,20 @@ angular.module('timeSheetApp')
 
         };
 
-        $scope.loadRegions = function (projectId) {
+        $scope.loadRegions = function (projectId, callback) {
             SiteComponent.getRegionByProject(projectId).then(function (response) {
                 console.log(response);
                 $scope.regionList = response;
-
+                for(var i=0;i<$scope.regionList.length; i++) {
+	            		$scope.uiRegion.push($scope.regionList[i].name);
+	            }
+                
+                console.log('region list : ' + JSON.stringify($scope.regionList));
+                callback();
             })
         };
 
-        $scope.loadBranch = function (projectId) {
+        $scope.loadBranch = function (projectId, callback) {
         		
             if(projectId){
 
@@ -983,8 +993,15 @@ angular.module('timeSheetApp')
                     SiteComponent.getBranchByProject(projectId,$scope.selectedRegion.id).then(function (response) {
                         console.log(response);
                         $scope.branchList = response;
-
+                        if($scope.branchList) {
+                        		for(var i = 0; i < $scope.branchList.length; i++) {
+                        			$scope.uiBranch.push($scope.branchList[i].name);
+                        		}
+                        }	
+                        console.log('branch list : ' + JSON.stringify($scope.branchList));
                         $scope.getSitesBYRegionOrBranch(projectId,$scope.selectedRegion.name,null);
+                        callback();
+
 
 
                     })
@@ -998,8 +1015,6 @@ angular.module('timeSheetApp')
                 $scope.showNotifications('top','center','danger','Please select Project to continue...');
 
             }
-
-
         };
 
         $scope.getSitesBYRegionOrBranch = function (projectId, region, branch) {

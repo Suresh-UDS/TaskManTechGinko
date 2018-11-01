@@ -188,7 +188,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.selectRegion = function (region) {
-            $scope.selectedRegion = $scope.regionsList[$scope.uiRegion.indexOf(region)];
+            $scope.selectedRegion = $scope.regionList[$scope.uiRegion.indexOf(region)];
             console.log('Region dropdown list:',$scope.searchRegion)
         }
 
@@ -219,7 +219,9 @@ angular.module('timeSheetApp')
             SiteComponent.getRegionByProject(projectId).then(function (response) {
                 console.log(response);
                 $scope.regionList = response;
-
+                for(var i=0;i<$scope.regionList.length; i++) {
+                		$scope.uiRegion.push($scope.regionList[i].name);
+                }
             })
         };
 
@@ -251,7 +253,6 @@ angular.module('timeSheetApp')
         };
 
         $scope.getSitesBYRegionOrBranch = function (projectId, region, branch) {
-        		alert(projectId + ' ' + region  + ' ' + branch);
             if(branch){
                 $scope.siteFilterDisable = true;
                 $scope.siteSpin = true;
