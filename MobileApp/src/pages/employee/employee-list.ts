@@ -13,6 +13,8 @@ import {componentService} from "../service/componentService";
 import {AttendanceViewPage} from "../attendance-view/attendance-view";
 import {Diagnostic} from "@ionic-native/diagnostic";
 import {LocationAccuracy} from "@ionic-native/location-accuracy";
+import Swal from 'sweetalert2'
+
 
 declare  var demo ;
 
@@ -45,6 +47,7 @@ export class EmployeeList {
     totalPages:0;
     pageSort:15;
     count=0;
+
 
     fakeEmployeeList: Array<any> = new Array(12);
     constructor(public navCtrl: NavController,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
@@ -264,10 +267,13 @@ export class EmployeeList {
             this.employeeService.enrollFace(employee).subscribe(response=>{
                 this.component.closeAll();
                 if(response.errorStatus){
-                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                  Swal('Oops...', 'Something went wrong!', 'error');
+                  demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
                 }else{
                     var verificationResponse = response;
                     console.log(verificationResponse);
+                    Swal('Success', 'Face Enrolled Successfully..', 'success');
+                  // Swal('Face Enrolled successfully');
                     this.component.showToastMessage('Face Enrolled successfully..','bottom');
                 }
 
