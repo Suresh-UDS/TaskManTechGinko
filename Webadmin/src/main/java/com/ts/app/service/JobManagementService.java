@@ -28,6 +28,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -874,6 +875,7 @@ public class JobManagementService extends AbstractService {
 		return;
 	}
 	
+	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void saveScheduledJob(List<JobDTO> jobDTOs) {
 		if(CollectionUtils.isNotEmpty(jobDTOs)) {
 			List<Job> jobs = new ArrayList<Job>();

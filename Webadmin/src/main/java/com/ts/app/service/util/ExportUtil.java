@@ -32,6 +32,7 @@ import javax.transaction.Transactional;
 
 import com.ts.app.repository.EmployeeRepository;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.io.IOUtils;
@@ -677,23 +678,32 @@ public class ExportUtil {
 		Row projRow = consSheet.getRow(0);
 		projRow.getCell(0).setCellValue(projName);
 
-		for (Map<String,String> data : consolidatedData) {
-			Row dataRow = consSheet.getRow(rowNum++);
-			dataRow.getCell(0).setCellValue(data.get("SiteName") != null ? data.get("SiteName") : "");
-			dataRow.getCell(1).setCellValue((data.get("ShiftStartTime") != null ? data.get("ShiftStartTime") : "") + " - " + (data.get("ShiftEndTime") != null ? data.get("ShiftEndTime") : ""));
-			dataRow.getCell(2).setCellValue(data.get("Present"));
-			//dataRow.getCell(3).setCellValue(data.get("Present"));
-			//dataRow.getCell(4).setCellValue(data.get("Absent"));
+		if(CollectionUtils.isNotEmpty(consolidatedData)) {
+			for (Map<String,String> data : consolidatedData) {
+				if(MapUtils.isNotEmpty(data)) {
+					Row dataRow = consSheet.getRow(rowNum++);
+					if(dataRow != null && dataRow.getPhysicalNumberOfCells() > 0) {
+						dataRow.getCell(0).setCellValue(data.get("SiteName") != null ? data.get("SiteName") : "");
+						dataRow.getCell(1).setCellValue((data.get("ShiftStartTime") != null ? data.get("ShiftStartTime") : "") + " - " + (data.get("ShiftEndTime") != null ? data.get("ShiftEndTime") : ""));
+						dataRow.getCell(2).setCellValue(data.get("Present"));
+						//dataRow.getCell(3).setCellValue(data.get("Present"));
+						//dataRow.getCell(4).setCellValue(data.get("Absent"));
+					}
+				}
+			}
 		}
 
 		rowNum++;
 
 		Row summaryRow = consSheet.getRow(rowNum);
-		summaryRow.getCell(0).setCellValue("Total Mandays Per Day");
-		summaryRow.getCell(2).setCellValue(summary.get("TotalPresent"));
-		//summaryRow.getCell(3).setCellValue(summary.get("TotalPresent"));
-		//summaryRow.getCell(4).setCellValue(summary.get("TotalAbsent"));
-
+		if(summaryRow != null && summaryRow.getPhysicalNumberOfCells() > 0) {
+			summaryRow.getCell(0).setCellValue("Total Mandays Per Day");
+			if(MapUtils.isNotEmpty(summary)) {
+				summaryRow.getCell(2).setCellValue(summary.get("TotalPresent"));
+				//summaryRow.getCell(3).setCellValue(summary.get("TotalPresent"));
+				//summaryRow.getCell(4).setCellValue(summary.get("TotalAbsent"));
+			}
+		}	
 		rowNum++;
 		/* ShiftWise Summary report is temporarily commented out as per request from FLEXTRONICS
 
@@ -732,23 +742,25 @@ public class ExportUtil {
 //		}
 		XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(1);
 		rowNum = 1;
-
-		for (EmployeeAttendanceReport transaction : content) {
-
-			Row dataRow = xssfSheet.getRow(rowNum++);
-
-			dataRow.getCell(0).setCellValue(transaction.getEmployeeIds());
-			dataRow.getCell(1).setCellValue(transaction.getName() + " " + transaction.getLastName());
-			dataRow.getCell(2).setCellValue(transaction.isReliever() ? "YES" : "NO");
-			dataRow.getCell(3).setCellValue(transaction.getSiteName());
-			dataRow.getCell(4).setCellValue((StringUtils.isNotEmpty(transaction.getShiftStartTime()) ? StringUtil.formatShiftTime(transaction.getShiftStartTime()) : "") + "-" + (StringUtils.isNotEmpty(transaction.getShiftEndTime()) ? StringUtil.formatShiftTime(transaction.getShiftEndTime()) : ""));
-			dataRow.getCell(5).setCellValue(transaction.getCheckInTime() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getCheckInTime()) : "");
-			dataRow.getCell(6).setCellValue(transaction.getCheckOutTime() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getCheckOutTime()) : "");
-			dataRow.getCell(7).setCellValue(StringUtils.isNotEmpty(transaction.getDifferenceText())  ? transaction.getDifferenceText() : "");
-			dataRow.getCell(8).setCellValue(transaction.getStatus());
-			dataRow.getCell(9).setCellValue(transaction.isShiftContinued() ? "SHIFT CONTINUED" : "");
-			dataRow.getCell(10).setCellValue(transaction.isLate() ? "LATE CHECK IN" : "");
-			dataRow.getCell(11).setCellValue(StringUtils.isNotEmpty(transaction.getRemarks())  ? transaction.getRemarks() : "");
+		if(xssfSheet != null && CollectionUtils.isNotEmpty(content)) {
+			for (EmployeeAttendanceReport transaction : content) {
+	
+				Row dataRow = xssfSheet.getRow(rowNum++);
+				if(dataRow != null && dataRow.getPhysicalNumberOfCells() > 0) {
+					dataRow.getCell(0).setCellValue(transaction.getEmployeeIds());
+					dataRow.getCell(1).setCellValue(transaction.getName() + " " + transaction.getLastName());
+					dataRow.getCell(2).setCellValue(transaction.isReliever() ? "YES" : "NO");
+					dataRow.getCell(3).setCellValue(transaction.getSiteName());
+					dataRow.getCell(4).setCellValue((StringUtils.isNotEmpty(transaction.getShiftStartTime()) ? StringUtil.formatShiftTime(transaction.getShiftStartTime()) : "") + "-" + (StringUtils.isNotEmpty(transaction.getShiftEndTime()) ? StringUtil.formatShiftTime(transaction.getShiftEndTime()) : ""));
+					dataRow.getCell(5).setCellValue(transaction.getCheckInTime() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getCheckInTime()) : "");
+					dataRow.getCell(6).setCellValue(transaction.getCheckOutTime() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getCheckOutTime()) : "");
+					dataRow.getCell(7).setCellValue(StringUtils.isNotEmpty(transaction.getDifferenceText())  ? transaction.getDifferenceText() : "");
+					dataRow.getCell(8).setCellValue(transaction.getStatus());
+					dataRow.getCell(9).setCellValue(transaction.isShiftContinued() ? "SHIFT CONTINUED" : "");
+					dataRow.getCell(10).setCellValue(transaction.isLate() ? "LATE CHECK IN" : "");
+					dataRow.getCell(11).setCellValue(StringUtils.isNotEmpty(transaction.getRemarks())  ? transaction.getRemarks() : "");
+				}
+			}
 		}
 
 //		for (int i = 0; i < ATTD_HEADER.length; i++) {
