@@ -234,13 +234,14 @@
                             
                             <div class="dropdown">
                                     <label class="label-control">Client</label>
-                                   
+                    
                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                     <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                   
                                     <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
 									  <ui-select-match placeholder="Select clients..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
 									  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)" null-option="allClients" loose-null>
+
 									    <span ng-bind-html="client.name | highlight: $select.search"></span>
 									  </ui-select-choices>
 									</ui-select>
@@ -292,7 +293,7 @@
                             <div class="dropdown">
                                 <div class="form-group">
                                     <label class="label-control">Site</label>
-                                   
+                     
                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                     <span ng-show="!siteSpin && !sitesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                  

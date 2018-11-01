@@ -977,6 +977,7 @@ angular.module('timeSheetApp')
 	                                }
 	
 	                            })
+
                             }else{
                                 $scope.searchBranch = null;
                                 $scope.branchsListOne.selected = $scope.searchBranch;

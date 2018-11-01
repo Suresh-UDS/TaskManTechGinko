@@ -27,7 +27,7 @@
                                                 <label class="control-label">Select Client<span class="red-star">*</span> </label>
                                                
                                                 <span ng-show="!clientDisable && !SelectClient.selected" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                
+
                                                 <ui-select ng-model="SelectClient.selected"  name="projectName" ng-disabled="clientDisable" ng-required="true">
 
 												  <ui-select-match placeholder="Select clients..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
