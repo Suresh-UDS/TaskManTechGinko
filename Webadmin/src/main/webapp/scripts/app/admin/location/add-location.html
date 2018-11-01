@@ -31,19 +31,23 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="control-label">Client<span class="red-star">*</span> </label>
-                                                    <!--<span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                    <!--<select class="form-control " ng-model="selectedProject"  ng-change="loadDepSites()"  ng-options="project as project.name for project in projectsList">-->
-                                                        <!--<option value="">Please select Client...</option>-->
-                                                    <!--</select>-->
-                                                    <span ng-show="clientDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                                    <span ng-show="!clientDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="selectedProject"  ng-disabled="clientDisable"  required="">
-                                                        <ui-select-match placeholder="Select clients...">{{selectedProject}}</ui-select-match>
-                                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search" ng-click="loadDepSites(selectedProject)">
-                                                            <div >{{ client }}</div>
-                                                        </ui-select-choices>
-
-                                                    </ui-select>
+                                                    <span ng-show="!clientDisable && !SelectClient.selected" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                              
+	                                                <ui-select ng-model="SelectClient.selected"  name="projectName" ng-disabled="clientDisable" ng-required="true">
+													  <ui-select-match placeholder="Select clients..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
+													  <ui-select-choices repeat="SelectClient in SelectClients | filter: $select.search"  ng-click="loadDepSitesList(SelectClient.selected)">
+													    <span ng-bind-html="SelectClient.name | highlight: $select.search"></span>
+													  </ui-select-choices>
+													</ui-select>
+													<div ng-show="form.$submitted || form.projectName.$touched">
+	                                                   <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
+	                                                       <p class="help-block" style="color:maroon"
+	                                                          ng-show="form.projectName.$error.required">
+	                                                           Client name is required.
+	                                                       </p>
+	                                                      
+	                                                   </div>
+	                                               </div>
 
                                                 </div>
                                             </div>
@@ -51,21 +55,26 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label class="control-label">Site<span class="red-star">*</span> </label>
-
-                                                    <!--<span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                    <!--<select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sitesList">-->
-                                                        <!--<option value="">Select Site...</option>-->
-                                                    <!--</select>-->
-                                                    <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                                    <span  ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="selectedSite" ng-disabled="siteDisable || sitesList.length == 0"  required="">
-                                                        <ui-select-match placeholder="Select sites...">{{ selectedSite }}</ui-select-match>
-                                                        <ui-select-choices   repeat="site in getSites($select.search) | filter: $select.search" ng-click="loadBloack(selectedSite)">
-                                                            <div >{{ site }}</div>
-                                                        </ui-select-choices>
-                                                    </ui-select>
-                                                    <span ng-if="sitesList.length == 0"><p class="error-msg margin0">No sites</p></span>
+	                                                    <label class="control-label">Site<span class="red-star">*</span> </label>
+	
+	                                                    <span ng-show="!siteDisable && !SelectSite.selected" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                              
+		                                               <ui-select ng-model="SelectSite.selected"  name="siteName" ng-disabled="siteDisable || SelectSites.length == 0" ng-required="true">
+														  <ui-select-match placeholder="Select sites..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
+														  <ui-select-choices repeat="SelectSite in SelectSites | filter: $select.search" >
+														    <span ng-bind-html="SelectSite.name | highlight: $select.search"></span>
+														  </ui-select-choices>
+														</ui-select>
+                                                        <span ng-if="SelectSites.length == 0"><p class="error-msg margin0">No sites</p></span>
+	                                                    <div ng-show="form.$submitted || form.siteName.$touched">
+		                                                   <div ng-show="form.siteName.$dirty || form.siteName.$invalid">
+		                                                       <p class="help-block" style="color:maroon"
+		                                                          ng-show="form.siteName.$error.required">
+		                                                           Site name is required.
+		                                                       </p>
+		                                                       
+		                                                   </div>
+	                                                    </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -77,6 +86,23 @@
                                                         ng-model="selectedBlock"
                                                         name="selectedBlock" ng-minlength="1" ng-maxlength="50" autofocus
                                                         required />
+                                                        <div ng-show="form.$submitted || form.selectedBlock.$touched">
+			                                                 <div ng-show="form.selectedBlock.$dirty || form.selectedBlock.$invalid">
+			                                                     <p class="help-block" style="color:maroon"
+			                                                        ng-show="form.selectedBlock.$error.required">
+			                                                         Block name is required.
+			                                                     </p>
+			                                                     <p class="help-block" style="color:maroon"
+			                                                        ng-show="form.selectedBlocke.$error.minlength">
+			                                                         Block name is required to be at least 1 character.
+			                                                     </p>
+			                                                     <p class="help-block" style="color:maroon"
+			                                                        ng-show="form.selectedBlock.$error.maxlength">
+			                                                         Block name cannot be longer than 50 characters.
+			                                                     </p>
+			                                                     
+			                                                 </div>
+			                                             </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -88,6 +114,23 @@
                                                         ng-model="selectedFloor"
                                                         name="selectedFloor" ng-minlength="1" ng-maxlength="50" autofocus
                                                         required />
+                                                        <div ng-show="form.$submitted || form.selectedFloor.$touched">
+			                                                 <div ng-show="form.selectedFloor.$dirty || form.selectedFloor.$invalid">
+			                                                     <p class="help-block" style="color:maroon"
+			                                                        ng-show="form.selectedFloor.$error.required">
+			                                                         Floor name is required.
+			                                                     </p>
+			                                                     <p class="help-block" style="color:maroon"
+			                                                        ng-show="form.selectedFloor.$error.minlength">
+			                                                         Floor name is required to be at least 1 character.
+			                                                     </p>
+			                                                     <p class="help-block" style="color:maroon"
+			                                                        ng-show="form.selectedFloor.$error.maxlength">
+			                                                         Floor name cannot be longer than 50 characters.
+			                                                     </p>
+			                                                     
+			                                                 </div>
+			                                             </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -100,7 +143,23 @@
                                                         ng-model="selectedZone"
                                                         name="selectedZone" ng-minlength="1" ng-maxlength="50" autofocus
                                                         required />
-
+                                                        <div ng-show="form.$submitted || form.selectedZone.$touched">
+			                                                 <div ng-show="form.selectedZone.$dirty || form.selectedZone.$invalid">
+			                                                     <p class="help-block" style="color:maroon"
+			                                                        ng-show="form.selectedZone.$error.required">
+			                                                         Zone name is required.
+			                                                     </p>
+			                                                     <p class="help-block" style="color:maroon"
+			                                                        ng-show="form.selectedZone.$error.minlength">
+			                                                         Zone name is required to be at least 1 character.
+			                                                     </p>
+			                                                     <p class="help-block" style="color:maroon"
+			                                                        ng-show="form.selectedZone.$error.maxlength">
+			                                                         Zone name cannot be longer than 50 characters.
+			                                                     </p>
+			                                                     
+			                                                 </div>
+			                                             </div>
                                                     </div>
                                                 </div>
                                             </div>

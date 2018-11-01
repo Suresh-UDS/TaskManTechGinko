@@ -38,20 +38,9 @@
                                                       autofocus  required autocomplete="off"/> -->
 
                                               <label class="control-label">Select Client<span class="red-star">*</span></label>
-                                                     <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                    <!--<select name='projectName'-->
-                                                      <!--class="form-control " ng-model="selectedProject"  ng-options="project as project.name for project in projectsList" autofocus  required >-->
-                                                        <!--<option value="">Select Client...</option>-->
-                                                    <!--</select>-->
-                                               <!--<span ng-show="clientDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-spinner ld-spin" ></i></span>-->
+                                                    
                                                <span ng-show="!clientDisable && !SelectClient.selected" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                              <!--  <ui-select ng-model="selectedProject" name="projectName" ng-disabled="clientDisable"  ng-change="addProject(selectedProject)" tabindex="1"  ng-required="true"   autofocus="true">
-                                                   <ui-select-match placeholder="Select clients...">{{selectedProject}}</ui-select-match>
-                                                   <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
-                                                       <div >{{ client }}</div>
-                                                   </ui-select-choices>
-
-                                               </ui-select> -->
+                                              
                                                <ui-select ng-model="SelectClient.selected"  name="projectName" ng-disabled="clientDisable" ng-required="true">
 												  <ui-select-match placeholder="Select clients..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
 												  <ui-select-choices repeat="SelectClient in SelectClients | filter: $select.search" >

@@ -215,12 +215,12 @@ angular.module('timeSheetApp')
 	              }else{
 	                      var depProj=0;
 	              }
-	
+	              
 	              ProjectComponent.findSites(depProj).then(function (data) {
 	                  $scope.selectedSite = null;
 	                  $scope.sitesList = data;
 	                  $scope.sitesLists = [];
-	                  //$scope.sitesListOne.selected = null;
+	                  $scope.sitesListOne.selected = null;
 	                  $scope.sitesLists[0] = $scope.allSites;
 	                  
 	                  for(var i=0;i<$scope.sitesList.length;i++)
@@ -736,7 +736,20 @@ angular.module('timeSheetApp')
                             if($scope.localStorage.projectId){
                                $scope.searchProject = {id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
                                $scope.client.selected = $scope.searchProject;
-                               $scope.loadDepSitesList($scope.client.selected);
+                               //$scope.loadDepSitesList($scope.client.selected);
+                               ProjectComponent.findSites($scope.searchProject.id).then(function (data) {
+             	                  $scope.selectedSite = null;
+             	                  $scope.sitesList = data;
+             	                  $scope.sitesLists = [];
+             	                  $scope.sitesLists[0] = $scope.allSites;
+             	                  
+             	                  for(var i=0;i<$scope.sitesList.length;i++)
+             	                  {
+             	                      $scope.sitesLists[i+1] = $scope.sitesList[i];
+             	                  }
+             	                  $scope.siteFilterDisable = false;
+             	                  $scope.siteSpin = false;
+             	              });
                             }else{
                                $scope.searchProject = null;
                                $scope.client.selected = $scope.searchProject;
