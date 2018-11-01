@@ -696,7 +696,7 @@ public class ExportUtil {
 		rowNum++;
 
 		Row summaryRow = consSheet.getRow(rowNum);
-		if(summaryRow != null && dataRow.getPhysicalNumberOfCells() > 0) {
+		if(summaryRow != null && summaryRow.getPhysicalNumberOfCells() > 0) {
 			summaryRow.getCell(0).setCellValue("Total Mandays Per Day");
 			if(MapUtils.isNotEmpty(summary)) {
 				summaryRow.getCell(2).setCellValue(summary.get("TotalPresent"));
