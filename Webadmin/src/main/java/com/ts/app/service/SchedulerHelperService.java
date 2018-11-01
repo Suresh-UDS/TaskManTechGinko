@@ -2295,8 +2295,13 @@ public class SchedulerHelperService extends AbstractService {
 									new FileInputStream(exportPath + "/" + content.getAttendanceFile() + ".xlsx"));
 							int noOfSheets = attnWorkBook.getNumberOfSheets();
 							for(int i = 0; i < noOfSheets; i++) {
-								XSSFSheet newAttnSheet = xssfAttnWorkbook.createSheet(entry.getKey() + "_" + (i+1) + "_" + content.getSiteName());
-								copySheet(attnWorkBook.getSheetAt(i), newAttnSheet);
+								String sheetName = entry.getKey() + "_" + (i+1) + "_" + content.getSiteName();
+								try {
+									XSSFSheet newAttnSheet = xssfAttnWorkbook.createSheet(sheetName);
+									copySheet(attnWorkBook.getSheetAt(i), newAttnSheet);
+								}catch (Exception e) {
+									log.error("Error while creating attendance report sheet with name - " + sheetName);
+								}
 							}
 						}
 					}
