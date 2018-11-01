@@ -768,7 +768,6 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.feedbackDetailedReport();
 	}
 
-	@Async
 	public void createJobs(SchedulerConfig scheduledTask) {
 		if ("CREATE_JOB".equals(scheduledTask.getType())) {
 			String creationPolicy = env.getProperty("scheduler.job.creationPolicy");
