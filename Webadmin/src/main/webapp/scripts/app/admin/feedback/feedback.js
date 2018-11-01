@@ -20,6 +20,25 @@ angular.module('timeSheetApp')
                 },
                 resolve: {
 
+                },
+
+            }).state('feedbacksList', {
+                parent: 'manage',
+                url: '/feedbacksList/:pid/:pName/:sid/:sName/:block/:floor/:zone/:date',
+                controller: 'FeedbackController',
+                data: {
+                    authorities: [],
+                    pageTitle: 'Feedbacks   '
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'scripts/app/admin/feedback/feedback-list.html',
+                        controller: 'FeedbackController',
+                        controllerAs:'vm'
+                    }
+                },
+                resolve: {
+
                 }
             });
 
