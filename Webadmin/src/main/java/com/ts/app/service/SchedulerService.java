@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -301,9 +302,8 @@ public class SchedulerService extends AbstractService {
 				 try {
 					 boolean shouldProcess = true;
                      if(schedulerConfig.isScheduleDailyExcludeWeekend()) {
-                         Calendar today = Calendar.getInstance();
                          //if(today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-                        	if(today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                        	if(startTimeCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
                              shouldProcess =false;
                          }
                      }
@@ -768,7 +768,7 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.feedbackDetailedReport();
 	}
 
-	@Transactional(propagation=Propagation.REQUIRES_NEW)
+	@Async
 	public void createJobs(SchedulerConfig scheduledTask) {
 		if ("CREATE_JOB".equals(scheduledTask.getType())) {
 			String creationPolicy = env.getProperty("scheduler.job.creationPolicy");
@@ -1149,7 +1149,7 @@ public class SchedulerService extends AbstractService {
 		Calendar cal = DateUtils.toCalendar(sHrs);
 		int sHr = cal.get(Calendar.HOUR_OF_DAY);
 		int sMin = cal.get(Calendar.MINUTE);
-		log.debug("Start time hours =" + sHr + ", start time mins -" + sMin);
+		//log.debug("Start time hours =" + sHr + ", start time mins -" + sMin);
 		startTime.set(Calendar.HOUR_OF_DAY, sHr);
 		startTime.set(Calendar.MINUTE, sMin);
 		startTime.set(Calendar.SECOND, 0);
@@ -1157,7 +1157,7 @@ public class SchedulerService extends AbstractService {
 		cal = DateUtils.toCalendar(eHrs);
 		int eHr = cal.get(Calendar.HOUR_OF_DAY);
 		int eMin = cal.get(Calendar.MINUTE);
-		log.debug("End time hours =" + eHr + ", end time mins -" + eMin);
+		//log.debug("End time hours =" + eHr + ", end time mins -" + eMin);
 		if (StringUtils.isNotEmpty(frequency)) {
 			endTime.set(Calendar.HOUR_OF_DAY, startTime.get(Calendar.HOUR_OF_DAY));
 			if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_HOUR)) {
@@ -1199,7 +1199,7 @@ public class SchedulerService extends AbstractService {
 		job.setZone(parentJob.getZone());
 		job.setFloor(parentJob.getFloor());
 		job.setBlock(parentJob.getBlock());
-		log.debug("Job status in scheduler {}",job.getJobStatus());
+		//log.debug("Job status in scheduler {}",job.getJobStatus());
         if(CollectionUtils.isNotEmpty(parentJob.getChecklistItems())) {
             List<JobChecklist> jobclList = parentJob.getChecklistItems();
             List<JobChecklistDTO> checklistItems = new ArrayList<JobChecklistDTO>();
@@ -1218,9 +1218,9 @@ public class SchedulerService extends AbstractService {
                 job.setChecklistItems(checklistItems);
             }
         }
-		log.debug("JobDTO parent job id - " + parentJob.getId());
-		log.debug("JobDTO parent job id - " + job.getParentJobId());
-		log.debug("JobDTO Details before calling saveJob - " + job);
+		//log.debug("JobDTO parent job id - " + parentJob.getId());
+		//log.debug("JobDTO parent job id - " + job.getParentJobId());
+		//log.debug("JobDTO Details before calling saveJob - " + job);
 		//jobManagementService.saveScheduledJob(job);
 		jobs.add(job);
 		if (StringUtils.isNotEmpty(frequency)) {
@@ -1230,9 +1230,9 @@ public class SchedulerService extends AbstractService {
 			tmpCal.set(Calendar.HOUR_OF_DAY, plannedEndTimeCal.get(Calendar.HOUR_OF_DAY));
 			tmpCal.set(Calendar.MINUTE, plannedEndTimeCal.get(Calendar.MINUTE));
 			tmpCal.getTime(); // recalculate
-			log.debug("Planned end time cal value = " + tmpCal.getTime());
-			log.debug("end time value based on frequency = " + endTime.getTime());
-			log.debug("planned end time after endTime " + tmpCal.getTime().after(endTime.getTime()));
+			//log.debug("Planned end time cal value = " + tmpCal.getTime());
+			//log.debug("end time value based on frequency = " + endTime.getTime());
+			//log.debug("planned end time after endTime " + tmpCal.getTime().after(endTime.getTime()));
 			if (tmpCal.getTime().after(endTime.getTime())) {
 				tmpCal.setTime(endTime.getTime());
 				if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_HOUR)) {
