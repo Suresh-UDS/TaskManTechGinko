@@ -2295,7 +2295,7 @@ public class SchedulerHelperService extends AbstractService {
 									new FileInputStream(exportPath + "/" + content.getAttendanceFile() + ".xlsx"));
 							int noOfSheets = attnWorkBook.getNumberOfSheets();
 							for(int i = 0; i < noOfSheets; i++) {
-								XSSFSheet newAttnSheet = xssfAttnWorkbook.createSheet(entry.getKey() + "_" +content.getSiteName());
+								XSSFSheet newAttnSheet = xssfAttnWorkbook.createSheet(entry.getKey() + "_" + (i+1) + "_" + content.getSiteName());
 								copySheet(attnWorkBook.getSheetAt(i), newAttnSheet);
 							}
 						}
