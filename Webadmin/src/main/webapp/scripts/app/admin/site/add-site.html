@@ -44,7 +44,7 @@
                                                         <!--<option value="">Select Client...</option>-->
                                                     <!--</select>-->
                                                <!--<span ng-show="clientDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-spinner ld-spin" ></i></span>-->
-                                               <span ng-show="!clientDisable" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                               <span ng-show="!clientDisable && !SelectClient.selected" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                               <!--  <ui-select ng-model="selectedProject" name="projectName" ng-disabled="clientDisable"  ng-change="addProject(selectedProject)" tabindex="1"  ng-required="true"   autofocus="true">
                                                    <ui-select-match placeholder="Select clients...">{{selectedProject}}</ui-select-match>
                                                    <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
@@ -53,7 +53,7 @@
 
                                                </ui-select> -->
                                                <ui-select ng-model="SelectClient.selected"  name="projectName" ng-disabled="clientDisable" ng-required="true">
-												  <ui-select-match placeholder="Select clients...">{{$select.selected.name}}</ui-select-match>
+												  <ui-select-match placeholder="Select clients..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
 												  <ui-select-choices repeat="SelectClient in SelectClients | filter: $select.search" >
 												    <span ng-bind-html="SelectClient.name | highlight: $select.search"></span>
 												  </ui-select-choices>
@@ -65,18 +65,7 @@
                                                           ng-show="form.projectName.$error.required">
                                                            Client name is required.
                                                        </p>
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.projectName.$error.minlength">
-                                                           Client name is required to be at least 2 character.
-                                                       </p>
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.projectName.$error.maxlength">
-                                                           Client name cannot be longer than 50 characters.
-                                                       </p>
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.projectName.$error.pattern">
-                                                           Client name can only contain letters, digits and space.
-                                                       </p>
+                                                     
                                                    </div>
                                                </div>
 

@@ -36,6 +36,8 @@ export class JobsPage {
     todaysPage:1;
     todaysTotalPages:0;
     pageSort:15;
+
+    searchCriteria:any;
     private scannedLocationId: any;
 
     constructor(public navCtrl: NavController, public navParams:NavParams,public component:componentService, public authService: authService,
@@ -129,16 +131,7 @@ export class JobsPage {
 
         var searchCriteria = {};
         var msg='';
-        if(this.scannedLocationId){
-            console.log("Location Id in job search ");
-            console.log(this.scannedLocationId)
-            searchCriteria = {
-                checkInDateTimeFrom:new Date(),
-                locationId:this.scannedLocationId,
-                siteId:this.scannedSiteId
-            };
-            msg='Unable to fetch jobs of the location '+this.scannedLocationId+' in site '+this.scannedSiteId;
-        }else if(this.scannedBlock && this.scannedFloor && this.scannedZone){
+        if(this.scannedBlock && this.scannedFloor && this.scannedZone){
 
             console.log("No location id present");
             console.log(this.scannedBlock);
@@ -147,7 +140,12 @@ export class JobsPage {
                 siteId:this.scannedSiteId,
                 block:this.scannedBlock,
                 floor:this.scannedFloor,
-                zone:this.scannedZone
+                zone:this.scannedZone,
+                currPage:1,
+                columnName:"plannedStartTime",
+                sortByAsc:true,
+                sort:10
+
             };
             msg = 'Unable to fetch jobs for the location '+this.scannedBlock+' - '+this.scannedFloor+' - '+this.scannedZone;
         }else{
@@ -279,11 +277,57 @@ export class JobsPage {
         console.log('Begin async operation');
         console.log(infiniteScroll);
         console.log(this.totalPages);
-        console.log(this.page);
-        var searchCriteria ={
-            currPage:this.page+1
+        console.log(this.page)
 
-        };
+        var searchCriteria = {};
+        var msg="";
+
+        if(this.scannedLocationId){
+            console.log("Location Id in job search ");
+            console.log(this.scannedLocationId)
+            searchCriteria = {
+                checkInDateTimeFrom:new Date(),
+                locationId:this.scannedLocationId,
+                siteId:this.scannedSiteId,
+                currPage:this.page+1,
+                columnName:"plannedStartTime",
+                sortByAsc:true,
+                sort:10
+            };
+            msg='Unable to fetch jobs of the location '+this.scannedLocationId+' in site '+this.scannedSiteId;
+        }else if(this.scannedBlock && this.scannedFloor && this.scannedZone){
+
+            console.log("No location id present");
+            console.log(this.scannedBlock);
+            searchCriteria={
+                checkInDateTimeFrom:new Date(),
+                siteId:this.scannedSiteId,
+                block:this.scannedBlock,
+                floor:this.scannedFloor,
+                zone:this.scannedZone,
+                currPage:this.page+1,
+                columnName:"plannedStartTime",
+                sortByAsc:true,
+                sort:10
+
+            };
+            msg = 'Unable to fetch jobs for the location '+this.scannedBlock+' - '+this.scannedFloor+' - '+this.scannedZone;
+        }else{
+            console.log("Scanned location Id or block floor zone not available");
+            searchCriteria = {
+                checkInDateTimeFrom:new Date(),
+                locationId:this.scannedLocationId,
+                siteId:this.scannedSiteId,
+                currPage:this.page+1,
+                columnName:"plannedStartTime",
+                sortByAsc:true,
+                sort:10
+
+            };
+            msg='Unable to fetch today\'s jobs ';
+        }
+
+
         if(this.page>this.totalPages){
             console.log("End of all pages");
             infiniteScroll.complete();
@@ -321,10 +365,41 @@ export class JobsPage {
         console.log(infiniteScroll);
         console.log(this.todaysTotalPages);
         console.log(this.todaysPage);
-        var searchCriteria ={
-            checkInDateTimeFrom:new Date(),
-            currPage:this.todaysPage+1
-        };
+        console.log(this.page);
+        var searchCriteria = {};
+        var msg="";
+
+         if(this.scannedBlock && this.scannedFloor && this.scannedZone){
+
+            console.log("No location id present");
+            console.log(this.scannedBlock);
+            searchCriteria={
+                checkInDateTimeFrom:new Date(),
+                siteId:this.scannedSiteId,
+                block:this.scannedBlock,
+                floor:this.scannedFloor,
+                zone:this.scannedZone,
+                currPage:this.todaysPage+1,
+                columnName:"plannedStartTime",
+                sortByAsc:true,
+                sort:10
+
+            };
+            msg = 'Unable to fetch jobs for the location '+this.scannedBlock+' - '+this.scannedFloor+' - '+this.scannedZone;
+        }else{
+            console.log("Scanned location Id or block floor zone not available");
+            searchCriteria = {
+                checkInDateTimeFrom:new Date(),
+                // locationId:this.scannedLocationId,
+                siteId:this.scannedSiteId,
+                currPage:this.todaysPage+1,
+                columnName:"plannedStartTime",
+                sortByAsc:true,
+                sort:10
+
+            };
+            msg='Unable to fetch today\'s jobs ';
+        }
         if(this.todaysPage>this.todaysTotalPages){
             console.log("End of all pages");
             infiniteScroll.complete();
@@ -366,5 +441,6 @@ export class JobsPage {
     scanQR(){
         this.navCtrl.push(ScanQR);
     }
+
 
 }

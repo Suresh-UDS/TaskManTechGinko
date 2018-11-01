@@ -168,6 +168,7 @@ angular.module('timeSheetApp')
                     $scope.project.addressLat = data.addressLat;
                     $scope.project = data;
                     $scope.selectedClientGroup ={clientgroup:$scope.project.clientGroup};
+                    $scope.title = $scope.project.name;
                     if(!$scope.project){
                        $location.path('/projects');
                     }
@@ -382,6 +383,7 @@ angular.module('timeSheetApp')
                              $scope.searchProject = null;
                              $scope.client.selected = $scope.allClients;
                         }
+                        
 
                     }
 

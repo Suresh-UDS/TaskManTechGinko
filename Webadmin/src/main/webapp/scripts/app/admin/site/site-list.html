@@ -37,12 +37,12 @@
 
     <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
             <span class="AppliedFilterTxtCon">
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.projectName || localStorage.projectName">
-                    Client: {{searchCriteria.projectName || localStorage.projectName}}
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="client.selected.id !=0 && client.selected.id !=null">
+                    Client: {{client.selected.name}}
                 </span>
 
-                <span class="tag label label-info"  ng-show="searchCriteria.siteName || localStorage.siteName">
-                    Site: {{searchCriteria.siteName || localStorage.siteName}}
+                <span class="tag label label-info"  ng-show="sitesListOne.selected.id !=0 && sitesListOne.selected.id !=null">
+                    Site: {{sitesListOne.selected.name}}
                 </span>
             </span>
     </div>
@@ -230,7 +230,7 @@
                                         <!--<option value="">Select Client...</option>-->
                                     <!--</select>-->
                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                    <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                     <!-- <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable">
                                         <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select client' :clearField?'Select client':searchProject}}</ui-select-match>
                                         <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search" ng-click="loadDepSites(searchProject)">
@@ -238,7 +238,7 @@
                                         </ui-select-choices>
                                     </ui-select> -->
                                     <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
-									  <ui-select-match placeholder="Select clients...">{{$select.selected.name}}</ui-select-match>
+									  <ui-select-match placeholder="Select clients..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
 									  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected)" null-option="allClients" loose-null>
 									    <span ng-bind-html="client.name | highlight: $select.search"></span>
 									  </ui-select-choices>
@@ -255,7 +255,7 @@
                                         <!--<option value="">Select Site...</option>-->
                                     <!--</select>-->
                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                    <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <span ng-show="!siteSpin && !sitesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                     <!--<span class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>-->
                                     <!-- <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable ||sitesList.length == 0">
                                         <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select site' : hideSite ?clearField?'Select site':searchSite : 'Select Site' }}</ui-select-match>
@@ -265,7 +265,7 @@
                                     </ui-select>
                                     <span ng-if="sitesList.length == 0"><p class="error-msg margin0">No sites</p></span> -->
                                     <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
-									  <ui-select-match placeholder="Select site...">{{$select.selected.name}}</ui-select-match>
+									  <ui-select-match placeholder="Select site..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
 									  <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search" null-option="allSites" loose-null>
 									    <span ng-bind-html="sitesListOne.name | highlight: $select.search"></span>
 									  </ui-select-choices>

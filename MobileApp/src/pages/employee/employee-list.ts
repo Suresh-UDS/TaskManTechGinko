@@ -231,28 +231,6 @@ export class EmployeeList {
         });
 
 
-        // var config: BackgroundGeolocationConfig = {
-        //
-        //     desiredAccuracy: 10,
-        //     stationaryRadius: 20,
-        //     distanceFilter: 30,
-        //     debug: true,
-        //     stopOnTerminate: false,
-        // };
-        //
-        // this.backgroundGeolocation.configure(config)
-        //     .subscribe((location: BackgroundGeolocationResponse) => {
-        //
-        //         console.log(location);
-        //
-        //     });
-        //
-        // this.backgroundGeolocation.getStationaryLocation().then(
-        //     response=>{
-        //         console.log(response);
-        //     }
-        // )
-
 
     }
 
