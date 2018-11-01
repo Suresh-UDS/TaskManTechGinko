@@ -334,7 +334,7 @@ public class SchedulerHelperService extends AbstractService {
 			// alertEmailIds = overdueEmails.getSettingValue();
 			// }
 
-			List<Job> overDueJobs = jobRepository.findOverdueJobsByStatusAndEndDateTime(cal.getTime());
+			List<Job> overDueJobs = jobRepository.findOverdueJobsByStatusAndEndDateTime(DateUtil.convertToSQLDate(cal.getTime()));
 			log.debug("Found {} overdue jobs", (overDueJobs != null ? overDueJobs.size() : 0));
 
 			if (CollectionUtils.isNotEmpty(overDueJobs)) {
