@@ -500,6 +500,13 @@ angular.module('timeSheetApp')
 
         // Stacked colum charts
 
+        // var seriesObj1={
+        //     name:['Assigned','Overdue','Completed']
+        // };
+        // var seriesObj2={
+        //     data:[5, 3, 4, 7, 2]
+        // };
+
         var jobxdata=['19/10/2018', '20/10/2018', '21/10/2018', '22/10/2018', '23/10/2018'];
 
 
@@ -565,7 +572,7 @@ angular.module('timeSheetApp')
         // Sample data for pie chart
         $scope.pieData = [{
             name: "AC & APPLIANCES",
-            y: 20
+            y: 12
         },{
             name: "CLEANING",
             y: 30
@@ -1077,7 +1084,7 @@ angular.module('timeSheetApp')
             }
         });
 
-
+        var quotationxdata = ['15/10/2018', '16/10/2018', '17/10/2018', '18/10/2018', '19/10/2018', '20/10/2018', '21/10/2018', '22/10/2018', '23/10/2018',]
 
         Highcharts.chart('quotationStackedCharts', {
             chart: {
@@ -1087,7 +1094,7 @@ angular.module('timeSheetApp')
                 text: 'Quotation Status'
             },
             xAxis: {
-                categories: ['15/10/2018', '16/10/2018', '17/10/2018', '18/10/2018', '19/10/2018', '20/10/2018', '21/10/2018', '22/10/2018', '23/10/2018',]
+                categories: quotationxdata
             },
             yAxis: {
                 min: 0,
@@ -1128,16 +1135,16 @@ angular.module('timeSheetApp')
             },
             series: [{
                 name: 'Waiting for Approval',
-                data: [8, 3, 4, 7, 2,5, 3, 4, 7]
+                data: [8, 3, 4, 7, 2,5, 3, 7, 2]
             }, {
                 name: 'Rejected',
-                data: [7, 2, 3, 2, 1,5, 3, 4, 7]
+                data: [7, 2, 3, 2, 1,7, 5, 3, 8]
             }, {
                 name: 'Approved',
-                data: [6, 2, 3, 2, 1,5, 3, 4, 7]
+                data: [6, 2, 3, 2, 1,2, 2, 8, 9]
             }, {
                 name: 'Pending',
-                data: [8, 4, 4, 2, 5,5, 3, 4, 7]
+                data: [8, 4, 4, 2, 5,9, 9, 6, 5]
             }]
         });
 
