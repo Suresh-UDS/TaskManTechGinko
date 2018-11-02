@@ -25,10 +25,41 @@ page-add-expense {
     border-bottom:1px solid #ccc !important;
   }
   .form-group.label-static label.control-label, .form-group.label-floating.is-focused label.control-label, .form-group.label-floating:not(.is-empty) label.control-label {
-    top: -21px !important;
+    top: -31px !important;
     left: 0;
     font-size: 11px;
     line-height: 1.0714285718;
+  }
+  .select-drop{
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }
+  .select-md .select-placeholder{
+    color: #000 !important;
+  }
+  .radio-label{
+    text-align: left !important;
+  }
+  .border{
+    border: 1px solid #EEEEEE !important;
+    height: 40px;
+    padding-left: 10px;
+    background-image: none !important;
+    border-radius: 3px;  }
+  .border-none{
+    border-bottom: none !important;
+  }
+  .client-label{
+    padding-left: 10px !important;
+  }
+  .radio-margin{
+    margin: 11px 10px 15px 0px !important;
+  }
+  .date-border{
+    border: 1px solid #EEEEEE !important;
+    height: 40px;
+    background-image: none !important;
+    border-radius: 3px;
   }
 
 }

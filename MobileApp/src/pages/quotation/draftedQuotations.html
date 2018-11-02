@@ -20,7 +20,7 @@
 
         <ion-item *ngFor="let quotation of quotations;let i of index" class="border-btm-dotted emp QuotationListContent" (click)="viewQuotation(quotation)">
 
-            <ion-icon name="ios-mail-outline" class="q-mail-round icon-round-orange" item-start></ion-icon>
+            <ion-icon name="ios-mail-outline" class="no-border icon-round-orange mail-icon" item-start></ion-icon>
             {{quotation.title}}
             <ion-icon class="grey fnt-24" name="ios-arrow-forward-outline" item-end></ion-icon>
         </ion-item>

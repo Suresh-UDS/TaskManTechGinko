@@ -14,6 +14,9 @@
 
 
 <ion-content class="CreateTicketPage FormPage">
+  <ion-fab right bottom>
+    <button (click)="createTicket()" ion-fab><ion-icon name="checkmark"></ion-icon></button>
+  </ion-fab>
     <div class="row">
         <div class="col-md-8">
             <div class="card">
@@ -218,10 +221,10 @@
     </div>
 </ion-content>
 
-<ion-footer>
+<!--<ion-footer>
     <ion-toolbar class="align-center" >
         <button class="btn btn-warning center margin-auto" type="submit" (click)="createTicket()">
             Add
         </button>
     </ion-toolbar>
-</ion-footer>
+</ion-footer>-->

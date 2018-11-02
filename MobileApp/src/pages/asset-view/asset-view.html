@@ -61,7 +61,7 @@
                       </ion-col>
                     </ion-col>
                     <ion-col col-2 class="">
-                      <button ion-button round class="color-white" (click)="dateSearch(fromDate,toDate,categories)" [disabled]="!viewButton">
+                      <button ion-button round class="color-white search-button" (click)="dateSearch(fromDate,toDate,categories)" [disabled]="!viewButton">
                         <ion-icon name="search" class="fnt-30"></ion-icon>
                       </button>
                     </ion-col>
@@ -742,12 +742,12 @@
             </ion-card>
         </div>
 
-      <div *ngIf="assetDetails.reading">
+      <!--<div *ngIf="assetDetails.reading">
         <ion-card *ngFor="let readings of assetDetails.reading">
           <ion-row>
             <ion-col col-6 style="text-align: center;">
               <p style="color: #ff9800">Date</p>
-              <p>{{readings.createdDate|date:'dd/MM/YY'}}</p>
+              <p>{{readings.createdDate|date:'dd/MM/YYYY'}}</p>
               <p>{{readings.createdDate|date : 'hh:mm a'}}</p>
             </ion-col>
             <ion-col col-6  style="text-align: center;">
@@ -782,12 +782,12 @@
           </ion-row>
         </ion-card>
 
-      </div>
+      </div>-->
 
 
 
 
-       <!-- <div *ngIf="assetDetails.reading">
+        <div *ngIf="assetDetails.reading">
             <div class="card-content card cardWithRadius" >
                 <div class="table-responsive">
                     <table class="table table-scroll">
@@ -818,7 +818,7 @@
                 </div>
                 </div>
 
-            </div>-->
+            </div>
         <ion-infinite-scroll *ngIf="page<totalPages" (ionInfinite)="readingScroll($event)">
             <ion-infinite-scroll-content></ion-infinite-scroll-content>
         </ion-infinite-scroll>

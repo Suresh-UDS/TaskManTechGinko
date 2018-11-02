@@ -111,7 +111,6 @@ export class InventoryFilter {
     }
 
     dismiss(){
-
         this.viewCtrl.dismiss({project:this.selectedProject,site:this.selectedSite});
     }
 
