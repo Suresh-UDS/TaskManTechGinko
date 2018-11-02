@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {IonicPage, LoadingController, NavController, NavParams, ToastController} from 'ionic-angular';
+import {Alert, IonicPage, LoadingController, NavController, NavParams, ToastController} from 'ionic-angular';
 import {AttendanceListPage} from "../attendance-list/attendance-list";
 import {authService} from "../service/authService";
 import {Camera, CameraOptions} from "@ionic-native/camera";
@@ -13,7 +13,10 @@ import {componentService} from "../service/componentService";
 import {AttendanceViewPage} from "../attendance-view/attendance-view";
 import {Diagnostic} from "@ionic-native/diagnostic";
 import {LocationAccuracy} from "@ionic-native/location-accuracy";
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+import {AlertController} from "ionic-angular";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+// import {swal} from "../calender-page/calender-page";
 
 
 declare  var demo ;
@@ -51,7 +54,7 @@ export class EmployeeList {
 
     fakeEmployeeList: Array<any> = new Array(12);
     constructor(public navCtrl: NavController,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
-                private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,private locationAccuracy:LocationAccuracy,
+                private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,private locationAccuracy:LocationAccuracy, public alertController:AlertController,
                 private geoFence:Geofence, private employeeService: EmployeeService, private jobService: JobService, private siteService:SiteService, private attendanceService:AttendanceService, private diagonistic:Diagnostic) {
 
         this.lattitude = 0;
@@ -285,7 +288,15 @@ export class EmployeeList {
             this.getEmployees();
             if(response.errorStatus){
                 var msg='Face Verified and Attendance marked Successfully';
-                demo.showSwal('warning-message-and-confirmation-ok','Error in Marking Attendance',response.errorMessage);
+
+                let alert =this.alertController.create({
+                    title:'Success',
+                    subTitle:'Attendance Marked Successfully',
+                    buttons:['Dismiss']
+                });
+
+                alert.present();
+
             }else{
                 demo.showSwal('success','Success','Face Verified and Attendance marked Successfully');
 
@@ -306,7 +317,13 @@ export class EmployeeList {
             this.getEmployees();
             if(response.errorStatus){
                 var msg='Face Verified and Attendance marked Successfully';
-                demo.showSwal('warning-message-and-confirmation-ok','Error in Marking Attendance',response.errorMessage);
+                let alert =this.alertController.create({
+                    title:'Success',
+                    subTitle:'Attendance Marked Successfully',
+                    buttons:['Dismiss']
+                });
+
+                alert.present();
             }else{
                 demo.showSwal('success','Success','Face Verified and Attendance marked Successfully');
 
