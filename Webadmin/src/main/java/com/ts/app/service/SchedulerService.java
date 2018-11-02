@@ -206,7 +206,7 @@ public class SchedulerService extends AbstractService {
 
 //	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
 	// @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
-	@Scheduled(cron = "0 0 23 1/1 * ?")
+	@Scheduled(cron = "0 0 19 1/1 * ?")
 	public void createDailyTask() {
 		if (env.getProperty("scheduler.dailyJob.enabled").equalsIgnoreCase("true")) {
             log.debug("Daily jobs enabled");
@@ -326,7 +326,7 @@ public class SchedulerService extends AbstractService {
 
 //	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
 	// @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
-	@Scheduled(cron = "0 0 23 1/1 * ?")
+	@Scheduled(cron = "0 0 19 1/1 * ?")
 	public void createWeeklyTask() {
 		if (env.getProperty("scheduler.weeklyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -423,7 +423,7 @@ public class SchedulerService extends AbstractService {
 
 //	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
 	// @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
-	@Scheduled(cron = "0 0 23 1/1 * ?")
+	@Scheduled(cron = "0 0 19 1/1 * ?")
 	public void createMonthlyTask() {
 		if (env.getProperty("scheduler.monthlyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -465,7 +465,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(cron = "0 0 23 1/1 * ?")
+	@Scheduled(cron = "0 0 19 1/1 * ?")
 	public void createFortnightlyTask() {
 		if (env.getProperty("scheduler.fortnightlyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -498,7 +498,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(cron = "0 0 23 1/1 * ?")
+	@Scheduled(cron = "0 0 19 1/1 * ?")
 	public void createQuarterlyTask() {
 		if (env.getProperty("scheduler.quarterlyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -530,7 +530,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(cron = "0 0 23 1/1 * ?")
+	@Scheduled(cron = "0 0 19 1/1 * ?")
 	public void createHalfYearlyTask() {
 		if (env.getProperty("scheduler.halfyearlyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -562,7 +562,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(cron = "0 0 23 1/1 * ?")
+	@Scheduled(cron = "0 0 19 1/1 * ?")
 	public void createYearlyTask() {
 		if (env.getProperty("scheduler.yearlyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
