@@ -24,7 +24,12 @@ angular.module('timeSheetApp')
         $scope.noData = false;
         $scope.btnDisable = false;
         console.log($stateParams)
-                    var that =  $scope;
+        var that =  $scope;
+        
+        /** Ui-select scopes **/
+        $scope.allAssetType = {id:0 , name: '-- ALL ASSET TYPE --'};
+        $scope.assetTypesListOne = {};
+        $scope.assetTypesLists = [];
 
         $scope.calendar = {
             actualStart : false,
@@ -94,11 +99,13 @@ angular.module('timeSheetApp')
                 //$scope.selectedAssetType = null;
                 $scope.assetTypes = data;
                 console.log('Asset type',$scope.assetTypes);
-
+                /** Ui-select scope **/
+                $scope.assetTypesLists[0] = $scope.allAssetType;
                 //Filter
                     for(var i=0;i<$scope.assetTypes.length;i++)
                     {
                         $scope.uiAssetType[i] = $scope.assetTypes[i].name;
+                        $scope.assetTypesLists[i+1] = $scope.assetTypes[i];
                     }
                     $scope.assetTypeDisable = false;
 
@@ -144,6 +151,7 @@ angular.module('timeSheetApp')
                         $scope.manufacturer=data;
                       if($scope.manufacturer){
                           $scope.selectedAssetType = {name : $scope.manufacturer.assetType};
+                          $scope.title=$scope.manufacturer.name;
                           console.log('Manufacturer details by id',$scope.manufacturer);
                       }else{
                           $location.path('/manufacturer-list');
@@ -186,6 +194,7 @@ angular.module('timeSheetApp')
         }
 
         $scope.searchFilter = function () {
+        	$('.BasicFilterModal.in').modal('hide');
             $scope.setPage(1);
             $scope.search();
          }
@@ -203,6 +212,13 @@ angular.module('timeSheetApp')
 
 
             $scope.searchCriteria.currPage = currPageVal;
+            
+            if($scope.assetTypesListOne.selected && $scope.assetTypesListOne.selected.id !=0){
+        		$scope.searchAssetType = $scope.assetTypesListOne.selected;
+        	}else{
+        	   $scope.searchAssetType = null;
+        	}
+            
             $scope.searchCriteria.findAll = false;
 
              if(!$scope.searchName && !$scope.searchAssetType) {
@@ -216,8 +232,10 @@ angular.module('timeSheetApp')
             }
             if($scope.searchAssetType) {
                 $scope.searchCriteria.assetTypeName = $scope.searchAssetType.name;
+                $scope.searchCriteria.assetTypeId = $scope.searchAssetType.id;
             }else{
                 $scope.searchCriteria.assetTypeName = null;
+                $scope.searchCriteria.assetTypeId = 0;
             }
 
 
@@ -253,14 +271,16 @@ angular.module('timeSheetApp')
                     $scope.filter = true;
                     $scope.pages.currPage = $scope.localStorage.currPage;
                     if($scope.localStorage.assetTypeName){
-                        $scope.searchAssetType = {name:$scope.localStorage.assetTypeName};
+                        $scope.searchAssetType = {id:$scope.localStorage.assetTypeId,name:$scope.localStorage.assetTypeName};
+                        $scope.assetTypesListOne.selected = $scope.searchAssetType;
                     }else{
-                        $scope.searchAssetType = "";
+                        $scope.searchAssetType = null;
+                        $scope.assetTypesListOne.selected = $scope.searchAssetType;
                     }
                     if($scope.localStorage.manufacturerName){
-                        $scope.searchCriteria.manufacturerName = $scope.localStorage.manufacturerName;
+                    	 $scope.searchName = $scope.localStorage.manufacturerName;
                     }else{
-                        $scope.searchCriteria.manufacturerName = "";
+                    	 $scope.searchName = "";
                     }
 
                     // $scope.searchName = {searchStatus:'0',manufacturerName:$scope.localStorage.manufacturerName};
@@ -454,6 +474,8 @@ angular.module('timeSheetApp')
             $scope.selectedAssetType = null;
             $scope.selectedName = null;
             $scope.searchAssetType = null;
+            /** Ui-select scopes **/
+        	$scope.assetTypesListOne.selected = null;
             $scope.localStorage = null;
             $scope.searchName = null;
             $scope.searchCriteria = {};
