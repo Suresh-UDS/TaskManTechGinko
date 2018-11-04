@@ -243,7 +243,7 @@ public class ExportUtil {
 									.printRecord("CLIENT - " + projName + "  SITE - " + transaction.getSiteName());
 						}
 						List record = new ArrayList();
-						log.debug("Writing transaction record for site :" + transaction.getSiteName());
+						//log.debug("Writing transaction record for site :" + transaction.getSiteName());
 						record.add(transaction.getSiteName());
 						record.add(transaction.getLocatinName());
 						record.add(transaction.getAssignedJobCount());

@@ -2127,7 +2127,27 @@ public class SchedulerHelperService extends AbstractService {
 		//								cal.getTime(), sb.toString());
 		//					}
 		//				}
-				}	
+				}else {
+					sb.append("<tr bgcolor=\"FFD966\">");
+					sb.append("<td><b>" + proj.getName() + "</b></td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("</tr>");
+				}
 
 			}
 			sb.append("</table>");
