@@ -875,6 +875,7 @@ public class SchedulerHelperService extends AbstractService {
 					List<EmployeeAttendanceReport> empAttnList = new ArrayList<EmployeeAttendanceReport>();
 					List<EmployeeAttendanceReport> siteAttnList = null;
 					StringBuilder content = new StringBuilder();
+					siteItr = sites.iterator();
 					while (siteItr.hasNext()) {
 						Site site = siteItr.next();
 
