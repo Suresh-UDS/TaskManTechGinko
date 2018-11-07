@@ -186,7 +186,7 @@ export class EmployeeList {
         this.camera.getPicture(options).then((imageData) => {
             let base64Image = 'data:image/jpeg;base64,' + imageData;
             var employeeName = employee.fullName+employee.empId;
-            this.component.showLoader("Enrolling Face..")
+            this.component.showLoader("Getting Face..")
             this.checkProximity(this.site.id,base64Image,mode,attendanceMode,employee);
             // this.enrollFace(employee,base64Image);
             // this.navCtrl.push(AttendanceViewPage,imageData)
@@ -214,6 +214,12 @@ export class EmployeeList {
     checkProximity(siteId,imageData,mode,attendanceMode,employee){
 
         // this.component.showLoader('Getting Location..');
+        this.component.closeAll();
+        this.component.showLoader("Getting Locations...");
+
+        // demo.showSwal('success-message-and-ok','Success','Checking Site Proximity');
+
+        this.locationProvider.startTracking();
 
         let config = {
             desiredAccuracy: 0,
@@ -224,33 +230,52 @@ export class EmployeeList {
         };
 
         this.backgroundGeolocation.configure(config).subscribe((response) => {
+
+            this.component.closeAll();
+            this.component.showLoader("Verifying Location...");
+            console.log("Response from background geo location");
             console.log(response);
 
-            if(response.latitude && response.longitude>0){
-                this.attendanceService.checkSiteProximity(siteId,response.latitude,response.longitude).subscribe(
-                    response=> {
-                        this.component.closeAll();
-                        this.verifyFaceAndMarkAttendance(employee,mode,response.latitude,response.longitude,attendanceMode,imageData);
+            console.log(response.latitude);
+            console.log(response.longitude);
+            if(response.latitude && response.longitude){
+                console.log("if condition verified");
 
-                    },error=>{
-                        console.log("errors");
-                        this.component.closeAll();
-                        // demo.showSwal('warning-message-and-confirmation-ok',"Location Error", "Please check-in/out from site location   ");
-                        this.verifyFaceAndMarkAttendance(employee,mode,response.latitude,response.longitude,attendanceMode,imageData);
+                if(response.latitude && response.longitude>0){
+                    this.attendanceService.checkSiteProximity(siteId,response.latitude,response.longitude).subscribe(
+                        response=> {
+                            this.component.closeAll();
+                            this.locationProvider.stopTracking();
+                            this.verifyFaceAndMarkAttendance(employee,mode,response.latitude,response.longitude,attendanceMode,imageData);
+
+                        },error=>{
+                            console.log("errors");
+                            this.component.closeAll();
+                            this.locationProvider.stopTracking();
+                            demo.showSwal('warning-message-and-confirmation-ok',"Location Error", "Please check-in/out from site location   ");
+                            // this.verifyFaceAndMarkAttendance(employee,mode,response.latitude,response.longitude,attendanceMode,imageData);
 
 
-                    })
-            }else{
-                this.component.closeAll();
-                console.log("error in getting current location");
-                demo.showSwal('warning-message-and-confirmation-ok',"Location Error", "Error in getting location..");
-                // this.verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData);
-                console.log(response);
+                        })
+                }else{
+                    this.component.closeAll();
+                    console.log("error in getting current location");
+                    demo.showSwal('warning-message-and-confirmation-ok',"Location Error", "Error in getting location..");
+                    // this.verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData);
+                    console.log(response);
+
+                }
 
             }
 
+            // this.locationProvider.stopTracking();
+
+
+
         },err=>{
+            // demo.showSwal('warning-message-and-confirmation-ok','Failure','Error in getting background location');
             this.component.closeAll();
+            console.log("Error from background geo location");
             console.log(err);
         });
 
@@ -272,7 +297,9 @@ export class EmployeeList {
                 }else{
                     var verificationResponse = response;
                     console.log(verificationResponse);
-                    this.component.showToastMessage('Face Enrolled successfully..','bottom');
+                    // this.component.showToastMessage('Face Enrolled successfully..','bottom');
+                    demo.showSwal('success-message-and-ok','Success','Face Enrolled Successfully');
+
                 }
 
             },error=>{
@@ -307,7 +334,8 @@ export class EmployeeList {
                 var msg='Face Verified and Attendance marked Successfully';
                 demo.showSwal('warning-message-and-confirmation-ok','Error in Marking Attendance',response.errorMessage);
             }else{
-                demo.showSwal('success','Success','Face Verified and Attendance marked Successfully');
+                this.getEmployees();
+                demo.showSwal('success-message-and-ok','Success','Face Verified and Attendance marked Successfully');
 
             }
         },error=>{
@@ -328,7 +356,8 @@ export class EmployeeList {
                 var msg='Face Verified and Attendance marked Successfully';
                 demo.showSwal('warning-message-and-confirmation-ok','Error in Marking Attendance',response.errorMessage);
             }else{
-                demo.showSwal('success','Success','Face Verified and Attendance marked Successfully');
+                this.getEmployees();
+                demo.showSwal('success-message-and-ok','Success','Face Verified and Attendance marked Successfully');
 
             }
         },error=>{

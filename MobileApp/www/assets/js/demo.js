@@ -647,7 +647,7 @@ demo = {
                 text: txt,
                 type: 'success',
                 showCancelButton: false,
-                confirmButtonClass: 'btn btn-danger',
+                confirmButtonClass: 'btn btn-success',
                 cancelButtonClass: 'btn btn-danger',
                 confirmButtonText: 'Ok',
                 buttonsStyling: false
