@@ -244,9 +244,9 @@ public class SchedulerService extends AbstractService {
 
 		List<SchedulerConfig> dailyTasks = null;
 		if(CollectionUtils.isNotEmpty(siteIds)) {
-			dailyTasks = schedulerConfigRepository.getDailyTask(cal.getTime(), siteIds);
+			dailyTasks = schedulerConfigRepository.getDailyTask(startDate, siteIds);
 		}else {
-			dailyTasks = schedulerConfigRepository.getDailyTask(cal.getTime());
+			dailyTasks = schedulerConfigRepository.getDailyTask(startDate);
 		}
 		log.debug("Found {} Daily Tasks", dailyTasks.size());
 		ExecutorService executorService = Executors.newFixedThreadPool(50); //Executes job creation task for each schedule asynchronously
@@ -338,7 +338,7 @@ public class SchedulerService extends AbstractService {
 			endCal.set(Calendar.HOUR_OF_DAY, 23);
 			endCal.set(Calendar.MINUTE, 59);
 			//List<SchedulerConfig> weeklyTasks = schedulerConfigRepository.getWeeklyTask(cal.getTime());
-			List<SchedulerConfig> weeklyTasks = schedulerConfigRepository.findScheduledTask(cal.getTime(), Frequency.WEEK.getValue());
+			List<SchedulerConfig> weeklyTasks = schedulerConfigRepository.findScheduledTask(DateUtil.convertToSQLDate(cal.getTime()), Frequency.WEEK.getValue());
 			log.debug("Found {} Weekly Tasks", weeklyTasks.size());
 
 			if (CollectionUtils.isNotEmpty(weeklyTasks)) {
@@ -435,7 +435,7 @@ public class SchedulerService extends AbstractService {
 			endCal.set(Calendar.HOUR_OF_DAY, 23);
 			endCal.set(Calendar.MINUTE, 59);
 			//List<SchedulerConfig> monthlyTasks = schedulerConfigRepository.getMonthlyTask(cal.getTime());
-			List<SchedulerConfig> monthlyTasks = schedulerConfigRepository.findScheduledTask(cal.getTime(), Frequency.MONTH.getValue());
+			List<SchedulerConfig> monthlyTasks = schedulerConfigRepository.findScheduledTask(DateUtil.convertToSQLDate(cal.getTime()), Frequency.MONTH.getValue());
 			log.debug("Found {} Monthly Tasks", monthlyTasks.size());
 
 			if (CollectionUtils.isNotEmpty(monthlyTasks)) {
@@ -477,7 +477,7 @@ public class SchedulerService extends AbstractService {
 			endCal.set(Calendar.HOUR_OF_DAY, 23);
 			endCal.set(Calendar.MINUTE, 59);
 			//List<SchedulerConfig> monthlyTasks = schedulerConfigRepository.getMonthlyTask(cal.getTime());
-			List<SchedulerConfig> fortnightlyTasks = schedulerConfigRepository.findScheduledTask(cal.getTime(), Frequency.FORTNIGHT.getValue());
+			List<SchedulerConfig> fortnightlyTasks = schedulerConfigRepository.findScheduledTask(DateUtil.convertToSQLDate(cal.getTime()), Frequency.FORTNIGHT.getValue());
 			log.debug("Found {} Monthly Tasks", fortnightlyTasks.size());
 
 			if (CollectionUtils.isNotEmpty(fortnightlyTasks)) {
@@ -509,7 +509,7 @@ public class SchedulerService extends AbstractService {
 			endCal.add(Calendar.DAY_OF_MONTH, 1);
 			endCal.set(Calendar.HOUR_OF_DAY, 23);
 			endCal.set(Calendar.MINUTE, 59);
-			List<SchedulerConfig> quarterlyTasks = schedulerConfigRepository.findScheduledTask(cal.getTime(), Frequency.QUARTER.getValue());
+			List<SchedulerConfig> quarterlyTasks = schedulerConfigRepository.findScheduledTask(DateUtil.convertToSQLDate(cal.getTime()), Frequency.QUARTER.getValue());
 			log.debug("Found {} Monthly Tasks", quarterlyTasks.size());
 
 			if (CollectionUtils.isNotEmpty(quarterlyTasks)) {
@@ -541,7 +541,7 @@ public class SchedulerService extends AbstractService {
 			endCal.add(Calendar.DAY_OF_MONTH, 1);
 			endCal.set(Calendar.HOUR_OF_DAY, 23);
 			endCal.set(Calendar.MINUTE, 59);
-			List<SchedulerConfig> halfyearlyTasks = schedulerConfigRepository.findScheduledTask(cal.getTime(), Frequency.HALFYEAR.getValue());
+			List<SchedulerConfig> halfyearlyTasks = schedulerConfigRepository.findScheduledTask(DateUtil.convertToSQLDate(cal.getTime()), Frequency.HALFYEAR.getValue());
 			log.debug("Found {} Monthly Tasks", halfyearlyTasks.size());
 
 			if (CollectionUtils.isNotEmpty(halfyearlyTasks)) {
@@ -573,7 +573,7 @@ public class SchedulerService extends AbstractService {
 			endCal.add(Calendar.DAY_OF_MONTH, 1);
 			endCal.set(Calendar.HOUR_OF_DAY, 23);
 			endCal.set(Calendar.MINUTE, 59);
-			List<SchedulerConfig> yearlyTasks = schedulerConfigRepository.findScheduledTask(cal.getTime(), Frequency.YEAR.getValue());
+			List<SchedulerConfig> yearlyTasks = schedulerConfigRepository.findScheduledTask(DateUtil.convertToSQLDate(cal.getTime()), Frequency.YEAR.getValue());
 			log.debug("Found {} Monthly Tasks", yearlyTasks.size());
 
 			if (CollectionUtils.isNotEmpty(yearlyTasks)) {
@@ -1113,7 +1113,10 @@ public class SchedulerService extends AbstractService {
 				if (shouldProcess) {
 					List<Job> job = jobRepository.findJobsByParentJobIdAndDate(parentJob.getId(), DateUtil.convertToSQLDate(jobDate), DateUtil.convertToSQLDate(jobDate));
 					if (CollectionUtils.isEmpty(job)) {
-						createJob(parentJob, dataMap, jobDate, eHrs, sHrs, eHrs, jobs);
+						job = jobRepository.findChildJobByTitleSiteDateAndLocation(parentJob.getTitle(), parentJob.getSite().getId(), DateUtil.convertToSQLDate(parentJob.getPlannedStartTime()), DateUtil.convertToSQLDate(parentJob.getPlannedStartTime()), parentJob.getBlock(), parentJob.getFloor(), parentJob.getZone());
+						if(CollectionUtils.isEmpty(job)) {
+							createJob(parentJob, dataMap, jobDate, eHrs, sHrs, eHrs, jobs);
+						}
 					}
 				}
 			} catch (Exception ex) {
@@ -1263,7 +1266,7 @@ public class SchedulerService extends AbstractService {
 	}
 
 	private List<SchedulerConfig> findScheduledTask(Date taskDate, String schedule) {
-		return schedulerConfigRepository.findScheduledTask(taskDate, schedule);
+		return schedulerConfigRepository.findScheduledTask(DateUtil.convertToSQLDate(taskDate), schedule);
 	}
 
 //	@Scheduled(cron = "0 */5 * * * ?")
