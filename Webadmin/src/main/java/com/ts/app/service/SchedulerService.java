@@ -832,24 +832,37 @@ public class SchedulerService extends AbstractService {
 				}
 			} else if (creationPolicy.equalsIgnoreCase("daily")) {
 				DateTime currDate = DateTime.now();
+				
+				DateTime lastDate = DateTime.now();
+
+				lastDate = lastDate.plusDays(2);
+
+				
 				if(CollectionUtils.isNotEmpty(prevJobs)) {
 					Job prevJob = prevJobs.get(0);
 					currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
 					if(prevJob.getPlannedStartTime().before(currDate.toDate())){
-						if(currDate.isAfter(today) && currDate.isBefore(endDate)) {
-							jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate(), jobDtos);
-							if(CollectionUtils.isNotEmpty(jobDtos)) {
-								jobManagementService.saveScheduledJob(jobDtos);
+						while ((currDate.isBefore(lastDate) || currDate.isEqual(lastDate))) {
+							if(currDate.isAfter(today) && currDate.isBefore(endDate)) {
+								jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate(), jobDtos);
 							}
+							currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
 						}
-					}
-				}else {
-					//currDate = new DateTime(parentJob.getPlannedStartTime().getTime());
-					if((currDate.isAfter(today) || currDate.isEqual(today)) && currDate.isBefore(endDate)) {
-						jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate(), jobDtos);
 						if(CollectionUtils.isNotEmpty(jobDtos)) {
 							jobManagementService.saveScheduledJob(jobDtos);
 						}
+
+					}
+				}else {
+					//currDate = new DateTime(parentJob.getPlannedStartTime().getTime());
+					while ((currDate.isBefore(lastDate) || currDate.isEqual(lastDate))) {
+						if((currDate.isAfter(today) || currDate.isEqual(today)) && currDate.isBefore(endDate)) {
+							jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate(), jobDtos);
+						}
+						currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
+					}
+					if(CollectionUtils.isNotEmpty(jobDtos)) {
+						jobManagementService.saveScheduledJob(jobDtos);
 					}
 				}
 			}
