@@ -1229,7 +1229,7 @@ public class SchedulerHelperService extends AbstractService {
 			java.sql.Date startDate = new java.sql.Date(cal.getTimeInMillis());
 			java.sql.Date endDate = new java.sql.Date(endCal.getTimeInMillis());
 			java.sql.Date tomorrow = new java.sql.Date(nextDay.getTimeInMillis());
-			List<SchedulerConfig> dailyTasks = schedulerConfigRepository.getDailyTask(cal.getTime());
+			List<SchedulerConfig> dailyTasks = schedulerConfigRepository.getDailyTask(startDate);
 			log.debug("Found {} Daily Tasks", dailyTasks.size());
 
 			if (CollectionUtils.isNotEmpty(dailyTasks)) {
