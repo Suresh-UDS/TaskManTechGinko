@@ -1127,7 +1127,7 @@ public class SchedulerService extends AbstractService {
 				if (shouldProcess) {
 					List<Job> job = jobRepository.findJobsByParentJobIdAndDate(parentJob.getId(), DateUtil.convertToSQLDate(jobDate), DateUtil.convertToSQLDate(jobDate));
 					if (CollectionUtils.isEmpty(job)) {
-						job = jobRepository.findChildJobByTitleSiteDateAndLocation(parentJob.getTitle(), parentJob.getSite().getId(), DateUtil.convertToSQLDate(parentJob.getPlannedStartTime()), DateUtil.convertToSQLDate(parentJob.getPlannedStartTime()), parentJob.getBlock(), parentJob.getFloor(), parentJob.getZone());
+						job = jobRepository.findChildJobByTitleSiteDateAndLocation(parentJob.getTitle(), parentJob.getSite().getId(), DateUtil.convertToSQLDate(jobDate), DateUtil.convertToSQLDate(jobDate), parentJob.getBlock(), parentJob.getFloor(), parentJob.getZone());
 						if(CollectionUtils.isEmpty(job)) {
 							createJob(parentJob, dataMap, jobDate, eHrs, sHrs, eHrs, jobs);
 						}
