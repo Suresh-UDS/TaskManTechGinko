@@ -362,6 +362,7 @@ public class JobManagementService extends AbstractService {
 		                    page = jobRepository.findByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds,searchCriteria.getJobStatus(),fromDt,toDt,searchCriteria.isScheduled(),searchCriteria.getLocationId(),pageRequest);
 		                }
 		                */
+		        		/*
 		        		if(searchCriteria.isAssignedStatus()) {
 		        		    log.debug("search criteria assigned status true");
 		        		    if(searchCriteria.getSiteId() > 0) {
@@ -389,7 +390,9 @@ public class JobManagementService extends AbstractService {
 		        			}
 		        			allJobsList.addAll(page.getContent());
 		        		}
+		        		*/
 		            	if(employee.getUser().getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
+		            		/*
 		            		if(searchCriteria.getSiteId() > 0 && searchCriteria.getEmployeeId() >0 ) {
 		            		    if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateSiteAndEmployeeAndLocation(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
@@ -429,10 +432,12 @@ public class JobManagementService extends AbstractService {
                                 }
 		            		}else {
 			        			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
-		            		}
+		            		}*/
+		            		page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
 		        			allJobsList.addAll(page.getContent());
 
 		            	}else {
+		            		/*
 		            		if(searchCriteria.getSiteId() > 0 && searchCriteria.getEmployeeId() >0) {
                                 if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateSiteAndEmployeeAndLocation(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
@@ -483,6 +488,8 @@ public class JobManagementService extends AbstractService {
 		            				page = jobRepository.findByDateRange(searchCriteria.getUserId(), subEmpIds, fromDt, toDt, pageRequest);
 		            			}
 		            		}
+		            		*/
+		            		page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
 		            		allJobsList.addAll(page.getContent());
 		            	}
 
