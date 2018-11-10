@@ -500,6 +500,7 @@ angular.module('timeSheetApp')
         $scope.refreshReportByProject = function() {
              $scope.selectedFromDate.setHours(0,0,0,0);
              $scope.selectedToDate.setHours(23,59,59,0);
+             $scope.loadJobReport();
              DashboardComponent.loadAttendanceReportByProject($scope.selectedProject.id,$scope.selectedFromDate,$scope.selectedToDate).then(function(data){
                 console.log(data);
                 $scope.employeeCount = data.totalEmployeeCount;
@@ -512,6 +513,7 @@ angular.module('timeSheetApp')
         $scope.refreshReportByRegion = function(){
             $scope.selectedFromDate.setHours(0,0,0,0);
             $scope.selectedToDate.setHours(23,59,59,0);
+            $scope.loadJobReport();
             DashboardComponent.loadAttendanceReportByRegion($scope.selectedProject.id,$scope.selectedRegion.name,$scope.selectedFromDate,$scope.selectedToDate).then(function(data){
                 console.log(data);
                 $scope.employeeCount = data.totalEmployeeCount;
@@ -524,6 +526,7 @@ angular.module('timeSheetApp')
         $scope.refreshReportByBranch = function(){
             $scope.selectedFromDate.setHours(0,0,0,0);
             $scope.selectedToDate.setHours(23,59,59,0);
+            $scope.loadJobReport();
             DashboardComponent.loadAttendanceReportByBranch($scope.selectedProject.id,$scope.selectedRegion.name,$scope.selectedBranch.name,$scope.selectedFromDate,$scope.selectedToDate).then(function(data){
                 console.log(data);
                 $scope.employeeCount = data.totalEmployeeCount;
@@ -536,6 +539,7 @@ angular.module('timeSheetApp')
         $scope.refreshReportBySite = function() {
             $scope.selectedFromDate.setHours(0,0,0,0);
             $scope.selectedToDate.setHours(23,59,59,0);
+            $scope.loadJobReport();
             DashboardComponent.loadAttendanceReport($scope.selectedSite.id,$scope.selectedFromDate,$scope.selectedToDate).then(function(data){
                console.log(data);
                $scope.employeeCount = data.totalEmployeeCount;
