@@ -170,7 +170,7 @@ export class EmployeeList {
         this.camera.getPicture(options).then((imageData) => {
             let base64Image = 'data:image/jpeg;base64,' + imageData;
             var employeeName = employee.fullName+employee.empId;
-            this.component.showLoader("Enrolling Face..")
+            this.component.showLoader("Getting Location..")
             this.checkProximity(this.site.id,this.lattitude,this.longitude,base64Image,mode,attendanceMode,employee);
             // this.enrollFace(employee,base64Image);
             // this.navCtrl.push(AttendanceViewPage,imageData)
@@ -196,8 +196,6 @@ export class EmployeeList {
     }
 
     checkProximity(siteId,lat,lng,imageData,mode,attendanceMode,employee){
-
-        this.component.showLoader('Getting Location..');
 
         var options={
             timeout:3000
@@ -243,17 +241,17 @@ export class EmployeeList {
         // this.component.showLoader('Detecting Face');
         if(mode === 'enroll'){
             this.component.closeAll();
-            this.component.showLoader('Enrolling Face Id');
+            this.component.showLoader('Enrolling Face Id..');
             employee.enrolled_face = imageData;
             this.employeeService.enrollFace(employee).subscribe(response=>{
                 this.component.closeAll();
                 if(response.errorStatus){
-                  Swal('Oops...', 'Something went wrong!', 'error');
-                  demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                  demo.showSwal('warning-message-and-confirmation-ok','Failed',response.errorMessage);
                 }else{
                     var verificationResponse = response;
                     console.log(verificationResponse);
-                    Swal('Success', 'Face Enrolled Successfully..', 'success');
+                    demo.showSwal('success-message-and-ok','Success','Face Enrolled Successfully');
+                    this.getEmployees();
                   // Swal('Face Enrolled successfully');
                     this.component.showToastMessage('Face Enrolled successfully..','bottom');
                 }
@@ -261,7 +259,7 @@ export class EmployeeList {
             },error=>{
                 this.component.closeAll();
                 var msg='Error in Detecting Face..';
-                this.component.showLoader(msg);
+                this.component.showToastMessage(msg,'bottom');
                 console.log("Error");
                 console.log(error)
             })
@@ -287,18 +285,10 @@ export class EmployeeList {
             this.component.closeAll();
             this.getEmployees();
             if(response.errorStatus){
-                var msg='Face Verified and Attendance marked Successfully';
-
-                let alert =this.alertController.create({
-                    title:'Success',
-                    subTitle:'Attendance Marked Successfully',
-                    buttons:['Dismiss']
-                });
-
-                alert.present();
+                demo.showSwal('warning-message-and-confirmation-ok','Failed',response.errorMessage);
 
             }else{
-                demo.showSwal('success','Success','Face Verified and Attendance marked Successfully');
+                demo.showSwal('success-message-and-ok','Success','Face Verified and Attendance marked Successfully');
 
             }
         },error=>{
@@ -316,16 +306,9 @@ export class EmployeeList {
             this.component.closeAll();
             this.getEmployees();
             if(response.errorStatus){
-                var msg='Face Verified and Attendance marked Successfully';
-                let alert =this.alertController.create({
-                    title:'Success',
-                    subTitle:'Attendance Marked Successfully',
-                    buttons:['Dismiss']
-                });
-
-                alert.present();
+                demo.showSwal('warning-message-and-confirmation-ok','Failed',response.errorMessage);
             }else{
-                demo.showSwal('success','Success','Face Verified and Attendance marked Successfully');
+                demo.showSwal('success-message-and-ok','Success','Face Verified and Attendance marked Successfully');
 
             }
         },error=>{

@@ -645,9 +645,8 @@ demo = {
             swal({
                 title: title,
                 text: txt,
-                type: 'success',
                 showCancelButton: false,
-                confirmButtonClass: 'btn btn-danger',
+                confirmButtonClass: 'btn btn-success',
                 cancelButtonClass: 'btn btn-danger',
                 confirmButtonText: 'Ok',
                 buttonsStyling: false
@@ -690,7 +689,6 @@ demo = {
             swal({
                 title: title,
                 text: txt,
-                type: 'warning',
                 showCancelButton: false,
                 confirmButtonClass: 'btn btn-danger',
                 cancelButtonClass: 'btn btn-danger',
