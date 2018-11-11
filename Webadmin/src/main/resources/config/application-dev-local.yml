@@ -211,43 +211,43 @@ scheduler:
    job:
       creationPolicy: monthly
    dailyJob:
-      enabled: true
+      enabled: false
       creation: monthly
    weeklyJob:
-      enabled: true
+      enabled: false
    monthlyJob:
-      enabled: true
+      enabled: false
    quarterlyJob:
-      enabled: true
+      enabled: false
    yearlyJob:
-      enabled: true
+      enabled: false
       creation: daily
    fortnightlyJob:
-      enabled: true
+      enabled: false
       creation: daily
    halfyearlyJob:
-      enabled: true
+      enabled: false
       creation: yearly
    overdueJob:
-      enabled: true
+      enabled: false
    eodJobReport:
-      enabled: true
+      enabled: false
    attendanceDetailReport:
-      enabled: true
+      enabled: false
    attendanceConsolidatedReport:
-      enabled: true
+      enabled: false
    feedbackreport:
-      enabled: true 
+      enabled: false 
    attendanceMusterRollReport:
-      enabled: true   
+      enabled: false   
    dayWiseJobReport:
-      enabled: true 
+      enabled: false 
    dayWiseTicketReport:
-      enabled: true
+      enabled: false
    dayWiseQuotationReport:
-      enabled: true 
+      enabled: false 
    dayWiseAttendanceReport:
-      enabled: true 
+      enabled: false 
 
 default.user.password: uds12345
 

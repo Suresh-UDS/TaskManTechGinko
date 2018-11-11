@@ -364,12 +364,12 @@
                   </div>
               </div>
 
-              <div class="panel panel-default" has-permission="DashboardTickets:View" ng-if="openTicketsTotalCount>0">
+              <div id="openTicketPanel" class="panel panel-default" has-permission="DashboardTicketsChart:View" >
                   <div class="panel-heading">Open Call Tickets</div>
                   <div class="panel-body">
                       <div class="row">
                           <div class="col-md-8">
-                              <canvas id="bar" class="chart chart-bar">
+                              <canvas id="bar1" class="chart chart-bar" >
                               </canvas>
                           </div>
 
@@ -420,7 +420,7 @@
                       </div>
                   </div>
               </div>
-              <div class="panel panel-default" has-permission="DashboardTickets:View" ng-if="closedTicketsTotalCount>0">
+              <div id="closedTicketPanel" class="panel panel-default" has-permission="DashboardTicketsChart:View" >
                   <div class="panel-heading"> Closed Call Tickets</div>
                   <div class="panel-body">
                       <div class="row">
@@ -480,7 +480,7 @@
                       </div>
                   </div>
               </div>
-              <div class="panel panel-default" has-permission="DashboardTickets:View" ng-if="overAllTicketsTotalCount>0">
+              <div id="overallTicketPanel" class="panel panel-default" has-permission="DashboardTicketsChart:View" >
                   <div class="panel-heading">Overall Tickets</div>
                   <div class="panel-body">
                       <div class="row">
