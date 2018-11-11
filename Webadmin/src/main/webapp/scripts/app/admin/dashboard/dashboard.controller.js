@@ -199,115 +199,131 @@ angular.module('timeSheetApp')
             $scope.closedTicketsLabels.push(">-11");
             $scope.overAllTicketsTotalCount=$scope.openTicketsTotalCount+$scope.closedTicketsTotalCount;
 
+            
+            if($scope.openTicketsTotalCount > 0) {
+            	
+	            var ctx = document.getElementById("bar1").getContext('2d');
+	            $scope.myChart = new Chart(ctx, {
+	                type: 'bar',
+	                data: {
+	                    labels:$scope.openTicketsLabels ,
+	                    datasets: [{
+	                        // label: '# of Votes',
+	                        data:$scope.openTicketsCountArray ,
+	                        backgroundColor: [
+	                            'rgba(255, 99, 132, 0.2)',
+	                            'rgba(54, 162, 235, 0.2)',
+	                            'rgba(255, 206, 86, 0.2)',
+	                            'rgba(75, 192, 192, 0.2)',
+	                            'rgba(153, 102, 255, 0.2)'
+	                        ],
+	                        borderColor: [
+	                            'rgba(255,99,132,1)',
+	                            'rgba(54, 162, 235, 1)',
+	                            'rgba(255, 206, 86, 1)',
+	                            'rgba(75, 192, 192, 1)',
+	                            'rgba(153, 102, 255, 1)'
+	                        ],
+	                        borderWidth: 1
+	                    }]
+	                },
+	                options: {
+	                    scales: {
+	                        yAxes: [{
+	                            ticks: {
+	                                beginAtZero:true
+	                            }
+	                        }]
+	                    }
+	                }
+	            });
+            
+            }else {
+            		document.getElementById("openTicketPanel").style.display = 'none';
+            }
 
+            
+            if($scope.closedTicketsTotalCount > 0) {
+            
+	            var ctx2 = document.getElementById("bar2").getContext('2d');
+	            $scope.myChart = new Chart(ctx2, {
+	                type: 'bar',
+	                data: {
+	                    labels:$scope.closedTicketsLabels ,
+	                    datasets: [{
+	                        // label: '# of Votes',
+	                        data:$scope.closedTicketsCountArray ,
+	                        backgroundColor: [
+	                            'rgba(255, 99, 132, 0.2)',
+	                            'rgba(54, 162, 235, 0.2)',
+	                            'rgba(255, 206, 86, 0.2)',
+	                            'rgba(75, 192, 192, 0.2)',
+	                            'rgba(153, 102, 255, 0.2)'
+	                        ],
+	                        borderColor: [
+	                            'rgba(255,99,132,1)',
+	                            'rgba(54, 162, 235, 1)',
+	                            'rgba(255, 206, 86, 1)',
+	                            'rgba(75, 192, 192, 1)',
+	                            'rgba(153, 102, 255, 1)'
+	                        ],
+	                        borderWidth: 1
+	                    }]
+	                },
+	                options: {
+	                    scales: {
+	                        yAxes: [{
+	                            ticks: {
+	                                beginAtZero:true
+	                            }
+	                        }]
+	                    }
+	                }
+	            });
+            }else {
+            		document.getElementById("closedTicketPanel").style.display = 'none';
+            }
+            
+            if($scope.overAllTicketsTotalCount > 0) {
 
-            var ctx = document.getElementById("bar").getContext('2d');
-            $scope.myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels:$scope.openTicketsLabels ,
-                    datasets: [{
-                        // label: '# of Votes',
-                        data:$scope.openTicketsCountArray ,
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(255,99,132,1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero:true
-                            }
-                        }]
-                    }
-                }
-            });
-
-            var ctx2 = document.getElementById("bar2").getContext('2d');
-            $scope.myChart = new Chart(ctx2, {
-                type: 'bar',
-                data: {
-                    labels:$scope.closedTicketsLabels ,
-                    datasets: [{
-                        // label: '# of Votes',
-                        data:$scope.closedTicketsCountArray ,
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(255,99,132,1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero:true
-                            }
-                        }]
-                    }
-                }
-            });
-
-            var ctx3 = document.getElementById("bar3").getContext('2d');
-            $scope.myChart = new Chart(ctx3, {
-                type: 'bar',
-                data: {
-                    labels:$scope.overallTicketLabels ,
-                    datasets: [{
-                        // label: '# of Votes',
-                        data:$scope.overAllTicketsCountArray ,
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(255,99,132,1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero:true
-                            }
-                        }]
-                    }
-                }
-            });
+	            var ctx3 = document.getElementById("bar3").getContext('2d');
+	            $scope.myChart = new Chart(ctx3, {
+	                type: 'bar',
+	                data: {
+	                    labels:$scope.overallTicketLabels ,
+	                    datasets: [{
+	                        // label: '# of Votes',
+	                        data:$scope.overAllTicketsCountArray ,
+	                        backgroundColor: [
+	                            'rgba(255, 99, 132, 0.2)',
+	                            'rgba(54, 162, 235, 0.2)',
+	                            'rgba(255, 206, 86, 0.2)',
+	                            'rgba(75, 192, 192, 0.2)',
+	                            'rgba(153, 102, 255, 0.2)'
+	                        ],
+	                        borderColor: [
+	                            'rgba(255,99,132,1)',
+	                            'rgba(54, 162, 235, 1)',
+	                            'rgba(255, 206, 86, 1)',
+	                            'rgba(75, 192, 192, 1)',
+	                            'rgba(153, 102, 255, 1)'
+	                        ],
+	                        borderWidth: 1
+	                    }]
+	                },
+	                options: {
+	                    scales: {
+	                        yAxes: [{
+	                            ticks: {
+	                                beginAtZero:true
+	                            }
+	                        }]
+	                    }
+	                }
+	            });
+            }else {
+            		document.getElementById("overallTicketPanel").style.display = 'none';
+            }
 
 
 
@@ -568,8 +584,8 @@ angular.module('timeSheetApp')
 	        		$scope.searchCriteria.projectId = $scope.selectedProject.id;
 	        	}
 
-                $scope.searchCriteria.region = $scope.selectedRegion!=null?$scope.selectedRegion.name:" ";
-                $scope.searchCriteria.branch = $scope.selectedBranch!=null?$scope.selectedBranch.name:" ";
+                $scope.searchCriteria.region = $scope.selectedRegion!=null?$scope.selectedRegion.name:"";
+                $scope.searchCriteria.branch = $scope.selectedBranch!=null?$scope.selectedBranch.name:"";
 
 	        	if($scope.selectedSite) {
 	        		$scope.searchCriteria.siteId = $scope.selectedSite.id;
@@ -583,7 +599,7 @@ angular.module('timeSheetApp')
 	        	$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedFromDate;
 	        	$scope.searchCriteria.checkInDateTimeTo = $scope.selectedToDate;
 
-	        	console.log($scope.searchCriteria);
+	        	console.log('job report search criteria -' + JSON.stringify($scope.searchCriteria));
 	        	JobComponent.generateReport($scope.searchCriteria).then(function (data) {
 	        		$scope.result.assignedJobCount = 0;
 	        		$scope.result.completedJobCount = 0;

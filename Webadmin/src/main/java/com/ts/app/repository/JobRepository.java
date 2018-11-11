@@ -36,8 +36,26 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     @Query("SELECT count(j.id) from Job j where j.site.id = :siteId and (j.plannedStartTime between :selDate and :endDate)")
     long findTotalJobCountBySiteIdAndDateRange(@Param("siteId") Long siteId, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
 
+    @Query("SELECT count(j.id) from Job j where j.site.project.id = :projectId and (j.plannedStartTime between :selDate and :endDate)")
+    long findTotalJobCountByProjectAndDateRange(@Param("projectId") Long projectId, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
+    
+    @Query("SELECT count(j.id) from Job j where j.site.project.id = :projectId and j.site.region = :region and (j.plannedStartTime between :selDate and :endDate)")
+    long findTotalJobCountByProjectRegionAndDateRange(@Param("projectId") Long projectId, @Param("region") String region, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
+
+    @Query("SELECT count(j.id) from Job j where j.site.project.id = :projectId and j.site.region = :region and j.site.branch = :branch and (j.plannedStartTime between :selDate and :endDate)")
+    long findTotalJobCountByProjectRegionBranchAndDateRange(@Param("projectId") Long projectId, @Param("region") String region,@Param("branch") String branch, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
+
     @Query("SELECT count(j.id) from Job j where j.site.id = :siteId and (j.plannedStartTime between :selDate and :endDate) and j.status = :currentJobStatus")
     long findJobCountBySiteIdAndStatusDateRange(@Param("siteId") Long siteId, @Param("selDate") Date selDate, @Param("endDate") Date endDate, @Param("currentJobStatus") JobStatus currentJobStatus);
+
+    @Query("SELECT count(j.id) from Job j where j.site.project.id = :projectId and (j.plannedStartTime between :selDate and :endDate) and j.status = :currentJobStatus")
+    long findJobCountByProjectAndStatusDateRange(@Param("projectId") Long projectId, @Param("selDate") Date selDate, @Param("endDate") Date endDate, @Param("currentJobStatus") JobStatus currentJobStatus);
+
+    @Query("SELECT count(j.id) from Job j where j.site.project.id = :projectId and j.site.region = :region and (j.plannedStartTime between :selDate and :endDate) and j.status = :currentJobStatus")
+    long findJobCountByProjectRegionAndStatusDateRange(@Param("projectId") Long projectId, @Param("region") String region, @Param("selDate") Date selDate, @Param("endDate") Date endDate, @Param("currentJobStatus") JobStatus currentJobStatus);
+
+    @Query("SELECT count(j.id) from Job j where j.site.project.id = :projectId and j.site.region = :region and j.site.branch = :branch and (j.plannedStartTime between :selDate and :endDate) and j.status = :currentJobStatus")
+    long findJobCountByProjectRegionBranchAndStatusDateRange(@Param("projectId") Long projectId, @Param("region") String region, @Param("branch") String branch, @Param("selDate") Date selDate, @Param("endDate") Date endDate, @Param("currentJobStatus") JobStatus currentJobStatus);
 
     @Query("SELECT count(j.id) from Job j where j.site.id = :siteId and (j.plannedStartTime between :selDate and :endDate) and j.status = :currentJobStatus group by j.plannedStartTime")
     long findJobCountForReports(@Param("siteId") Long siteId, @Param("selDate") Date selDate, @Param("endDate") Date endDate, @Param("currentJobStatus") JobStatus currentJobStatus);

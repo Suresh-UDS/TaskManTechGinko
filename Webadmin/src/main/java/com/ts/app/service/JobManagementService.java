@@ -666,6 +666,16 @@ public class JobManagementService extends AbstractService {
 
 		        	    log.debug("site reporsitory find all");
 		        		List<Site> allSites = null;
+		        		if(searchCriteria.getSiteId() > 0){
+	        				reportResults.add(reportService.jobCountBySiteAndStatusAndDateRange(searchCriteria.getSiteId(),fromDt, toDt));
+	        			}else if(!StringUtils.isEmpty(searchCriteria.getBranch())) {
+	        				reportResults.add(reportService.jobCountByProjectRegionBranchAndStatusAndDateRange(searchCriteria.getProjectId(),searchCriteria.getRegion(), searchCriteria.getBranch(), fromDt, toDt));
+	        			}else if(!StringUtils.isEmpty(searchCriteria.getRegion())) {
+	        				reportResults.add(reportService.jobCountByProjectRegionAndStatusAndDateRange(searchCriteria.getProjectId(),searchCriteria.getRegion(), fromDt, toDt));
+	        			}else if(searchCriteria.getProjectId() > 0) {
+	        				reportResults.add(reportService.jobCountByProjectAndStatusAndDateRange(searchCriteria.getProjectId(), fromDt, toDt));
+	        			}
+		        		
 		        		if(isAdmin) {
 		        			allSites = siteRepository.findAll();
 		        		}else {
@@ -673,6 +683,8 @@ public class JobManagementService extends AbstractService {
 		        				allSites = siteRepository.findSiteByEmployeeId(user.getEmployee().getId());
 		        			}
 		        		}
+
+		        		
 		        		if(CollectionUtils.isEmpty(allSites)) {
 		        			allSites = new ArrayList<Site>();
 		        			if(searchCriteria.getSiteId() > 0) {
@@ -683,8 +695,6 @@ public class JobManagementService extends AbstractService {
 			        		for(Site site : allSites) {
 			        			if(searchCriteria.isGraphRequest()) {
 			        				reportResults.add(reportService.jobCountGroupByDate(site.getId(), fromDt, toDt));
-			        			}else {
-			        				reportResults.add(reportService.jobCountBySiteAndStatusAndDateRange(site.getId(),fromDt, toDt));
 			        			}
 			        		}
 		        		}
