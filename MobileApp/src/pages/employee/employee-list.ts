@@ -225,8 +225,8 @@ export class EmployeeList {
             desiredAccuracy: 0,
             stationaryRadius: 20,
             distanceFilter: 10,
-            debug: true,
-            interval: 2000
+            debug: false,
+            // interval: 2000
         };
 
         this.backgroundGeolocation.configure(config).subscribe((response) => {
@@ -247,6 +247,7 @@ export class EmployeeList {
                             this.component.closeAll();
                             this.locationProvider.stopTracking();
                             this.verifyFaceAndMarkAttendance(employee,mode,response.latitude,response.longitude,attendanceMode,imageData);
+                            // demo.showSwal('success-message-and-ok','Success','Face Enrolled Successfully');
 
                         },error=>{
                             console.log("errors");
