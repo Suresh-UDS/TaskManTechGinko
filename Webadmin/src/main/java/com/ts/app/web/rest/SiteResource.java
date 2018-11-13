@@ -212,6 +212,11 @@ public class SiteResource {
         return siteService.findBranchByProject(projectId,regionId);
     }
 
+    @RequestMapping(value = "/branch/projectId/{projectId}/regionName/{region}", method = RequestMethod.GET)
+    public List<BranchDTO> findBranchByProjectAndRegionName(@PathVariable("projectId") long projectId, @PathVariable("region") String region){
+        return siteService.findBranchByProjectAndRegionName(projectId,region);
+    }
+    
     @RequestMapping(value = "/project/region/{region}/projectId/{projectId}", method = RequestMethod.POST)
     public List<SiteDTO> findSitesByRegion( @PathVariable("region") String region, @PathVariable("projectId") long projectId){
         log.debug("find by project id and region - "+projectId+" - "+region);

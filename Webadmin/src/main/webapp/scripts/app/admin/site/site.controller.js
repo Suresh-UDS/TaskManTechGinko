@@ -544,6 +544,11 @@ angular.module('timeSheetApp')
                         console.log('$scope.site.shifts - '+$scope.site.shifts);
                         $scope.selectedProject = {id:$scope.site.projectId,name:$scope.site.projectName};
                         $scope.SelectClient.selected = $scope.selectedProject;
+                        $scope.selectedRegion= {name:$scope.site.region};
+                        SiteComponent.getBranchByProjectAndRegionName($scope.selectedProject.id,$scope.selectedRegion.name).then(function (data) {
+                        	$scope.branchList = data;
+                        });
+                        $scope.selectedBranch= {name:$scope.site.branch};
                         $scope.shiftItems = $scope.site.shifts;
                         $scope.loadRegions($scope.site.projectId, function(resp) {
                             $scope.selectRegion($scope.site.region, function(resp) {

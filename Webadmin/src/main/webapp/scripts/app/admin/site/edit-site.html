@@ -67,7 +67,7 @@
                                                 <label class="control-label">Region</label>
                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                 <select name='region'
-                                                        class="form-control " ng-model="selectedRegion" ng-change="loadBranch(selectedProject.id)"  ng-options="region.name for region in regionList" tabindex="7"    >
+                                                        class="form-control " ng-model="selectedRegion" ng-change="loadBranch(selectedProject.id)"  ng-options="region.name for region in regionList track by region.name" tabindex="7"    >
                                                     <option value="">Select Region...</option>
                                                 </select>
                                                 <!--<div ng-show="form.$submitted || form.region.$touched">-->
@@ -80,26 +80,26 @@
                                                 <!--</div>-->
                                             </div>
                                         </div>
-                                        <div class="col-md-2 pad0px">
-                                            <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addRegion" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                <i class="material-icons">add</i>
-                                            </a>
-                                        </div>
+                                        <div class="col-md-2" style="padding: 18px 0 0 0;">
+                                           <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addRegion" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                               <i class="material-icons">add</i>
+                                           </a>
+                                       </div>
 
-                                        <div class="collapse" id="addRegion">
-                                            <div class="">
-                                                <input class="input-desc" id='regionName' ng-model="regionDetails.name"
-                                                       name='region' type='text' value=""/>
-                                                <a class="btn btn-success"  ng-click="addRegion()">Add</a>
-                                            </div>
-                                        </div>
+                                       <div class="col-md-12 collapse" id="addRegion">
+                                           <div class="">
+                                               <input class="inputDescBox" id='regionName' ng-model="regionDetails.name"
+                                                      name='region' type='text' value=""/>
+                                               <a class="btn btn-success"  ng-click="addRegion()">Add</a>
+                                           </div>
+                                       </div>
 
                                         <div class="col-md-10">
                                             <div class="form-group">
                                                 <label class="control-label">Branch</label>
                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                 <select name='branch'
-                                                        class="form-control " ng-model="selectedBranch"  ng-options="branch.name for branch in branchList" tabindex="7"    >
+                                                        class="form-control " ng-model="selectedBranch"  ng-options="branch.name for branch in branchList track by branch.name" tabindex="7"    >
                                                     <option value="">Select Branch...</option>
                                                 </select>
                                                 <!--<div ng-show="form.$submitted || form.region.$touched">-->
@@ -112,19 +112,19 @@
                                                 <!--</div>-->
                                             </div>
                                         </div>
-                                        <div class="col-md-2 pad0px">
-                                            <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addBranch" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                <i class="material-icons">add</i>
-                                            </a>
-                                        </div>
+                                        <div class="col-md-2" style="padding: 18px 0 0 0;">
+                                           <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addBranch" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                               <i class="material-icons">add</i>
+                                           </a>
+                                       </div>
 
-                                        <div class="collapse" id="addBranch">
-                                            <div class="">
-                                                <input class="input-desc" id='branchName' ng-model="branchDetails.name"
-                                                       name='region' type='text' value=""/>
-                                                <a class="btn btn-success"  ng-click="addBranch()">Add</a>
-                                            </div>
-                                        </div>
+                                       <div class="col-md-12 collapse" id="addBranch">
+                                           <div class="">
+                                               <input class="inputDescBox" id='branchName' ng-model="branchDetails.name"
+                                                      name='region' type='text' value=""/>
+                                               <a class="btn btn-success"  ng-click="addBranch()">Add</a>
+                                           </div>
+                                       </div>
 
 
 
