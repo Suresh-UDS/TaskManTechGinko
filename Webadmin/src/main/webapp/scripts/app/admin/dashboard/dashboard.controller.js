@@ -37,7 +37,7 @@ angular.module('timeSheetApp')
         };
     })
 
-    .controller('DashboardController', function ($timeout,$scope,$rootScope,DashboardComponent,JobComponent, $state,$http,$stateParams,$location) {
+    .controller('DashboardController', function ($timeout,$scope,$rootScope,$filter,DashboardComponent,JobComponent, $state,$http,$stateParams,$location) {
         $rootScope.loginView = false;
 
 
