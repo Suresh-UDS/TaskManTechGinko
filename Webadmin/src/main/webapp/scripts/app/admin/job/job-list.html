@@ -72,10 +72,10 @@
                     From: {{searchJobDate}}
                 </span>
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchJobDateTo">
-                    To: {{searchJobDateTo}}
+                    To: {{searchJobDateTo}} 
                 </span>
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchEmployee.id !=0 && searchEmployee.id !=null">
-                    Employee: {{searchEmployee.name}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="empListOne.selected.id !=0 && empListOne.selected.id !=null">
+                    Employee: {{empListOne.selected.name}}
                 </span>
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchStatus !=null && searchStatus !='-- ALL STATUS --'">
                     Status: {{searchStatus}}
