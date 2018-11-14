@@ -752,7 +752,7 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.generateMusterRollAttendanceReport(siteId, startCal.getTime(), endCal.getTime(), true, false);
 	}
 
-	@Scheduled(cron="0 */5 * * * ?") // runs every 30 mins
+	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
 	public void attendanceCheckOutTask() {
 		log.info("Attendance auto check out scheduler invoked");
 		schedulerHelperService.autoCheckOutAttendance();
@@ -1458,7 +1458,7 @@ public class SchedulerService extends AbstractService {
 			}
 		}
 
-	@Scheduled(cron="0 */5 * * * ?")
+	@Scheduled(cron="0 */30 * * * ?")
 	public void sendDaywiseReport() {
 		log.info("Daywise report scheduler invoked");
 		Calendar cal = Calendar.getInstance();
