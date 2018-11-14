@@ -144,13 +144,11 @@ angular.module('timeSheetApp')
                 for(var i=0;i<$scope.projects.length;i++)
                 {
                     $scope.uiClient[i] = $scope.projects[i].name;
-                }
-                /** Ui-select scope **/
-                for(var i=0;i<$scope.projects.length;i++)
-                {
+                    /** Ui-select scope **/
                     $scope.clients[i+1] = $scope.projects[i];
-                    
                 }
+               
+                
                 $scope.clientDisable = false;
                 $scope.clientFilterDisable = false;
 
