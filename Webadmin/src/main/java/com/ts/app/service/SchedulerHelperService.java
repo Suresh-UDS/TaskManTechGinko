@@ -532,6 +532,7 @@ public class SchedulerHelperService extends AbstractService {
 						ExportResult exportResult = null;
 						String alertTime = attnDayWiseAlertTime != null ? attnDayWiseAlertTime.getSettingValue() : null;
 						Calendar now = Calendar.getInstance();
+						now.setTime(date);
 						now.set(Calendar.SECOND, 0);
 						now.set(Calendar.MILLISECOND, 0);
 						Calendar alertTimeCal = Calendar.getInstance();
@@ -1728,6 +1729,7 @@ public class SchedulerHelperService extends AbstractService {
 		dayEndcal.set(Calendar.MILLISECOND, 0);
 
 		Calendar now = Calendar.getInstance();
+		now.setTime(date);
 		now.set(Calendar.SECOND, 0);
 		now.set(Calendar.MILLISECOND, 0);
 
