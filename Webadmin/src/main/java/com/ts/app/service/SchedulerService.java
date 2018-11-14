@@ -730,6 +730,7 @@ public class SchedulerService extends AbstractService {
 
 	//@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
 	public void attendanceDetailReportSchedule() {
+		log.info("Attendance detailed report scheduler invoked");
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_YEAR, -1);
 		schedulerHelperService.generateDetailedAttendanceReport(cal.getTime(), false, true, false);
@@ -738,6 +739,7 @@ public class SchedulerService extends AbstractService {
 	//@Scheduled(cron = "0 0 9 1 * ?")
 	//@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
 	public void attendanceMusterrollReportSchedule() {
+		log.info("Attendance muster roll report scheduler invoked");
 		Calendar startCal = Calendar.getInstance();
 		startCal.set(Calendar.DAY_OF_MONTH, 1);
 		startCal.set(Calendar.HOUR_OF_DAY,0);
@@ -752,6 +754,7 @@ public class SchedulerService extends AbstractService {
 
 	//@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
 	public void attendanceCheckOutTask() {
+		log.info("Attendance auto check out scheduler invoked");
 		schedulerHelperService.autoCheckOutAttendance();
 	}
 
@@ -1457,6 +1460,7 @@ public class SchedulerService extends AbstractService {
 
 	//@Scheduled(cron="0 */30 * * * ?")
 	public void sendDaywiseReport() {
+		log.info("Daywise report scheduler invoked");
 		Calendar cal = Calendar.getInstance();
 		boolean isOnDemand = false;
 		schedulerHelperService.sendDaywiseReportEmail(cal.getTime(), isOnDemand, 0);
