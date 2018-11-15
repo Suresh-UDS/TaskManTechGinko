@@ -32,6 +32,7 @@ import com.ts.app.domain.User;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
+import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
@@ -46,6 +47,9 @@ public class ReportService extends AbstractService {
 
 	@Inject
 	private JobRepository jobRepository;
+
+	@Inject
+	private ProjectRepository projectRepository;
 
 	@Inject
 	private SiteRepository siteRepository;
@@ -143,6 +147,84 @@ public class ReportService extends AbstractService {
         reportResult.setOverdueJobCount(overdueJobCount);
         log.debug("completed job turn around time jobCountBySiteAndStatusAndDateRange");
         log.debug(String.valueOf(completedJobTAT));
+        return reportResult;
+    }
+    
+    public ReportResult jobCountByProjectAndStatusAndDateRange(Long projectId, Date selectedDate, Date endDate) {
+        java.sql.Date sqlDate = new java.sql.Date(DateUtils.toCalendar(selectedDate).getTimeInMillis());
+        java.sql.Date sqlEndDate = new java.sql.Date(DateUtils.toCalendar(endDate).getTimeInMillis());
+
+        log.debug("selected Date  in report result"+selectedDate);
+        log.debug("end date in report result"+endDate);
+ 
+        long assignedJobCount = jobRepository.findJobCountByProjectAndStatusDateRange(projectId, sqlDate,sqlEndDate, JobStatus.ASSIGNED);
+        long completedJobCount = jobRepository.findJobCountByProjectAndStatusDateRange(projectId,sqlDate,sqlEndDate, JobStatus.COMPLETED);
+        long overdueJobCount = jobRepository.findJobCountByProjectAndStatusDateRange(projectId, sqlDate,sqlEndDate, JobStatus.OVERDUE);
+        long totalJobCount = jobRepository.findTotalJobCountByProjectAndDateRange(projectId, sqlDate, sqlEndDate);
+        //long completedJobTAT = jobRepository.jobCountTAT(siteId, JobStatus.COMPLETED);
+
+        ReportResult reportResult = new ReportResult();
+        reportResult.setProjectId(projectId);
+        reportResult.setProjectName(projectRepository.findOne(projectId).getName());
+        reportResult.setTotalJobCount(totalJobCount);
+        reportResult.setAssignedJobCount(assignedJobCount);
+        reportResult.setCompletedJobCount(completedJobCount);
+        //reportResult.setTat(completedJobTAT);
+        reportResult.setOverdueJobCount(overdueJobCount);
+        log.debug("completed job turn around time jobCountByProjectAndStatusAndDateRange");
+        //log.debug(String.valueOf(completedJobTAT));
+        return reportResult;
+    }
+    
+    public ReportResult jobCountByProjectRegionAndStatusAndDateRange(Long projectId, String region, Date selectedDate, Date endDate) {
+        java.sql.Date sqlDate = new java.sql.Date(DateUtils.toCalendar(selectedDate).getTimeInMillis());
+        java.sql.Date sqlEndDate = new java.sql.Date(DateUtils.toCalendar(endDate).getTimeInMillis());
+
+        log.debug("selected Date  in report result"+selectedDate);
+        log.debug("end date in report result"+endDate);
+
+        long assignedJobCount = jobRepository.findJobCountByProjectRegionAndStatusDateRange(projectId, region, sqlDate,sqlEndDate, JobStatus.ASSIGNED);
+        long completedJobCount = jobRepository.findJobCountByProjectRegionAndStatusDateRange(projectId, region, sqlDate,sqlEndDate, JobStatus.COMPLETED);
+        long overdueJobCount = jobRepository.findJobCountByProjectRegionAndStatusDateRange(projectId, region, sqlDate,sqlEndDate, JobStatus.OVERDUE);
+        long totalJobCount = jobRepository.findTotalJobCountByProjectRegionAndDateRange(projectId, region, sqlDate, sqlEndDate);
+        //long completedJobTAT = jobRepository.jobCountTAT(siteId, JobStatus.COMPLETED);
+
+        ReportResult reportResult = new ReportResult();
+        reportResult.setProjectId(projectId);
+        reportResult.setProjectName(projectRepository.findOne(projectId).getName());
+        reportResult.setTotalJobCount(totalJobCount);
+        reportResult.setAssignedJobCount(assignedJobCount);
+        reportResult.setCompletedJobCount(completedJobCount);
+        //reportResult.setTat(completedJobTAT);
+        reportResult.setOverdueJobCount(overdueJobCount);
+        log.debug("completed job turn around time jobCountByProjectRegionAndStatusAndDateRange");
+        //log.debug(String.valueOf(completedJobTAT));
+        return reportResult;
+    }
+    
+    public ReportResult jobCountByProjectRegionBranchAndStatusAndDateRange(Long projectId, String region, String branch, Date selectedDate, Date endDate) {
+        java.sql.Date sqlDate = new java.sql.Date(DateUtils.toCalendar(selectedDate).getTimeInMillis());
+        java.sql.Date sqlEndDate = new java.sql.Date(DateUtils.toCalendar(endDate).getTimeInMillis());
+
+        log.debug("selected Date  in report result"+selectedDate);
+        log.debug("end date in report result"+endDate);
+
+        long assignedJobCount = jobRepository.findJobCountByProjectRegionBranchAndStatusDateRange(projectId, region, branch, sqlDate,sqlEndDate, JobStatus.ASSIGNED);
+        long completedJobCount = jobRepository.findJobCountByProjectRegionBranchAndStatusDateRange(projectId, region, branch, sqlDate,sqlEndDate, JobStatus.COMPLETED);
+        long overdueJobCount = jobRepository.findJobCountByProjectRegionBranchAndStatusDateRange(projectId, region, branch, sqlDate,sqlEndDate, JobStatus.OVERDUE);
+        long totalJobCount = jobRepository.findTotalJobCountByProjectRegionBranchAndDateRange(projectId, region, branch, sqlDate, sqlEndDate);
+        //long completedJobTAT = jobRepository.jobCountTAT(siteId, JobStatus.COMPLETED);
+
+        ReportResult reportResult = new ReportResult();
+        reportResult.setProjectId(projectId);
+        reportResult.setProjectName(projectRepository.findOne(projectId).getName());
+        reportResult.setTotalJobCount(totalJobCount);
+        reportResult.setAssignedJobCount(assignedJobCount);
+        reportResult.setCompletedJobCount(completedJobCount);
+        //reportResult.setTat(completedJobTAT);
+        reportResult.setOverdueJobCount(overdueJobCount);
+        log.debug("completed job turn around time jobCountByProjectRegionBranchAndStatusAndDateRange");
+        //log.debug(String.valueOf(completedJobTAT));
         return reportResult;
     }
 

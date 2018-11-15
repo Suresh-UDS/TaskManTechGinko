@@ -804,6 +804,18 @@ public class ImportUtil {
 
 				assetPPMDto.setEmpId(Long.parseLong(getCellValue(currentRow.getCell(10))));
 
+                String checkListName = getCellValue(currentRow.getCell(11));
+                if(StringUtils.isNotBlank(checkListName)) {
+                    SearchCriteria searchCriteria = new SearchCriteria();
+                    searchCriteria.setName(checkListName);
+                    SearchResult<ChecklistDTO> result = checklistService.findBySearchCrieria(searchCriteria);
+                    List<ChecklistDTO> checkListDtos = result.getTransactions();
+                    if (CollectionUtils.isNotEmpty(checkListDtos)) {
+                        ChecklistDTO checklistDto = checkListDtos.get(0);
+                        assetPPMDto.setChecklistId(checklistDto.getId());
+                    }
+                }
+
 				assetManagementService.createAssetPpmSchedule(assetPPMDto);
 
 			}
@@ -856,6 +868,20 @@ public class ImportUtil {
 				assetAMCDto.setEmpId(Long.parseLong(getCellValue(currentRow.getCell(10))));
 				assetAMCDto.setFrequencyPrefix("Every");
 				assetAMCDto.setMaintenanceType(getCellValue(currentRow.getCell(11)));
+
+                String checkListName = getCellValue(currentRow.getCell(12));
+
+                if(StringUtils.isNotBlank(checkListName)) {
+                    SearchCriteria searchCriteria = new SearchCriteria();
+                    searchCriteria.setName(checkListName);
+                    SearchResult<ChecklistDTO> result = checklistService.findBySearchCrieria(searchCriteria);
+                    List<ChecklistDTO> checkListDtos = result.getTransactions();
+                    if (CollectionUtils.isNotEmpty(checkListDtos)) {
+                        ChecklistDTO checklistDto = checkListDtos.get(0);
+                        assetAMCDto.setChecklistId(checklistDto.getId());
+                    }
+                }
+
 				assetManagementService.createAssetAMCSchedule(assetAMCDto);
 
 			}

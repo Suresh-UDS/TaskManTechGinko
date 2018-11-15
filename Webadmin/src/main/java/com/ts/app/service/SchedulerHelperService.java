@@ -334,7 +334,7 @@ public class SchedulerHelperService extends AbstractService {
 			// alertEmailIds = overdueEmails.getSettingValue();
 			// }
 
-			List<Job> overDueJobs = jobRepository.findOverdueJobsByStatusAndEndDateTime(cal.getTime());
+			List<Job> overDueJobs = jobRepository.findOverdueJobsByStatusAndEndDateTime(DateUtil.convertToSQLDate(cal.getTime()));
 			log.debug("Found {} overdue jobs", (overDueJobs != null ? overDueJobs.size() : 0));
 
 			if (CollectionUtils.isNotEmpty(overDueJobs)) {
@@ -532,6 +532,7 @@ public class SchedulerHelperService extends AbstractService {
 						ExportResult exportResult = null;
 						String alertTime = attnDayWiseAlertTime != null ? attnDayWiseAlertTime.getSettingValue() : null;
 						Calendar now = Calendar.getInstance();
+						now.setTime(date);
 						now.set(Calendar.SECOND, 0);
 						now.set(Calendar.MILLISECOND, 0);
 						Calendar alertTimeCal = Calendar.getInstance();
@@ -875,6 +876,7 @@ public class SchedulerHelperService extends AbstractService {
 					List<EmployeeAttendanceReport> empAttnList = new ArrayList<EmployeeAttendanceReport>();
 					List<EmployeeAttendanceReport> siteAttnList = null;
 					StringBuilder content = new StringBuilder();
+					siteItr = sites.iterator();
 					while (siteItr.hasNext()) {
 						Site site = siteItr.next();
 
@@ -1228,7 +1230,7 @@ public class SchedulerHelperService extends AbstractService {
 			java.sql.Date startDate = new java.sql.Date(cal.getTimeInMillis());
 			java.sql.Date endDate = new java.sql.Date(endCal.getTimeInMillis());
 			java.sql.Date tomorrow = new java.sql.Date(nextDay.getTimeInMillis());
-			List<SchedulerConfig> dailyTasks = schedulerConfigRepository.getDailyTask(cal.getTime());
+			List<SchedulerConfig> dailyTasks = schedulerConfigRepository.getDailyTask(startDate);
 			log.debug("Found {} Daily Tasks", dailyTasks.size());
 
 			if (CollectionUtils.isNotEmpty(dailyTasks)) {
@@ -1727,6 +1729,7 @@ public class SchedulerHelperService extends AbstractService {
 		dayEndcal.set(Calendar.MILLISECOND, 0);
 
 		Calendar now = Calendar.getInstance();
+		now.setTime(date);
 		now.set(Calendar.SECOND, 0);
 		now.set(Calendar.MILLISECOND, 0);
 
@@ -2127,7 +2130,27 @@ public class SchedulerHelperService extends AbstractService {
 		//								cal.getTime(), sb.toString());
 		//					}
 		//				}
-				}	
+				}else {
+					sb.append("<tr bgcolor=\"FFD966\">");
+					sb.append("<td><b>" + proj.getName() + "</b></td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("<td>0</td>");
+					sb.append("</tr>");
+				}
 
 			}
 			sb.append("</table>");
@@ -2295,8 +2318,13 @@ public class SchedulerHelperService extends AbstractService {
 									new FileInputStream(exportPath + "/" + content.getAttendanceFile() + ".xlsx"));
 							int noOfSheets = attnWorkBook.getNumberOfSheets();
 							for(int i = 0; i < noOfSheets; i++) {
-								XSSFSheet newAttnSheet = xssfAttnWorkbook.createSheet(entry.getKey() + (i+1));
-								copySheet(attnWorkBook.getSheetAt(i), newAttnSheet);
+								String sheetName = entry.getKey() + "_" + (i+1) + "_" + content.getSiteName();
+								try {
+									XSSFSheet newAttnSheet = xssfAttnWorkbook.createSheet(sheetName);
+									copySheet(attnWorkBook.getSheetAt(i), newAttnSheet);
+								}catch (Exception e) {
+									log.error("Error while creating attendance report sheet with name - " + sheetName);
+								}
 							}
 						}
 					}
