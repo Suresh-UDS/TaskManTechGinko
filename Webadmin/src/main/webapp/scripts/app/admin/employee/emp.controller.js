@@ -242,9 +242,15 @@ angular.module('timeSheetApp')
             })
         };
         
+        $scope.regionFilterDisable = true;
+        $scope.branchFilterDisable = true;
+        
         /*** UI select (Region List) **/
         $scope.loadRegionsList = function (projectId, callback) {
         	$scope.regionSpin = true;
+        	$scope.branchsLists = [];
+        	$scope.branchsListOne.selected = null;
+        	$scope.branchFilterDisable = true;
             SiteComponent.getRegionByProject(projectId).then(function (response) {
                 console.log(response);
                 $scope.regionList = response;
@@ -1028,10 +1034,23 @@ angular.module('timeSheetApp')
 
        $scope.refreshPage = function() {
         if($scope.curUrl =='employeeShifts'){
+        	$('input#selectedDate').data('DateTimePicker').clear();
             $scope.noData = false;
             $scope.siteFilterDisable = true;
+            $scope.regionFilterDisable = true;
+            $scope.branchFilterDisable = true;
             $scope.sitesList = null;
             $scope.sites = null;
+            
+            /** Ui-select scopes **/
+        	$scope.client.selected = null;
+        	$scope.sitesLists =  [];
+        	$scope.sitesListOne.selected =  null;
+        	$scope.regionsLists =  [];
+        	$scope.regionsListOne.selected =  null;
+        	$scope.branchsLists =  [];
+        	$scope.branchsListOne.selected =  null;
+        	
             $scope.selectedSite = null;
             $scope.selectedProject = null;
             $scope.searchProject = null;
@@ -1870,6 +1889,7 @@ angular.module('timeSheetApp')
         }
 
         $scope.searchShiftFilter = function () {
+        	$('.AdvancedFilterModal.in').modal('hide');
             $scope.setPage(1);
             $scope.searchShift();
          }
@@ -1890,6 +1910,27 @@ angular.module('timeSheetApp')
 
 	            $scope.searchCriteria.currPage = currPageVal;
 	            $scope.searchCriteria.findAll = false;
+	            
+	            if($scope.client.selected && $scope.client.selected.id !=0){
+	        		$scope.searchProject = $scope.client.selected;
+	        	}else{
+	        	   $scope.searchProject = null;
+	        	}
+	        	if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
+	        		$scope.searchSite = $scope.sitesListOne.selected;
+	        	}else{
+	        	   $scope.searchSite = null;
+	        	}
+	        	if($scope.regionsListOne.selected && $scope.regionsListOne.selected.id !=0){
+	        		$scope.searchRegion = $scope.regionsListOne.selected;
+	        	}else{
+	        	   $scope.searchRegion = null;
+	        	}
+	        	if($scope.branchsListOne.selected && $scope.branchsListOne.selected.id !=0){
+	        		$scope.searchBranch = $scope.branchsListOne.selected;
+	        	}else{
+	        	   $scope.searchBranch = null;
+	        	}
 
                 if(!$scope.searchProject && !$scope.searchSite){
                     $scope.searchCriteria.findAll = true;
@@ -1902,6 +1943,32 @@ angular.module('timeSheetApp')
                     $scope.searchCriteria.projectId = null;
                     $scope.searchCriteria.projectName = null;
                 }
+	               
+	            if($scope.searchRegion) {
+		        	$scope.searchCriteria.regionId = $scope.searchRegion.id;
+                    $scope.searchCriteria.regionName = $scope.searchRegion.name;
+		        	if(!$scope.searchCriteria.regionId) {
+		        		$scope.searchCriteria.regionName = $scope.searchRegion.name;
+		        		console.log('selected region name ='+ $scope.searchRegion + ', ' +$scope.searchCriteria.regionName);
+		        	}
+		        	console.log('selected region id ='+ $scope.searchCriteria.regionId);
+	        	}else {
+	        		$scope.searchCriteria.regionId = 0;
+	        		$scope.searchCriteria.regionName = null;
+	        	}
+	        	
+	        	if($scope.searchBranch) {
+		        	$scope.searchCriteria.branchId = $scope.searchBranch.id;
+                    $scope.searchCriteria.branchName = $scope.searchBranch.name;
+		        	if(!$scope.searchCriteria.branchId) {
+		        		$scope.searchCriteria.branchName = $scope.searchBranch.name;
+		        		console.log('selected branch name ='+ $scope.searchBranch + ', ' +$scope.searchCriteria.branchName);
+		        	}
+		        	console.log('selected branch id ='+ $scope.searchCriteria.branchId);
+	        	}else {
+	        		$scope.searchCriteria.branchId = 0;
+	        		$scope.searchCriteria.branchName = null;
+	        	}
 
 	            if($scope.searchSite) {
 	                    $scope.searchCriteria.siteId = $scope.searchSite.id;
@@ -2108,6 +2175,8 @@ angular.module('timeSheetApp')
             $scope.downloader=false;
             $scope.downloaded = true;
             $scope.siteFilterDisable = true;
+            $scope.regionFilterDisable = true;
+            $scope.branchFilterDisable = true;
             $scope.sitesList = null;
             $scope.sites = null;
             

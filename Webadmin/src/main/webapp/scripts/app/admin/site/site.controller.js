@@ -1047,6 +1047,8 @@ angular.module('timeSheetApp')
             $scope.clearField = true;
             $scope.filter = false;
             $scope.siteFilterDisable = true;
+            $scope.regionFilterDisable = true;
+            $scope.branchFilterDisable = true;
         	$scope.selectedSite = null;
         	$scope.sitesList = null;
 
@@ -1117,6 +1119,9 @@ angular.module('timeSheetApp')
         /*** UI select (Region List) **/
         $scope.loadRegionsList = function (projectId, callback) {
         	$scope.regionSpin = true;
+        	$scope.branchsLists = [];
+        	$scope.branchsListOne.selected = null;
+        	$scope.branchFilterDisable = true;
             SiteComponent.getRegionByProject(projectId).then(function (response) {
                 console.log(response);
                 $scope.regionList = response;
