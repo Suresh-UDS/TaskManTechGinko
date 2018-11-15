@@ -25,7 +25,9 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 import com.ts.app.domain.*;
+import com.ts.app.repository.*;
 import com.ts.app.service.*;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -43,29 +45,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ts.app.repository.EmployeeRepository;
-import com.ts.app.repository.EmployeeShiftRepository;
-import com.ts.app.repository.LocationRepository;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.repository.UserRoleRepository;
 import com.ts.app.security.SecurityUtils;
-import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
-import com.ts.app.web.rest.dto.AssetDTO;
-import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.ChecklistDTO;
-import com.ts.app.web.rest.dto.ChecklistItemDTO;
-import com.ts.app.web.rest.dto.ImportResult;
-import com.ts.app.web.rest.dto.JobChecklistDTO;
-import com.ts.app.web.rest.dto.JobDTO;
-import com.ts.app.web.rest.dto.LocationDTO;
-import com.ts.app.web.rest.dto.ProjectDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
-import com.ts.app.web.rest.dto.SiteDTO;
-import com.ts.app.web.rest.dto.UserDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
 
 
@@ -106,6 +86,9 @@ public class ImportUtil {
 
 	@Autowired
 	private EmployeeRepository employeeRepo;
+
+    @Autowired
+    private TicketRepository ticketRepository;
 
 	@Autowired
 	private ProjectRepository projectRepo;
@@ -194,6 +177,28 @@ public class ImportUtil {
 		result.setStatus("PROCESSING");
 		return result;
 	}
+
+	public ImportResult changeEmployeeSite(MultipartFile file, long dateTime){
+	    String fileName = "changeEmployee"+dateTime + ".xlsx";
+	    String filePath = env.getProperty(NEW_IMPORT_FOLDER)+SEPARATOR+SITE_FOLDER;
+	    String uploadFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
+	    String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER)+SEPARATOR+SITE_FOLDER;
+	    String fileKey = fileName.substring(0,fileName.indexOf(".xlsx"));
+
+	    if(statusMap.containsKey(fileKey)){
+	        String status = statusMap.get(fileKey);
+	        log.debug("Current status for filename - "+fileKey+" ,status - "+status);
+        }else{
+	        statusMap.put(fileKey,"PROCESSING");
+        }
+
+        importNewFiles("siteEmployeeChange",filePath,fileName,targetFilePath);
+	    ImportResult result = new ImportResult();
+	    result.setFile(fileKey);
+	    result.setStatus("PROCESSING");
+	    return result;
+
+    }
 
 	public ImportResult importLocationData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
@@ -342,6 +347,9 @@ public class ImportUtil {
 					case "assetAMC" :
 						importAssetAMCFromFile(fileObj.getPath());
 						break;
+
+                    case "siteEmployeeChange" :
+                        changeSiteEmployee(fileObj.getPath());
 				}
 				statusMap.put(fileKey, "COMPLETED");
 				FileSystem fileSystem = FileSystems.getDefault();
@@ -418,7 +426,12 @@ public class ImportUtil {
 				Row currentRow = datatypeSheet.getRow(r);
 				JobDTO jobDto = new JobDTO();
 				if(siteId == 0) {
-					siteId = (long) currentRow.getCell(0).getNumericCellValue();
+					if(currentRow.getCell(0) != null) {
+						siteId = (long) currentRow.getCell(0).getNumericCellValue();
+					}
+					if(siteId == 0 && siteRow.getCell(2) != null) {
+						siteId = (long) siteRow.getCell(2).getNumericCellValue();
+					}
 				}
 				jobDto.setSiteId(siteId);
 				jobDto.setTitle(currentRow.getCell(1).getStringCellValue());
@@ -519,6 +532,7 @@ public class ImportUtil {
 					jobService.saveJob(jobDto);
 
 				}
+				siteId  = 0;
 			}
 
 		} catch (FileNotFoundException e) {
@@ -581,11 +595,15 @@ public class ImportUtil {
 				log.debug("REgion and branch - "+ currentRow.getCell(7).getStringCellValue()+" - "+currentRow.getCell(8).getStringCellValue());
                 if(org.apache.commons.lang3.StringUtils.isNotEmpty(currentRow.getCell(7).getStringCellValue())){
                     log.debug("REgion from site import - "+currentRow.getCell(7).getStringCellValue());
-                    Region region = siteService.isRegionSaved(currentRow.getCell(7).getStringCellValue(),siteDTO.getProjectId());
+                    String regionName = currentRow.getCell(7).getStringCellValue();
+                    Region region = siteService.isRegionSaved(regionName,siteDTO.getProjectId());
+
                     if(region!=null && region.getId()>0){
                         siteDTO.setRegion(region.getName());
                         if(org.apache.commons.lang3.StringUtils.isNotEmpty(currentRow.getCell(8).getStringCellValue())){
-                            Branch branch = siteService.isBranchSaved(currentRow.getCell(8).getStringCellValue(),siteDTO.getProjectId(),region.getId());
+
+                            String branchName = currentRow.getCell(8).getStringCellValue();
+                            Branch branch = siteService.isBranchSaved(branchName,siteDTO.getProjectId(),region.getId());
                             if(branch!=null && branch.getId()>0){
                                 siteDTO.setBranch(branch.getName());
                             }
@@ -786,6 +804,18 @@ public class ImportUtil {
 
 				assetPPMDto.setEmpId(Long.parseLong(getCellValue(currentRow.getCell(10))));
 
+                String checkListName = getCellValue(currentRow.getCell(11));
+                if(StringUtils.isNotBlank(checkListName)) {
+                    SearchCriteria searchCriteria = new SearchCriteria();
+                    searchCriteria.setName(checkListName);
+                    SearchResult<ChecklistDTO> result = checklistService.findBySearchCrieria(searchCriteria);
+                    List<ChecklistDTO> checkListDtos = result.getTransactions();
+                    if (CollectionUtils.isNotEmpty(checkListDtos)) {
+                        ChecklistDTO checklistDto = checkListDtos.get(0);
+                        assetPPMDto.setChecklistId(checklistDto.getId());
+                    }
+                }
+
 				assetManagementService.createAssetPpmSchedule(assetPPMDto);
 
 			}
@@ -838,6 +868,20 @@ public class ImportUtil {
 				assetAMCDto.setEmpId(Long.parseLong(getCellValue(currentRow.getCell(10))));
 				assetAMCDto.setFrequencyPrefix("Every");
 				assetAMCDto.setMaintenanceType(getCellValue(currentRow.getCell(11)));
+
+                String checkListName = getCellValue(currentRow.getCell(12));
+
+                if(StringUtils.isNotBlank(checkListName)) {
+                    SearchCriteria searchCriteria = new SearchCriteria();
+                    searchCriteria.setName(checkListName);
+                    SearchResult<ChecklistDTO> result = checklistService.findBySearchCrieria(searchCriteria);
+                    List<ChecklistDTO> checkListDtos = result.getTransactions();
+                    if (CollectionUtils.isNotEmpty(checkListDtos)) {
+                        ChecklistDTO checklistDto = checkListDtos.get(0);
+                        assetAMCDto.setChecklistId(checklistDto.getId());
+                    }
+                }
+
 				assetManagementService.createAssetAMCSchedule(assetAMCDto);
 
 			}
@@ -863,7 +907,6 @@ public class ImportUtil {
 			for (; r <= lastRow; r++) {
 				log.debug("Current Row number -" + r);
 				Row currentRow = datatypeSheet.getRow(r);
-				Employee employee = new Employee();
 
 				/*Employee existingEmployee = employeeRepo.findByEmpId(currentRow.getCell(2).getStringCellValue().trim());
 				log.debug("Employee obj =" + existingEmployee);
@@ -873,68 +916,99 @@ public class ImportUtil {
 
 				}
 				else {*/
-				Project newProj = projectRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(0))));
-				Site newSite = siteRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(1))));
-				employee.setEmpId(getCellValue(currentRow.getCell(2)));
-				employee.setName(getCellValue(currentRow.getCell(3)));
-				employee.setFullName(getCellValue(currentRow.getCell(3)));
-				employee.setLastName(getCellValue(currentRow.getCell(4)));
-				employee.setPhone(getCellValue(currentRow.getCell(5)));
-				employee.setEmail(getCellValue(currentRow.getCell(6)));
-				employee.setDesignation(getCellValue(currentRow.getCell(7)));
-				// email, phone number missing
-				ZoneId  zone = ZoneId.of("Asia/Singapore");
-				ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
-				employee.setCreatedDate(zdt);
-				employee.setActive(Employee.ACTIVE_YES);
-				if(StringUtils.isNotEmpty(getCellValue(currentRow.getCell(8)))) {
-					Employee manager =  employeeRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(8))));
-					employee.setManager(manager);
-		        }
-				List<Project> projects = new ArrayList<Project>();
-				projects.add(newProj);
-				List<Site> sites = new ArrayList<Site>();
-				sites.add(newSite);
-				employee.setFaceAuthorised(false);
-				employee.setFaceIdEnrolled(false);
-				employee.setLeft(false);
-				employee.setRelieved(false);
-				employee.setReliever(false);
-				List<EmployeeProjectSite> projectSites = new ArrayList<EmployeeProjectSite>();
-				EmployeeProjectSite projectSite = new EmployeeProjectSite();
-				/*
-				projectSite.setProjectId(newProj.getId());
-				projectSite.setProjectName(newProj.getName());
-				projectSite.setSiteId(newSite.getId());
-				projectSite.setSiteName(newSite.getName());
-				*/
-				projectSite.setProject(newProj);
-				projectSite.setSite(newSite);
-				projectSite.setEmployee(employee);
-				projectSites.add(projectSite);
-				employee.setProjectSites(projectSites);
 
-				employeeRepo.save(employee);
-				//create user if opted.
-				String createUser = getCellValue(currentRow.getCell(9));
-				long userRoleId = Long.parseLong(getCellValue(currentRow.getCell(10)));
-				UserDTO user = new UserDTO();
-				if(StringUtils.isNotEmpty(createUser) && createUser.equalsIgnoreCase("Y") && userRoleId > 0) {
-					user.setLogin(employee.getEmpId());
-					user.setPassword(employee.getEmpId());
-					user.setFirstName(employee.getName());
-					user.setLastName(employee.getLastName());
-					user.setAdminFlag("N");
-					user.setUserRoleId(userRoleId);
-					user.setEmployeeId(employee.getId());
-					user.setActivated(true);
-					user.setEmail(currentRow.getCell(6).getStringCellValue());
-					user = userService.createUserInformation(user);
-					User userObj = userRepository.findOne(user.getId());
-					employee.setUser(userObj);
-					employeeRepo.save(employee);
+				if(currentRow.getCell(2).getStringCellValue() != null) {
+					Employee existingEmployee = employeeRepo.findByEmpId(currentRow.getCell(2).getStringCellValue().trim());
+					if(existingEmployee != null) {
+						List<EmployeeProjectSite> projSites = existingEmployee.getProjectSites();
+						Project newProj = projectRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(0))));
+						Site newSite = siteRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(1))));
+						EmployeeProjectSite projectSite = new EmployeeProjectSite();
+						/*
+						projectSite.setProjectId(newProj.getId());
+						projectSite.setProjectName(newProj.getName());
+						projectSite.setSiteId(newSite.getId());
+						projectSite.setSiteName(newSite.getName());
+						*/
+						projectSite.setProject(newProj);
+						projectSite.setSite(newSite);
+						projectSite.setEmployee(existingEmployee);
+
+						if(CollectionUtils.isNotEmpty(projSites)) {
+							projSites.add(projectSite);
+						}
+						employeeRepo.save(existingEmployee);
+						log.debug("Update Employee Information with new site info: {}");
+					}else {
+						Employee employee = new Employee();
+
+						Project newProj = projectRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(0))));
+						Site newSite = siteRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(1))));
+						employee.setEmpId(getCellValue(currentRow.getCell(2)));
+						employee.setName(getCellValue(currentRow.getCell(3)));
+						employee.setFullName(getCellValue(currentRow.getCell(3)));
+						employee.setLastName(getCellValue(currentRow.getCell(4)));
+						employee.setPhone(getCellValue(currentRow.getCell(5)));
+						employee.setEmail(getCellValue(currentRow.getCell(6)));
+						employee.setDesignation(getCellValue(currentRow.getCell(7)));
+						// email, phone number missing
+						ZoneId  zone = ZoneId.of("Asia/Singapore");
+						ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
+						employee.setCreatedDate(zdt);
+						employee.setActive(Employee.ACTIVE_YES);
+						if(StringUtils.isNotEmpty(getCellValue(currentRow.getCell(8)))) {
+							Employee manager =  employeeRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(8))));
+							employee.setManager(manager);
+				        }
+						List<Project> projects = new ArrayList<Project>();
+						projects.add(newProj);
+						List<Site> sites = new ArrayList<Site>();
+						sites.add(newSite);
+						employee.setFaceAuthorised(false);
+						employee.setFaceIdEnrolled(false);
+						employee.setLeft(false);
+						employee.setRelieved(false);
+						employee.setReliever(false);
+						List<EmployeeProjectSite> projectSites = new ArrayList<EmployeeProjectSite>();
+						EmployeeProjectSite projectSite = new EmployeeProjectSite();
+						/*
+						projectSite.setProjectId(newProj.getId());
+						projectSite.setProjectName(newProj.getName());
+						projectSite.setSiteId(newSite.getId());
+						projectSite.setSiteName(newSite.getName());
+						*/
+						projectSite.setProject(newProj);
+						projectSite.setSite(newSite);
+						projectSite.setEmployee(employee);
+						projectSites.add(projectSite);
+						employee.setProjectSites(projectSites);
+
+						employeeRepo.save(employee);
+						//create user if opted.
+						String createUser = getCellValue(currentRow.getCell(9));
+						long userRoleId = Long.parseLong(getCellValue(currentRow.getCell(10)));
+						UserDTO user = new UserDTO();
+						if(StringUtils.isNotEmpty(createUser) && createUser.equalsIgnoreCase("Y") && userRoleId > 0) {
+							user.setLogin(employee.getEmpId());
+							user.setPassword(employee.getEmpId());
+							user.setFirstName(employee.getName());
+							user.setLastName(employee.getLastName());
+							user.setAdminFlag("N");
+							user.setUserRoleId(userRoleId);
+							user.setEmployeeId(employee.getId());
+							user.setActivated(true);
+							user.setEmail(currentRow.getCell(6).getStringCellValue());
+							user = userService.createUserInformation(user);
+							User userObj = userRepository.findOne(user.getId());
+							employee.setUser(userObj);
+							employeeRepo.save(employee);
+						}
+						log.debug("Created Information for Employee: {}" + employee.getId());
+
+					}
 				}
-				log.debug("Created Information for Employee: {}", employee);
+
+
 
 			/*}*/
 			}
@@ -945,6 +1019,75 @@ public class ImportUtil {
 			log.error("Error while reading the job data file for import", e);
 		}
 	}
+
+	private void changeSiteEmployee(String path){
+
+	    try{
+	        FileInputStream excelFile = new FileInputStream(new File(path));
+	        Workbook workbook = new XSSFWorkbook(excelFile);
+	        Sheet datatypeSheet = workbook.getSheetAt(0);
+	        int lastRow = datatypeSheet.getLastRowNum();
+	        int r =1;
+	        log.debug("Last Row number - "+r);
+	        boolean canSave = true;
+	        for (;r<=lastRow;r++){
+	            log.debug("Current Row Number - "+lastRow);
+                Row currentRow = datatypeSheet.getRow(r);
+                EmployeeProjectSite employeeProjectSite =new EmployeeProjectSite();
+                Long siteId = Long.valueOf(getCellValue(currentRow.getCell(0)));
+                log.debug("Site id - "+siteId);
+                String empId  = getCellValue(currentRow.getCell(1));
+                log.debug("Employee id - "+empId);
+                Long projectId= Long.valueOf(getCellValue(currentRow.getCell(2)));
+                log.debug("Project id - "+projectId);
+
+                Employee employee = employeeRepo.findByEmpId(empId);
+
+                Site site = siteRepo.getOne(siteId);
+
+                Project project = projectRepo.findOne(projectId);
+
+                if(employee!=null){
+//                    List<Ticket> tickets = ticketRepository.findByEmployee(employee.getId());
+//                    log.debug("Ticket - "+tickets.size());
+//                    if(tickets.size()>0){
+//                        for (Ticket ticket : tickets){
+//                            ticket.setSite(site);
+//                            log.debug("Ticket site id after change - "+ticket.getSite().getId());
+//                            Ticket ticket1 = ticketRepository.save(ticket);
+//                            log.debug("Ticket after changing site Id - "+ticket1.getSite().getId());
+//                        }
+//                    }
+                    employeeProjectSite.setProject(project);
+                    employeeProjectSite.setSite(site);
+                    employeeProjectSite.setEmployee(employee);
+                    List<EmployeeProjectSite> employeeProjectSites = employee.getProjectSites();
+//                    employeeProjectSites.clear();
+                    log.debug("Employee project sites count - "+employeeProjectSites.size());
+                    employeeProjectSites.add(employeeProjectSite);
+                    log.debug("Employee project sites count after - "+employeeProjectSites.size());
+                    log.debug("Employee project sites count after - "+site.getName() +" - "+project.getName());
+
+                    employee.setProjectSites(employeeProjectSites);
+
+//                    for(EmployeeProjectSite employeeProjectSite1:employeeProjectSites){
+//                        log.debug("Employee - "+employeeProjectSite1.getProject().getName());
+//                    }
+                    employeeRepo.save(employee);
+
+//                    log.debug("Employee found - "+employee.getName());
+                }else{
+                    log.debug("Employee null");
+                }
+
+
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 	private void importEmployeeShiftMasterFromFile(String path) {
 		try {

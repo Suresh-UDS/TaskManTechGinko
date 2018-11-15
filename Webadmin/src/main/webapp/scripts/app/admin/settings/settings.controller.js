@@ -25,7 +25,8 @@ angular.module('timeSheetApp')
     			ppmEmailIds : [],
     			amcEmailIds : [],
     			warrantyEmailIds: [],
-    			dayWiseReportEmailIds: []
+    			dayWiseReportEmailIds: [],
+    			musterRollEmailIds : []
     		};
     		
     	
@@ -263,6 +264,20 @@ angular.module('timeSheetApp')
     
 	    $scope.removeDayWiseReportEmail = function(ind) {
     		$scope.settings.dayWiseReportEmailIds.splice(ind,1);
+	    }
+	    
+	    // Muster roll report alert
+	    $scope.addMusterRollEmail = function() {
+        	var email = $scope.musterRollEmail;
+        	if(!$scope.settings.musterRollEmailIds) {
+        		$scope.settings.musterRollEmailIds = [];
+        	}
+        	$scope.settings.musterRollEmailIds.push(email);
+        	$scope.musterRollEmail = '';
+	    }
+    
+	    $scope.removeMusterEmail = function(index) {
+    		$scope.settings.musterRollEmailIds.splice(index,1);
 	    }
     		
         $scope.loadProjects = function () {

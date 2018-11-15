@@ -28,7 +28,7 @@
                         <div class="form-group">
                             <label class="label-control">From date</label>
                             <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                            <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+                            <input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedFromDate" autocomplete="off"/>
 
                         </div>
 
@@ -38,7 +38,7 @@
                         <div class="form-group">
                             <label class="label-control">To date</label>
                             <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                            <input type="text" class="form-control datepicker"  id="dateFilterTo"  placeholder="{{dateFilterTo | date:'dd-MMM-yyyy'}}"/>
+                            <input type="text" class="form-control datepicker"  id="dateFilterTo" ng-model="selectedToDate"  autocomplete="off"/>
 
                         </div>
 
@@ -47,7 +47,7 @@
                         <div class="dropdown">
                             <label class="label-control">Select Client</label>
                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                            <select class="form-control " ng-model="selectedProject" ng-change="changeProject()" ng-options="project as project.name for project in projects" >
+                            <select class="form-control " ng-model="selectedProject" ng-change="LoadFilterProjects()" ng-options="project as project.name for project in projects" >
                                 <option value="">Please select Client...</option>
                             </select>
                         </div>
@@ -58,7 +58,7 @@
                         <div class="dropdown ">
                             <label class="label-control">Select Region</label>
                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                            <select class="form-control " ng-model="selectedRegion" ng-change="refreshReport()" ng-options="region as region.name for region in regionList">
+                            <select class="form-control " ng-model="selectedRegion" ng-change="LoadFilterRegions()" ng-options="region as region.name for region in regionList">
                                 <option value="">Please select Region...</option>
                             </select>
                         </div>
@@ -68,7 +68,7 @@
                         <div class="dropdown ">
                             <label class="label-control">Select Branch</label>
                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                            <select class="form-control " ng-model="selectedBranch" ng-change="refreshReport()" ng-options="branch as branch.name for branch in branchList">
+                            <select class="form-control " ng-model="selectedBranch" ng-change="LoadFilterBranches()" ng-options="branch as branch.name for branch in branchList">
                                 <option value="">Please select Branch...</option>
                             </select>
                         </div>
@@ -78,7 +78,7 @@
                         <div class="dropdown ">
                             <label class="label-control">Select Site</label>
                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                            <select class="form-control " ng-model="selectedSite" ng-change="refreshReport()" ng-options="site as site.name for site in sites">
+                            <select class="form-control " ng-model="selectedSite" ng-change="LoadFilterSites()" ng-options="site as site.name for site in sites">
                                 <option value="">Please select Site...</option>
                             </select>
                         </div>
@@ -364,12 +364,12 @@
                   </div>
               </div>
 
-              <div class="panel panel-default" has-permission="DashboardTickets:View" ng-if="openTicketsTotalCount>0">
+              <div id="openTicketPanel" class="panel panel-default" has-permission="DashboardTicketsChart:View" >
                   <div class="panel-heading">Open Call Tickets</div>
                   <div class="panel-body">
                       <div class="row">
                           <div class="col-md-8">
-                              <canvas id="bar" class="chart chart-bar">
+                              <canvas id="bar1" class="chart chart-bar" >
                               </canvas>
                           </div>
 
@@ -420,7 +420,7 @@
                       </div>
                   </div>
               </div>
-              <div class="panel panel-default" has-permission="DashboardTickets:View" ng-if="closedTicketsTotalCount>0">
+              <div id="closedTicketPanel" class="panel panel-default" has-permission="DashboardTicketsChart:View" >
                   <div class="panel-heading"> Closed Call Tickets</div>
                   <div class="panel-body">
                       <div class="row">
@@ -480,7 +480,7 @@
                       </div>
                   </div>
               </div>
-              <div class="panel panel-default" has-permission="DashboardTickets:View" ng-if="overAllTicketsTotalCount>0">
+              <div id="overallTicketPanel" class="panel panel-default" has-permission="DashboardTicketsChart:View" >
                   <div class="panel-heading">Overall Tickets</div>
                   <div class="panel-body">
                       <div class="row">

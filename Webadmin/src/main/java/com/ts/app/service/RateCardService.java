@@ -499,7 +499,7 @@ public class RateCardService extends AbstractService {
 
 	public Object getQuotations(SearchCriteria searchCriteria) {
 
-        log.debug("get Quotations");
+        log.debug("get Quotations"+searchCriteria);
         Object quotationList = "";
 		User user = userRepository.findOne(searchCriteria.getUserId());
 		List<EmployeeProjectSite> projectSites = new ArrayList<EmployeeProjectSite>();
@@ -535,22 +535,58 @@ public class RateCardService extends AbstractService {
 
             headers.setAll(map);
 
+            log.debug("Parameters - "+searchCriteria.isQuotationIsApproved() + " "+searchCriteria.isQuotationIsArchived()+ " "+ searchCriteria.isQuotationIsDrafted());
+
             JSONObject request = new JSONObject();
             request.put("projectId",searchCriteria.getProjectId());
             request.put("siteId",searchCriteria.getSiteId());
             request.put("id",searchCriteria.getId());
             request.put("title",searchCriteria.getQuotationTitle());
             request.put("createdBy",searchCriteria.getQuotationCreatedBy());
-            request.put("createdDate", df.format(searchCriteria.getQuotationCreatedDate()));
+
+            if(searchCriteria.getQuotationCreatedDate()!=null){
+                df.setTimeZone(tz);
+                String createdDate = df.format(searchCriteria.getQuotationCreatedDate());
+                String toDate = df.format(searchCriteria.getToDate());
+                request.put("createdDate", createdDate);
+                request.put("toDate", toDate);
+
+            }
+
+            if(searchCriteria.getFromDate()!=null){
+                df.setTimeZone(tz);
+                String createdDate = df.format(searchCriteria.getQuotationCreatedDate());
+                String toDate = df.format(searchCriteria.getToDate());
+                request.put("createdDate", createdDate);
+                request.put("toDate", toDate);
+
+            }
+
+            if(searchCriteria.getCheckInDateTimeFrom()!=null){
+                df.setTimeZone(tz);
+                String createdDate = df.format(searchCriteria.getQuotationCreatedDate());
+                String toDate = df.format(searchCriteria.getToDate());
+                request.put("createdDate", createdDate);
+                request.put("toDate", toDate);
+
+            }
+
             request.put("approvedBy",searchCriteria.getQuotationApprovedBy());
             request.put("status",searchCriteria.getQuotationStatus());
             request.put("submittedDate", searchCriteria.getQuotationSubmittedDate());
             request.put("approvedDate", searchCriteria.getQuotationApprovedDate());
+            request.put("isSubmitted", searchCriteria.isQuotationIsSubmitted());
+            request.put("isArchived", searchCriteria.isQuotationIsArchived());
+            request.put("isRejected", searchCriteria.isQuotationIsRejected());
+            request.put("isDrafted", searchCriteria.isQuotationIsDrafted());
+            request.put("isApproved", searchCriteria.isQuotationIsApproved());
+            request.put("currPage", searchCriteria.getCurrPage());
+            request.put("sort", searchCriteria.getSort());
             request.put("siteIds", siteIds);
             log.debug("Request body " + request.toString());
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);
             log.debug("Rate card service end point"+quotationSvcEndPoint);
-            ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/quotation", requestEntity, String.class);
+                ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/quotation", requestEntity, String.class);
             log.debug("Response freom push service "+ response.getStatusCode());
             log.debug("response from push service"+response.getBody());
 //            rateCardDTOList = (List<RateCardDTO>) response.getBody();

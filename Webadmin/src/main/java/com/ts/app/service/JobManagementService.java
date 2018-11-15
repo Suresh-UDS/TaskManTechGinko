@@ -28,6 +28,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -361,6 +362,7 @@ public class JobManagementService extends AbstractService {
 		                    page = jobRepository.findByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds,searchCriteria.getJobStatus(),fromDt,toDt,searchCriteria.isScheduled(),searchCriteria.getLocationId(),pageRequest);
 		                }
 		                */
+		        		/*
 		        		if(searchCriteria.isAssignedStatus()) {
 		        		    log.debug("search criteria assigned status true");
 		        		    if(searchCriteria.getSiteId() > 0) {
@@ -388,7 +390,9 @@ public class JobManagementService extends AbstractService {
 		        			}
 		        			allJobsList.addAll(page.getContent());
 		        		}
+		        		*/
 		            	if(employee.getUser().getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
+		            		/*
 		            		if(searchCriteria.getSiteId() > 0 && searchCriteria.getEmployeeId() >0 ) {
 		            		    if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateSiteAndEmployeeAndLocation(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
@@ -428,10 +432,12 @@ public class JobManagementService extends AbstractService {
                                 }
 		            		}else {
 			        			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
-		            		}
+		            		}*/
+		            		page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
 		        			allJobsList.addAll(page.getContent());
 
 		            	}else {
+		            		/*
 		            		if(searchCriteria.getSiteId() > 0 && searchCriteria.getEmployeeId() >0) {
                                 if(searchCriteria.getLocationId()>0){
                                     page = jobRepository.findByStartDateSiteAndEmployeeAndLocation(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(),searchCriteria.getLocationId(), fromDt, toDt, pageRequest);
@@ -482,6 +488,8 @@ public class JobManagementService extends AbstractService {
 		            				page = jobRepository.findByDateRange(searchCriteria.getUserId(), subEmpIds, fromDt, toDt, pageRequest);
 		            			}
 		            		}
+		            		*/
+		            		page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
 		            		allJobsList.addAll(page.getContent());
 		            	}
 
@@ -658,6 +666,16 @@ public class JobManagementService extends AbstractService {
 
 		        	    log.debug("site reporsitory find all");
 		        		List<Site> allSites = null;
+		        		if(searchCriteria.getSiteId() > 0){
+	        				reportResults.add(reportService.jobCountBySiteAndStatusAndDateRange(searchCriteria.getSiteId(),fromDt, toDt));
+	        			}else if(!StringUtils.isEmpty(searchCriteria.getBranch())) {
+	        				reportResults.add(reportService.jobCountByProjectRegionBranchAndStatusAndDateRange(searchCriteria.getProjectId(),searchCriteria.getRegion(), searchCriteria.getBranch(), fromDt, toDt));
+	        			}else if(!StringUtils.isEmpty(searchCriteria.getRegion())) {
+	        				reportResults.add(reportService.jobCountByProjectRegionAndStatusAndDateRange(searchCriteria.getProjectId(),searchCriteria.getRegion(), fromDt, toDt));
+	        			}else if(searchCriteria.getProjectId() > 0) {
+	        				reportResults.add(reportService.jobCountByProjectAndStatusAndDateRange(searchCriteria.getProjectId(), fromDt, toDt));
+	        			}
+		        		
 		        		if(isAdmin) {
 		        			allSites = siteRepository.findAll();
 		        		}else {
@@ -665,6 +683,8 @@ public class JobManagementService extends AbstractService {
 		        				allSites = siteRepository.findSiteByEmployeeId(user.getEmployee().getId());
 		        			}
 		        		}
+
+		        		
 		        		if(CollectionUtils.isEmpty(allSites)) {
 		        			allSites = new ArrayList<Site>();
 		        			if(searchCriteria.getSiteId() > 0) {
@@ -675,8 +695,6 @@ public class JobManagementService extends AbstractService {
 			        		for(Site site : allSites) {
 			        			if(searchCriteria.isGraphRequest()) {
 			        				reportResults.add(reportService.jobCountGroupByDate(site.getId(), fromDt, toDt));
-			        			}else {
-			        				reportResults.add(reportService.jobCountBySiteAndStatusAndDateRange(site.getId(),fromDt, toDt));
 			        			}
 			        		}
 		        		}
@@ -874,6 +892,7 @@ public class JobManagementService extends AbstractService {
 		return;
 	}
 	
+	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void saveScheduledJob(List<JobDTO> jobDTOs) {
 		if(CollectionUtils.isNotEmpty(jobDTOs)) {
 			List<Job> jobs = new ArrayList<Job>();
@@ -1024,7 +1043,7 @@ public class JobManagementService extends AbstractService {
 			data.append("&plannedEndTime="+job.getPlannedEndTime());
 			data.append("&plannedHours="+jobDTO.getPlannedHours());
 			data.append("&location="+jobDTO.getLocationId());
-			data.append("&frequency="+jobDTO.getFrequency());
+			data.append("&frequency="+ (StringUtils.isEmpty(jobDTO.getFrequency()) ? "" : jobDTO.getFrequency()));
 			data.append("&duration="+(StringUtils.isEmpty(jobDTO.getDuration()) ? "1" : jobDTO.getDuration()));
 			schConfDto.setData(data.toString());
 			schConfDto.setStartDate(jobDTO.getPlannedStartTime());

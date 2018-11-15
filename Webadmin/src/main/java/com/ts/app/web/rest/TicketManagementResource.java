@@ -187,9 +187,9 @@ public class TicketManagementResource {
 	}
 	
 	@RequestMapping(value = "/checkDailyReports", method = RequestMethod.GET)
-	public String checkdailyReport(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date date, @RequestParam("onDemand") boolean onDemand) {
+	public String checkdailyReport(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date date, @RequestParam("onDemand") boolean onDemand, @RequestParam(value="siteId", required=false) long siteId) {
 		log.debug("check daily report called...");
-		schedulerHelperService.sendDaywiseReportEmail(date, onDemand);
+		schedulerHelperService.sendDaywiseReportEmail(date, onDemand, siteId);
 		return "successfully send reports!";
 	}
 	

@@ -750,8 +750,96 @@ module.exports = {
         });
 
 
-    }
+    },
 
+    /*newSearchQuotation: function(req,res,next){
+      if(req.body.siteId && req.body.siteId>0 && req.body.title && req.body.status && req.body.createdBy && req.body.approvedBy && req.body.createdDate){
 
-    
+      }else if(req.body.siteId && req.body.siteId>0 && req.body.title && req.body.status && req.body.createdBy && req.body.approvedBy){
+
+      }else if(req.body.siteId && req.body.siteId>0 && req.body.title && req.body.status && req.body.createdDate && req.body.approvedBy){
+
+      }else if(req.body.siteId && req.body.siteId>0 && req.body.title && req.body.status && req.body.created){
+
+      }
+    }*/
+
+    newSearchQuotation: function(req,res,next){
+
+        console.log("Search criteria");
+        console.log(req.body);
+
+        var quotCriterias = {};
+
+      if(req.body.siteId && req.body.siteId>0){
+        quotCriterias.siteId=req.body.siteId;
+      }
+      if(req.body.title){
+        quotCriterias.title={$regex:'^'+req.body.title,$options:"si"};
+      }
+      if(req.body.status){
+        //quotCriterias.status={$regex:'^'+req.body.status,$options:"si"};
+      }
+      if(req.body.createdBy){
+        quotCriterias.createdByUserName={$regex:'^'+req.body.createdBy,$options:"si"};
+      }
+      if(req.body.approvedBy){
+        quotCriterias.approvedByUserName={$regex:'^'+req.body.approvedBy,$options:"si"};
+      }
+      if(req.body.isSubmitted){
+        quotCriterias.isSubmitted=req.body.isSubmitted;
+      }
+      if(req.body.isArchived){
+        quotCriterias.isArchived=req.body.isArchived;
+      }
+      if(req.body.isRejected){
+        quotCriterias.isRejected=req.body.isRejected;
+      }
+      if(req.body.isDrafted){
+        quotCriterias.isDrafted=req.body.isDrafted;
+      }
+      if(req.body.isApproved){
+        quotCriterias.isApproved=req.body.isApproved;
+      }
+      if(req.body.createdDate){
+          var startDate = new Date(req.body.createdDate);
+          startDate.setHours(0,0,0);
+          quotCriterias.lastModifiedDate = { $gt: startDate, $lt: endDate };
+            if(req.body.toDate){
+                var endDate = new Date(req.body.toDate);
+                endDate.setHours(23,59,59);
+                quotCriterias.lastModifiedDate = { $gt: startDate, $lt: endDate };
+            }else{
+                var endDate = new Date();
+                endDate.setHours(23,59,59);
+                quotCriterias.lastModifiedDate = { $gt: startDate, $lt: endDate };
+            }
+       }
+   
+      console.log("currPage",req.body.currPage-1 +"sort"+ req.body.sort);
+      var quotQuery = Quotation.find(quotCriterias).sort({'createdDate':-1}).skip((req.body.currPage-1)*10).limit(req.body.sort);
+      //var quotQueryCount = Quotation.find(quotCriterias).count();
+      //var quotQueryCountVal = 0; 
+      console.log("Search criteria",quotCriterias);
+      quotQuery.exec(function(err,quotations){
+          if(err){
+              //console.log("Error in finding quotations");
+              res.send(400,"No quotation found");
+          }else{
+              /*quotQueryCount.exec(function(err,quotationsCount){
+                  if(err){
+                    quotQueryCountVal = 0;
+                  }else{
+                     quotQueryCountVal = quotationsCount;
+                  }
+                });     
+                //console.log("result",quotations);
+             quotations.totalCount = quotQueryCountVal;*/
+             res.send(200,quotations); 
+          }
+          
+    });     
+
+   }
 };
+

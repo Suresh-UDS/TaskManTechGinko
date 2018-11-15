@@ -222,30 +222,55 @@
                     <div class="row">
 
                         <div class="col-xs-12 col-md-6 col-lg-6">
-                            <div class="form-group" >
-                                <div class="dropdown">
-                                    <label class="label-control">Client</label>
-                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                    <!--<select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projectsList track by project.id" ng-pattern="Select Client" ng-required>-->
-                                        <!--<option value="">Select Client...</option>-->
-                                    <!--</select>-->
-                                    <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                    <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <!-- <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable">
-                                        <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select client' :clearField?'Select client':searchProject}}</ui-select-match>
-                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search" ng-click="loadDepSites(searchProject)">
-                                            <div ng-bind="client" ></div>
-                                        </ui-select-choices>
-                                    </ui-select> -->
-                                    <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
-									  <ui-select-match placeholder="Select clients...">{{$select.selected.name}}</ui-select-match>
-									  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected)" null-option="allClients" loose-null>
-									    <span ng-bind-html="client.name | highlight: $select.search"></span>
-									  </ui-select-choices>
-									</ui-select>
-                                </div>
+                        <div class="form-group" >
+                            <div class="dropdown">
+                                <label class="label-control">Client</label>
+                                <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                <!--<select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projectsList track by project.id" ng-pattern="Select Client" ng-required>-->
+                                <!--<option value="">Select Client...</option>-->
+                                <!--</select>-->
+                                <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                <!-- <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable">
+                                    <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select client' :clearField?'Select client':searchProject}}</ui-select-match>
+                                    <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search" ng-click="loadDepSites(searchProject)">
+                                        <div ng-bind="client" ></div>
+                                    </ui-select-choices>
+                                </ui-select> -->
+                                <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
+                                    <ui-select-match placeholder="Select clients...">{{$select.selected.name}}</ui-select-match>
+                                    <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected);loadRegions(client.selected.id)" null-option="allClients" loose-null>
+                                        <span ng-bind-html="client.name | highlight: $select.search"></span>
+                                    </ui-select-choices>
+                                </ui-select>
                             </div>
                         </div>
+                    </div>
+
+                        <div class="col-xs-12 col-md-6 col-lg-6">
+                            <div class="form-group" >
+
+                                    <div class="dropdown ">
+                                        <label class="label-control">Select Region</label>
+                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                        <select class="form-control " ng-model="selectedRegion" ng-change="loadBranch(client.selected.id)" ng-options="region as region.name for region in regionList">
+                                            <option value="">Please select Region...</option>
+                                        </select>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-md-6 col-lg-6">
+                            <div class="dropdown ">
+                                <label class="label-control">Select Branch</label>
+                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                <select class="form-control " ng-model="selectedBranch" ng-change="getSitesBYRegionOrBranch(client.selected.id,selectedRegion.name,selectedBranch.name)" ng-options="branch as branch.name for branch in branchList">
+                                    <option value="">Please select Branch...</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="col-xs-12 col-md-6 col-lg-6">
                             <div class="dropdown">
                                 <div class="form-group">

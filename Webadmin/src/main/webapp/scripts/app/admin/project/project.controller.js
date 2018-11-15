@@ -59,7 +59,7 @@ angular.module('timeSheetApp')
         	$scope.success =null;
         	$scope.errorProjectExists = null;
         	$scope.btnDisable = true;
-        	if($scope.selectedClientGroup.id) {
+        	if($scope.selectedClientGroup && $scope.selectedClientGroup.id) {
         		$scope.project.clientGroup = $scope.selectedClientGroup.clientgroup;
         	}
             ProjectComponent.createProject($scope.project).then(function () {
