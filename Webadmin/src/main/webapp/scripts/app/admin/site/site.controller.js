@@ -38,11 +38,11 @@ angular.module('timeSheetApp')
         $scope.sitesListOne = {};
         $scope.sitesLists = [];
         $scope.sitesListOne.selected =  null;
-        $scope.allRegions = {id:0 , name: '-- ALL REGIONS --'};
+        $scope.allRegions = {id:0 , name: '-- SELECT REGIONS --'};
         $scope.regionsListOne = {};
         $scope.regionsLists = [];
         $scope.regionsListOne.selected =  null;
-        $scope.allBranchs = {id:0 , name: '-- ALL BRANCHES --'};
+        $scope.allBranchs = {id:0 , name: '-- SELECT BRANCHES --'};
         $scope.branchsListOne = {};
         $scope.branchsLists = [];
         $scope.branchsListOne.selected =  null;
