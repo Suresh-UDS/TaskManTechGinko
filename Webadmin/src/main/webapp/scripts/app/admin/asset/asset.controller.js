@@ -132,6 +132,21 @@ angular.module('timeSheetApp')
         $scope.selectedClientFile;
 
         $scope.selectedPhotoFile;
+        
+        /** Ui-select scopes **/
+        $scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
+        $scope.client = {};
+        $scope.clients = [];
+        $scope.allSites = {id:0 , name: '-- ALL SITES --'};
+        $scope.sitesListOne = {};
+        $scope.sitesLists = [];
+        $scope.sitesListOne.selected =  null;
+        $scope.allAssetType = {name: '-- ALL ASSET TYPE --'};
+        $scope.assetTypesListOne = {};
+        $scope.assetTypesLists = [];
+        $scope.allAssetGroup = {assetgroup: '-- ALL ASSET GROUP --'};
+        $scope.assetGroupsListOne = {};
+        $scope.assetGroupsLists = [];
 
         console.log("state params",$stateParams);
 
@@ -514,15 +529,23 @@ angular.module('timeSheetApp')
                 console.log("Loading all projects")
                 $scope.projects = data;
 
-                //Filter
+                /** Ui-select scope **/
+                $scope.clients[0] = $scope.allClients;
+                /*for(var i=0;i<$scope.projectsList.length;i++)
+                {
+                    $scope.uiClient[i] = $scope.projectsList[i].name;
+                }*/
                 for(var i=0;i<$scope.projects.length;i++)
                 {
-                    $scope.uiClient[i] = $scope.projects[i].name;
+                    $scope.clients[i+1] = $scope.projects[i];
                 }
+                
+                $scope.clientDisable = false;
                 $scope.clientFilterDisable = false;
                 //
             });
         }
+        
 
         $scope.loadManufacturer = function () {
             ManufacturerComponent.findAll().then(function (data) {
@@ -765,6 +788,94 @@ angular.module('timeSheetApp')
                 });
             }
         }
+        
+        /** Ui-select function **/
+        
+        $scope.loadDepSitesList = function (searchProject) {
+       	
+            if(searchProject){
+              $scope.siteSpin = true;
+              $scope.searchProject = searchProject;
+              if(jQuery.isEmptyObject($scope.searchProject) == false && $scope.searchProject.id == 0){
+            	  SiteComponent.findAll().then(function (data) {
+	                  $scope.sitesList = data;
+	                  $scope.sitesLists = [];
+	                  $scope.sitesListOne.selected = null;
+	                  $scope.sitesLists[0] = $scope.allSites;
+	                  
+	                  for(var i=0;i<$scope.sitesList.length;i++)
+	                  {
+	                      $scope.sitesLists[i+1] = $scope.sitesList[i];
+	                  }
+	                 
+	                  $scope.siteFilterDisable = false;
+	                  $scope.siteSpin = false;
+	              });
+              }else{
+	              if(jQuery.isEmptyObject($scope.searchProject) == false){
+	                      var depProj=$scope.searchProject.id;
+	              }else{
+	                      var depProj=0;
+	              }
+    
+	              ProjectComponent.findSites(depProj).then(function (data) {
+	                  $scope.sitesList = data;
+	                  $scope.sitesLists = [];
+	                  $scope.sitesListOne.selected = null;
+	                  $scope.sitesLists[0] = $scope.allSites;
+	                  
+	                  //console.log('Site List',$scope.sitesList);
+	                  
+	                  for(var i=0;i<$scope.sitesList.length;i++)
+	                  {
+	                      $scope.sitesLists[i+1] = $scope.sitesList[i];
+	                      
+	                  }
+	       
+	                  $scope.siteFilterDisable = false;
+	                  $scope.siteSpin = false;
+	              });
+              }
+            }
+
+            };
+            
+            $scope.loadAllAssetTypes = function() {
+                //$scope.loadingStart();
+        		AssetTypeComponent.findAll().then(function (data) {
+                //$scope.selectedAssetType = null;
+                $scope.assetTypes = data;
+                console.log('Asset type',$scope.assetTypes);
+                /** Ui-select scope **/
+                $scope.assetTypesLists[0] = $scope.allAssetType;
+                //Filter
+                    for(var i=0;i<$scope.assetTypes.length;i++)
+                    {
+                        $scope.assetTypesLists[i+1] = $scope.assetTypes[i];
+                    }
+                    $scope.assetTypeDisable = false;
+
+            });
+        }
+            
+            $scope.loadAllAssetGroups = function () {
+
+               AssetComponent.loadAssetGroup().then(function (data) {
+                   //console.log("Loading all Asset Group -- " , data)
+                   $scope.assetGroups = data;
+                   //console.log("group",$scope.assetGroups);
+                   /** Ui-select scope **/
+                   $scope.assetGroupsLists[0] = $scope.allAssetGroup;
+                   for(var i=0;i<$scope.assetGroups.length;i++)
+                   {
+                       $scope.assetGroupsLists[i+1] = $scope.assetGroups[i];
+                   }
+                   $scope.assetTypeDisable = false;
+                   $scope.groupFilterDisable = false;
+                   //
+
+               });
+           }
 
         $scope.loadSiteShifts = function() {
         		console.log('selected site - ' + JSON.stringify($scope.selectedSites));
@@ -879,6 +990,7 @@ angular.module('timeSheetApp')
                     console.log("--- Load asset ---",$scope.assetList);
                     $scope.assetEdit.id = $scope.assetList.id;
                     $scope.assetEdit.title = $scope.assetList.title;
+                    $scope.title  = $scope.assetList.title;
                     $scope.assetEdit.modelNumber = $scope.assetList.modelNumber;
                     $scope.assetEdit.serialNumber =  $scope.assetList.serialNumber;
                     $scope.assetEdit.acquiredDate = $scope.assetList.acquiredDate;
@@ -1012,7 +1124,30 @@ angular.module('timeSheetApp')
             }
 
             $scope.searchCriteria.currPage = currPageVal;
+            
             $scope.searchCriteria.isReport = false;
+            
+            
+            if($scope.client.selected && $scope.client.selected.id !=0){
+        		$scope.searchProject = $scope.client.selected;
+        	}else{
+        	   $scope.searchProject = null;
+        	}
+        	if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
+        		$scope.searchSite = $scope.sitesListOne.selected;
+        	}else{
+        	   $scope.searchSite = null;
+        	}
+        	if($scope.assetTypesListOne.selected && $scope.assetTypesListOne.selected.name != "-- ALL ASSET TYPE --"){
+        		$scope.searchAssetType = $scope.assetTypesListOne.selected;
+        	}else{
+        	   $scope.searchAssetType = null;
+        	}
+        	if($scope.assetGroupsListOne.selected && $scope.assetGroupsListOne.selected.assetgroup !="-- ALL ASSET GROUP --"){
+        		$scope.searchAssetGroup = $scope.assetGroupsListOne.selected;
+        	}else{
+        	   $scope.searchAssetGroup = null;
+        	}
 
             console.log('Selected Asset' + $scope.searchAssetName);
 
@@ -1114,11 +1249,6 @@ angular.module('timeSheetApp')
                      $scope.searchCriteria.assetCode =null;
                 }
 
-
-
-
-
-
             //----
             if($scope.pageSort){
                 $scope.searchCriteria.sort = $scope.pageSort;
@@ -1148,9 +1278,64 @@ angular.module('timeSheetApp')
                 if($scope.localStorage){
                     $scope.filter = true;
                     $scope.pages.currPage = $scope.localStorage.currPage;
-                    $scope.searchProject = {searchStatus:'0',id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
-                    $scope.searchSite = {searchStatus:'0',id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
-                    $scope.searchAssetType = {searchStatus:'0',name:$scope.localStorage.assetTypeName};
+                    if($scope.localStorage.projectId){
+                        $scope.searchProject = {id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
+                        $scope.client.selected = $scope.searchProject;
+                        ProjectComponent.findSites($scope.searchProject.id).then(function (data) {
+       	                  $scope.selectedSite = null;
+       	                  $scope.sitesList = data;
+       	                  $scope.sitesLists = [];
+       	                  $scope.sitesLists[0] = $scope.allSites;
+       	                  
+       	                  for(var i=0;i<$scope.sitesList.length;i++)
+       	                  {
+       	                      $scope.sitesLists[i+1] = $scope.sitesList[i];
+       	                  }
+       	                  $scope.siteFilterDisable = false;
+       	                  $scope.siteSpin = false;
+       	              });
+                     }else{
+                        $scope.searchProject = null;
+                     }
+                     if($scope.localStorage.siteId){
+                       $scope.searchSite = {id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
+                       $scope.sitesListOne.selected = $scope.searchSite;
+                       $scope.siteFilterDisable=false;
+                       
+                     }else{
+                        $scope.searchSite = null;
+                     }
+                     if($scope.localStorage.assetTypeName){
+                         $scope.searchAssetType = {name:$scope.localStorage.assetTypeName};
+                         $scope.assetTypesListOne.selected = $scope.searchAssetType;
+                     }else{
+                         $scope.searchAssetType = null;
+                         $scope.assetTypesListOne.selected = $scope.searchAssetType;
+                     }
+                     if($scope.localStorage.assetGroupName){
+                         $scope.searchAssetGroup = {assetgroup:$scope.localStorage.assetGroupName};
+                         $scope.assetGroupsListOne.selected = $scope.searchAssetGroup;
+                     }else{
+                         $scope.searchAssetGroup = null;
+                         $scope.assetGroupsListOne.selected = $scope.searchAssetGroup;
+                     }
+                     if($scope.localStorage.assetTitle){
+                    	 $scope.searchAssetName = $scope.localStorage.assetTitle;
+                    }else{
+                    	 $scope.searchAssetName = "";
+                    }
+                     if($scope.localStorage.assetCode){
+                    	 $scope.searchAssetCode = $scope.localStorage.assetCode;
+                    }else{
+                    	 $scope.searchAssetCode = "";
+                    }
+                     
+                     $scope.searchAcquiredDate = $filter('date')($scope.localStorage.acquiredDate, 'dd/MM/yyyy'); 
+                     $scope.searchAcquiredDateSer = $scope.localStorage.acquiredDate;
+                     $scope.searchCreatedDate = $filter('date')($scope.localStorage.assetCreatedDate, 'dd/MM/yyyy');
+                     $scope.searchCreatedDateSer = $scope.localStorage.assetCreatedDate;
+                     
+                     
 
                 }
 
@@ -1827,6 +2012,14 @@ angular.module('timeSheetApp')
             $scope.downloaded = true;
             $scope.siteFilterDisable = true;
             $scope.sites = null;
+            
+            /** Ui-select scopes **/
+        	$scope.client.selected = null;
+        	$scope.sitesLists =  [];
+        	$scope.sitesListOne.selected =  null;
+        	$scope.assetTypesListOne.selected = null;
+        	$scope.assetGroupsListOne.selected = null;
+        	
             $scope.selectedAsset = {};
             $scope.selectedProject = null;
             $scope.searchCriteria = {};

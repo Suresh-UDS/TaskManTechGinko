@@ -1298,10 +1298,17 @@ angular.module('timeSheetApp')
                     	$scope.statusListOne.selected  = null;
                     	$scope.statusListOne.selected  = $scope.searchStatus;
                     } 
-                    
-                    $scope.searchJobTitle = $scope.localStorage.jobTitle;
-                    $scope.searchJobId = $scope.localStorage.jobId;
-                    $scope.statusListOne.selected   = $scope.localStorage.jobStatus;
+                    if($scope.localStorage.jobTitle){
+                   	 $scope.searchJobTitle = $scope.localStorage.jobTitle;
+                   }else{
+                   	 $scope.searchJobTitle = "";
+                   }
+                    if($scope.localStorage.jobId){
+                   	 $scope.searchJobId = $scope.localStorage.jobId;
+                   }else{
+                   	 $scope.searchJobId = "";
+                   }
+
                     $scope.searchJobDate = $filter('date')($scope.localStorage.checkInDateTimeFrom, 'dd/MM/yyyy');
                     $scope.searchJobDateTo = $filter('date')($scope.localStorage.checkInDateTimeTo, 'dd/MM/yyyy');
                     $scope.searchJobDateSer = $scope.localStorage.checkInDateTimeFrom;
