@@ -58,7 +58,7 @@
 
         </div>
     </div>
-    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
+    <div class="AppliedFilterCon" >
             <span class="AppliedFilterTxtCon">
                 <span class="tag label label-info" style="margin-right: 10px" ng-show="searchProject.id !=0 && searchProject.id !=null">
                     Client: {{searchProject.name}}
@@ -472,8 +472,8 @@
 
                                     <div class="row">
                                         <div class="col-xs-12 col-md-6">
-                                            <div class="form-group" >
-                                                <div class="dropdown">
+                                            <div class="dropdown" >
+                                                <div class="form-group">
                                                     <label class="label-control">Client</label>
                                                 
                                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
@@ -551,14 +551,14 @@
                                         </div>
 
                                         <div class="col-xs-12 col-md-4">
-                                            <div class="form-group" >
-                                                <div class="dropdown">
+                                            <div class="dropdown" >
+                                                <div class="form-group">
                                                     <label class="label-control">Select Employee</label>
                                                     
                                                     <span ng-show="empSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!empSpin && !empListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                     
-                                                    <ui-select ng-model="empListOne.selected"  ng-disabled="empLists.length == 1 || empLists == null">
+                                                    <ui-select ng-model="empListOne.selected"  ng-disabled="empLists.length == 1 || empLists == null || employeeFilterDisable">
 													  <ui-select-match placeholder="Select Employee..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
 													  <ui-select-choices repeat="empListOne in empLists | filter: $select.search" null-option="allEmp" loose-null>
 													    <span ng-bind-html="empListOne.name | highlight: $select.search"></span>
@@ -571,8 +571,8 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-12 col-md-4">
-                                            <div class="form-group">
-                                                <div class="dropdown ">
+                                            <div class="dropdown">
+                                                <div class="form-group">
                                                     <label class="label-control">Select Status</label>
                                                     
                                                     <span ng-show="statusSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
