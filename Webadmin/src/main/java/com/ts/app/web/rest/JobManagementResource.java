@@ -373,7 +373,7 @@ public class JobManagementResource {
 		ImportResult result = importUtil.importJobData(file, cal.getTimeInMillis());
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
-
+ 
     @RequestMapping(value = "/jobs/import/{fileId}/status",method = RequestMethod.GET)
 	public ImportResult importStatus(@PathVariable("fileId") String fileId) {
 		//log.debug("ImportStatus -  fileId -"+ fileId);
@@ -387,7 +387,7 @@ public class JobManagementResource {
 					result.setMsg("Completed importing");
 					break;
 				case "FAILED" :
-					result.setMsg("Failed to import. Please try again");
+					//result.setMsg("Failed to import. Please try again");
 					break;
 				default :
 					result.setMsg("Completed importing");

@@ -1272,6 +1272,23 @@ demo = {
             }
         });
     },
+    
+    showNotificationLonger: function(from, align, type,msg) {
+
+        $.notify({
+            icon: "notifications",
+            message: msg
+
+        }, {
+            type: type,
+            delay: 500,
+            timer: 300000,
+            placement: {
+                from: from,
+                align: align
+            }
+        });
+    },
 
     showApproveAlert: function(employee){
         swal({

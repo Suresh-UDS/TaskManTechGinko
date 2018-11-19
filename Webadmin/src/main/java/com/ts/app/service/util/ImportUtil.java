@@ -24,10 +24,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
-import com.ts.app.domain.*;
-import com.ts.app.repository.*;
-import com.ts.app.service.*;
-import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -45,7 +41,48 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Branch;
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.EmployeeShift;
+import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.JobType;
+import com.ts.app.domain.Location;
+import com.ts.app.domain.Project;
+import com.ts.app.domain.Region;
+import com.ts.app.domain.Site;
+import com.ts.app.domain.User;
+import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.EmployeeShiftRepository;
+import com.ts.app.repository.LocationRepository;
+import com.ts.app.repository.ProjectRepository;
+import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.TicketRepository;
+import com.ts.app.repository.UserRepository;
+import com.ts.app.repository.UserRoleRepository;
 import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.AssetManagementService;
+import com.ts.app.service.ChecklistService;
+import com.ts.app.service.JobManagementService;
+import com.ts.app.service.SiteLocationService;
+import com.ts.app.service.SiteService;
+import com.ts.app.service.UserService;
+import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
+import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
+import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ChecklistDTO;
+import com.ts.app.web.rest.dto.ChecklistItemDTO;
+import com.ts.app.web.rest.dto.ImportResult;
+import com.ts.app.web.rest.dto.JobChecklistDTO;
+import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.LocationDTO;
+import com.ts.app.web.rest.dto.ProjectDTO;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
+import com.ts.app.web.rest.dto.SiteDTO;
+import com.ts.app.web.rest.dto.UserDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
 
 
@@ -55,6 +92,9 @@ public class ImportUtil {
 
 	private static final Logger log = LoggerFactory.getLogger(ImportUtil.class);
 
+	public static final String COMPLETED = "COMPLETED";
+	public static final String FAILED = "FAILED";
+	public static final String SUCCESS_MESSAGE = "SUCCESS"; 
 	private static final String NEW_IMPORT_FOLDER = "import.file.path.new";
 	private static final String JOB_FOLDER = "job";
 	private static final String EMPLOYEE_FOLDER = "employee";
@@ -67,7 +107,7 @@ public class ImportUtil {
 	private static final String COMPLETED_IMPORT_FOLDER = "import.file.path.completed";
 	private static final String SEPARATOR = System.getProperty("file.separator");
 
-	private static final Map<String,String> statusMap = new ConcurrentHashMap<String,String>();
+	private static final Map<String,ImportResult> statusMap = new ConcurrentHashMap<String,ImportResult>();
 
 	@Autowired
 	private JobManagementService jobService;
@@ -120,22 +160,29 @@ public class ImportUtil {
 	@Inject
 	private AssetManagementService assetManagementService;
 
-	public ImportResult importJobData(MultipartFile file, long dateTime) {
+	public ImportResult importJobData(MultipartFile file, long dateTime)  {
         String fileName = dateTime + ".xlsx";
 		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  JOB_FOLDER;
 		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
 		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  JOB_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
+		ImportResult result = new ImportResult();
 		if(statusMap.containsKey(fileKey)) {
-			String status = statusMap.get(fileKey);
+			ImportResult importResult = statusMap.get(fileKey);
+			String status = importResult.getStatus();
 			log.debug("Current status for filename -"+fileKey+", status -" + status);
 		}else {
-			statusMap.put(fileKey, "PROCESSING");
+			result.setFile(fileKey);
+			result.setStatus("PROCESSING");
+			statusMap.put(fileKey, result);
 		}
-		importNewFiles("job",filePath, fileName, targetFilePath);
-		ImportResult result = new ImportResult();
-		result.setFile(fileKey);
-		result.setStatus("PROCESSING");
+		String response = null; 
+		try {
+			response = importNewFiles("job",filePath, fileName, targetFilePath);
+		}catch (Exception e ) {
+			log.error("Error while importing job data", e);
+		}
+		//result.setMsg(response);
 		return result;
 	}
 
@@ -145,14 +192,21 @@ public class ImportUtil {
 		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
 		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  CLIENT_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
+		ImportResult result = new ImportResult();
 		if(statusMap.containsKey(fileKey)) {
-			String status = statusMap.get(fileKey);
+			ImportResult importResult = statusMap.get(fileKey);
+			String status = importResult.getStatus();
 			log.debug("Current status for filename -"+fileKey+", status -" + status);
 		}else {
-			statusMap.put(fileKey, "PROCESSING");
+			result.setFile(fileKey);
+			result.setStatus("PROCESSING");
+			statusMap.put(fileKey, result);
 		}
-		importNewFiles("client",filePath, fileName, targetFilePath);
-		ImportResult result = new ImportResult();
+		try {
+			importNewFiles("client",filePath, fileName, targetFilePath);
+		}catch (Exception e) {
+			log.error("Error while importing client data",e);
+		}
 		result.setFile(fileKey);
 		//result.setStatus(getImportStatus(fileKey));
 		result.setStatus("PROCESSING");
@@ -165,35 +219,48 @@ public class ImportUtil {
 		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
 		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  SITE_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
+		ImportResult result = new ImportResult();
 		if(statusMap.containsKey(fileKey)) {
-			String status = statusMap.get(fileKey);
+			ImportResult importResult = statusMap.get(fileKey);
+			String status = importResult.getStatus();
 			log.debug("Current status for filename -"+fileKey+", status -" + status);
 		}else {
-			statusMap.put(fileKey, "PROCESSING");
+			result.setFile(fileKey);
+			result.setStatus("PROCESSING");
+			statusMap.put(fileKey, result);
 		}
-		importNewFiles("site",filePath, fileName, targetFilePath);
-		ImportResult result = new ImportResult();
+		try {
+			importNewFiles("site",filePath, fileName, targetFilePath);
+		}catch (Exception e) {
+			log.error("Error while importing site data",e);
+		}
 		result.setFile(fileKey);
 		result.setStatus("PROCESSING");
 		return result;
 	}
 
-	public ImportResult changeEmployeeSite(MultipartFile file, long dateTime){
+	public ImportResult changeEmployeeSite(MultipartFile file, long dateTime) {
 	    String fileName = "changeEmployee"+dateTime + ".xlsx";
 	    String filePath = env.getProperty(NEW_IMPORT_FOLDER)+SEPARATOR+SITE_FOLDER;
 	    String uploadFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
 	    String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER)+SEPARATOR+SITE_FOLDER;
 	    String fileKey = fileName.substring(0,fileName.indexOf(".xlsx"));
 
-	    if(statusMap.containsKey(fileKey)){
-	        String status = statusMap.get(fileKey);
-	        log.debug("Current status for filename - "+fileKey+" ,status - "+status);
-        }else{
-	        statusMap.put(fileKey,"PROCESSING");
-        }
-
-        importNewFiles("siteEmployeeChange",filePath,fileName,targetFilePath);
 	    ImportResult result = new ImportResult();
+		if(statusMap.containsKey(fileKey)) {
+			ImportResult importResult = statusMap.get(fileKey);
+			String status = importResult.getStatus();
+			log.debug("Current status for filename -"+fileKey+", status -" + status);
+		}else {
+			result.setFile(fileKey);
+			result.setStatus("PROCESSING");
+			statusMap.put(fileKey, result);
+		}
+		try {
+			importNewFiles("siteEmployeeChange",filePath,fileName,targetFilePath);
+		}catch (Exception e) {
+			log.error("Error while importing employee site change data",e);
+		}
 	    result.setFile(fileKey);
 	    result.setStatus("PROCESSING");
 	    return result;
@@ -206,14 +273,21 @@ public class ImportUtil {
 		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
 		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  LOCATION_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
+		ImportResult result = new ImportResult();
 		if(statusMap.containsKey(fileKey)) {
-			String status = statusMap.get(fileKey);
+			ImportResult importResult = statusMap.get(fileKey);
+			String status = importResult.getStatus();
 			log.debug("Current status for filename -"+fileKey+", status -" + status);
 		}else {
-			statusMap.put(fileKey, "PROCESSING");
+			result.setFile(fileKey);
+			result.setStatus("PROCESSING");
+			statusMap.put(fileKey, result);
 		}
-		importNewFiles("location",filePath, fileName, targetFilePath);
-		ImportResult result = new ImportResult();
+		try {
+			importNewFiles("location",filePath, fileName, targetFilePath);
+		}catch (Exception e) {
+			log.error("Error while importing location data",e);
+		}
 		result.setFile(fileKey);
 		result.setStatus("PROCESSING");
 		return result;
@@ -225,14 +299,21 @@ public class ImportUtil {
 		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
 		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  EMPLOYEE_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
+		ImportResult result = new ImportResult();
 		if(statusMap.containsKey(fileKey)) {
-			String status = statusMap.get(fileKey);
+			ImportResult importResult = statusMap.get(fileKey);
+			String status = importResult.getStatus();
 			log.debug("Current status for filename -"+fileKey+", status -" + status);
 		}else {
-			statusMap.put(fileKey, "PROCESSING");
+			result.setFile(fileKey);
+			result.setStatus("PROCESSING");
+			statusMap.put(fileKey, result);
 		}
-		importNewFiles("employee",filePath, fileName, targetFilePath);
-		ImportResult result = new ImportResult();
+		try {
+			importNewFiles("employee",filePath, fileName, targetFilePath);
+		}catch (Exception e) {
+			log.error("Error while importing employee data",e);
+		}
 		result.setFile(fileKey);
 		result.setStatus("PROCESSING");
 		return result;
@@ -245,20 +326,27 @@ public class ImportUtil {
 		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
 		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  ASSET_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
+		ImportResult result = new ImportResult();
 		if(statusMap.containsKey(fileKey)) {
-			String status = statusMap.get(fileKey);
+			ImportResult importResult = statusMap.get(fileKey);
+			String status = importResult.getStatus();
 			log.debug("Current status for filename -"+fileKey+", status -" + status);
 		}else {
-			statusMap.put(fileKey, "PROCESSING");
+			result.setFile(fileKey);
+			result.setStatus("PROCESSING");
+			statusMap.put(fileKey, result);
 		}
-		if(isPPM) {
-			importNewFiles("assetPPM",filePath, fileName, targetFilePath);
-		}else if(isAMC) {
-			importNewFiles("assetAMC",filePath, fileName, targetFilePath);
-		}else {
-			importNewFiles("asset",filePath, fileName, targetFilePath);
+		try {
+			if(isPPM) {
+				importNewFiles("assetPPM",filePath, fileName, targetFilePath);
+			}else if(isAMC) {
+				importNewFiles("assetAMC",filePath, fileName, targetFilePath);
+			}else {
+				importNewFiles("asset",filePath, fileName, targetFilePath);
+			}
+		}catch (Exception e) {
+			log.error("Error while importing asset data",e);
 		}
-		ImportResult result = new ImportResult();
 		result.setFile(fileKey);
 		result.setStatus("PROCESSING");
 		return result;
@@ -271,14 +359,21 @@ public class ImportUtil {
 		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
 		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  CHECKLIST_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
+		ImportResult result = new ImportResult();
 		if(statusMap.containsKey(fileKey)) {
-			String status = statusMap.get(fileKey);
+			ImportResult importResult = statusMap.get(fileKey);
+			String status = importResult.getStatus();
 			log.debug("Current status for filename -"+fileKey+", status -" + status);
 		}else {
-			statusMap.put(fileKey, "PROCESSING");
+			result.setFile(fileKey);
+			result.setStatus("PROCESSING");
+			statusMap.put(fileKey, result);
 		}
-		importNewFiles("checklist",filePath, fileName, targetFilePath);
-		ImportResult result = new ImportResult();
+		try {
+			importNewFiles("checklist",filePath, fileName, targetFilePath);
+		}catch (Exception e) {
+			log.error("Error while importing checklist data",e );
+		}
 		result.setFile(fileKey);
 		result.setStatus("PROCESSING");
 		return result;
@@ -291,14 +386,21 @@ public class ImportUtil {
 		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
 		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  EMP_SHIFT_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
+		ImportResult result = new ImportResult();
 		if(statusMap.containsKey(fileKey)) {
-			String status = statusMap.get(fileKey);
+			ImportResult importResult = statusMap.get(fileKey);
+			String status = importResult.getStatus();
 			log.debug("Current status for filename -"+fileKey+", status -" + status);
 		}else {
-			statusMap.put(fileKey, "PROCESSING");
+			result.setFile(fileKey);
+			result.setStatus("PROCESSING");
+			statusMap.put(fileKey, result);
 		}
-		importNewFiles("employeeshift",filePath, fileName, targetFilePath);
-		ImportResult result = new ImportResult();
+		try {
+			importNewFiles("employeeshift",filePath, fileName, targetFilePath);
+		}catch (Exception e) {
+			log.error("Eror while importing employee shift data",e);
+		}
 		result.setFile(fileKey);
 		result.setStatus("PROCESSING");
 		return result;
@@ -306,7 +408,8 @@ public class ImportUtil {
 	}
 
 	@Async
-	private void importNewFiles(String domain, String sourceFilePath,String fileName, String targetFilePath) {
+	private String importNewFiles(String domain, String sourceFilePath,String fileName, String targetFilePath) throws Exception {
+		String response = null;
 		// get new files in the imports folder
 		//FilenameFilter filter = new ExcelFilenameFilter(".xlsx");
 		//File[] files = new File(sourceFilePath).listFiles(filter);
@@ -318,7 +421,7 @@ public class ImportUtil {
 			if (fileObj.isFile()) {
 				switch(domain) {
 					case "job" :
-						importJobFromFile(fileObj.getPath());
+						importJobFromFile(fileKey,fileObj.getPath());
 						break;
 					case "employee":
 						importEmployeeFromFile(fileObj.getPath());
@@ -351,7 +454,16 @@ public class ImportUtil {
                     case "siteEmployeeChange" :
                         changeSiteEmployee(fileObj.getPath());
 				}
-				statusMap.put(fileKey, "COMPLETED");
+				ImportResult importResult = null;
+				if(statusMap.containsKey(fileKey)) {
+					importResult = statusMap.get(fileKey);
+				}else {
+					importResult = new ImportResult();
+				}
+				importResult.setFile(fileKey);
+				importResult.setMsg(SUCCESS_MESSAGE);
+				importResult.setStatus(COMPLETED);
+				statusMap.put(fileKey, importResult);
 				FileSystem fileSystem = FileSystems.getDefault();
 	            Path path = fileSystem.getPath(targetFilePath);
 	            if (!Files.exists(path)) {
@@ -366,21 +478,47 @@ public class ImportUtil {
 			}
 		//}
 		//result.setEmpId(empId);
+		return response;
 	}
 
 	public String getImportStatus(String fileName) {
+		ImportResult importResult = null;
 		String status = "";
 		log.debug("statusMap -" + statusMap);
 		if(statusMap != null) {
 			if(statusMap.containsKey(fileName)) {
-				status = statusMap.get(fileName);
-				if(status.equals("COMPLETED") || status.equals("FAILED")) {
-					statusMap.remove(fileName);
+				importResult = statusMap.get(fileName);
+				if(importResult != null) {
+					status = importResult.getStatus();
+					if(StringUtils.isNotEmpty(status) && 
+							(status.equalsIgnoreCase("COMPLETED") || status.equalsIgnoreCase("FAILED"))) {
+						statusMap.remove(fileName);
+					}
 				}
 			}
 		}
 		log.debug("status for fileName -" + fileName +" , status -" +status);
 		return status;
+	}
+	
+	public ImportResult getImportResult(String fileName) {
+		ImportResult importResult = null;
+		String status = "";
+		log.debug("statusMap -" + statusMap);
+		if(statusMap != null) {
+			if(statusMap.containsKey(fileName)) {
+				importResult = statusMap.get(fileName);
+				if(importResult != null) {
+					status = importResult.getStatus();
+					if(StringUtils.isNotEmpty(status) && 
+							(status.equalsIgnoreCase("COMPLETED") || status.equalsIgnoreCase("FAILED"))) {
+						statusMap.remove(fileName);
+					}
+				}
+			}
+		}
+		log.debug("status for fileName -" + fileName +" , status -" +status);
+		return importResult;
 	}
 
 	public static class ExcelFilenameFilter implements FilenameFilter {
@@ -399,7 +537,11 @@ public class ImportUtil {
 	}
 
 
-	private void importJobFromFile(String path) {
+	private String importJobFromFile(String fileKey, String path) throws Exception {
+		int r = 0;
+		int cellNo = 0;
+		StringBuffer response = new StringBuffer();
+		ImportResult importResult = statusMap.get(fileKey);
 		try {
 			log.debug("JobFromFile -" + path);
 			FileInputStream excelFile = new FileInputStream(new File(path));
@@ -407,7 +549,6 @@ public class ImportUtil {
 			Sheet datatypeSheet = workbook.getSheetAt(0);
 			Iterator<Row> iterator = datatypeSheet.iterator();
 			int lastRow = datatypeSheet.getLastRowNum();
-			int r = 0;
 			Row projectRow = datatypeSheet.getRow(r);
 			long projectId = (long) projectRow.getCell(2).getNumericCellValue();
 			r++;
@@ -417,129 +558,191 @@ public class ImportUtil {
 				siteId = (long) siteRow.getCell(2).getNumericCellValue();
 			}
 			r++;
-			Row managerRow = datatypeSheet.getRow(r);
-			String managerId = String.valueOf(managerRow.getCell(2).getNumericCellValue());
-			String supervisorId = String.valueOf(managerRow.getCell(5).getNumericCellValue());
+			//Row managerRow = datatypeSheet.getRow(r);
+			//String managerId = String.valueOf(managerRow.getCell(2).getNumericCellValue());
+			//String supervisorId = String.valueOf(managerRow.getCell(5).getNumericCellValue());
 			r = 4;
 			for (; r <= lastRow; r++) {
 				log.debug("Current Row number -" + r);
-				Row currentRow = datatypeSheet.getRow(r);
-				JobDTO jobDto = new JobDTO();
-				if(siteId == 0) {
-					if(currentRow.getCell(0) != null) {
-						siteId = (long) currentRow.getCell(0).getNumericCellValue();
-					}
-					if(siteId == 0 && siteRow.getCell(2) != null) {
-						siteId = (long) siteRow.getCell(2).getNumericCellValue();
-					}
-				}
-				jobDto.setSiteId(siteId);
-				jobDto.setTitle(currentRow.getCell(1).getStringCellValue());
-				jobDto.setDescription(currentRow.getCell(2).getStringCellValue());
-//				long location = (long)currentRow.getCell(2).getNumericCellValue();
-//				Location loc = locationRepo.findByName(location);
-//				if (loc == null) {
-//					loc = new Location();
-//					loc.setName(location);
-//					loc.setActive("Y");
-//					loc = locationRepo.save(loc);
-//				}
-
-				String jobType = currentRow.getCell(4).getStringCellValue();
-				String empId = null;
-				if (currentRow.getCell(6).getCellType() == CellFormatType.NUMBER.ordinal()) {
-					try {
-						empId = String.valueOf((long)currentRow.getCell(6).getNumericCellValue());
-					} catch (IllegalStateException ise) {
-						empId = currentRow.getCell(6).getStringCellValue();
-					}
-				} else {
-					try {
-						empId = currentRow.getCell(6).getStringCellValue();
-					} catch (IllegalStateException ise) {
-						empId = String.valueOf((long)currentRow.getCell(6).getNumericCellValue());
-					}
-
-				}
-				log.debug("Employee id =" + empId);
-				Employee emp = employeeRepo.findByEmpId(empId);
-				log.debug("Employee obj =" + emp);
-				if (emp != null) {
-					jobDto.setEmployeeId(emp.getId());
-					jobDto.setEmployeeName(emp.getFullName());
-					jobDto.setStatus(JobStatus.ASSIGNED.name());
-					jobDto.setJobType(JobType.valueOf(jobType));
-					String schedule = currentRow.getCell(7).getStringCellValue();
-					jobDto.setSchedule(schedule);
-					Date startDate = currentRow.getCell(8).getDateCellValue();
-					Date startTime = currentRow.getCell(10).getDateCellValue();
-					Date endDate = currentRow.getCell(9).getDateCellValue();
-					Date endTime = currentRow.getCell(11).getDateCellValue();
-					jobDto.setPlannedStartTime(DateUtil.convertToDateTime(startDate, startTime));
-					jobDto.setPlannedEndTime(DateUtil.convertToDateTime(startDate, endTime));
-					jobDto.setScheduleEndDate(DateUtil.convertToDateTime(endDate, endTime));
-					if(currentRow.getCell(12)!=null){
-                        jobDto.setFrequency(currentRow.getCell(12).getStringCellValue());
-                    }
-					jobDto.setActive("Y");
-					if(currentRow.getCell(13) != null) {
-						String checkListName = currentRow.getCell(13).getStringCellValue();
-						if(StringUtils.isNotBlank(checkListName)) {
-							SearchCriteria searchCriteria = new SearchCriteria();
-							searchCriteria.setName(checkListName);
-							SearchResult<ChecklistDTO> result = checklistService.findBySearchCrieria(searchCriteria);
-							List<ChecklistDTO> checkListDtos = result.getTransactions();
-							if(CollectionUtils.isNotEmpty(checkListDtos)) {
-								ChecklistDTO checklistDto = checkListDtos.get(0);
-								List<ChecklistItemDTO> checkListItems = checklistDto.getItems();
-								List<JobChecklistDTO> jobCheckListItems = new ArrayList<JobChecklistDTO>();
-								for(ChecklistItemDTO checklistItemDto : checkListItems) {
-									JobChecklistDTO jobChecklistDto = new JobChecklistDTO();
-									jobChecklistDto.setChecklistId(String.valueOf(checklistDto.getId()));
-									jobChecklistDto.setChecklistName(checklistDto.getName());
-									jobChecklistDto.setChecklistItemId(String.valueOf(checklistItemDto.getId()));
-									jobChecklistDto.setChecklistItemName(String.valueOf(checklistItemDto.getName()));
-									jobCheckListItems.add(jobChecklistDto);
-								}
-								jobDto.setChecklistItems(jobCheckListItems);
-							}
+				cellNo = 0;
+				try {
+					Row currentRow = datatypeSheet.getRow(r);
+					JobDTO jobDto = new JobDTO();
+					if(siteId == 0) {
+						if(currentRow.getCell(cellNo) != null) {
+							siteId = (long) currentRow.getCell(cellNo).getNumericCellValue();
+						}
+						if(siteId == 0 && siteRow.getCell(2) != null) {
+							siteId = (long) siteRow.getCell(2).getNumericCellValue();
 						}
 					}
-					if((currentRow.getCell(14)!=null)&&(currentRow.getCell(15)!=null)&&currentRow.getCell(16)!=null){
-					    String block = currentRow.getCell(14).getStringCellValue();
-					    String floor = currentRow.getCell(15).getStringCellValue();
-					    String zone = currentRow.getCell(16).getStringCellValue();
-                        jobDto.setBlock(block);
-                        jobDto.setFloor(floor);
-                        jobDto.setZone(zone);
-                        log.debug("location available - " + block+" - "+floor+" - "+zone);
-                        log.debug("site id - "+jobDto.getSiteId());
-
-                        List<Location> loc = locationRepo.findByAll(jobDto.getSiteId(),block,floor,zone);
-                        log.debug("location details - "+loc.isEmpty());
-                        if(loc.isEmpty()){
-
-                        }else{
-                            long locationId = loc.get(0).getId();
-                            jobDto.setLocationId(locationId);
-                        }
-
-                    }
-					if(currentRow.getCell(17) != null) {
-						boolean isScheduleExcludeWeeknd = currentRow.getCell(17).getBooleanCellValue();
-						jobDto.setScheduleDailyExcludeWeekend(isScheduleExcludeWeeknd);
+					jobDto.setSiteId(siteId);
+					cellNo++;
+					jobDto.setTitle(currentRow.getCell(1).getStringCellValue());
+					cellNo++;
+					jobDto.setDescription(currentRow.getCell(2).getStringCellValue());
+					cellNo = 4;
+					String jobType = currentRow.getCell(4).getStringCellValue();
+					String empId = null;
+					cellNo = 6;
+					if (currentRow.getCell(6).getCellType() == CellFormatType.NUMBER.ordinal()) {
+						try {
+							empId = String.valueOf((long)currentRow.getCell(6).getNumericCellValue());
+						} catch (IllegalStateException ise) {
+							empId = currentRow.getCell(6).getStringCellValue();
+						}
+					} else {
+						try {
+							empId = currentRow.getCell(6).getStringCellValue();
+						} catch (IllegalStateException ise) {
+							empId = String.valueOf((long)currentRow.getCell(6).getNumericCellValue());
+						}
+	
 					}
-					jobService.saveJob(jobDto);
-
+					log.debug("Employee id =" + empId);
+					Employee emp = employeeRepo.findByEmpId(empId);
+					log.debug("Employee obj =" + emp);
+					if (emp != null) {
+						jobDto.setEmployeeId(emp.getId());
+						jobDto.setEmployeeName(emp.getFullName());
+						jobDto.setStatus(JobStatus.ASSIGNED.name());
+						jobDto.setJobType(JobType.valueOf(jobType));
+						cellNo++;
+						String schedule = currentRow.getCell(7).getStringCellValue();
+						jobDto.setSchedule(schedule);
+						cellNo++;
+						Date startDate = currentRow.getCell(8).getDateCellValue();
+						cellNo++;
+						Date endDate = currentRow.getCell(9).getDateCellValue();
+						cellNo++;
+						Date startTime = currentRow.getCell(10).getDateCellValue();
+						cellNo++;
+						Date endTime = currentRow.getCell(11).getDateCellValue();
+						jobDto.setPlannedStartTime(DateUtil.convertToDateTime(startDate, startTime));
+						jobDto.setPlannedEndTime(DateUtil.convertToDateTime(startDate, endTime));
+						jobDto.setScheduleEndDate(DateUtil.convertToDateTime(endDate, endTime));
+						cellNo++;
+						if(currentRow.getCell(12)!=null){
+	                        jobDto.setFrequency(currentRow.getCell(12).getStringCellValue());
+	                    }
+						jobDto.setActive("Y");
+						cellNo++;
+						if(currentRow.getCell(13) != null) {
+							String checkListName = currentRow.getCell(13).getStringCellValue();
+							if(StringUtils.isNotBlank(checkListName)) {
+								SearchCriteria searchCriteria = new SearchCriteria();
+								searchCriteria.setName(checkListName);
+								SearchResult<ChecklistDTO> result = checklistService.findBySearchCrieria(searchCriteria);
+								List<ChecklistDTO> checkListDtos = result.getTransactions();
+								if(CollectionUtils.isNotEmpty(checkListDtos)) {
+									ChecklistDTO checklistDto = checkListDtos.get(0);
+									List<ChecklistItemDTO> checkListItems = checklistDto.getItems();
+									List<JobChecklistDTO> jobCheckListItems = new ArrayList<JobChecklistDTO>();
+									for(ChecklistItemDTO checklistItemDto : checkListItems) {
+										JobChecklistDTO jobChecklistDto = new JobChecklistDTO();
+										jobChecklistDto.setChecklistId(String.valueOf(checklistDto.getId()));
+										jobChecklistDto.setChecklistName(checklistDto.getName());
+										jobChecklistDto.setChecklistItemId(String.valueOf(checklistItemDto.getId()));
+										jobChecklistDto.setChecklistItemName(String.valueOf(checklistItemDto.getName()));
+										jobCheckListItems.add(jobChecklistDto);
+									}
+									jobDto.setChecklistItems(jobCheckListItems);
+								}
+							}
+						}
+						cellNo++;
+						if((currentRow.getCell(14)!=null)&&(currentRow.getCell(15)!=null)&&currentRow.getCell(16)!=null){
+						    String block = currentRow.getCell(14).getStringCellValue();
+						    cellNo++;
+						    String floor = currentRow.getCell(15).getStringCellValue();
+						    cellNo++;
+						    String zone = currentRow.getCell(16).getStringCellValue();
+	                        jobDto.setBlock(block);
+	                        jobDto.setFloor(floor);
+	                        jobDto.setZone(zone);
+	                        log.debug("location available - " + block+" - "+floor+" - "+zone);
+	                        log.debug("site id - "+jobDto.getSiteId());
+	
+	                        List<Location> loc = locationRepo.findByAll(jobDto.getSiteId(),block,floor,zone);
+	                        log.debug("location details - "+loc.isEmpty());
+	                        if(loc.isEmpty()){
+	
+	                        }else{
+	                            long locationId = loc.get(0).getId();
+	                            jobDto.setLocationId(locationId);
+	                        }
+	
+	                    }else {
+						    cellNo += 2;
+	                    }
+					    cellNo++;
+						if(currentRow.getCell(17) != null) {
+							boolean isScheduleExcludeWeeknd = currentRow.getCell(17).getBooleanCellValue();
+							jobDto.setScheduleDailyExcludeWeekend(isScheduleExcludeWeeknd);
+						}
+						jobService.saveJob(jobDto);
+	
+					}
+					siteId  = 0;
+				} catch (IllegalStateException | NumberFormatException formatEx) {
+					/*
+					String msg = "Error while getting values from row - " + r;
+					log.error(msg, formatEx);
+					response.append(formatEx.getMessage());
+					response.append("\n" + msg);
+					response.append("\n" + "Correct the data format and retry again");
+					if(importResult == null) {
+						importResult = new ImportResult();
+					}
+					importResult.setStatus(FAILED);
+					importResult.setMsg(response.toString());
+					statusMap.put(fileKey, importResult);
+					*/
+					throw formatEx;
+				} catch (Exception e) {
+					String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+					log.error(msg, e);
+					response.append(e.getMessage());
+					response.append("--" + msg);
+					response.append("--" + "Please correct the data format and retry again");
+					if(importResult == null) {
+						importResult = new ImportResult();
+					}
+					importResult.setStatus(FAILED);
+					importResult.setMsg(response.toString());
+					statusMap.put(fileKey, importResult);
+					throw e;
 				}
-				siteId  = 0;
 			}
 
-		} catch (FileNotFoundException e) {
-			log.error("Error while reading the job data file for import", e);
 		} catch (IOException e) {
-			log.error("Error while reading the job data file for import", e);
+			String msg = "Error while reading the job data file for import";
+			log.error(msg, e);
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw e;
+		} catch (IllegalStateException | NumberFormatException formatEx) {
+			String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+			log.error(msg, formatEx);
+			response.append(formatEx.getMessage());
+			response.append("--" + msg);
+			response.append("--" + "Please correct the data format and retry again");
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw formatEx;
 		}
+		if(response.length() == 0) {
+			response.append(SUCCESS_MESSAGE);
+		}
+		return response.toString();
 	}
 
 

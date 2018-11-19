@@ -82,18 +82,26 @@ angular.module('timeSheetApp')
 	                		$rootScope.jobImportStatus.importMsg = data.msg;
 	                		console.log('jobimportMsg - '+ $rootScope.jobImportStatus.importMsg);
 	                		if($rootScope.jobImportStatus.importStatus == 'COMPLETED'){
+	                			$scope.showNotification('top','center','success','Job data imported successfully');
 	                			$rootScope.jobImportStatus.fileName = data.file;
 	                    		console.log('jobimportFile - '+ $rootScope.jobImportStatus.fileName);
-	                    		$scope.stop('job');
+	                    		$rootScope.stop('job');
 	                    		$rootScope.jobImportStatusLoad = false;
 	                    		$timeout(function() {
 	                    			$rootScope.jobImportStatus = {};
 	                    	      }, 3000);
 	                		}else if($rootScope.jobImportStatus.importStatus == 'FAILED'){
-	                    		$scope.stop('job');
-	                		}else if(!$rootScope.jobImportStatus.importStatus){
-	                			$scope.stop('job');
+	                    		$scope.showNotification('top','center','danger',$rootScope.jobImportStatus.importMsg);
+	                    		$rootScope.stop('job');
+	                    		$rootScope.jobImportStatusLoad = false;
+	                    		$timeout(function() {
+	                    			$rootScope.jobImportStatus = {};
+	                    	      }, 3000);
+//	                		}else if(!$rootScope.jobImportStatus.importStatus){
+//	                			$rootScope.stop('job');
+//	                    		$scope.showNotifications('top','center','danger',$rootScope.jobImportStatus.importMsg);
 	                		}else {
+	                		
 	                			$rootScope.jobImportStatus.fileName = '#';
 	                		}
 	            		}
@@ -147,15 +155,15 @@ angular.module('timeSheetApp')
                 		if($rootScope.employeeImportStatus.importStatus == 'COMPLETED'){
                 			$rootScope.employeeImportStatus.fileName = data.file;
                     		console.log('importEmployeeFile - '+ $rootScope.employeeImportStatus.fileName);
-                    		$scope.stop('employee');
+                    		$rootScope.stop('employee');
                     		$rootScope.empImportStatusLoad = false;
                     		$timeout(function() {
                     			$rootScope.employeeImportStatus = {};
                     	      }, 3000);
                 		}else if($rootScope.employeeImportStatus.importStatus == 'FAILED'){
-                    		$scope.stop('employee');
+                    		$rootScope.stop('employee');
                 		}else if(!$rootScope.employeeImportStatus.importStatus){
-                			$scope.stop('employee');
+                			$rootScope.stop('employee');
                 		}else {
                 			$rootScope.employeeImportStatus.fileName = '#';
                 		}
@@ -207,15 +215,15 @@ angular.module('timeSheetApp')
 	                		if($rootScope.clientImportStatus.importStatus == 'COMPLETED'){
 	                			$rootScope.clientImportStatus.fileName = data.file;
 	                    		console.log('importFile - '+ $rootScope.clientImportStatus.fileName);
-	                    		$scope.stop('client');
+	                    		$rootScope.stop('client');
 	                    		$rootScope.clientImportStatusLoad = false;
 	                    		$timeout(function() {
 	                    			$rootScope.clientImportStatus = {};
 	                    	    }, 3000);
 	                		}else if($rootScope.clientImportStatus.importStatus == 'FAILED'){
-	                    		$scope.stop('client');
+	                    		$rootScope.stop('client');
 	                		}else if(!$rootScope.clientImportStatus.importStatus){
-	                			$scope.stop('client');
+	                			$rootScope.stop('client');
 	                		}else {
 	                			$rootScope.clientImportStatus.fileName = '#';
 	                		}
@@ -266,15 +274,15 @@ angular.module('timeSheetApp')
 	                		if($rootScope.siteImportStatus.importStatus == 'COMPLETED'){
 	                			$rootScope.siteImportStatus.fileName = data.file;
 	                    		console.log('importFile - '+ $rootScope.siteImportStatus.fileName);
-	                    		$scope.stop('site');
+	                    		$rootScope.stop('site');
 	                    		$rootScope.siteImportStatusLoad = false;
 	                    		$timeout(function() {
 	                    			$rootScope.siteImportStatus = {};
 	                    	    }, 3000);
 	                		}else if($rootScope.siteImportStatus.importStatus == 'FAILED'){
-	                    		$scope.stop('client');
+	                    		$rootScope.stop('client');
 	                		}else if(!$rootScope.siteImportStatus.importStatus){
-	                			$scope.stop('client');
+	                			$rootScope.stop('client');
 	                		}else {
 	                			$rootScope.siteImportStatus.fileName = '#';
 	                		}
@@ -334,15 +342,15 @@ angular.module('timeSheetApp')
 		                		if($rootScope.locationImportStatus.importStatus == 'COMPLETED'){
 		                			$rootScope.locationImportStatus.fileName = data.file;
 		                    		console.log('importFile - '+ $rootScope.locationImportStatus.fileName);
-		                    		$scope.stop('location');
+		                    		$rootScope.stop('location');
 		                    		$rootScope.locationImportStatusLoad = false;
 		                    		$timeout(function() {
 		                    			$rootScope.locationImportStatus = {};
 		                    	    }, 3000);
 		                		}else if($rootScope.locationImportStatus.importStatus == 'FAILED'){
-		                    		$scope.stop('client');
+		                    		$rootScope.stop('client');
 		                		}else if(!$rootScope.locationImportStatus.importStatus){
-		                			$scope.stop('client');
+		                			$rootScope.stop('client');
 		                		}else {
 		                			$rootScope.locationImportStatus.fileName = '#';
 		                		}
@@ -399,15 +407,15 @@ angular.module('timeSheetApp')
                 		if($rootScope.checklistImportStatus.importStatus == 'COMPLETED'){
                 			$rootScope.checklistImportStatus.fileName = data.file;
                     		console.log('importFile - '+ $rootScope.checklistImportStatus.fileName);
-                    		$scope.stop('checklist');
+                    		$rootScope.stop('checklist');
                     		$rootScope.checklistImportStatusLoad = false;
                     		$timeout(function() {
                     			$rootScope.checklistImportStatus = {};
                     	    }, 3000);
                 		}else if($rootScope.checklistImportStatus.importStatus == 'FAILED'){
-                    		$scope.stop('checklist');
+                    		$rootScope.stop('checklist');
                 		}else if(!$rootScope.checklistImportStatus.importStatus){
-                			$scope.stop('checklist');
+                			$rootScope.stop('checklist');
                 		}else {
                 			$rootScope.checklistImportStatus.fileName = '#';
                 		}
@@ -457,15 +465,15 @@ angular.module('timeSheetApp')
                		if($rootScope.employeeShiftImportStatus.importStatus == 'COMPLETED'){
                			$rootScope.employeeShiftImportStatus.fileName = data.file;
                    		console.log('importFile - '+ $rootScope.employeeShiftImportStatus.fileName);
-                   		$scope.stop('employeeShift');
+                   		$rootScope.stop('employeeShift');
                    		$rootScope.employeeShiftImportStatusLoad = false;
                    		$timeout(function() {
                    			$rootScope.employeeShiftImportStatus = {};
                    	    }, 3000);
                		}else if($rootScope.employeeShiftImportStatus.importStatus == 'FAILED'){
-                   		$scope.stop('employeeShift');
+                   		$rootScope.stop('employeeShift');
                		}else if(!$rootScope.employeeShiftImportStatus.importStatus){
-               			$scope.stop('employeeShift');
+               			$rootScope.stop('employeeShift');
                		}else {
                			$rootScope.employeeShiftImportStatus.fileName = '#';
                		}
@@ -517,15 +525,15 @@ angular.module('timeSheetApp')
               		if($rootScope.assetImportStatus.importStatus == 'COMPLETED'){
               			$rootScope.assetImportStatus.fileName = data.file;
                   		console.log('importFile - '+ $rootScope.assetImportStatus.fileName);
-                  		$scope.stop('asset');
+                  		$rootScope.stop('asset');
                   		$rootScope.assetImportStatusLoad = false;
                   		$timeout(function() {
                   			$rootScope.assetImportStatus = {};
                   	    }, 3000);
               		}else if($rootScope.assetImportStatus.importStatus == 'FAILED'){
-                  		$scope.stop('asset');
+                  		$rootScope.stop('asset');
               		}else if(!$rootScope.assetImportStatus.importStatus){
-              			$scope.stop('asset');
+              			$rootScope.stop('asset');
               		}else {
               			$rootScope.assetImportStatus.fileName = '#';
               		}
@@ -576,15 +584,15 @@ angular.module('timeSheetApp')
              		if($rootScope.assetPPMImportStatus.importStatus == 'COMPLETED'){
              			$rootScope.assetPPMImportStatus.fileName = data.file;
                  		console.log('importFile - '+ $rootScope.assetPPMImportStatus.fileName);
-                 		$scope.stop('assetPPM');
+                 		$rootScope.stop('assetPPM');
                  		$rootScope.assetPPMImportStatusLoad = false;
                  		$timeout(function() {
                  			$rootScope.assetPPMImportStatus = {};
                  	    }, 3000);
              		}else if($rootScope.assetPPMImportStatus.importStatus == 'FAILED'){
-                 		$scope.stop('assetPPM');
+                 		$rootScope.stop('assetPPM');
              		}else if(!$rootScope.assetPPMImportStatus.importStatus){
-             			$scope.stop('assetPPM');
+             			$rootScope.stop('assetPPM');
              		}else {
              			$rootScope.assetPPMImportStatus.fileName = '#';
              		}
@@ -634,15 +642,15 @@ angular.module('timeSheetApp')
 	            		if($rootScope.assetAMCImportStatus.importStatus == 'COMPLETED'){
 	            			$rootScope.assetAMCImportStatus.fileName = data.file;
 	                		console.log('importFile - '+ $rootScope.assetAMCImportStatus.fileName);
-	                		$scope.stop('assetAMC');
+	                		$rootScope.stop('assetAMC');
 	                		$rootScope.assetAMCImportStatusLoad = false;
 	                		$timeout(function() {
 	                			$rootScope.assetAMCImportStatus = {};
 	                	    }, 3000);
 	            		}else if($rootScope.assetAMCImportStatus.importStatus == 'FAILED'){
-	                		$scope.stop('assetAMC');
+	                		$rootScope.stop('assetAMC');
 	            		}else if(!$rootScope.assetAMCImportStatus.importStatus){
-	            			$scope.stop('assetAMC');
+	            			$rootScope.stop('assetAMC');
 	            		}else {
 	            			$rootScope.assetAMCImportStatus.fileName = '#';
 	            		}
@@ -733,7 +741,7 @@ angular.module('timeSheetApp')
 	    // stops the interval
 	    $rootScope.stop = function(stopInterval) {
 	      if(stopInterval == 'job'){
-	    	  $interval.cancel(promiseJob);
+	    	  	$interval.cancel(promiseJob);
 	      }
 	      if(stopInterval == 'employee'){
 	    	  $interval.cancel(promiseEmployee);
@@ -769,5 +777,11 @@ angular.module('timeSheetApp')
 
          }
 
+        $scope.showNotification = function(position,alignment,color,msg){
+            demo.showNotificationLonger(position,alignment,color,msg);
+        }
+
 
     });
+
+

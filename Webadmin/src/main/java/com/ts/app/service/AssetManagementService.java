@@ -1190,7 +1190,7 @@ public class AssetManagementService extends AbstractService {
 	public ImportResult importAMCFile(MultipartFile file, long dateTime) {
 		return importUtil.importAssetData(file, dateTime, false, true);
 	}
-
+ 
 	public ImportResult getImportAMCStatus(String fileId) {
 		ImportResult er = new ImportResult();
 		// fileId += ".csv";
