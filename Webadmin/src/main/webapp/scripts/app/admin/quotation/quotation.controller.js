@@ -116,8 +116,8 @@ angular
 			        $rootScope.initScrollBar();
 
 			        $('input#submittedDateFilter').on('dp.change', function(e){
-			            console.log(e.date);
-			            console.log(e.date._d);
+			          //console.log(e.date);
+			          //console.log(e.date._d);
 			            $scope.selectedSubmittedDateSer = e.date._d;
 
 			            $.notifyClose();
@@ -128,8 +128,8 @@ angular
 
 			        });
 			        $('input#approvedDateFilter').on('dp.change', function(e){
-			            console.log(e.date);
-			            console.log(e.date._d);
+			          //console.log(e.date);
+			          //console.log(e.date._d);
 			            $scope.selectedApprovedDateSer = e.date._d;
 
 			            $.notifyClose();
@@ -142,12 +142,12 @@ angular
 
 					$scope.init = function() {
 
-                        console.log("State parameters");
-                        console.log($stateParams);
+                      //console.log("State parameters");
+                      //console.log($stateParams);
                         if($stateParams.ticketId){
                             TicketComponent.getTicketDetails($stateParams.ticketId).then(function(data){
-                                console.log("Ticket details");
-                                console.log(data);
+                              //console.log("Ticket details");
+                              //console.log(data);
                                 $scope.quotation.title =data.title;
                                 $scope.quotation.description = data.description;
                                 $scope.quotation.ticketId = data.id;
@@ -158,7 +158,7 @@ angular
 
                                 /*if(data.siteId){
                                     SiteComponent.findOne(data.siteID).then(function (data) {
-                                        console.log(data);
+                                      //console.log(data);
                                         $scope.selectedSite = data;
                                     })
                                 }*/
@@ -222,7 +222,7 @@ angular
 
                     $scope.conform = function(text,msg)
                     {
-                        console.log($scope.selectedProject)
+                      //console.log($scope.selectedProject)
                         $rootScope.conformText = text;
                         $scope.msg = msg;
                         $('#conformationModal').modal();
@@ -254,7 +254,7 @@ angular
 					$scope.loadProjects = function() {
                             $scope.loadSites();
                             ProjectComponent.findAll().then(function(data) {
-                                console.log("Loading all projects")
+                              //console.log("Loading all projects")
                                 $scope.projects = data;
                                 //$scope.selectedProject = $scope.projects[0];
                                 /** Ui-select scope **/
@@ -398,7 +398,7 @@ angular
                             $scope.sitesList = data;
 
                             //
-                              console.log($scope.sitesList)
+                            //console.log($scope.sitesList)
                               for(var i=0;i<$scope.sitesList.length;i++)
                               {
                                   $scope.uiSite[i] = $scope.sitesList[i].name;
@@ -413,11 +413,10 @@ angular
 					 /** Ui-select function **/
 			         
 			         $scope.loadDepSitesList = function (searchProject) {
-			        	
-			             if(searchProject){
+	
 			               $scope.siteSpin = true;
 			               $scope.searchProject = searchProject;
-			               if(jQuery.isEmptyObject($scope.searchProject) == false && $scope.searchProject.id == 0){
+			               if(jQuery.isEmptyObject($scope.searchProject) == true){
 			             	  SiteComponent.findAll().then(function (data) {
 			 	                  $scope.selectedSite = null;
 			 	                  $scope.sitesList = data;
@@ -437,17 +436,17 @@ angular
 			               }else{
 			 	              if(jQuery.isEmptyObject($scope.SelectClient.selected) == false) {
 			 	                     var depProj=$scope.SelectClient.selected.id;
+			 	                     $scope.SelectSites = [];
+					                 $scope.SelectSite.selected = null;
+					                 $scope.selectedSite = null; 
 			 	              }else if(jQuery.isEmptyObject($scope.searchProject) == false){
 			 	                      var depProj=$scope.searchProject.id;
 			 	              }else{
 			 	                      var depProj=0;
 			 	              }
-			 	              
-			 	             $scope.SelectSites = [];
-			                 $scope.SelectSite.selected = null;
-			 	               
+			 	           
 			 	              ProjectComponent.findSites(depProj).then(function (data) {
-			 	                  $scope.selectedSite = null;
+			 	                  
 			 	                  $scope.sitesList = data;
 			 	                  $scope.sitesLists = [];
 			 	                  $scope.sitesListOne.selected = null;
@@ -472,7 +471,7 @@ angular
 			 	                  $scope.siteSpin = false;
 			 	              });
 			               }
-			             }
+			            
 
 			             };
 
@@ -619,7 +618,7 @@ angular
 								.then(function(response) {
                                     $scope.saveLoad = false;
 									console.log(response);
-                                console.log($scope.selectedImageFile);
+                              //console.log($scope.selectedImageFile);
 								if($scope.selectedImageFile){
 
 								RateCardComponent.upload(response._id,$scope.selectedImageFile)
@@ -638,7 +637,7 @@ angular
                                     $scope.saveLoad = false;
 			                        $scope.success = null;
 			                        $scope.btnDisable = false;
-			                        console.log('Error - '+ JSON.stringify(response.data));
+			                      //console.log('Error - '+ JSON.stringify(response.data));
 			                        if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
 			                            $scope.errorEmployeeExists = true;
 			                            $scope.errorMessage = response.data.description;
@@ -671,7 +670,7 @@ angular
 			        				$scope.materialTotalCost = 0;
 			        				$scope.totalCost = 0;
 			        				var qId = $stateParams.id;
-                            console.log('quotation id - ' + $stateParams.id);
+                          //console.log('quotation id - ' + $stateParams.id);
 			        		RateCardComponent.findQuotation(qId).then(function (data) {
 
 			        				console.log('quotation response - '+ JSON.stringify(data))
@@ -715,12 +714,12 @@ angular
                                     $scope.SelectSite.selected = $scope.selectedSite;
                                     
                                     if($scope.quotation.images.length>0){
-                                        console.log("images found");
+                                      //console.log("images found");
                                         for(var i=0;i<$scope.quotation.images.length;i++){
                                             RateCardComponent.findQuotationImages($scope.quotation._id,$scope.quotation.images[i]).
                                             then(function (response) {
-                                                console.log(response);
-                                                console.log(response.image);
+                                              //console.log(response);
+                                              //console.log(response.image);
                                                 $scope.quotationImages.push(response);
                                             })
                                         }
@@ -734,8 +733,8 @@ angular
 
                                     if($scope.quotation.ticketId > 0) {
                                         TicketComponent.getTicketDetails($scope.quotation.ticketId).then(function(data){
-                                            console.log("Ticket details");
-                                            console.log(data);
+                                          //console.log("Ticket details");
+                                          //console.log(data);
                                             $scope.ticketStatus = data.status;
                                             $scope.loadingStop();
                                             });
@@ -761,7 +760,7 @@ angular
 
 
 					$scope.approveQuotation = function(quotation) {
-					    console.log(quotation)
+					  //console.log(quotation)
 						RateCardComponent.approveQuotation(quotation).then(
 								function(response) {
 									console.log(response);
@@ -784,13 +783,13 @@ angular
 					}
 
 			        $scope.showLoader = function(){
-			            console.log("Show Loader");
+			          //console.log("Show Loader");
 			            $scope.loading = true;
 			            $scope.notLoading=false;
 			        };
 
 			        $scope.hideLoader = function(){
-			            console.log("Show Loader");
+			          //console.log("Show Loader");
 			            $scope.loading = false;
 			            $scope.notLoading=true;
 			        };
@@ -938,7 +937,7 @@ angular
                             $scope.searchCriteria.projectName = $scope.searchProject.name;
 			        	}else{
 			        		$scope.searchCriteria.projectId = null;
-			        		$scope.searchCriteria.projectName = "";
+			        		$scope.searchCriteria.projectName = null;
 			        	}
 
 			        	if($scope.searchSite) {
@@ -949,7 +948,7 @@ angular
 				    }*/
 				    else{
 				    	$scope.searchCriteria.siteId =null;
-				    	$scope.searchCriteria.siteName = "";
+				    	$scope.searchCriteria.siteName = null;
 				    }
 
 			        	if($scope.searchStatus){
@@ -1024,7 +1023,7 @@ angular
 		                $scope.searchCriteria.sortByAsc = true;
 		            }*/
 
-                     console.log("search criteria", JSON.stringify($scope.searchCriteria));
+                   //console.log("search criteria", JSON.stringify($scope.searchCriteria));
                      $scope.quotations = '';
                      $scope.quotationsLoader = false;
                      $scope.loadPageTop();
@@ -1033,7 +1032,7 @@ angular
 
 	                 if($rootScope.retain == 1){
 	                    $scope.localStorage = getLocalStorage.getSearch();
-	                    console.log('Local storage---',$scope.localStorage);
+	                  //console.log('Local storage---',$scope.localStorage);
 
 	                    if($scope.localStorage){
 	                            $scope.filter = true;
@@ -1117,8 +1116,8 @@ angular
 		                     $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
 		                     $scope.totalCountPages = data.totalCount;
 
-		                     console.log("Pagination",$scope.pager);
-		                     console.log("quotations",$scope.quotations);
+		                   //console.log("Pagination",$scope.pager);
+		                   //console.log("quotations",$scope.quotations);
 
 			        		$scope.pages.currPage = $scope.pages.currPage;
 			                $scope.pages.totalPages = data.totalPages;

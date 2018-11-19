@@ -74,12 +74,12 @@
 					Site: {{searchSite.name}}
 			</span>
 			 <span class="tag label label-info" style="margin-right: 10px"
-	                ng-show="searchCriteria.employeeEmpId || localStorage.employeeEmpId">
-					Emp Id: {{searchCriteria.employeeEmpId || localStorage.employeeEmpId}}
+	                ng-show="searchEmployeeId">
+					Emp Id: {{searchEmployeeId}}
 			</span> 
 			<span class="tag label label-info" style="margin-right: 10px"
-	                      ng-show="searchCriteria.name || localStorage.name"> Emp Name:
-					{{searchCriteria.name || localStorage.name}} 
+	                      ng-show="searchEmployeeName"> Emp Name:
+					{{searchEmployeeName}} 
 			</span>
 		</span>
     </div>
@@ -1743,7 +1743,6 @@
                                  style="height: 210px;">
                                 <div class="panel-body">
 
-
                                     <div class="row">
 
                                         <div class="col-xs-12 col-md-6 col-lg-6" >
@@ -1768,7 +1767,7 @@
 				                            <div class="form-group" >
 				
 				                                    <div class="dropdown">
-				                                        <label class="label-control">Select Region</label>
+				                                        <label class="label-control">Region</label>
 				                                        <span ng-show="regionSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 				                                        <span ng-show="!regionSpin && !regionsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 				                                 
@@ -1788,7 +1787,7 @@
                                    		<div class="col-xs-12 col-md-6 col-lg-6">
                                    		   <div class="form-group" >
 				                            <div class="dropdown">
-				                                <label class="label-control">Select Branch</label>
+				                                <label class="label-control">Branch</label>
 				                                 <span ng-show="branchSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 				                                 <span ng-show="!branchSpin && !branchsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 				                                 

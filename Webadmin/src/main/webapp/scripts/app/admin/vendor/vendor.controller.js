@@ -29,7 +29,7 @@ angular.module('timeSheetApp')
         $scope.vendorsListOne = {};
         $scope.vendorsLists = [];
 
-        console.log($stateParams)
+      //console.log($stateParams)
                     var that =  $scope;
 
         $scope.calendar = {
@@ -69,7 +69,7 @@ angular.module('timeSheetApp')
 
         $scope.conform = function(text)
          {
-            console.log($scope.selectedProject)
+          //console.log($scope.selectedProject)
             $rootScope.conformText = text;
             $('#conformationModal').modal();
          }
@@ -148,7 +148,7 @@ angular.module('timeSheetApp')
                   $location.path('/vendor-list');
                 }
                 $scope.title=$scope.vendor.name;
-                console.log($scope.vendor);
+              //console.log($scope.vendor);
              })
           }else{
               $location.path('/vendor-list');
@@ -227,15 +227,15 @@ angular.module('timeSheetApp')
 
             if($scope.selectedColumn){
                 $scope.searchCriteria.columnName = $scope.selectedColumn;
-                console.log('>>> $scope.searchCriteria.columnName <<< '+$scope.searchCriteria.columnName);
+              //console.log('>>> $scope.searchCriteria.columnName <<< '+$scope.searchCriteria.columnName);
                 $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
-                console.log('>>> $scope.searchCriteria.sortByAsc <<< '+$scope.searchCriteria.sortByAsc);
+              //console.log('>>> $scope.searchCriteria.sortByAsc <<< '+$scope.searchCriteria.sortByAsc);
             }else{
                 $scope.searchCriteria.columnName ="name";
                 $scope.searchCriteria.sortByAsc = true;
             }
 
-            console.log("search criteria",$scope.searchCriteria);
+          //console.log("search criteria",$scope.searchCriteria);
                      $scope.vendors = '';
                      $scope.vendorsLoader = false;
                      $scope.loadPageTop();
@@ -244,7 +244,7 @@ angular.module('timeSheetApp')
 
             if($rootScope.retain == 1){
                 $scope.localStorage = getLocalStorage.getSearch();
-                console.log('Local storage---',$scope.localStorage);
+              //console.log('Local storage---',$scope.localStorage);
 
                 if($scope.localStorage){
                     $scope.filter = true;
@@ -266,7 +266,7 @@ angular.module('timeSheetApp')
 
 
             VendorComponent.search(searchCriteras).then(function (data) {
-                console.log(data);
+              //console.log(data);
                 $scope.vendors = data.transactions;
                 $scope.vendorsLoader = true;
                 $scope.loadingStop();
@@ -284,8 +284,8 @@ angular.module('timeSheetApp')
                  $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
                  $scope.totalCountPages = data.totalCount;
 
-                console.log("Pagination",$scope.pager);
-                console.log('vendors search result list -' + JSON.stringify($scope.vendors));
+              //console.log("Pagination",$scope.pager);
+              //console.log('vendors search result list -' + JSON.stringify($scope.vendors));
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
 
@@ -341,7 +341,7 @@ angular.module('timeSheetApp')
 	                $location.path('/vendor-list');
 	            }).catch(function (response) {
 	                $scope.success = null;
-	                console.log('Error - '+ response.data);
+	              //console.log('Error - '+ response.data);
 	                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
 	                    $scope.errorProjectExists = 'ERROR';
 	                } else {
@@ -356,7 +356,7 @@ angular.module('timeSheetApp')
                 $scope.success =null;
                 $scope.saveLoad = true;
                 $scope.btnDisable = true;
-                console.log('vendor details ='+ JSON.stringify($scope.vendor));
+              //console.log('vendor details ='+ JSON.stringify($scope.vendor));
 
                  VendorComponent.create($scope.vendor).then(function () {
                     $scope.success = 'OK';
@@ -367,7 +367,7 @@ angular.module('timeSheetApp')
                      $scope.saveLoad = false;
                     $scope.success = null;
                     $scope.btnDisable = false;
-                    console.log('Error - '+ response.data);
+                  //console.log('Error - '+ response.data);
                     if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                         $scope.showNotifications('top','center','danger','vendor already exist!!');
                         $scope.errorProjectExists = 'ERROR';
@@ -385,7 +385,7 @@ angular.module('timeSheetApp')
                 $scope.success =null;
                 $scope.btnDisable = true;
 
-                console.log('vendor details ='+ JSON.stringify($scope.vendor));
+              //console.log('vendor details ='+ JSON.stringify($scope.vendor));
 
                  VendorComponent.update($scope.vendor).then(function () {
                     $scope.success = 'OK';
@@ -396,7 +396,7 @@ angular.module('timeSheetApp')
                     $scope.success = null;
                      $scope.saveLoad = false;
                      $scope.btnDisable = false;
-                    console.log('Error - '+ response.data);
+                  //console.log('Error - '+ response.data);
                     if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                         $scope.showNotifications('top','center','danger','vendor already exist!!');
                         $scope.errorProjectExists = 'ERROR';
@@ -493,21 +493,21 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.exportType = type;
             $scope.searchCriteria.report = true;
 
-            console.log('calling asset export api');
+          //console.log('calling asset export api');
             VendorComponent.exportAllData($scope.searchCriteria).then(function(data){
                 var result = data.results[0];
-                console.log(result.file + ', ' + result.status + ',' + result.msg);
+              //console.log(result.file + ', ' + result.status + ',' + result.msg);
                 var exportAllStatus = {
                         fileName : result.file,
                         exportMsg : 'Exporting All...',
                         url: result.url
                 };
                 $scope.exportStatusMap[0] = exportAllStatus;
-                console.log('exportStatusMap size - ' + $scope.exportStatusMap.length);
+              //console.log('exportStatusMap size - ' + $scope.exportStatusMap.length);
                 $scope.start();
               },function(err){
-                  console.log('error message for export all ')
-                  console.log(err);
+                //console.log('error message for export all ')
+                //console.log(err);
           });
     };
 
@@ -521,7 +521,7 @@ angular.module('timeSheetApp')
 
       // store the interval promise
       promise = $interval($scope.exportStatus, 5000);
-      console.log('promise -'+promise);
+    //console.log('promise -'+promise);
     };
 
     // stops the interval
@@ -534,7 +534,7 @@ angular.module('timeSheetApp')
 
     $scope.exportStatus = function() {
         //console.log('empId='+$scope.empId);
-        console.log('exportStatusMap length -'+$scope.exportStatusMap.length);
+      //console.log('exportStatusMap length -'+$scope.exportStatusMap.length);
         angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
             if(!exportStatusObj.empId) {
                 exportStatusObj.empId = 0;
@@ -542,18 +542,18 @@ angular.module('timeSheetApp')
             VendorComponent.exportStatus(exportStatusObj.fileName).then(function(data) {
                 if(data) {
                     exportStatusObj.exportStatus = data.status;
-                    console.log('exportStatus - '+ exportStatusObj);
-                    console.log(data)
+                  //console.log('exportStatus - '+ exportStatusObj);
+                  //console.log(data)
                     exportStatusObj.exportMsg = data.msg;
                     $scope.downloader=false;
-                    console.log('exportMsg - '+ exportStatusObj.exportMsg);
+                  //console.log('exportMsg - '+ exportStatusObj.exportMsg);
                     if(exportStatusObj.exportStatus == 'COMPLETED'){
                         if(exportStatusObj.url) {
                             exportStatusObj.exportFile = exportStatusObj.url;
                         }else {
                             exportStatusObj.exportFile = data.file;
                         }
-                        console.log('exportFile - '+ exportStatusObj.exportFile);
+                      //console.log('exportFile - '+ exportStatusObj.exportFile);
                         $scope.stop();
                     }else if(exportStatusObj.exportStatus == 'FAILED'){
                         $scope.stop();

@@ -61,6 +61,12 @@
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchSite.id !=0 && searchSite.id !=null">
                     Site: {{searchSite.name}}
                 </span>
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchRegion.id !=0 && searchRegion.id !=null">
+						Region: {{searchRegion.name}}
+				</span>
+				 <span class="tag label label-info" style="margin-right: 10px" ng-show="searchBranch.id !=0 && searchBranch.id !=null">
+						Branch: {{searchBranch.name}}
+				</span>
 
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="selectedDateFrom">
                     From: {{selectedDateFrom | date:'dd/MM/yyyy'}}
@@ -70,7 +76,7 @@
                     To: {{selectedDateTo | date:'dd/MM/yyyy'}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="empListOne.selected.id !=0 && empListOne.selected.id !=null">
+               <!--  <span class="tag label label-info"  style="margin-right: 10px" ng-show="empListOne.selected.id !=0 && empListOne.selected.id !=null">
                     Employee: {{empListOne.selected.name}}
                 </span>
 
@@ -80,7 +86,7 @@
 
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchDescription">
                     Description: {{searchDescription}}
-                </span>
+                </span> -->
 
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchStatus !=null && searchStatus !='-- ALL STATUS --'">
                     Status: {{searchStatus}}
@@ -770,7 +776,7 @@
                                         <div class="col-xs-12 col-md-4">
                                             <div class="dropdown" >
                                                 <div class="form-group">
-                                                    <label class="label-control">Select Employee</label>
+                                                    <label class="label-control">Employee</label>
                                                     <span ng-show="empSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!empSpin && !empListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                     
@@ -813,7 +819,7 @@
                                         <div class="col-xs-12 col-md-4">
                                             <div class="dropdown ">
 	                                            <div class="form-group">
-	                                                    <label class="label-control">Select Status</label>
+	                                                    <label class="label-control">Status</label>
 	                                                    
 	                                                    <span ng-show="statusSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 	                                                    <span ng-show="!statusSpin && !statusListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>

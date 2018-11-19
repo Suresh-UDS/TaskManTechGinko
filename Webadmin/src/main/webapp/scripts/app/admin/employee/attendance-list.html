@@ -544,7 +544,7 @@
                                                     
                                                     <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
 													  <ui-select-match placeholder="Select site..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
-													  <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search" ng-click="loadDepBlocksList(sitesListOne.selected)" null-option="allSitesVal" loose-null>
+													  <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search"  null-option="allSitesVal" loose-null>
 													    <span ng-bind-html="sitesListOne.name | highlight: $select.search"></span>
 													  </ui-select-choices>
 													</ui-select>
