@@ -18,7 +18,7 @@
             <div class="col-md-12">
 
                 <div class="form-container table-container" ng-init="loadProjectsList();">
-                    <form ng-show="!success" name="form" role="form" novalidate
+                    <form ng-show="!success" name="form" role="form" ng-submit="conform('save')" novalidate
                           ng-submit=""  class="form-horizontal">
 
                         <div class="row">
@@ -171,7 +171,7 @@
                                                 <div class="col-md-12 txt-align-rgt">
                                                     <div class="form-group">
 
-                                                        <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" ng-click="conform('save')"
+                                                        <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" 
                                                                 type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisable">
                                                             <span class="btn-label"><i class="material-icons">check</i></span> Save
                                                             <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
