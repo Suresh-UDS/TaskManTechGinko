@@ -18,6 +18,9 @@ angular.module('timeSheetApp')
         $scope.noData = false;
         $scope.checkStatus = 0;
         $scope.btnDisable = false;
+        $scope.allUserRole = {name: '-- ALL ROLE --'};
+        $scope.userRolesListOne = {};
+        $scope.userRolesLists = [];
 
         //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -32,6 +35,8 @@ angular.module('timeSheetApp')
         $scope.userRoles;
 
         $scope.selectedRole = null;
+        
+        $scope.searchRole = null;
 
         $scope.selectedUser;
 
@@ -44,7 +49,7 @@ angular.module('timeSheetApp')
 
         $scope.conform = function(text)
         {
-            console.log($scope.selectedProject)
+          //console.log($scope.selectedProject)
             $rootScope.conformText = text;
             $('#conformationModal').modal();
 
@@ -82,13 +87,15 @@ angular.module('timeSheetApp')
         $scope.loadUserRoles = function () {
         	UserRoleComponent.findAll().then(function (data) {
                 $scope.userRoles = data;
-
-
+              //console.log("User Roles",$scope.userRoles)
+                /** Ui-select scope **/
+                $scope.userRolesLists[0] = $scope.allUserRole;
                 //
                 $scope.uiRole.splice(0,$scope.uiRole.length)
                 for(var i=0;i<$scope.userRoles.length;i++)
                 {
                     $scope.uiRole[i] = $scope.userRoles[i].name;
+                    $scope.userRolesLists[i+1] = $scope.userRoles[i];
                 }
                 $scope.roleDisable = false;
                 //
@@ -111,7 +118,7 @@ angular.module('timeSheetApp')
         $scope.loadSearchRole = function(role)
         {
             $scope.selectedRole = $scope.userRoles[$scope.uiRole.indexOf(role)]
-            console.log('Project dropdown list:',$scope.searchProject)
+          //console.log('Project dropdown list:',$scope.searchProject)
         }
         //
 
@@ -145,7 +152,7 @@ angular.module('timeSheetApp')
             	$scope.success = 'OK';
                 $scope.saveLoad = false;
             	//$scope.loadUsers();
-            	$scope.showNotifications('top','center','success','User Created Successfully');
+            	//$scope.showNotifications('top','center','success','User Created Successfully');
             	$location.path('/users');
             }).catch(function (response) {
                 $scope.success = null;
@@ -187,15 +194,31 @@ angular.module('timeSheetApp')
 
 
         $scope.loadUser = function() {
-            if($stateParams.checkStatus == 1){
-               $scope.checkStatus = 1;
-            }
-	        	$scope.loadEmployee();
-	        	UserComponent.findOne($stateParams.id).then(function (data) {
-	                $scope.user = data;
-	                $scope.selectedRole = {id : data.userRoleId, name : data.userRoleName}
-	                $scope.selectedEmployee = {id : data.employeeId,name : data.employeeName}
-	            });
+        	if($stateParams.id){
+    		if($stateParams.checkStatus == 1){
+                $scope.checkStatus = 1;
+             }
+ 	        	//$scope.loadEmployee();
+ 	        	UserComponent.findOne($stateParams.id).then(function (data) {
+ 	                $scope.user = data;
+ 	              //console.log('User Role list',$scope.user);
+ 	                $scope.selectedRole = {id : $scope.user.userRoleId, name : $scope.user.userRoleName};
+ 	                
+ 	               EmployeeComponent.findAll().then(function (data) {
+ 	            	  $scope.selectedEmployee = {id : $scope.user.employeeId,name : $scope.user.employeeName};
+ 	                  $scope.employees = data;
+ 	                //console.log("employee",$scope.employees);
+ 	                  $scope.loadingStop();
+ 	                });
+ 	               
+ 	               
+ 	              //console.log("selected employee",$scope.selectedEmployee);
+ 	            });
+        		
+        	}else{
+        		$location.path('/users');
+        	}
+            
         };
 
         $scope.updateUser = function () {
@@ -222,7 +245,7 @@ angular.module('timeSheetApp')
                 $scope.saveLoad = false;
                 $scope.btnDisable = false;
                 $scope.success = null;
-                console.log('Error - '+ response.data);
+              //console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                     $scope.errorUserExists = true;
                 } else if(response.status === 400 && response.data.message === 'error.validation'){
@@ -270,6 +293,7 @@ angular.module('timeSheetApp')
 
 
          $scope.searchFilter = function () {
+        	$('.AdvancedFilterModal.in').modal('hide');
             $scope.setPage(1);
             $scope.search();
          }
@@ -288,37 +312,54 @@ angular.module('timeSheetApp')
 	        	}
 
 	        	$scope.searchCriteria.currPage = currPageVal;
+	        	
+	        	if($scope.userRolesListOne.selected && $scope.userRolesListOne.selected.name !="-- ALL ROLE --"){
+	        		$scope.searchRole = $scope.userRolesListOne.selected;
+	        	}else{
+	        	   $scope.searchRole = null;
+	        	}
 
 	        	//------
-            console.log('Selected  user -' + JSON.stringify($scope.searchCriteria.userLogin));
-            console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaUser));
+          //console.log('Selected  user -' + JSON.stringify($scope.searchCriteria.userLogin));
+          //console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaUser));
             $scope.searchCriteria.findAll = false;
 
 	        	if(!$scope.userLogin && !$scope.userFirstName
-	        			&& !$scope.userLastName && !$scope.userEmail && !$scope.selectedRole) {
+	        			&& !$scope.userLastName && !$scope.userEmail && !$scope.searchRole) {
 
 	        			$scope.searchCriteria.findAll = true;
 	        		}
 
                 if($scope.userLogin) {
                     $scope.searchCriteria.userLogin = $scope.userLogin;
+                }else{
+                	$scope.searchCriteria.userLogin = null;
                 }
 
                 if($scope.userFirstName) {
                     $scope.searchCriteria.userFirstName = $scope.userFirstName;
+                }else{
+                	$scope.searchCriteria.userFirstName = "";
                 }
 
                 if($scope.userLastName) {
                     $scope.searchCriteria.userLastName = $scope.userLastName;
+                }else{
+                	$scope.searchCriteria.userLastName = "";
                 }
 
                 if($scope.userEmail) {
                     $scope.searchCriteria.userEmail = $scope.userEmail;
+                }else{
+                	 $scope.searchCriteria.userEmail = "";
                 }
 
-	        	if($scope.selectedRole) {
-	        		$scope.searchCriteria.userRoleId = $scope.selectedRole.id;
-                    $scope.searchCriteria.userRoleName = $scope.selectedRole.name;
+	        	if($scope.searchRole) {
+	        		$scope.searchCriteria.userRoleId = $scope.searchRole.id;
+                    $scope.searchCriteria.userRoleName = $scope.searchRole.name;
+	        	}else{
+	        		$scope.searchCriteria.userRoleId = null;
+                    $scope.searchCriteria.userRoleName = null;
 	        	}
 
 
@@ -339,7 +380,7 @@ angular.module('timeSheetApp')
                 }
 
 
-                     console.log("search criteria",$scope.searchCriteria);
+                   //console.log("search criteria",$scope.searchCriteria);
                      $scope.users = '';
                      $scope.usersLoader = false;
                      $scope.loadPageTop();
@@ -349,13 +390,39 @@ angular.module('timeSheetApp')
 
             if($rootScope.retain == 1){
                 $scope.localStorage = getLocalStorage.getSearch();
-                console.log('Local storage---',$scope.localStorage);
+              //console.log('Local storage---',$scope.localStorage);
 
                 if($scope.localStorage){
                     $scope.filter = true;
                     $scope.pages.currPage = $scope.localStorage.currPage;
-                    $scope.searchProject = {searchStatus:'0',id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
-                    $scope.searchSite = {searchStatus:'0',id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
+                    
+                    if($scope.localStorage.userRoleName){
+                        $scope.searchRole = {name:$scope.localStorage.userRoleName};
+                        $scope.userRolesListOne.selected = $scope.searchRole;
+                    }else{
+                        $scope.searchRole = null;
+                        $scope.userRolesListOne.selected = $scope.searchRole;
+                    }
+                    if($scope.localStorage.userLogin){
+                   	 $scope.userLogin = $scope.localStorage.userLogin;
+                   }else{
+                   	 $scope.userLogin = "";
+                   }
+                    if($scope.localStorage.userFirstName){
+                   	 $scope.userFirstName = $scope.localStorage.userFirstName;
+                   }else{
+                   	 $scope.userFirstName = "";
+                   }
+	                if($scope.localStorage.userLastName){
+	                  	 $scope.userLastName = $scope.localStorage.userLastName;
+	                  }else{
+	                  	 $scope.userLastName = "";
+	                  }
+	                if($scope.localStorage.userEmail){
+	                  	 $scope.userEmail = $scope.localStorage.userEmail;
+	                  }else{
+	                  	 $scope.userEmail = "";
+	                  }
 
                 }
 
@@ -390,8 +457,8 @@ angular.module('timeSheetApp')
                      $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
                      $scope.totalCountPages = data.totalCount;
 
-                     console.log("Pagination",$scope.pager);
-                     console.log("jobs",$scope.users);
+                   //console.log("Pagination",$scope.pager);
+                   //console.log("jobs",$scope.users);
 
                     $scope.pages.currPage = $scope.pages.currPage;
                     $scope.pages.totalPages = data.totalPages;
@@ -420,10 +487,15 @@ angular.module('timeSheetApp')
             $scope.selectedProject = null;
             $scope.userLogin = null;
             $scope.client = null;
+            
+            /** Ui-select scopes **/
+            $scope.userRolesListOne.selected = null;
+            
             $scope.userFirstName = null;
             $scope.userLastName = null;
             $scope.userEmail = null;
             $scope.selectedRole = null;
+            $scope.searchRole = null;
             $scope.searchCriteria = {};
             $scope.localStorage = null;
             $rootScope.searchCriteriaUser = null;

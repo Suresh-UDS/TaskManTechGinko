@@ -196,7 +196,7 @@
                                                     <label class="control-label">Email<span class="red-star">*</span></label>
                                                     <input id='employeeEmail' ng-model="employee.email" class='form-control'
                                                            name='employeeEmail' type='email' value=""
-                                                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"  required tabindex="7" />
+                                                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" ng-maxlength="50"  required tabindex="7" />
                                                     <div ng-show="form.$submitted || form.employeeEmail.$touched || form.employeeEmail.$dirty">
                                                         <div ng-show="form.employeeEmail.$dirty || form.employeeEmail.$invalid">
                                                             <p class="help-block" style="color:maroon"
@@ -207,6 +207,10 @@
                                                                ng-show="form.employeeEmail.$error.pattern">
                                                                 Employee email is invalid.
                                                             </p>
+                                                            <p class="help-block" style="color: maroon"
+                                                              ng-show="form.employeeEmail.$error.maxlength"
+                                                              translate-value-max="255">Email cannot be longer than 50
+                                                               characters.</p>
                                                         </div>
                                                     </div>
                                                 </div>

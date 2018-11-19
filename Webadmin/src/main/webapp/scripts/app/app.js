@@ -23,7 +23,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
 
        /* Principal.identity().then(function(response)
              {
-                 console.log('current user' +JSON.stringify(response.login));
+               //console.log('current user' +JSON.stringify(response.login));
                  $rootScope.accountName = response.login;
              });*/
 
@@ -36,7 +36,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
         $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
             $rootScope.toState = toState;
             $rootScope.toStateParams = toStateParams;
-            console.log("state change start")
+          //console.log("state change start")
             if (Principal.isIdentityResolved()) {
                 Auth.authorize();
 
@@ -45,7 +45,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
 
         });
 
-        console.log('current state - ' +JSON.stringify($state));
+      //console.log('current state - ' +JSON.stringify($state));
         $rootScope.isLoggedIn = true;
 
         $rootScope.stateDetails = $state;
@@ -75,18 +75,18 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
             }
             $window.document.title = titleKey;
             $rootScope.pageTitle = titleKey;
-            console.log(toState.name)
+          //console.log(toState.name)
             if(toState.name == 'login'){
                 $rootScope.isLoggedIn = false;
             }
             if(toState.name !='dashboard'){
-                console.log("Not Dashboard");
+              //console.log("Not Dashboard");
                 $rootScope.isChartsDisplayed = true;
-                console.log($rootScope.isChartsDisplayed);
+              //console.log($rootScope.isChartsDisplayed);
             }else{
-                console.log("Not Dashboard");
+              //console.log("Not Dashboard");
                 $rootScope.isChartsDisplayed = false;
-                console.log($rootScope.isChartsDisplayed);
+              //console.log($rootScope.isChartsDisplayed);
 
             }
 
@@ -150,7 +150,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
 
         $rootScope.loadingStop = function(){
 
-            console.log("Calling loader");
+          //console.log("Calling loader");
 
             $('.pageCenter').hide();
             $('.overlay').hide();
@@ -171,7 +171,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
 
          $rootScope.initScrollBar = function(){
 
-            console.log("-- Calling scrollbar -- ");
+          //console.log("-- Calling scrollbar -- ");
 
              $('.sidebar .sidebar-wrapper').perfectScrollbar();
          }
