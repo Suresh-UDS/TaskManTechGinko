@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Alert, IonicPage, LoadingController, NavController, NavParams, ToastController} from 'ionic-angular';
+import {IonicPage, LoadingController, NavController, NavParams, ToastController} from 'ionic-angular';
 import {AttendanceListPage} from "../attendance-list/attendance-list";
 import {authService} from "../service/authService";
 import {Camera, CameraOptions} from "@ionic-native/camera";
@@ -13,11 +13,8 @@ import {componentService} from "../service/componentService";
 import {AttendanceViewPage} from "../attendance-view/attendance-view";
 import {Diagnostic} from "@ionic-native/diagnostic";
 import {LocationAccuracy} from "@ionic-native/location-accuracy";
-import Swal from 'sweetalert2';
-import {AlertController} from "ionic-angular";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-// import {swal} from "../calender-page/calender-page";
-
+import {LocationProvider} from "../../providers/location-provider";
+import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 
 declare  var demo ;
 
@@ -51,11 +48,11 @@ export class EmployeeList {
     pageSort:15;
     count=0;
 
-
     fakeEmployeeList: Array<any> = new Array(12);
     constructor(public navCtrl: NavController,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
-                private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,private locationAccuracy:LocationAccuracy, public alertController:AlertController,
-                private geoFence:Geofence, private employeeService: EmployeeService, private jobService: JobService, private siteService:SiteService, private attendanceService:AttendanceService, private diagonistic:Diagnostic) {
+                private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,private locationAccuracy:LocationAccuracy,
+                private geoFence:Geofence, private employeeService: EmployeeService, private jobService: JobService, private siteService:SiteService, private attendanceService:AttendanceService,
+                private diagonistic:Diagnostic, public locationProvider: LocationProvider,public backgroundGeolocation: BackgroundGeolocation) {
 
         this.lattitude = 0;
         this.longitude = 0;
@@ -77,11 +74,30 @@ export class EmployeeList {
         })
     }
 
+    getLocation(){
+        console.log("Location on enter");
+        console.log(this.locationProvider.lat);
+        console.log(this.locationProvider.lng);
+
+        this.locationProvider.startTracking().subscribe(response=>{
+            console.log(response);
+        });
+    }
+
+    stop(){
+        this.locationProvider.stopTracking();
+    }
+
     ionViewDidLoad() {
+
+        console.log("Location on enter");
+        console.log(this.locationProvider.lat);
+        console.log(this.locationProvider.lng);
+
         console.log('ionViewDidLoad SiteListPage');
         var options={
             timeout:3000
-        }
+        };
         this.geolocation.getCurrentPosition(options).then((response)=>{
             console.log("Current location");
             console.log(response);
@@ -170,8 +186,8 @@ export class EmployeeList {
         this.camera.getPicture(options).then((imageData) => {
             let base64Image = 'data:image/jpeg;base64,' + imageData;
             var employeeName = employee.fullName+employee.empId;
-            this.component.showLoader("Getting Location..")
-            this.checkProximity(this.site.id,this.lattitude,this.longitude,base64Image,mode,attendanceMode,employee);
+            this.component.showLoader("Getting Face..")
+            this.checkProximity(this.site.id,base64Image,mode,attendanceMode,employee);
             // this.enrollFace(employee,base64Image);
             // this.navCtrl.push(AttendanceViewPage,imageData)
         }, (err) => {
@@ -195,71 +211,102 @@ export class EmployeeList {
         )
     }
 
-    checkProximity(siteId,lat,lng,imageData,mode,attendanceMode,employee){
+    checkProximity(siteId,imageData,mode,attendanceMode,employee){
 
-        var options={
-            timeout:3000
+        // this.component.showLoader('Getting Location..');
+        this.component.closeAll();
+        this.component.showLoader("Getting Locations...");
+
+        // demo.showSwal('success-message-and-ok','Success','Checking Site Proximity');
+
+        this.locationProvider.startTracking();
+
+        let config = {
+            desiredAccuracy: 0,
+            stationaryRadius: 20,
+            distanceFilter: 10,
+            debug: false,
+            // interval: 2000
         };
-        this.geolocation.getCurrentPosition(options).then((response)=>{
+
+        this.backgroundGeolocation.configure(config).subscribe((response) => {
+
             this.component.closeAll();
-            this.component.showLoader('Verifying Location..');
-            console.log("Current location");
+            this.component.showLoader("Verifying Location...");
+            console.log("Response from background geo location");
             console.log(response);
-            console.log(response.coords.latitude);
-            console.log(response.coords.longitude);
-            this.lattitude = response.coords.latitude;
-            this.longitude = response.coords.longitude;
 
-            this.attendanceService.checkSiteProximity(siteId,this.lattitude,this.longitude).subscribe(
-                response=> {
+            console.log(response.latitude);
+            console.log(response.longitude);
+            if(response.latitude && response.longitude){
+                console.log("if condition verified");
+
+                if(response.latitude && response.longitude>0){
+                    this.attendanceService.checkSiteProximity(siteId,response.latitude,response.longitude).subscribe(
+                        response=> {
+                            this.component.closeAll();
+                            this.locationProvider.stopTracking();
+                            this.verifyFaceAndMarkAttendance(employee,mode,response.latitude,response.longitude,attendanceMode,imageData);
+                            // demo.showSwal('success-message-and-ok','Success','Face Enrolled Successfully');
+
+                        },error=>{
+                            console.log("errors");
+                            this.component.closeAll();
+                            this.locationProvider.stopTracking();
+                            demo.showSwal('warning-message-and-confirmation-ok',"Location Error", "Please check-in/out from site location   ");
+                            // this.verifyFaceAndMarkAttendance(employee,mode,response.latitude,response.longitude,attendanceMode,imageData);
+
+
+                        })
+                }else{
                     this.component.closeAll();
-                    this.verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData);
+                    console.log("error in getting current location");
+                    demo.showSwal('warning-message-and-confirmation-ok',"Location Error", "Error in getting location..");
+                    // this.verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData);
+                    console.log(response);
 
-                },error=>{
-                    console.log("errors");
-                    this.component.closeAll();
-                    // demo.showSwal('warning-message-and-confirmation-ok',"Location Error", "Please check-in/out from site location   ");
-                    this.verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData);
+                }
 
-                })
+            }
+
+            // this.locationProvider.stopTracking();
 
 
-        }).catch((error)=>{
-            console.log("error in getting current location");
-            // demo.showSwal('warning-message-and-confirmation-ok',"Location Error", "Error in getting location..");
-            this.verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData);
 
+        },err=>{
+            // demo.showSwal('warning-message-and-confirmation-ok','Failure','Error in getting background location');
+            this.component.closeAll();
+            console.log("Error from background geo location");
+            console.log(err);
         });
-
 
 
     }
 
-    verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData){
+    verifyFaceAndMarkAttendance(employee,mode,lat,lng,attendanceMode,imageData){
         let base64Image = 'data:image/jpeg;base64,' + imageData;
         var employeeName = employee.fullName+employee.empId;
         // this.component.showLoader('Detecting Face');
         if(mode === 'enroll'){
             this.component.closeAll();
-            this.component.showLoader('Enrolling Face Id..');
+            this.component.showLoader('Enrolling Face Id');
             employee.enrolled_face = imageData;
             this.employeeService.enrollFace(employee).subscribe(response=>{
                 this.component.closeAll();
                 if(response.errorStatus){
-                  demo.showSwal('warning-message-and-confirmation-ok','Failed',response.errorMessage);
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
                 }else{
                     var verificationResponse = response;
                     console.log(verificationResponse);
+                    // this.component.showToastMessage('Face Enrolled successfully..','bottom');
                     demo.showSwal('success-message-and-ok','Success','Face Enrolled Successfully');
-                    this.getEmployees();
-                  // Swal('Face Enrolled successfully');
-                    this.component.showToastMessage('Face Enrolled successfully..','bottom');
+
                 }
 
             },error=>{
                 this.component.closeAll();
                 var msg='Error in Detecting Face..';
-                this.component.showToastMessage(msg,'bottom');
+                this.component.showLoader(msg);
                 console.log("Error");
                 console.log(error)
             })
@@ -268,10 +315,10 @@ export class EmployeeList {
             this.component.closeAll();
             if(attendanceMode == 'checkIn'){
 
-                this.markAttendance(employee,imageData);
+                this.markAttendance(employee,lat,lng,imageData);
 
             }else{
-                this.markAttendanceCheckOut(employee,imageData);
+                this.markAttendanceCheckOut(employee,lat,lng,imageData);
             }
 
         }
@@ -279,15 +326,16 @@ export class EmployeeList {
 
     }
 
-    markAttendance(employee,imageData){
+    markAttendance(employee,lat,lng,imageData){
         this.component.showLoader("Marking Attendance...");
-        this.attendanceService.markAttendanceCheckIn(this.site.id,employee.empId,this.lattitude,this.longitude,imageData).subscribe(response=>{
+        this.attendanceService.markAttendanceCheckIn(this.site.id,employee.empId,lat,lng,imageData).subscribe(response=>{
             this.component.closeAll();
             this.getEmployees();
             if(response.errorStatus){
-                demo.showSwal('warning-message-and-confirmation-ok','Failed',response.errorMessage);
-
+                var msg='Face Verified and Attendance marked Successfully';
+                demo.showSwal('warning-message-and-confirmation-ok','Error in Marking Attendance',response.errorMessage);
             }else{
+                this.getEmployees();
                 demo.showSwal('success-message-and-ok','Success','Face Verified and Attendance marked Successfully');
 
             }
@@ -300,14 +348,16 @@ export class EmployeeList {
         })
     }
 
-    markAttendanceCheckOut(employee,imageData){
+    markAttendanceCheckOut(employee,lat,lng,imageData){
         this.component.showLoader("Marking Attendance...");
-        this.attendanceService.markAttendanceCheckOut(this.site.id,employee.empId,this.lattitude,this.longitude,imageData,employee.attendanceId).subscribe(response=>{
+        this.attendanceService.markAttendanceCheckOut(this.site.id,employee.empId,lat,lng,imageData,employee.attendanceId).subscribe(response=>{
             this.component.closeAll();
             this.getEmployees();
             if(response.errorStatus){
-                demo.showSwal('warning-message-and-confirmation-ok','Failed',response.errorMessage);
+                var msg='Face Verified and Attendance marked Successfully';
+                demo.showSwal('warning-message-and-confirmation-ok','Error in Marking Attendance',response.errorMessage);
             }else{
+                this.getEmployees();
                 demo.showSwal('success-message-and-ok','Success','Face Verified and Attendance marked Successfully');
 
             }
