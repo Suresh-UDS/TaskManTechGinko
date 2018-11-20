@@ -565,6 +565,8 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.columnName ="id";
                 $scope.searchCriteria.sortByAsc = true;
             }
+            
+               $scope.searchCriteras = $scope.searchCriteria;
 
                //console.log("search criteria",$scope.searchCriteria);
                      $scope.assetsData = '';
@@ -585,7 +587,7 @@ angular.module('timeSheetApp')
                  $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
                  $scope.totalCountPages = data.totalCount;
 
-                $scope.pages.currPage = data.currPage;
+                $scope.pages.currPage = data.currPage = 0 ? 1 : data.currPage;
                 $scope.pages.totalPages = data.totalPages;
 
                 if($scope.assetsData && $scope.assetsData.length > 0 ){

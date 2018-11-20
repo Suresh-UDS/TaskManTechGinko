@@ -1176,7 +1176,7 @@ angular.module('timeSheetApp')
 	        		$scope.searchCriteria.findAll = true;
 	        	}
 
-	        	if($scope.searchProject && $scope.searchProject.searchStatus != '0') {
+	        	if($scope.searchProject) {
 	        		$scope.searchCriteria.projectId = $scope.searchProject.id;
                     $scope.searchCriteria.projectName = $scope.searchProject.name;
 	        	}else{
@@ -1184,7 +1184,7 @@ angular.module('timeSheetApp')
                     $scope.searchCriteria.projectName = null;
                 }
 
-	        	if($scope.searchSite && $scope.searchSite.searchStatus != '0') {
+	        	if($scope.searchSite) {
 	        		$scope.searchCriteria.siteId = $scope.searchSite.id;
                     $scope.searchCriteria.siteName = $scope.searchSite.name;
 		        }else{
@@ -1328,10 +1328,10 @@ angular.module('timeSheetApp')
 
                 $rootScope.retain = 0;
 
-                var searchCriteras  = $scope.localStorage;
+                $scope.searchCriteras  = $scope.localStorage;
             }else{
 
-                var searchCriteras  = $scope.searchCriteria;
+            	$scope.searchCriteras  = $scope.searchCriteria;
             }
 
             /* Localstorage (Retain old values while edit page to list) end */
@@ -1340,13 +1340,13 @@ angular.module('timeSheetApp')
 
 
 
-            JobComponent.search(searchCriteras).then(function (data) {
+            JobComponent.search($scope.searchCriteras).then(function (data) {
                     $scope.jobs = data.transactions;
 	        		$scope.jobsLoader = true;
 
 
                 /** retaining list search value.**/
-                getLocalStorage.updateSearch(searchCriteras);
+                getLocalStorage.updateSearch($scope.searchCriteras);
 
 
                 /*

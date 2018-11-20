@@ -84,37 +84,40 @@
         <!--</div>-->
     </div>
     <div class="AppliedFilterCon" >
-            <span class="AppliedFilterTxtCon">
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchProject.id !=0 && searchProject.id !=null">
-                    Client: {{searchProject.name}}
+            <span class="AppliedFilterTxtCon" ng-show="!searchCriteria.findAll || localStorage">
+                <span
+	            class="tag label label-info" style="margin-right: 10px"
+	            ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
+					Client: {{searchCriteras.projectName}}
+			    </span>
+
+                <span class="tag label label-info" style="margin-right: 10px"
+	                  ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
+					Site: {{searchCriteras.siteName}}
+			   </span>
+
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.acquiredDate">
+                    Acquired Date: {{searchCriteras.acquiredDate | date:'dd/MM/yyyy'}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchSite.id !=0 && searchSite.id !=null">
-                    Site: {{searchSite.name}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.assetCreatedDate">
+                    CreatedDate: {{searchCriteras.assetCreatedDate | date:'dd/MM/yyyy'}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchAcquiredDate">
-                    Acquired Date: {{searchAcquiredDate | date:'dd/MM/yyyy'}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.assetTypeName && searchCriteras.assetTypeName !='-- ALL ASSET TYPE --'">
+                    Type: {{searchCriteras.assetTypeName}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCreatedDate">
-                    CreatedDate: {{searchCreatedDate | date:'dd/MM/yyyy'}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.assetGroupName && searchCriteras.assetGroupName !='-- ALL ASSET GROUP --'">
+                    Group: {{searchCriteras.assetGroupName}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="assetTypesListOne.selected.name && assetTypesListOne.selected.name !='-- ALL ASSET TYPE --'">
-                    Type: {{assetTypesListOne.selected.name}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.assetTitle">
+                    Title: {{searchCriteras.assetTitle}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="assetGroupsListOne.selected.assetgroup && assetGroupsListOne.selected.assetgroup !='-- ALL ASSET GROUP --'">
-                    Group: {{assetGroupsListOne.selected.assetgroup}}
-                </span>
-
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchAssetName">
-                    Title: {{searchAssetName}}
-                </span>
-
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchAssetCode">
-                    Code: {{searchAssetCode}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.assetCode">
+                    Code: {{searchCriteras.assetCode}}
                 </span>
 
             </span>

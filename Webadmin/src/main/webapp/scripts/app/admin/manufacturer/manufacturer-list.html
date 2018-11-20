@@ -32,11 +32,11 @@
     </div>
     <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
             <span class="AppliedFilterTxtCon">
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchAssetType.id !=0 && searchAssetType.id !=null">
-                    Client: {{searchAssetType.name}}
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.assetTypeId !=0 && searchCriteras.assetTypeId !=null">
+                    Asset Type: {{searchCriteras.assetTypeName}}
                 </span>
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchName">
-                    Client: {{searchName}}
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.manufacturerName">
+                    Manufacturer: {{searchCriteras.manufacturerName}}
                 </span>
             </span>
     </div>

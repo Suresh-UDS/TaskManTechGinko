@@ -1206,16 +1206,16 @@ angular.module('timeSheetApp')
 
                 $rootScope.retain = 0;
 
-                var searchCriteras  = $scope.localStorage;
+                $scope.searchCriteras  = $scope.localStorage;
             }else{
 
-                var searchCriteras  = $scope.searchCriteria;
+            	$scope.searchCriteras  = $scope.searchCriteria;
             }
 
             /* Localstorage (Retain old values while edit page to list) end */
 
 
-            JobComponent.searchTickets(searchCriteras).then(function (data) {
+            JobComponent.searchTickets($scope.searchCriteras).then(function (data) {
                 $scope.tickets = data.transactions;
                 $scope.ticketsLoader = true;
                 $scope.loadingStop();
@@ -1223,7 +1223,7 @@ angular.module('timeSheetApp')
 
 
                 /** retaining list search value.**/
-                getLocalStorage.updateSearch(searchCriteras);
+                getLocalStorage.updateSearch($scope.searchCriteras);
 
 
                 /*
@@ -1282,8 +1282,8 @@ angular.module('timeSheetApp')
         	
             $scope.selectedDateFrom = $filter('date')(fromDate, 'dd/MM/yyyy');
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-            // $scope.selectedDateFromSer = fromDate;
-            // $scope.selectedDateToSer =  new Date();
+            $scope.selectedDateFromSer = fromDate;
+            $scope.selectedDateToSer =  new Date();
             $scope.selectedTicket = null;
             $scope.selectedProject = null;
             $scope.selectedEmployee = null;

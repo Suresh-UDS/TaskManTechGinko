@@ -36,25 +36,25 @@
     </div>
     <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
             <span class="AppliedFilterTxtCon">
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchProject.id !=0 && searchProject.id !=null">
-                    Client:  {{searchProject.name}}
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
+                    Client:  {{searchCriteras.projectName}}
                 </span>
 
-                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchSite.id !=0 && searchSite.id !=null">
-                    Site: {{searchSite.name}}
+                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
+                    Site: {{searchCriteras.siteName}}
                 </span>
 
 
-                <span class="tag label label-info"  ng-show="searchBlock">
-                    Block: {{searchBlock}}
+                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.block">
+                    Block: {{searchCriteras.block}}
                 </span>
 
-                <span class="tag label label-info"  ng-show="searchFloor">
-                    Floor: {{searchFloor}}
+                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.floor">
+                    Floor: {{searchCriteras.floor}}
                 </span>
 
-                <span class="tag label label-info"  ng-show="searchZone">
-                    Zone: {{searchZone}}
+                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.zone">
+                    Zone: {{searchCriteras.zone}}
                 </span>
             </span>
     </div>
@@ -336,7 +336,7 @@
 <!--  End Modal -->
 
 <!-- AdvancedFilterModal -->
-<div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <form name="searchForm"  role="form" ng-submit ="searchFilter()" novalidate >

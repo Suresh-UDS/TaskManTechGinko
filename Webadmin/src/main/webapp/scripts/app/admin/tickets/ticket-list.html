@@ -53,43 +53,47 @@
     </div>
 
     <div class="AppliedFilterCon" >
-            <span class="AppliedFilterTxtCon">
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchProject.id !=0 && searchProject.id !=null">
-                    Client: {{searchProject.name}}
-                </span>
-
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchSite.id !=0 && searchSite.id !=null">
-                    Site: {{searchSite.name}}
-                </span>
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchRegion.id !=0 && searchRegion.id !=null">
-						Region: {{searchRegion.name}}
+	          <span class="AppliedFilterTxtCon">
+	             <span
+		            class="tag label label-info" style="margin-right: 10px"
+		            ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
+						Client: {{searchCriteras.projectName}}
 				</span>
-				 <span class="tag label label-info" style="margin-right: 10px" ng-show="searchBranch.id !=0 && searchBranch.id !=null">
-						Branch: {{searchBranch.name}}
+				 <span class="tag label label-info" style="margin-right: 10px"
+		                  ng-show="searchCriteras.regionId !=0 && searchCriteras.regionId !=null">
+						Region: {{searchCriteras.regionName}}
+				</span>
+				 <span class="tag label label-info" style="margin-right: 10px"
+		                  ng-show="searchCriteras.branchId !=0 && searchCriteras.branchId !=null">
+						Branch: {{searchCriteras.branchName}}
+				</span>
+				 <span class="tag label label-info" style="margin-right: 10px"
+		                  ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
+						Site: {{searchCriteras.siteName}}
 				</span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="selectedDateFrom">
-                    From: {{selectedDateFrom | date:'dd/MM/yyyy'}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.fromDate">
+                    From: {{searchCriteras.fromDate | date:'dd/MM/yyyy'}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="selectedDateTo">
-                    To: {{selectedDateTo | date:'dd/MM/yyyy'}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.toDate">
+                    To: {{searchCriteras.toDate | date:'dd/MM/yyyy'}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="empListOne.selected.id !=0 && empListOne.selected.id !=null">
-                    Employee: {{empListOne.selected.name}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.employeeId !=0 && searchCriteras.employeeId !=null">
+                    Employee: {{searchCriteras.employeeName}}
                 </span>
 
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchTitle">
-                    Title: {{searchTitle}}
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.ticketTitle">
+                    Title: {{searchCriteras.ticketTitle}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchDescription">
-                    Description: {{searchDescription}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.ticketDescription">
+                    Description: {{searchCriteras.ticketDescription}}
                 </span> 
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchStatus !=null && searchStatus !='-- ALL STATUS --'">
-                    Status: {{searchStatus}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.ticketStatus !=null && searchCriteras.ticketStatus !='-- ALL STATUS --'">
+                    Status: {{searchCriteras.ticketStatus}}
                 </span>
 
             </span>

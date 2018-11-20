@@ -379,7 +379,9 @@ angular.module('timeSheetApp')
                     $scope.searchCriteria.sortByAsc = true;
                 }
 
-
+                   
+                   $scope.searchCriteras = $scope.searchCriteria;
+                   
                    //console.log("search criteria",$scope.searchCriteria);
                      $scope.users = '';
                      $scope.usersLoader = false;

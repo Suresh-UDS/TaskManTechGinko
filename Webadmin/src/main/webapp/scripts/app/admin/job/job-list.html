@@ -59,32 +59,35 @@
         </div>
     </div>
     <div class="AppliedFilterCon" >
-            <span class="AppliedFilterTxtCon">
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchProject.id !=0 && searchProject.id !=null">
-                    Client: {{searchProject.name}}
-                </span>
+            <span class="AppliedFilterTxtCon" ng-show="!searchCriteria.findAll || localStorage">
+                <span
+	            class="tag label label-info" style="margin-right: 10px"
+	            ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
+					Client: {{searchCriteras.projectName}}
+			    </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchSite.id !=0 && searchSite.id !=null">
-                    Site: {{searchSite.name}}
-                </span>
+                <span class="tag label label-info" style="margin-right: 10px"
+	                  ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
+					Site: {{searchCriteras.siteName}}
+			    </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchJobDate">
-                    From: {{searchJobDate}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.checkInDateTimeFrom">
+                    From: {{searchCriteras.checkInDateTimeFrom | date:'dd/MM/yyyy'}}
                 </span>
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchJobDateTo">
-                    To: {{searchJobDateTo}} 
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.checkInDateTimeTo">
+                    To: {{searchCriteras.checkInDateTimeTo | date:'dd/MM/yyyy'}} 
                 </span>
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="empListOne.selected.id !=0 && empListOne.selected.id !=null">
-                    Employee: {{empListOne.selected.name}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.employeeId !=0 && searchCriteras.employeeId !=null">
+                    Employee: {{searchCriteras.employeeName}}
                 </span>
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchStatus !=null && searchStatus !='-- ALL STATUS --'">
-                    Status: {{searchStatus}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.jobStatus !=null && searchCriteras.jobStatus !='-- ALL STATUS --'">
+                    Status: {{searchCriteras.jobStatus}}
                 </span>
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchJobId">
-                    Id: {{searchJobId}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.jobId">
+                    Id: {{searchCriteras.jobId}}
                 </span>
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchJobTitle">
-                    Title: {{searchJobTitle}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.jobTitle">
+                    Title: {{searchCriteras.jobTitle}}
                 </span>
 
             </span>

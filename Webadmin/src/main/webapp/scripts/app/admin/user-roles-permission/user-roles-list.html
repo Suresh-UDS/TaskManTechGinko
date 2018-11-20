@@ -28,16 +28,16 @@
     </div>
     <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
             <span class="AppliedFilterTxtCon">
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.userRoleId || localStorage.userRoleId">
-                    Role Id: {{searchCriteria.userRoleId || localStorage.userRoleId}}
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.userRoleId">
+                    Role Id: {{searchCriteras.userRoleId}}
                 </span>
 
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.role || localStorage.role">
-                    Role: {{searchCriteria.role || localStorage.role}}
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.role">
+                    Role: {{searchCriteras.role}}
                 </span>
 
-                 <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.roleLevel || localStorage.roleLevel">
-                    Role Level: {{searchCriteria.roleLevel || localStorage.roleLevel}}
+                 <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.roleLevel">
+                    Role Level: {{searchCriteras.roleLevel}}
                 </span>
 
             </span>
@@ -418,7 +418,7 @@
                         <div class="col-xs-12 col-md-4">
                             <div class="form-group">
                                 <div class="dropdown">
-                                    <input type="text" class="form-control searchable-input floatL border-bottom-input" placeholder="Role Level"
+                                    <input type="number" class="form-control searchable-input floatL border-bottom-input" placeholder="Role Level"
                                            ng-model="searchUserRoleLevel" ng-value="" name="roleLevel" uib-typeahead="userRule as userRole.roleLevel for userRole in userRoles | filter:$viewValue | limitTo:5" />
 
                                 </div>

@@ -46,29 +46,29 @@
 
     <div class="AppliedFilterCon">
             <span class="AppliedFilterTxtCon">
-                <span
-	            class="tag label label-info" style="margin-right: 10px"
-	            ng-show="searchProject.id !=0 && searchProject.id !=null">
-					Client: {{searchProject.name}} 
+                 <span
+	              class="tag label label-info" style="margin-right: 10px"
+	             ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
+				 		Client: {{searchCriteras.projectName}}
 				</span>
 				 <span class="tag label label-info" style="margin-right: 10px"
-		                  ng-show="searchRegion.id !=0 && searchRegion.id !=null">
-						Region: {{searchRegion.name}}
+		                  ng-show="searchCriteras.regionId !=0 && searchCriteras.regionId !=null">
+						Region: {{searchCriteras.regionName}}
 				</span>
 				 <span class="tag label label-info" style="margin-right: 10px"
-		                  ng-show="searchBranch.id !=0 && searchBranch.id !=null">
-						Branch: {{searchBranch.name}}
+		                  ng-show="searchCriteras.branchId !=0 && searchCriteras.branchId !=null">
+						Branch: {{searchCriteras.branchName}}
 				</span>
 				 <span class="tag label label-info" style="margin-right: 10px"
-		                  ng-show="searchSite.id !=0 && searchSite.id !=null">
-						Site: {{searchSite.name}}
+		                  ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
+						Site: {{searchCriteras.siteName}}
 				</span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="selectedDateFrom">
-                    From: {{selectedDateFrom | date:'dd/MM/yyyy'}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.checkInDateTimeFrom">
+                    From: {{searchCriteras.checkInDateTimeFrom | date:'dd/MM/yyyy'}}
                 </span>
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="selectedDateTo">
-                    To: {{selectedDateTo | date:'dd/MM/yyyy'}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.checkInDateTimeTo">
+                    To: {{searchCriteras.checkInDateTimeTo | date:'dd/MM/yyyy'}}
                 </span>
                 <!-- <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.employeeEmpId || localStorage.employeeEmpId">
                     Employee Id: {{searchCriteria.employeeEmpId || localStorage.employeeEmpId}}

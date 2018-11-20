@@ -36,28 +36,31 @@
 </div>
 <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
             <span class="AppliedFilterTxtCon">
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchProject.id !=0 && searchProject.id !=null">
-                    Client: {{searchProject.name}}
+                <span
+	            class="tag label label-info" style="margin-right: 10px"
+	            ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
+					Client: {{searchCriteras.projectName}}
+			    </span>
+
+                <span class="tag label label-info" style="margin-right: 10px"
+	                  ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
+					Site: {{searchCriteras.siteName}}
+			    </span>
+
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.quotationTitle">
+                    Title: {{searchCriteras.quotationTitle}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchSite.id !=0 && searchSite.id !=null">
-                    Site: {{searchSite.name}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.quotationCreatedBy">
+                    Created by: {{searchCriteras.quotationCreatedBy}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchTitle">
-                    Title: {{searchTitle}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.quotationApprovedBy">
+                    Approved By: {{searchCriteras.quotationApprovedBy}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCreatedBy">
-                    Created by: {{searchCreatedBy}}
-                </span>
-
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchApprovedBy">
-                    Approved By: {{searchApprovedBy}}
-                </span>
-
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchStatus">
-                    Status: {{searchStatus}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.quotationStatus">
+                    Status: {{searchCriteras.quotationStatus}}
                 </span>
             </span>
 </div>

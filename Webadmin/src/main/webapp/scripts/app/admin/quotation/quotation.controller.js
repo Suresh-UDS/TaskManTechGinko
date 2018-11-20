@@ -1089,10 +1089,10 @@ angular
 
 	                    $rootScope.retain = 0;
 
-	                    var searchCriteras  = $scope.localStorage;
+	                    $scope.searchCriteras  = $scope.localStorage;
 	                 }else{
 
-	                    var searchCriteras  = $scope.searchCriteria;
+	                	 $scope.searchCriteras  = $scope.searchCriteria;
 	                 }
 
 	                 $scope.searchCriteria.quotationCreatedDate = new Date();
@@ -1101,13 +1101,13 @@ angular
 
 
                         //RateCardComponent.search($scope.searchCriteria).then(function (data) {
-		        	RateCardComponent.getAllQuotations(searchCriteras).then(function (data) {
+		        	RateCardComponent.getAllQuotations($scope.searchCriteras).then(function (data) {
 		        	    $scope.quotations = data;
 		                //$scope.quotations = data.transactions;
 		                $scope.quotationsLoader = true;
 
 		                 /** retaining list search value.**/
-                         getLocalStorage.updateSearch(searchCriteras);
+                         getLocalStorage.updateSearch($scope.searchCriteras);
 
 		                  /*
 		                        ** Call pagination  main function **

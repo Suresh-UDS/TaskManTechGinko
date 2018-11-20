@@ -701,9 +701,11 @@ angular.module('timeSheetApp')
 
             }
             else{
-                // $scope.searchCriteria.columnName ="id";
-                // $scope.searchCriteria.sortByAsc = true;
+                 $scope.searchCriteria.columnName ="id";
+                 $scope.searchCriteria.sortByAsc = true;
             }
+            
+             $scope.searchCriteras = $scope.searchCriteria;
 
                //console.log("search criteria ==================",$scope.searchCriteria);
                      $scope.ticketsData = '';

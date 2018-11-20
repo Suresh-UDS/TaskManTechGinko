@@ -1192,7 +1192,7 @@ angular.module('timeSheetApp')
                    if($scope.searchProject.id != undefined){
                     $scope.searchCriteria.projectId = $scope.searchProject.id;
                        $scope.searchCriteria.projectName = $scope.searchProject.name;
-                    $scope.searchCriteria.findAll = false;
+                       $scope.searchCriteria.findAll = false;
                    }else{
                     $scope.searchCriteria.projectId = null;
                     $scope.searchCriteria.findAll = true;
@@ -1340,23 +1340,23 @@ angular.module('timeSheetApp')
 
                 $rootScope.retain = 0;
 
-                var searchCriteras  = $scope.localStorage;
+                $scope.searchCriteras  = $scope.localStorage;
             }else{
 
-                var searchCriteras  = $scope.searchCriteria;
+            	$scope.searchCriteras  = $scope.searchCriteria;
             }
 
             /* Localstorage (Retain old values while edit page to list) end */
 
 
 
-            AssetComponent.search(searchCriteras).then(function (data) {
+            AssetComponent.search($scope.searchCriteras).then(function (data) {
                 $scope.assets = data.transactions;
                 $scope.assetsLoader = true;
 
 
                 /** retaining list search value.**/
-                getLocalStorage.updateSearch(searchCriteras);
+                getLocalStorage.updateSearch($scope.searchCriteras);
                 /*
                     ** Call pagination  main function **
                 */
@@ -1370,7 +1370,7 @@ angular.module('timeSheetApp')
 
 
 
-                $scope.pages.currPage = data.currPage;
+                $scope.pages.currPage = data.currPage == 0 ? 1 : data.currPage;
                 $scope.pages.totalPages = data.totalPages;
                 $scope.loading = false;
 

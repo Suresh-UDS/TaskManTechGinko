@@ -312,37 +312,28 @@ angular.module('timeSheetApp')
         	}
 
         	$scope.searchCriteria.currPage = currPageVal;
+        	$scope.searchCriteria.findAll = false;
         	if($scope.client.selected && $scope.client.selected.id !=0){
         		$scope.searchProject = $scope.client.selected;
         	}else{
         	   $scope.searchProject = null;
         	}
         	console.log('Selected  project -' , $scope.searchProject);
-        	console.log('search criteria - ', JSON.stringify($rootScope.searchCriteriaProject));
+
         	
         	if(!$scope.searchProject) {
-        		if($rootScope.searchCriteriaProject) {
-            		$scope.searchCriteria = $rootScope.searchCriteriaProject;
-        		}else {
-        			$scope.searchCriteria.findAll = true;
-        		}
-        	}else if($scope.searchProject) {
-        		$scope.searchCriteria.findAll = false;
-	        	if($scope.searchProject) {
-		        	$scope.searchCriteria.projectId = $scope.searchProject.id;
-		        	if(!$scope.searchCriteria.projectId) {
-		        		$scope.searchCriteria.projectName = $scope.searchProject.name;
-		        		console.log('selected project name =', $scope.searchProject.name + ', ' +$scope.searchCriteria.projectName);
-		        	}else {
-			        	$scope.searchCriteria.projectName = $scope.searchProject.name;
-		        	}
-	        	}else {
-	        		$scope.searchCriteria.projectId = null;
-	        	}
-
-
-
+        			$scope.searchCriteria.findAll = true;	
         	}
+        		
+        	if($scope.searchProject) {
+	        	$scope.searchCriteria.projectId = $scope.searchProject.id;	
+	        	$scope.searchCriteria.projectName = $scope.searchProject.name;
+        	}else {
+        		$scope.searchCriteria.projectId = null;
+        		$scope.searchCriteria.projectName = null;
+        	}
+
+        
         	console.log($scope.searchCriteria);
 
         	//------
@@ -360,7 +351,7 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.sortByAsc = true;
             }
 
-              //console.log("search criteria",$scope.searchCriteria);
+              
                 $scope.projects = '';
                 $scope.projectsLoader = false;
                 $scope.loadPageTop();
@@ -381,7 +372,7 @@ angular.module('timeSheetApp')
                              $scope.client.selected = $scope.searchProject;
                         }else{
                              $scope.searchProject = null;
-                             $scope.client.selected = $scope.allClients;
+                             $scope.client.selected = $scope.searchProject;
                         }
                         
 
@@ -389,20 +380,22 @@ angular.module('timeSheetApp')
 
                     $rootScope.retain = 0;
 
-                    var searchCriteras  = $scope.localStorage;
+                    $scope.searchCriteras  = $scope.localStorage;
                  }else{
 
-                    var searchCriteras  = $scope.searchCriteria;
+                	 $scope.searchCriteras  = $scope.searchCriteria;
                  }
+                 
+               //console.log("search criterias",$scope.searchCriteras);
 
                  /* Localstorage (Retain old values while edit page to list) end */
 
-            ProjectComponent.search(searchCriteras).then(function (data) {
+            ProjectComponent.search($scope.searchCriteras).then(function (data) {
                 $scope.projects = data.transactions;
                 $scope.projectsLoader = true;
 
                 /** retaining list search value.**/
-                getLocalStorage.updateSearch(searchCriteras);
+                getLocalStorage.updateSearch($scope.searchCriteras);
 
                 /*
                     ** Call pagination  main function **

@@ -255,24 +255,24 @@ angular.module('timeSheetApp')
 
                 $rootScope.retain = 0;
 
-                var searchCriteras  = $scope.localStorage;
+                $scope.searchCriteras  = $scope.localStorage;
             }else{
 
-                var searchCriteras  = $scope.searchCriteria;
+            	$scope.searchCriteras  = $scope.searchCriteria;
             }
 
             /* Localstorage (Retain old values while edit page to list) end */
 
 
 
-            VendorComponent.search(searchCriteras).then(function (data) {
+            VendorComponent.search($scope.searchCriteras).then(function (data) {
               //console.log(data);
                 $scope.vendors = data.transactions;
                 $scope.vendorsLoader = true;
                 $scope.loadingStop();
 
                 /** retaining list search value.**/
-                getLocalStorage.updateSearch(searchCriteras);
+                getLocalStorage.updateSearch($scope.searchCriteras);
 
 
 

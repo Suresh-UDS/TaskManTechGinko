@@ -599,8 +599,6 @@ angular.module('timeSheetApp')
                     $scope.searchCriteria.checkInDateTimeTo = $scope.selectedDateToSer;
                 }
 
-                $scope.searchCriteria.region = $scope.searchRegion!=null?$scope.searchRegion.name:"";
-                $scope.searchCriteria.branch = $scope.searchBranch!=null?$scope.searchBranch.name:"";
 //          if($scope.selectedEmployee){
 //            //console.log($scope.selectedEmployee);
 //                $scope.searchCriteria.employeeEmpId = $scope.selectedEmployee.empId;
@@ -622,6 +620,24 @@ angular.module('timeSheetApp')
                      $scope.searchCriteria.projectId = null;
                      $scope.searchCriteria.projectName = null;
                 }
+                
+                if($scope.searchRegion) {
+		        	$scope.searchCriteria.regionId = $scope.searchRegion.id;
+                    $scope.searchCriteria.regionName = $scope.searchRegion.name;
+		        	
+	        	}else {
+	        		$scope.searchCriteria.regionId = null;
+	        		$scope.searchCriteria.regionName = null;
+	        	}
+	        	
+	        	if($scope.searchBranch) {
+		        	$scope.searchCriteria.branchId = $scope.searchBranch.id;
+                    $scope.searchCriteria.branchName = $scope.searchBranch.name;
+		        	
+	        	}else {
+	        		$scope.searchCriteria.branchId = null;
+	        		$scope.searchCriteria.branchName = null;
+	        	}
                 
                 if($scope.searchSite) {
                     $scope.searchCriteria.siteId = $scope.searchSite.id;
@@ -664,6 +680,8 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.columnName ="id";
                 $scope.searchCriteria.sortByAsc = true;
             }
+            
+            $scope.searchCriteras = $scope.searchCriteria;
 
              //console.log("search criteria",$scope.searchCriteria);
                      $scope.attendancesData = '';

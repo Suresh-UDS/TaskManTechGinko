@@ -29,24 +29,24 @@
     </div>
     <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
             <span class="AppliedFilterTxtCon">
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="userLogin">
-                    User: {{userLogin}}
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.userLogin">
+                    User: {{searchCriteras.userLogin}}
                 </span>
 
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="userFirstName">
-                    First Name: {{userFirstName}}
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.userFirstName">
+                    First Name: {{searchCriteras.userFirstName}}
                 </span>
 
-                 <span class="tag label label-info" style="margin-right: 10px" ng-show="userLastName">
-                    Last Name: {{userLastName ||userLastName}}
+                 <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.userLastName">
+                    Last Name: {{searchCriteras.userLastName ||userLastName}}
                 </span>
 
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="userEmail">
-                    Mail: {{userEmail}}
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.userEmail">
+                    Mail: {{searchCriteras.userEmail}}
                 </span>
 
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="userRolesListOne.selected.name && userRolesListOne.selected.name !='-- ALL ROLE --'">
-                    Role: {{userRolesListOne.selected.name}}
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.userRoleName && searchCriteras.userRoleName !='-- ALL ROLE --'">
+                    Role: {{searchCriteras.userRoleName}}
                 </span>
 
             </span>

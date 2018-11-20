@@ -686,6 +686,8 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.columnName ="id";
                 $scope.searchCriteria.sortByAsc = true;
             }
+            
+            $scope.searchCriteras = $scope.searchCriteria;
 
            //console.log("search criteria",$scope.searchCriteria);
              $scope.employees = '';

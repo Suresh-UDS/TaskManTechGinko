@@ -864,6 +864,8 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.columnName ="id";
                 $scope.searchCriteria.sortByAsc = true;
             }
+            
+           
 
              //console.log('search criteria',$scope.searchCriteria);
 
@@ -978,17 +980,17 @@ angular.module('timeSheetApp')
 
                 $rootScope.retain = 0;
 
-                var searchCriteras  = $scope.localStorage;
+                $scope.searchCriteras  = $scope.localStorage;
             }else{
 
-                var searchCriteras  = $scope.searchCriteria;
+            	$scope.searchCriteras  = $scope.searchCriteria;
             }
 
             /* Localstorage (Retain old values while edit page to list) end */
 
 
 
-            LocationComponent.search(searchCriteras).then(function (data) {
+            LocationComponent.search($scope.searchCriteras).then(function (data) {
                 $scope.locations = data.transactions;
                 $scope.locationsLoader = true;
 
@@ -1016,7 +1018,7 @@ angular.module('timeSheetApp')
 
 
                 /** retaining list search value.* */
-                getLocalStorage.updateSearch(searchCriteras);
+                getLocalStorage.updateSearch($scope.searchCriteras);
 
 
                 /*

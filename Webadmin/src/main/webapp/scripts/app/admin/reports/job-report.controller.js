@@ -640,11 +640,12 @@ angular.module('timeSheetApp')
 
             }
             else{
-                $scope.searchCriteria.columnName ="title";
+                $scope.searchCriteria.columnName ="id";
                 $scope.searchCriteria.sortByAsc = true;
             }
 
-
+              $scope.searchCriteras = $scope.searchCriteria;
+              
                    //console.log("search criteria",$scope.searchCriteria);
                      $scope.jobs = '';
                      $scope.jobsLoader = false;

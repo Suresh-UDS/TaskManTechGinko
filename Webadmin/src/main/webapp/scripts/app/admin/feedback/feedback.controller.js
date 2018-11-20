@@ -495,7 +495,7 @@ angular.module('timeSheetApp')
 
             }
 
-
+              $scope.searchCriteras = $scope.searchCriteria;
               $scope.feedbackReport = "";
               $scope.feedbackListLoader = false;
               $scope.feedbackListData = false;
