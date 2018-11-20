@@ -1,12 +1,11 @@
 package com.ts.app.repository;
 
-import java.util.List;
-
+import com.ts.app.domain.AssetDocument;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ts.app.domain.AssetDocument;
+import java.util.List;
 
 public interface AssetDocumentRepository extends JpaRepository<AssetDocument, Long>{
 	

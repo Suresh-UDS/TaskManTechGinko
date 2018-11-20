@@ -1,29 +1,19 @@
 package com.ts.app.service.util;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Base64;
-import java.util.Date;
-
-import javax.inject.Inject;
-
+import com.ts.app.domain.Employee;
+import com.ts.app.service.AmazonS3Service;
+import com.ts.app.web.rest.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ts.app.domain.Employee;
-import com.ts.app.service.AmazonS3Service;
-import com.ts.app.web.rest.dto.AssetDTO;
-import com.ts.app.web.rest.dto.AssetDocumentDTO;
-import com.ts.app.web.rest.dto.AttendanceDTO;
-import com.ts.app.web.rest.dto.CheckInOutDTO;
-import com.ts.app.web.rest.dto.CheckInOutImageDTO;
-import com.ts.app.web.rest.dto.EmployeeDTO;
-import com.ts.app.web.rest.dto.LocationDTO;
-import com.ts.app.web.rest.dto.QuotationDTO;
-import com.ts.app.web.rest.dto.TicketDTO;
+import javax.inject.Inject;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Base64;
+import java.util.Date;
 
 @Component
 public class AmazonS3Utils {

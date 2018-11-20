@@ -1,16 +1,14 @@
 package com.ts.app.repository;
 
-import java.util.List;
-
+import com.ts.app.domain.EmployeeLocation;
+import com.ts.app.domain.Location;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ts.app.domain.EmployeeLocation;
-import com.ts.app.domain.Location;
-import org.springframework.security.access.method.P;
+import java.util.List;
 
 /**
  * Created by karth on 6/14/2017.

@@ -1,17 +1,15 @@
 package com.ts.app.web.rest.dto;
 
-import java.util.Set;
-import java.util.stream.Collectors;
+import com.ts.app.domain.Authority;
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.User;
+import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.Email;
-
-import com.ts.app.domain.Authority;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.User;
+import java.util.Set;
+import java.util.stream.Collectors;
 /**
  * A DTO representing a user, with his authorities.
  */

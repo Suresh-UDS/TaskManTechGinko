@@ -1,8 +1,10 @@
 package com.ts.app.config;
 
-import org.springframework.context.annotation.*;
-
 import com.ts.app.aop.logging.LoggingAspect;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
 @EnableAspectJAutoProxy

@@ -1,8 +1,8 @@
 package com.ts.app.service.util;
 
-import java.text.DecimalFormat;
-
 import org.springframework.stereotype.Component;
+
+import java.text.DecimalFormat;
 
 @Component
 public class NumberUtil {

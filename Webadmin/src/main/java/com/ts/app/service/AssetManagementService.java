@@ -1,20 +1,10 @@
 package com.ts.app.service;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TimeZone;
-
-import javax.inject.Inject;
-
 import com.ts.app.domain.*;
+import com.ts.app.repository.*;
+import com.ts.app.service.util.*;
 import com.ts.app.web.rest.dto.*;
+import com.ts.app.web.rest.errors.TimesheetException;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.hibernate.Hibernate;
@@ -25,55 +15,13 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ts.app.repository.AssetAMCRepository;
-import com.ts.app.repository.AssetDocumentRepository;
-import com.ts.app.repository.AssetGroupRepository;
-import com.ts.app.repository.AssetParamReadingRepository;
-import com.ts.app.repository.AssetParamRuleRepository;
-import com.ts.app.repository.AssetParameterConfigRepository;
-import com.ts.app.repository.AssetPpmScheduleRepository;
-import com.ts.app.repository.AssetReadingRuleRepository;
-import com.ts.app.repository.AssetRepository;
-import com.ts.app.repository.AssetSiteHistoryRepository;
-import com.ts.app.repository.AssetSpecification;
-import com.ts.app.repository.AssetStatusHistoryRepository;
-import com.ts.app.repository.AssetTypeRepository;
-import com.ts.app.repository.CheckInOutImageRepository;
-import com.ts.app.repository.CheckInOutRepository;
-import com.ts.app.repository.ChecklistItemRepository;
-import com.ts.app.repository.ChecklistRepository;
-import com.ts.app.repository.EmployeeRepository;
-import com.ts.app.repository.JobRepository;
-import com.ts.app.repository.LocationRepository;
-import com.ts.app.repository.ManufacturerRepository;
-import com.ts.app.repository.NotificationRepository;
-import com.ts.app.repository.ParameterConfigRepository;
-import com.ts.app.repository.PricingRepository;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.SchedulerConfigRepository;
-import com.ts.app.repository.SettingsRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.repository.TicketRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.repository.VendorRepository;
-import com.ts.app.repository.WarrantyTypeRepository;
-import com.ts.app.service.util.AmazonS3Utils;
-import com.ts.app.service.util.CommonUtil;
-import com.ts.app.service.util.DateUtil;
-import com.ts.app.service.util.ExportUtil;
-import com.ts.app.service.util.FileUploadHelper;
-import com.ts.app.service.util.ImportUtil;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.service.util.PagingUtil;
-import com.ts.app.service.util.QRCodeUtil;
-import com.ts.app.service.util.ReportUtil;
-import com.ts.app.web.rest.errors.TimesheetException;
+import javax.inject.Inject;
+import java.util.*;
 
 /**
  * Service class for managing Asset information.

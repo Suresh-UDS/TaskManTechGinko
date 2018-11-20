@@ -1,7 +1,6 @@
 package com.ts.app.repository;
 
-import java.util.List;
-
+import com.ts.app.domain.Manufacturer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ts.app.domain.Manufacturer;
+import java.util.List;
 
 public interface ManufacturerRepository extends JpaRepository<Manufacturer, Long>,JpaSpecificationExecutor<Manufacturer> {
 

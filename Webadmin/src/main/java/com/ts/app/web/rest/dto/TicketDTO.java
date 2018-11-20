@@ -1,8 +1,8 @@
 package com.ts.app.web.rest.dto;
 
-import java.util.Date;
-
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Date;
 
 public class TicketDTO extends BaseDTO {
     private long id;

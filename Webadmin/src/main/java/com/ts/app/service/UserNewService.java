@@ -1,30 +1,17 @@
 package com.ts.app.service;
 
-import com.ts.app.domain.Authority;
-import com.ts.app.domain.PersistentToken;
-
+import com.ts.app.domain.UserNew;
 import com.ts.app.repository.AuthorityRepository;
 import com.ts.app.repository.PersistentTokenRepository;
-
-import com.ts.app.security.SecurityUtils;
-import com.ts.app.service.util.RandomUtil;
-
-import java.time.ZonedDateTime;
-import java.time.LocalDate;
+import com.ts.app.repository.UserGroupRepository;
+import com.ts.app.repository.UserNewRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.util.*;
-import com.ts.app.domain.User;
-import com.ts.app.domain.UserNew;
-import com.ts.app.repository.UserNewRepository;
-import com.ts.app.domain.UserGroup;
-import com.ts.app.repository.UserGroupRepository;
 /**
  * Service class for managing users.
  */

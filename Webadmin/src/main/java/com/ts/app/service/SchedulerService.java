@@ -1,20 +1,14 @@
 package com.ts.app.service;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
-import javax.inject.Inject;
-
+import com.google.common.base.Splitter;
+import com.ts.app.config.Constants;
+import com.ts.app.domain.*;
+import com.ts.app.repository.*;
+import com.ts.app.service.util.DateUtil;
+import com.ts.app.service.util.ExportUtil;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.*;
+import com.ts.app.web.rest.errors.TimesheetException;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -24,50 +18,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.base.Splitter;
-import com.ts.app.config.Constants;
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Asset;
-import com.ts.app.domain.Frequency;
-import com.ts.app.domain.Job;
-import com.ts.app.domain.JobChecklist;
-import com.ts.app.domain.Project;
-import com.ts.app.domain.SLANotificationLog;
-import com.ts.app.domain.SchedulerConfig;
-import com.ts.app.domain.Setting;
-import com.ts.app.domain.Shift;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.SlaConfig;
-import com.ts.app.domain.SlaEscalationConfig;
-import com.ts.app.domain.Ticket;
-import com.ts.app.repository.AssetRepository;
-import com.ts.app.repository.AttendanceRepository;
-import com.ts.app.repository.EmployeeRepository;
-import com.ts.app.repository.EmployeeShiftRepository;
-import com.ts.app.repository.JobRepository;
-import com.ts.app.repository.ManufacturerRepository;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.SLANotificationLogRepository;
-import com.ts.app.repository.SchedulerConfigRepository;
-import com.ts.app.repository.SettingsRepository;
-import com.ts.app.repository.SlaConfigRepository;
-import com.ts.app.repository.TicketRepository;
-import com.ts.app.service.util.DateUtil;
-import com.ts.app.service.util.ExportUtil;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.JobChecklistDTO;
-import com.ts.app.web.rest.dto.JobDTO;
-import com.ts.app.web.rest.dto.SchedulerConfigDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
-import com.ts.app.web.rest.errors.TimesheetException;
+import javax.inject.Inject;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Service class for managing Device information.

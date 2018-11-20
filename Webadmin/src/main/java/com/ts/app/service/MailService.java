@@ -1,18 +1,10 @@
 package com.ts.app.service;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.inject.Inject;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
+import com.ts.app.config.JHipsterProperties;
+import com.ts.app.domain.User;
+import com.ts.app.service.util.DateUtil;
+import com.ts.app.service.util.Sendgrid;
+import com.ts.app.web.rest.dto.UserDTO;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.slf4j.Logger;
@@ -28,11 +20,11 @@ import org.springframework.util.StringUtils;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
-import com.ts.app.config.JHipsterProperties;
-import com.ts.app.domain.User;
-import com.ts.app.service.util.DateUtil;
-import com.ts.app.service.util.Sendgrid;
-import com.ts.app.web.rest.dto.UserDTO;
+import javax.inject.Inject;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.io.File;
+import java.util.*;
 
 /**
  * Service for sending e-mails.

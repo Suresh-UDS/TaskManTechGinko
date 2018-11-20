@@ -1,13 +1,8 @@
 package com.ts.app.security;
 
-import java.security.SecureRandom;
-import java.time.LocalDate;
-import java.util.Arrays;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.ts.app.domain.PersistentToken;
+import com.ts.app.repository.PersistentTokenRepository;
+import com.ts.app.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -24,9 +19,12 @@ import org.springframework.security.web.authentication.rememberme.RememberMeAuth
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ts.app.domain.PersistentToken;
-import com.ts.app.repository.PersistentTokenRepository;
-import com.ts.app.repository.UserRepository;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.security.SecureRandom;
+import java.time.LocalDate;
+import java.util.Arrays;
 
 /**
  * Custom implementation of Spring Security's RememberMeServices.

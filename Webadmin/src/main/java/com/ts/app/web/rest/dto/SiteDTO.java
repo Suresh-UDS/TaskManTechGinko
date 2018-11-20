@@ -1,12 +1,11 @@
 package com.ts.app.web.rest.dto;
 
 
-import java.util.Date;
-import java.util.List;
+import com.ts.app.domain.Site;
 
 import javax.validation.constraints.Size;
-
-import com.ts.app.domain.Site;
+import java.util.Date;
+import java.util.List;
 
 /**
  * A DTO representing a Site

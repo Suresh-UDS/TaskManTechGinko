@@ -1,12 +1,12 @@
 package com.ts.app.service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.inject.Inject;
-
+import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.ApplicationAction;
+import com.ts.app.domain.ApplicationModule;
+import com.ts.app.repository.ApplicationActionRepository;
+import com.ts.app.repository.ApplicationModuleRepository;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,19 +15,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.ApplicationAction;
-import com.ts.app.domain.ApplicationModule;
-import com.ts.app.repository.ApplicationActionRepository;
-import com.ts.app.repository.ApplicationModuleRepository;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.ApplicationActionDTO;
-import com.ts.app.web.rest.dto.ApplicationModuleDTO;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
 import org.springframework.util.StringUtils;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 /**

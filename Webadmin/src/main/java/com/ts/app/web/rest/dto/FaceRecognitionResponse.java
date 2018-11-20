@@ -1,13 +1,10 @@
 package com.ts.app.web.rest.dto;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import org.springframework.web.multipart.MultipartFile;
+import java.io.Serializable;
+import java.sql.Timestamp;
 
 public class FaceRecognitionResponse extends BaseDTO implements Serializable{
 

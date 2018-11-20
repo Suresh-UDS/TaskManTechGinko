@@ -1,12 +1,9 @@
 package com.ts.app.service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.inject.Inject;
-
+import com.ts.app.domain.*;
+import com.ts.app.repository.*;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,28 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Asset;
-import com.ts.app.domain.Job;
-import com.ts.app.domain.Project;
-import com.ts.app.domain.SLANotificationLog;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.SlaConfig;
-import com.ts.app.domain.SlaEscalationConfig;
-import com.ts.app.domain.Ticket;
-import com.ts.app.repository.JobRepository;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.SLAEscalationConfigRepository;
-import com.ts.app.repository.SLANotificationLogRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.repository.SlaConfigRepository;
-import com.ts.app.repository.TicketRepository;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
-import com.ts.app.web.rest.dto.SlaConfigDTO;
-import com.ts.app.web.rest.dto.SlaEscalationConfigDTO;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional

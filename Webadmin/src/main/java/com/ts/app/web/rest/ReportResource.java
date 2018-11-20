@@ -1,29 +1,22 @@
 package com.ts.app.web.rest;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.inject.Inject;
-
+import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.ReportService;
+import com.ts.app.service.SchedulerHelperService;
+import com.ts.app.web.rest.dto.ReportResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.ts.app.security.SecurityUtils;
-import com.ts.app.service.ReportService;
-import com.ts.app.service.SchedulerHelperService;
-import com.ts.app.web.rest.dto.ReportResult;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 
 /**

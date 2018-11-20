@@ -1,15 +1,13 @@
 package com.ts.app.repository;
 
-import java.util.List;
-
+import com.ts.app.domain.UserRole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.UserRole;
+import java.util.List;
 
 /**
  * Spring Data JPA repository for the UserRole entity.

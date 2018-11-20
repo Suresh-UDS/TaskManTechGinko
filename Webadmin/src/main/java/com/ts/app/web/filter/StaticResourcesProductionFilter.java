@@ -3,7 +3,12 @@ package com.ts.app.web.filter;
 
 import org.apache.commons.lang.StringUtils;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
@@ -15,6 +20,7 @@ import java.io.IOException;
  * destination directory.
  * </p>
  */
+
 public class StaticResourcesProductionFilter implements Filter {
 
     @Override

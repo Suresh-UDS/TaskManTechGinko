@@ -2,7 +2,6 @@ package com.ts.app.web.rest.dto;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 
 public class FeedbackDTO extends BaseDTO implements Serializable {

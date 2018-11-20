@@ -1,9 +1,9 @@
 package com.ts.app.web.rest.dto;
 
-import java.io.Serializable;
-
 import com.ts.app.domain.RateType;
 import com.ts.app.domain.UOMType;
+
+import java.io.Serializable;
 
 
 public class RateCardDTO extends BaseDTO implements Serializable {

@@ -1,7 +1,8 @@
 package com.ts.app.web.rest;
 
-import javax.inject.Inject;
-
+import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.PushService;
+import com.ts.app.web.rest.dto.PushRequestDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -11,9 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ts.app.security.SecurityUtils;
-import com.ts.app.service.PushService;
-import com.ts.app.web.rest.dto.PushRequestDTO;
+import javax.inject.Inject;
 
 /**
  * REST controller for Push service

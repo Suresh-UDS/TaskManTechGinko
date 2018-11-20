@@ -1,10 +1,10 @@
 package com.ts.app.web.rest.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
-import org.springframework.web.multipart.MultipartFile;
 
 public class QuotationDTO extends BaseDTO implements Serializable {
 

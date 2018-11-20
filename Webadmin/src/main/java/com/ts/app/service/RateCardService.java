@@ -1,15 +1,12 @@
 package com.ts.app.service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
-
-import javax.inject.Inject;
-
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.ts.app.domain.*;
+import com.ts.app.repository.*;
+import com.ts.app.service.util.AmazonS3Utils;
+import com.ts.app.service.util.FileUploadHelper;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,30 +27,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Attendance;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.EmployeeProjectSite;
-import com.ts.app.domain.RateCard;
-import com.ts.app.domain.Setting;
-import com.ts.app.domain.Ticket;
-import com.ts.app.domain.User;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.RateCardRepository;
-import com.ts.app.repository.SettingsRepository;
-import com.ts.app.repository.ManufacturerRepository;
-import com.ts.app.repository.TicketRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.service.util.AmazonS3Utils;
-import com.ts.app.service.util.FileUploadHelper;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.AttendanceDTO;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.QuotationDTO;
-import com.ts.app.web.rest.dto.RateCardDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
+import javax.inject.Inject;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Service class for exposing rate card related operations.

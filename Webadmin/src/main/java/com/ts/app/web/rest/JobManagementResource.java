@@ -1,18 +1,16 @@
 package com.ts.app.web.rest;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
+import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.User;
+import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.*;
+import com.ts.app.service.util.CacheUtil;
+import com.ts.app.service.util.ImportUtil;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.service.util.ReportUtil;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -20,44 +18,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.codahale.metrics.annotation.Timed;
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.JobStatus;
-import com.ts.app.domain.User;
-import com.ts.app.security.SecurityUtils;
-import com.ts.app.service.AmazonS3Service;
-import com.ts.app.service.JobManagementService;
-import com.ts.app.service.PushService;
-import com.ts.app.service.SchedulerService;
-import com.ts.app.service.UserService;
-import com.ts.app.service.util.CacheUtil;
-import com.ts.app.service.util.ImportUtil;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.service.util.ReportUtil;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.CheckInOutDTO;
-import com.ts.app.web.rest.dto.EmployeeDTO;
-import com.ts.app.web.rest.dto.ExportResponse;
-import com.ts.app.web.rest.dto.ExportResult;
-import com.ts.app.web.rest.dto.GraphResponse;
-import com.ts.app.web.rest.dto.ImportResult;
-import com.ts.app.web.rest.dto.JobDTO;
-import com.ts.app.web.rest.dto.LocationDTO;
-import com.ts.app.web.rest.dto.NotificationLogDTO;
-import com.ts.app.web.rest.dto.Paginator;
-import com.ts.app.web.rest.dto.PriceDTO;
-import com.ts.app.web.rest.dto.ReportResult;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.util.*;
 
 /**
  * REST controller for managing the Site information.
