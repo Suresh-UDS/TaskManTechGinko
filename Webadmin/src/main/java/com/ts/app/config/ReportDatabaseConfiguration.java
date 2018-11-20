@@ -39,6 +39,19 @@ public class ReportDatabaseConfiguration {
             log.info("InfluxDB database successfully connected.");
             log.info("Database version: {}", response.getVersion());
         }
+
+        String dbName = databaseName;
+        boolean isExists = influxDb.databaseExists(dbName);
+
+        if(!isExists) {
+            log.info("Influx DB to create database....");
+            influxDb.createDatabase(dbName);
+            influxDb.createRetentionPolicy("defaultPolicy", dbName, "30d", 1, true);
+        }else {
+            log.info("Already database Exists." +isExists);
+        }
+
+        influxDb.setLogLevel(InfluxDB.LogLevel.BASIC);
        
         return influxDb;
 		

@@ -207,12 +207,6 @@ public class TicketManagementResource {
 		return "successfully send reports!";
 	}
 	
-	@RequestMapping(value = "/checkConnection", method = RequestMethod.GET)
-	public String checkConnection() {
-		log.debug("Check connection for influxdb");
-		return reportDataService.initializeInduxDbConnection();
-	}
-	
 	
 
 }
