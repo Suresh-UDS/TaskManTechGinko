@@ -112,37 +112,6 @@ export class DashboardPage {
           console.log("=====Platform=====:"+this.platform);
       }
 
-
-      this.events.subscribe('userType',(userType)=>{
-          console.log("user type in dashboard");
-          console.log(userType);
-          this.userType = userType;
-      })
-   // demo.initFullCalendar();
-   //  this.siteService.searchSite().subscribe(response=>
-   //  {
-   //    console.log(response);
-   //  },
-   //  error=>
-   //  {
-   //    console.log(error);
-   //  });
-
-
-    // this.employeeService.getAllEmployees().subscribe(
-    //     response=>{
-    //       console.log('ionViewDidLoad Employee list:');
-    //       console.log(response);
-    //       this.employee=response;
-    //       this.empSpinner=false;
-    //       this.component.closeLoader();
-    //     },
-    //     error=>{
-    //       console.log('ionViewDidLoad SitePage:'+error);
-    //         this.component.closeLoader();
-    //     }
-    // )
-
     this.searchSites();
       
     this.searchCriteria={
@@ -594,7 +563,7 @@ export class DashboardPage {
                     error2 => {
                         console.log("Error in syncing attendance to server");
                         this.componentService.closeLoader()
-                        this.componentService.showToastMessage("Error in syncing attendance to server","")
+                        this.componentService.showToastMessage("Error in syncing attendance to server","bottom")
                     })
             },3000)
 
