@@ -70,7 +70,7 @@ angular
 						$scope.clearField = true;
 						$scope.filter = false;
 						$scope.siteFilterDisable = true;
-						$scope.selectedSite = null;
+						//$scope.selectedSite = null;
 						$scope.slaList = null;
 
 						/** Ui-select scopes * */
@@ -80,9 +80,11 @@ angular
 
 						$scope.selectedSla = null;
 						$scope.selectedSite = null;
+						$scope.selectedProject = null;
 						$scope.searchProject = null;
 						$scope.searchSite = null;
 						$scope.searchCriteria = {};
+						
 						// $scope.localStorage = null;
 						// $rootScope.searchCriteriaSite = null;
 						$scope.pages = {
