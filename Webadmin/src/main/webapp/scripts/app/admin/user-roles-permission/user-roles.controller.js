@@ -195,6 +195,7 @@ angular.module('timeSheetApp')
             $scope.search();
         }
         $scope.searchFilter = function () {
+        	$('.BasicFilterModal.in').modal('hide');
             $scope.setPage(1);
             $scope.search();
          }
