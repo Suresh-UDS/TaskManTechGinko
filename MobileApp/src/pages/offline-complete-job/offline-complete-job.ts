@@ -117,7 +117,9 @@ export class OfflineCompleteJob {
           if (this.savedImages.length > 0) {
             for (var i = 0; i < this.savedImages.length; i++) {
             // console.log("saved images",this.savedImages[i].image);
-            let base64Image = 'data:image/jpeg;base64,' + this.savedImages[i].image;
+              let imageData = this.savedImages[i].image;
+              let base64Image = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
+              // let base64Image = 'data:image/jpeg;base64,' + this.savedImages[i].image;
             this.completedImages.push(base64Image);
             this.component.closeLoader();
 
@@ -155,16 +157,16 @@ export class OfflineCompleteJob {
   viewCamera(status,job) {
     const options: CameraOptions = {
       quality: 50,
-      destinationType: this.camera.DestinationType.DATA_URL,
+      destinationType: this.camera.DestinationType.NATIVE_URI,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE
     };
 
     this.camera.getPicture(options).then((imageData) => {
-      // console.log('imageData -' +imageData);
+      console.log('imageData -' +imageData);
       var base64ImageString = imageData;
-      let base64Image = 'data:image/jpeg;base64,' + imageData;
-      // imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
+      // let base64Image = 'data:image/jpeg;base64,' + imageData;
+      let base64Image = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
       this.taken64Images.push(base64ImageString);
       this.takenImages.push(base64Image);
     })
