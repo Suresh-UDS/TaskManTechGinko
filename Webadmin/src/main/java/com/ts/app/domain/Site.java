@@ -65,6 +65,8 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 	private String country;
 	private String state;
 	private String address;
+	private String city;
+	private String pinCode;
 
 	private String region;
 
@@ -163,6 +165,8 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 	public void setState(String state) {
 		this.state = state;
 	}
+	
+	
 
 //	public List<Employee> getEmployees() {
 //		return employees;
@@ -173,7 +177,23 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 //	}
 
 
-    public double getRadius() {
+    public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getPinCode() {
+		return pinCode;
+	}
+
+	public void setPinCode(String pinCode) {
+		this.pinCode = pinCode;
+	}
+
+	public double getRadius() {
         return radius;
     }
 

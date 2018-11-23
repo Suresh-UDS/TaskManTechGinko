@@ -185,13 +185,27 @@
                                         </div>
                                     </div>
                                     <div class="row">
+                                       <div class="col-md-6">
+                                           <div class="form-group">
+                                               <label class="control-label">City <span class="red-star">*</span></label>
+                                               <input type="text" name="city" ng-model="site.city" class="form-control InputTxtCaps" tabindex="7" required>
+                                               <div ng-show="form.$submitted || form.city.$touched">
+                                                   <div ng-show="form.city.$dirty || form.city.$invalid">
+                                                       <p class="help-block" style="color:maroon"
+                                                          ng-show="form.city.$error.required">
+                                                           City is required.
+                                                       </p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">State<span class="red-star">*</span></label>
                                                 <!-- <input type="text" ng-model="site.state" class="form-control"> -->
                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                 <select name='stateName'
-                                                  class="form-control " ng-model="site.state"  ng-options="stateName for stateName in stateNames track by stateName" tabindex="7"  required >
+                                                  class="form-control " ng-model="site.state"  ng-options="stateName for stateName in stateNames track by stateName" tabindex="8"  required >
                                                     <option value="">Select State...</option>
                                                 </select>
                                                 <div ng-show="form.$submitted || form.stateName.$touched">
@@ -204,10 +218,38 @@
                                                </div>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="row">
+                                       <div class="col-md-6">
+                                           <div class="form-group">
+                                               <label class="control-label">Pin Code<span class="red-star">*</span></label>
+                                               <input type="text" name="pinCode" ng-model="site.pinCode" ng-pattern='/^[0-9]{1,6}$/' class="form-control InputTxtCaps" tabindex="9" required>
+                                               <div ng-show="form.$submitted || form.pinCode.$touched">
+                                                   <div ng-show="form.pinCode.$dirty || form.pinCode.$invalid">
+                                                       <p class="help-block" style="color:maroon"
+                                                          ng-show="form.pinCode.$error.required">
+                                                           Pin code is required.
+                                                       </p>
+                                                       <p class="help-block" style="color:maroon"
+                                                          ng-show="form.pinCode.$error.pattern">
+                                                           Pin code is invalid.
+                                                       </p>
+                                                   </div>
+                                               </div> 
+                                           </div>
+                                       </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">Country</label>
-                                                <input type="text" ng-model="site.country" tabindex="8"  class="form-control">
+                                                <input type="text"  name="country" ng-model="site.country" tabindex="10"  class="form-control" required>
+                                                <div ng-show="form.$submitted || form.country.$touched">
+                                                   <div ng-show="form.country.$dirty || form.country.$invalid">
+                                                       <p class="help-block" style="color:maroon"
+                                                          ng-show="form.country.$error.required">
+                                                           Country is required.
+                                                       </p>
+                                                   </div>
+                                               </div>
                                             </div>
                                         </div>
                                     </div>
@@ -319,7 +361,7 @@
 				                        <div class="form-group">
 				                            <label class="label-control">From Time</label>
 				                            <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
-				                            <input type="text" class="form-control timepicker"  id="shiftFrom" ng-model="newShiftItem.startTimeDup" tabindex="9"  placeholder="hh:mm"
+				                            <input type="text" class="form-control timepicker"  id="shiftFrom" ng-model="newShiftItem.startTimeDup" tabindex="11"  placeholder="hh:mm"
                                             autocomplete="off" />
 
                                             <div ng-show="sStatus">
@@ -334,7 +376,7 @@
 				                        <div class="form-group">
 				                            <label class="label-control">To Time</label>
 				                            <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
-				                            <input type="text" class="form-control timepicker"  id="shiftTo"  ng-model="newShiftItem.endTimeDup" tabindex="10" placeholder="hh:mm"
+				                            <input type="text" class="form-control timepicker"  id="shiftTo"  ng-model="newShiftItem.endTimeDup" tabindex="12" placeholder="hh:mm"
                                              autocomplete="off" />
 
                                             <div ng-show="eStatus">
@@ -347,7 +389,7 @@
 
 				                    <div class="col-md-4">
 
-			                            <button class="btn btn-success margn-top20"  tabindex="11" ng-click="addShiftItem($event)">
+			                            <button class="btn btn-success margn-top20"  tabindex="13" ng-click="addShiftItem($event)">
 			                                <span class="btn-label">
 			                                    <i class="material-icons">add</i>
                                                 Add
@@ -382,7 +424,7 @@
 
 
                             <button type="submit" ng-click="conform('back')"
-                                    id="cancel-button" ng-disabled="btnDisable" tabindex="13"  class="btn btn-default pull-right">Back</button>
+                                    id="cancel-button" ng-disabled="btnDisable" tabindex="15"  class="btn btn-default pull-right">Back</button>
 
                             <!--<button type="submit" type="submit" ng-click="updateSite(form.$invalid)"-->
                                     <!--id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">-->
@@ -390,7 +432,7 @@
                                     <!--</span>Update site</button>-->
 
                             <button type="submit" type="submit" ng-click="conform('update',form.$invalid)" id="form-button-save"
-                                    ng-disabled="form.$invalid || btnDisable" tabindex="12" class="btn btn-success ld ld-over-inverse pull-right"
+                                    ng-disabled="form.$invalid || btnDisable" tabindex="14" class="btn btn-success ld ld-over-inverse pull-right"
                                     ng-class="{'running':saveLoad}">
                                 <span class="btn-label"><i class="material-icons">check</i></span> Update site
                                 <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
@@ -406,7 +448,7 @@
     </div>
 </div>
 
-<div class="container">
+<!-- <div class="container">
     <div class="row">
         <div class="col-mod-12">
             <div class="alert alert-success" ng-show="success">
@@ -429,7 +471,7 @@
         </div>
 
     </div>
-</div>
+</div> -->
 
 
 
