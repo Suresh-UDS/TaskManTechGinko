@@ -907,8 +907,7 @@ angular.module('timeSheetApp')
                     designation:$scope.designation
                 };
                 EmployeeComponent.createDesignation(designationDetails).then(function (response) {
-                	
-                }
+      
                     console.log(response);
 
                     $scope.designation= null;
