@@ -1186,7 +1186,7 @@ angular.module('timeSheetApp')
 
 
 
-                $scope.pages.currPage = data.currPage;
+                $scope.pages.currPage = data.currPage == 0 ? 1 : data.currPage;
                 $scope.pages.totalPages = data.totalPages;
                 $scope.loading = false;
 
@@ -3527,6 +3527,8 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.exportType = type;
                 $scope.searchCriteria.report = true;
                 $scope.searchCriteria.isReport = true;
+                $scope.searchCriteria.columnName = "createdDate";
+                $scope.searchCriteria.sortByAsc = false;
                 $scope.typeMsg = type;
 
                 console.log('calling asset export api');

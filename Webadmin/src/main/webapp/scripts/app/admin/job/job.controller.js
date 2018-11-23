@@ -1323,6 +1323,8 @@ angular.module('timeSheetApp')
                 $scope.downloader=true;
                 $scope.downloaded = false;
                 $scope.searchCriteria.isReport = true;
+                $scope.searchCriteria.columnName = "createdDate";
+                $scope.searchCriteria.sortByAsc = false;
                 JobComponent.exportAllData($scope.searchCriteria).then(function(data){
                     var result = data.results[0];
                     console.log(result);

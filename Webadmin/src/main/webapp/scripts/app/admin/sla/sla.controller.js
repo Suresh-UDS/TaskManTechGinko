@@ -70,7 +70,7 @@ angular
 						$scope.clearField = true;
 						$scope.filter = false;
 						$scope.siteFilterDisable = true;
-						$scope.selectedSite = null;
+						//$scope.selectedSite = null;
 						$scope.slaList = null;
 
 						/** Ui-select scopes * */
@@ -80,9 +80,11 @@ angular
 
 						$scope.selectedSla = null;
 						$scope.selectedSite = null;
+						$scope.selectedProject = null;
 						$scope.searchProject = null;
 						$scope.searchSite = null;
 						$scope.searchCriteria = {};
+						
 						// $scope.localStorage = null;
 						// $rootScope.searchCriteriaSite = null;
 						$scope.pages = {
@@ -189,7 +191,7 @@ angular
 					};
 
 					$scope.search = function() {
-						//alert("123");
+//						alert("123");
 						$scope.noData = false;
 						var currPageVal = ($scope.pages ? $scope.pages.currPage
 								: 1);
@@ -342,6 +344,10 @@ angular
 																'Sla has been saved successfully!!');
 												console.log(data);
 												$scope.loadingStop();
+//												if(i=$scope.slaList.length){
+//													$location.path('/sla-list');
+//													$scope.initLoad();
+//												}
 											});
 						}
 						$location.path('/sla-list');
