@@ -1950,6 +1950,8 @@ angular.module('timeSheetApp')
                   $scope.downloader=true;
                   $scope.searchCriteria.list = true;
                   $scope.searchCriteria.report = true;
+                  $scope.searchCriteria.columnName = "createdDate";
+                  $scope.searchCriteria.sortByAsc = false;
                 EmployeeComponent.exportAllData($scope.searchCriteria).then(function(data){
                     var result = data.results[0];
                     console.log(result);

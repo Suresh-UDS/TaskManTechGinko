@@ -191,7 +191,7 @@ angular
 					};
 
 					$scope.search = function() {
-						//alert("123");
+//						alert("123");
 						$scope.noData = false;
 						var currPageVal = ($scope.pages ? $scope.pages.currPage
 								: 1);
@@ -344,6 +344,10 @@ angular
 																'Sla has been saved successfully!!');
 												console.log(data);
 												$scope.loadingStop();
+//												if(i=$scope.slaList.length){
+//													$location.path('/sla-list');
+//													$scope.initLoad();
+//												}
 											});
 						}
 						$location.path('/sla-list');
