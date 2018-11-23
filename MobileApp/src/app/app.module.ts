@@ -124,6 +124,8 @@ import{ChangePassword} from "../pages/change-password/change-password";
 import{LocationAccuracy} from "@ionic-native/location-accuracy";
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 import {LocationProvider} from "../providers/location-provider";
+import {OfflineCompleteJob} from "../pages/offline-complete-job/offline-complete-job";
+import {OfflineJobs} from "../pages/offline-jobs/offline-jobs";
 // import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 // import{IonicImageViewerModule} from "ionic-img-viewer";
@@ -211,6 +213,8 @@ import {LocationProvider} from "../providers/location-provider";
       InventoryMaster,
       UpdateApp,
       ForgotPassword,
+    OfflineCompleteJob,
+    OfflineJobs
       // PhotoViewer
   ],
   imports: [
@@ -307,7 +311,9 @@ import {LocationProvider} from "../providers/location-provider";
       ChangePassword,
       InventoryMaster,
       UpdateApp,
-      ForgotPassword
+      ForgotPassword,
+    OfflineCompleteJob,
+    OfflineJobs
 
 
   ],

@@ -5,6 +5,7 @@ import{OfflineAttendanceSites} from "../employee/offline-attendance-sites";
 import {OfflineAsset} from "../offline-asset/offline-asset";
 import{AssetList} from "../asset-list/asset-list";
 import {OfflineAssetList} from "../offline-assetlist/offline-assetlist";
+import {OfflineJobs} from "../offline-jobs/offline-jobs";
 
 
 /**
@@ -33,6 +34,10 @@ export class OfflinePage {
   offlineAsset(){
     // this.navCtrl.push(OfflineAsset);
       this.navCtrl.push(OfflineAssetList);
+  }
+
+  offlineJob(){
+    this.navCtrl.push(OfflineJobs);
   }
 
 }
