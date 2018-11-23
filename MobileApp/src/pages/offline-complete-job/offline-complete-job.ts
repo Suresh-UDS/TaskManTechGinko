@@ -180,6 +180,7 @@ export class OfflineCompleteJob {
         (res)=>{
           console.log("image saved in local db",res);
           this.component.closeLoader();
+          this.navCtrl.pop();
         },(err)=>{
           console.log("error in saving image",err);
           this.component.closeLoader();
