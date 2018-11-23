@@ -1186,7 +1186,7 @@ angular.module('timeSheetApp')
 
 
 
-                $scope.pages.currPage = data.currPage;
+                $scope.pages.currPage = data.currPage == 0 ? 1 : data.currPage;
                 $scope.pages.totalPages = data.totalPages;
                 $scope.loading = false;
 

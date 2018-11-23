@@ -1822,7 +1822,7 @@ angular.module('timeSheetApp')
 	                //console.log("Pagination",$scope.pager);
 	                //console.log('Employees list -' + JSON.stringify($scope.employees));
 
-	                $scope.pages.currPage = data.currPage;
+	                $scope.pages.currPage = data.currPage == 0 ? 1 : data.currPage;
 	                $scope.pages.totalPages = data.totalPages;
 
 	                if($scope.employees && $scope.employees.length > 0 ){
