@@ -278,9 +278,7 @@
                                         </button>
                                         <!--<button ng-disabled="employee.left" title="View"  ng-click="getCheckInDetails(employee.id)" has-permission="Employee:Edit" ui-sref="view-employee({ id: employee.id })"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>-->
                                         <button ng-disabled="employee.left" title="Mark Attendance "
-                                                data-toggle="modal" has-permission="Employee:Edit"
-                                                data-target="#noticeModal"
-                                                ng-click="getEmployeeDetails(employee.id)"
+                                                 has-permission="Employee:Edit"
                                                 class="btn btn-simple btn-info btn-icon like">
                                             <i class="material-icons">date_range</i>
                                         </button>
@@ -341,7 +339,7 @@
 
 <!-- Pagination directive end -->
 <!-- Modal -->
-<div class="modal right fade" id="ViewModal" role="dialog"
+<div class="modal right  fade ViewModal" id="ViewModal" role="dialog"
      aria-labelledby="ViewModal12">
     <div class="modal-dialogNew" role="document" ng-init="initLoad()">
         <div class="modal-content" ng-init="loadEmployee()">
@@ -633,23 +631,30 @@
                                     <tr>
                                         <th>Id</th>
                                         <th>Site Name</th>
-                                        <th>Check In/Out</th>
+                                        <th>Check In</th>
+                                        <th>Check Out</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="projSite in sites">
+                                    <tr ng-repeat="projSite in empSitesList">
                                         <td>{{projSite.siteId}}</td>
                                         <td>{{projSite.siteName | uppercase}}</td>
                                         <td>
-                                            <button ng-disabled="isCheckedIn"
+                                            <button ng-disabled="isCheckedIn" ng-hide="attendSite && attendSite !=projSite.siteId"
                                                     ng-click="checkIn(projSite.siteId,employee.empId,employee.id)"
                                                     data-dismiss="modal"
                                                     class="btn btn-success btn-sm btn-round">check-In</button>
-                                            <button ng-disabled="!isCheckedIn"
+                                         </td>
+                                         <td>           
+                                            <button ng-disabled="isCheckedOut" ng-hide="attendSite && attendSite !=projSite.siteId"
                                                     ng-click="checkOut(projSite.siteId,employee.empId,employee.id)"
                                                     data-dismiss="modal"
                                                     class="btn btn-success btn-sm btn-round">check-Out</button>
                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" ng-show="!empSitesList" class="txt-align-center">No sites</td>
+                                        
                                     </tr>
                                     </tbody>
                                 </table>
