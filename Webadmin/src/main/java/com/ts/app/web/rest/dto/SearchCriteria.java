@@ -126,6 +126,10 @@ public class SearchCriteria extends Paginator {
 
 	private String ticketStatus;
 
+	private String ticketTitle;
+
+	private String ticketDescription;
+
 	private boolean admin;
 
 	private boolean list;
@@ -193,15 +197,15 @@ public class SearchCriteria extends Paginator {
 	private long regionId;
 
 	private long jobId;
-	
+
 	private boolean quotationIsSubmitted;
-	
+
 	private boolean quotationIsArchived;
-	
+
 	private boolean quotationIsRejected;
-	
+
 	private boolean quotationIsDrafted;
-	
+
 	private boolean quotationIsApproved;
 
 	public String getModule() {
@@ -1063,7 +1067,20 @@ public class SearchCriteria extends Paginator {
 		this.quotationIsApproved = quotationIsApproved;
 	}
 
-	
-    
-    
+
+    public String getTicketTitle() {
+        return ticketTitle;
+    }
+
+    public void setTicketTitle(String ticketTitle) {
+        this.ticketTitle = ticketTitle;
+    }
+
+    public String getTicketDescription() {
+        return ticketDescription;
+    }
+
+    public void setTicketDescription(String ticketDescription) {
+        this.ticketDescription = ticketDescription;
+    }
 }
