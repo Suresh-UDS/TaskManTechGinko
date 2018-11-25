@@ -99,6 +99,12 @@ angular.module('timeSheetApp')
 
             DashboardComponent.loadAllJobsByStatusCnt().then(function (data) {
                 console.log("All jobs by status count per date" +JSON.stringify(data));
+                if(data.length > 0) {
+                    $scope.jobStackChart = data[0];
+                    $scope.jobStackXSeries = $scope.jobStackChart.x;
+                    $scope.jobStackYSeries = $scope.jobStackChart.status;
+                    console.log($scope.jobStackChart.status);
+                }
             });
 
         };
@@ -789,67 +795,60 @@ angular.module('timeSheetApp')
         //     data:[5, 3, 4, 7, 2]
         // };
 
-        var jobxdata=['Electrical', 'Carpentry', 'Plumbing'];
+        //var jobxdata=['Electrical', 'Carpentry', 'Plumbing'];
 
-
-        Highcharts.chart('jobStackedCharts', {
-            chart: {
-                type: 'column'
-            },
-            title: {
-                text: 'Jobs Status'
-            },
-            xAxis: {
-                categories:jobxdata
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: 'Total Job Count'
+        $timeout(function () {
+            Highcharts.chart('jobStackedCharts', {
+                chart: {
+                    type: 'column'
                 },
-                stackLabels: {
-                    enabled: true,
-                    style: {
-                        fontWeight: 'bold',
-                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                    }
-                }
-            },
-            legend: {
-                align: 'right',
-                x: -30,
-                verticalAlign: 'top',
-                y: 25,
-                floating: true,
-                backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-                borderColor: '#CCC',
-                borderWidth: 1,
-                shadow: false
-            },
-            tooltip: {
-                headerFormat: '<b>{point.x}</b><br/>',
-                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-            },
-            plotOptions: {
-                column: {
-                    stacking: 'normal',
-                    dataLabels: {
+                title: {
+                    text: 'Jobs Status'
+                },
+                xAxis: {
+                    categories:$scope.jobStackXSeries
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Total Job Count'
+                    },
+                    stackLabels: {
                         enabled: true,
-                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                        style: {
+                            fontWeight: 'bold',
+                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                        }
                     }
-                }
-            },
-            series: [{
-                name: 'Assigned',
-                data: [5, 9, 7]
-            }, {
-                name: 'Overdue',
-                data: [2, 5, 3]
-            }, {
-                name: 'Completed',
-                data: [3, 5, 3]
-            }]
-        });
+                },
+                legend: {
+                    align: 'right',
+                    x: -30,
+                    verticalAlign: 'top',
+                    y: 25,
+                    floating: true,
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                    borderColor: '#CCC',
+                    borderWidth: 1,
+                    shadow: false
+                },
+                tooltip: {
+                    headerFormat: '<b>{point.x}</b><br/>',
+                    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: true,
+                            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                        }
+                    }
+                },
+                series: $scope.jobStackYSeries
+            });
+        }, 1000);
+
 
         // Sample data for pie chart
         $scope.pieData = [{
