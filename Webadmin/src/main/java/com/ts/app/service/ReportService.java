@@ -831,4 +831,6 @@ public class ReportService extends AbstractService {
         return resultVal != null ? resultVal.longValue() : 0;
 
     }
+
+
 }

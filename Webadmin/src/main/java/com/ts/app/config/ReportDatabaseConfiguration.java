@@ -49,6 +49,7 @@ public class ReportDatabaseConfiguration {
             influxDb.createRetentionPolicy("defaultPolicy", dbName, "30d", 1, true);
         }else {
             log.info("Already database Exists." +isExists);
+            influxDb.createRetentionPolicy("defaultPolicy", dbName, "30d", 1, true);
         }
 
         influxDb.setLogLevel(InfluxDB.LogLevel.BASIC);

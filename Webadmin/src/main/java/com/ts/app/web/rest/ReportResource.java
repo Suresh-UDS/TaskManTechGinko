@@ -1,8 +1,12 @@
 package com.ts.app.web.rest;
 
+import com.ts.app.domain.ChartModelEntity;
+import com.ts.app.domain.JobStatusReport;
+import com.ts.app.domain.Measurements.JobStatusMeasurement;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.ReportService;
 import com.ts.app.service.SchedulerHelperService;
+import com.ts.app.service.util.ReportDatabaseUtil;
 import com.ts.app.web.rest.dto.ReportResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,10 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -34,6 +35,9 @@ public class ReportResource {
 	@Inject
 	@Lazy
 	private SchedulerHelperService schedulerHelperService;
+
+	@Inject
+    private ReportDatabaseUtil reportDatabaseUtil;
 
 
 	@RequestMapping(value = "/reports/attendance/site/{siteId}/selectedDate/{selectedDate}", method = RequestMethod.GET)
@@ -135,6 +139,30 @@ public class ReportResource {
 		schedulerHelperService.sendDaywiseReportEmail(reportDate, true, projectId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+
+    @RequestMapping(value = "/reports/preCompute", method = RequestMethod.GET)
+    public ResponseEntity<?> getJobPrecomputeData() {
+        List<JobStatusReport> reportList = reportDatabaseUtil.getPreComputeData();
+        return new ResponseEntity<>(reportList, HttpStatus.OK);
+    }
+
+	@RequestMapping(value = "/reports/job/points", method = RequestMethod.GET)
+	public ResponseEntity<?> addJobPoints() throws Exception {
+        reportDatabaseUtil.addPointsToJob();
+	    return new ResponseEntity<>("Successfully created points to influxDb", HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/reports/jobType/count", method = RequestMethod.GET)
+    public ResponseEntity<?> getJobPointsByStatus() {
+        List<JobStatusMeasurement> reportCategoryPoints = reportDatabaseUtil.getJobReportCategoryPoints();
+        return new ResponseEntity<>(reportCategoryPoints, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reports/jobStatus/count", method = RequestMethod.GET)
+    public ResponseEntity<?> getJobListByStatus() {
+        List<ChartModelEntity> reportStatusPoints = reportDatabaseUtil.getJobReportStatusPoints();
+        return new ResponseEntity<>(reportStatusPoints, HttpStatus.OK);
+    }
 
 
 	//    @CrossOrigin

@@ -40,7 +40,7 @@ angular.module('timeSheetApp')
     .controller('DashboardController', function ($timeout,$scope,$rootScope,$filter,DashboardComponent,JobComponent, $state,$http,$stateParams,$location) {
         $rootScope.loginView = false;
 
-
+        $scope.ready = false;
 
         if($rootScope.loginView == false){
             $(".content").removeClass("remove-mr");
@@ -73,12 +73,33 @@ angular.module('timeSheetApp')
 
 
         $scope.init = function() {
-        		$scope.loadAllProjects();
-        		$scope.loadAllSites();
-        		$scope.loadQuotationReport();
-                $scope.loadJobReport();
-                $scope.loadingStart();
-                $scope.loadChartData();
+            $scope.loadAllProjects();
+            $scope.loadAllSites();
+            $scope.loadQuotationReport();
+            $scope.loadJobReport();
+            $scope.loadingStart();
+            $scope.loadChartData();
+
+            DashboardComponent.loadAllJobsByCategoryCnt().then(function (data) {
+                console.log("All jobs by category count " +JSON.stringify(data));
+                if(data.length > 0) {
+                    $scope.pieSeries = [];
+                    data.map(function (item) {
+                        if(item) {
+                            var seriesData = {};
+                            seriesData.name = item.type;
+                            seriesData.y = item.categoryCount;
+                            $scope.pieSeries.push(seriesData);
+                        }
+                    })
+                }
+                console.log($scope.pieSeries);
+                $scope.ready = true;
+            });
+
+            DashboardComponent.loadAllJobsByStatusCnt().then(function (data) {
+                console.log("All jobs by status count per date" +JSON.stringify(data));
+            });
 
         };
 
@@ -768,7 +789,7 @@ angular.module('timeSheetApp')
         //     data:[5, 3, 4, 7, 2]
         // };
 
-        var jobxdata=['19/10/2018', '20/10/2018', '21/10/2018', '22/10/2018', '23/10/2018'];
+        var jobxdata=['Electrical', 'Carpentry', 'Plumbing'];
 
 
         Highcharts.chart('jobStackedCharts', {
@@ -820,13 +841,13 @@ angular.module('timeSheetApp')
             },
             series: [{
                 name: 'Assigned',
-                data: [5, 3, 4, 7, 2]
+                data: [5, 9, 7]
             }, {
                 name: 'Overdue',
-                data: [2, 2, 3, 2, 1]
+                data: [2, 5, 3]
             }, {
                 name: 'Completed',
-                data: [3, 4, 4, 2, 5]
+                data: [3, 5, 3]
             }]
         });
 

@@ -65,6 +65,18 @@ angular.module('timeSheetApp')
                 return $http.get('api/reports/ticket/branch/'+branch+'/region/'+region+'/project/'+projectId+'/fromDate/'+fromDate+'/toDate/'+toDate).then(function (response) {
                     return response.data;
                 })
+            },
+
+            loadAllJobsByCategoryCnt: function () {
+                return $http.get('api/reports/jobType/count').then(function (response) {
+                    return response.data;
+                })
+            },
+
+            loadAllJobsByStatusCnt: function () {
+                return $http.get('api/reports/jobStatus/count').then(function (response) {
+                    return response.data;
+                })
             }
         }
     })
