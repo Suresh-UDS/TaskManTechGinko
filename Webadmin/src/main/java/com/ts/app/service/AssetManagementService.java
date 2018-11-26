@@ -1162,12 +1162,12 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	public ImportResult getImportStatus(String fileId) {
-		ImportResult er = new ImportResult();
+		ImportResult er = null;
 		// fileId += ".csv";
 		if (!StringUtils.isEmpty(fileId)) {
-			String status = importUtil.getImportStatus(fileId);
-			er.setFile(fileId);
-			er.setStatus(status);
+			er = importUtil.getImportResult(fileId);
+			//er.setFile(fileId);
+			//er.setStatus(status);
 		}
 		return er;
 	}
@@ -1177,12 +1177,12 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	public ImportResult getImportPPMStatus(String fileId) {
-		ImportResult er = new ImportResult();
+		ImportResult er = null;
 		// fileId += ".csv";
 		if (!StringUtils.isEmpty(fileId)) {
-			String status = importUtil.getImportStatus(fileId);
-			er.setFile(fileId);
-			er.setStatus(status);
+			er = importUtil.getImportResult(fileId);
+			//er.setFile(fileId);
+			//er.setStatus(status);
 		}
 		return er;
 	}
@@ -1192,12 +1192,12 @@ public class AssetManagementService extends AbstractService {
 	}
  
 	public ImportResult getImportAMCStatus(String fileId) {
-		ImportResult er = new ImportResult();
+		ImportResult er = null;
 		// fileId += ".csv";
 		if (!StringUtils.isEmpty(fileId)) {
-			String status = importUtil.getImportStatus(fileId);
-			er.setFile(fileId);
-			er.setStatus(status);
+			er = importUtil.getImportResult(fileId);
+			//er.setFile(fileId);
+			//er.setStatus(status);
 		}
 		return er;
 	}

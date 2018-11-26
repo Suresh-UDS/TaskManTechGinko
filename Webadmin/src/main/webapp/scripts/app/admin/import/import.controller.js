@@ -161,9 +161,12 @@ angular.module('timeSheetApp')
                     			$rootScope.employeeImportStatus = {};
                     	      }, 3000);
                 		}else if($rootScope.employeeImportStatus.importStatus == 'FAILED'){
-                    		$rootScope.stop('employee');
-                		}else if(!$rootScope.employeeImportStatus.importStatus){
-                			$rootScope.stop('employee');
+                			$scope.showNotification('top','center','danger',$rootScope.employeeImportStatus.importMsg);
+	                		$rootScope.stop('employee');
+	                		$rootScope.employeeImportStatusLoad = false;
+	                		$timeout(function() {
+	                			$rootScope.employeeImportStatus = {};
+	                	      }, 3000);
                 		}else {
                 			$rootScope.employeeImportStatus.fileName = '#';
                 		}
@@ -221,9 +224,12 @@ angular.module('timeSheetApp')
 	                    			$rootScope.clientImportStatus = {};
 	                    	    }, 3000);
 	                		}else if($rootScope.clientImportStatus.importStatus == 'FAILED'){
-	                    		$rootScope.stop('client');
-	                		}else if(!$rootScope.clientImportStatus.importStatus){
-	                			$rootScope.stop('client');
+	                			$scope.showNotification('top','center','danger',$rootScope.clientImportStatus.importMsg);
+		                		$rootScope.stop('client');
+		                		$rootScope.clientImportStatusLoad = false;
+		                		$timeout(function() {
+		                			$rootScope.clientImportStatus = {};
+		                	      }, 3000);
 	                		}else {
 	                			$rootScope.clientImportStatus.fileName = '#';
 	                		}
@@ -280,9 +286,12 @@ angular.module('timeSheetApp')
 	                    			$rootScope.siteImportStatus = {};
 	                    	    }, 3000);
 	                		}else if($rootScope.siteImportStatus.importStatus == 'FAILED'){
-	                    		$rootScope.stop('client');
-	                		}else if(!$rootScope.siteImportStatus.importStatus){
-	                			$rootScope.stop('client');
+	                			$scope.showNotification('top','center','danger',$rootScope.siteImportStatus.importMsg);
+		                		$rootScope.stop('site');
+		                		$rootScope.siteImportStatusLoad = false;
+		                		$timeout(function() {
+		                			$rootScope.siteImportStatus = {};
+		                	      }, 3000);
 	                		}else {
 	                			$rootScope.siteImportStatus.fileName = '#';
 	                		}
@@ -348,9 +357,12 @@ angular.module('timeSheetApp')
 		                    			$rootScope.locationImportStatus = {};
 		                    	    }, 3000);
 		                		}else if($rootScope.locationImportStatus.importStatus == 'FAILED'){
-		                    		$rootScope.stop('client');
-		                		}else if(!$rootScope.locationImportStatus.importStatus){
-		                			$rootScope.stop('client');
+		                			$scope.showNotification('top','center','danger',$rootScope.locationImportStatus.importMsg);
+			                		$rootScope.stop('location');
+			                		$rootScope.locationImportStatusLoad = false;
+			                		$timeout(function() {
+			                			$rootScope.locationImportStatus = {};
+			                	      }, 3000);
 		                		}else {
 		                			$rootScope.locationImportStatus.fileName = '#';
 		                		}
@@ -413,9 +425,12 @@ angular.module('timeSheetApp')
                     			$rootScope.checklistImportStatus = {};
                     	    }, 3000);
                 		}else if($rootScope.checklistImportStatus.importStatus == 'FAILED'){
-                    		$rootScope.stop('checklist');
-                		}else if(!$rootScope.checklistImportStatus.importStatus){
-                			$rootScope.stop('checklist');
+                			$scope.showNotification('top','center','danger',$rootScope.checklistImportStatus.importMsg);
+	                		$rootScope.stop('checklist');
+	                		$rootScope.checklistImportStatusLoad = false;
+	                		$timeout(function() {
+	                			$rootScope.checklistImportStatus = {};
+	                	      }, 3000);
                 		}else {
                 			$rootScope.checklistImportStatus.fileName = '#';
                 		}
@@ -458,6 +473,7 @@ angular.module('timeSheetApp')
 	    		console.log('$rootScope.employeeShiftImportStatus -'+JSON.stringify($rootScope.employeeShiftImportStatus));
        		EmployeeComponent.importEmployeeShiftStatus($rootScope.employeeShiftImportStatus.fileName).then(function(data) {
            		if(data) {
+           			alert(JSON.stringify(data));
            			$rootScope.employeeShiftImportStatus.importStatus = data.status;
                		console.log('*****************importStatus - '+ JSON.stringify($rootScope.employeeShiftImportStatus));
                		$rootScope.employeeShiftImportStatus.importMsg = data.msg;
@@ -471,9 +487,13 @@ angular.module('timeSheetApp')
                    			$rootScope.employeeShiftImportStatus = {};
                    	    }, 3000);
                		}else if($rootScope.employeeShiftImportStatus.importStatus == 'FAILED'){
-                   		$rootScope.stop('employeeShift');
-               		}else if(!$rootScope.employeeShiftImportStatus.importStatus){
-               			$rootScope.stop('employeeShift');
+	                		$scope.showNotification('top','center','danger',$rootScope.employeeShiftImportStatus.importMsg);
+	                		$rootScope.stop('employeeShift');
+	                		$rootScope.employeeShiftImportStatusLoad = false;
+	                		$timeout(function() {
+	                			$rootScope.employeeShiftImportStatus = {};
+	                	      }, 3000);
+                   		
                		}else {
                			$rootScope.employeeShiftImportStatus.fileName = '#';
                		}

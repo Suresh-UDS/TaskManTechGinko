@@ -204,12 +204,12 @@ public class ImportUtil {
 		}
 		try {
 			importNewFiles("client",filePath, fileName, targetFilePath);
+			result.setFile(fileKey);
+			//result.setStatus(getImportStatus(fileKey));
+			result.setStatus("PROCESSING");
 		}catch (Exception e) {
 			log.error("Error while importing client data",e);
 		}
-		result.setFile(fileKey);
-		//result.setStatus(getImportStatus(fileKey));
-		result.setStatus("PROCESSING");
 		return result;
 	}
 
@@ -231,11 +231,11 @@ public class ImportUtil {
 		}
 		try {
 			importNewFiles("site",filePath, fileName, targetFilePath);
+			result.setFile(fileKey);
+			result.setStatus("PROCESSING");
 		}catch (Exception e) {
 			log.error("Error while importing site data",e);
 		}
-		result.setFile(fileKey);
-		result.setStatus("PROCESSING");
 		return result;
 	}
 
@@ -285,11 +285,11 @@ public class ImportUtil {
 		}
 		try {
 			importNewFiles("location",filePath, fileName, targetFilePath);
+			result.setFile(fileKey);
+			result.setStatus("PROCESSING");
 		}catch (Exception e) {
 			log.error("Error while importing location data",e);
 		}
-		result.setFile(fileKey);
-		result.setStatus("PROCESSING");
 		return result;
 	}
 
@@ -311,11 +311,11 @@ public class ImportUtil {
 		}
 		try {
 			importNewFiles("employee",filePath, fileName, targetFilePath);
+			result.setFile(fileKey);
+			result.setStatus("PROCESSING");
 		}catch (Exception e) {
 			log.error("Error while importing employee data",e);
 		}
-		result.setFile(fileKey);
-		result.setStatus("PROCESSING");
 		return result;
 
 	}
@@ -344,11 +344,11 @@ public class ImportUtil {
 			}else {
 				importNewFiles("asset",filePath, fileName, targetFilePath);
 			}
+			result.setFile(fileKey);
+			result.setStatus("PROCESSING");
 		}catch (Exception e) {
 			log.error("Error while importing asset data",e);
 		}
-		result.setFile(fileKey);
-		result.setStatus("PROCESSING");
 		return result;
 	}
 
@@ -371,11 +371,11 @@ public class ImportUtil {
 		}
 		try {
 			importNewFiles("checklist",filePath, fileName, targetFilePath);
+			result.setFile(fileKey);
+			result.setStatus("PROCESSING");
 		}catch (Exception e) {
 			log.error("Error while importing checklist data",e );
 		}
-		result.setFile(fileKey);
-		result.setStatus("PROCESSING");
 		return result;
 
 	}
@@ -401,8 +401,6 @@ public class ImportUtil {
 		}catch (Exception e) {
 			log.error("Eror while importing employee shift data",e);
 		}
-		result.setFile(fileKey);
-		result.setStatus("PROCESSING");
 		return result;
 
 	}
@@ -415,8 +413,10 @@ public class ImportUtil {
 		//File[] files = new File(sourceFilePath).listFiles(filter);
 
 		//for (File fileObj : files) {
-		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
-
+		String fileKey = null;
+		try {
+			fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
+	
 			File fileObj = new File(sourceFilePath + SEPARATOR +  fileName);
 			if (fileObj.isFile()) {
 				switch(domain) {
@@ -424,35 +424,35 @@ public class ImportUtil {
 						importJobFromFile(fileKey,fileObj.getPath());
 						break;
 					case "employee":
-						importEmployeeFromFile(fileObj.getPath());
+						importEmployeeFromFile(fileKey, fileObj.getPath());
 						break;
 					case "client" :
-						importClientFromFile(fileObj.getPath());
+						importClientFromFile(fileKey,fileObj.getPath());
 						break;
 					case "site" :
-						importSiteFromFile(fileObj.getPath());
+						importSiteFromFile(fileKey,fileObj.getPath());
 						break;
 					case "location" :
-						importLocationFromFile(fileObj.getPath());
+						importLocationFromFile(fileKey,fileObj.getPath());
 						break;
 					case "checklist" :
-						importChecklistFromFile(fileObj.getPath());
+						importChecklistFromFile(fileKey,fileObj.getPath());
 						break;
 					case "employeeshift" :
-						importEmployeeShiftMasterFromFile(fileObj.getPath());
+						importEmployeeShiftMasterFromFile(fileKey, fileObj.getPath());
 						break;
 					case "asset" :
-						importAssetFromFile(fileObj.getPath());
+						importAssetFromFile(fileKey, fileObj.getPath());
 						break;
 					case "assetPPM" :
-						importAssetPPMFromFile(fileObj.getPath());
+						importAssetPPMFromFile(fileKey,fileObj.getPath());
 						break;
 					case "assetAMC" :
-						importAssetAMCFromFile(fileObj.getPath());
+						importAssetAMCFromFile(fileKey,fileObj.getPath());
 						break;
-
-                    case "siteEmployeeChange" :
-                        changeSiteEmployee(fileObj.getPath());
+	
+	                case "siteEmployeeChange" :
+	                    changeSiteEmployee(fileObj.getPath());
 				}
 				ImportResult importResult = null;
 				if(statusMap.containsKey(fileKey)) {
@@ -476,6 +476,28 @@ public class ImportUtil {
 	            }
 				fileObj.renameTo(new File(targetFilePath + SEPARATOR + fileName));
 			}
+		} catch (Exception ex) {
+			String msg = "Error while importing from the file - " + fileName ;
+			log.error(msg, ex);
+			StringBuffer statusMsg = new StringBuffer();
+			ImportResult importResult = null;
+			if(statusMap.containsKey(fileKey)) {
+				importResult = statusMap.get(fileKey);
+			}else {
+				importResult = new ImportResult();
+			}
+			
+			statusMsg.append(ex.getMessage());
+			statusMsg.append("--" + msg);
+			statusMsg.append("--" + "Please correct the data format and retry again");
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(statusMsg.toString());
+			statusMap.put(fileKey, importResult);
+			throw ex;
+		}
 		//}
 		//result.setEmpId(empId);
 		return response;
@@ -550,6 +572,7 @@ public class ImportUtil {
 			Iterator<Row> iterator = datatypeSheet.iterator();
 			int lastRow = datatypeSheet.getLastRowNum();
 			Row projectRow = datatypeSheet.getRow(r);
+			cellNo = 2;
 			long projectId = (long) projectRow.getCell(2).getNumericCellValue();
 			r++;
 			Row siteRow = datatypeSheet.getRow(r);
@@ -746,40 +769,94 @@ public class ImportUtil {
 	}
 
 
-	private void importClientFromFile(String path) {
+	private String importClientFromFile(String fileKey, String path) throws Exception {
+		int r = 0;
+		int cellNo = 0;
+		StringBuffer response = new StringBuffer();
+		ImportResult importResult = statusMap.get(fileKey);
 		try {
 
 			FileInputStream excelFile = new FileInputStream(new File(path));
 			Workbook workbook = new XSSFWorkbook(excelFile);
 			Sheet datatypeSheet = workbook.getSheetAt(0);
 			int lastRow = datatypeSheet.getLastRowNum();
-			int r = 1;
+			r = 1;
 			for (; r <= lastRow; r++) {
 				log.debug("Current Row number -" + r);
-				Row currentRow = datatypeSheet.getRow(r);
-				ProjectDTO projectDto = new ProjectDTO();
-				projectDto.setName(currentRow.getCell(0).getStringCellValue());
-				projectDto.setContactFirstName(currentRow.getCell(1).getStringCellValue());
-				projectDto.setContactLastName(currentRow.getCell(2).getStringCellValue());
-				projectDto.setPhone(String.valueOf(currentRow.getCell(3).getStringCellValue()));
-				projectDto.setEmail(currentRow.getCell(4).getStringCellValue());
-				projectDto.setAddress(currentRow.getCell(5).getStringCellValue());
-				projectDto.setUserId(SecurityUtils.getCurrentUserId());
-				if (CollectionUtils.isEmpty(projectRepo.findAllByName(projectDto.getName()))){
-						Project project = mapperUtil.toEntity(projectDto, Project.class);
-						project.setActive(Project.ACTIVE_YES);
-						project = projectRepo.save(project);
+				try {
+					Row currentRow = datatypeSheet.getRow(r);
+					ProjectDTO projectDto = new ProjectDTO();
+					cellNo = 0;
+					projectDto.setName(currentRow.getCell(0).getStringCellValue());
+					cellNo = 1;
+					projectDto.setContactFirstName(currentRow.getCell(1).getStringCellValue());
+					cellNo = 2;
+					projectDto.setContactLastName(currentRow.getCell(2).getStringCellValue());
+					cellNo = 3;
+					projectDto.setPhone(String.valueOf(currentRow.getCell(3).getStringCellValue()));
+					cellNo = 4;
+					projectDto.setEmail(currentRow.getCell(4).getStringCellValue());
+					cellNo = 5;
+					projectDto.setAddress(currentRow.getCell(5).getStringCellValue());
+					projectDto.setUserId(SecurityUtils.getCurrentUserId());
+					if (CollectionUtils.isEmpty(projectRepo.findAllByName(projectDto.getName()))){
+							Project project = mapperUtil.toEntity(projectDto, Project.class);
+							project.setActive(Project.ACTIVE_YES);
+							project = projectRepo.save(project);
+					}
+				} catch (IllegalStateException | NumberFormatException formatEx) {
+					throw formatEx;
+				} catch (Exception e) {
+					String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+					log.error(msg, e);
+					response.append(e.getMessage());
+					response.append("--" + msg);
+					response.append("--" + "Please correct the data format and retry again");
+					if(importResult == null) {
+						importResult = new ImportResult();
+					}
+					importResult.setStatus(FAILED);
+					importResult.setMsg(response.toString());
+					statusMap.put(fileKey, importResult);
+					throw e;
 				}
 			}
 
-		} catch (FileNotFoundException e) {
-			log.error("Error while reading the job data file for import", e);
 		} catch (IOException e) {
-			log.error("Error while reading the job data file for import", e);
+			String msg = "Error while reading the client data file for import";
+			log.error(msg, e);
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw e;
+		} catch (IllegalStateException | NumberFormatException formatEx) {
+			String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+			log.error(msg, formatEx);
+			response.append(formatEx.getMessage());
+			response.append("--" + msg);
+			response.append("--" + "Please correct the data format and retry again");
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw formatEx;
 		}
+		if(response.length() == 0) {
+			response.append(SUCCESS_MESSAGE);
+		}
+		return response.toString();
 	}
 
-	private void importSiteFromFile(String path) {
+	private String importSiteFromFile(String fileKey, String path) throws Exception {
+		int r = 0;
+		int cellNo = 0;
+		StringBuffer response = new StringBuffer();
+		ImportResult importResult = statusMap.get(fileKey);		
 		try {
 
 			FileInputStream excelFile = new FileInputStream(new File(path));
@@ -787,55 +864,108 @@ public class ImportUtil {
 			Sheet datatypeSheet = workbook.getSheetAt(0);
 			Iterator<Row> iterator = datatypeSheet.iterator();
 			int lastRow = datatypeSheet.getLastRowNum();
-			int r = 1;
+			r = 1;
 			for (; r <= lastRow; r++) {
 				log.debug("Current Row number -" + r+"Last Row : "+lastRow);
-				Row currentRow = datatypeSheet.getRow(r);
-				log.debug("cell type =" + currentRow.getCell(0).getNumericCellValue()+"\t"+currentRow.getCell(9).getNumericCellValue());
-				SiteDTO siteDTO = new SiteDTO();
-				siteDTO.setProjectId((int)currentRow.getCell(0).getNumericCellValue());
-				siteDTO.setName(currentRow.getCell(1).getStringCellValue());
-				log.debug("REgion and branch - "+ currentRow.getCell(7).getStringCellValue()+" - "+currentRow.getCell(8).getStringCellValue());
-                if(org.apache.commons.lang3.StringUtils.isNotEmpty(currentRow.getCell(7).getStringCellValue())){
-                    log.debug("REgion from site import - "+currentRow.getCell(7).getStringCellValue());
-                    String regionName = currentRow.getCell(7).getStringCellValue();
-                    Region region = siteService.isRegionSaved(regionName,siteDTO.getProjectId());
+				try {
+					Row currentRow = datatypeSheet.getRow(r);
+					cellNo = 0;
+					log.debug("cell type =" + currentRow.getCell(0).getNumericCellValue()+"\t"+currentRow.getCell(9).getNumericCellValue());
+					SiteDTO siteDTO = new SiteDTO();
+					siteDTO.setProjectId((int)currentRow.getCell(0).getNumericCellValue());
+					cellNo = 1;
+					siteDTO.setName(currentRow.getCell(1).getStringCellValue());
+					cellNo = 7;
+					log.debug("REgion and branch - "+ currentRow.getCell(7).getStringCellValue());
+					cellNo = 8;
+					log.debug("Branch - " + currentRow.getCell(8).getStringCellValue());
+	                if(org.apache.commons.lang3.StringUtils.isNotEmpty(currentRow.getCell(7).getStringCellValue())){
+	                    log.debug("REgion from site import - "+currentRow.getCell(7).getStringCellValue());
+	                    String regionName = currentRow.getCell(7).getStringCellValue();
+	                    Region region = siteService.isRegionSaved(regionName,siteDTO.getProjectId());
+	
+	                    if(region!=null && region.getId()>0){
+	                        siteDTO.setRegion(region.getName());
+	                        if(org.apache.commons.lang3.StringUtils.isNotEmpty(currentRow.getCell(8).getStringCellValue())){
+	
+	                            String branchName = currentRow.getCell(8).getStringCellValue();
+	                            Branch branch = siteService.isBranchSaved(branchName,siteDTO.getProjectId(),region.getId());
+	                            if(branch!=null && branch.getId()>0){
+	                                siteDTO.setBranch(branch.getName());
+	                            }
+	                        }
+	                    }
+	                }
+	                log.debug("site DTO region and branch - "+siteDTO.getRegion()+" - "+siteDTO.getBranch());
+	                cellNo = 9;
+					siteDTO.setAddressLat(Double.valueOf(currentRow.getCell(9).getNumericCellValue()));
+					cellNo = 10;
+					siteDTO.setAddressLng(Double.valueOf(currentRow.getCell(10).getNumericCellValue()));
+					cellNo = 11;
+					siteDTO.setRadius(Double.valueOf(currentRow.getCell(11).getNumericCellValue()));
+					cellNo = 6;
+					siteDTO.setAddress(currentRow.getCell(6).getStringCellValue());
+					siteDTO.setUserId(SecurityUtils.getCurrentUserId());
+					Site site = mapperUtil.toEntity(siteDTO, Site.class);
+			        site.setActive(Site.ACTIVE_YES);
+					site = siteRepo.save(site);
+					log.debug("Created Information for Site: {}", site);
+					//update the site location by calling site location service
+					siteLocationService.save(site.getUser().getId(), site.getId(), site.getAddressLat(), site.getAddressLng(), site.getRadius());
 
-                    if(region!=null && region.getId()>0){
-                        siteDTO.setRegion(region.getName());
-                        if(org.apache.commons.lang3.StringUtils.isNotEmpty(currentRow.getCell(8).getStringCellValue())){
-
-                            String branchName = currentRow.getCell(8).getStringCellValue();
-                            Branch branch = siteService.isBranchSaved(branchName,siteDTO.getProjectId(),region.getId());
-                            if(branch!=null && branch.getId()>0){
-                                siteDTO.setBranch(branch.getName());
-                            }
-                        }
-                    }
-                }
-                log.debug("site DTO region and branch - "+siteDTO.getRegion()+" - "+siteDTO.getBranch());
-				siteDTO.setAddressLat(Double.valueOf(currentRow.getCell(9).getNumericCellValue()));
-				siteDTO.setAddressLng(Double.valueOf(currentRow.getCell(10).getNumericCellValue()));
-				siteDTO.setRadius(Double.valueOf(currentRow.getCell(11).getNumericCellValue()));
-				siteDTO.setAddress(currentRow.getCell(6).getStringCellValue());
-				siteDTO.setUserId(SecurityUtils.getCurrentUserId());
-				Site site = mapperUtil.toEntity(siteDTO, Site.class);
-		        site.setActive(Site.ACTIVE_YES);
-				site = siteRepo.save(site);
-				log.debug("Created Information for Site: {}", site);
-				//update the site location by calling site location service
-				siteLocationService.save(site.getUser().getId(), site.getId(), site.getAddressLat(), site.getAddressLng(), site.getRadius());
-
+				} catch (IllegalStateException | NumberFormatException formatEx) {
+					throw formatEx;
+				} catch (Exception e) {
+					String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+					log.error(msg, e);
+					response.append(e.getMessage());
+					response.append("--" + msg);
+					response.append("--" + "Please correct the data format and retry again");
+					if(importResult == null) {
+						importResult = new ImportResult();
+					}
+					importResult.setStatus(FAILED);
+					importResult.setMsg(response.toString());
+					statusMap.put(fileKey, importResult);
+					throw e;
 				}
+			}
 
-		} catch (FileNotFoundException e) {
-			log.error("Error while reading the job data file for import", e);
 		} catch (IOException e) {
-			log.error("Error while reading the job data file for import", e);
+			String msg = "Error while reading the site data file for import";
+			log.error(msg, e);
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw e;
+		} catch (IllegalStateException | NumberFormatException formatEx) {
+			String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+			log.error(msg, formatEx);
+			response.append(formatEx.getMessage());
+			response.append("--" + msg);
+			response.append("--" + "Please correct the data format and retry again");
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw formatEx;
 		}
+		if(response.length() == 0) {
+			response.append(SUCCESS_MESSAGE);
+		}
+		return response.toString();
 	}
 
-	private void importLocationFromFile(String path) {
+	private String importLocationFromFile(String fileKey, String path) throws Exception {
+		int r = 0;
+		int cellNo = 0;
+		StringBuffer response = new StringBuffer();
+		ImportResult importResult = statusMap.get(fileKey);
 		try {
 
 			FileInputStream excelFile = new FileInputStream(new File(path));
@@ -843,372 +973,651 @@ public class ImportUtil {
 			Sheet datatypeSheet = workbook.getSheetAt(0);
 			Iterator<Row> iterator = datatypeSheet.iterator();
 			int lastRow = datatypeSheet.getLastRowNum();
-			int r = 1;
+			r = 1;
 			for (; r <= lastRow; r++) {
 				log.debug("Current Row number -" + r+"Last Row : "+lastRow);
-				Row currentRow = datatypeSheet.getRow(r);
-				LocationDTO locationDTO = new LocationDTO();
-				locationDTO.setProjectId(Long.valueOf(getCellValue(currentRow.getCell(1))));
-				locationDTO.setSiteId(Long.valueOf(getCellValue(currentRow.getCell(3))));
-				locationDTO.setBlock(currentRow.getCell(5).getStringCellValue());
-				locationDTO.setFloor(currentRow.getCell(6).getStringCellValue());
-				locationDTO.setZone(currentRow.getCell(8).getStringCellValue());
-				Location loc = mapperUtil.toEntity(locationDTO, Location.class);
-		        loc.setActive(Site.ACTIVE_YES);
-				loc = locationRepo.save(loc);
-				log.debug("Created Information for Location: {}", loc);
+				try {
+					Row currentRow = datatypeSheet.getRow(r);
+					LocationDTO locationDTO = new LocationDTO();
+					cellNo = 1;
+					locationDTO.setProjectId(Long.valueOf(getCellValue(currentRow.getCell(1))));
+					cellNo = 3;
+					locationDTO.setSiteId(Long.valueOf(getCellValue(currentRow.getCell(3))));
+					cellNo = 5;
+					locationDTO.setBlock(currentRow.getCell(5).getStringCellValue());
+					cellNo = 6;
+					locationDTO.setFloor(currentRow.getCell(6).getStringCellValue());
+					cellNo = 8;
+					locationDTO.setZone(currentRow.getCell(8).getStringCellValue());
+					Location loc = mapperUtil.toEntity(locationDTO, Location.class);
+			        loc.setActive(Site.ACTIVE_YES);
+					loc = locationRepo.save(loc);
+					log.debug("Created Information for Location: {}", loc);
+				} catch (IllegalStateException | NumberFormatException formatEx) {
+					throw formatEx;
+				} catch (Exception e) {
+					String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+					log.error(msg, e);
+					response.append(e.getMessage());
+					response.append("--" + msg);
+					response.append("--" + "Please correct the data format and retry again");
+					if(importResult == null) {
+						importResult = new ImportResult();
+					}
+					importResult.setStatus(FAILED);
+					importResult.setMsg(response.toString());
+					statusMap.put(fileKey, importResult);
+					throw e;
+				}
 			}
 
-		} catch (FileNotFoundException e) {
-			log.error("Error while reading the location data file for import", e);
 		} catch (IOException e) {
-			log.error("Error while reading the location data file for import", e);
+			String msg = "Error while reading the location data file for import";
+			log.error(msg, e);
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw e;
+		} catch (IllegalStateException | NumberFormatException formatEx) {
+			String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+			log.error(msg, formatEx);
+			response.append(formatEx.getMessage());
+			response.append("--" + msg);
+			response.append("--" + "Please correct the data format and retry again");
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw formatEx;
 		}
+		if(response.length() == 0) {
+			response.append(SUCCESS_MESSAGE);
+		}
+		return response.toString();
 	}
 
 
-	private void importChecklistFromFile(String path) {
+	private String importChecklistFromFile(String fileKey, String path) throws Exception {
 		// TODO Auto-generated method stub
+		int r = 0;
+		int cellNo = 0;
+		StringBuffer response = new StringBuffer();
+		ImportResult importResult = statusMap.get(fileKey);
 		try{
 			FileInputStream excelFile = new FileInputStream(new File(path));
 			Workbook workbook = new XSSFWorkbook(excelFile);
 			Sheet datatypeSheet = workbook.getSheetAt(0);
 			Iterator<Row> iterator = datatypeSheet.iterator();
 			int lastRow = datatypeSheet.getLastRowNum();
-			int r = 1;
+			r = 1;
 			for (; r <= lastRow; r++) {
-				Row currentRow = datatypeSheet.getRow(r);
-				log.debug("cell type =" + currentRow.getCell(0).getStringCellValue()+"\t"+currentRow.getCell(1).getStringCellValue());
-				ChecklistDTO checklistDTO = new ChecklistDTO();
-				List<ChecklistItemDTO> checkListItems = new ArrayList<ChecklistItemDTO>();
-				StringTokenizer items = new StringTokenizer(currentRow.getCell(1).getStringCellValue(), ",");
-				while(items.hasMoreTokens()){
-					String itemName = items.nextToken();
-					log.debug("Items -"+itemName);
-					ChecklistItemDTO checkListItemDTO = new ChecklistItemDTO();
-					//checkListItemDTO.setId(i);
-					checkListItemDTO.setName(itemName);
-					checkListItems.add(checkListItemDTO);
-				}
-				checklistDTO.setName(currentRow.getCell(0).getStringCellValue());
-				checklistDTO.setItems(checkListItems);
-				ChecklistDTO createdChecklist = null;
 				try {
-					createdChecklist = checklistService.createChecklistInformation(checklistDTO);
-				}catch (Exception e) {
-					e.getMessage();
-					String msg = "Error while creating checklist, please check the information";
-					throw new TimesheetException(e, checklistDTO);
-
-				}
-
-			}
-
-		}catch (FileNotFoundException e) {
-			// TODO: handle exception
-			log.error("Error while reading the job data file for import", e);
-		} catch(IOException e){
-			log.error("Error while reading the job data file for import", e);
-		}
-
-
-	}
-
-	private void importAssetFromFile(String path) {
-		try {
-
-			FileInputStream excelFile = new FileInputStream(new File(path));
-			Workbook workbook = new XSSFWorkbook(excelFile);
-			Sheet datatypeSheet = workbook.getSheetAt(0);
-			//Iterator<Row> iterator = datatypeSheet.iterator();
-			int lastRow = datatypeSheet.getLastRowNum();
-			int r = 1;
-
-			log.debug("Last Row number -" + lastRow);
-			for (; r <= lastRow; r++) {
-				log.debug("Current Row number -" + r);
-				Row currentRow = datatypeSheet.getRow(r);
-				AssetDTO assetDTO = new AssetDTO();
-				assetDTO.setTitle(getCellValue(currentRow.getCell(0)));
-				assetDTO.setDescription(getCellValue(currentRow.getCell(1)));
-				assetDTO.setAssetType(getCellValue(currentRow.getCell(2)));
-				assetDTO.setAssetGroup(getCellValue(currentRow.getCell(3)));
-				assetDTO.setProjectId(Long.valueOf(getCellValue(currentRow.getCell(4))));
-				assetDTO.setSiteId(Long.valueOf(getCellValue(currentRow.getCell(5))));
-				assetDTO.setBlock(getCellValue(currentRow.getCell(6)));
-				assetDTO.setFloor(getCellValue(currentRow.getCell(7)));
-				assetDTO.setZone(getCellValue(currentRow.getCell(8)));
-				assetDTO.setManufacturerId(Long.valueOf(getCellValue(currentRow.getCell(9))));
-				assetDTO.setModelNumber(getCellValue(currentRow.getCell(10)));
-				assetDTO.setSerialNumber(getCellValue(currentRow.getCell(11)));
-				Date acquiredDate = currentRow.getCell(12) != null ? currentRow.getCell(12).getDateCellValue() : null;
-				if(acquiredDate != null) {
-					assetDTO.setAcquiredDate(acquiredDate);
-				}
-				assetDTO.setPurchasePrice(Double.valueOf(getCellValue(currentRow.getCell(13))));
-				assetDTO.setCurrentPrice(Double.valueOf(getCellValue(currentRow.getCell(14))));
-				assetDTO.setEstimatedDisposePrice(Double.valueOf(getCellValue(currentRow.getCell(15))));
-				assetDTO.setWarrantyType(getCellValue(currentRow.getCell(16)));
-				Date warrantyDate = currentRow.getCell(17) != null ? currentRow.getCell(17).getDateCellValue() : null;
-				if(warrantyDate != null) {
-					assetDTO.setWarrantyExpiryDate(warrantyDate);
-				}
-				assetDTO.setVendorId(Long.valueOf(getCellValue(currentRow.getCell(18))));
-				assetDTO.setCode(getCellValue(currentRow.getCell(19)));
-				assetDTO.setStatus(getCellValue(currentRow.getCell(20)));
-				assetManagementService.saveAsset(assetDTO);
-
-			}
-
-		} catch (FileNotFoundException e) {
-			log.error("Error while reading the job data file for import", e);
-		} catch (IOException e) {
-			log.error("Error while reading the job data file for import", e);
-		}
-	}
-
-	private void importAssetPPMFromFile(String path) {
-		try {
-
-			FileInputStream excelFile = new FileInputStream(new File(path));
-			Workbook workbook = new XSSFWorkbook(excelFile);
-			Sheet datatypeSheet = workbook.getSheetAt(0);
-			//Iterator<Row> iterator = datatypeSheet.iterator();
-			int lastRow = datatypeSheet.getLastRowNum();
-			int r = 1;
-
-			log.debug("Last Row number -" + lastRow);
-			for (; r <= lastRow; r++) {
-				log.debug("Current Row number -" + r);
-				Row currentRow = datatypeSheet.getRow(r);
-
-				AssetPpmScheduleDTO assetPPMDto = new AssetPpmScheduleDTO();
-				String assetCode = getCellValue(currentRow.getCell(0));
-				AssetDTO assetDTO = assetManagementService.findByAssetCode(assetCode);
-				assetPPMDto.setAssetId(assetDTO.getId());
-				assetPPMDto.setTitle(getCellValue(currentRow.getCell(3)));
-				assetPPMDto.setFrequency(getCellValue(currentRow.getCell(4)));
-				assetPPMDto.setFrequencyDuration(Integer.parseInt(getCellValue(currentRow.getCell(5))));
-				Date startDate = currentRow.getCell(6) != null ? currentRow.getCell(6).getDateCellValue() : null;
-				if(startDate != null) {
-					assetPPMDto.setStartDate(startDate);
-				}
-
-				Date endDate = currentRow.getCell(7) != null ? currentRow.getCell(7).getDateCellValue() : null;
-				if(endDate != null) {
-					assetPPMDto.setEndDate(endDate);
-				}
-				Date startDateTime = currentRow.getCell(8) != null ? currentRow.getCell(8).getDateCellValue() : null;
-				if(startDateTime != null) {
-					assetPPMDto.setJobStartTime(DateUtil.convertToZDT(startDateTime));
-				}
-
-				assetPPMDto.setPlannedHours(Integer.parseInt(getCellValue(currentRow.getCell(9))));
-
-				assetPPMDto.setEmpId(Long.parseLong(getCellValue(currentRow.getCell(10))));
-
-                String checkListName = getCellValue(currentRow.getCell(11));
-                if(StringUtils.isNotBlank(checkListName)) {
-                    SearchCriteria searchCriteria = new SearchCriteria();
-                    searchCriteria.setName(checkListName);
-                    SearchResult<ChecklistDTO> result = checklistService.findBySearchCrieria(searchCriteria);
-                    List<ChecklistDTO> checkListDtos = result.getTransactions();
-                    if (CollectionUtils.isNotEmpty(checkListDtos)) {
-                        ChecklistDTO checklistDto = checkListDtos.get(0);
-                        assetPPMDto.setChecklistId(checklistDto.getId());
-                    }
-                }
-
-				assetManagementService.createAssetPpmSchedule(assetPPMDto);
-
-			}
-
-		} catch (FileNotFoundException e) {
-			log.error("Error while reading the asset ppm schedule data file for import", e);
-		} catch (IOException e) {
-			log.error("Error while reading the asset ppm schedule data file for import", e);
-		}
-	}
-
-	private void importAssetAMCFromFile(String path) {
-		try {
-
-			FileInputStream excelFile = new FileInputStream(new File(path));
-			Workbook workbook = new XSSFWorkbook(excelFile);
-			Sheet datatypeSheet = workbook.getSheetAt(0);
-			//Iterator<Row> iterator = datatypeSheet.iterator();
-			int lastRow = datatypeSheet.getLastRowNum();
-			int r = 1;
-
-			log.debug("Last Row number -" + lastRow);
-			for (; r <= lastRow; r++) {
-				log.debug("Current Row number -" + r);
-				Row currentRow = datatypeSheet.getRow(r);
-
-				AssetAMCScheduleDTO assetAMCDto = new AssetAMCScheduleDTO();
-				String assetCode = getCellValue(currentRow.getCell(0));
-				AssetDTO assetDTO = assetManagementService.findByAssetCode(assetCode);
-				assetAMCDto.setAssetId(assetDTO.getId());
-				assetAMCDto.setTitle(getCellValue(currentRow.getCell(3)));
-				assetAMCDto.setFrequency(getCellValue(currentRow.getCell(4)));
-				assetAMCDto.setFrequencyDuration(Integer.parseInt(getCellValue(currentRow.getCell(5))));
-				Date startDate = currentRow.getCell(6) != null ? currentRow.getCell(6).getDateCellValue() : null;
-				if(startDate != null) {
-					assetAMCDto.setStartDate(startDate);
-				}
-
-				Date endDate = currentRow.getCell(7) != null ? currentRow.getCell(7).getDateCellValue() : null;
-				if(endDate != null) {
-					assetAMCDto.setEndDate(endDate);
-				}
-				Date startDateTime = currentRow.getCell(8) != null ? currentRow.getCell(8).getDateCellValue() : null;
-				if(startDateTime != null) {
-					assetAMCDto.setJobStartTime(DateUtil.convertToZDT(startDateTime));
-				}
-
-				assetAMCDto.setPlannedHours(Integer.parseInt(getCellValue(currentRow.getCell(9))));
-
-				assetAMCDto.setEmpId(Long.parseLong(getCellValue(currentRow.getCell(10))));
-				assetAMCDto.setFrequencyPrefix("Every");
-				assetAMCDto.setMaintenanceType(getCellValue(currentRow.getCell(11)));
-
-                String checkListName = getCellValue(currentRow.getCell(12));
-
-                if(StringUtils.isNotBlank(checkListName)) {
-                    SearchCriteria searchCriteria = new SearchCriteria();
-                    searchCriteria.setName(checkListName);
-                    SearchResult<ChecklistDTO> result = checklistService.findBySearchCrieria(searchCriteria);
-                    List<ChecklistDTO> checkListDtos = result.getTransactions();
-                    if (CollectionUtils.isNotEmpty(checkListDtos)) {
-                        ChecklistDTO checklistDto = checkListDtos.get(0);
-                        assetAMCDto.setChecklistId(checklistDto.getId());
-                    }
-                }
-
-				assetManagementService.createAssetAMCSchedule(assetAMCDto);
-
-			}
-
-		} catch (FileNotFoundException e) {
-			log.error("Error while reading the asset amc schedule data file for import", e);
-		} catch (IOException e) {
-			log.error("Error while reading the asset amc schedule data file for import", e);
-		}
-	}
-
-	private void importEmployeeFromFile(String path) {
-		try {
-
-			FileInputStream excelFile = new FileInputStream(new File(path));
-			Workbook workbook = new XSSFWorkbook(excelFile);
-			Sheet datatypeSheet = workbook.getSheetAt(0);
-			//Iterator<Row> iterator = datatypeSheet.iterator();
-			int lastRow = datatypeSheet.getLastRowNum();
-			int r = 1;
-
-			log.debug("Last Row number -" + lastRow);
-			for (; r <= lastRow; r++) {
-				log.debug("Current Row number -" + r);
-				Row currentRow = datatypeSheet.getRow(r);
-
-				/*Employee existingEmployee = employeeRepo.findByEmpId(currentRow.getCell(2).getStringCellValue().trim());
-				log.debug("Employee obj =" + existingEmployee);
-				&& existingEmployee.getActive().equals(Employee.ACTIVE_NO
-				if(existingEmployee!=null){
-					log.debug("*************Existing Employee");
-
-				}
-				else {*/
-
-				if(currentRow.getCell(2).getStringCellValue() != null) {
-					Employee existingEmployee = employeeRepo.findByEmpId(currentRow.getCell(2).getStringCellValue().trim());
-					if(existingEmployee != null) {
-						List<EmployeeProjectSite> projSites = existingEmployee.getProjectSites();
-						Project newProj = projectRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(0))));
-						Site newSite = siteRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(1))));
-						EmployeeProjectSite projectSite = new EmployeeProjectSite();
-						/*
-						projectSite.setProjectId(newProj.getId());
-						projectSite.setProjectName(newProj.getName());
-						projectSite.setSiteId(newSite.getId());
-						projectSite.setSiteName(newSite.getName());
-						*/
-						projectSite.setProject(newProj);
-						projectSite.setSite(newSite);
-						projectSite.setEmployee(existingEmployee);
-
-						if(CollectionUtils.isNotEmpty(projSites)) {
-							projSites.add(projectSite);
-						}
-						employeeRepo.save(existingEmployee);
-						log.debug("Update Employee Information with new site info: {}");
-					}else {
-						Employee employee = new Employee();
-
-						Project newProj = projectRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(0))));
-						Site newSite = siteRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(1))));
-						employee.setEmpId(getCellValue(currentRow.getCell(2)));
-						employee.setName(getCellValue(currentRow.getCell(3)));
-						employee.setFullName(getCellValue(currentRow.getCell(3)));
-						employee.setLastName(getCellValue(currentRow.getCell(4)));
-						employee.setPhone(getCellValue(currentRow.getCell(5)));
-						employee.setEmail(getCellValue(currentRow.getCell(6)));
-						employee.setDesignation(getCellValue(currentRow.getCell(7)));
-						// email, phone number missing
-						ZoneId  zone = ZoneId.of("Asia/Singapore");
-						ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
-						employee.setCreatedDate(zdt);
-						employee.setActive(Employee.ACTIVE_YES);
-						if(StringUtils.isNotEmpty(getCellValue(currentRow.getCell(8)))) {
-							Employee manager =  employeeRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(8))));
-							employee.setManager(manager);
-				        }
-						List<Project> projects = new ArrayList<Project>();
-						projects.add(newProj);
-						List<Site> sites = new ArrayList<Site>();
-						sites.add(newSite);
-						employee.setFaceAuthorised(false);
-						employee.setFaceIdEnrolled(false);
-						employee.setLeft(false);
-						employee.setRelieved(false);
-						employee.setReliever(false);
-						List<EmployeeProjectSite> projectSites = new ArrayList<EmployeeProjectSite>();
-						EmployeeProjectSite projectSite = new EmployeeProjectSite();
-						/*
-						projectSite.setProjectId(newProj.getId());
-						projectSite.setProjectName(newProj.getName());
-						projectSite.setSiteId(newSite.getId());
-						projectSite.setSiteName(newSite.getName());
-						*/
-						projectSite.setProject(newProj);
-						projectSite.setSite(newSite);
-						projectSite.setEmployee(employee);
-						projectSites.add(projectSite);
-						employee.setProjectSites(projectSites);
-
-						employeeRepo.save(employee);
-						//create user if opted.
-						String createUser = getCellValue(currentRow.getCell(9));
-						long userRoleId = Long.parseLong(getCellValue(currentRow.getCell(10)));
-						UserDTO user = new UserDTO();
-						if(StringUtils.isNotEmpty(createUser) && createUser.equalsIgnoreCase("Y") && userRoleId > 0) {
-							user.setLogin(employee.getEmpId());
-							user.setPassword(employee.getEmpId());
-							user.setFirstName(employee.getName());
-							user.setLastName(employee.getLastName());
-							user.setAdminFlag("N");
-							user.setUserRoleId(userRoleId);
-							user.setEmployeeId(employee.getId());
-							user.setActivated(true);
-							user.setEmail(currentRow.getCell(6).getStringCellValue());
-							user = userService.createUserInformation(user);
-							User userObj = userRepository.findOne(user.getId());
-							employee.setUser(userObj);
-							employeeRepo.save(employee);
-						}
-						log.debug("Created Information for Employee: {}" + employee.getId());
-
+					Row currentRow = datatypeSheet.getRow(r);
+					log.debug("cell type =" + currentRow.getCell(0).getStringCellValue()+"\t"+currentRow.getCell(1).getStringCellValue());
+					ChecklistDTO checklistDTO = new ChecklistDTO();
+					List<ChecklistItemDTO> checkListItems = new ArrayList<ChecklistItemDTO>();
+					StringTokenizer items = new StringTokenizer(currentRow.getCell(1).getStringCellValue(), ",");
+					while(items.hasMoreTokens()){
+						String itemName = items.nextToken();
+						log.debug("Items -"+itemName);
+						ChecklistItemDTO checkListItemDTO = new ChecklistItemDTO();
+						//checkListItemDTO.setId(i);
+						checkListItemDTO.setName(itemName);
+						checkListItems.add(checkListItemDTO);
 					}
+					checklistDTO.setName(currentRow.getCell(0).getStringCellValue());
+					checklistDTO.setItems(checkListItems);
+					ChecklistDTO createdChecklist = null;
+					createdChecklist = checklistService.createChecklistInformation(checklistDTO);
+				} catch (IllegalStateException | NumberFormatException formatEx) {
+					throw formatEx;
+				} catch (Exception e) {
+					String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+					log.error(msg, e);
+					response.append(e.getMessage());
+					response.append("--" + msg);
+					response.append("--" + "Please correct the data format and retry again");
+					if(importResult == null) {
+						importResult = new ImportResult();
+					}
+					importResult.setStatus(FAILED);
+					importResult.setMsg(response.toString());
+					statusMap.put(fileKey, importResult);
+					throw e;
+				}	
+					
+
+			}
+
+		}catch (IOException e) {
+			String msg = "Error while reading the checklist data file for import";
+			log.error(msg, e);
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw e;
+		} catch (IllegalStateException | NumberFormatException formatEx) {
+			String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+			log.error(msg, formatEx);
+			response.append(formatEx.getMessage());
+			response.append("--" + msg);
+			response.append("--" + "Please correct the data format and retry again");
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw formatEx;
+		}
+		if(response.length() == 0) {
+			response.append(SUCCESS_MESSAGE);
+		}
+		return response.toString();
+
+
+	}
+
+	private String importAssetFromFile(String fileKey, String path) throws Exception {
+		int r = 0;
+		int cellNo = 0;
+		StringBuffer response = new StringBuffer();
+		ImportResult importResult = statusMap.get(fileKey);
+		try {
+
+			FileInputStream excelFile = new FileInputStream(new File(path));
+			Workbook workbook = new XSSFWorkbook(excelFile);
+			Sheet datatypeSheet = workbook.getSheetAt(0);
+			//Iterator<Row> iterator = datatypeSheet.iterator();
+			int lastRow = datatypeSheet.getLastRowNum();
+			r = 1;
+
+			log.debug("Last Row number -" + lastRow);
+			for (; r <= lastRow; r++) {
+				log.debug("Current Row number -" + r);
+				try {
+					Row currentRow = datatypeSheet.getRow(r);
+					AssetDTO assetDTO = new AssetDTO();
+					cellNo = 0;
+					assetDTO.setTitle(getCellValue(currentRow.getCell(0)));
+					cellNo = 1;
+					assetDTO.setDescription(getCellValue(currentRow.getCell(1)));
+					cellNo = 2;
+					assetDTO.setAssetType(getCellValue(currentRow.getCell(2)));
+					cellNo = 3;
+					assetDTO.setAssetGroup(getCellValue(currentRow.getCell(3)));
+					cellNo = 4;
+					assetDTO.setProjectId(Long.valueOf(getCellValue(currentRow.getCell(4))));
+					cellNo = 5;
+					assetDTO.setSiteId(Long.valueOf(getCellValue(currentRow.getCell(5))));
+					cellNo = 6;
+					assetDTO.setBlock(getCellValue(currentRow.getCell(6)));
+					cellNo = 7;
+					assetDTO.setFloor(getCellValue(currentRow.getCell(7)));
+					cellNo = 8;
+					assetDTO.setZone(getCellValue(currentRow.getCell(8)));
+					cellNo = 9;
+					assetDTO.setManufacturerId(Long.valueOf(getCellValue(currentRow.getCell(9))));
+					cellNo = 10;
+					assetDTO.setModelNumber(getCellValue(currentRow.getCell(10)));
+					cellNo = 11;
+					assetDTO.setSerialNumber(getCellValue(currentRow.getCell(11)));
+					cellNo = 12;
+					Date acquiredDate = currentRow.getCell(12) != null ? currentRow.getCell(12).getDateCellValue() : null;
+					if(acquiredDate != null) {
+						assetDTO.setAcquiredDate(acquiredDate);
+					}
+					cellNo = 13;
+					assetDTO.setPurchasePrice(Double.valueOf(getCellValue(currentRow.getCell(13))));
+					cellNo = 14;
+					assetDTO.setCurrentPrice(Double.valueOf(getCellValue(currentRow.getCell(14))));
+					cellNo = 15;
+					assetDTO.setEstimatedDisposePrice(Double.valueOf(getCellValue(currentRow.getCell(15))));
+					cellNo = 16;
+					assetDTO.setWarrantyType(getCellValue(currentRow.getCell(16)));
+					cellNo = 17;
+					Date warrantyDate = currentRow.getCell(17) != null ? currentRow.getCell(17).getDateCellValue() : null;
+					if(warrantyDate != null) {
+						assetDTO.setWarrantyExpiryDate(warrantyDate);
+					}
+					cellNo = 18;
+					assetDTO.setVendorId(Long.valueOf(getCellValue(currentRow.getCell(18))));
+					cellNo = 19;
+					assetDTO.setCode(getCellValue(currentRow.getCell(19)));
+					cellNo = 20;
+					assetDTO.setStatus(getCellValue(currentRow.getCell(20)));
+					assetManagementService.saveAsset(assetDTO);
+				} catch (IllegalStateException | NumberFormatException formatEx) {
+					throw formatEx;
+				} catch (Exception e) {
+					String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+					log.error(msg, e);
+					response.append(e.getMessage());
+					response.append("--" + msg);
+					response.append("--" + "Please correct the data format and retry again");
+					if(importResult == null) {
+						importResult = new ImportResult();
+					}
+					importResult.setStatus(FAILED);
+					importResult.setMsg(response.toString());
+					statusMap.put(fileKey, importResult);
+					throw e;
+				}
+
+			}
+
+		} catch (IOException e) {
+			String msg = "Error while reading the asset data file for import";
+			log.error(msg, e);
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw e;
+		} catch (IllegalStateException | NumberFormatException formatEx) {
+			String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+			log.error(msg, formatEx);
+			response.append(formatEx.getMessage());
+			response.append("--" + msg);
+			response.append("--" + "Please correct the data format and retry again");
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw formatEx;
+		}
+		if(response.length() == 0) {
+			response.append(SUCCESS_MESSAGE);
+		}
+		return response.toString();
+	}
+
+	private String importAssetPPMFromFile(String fileKey, String path) throws Exception {
+		int r = 0;
+		int cellNo = 0;
+		StringBuffer response = new StringBuffer();
+		ImportResult importResult = statusMap.get(fileKey);
+		try {
+
+			FileInputStream excelFile = new FileInputStream(new File(path));
+			Workbook workbook = new XSSFWorkbook(excelFile);
+			Sheet datatypeSheet = workbook.getSheetAt(0);
+			//Iterator<Row> iterator = datatypeSheet.iterator();
+			int lastRow = datatypeSheet.getLastRowNum();
+			r = 1;
+
+			log.debug("Last Row number -" + lastRow);
+			for (; r <= lastRow; r++) {
+				log.debug("Current Row number -" + r);
+				try {
+					Row currentRow = datatypeSheet.getRow(r);
+	
+					AssetPpmScheduleDTO assetPPMDto = new AssetPpmScheduleDTO();
+					cellNo = 0;
+					String assetCode = getCellValue(currentRow.getCell(0));
+					AssetDTO assetDTO = assetManagementService.findByAssetCode(assetCode);
+					assetPPMDto.setAssetId(assetDTO.getId());
+					cellNo = 3;
+					assetPPMDto.setTitle(getCellValue(currentRow.getCell(3)));
+					cellNo = 4;
+					assetPPMDto.setFrequency(getCellValue(currentRow.getCell(4)));
+					cellNo = 5;
+					assetPPMDto.setFrequencyDuration(Integer.parseInt(getCellValue(currentRow.getCell(5))));
+					cellNo = 6;
+					Date startDate = currentRow.getCell(6) != null ? currentRow.getCell(6).getDateCellValue() : null;
+					if(startDate != null) {
+						assetPPMDto.setStartDate(startDate);
+					}
+					cellNo = 7;
+					Date endDate = currentRow.getCell(7) != null ? currentRow.getCell(7).getDateCellValue() : null;
+					if(endDate != null) {
+						assetPPMDto.setEndDate(endDate);
+					}
+					cellNo = 8;
+					Date startDateTime = currentRow.getCell(8) != null ? currentRow.getCell(8).getDateCellValue() : null;
+					if(startDateTime != null) {
+						assetPPMDto.setJobStartTime(DateUtil.convertToZDT(startDateTime));
+					}
+					cellNo = 9;
+					assetPPMDto.setPlannedHours(Integer.parseInt(getCellValue(currentRow.getCell(9))));
+					cellNo = 10;
+					assetPPMDto.setEmpId(Long.parseLong(getCellValue(currentRow.getCell(10))));
+					cellNo = 11;
+	                String checkListName = getCellValue(currentRow.getCell(11));
+	                if(StringUtils.isNotBlank(checkListName)) {
+	                    SearchCriteria searchCriteria = new SearchCriteria();
+	                    searchCriteria.setName(checkListName);
+	                    SearchResult<ChecklistDTO> result = checklistService.findBySearchCrieria(searchCriteria);
+	                    List<ChecklistDTO> checkListDtos = result.getTransactions();
+	                    if (CollectionUtils.isNotEmpty(checkListDtos)) {
+	                        ChecklistDTO checklistDto = checkListDtos.get(0);
+	                        assetPPMDto.setChecklistId(checklistDto.getId());
+	                    }
+	                }
+	
+					assetManagementService.createAssetPpmSchedule(assetPPMDto);
+				} catch (IllegalStateException | NumberFormatException formatEx) {
+					throw formatEx;
+				} catch (Exception e) {
+					String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+					log.error(msg, e);
+					response.append(e.getMessage());
+					response.append("--" + msg);
+					response.append("--" + "Please correct the data format and retry again");
+					if(importResult == null) {
+						importResult = new ImportResult();
+					}
+					importResult.setStatus(FAILED);
+					importResult.setMsg(response.toString());
+					statusMap.put(fileKey, importResult);
+					throw e;
+				}
+
+			}
+
+		} catch (IOException e) {
+			String msg = "Error while reading the asset ppm data file for import";
+			log.error(msg, e);
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw e;
+		} catch (IllegalStateException | NumberFormatException formatEx) {
+			String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+			log.error(msg, formatEx);
+			response.append(formatEx.getMessage());
+			response.append("--" + msg);
+			response.append("--" + "Please correct the data format and retry again");
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw formatEx;
+		}
+		if(response.length() == 0) {
+			response.append(SUCCESS_MESSAGE);
+		}
+		return response.toString();
+	}
+
+	private String importAssetAMCFromFile(String fileKey, String path) throws Exception{
+		int r = 0;
+		int cellNo = 0;
+		StringBuffer response = new StringBuffer();
+		ImportResult importResult = statusMap.get(fileKey);
+		try {
+
+			FileInputStream excelFile = new FileInputStream(new File(path));
+			Workbook workbook = new XSSFWorkbook(excelFile);
+			Sheet datatypeSheet = workbook.getSheetAt(0);
+			//Iterator<Row> iterator = datatypeSheet.iterator();
+			int lastRow = datatypeSheet.getLastRowNum();
+			r = 1;
+
+			log.debug("Last Row number -" + lastRow);
+			for (; r <= lastRow; r++) {
+				log.debug("Current Row number -" + r);
+				try {
+					Row currentRow = datatypeSheet.getRow(r);
+					cellNo = 0;
+					AssetAMCScheduleDTO assetAMCDto = new AssetAMCScheduleDTO();
+					String assetCode = getCellValue(currentRow.getCell(0));
+					AssetDTO assetDTO = assetManagementService.findByAssetCode(assetCode);
+					assetAMCDto.setAssetId(assetDTO.getId());
+					cellNo = 3;
+					assetAMCDto.setTitle(getCellValue(currentRow.getCell(3)));
+					cellNo = 4;
+					assetAMCDto.setFrequency(getCellValue(currentRow.getCell(4)));
+					cellNo = 5;
+					assetAMCDto.setFrequencyDuration(Integer.parseInt(getCellValue(currentRow.getCell(5))));
+					cellNo = 6;
+					Date startDate = currentRow.getCell(6) != null ? currentRow.getCell(6).getDateCellValue() : null;
+					if(startDate != null) {
+						assetAMCDto.setStartDate(startDate);
+					}
+					cellNo = 7;
+					Date endDate = currentRow.getCell(7) != null ? currentRow.getCell(7).getDateCellValue() : null;
+					if(endDate != null) {
+						assetAMCDto.setEndDate(endDate);
+					}
+					cellNo = 8;
+					Date startDateTime = currentRow.getCell(8) != null ? currentRow.getCell(8).getDateCellValue() : null;
+					if(startDateTime != null) {
+						assetAMCDto.setJobStartTime(DateUtil.convertToZDT(startDateTime));
+					}
+					cellNo = 9;
+					assetAMCDto.setPlannedHours(Integer.parseInt(getCellValue(currentRow.getCell(9))));
+					cellNo = 10;
+					assetAMCDto.setEmpId(Long.parseLong(getCellValue(currentRow.getCell(10))));
+					assetAMCDto.setFrequencyPrefix("Every");
+					cellNo = 11;
+					assetAMCDto.setMaintenanceType(getCellValue(currentRow.getCell(11)));
+					cellNo = 12;
+	                String checkListName = getCellValue(currentRow.getCell(12));
+	
+	                if(StringUtils.isNotBlank(checkListName)) {
+	                    SearchCriteria searchCriteria = new SearchCriteria();
+	                    searchCriteria.setName(checkListName);
+	                    SearchResult<ChecklistDTO> result = checklistService.findBySearchCrieria(searchCriteria);
+	                    List<ChecklistDTO> checkListDtos = result.getTransactions();
+	                    if (CollectionUtils.isNotEmpty(checkListDtos)) {
+	                        ChecklistDTO checklistDto = checkListDtos.get(0);
+	                        assetAMCDto.setChecklistId(checklistDto.getId());
+	                    }
+	                }
+	
+					assetManagementService.createAssetAMCSchedule(assetAMCDto);
+				} catch (IllegalStateException | NumberFormatException formatEx) {
+					throw formatEx;
+				} catch (Exception e) {
+					String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+					log.error(msg, e);
+					response.append(e.getMessage());
+					response.append("--" + msg);
+					response.append("--" + "Please correct the data format and retry again");
+					if(importResult == null) {
+						importResult = new ImportResult();
+					}
+					importResult.setStatus(FAILED);
+					importResult.setMsg(response.toString());
+					statusMap.put(fileKey, importResult);
+					throw e;
+				}
+
+			}
+
+		} catch (IOException e) {
+			String msg = "Error while reading the asset amc data file for import";
+			log.error(msg, e);
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw e;
+		} catch (IllegalStateException | NumberFormatException formatEx) {
+			String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+			log.error(msg, formatEx);
+			response.append(formatEx.getMessage());
+			response.append("--" + msg);
+			response.append("--" + "Please correct the data format and retry again");
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw formatEx;
+		}
+		if(response.length() == 0) {
+			response.append(SUCCESS_MESSAGE);
+		}
+		return response.toString();
+	}
+
+	private String importEmployeeFromFile(String fileKey, String path) throws Exception {
+		StringBuffer response = new StringBuffer();
+		int r = 1;
+		int cellNo = 0;
+		ImportResult importResult = statusMap.get(fileKey);
+		try {
+
+			FileInputStream excelFile = new FileInputStream(new File(path));
+			Workbook workbook = new XSSFWorkbook(excelFile);
+			Sheet datatypeSheet = workbook.getSheetAt(0);
+			//Iterator<Row> iterator = datatypeSheet.iterator();
+			int lastRow = datatypeSheet.getLastRowNum();
+			log.debug("Last Row number -" + lastRow);
+			for (; r <= lastRow; r++) {
+				log.debug("Current Row number -" + r);
+				Row currentRow = datatypeSheet.getRow(r);
+				try {
+
+					/*Employee existingEmployee = employeeRepo.findByEmpId(currentRow.getCell(2).getStringCellValue().trim());
+					log.debug("Employee obj =" + existingEmployee);
+					&& existingEmployee.getActive().equals(Employee.ACTIVE_NO
+					if(existingEmployee!=null){
+						log.debug("*************Existing Employee");
+	
+					}
+					else {*/
+					cellNo = 2;
+					if(currentRow.getCell(2).getStringCellValue() != null) {
+						Employee existingEmployee = employeeRepo.findByEmpId(currentRow.getCell(2).getStringCellValue().trim());
+						if(existingEmployee != null) {
+							List<EmployeeProjectSite> projSites = existingEmployee.getProjectSites();
+							cellNo = 0;
+							Project newProj = projectRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(0))));
+							cellNo = 1;
+							Site newSite = siteRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(1))));
+							EmployeeProjectSite projectSite = new EmployeeProjectSite();
+							/*
+							projectSite.setProjectId(newProj.getId());
+							projectSite.setProjectName(newProj.getName());
+							projectSite.setSiteId(newSite.getId());
+							projectSite.setSiteName(newSite.getName());
+							*/
+							projectSite.setProject(newProj);
+							projectSite.setSite(newSite);
+							projectSite.setEmployee(existingEmployee);
+	
+							if(CollectionUtils.isNotEmpty(projSites)) {
+								projSites.add(projectSite);
+							}
+							employeeRepo.save(existingEmployee);
+							log.debug("Update Employee Information with new site info: {}");
+						}else {
+							Employee employee = new Employee();
+							cellNo = 0;
+							Project newProj = projectRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(0))));
+							cellNo = 1;
+							Site newSite = siteRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(1))));
+							cellNo = 2;
+							employee.setEmpId(getCellValue(currentRow.getCell(2)));
+							cellNo = 3;
+							employee.setName(getCellValue(currentRow.getCell(3)));
+							employee.setFullName(getCellValue(currentRow.getCell(3)));
+							cellNo = 4;
+							employee.setLastName(getCellValue(currentRow.getCell(4)));
+							cellNo = 5;
+							employee.setPhone(getCellValue(currentRow.getCell(5)));
+							cellNo = 6;
+							employee.setEmail(getCellValue(currentRow.getCell(6)));
+							cellNo = 7;
+							employee.setDesignation(getCellValue(currentRow.getCell(7)));
+							// email, phone number missing
+							ZoneId  zone = ZoneId.of("Asia/Singapore");
+							ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
+							employee.setCreatedDate(zdt);
+							employee.setActive(Employee.ACTIVE_YES);
+							cellNo = 8;
+							if(StringUtils.isNotEmpty(getCellValue(currentRow.getCell(8)))) {
+								Employee manager =  employeeRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(8))));
+								employee.setManager(manager);
+					        }
+							List<Project> projects = new ArrayList<Project>();
+							projects.add(newProj);
+							List<Site> sites = new ArrayList<Site>();
+							sites.add(newSite);
+							employee.setFaceAuthorised(false);
+							employee.setFaceIdEnrolled(false);
+							employee.setLeft(false);
+							employee.setRelieved(false);
+							employee.setReliever(false);
+							List<EmployeeProjectSite> projectSites = new ArrayList<EmployeeProjectSite>();
+							EmployeeProjectSite projectSite = new EmployeeProjectSite();
+							/*
+							projectSite.setProjectId(newProj.getId());
+							projectSite.setProjectName(newProj.getName());
+							projectSite.setSiteId(newSite.getId());
+							projectSite.setSiteName(newSite.getName());
+							*/
+							projectSite.setProject(newProj);
+							projectSite.setSite(newSite);
+							projectSite.setEmployee(employee);
+							projectSites.add(projectSite);
+							employee.setProjectSites(projectSites);
+	
+							employeeRepo.save(employee);
+							//create user if opted.
+							cellNo = 9;
+							String createUser = getCellValue(currentRow.getCell(9));
+							cellNo = 10;
+							long userRoleId = Long.parseLong(getCellValue(currentRow.getCell(10)));
+							UserDTO user = new UserDTO();
+							if(StringUtils.isNotEmpty(createUser) && createUser.equalsIgnoreCase("Y") && userRoleId > 0) {
+								user.setLogin(employee.getEmpId());
+								user.setPassword(employee.getEmpId());
+								user.setFirstName(employee.getName());
+								user.setLastName(employee.getLastName());
+								user.setAdminFlag("N");
+								user.setUserRoleId(userRoleId);
+								user.setEmployeeId(employee.getId());
+								user.setActivated(true);
+								cellNo = 6;
+								user.setEmail(currentRow.getCell(6).getStringCellValue());
+								user = userService.createUserInformation(user);
+								User userObj = userRepository.findOne(user.getId());
+								employee.setUser(userObj);
+								employeeRepo.save(employee);
+							}
+							log.debug("Created Information for Employee: {}" + employee.getId());
+	
+						}
+					} 
+				} catch (IllegalStateException | NumberFormatException formatEx) {
+					throw formatEx;
+				} catch (Exception e) {
+					String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+					log.error(msg, e);
+					response.append(e.getMessage());
+					response.append("--" + msg);
+					response.append("--" + "Please correct the data format and retry again");
+					if(importResult == null) {
+						importResult = new ImportResult();
+					}
+					importResult.setStatus(FAILED);
+					importResult.setMsg(response.toString());
+					statusMap.put(fileKey, importResult);
+					throw e;
 				}
 
 
@@ -1216,11 +1625,34 @@ public class ImportUtil {
 			/*}*/
 			}
 
-		} catch (FileNotFoundException e) {
-			log.error("Error while reading the job data file for import", e);
 		} catch (IOException e) {
-			log.error("Error while reading the job data file for import", e);
+			String msg = "Error while reading the employee data file for import";
+			log.error(msg, e);
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw e;
+		}  catch (IllegalStateException | NumberFormatException formatEx) {
+			String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+			log.error(msg, formatEx);
+			response.append(formatEx.getMessage());
+			response.append("--" + msg);
+			response.append("--" + "Please correct the data format and retry again");
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw formatEx;
 		}
+		if(response.length() == 0) {
+			response.append(SUCCESS_MESSAGE);
+		}
+		return response.toString();
 	}
 
 	private void changeSiteEmployee(String path){
@@ -1292,7 +1724,11 @@ public class ImportUtil {
         }
     }
 
-	private void importEmployeeShiftMasterFromFile(String path) {
+	private String importEmployeeShiftMasterFromFile(String fileKey, String path) throws Exception {
+		int r = 0;
+		int cellNo = 0;
+		StringBuffer response = new StringBuffer();
+		ImportResult importResult = statusMap.get(fileKey);
 		try {
 
 			FileInputStream excelFile = new FileInputStream(new File(path));
@@ -1300,47 +1736,67 @@ public class ImportUtil {
 			Sheet datatypeSheet = workbook.getSheetAt(0);
 			//Iterator<Row> iterator = datatypeSheet.iterator();
 			int lastRow = datatypeSheet.getLastRowNum();
-			int r = 1;
+			r = 1;
 
 			log.debug("Last Row number -" + lastRow);
 			boolean canSave = true;
 			for (; r <= lastRow; r++) {
 				log.debug("Current Row number -" + r);
-				Row currentRow = datatypeSheet.getRow(r);
-
-				EmployeeShift shift = new EmployeeShift();
-				canSave = true;
-
-				//Project newProj = projectRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(0))));
-				Site site = siteRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(1))));
-				String empId = getCellValue(currentRow.getCell(2));
-				Employee employee = employeeRepo.findByEmpId(empId);
-				shift.setEmployee(employee);
-				shift.setSite(site);
-				//String startTime = getCellValue(currentRow.getCell(4));
 				try {
-					shift.setStartTime(DateUtil.convertToTimestamp(currentRow.getCell(4).getDateCellValue()));
-				}catch (IllegalStateException ise) {
-					canSave = false;
-					log.error("Error while reading the shift start time from the file", ise);
+					Row currentRow = datatypeSheet.getRow(r);
+	
+					EmployeeShift shift = new EmployeeShift();
+					canSave = true;
+					cellNo = 1;
+					//Project newProj = projectRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(0))));
+					Site site = siteRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(1))));
+					cellNo = 2;
+					String empId = getCellValue(currentRow.getCell(2));
+					Employee employee = employeeRepo.findByEmpId(empId);
+					shift.setEmployee(employee);
+					shift.setSite(site);
+					//String startTime = getCellValue(currentRow.getCell(4));
+					try {
+						cellNo = 4;
+						shift.setStartTime(DateUtil.convertToTimestamp(currentRow.getCell(4).getDateCellValue()));
+					}catch (IllegalStateException ise) {
+						canSave = false;
+						log.error("Error while reading the shift start time from the file", ise);
+					}
+					//String endTime = getCellValue(currentRow.getCell(5));
+					try {
+						cellNo = 5;
+						shift.setEndTime(DateUtil.convertToTimestamp(currentRow.getCell(5).getDateCellValue()));
+					}catch (IllegalStateException ise) {
+						canSave = false;
+						log.error("Error while reading the shift end time from the file", ise);
+					}
+					// email, phone number missing
+					ZoneId  zone = ZoneId.of("Asia/Singapore");
+					ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
+					shift.setCreatedDate(zdt);
+					shift.setActive(Employee.ACTIVE_YES);
+					if(canSave) {
+						empShiftRepo.saveAndFlush(shift);
+					}
+	
+					log.debug("Created Information for EmployeeShift: {}", shift);
+				} catch (IllegalStateException | NumberFormatException formatEx) {
+					throw formatEx;
+				} catch (Exception e) {
+					String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+					log.error(msg, e);
+					response.append(e.getMessage());
+					response.append("--" + msg);
+					response.append("--" + "Please correct the data format and retry again");
+					if(importResult == null) {
+						importResult = new ImportResult();
+					}
+					importResult.setStatus(FAILED);
+					importResult.setMsg(response.toString());
+					statusMap.put(fileKey, importResult);
+					throw e;
 				}
-				//String endTime = getCellValue(currentRow.getCell(5));
-				try {
-					shift.setEndTime(DateUtil.convertToTimestamp(currentRow.getCell(5).getDateCellValue()));
-				}catch (IllegalStateException ise) {
-					canSave = false;
-					log.error("Error while reading the shift end time from the file", ise);
-				}
-				// email, phone number missing
-				ZoneId  zone = ZoneId.of("Asia/Singapore");
-				ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
-				shift.setCreatedDate(zdt);
-				shift.setActive(Employee.ACTIVE_YES);
-				if(canSave) {
-					empShiftRepo.saveAndFlush(shift);
-				}
-
-				log.debug("Created Information for EmployeeShift: {}", shift);
 
 			/*}*/
 			}
@@ -1348,10 +1804,33 @@ public class ImportUtil {
 		} catch (FileNotFoundException e) {
 			log.error("Error while reading the employee shift data file for import", e);
 		} catch (IOException e) {
-			log.error("Error while reading the employee shift data file for import", e);
-		} catch (Exception e) {
-			log.error("Error while reading the employee shift data file for import", e);
+			String msg = "Error while reading the employee shift data file for import";
+			log.error(msg, e);
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw e;
+		} catch (IllegalStateException | NumberFormatException formatEx) {
+			String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+			log.error(msg, formatEx);
+			response.append(formatEx.getMessage());
+			response.append("--" + msg);
+			response.append("--" + "Please correct the data format and retry again");
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw formatEx;
 		}
+		if(response.length() == 0) {
+			response.append(SUCCESS_MESSAGE);
+		}
+		return response.toString();
 	}
 
 	private String getCellValue(Cell cell) {
