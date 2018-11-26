@@ -115,7 +115,7 @@ export class AttendanceService
             (response)=>{
                 console.log("check site proximity");
                 console.log(response);
-                return response.json();
+                return response;
             }).catch(error=>{
                 console.log("Error in check site proximity");
                 console.log(error);

@@ -19,6 +19,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,6 +32,7 @@ import javax.transaction.Transactional;
 
 import com.ts.app.repository.EmployeeRepository;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.io.IOUtils;
@@ -107,8 +109,11 @@ public class ExportUtil {
 
 	private String[] EMP_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "DESIGNATION", "REPORTING TO", "CLIENT", "SITE",
 			"ACTIVE" };
+//JOB HEADER WITH RELIEVER INFO
+//	private String[] JOB_HEADER = { "CLIENT", "SITE", "LOCATION", "JOB ID", "TITLE", "DESCRIPTION", "TICKET ID", "TICKET TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
+//			"STATUS", "CHECKLIST ITEMS", "CHECKLIST STATUS", "CHECKLIST REMARKS","CHECKLIST IMAGE LINK", "RELIEVER", "RELIEVER ID", "RELIEVER NAME" };
 	private String[] JOB_HEADER = { "CLIENT", "SITE", "LOCATION", "JOB ID", "TITLE", "DESCRIPTION", "TICKET ID", "TICKET TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
-			"STATUS", "CHECKLIST ITEMS", "CHECKLIST STATUS", "CHECKLIST REMARKS","CHECKLIST IMAGE LINK", "RELIEVER", "RELIEVER ID", "RELIEVER NAME" };
+			"STATUS", "CHECKLIST ITEMS", "CHECKLIST STATUS", "CHECKLIST REMARKS","CHECKLIST IMAGE LINK"};
 	private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME","RELIEVER", "SITE", "CLIENT", "CHECK IN", "CHECK OUT", "DURATION(In Hours) ",
 			 "SHIFT CONTINUED", "LATE CHECK IN","REMARKS" ,"CHECK IN IMAGE", "CHECK OUT IMAGE" };
 
@@ -238,7 +243,7 @@ public class ExportUtil {
 									.printRecord("CLIENT - " + projName + "  SITE - " + transaction.getSiteName());
 						}
 						List record = new ArrayList();
-						log.debug("Writing transaction record for site :" + transaction.getSiteName());
+						//log.debug("Writing transaction record for site :" + transaction.getSiteName());
 						record.add(transaction.getSiteName());
 						record.add(transaction.getLocatinName());
 						record.add(transaction.getAssignedJobCount());
@@ -673,23 +678,32 @@ public class ExportUtil {
 		Row projRow = consSheet.getRow(0);
 		projRow.getCell(0).setCellValue(projName);
 
-		for (Map<String,String> data : consolidatedData) {
-			Row dataRow = consSheet.getRow(rowNum++);
-			dataRow.getCell(0).setCellValue(data.get("SiteName") != null ? data.get("SiteName") : "");
-			dataRow.getCell(1).setCellValue((data.get("ShiftStartTime") != null ? data.get("ShiftStartTime") : "") + " - " + (data.get("ShiftEndTime") != null ? data.get("ShiftEndTime") : ""));
-			dataRow.getCell(2).setCellValue(data.get("Present"));
-			//dataRow.getCell(3).setCellValue(data.get("Present"));
-			//dataRow.getCell(4).setCellValue(data.get("Absent"));
+		if(CollectionUtils.isNotEmpty(consolidatedData)) {
+			for (Map<String,String> data : consolidatedData) {
+				if(MapUtils.isNotEmpty(data)) {
+					Row dataRow = consSheet.getRow(rowNum++);
+					if(dataRow != null && dataRow.getPhysicalNumberOfCells() > 0) {
+						dataRow.getCell(0).setCellValue(data.get("SiteName") != null ? data.get("SiteName") : "");
+						dataRow.getCell(1).setCellValue((data.get("ShiftStartTime") != null ? data.get("ShiftStartTime") : "") + " - " + (data.get("ShiftEndTime") != null ? data.get("ShiftEndTime") : ""));
+						dataRow.getCell(2).setCellValue(data.get("Present"));
+						//dataRow.getCell(3).setCellValue(data.get("Present"));
+						//dataRow.getCell(4).setCellValue(data.get("Absent"));
+					}
+				}
+			}
 		}
 
 		rowNum++;
 
 		Row summaryRow = consSheet.getRow(rowNum);
-		summaryRow.getCell(0).setCellValue("Total Mandays Per Day");
-		summaryRow.getCell(2).setCellValue(summary.get("TotalPresent"));
-		//summaryRow.getCell(3).setCellValue(summary.get("TotalPresent"));
-		//summaryRow.getCell(4).setCellValue(summary.get("TotalAbsent"));
-
+		if(summaryRow != null && summaryRow.getPhysicalNumberOfCells() > 0) {
+			summaryRow.getCell(0).setCellValue("Total Mandays Per Day");
+			if(MapUtils.isNotEmpty(summary)) {
+				summaryRow.getCell(2).setCellValue(summary.get("TotalPresent"));
+				//summaryRow.getCell(3).setCellValue(summary.get("TotalPresent"));
+				//summaryRow.getCell(4).setCellValue(summary.get("TotalAbsent"));
+			}
+		}	
 		rowNum++;
 		/* ShiftWise Summary report is temporarily commented out as per request from FLEXTRONICS
 
@@ -728,22 +742,25 @@ public class ExportUtil {
 //		}
 		XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(1);
 		rowNum = 1;
-
-		for (EmployeeAttendanceReport transaction : content) {
-
-			Row dataRow = xssfSheet.getRow(rowNum++);
-
-			dataRow.getCell(0).setCellValue(transaction.getEmployeeIds());
-			dataRow.getCell(1).setCellValue(transaction.getName() + " " + transaction.getLastName());
-			dataRow.getCell(2).setCellValue(transaction.getSiteName());
-			dataRow.getCell(3).setCellValue((StringUtils.isNotEmpty(transaction.getShiftStartTime()) ? StringUtil.formatShiftTime(transaction.getShiftStartTime()) : "") + "-" + (StringUtils.isNotEmpty(transaction.getShiftEndTime()) ? StringUtil.formatShiftTime(transaction.getShiftEndTime()) : ""));
-			dataRow.getCell(4).setCellValue(transaction.getCheckInTime() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getCheckInTime()) : "");
-			dataRow.getCell(5).setCellValue(transaction.getCheckOutTime() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getCheckOutTime()) : "");
-			dataRow.getCell(6).setCellValue(StringUtils.isNotEmpty(transaction.getDifferenceText())  ? transaction.getDifferenceText() : "");
-			dataRow.getCell(7).setCellValue(transaction.getStatus());
-			dataRow.getCell(8).setCellValue(transaction.isShiftContinued() ? "SHIFT CONTINUED" : "");
-			dataRow.getCell(9).setCellValue(transaction.isLate() ? "LATE CHECK IN" : "");
-			dataRow.getCell(10).setCellValue(StringUtils.isNotEmpty(transaction.getRemarks())  ? transaction.getRemarks() : "");
+		if(CollectionUtils.isNotEmpty(content)) {
+			for (EmployeeAttendanceReport transaction : content) {
+	
+				Row dataRow = xssfSheet.getRow(rowNum++);
+				if(dataRow != null && dataRow.getPhysicalNumberOfCells() > 0) {
+					dataRow.getCell(0).setCellValue(transaction.getEmployeeIds());
+					dataRow.getCell(1).setCellValue(transaction.getName() + " " + transaction.getLastName());
+					dataRow.getCell(2).setCellValue(transaction.isReliever() ? "YES" : "NO");
+					dataRow.getCell(3).setCellValue(transaction.getSiteName());
+					dataRow.getCell(4).setCellValue((StringUtils.isNotEmpty(transaction.getShiftStartTime()) ? StringUtil.formatShiftTime(transaction.getShiftStartTime()) : "") + "-" + (StringUtils.isNotEmpty(transaction.getShiftEndTime()) ? StringUtil.formatShiftTime(transaction.getShiftEndTime()) : ""));
+					dataRow.getCell(5).setCellValue(transaction.getCheckInTime() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getCheckInTime()) : "");
+					dataRow.getCell(6).setCellValue(transaction.getCheckOutTime() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getCheckOutTime()) : "");
+					dataRow.getCell(7).setCellValue(StringUtils.isNotEmpty(transaction.getDifferenceText())  ? transaction.getDifferenceText() : "");
+					dataRow.getCell(8).setCellValue(transaction.getStatus());
+					dataRow.getCell(9).setCellValue(transaction.isShiftContinued() ? "SHIFT CONTINUED" : "");
+					dataRow.getCell(10).setCellValue(transaction.isLate() ? "LATE CHECK IN" : "");
+					dataRow.getCell(11).setCellValue(StringUtils.isNotEmpty(transaction.getRemarks())  ? transaction.getRemarks() : "");
+				}
+			}
 		}
 
 //		for (int i = 0; i < ATTD_HEADER.length; i++) {
@@ -777,7 +794,7 @@ public class ExportUtil {
 	} 
 	  
 
-	public ExportResult writeMusterRollAttendanceReportToFile(String projName, String siteName, String shifts, String month, Date fromDate, Date toDate, List<EmployeeAttendanceReport> content, final String empId, ExportResult result, Map<Map<String,String>, String> shiftSlots) {
+	public ExportResult writeMusterRollAttendanceReportToFile(String projName, String siteName, String shifts, String month, Date fromDate, Date toDate, List<EmployeeAttendanceReport> content, final String empId, ExportResult result, LinkedHashMap<Map<String,String>, String> shiftSlots) {
 		
 		final String KEY_SEPARATOR = "::";
 		
@@ -893,38 +910,42 @@ public class ExportUtil {
 	    style.setFillBackgroundColor(HSSFColor.DARK_GREEN.index);
 	    
 	    CellStyle rowStyle = xssfWorkbook.createCellStyle();
-	    rowStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
-	    rowStyle.setFillPattern(CellStyle.BIG_SPOTS);
+	    rowStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
+//	    rowStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+//	    rowStyle.setFillPattern(CellStyle.BIG_SPOTS);
 	    //style.setFont(font);
 	    //fill the header fields
 
-	    int rowNum = 8; //10
+	    int rowNum = 4; //10
 	    Row headerRow = musterSheet.getRow(rowNum);
 	    Cell clientNameCell = headerRow.getCell(10);
 	    String clientNameCellVal = headerRow.getCell(10).getStringCellValue();
 	    clientNameCell.setCellValue(clientNameCellVal + " " + projName);
-	    rowNum = 9;
+	    rowNum = 5;
 	    headerRow = musterSheet.getRow(rowNum);
-	    headerRow.setRowStyle(rowStyle);
-	    Cell siteNameCell = headerRow.getCell(5);
-	    String siteNameCellVal = headerRow.getCell(5).getStringCellValue();
+//	    headerRow.setRowStyle(rowStyle);
+	    Cell siteNameCell = headerRow.getCell(4);
+	    String siteNameCellVal = headerRow.getCell(4).getStringCellValue();
 	    siteNameCell.setCellValue(siteNameCellVal + " " + siteName);
-
-	    Row dayHeader = musterSheet.getRow(10);
-	    dayHeader.setRowStyle(rowStyle);
 	    
-	    Cell shiftCell = headerRow.getCell(18);
-	    String shiftCellVal = headerRow.getCell(18).getStringCellValue();
-	    shiftCell.setCellValue(shiftCellVal + " " + shifts);
+	    Cell shiftCell = headerRow.getCell(9);
+	    String shiftCellVal = headerRow.getCell(9).getStringCellValue();
+	    XSSFFont shiftCellFont= xssfWorkbook.createFont();
+        XSSFRichTextString richTxt = new XSSFRichTextString(shifts);
+        shiftCellFont.setBold(true);
+        shiftCellFont.setFontHeight(5);
+        richTxt.applyFont(shiftCellFont);
+	    shiftCell.setCellValue(shiftCellVal + " " + richTxt);
+//	    musterSheet.autoSizeColumn(18);
 
-	    Cell monthCell = headerRow.getCell(25);
-	    String monthCellVal = headerRow.getCell(25).getStringCellValue();
+	    Cell monthCell = headerRow.getCell(24);
+	    String monthCellVal = headerRow.getCell(24).getStringCellValue();
 	    monthCell.setCellValue(monthCellVal + " " + month);
 	    
-	    Row weekDayRow = musterSheet.createRow(11);	  
-	    weekDayRow.setRowStyle(rowStyle);
+	    Row weekDayRow = musterSheet.getRow(7);
+//	    weekDayRow.setRowStyle(rowStyle);
 	    	    
-	    rowNum = 12;
+	    rowNum = 8;
 
 		Set<Entry<EmployeeAttendanceReport,Map<Integer,Boolean>>> entrySet = attnInfoMap.entrySet();
 		
@@ -970,15 +991,14 @@ public class ExportUtil {
 		  cal.add(Calendar.DAY_OF_MONTH, 1);
 		}
 		
-		int cellRow = 6;
+		int cellRow = 5;
 		for(String weekDay : weeks) { 
 		    XSSFFont weekFont= xssfWorkbook.createFont();
 	        XSSFRichTextString rt = new XSSFRichTextString(weekDay);
 	        CellStyle dayStyle = xssfWorkbook.createCellStyle();
 	        dayStyle.setBorderLeft(CellStyle.BORDER_THIN);
 	        dayStyle.setBorderRight(CellStyle.BORDER_THIN);
-	        dayStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
-	        dayStyle.setFillPattern(CellStyle.BIG_SPOTS);
+	        dayStyle.setAlignment(CellStyle.ALIGN_CENTER);
 	        weekFont.setBold(true);
 	        rt.applyFont(weekFont);
 			Cell cell = weekDayRow.createCell(cellRow);
@@ -987,67 +1007,32 @@ public class ExportUtil {
 			cellRow++;
 		}
 		
-		int shiftCellRow = 37;
-		
-	    int firstRow = 5;
-	    Row headerFirstRow = musterSheet.getRow(firstRow);
-	    Cell headerCell;
+		int shiftCellRow = 36;
 	    
-	    CellStyle headerStyle = xssfWorkbook.createCellStyle();
-		headerStyle.setBorderTop(CellStyle.BORDER_MEDIUM);
-	    
-		Row shiftRowNum = musterSheet.getRow(10);
+		Row shiftRowNum = musterSheet.getRow(6);
+	    musterSheet.setColumnWidth(2, 8000);
+	    musterSheet.setColumnWidth(4, 8000);
+
 		XSSFFont shiftFont = xssfWorkbook.createFont();
- 		for(Map.Entry<Map<String, String>, String> ent : shiftSlots.entrySet()) { 
- 		    CellStyle shiftStyle = xssfWorkbook.createCellStyle();
- 		    shiftStyle.setBorderTop(CellStyle.BORDER_THIN);
- 		    shiftStyle.setBorderBottom(CellStyle.BORDER_THIN);
- 		    shiftStyle.setBorderLeft(CellStyle.BORDER_THIN);
- 		    shiftStyle.setBorderRight(CellStyle.BORDER_THIN);
-			String value = ent.getValue();
-			XSSFRichTextString rt = new XSSFRichTextString(value);
-		    shiftFont.setBold(true);
-		    rt.applyFont(shiftFont);
-		    headerCell = headerFirstRow.createCell(shiftCellRow);
-			Cell shiftRow = shiftRowNum.getCell(shiftCellRow);
-			if(shiftRow == null) {
-				shiftRow = shiftRowNum.createCell(shiftCellRow);				
-			}
-			if(headerCell == null) {
-				headerCell = headerFirstRow.createCell(shiftCellRow);
-			}
-			shiftRow.setCellValue(rt);
-			shiftRow.setCellStyle(shiftStyle);
 		
-			headerCell.setCellStyle(headerStyle);
-			
-			shiftCellRow++;
-		}
- 		 		
- 	    CellStyle leftRowStyle = xssfWorkbook.createCellStyle();
- 	    leftRowStyle.setBorderTop(CellStyle.BORDER_THIN);
- 	    leftRowStyle.setBorderBottom(CellStyle.BORDER_THIN);
- 	    leftRowStyle.setBorderLeft(CellStyle.BORDER_THIN);
- 	    leftRowStyle.setBorderRight(CellStyle.BORDER_THIN);
+		int shiftLength = shiftSlots.entrySet().size();
+		
+		CellStyle leftRowStyle = xssfWorkbook.createCellStyle();
+ 	    leftRowStyle.setBorderTop(CellStyle.BORDER_MEDIUM);
+ 	    leftRowStyle.setBorderBottom(CellStyle.BORDER_MEDIUM);
+ 	    leftRowStyle.setBorderLeft(CellStyle.BORDER_MEDIUM);
+ 	    leftRowStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
+ 	    leftRowStyle.setAlignment(CellStyle.ALIGN_CENTER);
  		
- 		int offRow = shiftCellRow;
- 		headerCell = headerFirstRow.createCell(offRow);
- 		headerCell.setCellStyle(headerStyle);
- 		
+ 		int offRow = shiftCellRow + shiftLength; 		
  		Cell offCell = shiftRowNum.createCell(offRow);
- 		XSSFRichTextString rt = new XSSFRichTextString("Off");
+ 		XSSFRichTextString rtr = new XSSFRichTextString("Off");
  		shiftFont.setBold(true);
- 		rt.applyFont(shiftFont);
- 		offCell.setCellValue(rt);
+ 		rtr.applyFont(shiftFont);
+ 		offCell.setCellValue(rtr);
  		offCell.setCellStyle(leftRowStyle);
  		
  		int totalRow = offRow + 1;
- 		CellStyle lastRowStyle = xssfWorkbook.createCellStyle();
- 		Cell lastHeaderCell = headerFirstRow.createCell(totalRow);
- 		lastRowStyle.setBorderTop(CellStyle.BORDER_MEDIUM);
- 		lastRowStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
- 		lastHeaderCell.setCellStyle(lastRowStyle);
- 		
  		Cell totalCell = shiftRowNum.createCell(totalRow);
  		XSSFRichTextString tot = new XSSFRichTextString("Total Pay");
  		shiftFont.setBold(true);
@@ -1055,14 +1040,76 @@ public class ExportUtil {
  		totalCell.setCellValue(tot);
  		totalCell.setCellStyle(leftRowStyle);
  		
- 		int length = 10;
- 		for(int i=6; i < length; i++) { 
- 			 Row headerLastRow = musterSheet.getRow(i);
- 			 Cell createLastCell = headerLastRow.createCell(totalRow);
- 			 CellStyle lastStyle = xssfWorkbook.createCellStyle();
- 			 lastStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
- 			 createLastCell.setCellStyle(lastStyle);
- 		}
+ 		int totalDesigRow = totalRow + 1;
+ 		weekDayRow.createCell(totalDesigRow).setCellStyle(rowStyle);
+ 		Cell totalDesigCell = shiftRowNum.createCell(totalRow + 1);
+ 		XSSFRichTextString totDesig = new XSSFRichTextString("Designation Total");
+ 		musterSheet.setColumnWidth(totalDesigRow, 4000);
+ 		leftRowStyle.setWrapText(true);
+ 		shiftFont.setBold(true);
+ 		totDesig.applyFont(shiftFont);
+ 		totalDesigCell.setCellValue(totDesig);
+ 		totalDesigCell.setCellStyle(leftRowStyle);
+		
+		log.debug("Shift count length" + shiftLength);
+		
+		for(int i=1; i<6; i++) { 
+			Row mergeHeader = musterSheet.getRow(i);
+			for(int j=shiftCellRow; j<totalDesigRow+1; j++) {
+				if(i==1 && j==totalDesigRow) {
+					CellStyle firstRowStyle = xssfWorkbook.createCellStyle();
+					firstRowStyle.setBorderTop(CellStyle.BORDER_MEDIUM);
+					firstRowStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
+					firstRowStyle.setFillForegroundColor(IndexedColors.TAN.getIndex());
+					firstRowStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+					mergeHeader.createCell(j).setCellStyle(firstRowStyle);
+				}else if(j==totalDesigRow && i != 1) {
+					CellStyle secondRowStyle = xssfWorkbook.createCellStyle();
+					secondRowStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
+					secondRowStyle.setFillForegroundColor(IndexedColors.TAN.getIndex());
+					secondRowStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+					mergeHeader.createCell(j).setCellStyle(secondRowStyle);
+				}else if(i==1){
+					CellStyle secondRowsStyle = xssfWorkbook.createCellStyle();
+					secondRowsStyle.setBorderTop(CellStyle.BORDER_MEDIUM);
+					secondRowsStyle.setFillForegroundColor(IndexedColors.TAN.getIndex());
+					secondRowsStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+					mergeHeader.createCell(j).setCellStyle(secondRowsStyle);
+				}else {
+					CellStyle thirdRowsStyle = xssfWorkbook.createCellStyle();
+					thirdRowsStyle.setFillForegroundColor(IndexedColors.TAN.getIndex());
+					thirdRowsStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+					mergeHeader.createCell(j).setCellStyle(thirdRowsStyle);
+				}
+				
+			}
+		}
+		
+		musterSheet.addMergedRegion(new CellRangeAddress(1, 5, totalRow, totalDesigRow)); 
+		
+ 		for(Map.Entry<Map<String, String>, String> ent : shiftSlots.entrySet()) { 
+ 		    CellStyle shiftStyle = xssfWorkbook.createCellStyle();
+ 		    shiftStyle.setBorderTop(CellStyle.BORDER_MEDIUM);
+ 		    shiftStyle.setBorderBottom(CellStyle.BORDER_MEDIUM);
+ 		    shiftStyle.setBorderLeft(CellStyle.BORDER_MEDIUM);
+ 		    shiftStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
+ 		    shiftStyle.setAlignment(CellStyle.ALIGN_CENTER);
+			String value = ent.getValue();
+			XSSFRichTextString rt = new XSSFRichTextString(value);
+		    shiftFont.setBold(true);
+		    rt.applyFont(shiftFont);
+			Cell shiftRow = shiftRowNum.getCell(shiftCellRow);
+			if(shiftRow == null) {
+				shiftRow = shiftRowNum.createCell(shiftCellRow);				
+			}
+
+			shiftRow.setCellValue(rt);
+			shiftRow.setCellStyle(shiftStyle);
+				
+			shiftCellRow++;
+		}
+ 		 		
+ 	    
 		
  		String prevDesignation = null;
 		String currDesignation = null;
@@ -1074,25 +1121,56 @@ public class ExportUtil {
 		CellStyle desigStyle = xssfWorkbook.createCellStyle();
 		log.debug("Employee list length" +list.size());
 		int employeeList = list.size() + (rowNum - 1);
+		
 		for (Entry<EmployeeAttendanceReport,Map<Integer,Boolean>> entry : list) {
 			
-			Row dataRow = musterSheet.getRow(rowNum++);
-
+			Row dataRow = musterSheet.getRow(rowNum);
+			
+			CellStyle shiftStyle = xssfWorkbook.createCellStyle();
+			shiftStyle.setBorderTop(CellStyle.BORDER_THIN);
+			shiftStyle.setBorderBottom(CellStyle.BORDER_THIN);
+			shiftStyle.setBorderLeft(CellStyle.BORDER_THIN);
+			shiftStyle.setBorderRight(CellStyle.BORDER_THIN);
+			shiftStyle.setAlignment(CellStyle.ALIGN_CENTER);
+			
+			CellStyle shiftStyle_2 = xssfWorkbook.createCellStyle();
+			shiftStyle_2.setBorderTop(CellStyle.BORDER_THIN);
+			shiftStyle_2.setBorderBottom(CellStyle.BORDER_THIN);
+			shiftStyle_2.setBorderLeft(CellStyle.BORDER_THIN);
+			shiftStyle_2.setBorderRight(CellStyle.BORDER_THIN);
+			
+			if(rowNum == 9) {
+				int numClmn = list.size() - 1;
+				musterSheet.shiftRows(rowNum, 11, numClmn, true, true);
+				dataRow = musterSheet.createRow(rowNum);
+				for(int i=0; i<totalRow; i++) {
+					dataRow.createCell(i).setCellStyle(shiftStyle);
+				}
+			}
+			
+			if(dataRow == null) {
+				dataRow = musterSheet.createRow(rowNum);
+				for(int i=0; i<totalRow; i++) {
+					dataRow.createCell(i).setCellStyle(shiftStyle);
+				}
+			}
+				
 			EmployeeAttendanceReport key = entry.getKey();
 			Map<Integer,Boolean> attnMap = attnInfoMap.get(key);
-
-//			String[] keyArr = key.split(KEY_SEPARATOR);
-			
 			dataRow.getCell(0).setCellValue(serialId);
+			dataRow.getCell(0).setCellStyle(shiftStyle);
 			dataRow.getCell(1).setCellValue(key.getEmployeeId());
+			dataRow.getCell(1).setCellStyle(shiftStyle_2);
 			dataRow.getCell(2).setCellValue(key.getName()+ " " + key.getLastName());
-			//dataRow.getCell(3).setCellValue(); //father's name not available
-			//dataRow.getCell(4).setCellValue(); //gender not available
-			dataRow.getCell(5).setCellValue(key.getDesignation());
+			dataRow.getCell(2).setCellStyle(shiftStyle_2);
+			dataRow.getCell(3).setCellValue("");
+			dataRow.getCell(3).setCellStyle(shiftStyle);
+			dataRow.getCell(4).setCellValue(key.getDesignation());
+			dataRow.getCell(4).setCellStyle(shiftStyle_2);
 			
 			Map<String, Map<String, Integer>> shiftCountMap = new HashMap<String,Map<String, Integer>>();
 
-			int dayStartCell = 6;
+			int dayStartCell = 5;
 			int presentCnt = 0;
 			int offCounts = 0;
 			for(int day=1;day <= daysInMonth;day++) {
@@ -1100,6 +1178,7 @@ public class ExportUtil {
 				Map<String, Integer> shiftCounts = null;
 				String week = weeks.get(day - 1);
 				log.debug("Week of the day is -" +week);
+				dataRow.getCell(dayStartCell).setCellStyle(shiftStyle);
 				if(attnMap.containsKey(day)) {
 					boolean attnVal = attnMap.get(day);
 					presentCnt += (attnVal ? 1 : 0);
@@ -1113,7 +1192,7 @@ public class ExportUtil {
 					if(attnVal) {
 						shiftCounts.put(sh, presentCnt);
 						shiftCountMap.put(key.getEmployeeId(), shiftCounts);
-						dataRow.getCell(dayStartCell).setCellStyle(leftRowStyle);
+						dataRow.getCell(dayStartCell).setCellStyle(shiftStyle);
 					}
 				}else {
 					dataRow.getCell(dayStartCell).setCellValue("A");
@@ -1175,6 +1254,11 @@ public class ExportUtil {
 				sumCount++;
 			}
 			
+			CellStyle desig_style = xssfWorkbook.createCellStyle();
+			desig_style.setBorderRight(CellStyle.BORDER_MEDIUM);
+			Cell desig_cell = dataRow.createCell(designationWiseTotal);
+			desig_cell.setCellStyle(desig_style);
+			
 			if(StringUtils.isNotEmpty(prevDesignation)) { 
 				currDesignation = key.getDesignation();  
 				if(!prevDesignation.equals(currDesignation)) {  
@@ -1182,8 +1266,9 @@ public class ExportUtil {
 				    desigStyle.setBorderBottom(CellStyle.BORDER_MEDIUM);
 				    desigStyle.setBorderLeft(CellStyle.BORDER_MEDIUM);
 				    desigStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
-				    desigStyle.setFillForegroundColor(IndexedColors.GREEN.getIndex());
-				    desigStyle.setFillPattern(CellStyle.BIG_SPOTS);
+				    desigStyle.setFillForegroundColor(IndexedColors.TAN.getIndex());
+				    desigStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+				    desigStyle.setAlignment(CellStyle.ALIGN_CENTER);
 				    shiftFont.setBold(true);
 				    shiftFont.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
 				    desigStyle.setFont(shiftFont);
@@ -1208,36 +1293,85 @@ public class ExportUtil {
 				}else {
 					desigSum += (int)Math.round(totalCountRow.getNumericCellValue());  // 4 + 4 + 4
 					log.debug("Designation wise sum" + desigSum);
+					if(employeeList == dataRow.getRowNum()) {
+						Cell lastRowCell = dataRow.createCell(designationWiseTotal);
+						lastRowCell.setCellValue(desigSum);
+						lastRowCell.setCellStyle(desigStyle);
+						overAllSum += desigSum;
+						dataRow.getCell(designationWiseTotal).setCellStyle(desigStyle);
+					}
 				}
 			}else {
 				prevDesignation = key.getDesignation();
 				int sumVal = (int)Math.round(totalCountRow.getNumericCellValue()); 
 				log.debug("" +sumVal);
 				desigSum = sumVal;  // 4
+				
+				if(employeeList == dataRow.getRowNum()) {
+					Cell lastRowCell = dataRow.createCell(designationWiseTotal);
+					lastRowCell.setCellValue(desigSum);
+					lastRowCell.setCellStyle(desigStyle);
+					overAllSum += desigSum;
+					dataRow.getCell(designationWiseTotal).setCellStyle(desigStyle);
+				}
 			}
-			
+//			
 			log.debug("Designation wise sum" + designationMap);
 			lastRow = dataRow.getRowNum();
+			rowNum++;
 			serialId++;
-			/*
-			dataRow.getCell(0).setCellValue(transaction.getEmployeeIds());
-			dataRow.getCell(1).setCellValue(transaction.getName() + " " + transaction.getLastName());
-			dataRow.getCell(2).setCellValue(transaction.getSiteName());
-			dataRow.getCell(3).setCellValue((StringUtils.isNotEmpty(transaction.getShiftStartTime()) ? StringUtil.formatShiftTime(transaction.getShiftStartTime()) : "") + "-" + (StringUtils.isNotEmpty(transaction.getShiftEndTime()) ? StringUtil.formatShiftTime(transaction.getShiftEndTime()) : ""));
-			dataRow.getCell(4).setCellValue(transaction.getCheckInTime() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getCheckInTime()) : "");
-			dataRow.getCell(5).setCellValue(transaction.getCheckOutTime() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getCheckOutTime()) : "");
-			dataRow.getCell(6).setCellValue(StringUtils.isNotEmpty(transaction.getDifferenceText())  ? transaction.getDifferenceText() : "");
-			dataRow.getCell(7).setCellValue(transaction.getStatus());
-			dataRow.getCell(8).setCellValue(transaction.isShiftContinued() ? "SHIFT CONTINUED" : "");
-			dataRow.getCell(9).setCellValue(transaction.isLate() ? "LATE CHECK IN" : "");
-			dataRow.getCell(10).setCellValue(StringUtils.isNotEmpty(transaction.getRemarks())  ? transaction.getRemarks() : "");
-			*/
+//			/*
+//			dataRow.getCell(0).setCellValue(transaction.getEmployeeIds());
+//			dataRow.getCell(1).setCellValue(transaction.getName() + " " + transaction.getLastName());
+//			dataRow.getCell(2).setCellValue(transaction.getSiteName());
+//			dataRow.getCell(3).setCellValue((StringUtils.isNotEmpty(transaction.getShiftStartTime()) ? StringUtil.formatShiftTime(transaction.getShiftStartTime()) : "") + "-" + (StringUtils.isNotEmpty(transaction.getShiftEndTime()) ? StringUtil.formatShiftTime(transaction.getShiftEndTime()) : ""));
+//			dataRow.getCell(4).setCellValue(transaction.getCheckInTime() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getCheckInTime()) : "");
+//			dataRow.getCell(5).setCellValue(transaction.getCheckOutTime() != null ? DateUtil.formatTo24HourDateTimeString(transaction.getCheckOutTime()) : "");
+//			dataRow.getCell(6).setCellValue(StringUtils.isNotEmpty(transaction.getDifferenceText())  ? transaction.getDifferenceText() : "");
+//			dataRow.getCell(7).setCellValue(transaction.getStatus());
+//			dataRow.getCell(8).setCellValue(transaction.isShiftContinued() ? "SHIFT CONTINUED" : "");
+//			dataRow.getCell(9).setCellValue(transaction.isLate() ? "LATE CHECK IN" : "");
+//			dataRow.getCell(10).setCellValue(StringUtils.isNotEmpty(transaction.getRemarks())  ? transaction.getRemarks() : "");
+//			*/
 		}
 		
-		Row overAllRow = musterSheet.getRow(lastRow + 1);
-		Cell lastCell = overAllRow.createCell(totalRow + 1);
+		int mergeLstRow = lastRow + 2;
+		int mergeNxtRow = mergeLstRow + 1;
+		Row overAllRow = musterSheet.getRow(lastRow + 2);
+		if(overAllRow == null) {
+			overAllRow = musterSheet.createRow(lastRow + 2); 
+		}
+		for(int i=shiftCellRow; i<totalRow + 1 ; i++) {
+			CellStyle overall_style_2 = xssfWorkbook.createCellStyle();
+			overall_style_2.setBorderTop(CellStyle.BORDER_MEDIUM);
+			overall_style_2.setFillForegroundColor(IndexedColors.TAN.getIndex());
+			overall_style_2.setFillPattern(CellStyle.SOLID_FOREGROUND);
+			Row mergedLstRow = musterSheet.getRow(mergeLstRow);
+			mergedLstRow.createCell(i).setCellStyle(overall_style_2);
+			
+			CellStyle overall_style_3 = xssfWorkbook.createCellStyle();
+			overall_style_3.setBorderBottom(CellStyle.BORDER_MEDIUM);
+			overall_style_3.setFillForegroundColor(IndexedColors.TAN.getIndex());
+			overall_style_3.setFillPattern(CellStyle.SOLID_FOREGROUND);
+			Row mergedNxtRow = musterSheet.getRow(mergeNxtRow);
+			mergedNxtRow.createCell(i).setCellStyle(overall_style_3);
+			
+		}
+		int totalLastRow = totalRow + 1;
+		Row prevLastRow = musterSheet.getRow(lastRow + 1);
+		prevLastRow.createCell(totalLastRow).setCellStyle(rowStyle);
+		Cell lastCell = overAllRow.createCell(totalLastRow);
 		lastCell.setCellValue(overAllSum);
 		lastCell.setCellStyle(desigStyle);
+		CellStyle overall_style = xssfWorkbook.createCellStyle();
+		overall_style.setBorderBottom(CellStyle.BORDER_MEDIUM);
+		overall_style.setBorderLeft(CellStyle.BORDER_MEDIUM);
+		overall_style.setBorderRight(CellStyle.BORDER_MEDIUM);
+		Row merge_nxt = musterSheet.getRow(mergeNxtRow);
+		merge_nxt.createCell(totalLastRow).setCellStyle(overall_style);
+		musterSheet.addMergedRegion(new CellRangeAddress(mergeLstRow, mergeNxtRow, totalDesigRow, totalDesigRow));
+
+		
 		
 		
 		log.info(filePath + " Excel file was created successfully !!!");
@@ -2067,9 +2201,9 @@ public class ExportUtil {
 							dataRow.createCell(14).setCellValue((result.isCompleted() ? "COMPLETED" : "NOT COMPLETED"));
 							dataRow.createCell(15).setCellValue((StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : ""));
 							dataRow.createCell(16).setCellValue((StringUtils.isNotEmpty(result.getImageUrl_1()) ? result.getImageUrl_1() : ""));
-							dataRow.createCell(17).setCellValue(transaction.isRelieved());
-							dataRow.createCell(18).setCellValue(transaction.getRelieverId());
-							dataRow.createCell(19).setCellValue((StringUtils.isNotEmpty(transaction.getRelieverName()) ? transaction.getRelieverName() : ""));
+							//dataRow.createCell(17).setCellValue(transaction.isRelieved());
+							//dataRow.createCell(18).setCellValue(transaction.getRelieverId());
+							//dataRow.createCell(19).setCellValue((StringUtils.isNotEmpty(transaction.getRelieverName()) ? transaction.getRelieverName() : ""));
 							if(cnt < size) {
 								dataRow = xssfSheet.createRow(rowNum++);
 								dataRow.createCell(0).setCellValue(transaction.getSiteProjectName().toUpperCase());

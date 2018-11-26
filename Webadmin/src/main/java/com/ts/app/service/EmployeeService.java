@@ -1201,6 +1201,14 @@ public class    EmployeeService extends AbstractService {
             if(role != null) {
                 isClient = role.getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue());
             }
+            
+            List<EmployeeProjectSite> projectSites = user.getEmployee().getProjectSites();
+            List<Long> siteIds = new ArrayList<Long>();
+            if(CollectionUtils.isNotEmpty(projectSites)) {
+                for(EmployeeProjectSite projSite : projectSites) {
+                    siteIds.add(projSite.getSite().getId());
+                }
+            }
 
             if((searchCriteria.getSiteId() != 0 && searchCriteria.getProjectId() != 0)) {
                 if(searchCriteria.getFromDate() != null) {
@@ -1226,7 +1234,11 @@ public class    EmployeeService extends AbstractService {
                 page = employeeRepository.findAllByEmpCodes(empIds, isClient, pageRequest);
             }
             else if(StringUtils.isNotEmpty(searchCriteria.getName())) {
-                page = employeeRepository.findByEmployeeName(searchCriteria.getName(), isClient, pageRequest);
+            		if(role.getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
+            			page = employeeRepository.findByEmployeeName(searchCriteria.getName(), isClient, pageRequest);
+            		}else {
+            			page = employeeRepository.findByEmployeeName(siteIds, searchCriteria.getName(), isClient, pageRequest);
+            		}
             }else if (StringUtils.isNotEmpty(searchCriteria.getEmployeeEmpId())) {
                 log.debug(">>> find empid from service <<<");
                 page = employeeRepository.findEmployeeId(String.valueOf(searchCriteria.getEmployeeId()), isClient, pageRequest);
@@ -1259,15 +1271,10 @@ public class    EmployeeService extends AbstractService {
                 subEmpList.addAll(subEmpIds);
                 page = employeeRepository.findByProjectName(searchCriteria.getProjectName(), subEmpList, isClient, pageRequest);
             }else {
-                if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
+                if(role.getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
                     page = employeeRepository.findAll(pageRequest);
                 }else {
-                    List<EmployeeProjectSite> projectSites = user.getEmployee().getProjectSites();
-                    if(CollectionUtils.isNotEmpty(projectSites)) {
-                        List<Long> siteIds = new ArrayList<Long>();
-                        for(EmployeeProjectSite projSite : projectSites) {
-                            siteIds.add(projSite.getSite().getId());
-                        }
+                    if(CollectionUtils.isNotEmpty(siteIds)) {
                         page = employeeRepository.findBySiteIds(siteIds, isClient, pageRequest);
                     }else {
                         Set<Long> subEmpIds = null;

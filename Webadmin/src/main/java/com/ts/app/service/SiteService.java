@@ -116,7 +116,9 @@ public class SiteService extends AbstractService {
 	private void mapToEntity(SiteDTO siteDTO, Site site) {
 		site.setName(siteDTO.getName());
 		site.setAddress(siteDTO.getAddress());
+		site.setCity(siteDTO.getCity());
 		site.setCountry(siteDTO.getCountry());
+		site.setPinCode(siteDTO.getPinCode());
 		site.setState(siteDTO.getState());
 		site.setAddressLat(siteDTO.getAddressLat());
 		site.setAddressLng(siteDTO.getAddressLng());
@@ -528,6 +530,8 @@ public class SiteService extends AbstractService {
     }
 
     public Region isRegionSaved(String region, Long projectId){
+        log.debug("REgion from site import - before "+region);
+
         Region region1 = regionRepository.findByName(region,projectId);
 
         if(region1!=null && region1.getId()>0){
@@ -538,6 +542,8 @@ public class SiteService extends AbstractService {
             regionDTO.setName(region);
             regionDTO.setProjectId(projectId);
             RegionDTO regionDTO1 = createRegion(regionDTO);
+
+            log.debug("REgion from site import - "+regionDTO1.getName());
 
             return mapperUtil.toEntity(regionDTO1,Region.class);
         }

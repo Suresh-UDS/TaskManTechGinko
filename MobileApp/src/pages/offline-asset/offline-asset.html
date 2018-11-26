@@ -531,7 +531,7 @@
               <ion-row class="margin0">
                 <ion-col col-6 class="padding-right5">
                   <div *ngIf="job.status =='COMPLETED'">
-                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:'MMM d, y, h:mm a' }} </p>
+                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.checkInDateTimeFrom | date:'MMM d, y, h:mm a' }} </p>
                   </div>
                   <div *ngIf="job.status !='COMPLETED'">
                     <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:'MMM d, y, h:mm a' }} </p>
@@ -539,7 +539,7 @@
                 </ion-col>
                 <ion-col col-6>
                   <div *ngIf="job.status =='COMPLETED'">
-                    <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:'MMM d, y, h:mm a' }} </p>
+                    <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.checkInDateTimeTo | date:'MMM d, y, h:mm a' }} </p>
                   </div>
                   <div *ngIf="job.status !='COMPLETED'">
                     <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:'MMM d, y, h:mm a' }} </p>
@@ -557,9 +557,9 @@
             <!--<div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">-->
             <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
             <!--</div>-->
-            <!--<div >-->
-              <!--<button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>-->
-            <!--</div>-->
+            <div >
+              <button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>
+            </div>
             <div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">
               <button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24 act-btn-view"></ion-icon></button>
             </div>
@@ -649,7 +649,7 @@
                           <ion-row class="margin0">
                               <ion-col col-6 class="padding-right5">
                                   <div *ngIf="job.status =='COMPLETED'">
-                                      <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:'MMM d, y, h:mm a' }} </p>
+                                      <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.checkInDateTimeFrom | date:'MMM d, y, h:mm a' }} </p>
                                   </div>
                                   <div *ngIf="job.status !='COMPLETED'">
                                       <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:'MMM d, y, h:mm a' }} </p>
@@ -657,7 +657,7 @@
                               </ion-col>
                               <ion-col col-6>
                                   <div *ngIf="job.status =='COMPLETED'">
-                                      <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:'MMM d, y, h:mm a' }} </p>
+                                      <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.checkInDateTimeTo | date:'MMM d, y, h:mm a' }} </p>
                                   </div>
                                   <div *ngIf="job.status !='COMPLETED'">
                                       <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:'MMM d, y, h:mm a' }} </p>
@@ -675,9 +675,9 @@
                       <!--<div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">-->
                       <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
                       <!--</div>-->
-                      <!--<div >-->
-                      <!--<button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>-->
-                      <!--</div>-->
+                      <div >
+                      <button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>
+                      </div>
                       <div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">
                           <button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24 act-btn-view"></ion-icon></button>
                       </div>

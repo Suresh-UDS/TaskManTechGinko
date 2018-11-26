@@ -95,6 +95,10 @@ public class SettingsService extends AbstractService {
 	public static final String EMAIL_NOTIFICATION_DAYWISE_REPORT_EMAILS = "email.notification.daywiseReports.emails";
 	
 	public static final String EMAIL_NOTIFICATION_DAYWISE_REPORT_ALERT_TIME = "email.notification.dayWiseReportAlertTime";
+	
+	public static final String EMAIL_NOTIFICATION_MUSTER_ROLL = "email.notification.attendance.musterRoll";
+	
+	public static final String EMAIL_NOTIFICATION_MUSTER_ROLL_EMAILS = "email.notification.attendance.musterRoll.emails";
 
 	@Inject
 	private SettingsRepository settingsRepository;
@@ -547,8 +551,8 @@ public class SettingsService extends AbstractService {
 		warrantyEmailsSetting.setActive("Y");
 		
 		Setting dayWiseReportAlertSetting = null;
-		if(settingsDto.getDayWiseReportAlertTimeId() > 0) {
-			dayWiseReportAlertSetting = settingsRepository.findOne(settingsDto.getDayWiseReportAlertTimeId());
+		if(settingsDto.getDayWiseReportEmailAlertId() > 0) {
+			dayWiseReportAlertSetting = settingsRepository.findOne(settingsDto.getDayWiseReportEmailAlertId());
 		}else {
 			dayWiseReportAlertSetting = new Setting();
 		}
@@ -607,6 +611,36 @@ public class SettingsService extends AbstractService {
 		dayWiseReportAlertTimeSetting.setSiteId(settingsDto.getSiteId());
 		dayWiseReportAlertTimeSetting.setSiteName(settingsDto.getSiteName());
 		dayWiseReportAlertTimeSetting.setActive("Y");
+		
+		Setting musterAlertSetting = null;
+		if(settingsDto.getMusterRollEmailAlertId() > 0) {
+			musterAlertSetting = settingsRepository.findOne(settingsDto.getMusterRollEmailAlertId());
+		}else {
+			musterAlertSetting = new Setting();
+		}
+		musterAlertSetting.setSettingKey(EMAIL_NOTIFICATION_MUSTER_ROLL);
+		musterAlertSetting.setSettingValue(String.valueOf(settingsDto.isMusterRollEmailAlert()));
+		musterAlertSetting.setProjectId(settingsDto.getProjectId());
+		musterAlertSetting.setProjectName(settingsDto.getProjectName());
+		musterAlertSetting.setSiteId(settingsDto.getSiteId());
+		musterAlertSetting.setSiteName(settingsDto.getSiteName());
+		musterAlertSetting.setActive("Y");
+		
+		Setting musterEmailsSetting = null;
+		if(settingsDto.getMusterRollEmailsId() > 0) {
+			musterEmailsSetting = settingsRepository.findOne(settingsDto.getMusterRollEmailsId());
+		}else {
+			musterEmailsSetting = new Setting();
+		}
+		musterEmailsSetting.setSettingKey(EMAIL_NOTIFICATION_MUSTER_ROLL_EMAILS);
+		if(CollectionUtils.isNotEmpty(settingsDto.getMusterRollEmailIds())) {
+			musterEmailsSetting.setSettingValue(CommonUtil.convertToString(settingsDto.getMusterRollEmailIds()));
+		}
+		musterEmailsSetting.setProjectId(settingsDto.getProjectId());
+		musterEmailsSetting.setProjectName(settingsDto.getProjectName());
+		musterEmailsSetting.setSiteId(settingsDto.getSiteId());
+		musterEmailsSetting.setSiteName(settingsDto.getSiteName());
+		musterEmailsSetting.setActive("Y");
 
 		
 		List<Setting> settingList = new ArrayList<Setting>();
@@ -709,6 +743,12 @@ public class SettingsService extends AbstractService {
 		}
 		if(StringUtils.isNotEmpty(dayWiseReportAlertTimeSetting.getSettingValue())) {
 			settingList.add(dayWiseReportAlertTimeSetting);
+		}
+		if(StringUtils.isNotEmpty(musterAlertSetting.getSettingValue())) {
+			settingList.add(musterAlertSetting);
+		}
+		if(StringUtils.isNotEmpty(musterEmailsSetting.getSettingValue())) {
+			settingList.add(musterEmailsSetting);
 		}
 		
 		settingsRepository.save(settingList);
@@ -832,6 +872,12 @@ public class SettingsService extends AbstractService {
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_DAYWISE_REPORT_ALERT_TIME)) {
 					settingDto.setDayWiseReportAlertTimeId(setting.getId());
 					settingDto.setDayWiseReportAlertTime(StringUtils.isNotEmpty(setting.getSettingValue()) ? DateUtil.parseToDateTime(setting.getSettingValue()) : null);
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_MUSTER_ROLL)) {
+					settingDto.setMusterRollEmailAlertId(setting.getId());
+					settingDto.setMusterRollEmailAlert(Boolean.valueOf(setting.getSettingValue()));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_MUSTER_ROLL_EMAILS)) {
+					settingDto.setMusterRollEmailsId(setting.getId());
+					settingDto.setMusterRollEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
 				}
 
 				//settings.add(settingDto);

@@ -36,8 +36,26 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     @Query("SELECT count(j.id) from Job j where j.site.id = :siteId and (j.plannedStartTime between :selDate and :endDate)")
     long findTotalJobCountBySiteIdAndDateRange(@Param("siteId") Long siteId, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
 
+    @Query("SELECT count(j.id) from Job j where j.site.project.id = :projectId and (j.plannedStartTime between :selDate and :endDate)")
+    long findTotalJobCountByProjectAndDateRange(@Param("projectId") Long projectId, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
+    
+    @Query("SELECT count(j.id) from Job j where j.site.project.id = :projectId and j.site.region = :region and (j.plannedStartTime between :selDate and :endDate)")
+    long findTotalJobCountByProjectRegionAndDateRange(@Param("projectId") Long projectId, @Param("region") String region, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
+
+    @Query("SELECT count(j.id) from Job j where j.site.project.id = :projectId and j.site.region = :region and j.site.branch = :branch and (j.plannedStartTime between :selDate and :endDate)")
+    long findTotalJobCountByProjectRegionBranchAndDateRange(@Param("projectId") Long projectId, @Param("region") String region,@Param("branch") String branch, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
+
     @Query("SELECT count(j.id) from Job j where j.site.id = :siteId and (j.plannedStartTime between :selDate and :endDate) and j.status = :currentJobStatus")
     long findJobCountBySiteIdAndStatusDateRange(@Param("siteId") Long siteId, @Param("selDate") Date selDate, @Param("endDate") Date endDate, @Param("currentJobStatus") JobStatus currentJobStatus);
+
+    @Query("SELECT count(j.id) from Job j where j.site.project.id = :projectId and (j.plannedStartTime between :selDate and :endDate) and j.status = :currentJobStatus")
+    long findJobCountByProjectAndStatusDateRange(@Param("projectId") Long projectId, @Param("selDate") Date selDate, @Param("endDate") Date endDate, @Param("currentJobStatus") JobStatus currentJobStatus);
+
+    @Query("SELECT count(j.id) from Job j where j.site.project.id = :projectId and j.site.region = :region and (j.plannedStartTime between :selDate and :endDate) and j.status = :currentJobStatus")
+    long findJobCountByProjectRegionAndStatusDateRange(@Param("projectId") Long projectId, @Param("region") String region, @Param("selDate") Date selDate, @Param("endDate") Date endDate, @Param("currentJobStatus") JobStatus currentJobStatus);
+
+    @Query("SELECT count(j.id) from Job j where j.site.project.id = :projectId and j.site.region = :region and j.site.branch = :branch and (j.plannedStartTime between :selDate and :endDate) and j.status = :currentJobStatus")
+    long findJobCountByProjectRegionBranchAndStatusDateRange(@Param("projectId") Long projectId, @Param("region") String region, @Param("branch") String branch, @Param("selDate") Date selDate, @Param("endDate") Date endDate, @Param("currentJobStatus") JobStatus currentJobStatus);
 
     @Query("SELECT count(j.id) from Job j where j.site.id = :siteId and (j.plannedStartTime between :selDate and :endDate) and j.status = :currentJobStatus group by j.plannedStartTime")
     long findJobCountForReports(@Param("siteId") Long siteId, @Param("selDate") Date selDate, @Param("endDate") Date endDate, @Param("currentJobStatus") JobStatus currentJobStatus);
@@ -48,8 +66,8 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     @Query("SELECT new map(j.plannedStartTime as date ,count(j.id) as count) from Job j where j.site.id = :siteId and (j.plannedStartTime between :selDate and :endDate) group by j.plannedStartTime order by j.plannedStartTime")
     Map<Date, Long> findTotalJobCountByDateForReports(@Param("siteId") Long siteId, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
 
-    @Query("SELECT j from Job j where (j.plannedEndTime < :currDateTime) and (j.status < 3 or j.status = 4) ")
-    List<Job> findOverdueJobsByStatusAndEndDateTime(@Param("currDateTime") java.util.Date endDate);
+    @Query("SELECT j from Job j where (j.plannedEndTime < :currDateTime) and (j.status < 3) ")
+    List<Job> findOverdueJobsByStatusAndEndDateTime(@Param("currDateTime") Date endDate);
 
     @Query("SELECT new map(type as jobType ,count(j.id) as count) from Job j where j.site.id = :siteId and j.plannedStartTime = :selDate group by j.type")
     Map<JobType, Long> findJobCountByType(@Param("siteId") Long siteId, @Param("selDate") Date selDate);

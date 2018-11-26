@@ -247,12 +247,12 @@ public class SiteResource {
 	}
 
 
-
-
-
-
-
-
-
+    @RequestMapping(value = "/change/site/employee", method = RequestMethod.POST)
+    public ResponseEntity<ImportResult> changeSiteEmployee(@RequestParam("siteFile") MultipartFile file){
+        log.info("--Invoked Change Site Import --");
+        Calendar cal = Calendar.getInstance();
+        ImportResult result = importUtil.changeEmployeeSite(file, cal.getTimeInMillis());
+        return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
+    }
 
 }

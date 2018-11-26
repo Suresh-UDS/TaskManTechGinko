@@ -164,27 +164,30 @@ angular.module('timeSheetApp')
         format: 'DD/MM/YYYY HH:mm A'
         });
 
-
+        
+        /*
         $('input#selectedJobDate').on('dp.change', function(e){
 
                 $scope.selectedJobDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
                 $scope.selectedJobDateSer = new Date(e.date._d);
         });
+        	*/
 
 
-
+        /*
         $('input#selectedJobDateTo').on('dp.change', function(e){
 
             $scope.selectedJobDateTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
             $scope.selectedJobDateToSer = new Date(e.date._d);
         });
+        */
 
         $('input#searchJobDate').on('dp.change', function(e){
 
             $scope.searchJobDateSer = new Date(e.date._d);
             $scope.searchJobDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
 
-            if($scope.searchJobDateSer > $scope.searchJobDateToSer){
+            if($scope.searchJobDate > $scope.searchJobDateTo){
                $scope.searchJobDateTo = null;
                $scope.searchJobDateToSer = null;
             }
@@ -199,7 +202,7 @@ angular.module('timeSheetApp')
             $scope.searchJobDateToSer = new Date(e.date._d);
             $scope.searchJobDateTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
 
-            if($scope.searchJobDateSer > $scope.searchJobDateToSer){
+            if($scope.searchJobDate > $scope.searchJobDateTo){
               $scope.searchJobDate = null;
               $scope.searchJobDateSer = null;
             }
@@ -1320,6 +1323,8 @@ angular.module('timeSheetApp')
                 $scope.downloader=true;
                 $scope.downloaded = false;
                 $scope.searchCriteria.isReport = true;
+                $scope.searchCriteria.columnName = "createdDate";
+                $scope.searchCriteria.sortByAsc = false;
                 JobComponent.exportAllData($scope.searchCriteria).then(function(data){
                     var result = data.results[0];
                     console.log(result);

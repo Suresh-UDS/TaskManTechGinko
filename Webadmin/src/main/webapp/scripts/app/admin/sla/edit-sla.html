@@ -1,123 +1,160 @@
 <div class="crud-form"
-     data-unique-hash="a2ad475d60b22954085c657a73309b8f">
-    <div  ng-init="loadSla(); loadProjects(); loadingAuto();">
+	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
+	<div ng-init="loadSla(); loadProjects(); loadingAuto();">
 
 
-        <div class="col-md-8">
-            <!--<h2 class="title">Add Site</h2>-->
-        </div>
+		<div class="col-md-8">
+			<!--<h2 class="title">Add Site</h2>-->
+		</div>
 
 
-        <!--<div class="card-header" data-background-color="red">-->
-        <!--<h4 class="title">Add Site</h4>-->
-        <!--<p class="category"></p>-->
-        <!--</div>-->
+		<!--<div class="card-header" data-background-color="red">-->
+		<!--<h4 class="title">Add Site</h4>-->
+		<!--<p class="category"></p>-->
+		<!--</div>-->
 
-        <div class="cardsCon addSiteCon">
-            <form ng-show="!success" name="form" role="form" novalidate
-                  ng-submit="saveInventory()">
+		<div class="cardsCon addSiteCon">
+			<form ng-show="!success" name="form" role="form" novalidate
+				ng-submit="conform('update');">
 
-                <div class="row">
+				<div class="row">
 
-                    <div class="col-md-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">SLA Info</div>
-                            <div class="panel-body">
+					<div class="col-md-12">
+						<div class="panel panel-default">
+							<div class="panel-heading">SLA Info</div>
+							<div class="panel-body">
 
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group no-padding" >
-                                            <div class="dropdown">
-                                                <div class="form-group">
-                                                    <label class="control-label">Select Client <span class="red-star">*</span></label>
-                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select ng-options = "prj.name for prj in projects" ng-model = "selectedProject" ng-change = "loadSites()" class="form-control">
-                                                        <option value="">Select Client...</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group no-padding" >
-                                            <div class="dropdown">
-                                                <div class="form-group">
-                                                    <label class="control-label">Select Site <span class="red-star">*</span></label>
-                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select ng-options = "site as site.name for site in sites" ng-model = "selectedSite" class="form-control">
-                                                        <option value="">Select Site...</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
+								<div class="row">
+									<div class="col-md-3">
+										<div class="form-group no-padding">
+											<div class="dropdown">
+												<div class="form-group">
+													<label class="control-label">Select Client <span
+														class="red-star">*</span></label>  <span
+														class="form-control-feedback d-arrow-icon"><i
+														class="material-icons">keyboard_arrow_down</i></span> <select
+														ng-options="prj.name for prj in projects"
+														ng-model="selectedProject.selected" ng-change="loadSites()"
+														class="form-control">
+														<option value="">Select Client...</option>
+													</select>
+													
+													 <!--<ui-select ng-model="selectedProject.selected"  name="projectName" ng-disabled="clientDisable" ng-change="loadSites()" ng-required="true">
+												  <ui-select-match placeholder="Select clients...">{{$select.selected.name}}</ui-select-match>
+												  <ui-select-choices repeat="prj in projects | filter: $select.search" >
+												    <span ng-bind-html="prj.name | highlight: $select.search"></span>
+												  </ui-select-choices>
+												</ui-select>-->
+													
+													
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group no-padding">
+											<div class="dropdown">
+												<div class="form-group">
+													<label class="control-label">Select Site <span
+														class="red-star">*</span></label> <span
+														class="form-control-feedback d-arrow-icon"><i
+														class="material-icons">keyboard_arrow_down</i></span> <select
+														ng-options="site as site.name for site in sites"
+														ng-model="selectedSite" class="form-control">
+														<option value="">Select Site...</option>
+													</select>
+													<!-- <ui-select ng-model="selectedSite.selected"  name="siteName"  ng-required="true">
+												  <ui-select-match placeholder="Select sites...">{{$select.selected.name}}</ui-select-match>
+												  <ui-select-choices repeat="site in sites | filter: $select.search" >
+												    <span ng-bind-html="site as site.name | highlight: $select.search"></span>
+												  </ui-select-choices>
+												</ui-select>-->
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
 
-                                        <div class="form-group no-padding" >
-                                            <div class="dropdown">
-                                                <div class="form-group">
-                                                    <label class="control-label">Select Process Type<span class="red-star">*</span></label>
-                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select ng-model = "sla.processType" ng-change = "editSla()" class="form-control">
-                                                        <option value="Tickets">Tickets</option>
-                                                        <option value="Jobs">Jobs</option>
-
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group no-padding" >
-                                            <div class="dropdown">
-                                                <div class="form-group">
-                                                    <label class="control-label">Select Category <span class="red-star">*</span></label>
-                                                    <select ng-model = "sla.category" ng-change = "editSla()"multiple class="form-control">
-                                                        <option value="Electrical">Electrical</option>
-                                                        <option value="Cleaning">Cleaning</option>
-                                                        <option value="Beauty">Beauty</option>
-                                                        <option value="Ac">Ac</option>
-                                                        <option value="Carpentry">Carpentry</option>
-                                                        <option value="Plumbing">Plumbing</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-
-                                    <div class="col-md-3">
-
-                                        <div class="form-group no-padding" >
-                                            <div class="dropdown">
-                                                <div class="form-group">
-                                                    <label class="control-label">Select Severity  <span class="red-star">*</span></label>
-                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select ng-model = "sla.severity" class="form-control">
-                                                        <option value="Low">Low</option>
-                                                        <option value="Medium">Medium</option>
-                                                        <option value="High">High</option>
-                                                        <option value="High">Critical</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
+										<div class="form-group no-padding">
+											<div class="dropdown">
+												<div class="form-group">
+													<label class="control-label">Select Process Type<span
+														class="red-star">*</span></label> <span
+														class="form-control-feedback d-arrow-icon"><i
+														class="material-icons">keyboard_arrow_down</i></span> <select
+														ng-model="sla.processType" ng-change="editSla()"
+														class="form-control">
+														<option value="Tickets">Tickets</option>
+														<option value="Jobs">Jobs</option>
+													</select>
+												</div>
+											</div>
+										</div>
 
 
-                                    </div>
-                                    <div class="col-md-2">
+									</div>
+									<div class="col-md-3">
+										<div class="form-group no-padding">
+											<div class="dropdown">
+												<div class="form-group">
+													<label class="control-label">Select Category <span
+														class="red-star">*</span></label> <select ng-model="sla.category"
+														ng-change="editSla()" multiple class="form-control">
+														<option value="Electrical">Electrical</option>
+														<option value="Cleaning">Cleaning</option>
+														<option value="Beauty">Beauty</option>
+														<option value="Ac">Ac</option>
+														<option value="Carpentry">Carpentry</option>
+														<option value="Plumbing">Plumbing</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
 
-                                        <div class="form-group no-padding">
-                                            <label class="control-label">Hours</label>
-                                            <input type="number" class="form-control ng-valid ng-dirty ng-touched" ng-model="sla.hours" tabindex="0" aria-invalid="false" autocomplete="off">
-                                            <span class="material-input"></span></div>
+								<div class="row">
 
-                                    </div>
-                                    <!-- <div class="col-md-7 txt-align-rgt">
+									<div class="col-md-3">
+
+										<div class="form-group no-padding">
+											<div class="dropdown">
+												<div class="form-group">
+													<label class="control-label">Select Severity <span
+														class="red-star">*</span></label> <span
+														class="form-control-feedback d-arrow-icon"><i
+														class="material-icons">keyboard_arrow_down</i></span> <select
+														ng-model="sla.severity" class="form-control">
+														<option value="Low">Low</option>
+														<option value="Medium">Medium</option>
+														<option value="High">High</option>
+														<option value="High">Critical</option>
+													</select>
+												</div>
+											</div>
+										</div>
+
+
+									</div>
+									<div class="col-md-2">
+
+										<div class="form-group no-padding">
+											<label class="control-label">Hours</label> <input
+												type="number" name="hrs"
+												class="form-control ng-valid ng-dirty ng-touched"
+												ng-model="sla.hours" tabindex="0" aria-invalid="false"
+												autocomplete="off" maxlength="2">
+											<div ng-show="form.hrs.$touched">
+												<div ng-show="form.hrs.$dirty || form.hrs.$invalid">
+													<p class="help-block" style="color: maroon"
+														ng-show="form.hrs.$error.maxlength">Enter only 2 digits</p>
+												</div>
+											</div>
+											<span class="material-input"></span>
+										</div>
+
+									</div>
+									<!-- <div class="col-md-7 txt-align-rgt">
                                         <button class="btn btn-success margn-top15"  data-toggle="modal" data-target="#AddEscalationLevel" tabindex="0">
                                             <span class="btn-label">
                                                 <i class="material-icons">add</i>
@@ -129,208 +166,260 @@
 
                                 </div>-->
 
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="table-responsive tablecard">
-                                            <table class="table table-hover">
-                                                <thead>
-                                                <tr>
-                                                    <th>Process Type</th>
-                                                    <th>Severity </th>
-                                                    <th>Hours</th>
-                                                    <th>Categories</th>
-                                                    <th>Escalation Level</th>
-                                                    <th class="text-right">Actions</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody >
-                                                <!-- <li class="list-group-item justify-content-between" ng-repeat = "slas in slaList" ng-bind-html-unsafe = "sla.text"> 
+									<div class="row">
+										<div class="col-md-12">
+											<div class="table-responsive tablecard">
+												<table class="table table-hover">
+													<thead>
+														<tr>
+															<th>Process Type</th>
+															<th>Severity</th>
+															<th>Hours</th>
+															<th>Categories</th>
+															<th>Escalation Level</th>
+															<th class="text-right">Actions</th>
+														</tr>
+													</thead>
+													<tbody>
+														<!-- <li class="list-group-item justify-content-between" ng-repeat = "slas in slaList" ng-bind-html-unsafe = "sla.text"> 
                                 					{{slas.processType}} - {{slas.category}} - {{slas.severity}} - {{slas.hours}} - {{slas.slaesc.level}} - {{slas.slaesc.hours}} - {{slas.slaesc.minutes}} - {{slas.slaesc.email}}
                                 					<span class="badge badge-default badge-pill" ng-click="removeSla($index)"><i class="material-icons">remove_circle</i></span>
                                 				</li> -->
-                                                <tr ng-repeat = "slas in slaList">
-                                                    <td>{{slas.processType}}</td>
-                                                    <td>{{slas.severity}}</td>
-                                                    <td>{{slas.hours}}</td>
-                                                    <td><span class="tag label label-info" ng-repeat = "cat in slas.category">{{cat}}<span data-role="remove"></span></span>
-                                                    </td>
-                                                    <td>
-                                                        <span ng-click="editEscalation()" class="tag label label-default" data-toggle="modal" data-target="#AddEscalationLevel" ng-repeat = "slaEsc in slas.slaesc">Level {{slaEsc.level}}</span>
-                                                    </td>
-                                                    <td class="text-right">
-                                                        <a ng-click = "editEscalation()" ng-class="{active: $state.includes('admin')}" data-toggle="modal" data-target="#AddEscalationLevel" class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                                        <a ng-click = "removeSla($index)" ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+														<tr ng-repeat="slas in slaList">
+															<td>{{slas.processType}}</td>
+															<td>{{slas.severity}}</td>
+															<td>{{slas.hours}}</td>
+															<td><span class="tag label label-info"
+																ng-repeat="cat in slas.category">{{cat}}<span
+																	data-role="remove"></span></span></td>
+															<td><span ng-click="editEscalation()"
+																class="tag label label-default" data-toggle="modal"
+																data-target="#AddEscalationLevel"
+																ng-repeat="slaEsc in slas.slaesc">Level
+																	{{slaEsc.level}}</span></td>
+															<td class="text-right"><a
+																ng-click="editEscalation()"
+																ng-class="{active: $state.includes('admin')}"
+																data-toggle="modal" data-target="#AddEscalationLevel"
+																class="btn btn-simple btn-info"><i
+																	class="material-icons">edit</i></a> <a
+																ng-click="removeSla($index)"
+																ng-class="{active: $state.includes('admin')}"
+																onClick="$('#deleteModal').modal()"
+																data-target="#myModal" class="btn btn-simple btn-danger"><i
+																	class="material-icons">close</i></a></td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
 
-                <div class="row">
+					<div class="row">
 
-                    <div class="col-md-12">
+						<div class="col-md-12">
 
-                        <!--<button type="submit" ng-click="cancelsla()"
-                                id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>-->
-                                
-                                <button id="cancel-button" class="btn btn-danger pull-right" type="button" ui-sref="sla-list" id="cancel-button">
-                         Cancel
-                         </button>
+							<button type="button" ng-click="conform('cancel')"
+								id="cancel-button" class="btn btn-danger pull-right"
+								ng-disabled="btnDisable">
+								<i class="material-icons">close</i> Cancel
+							</button>
 
-                        <button type="submit" ng-click = "updateSla()"
-                                id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
-                                            <i class="material-icons">check</i>
-                                        </span>Update SLA</button>
+							<button type="submit" id="form-button-save"
+								ng-disabled="form.$invalid" class="btn btn-success pull-right">
+								<span class="btn-label"> <i class="material-icons">check</i>
+								</span>Update SLA
+							</button>
 
-                        <div class="clearfix"></div>
-                    </div>
+							<div class="clearfix"></div>
+						</div>
 
-                </div>
-
-            </form>
-        </div>
-
-
-    </div>
-
-    <div class="">
-        <div class="row">
-            <div class="col-mod-12">
-                <div class="alert alert-success" ng-show="success">
-                    <strong>Site saved!</strong>
-                </div>
-                <div class="alert alert-danger" ng-show="errorSitesExists">
-                    <strong>Site already registered!</strong> Please choose another one.
-                </div>
-                <div class="alert alert-danger" ng-show="error">
-                    <strong>Site Not Saved!</strong> Please try again later.
-                </div>
-                <div class="alert alert-danger" ng-show="errorProject">
-                    <strong>Invalid Client</strong> Please choose another one.
-                </div>
-            </div>
-            <div class="col-md-12">
+					</div>
+			</form>
+		</div>
 
 
+	</div>
 
-            </div>
+	<div class="">
+		<div class="row">
+			<div class="col-mod-12">
+				<div class="alert alert-success" ng-show="success">
+					<strong>Site saved!</strong>
+				</div>
+				<div class="alert alert-danger" ng-show="errorSitesExists">
+					<strong>Site already registered!</strong> Please choose another
+					one.
+				</div>
+				<div class="alert alert-danger" ng-show="error">
+					<strong>Site Not Saved!</strong> Please try again later.
+				</div>
+				<div class="alert alert-danger" ng-show="errorProject">
+					<strong>Invalid Client</strong> Please choose another one.
+				</div>
+			</div>
+			<div class="col-md-12"></div>
 
-        </div>
-    </div>
+		</div>
+	</div>
 
 
 </div>
 
 
 <!-- AdvancedFilterModal -->
-<div class="modal fade AdvancedFilterModal FilterModalCon" id="AddEscalationLevel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form name="searchForm" novalidate >
+<div class="modal fade AdvancedFilterModal FilterModalCon"
+	id="AddEscalationLevel" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form name="searchForm" novalidate>
 
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        <i class="material-icons">clear</i>
-                    </button>
-                    <h4 class="modal-title">Add Escalation Level</h4>
-                </div>
-                <div class="modal-body">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">
+						<i class="material-icons">clear</i>
+					</button>
+					<h4 class="modal-title">Add Escalation Level</h4>
+				</div>
+				<div class="modal-body">
 
-                    <div class="row">
+					<div class="row">
 
-                        <div class="col-md-2">
+						<div class="col-md-2">
 
-                            <div class="form-group no-padding">
-                                <div class="dropdown">
-                                    <div class="form-group">
-                                        <label class="control-label">Select Level  <span class="red-star">*</span></label>
-                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                        <select ng-model = "escalation.level" class="form-control">
-                                            <option value="1">Level 1</option>
-                                            <option value="2">Level 2</option>
-                                            <option value="3">Level 3</option>
-                                            <option value="4">Level 4</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+							<div class="form-group no-padding">
+								<div class="dropdown">
+									<div class="form-group">
+										<label class="control-label">Select Level<span
+											class="red-star">*</span></label> <span
+											class="form-control-feedback d-arrow-icon"><i
+											class="material-icons">keyboard_arrow_down</i></span> <select
+											ng-model="escalation.level" class="form-control">
+											<option selected="selected" value="">Select</option>
+											<option value="1">Level 1</option>
+											<option value="2">Level 2</option>
+											<option value="3">Level 3</option>
+											<option value="4">Level 4</option>
+										</select>
+									</div>
+								</div>
+							</div>
 
-                        </div>
+						</div>
 
-                        <div class="col-md-1">
-                            <div class="form-group no-padding">
-                                <label class="control-label">Hours</label>
-                                <input type="number" ng-model = "escalation.hours" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
-                                <span class="material-input"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-1">
-                            <div class="form-group no-padding">
-                                <label class="control-label">Mins</label>
-                                <input type="number" ng-model = "escalation.minutes" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
-                                <span class="material-input"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group no-padding">
-                                <label class="control-label">Email</label>
-                                <input type="text" ng-model = "escalation.email" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
-                                <span class="material-input"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-2 txt-align-rgt">
-                            <button ng-click = "addSlaEscalations()" class="btn btn-success margn-top15"  tabindex="0">Add</button>
-                        </div>
+						<div class="col-md-1">
+							<div class="form-group no-padding">
+								<label class="control-label">Hours</label> <input type="number"
+									ng-model="escalation.hours" maxlength="2" name="hrs"
+									ng-pattern="/^[0-9]{1,7}$/"
+									class="form-control ng-valid ng-dirty ng-touched" tabindex="0"
+									aria-invalid="false" autocomplete="off"> 
+									<div ng-show="searchForm.hrs.$touched">
+									<div
+										ng-show="searchForm.hrs.$dirty || searchForm.hrs.$invalid">
+										<p class="help-block" style="color: maroon"
+											ng-show="searchForm.hrs.$error.maxlength">Only 2
+											digits</p>
+									</div>
+								</div>
+									<span
+									class="material-input"></span>
+							</div>
+						</div>
+						<div class="col-md-1">
+							<div class="form-group no-padding">
+								<label class="control-label">Mins</label> <input type="number"
+									name="mins" ng-model="escalation.minutes" maxlength="2" min="0" max="59"
+									class="form-control ng-valid ng-dirty ng-touched" tabindex="0"
+									aria-invalid="false" autocomplete="off" />
+								<div ng-show="searchForm.mins.$touched">
+									<div
+										ng-show="searchForm.mins.$dirty || searchForm.mins.$invalid">
+										<p class="help-block" style="color: maroon"
+											ng-show="searchForm.mins.$error.maxlength">Only 2
+											digits</p>
+											<p class="help-block" style="color: maroon"
+											ng-show="searchForm.mins.$error">Valid minutes</p>
+									</div>
+								</div>
+								<span class="material-input"></span>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group no-padding">
+								<label class="control-label">Email</label> <input type="email"
+									name="mail" ng-model="escalation.email"
+									class="form-control ng-valid ng-dirty ng-touched" tabindex="0"
+									aria-invalid="false" autocomplete="off" />
+								<div ng-show="searchForm.mail.$touched">
+									<div
+										ng-show="searchForm.mail.$dirty || searchForm.mail.$invalid">
+										<p class="help-block error" style="color: maroon"
+											ng-show="searchForm.mail.$error.email">Enter a valid email id</p>
+									</div>
+								</div>
+								<span class="material-input"></span>
+							</div>
+						</div>
+						<div class="col-md-2 txt-align-rgt">
+							<button ng-click="addSlaEscalations()"
+								ng-disabled="searchForm.$invalid"
+								class="btn btn-success margn-top15" tabindex="0">Add</button>
+						</div>
 
-                    </div>
+					</div>
 
-                    <div class="row">
+					<div class="row">
 
-                        <div class="table-responsive tablecard">
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th>Levels</th>
-                                    <th>Hours </th>
-                                    <th>Mins </th>
-                                    <th>Emails </th>
-                                    <th class="text-right">Actions</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat = "esc in slaEscalationList">
-                                    <td>Level {{esc.level}}</td>
-                                         <td>{{esc.hours}}</td>
-                                         <td>{{esc.minutes}}</td>
-                                         <td>
-                                             <span class="tag label label-default">{{esc.email}}</span>
-                                         </td>
-                                         <td class="text-right">
-                                             <a  ng-click = "" ng-class="{active: $state.includes('admin')}" class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                             <a ng-click = "removeEscalation($index)" ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                         </td>
-                                </tr>
-                                </tbody>
-                            </table>
+						<div class="table-responsive tablecard">
+							<table class="table table-hover">
+								<thead>
+									<tr>
+										<th>Levels</th>
+										<th>Hours</th>
+										<th>Mins</th>
+										<th>Emails</th>
+										<th class="text-right">Actions</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="esc in slaEscalationList">
+										<td>Level {{esc.level}}</td>
+										<td>{{esc.hours}}</td>
+										<td>{{esc.minutes}}</td>
+										<td><span class="tag label label-default">{{esc.email}}</span>
+										</td>
+										<td class="text-right"><a ng-click="editesc($index)"
+											ng-class="{active: $state.includes('admin')}"
+											class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+											<a ng-click="removeEscalation($index)"
+											ng-class="{active: $state.includes('admin')}"
+											onClick="$('#deleteModal').modal()" data-target="#myModal"
+											class="btn btn-simple btn-danger"><i
+												class="material-icons">close</i></a></td>
+									</tr>
+								</tbody>
+							</table>
 
-                        </div>
+						</div>
 
-                    </div>
+					</div>
 
-                </div>
-                <div class="modal-footer">
-                    <button ng-click = "updateEscalation()" ng-model = "slass" type="submit" class="btn btn-success btn-simple"  data-dismiss="modal" ng-disabled="searchForm.$invalid">Save</button>
-                    <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
-                </div>
-            </form>
-        </div>
-    </div>
+				</div>
+				<div class="modal-footer">
+					<button ng-click="updateEscalation()" ng-model="slass"
+						type="submit" class="btn btn-success btn-simple"
+						data-dismiss="modal">Save</button>
+					<!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
+				</div>
+			</form>
+		</div>
+	</div>
 </div>
 <!--  End Modal -->

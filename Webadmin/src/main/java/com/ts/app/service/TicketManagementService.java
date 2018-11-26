@@ -285,9 +285,23 @@ public class TicketManagementService extends AbstractService {
 	        }else{
 	            ticket.setDescription(ticket.getDescription());
 	        }
-	        ticket.setSeverity(ticketDTO.getSeverity());
-	        ticket.setComments(ticketDTO.getComments());
-	        ticket.setCategory(ticketDTO.getCategory());
+	        if(StringUtils.isNotEmpty(ticketDTO.getSeverity())){
+
+	            ticket.setSeverity(ticketDTO.getSeverity());
+            }else{
+	            ticket.setSeverity(ticket.getSeverity());
+            }
+            if(StringUtils.isNotEmpty(ticketDTO.getCategory())){
+	            //ticket.setComments(ticketDTO.getCategory());
+	            ticket.setRemarks(ticketDTO.getCategory());
+            }else{
+                //ticket.setComments(ticket.getCategory());
+                ticket.setRemarks(ticket.getCategory());
+                
+            }
+
+	        //ticket.setComments(ticketDTO.getComments());
+	        ticket.setRemarks(ticketDTO.getRemarks());
 	        if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Closed"))) {
 	        		ticket.setClosedBy(user.getEmployee());
 	        		ticket.setClosedOn(new java.sql.Date(currCal.getTimeInMillis()));
@@ -513,7 +527,7 @@ public class TicketManagementService extends AbstractService {
 	            		}
 
                 }
-            }	
+            }
 	    		if(log.isDebugEnabled()) {
 	    			log.debug("Ticket Search Result size -" + (page.getContent() != null ? page.getContent().size() :  null));
 	    		}
@@ -524,7 +538,7 @@ public class TicketManagementService extends AbstractService {
             			transactions.add(mapToModel(ticket));
             		}
             }
-	    		
+
             //transactions = mapperUtil.toModelList(page.getContent(), TicketDTO.class);
             buildSearchResult(searchCriteria, page, transactions, result);
 	    		if(log.isDebugEnabled()) {
@@ -533,7 +547,7 @@ public class TicketManagementService extends AbstractService {
         }
         return result;
     }
-    
+
     private TicketDTO mapToModel(Ticket ticket) {
     		TicketDTO dto = new TicketDTO();
     		dto.setActive(ticket.getActive());
@@ -568,7 +582,8 @@ public class TicketManagementService extends AbstractService {
     			dto.setJobId(job.getId());
     			dto.setJobName(job.getTitle());
     		}
-    		dto.setComments(ticket.getComments());
+    		//dto.setComments(ticket.getComments());
+    		dto.setRemarks(ticket.getRemarks());
     		dto.setImage(ticket.getImage());
     		dto.setQuotationId(ticket.getQuotationId());
     		return dto;
@@ -750,7 +765,7 @@ public class TicketManagementService extends AbstractService {
 
 		return "Successfully upload existing ticket file to S3";
 	}
-	
+
 	public List<TicketDTO> generateReport(SearchCriteria searchCriteria, boolean b) {
 		List<TicketDTO> transactions = null;
 		if(log.isDebugEnabled()) {
@@ -763,7 +778,7 @@ public class TicketManagementService extends AbstractService {
 		Pageable pageRequest = null;
 		Page<Ticket> page = null;
 		List<Ticket> allTicketList = new ArrayList<Ticket>();
-		
+
 		Calendar startCal = Calendar.getInstance();
 		if (searchCriteria.getFromDate() != null) {
 		    startCal.setTime(searchCriteria.getFromDate());
@@ -782,7 +797,7 @@ public class TicketManagementService extends AbstractService {
 		//searchCriteria.setToDate(endCal.getTime());
 		ZonedDateTime startDate = ZonedDateTime.ofInstant(startCal.toInstant(), ZoneId.systemDefault());
 		ZonedDateTime endDate = ZonedDateTime.ofInstant(endCal.toInstant(), ZoneId.systemDefault());
-		
+
         //create sql dates
         java.sql.Date sqlFromDate = DateUtil.convertToSQLDate(startCal.getTime());
         java.sql.Date sqlToDate = DateUtil.convertToSQLDate(endCal.getTime());

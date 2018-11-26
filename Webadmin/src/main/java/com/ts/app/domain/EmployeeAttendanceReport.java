@@ -29,6 +29,8 @@ public class EmployeeAttendanceReport implements Serializable {
 
     private String lastName;
     
+    private boolean reliever;
+    
     private String designation;
 
     private String siteName;
@@ -303,6 +305,16 @@ public class EmployeeAttendanceReport implements Serializable {
 
 	public void setShiftKey(String shiftKey) {
 		this.shiftKey = shiftKey;
+	}
+
+
+	public boolean isReliever() {
+		return reliever;
+	}
+
+
+	public void setReliever(boolean reliever) {
+		this.reliever = reliever;
 	}
     
 }

@@ -83,6 +83,13 @@ attendance:
         path:  /opt/attendance
     template:
         path: /opt/template/Attendance_Report_Format.xlsx
+    musterroll:
+        report:
+            template:
+                path: /opt/template/ATTENDENCE_MUSTER_ROLL_FORMAT.xlsx
+    generalShift:
+        startTime: 09:00
+        endTime: 17:00
 quotation:
     file:
         path:  /opt/quotation
@@ -95,12 +102,12 @@ import:
             new: /opt/imports/new
             completed: /opt/imports/completed
 
-extensionImg: jpeg,jpg,png    
+extensionImg: jpeg,jpg,png
 extensionFile: pdf,xlsx,xls,docx,doc,csv,txt
 
 asset:
    file:
-       path: /opt/asset/uploads/site      
+       path: /opt/asset/uploads/site
    weekly:
        template:
            path: /opt/template/Asset_52Week_Report_Format.xlsx
@@ -176,10 +183,10 @@ quotationService:
 
 pushService:
    url: http://localhost:9000/
-   
+
 AWS:
    s3-url: https://s3.ap-south-1.amazonaws.com
-   s3-accessKey: AKIAJJQEB7US7QOAV2LQ 
+   s3-accessKey: AKIAJJQEB7US7QOAV2LQ
    s3-secretKey: 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
    s3-bucketName: fms-taskman
    s3-cloudfront-url: http://d1wn8hrsdttztl.cloudfront.net/
@@ -208,7 +215,7 @@ scheduler:
       enabled: true
       creation: monthly
    quarterlyJob:
-      enabled: true   
+      enabled: true
    yearlyJob:
       enabled: true
       creation: daily
@@ -219,7 +226,7 @@ scheduler:
       enabled: true
       creation: yearly
    overdueJob:
-      enabled: false
+      enabled: true
    eodJobReport:
       enabled: false
    attendanceDetailReport:
@@ -229,12 +236,14 @@ scheduler:
    feedbackreport:
       enabled: true
    dayWiseJobReport:
-      enabled: true 
+      enabled: true
    dayWiseTicketReport:
       enabled: true
    dayWiseQuotationReport:
-      enabled: true 
-      
+      enabled: true
+   attendanceMusterRollReport:
+      enabled: true
+
 default.user.password: uds12345
 
 google:

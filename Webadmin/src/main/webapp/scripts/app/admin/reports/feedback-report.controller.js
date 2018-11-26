@@ -278,6 +278,8 @@ angular.module('timeSheetApp')
 
         $scope.exportAllData = function(type){
     			$scope.searchCriteria.exportType = type;
+    			$scope.searchCriteria.columnName = "createdDate";
+                $scope.searchCriteria.sortByAsc = false;
     			$rootScope.exportStatusObj = {};
     			$scope.exportStatusMap = [];
     			$scope.downloader=false;

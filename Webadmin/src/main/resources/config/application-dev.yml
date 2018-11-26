@@ -15,7 +15,7 @@ spring:
         active: dev
     devtools:
         restart:
-            enabled: true
+            enabled: false
         livereload:
             enabled: false # we use Grunt + BrowserSync for livereload
     datasource:
@@ -25,7 +25,6 @@ spring:
         name:
         username: root
         password: test
-        #password: tgadmin123#
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
@@ -66,10 +65,10 @@ server:
          max-threads:  400
 upload:
     file:
-         path: /opt/uploads
+         path: D:/fms/uploads
 export:
     file:
-         path: /opt/exports
+         path: D:/fms/exports
 qrcode:
     file:
          path: /opt/qrcode
@@ -89,7 +88,10 @@ attendance:
     musterroll:
         report:
             template:
-                path: /opt/template/ATTENDENCE_MUSTER_ROLL_FORMAT.xlsx        
+                path: /opt/template/ATTENDENCE_MUSTER_ROLL_FORMAT.xlsx
+    generalShift:
+        startTime: 09:00
+        endTime: 17:00
 quotation:
     file:
         path:  /opt/quotation
@@ -146,7 +148,7 @@ reports:
     attendance-report:
         url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/attendance-reports
     feedback-report:
-        url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/feedbacks
+        url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/feedbacksList
     asset-report:
         url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/asset-report
     vendor-report:
@@ -227,7 +229,7 @@ scheduler:
       enabled: true
       creation: yearly
    overdueJob:
-      enabled: false
+      enabled: true
    eodJobReport:
       enabled: true
    attendanceDetailReport:
@@ -237,14 +239,14 @@ scheduler:
    feedbackreport:
       enabled: true
    attendanceMusterRollReport:
-      enabled: true     
+      enabled: true
    dayWiseJobReport:
-      enabled: true 
+      enabled: true
    dayWiseTicketReport:
       enabled: true
    dayWiseQuotationReport:
-      enabled: true 
-      
+      enabled: true
+
 default.user.password: uds12345
 
 google:

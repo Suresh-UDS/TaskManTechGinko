@@ -82,7 +82,7 @@ function startup(){
 
   app.get('/api/quotation/id/:id',quotationController.getQuotation);
   app.get('/api/quotation/:id',quotationController.getQuotationById);
-  app.post('/api/quotation',quotationController.searchQuotations);
+  app.post('/api/quotation',quotationController.newSearchQuotation);
   app.post('/api/quotation/search', quotationController.getQuotations);
   app.get('/api/rateCard', quotationController.getRateCards);
   app.post('/api/rateCard', quotationController.getRateCards);

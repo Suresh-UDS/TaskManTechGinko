@@ -15,9 +15,9 @@ import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 
-@Configuration
-@EnableAsync
-@EnableScheduling
+//@Configuration
+//@EnableAsync
+//@EnableScheduling
 public class AsyncConfiguration implements AsyncConfigurer {
 
     private final Logger log = LoggerFactory.getLogger(AsyncConfiguration.class);
