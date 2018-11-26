@@ -141,6 +141,7 @@ public class AttendanceService extends AbstractService {
         //now.set(Calendar.HOUR_OF_DAY,6);
         if(StringUtils.isEmpty(attn.getCheckOutImage())){
             log.debug("check in image not available");
+            dbAttn.setCheckOutTime(new java.sql.Timestamp(now.getTimeInMillis()));
         }else{
             log.debug("check in image available");
             long dateTime = new Date().getTime();
