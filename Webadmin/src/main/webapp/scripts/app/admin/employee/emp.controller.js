@@ -452,8 +452,8 @@ angular.module('timeSheetApp')
 
 
 	        	if($scope.employee) {
-	        		projSite.employeeId = $scope.employee.id
-	        		projSite.employeeName = $scope.employee.name
+	        		projSite.employeeId = $scope.employee.id;
+	        		projSite.employeeName = $scope.employee.name;
 	        	}
 
                 function isProject(project) {
@@ -1580,10 +1580,10 @@ angular.module('timeSheetApp')
 
                 $scope.searchCriteria.isReport = true;
 
-	    		  console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaEmployees));
-	    		  console.log('criteria in scope -'+JSON.stringify($scope.searchCriteria));
+	    		//console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaEmployees));
+	    		//console.log('criteria in scope -'+JSON.stringify($scope.searchCriteria));
 
-	        	  console.log('Selected  project -' + $scope.searchEmployeeName + ", " + $scope.searchProject +" , "+ $scope.searchSite);
+	        	//console.log('Selected  project -' + $scope.searchEmployeeName + ", " + $scope.searchProject +" , "+ $scope.searchSite);
 
 	            $scope.searchCriteria.currPage = currPageVal;
 	            $scope.searchCriteria.findAll = false;
