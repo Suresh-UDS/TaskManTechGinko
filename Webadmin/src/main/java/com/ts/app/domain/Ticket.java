@@ -74,6 +74,8 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     private String image;
 
     private String comments;
+    
+    private String remarks;
 
     private String status;
     
@@ -162,8 +164,16 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     public void setComments(String comments) {
         this.comments = comments;
     }
+    
+    public String getRemarks() {
+		return remarks;
+	}
 
-    public String getReportingTo() {
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	public String getReportingTo() {
         return reportingTo;
     }
 

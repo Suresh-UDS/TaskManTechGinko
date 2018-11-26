@@ -43,6 +43,14 @@ angular.module('timeSheetApp')
         $scope.SelectClients = [];
         $scope.site = {};
         $scope.site.country='INDIA';
+        $scope.allRegions = {id:0 , name: '-- ALL REGIONS --'};
+        $scope.regionsListOne = {};
+        $scope.regionsLists = [];
+        $scope.regionsListOne.selected =  null;
+        $scope.allBranchs = {id:0 , name: '-- ALL BRANCHES --'};
+        $scope.branchsListOne = {};
+        $scope.branchsLists = [];
+        $scope.branchsListOne.selected =  null;
 
 
         //$timeout(function (){angular.element('[ng-model="name"]').focus();});
@@ -1134,26 +1142,25 @@ angular.module('timeSheetApp')
 
                 if($scope.selectedRegion){
 
-                   // //console.log($scope.selectedRegion);
-                    SiteComponent.getBranchByProject(projectId,$scope.selectedRegion.id).then(function (response) {
-                      //console.log(response);
-
-                        $scope.branchList = response;
-                        if($scope.branchList) {
-                        		for(var i = 0; i < $scope.branchList.length; i++) {
-                        			$scope.uiBranch.push($scope.branchList[i].name);
-                        		}
-                        }	
+	                   // //console.log($scope.selectedRegion);
+	                    SiteComponent.getBranchByProject(projectId,$scope.selectedRegion.id).then(function (response) {
+	                      //console.log(response);
+	
+	                        $scope.branchList = response;
+	                        if($scope.branchList) {
+	                        		for(var i = 0; i < $scope.branchList.length; i++) {
+	                        			$scope.uiBranch.push($scope.branchList[i].name);
+	                        		}
+	                        }	
+	                    });
 
                        // //console.log('branch list : ' + JSON.stringify($scope.branchList));
 
                         $scope.getSitesBYRegionOrBranch(projectId,$scope.selectedRegion.name,null);
                         callback();
 
-
-
-
-            }
+                  }
+             }
         };
         
         /*** UI select (Branch List) **/

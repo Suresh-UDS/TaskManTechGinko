@@ -398,8 +398,8 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Comments</td>
-                                    <td><span ng-if="listComments">{{listComments}}</span><span ng-if="!listComments">-</span>
+                                    <td>Remarks</td>
+                                    <td><span ng-if="listRemarks">{{listRemarks}}</span><span ng-if="!listRemarks">-</span>
 
                                     </td>
                                 </tr>
@@ -436,7 +436,7 @@
             <div class="modal-body">
 	                <p>Are you sure you want to close the ticket?</p>
 	                <br/>
-                    <input class="form-control border-bottom-input" ng-model="cTicket.comments" placeholder="Enter Remarks..">
+                    <input class="form-control border-bottom-input" ng-model="cTicket.remarks" placeholder="Enter Remarks..">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
