@@ -3,6 +3,7 @@ package com.ts.app.web.rest;
 import com.ts.app.domain.ChartModelEntity;
 import com.ts.app.domain.JobStatusReport;
 import com.ts.app.domain.Measurements.JobStatusMeasurement;
+import com.ts.app.domain.TicketStatusReport;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.ReportService;
 import com.ts.app.service.SchedulerHelperService;
@@ -140,9 +141,15 @@ public class ReportResource {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-    @RequestMapping(value = "/reports/preCompute", method = RequestMethod.GET)
+    @RequestMapping(value = "/reports/preCompute/jobs", method = RequestMethod.GET)
     public ResponseEntity<?> getJobPrecomputeData() {
-        List<JobStatusReport> reportList = reportDatabaseUtil.getPreComputeData();
+        List<JobStatusReport> reportList = reportDatabaseUtil.getPreComputeJobData();
+        return new ResponseEntity<>(reportList, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reports/preCompute/tickets", method = RequestMethod.GET)
+    public ResponseEntity<?> getTicketPrecomputeData() {
+        List<TicketStatusReport> reportList = reportDatabaseUtil.getPreComputeTicketData();
         return new ResponseEntity<>(reportList, HttpStatus.OK);
     }
 

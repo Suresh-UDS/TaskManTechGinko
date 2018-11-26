@@ -1,12 +1,10 @@
 package com.ts.app.service.util;
 
 import com.ts.app.config.ReportDatabaseConfiguration;
-import com.ts.app.domain.ChartModelEntity;
-import com.ts.app.domain.JobStatus;
-import com.ts.app.domain.JobStatusReport;
+import com.ts.app.domain.*;
 import com.ts.app.domain.Measurements.JobStatusMeasurement;
-import com.ts.app.domain.Status;
-import com.ts.app.repository.ReportDatabaseRepository;
+import com.ts.app.repository.ReportDatabaseJobRepository;
+import com.ts.app.repository.ReportDatabaseTicketRepository;
 import com.ts.app.service.ReportDatabaseSerivce;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Point;
@@ -31,7 +29,10 @@ public class ReportDatabaseUtil {
     private ReportDatabaseConfiguration reportDatabaseConfiguration;
 
     @Inject
-    private ReportDatabaseRepository reportDatabaseRepository;
+    private ReportDatabaseJobRepository reportDatabaseJobRepository;
+
+    @Inject
+    private ReportDatabaseTicketRepository reportDatabaseTicketRepository;
 
     @Inject
     private ReportDatabaseSerivce reportDatabaseSerivce;
@@ -41,16 +42,22 @@ public class ReportDatabaseUtil {
         return reportDatabaseConfiguration.initializeInduxDbConnection();
     }
 
-    public List<JobStatusReport> getPreComputeData() {
+    public List<JobStatusReport> getPreComputeJobData() {
         // Pre-compute a data from database
-        List<JobStatusReport> jobStatusReportList = reportDatabaseRepository.findAllJobStatusCountByDate();
+        List<JobStatusReport> jobStatusReportList = reportDatabaseJobRepository.findAllJobStatusCountByDate();
         log.debug("List of job status list " +jobStatusReportList.size());
         return jobStatusReportList;
     }
 
+    public List<TicketStatusReport> getPreComputeTicketData() {
+        List<TicketStatusReport> ticketStatusReportList = reportDatabaseTicketRepository.findAllTicketStatus();
+        log.debug("List of Ticket status list" +ticketStatusReportList.size());
+        return ticketStatusReportList;
+    }
+
     public void addPointsToJob() throws Exception {
         InfluxDB influxDB = connectDatabase();
-        List<JobStatusReport> reportLists = this.getPreComputeData();
+        List<JobStatusReport> reportLists = this.getPreComputeJobData();
         influxDB.setRetentionPolicy("defaultPolicy");
         influxDB.enableBatch(100, 200, TimeUnit.MILLISECONDS);
         for(int i=0; i<100; i++) {
