@@ -941,7 +941,7 @@ angular.module('timeSheetApp')
                 text: 'Tickets'
             },
             xAxis: {
-                categories: ['15/10/2018', '16/10/2018', '17/10/2018', '18/10/2018', '19/10/2018', '20/10/2018', '21/10/2018', '22/10/2018', '23/10/2018',]
+                categories: ['MAINTAINCE', 'ELECTRICAL', 'CARPENTRY', 'CLEANING', 'PLUMBING']
             },
             yAxis: {
                 min: 0,
@@ -982,13 +982,13 @@ angular.module('timeSheetApp')
             },
             series: [{
                 name: 'Open',
-                data: [5, 3, 4, 7, 2,5, 3, 4, 7]
+                data: [5, 3, 4, 7, 2]
             }, {
                 name: 'Closed',
-                data: [2, 2, 3, 2, 1,5, 3, 4, 7]
+                data: [2, 2, 3, 2, 1]
             }, {
                 name: 'Assigned',
-                data: [3, 4, 4, 2, 5,5, 3, 4, 7]
+                data: [3, 4, 4, 2, 5]
             }]
         });
 
@@ -1100,14 +1100,14 @@ angular.module('timeSheetApp')
                     borderWidth: 0,
                     dataLabels: {
                         enabled: true,
-                        format: '{point.y:.1f}%'
+                        format: '{point.y}'
                     }
                 }
             },
 
             tooltip: {
                 headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> of total<br/>'
             },
 
             "series": [
@@ -1117,27 +1117,27 @@ angular.module('timeSheetApp')
                     "data": [
                         {
                             "name": "AC & APPLIANCES",
-                            "y": 62.74,
+                            "y": 6,
                             "drilldown": "AC & APPLIANCES"
                         },
                         {
                             "name": "CLEANING",
-                            "y": 10.57,
+                            "y": 10,
                             "drilldown": "CLEANING"
                         },
                         {
                             "name": "PLUMBING",
-                            "y": 7.23,
+                            "y": 7,
                             "drilldown": "PLUMBING"
                         },
                         {
                             "name": "ELECTRICAL",
-                            "y": 5.58,
+                            "y": 5,
                             "drilldown": "ELECTRICAL"
                         },
                         {
                             "name": "CARPENTRY",
-                            "y": 4.02,
+                            "y": 4,
                             "drilldown": "CARPENTRY"
                         }
                     ]
