@@ -2071,32 +2071,32 @@ angular.module('timeSheetApp')
                     var msg = 'Attendance already marked ' + data[0].employeeFullName + ' at site ' + data[0].siteName;
                     $scope.showNotifications('top', 'center', 'warning', msg);
                 } else {
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(function (position) {
-                            $scope.$apply(function () {
-
-                                  console.log("Location available")
-                                  console.log(position);
-
-                                $scope.position = position;
-                                var checkInData = {};
-                                checkInData.siteId = siteId;
-                                checkInData.employeeEmpId = employeeEmpId;
-                                checkInData.latitudeIn = position.coords.latitude;
-                                checkInData.longitudeIn = position.coords.longitude;
-                                EmployeeComponent.checkIn(checkInData).then(function (data) {
-
-                                    console.log("attendance marked",data);
-                                  $('.ViewModal.in').modal('hide');
-
-                                    var msg = 'Attendance marked for ' + data.employeeFullName + ' at site ' + data.siteName;
-                                    $scope.showNotifications('top', 'center', 'success', msg);
-                                    //$location.path('/employees');
-                                    $scope.getEmployeeDetails(id);
-                                })
-                            });
-                        });
-                    } else {
+                    // if (navigator.geolocation) {
+                    //     navigator.geolocation.getCurrentPosition(function (position) {
+                    //         $scope.$apply(function () {
+                    //
+                    //               console.log("Location available")
+                    //               console.log(position);
+                    //
+                    //             $scope.position = position;
+                    //             var checkInData = {};
+                    //             checkInData.siteId = siteId;
+                    //             checkInData.employeeEmpId = employeeEmpId;
+                    //             checkInData.latitudeIn = position.coords.latitude;
+                    //             checkInData.longitudeIn = position.coords.longitude;
+                    //             EmployeeComponent.checkIn(checkInData).then(function (data) {
+                    //
+                    //                 console.log("attendance marked",data);
+                    //               $('.ViewModal.in').modal('hide');
+                    //
+                    //                 var msg = 'Attendance marked for ' + data.employeeFullName + ' at site ' + data.siteName;
+                    //                 $scope.showNotifications('top', 'center', 'success', msg);
+                    //                 //$location.path('/employees');
+                    //                 $scope.getEmployeeDetails(id);
+                    //             })
+                    //         });
+                    //     });
+                    // } else {
 
                           console.log("Location not available")
 
@@ -2113,7 +2113,7 @@ angular.module('timeSheetApp')
 
                         })
                     }
-                }
+                // }
 
             });
             // EmployeeComponent.getSites(employeeId).then(function (data) {
