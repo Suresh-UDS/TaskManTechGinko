@@ -2168,7 +2168,7 @@ angular.module('timeSheetApp')
                         var checkOutData = {};
                         checkOutData.siteId = siteId;
                         checkOutData.employeeEmpId = employeeEmpId;
-                        checkOutData.attendanceId = data[0].id;
+                        checkOutData.attendanceId = data.id;
                         EmployeeComponent.checkOut(checkOutData).then(function (data) {
 
                             console.log("attendance marked",data);
