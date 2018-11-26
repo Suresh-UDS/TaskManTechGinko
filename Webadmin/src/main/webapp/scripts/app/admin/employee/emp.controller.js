@@ -2133,35 +2133,35 @@ angular.module('timeSheetApp')
                     console.log("Already checked in");
 
 
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(function (position) {
-                            $scope.$apply(function () {
-
-                                console.log("Location available")
-                                console.log(position);
-
-                                $scope.position = position;
-                                var checkOutData = {};
-                                checkOutData.siteId = siteId;
-                                checkOutData.employeeEmpId = employeeEmpId;
-                                checkOutData.latitudeOut = position.coords.latitude;
-                                checkOutData.longitudeOut = position.coords.longitude;
-                                checkOutData.id = data.id;
-                                // checkOutData.remarks = "Marked from ba"
-                                EmployeeComponent.checkOut(checkOutData).then(function (data) {
-
-                                    console.log("attendance marked" , data);
-                                  $('.ViewModal.in').modal('hide');
-                                   var msg = 'Attendance marked for ' + data.employeeFullName + ' at site ' + data.siteName;
-                                   $scope.showNotifications('top', 'center', 'success', msg);
-                                   // $location.path('/employees');
-                                  //$window.location.reload();
-                                   $scope.getEmployeeDetails(id);
-
-                                })
-                            });
-                        });
-                    } else {
+                    // if (navigator.geolocation) {
+                    //     navigator.geolocation.getCurrentPosition(function (position) {
+                    //         $scope.$apply(function () {
+                    //
+                    //             console.log("Location available")
+                    //             console.log(position);
+                    //
+                    //             $scope.position = position;
+                    //             var checkOutData = {};
+                    //             checkOutData.siteId = siteId;
+                    //             checkOutData.employeeEmpId = employeeEmpId;
+                    //             checkOutData.latitudeOut = position.coords.latitude;
+                    //             checkOutData.longitudeOut = position.coords.longitude;
+                    //             checkOutData.id = data.id;
+                    //             // checkOutData.remarks = "Marked from ba"
+                    //             EmployeeComponent.checkOut(checkOutData).then(function (data) {
+                    //
+                    //                 console.log("attendance marked" , data);
+                    //               $('.ViewModal.in').modal('hide');
+                    //                var msg = 'Attendance marked for ' + data.employeeFullName + ' at site ' + data.siteName;
+                    //                $scope.showNotifications('top', 'center', 'success', msg);
+                    //                // $location.path('/employees');
+                    //               //$window.location.reload();
+                    //                $scope.getEmployeeDetails(id);
+                    //
+                    //             })
+                    //         });
+                    //     });
+                    // } else {
 
                           console.log("Location not available")
 
@@ -2180,7 +2180,7 @@ angular.module('timeSheetApp')
                            $scope.getEmployeeDetails(id);
 
                         })
-                    }
+                    // }
                 } else {
                 	$('.ViewModal.in').modal('hide');
                     var msg = 'No Attendance marked ' + data.employeeFullName + ' at site ' + data.siteName;
