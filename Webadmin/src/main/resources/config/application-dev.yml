@@ -20,8 +20,8 @@ spring:
             enabled: false # we use Grunt + BrowserSync for livereload
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://54.255.148.73:3306/Taskman?useUnicode=true&characterEncoding=utf8
-        #url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
+#        url: jdbc:mysql://54.255.148.73:3306/Taskman?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
         name:
         username: root
         password: tgadmin123#
@@ -40,7 +40,7 @@ spring:
         host: smtp.office365.com
         port: 587
         username: taskmanfms@uds.in
-        password: Ta$k@1234
+        password: Nov@2018
         properties:
             mail.transport.protocol: smtp
             mail.smtp.auth: true
