@@ -19,7 +19,7 @@
 
                 <div class="form-container table-container">
                     <form ng-show="!success" name="form" role="form" novalidate
-                          ng-submit=""  class="form-horizontal">
+                          ng-submit="saveFeedbackMapping()"  class="form-horizontal">
 
                         <div class="row">
                             <div class="col-md-8 col-md-offset-2">
@@ -196,7 +196,7 @@
                                             <div class="col-md-9 txt-align-rgt">
                                                 <div class="form-group">
 
-                                                    <button class="btn btn-success ld ld-over-inverse" type="submit" ng-click="saveFeedbackMapping()"
+                                                    <button class="btn btn-success ld ld-over-inverse" type="submit" 
                                                             id="form-button-save" ng-disabled="form.$invalid || btnDisable">
                                                         <span class="btn-label"><i class="material-icons">check</i></span> Save
                                                     </button>

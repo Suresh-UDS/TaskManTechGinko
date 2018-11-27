@@ -135,6 +135,12 @@ angular.module('timeSheetApp')
                     return response.data;
                 })
             },
+            
+            getBranchByProjectAndRegionName: function (projectId,region) {
+                return $http.get('api/branch/projectId/'+projectId+'/regionName/'+region).then(function (response) {
+                    return response.data;
+                })
+            },
 
             getSitesByRegion: function (projectId, region) {
                 return $http.post('api/project/region/'+region+'/projectId/'+projectId).then(function (response) {

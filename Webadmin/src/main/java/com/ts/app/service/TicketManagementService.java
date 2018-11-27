@@ -11,6 +11,7 @@ import java.util.TreeSet;
 
 import javax.inject.Inject;
 
+import com.ts.app.repository.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
@@ -44,14 +45,6 @@ import com.ts.app.domain.User;
 import com.ts.app.domain.UserRole;
 import com.ts.app.domain.UserRoleEnum;
 import com.ts.app.domain.UserRolePermission;
-import com.ts.app.repository.AssetRepository;
-import com.ts.app.repository.EmployeeRepository;
-import com.ts.app.repository.JobRepository;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.SettingsRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.repository.TicketRepository;
-import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.AmazonS3Utils;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
@@ -442,32 +435,41 @@ public class TicketManagementService extends AbstractService {
 	        			if(userRole.getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())){
 	        				if(searchCriteria.isFindAll()) {
 	        					page = ticketRepository.findAll(startDate, endDate, pageRequest);
-	        				}else if(searchCriteria.getSiteId() > 0) {
-	        					if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
-	        						page = ticketRepository.findBySiteIdAndStatus(searchCriteria.getSiteId(), searchCriteria.getTicketStatus(), startDate, endDate, pageRequest);
-	        					}else {
-	        						page = ticketRepository.findBySiteId(searchCriteria.getSiteId(), startDate, endDate, pageRequest);
-	        					}
-	        				}else if(searchCriteria.getProjectId() > 0) {
-	        					if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
-	        						page = ticketRepository.findByProjectIdAndStatus(searchCriteria.getProjectId(), searchCriteria.getTicketStatus(), startDate, endDate, pageRequest);
-	        					}else {
-	        						page = ticketRepository.findByProjectId(searchCriteria.getProjectId(), startDate, endDate, pageRequest);
-	        					}
-	        				}else if(searchCriteria.getAssetId() > 0) {
-	        					if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
-	        						page = ticketRepository.findByAssetIdAndStatus(searchCriteria.getAssetId(), searchCriteria.getTicketStatus(), startDate, endDate, pageRequest);
-	        					}else {
-	        						page = ticketRepository.findByAssetId(searchCriteria.getAssetId(), startDate, endDate, pageRequest);
-	        					}
 	        				}else {
-	        					if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
-	        						page = ticketRepository.findByStatus(searchCriteria.getTicketStatus(), startDate, endDate, pageRequest);
-	        					}else {
-	        						page = ticketRepository.findByDateRange(startDate, endDate, pageRequest);
-	        					}
-	        				}
-	        			}
+	        				    page = ticketRepository.findAll(new TicketSpecification(searchCriteria,true),pageRequest);
+                            }
+
+//	        				    if(searchCriteria.getSiteId() > 0) {
+//	        					if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
+//	        						page = ticketRepository.findBySiteIdAndStatus(searchCriteria.getSiteId(), searchCriteria.getTicketStatus(), startDate, endDate, pageRequest);
+//	        					}else {
+//	        						page = ticketRepository.findBySiteId(searchCriteria.getSiteId(), startDate, endDate, pageRequest);
+//	        					}
+//	        				}else if(searchCriteria.getProjectId() > 0) {
+//	        					if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
+//	        						page = ticketRepository.findByProjectIdAndStatus(searchCriteria.getProjectId(), searchCriteria.getTicketStatus(), startDate, endDate, pageRequest);
+//	        					}else {
+//	        						page = ticketRepository.findByProjectId(searchCriteria.getProjectId(), startDate, endDate, pageRequest);
+//	        					}
+//	        				}else if(searchCriteria.getAssetId() > 0) {
+//	        					if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
+//	        						page = ticketRepository.findByAssetIdAndStatus(searchCriteria.getAssetId(), searchCriteria.getTicketStatus(), startDate, endDate, pageRequest);
+//	        					}else {
+//	        						page = ticketRepository.findByAssetId(searchCriteria.getAssetId(), startDate, endDate, pageRequest);
+//	        					}
+//	        				}else {
+//	        					if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
+//	        						page = ticketRepository.findByStatus(searchCriteria.getTicketStatus(), startDate, endDate, pageRequest);
+//	        					}else {
+//	        						page = ticketRepository.findByDateRange(startDate, endDate, pageRequest);
+//	        					}
+//	        				}
+	        			}else{
+                            page = ticketRepository.findAll(new TicketSpecification(searchCriteria,false),pageRequest);
+
+                            log.debug("Total records - "+page.getTotalElements());
+
+                        }
 	        		}
             }
             if(page == null && user != null) {
@@ -505,52 +507,54 @@ public class TicketManagementService extends AbstractService {
                     log.debug("List of subordinate ids -"+ subEmpIds);
                     searchCriteria.setSubordinateIds(subEmpList);
                 }
-                if(searchCriteria.getSiteId() > 0) {
-                		if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
-                			if(hasViewAll) {
-                				page = ticketRepository.findBySiteIdAndStatus(searchCriteria.getSiteId(), searchCriteria.getTicketStatus(), startDate, endDate,pageRequest);
-                			}else {
-                				page = ticketRepository.findBySiteIdStatusAndEmpId(searchCriteria.getSiteId(), searchCriteria.getTicketStatus(),searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
-                			}
-                		}else {
-                			if(hasViewAll) {
-                				page = ticketRepository.findBySiteId(searchCriteria.getSiteId(), startDate, endDate,pageRequest);
-                			}else {
-                				page = ticketRepository.findBySiteIdUserIdAndEmpId(searchCriteria.getSiteId(), searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
-                			}
-                		}
-                }else if (searchCriteria.getProjectId() > 0) {
-	            		if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
-	            			if(hasViewAll) {
-	            				page = ticketRepository.findByProjectIdAndStatus(searchCriteria.getProjectId(), searchCriteria.getTicketStatus(), startDate, endDate,pageRequest);
-	            			}else {
-	            				page = ticketRepository.findByProjectIdStatusAndEmpId(searchCriteria.getProjectId(), searchCriteria.getTicketStatus(),searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
-	            			}
-	            		}else {
-	            			if(hasViewAll) {
-	            				page = ticketRepository.findByProjectId(searchCriteria.getProjectId(), startDate, endDate, pageRequest);
-	            			} else {
-	            				page = ticketRepository.findByProjectIdAndEmpId(searchCriteria.getProjectId(), searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
-	            			}
-	            		}
-                }else if (searchCriteria.getAssetId() > 0) {
-	            		if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
-            				page = ticketRepository.findByAssetIdAndStatus(searchCriteria.getAssetId(), searchCriteria.getTicketStatus(), startDate, endDate,pageRequest);
-	            		}else {
-            				page = ticketRepository.findByAssetId(searchCriteria.getAssetId(), startDate, endDate, pageRequest);
-	            		}
-	            }else {
-	            		if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
-            				page = ticketRepository.findByStatusAndEmpId(siteIds,searchCriteria.getTicketStatus(),searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
-	            		}else {
-	            			if(CollectionUtils.isNotEmpty(siteIds)) {
-	            				page = ticketRepository.findByEmpId(siteIds,searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
-	            			}else {
-	            				page = ticketRepository.findByEmpId(searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
-	            			}
-	            		}
 
-                }
+                page = ticketRepository.findAll(new TicketSpecification(searchCriteria,hasViewAll),pageRequest);
+//                if(searchCriteria.getSiteId() > 0) {
+//                		if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
+//                			if(hasViewAll) {
+//                				page = ticketRepository.findBySiteIdAndStatus(searchCriteria.getSiteId(), searchCriteria.getTicketStatus(), startDate, endDate,pageRequest);
+//                			}else {
+//                				page = ticketRepository.findBySiteIdStatusAndEmpId(searchCriteria.getSiteId(), searchCriteria.getTicketStatus(),searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
+//                			}
+//                		}else {
+//                			if(hasViewAll) {
+//                				page = ticketRepository.findBySiteId(searchCriteria.getSiteId(), startDate, endDate,pageRequest);
+//                			}else {
+//                				page = ticketRepository.findBySiteIdUserIdAndEmpId(searchCriteria.getSiteId(), searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
+//                			}
+//                		}
+//                }else if (searchCriteria.getProjectId() > 0) {
+//	            		if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
+//	            			if(hasViewAll) {
+//	            				page = ticketRepository.findByProjectIdAndStatus(searchCriteria.getProjectId(), searchCriteria.getTicketStatus(), startDate, endDate,pageRequest);
+//	            			}else {
+//	            				page = ticketRepository.findByProjectIdStatusAndEmpId(searchCriteria.getProjectId(), searchCriteria.getTicketStatus(),searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
+//	            			}
+//	            		}else {
+//	            			if(hasViewAll) {
+//	            				page = ticketRepository.findByProjectId(searchCriteria.getProjectId(), startDate, endDate, pageRequest);
+//	            			} else {
+//	            				page = ticketRepository.findByProjectIdAndEmpId(searchCriteria.getProjectId(), searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
+//	            			}
+//	            		}
+//                }else if (searchCriteria.getAssetId() > 0) {
+//	            		if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
+//            				page = ticketRepository.findByAssetIdAndStatus(searchCriteria.getAssetId(), searchCriteria.getTicketStatus(), startDate, endDate,pageRequest);
+//	            		}else {
+//            				page = ticketRepository.findByAssetId(searchCriteria.getAssetId(), startDate, endDate, pageRequest);
+//	            		}
+//	            }else {
+//	            		if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
+//            				page = ticketRepository.findByStatusAndEmpId(siteIds,searchCriteria.getTicketStatus(),searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
+//	            		}else {
+//	            			if(CollectionUtils.isNotEmpty(siteIds)) {
+//	            				page = ticketRepository.findByEmpId(siteIds,searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
+//	            			}else {
+//	            				page = ticketRepository.findByEmpId(searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
+//	            			}
+//	            		}
+//
+//                }
             }
 	    		if(log.isDebugEnabled()) {
 	    			log.debug("Ticket Search Result size -" + (page.getContent() != null ? page.getContent().size() :  null));

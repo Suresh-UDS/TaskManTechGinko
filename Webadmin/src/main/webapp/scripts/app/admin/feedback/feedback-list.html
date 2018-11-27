@@ -32,31 +32,35 @@
         </div>
 
     </div>
-    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
+    <div class="AppliedFilterCon" >
             <span class="AppliedFilterTxtCon">
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.checkInDateTimeFrom || localStorage.checkInDateTimeFrom">
-                    From: {{searchCriteria.checkInDateTimeFrom || localStorage.checkInDateTimeFrom | date:'dd/MM/yyyy'}}
-                </span>
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.checkInDateTimeTo || localStorage.checkInDateTimeTo">
-                    To: {{searchCriteria.checkInDateTimeTo || localStorage.checkInDateTimeTo | date:'dd/MM/yyyy'}}
-                </span>
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.projectName || localStorage.projectName">
-                    Client: {{searchCriteria.projectName || localStorage.projectName}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.checkInDateTimeFrom">
+                    From: {{searchCriteras.checkInDateTimeFrom | date:'dd/MM/yyyy'}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.siteName || localStorage.siteName">
-                    Site: {{searchCriteria.siteName || localStorage.siteName}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.checkInDateTimeTo">
+                    To: {{searchCriteras.checkInDateTimeTo | date:'dd/MM/yyyy'}}
                 </span>
-                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteria.block || localStorage.block">
-                    Block: {{searchCriteria.block || localStorage.block}}
+                <span
+	            class="tag label label-info" style="margin-right: 10px"
+	            ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
+					Client: {{searchCriteras.projectName}}
+				</span>
+
+                <span class="tag label label-info" style="margin-right: 10px"
+		                  ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
+						Site: {{searchCriteras.siteName}}
+				</span>
+                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.block">
+                    Block: {{searchCriteras.block}}
                 </span>
 
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.floor || localStorage.floor">
-                    Floor: {{searchCriteria.floor || localStorage.floor}}
+                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.floor">
+                    Floor: {{searchCriteras.floor}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px"ng-show="searchCriteria.zone || localStorage.zone">
-                    Zone: {{searchCriteria.zone || localStorage.zone}}
+                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.zone">
+                    Zone: {{searchCriteras.zone}}
                 </span>
 
             </span>
