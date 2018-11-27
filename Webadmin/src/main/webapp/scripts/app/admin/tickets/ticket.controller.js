@@ -151,8 +151,7 @@ angular.module('timeSheetApp')
                     $scope.tickets.siteId = $scope.selectedSite.id;
                     $scope.tickets.employeeId = $scope.selectedEmployee.id;
                     $scope.tickets.severity = $scope.tickets.severity;
-                    //$scope.tickets.comments = $scope.tickets.comments;
-                    $scope.tickets.remarks = $scope.tickets.remarks;
+                    $scope.tickets.comments = $scope.tickets.comments;
                     if($scope.selectedAsset) {
                     	$scope.tickets.assetId = $scope.selectedAsset.id;
                     }
@@ -536,8 +535,7 @@ angular.module('timeSheetApp')
                     $scope.selectedSite = {id : data.siteId,name : data.siteName};
                     $scope.selectedEmployee = {id : data.assignedToId,name : data.assignedToName};
                     $scope.tickets.severity = $scope.tickets.severity;
-                    //$scope.tickets.comments = $scope.tickets.comments;
-                    $scope.tickets.remarks = $scope.tickets.remarks;
+                    $scope.tickets.comments = $scope.tickets.comments;
                     $scope.tickets.status = $scope.tickets.status;
                     $scope.loadAssets();
                     $scope.loadEmployees();
@@ -606,8 +604,7 @@ angular.module('timeSheetApp')
                 $scope.listSite = tlist.siteName;
                 $scope.listEmployee = tlist.assignedToName;
                 $scope.listSeverity = tlist.severity;
-                //$scope.listComments = tlist.comments;
-                $scope.listRemarks = tlist.remarks;
+                $scope.listComments = tlist.comments;
                 $scope.listCreatedBy = tlist.createdBy;
                 $scope.listCreatedDate = tlist.createdDate;
                 $scope.listStatus = tlist.status;
@@ -677,8 +674,7 @@ angular.module('timeSheetApp')
                 if($scope.selectedAsset) {
                 	$scope.tickets.assetId = $scope.selectedAsset.id;
                 }
-                //$scope.tickets.comments = $scope.tickets.comments;
-                $scope.tickets.remarks = $scope.tickets.remarks;
+                $scope.tickets.comments = $scope.tickets.comments;
                 console.log('Tickets - ' + JSON.stringify($scope.tickets));
                 JobComponent.updateTicket($scope.tickets).then(function(response) {
 

@@ -1709,11 +1709,6 @@ public class SchedulerHelperService extends AbstractService {
 
 	public void sendDaywiseReportEmail(Date date, boolean isOnDemand, long projectId) {
 		// TODO Auto-generated method stub
-		Calendar reportCal = Calendar.getInstance();
-		reportCal.setTime(date);
-		if(!isOnDemand && reportCal.get(Calendar.DAY_OF_WEEK) == 1) { //FILTER TO AVOID DAILY REPORTS ON SUNDAYS
-			return;
-		}
 		dayWiseJQTReport(date, isOnDemand, projectId);
 	}
 

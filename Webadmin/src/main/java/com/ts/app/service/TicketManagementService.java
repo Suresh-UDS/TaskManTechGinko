@@ -292,16 +292,12 @@ public class TicketManagementService extends AbstractService {
 	            ticket.setSeverity(ticket.getSeverity());
             }
             if(StringUtils.isNotEmpty(ticketDTO.getCategory())){
-	            //ticket.setComments(ticketDTO.getCategory());
-	            ticket.setRemarks(ticketDTO.getCategory());
+	            ticket.setComments(ticketDTO.getCategory());
             }else{
-                //ticket.setComments(ticket.getCategory());
-                ticket.setRemarks(ticket.getCategory());
-                
+                ticket.setComments(ticket.getCategory());
             }
 
-	        //ticket.setComments(ticketDTO.getComments());
-	        ticket.setRemarks(ticketDTO.getRemarks());
+	        ticket.setComments(ticketDTO.getComments());
 	        if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Closed"))) {
 	        		ticket.setClosedBy(user.getEmployee());
 	        		ticket.setClosedOn(new java.sql.Date(currCal.getTimeInMillis()));
@@ -582,8 +578,7 @@ public class TicketManagementService extends AbstractService {
     			dto.setJobId(job.getId());
     			dto.setJobName(job.getTitle());
     		}
-    		//dto.setComments(ticket.getComments());
-    		dto.setRemarks(ticket.getRemarks());
+    		dto.setComments(ticket.getComments());
     		dto.setImage(ticket.getImage());
     		dto.setQuotationId(ticket.getQuotationId());
     		return dto;

@@ -742,7 +742,7 @@ public class ExportUtil {
 //		}
 		XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(1);
 		rowNum = 1;
-		if(CollectionUtils.isNotEmpty(content)) {
+		if(xssfSheet != null && CollectionUtils.isNotEmpty(content)) {
 			for (EmployeeAttendanceReport transaction : content) {
 	
 				Row dataRow = xssfSheet.getRow(rowNum++);
