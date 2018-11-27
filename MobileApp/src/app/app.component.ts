@@ -191,11 +191,21 @@ export class MyApp {
         this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);
         this.oneSignal.handleNotificationReceived().subscribe(response =>{
             console.log(response);
-        })
+        });
+
+
 
         this.oneSignal.handleNotificationOpened().subscribe(response=>{
             console.log(response);
-        })
+        });
+
+        this.oneSignal.getIds().then(
+            response=>{
+                console.log("Push Subscription response - get Ids");
+                console.log(response);
+                    this.registerForPush("android",response.pushToken,response.userId);
+            }
+        );
 
         this.oneSignal.endInit();
     });
