@@ -28,16 +28,16 @@
     </div>
     <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
             <span class="AppliedFilterTxtCon">
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.userRoleId || localStorage.userRoleId">
-                    Role Id: {{searchCriteria.userRoleId || localStorage.userRoleId}}
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.userRoleId">
+                    Role Id: {{searchCriteras.userRoleId}}
                 </span>
 
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.role || localStorage.role">
-                    Role: {{searchCriteria.role || localStorage.role}}
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.role">
+                    Role: {{searchCriteras.role}}
                 </span>
 
-                 <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.roleLevel || localStorage.roleLevel">
-                    Role Level: {{searchCriteria.roleLevel || localStorage.roleLevel}}
+                 <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.roleLevel">
+                    Role Level: {{searchCriteras.roleLevel}}
                 </span>
 
             </span>
