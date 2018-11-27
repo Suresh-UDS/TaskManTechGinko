@@ -152,6 +152,7 @@ angular.module('timeSheetApp')
                     $scope.tickets.employeeId = $scope.selectedEmployee.id;
                     $scope.tickets.severity = $scope.tickets.severity;
                     $scope.tickets.comments = $scope.tickets.comments;
+                    $scope.tickets.remarks = $scope.tickets.remarks;
                     if($scope.selectedAsset) {
                     	$scope.tickets.assetId = $scope.selectedAsset.id;
                     }
@@ -536,6 +537,7 @@ angular.module('timeSheetApp')
                     $scope.selectedEmployee = {id : data.assignedToId,name : data.assignedToName};
                     $scope.tickets.severity = $scope.tickets.severity;
                     $scope.tickets.comments = $scope.tickets.comments;
+                    $scope.tickets.remarks = $scope.tickets.remarks;
                     $scope.tickets.status = $scope.tickets.status;
                     $scope.loadAssets();
                     $scope.loadEmployees();
@@ -605,6 +607,7 @@ angular.module('timeSheetApp')
                 $scope.listEmployee = tlist.assignedToName;
                 $scope.listSeverity = tlist.severity;
                 $scope.listComments = tlist.comments;
+                $scope.listRemarks = tlist.remarks;
                 $scope.listCreatedBy = tlist.createdBy;
                 $scope.listCreatedDate = tlist.createdDate;
                 $scope.listStatus = tlist.status;
@@ -675,6 +678,7 @@ angular.module('timeSheetApp')
                 	$scope.tickets.assetId = $scope.selectedAsset.id;
                 }
                 $scope.tickets.comments = $scope.tickets.comments;
+                $scope.tickets.remarks = $scope.tickets.remarks;
                 console.log('Tickets - ' + JSON.stringify($scope.tickets));
                 JobComponent.updateTicket($scope.tickets).then(function(response) {
 

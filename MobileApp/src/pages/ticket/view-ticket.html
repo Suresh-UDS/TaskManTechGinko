@@ -77,11 +77,11 @@
 
     <br>
 
-    <ion-row class="margin0 white-bg padding10" >
+    <ion-row class="margin0 white-bg padding10" *ngIf="ticketDetails.image !=null">
         <ion-col col-12>
             <ion-row>
                 <ion-col col-3 >
-                    <img [src]="ticketImage" class="job-img margin-bottom25" >
+                    <img [src]="ticketImage" class="job-img margin-bottom25">
                 </ion-col>
             </ion-row>
         </ion-col>
@@ -98,7 +98,10 @@
         <button has-permission="JobsView" class="btn btn-warning center pull-left" (click)="viewJob(ticketDetails)" *ngIf="ticketDetails.jobId >0">
             View Job
         </button>
-        <button has-permission="TicketsView" class="btn btn-success center pull-right" (click)="closeTicket()">
+        <!--<button has-permission="TicketsView" class="btn btn-success center pull-right" (click)="closeTicket()">-->
+            <!--Close Ticket <ion-icon name="ios-arrow-forward-outline"></ion-icon>-->
+        <!--</button>-->
+        <button has-permission="TicketsView" class="btn btn-success center pull-right" (click)="presentPrompt()">
             Close Ticket <ion-icon name="ios-arrow-forward-outline"></ion-icon>
         </button>
     </ion-toolbar>

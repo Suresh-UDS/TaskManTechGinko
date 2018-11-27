@@ -87,6 +87,10 @@
 {
   font-weight: 400;
 }
+.magn-feedback
+{
+    margin: 9px 36px 9px 40px;
+}
 p.siteName {
     font-size: 12px !important;
     color: #000 !important;
@@ -1570,6 +1574,10 @@ ion-grid .row:before
     /*padding: 6px 0 !important;*/
 /*}*/
 @media only screen and (min-width: 600px ){
+
+    .logo-img{
+        width:15% !important;
+    }
     h2
     {
         font-size: 4.4rem !important;
