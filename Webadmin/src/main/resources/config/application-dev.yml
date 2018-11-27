@@ -40,7 +40,7 @@ spring:
         host: smtp.office365.com
         port: 587
         username: taskmanfms@uds.in
-        password: Ta$k@1234
+        password: Nov@2018
         properties:
             mail.transport.protocol: smtp
             mail.smtp.auth: true
