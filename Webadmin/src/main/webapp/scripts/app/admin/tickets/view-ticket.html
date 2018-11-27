@@ -169,12 +169,16 @@
                             <div class="col-md-4">
 
                                 <div class="panel panel-default">
-                                    <div class="panel-heading">Remarks </div>
+                                    <div class="panel-heading">Comments & Remarks </div>
                                     <div class="panel-body" style="min-height: 265px;">
 
                                         <div class="table-responsive">
                                             <table class="table">
                                                 <tbody>
+                                                <tr>
+                                                    <td>Comments</td>
+                                                    <td><span ng-if="tickets.comments">{{tickets.comments}}</span><span ng-if="!tickets.comments">No comments</span></td>
+                                                </tr>
                                                 <tr>
                                                     <td>Remarks</td>
                                                     <td><span ng-if="tickets.remarks">{{tickets.remarks}}</span><span ng-if="!tickets.remarks">No remarks</span></td>
