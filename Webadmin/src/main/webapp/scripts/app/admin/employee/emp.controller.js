@@ -1188,7 +1188,18 @@ angular.module('timeSheetApp')
             }
 
         };
-
+        
+        
+        $scope.getEmployeeSiteDetails = function(id){
+        	$scope.loadingStart();
+        	$scope.empSitesList = null;
+        	EmployeeComponent.findOne(id).then(function (data) {
+                $scope.empSitesList = data.projectSites;
+                $scope.loadingStop();
+            });
+        	
+        }
+         
 
 
         $scope.getEmployeeDetails = function(id) {
@@ -2066,12 +2077,12 @@ angular.module('timeSheetApp')
               //console.log("Attendance Data",data);
                 if (data && data.length > 0) {
                     //console.log("Already checked in");
-                    $('.ViewModal.in').modal('hide');
+                    //$('.ViewModal.in').modal('hide');
 
                     var msg = 'Attendance already marked ' + data[0].employeeFullName + ' at site ' + data[0].siteName;
                     $scope.showNotifications('top', 'center', 'warning', msg);
                 } else {
-                    if (navigator.geolocation) {
+                    /*if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(function (position) {
                             $scope.$apply(function () {
 
@@ -2087,7 +2098,7 @@ angular.module('timeSheetApp')
                                 EmployeeComponent.checkIn(checkInData).then(function (data) {
 
                                   //console.log("attendance marked",data);
-                                  $('.ViewModal.in').modal('hide');
+                                  //$('.ViewModal.in').modal('hide');
 
                                     var msg = 'Attendance marked for ' + data.employeeFullName + ' at site ' + data.siteName;
                                     $scope.showNotifications('top', 'center', 'success', msg);
@@ -2096,7 +2107,7 @@ angular.module('timeSheetApp')
                                 })
                             });
                         });
-                    } else {
+                    } else {*/
 
                         //console.log("Location not available")
 
@@ -2106,13 +2117,13 @@ angular.module('timeSheetApp')
                         EmployeeComponent.checkIn(checkInData).then(function (data) {
 
                           //console.log("attendance marked");
-                          $('.ViewModal.in').modal('hide');
+                          //$('.ViewModal.in').modal('hide');
                           var msg = 'Attendance marked for ' + data.employeeFullName + ' at site ' + data.siteName;
                           $scope.showNotifications('top', 'center', 'success', msg);
                           $scope.getEmployeeDetails(id);
 
                         })
-                    }
+                    /*}*/
                 }
 
             });
@@ -2133,7 +2144,7 @@ angular.module('timeSheetApp')
                     console.log("Already checked in");
 
 
-                    if (navigator.geolocation) {
+                    /*if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(function (position) {
                             $scope.$apply(function () {
 
@@ -2151,7 +2162,7 @@ angular.module('timeSheetApp')
                                 EmployeeComponent.checkOut(checkOutData).then(function (data) {
 
                                   //console.log("attendance marked" , data);
-                                  $('.ViewModal.in').modal('hide');
+                                  //$('.ViewModal.in').modal('hide');
                                    var msg = 'Attendance marked for ' + data.employeeFullName + ' at site ' + data.siteName;
                                    $scope.showNotifications('top', 'center', 'success', msg);
                                    // $location.path('/employees');
@@ -2162,17 +2173,17 @@ angular.module('timeSheetApp')
                             });
                         });
                     } else {
-
+*/
                         //console.log("Location not available")
 
                         var checkOutData = {};
                         checkOutData.siteId = siteId;
                         checkOutData.employeeEmpId = employeeEmpId;
-                        checkOutData.attendanceId = data[0].id;
+                        checkOutData.id = data.id;
                         EmployeeComponent.checkOut(checkOutData).then(function (data) {
 
                           //console.log("attendance marked",data);
-                          $('.ViewModal.in').modal('hide');
+                          //$('.ViewModal.in').modal('hide');
                            var msg = 'Attendance marked for ' + data.employeeFullName + ' at site ' + data.siteName;
                            $scope.showNotifications('top', 'center', 'success', msg);
                            // $location.path('/employees');
@@ -2180,9 +2191,9 @@ angular.module('timeSheetApp')
                            $scope.getEmployeeDetails(id);
 
                         })
-                    }
+                   /* }*/
                 } else {
-                	$('.ViewModal.in').modal('hide');
+                	//$('.ViewModal.in').modal('hide');
                     var msg = 'No Attendance marked ' + data.employeeFullName + ' at site ' + data.siteName;
                     $scope.showNotifications('top', 'center', 'warning', msg);
                     $scope.getEmployeeDetails(id);
