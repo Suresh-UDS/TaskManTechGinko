@@ -96,36 +96,41 @@
 
                       <div class="row">
                           <div class="col-lg-4 col-md-6 col-sm-6">
-                              <div class="card card-stats">
-                                  <div class="card-header" data-background-color="orange">
-                                      <i class="material-icons">domain</i>
-                                  </div>
-                                  <div class="card-content">
-                                      <p class="category">Clients</p>
-                                      <h3 class="card-title">{{projectCount ? projectCount : 0}}</h3>
-                                  </div>
-                                  <div class="card-footer">
-                                      <div class="stats">
-                                      </div>
-                                  </div>
-                              </div>
+                              <a  ui-sref="projects" ng-click="dbdFilter();">
+	                              <div class="card card-stats">
+	                                  <div class="card-header" data-background-color="orange">
+	                                      <i class="material-icons">domain</i>
+	                                  </div>
+	                                  <div class="card-content">
+	                                      <p class="category">Clients</p>
+	                                      <h3 class="card-title">{{projectCount ? projectCount : 0}}</h3>
+	                                  </div>
+	                                  <div class="card-footer">
+	                                      <div class="stats">
+	                                      </div>
+	                                  </div>
+	                              </div>
+                              </a>
                           </div>
                           <div class="col-lg-4 col-md-6 col-sm-6">
-                              <div class="card card-stats">
-                                  <div class="card-header" data-background-color="rose">
-                                      <i class="material-icons">location_city</i>
-                                  </div>
-                                  <div class="card-content">
-                                      <p class="category">Sites</p>
-                                      <h3 class="card-title">{{siteCount ? siteCount : 0}}</h3>
-                                  </div>
-                                  <div class="card-footer">
-                                      <div class="stats">
-                                      </div>
-                                  </div>
-                              </div>
+                             <a  ui-sref="sites" ng-click="dbdFilter();">
+	                              <div class="card card-stats">
+	                                  <div class="card-header" data-background-color="rose">
+	                                      <i class="material-icons">location_city</i>
+	                                  </div>
+	                                  <div class="card-content">
+	                                      <p class="category">Sites</p>
+	                                      <h3 class="card-title">{{siteCount ? siteCount : 0}}</h3>
+	                                  </div>
+	                                  <div class="card-footer">
+	                                      <div class="stats">
+	                                      </div>
+	                                  </div>
+	                              </div>
+                              </a>
                           </div>
                           <div class="col-lg-4 col-md-6 col-sm-6">
+                          <a  ui-sref="employees" ng-click="dbdFilter();">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="green">
                                       <i class="material-icons">people</i>
@@ -139,7 +144,8 @@
                                           <!-- <i class="material-icons">local_offer</i> Tracked from Google Analytics -->
                                       </div>
                                   </div>
-                              </div>
+                               </div>
+                           </a>
                           </div>
                           <!--<div class="col-lg-3 col-md-6 col-sm-6" has-permission="Quotation:List">-->
                               <!--<div class="card card-stats">-->
@@ -168,6 +174,7 @@
                       <div class="row">
 
                           <div class="col-lg-3 col-md-6 col-sm-6">
+                            <a ui-sref="jobs" ng-click="dbdStatusFilter('');">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="orange">
                                       <i class="material-icons">work</i>
@@ -180,9 +187,12 @@
                                       <div class="stats">
                                       </div>
                                   </div>
-                              </div>
+                               </div>
+                            </a>
+                              
                           </div>
                           <div class="col-lg-3 col-md-6 col-sm-6">
+                             <a ui-sref="jobs" ng-click="dbdStatusFilter('ASSIGNED');">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="blue">
                                       <i class="material-icons">work</i>
@@ -196,8 +206,10 @@
                                       </div>
                                   </div>
                               </div>
+                             </a> 
                           </div>
                           <div class="col-lg-3 col-md-6 col-sm-6">
+                             <a ui-sref="jobs" ng-click="dbdStatusFilter('COMPLETED');">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="green">
                                       <i class="material-icons">work</i>
@@ -212,9 +224,11 @@
                                       </div>
                                   </div>
                               </div>
+                             </a>
                           </div>
                           <div class="col-lg-3 col-md-6 col-sm-6">
-                              <div class="card card-stats">
+                            <a ui-sref="jobs" ng-click="dbdStatusFilter('OVERDUE');">
+                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="rose">
                                       <i class="material-icons">work</i>
                                   </div>
@@ -227,7 +241,8 @@
                                           <!-- <i class="material-icons">date_range</i> Last 24 Hours -->
                                       </div>
                                   </div>
-                              </div>
+                               </div>
+                              </a>
                           </div>
                       </div>
 
@@ -241,6 +256,7 @@
                       <div class="row">
 
                           <div class="col-lg-3 col-md-6 col-sm-6">
+                            <a ui-sref="attendances" ng-click="dbdFilter();">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="orange">
                                       <i class="material-icons">schedule</i>
@@ -254,8 +270,10 @@
                                       </div>
                                   </div>
                               </div>
+                            </a>
                           </div>
                           <div class="col-lg-3 col-md-6 col-sm-6">
+                            <a ui-sref="attendances" ng-click="dbdFilter();">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="green">
                                       <i class="material-icons">schedule</i>
@@ -269,8 +287,10 @@
                                       </div>
                                   </div>
                               </div>
+                            </a>
                           </div>
                           <div class="col-lg-3 col-md-6 col-sm-6">
+                            <a ui-sref="attendances" ng-click="dbdFilter();">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="rose">
                                       <i class="material-icons">schedule</i>
@@ -285,8 +305,10 @@
                                       </div>
                                   </div>
                               </div>
+                            </a>
                           </div>
                           <div class="col-lg-3 col-md-6 col-sm-6">
+                            <a ui-sref="attendances" ng-click="dbdFilter();">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="blue">
                                       <i class="material-icons">schedule</i>
@@ -301,6 +323,7 @@
                                       </div>
                                   </div>
                               </div>
+                            </a>
                           </div>
                       </div>
 
@@ -314,6 +337,7 @@
                       <div class="row">
 
                           <div class="col-lg-4 col-md-6 col-sm-6">
+                            <a ui-sref="tickets" ng-click="dbdTStatusFilter('');">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="orange">
                                       <i class="material-icons">tab</i>
@@ -327,8 +351,10 @@
                                       </div>
                                   </div>
                               </div>
+                            </a>
                           </div>
                           <div class="col-lg-4 col-md-6 col-sm-6">
+                            <a ui-sref="tickets" ng-click="dbdTStatusFilter('OPEN');">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="red">
                                       <i class="material-icons">tab</i>
@@ -342,8 +368,10 @@
                                       </div>
                                   </div>
                               </div>
+                            </a>
                           </div>
                           <div class="col-lg-4 col-md-6 col-sm-6">
+                            <a ui-sref="tickets" ng-click="dbdTStatusFilter('CLOSED');">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="green">
                                       <i class="material-icons">tab</i>
@@ -358,6 +386,7 @@
                                       </div>
                                   </div>
                               </div>
+                            </a>
                           </div>
                       </div>
 

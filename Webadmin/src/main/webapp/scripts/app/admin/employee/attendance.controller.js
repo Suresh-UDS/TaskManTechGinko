@@ -384,6 +384,7 @@ angular.module('timeSheetApp')
         $scope.search = function () {
             $scope.noData = false;
           //console.log($scope.datePickerDate);
+           
 
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         	if(!$scope.searchCriteria) {
@@ -400,27 +401,79 @@ angular.module('timeSheetApp')
         	//console.log('Selected  date range -' + $scope.checkInDateTimeFrom + ", " + $scope.checkInDateTimeTo);
         	$scope.searchCriteria.currPage = currPageVal;
         	
-        	if($scope.client.selected && $scope.client.selected.id !=0){
-        		$scope.searchProject = $scope.client.selected;
-        	}else{
-        	   $scope.searchProject = null;
-        	}
-        	if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
-        		$scope.searchSite = $scope.sitesListOne.selected;
-        	}else{
-        	   $scope.searchSite = null;
-        	}
+            /* Root scope (search criteria) start*/
+            
+            if($rootScope.searchFilterCriteria.isDashboard){
+            	
+            	 if($rootScope.searchFilterCriteria.projectId){
+              		$scope.searchProject ={id:$rootScope.searchFilterCriteria.projectId,name:$rootScope.searchFilterCriteria.projectName};
+              		$scope.client.selected =$scope.searchProject;
+              		$scope.projectFilterFunction($scope.searchProject);
+              	}else{
+              	   $scope.searchProject = null;
+              	   $scope.client.selected =$scope.searchProject;
+              	} 
+            	
+            	 if($rootScope.searchFilterCriteria.siteId){
+             		$scope.searchSite = {id:$rootScope.searchFilterCriteria.siteId,name:$rootScope.searchFilterCriteria.siteName};
+             		$scope.sitesListOne.selected = $scope.searchSite;
+             		$scope.siteFilterDisable=false;
+             		
+             	}else{
+             	   $scope.searchSite = null;
+             	  $scope.sitesListOne.selected=$scope.searchSite;
+             	}
+            	
+            	if($rootScope.searchFilterCriteria.selectedFromDate) {
+	        		$scope.searchCriteria.checkInDateTimeFrom = $rootScope.searchFilterCriteria.selectedFromDate;
+	        		$scope.selectedDateFrom = $filter('date')($rootScope.searchFilterCriteria.selectedFromDate, 'dd/MM/yyyy');
+	        		$scope.selectedDateFromSer = $rootScope.searchFilterCriteria.selectedFromDate;
+	        	}/*else{
+	        	    $scope.searchCriteria.checkInDateTimeFrom = null;
+	        	    $scope.selectedDateFrom = null;
+	        	}*/
+
+	        	if($rootScope.searchFilterCriteria.selectedToDate) {
+	        		$scope.searchCriteria.checkInDateTimeTo = $rootScope.searchFilterCriteria.selectedToDate;
+	        		$scope.selectedDateTo = $filter('date')($rootScope.searchFilterCriteria.selectedToDate, 'dd/MM/yyyy');
+	        		$scope.selectedDateToSer = $rootScope.searchFilterCriteria.selectedToDate;
+	        	}/*else{
+	        	    $scope.searchCriteria.checkInDateTimeTo = null;
+	        	    $scope.selectedDateTo = null;
+	        	}*/
+             	
+            	 /* Root scope (search criteria) end*/
+             	
+            }else{
+            	
+            	if($scope.client.selected && $scope.client.selected.id !=0){
+            		$scope.searchProject = $scope.client.selected;
+            	}else{
+            	   $scope.searchProject = null;
+            	}
+            	if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
+            		$scope.searchSite = $scope.sitesListOne.selected;
+            	}else{
+            	   $scope.searchSite = null;
+            	}
+	        	 if($scope.selectedDateFrom) {
+	                 $scope.searchCriteria.checkInDateTimeFrom = $scope.selectedDateFromSer;
+	             }
+	             if($scope.selectedDateTo) {
+	                 $scope.searchCriteria.checkInDateTimeTo = $scope.selectedDateToSer;
+	             }
+            	
+            }
+            
+            /* Root scope (search criteria) */
+            $rootScope.searchFilterCriteria.isDashboard = false;
+        
         	$scope.searchCriteria.findAll = false;
         	$scope.searchCriteria.list = false;
             $scope.searchCriteria.report = false;
             $scope.searchCriteria.isReport = false;
 
-               if($scope.selectedDateFrom) {
-                    $scope.searchCriteria.checkInDateTimeFrom = $scope.selectedDateFromSer;
-                }
-                if($scope.selectedDateTo) {
-                    $scope.searchCriteria.checkInDateTimeTo = $scope.selectedDateToSer;
-                }
+              
 
 
 //        	if($scope.selectedEmployee){
@@ -931,7 +984,7 @@ angular.module('timeSheetApp')
         $scope.initLoad = function(){
              $scope.loadPageTop();
              $scope.init();
-             $scope.setPage(1);
+             //$scope.setPage(1);
 
          }
 
@@ -1064,6 +1117,26 @@ angular.module('timeSheetApp')
                     return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportMsg : '');
                 }
 
+        };
+        
+     //Search Filter Site Load Function
+        
+        $scope.projectFilterFunction = function (searchProject){
+        	$scope.siteSpin = true;
+        	ProjectComponent.findSites(searchProject.id).then(function (data) {
+                  $scope.selectedSite = null;
+                  $scope.sitesList = data;
+                  $scope.sitesLists = [];
+                  $scope.sitesLists[0] = $scope.allSites;
+
+                  for(var i=0;i<$scope.sitesList.length;i++)
+                  {
+                      $scope.sitesLists[i+1] = $scope.sitesList[i];
+                  }
+                  $scope.siteFilterDisable = false;
+                  $scope.siteSpin = false;
+              });
+        	
         };
 
     });

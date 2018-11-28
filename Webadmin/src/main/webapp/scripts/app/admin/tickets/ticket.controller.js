@@ -1029,45 +1029,97 @@ angular.module('timeSheetApp')
             }
 
             $scope.searchCriteria.currPage = currPageVal;
+            $scope.searchCriteria.findAll = false;
+            
+        	/* Root scope (search criteria) start*/
+            
+            if($rootScope.searchFilterCriteria.isDashboard){
+            	
+            	 if($rootScope.searchFilterCriteria.projectId){
+              		$scope.searchProject ={id:$rootScope.searchFilterCriteria.projectId,name:$rootScope.searchFilterCriteria.projectName};
+              		$scope.client.selected =$scope.searchProject;
+              		$scope.projectFilterFunction($scope.searchProject);
+              	}else{
+              	   $scope.searchProject = null;
+              	   $scope.client.selected =$scope.searchProject;
+              	} 
+            	
+            	 if($rootScope.searchFilterCriteria.siteId){
+             		$scope.searchSite = {id:$rootScope.searchFilterCriteria.siteId,name:$rootScope.searchFilterCriteria.siteName};
+             		$scope.sitesListOne.selected = $scope.searchSite;
+             		$scope.siteFilterDisable=false;
+             		
+             	}else{
+             	   $scope.searchSite = null;
+             	  $scope.sitesListOne.selected=$scope.searchSite;
+             	}
+            	if($rootScope.searchFilterCriteria.ticketStatus){
+              		$scope.searchStatus = $rootScope.searchFilterCriteria.ticketStatus;
+              		$scope.statusListOne.selected = $scope.searchStatus;
+              		
+              	}else{
+              	   $scope.searchStatus = null;
+              	   $scope.statusListOne.selected = $scope.searchStatus;
+              	}
+            	if($rootScope.searchFilterCriteria.selectedFromDate) {
+	        		$scope.searchCriteria.fromDate = $rootScope.searchFilterCriteria.selectedFromDate;
+	        		$scope.selectedDateFrom = $filter('date')($rootScope.searchFilterCriteria.selectedFromDate, 'dd/MM/yyyy');
+	        	}/*else{
+	        	    $scope.searchCriteria.fromDate = null;
+	        	    $scope.selectedDateFrom = null;
+	        	}*/
 
-            if($scope.client.selected && $scope.client.selected.id !=0){
-        		$scope.searchProject = $scope.client.selected;
-        	}else{
-        	   $scope.searchProject = null;
-        	}
-        	if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
-        		$scope.searchSite = $scope.sitesListOne.selected;
-        	}else{
-        	   $scope.searchSite = null;
-        	}
+	        	if($rootScope.searchFilterCriteria.selectedToDate) {
+	        		$scope.searchCriteria.toDate = $rootScope.searchFilterCriteria.selectedToDate;
+	        		$scope.selectedDateTo = $filter('date')($rootScope.searchFilterCriteria.selectedToDate, 'dd/MM/yyyy');
+	        	}/*else{
+	        	    $scope.searchCriteria.toDate = null;
+	        	    $scope.selectedDateTo = null;
+	        	}*/
+             	
+            	 /* Root scope (search criteria) end*/
+            }else{
+            	if($scope.client.selected && $scope.client.selected.id !=0){
+            		$scope.searchProject = $scope.client.selected;
+            	}else{
+            	   $scope.searchProject = null;
+            	}
+            	if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
+            		$scope.searchSite = $scope.sitesListOne.selected;
+            	}else{
+            	   $scope.searchSite = null;
+            	}
+            	if($scope.statusListOne.selected && $scope.statusListOne.selected != '-- ALL STATUS --'){
+             		$scope.searchStatus = $scope.statusListOne.selected;
+
+             	}else{
+             	   $scope.searchStatus = null;
+             	}
+            	if($scope.selectedDateFrom) {
+                    $scope.searchCriteria.fromDate = $scope.selectedDateFromSer;
+                }
+                if($scope.selectedDateTo) {
+                    $scope.searchCriteria.toDate = $scope.selectedDateToSer;
+                }
+            	
+            }
+            
+            /* Root scope (search criteria) */
+            $rootScope.searchFilterCriteria.isDashboard = false;
+
         	if($scope.empListOne.selected && $scope.empListOne.selected.id != 0){
          		$scope.searchEmployee = $scope.empListOne.selected;
 
          	}else{
          	   $scope.searchEmployee = null;
          	}
-         	if($scope.statusListOne.selected && $scope.statusListOne.selected != '-- ALL STATUS --'){
-         		$scope.searchStatus = $scope.statusListOne.selected;
-
-         	}else{
-         	   $scope.searchStatus = null;
-         	}
-
-            $scope.searchCriteria.findAll = false;
-
+         	
             $scope.searchCriteria.isReport = false;
 
              if(!$scope.searchTitle && !$scope.searchDescription && !$scope.searchProject && !$scope.searchSite
                 && !$scope.searchEmployee && !$scope.searchStatus && !$scope.selectedDateFrom && !$scope.selectedDateTo ) {
                 $scope.searchCriteria.findAll = true;
             }
-
-            if($scope.selectedDateFrom) {
-                    $scope.searchCriteria.fromDate = $scope.selectedDateFromSer;
-                }
-                if($scope.selectedDateTo) {
-                    $scope.searchCriteria.toDate = $scope.selectedDateToSer;
-                }
 
                 if($scope.searchTitle)
                 {
@@ -1308,6 +1360,8 @@ angular.module('timeSheetApp')
                 currPage: 1,
                 totalPages: 0
             }
+            /* Root scope (search criteria) */
+            //$rootScope.searchFilterCriteria.isDashboard = false;
             // $scope.search();
         };
 
@@ -1513,6 +1567,26 @@ angular.module('timeSheetApp')
       $rootScope.exportStatusObj = {};
       $scope.exportStatusMap = [];
     }
+    
+    //Search Filter Site Load Function
+    
+    $scope.projectFilterFunction = function (searchProject){
+    	$scope.siteSpin = true;
+    	ProjectComponent.findSites(searchProject.id).then(function (data) {
+              $scope.selectedSite = null;
+              $scope.sitesList = data;
+              $scope.sitesLists = [];
+              $scope.sitesLists[0] = $scope.allSites;
+
+              for(var i=0;i<$scope.sitesList.length;i++)
+              {
+                  $scope.sitesLists[i+1] = $scope.sitesList[i];
+              }
+              $scope.siteFilterDisable = false;
+              $scope.siteSpin = false;
+          });
+    	
+    };
 
 
     });
