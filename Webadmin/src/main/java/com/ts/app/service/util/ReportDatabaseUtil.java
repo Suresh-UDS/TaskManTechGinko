@@ -6,7 +6,7 @@ import com.ts.app.domain.Measurements.JobStatusMeasurement;
 import com.ts.app.domain.Measurements.TicketStatusMeasurement;
 import com.ts.app.repository.ReportDatabaseJobRepository;
 import com.ts.app.repository.ReportDatabaseTicketRepository;
-import com.ts.app.service.ReportDatabaseSerivce;
+import com.ts.app.service.ReportDatabaseService;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Point;
 import org.slf4j.Logger;
@@ -36,7 +36,7 @@ public class ReportDatabaseUtil {
     private ReportDatabaseTicketRepository reportDatabaseTicketRepository;
 
     @Inject
-    private ReportDatabaseSerivce reportDatabaseSerivce;
+    private ReportDatabaseService reportDatabaseService;
 
     private InfluxDB connectDatabase() {
         // Connect to database assumed on local host with default credentials.
@@ -92,14 +92,14 @@ public class ReportDatabaseUtil {
     public List<JobStatusMeasurement> getJobReportCategoryPoints() {
         InfluxDB connection = connectDatabase();
         String query = "select count(type) as categoryCount from jobReportStatus group by type";
-        List<JobStatusMeasurement> jobCategoryReportPoints = reportDatabaseSerivce.getJobPoints(connection, query, dbName);
+        List<JobStatusMeasurement> jobCategoryReportPoints = reportDatabaseService.getJobPoints(connection, query, dbName);
         return jobCategoryReportPoints;
     }
 
     public List<ChartModelEntity> getJobReportStatusPoints() {
         InfluxDB connection = connectDatabase();
         String query = "select count(status) as statusCount from jobReportStatus group by type, status";
-        List<JobStatusMeasurement> jobStatusReportPoints = reportDatabaseSerivce.getJobPoints(connection, query, dbName);
+        List<JobStatusMeasurement> jobStatusReportPoints = reportDatabaseService.getJobPoints(connection, query, dbName);
         Map<String, Map<String, Integer>> statusPoints = new HashMap<>();
         Map<String, Integer> statusCounts = null;
         List<ChartModelEntity> chartModelEntities = new ArrayList<>();
@@ -222,11 +222,91 @@ public class ReportDatabaseUtil {
         influxDB.close();
     }
 
-    public List<TicketStatusMeasurement> getTicketReportStatusPoints() {
+    public List<ChartModelEntity> getTicketReportStatusPoints() {
         InfluxDB connection = connectDatabase();
         String query = "select count(status) as statusCount from ticketReportStatus group by category,status";
-        List<TicketStatusMeasurement> ticketCategoryReportPoints = reportDatabaseSerivce.getTicketPoints(connection, query, dbName);
-        return ticketCategoryReportPoints;
+        List<TicketStatusMeasurement> ticketCategoryReportPoints = reportDatabaseService.getTicketPoints(connection, query, dbName);
+        Map<String, Map<String, Integer>> statusPoints = new HashMap<>();
+        Map<String, Integer> statusCounts = null;
+        List<ChartModelEntity> chartModelEntities = new ArrayList<>();
+
+        if(ticketCategoryReportPoints.size() > 0) {
+            for(TicketStatusMeasurement ticketStatusPoint : ticketCategoryReportPoints) {
+                String category = ticketStatusPoint.getCategory();
+
+                if(statusPoints.containsKey(category)) {
+                    statusCounts = statusPoints.get(category);
+                }else {
+                    statusCounts = new HashMap<String, Integer>();
+                }
+
+                int AssignCnt = statusCounts.containsKey("Assigned") ? statusCounts.get("Assigned") : 0;
+                int OpenCnt = statusCounts.containsKey("Open") ? statusCounts.get("Open") : 0;
+                int ClosedCnt = statusCounts.containsKey("Closed") ? statusCounts.get("Closed") : 0;
+
+                AssignCnt +=  ticketStatusPoint.getStatus().equalsIgnoreCase("Open") ? ticketStatusPoint.getStatusCount() : 0;
+                OpenCnt += ticketStatusPoint.getStatus().equalsIgnoreCase("Assigned") ? ticketStatusPoint.getStatusCount() : 0;
+                ClosedCnt += ticketStatusPoint.getStatus().equalsIgnoreCase("Closed") ? ticketStatusPoint.getStatusCount() : 0;
+
+                statusCounts.put("Assigned", AssignCnt);
+                statusCounts.put("Open", OpenCnt);
+                statusCounts.put("Closed", ClosedCnt);
+
+                statusPoints.put(category, statusCounts);
+
+            }
+            log.debug("Ticket status points map count" +statusPoints.toString());
+
+            if(!statusPoints.isEmpty()) {
+                Set<Map.Entry<String,Map<String,Integer>>> entrySet = statusPoints.entrySet();
+                List<Map.Entry<String, Map<String,Integer>>> list = new ArrayList<Map.Entry<String, Map<String,Integer>>>(entrySet);
+                ChartModelEntity chartModelEntity = new ChartModelEntity();
+                List<String> categoryList = new ArrayList<>();
+                List<Status> categoryStatusCnts = new ArrayList<>();
+                Status assignstatus = new Status();
+                Status openstatus = new Status();
+                Status closedstatus = new Status();
+                List<Integer> totalAssignCnts = new ArrayList<>();
+                List<Integer> totalOverDueCnts = new ArrayList<>();
+                List<Integer> totalComplCnts = new ArrayList<>();
+                for(Map.Entry<String, Map<String, Integer>> ent : list) {
+                    String category = ent.getKey();
+                    categoryList.add(category);
+                    Map<String, Integer> categoryWiseCount = statusPoints.get(category);
+                    if(categoryWiseCount.containsKey("Assigned")) {
+                        int assignCnt = categoryWiseCount.get("Assigned");
+                        assignstatus.setName("Assigned");
+                        totalAssignCnts.add(assignCnt);
+                        assignstatus.setData(totalAssignCnts);
+                    }
+                    if(categoryWiseCount.containsKey("Open")) {
+                        int overCnt = categoryWiseCount.get("Open");
+                        openstatus.setName("Open");
+                        totalOverDueCnts.add(overCnt);
+                        openstatus.setData(totalOverDueCnts);
+                    }
+                    if(categoryWiseCount.containsKey("Closed")) {
+                        int compCnt = categoryWiseCount.get("Closed");
+                        closedstatus.setName("Closed");
+                        totalComplCnts.add(compCnt);
+                        closedstatus.setData(totalComplCnts);
+                    }
+
+                }
+
+                chartModelEntity.setX(categoryList);
+                categoryStatusCnts.add(assignstatus);
+                categoryStatusCnts.add(openstatus);
+                categoryStatusCnts.add(closedstatus);
+                chartModelEntity.setStatus(categoryStatusCnts);
+                chartModelEntities.add(chartModelEntity);
+
+                log.debug("Formatted JSON for client side" +chartModelEntities.toString());
+            }
+
+        }
+
+        return chartModelEntities;
     }
 
 

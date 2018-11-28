@@ -65,7 +65,7 @@ public class JobManagementResource {
 	private AmazonS3Service amazonService;
 
 	@Inject
-    private ReportDatabaseSerivce reportDatabaseSerivce;
+    private ReportDatabaseService reportDatabaseService;
 
 
 	@RequestMapping(path="/job/lookup/status", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -111,7 +111,7 @@ public class JobManagementResource {
 			}
 		}
 		if(response != null && response.getId() > 0) {
-		    reportDatabaseSerivce.addPointsToJobReport(response);
+		    reportDatabaseService.addPointsToJobReport(response);
 			return new ResponseEntity<>(response,HttpStatus.CREATED);
 		}else {
 			return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);

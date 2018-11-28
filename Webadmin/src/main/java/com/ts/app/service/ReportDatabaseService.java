@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ReportDatabaseSerivce {
+public class ReportDatabaseService {
 
     public List<JobStatusMeasurement> getJobPoints(InfluxDB connection, String query, String databaseName) {
         // Run the query
@@ -27,6 +27,7 @@ public class ReportDatabaseSerivce {
 
     @Async
     public void addPointsToJobReport(JobDTO response) {
+
 
     }
 

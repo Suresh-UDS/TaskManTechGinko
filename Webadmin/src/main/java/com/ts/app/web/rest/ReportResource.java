@@ -180,7 +180,7 @@ public class ReportResource {
 
     @RequestMapping(value = "/reports/ticketStatus/count", method = RequestMethod.GET)
     public ResponseEntity<?> getTicketListByStatus() {
-        List<TicketStatusMeasurement> reportStatusPoints = reportDatabaseUtil.getTicketReportStatusPoints();
+        List<ChartModelEntity> reportStatusPoints = reportDatabaseUtil.getTicketReportStatusPoints();
         return new ResponseEntity<>(reportStatusPoints, HttpStatus.OK);
     }
 
