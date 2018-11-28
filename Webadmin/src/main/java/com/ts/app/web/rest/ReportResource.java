@@ -3,6 +3,7 @@ package com.ts.app.web.rest;
 import com.ts.app.domain.ChartModelEntity;
 import com.ts.app.domain.JobStatusReport;
 import com.ts.app.domain.Measurements.JobStatusMeasurement;
+import com.ts.app.domain.Measurements.TicketStatusMeasurement;
 import com.ts.app.domain.TicketStatusReport;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.ReportService;
@@ -159,6 +160,12 @@ public class ReportResource {
 	    return new ResponseEntity<>("Successfully created points to influxDb", HttpStatus.CREATED);
     }
 
+    @RequestMapping(value = "/reports/ticket/points", method = RequestMethod.GET)
+    public ResponseEntity<?> addTicketPoints() throws Exception {
+        reportDatabaseUtil.addTicketPoints();
+        return new ResponseEntity<>("Successfully created points to influxDb", HttpStatus.CREATED);
+    }
+
     @RequestMapping(value = "/reports/jobType/count", method = RequestMethod.GET)
     public ResponseEntity<?> getJobPointsByStatus() {
         List<JobStatusMeasurement> reportCategoryPoints = reportDatabaseUtil.getJobReportCategoryPoints();
@@ -171,6 +178,11 @@ public class ReportResource {
         return new ResponseEntity<>(reportStatusPoints, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/reports/ticketStatus/count", method = RequestMethod.GET)
+    public ResponseEntity<?> getTicketListByStatus() {
+        List<TicketStatusMeasurement> reportStatusPoints = reportDatabaseUtil.getTicketReportStatusPoints();
+        return new ResponseEntity<>(reportStatusPoints, HttpStatus.OK);
+    }
 
 	//    @CrossOrigin
 //    @RequestMapping(value = "/reports/site/{siteId}/selectedDate/{selectedDate}", method = RequestMethod.GET)

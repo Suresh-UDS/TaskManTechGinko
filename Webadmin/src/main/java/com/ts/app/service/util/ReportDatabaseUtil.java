@@ -3,6 +3,7 @@ package com.ts.app.service.util;
 import com.ts.app.config.ReportDatabaseConfiguration;
 import com.ts.app.domain.*;
 import com.ts.app.domain.Measurements.JobStatusMeasurement;
+import com.ts.app.domain.Measurements.TicketStatusMeasurement;
 import com.ts.app.repository.ReportDatabaseJobRepository;
 import com.ts.app.repository.ReportDatabaseTicketRepository;
 import com.ts.app.service.ReportDatabaseSerivce;
@@ -61,7 +62,7 @@ public class ReportDatabaseUtil {
         influxDB.setRetentionPolicy("defaultPolicy");
         influxDB.enableBatch(100, 200, TimeUnit.MILLISECONDS);
         for(int i=0; i<100; i++) {
-            Point point = Point.measurement("jobReportStatus")
+            Point jobPoint = Point.measurement("jobReportStatus")
                 .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                 .addField("date",reportLists.get(i).getJobCreatedDate().toString())
                 .tag("date",reportLists.get(i).getJobCreatedDate().toString())
@@ -71,6 +72,7 @@ public class ReportDatabaseUtil {
                 .tag("type", (reportLists.get(i).getJobType() != null ? reportLists.get(i).getJobType().toString() : "CARPENTRY"))
                 .addField("projectId", reportLists.get(i).getProjectId())
                 .addField("siteId", reportLists.get(i).getSiteId())
+                .tag("siteId", String.valueOf(reportLists.get(i).getSiteId()))
                 .addField("region", reportLists.get(i).getRegion() != null ? reportLists.get(i).getRegion() : "north-region")
                 .tag("region", reportLists.get(i).getRegion() != null ? reportLists.get(i).getRegion() : "north-region")
                 .addField("branch", reportLists.get(i).getBranch() != null ? reportLists.get(i).getBranch() : "andhrapradesh")
@@ -78,7 +80,7 @@ public class ReportDatabaseUtil {
                 .addField("statusCount", reportLists.get(i).getStatusCount())
                 .build();
 
-            influxDB.write(dbName, "defaultPolicy", point);
+            influxDB.write(dbName, "defaultPolicy", jobPoint);
             Thread.sleep(2);
         }
         Thread.sleep(10);
@@ -90,14 +92,14 @@ public class ReportDatabaseUtil {
     public List<JobStatusMeasurement> getJobReportCategoryPoints() {
         InfluxDB connection = connectDatabase();
         String query = "select count(type) as categoryCount from jobReportStatus group by type";
-        List<JobStatusMeasurement> jobCategoryReportPoints = reportDatabaseSerivce.getPoints(connection, query, dbName);
+        List<JobStatusMeasurement> jobCategoryReportPoints = reportDatabaseSerivce.getJobPoints(connection, query, dbName);
         return jobCategoryReportPoints;
     }
 
     public List<ChartModelEntity> getJobReportStatusPoints() {
         InfluxDB connection = connectDatabase();
         String query = "select count(status) as statusCount from jobReportStatus group by type, status";
-        List<JobStatusMeasurement> jobStatusReportPoints = reportDatabaseSerivce.getPoints(connection, query, dbName);
+        List<JobStatusMeasurement> jobStatusReportPoints = reportDatabaseSerivce.getJobPoints(connection, query, dbName);
         Map<String, Map<String, Integer>> statusPoints = new HashMap<>();
         Map<String, Integer> statusCounts = null;
         List<ChartModelEntity> chartModelEntities = new ArrayList<>();
@@ -180,6 +182,54 @@ public class ReportDatabaseUtil {
 
         return chartModelEntities;
     }
+
+    public void addTicketPoints() throws Exception {
+        InfluxDB influxDB = connectDatabase();
+        List<TicketStatusReport> ticketStatusReportLists = this.getPreComputeTicketData();
+        log.debug("Size of ticket status report " +ticketStatusReportLists.size());
+        influxDB.setRetentionPolicy("defaultPolicy");
+        influxDB.enableBatch(100, 200, TimeUnit.MILLISECONDS);
+        for(TicketStatusReport ticketReportList : ticketStatusReportLists) {
+            Point ticketPoint = Point.measurement("ticketReportStatus")
+                .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                .addField("date", ticketReportList.getDate())
+                .tag("date", ticketReportList.getDate())
+                .addField("siteId", ticketReportList.getSiteId())
+                .addField("projectId", ticketReportList.getProjectId())
+                .addField("employeeId", ticketReportList.getEmployeeId())
+                .addField("jobId", ticketReportList.getJobId())
+                .addField("status", ticketReportList.getStatus())
+                .tag("status", ticketReportList.getStatus())
+                .addField("category", ticketReportList.getCategory() != null ? ticketReportList.getCategory() : "")
+                .tag("category", ticketReportList.getCategory() != null ? ticketReportList.getCategory() : "ELECTRICAL")
+                .addField("assignedOn", ticketReportList.getAssignedOn() != null ? ticketReportList.getAssignedOn().toString() : "")
+                .tag("assignedOn", ticketReportList.getAssignedOn() != null ? ticketReportList.getAssignedOn().toString() : "")
+                .addField("closedOn", ticketReportList.getClosedOn() != null ? ticketReportList.getClosedOn().toString() : "")
+                .tag("closedOn", ticketReportList.getClosedOn() != null ? ticketReportList.getClosedOn().toString() : "")
+                .addField("statusCount", ticketReportList.getStatusCount())
+                .addField("region", ticketReportList.getRegion() != null ? ticketReportList.getRegion() : "")
+                .tag("region", ticketReportList.getRegion() != null ? ticketReportList.getRegion() : "")
+                .addField("branch", ticketReportList.getBranch() != null ? ticketReportList.getBranch() : "")
+                .tag("branch", ticketReportList.getBranch() != null ? ticketReportList.getBranch() : "")
+                .build();
+
+            influxDB.write(dbName, "defaultPolicy", ticketPoint);
+            Thread.sleep(2);
+        }
+
+        Thread.sleep(10);
+        influxDB.disableBatch();
+        influxDB.close();
+    }
+
+    public List<TicketStatusMeasurement> getTicketReportStatusPoints() {
+        InfluxDB connection = connectDatabase();
+        String query = "select count(status) as statusCount from ticketReportStatus group by category,status";
+        List<TicketStatusMeasurement> ticketCategoryReportPoints = reportDatabaseSerivce.getTicketPoints(connection, query, dbName);
+        return ticketCategoryReportPoints;
+    }
+
+
 
 
 

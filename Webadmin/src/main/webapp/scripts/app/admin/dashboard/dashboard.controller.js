@@ -930,9 +930,6 @@ angular.module('timeSheetApp')
             }]
         });
 
-
-
-
         Highcharts.chart('ticketStackedCharts', {
             chart: {
                 type: 'column'
@@ -992,8 +989,7 @@ angular.module('timeSheetApp')
             }]
         });
 
-
-
+        
         Highcharts.chart('catgAgeTicketsCharts', {
             chart: {
                 type: 'spline'
