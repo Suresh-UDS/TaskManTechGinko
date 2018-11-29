@@ -7,6 +7,7 @@ import com.ts.app.domain.Measurements.TicketStatusMeasurement;
 import com.ts.app.domain.TicketStatusReport;
 import com.ts.app.web.rest.dto.JobDTO;
 import org.influxdb.InfluxDB;
+import org.influxdb.dto.BoundParameterQuery;
 import org.influxdb.dto.Point;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
@@ -80,20 +81,22 @@ public class ReportDatabaseService {
         Thread.sleep(2);
         influxDB.disableBatch();
         influxDB.close();
+    }
 
+    public void updateJobPoints(JobStatusReport response) {
+        InfluxDB influxDB = connectDatabase();
         // Query the data from influxDB
-//        Query query = BoundParameterQuery.QueryBuilder.newQuery("SELECT * FROM jobReportStatus WHERE projectId = $projectId AND region = $region" +
-//            " AND branch = $branch AND siteId = $siteId AND date = $date")
-//            .forDatabase(dbName)
-//            .bind("projectId", response.getProjectId())
-//            .bind("region", response.getRegion())
-//            .bind("branch", response.getBranch())
-//            .bind("siteId", response.getSiteId())
-//            .bind("date", response.getJobCreatedDate())
-//            .create();
-//
-//        List<JobStatusMeasurement> jobStatusMeasurementList = getJobExistingPoints(influxDB, query);
+        Query query = BoundParameterQuery.QueryBuilder.newQuery("SELECT * FROM jobReportStatus WHERE projectId = $projectId AND region = $region" +
+            " AND branch = $branch AND siteId = $siteId AND date = $date")
+            .forDatabase(dbName)
+            .bind("projectId", response.getProjectId())
+            .bind("region", response.getRegion())
+            .bind("branch", response.getBranch())
+            .bind("siteId", response.getSiteId())
+            .bind("date", response.getJobCreatedDate())
+            .create();
 
+        List<JobStatusMeasurement> jobStatusMeasurementList = getJobExistingPoints(influxDB, query);
     }
 
     public List<TicketStatusMeasurement> getTicketPoints(InfluxDB connection, String query, String databaseName) {
@@ -106,5 +109,5 @@ public class ReportDatabaseService {
         return resultMapper.toPOJO(queryResult, TicketStatusMeasurement.class);
     }
 
-    
+
 }
