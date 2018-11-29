@@ -266,6 +266,7 @@ ul.checkList li
     font-size:14px;
     padding-right: 0;
 }
+
 .navbar .dropdown-menu li a:hover, .navbar .dropdown-menu li a:focus, .navbar .dropdown-menu li a:active, .navbar.navbar-default .dropdown-menu li a:hover, .navbar.navbar-default .dropdown-menu li a:focus, .navbar.navbar-default .dropdown-menu li a:active
 {
     background-color: #ff9800;

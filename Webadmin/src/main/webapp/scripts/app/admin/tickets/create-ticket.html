@@ -34,7 +34,7 @@
 
                                                <input type="text" class="form-control InputTxtCapsAll"   name='title'
                                                       ng-model="tickets.title" ng-minlength=1 ng-maxlength=50
-                                                      autofocus  required autocomplete="off" ng-keypress="keyPressHandler($event)"/>
+                                                      autofocus  required autocomplete="off" ng-keypress="keyPressHandler($event)" tabindex="1" />
                                                <div ng-show="form.$submitted || form.title.$touched">
                                                    <div ng-show="form.title.$dirty || form.title.$invalid">
                                                        <p class="help-block" style="color:maroon"
@@ -53,7 +53,7 @@
                                                <label class="control-label">Description<span class="red-star">*</span> </label>
                                                <input id='description' ng-model="tickets.description" class='form-control InputTxtCaps'
                                                       name='description' type='text' value=""
-                                                       autofocus required ng-keypress="keyPressHandler($event)"/>
+                                                       autofocus required ng-keypress="keyPressHandler($event)" tabindex="4" />
                                                <div ng-show="form.$submitted || form.description.$touched">
                                                    <div ng-show="form.description.$dirty || form.description.$invalid">
                                                        <p class="help-block" style="color:maroon"
@@ -73,7 +73,7 @@
                                                    required
                                                    name="category"
                                                    ng-model="tickets.category"
-                                                   class="form-control searchable-input floatL">
+                                                   class="form-control searchable-input floatL" tabindex="5">
                                                    <option value=''>Select Category</option>
                                                    <option>HOUSEKEEPING</option>
                                                    <option>ELECTRICAL</option>
@@ -107,7 +107,7 @@
                                                 required
                                                 name="severity"
                                                 ng-model="tickets.severity"
-                                                class="form-control searchable-input floatL">
+                                                class="form-control searchable-input floatL" tabindex="6">
                                                 <option value=''>Select severity</option>
                                                 <option value='Low' selected>Low</option>
                                                 <option value='Medium'>Medium</option>
@@ -150,7 +150,7 @@
                                             required
                                             ng-model="selectedSite"
                                             ng-change="loadEmployees();loadAssets()"
-                                            class="form-control searchable-input floatL" ng-options="site as site.name for site in sites track by site.id">
+                                            class="form-control searchable-input floatL" ng-options="site as site.name for site in sites track by site.id" tabindex="2">
                                             <option value="">Select Site</option>
 
                                         </select>
@@ -178,7 +178,8 @@
                                             required
                                             name="employee"
                                             ng-model="selectedEmployee"
-                                            class="form-control searchable-input floatL selectTxtCaps" ng-options="emp as emp.fullName +' '+ emp.lastName group by emp.designation for emp in employees | filter: {designation : '!' + 'Client'} track by emp.id">
+                                            class="form-control searchable-input floatL selectTxtCaps" ng-options="emp as emp.fullName +' '+ emp.lastName group by emp.designation for emp in employees | filter: {designation : '!' + 'Client'} track by emp.id"
+                                            tabindex="3">
                                             <option value="">Select Employee</option>
 
                                         </select>
@@ -216,7 +217,7 @@
                                         </select>
                                         <input id='assetId' ng-model="assetObj.title" class='form-control' ng-show="assetObj"
                                                       name='description' type='text' value="assetName"
-                                                       readOnly/>
+                                                       readOnly tabindex="7" />
 
                                     </div>
 
@@ -241,7 +242,7 @@
                              <div class="col-md-12">
                                  <div class="form-group">
                                      <label class="control-label">Comments</label>
-                                     <textarea ng-model="tickets.comments" class="form-control InputTxtCaps"></textarea>
+                                     <textarea ng-model="tickets.comments" class="form-control InputTxtCaps" tabindex="8"></textarea>
                                  </div>
                              </div>
                            </div>
@@ -262,7 +263,7 @@
 			                          <input type="file"
 			                                 class="form-control" style="opacity:100;position:relative" file-model
 			                                 ng-model="selectedImageFile"
-			                                 name="ImageFile"
+			                                 name="ImageFile" tabindex="9"
 			                          />
 			                      	</div>
 			                       </div>
@@ -278,7 +279,7 @@
 
 
                            <button  type="button"  ng-click="conform('cancel')"
-                                   id="cancel-button"   class="btn btn-danger pull-right" ng-disabled="btnDisable"> <i class="material-icons">close</i> Cancel</button>
+                                   id="cancel-button"   class="btn btn-danger pull-right" ng-disabled="btnDisable" tabindex="11"> <i class="material-icons">close</i> Cancel</button>
 
                            <!--<button type="submit" id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right">-->
                                <!--<span class="btn-label">-->
@@ -286,7 +287,7 @@
                                <!--</span>Create ticket</button>-->
 
                            <button class="btn btn-success ld ld-over-inverse pull-right" ng-class="{'running':saveLoad}"
-                                   type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisable">
+                                   type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisable" tabindex="12">
                                <span class="btn-label"><i class="material-icons">check</i></span>  Create ticket
                                <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                            </button>

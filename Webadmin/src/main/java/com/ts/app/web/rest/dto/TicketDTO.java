@@ -62,6 +62,8 @@ public class TicketDTO extends BaseDTO {
     private Date closedOn;
 
     private String comments;
+    
+    private String remarks;
 
     private String category;
 
@@ -261,6 +263,15 @@ public class TicketDTO extends BaseDTO {
 
 	public void setComments(String comments) {
 		this.comments = comments;
+	}
+	
+	
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
 	}
 
 	public String getCategory() {

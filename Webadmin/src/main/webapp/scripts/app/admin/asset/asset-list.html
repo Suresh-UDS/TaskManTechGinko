@@ -83,38 +83,41 @@
 
         <!--</div>-->
     </div>
-    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
-            <span class="AppliedFilterTxtCon">
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.projectName || localStorage.projectName">
-                    Client: {{searchCriteria.projectName || localStorage.projectName}}
+    <div class="AppliedFilterCon" >
+            <span class="AppliedFilterTxtCon" ng-show="!searchCriteria.findAll || localStorage">
+                <span
+	            class="tag label label-info" style="margin-right: 10px"
+	            ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
+					Client: {{searchCriteras.projectName}}
+			    </span>
+
+                <span class="tag label label-info" style="margin-right: 10px"
+	                  ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
+					Site: {{searchCriteras.siteName}}
+			   </span>
+
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.acquiredDate">
+                    Acquired Date: {{searchCriteras.acquiredDate | date:'dd/MM/yyyy'}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.siteName || localStorage.siteName">
-                    Site: {{searchCriteria.siteName || localStorage.siteName}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.assetCreatedDate">
+                    CreatedDate: {{searchCriteras.assetCreatedDate | date:'dd/MM/yyyy'}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.acquiredDate || localStorage.acquiredDate">
-                    Acquired Date: {{searchCriteria.acquiredDate || localStorage.acquiredDate | date:'dd/MM/yyyy'}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.assetTypeName && searchCriteras.assetTypeName !='-- ALL ASSET TYPE --'">
+                    Type: {{searchCriteras.assetTypeName}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.assetCreatedDate || localStorage.assetCreatedDate">
-                    CreatedDate: {{searchCriteria.assetCreatedDate || localStorage.assetCreatedDate | date:'dd/MM/yyyy'}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.assetGroupName && searchCriteras.assetGroupName !='-- ALL ASSET GROUP --'">
+                    Group: {{searchCriteras.assetGroupName}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.assetTypeName || localStorage.assetTypeName">
-                    Type: {{searchCriteria.assetTypeName || localStorage.assetTypeName}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.assetTitle">
+                    Title: {{searchCriteras.assetTitle}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.assetGroupName || localStorage.assetGroupName">
-                    Group: {{searchCriteria.assetGroupName || localStorage.assetGroupName}}
-                </span>
-
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.assetTitle || localStorage.assetTitle">
-                    Title: {{searchCriteria.assetTitle || localStorage.assetTitle}}
-                </span>
-
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.assetCode || localStorage.assetCode">
-                    Code: {{searchCriteria.assetCode || localStorage.assetCode}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.assetCode">
+                    Code: {{searchCriteras.assetCode}}
                 </span>
 
             </span>
@@ -500,23 +503,21 @@
                             <div id="collapseOne" class="panel-collapse collapse collapseOne in" role="tabpanel" aria-labelledby="headingOne" aria-expanded="true" style="height: 110px;">
                                 <div class="panel-body">
                                     <!--loadAssets();-->
-                                    <div class="row" ng-init="loadProjects();loadEmployee()">
+                                    <div class="row" ng-init="loadProjects();loadSitesList();loadEmployee();">
                                         <div class="col-xs-12 col-md-6">
                                             <div class="form-group" >
                                                 <div class="dropdown">
                                                     <label class="label-control">Client</label>
-                                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                    <!--<select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projectsList"  >-->
-                                                    <!--<option value="">Select Client...</option>-->
-                                                    <!--</select>-->
+                                                   
                                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                                    <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable" ng-change="loadSearchProject(searchProject);loadDepSites()" ng-click="loadSearchProject(searchProject);loadDepSites()">
-                                                        <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :clearField?'Select Client':searchProject}}</ui-select-match>
-                                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
-                                                            <div ng-bind="client"></div>
-                                                        </ui-select-choices>
-                                                    </ui-select>
+                                                    <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                                   
+                                                    <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
+													  <ui-select-match placeholder="Select clients..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
+													  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected)" null-option="allClients" loose-null>
+													    <span ng-bind-html="client.name | highlight: $select.search"></span>
+													  </ui-select-choices>
+													</ui-select>
                                                 </div>
                                             </div>
                                         </div>
@@ -524,19 +525,17 @@
                                             <div class="dropdown">
                                                 <div class="form-group">
                                                     <label class="label-control">Site</label>
-                                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                    <!--<select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sitesList" ng-change="loadDepBlocks();">-->
-                                                    <!--<option value="">Select Site...</option>-->
-                                                    <!--</select>-->
+                                                  
                                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                                    <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sites.length == 0"  ng-change="loadSearchSite(searchSite)">
-                                                        <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?clearField?'Select Site':searchSite : 'Select Site' }}</ui-select-match>
-                                                        <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
-                                                            <div ng-bind="site" ng-click="loadSearchSite(searchSite)"></div>
-                                                        </ui-select-choices>
-                                                    </ui-select>
-                                                    <span ng-if="sites.length == 0"><p class="help-block">No sites</p></span>
+                                                    <span ng-show="!siteSpin && !sitesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    
+                                                    <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
+													  <ui-select-match placeholder="Select site..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
+													  <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search" ng-click="loadDepBlocksList(sitesListOne.selected)" null-option="allSites" loose-null>
+													    <span ng-bind-html="sitesListOne.name | highlight: $select.search"></span>
+													  </ui-select-choices>
+													</ui-select>
+                                                    <span ng-if="sitesLists.length == 1"><p class="error-msg margin0">No sites</p></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -563,7 +562,7 @@
                                                 <div class="dropdown">
                                                     <label class="label-control">Acquired Date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker"  id="searchAcquiredDate" placeholder="DD/MM/YYYY"  ng-model="searchAcquiredDate" tabindex="1"/>
+                                                    <input type="text" class="form-control datepicker"  id="searchAcquiredDate" placeholder="DD/MM/YYYY"  ng-model="searchAcquiredDate" autocomplete="off" tabindex="1"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -577,48 +576,45 @@
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-md-4">
-                                            <div class="dropdown">
-                                                <div class="form-group">
-                                                    <label class="label-control">Asset Type</label>
-                                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                    <!--<select class="form-control " ng-model="searchAssetType"  ng-options="assetype as assetype.name for assetype in assetTypes track by assetype.name">-->
-                                                        <!--<option value="">Select Asset Type...</option>-->
-                                                    <!--</select>-->
-                                                    <span ng-show="typeFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                                    <span ng-show="!typeFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchAssetType" ng-disabled="typeFilterDisable" ng-click="loadSearchType(searchAssetType)">
-                                                        <ui-select-match placeholder="Select asset Type...">{{filter ? searchAssetType.name?searchAssetType.name:'Select asset Type' :clearField?'Select Asset Type':searchAssetType}}</ui-select-match>
-                                                        <ui-select-choices  repeat="type in getType($select.search) | filter: $select.search track by $index">
-                                                            <div ng-bind="type"></div>
-                                                        </ui-select-choices>
-                                                    </ui-select>
-                                                </div>
-                                            </div>
-                                        </div>
-
+				                            <div class="form-group no-padding" >
+				                                <div class="dropdown" ng-init="loadAllAssetTypes();">
+				                                    <div class="form-group">
+				                                        <label class="control-label">Asset Type</label>
+				                                       
+				                                        <span ng-show="assetTypeDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+				                                        <span ng-show="!assetTypeDisable && !assetTypesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+				                                               
+					                                    <ui-select ng-model="assetTypesListOne.selected"  ng-disabled="assetTypeDisable">
+														  <ui-select-match placeholder="Select Asset Type..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
+														  <ui-select-choices repeat="assetTypesListOne in assetTypesLists | filter: $select.search"  null-option="allAssetType" loose-null>
+														    <span ng-bind-html="assetTypesListOne.name | highlight: $select.search"></span>
+														  </ui-select-choices>
+														</ui-select>
+				                                    </div>
+				                                </div>
+				                            </div>
+				                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-12 col-md-4">
-
-                                            <div class="dropdown">
-                                                <div class="form-group">
-                                                    <label class="label-control">Asset Group</label>
-                                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                    <!--<select class="form-control" ng-model="searchAssetGroup" ng-options="assetgroup as assetgroup.assetgroup for assetgroup in assetGroups track by assetgroup.assetgroup" >-->
-
-                                                        <!--<option value="">Select Asset Group...</option>-->
-                                                    <!--</select>-->
-                                                    <span ng-show="groupFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                                    <span ng-show="!groupFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchAssetGroup" ng-disabled="groupFilterDisable" ng-click="loadSearchGroup(searchAssetGroup)">
-                                                        <ui-select-match placeholder="Select asset group...">{{filter ? searchAssetGroup.name?searchAssetGroup.name:'Select Asset Group' :clearField?'Select Asset Group':searchAssetGroup}}</ui-select-match>
-                                                        <ui-select-choices  repeat="group in getGroup($select.search) | filter: $select.search track by $index">
-                                                            <div ng-bind="group"></div>
-                                                        </ui-select-choices>
-                                                    </ui-select>
-                                                </div>
-                                            </div>
-                                        </div>
+				                            <div class="form-group no-padding" >
+				                                <div class="dropdown" ng-init="loadAllAssetGroups();">
+				                                    <div class="form-group">
+				                                        <label class="control-label">Asset Group</label>
+				                                       
+				                                        <span ng-show="assetGroupDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+				                                        <span ng-show="!assetGroupDisable && !assetGroupsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+				                                               
+					                                    <ui-select ng-model="assetGroupsListOne.selected"  ng-disabled="assetGroupDisable">
+														  <ui-select-match placeholder="Select Asset Group..." allow-clear="true">{{$select.selected.assetgroup}}</ui-select-match>
+														  <ui-select-choices repeat="assetGroupsListOne in assetGroupsLists | filter: $select.search"  null-option="allAssetGroup" loose-null>
+														    <span ng-bind-html="assetGroupsListOne.assetgroup | highlight: $select.search"></span>
+														  </ui-select-choices>
+														</ui-select>
+				                                    </div>
+				                                </div>
+				                            </div>
+				                        </div>
                                         <div class="col-xs-12 col-md-4">
                                             <div class="form-group" >
                                                 <div class="dropdown">
@@ -655,7 +651,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal" tabindex="5">Cancel</button>
-                    <button type="submit" class="btn btn-success btn-simple"  ng-disabled="searchForm.$invalid" tabindex="6">Apply Filter</button>
+                    <button type="submit" class="btn btn-success btn-simple"   tabindex="6">Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>

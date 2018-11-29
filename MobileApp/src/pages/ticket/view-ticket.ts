@@ -6,6 +6,7 @@ import {Ticket} from "./ticket";
 import {CreateJobPage} from "../jobs/add-job";
 import {QuotationImagePopoverPage} from "../quotation/quotation-image-popover";
 import{ViewJobPage} from "../jobs/view-job";
+import{AlertController} from "ionic-angular";
 
 declare var demo;
 
@@ -25,7 +26,9 @@ export class ViewTicket {
 
   ticketDetails:any;
   ticketImage:any;
-  constructor(public navCtrl: NavController, public navParams: NavParams,private cs:componentService, private jobService:JobService,private popoverCtrl:PopoverController) {
+  remarks:any;
+  constructor(public navCtrl: NavController, public navParams: NavParams,private cs:componentService,
+              private jobService:JobService,private popoverCtrl:PopoverController,private alertCtrl:AlertController) {
     // this.ticketDetails = this.navParams.data.ticket;
       console.log("ticket");
       console.log(this.navParams.data.ticket);
@@ -67,6 +70,7 @@ export class ViewTicket {
     closeTicket(){
       this.cs.showLoader("Closing Job");
       this.ticketDetails.status = "Closed";
+      this.ticketDetails.remarks=this.remarks;
       this.jobService.updateTicket(this.ticketDetails).subscribe(
           response=>{
               if(response.errorStatus){
@@ -98,5 +102,38 @@ export class ViewTicket {
             }
             this.navCtrl.push(ViewJobPage,{job:jobDetails});
     }
+
+
+    presentPrompt() {
+        let alert = this.alertCtrl.create({
+            title: 'Remarks',
+            inputs: [
+                {
+                    name: 'Remarks',
+                    placeholder: 'Remarks here...'
+                }
+            ],
+            buttons: [
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    handler: data => {
+                        console.log('Cancel clicked');
+                    }
+                },
+                {
+                    text: 'ok',
+                    handler: data => {
+                        console.log("Remarks Data");
+                        console.log(data);
+                        this.remarks=data;
+                        this.closeTicket();
+                    }
+                }
+            ]
+        });
+        alert.present();
+    }
+
 
 }

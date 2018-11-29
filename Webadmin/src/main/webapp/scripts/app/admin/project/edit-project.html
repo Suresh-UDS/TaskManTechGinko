@@ -14,7 +14,7 @@
      data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="loadProject()">
     <div class="">
         <div class="titleCon">
-            <h3>{{project.name | uppercase}}</h3>
+            <h3>{{title | uppercase}}</h3>
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -92,7 +92,7 @@
                                             <div class="col-md-10 pad-r-0px">
                                                  <label class="control-label">Client Group</label>
                                                  <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                <select class="form-control" ng-model="selectedClientGroup" ng-options="clientgroup as (clientgroup.clientgroup | uppercase) for clientgroup in clientGroups track by clientgroup.clientgroup">
+                                                <select class="form-control" ng-model="selectedClientGroup" tabindex="7" ng-options="clientgroup as (clientgroup.clientgroup | uppercase) for clientgroup in clientGroups track by clientgroup.clientgroup">
                                                     <option value="">Select Client Group ..</option>
                                                 </select>
 
@@ -242,7 +242,7 @@
                                   <div class="form-group">
 
                                       <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" type="submit"
-                                              id="form-button-save" ng-disabled="form.$invalid || btnDisable" tabindex="7">
+                                              id="form-button-save" ng-disabled="form.$invalid || btnDisable" tabindex="8">
                                           <span class="btn-label"><i class="material-icons">check</i></span> Update
                                           <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                       </button>
@@ -254,7 +254,7 @@
                                       </button>-->
 
                                       <button class="btn btn-default" type="button"
-                                              ng-click="conform('back')" id="cancel-button" tabindex="8" ng-disabled="btnDisable">
+                                              ng-click="conform('back')" id="cancel-button" tabindex="9" ng-disabled="btnDisable">
                                           Back
                                       </button>
 

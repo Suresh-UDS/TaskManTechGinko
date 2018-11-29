@@ -36,7 +36,7 @@
                                                         <label class="control-label">Vendor Name<span class="red-star">*</span></label>
                                                         <input id='manufacturerName' ng-model="vendor.name"
                                                                class='form-control InputTxtCapsAll' name='name' type='text' value=""
-                                                               ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                               ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required tabindex="1" />
                                                         <div ng-show="formSave.$submitted || formSave.name.$touched">
                                                             <div ng-show="formSave.name.$dirty || formSave.name.$invalid">
                                                                 <p class="help-block" style="color:maroon"
@@ -53,18 +53,18 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label">Contact First Name</label>
-                                                        <input id='contactName' ng-model="vendor.contactFirstName"
+                                                        <input id='contactFirstName' ng-model="vendor.contactFirstName"
                                                                class='form-control InputTxtCaps' name='contactFirstName' type='text' value=""
-                                                        />
+                                                       tabindex="3" />
 
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label">Contact Last Name</label>
-                                                        <input id='contactName' ng-model="vendor.contactLastName"
+                                                        <input id='contactLastName' ng-model="vendor.contactLastName"
                                                                class='form-control InputTxtCaps' name='contactLastName' type='text' value=""
-                                                        />
+                                                        tabindex="4" />
 
                                                     </div>
                                                 </div>
@@ -74,7 +74,7 @@
                                                         <label class="control-label">Phone No</label>
                                                         <input id='mobNum' ng-model="vendor.phone"
                                                                class='form-control' name='phone' type='text' value=""
-                                                                />
+                                                                tabindex="6" />
 
                                                     </div>
 
@@ -84,7 +84,7 @@
                                                         <label class="control-label">Email</label>
                                                         <input id='email' ng-model="vendor.email"
                                                                class='form-control' name='email' type='email' value=""
-                                                        />
+                                                        tabindex="7" />
 
                                                     </div>
                                                 </div>
@@ -109,7 +109,7 @@
                                                         <label class="control-label">Line 1</label>
                                                         <input id='line1' ng-model="vendor.addressLine1"
                                                                class='form-control InputTxtCaps' name='line1' type='text' value=""
-                                                        />
+                                                        tabindex="2" />
 
                                                     </div>
                                                 </div>
@@ -118,7 +118,7 @@
                                                         <label class="control-label">Line 2</label>
                                                         <input id='line2' ng-model="vendor.addressLine2"
                                                                class='form-control InputTxtCaps' name='line2' type='text' value=""
-                                                        />
+                                                        tabindex="5"/>
 
                                                     </div>
                                                 </div>
@@ -127,7 +127,7 @@
                                                         <label class="control-label">City</label>
                                                         <input id='City' ng-model="vendor.city"
                                                                class='form-control InputTxtCaps' name='City' type='text' value=""
-                                                        />
+                                                       tabindex="8" />
 
                                                     </div>
                                                 </div>
@@ -136,7 +136,7 @@
                                                         <label class="control-label">State</label>
                                                         <input id='state' ng-model="vendor.state"
                                                                class='form-control InputTxtCaps' name='state' type='text' value=""
-                                                        />
+                                                       tabindex="9" />
 
                                                     </div>
                                                 </div>
@@ -145,7 +145,7 @@
                                                         <label class="control-label">Pin Code</label>
                                                         <input id='pinCode' ng-model="vendor.pincode"
                                                                class='form-control' name='pinCode' type='text' value=""
-                                                        />
+                                                        tabindex="10"/>
 
                                                     </div>
                                                 </div>
@@ -154,7 +154,7 @@
                                                         <label class="control-label">Country</label>
                                                         <input id='country' ng-model="vendor.country"
                                                                class='form-control InputTxtCaps' name='country' type='text' value=""
-                                                        />
+                                                        tabindex="11"/>
 
                                                     </div>
                                                 </div>
@@ -180,12 +180,12 @@
                                             <!--<span class="btn-label"><i class="material-icons">check</i></span> Save-->
                                         <!--</button>-->
                                         <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}"
-                                                type="submit" id="form-button-save" ng-disabled="formSave.$invalid || btnDisable">
+                                                type="submit" id="form-button-save" ng-disabled="formSave.$invalid || btnDisable" tabindex="12">
                                             <span class="btn-label"><i class="material-icons">check</i></span> Save
                                             <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                         </button>
                                         <button class="btn btn-danger"  data-dismiss="modal" aria-label="Close" type="button"
-                                                id="cancel-button" ng-disabled="btnDisable" ng-click="conform('cancel')">
+                                                id="cancel-button" ng-disabled="btnDisable" ng-click="conform('cancel')" tabindex="13">
                                             <i class="material-icons">close</i> Cancel
                                         </button>
 

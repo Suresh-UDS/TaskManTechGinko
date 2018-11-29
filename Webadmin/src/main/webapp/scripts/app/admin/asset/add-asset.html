@@ -91,7 +91,7 @@
                                                                                        ng-minlength='5'
                                                                                        ng-maxlength='250'
                                                                                        ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus="true"
-                                                                                       required />
+                                                                                       required tabindex="1" />
 
 
                                                                                     <div ng-show="form.$submitted || form.assetTitle.$touched">
@@ -125,7 +125,7 @@
                                                                                                 <label class="control-label">Type <span class="red-star">*</span></label>
                                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
         	                                                                                    <select class="form-control" ng-model="selectedAssetType" ng-options="assetype as assetype.name | uppercase for assetype in assetTypes" name="assetTypeName"
-                                                                                                required >
+                                                                                                required tabindex="3">
         	                                                                                        <option value="">Select Asset Type ..</option>
         	                                                                                    </select>
 
@@ -162,7 +162,7 @@
                                                                                         <div class="col-md-10 pad-r-0px">
                                                                                              <label class="control-label">Group</label>
                                                                                              <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                            <select class="form-control" ng-model="selectedAssetGroup" ng-options="assetgroup as assetgroup.assetgroup | uppercase for assetgroup in assetGroups" >
+                                                                                            <select class="form-control" ng-model="selectedAssetGroup" ng-options="assetgroup as assetgroup.assetgroup | uppercase for assetgroup in assetGroups" tabindex="6">
                                                                                                 <option value="">Select Asset Group ..</option>
                                                                                             </select>
 
@@ -193,7 +193,7 @@
                                                                                 <div class="form-group" ng-init="loadStatus();">
                                                                                     <label class="control-label">Status<span class="red-star">*</span></label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control" ng-model="selectedAssetStatus" ng-options="status | uppercase  for status in statuses" name="AssetStatus" required>
+                                                                                    <select class="form-control" ng-model="selectedAssetStatus" ng-options="status | uppercase  for status in statuses" name="AssetStatus" required tabindex="8">
                                                                                         <option value="">Select Status ..</option>
                                                                                     </select>
                                                                                     <div ng-show="form.$submitted || form.AssetStatus.$touched">
@@ -250,7 +250,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control " ng-model="selectedSites"  ng-options="site as (site.name | uppercase)  for site in sites " ng-change="loadBlocks();loadEmployees();" name="AssetSite"  required>
+                                                                                    <select class="form-control " ng-model="selectedSites"  ng-options="site as (site.name | uppercase)  for site in sites " ng-change="loadBlocks();loadEmployees();" name="AssetSite"  required tabindex="2">
                                                                                         <option value="">Select Site ...</option>
                                                                                     </select>
 
@@ -272,7 +272,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Block  </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control " ng-model="selectedBlock"  ng-options="(block | uppercase) for  block in  blocks track by block" name="AssetBlock"  ng-change="loadFloors()">
+                                                                                    <select class="form-control " ng-model="selectedBlock"  ng-options="(block | uppercase) for  block in  blocks track by block" name="AssetBlock"  ng-change="loadFloors()" tabindex="4">
                                                                                         <option value="">Select Block ...</option>
                                                                                     </select>
                                                                                 </div>
@@ -281,7 +281,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Floor </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control " ng-model="selectedFloor" ng-options="(floor | uppercase)  for floor in floors track by floor" name="AssetFloor" ng-change="loadZones()" >
+                                                                                    <select class="form-control " ng-model="selectedFloor" ng-options="(floor | uppercase)  for floor in floors track by floor" name="AssetFloor" ng-change="loadZones()" tabindex="5">
                                                                                         <option value="">Select Floor ...</option>
                                                                                     </select>
                                                                                 </div>
@@ -290,7 +290,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Zone  </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control " ng-model="selectedZone"  ng-options="(zone | uppercase) for zone in zones track by zone" name="AssetZone" >
+                                                                                    <select class="form-control " ng-model="selectedZone"  ng-options="(zone | uppercase) for zone in zones track by zone" name="AssetZone" tabindex="7">
                                                                                         <option value="">Select Zone  ...</option>
                                                                                     </select>
 
@@ -316,7 +316,7 @@
                                                                                 <div class="form-group selectcon is-empty">
                                                                                     <label class="control-label">Manufacturer </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control selectTxtCaps ng-pristine ng-valid ng-touched" ng-model="selectedManufacturer" ng-options="manufacturer as manufacturer.name | uppercase for manufacturer in manufacturers">
+                                                                                    <select class="form-control selectTxtCaps ng-pristine ng-valid ng-touched" ng-model="selectedManufacturer" ng-options="manufacturer as manufacturer.name | uppercase for manufacturer in manufacturers" tabindex="9">
                                                                                         <option value="">Select Manufacturer ..</option>
                                                                                     </select>
                                                                                 </div>
@@ -333,7 +333,7 @@
                                                                                            ng-maxlength='250'
                                                                                            ng-pattern="/^[A-Za-z0-9\s]*$/"
                                                                                            autofocus
-                                                                                            />
+                                                                                           tabindex="10" />
         																			<div ng-show="form.$submitted || form.assetModel.$touched">
         																				<div ng-show="form.assetModel.$dirty || form.assetModel.$invalid">
 
@@ -361,7 +361,7 @@
                                                                                            name='assetSerial'
                                                                                            type='text' ng-maxlength='250'
                                                                                            autofocus
-                                                                                            />
+                                                                                            tabindex="11" />
                                                                                             <!-- ng-pattern="/^[A-Za-z0-9\s]*$/" -->
         																			<div ng-show="form.$submitted || form.assetSerial.$touched">
         																				<div ng-show="form.assetSerial.$dirty || form.assetSerial.$invalid">
@@ -382,7 +382,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Acquired Date</label>
                                                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                    <input type="text" class="form-control datepicker"  id="acquiredDate" placeholder="{{acquiredDate | date:'dd/MMM/yyyy'}}"/>
+                                                                                    <input type="text" class="form-control datepicker"  id="acquiredDate" placeholder="{{acquiredDate | date:'dd/MMM/yyyy'}}" tabindex="12" />
 
                                                                                 </div>
 
@@ -396,7 +396,7 @@
                                                                                            name='assetPurchase'
                                                                                            type='text' value=""
                                                                                            autofocus ng-pattern="/^[0-9]/"
-                                                                                             />
+                                                                                            tabindex="13"  />
                                                                                     <div ng-show="form.$submitted || form.assetPurchase.$touched">
                                                                                         <div ng-show="form.assetPurchase.$dirty || form.assetPurchase.$invalid">
 
@@ -419,7 +419,7 @@
                                                                                            name='assetCurrent'
                                                                                            type='text' value="" ng-pattern="/^[0-9]/"
                                                                                            autofocus
-                                                                                            />
+                                                                                           tabindex="14" />
 
                                                                                      <div ng-show="form.$submitted || form.assetCurrent.$touched">
                                                                                         <div ng-show="form.assetCurrent.$dirty || form.assetCurrent.$invalid">
@@ -443,7 +443,7 @@
                                                                                            name='assetEstimate'
                                                                                            type='text' value="" ng-pattern="/^[0-9]/" autofocus
 
-                                                                                            />
+                                                                                           tabindex="15" />
 
                                                                                     <div ng-show="form.$submitted || form.assetEstimate.$touched">
                                                                                         <div ng-show="form.assetEstimate.$dirty || form.assetEstimate.$invalid">
@@ -543,7 +543,7 @@
                                                                                 <div class="form-group selectcon is-empty">
                                                                                     <label class="control-label">Vendor </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control selectTxtCaps ng-pristine ng-valid ng-touched" ng-model="selectedVendor" ng-options="vendor as vendor.name | uppercase for vendor in vendors">
+                                                                                    <select class="form-control selectTxtCaps ng-pristine ng-valid ng-touched" ng-model="selectedVendor" ng-options="vendor as vendor.name | uppercase for vendor in vendors" tabindex="16">
                                                                                         <option value="">Select Vendor ..</option>
                                                                                     </select>
                                                                                 </div>
@@ -589,7 +589,7 @@
                                                                                         <div class="col-md-10 pad-r-0px">
                                                                                             <label class="control-label">Service Warranty Type </label>
                                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                            <select class="form-control" ng-model="selectedServiceWarranty" ng-options="servicewarranty as servicewarranty.name | uppercase for servicewarranty in servicewarranties">
+                                                                                            <select class="form-control" ng-model="selectedServiceWarranty" ng-options="servicewarranty as servicewarranty.name | uppercase for servicewarranty in servicewarranties" tabindex="17">
                                                                                                 <option value="">Select Service Warranty Type ..</option>
                                                                                             </select>
 
@@ -619,7 +619,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">From Date</label>
                                                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                    <input type="text" class="form-control datepicker"  id="warFromDate" ng-model ="warFromDate1" placeholder="DD/MM/YYYY" name="warFromDate" autocomplete="off"/>
+                                                                                    <input type="text" class="form-control datepicker"  id="warFromDate" ng-model ="warFromDate1" placeholder="DD/MM/YYYY" name="warFromDate" autocomplete="off" tabindex="18" />
                                                                                     <!-- <div ng-show="form.$submitted || form.warFromDate.$touched"> -->
                                                                                         <!-- <div
                                                                                             ng-show="form.warFromDate.$dirty || form.warFromDate.$invalid">
@@ -644,7 +644,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">To Date</label>
                                                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                    <input type="text" class="form-control datepicker"  id="warToDate" name="warToDate" ng-model ="warToDate1"  placeholder="DD/MM/YYYY" autocomplete="off"/>
+                                                                                    <input type="text" class="form-control datepicker"  id="warToDate" name="warToDate" ng-model ="warToDate1"  placeholder="DD/MM/YYYY" autocomplete="off" tabindex="19" />
                                                                                     <!-- <div ng-show="form.$submitted || form.warToDate.$touched"> -->
                                                                                          <!-- <div
                                                                                             ng-show="form.warToDate.$dirty || form.warToDate.$invalid">
@@ -676,7 +676,7 @@
                                                                                 <!--</span> Save &amp; Continue-->
                                                                                 <!--</button>-->
                                                                                 <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" ng-if="!assetVal.id"
-                                                                                        type="submit"  id="form-button-save" ng-disabled="form.$invalid || btnDisabled" >
+                                                                                        type="submit"  id="form-button-save" ng-disabled="form.$invalid || btnDisabled" tabindex="20">
                                                                                     <span class="btn-label"><i class="material-icons">check</i></span>  Save &amp; Continue
                                                                                     <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                                                                 </button>
@@ -732,7 +732,7 @@
 
                                                                         <div class="form-group is-empty">
                                                                             <label class="control-label">Asset Code </label>
-                                                                            <input id="assetcode" ng-model="assetGen.assetcode" class="form-control" name="assetcode" type="text" ng-minlength="1" ng-maxlength="20" ng-pattern="/^[A-Za-z0-9]*$/" autofocus  tabindex="0" aria-required="true" aria-invalid="true" autocomplete="off" required>
+                                                                            <input id="assetcode" ng-model="assetGen.assetcode" class="form-control" name="assetcode" type="text" ng-minlength="1" ng-maxlength="20" ng-pattern="/^[A-Za-z0-9]*$/" autofocus   aria-required="true" aria-invalid="true" autocomplete="off" required>
 
                                                                             <div ng-show="form1.$submitted || form1.assetcode.$touched">
                                                                                 <div ng-show="form1.assetcode.$dirty || form1.assetcode.$invalid">
@@ -784,7 +784,7 @@
 
                                                                         <div class="QrcodeCon" ng-if="qr_img">
 
-                                                                            <img src="{{qr_img}}" width="50%">
+                                                                            <img ng-src="{{qr_img}}" width="50%">
 
                                                                         </div>
                                                                         <div class="QrcodeCon" ng-if="!qr_img">
@@ -854,7 +854,7 @@
                                                                                             <div class="" style="float:left;width:90%;">
                                                                                                 <label class="control-label">Select Parameter<span class="red-star">*</span> </label>
                                                                                                 <span class="form-control-feedback d-arrow-icon" style="padding-right: 85px"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameter" name="param"  ng-options="parameter as parameter.name | uppercase for parameter in parameters track by parameter.name" tabindex="0" aria-invalid="false" required>
+                                                                                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameter" name="param"  ng-options="parameter as parameter.name | uppercase for parameter in parameters track by parameter.name"  aria-invalid="false" required>
                                                                                                     <option value="" class="" selected="selected">Select Parameter ..</option>
                                                                                                 </select>
                                                                                                 <div ng-show="form2.$submitted || form2.param.$touched">
@@ -876,8 +876,8 @@
                                                                                             <!-- <div class="clear"></div>
                                                                                             <div class="collapse" id="addParamet">
                                                                                                 <div class="">
-                                                                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="parameter.name" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
-                                                                                                    <a class="btn btn-success" ng-click="addParameter()" tabindex="0">Add</a>
+                                                                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="parameter.name" name="assetgroupName" type="text" value="" aria-invalid="false">
+                                                                                                    <a class="btn btn-success" ng-click="addParameter()" >Add</a>
                                                                                                 </div>
                                                                                             </div>
                                                                                             <span class="material-input"></span> -->
@@ -891,7 +891,7 @@
                                                                                             <div class="" style="float:left;width:90%;">
                                                                                                 <label class="control-label">Select Units<span class="red-star">*</span></label>
                                                                                                 <span class="form-control-feedback d-arrow-icon" style="padding-right: 85px"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameterUOM" name="parameterUOM"  ng-options="parameterUOM as parameterUOM.uom | uppercase for parameterUOM in parameterUOMs track by parameterUOM.uom" tabindex="0" aria-invalid="false" required>
+                                                                                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameterUOM" name="parameterUOM"  ng-options="parameterUOM as parameterUOM.uom | uppercase for parameterUOM in parameterUOMs track by parameterUOM.uom"  aria-invalid="false" required>
                                                                                                     <option value="" class="" selected="selected">Select Units ..</option>
                                                                                                 </select>
                                                                                                 <div ng-show="form2.$submitted || form2.parameterUOM.$touched">
@@ -913,8 +913,8 @@
                                                                                             <!-- <div class="clear"></div>
                                                                                             <div class="collapse" id="addUnits">
                                                                                                 <div class="">
-                                                                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="ParameterUOM" ng-model="parameterUOM.uom" name="ParameterUOM" type="text" value="" tabindex="0" aria-invalid="false">
-                                                                                                    <a class="btn btn-success" ng-click="addParameterUOM()" tabindex="0">Add</a>
+                                                                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="ParameterUOM" ng-model="parameterUOM.uom" name="ParameterUOM" type="text" value=""  aria-invalid="false">
+                                                                                                    <a class="btn btn-success" ng-click="addParameterUOM()" >Add</a>
                                                                                                 </div>
                                                                                             </div>
                                                                                             <span class="material-input"></span> -->
@@ -933,7 +933,7 @@
                                                                             <div class="" style="float:left;width:90%;" ng-init="loadAllRules()">
                                                                                 <label class="control-label">Select Rule </label>
                                                                                 <span class="form-control-feedback d-arrow-icon" style="padding-right: 85px"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedRule" name="param" ng-options="rule | uppercase for rule in readingRules" tabindex="0" aria-invalid="false" required>
+                                                                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedRule" name="param" ng-options="rule | uppercase for rule in readingRules"  aria-invalid="false" required>
                                                                                 <option value="" class="" selected="selected">Select Rule ..</option>
                                                                                 </select>
                                                                                 <!-- <div ng-show="form6.$submitted || form6.param.$touched">
@@ -955,8 +955,8 @@
                                                                             <!-- <div class="clear"></div>
                                                                             <div class="collapse" id="addParamet">
                                                                                 <div class="">
-                                                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="parameter.name" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
-                                                                                    <a class="btn btn-success" ng-click="addParameter()" tabindex="0">Add</a>
+                                                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="parameter.name" name="assetgroupName" type="text" value=""  aria-invalid="false">
+                                                                                    <a class="btn btn-success" ng-click="addParameter()" >Add</a>
                                                                                 </div>
                                                                             </div>
                                                                             <span class="material-input"></span> -->
@@ -995,8 +995,8 @@
                                                                             <!-- <div class="clear"></div>
                                                                             <div class="collapse" id="addUnits">
                                                                                 <div class="">
-                                                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="parameterUOM.uom" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
-                                                                                    <a class="btn btn-success" ng-click="addParameterUOM()" tabindex="0">Add</a>
+                                                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="parameterUOM.uom" name="assetgroupName" type="text" value=""  aria-invalid="false">
+                                                                                    <a class="btn btn-success" ng-click="addParameterUOM()" >Add</a>
                                                                                 </div>
                                                                             </div>
                                                                             <span class="material-input"></span> -->
@@ -1217,7 +1217,7 @@
                                                                             <div class="col-md-10 pad-r-0px">
                                                                                 <label class="control-label">Checklist</label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedChecklist" ng-options="checklist as checklist.name | uppercase for checklist in checkLists" tabindex="0" aria-invalid="false">
+                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedChecklist" ng-options="checklist as checklist.name | uppercase for checklist in checkLists"  aria-invalid="false">
                                                                                         <option value="" >Select Checklist ..</option>
                                                                                     </select>
                                                                             </div>
@@ -1231,8 +1231,8 @@
                                                                            <!--  <div class="clear"></div>
                                                                             <div class="collapse" id="addAssetGroup">
                                                                                 <div class="">
-                                                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
-                                                                                    <a class="btn btn-success" ng-click="" tabindex="0">Add</a>
+                                                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="" name="assetgroupName" type="text" value=""  aria-invalid="false">
+                                                                                    <a class="btn btn-success" ng-click="" >Add</a>
                                                                                 </div>
                                                                             </div>
                                                                             <span class="material-input"></span></div> -->
@@ -1511,7 +1511,7 @@
                                                                                 <!-- <div class="col-md-10 pad-r-0px"> -->
                                                                                     <label class="control-label">Type<span class="red-star">*</span> </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="amcSchedule.maintenanceType" tabindex="0" aria-invalid="false" name="maintenanceType" required>
+                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="amcSchedule.maintenanceType" aria-invalid="false" name="maintenanceType" required>
                                                                                         <option value="" >Select Maintenance Type..</option>
                                                                                         <option value="amc" >AMC</option>
                                                                                         <option value="dlp" >DLP</option>
@@ -1536,8 +1536,8 @@
                                                                                 <!--  <div class="clear"></div>
                                                                                  <div class="collapse" id="addAssetGroup">
                                                                                      <div class="">
-                                                                                         <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
-                                                                                         <a class="btn btn-success" ng-click="" tabindex="0">Add</a>
+                                                                                         <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="" name="assetgroupName" type="text" value=""  aria-invalid="false">
+                                                                                         <a class="btn btn-success" ng-click="">Add</a>
                                                                                      </div>
                                                                                  </div>
                                                                                  <span class="material-input"></span></div> -->
@@ -1579,7 +1579,7 @@
                                                                                 <!-- <div class="col-md-10 pad-r-0px"> -->
                                                                                     <label class="control-label">Checklist</label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedChecklist" ng-options="checklist as checklist.name | uppercase for checklist in checkLists" tabindex="0" aria-invalid="false">
+                                                                                        <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedChecklist" ng-options="checklist as checklist.name | uppercase for checklist in checkLists"  aria-invalid="false">
                                                                                             <option value="" >Select Checklist ..</option>
                                                                                         </select>
                                                                                 </div>
@@ -1593,8 +1593,8 @@
                                                                                <!--  <div class="clear"></div>
                                                                                 <div class="collapse" id="addAssetGroup">
                                                                                     <div class="">
-                                                                                        <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
-                                                                                        <a class="btn btn-success" ng-click="" tabindex="0">Add</a>
+                                                                                        <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="" name="assetgroupName" type="text" value=""  aria-invalid="false">
+                                                                                        <a class="btn btn-success" ng-click="" >Add</a>
                                                                                     </div>
                                                                                 </div>
                                                                                 <span class="material-input"></span></div> -->
@@ -1908,7 +1908,7 @@
                                                                             <div class="col-md-12">
                                                                                 <div class="form-group label-floating is-empty is-fileinput row">
                                                                                     <div class="col-md-6 pdng-top13">
-                                                                                        <input type="file" id="assetFilesUpload" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false" required  onchange="angular.element(this).scope().uploadfileValidation(this.files)">
+                                                                                        <input type="file" id="assetFilesUpload" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile"  aria-invalid="false" required  onchange="angular.element(this).scope().uploadfileValidation(this.files)">
                                                                                          <div ng-show="importClientForm.$submitted || importClientForm.clientFile.$touched">
                                                                                             <div
                                                                                                 ng-show="importClientForm.clientFile.$dirty || importClientForm.clientFile.$invalid">
@@ -1930,7 +1930,7 @@
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="col-md-6">
-                                                                                        <button class="btn btn-success" tabindex="0" ng-click="uploadAssetFile()" ng-disabled="importClientForm.$invalid || fileNotValid || fileSizeHigh">
+                                                                                        <button class="btn btn-success"  ng-click="uploadAssetFile()" ng-disabled="importClientForm.$invalid || fileNotValid || fileSizeHigh">
                                                                                     <span class="btn-label">
                                                                                         <i class="material-icons">file_upload</i>
                                                                                     </span>Upload Docs
@@ -1955,7 +1955,7 @@
                                                                            <div class="col-md-11">
                                                                                <div class="form-group">
                                                                                    <label class="control-label">Photo Title</label>
-                                                                                   <input id='fileTitle'
+                                                                                   <input id='photoTitle'
                                                                                           ng-model="uploadAssetPhoto.title"
                                                                                           class='form-control'
                                                                                           name='photoTitle'
@@ -1983,7 +1983,7 @@
                                                                            <div class="col-md-12">
                                                                                <div class="form-group label-floating is-empty is-fileinput row">
                                                                                    <div class="col-md-6 pdng-top13">
-                                                                                       <input type="file" id="assetPohotsUpload" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedPhotoFile" name="clientFile1" tabindex="0" aria-invalid="false" onchange="angular.element(this).scope().uploadImage(this.files)" required>
+                                                                                       <input type="file" id="assetPohotsUpload" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedPhotoFile" name="clientFile1" aria-invalid="false" onchange="angular.element(this).scope().uploadImage(this.files)" required>
                                                                                        <div ng-show="importClientForm1.$submitted || importClientForm1.clientFile1.$touched">
                                                                                             <div
                                                                                                 ng-show="importClientForm1.clientFile1.$dirty || importClientForm1.clientFile1.$invalid">
@@ -2005,7 +2005,7 @@
                                                                                         </div>
                                                                                    </div>
                                                                                    <div class="col-md-6">
-                                                                                       <button class="btn btn-success" tabindex="0" ng-click="uploadAssetPhotoFile()"  ng-disabled="importClientForm1.$invalid || imgNotValid || imgSizeHigh">
+                                                                                       <button class="btn btn-success" ng-click="uploadAssetPhotoFile()"  ng-disabled="importClientForm1.$invalid || imgNotValid || imgSizeHigh">
                                                                                     <span class="btn-label">
                                                                                         <i class="material-icons">file_upload</i>
                                                                                     </span>Upload Photos
@@ -2569,7 +2569,7 @@
 
 <div class="row">
         <div id="deleteModal" data-backdrop="false" class="modal fade deleteModal"
-            tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             role="dialog" aria-labelledby="myModalLabel"
             aria-hidden="true">
             <div class="delete-dialog">
                 <div class="modal-content">
@@ -2592,7 +2592,7 @@
 <div class="row">
 
     <div id="deleteModalConfig" data-backdrop="false" class="modal fade deleteModal"
-        tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
         <div class="delete-dialog">
             <div class="modal-content">

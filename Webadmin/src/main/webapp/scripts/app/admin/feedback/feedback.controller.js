@@ -29,7 +29,7 @@ angular.module('timeSheetApp')
 
 
         $scope.onClick = function (points, evt) {
-            console.log(points, evt);
+          //console.log(points, evt);
         };
         $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }];
         $scope.options = {
@@ -181,7 +181,6 @@ angular.module('timeSheetApp')
         /** Ui-select function **/
 
         $scope.loadDepSitesList = function (searchProject) {
-            if(searchProject){
               $scope.siteSpin = true;
               $scope.searchProject = searchProject;
               if(jQuery.isEmptyObject($scope.searchProject) == false && $scope.searchProject.id == 0){
@@ -202,6 +201,7 @@ angular.module('timeSheetApp')
               }else{
                   if(jQuery.isEmptyObject($scope.selectedProject) == false) {
                          var depProj=$scope.selectedProject.id;
+                         $scope.selectedSite = null;
                   }else if(jQuery.isEmptyObject($scope.searchProject) == false){
                           var depProj=$scope.searchProject.id;
                   }else{
@@ -209,7 +209,7 @@ angular.module('timeSheetApp')
                   }
 
                   ProjectComponent.findSites(depProj).then(function (data) {
-                      $scope.selectedSite = null;
+                      
                       $scope.sitesList = data;
                       $scope.sitesLists = [];
                       $scope.sitesListOne.selected = null;
@@ -223,7 +223,6 @@ angular.module('timeSheetApp')
                       $scope.siteSpin = false;
                   });
               }
-            }
 
             };
 
@@ -289,7 +288,7 @@ angular.module('timeSheetApp')
 
                 LocationComponent.search($scope.searchCriteria).then(function (data) {
                     $scope.filteredLocations = data.transactions;
-                    console.log('searchLocations- ', $scope.filteredLocations);
+                  //console.log('searchLocations- ', $scope.filteredLocations);
 
             });
         };
@@ -298,7 +297,7 @@ angular.module('timeSheetApp')
         $scope.loadBlocks = function () {
                 var projectId = $scope.client.selected.id ? $scope.client.selected.id  : 0;
                 var siteId = $scope.sitesListOne.selected ? $scope.sitesListOne.selected.id  : 0;
-                console.log('selected project -' + projectId + ', site -' + siteId);
+              //console.log('selected project -' + projectId + ', site -' + siteId);
                 LocationComponent.findBlocks(projectId,siteId).then(function (data) {
                     $scope.selectedBlock = null;
                 $scope.blocks = data;
@@ -323,7 +322,7 @@ angular.module('timeSheetApp')
                            var siteId = $scope.sitesListOne.selected ? $scope.sitesListOne.selected.id  : 0;
                            var block = $scope.selectedBlock ? $scope.selectedBlock  : null;
                            var floor = $scope.selectedFloor ? $scope.selectedFloor  : null;
-                console.log('load zones - ' + projectId +',' + siteId +',' + block +','+ floor);
+              //console.log('load zones - ' + projectId +',' + siteId +',' + block +','+ floor);
                 LocationComponent.findZones(projectId,siteId,block,floor).then(function (data) {
                     $scope.selectedZone = null;
                 $scope.zones = data;
@@ -338,7 +337,7 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadFeedbacks = function () {
-                console.log('called loadFeedbacks');
+              //console.log('called loadFeedbacks');
                 $scope.search();
         };
 
@@ -382,12 +381,12 @@ angular.module('timeSheetApp')
            $scope.searchCriteria.isReport = false;
 
             $scope.searchCriteria.currPage = currPageVal;
-            console.log('Selected feedback' + $scope.selectedLocation);
+          //console.log('Selected feedback' + $scope.selectedLocation);
 
             if($scope.selectedFromDateSer){
                 $scope.searchCriteria.checkInDateTimeFrom = $scope.selectedFromDateSer;
-                console.log("From date found");
-                console.log($scope.searchCriteria.checkInDateTimeFrom);
+              //console.log("From date found");
+              //console.log($scope.searchCriteria.checkInDateTimeFrom);
             }else if($stateParams.date){
                 $scope.selectedFromDateSer = new Date($stateParams.date);
                 $scope.selectedFromDate = $filter('date')($scope.selectedFromDateSer, 'dd/MM/yyyy');
@@ -401,8 +400,8 @@ angular.module('timeSheetApp')
 
             if($scope.selectedToDateSer){
                 $scope.searchCriteria.checkInDateTimeTo = $scope.selectedToDateSer;
-                console.log("To date found");
-                console.log($scope.searchCriteria.checkInDateTimeTo);
+              //console.log("To date found");
+              //console.log($scope.searchCriteria.checkInDateTimeTo);
             }else if($stateParams.date){
                  $scope.selectedToDateSer = new Date($stateParams.date);
                  $scope.selectedToDate = $filter('date')($scope.selectedToDateSer, 'dd/MM/yyyy');
@@ -496,12 +495,12 @@ angular.module('timeSheetApp')
 
             }
 
-
+              $scope.searchCriteras = $scope.searchCriteria;
               $scope.feedbackReport = "";
               $scope.feedbackListLoader = false;
               $scope.feedbackListData = false;
               $rootScope.loadingStart();
-            console.log('Search Criteria : ', $scope.searchCriteria);
+          //console.log('Search Criteria : ', $scope.searchCriteria);
             FeedbackComponent.reports($scope.searchCriteria).then(function (data) {
                     $scope.feedbackReport = data;
                     $scope.feedbackListLoader = true;
@@ -514,10 +513,10 @@ angular.module('timeSheetApp')
                             $scope.feedbackListData = true;
                         }
                     }
-                        console.log('feedback report - ' + JSON.stringify($scope.feedbackReport));
+                      //console.log('feedback report - ' + JSON.stringify($scope.feedbackReport));
                         $scope.averageRating = $scope.feedbackReport.overallRating;
                         $scope.feedbackCount = $scope.feedbackReport.feedbackCount;
-                        console.log('feedback report - ' + JSON.stringify($scope.averageRating));
+                      //console.log('feedback report - ' + JSON.stringify($scope.averageRating));
 
 
                     $scope.hide = true;
@@ -542,8 +541,8 @@ angular.module('timeSheetApp')
                         //$scope.data.push(chartZoneDateWiseDataArr);
                         //$scope.data = chartZoneDateWiseDataArr;
 
-                        console.log('Line chart labels - ' + JSON.stringify($scope.labels));
-                        console.log('Line chart data - ' + JSON.stringify($scope.data));
+                      //console.log('Line chart labels - ' + JSON.stringify($scope.labels));
+                      //console.log('Line chart data - ' + JSON.stringify($scope.data));
 
                          // Doughnut chart data
 
@@ -557,8 +556,8 @@ angular.module('timeSheetApp')
 
 
 
-                        console.log('Doughnut chart labels - ' + JSON.stringify($scope.label));
-                        console.log('Doughnut chart data - ' + JSON.stringify($scope.datas));
+                      //console.log('Doughnut chart labels - ' + JSON.stringify($scope.label));
+                      //console.log('Doughnut chart data - ' + JSON.stringify($scope.datas));
 
 
                     }else {
@@ -578,8 +577,8 @@ angular.module('timeSheetApp')
                         //$scope.data.push(chartZoneWiseDataArr);
                         //$scope.data = chartZoneWiseDataArr;
 
-                        console.log('Line chart labels - ' + JSON.stringify($scope.labels));
-                        console.log('Line chart data - ' + JSON.stringify($scope.data));
+                      //console.log('Line chart labels - ' + JSON.stringify($scope.labels));
+                      //console.log('Line chart data - ' + JSON.stringify($scope.data));
 
                          // Doughnut chart data
 
@@ -597,8 +596,8 @@ angular.module('timeSheetApp')
 
                          $scope.chartOptions = { legend: { display: true } };
 
-                        console.log('Doughnut chart labels - ' + JSON.stringify($scope.label));
-                        console.log('Doughnut chart data - ' + JSON.stringify($scope.datas));
+                      //console.log('Doughnut chart labels - ' + JSON.stringify($scope.label));
+                      //console.log('Doughnut chart data - ' + JSON.stringify($scope.datas));
 
 
 
@@ -694,7 +693,7 @@ angular.module('timeSheetApp')
 
         //init load
         $scope.initLoad = function(){
-            console.log("***************************")
+          //console.log("***************************")
              $scope.loadPageTop();
              $scope.init();
 
@@ -713,18 +712,18 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.sortByAsc = false;
             FeedbackComponent.exportAllData($scope.searchCriteria).then(function(data){
                 var result = data.results[0];
-                console.log(result);
-                console.log(result.file + ', ' + result.status + ',' + result.msg);
+              //console.log(result);
+              //console.log(result.file + ', ' + result.status + ',' + result.msg);
                 var exportAllStatus = {
                         fileName : result.file,
                         exportMsg : 'Exporting All...',
                         url: result.url
                 };
                 $rootScope.exportStatusObj = exportAllStatus;
-                console.log('exportStatusObj size - ' + $rootScope.exportStatusObj.length);
+              //console.log('exportStatusObj size - ' + $rootScope.exportStatusObj.length);
                 $scope.start();
               },function(err){
-                  console.log('error message for export all ')
+                //console.log('error message for export all ')
                   //console.log(err);
                   $scope.start();
               });
@@ -740,7 +739,7 @@ angular.module('timeSheetApp')
 
 	      // store the interval promise
 	      promise = $interval($scope.exportStatus, 5000);
-	      console.log('promise -'+promise);
+	    //console.log('promise -'+promise);
 	    };
 
 	    // stops the interval
@@ -751,23 +750,23 @@ angular.module('timeSheetApp')
 
 
 	    $scope.exportStatus = function() {
-	            console.log('$rootScope.exportStatusObj -' , $rootScope.exportStatusObj);
+	          //console.log('$rootScope.exportStatusObj -' , $rootScope.exportStatusObj);
 
 	            FeedbackComponent.exportStatus($rootScope.exportStatusObj.fileName).then(function(data) {
-	                    console.log('feedback export status - data -' + JSON.stringify(data));
+	                  //console.log('feedback export status - data -' + JSON.stringify(data));
 	                    if(data) {
 	                        $rootScope.exportStatusObj.exportStatus = data.status;
-	                        console.log('exportStatus - '+ JSON.stringify($rootScope.exportStatusObj));
+	                      //console.log('exportStatus - '+ JSON.stringify($rootScope.exportStatusObj));
 	                        $rootScope.exportStatusObj.exportMsg = data.msg;
 	                        $scope.downloader=false;
-	                        console.log('exportMsg - '+ $rootScope.exportStatusObj.exportMsg);
+	                      //console.log('exportMsg - '+ $rootScope.exportStatusObj.exportMsg);
 	                        if($rootScope.exportStatusObj.exportStatus == 'COMPLETED'){
 	                            if($rootScope.exportStatusObj.url) {
 	                                $rootScope.exportStatusObj.exportFile = $rootScope.exportStatusObj.url;
 	                            }else {
 	                                $rootScope.exportStatusObj.exportFile = data.file;
 	                            }
-	                            console.log('exportFile - '+ $rootScope.exportStatusObj.exportFile);
+	                          //console.log('exportFile - '+ $rootScope.exportStatusObj.exportFile);
 	                            $scope.stop();
 	                        }else if($rootScope.exportStatusObj.exportStatus == 'FAILED'){
 	                            $scope.stop();
@@ -812,6 +811,6 @@ angular.module('timeSheetApp')
 
   $scope.isReadonly = true;
   $scope.rateFunction = function(rating) {
-    console.log("Rating selected: " + rating);
+  //console.log("Rating selected: " + rating);
   };
 })*/
