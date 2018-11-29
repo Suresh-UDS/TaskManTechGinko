@@ -16,10 +16,6 @@ public class TicketStatusReport implements Serializable {
 
     private long siteId;
 
-    private long employeeId;
-
-    private Long jobId;
-
     private String category;
 
     private String status;
@@ -43,15 +39,13 @@ public class TicketStatusReport implements Serializable {
     public TicketStatusReport() {
     }
 
-    public TicketStatusReport(ZonedDateTime createdDate, long siteId, long employeeId, Long jobId, String category, String status, Date assignedOn, Date closedOn, long projectId, String region, String branch, long statusCount) {
+    public TicketStatusReport(ZonedDateTime createdDate, long siteId, String category, String status, Date assignedOn, Date closedOn, long projectId, String region, String branch, long statusCount) {
         this.createdDate = createdDate;
         if(this.createdDate != null) {
             this.formattedDate = Date.from(this.createdDate.toInstant());
             this.date = dateFormat.format(this.formattedDate);
         }
         this.siteId = siteId;
-        this.employeeId = employeeId;
-        this.jobId = jobId;
         this.category = category;
         this.status = status;
         this.assignedOn = assignedOn;
@@ -84,22 +78,6 @@ public class TicketStatusReport implements Serializable {
 
     public void setSiteId(long siteId) {
         this.siteId = siteId;
-    }
-
-    public long getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(long employeeId) {
-        this.employeeId = employeeId;
-    }
-
-    public Long getJobId() {
-        return jobId;
-    }
-
-    public void setJobId(Long jobId) {
-        this.jobId = jobId;
     }
 
     public String getCategory() {

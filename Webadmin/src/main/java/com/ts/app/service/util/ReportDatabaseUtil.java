@@ -196,8 +196,6 @@ public class ReportDatabaseUtil {
                 .tag("date", ticketReportList.getDate())
                 .addField("siteId", ticketReportList.getSiteId())
                 .addField("projectId", ticketReportList.getProjectId())
-                .addField("employeeId", ticketReportList.getEmployeeId())
-                .addField("jobId", ticketReportList.getJobId())
                 .addField("status", ticketReportList.getStatus())
                 .tag("status", ticketReportList.getStatus())
                 .addField("category", ticketReportList.getCategory() != null ? ticketReportList.getCategory() : "")
