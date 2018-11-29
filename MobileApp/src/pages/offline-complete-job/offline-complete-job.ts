@@ -57,6 +57,7 @@ export class OfflineCompleteJob {
   fileTransfer: FileTransferObject = this.transfer.create();
 
   checkListItems:any;
+  checkListOffline: any;
   showIcon:any;
   index:any;
   spinner:any;
@@ -64,6 +65,8 @@ export class OfflineCompleteJob {
   savedImages:any;
   jobs:any;
   jobData:any;
+  savedCheckList:any;
+  jobChecklist: any;
 
   constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService, @Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
               private loadingCtrl:LoadingController, public camera: Camera,private geolocation:Geolocation, private jobService: JobService,
@@ -73,6 +76,7 @@ export class OfflineCompleteJob {
     this.spinner=true;
     this.categories = 'details';
     this.checkListItems=[];
+    this.checkListOffline = [];
     this.takenImages=[];
     this.taken64Images = [];
     this.jobDetails=[];
@@ -81,6 +85,7 @@ export class OfflineCompleteJob {
     this.savedImages = [];
     this.completedImages = [];
     this.jobs = [];
+    this.jobChecklist = [];
     this.jobData ={};
     this.checkOutDetails={
       employeeId:'',
@@ -133,7 +138,27 @@ export class OfflineCompleteJob {
           this.component.closeLoader();
         }
       )
+      console.log(this.jobDetails.id +"saved checklist")
+      this.dbService.getCheckList(this.jobDetails.id).then(
+        (res)=>{
+          console.log("saved checklist");
+          console.log(res);
+          this.checkListItems=res;
+          for(var i =0;i<this.checkListItems.length; i++){
+            if(this.checkListItems[i].completed=="false"){
+              this.checkListItems[i].completeOffline = false;
+            }else {
+              this.checkListItems[i].completeOffline = true;
+            }
+          }
+        },(err)=>{
+          console.log("Error in Saved checklist");
+          console.log(err);
+        }
+      )
     },3000);
+
+
 
   }
   viewImage(index,img)
@@ -179,6 +204,35 @@ export class OfflineCompleteJob {
       this.dbService.setSaveJobs(job, this.taken64Images).then(
         (res)=>{
           console.log("image saved in local db",res);
+          this.jobs=[];
+          this.jobData.id = job.id;
+          this.jobData.assetId = job.assetId;
+          this.jobData.title = job.title;
+          this.jobData.employeeName = job.employeeName;
+          this.jobData.siteName = job.siteName;
+          this.jobData.plannedEndTime = job.plannedEndTime;
+          this.jobData.plannedStartTime = job.plannedStartTime;
+          this.jobData.description = job.description;
+          this.jobData.status = job.status;
+          this.jobData.maintenanceType = job.maintenanceType;
+          this.jobData.checkInDateTimeFrom = job.checkInDateTimeFrom;
+          this.jobData.checkInDateTimeTo = job.checkInDateTimeTo;
+          this.jobData.offlineUpdate = 1;
+
+          this.jobs.push(this.jobData);
+          console.log("jobs",this.jobs);
+
+          this.dbService.setCompletJobs(this.jobData).then(
+            (res)=>{
+              console.log("save job",res);
+              this.component.closeLoader();
+              this.navCtrl.setRoot(OfflinePage);
+            },(err)=>{
+              console.log("error job",err);
+              this.component.closeLoader();
+
+            }
+          );
           this.component.closeLoader();
           this.navCtrl.pop();
         },(err)=>{
@@ -210,11 +264,12 @@ export class OfflineCompleteJob {
             this.jobData.maintenanceType = job.maintenanceType;
             this.jobData.checkInDateTimeFrom = job.checkInDateTimeFrom;
             this.jobData.checkInDateTimeTo = new Date();
+            this.jobData.offlineUpdate = 1;
 
             this.jobs.push(this.jobData);
             console.log("jobs",this.jobs);
 
-          this.dbService.setPPMCompletJobs(this.jobData).then(
+          this.dbService.setCompletJobs(this.jobData).then(
             (res)=>{
               console.log("complete job",res);
               this.component.closeLoader();
@@ -234,6 +289,66 @@ export class OfflineCompleteJob {
     },3000);
 
   }
+
+  saveJobCheckList(job,jobDetails){
+    console.log("checkList",job);
+    this.checkListOffline = job;
+    this.component.showLoader("Saving check list in offline...");
+    for(var i=0; i<this.checkListOffline.length; i++){
+      if(this.checkListOffline[i].completeOffline == true){
+        this.checkListOffline[i].completed="true";
+        console.log(this.checkListOffline);
+      }else {
+        this.checkListOffline[i].completed ="false";
+        console.log(this.checkListOffline);
+      }
+      console.log("ccc",this.checkListOffline[i]);
+
+      this.dbService.setCompletChecklist(this.checkListOffline[i]).then(
+        (res)=>{
+          this.component.showLoader("completing checklist..");
+          console.log("complete checklist",res);
+          this.jobData.id = jobDetails.id;
+          this.jobData.assetId = jobDetails.assetId;
+          this.jobData.title = jobDetails.title;
+          this.jobData.employeeName = jobDetails.employeeName;
+          this.jobData.siteName = jobDetails.siteName;
+          this.jobData.plannedEndTime = jobDetails.plannedEndTime;
+          this.jobData.plannedStartTime = jobDetails.plannedStartTime;
+          this.jobData.description = jobDetails.description;
+          this.jobData.status = jobDetails.status;
+          this.jobData.maintenanceType = jobDetails.maintenanceType;
+          this.jobData.checkInDateTimeFrom = jobDetails.checkInDateTimeFrom;
+          this.jobData.checkInDateTimeTo = jobDetails.checkInDateTimeTo;
+          this.jobData.offlineUpdate = 1;
+          this.component.closeLoader();
+          this.navCtrl.pop();
+          console.log("jobData checklist",this.jobData);
+          this.dbService.setCompletJobs(this.jobData).then(
+            (res)=>{
+              console.log("complete job",res);
+              this.component.closeLoader();
+              this.navCtrl.pop();
+            },(err)=>{
+              console.log("error job",err);
+              this.component.closeLoader();
+              this.navCtrl.pop();
+            }
+          );
+
+        },(err)=>{
+          console.log("error job",err);
+          this.component.closeLoader();
+
+        }
+      );
+    }
+    this.component.closeLoader();
+    console.log("totalchecklist",this.checkListOffline);
+
+  }
+
+
   changeStatus(i)
   {
     this.sLength=this.jobDetails.checklistItems.length;

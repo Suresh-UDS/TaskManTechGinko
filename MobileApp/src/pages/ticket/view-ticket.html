@@ -73,6 +73,10 @@
         <ion-col col-6>
             <p text-right>{{ticketDetails.lastModifiedDate}}</p>
         </ion-col>
+      <ion-col col-6 class="label-on-left"  *ngIf="ticketDetails.remarks">Remarks</ion-col>
+      <ion-col col-6 *ngIf="ticketDetails.remarks">
+            <p text-right>{{ticketDetails.remarks}}</p>
+      </ion-col>
     </ion-row>
 
     <br>
@@ -98,7 +102,7 @@
         <button has-permission="JobsView" class="btn btn-warning center pull-left" (click)="viewJob(ticketDetails)" *ngIf="ticketDetails.jobId >0">
             View Job
         </button>
-        <button has-permission="TicketsView" class="btn btn-success center pull-right" (click)="closeTicket()">
+        <button  class="btn btn-success center pull-right" (click)="closeTicket()">
             Close Ticket <ion-icon name="ios-arrow-forward-outline"></ion-icon>
         </button>
     </ion-toolbar>
