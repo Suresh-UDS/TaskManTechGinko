@@ -125,7 +125,7 @@ public class JobManagementResource {
                 jobStatusReport.setJobType(response.getJobType());
                 jobStatusReport.setStatusCount(1);
                 log.debug("New Job report point" +jobStatusReport);
-                reportDatabaseService.addPointsToJobReport(jobStatusReport);
+                reportDatabaseService.addNewJobPoints(jobStatusReport);
             } catch (Exception e) {
 		        e.printStackTrace();
             }
