@@ -6,6 +6,7 @@ import com.ts.app.domain.Measurements.JobStatusMeasurement;
 import com.ts.app.domain.Measurements.TicketStatusMeasurement;
 import com.ts.app.domain.TicketStatusReport;
 import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.ReportDatabaseService;
 import com.ts.app.service.ReportService;
 import com.ts.app.service.SchedulerHelperService;
 import com.ts.app.service.util.ReportDatabaseUtil;
@@ -29,7 +30,7 @@ import java.util.*;
 @RequestMapping("/api")
 public class ReportResource {
 
-	private final Logger log = LoggerFactory.getLogger(ProjectResource.class);
+	private final Logger log = LoggerFactory.getLogger(ReportResource.class);
 
 	@Inject
 	private ReportService reportService;
@@ -40,6 +41,9 @@ public class ReportResource {
 
 	@Inject
     private ReportDatabaseUtil reportDatabaseUtil;
+
+	@Inject
+    private ReportDatabaseService reportDatabaseService;
 
 
 	@RequestMapping(value = "/reports/attendance/site/{siteId}/selectedDate/{selectedDate}", method = RequestMethod.GET)
@@ -182,6 +186,17 @@ public class ReportResource {
     public ResponseEntity<?> getTicketListByStatus() {
         List<ChartModelEntity> reportStatusPoints = reportDatabaseUtil.getTicketReportStatusPoints();
         return new ResponseEntity<>(reportStatusPoints, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reports/query", method = RequestMethod.GET)
+    public ResponseEntity<?> getQueryListByStatus() {
+	    try{
+            JobStatusReport jobStatusReport = new JobStatusReport();
+            reportDatabaseService.addNewJobPoints(jobStatusReport);
+        } catch(Exception e) {
+	        e.printStackTrace();
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 	//    @CrossOrigin

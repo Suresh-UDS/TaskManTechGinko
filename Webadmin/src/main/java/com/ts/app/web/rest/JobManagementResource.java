@@ -3,13 +3,11 @@ package com.ts.app.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.JobStatusReport;
 import com.ts.app.domain.User;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.*;
-import com.ts.app.service.util.CacheUtil;
-import com.ts.app.service.util.ImportUtil;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.service.util.ReportUtil;
+import com.ts.app.service.util.*;
 import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -25,6 +23,8 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -66,6 +66,8 @@ public class JobManagementResource {
 
 	@Inject
     private ReportDatabaseService reportDatabaseService;
+
+    final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 
 	@RequestMapping(path="/job/lookup/status", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -111,7 +113,23 @@ public class JobManagementResource {
 			}
 		}
 		if(response != null && response.getId() > 0) {
-		    reportDatabaseService.addPointsToJobReport(response);
+		    try {
+                JobStatusReport jobStatusReport = new JobStatusReport();
+                Date date = DateUtil.convertToSQLDate(response.getPlannedStartTime());
+                jobStatusReport.setJobCreatedDate(date);
+                jobStatusReport.setProjectId(Long.parseLong(response.getSiteProjectId()));
+                jobStatusReport.setSiteId(response.getSiteId());
+                jobStatusReport.setBranch("chennai");
+                jobStatusReport.setRegion("south-region");
+                jobStatusReport.setJobStatus(response.getJobStatus());
+                jobStatusReport.setJobType(response.getJobType());
+                jobStatusReport.setStatusCount(1);
+                log.debug("New Job report point" +jobStatusReport);
+                reportDatabaseService.addPointsToJobReport(jobStatusReport);
+            } catch (Exception e) {
+		        e.printStackTrace();
+            }
+
 			return new ResponseEntity<>(response,HttpStatus.CREATED);
 		}else {
 			return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
