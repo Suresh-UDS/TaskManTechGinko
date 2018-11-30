@@ -856,7 +856,7 @@ angular.module('timeSheetApp')
               	   $scope.client.selected =$scope.searchProject;
               	} 
             	 if($rootScope.searchFilterCriteria.regionId){
-              		$scope.searchRegion = {id:$rootScope.searchFilterCriteria.regionId,name:$rootScope.searchFilterCriteria.regionName}
+              		$scope.searchRegion = {id:$rootScope.searchFilterCriteria.regionId,name:$rootScope.searchFilterCriteria.region}
               		$scope.regionsListOne.selected = $scope.searchRegion;
               		$scope.regionFilterFunction($scope.searchProject);
               	}else{
@@ -864,7 +864,7 @@ angular.module('timeSheetApp')
               	  $scope.regionsListOne.selected = $scope.searchRegion;
               	}
               	if($rootScope.searchFilterCriteria.branchId){
-              		$scope.searchBranch = {id:$rootScope.searchFilterCriteria.branchId,name:$rootScope.searchFilterCriteria.branchName}
+              		$scope.searchBranch = {id:$rootScope.searchFilterCriteria.branchId,name:$rootScope.searchFilterCriteria.branch}
               	    $scope.branchsListOne.selected= $scope.searchBranch;
               		 $scope.branchFilterFunction($scope.searchProject,$scope.searchRegion);
               	}else{
@@ -938,20 +938,20 @@ angular.module('timeSheetApp')
 
 	        	if($scope.searchRegion) {
 		        	$scope.searchCriteria.regionId = $scope.searchRegion.id;
-                    $scope.searchCriteria.regionName = $scope.searchRegion.name;
+                    $scope.searchCriteria.region = $scope.searchRegion.name;
 
 	        	}else {
 	        		$scope.searchCriteria.regionId = null;
-	        		$scope.searchCriteria.regionName = null;
+	        		$scope.searchCriteria.region = null;
 	        	}
 
 	        	if($scope.searchBranch) {
 		        	$scope.searchCriteria.branchId = $scope.searchBranch.id;
-                    $scope.searchCriteria.branchName = $scope.searchBranch.name;
+                    $scope.searchCriteria.branch = $scope.searchBranch.name;
 
 	        	}else {
 	        		$scope.searchCriteria.branchId = null;
-	        		$scope.searchCriteria.branchName = null;
+	        		$scope.searchCriteria.branch = null;
 	        	}
 
         	}
@@ -999,7 +999,7 @@ angular.module('timeSheetApp')
                                 $scope.client.selected = $scope.searchProject;
                              }
                             if($scope.localStorage.regionId){
-                                $scope.searchRegion = {id:$scope.localStorage.regionId,name:$scope.localStorage.regionName};
+                                $scope.searchRegion = {id:$scope.localStorage.regionId,name:$scope.localStorage.region};
                                 $scope.regionsListOne.selected = $scope.searchRegion;
                                 
                                 $scope.regionFilterFunction($scope.searchProject);
@@ -1008,7 +1008,7 @@ angular.module('timeSheetApp')
                                 $scope.regionsListOne.selected = $scope.searchRegion;
                              }
                             if($scope.localStorage.branchId){
-                            	$scope.searchBranch = {id:$scope.localStorage.branchId,name:$scope.localStorage.branchName};
+                            	$scope.searchBranch = {id:$scope.localStorage.branchId,name:$scope.localStorage.branch};
                                 $scope.branchsListOne.selected = $scope.searchBranch;
                                 $scope.branchFilterFunction($scope.searchProject,$scope.searchRegion);
 
@@ -1309,7 +1309,7 @@ angular.module('timeSheetApp')
                     $scope.siteSpin = false;
                 })
 
-            }else if(projectId >0){
+            }/*else if(projectId >0){
                 $scope.siteFilterDisable = true;
                 $scope.siteSpin = true;
                 ProjectComponent.findSites(projectId).then(function (data) {
@@ -1328,7 +1328,7 @@ angular.module('timeSheetApp')
                 });
             }else{
 
-            }
+            }*/
         }
 
         $scope.addRegion = function () {
