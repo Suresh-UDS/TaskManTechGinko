@@ -389,7 +389,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr ng-repeat="esc in slaEscalationList">
+									<tr ng-repeat="esc in slaEscalationList | orderBy:sorterFunc">
 										<td>Level {{esc.level}}</td>
 										<td>{{esc.hours}}</td>
 										<td>{{esc.minutes}}</td>
