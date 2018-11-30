@@ -892,7 +892,7 @@ public class JobManagementService extends AbstractService {
 		return;
 	}
 	
-	@Transactional(propagation=Propagation.REQUIRES_NEW)
+	//@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void saveScheduledJob(List<JobDTO> jobDTOs) {
 		if(CollectionUtils.isNotEmpty(jobDTOs)) {
 			List<Job> jobs = new ArrayList<Job>();
