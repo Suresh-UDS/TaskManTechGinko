@@ -817,6 +817,7 @@ public class AttendanceService extends AbstractService {
                     } else if (searchCriteria.getProjectId() > 0) {
 
                         if(StringUtils.isEmpty(searchCriteria.getRegion())){
+                            log.debug("Region not found");
                             if (StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
                                 page = attendanceRepository.findByProjectIdAndDate(searchCriteria.getProjectId(), startDate, toDate, pageRequest);
                             } else {
@@ -828,11 +829,9 @@ public class AttendanceService extends AbstractService {
                                 }
                             }
                         }else{
-
+                            log.debug("Project Id - "+searchCriteria.getProjectId());
+                            log.debug("Region  - "+searchCriteria.getRegion());
                             if(StringUtils.isEmpty(searchCriteria.getBranch())){
-                                log.debug("Project Id - "+searchCriteria.getProjectId());
-                                log.debug("Region  - "+searchCriteria.getRegion());
-
                                 List<Long> siteIds = siteRepository.findByRegion(searchCriteria.getProjectId(),searchCriteria.getRegion());
                                 page = attendanceRepository.findByMultipleSitesAndCheckInTime(siteIds, startDate, toDate, pageRequest);
 
