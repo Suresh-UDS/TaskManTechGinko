@@ -273,7 +273,7 @@ export class OfflineCompleteJob {
             (res)=>{
               console.log("complete job",res);
               this.component.closeLoader();
-              this.navCtrl.setRoot(OfflinePage);
+              this.navCtrl.pop();
             },(err)=>{
               console.log("error job",err);
               this.component.closeLoader();
