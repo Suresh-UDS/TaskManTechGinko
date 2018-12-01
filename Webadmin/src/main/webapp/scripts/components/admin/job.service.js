@@ -178,6 +178,12 @@ angular.module('timeSheetApp')
                     console.log(response);
                     return response.data;
                 })
+            },
+
+            getTotalCounts : function () {
+                return $http.get('api/reports/jobs/todayCount').then(function (response) {
+                    return response.data;
+                });
             }
 
 

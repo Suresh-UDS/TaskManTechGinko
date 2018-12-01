@@ -19,6 +19,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -59,12 +60,18 @@ public class ReportDatabaseService {
     public void addNewJobPoints(JobStatusReport response) throws Exception {
         InfluxDB influxDB = connectDatabase();
         log.debug("job status measurement" + response.toString());
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(response.getJobCreatedDate());
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
         influxDB.setRetentionPolicy("defaultPolicy");
         influxDB.enableBatch(100, 200, TimeUnit.MILLISECONDS);
         Point jobNewPoint = Point.measurement("jobReportStatus")
             .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-            .addField("date", response.getJobCreatedDate().toString())
-            .tag("date",response.getJobCreatedDate().toString())
+            .addField("date", cal.getTimeInMillis())
+            .tag("date", String.valueOf(cal.getTimeInMillis()))
             .addField("status", response.getJobStatus().toString())
             .tag("status",response.getJobStatus().toString())
             .addField("type", (response.getJobType() != null ? response.getJobType().toString() : "CARPENTRY"))
@@ -86,17 +93,14 @@ public class ReportDatabaseService {
     public void updateJobPoints(JobStatusReport response) {
         InfluxDB influxDB = connectDatabase();
         // Query the data from influxDB
-        Query query = BoundParameterQuery.QueryBuilder.newQuery("SELECT * FROM jobReportStatus WHERE projectId = $projectId AND region = $region" +
-            " AND branch = $branch AND siteId = $siteId AND date = $date")
+        Query query = BoundParameterQuery.QueryBuilder.newQuery("SELECT * FROM jobReportStatus WHERE date >= $fromDate AND date <= $toDate")
             .forDatabase(dbName)
-            .bind("projectId", response.getProjectId())
-            .bind("region", response.getRegion())
-            .bind("branch", response.getBranch())
-            .bind("siteId", response.getSiteId())
-            .bind("date", response.getJobCreatedDate())
+            .bind("fromDate", 1531765800090L)
+            .bind("toDate", 1531765800092L)
             .create();
 
         List<JobStatusMeasurement> jobStatusMeasurementList = getJobExistingPoints(influxDB, query);
+        log.debug("Existing points for job ", jobStatusMeasurementList.size());
     }
 
     public List<TicketStatusMeasurement> getTicketPoints(InfluxDB connection, String query, String databaseName) {

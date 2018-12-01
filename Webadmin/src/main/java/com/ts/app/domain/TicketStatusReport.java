@@ -64,6 +64,14 @@ public class TicketStatusReport implements Serializable {
         this.date = date;
     }
 
+    public Date getFormattedDate() {
+        return formattedDate;
+    }
+
+    public void setFormattedDate(Date formattedDate) {
+        this.formattedDate = formattedDate;
+    }
+
     public long getProjectId() {
         return projectId;
     }

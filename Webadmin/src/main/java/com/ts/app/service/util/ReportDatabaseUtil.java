@@ -8,13 +8,18 @@ import com.ts.app.repository.ReportDatabaseJobRepository;
 import com.ts.app.repository.ReportDatabaseTicketRepository;
 import com.ts.app.service.ReportDatabaseService;
 import org.influxdb.InfluxDB;
+import org.influxdb.dto.BoundParameterQuery;
 import org.influxdb.dto.Point;
+import org.influxdb.dto.Query;
+import org.influxdb.dto.QueryResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -62,10 +67,20 @@ public class ReportDatabaseUtil {
         influxDB.setRetentionPolicy("defaultPolicy");
         influxDB.enableBatch(100, 200, TimeUnit.MILLISECONDS);
         for(int i=0; i<100; i++) {
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(reportLists.get(i).getJobCreatedDate());
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+
+            log.debug("calendar time milliseconds" +cal.getTimeInMillis());
+            log.debug("system time milliseconds" + System.currentTimeMillis());
             Point jobPoint = Point.measurement("jobReportStatus")
                 .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                .addField("date",reportLists.get(i).getJobCreatedDate().toString())
-                .tag("date",reportLists.get(i).getJobCreatedDate().toString())
+                .addField("date",cal.getTimeInMillis())
+                .tag("date",String.valueOf(cal.getTimeInMillis()))
                 .addField("status", reportLists.get(i).getJobStatus().toString())
                 .tag("status",reportLists.get(i).getJobStatus().toString())
                 .addField("type", (reportLists.get(i).getJobType() != null ? reportLists.get(i).getJobType().toString() : "CARPENTRY"))
@@ -175,7 +190,7 @@ public class ReportDatabaseUtil {
                 chartModelEntity.setStatus(categoryStatusCnts);
                 chartModelEntities.add(chartModelEntity);
 
-                log.debug("Formatted JSON for client side" +chartModelEntities.toString());
+                log.debug("Formatted JSON for jobs" +chartModelEntities.toString());
             }
 
         }
@@ -190,10 +205,17 @@ public class ReportDatabaseUtil {
         influxDB.setRetentionPolicy("defaultPolicy");
         influxDB.enableBatch(100, 200, TimeUnit.MILLISECONDS);
         for(TicketStatusReport ticketReportList : ticketStatusReportLists) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(ticketReportList.getFormattedDate());
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+
             Point ticketPoint = Point.measurement("ticketReportStatus")
                 .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                .addField("date", ticketReportList.getDate())
-                .tag("date", ticketReportList.getDate())
+                .addField("date", cal.getTimeInMillis())
+                .tag("date", String.valueOf(cal.getTimeInMillis()))
                 .addField("siteId", ticketReportList.getSiteId())
                 .addField("projectId", ticketReportList.getProjectId())
                 .addField("status", ticketReportList.getStatus())
@@ -299,13 +321,67 @@ public class ReportDatabaseUtil {
                 chartModelEntity.setStatus(categoryStatusCnts);
                 chartModelEntities.add(chartModelEntity);
 
-                log.debug("Formatted JSON for client side" +chartModelEntities.toString());
+                log.debug("Formatted JSON for ticket" +chartModelEntities.toString());
             }
 
         }
 
         return chartModelEntities;
     }
+
+
+    public List<JobStatusMeasurement> getTodayJobsCount() {
+        InfluxDB conn = connectDatabase();
+        Query query = BoundParameterQuery.QueryBuilder.newQuery("SELECT sum(statusCount) as statusCount FROM jobReportStatus WHERE date >= $fromDate " +
+            "AND date <= $toDate group by date")
+            .forDatabase(dbName)
+            .bind("fromDate", 1531765800090L)
+            .bind("toDate", 1531765800092L)
+            .create();
+        QueryResult results = conn.query(query);
+        List<JobStatusMeasurement> jobTodayCounts = reportDatabaseService.getJobExistingPoints(conn, query);
+        return jobTodayCounts;
+    }
+
+    public List<JobReportCounts> getTotalJobsCount() {
+        InfluxDB conn = connectDatabase();
+        Query query = BoundParameterQuery.QueryBuilder.newQuery("SELECT sum(statusCount) as statusCount, count(date) as totalCount FROM jobReportStatus " +
+            "group by status")
+            .forDatabase(dbName)
+            .create();
+        QueryResult result = conn.query(query);
+        List<JobStatusMeasurement> jobTotalResults = reportDatabaseService.getJobExistingPoints(conn, query);
+        List<JobReportCounts> jobReportCounts = new ArrayList<>();
+        JobReportCounts jobReportCount = new JobReportCounts();
+        if(jobTotalResults.size() > 0) {
+            int totalCounts = 0;
+            for(JobStatusMeasurement jobTotalResult : jobTotalResults) {
+                if(jobTotalResult.getStatus().equalsIgnoreCase("ASSIGNED")) {
+                    jobReportCount.setAssignedCounts(jobTotalResult.getStatusCount());
+                    totalCounts += jobTotalResult.getTotalCount();
+                }
+                if(jobTotalResult.getStatus().equalsIgnoreCase("OVERDUE")) {
+                    jobReportCount.setOverdueCounts(jobTotalResult.getStatusCount());
+                    totalCounts += jobTotalResult.getTotalCount();
+                }
+                if(jobTotalResult.getStatus().equalsIgnoreCase("COMPLETED")) {
+                    jobReportCount.setCompletedCounts(jobTotalResult.getStatusCount());
+                    totalCounts += jobTotalResult.getTotalCount();
+                }
+            }
+            jobReportCount.setTotalCounts(totalCounts);
+            jobReportCounts.add(jobReportCount);
+        }
+        return jobReportCounts;
+    }
+
+
+
+
+
+
+
+
 
 
 

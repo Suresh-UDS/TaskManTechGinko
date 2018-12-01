@@ -76,7 +76,8 @@ angular.module('timeSheetApp')
             $scope.loadAllProjects();
             $scope.loadAllSites();
             $scope.loadQuotationReport();
-            $scope.loadJobReport();
+            // $scope.loadJobReport();
+            $scope.loadJobReportFromInflux();
             $scope.loadingStart();
             $scope.loadChartData();
 
@@ -771,9 +772,20 @@ angular.module('timeSheetApp')
 
 	        	});
 
-
-
         };
+
+        $scope.loadJobReportFromInflux = function() {
+
+            JobComponent.getTotalCounts().then(function (data) {
+                console.log("Job Total Counts" +JSON.stringify(data));
+                $scope.loadingStop();
+                $scope.result.totalJobCount = data[0].totalCounts;
+                $scope.result.assignedJobCount = data[0].assignedCounts;
+                $scope.result.overdueJobCount = data[0].overdueCounts;
+                $scope.result.completedJobCount = data[0].completedCounts;
+            });
+
+        }
 
         $scope.initCalender();
 

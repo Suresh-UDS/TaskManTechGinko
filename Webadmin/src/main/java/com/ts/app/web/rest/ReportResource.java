@@ -1,6 +1,7 @@
 package com.ts.app.web.rest;
 
 import com.ts.app.domain.ChartModelEntity;
+import com.ts.app.domain.JobReportCounts;
 import com.ts.app.domain.JobStatusReport;
 import com.ts.app.domain.Measurements.JobStatusMeasurement;
 import com.ts.app.domain.Measurements.TicketStatusMeasurement;
@@ -192,12 +193,20 @@ public class ReportResource {
     public ResponseEntity<?> getQueryListByStatus() {
 	    try{
             JobStatusReport jobStatusReport = new JobStatusReport();
-            reportDatabaseService.addNewJobPoints(jobStatusReport);
+            reportDatabaseService.updateJobPoints(jobStatusReport);
         } catch(Exception e) {
 	        e.printStackTrace();
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/reports/jobs/todayCount", method = RequestMethod.GET)
+    public ResponseEntity<?> getJobsCountByToday() {
+        List<JobReportCounts> reportTodayPoints = reportDatabaseUtil.getTotalJobsCount();
+        return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
+    }
+
+
 
 	//    @CrossOrigin
 //    @RequestMapping(value = "/reports/site/{siteId}/selectedDate/{selectedDate}", method = RequestMethod.GET)

@@ -39,6 +39,9 @@ public class JobStatusMeasurement {
     @Column(name="categoryCount")
     private int categoryCount;
 
+    @Column(name = "totalCount")
+    private int totalCount;
+
     public Instant getTime() {
         return time;
     }
@@ -103,7 +106,7 @@ public class JobStatusMeasurement {
         this.siteId = siteId;
     }
 
-    public long getStatusCount() {
+    public int getStatusCount() {
         return statusCount;
     }
 
@@ -117,5 +120,13 @@ public class JobStatusMeasurement {
 
     public void setCategoryCount(int categoryCount) {
         this.categoryCount = categoryCount;
+    }
+
+    public int getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(int totalCount) {
+        this.totalCount = totalCount;
     }
 }
