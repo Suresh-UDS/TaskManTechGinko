@@ -67,7 +67,6 @@ public class ReportDatabaseUtil {
         influxDB.setRetentionPolicy("defaultPolicy");
         influxDB.enableBatch(100, 200, TimeUnit.MILLISECONDS);
         for(int i=0; i<100; i++) {
-
             Calendar cal = Calendar.getInstance();
             cal.setTime(reportLists.get(i).getJobCreatedDate());
             cal.set(Calendar.HOUR_OF_DAY, 0);
