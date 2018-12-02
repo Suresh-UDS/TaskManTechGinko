@@ -74,19 +74,18 @@ public class ReportDatabaseUtil {
             cal.set(Calendar.MINUTE, 0);
             cal.set(Calendar.SECOND, 0);
             cal.set(Calendar.MILLISECOND, 0);
-
             log.debug("calendar time milliseconds" +cal.getTimeInMillis());
             log.debug("system time milliseconds" + System.currentTimeMillis());
             Point jobPoint = Point.measurement("jobReportStatus")
                 .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                .addField("date",cal.getTimeInMillis())
-                .tag("date",String.valueOf(cal.getTimeInMillis()))
+                .addField("date", (float) cal.getTimeInMillis())
+                .tag("date", String.valueOf(cal.getTimeInMillis()))
                 .addField("status", reportLists.get(i).getJobStatus().toString())
                 .tag("status",reportLists.get(i).getJobStatus().toString())
                 .addField("type", (reportLists.get(i).getJobType() != null ? reportLists.get(i).getJobType().toString() : "CARPENTRY"))
                 .tag("type", (reportLists.get(i).getJobType() != null ? reportLists.get(i).getJobType().toString() : "CARPENTRY"))
-                .addField("projectId", reportLists.get(i).getProjectId())
-                .addField("siteId", reportLists.get(i).getSiteId())
+                .addField("projectId", (float) reportLists.get(i).getProjectId())
+                .addField("siteId", (float) reportLists.get(i).getSiteId())
                 .tag("siteId", String.valueOf(reportLists.get(i).getSiteId()))
                 .addField("region", reportLists.get(i).getRegion() != null ? reportLists.get(i).getRegion() : "north-region")
                 .tag("region", reportLists.get(i).getRegion() != null ? reportLists.get(i).getRegion() : "north-region")
@@ -333,10 +332,10 @@ public class ReportDatabaseUtil {
     public List<JobStatusMeasurement> getTodayJobsCount() {
         InfluxDB conn = connectDatabase();
         Query query = BoundParameterQuery.QueryBuilder.newQuery("SELECT sum(statusCount) as statusCount FROM jobReportStatus WHERE date >= $fromDate " +
-            "AND date <= $toDate group by date")
+            "AND date <= $toDate group by date, status")
             .forDatabase(dbName)
-            .bind("fromDate", 1531765800090L)
-            .bind("toDate", 1531765800092L)
+            .bind("fromDate", 1531679342592L)
+            .bind("toDate", 1531852226560L)
             .create();
         QueryResult results = conn.query(query);
         List<JobStatusMeasurement> jobTodayCounts = reportDatabaseService.getJobExistingPoints(conn, query);
@@ -346,8 +345,14 @@ public class ReportDatabaseUtil {
     public List<JobReportCounts> getTotalJobsCount() {
         InfluxDB conn = connectDatabase();
         Query query = BoundParameterQuery.QueryBuilder.newQuery("SELECT sum(statusCount) as statusCount, count(date) as totalCount FROM jobReportStatus " +
-            "group by status")
+            "WHERE projectId = $projectId AND region = $region AND branch = $branch AND siteId = $siteId group by status")
             .forDatabase(dbName)
+            .bind("fromDate", 1531765800090L)
+            .bind("toDate", 1531852200099L)
+            .bind("projectId", 2)
+            .bind("region", "south-region")
+            .bind("branch", "chennai")
+            .bind("siteId", 2)
             .create();
         QueryResult result = conn.query(query);
         List<JobStatusMeasurement> jobTotalResults = reportDatabaseService.getJobExistingPoints(conn, query);

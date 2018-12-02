@@ -92,11 +92,16 @@ public class ReportDatabaseService {
 
     public void updateJobPoints(JobStatusReport response) {
         InfluxDB influxDB = connectDatabase();
+
         // Query the data from influxDB
         Query query = BoundParameterQuery.QueryBuilder.newQuery("SELECT * FROM jobReportStatus WHERE date >= $fromDate AND date <= $toDate")
             .forDatabase(dbName)
             .bind("fromDate", 1531765800090L)
             .bind("toDate", 1531765800092L)
+            .create();
+
+        Query updateQry = BoundParameterQuery.QueryBuilder.newQuery("INSERT jobReportStatus")
+            .forDatabase(dbName)
             .create();
 
         List<JobStatusMeasurement> jobStatusMeasurementList = getJobExistingPoints(influxDB, query);

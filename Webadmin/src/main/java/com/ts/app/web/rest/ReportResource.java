@@ -202,7 +202,7 @@ public class ReportResource {
 
     @RequestMapping(value = "/reports/jobs/todayCount", method = RequestMethod.GET)
     public ResponseEntity<?> getJobsCountByToday() {
-        List<JobReportCounts> reportTodayPoints = reportDatabaseUtil.getTotalJobsCount();
+        List<JobStatusMeasurement> reportTodayPoints = reportDatabaseUtil.getTodayJobsCount();
         return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
     }
 
