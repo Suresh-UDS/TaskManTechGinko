@@ -92,12 +92,25 @@ angular.module('timeSheetApp')
              });
 
         },
+
         findTicketImage: function(ticketId,imageId){
             return $http.get('api/ticket/image/'+ticketId+'/'+imageId).then(function (response) {
                 console.log("Ticket image response");
                 console.log(response.data);
                 return response.data;
             })
+        },
+
+        getStatusCountsByCategory : function () {
+            return $http.get('api/reports/ticketStatus/count').then(function (response) {
+               return response.data;
+            });
+        },
+
+        getTicketsCountsByStatus : function () {
+            return $http.get('api/reports/tickets/todayCount').then(function (response) {
+               return response.data;
+            });
         }
     };
 });

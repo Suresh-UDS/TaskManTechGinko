@@ -1,17 +1,15 @@
 package com.ts.app.web.rest;
 
-import com.ts.app.domain.ChartModelEntity;
-import com.ts.app.domain.JobReportCounts;
-import com.ts.app.domain.JobStatusReport;
+import com.ts.app.domain.*;
 import com.ts.app.domain.Measurements.JobStatusMeasurement;
 import com.ts.app.domain.Measurements.TicketStatusMeasurement;
-import com.ts.app.domain.TicketStatusReport;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.ReportDatabaseService;
 import com.ts.app.service.ReportService;
 import com.ts.app.service.SchedulerHelperService;
 import com.ts.app.service.util.ReportDatabaseUtil;
 import com.ts.app.web.rest.dto.ReportResult;
+import com.ts.app.web.rest.dto.SearchCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
@@ -202,7 +200,13 @@ public class ReportResource {
 
     @RequestMapping(value = "/reports/jobs/todayCount", method = RequestMethod.GET)
     public ResponseEntity<?> getJobsCountByToday() {
-        List<JobStatusMeasurement> reportTodayPoints = reportDatabaseUtil.getTodayJobsCount();
+        List<JobReportCounts> reportTodayPoints = reportDatabaseUtil.getTotalJobsCount();
+        return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reports/tickets/todayCount", method = RequestMethod.GET)
+    public ResponseEntity<?> getTicketsCountByToday() {
+        List<TicketReportCounts> reportTodayPoints = reportDatabaseUtil.getTotalTicketCount();
         return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
     }
 

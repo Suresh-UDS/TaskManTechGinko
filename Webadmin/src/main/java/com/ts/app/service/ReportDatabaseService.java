@@ -56,6 +56,13 @@ public class ReportDatabaseService {
         return jobStatusMeasurementList;
     }
 
+    public List<TicketStatusMeasurement> getTicketExistingPoints(InfluxDB influxDB, Query query) {
+        QueryResult results = influxDB.query(query);
+        InfluxDBResultMapper mapper = new InfluxDBResultMapper();
+        List<TicketStatusMeasurement> ticketStatusMeasurementList = mapper.toPOJO(results, TicketStatusMeasurement.class);
+        return ticketStatusMeasurementList;
+    }
+
     @Async
     public void addNewJobPoints(JobStatusReport response) throws Exception {
         InfluxDB influxDB = connectDatabase();

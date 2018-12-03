@@ -7,6 +7,7 @@ import com.ts.app.domain.Measurements.TicketStatusMeasurement;
 import com.ts.app.repository.ReportDatabaseJobRepository;
 import com.ts.app.repository.ReportDatabaseTicketRepository;
 import com.ts.app.service.ReportDatabaseService;
+import com.ts.app.web.rest.dto.SearchCriteria;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.BoundParameterQuery;
 import org.influxdb.dto.Point;
@@ -115,11 +116,29 @@ public class ReportDatabaseUtil {
         influxDB.enableBatch(100, 200, TimeUnit.MILLISECONDS);
         for(TicketStatusReport ticketReportList : ticketStatusReportLists) {
             Calendar cal = Calendar.getInstance();
+            Calendar assignedOn = Calendar.getInstance();
+            Calendar closedOn = Calendar.getInstance();
             cal.setTime(ticketReportList.getFormattedDate());
             cal.set(Calendar.HOUR_OF_DAY, 0);
             cal.set(Calendar.MINUTE, 0);
             cal.set(Calendar.SECOND, 0);
             cal.set(Calendar.MILLISECOND, 0);
+
+            if(ticketReportList.getAssignedOn() != null) {
+                assignedOn.setTime(ticketReportList.getAssignedOn());
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+            }
+
+            if(ticketReportList.getClosedOn() != null) {
+                assignedOn.setTime(ticketReportList.getClosedOn());
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+            }
 
             Point ticketPoint = Point.measurement("ticketReportStatus")
                 .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
@@ -129,17 +148,17 @@ public class ReportDatabaseUtil {
                 .addField("projectId", ticketReportList.getProjectId())
                 .addField("status", ticketReportList.getStatus())
                 .tag("status", ticketReportList.getStatus())
-                .addField("category", ticketReportList.getCategory() != null ? ticketReportList.getCategory() : "")
+                .addField("category", ticketReportList.getCategory() != null ? ticketReportList.getCategory() : "ELECTRICAL")
                 .tag("category", ticketReportList.getCategory() != null ? ticketReportList.getCategory() : "ELECTRICAL")
-                .addField("assignedOn", ticketReportList.getAssignedOn() != null ? ticketReportList.getAssignedOn().toString() : "")
-                .tag("assignedOn", ticketReportList.getAssignedOn() != null ? ticketReportList.getAssignedOn().toString() : "")
-                .addField("closedOn", ticketReportList.getClosedOn() != null ? ticketReportList.getClosedOn().toString() : "")
-                .tag("closedOn", ticketReportList.getClosedOn() != null ? ticketReportList.getClosedOn().toString() : "")
+                .addField("assignedOn", ticketReportList.getAssignedOn() != null ? assignedOn.getTimeInMillis() : 0)
+                .tag("assignedOn", ticketReportList.getAssignedOn() != null ? String.valueOf(assignedOn.getTimeInMillis()) : "")
+                .addField("closedOn", ticketReportList.getClosedOn() != null ? closedOn.getTimeInMillis() : 0)
+                .tag("closedOn", ticketReportList.getClosedOn() != null ? String.valueOf(closedOn.getTimeInMillis()) : "")
                 .addField("statusCount", ticketReportList.getStatusCount())
-                .addField("region", ticketReportList.getRegion() != null ? ticketReportList.getRegion() : "")
-                .tag("region", ticketReportList.getRegion() != null ? ticketReportList.getRegion() : "")
-                .addField("branch", ticketReportList.getBranch() != null ? ticketReportList.getBranch() : "")
-                .tag("branch", ticketReportList.getBranch() != null ? ticketReportList.getBranch() : "")
+                .addField("region", ticketReportList.getRegion() != null ? ticketReportList.getRegion() : "north-region")
+                .tag("region", ticketReportList.getRegion() != null ? ticketReportList.getRegion() : "north-region")
+                .addField("branch", ticketReportList.getBranch() != null ? ticketReportList.getBranch() : "andhrapradesh")
+                .tag("branch", ticketReportList.getBranch() != null ? ticketReportList.getBranch() : "andhrapradesh")
                 .build();
 
             influxDB.write(dbName, "defaultPolicy", ticketPoint);
@@ -349,6 +368,30 @@ public class ReportDatabaseUtil {
 
     public List<JobReportCounts> getTotalJobsCount() {
         InfluxDB conn = connectDatabase();
+//        Long fromDate = null;
+//        Long toDate = null;
+//        if(searchCriteria != null) {
+//            if(searchCriteria.getCheckInDateTimeFrom() != null) {
+//                Calendar fromCal = Calendar.getInstance();
+//                fromCal.setTime(searchCriteria.getCheckInDateTimeFrom());
+//                fromCal.set(Calendar.HOUR_OF_DAY, 0);
+//                fromCal.set(Calendar.MINUTE, 0);
+//                fromCal.set(Calendar.SECOND, 0);
+//                fromCal.set(Calendar.MILLISECOND, 0);
+//                fromDate = fromCal.getTimeInMillis();
+//            }
+//
+//            if(searchCriteria.getCheckInDateTimeTo() != null) {
+//                Calendar toCal = Calendar.getInstance();
+//                toCal.setTime(searchCriteria.getCheckInDateTimeTo());
+//                toCal.set(Calendar.HOUR_OF_DAY, 0);
+//                toCal.set(Calendar.MINUTE, 0);
+//                toCal.set(Calendar.SECOND, 0);
+//                toCal.set(Calendar.MILLISECOND, 0);
+//                toDate = toCal.getTimeInMillis();
+//            }
+//        }
+
         Query query = BoundParameterQuery.QueryBuilder.newQuery("SELECT sum(statusCount) as statusCount, count(date) as totalCount FROM jobReportStatus " +
             "WHERE projectId = $projectId AND region = $region AND branch = $branch AND siteId = $siteId group by status")
             .forDatabase(dbName)
@@ -359,7 +402,7 @@ public class ReportDatabaseUtil {
             .bind("branch", "chennai")
             .bind("siteId", 2)
             .create();
-        QueryResult result = conn.query(query);
+
         List<JobStatusMeasurement> jobTotalResults = reportDatabaseService.getJobExistingPoints(conn, query);
         List<JobReportCounts> jobReportCounts = new ArrayList<>();
         JobReportCounts jobReportCount = new JobReportCounts();
@@ -383,6 +426,45 @@ public class ReportDatabaseUtil {
             jobReportCounts.add(jobReportCount);
         }
         return jobReportCounts;
+    }
+
+    public List<TicketReportCounts> getTotalTicketCount() {
+        InfluxDB conn = connectDatabase();
+
+        Query query = BoundParameterQuery.QueryBuilder.newQuery("SELECT sum(statusCount) as statusCount, count(date) as totalCount FROM ticketReportStatus " +
+            "WHERE projectId = $projectId AND region = $region AND branch = $branch AND siteId = $siteId group by status")
+            .forDatabase(dbName)
+            .bind("fromDate", 1523298600000L )
+            .bind("toDate", 1539109800000L)
+            .bind("projectId", 2)
+            .bind("region", "south-region")
+            .bind("branch", "chennai")
+            .bind("siteId", 2)
+            .create();
+
+        List<TicketStatusMeasurement> ticketTotalResults = reportDatabaseService.getTicketExistingPoints(conn, query);
+        List<TicketReportCounts> ticketReportCounts = new ArrayList<>();
+        TicketReportCounts ticketReportCount = new TicketReportCounts();
+        if(ticketTotalResults.size() > 0) {
+            int totalCounts = 0;
+            for(TicketStatusMeasurement ticketTotalResult : ticketTotalResults) {
+                if(ticketTotalResult.getStatus().equalsIgnoreCase("ASSIGNED")) {
+                    ticketReportCount.setAssignedCounts(ticketTotalResult.getStatusCount());
+                    totalCounts += ticketTotalResult.getTotalCount();
+                }
+                if(ticketTotalResult.getStatus().equalsIgnoreCase("OPEN")) {
+                    ticketReportCount.setOpenCounts(ticketTotalResult.getStatusCount());
+                    totalCounts += ticketTotalResult.getTotalCount();
+                }
+                if(ticketTotalResult.getStatus().equalsIgnoreCase("CLOSED")) {
+                    ticketReportCount.setClosedCounts(ticketTotalResult.getStatusCount());
+                    totalCounts += ticketTotalResult.getTotalCount();
+                }
+            }
+            ticketReportCount.setTotalCounts(totalCounts);
+            ticketReportCounts.add(ticketReportCount);
+        }
+        return ticketReportCounts;
     }
 
 

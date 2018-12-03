@@ -14,8 +14,8 @@ public interface ReportDatabaseTicketRepository extends JpaRepository<Ticket, Lo
 
     @Query("select new com.ts.app.domain.TicketStatusReport(t.createdDate , t.site.id, t.category, t.status, " +
         "t.assignedOn, t.closedOn, s.project.id, s.region, s.branch, count(t.id) as statusCount) " +
-        "from Ticket t join t.site s where s.id = t.site.id group by t.createdDate, t.site.id, t.category, t.status, " +
-        "t.assignedOn, t.closedOn")
+        "from Ticket t join t.site s where s.id = t.site.id group by t.createdDate, t.category, t.status, " +
+        "t.site.id, t.assignedOn, t.closedOn ")
     List<TicketStatusReport> findAllTicketStatus();
 
     @Query("select new com.ts.app.domain.TicketAgeStatus(t.createdDate, t.site.id, t.category, t.status, t.assignedOn, t.closedOn, s.project.id, s.region, s.branch) " +

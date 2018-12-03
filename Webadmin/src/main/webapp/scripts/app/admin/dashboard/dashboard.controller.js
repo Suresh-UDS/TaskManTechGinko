@@ -37,7 +37,7 @@ angular.module('timeSheetApp')
         };
     })
 
-    .controller('DashboardController', function ($timeout,$scope,$rootScope,$filter,DashboardComponent,JobComponent, $state,$http,$stateParams,$location) {
+    .controller('DashboardController', function ($timeout,$scope,$rootScope,$filter,DashboardComponent,JobComponent, $state,$http,$stateParams,$location,TicketComponent) {
         $rootScope.loginView = false;
 
         $scope.ready = false;
@@ -77,9 +77,11 @@ angular.module('timeSheetApp')
             $scope.loadAllSites();
             $scope.loadQuotationReport();
             // $scope.loadJobReport();
-            $scope.loadJobReportFromInflux();
             $scope.loadingStart();
             $scope.loadChartData();
+            $scope.loadJobReportFromInflux();
+            $scope.loadTicketStatusFromInflux();
+            $scope.loadTicketStatusCounts();
 
             DashboardComponent.loadAllJobsByCategoryCnt().then(function (data) {
                 console.log("All jobs by category count " +JSON.stringify(data));
@@ -774,17 +776,56 @@ angular.module('timeSheetApp')
 
         };
 
-        $scope.loadJobReportFromInflux = function() {
+        $scope.loadJobReportFromInflux = function() {         // Jobs for get Total status counts
 
             JobComponent.getTotalCounts().then(function (data) {
                 console.log("Job Total Counts" +JSON.stringify(data));
                 $scope.loadingStop();
-                $scope.result.totalJobCount = data[0].totalCounts;
-                $scope.result.assignedJobCount = data[0].assignedCounts;
-                $scope.result.overdueJobCount = data[0].overdueCounts;
-                $scope.result.completedJobCount = data[0].completedCounts;
+                if(data.length > 0) {
+                    $scope.result.totalJobCount = data[0].totalCounts;
+                    $scope.result.assignedJobCount = data[0].assignedCounts;
+                    $scope.result.overdueJobCount = data[0].overdueCounts;
+                    $scope.result.completedJobCount = data[0].completedCounts;
+                } else {
+                    $scope.result.totalJobCount = 0;
+                    $scope.result.assignedJobCount = 0;
+                    $scope.result.overdueJobCount = 0;
+                    $scope.result.completedJobCount = 0;
+                }
+
             });
 
+        }
+
+        $scope.loadTicketStatusFromInflux = function() {         // Ticket chart for get category wise status counts
+            TicketComponent.getStatusCountsByCategory().then(function (data) {
+                console.log("Ticket category wise Status counts" +JSON.stringify(data));
+                if(data.length > 0) {
+                    $scope.ticketStackChart = data[0];
+                    $scope.ticketStackXSeries = $scope.ticketStackChart.x;
+                    $scope.ticketStackYSeries = $scope.ticketStackChart.status;
+                }
+
+            });
+        }
+
+        $scope.loadTicketStatusCounts = function() {             // Ticket for get total status counts
+            TicketComponent.getTicketsCountsByStatus().then(function (data) {
+               console.log("Ticket Status wise counts" +JSON.stringify(data));
+                $scope.loadingStop();
+               if(data.length > 0) {
+                   $scope.openTicketsTotalCount = data[0].openCounts;
+                   $scope.closedTicketsTotalCount = data[0].closedCounts;
+                   $scope.overAllTicketsTotalCount = data[0].totalCounts;
+                   $scope.assignedTicketTotalCount = data[0].assignedCounts;
+               } else {
+                   $scope.openTicketsTotalCount = 0;
+                   $scope.closedTicketsTotalCount = 0;
+                   $scope.overAllTicketsTotalCount = 0;
+                   $scope.assignedTicketTotalCount = 0;
+               }
+
+            });
         }
 
         $scope.initCalender();
@@ -942,64 +983,58 @@ angular.module('timeSheetApp')
             }]
         });
 
-        Highcharts.chart('ticketStackedCharts', {
-            chart: {
-                type: 'column'
-            },
-            title: {
-                text: 'Tickets'
-            },
-            xAxis: {
-                categories: ['MAINTAINCE', 'ELECTRICAL', 'CARPENTRY', 'CLEANING', 'PLUMBING']
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: 'Total Count'
+        $timeout(function () {
+            Highcharts.chart('ticketStackedCharts', {
+                chart: {
+                    type: 'column'
                 },
-                stackLabels: {
-                    enabled: true,
-                    style: {
-                        fontWeight: 'bold',
-                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                    }
-                }
-            },
-            legend: {
-                align: 'right',
-                x: -30,
-                verticalAlign: 'top',
-                y: 25,
-                floating: true,
-                backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-                borderColor: '#CCC',
-                borderWidth: 1,
-                shadow: false
-            },
-            tooltip: {
-                headerFormat: '<b>{point.x}</b><br/>',
-                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-            },
-            plotOptions: {
-                column: {
-                    stacking: 'normal',
-                    dataLabels: {
+                title: {
+                    text: 'Tickets'
+                },
+                xAxis: {
+                    categories: $scope.ticketStackXSeries
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Total Count'
+                    },
+                    stackLabels: {
                         enabled: true,
-                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                        style: {
+                            fontWeight: 'bold',
+                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                        }
                     }
-                }
-            },
-            series: [{
-                name: 'Open',
-                data: [5, 3, 4, 7, 2]
-            }, {
-                name: 'Closed',
-                data: [2, 2, 3, 2, 1]
-            }, {
-                name: 'Assigned',
-                data: [3, 4, 4, 2, 5]
-            }]
-        });
+                },
+                legend: {
+                    align: 'right',
+                    x: -30,
+                    verticalAlign: 'top',
+                    y: 25,
+                    floating: true,
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                    borderColor: '#CCC',
+                    borderWidth: 1,
+                    shadow: false
+                },
+                tooltip: {
+                    headerFormat: '<b>{point.x}</b><br/>',
+                    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: true,
+                            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                        }
+                    }
+                },
+                series: $scope.ticketStackYSeries
+            });
+        },1000);
+
 
         
         Highcharts.chart('catgAgeTicketsCharts', {

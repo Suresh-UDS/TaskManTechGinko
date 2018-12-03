@@ -44,6 +44,9 @@ public class TicketStatusMeasurement {
     @Column(name="statusCount")
     private int statusCount;
 
+    @Column(name="totalCount")
+    private int totalCount;
+
     public Instant getTime() {
         return time;
     }
@@ -138,5 +141,13 @@ public class TicketStatusMeasurement {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(int totalCount) {
+        this.totalCount = totalCount;
     }
 }
