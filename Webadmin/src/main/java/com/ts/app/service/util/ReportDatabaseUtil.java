@@ -61,6 +61,12 @@ public class ReportDatabaseUtil {
         return ticketStatusReportList;
     }
 
+    public List<TicketAgeStatus> getPreComputeTicketAge() {
+        List<TicketAgeStatus> ticketAgeStatusList = reportDatabaseTicketRepository.findByTicketAge();
+        log.debug("List of Ticket Age size" +ticketAgeStatusList);
+        return ticketAgeStatusList;
+    }
+
     public void addPointsToJob() throws Exception {
         InfluxDB influxDB = connectDatabase();
         List<JobStatusReport> reportLists = this.getPreComputeJobData();
@@ -96,6 +102,50 @@ public class ReportDatabaseUtil {
             influxDB.write(dbName, "defaultPolicy", jobPoint);
             Thread.sleep(2);
         }
+        Thread.sleep(10);
+        influxDB.disableBatch();
+        influxDB.close();
+    }
+
+    public void addTicketPoints() throws Exception {
+        InfluxDB influxDB = connectDatabase();
+        List<TicketStatusReport> ticketStatusReportLists = this.getPreComputeTicketData();
+        log.debug("Size of ticket status report " +ticketStatusReportLists.size());
+        influxDB.setRetentionPolicy("defaultPolicy");
+        influxDB.enableBatch(100, 200, TimeUnit.MILLISECONDS);
+        for(TicketStatusReport ticketReportList : ticketStatusReportLists) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(ticketReportList.getFormattedDate());
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+
+            Point ticketPoint = Point.measurement("ticketReportStatus")
+                .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                .addField("date", cal.getTimeInMillis())
+                .tag("date", String.valueOf(cal.getTimeInMillis()))
+                .addField("siteId", ticketReportList.getSiteId())
+                .addField("projectId", ticketReportList.getProjectId())
+                .addField("status", ticketReportList.getStatus())
+                .tag("status", ticketReportList.getStatus())
+                .addField("category", ticketReportList.getCategory() != null ? ticketReportList.getCategory() : "")
+                .tag("category", ticketReportList.getCategory() != null ? ticketReportList.getCategory() : "ELECTRICAL")
+                .addField("assignedOn", ticketReportList.getAssignedOn() != null ? ticketReportList.getAssignedOn().toString() : "")
+                .tag("assignedOn", ticketReportList.getAssignedOn() != null ? ticketReportList.getAssignedOn().toString() : "")
+                .addField("closedOn", ticketReportList.getClosedOn() != null ? ticketReportList.getClosedOn().toString() : "")
+                .tag("closedOn", ticketReportList.getClosedOn() != null ? ticketReportList.getClosedOn().toString() : "")
+                .addField("statusCount", ticketReportList.getStatusCount())
+                .addField("region", ticketReportList.getRegion() != null ? ticketReportList.getRegion() : "")
+                .tag("region", ticketReportList.getRegion() != null ? ticketReportList.getRegion() : "")
+                .addField("branch", ticketReportList.getBranch() != null ? ticketReportList.getBranch() : "")
+                .tag("branch", ticketReportList.getBranch() != null ? ticketReportList.getBranch() : "")
+                .build();
+
+            influxDB.write(dbName, "defaultPolicy", ticketPoint);
+            Thread.sleep(2);
+        }
+
         Thread.sleep(10);
         influxDB.disableBatch();
         influxDB.close();
@@ -194,50 +244,6 @@ public class ReportDatabaseUtil {
         }
 
         return chartModelEntities;
-    }
-
-    public void addTicketPoints() throws Exception {
-        InfluxDB influxDB = connectDatabase();
-        List<TicketStatusReport> ticketStatusReportLists = this.getPreComputeTicketData();
-        log.debug("Size of ticket status report " +ticketStatusReportLists.size());
-        influxDB.setRetentionPolicy("defaultPolicy");
-        influxDB.enableBatch(100, 200, TimeUnit.MILLISECONDS);
-        for(TicketStatusReport ticketReportList : ticketStatusReportLists) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(ticketReportList.getFormattedDate());
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-
-            Point ticketPoint = Point.measurement("ticketReportStatus")
-                .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                .addField("date", cal.getTimeInMillis())
-                .tag("date", String.valueOf(cal.getTimeInMillis()))
-                .addField("siteId", ticketReportList.getSiteId())
-                .addField("projectId", ticketReportList.getProjectId())
-                .addField("status", ticketReportList.getStatus())
-                .tag("status", ticketReportList.getStatus())
-                .addField("category", ticketReportList.getCategory() != null ? ticketReportList.getCategory() : "")
-                .tag("category", ticketReportList.getCategory() != null ? ticketReportList.getCategory() : "ELECTRICAL")
-                .addField("assignedOn", ticketReportList.getAssignedOn() != null ? ticketReportList.getAssignedOn().toString() : "")
-                .tag("assignedOn", ticketReportList.getAssignedOn() != null ? ticketReportList.getAssignedOn().toString() : "")
-                .addField("closedOn", ticketReportList.getClosedOn() != null ? ticketReportList.getClosedOn().toString() : "")
-                .tag("closedOn", ticketReportList.getClosedOn() != null ? ticketReportList.getClosedOn().toString() : "")
-                .addField("statusCount", ticketReportList.getStatusCount())
-                .addField("region", ticketReportList.getRegion() != null ? ticketReportList.getRegion() : "")
-                .tag("region", ticketReportList.getRegion() != null ? ticketReportList.getRegion() : "")
-                .addField("branch", ticketReportList.getBranch() != null ? ticketReportList.getBranch() : "")
-                .tag("branch", ticketReportList.getBranch() != null ? ticketReportList.getBranch() : "")
-                .build();
-
-            influxDB.write(dbName, "defaultPolicy", ticketPoint);
-            Thread.sleep(2);
-        }
-
-        Thread.sleep(10);
-        influxDB.disableBatch();
-        influxDB.close();
     }
 
     public List<ChartModelEntity> getTicketReportStatusPoints() {

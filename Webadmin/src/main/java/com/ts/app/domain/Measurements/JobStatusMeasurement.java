@@ -1,6 +1,5 @@
 package com.ts.app.domain.Measurements;
 
-import com.ts.app.domain.JobStatus;
 import org.influxdb.annotation.Column;
 import org.influxdb.annotation.Measurement;
 

@@ -38,6 +38,9 @@ public class TicketAgeMeasurement {
     @Column(name="status", tag = true)
     private String status;
 
+    @Column(name="statusCount", tag = true)
+    private int statusCount;
+
     public Instant getTime() {
         return time;
     }
@@ -116,5 +119,13 @@ public class TicketAgeMeasurement {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getStatusCount() {
+        return statusCount;
+    }
+
+    public void setStatusCount(int statusCount) {
+        this.statusCount = statusCount;
     }
 }
