@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.amazonaws.services.elasticmapreduce.model.Ec2InstanceAttributes;
+import com.ts.app.domain.TicketStatusReport;
+import com.ts.app.service.*;
 import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,10 +33,6 @@ import com.ts.app.config.ReportDatabaseConfiguration;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.TicketStatus;
 import com.ts.app.security.SecurityUtils;
-import com.ts.app.service.PushService;
-import com.ts.app.service.SchedulerHelperService;
-import com.ts.app.service.TicketManagementService;
-import com.ts.app.service.UserService;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.ExportResponse;
@@ -64,7 +63,7 @@ public class TicketManagementResource {
 	private SchedulerHelperService schedulerHelperService;
 	
 	@Inject 
-	private ReportDatabaseConfiguration reportDataService;
+	private ReportDatabaseService reportDatabaseService;
 
 	@RequestMapping(path = "/ticket", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
@@ -73,7 +72,22 @@ public class TicketManagementResource {
 		TicketDTO response = ticketService.saveTicket(ticketDTO);
 
 		if (response != null) {
-
+		    try {
+                TicketStatusReport ticketStatusReport = new TicketStatusReport();
+                ticketStatusReport.setAssignedOn(response.getAssignedOn());
+                ticketStatusReport.setBranch(response.getBranch());
+                ticketStatusReport.setCategory(response.getCategory());
+                ticketStatusReport.setClosedOn(response.getClosedOn());
+                ticketStatusReport.setCreatedDate(response.getCreatedDate());
+                ticketStatusReport.setProjectId(response.getProjectId());
+                ticketStatusReport.setSiteId(response.getSiteId());
+                ticketStatusReport.setRegion(response.getRegion());
+                ticketStatusReport.setStatus(response.getStatus());
+                ticketStatusReport.setStatusCount(1);
+                reportDatabaseService.addNewTicketPoints(ticketStatusReport);
+            } catch (Exception e) {
+		        e.printStackTrace();
+            }
 		}
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}

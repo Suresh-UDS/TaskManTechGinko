@@ -1,7 +1,6 @@
 package com.ts.app.repository;
 
 import com.ts.app.domain.Ticket;
-import com.ts.app.domain.TicketAgeStatus;
 import com.ts.app.domain.TicketStatusReport;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,10 +16,5 @@ public interface ReportDatabaseTicketRepository extends JpaRepository<Ticket, Lo
         "from Ticket t join t.site s where s.id = t.site.id group by t.createdDate, t.category, t.status, " +
         "t.site.id, t.assignedOn, t.closedOn ")
     List<TicketStatusReport> findAllTicketStatus();
-
-    @Query("select new com.ts.app.domain.TicketAgeStatus(t.createdDate, t.site.id, t.category, t.status, t.assignedOn, t.closedOn, s.project.id, s.region, s.branch) " +
-        "from Ticket t join t.site s where s.id = t.site.id group by t.createdDate")
-    List<TicketAgeStatus> findByTicketAge();
-
 
 }

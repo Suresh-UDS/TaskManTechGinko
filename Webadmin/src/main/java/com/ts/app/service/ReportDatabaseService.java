@@ -19,7 +19,10 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +30,8 @@ import java.util.concurrent.TimeUnit;
 public class ReportDatabaseService {
 
     private final Logger log = LoggerFactory.getLogger(ReportDatabaseService.class);
+
+    final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @Value("${influxdb.dbname}")
     private String dbName;
@@ -92,6 +97,66 @@ public class ReportDatabaseService {
             .addField("statusCount", response.getStatusCount())
             .build();
         influxDB.write(dbName, "defaultPolicy", jobNewPoint);
+        Thread.sleep(2);
+        influxDB.disableBatch();
+        influxDB.close();
+    }
+
+    @Async
+    public void addNewTicketPoints(TicketStatusReport ticketReportList) throws Exception {
+        InfluxDB influxDB = connectDatabase();
+        influxDB.setRetentionPolicy("defaultPolicy");
+        influxDB.enableBatch(100, 200, TimeUnit.MILLISECONDS);
+        if(ticketReportList.getCreatedDate() != null) {
+            ticketReportList.setFormattedDate(Date.from(ticketReportList.getCreatedDate().toInstant()));
+        }
+        Calendar cal = Calendar.getInstance();
+        Calendar assignedOn = Calendar.getInstance();
+        Calendar closedOn = Calendar.getInstance();
+        cal.setTime(ticketReportList.getFormattedDate());
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        if(ticketReportList.getAssignedOn() != null) {
+            assignedOn.setTime(ticketReportList.getAssignedOn());
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+        }
+
+        if(ticketReportList.getClosedOn() != null) {
+            assignedOn.setTime(ticketReportList.getClosedOn());
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+        }
+
+        Point ticketPoint = Point.measurement("ticketReportStatus")
+            .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+            .addField("date", cal.getTimeInMillis())
+            .tag("date", String.valueOf(cal.getTimeInMillis()))
+            .addField("siteId", ticketReportList.getSiteId())
+            .addField("projectId", ticketReportList.getProjectId())
+            .addField("status", ticketReportList.getStatus())
+            .tag("status", ticketReportList.getStatus())
+            .addField("category", ticketReportList.getCategory() != null ? ticketReportList.getCategory() : "ELECTRICAL")
+            .tag("category", ticketReportList.getCategory() != null ? ticketReportList.getCategory() : "ELECTRICAL")
+            .addField("assignedOn", ticketReportList.getAssignedOn() != null ? assignedOn.getTimeInMillis() : 0)
+            .tag("assignedOn", ticketReportList.getAssignedOn() != null ? String.valueOf(assignedOn.getTimeInMillis()) : "")
+            .addField("closedOn", ticketReportList.getClosedOn() != null ? closedOn.getTimeInMillis() : 0)
+            .tag("closedOn", ticketReportList.getClosedOn() != null ? String.valueOf(closedOn.getTimeInMillis()) : "")
+            .addField("statusCount", ticketReportList.getStatusCount())
+            .addField("region", ticketReportList.getRegion() != null ? ticketReportList.getRegion() : "north-region")
+            .tag("region", ticketReportList.getRegion() != null ? ticketReportList.getRegion() : "north-region")
+            .addField("branch", ticketReportList.getBranch() != null ? ticketReportList.getBranch() : "andhrapradesh")
+            .tag("branch", ticketReportList.getBranch() != null ? ticketReportList.getBranch() : "andhrapradesh")
+            .build();
+
+        influxDB.write(dbName, "defaultPolicy", ticketPoint);
         Thread.sleep(2);
         influxDB.disableBatch();
         influxDB.close();

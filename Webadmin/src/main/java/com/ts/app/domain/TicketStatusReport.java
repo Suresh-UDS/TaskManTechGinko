@@ -143,4 +143,12 @@ public class TicketStatusReport implements Serializable {
     public void setStatusCount(long statusCount) {
         this.statusCount = statusCount;
     }
+
+    public ZonedDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(ZonedDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
 }

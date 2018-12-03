@@ -62,12 +62,6 @@ public class ReportDatabaseUtil {
         return ticketStatusReportList;
     }
 
-    public List<TicketAgeStatus> getPreComputeTicketAge() {
-        List<TicketAgeStatus> ticketAgeStatusList = reportDatabaseTicketRepository.findByTicketAge();
-        log.debug("List of Ticket Age size" +ticketAgeStatusList);
-        return ticketAgeStatusList;
-    }
-
     public void addPointsToJob() throws Exception {
         InfluxDB influxDB = connectDatabase();
         List<JobStatusReport> reportLists = this.getPreComputeJobData();
