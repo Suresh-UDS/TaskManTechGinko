@@ -172,10 +172,6 @@ public class ReportDatabaseService {
             .bind("toDate", 1531765800092L)
             .create();
 
-        Query updateQry = BoundParameterQuery.QueryBuilder.newQuery("INSERT jobReportStatus")
-            .forDatabase(dbName)
-            .create();
-
         List<JobStatusMeasurement> jobStatusMeasurementList = getJobExistingPoints(influxDB, query);
         log.debug("Existing points for job ", jobStatusMeasurementList.size());
     }
