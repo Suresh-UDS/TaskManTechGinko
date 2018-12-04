@@ -246,6 +246,12 @@ scheduler:
 
 default.user.password: uds12345
 
+roles:
+    exclude:
+        role1: HELPDESK
+        role2: FLEX CLIENT
+        role3: FLEX SUPERVISOR
+
 google:
    drive:
       api:

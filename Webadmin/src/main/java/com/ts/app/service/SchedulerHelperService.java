@@ -7,18 +7,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.inject.Inject;
 
@@ -962,31 +951,34 @@ public class SchedulerHelperService extends AbstractService {
 									}
 									
 									EmployeeAttendanceReport empAttnRep = new EmployeeAttendanceReport();
-									empAttnRep.setEmpId(emp.getId());
-									empAttnRep.setEmployeeId(emp.getEmpId());
-									empAttnRep.setName(emp.getName());
-									empAttnRep.setLastName(emp.getLastName());
-									empAttnRep.setDesignation(emp.getDesignation());
-									empAttnRep.setStatus(EmployeeAttendanceReport.ABSENT_STATUS);
-									empAttnRep.setSiteName(site.getName());
-									if (empShift != null) {
-										Timestamp startTime = empShift.getStartTime();
-										Calendar startCal = Calendar.getInstance();
-										startCal.setTimeInMillis(startTime.getTime());
-										empAttnRep.setShiftStartTime(startCal.get(Calendar.HOUR_OF_DAY) + ":"
-												+ startCal.get(Calendar.MINUTE));
-										Timestamp endTime = empShift.getEndTime();
-										Calendar endCal = Calendar.getInstance();
-										endCal.setTimeInMillis(endTime.getTime());
-										empAttnRep.setShiftEndTime(
-												endCal.get(Calendar.HOUR_OF_DAY) + ":" + endCal.get(Calendar.MINUTE));
-										
-									} else {
-										empAttnRep.setShiftStartTime("attendance.generalShift.startTime");
-										empAttnRep.setShiftEndTime("attendance.generalShift.endTime");
-									}
-									empAttnRep.setProjectName(proj.getName());
-									siteAttnList.add(empAttnRep);
+									if(emp.getDesignation() != "Help Desk" || emp.getDesignation() != "Supervisor") {
+                                        empAttnRep.setEmpId(emp.getId());
+                                        empAttnRep.setEmployeeId(emp.getEmpId());
+                                        empAttnRep.setName(emp.getName());
+                                        empAttnRep.setLastName(emp.getLastName());
+                                        empAttnRep.setDesignation(emp.getDesignation());
+                                        empAttnRep.setStatus(EmployeeAttendanceReport.ABSENT_STATUS);
+                                        empAttnRep.setSiteName(site.getName());
+                                        if (empShift != null) {
+                                            Timestamp startTime = empShift.getStartTime();
+                                            Calendar startCal = Calendar.getInstance();
+                                            startCal.setTimeInMillis(startTime.getTime());
+                                            empAttnRep.setShiftStartTime(startCal.get(Calendar.HOUR_OF_DAY) + ":"
+                                                + startCal.get(Calendar.MINUTE));
+                                            Timestamp endTime = empShift.getEndTime();
+                                            Calendar endCal = Calendar.getInstance();
+                                            endCal.setTimeInMillis(endTime.getTime());
+                                            empAttnRep.setShiftEndTime(
+                                                endCal.get(Calendar.HOUR_OF_DAY) + ":" + endCal.get(Calendar.MINUTE));
+
+                                        } else {
+                                            empAttnRep.setShiftStartTime("attendance.generalShift.startTime");
+                                            empAttnRep.setShiftEndTime("attendance.generalShift.endTime");
+                                        }
+                                        empAttnRep.setProjectName(proj.getName());
+                                        siteAttnList.add(empAttnRep);
+                                    }
+
 								}
 							}
 						}
@@ -1045,11 +1037,25 @@ public class SchedulerHelperService extends AbstractService {
 									}
 								}
 								
-								log.debug("This site not having employees ", siteAttnList);
+//								log.debug("This site not having employees ", siteAttnList);
 								
 								if(siteAttnList.isEmpty()) {
 									log.debug("This site not having employees ", siteAttnList);
-								}
+								} else {
+                                    ListIterator<EmployeeAttendanceReport> iterator = siteAttnList.listIterator();
+                                    while(iterator.hasNext())
+                                    {
+                                        EmployeeAttendanceReport employee = iterator.next();
+                                        if (employee.getDesignation().equals(env.getProperty("roles.exclude.role1")))
+                                        {
+                                            iterator.remove();
+                                        } else if (employee.getDesignation().equals(env.getProperty("roles.exclude.role2"))) {
+                                            iterator.remove();
+                                        } else if (employee.getDesignation().equals(env.getProperty("roles.exclude.role3"))) {
+                                            iterator.remove();
+                                        }
+                                    }
+                                }
 
 								if (dayReport && !siteAttnList.isEmpty() || onDemand) {
 									exportResult = exportUtil.writeMusterRollAttendanceReportToFile(proj.getName(),

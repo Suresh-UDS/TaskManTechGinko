@@ -21,10 +21,10 @@ spring:
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
 #        url: jdbc:mysql://54.255.148.73:3306/Taskman?useUnicode=true&characterEncoding=utf8
-        url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://localhost:3306/taskman?useUnicode=true&characterEncoding=utf8
         name:
         username: root
-        password: tgadmin123#
+        password: root
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
@@ -248,6 +248,12 @@ scheduler:
       enabled: true
 
 default.user.password: uds12345
+
+roles:
+    exclude:
+        role1: Help Desk
+        role2: Client
+        role3: Supervisor
 
 google:
    drive:
