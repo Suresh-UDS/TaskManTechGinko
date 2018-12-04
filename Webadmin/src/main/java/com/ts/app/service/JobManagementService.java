@@ -892,13 +892,19 @@ public class JobManagementService extends AbstractService {
 		return;
 	}
 	
-	@Transactional(propagation=Propagation.REQUIRES_NEW)
-	public void saveScheduledJob(List<JobDTO> jobDTOs) {
+	//@Transactional(propagation=Propagation.REQUIRES_NEW)
+	public void saveScheduledJob(List<JobDTO> jobDTOs, long parentJobId, Employee emp, Site site) {
+		log.debug("Saving scheduled jobs for parent Id - "+ parentJobId);
+		Job parentJob = jobRepository.findOne(parentJobId);
+		Employee employee = getEmployee(emp.getId());
+		Site siteTmp = getSite(site.getId());
 		if(CollectionUtils.isNotEmpty(jobDTOs)) {
+			log.debug("Job Size - "+ jobDTOs.size());
 			List<Job> jobs = new ArrayList<Job>();
 			for(JobDTO jobDTO : jobDTOs) {
 				Job job = new Job();
-	
+				job.setEmployee(employee);
+				job.setSite(siteTmp);
 				mapToEntity(jobDTO, job);
 	
 				if(job.getStatus() == null) {
@@ -906,11 +912,13 @@ public class JobManagementService extends AbstractService {
 				}
 				
 				if(jobDTO.getParentJobId()>0){
-				    Job parentJob = jobRepository.findOne(jobDTO.getParentJobId());
+				    //parentJob = jobRepository.findOne(jobDTO.getParentJobId());
 				    job.setParentJob(parentJob);
 		        }
 				jobs.add(job);
+				log.debug("Creating job entities");
 			}
+			log.debug("Saving jobs ");
 			jobRepository.save(jobs);
 		}
 	}
@@ -1264,14 +1272,32 @@ public class JobManagementService extends AbstractService {
 		}
 		return dto;
 	}
-
+	
 	private void mapToEntity(JobDTO jobDTO, Job job) {
-		Employee employee = getEmployee(jobDTO.getEmployeeId());
-		Site site = getSite(jobDTO.getSiteId());
-		Location location = getLocation(jobDTO.getLocationId());
-		Asset asset = assetRepository.findOne(jobDTO.getAssetId());
-
-		Ticket ticket = getTicket(jobDTO.getTicketId());
+		Employee employee = null;
+		if(job.getEmployee() == null) {
+			employee = getEmployee(jobDTO.getEmployeeId());
+		}else {
+			employee = job.getEmployee();
+		}
+		Site site = null;
+		if(job.getSite() == null) {
+			site = getSite(jobDTO.getSiteId());
+		}else {
+			site = job.getSite();
+		}
+		Location location = null;
+		if(jobDTO.getLocationId() > 0) {
+			location = getLocation(jobDTO.getLocationId());
+		}
+		Asset asset = null;
+		if(jobDTO.getAssetId() > 0) {
+			asset = assetRepository.findOne(jobDTO.getAssetId());
+		}
+		Ticket ticket = null;
+		if(jobDTO.getTicketId() > 0) {
+			ticket = getTicket(jobDTO.getTicketId());
+		}
 		//update ticket status
 		if(ticket != null) {
 			ticket.setStatus(TicketStatus.INPROGRESS.toValue());
@@ -1361,7 +1387,8 @@ public class JobManagementService extends AbstractService {
 			List<JobChecklistDTO> jobclDtoList = jobDTO.getChecklistItems();
 			List<JobChecklist> checklistItems = new ArrayList<JobChecklist>();
 			for(JobChecklistDTO jobclDto : jobclDtoList) {
-				JobChecklist checklist = mapperUtil.toEntity(jobclDto, JobChecklist.class);
+				//JobChecklist checklist = mapperUtil.toEntity(jobclDto, JobChecklist.class);
+				JobChecklist checklist = mapToChecklistEntity(jobclDto);
 				if(checklist.getImage_1() != null) {
 					long jobId = checklist.getJob().getId();
 					String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_1(), checklist.getChecklistItemName(), jobId, "image_1");
@@ -1395,6 +1422,19 @@ public class JobManagementService extends AbstractService {
 			}
 		}
 
+	}
+	
+	private JobChecklist mapToChecklistEntity(JobChecklistDTO checklistDTO) {
+		JobChecklist checklist = new JobChecklist();
+		checklist.setActive(checklistDTO.getActive());
+		checklist.setChecklistId(checklistDTO.getChecklistId());
+		checklist.setChecklistItemId(checklistDTO.getChecklistItemId());
+		checklist.setChecklistItemName(checklistDTO.getChecklistItemName());
+		checklist.setChecklistName(checklistDTO.getChecklistName());
+		checklist.setImage_1(checklistDTO.getImage_1());
+		checklist.setImage_2(checklistDTO.getImage_2());
+		checklist.setImage_3(checklistDTO.getImage_3());
+		return checklist;
 	}
 
 	private Site getSite(Long siteId) {
