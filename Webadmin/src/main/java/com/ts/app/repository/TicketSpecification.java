@@ -15,6 +15,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 public class TicketSpecification implements Specification<Ticket> {
@@ -39,72 +41,75 @@ public class TicketSpecification implements Specification<Ticket> {
         if(searchCriteria.getId()!=0){
             predicates.add(cb.equal(root.get("id"), searchCriteria.getId()));
         }
-        log.debug("Ticket specification to predicate - "+searchCriteria.getId());
+        log.debug("Ticket specification to predicate ticket Id - "+searchCriteria.getId());
 
-//        if(searchCriteria.getProjectId() !=0){
-//            predicates.add(cb.equal(root.get("projectId"),searchCriteria.getProjectId()));
-//        }
-//        log.debug("Ticket specification to predicate - "+searchCriteria.getProjectId());
+        if(searchCriteria.getProjectId() !=0){
+            predicates.add(cb.equal(root.get("site").get("project").get("id"),searchCriteria.getProjectId()));
+        }
+        log.debug("Ticket specification to predicate project Id - "+searchCriteria.getProjectId());
 
         if(searchCriteria.getSiteId() !=0){
             predicates.add(cb.equal(root.get("site").get("id"),searchCriteria.getSiteId()));
         }
-        log.debug("Ticket specification to predicate - "+searchCriteria.getSiteId());
+        log.debug("Ticket specification to predicate site Id - "+searchCriteria.getSiteId());
 
-        if(searchCriteria.getEmployeeId() !=0){
+        if(searchCriteria.getEmployeeId() !=0 && !searchCriteria.isAdmin()){
             predicates.add(cb.equal(root.get("employee").get("id"),searchCriteria.getEmployeeId()));
         }
-        log.debug("Ticket specification to predicate - "+searchCriteria.getEmployeeId());
+        log.debug("Ticket specification to predicate Employee Id - "+searchCriteria.getEmployeeId());
+
+        if(searchCriteria.getEmployeeId() !=0 && searchCriteria.isAdmin()){
+            predicates.add(cb.equal(root.get("employee").get("id"),searchCriteria.getEmployeeId()));
+        }
+        log.debug("Ticket specification to predicate Employee Id - "+searchCriteria.getEmployeeId());
 
         if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())){
             predicates.add(cb.equal(root.get("status"),searchCriteria.getTicketStatus()));
         }
-        log.debug("Ticket specification to predicate - "+searchCriteria.getTicketStatus());
+        log.debug("Ticket specification to predicate ticket status - "+searchCriteria.getTicketStatus());
 
         if(StringUtils.isNotEmpty(searchCriteria.getTicketTitle())){
             predicates.add(cb.equal(root.get("title"),searchCriteria.getTicketTitle()));
         }
-        log.debug("Ticket specification to predicate - "+searchCriteria.getTicketTitle());
+        log.debug("Ticket specification to predicate ticket title - "+searchCriteria.getTicketTitle());
 
         if(StringUtils.isNotEmpty(searchCriteria.getTicketDescription())){
             predicates.add(cb.equal(root.get("description"),searchCriteria.getTicketDescription()));
         }
-        log.debug("Ticket specification to predicate - "+searchCriteria.getTicketDescription());
+        log.debug("Ticket specification to predicate ticket description - "+searchCriteria.getTicketDescription());
 
         if(searchCriteria.getAssetId()!=0){
-            predicates.add(cb.equal(root.get("assetId"),searchCriteria.getAssetId()));
+            predicates.add(cb.equal(root.get("asset").get("id"),searchCriteria.getAssetId()));
         }
-        log.debug("Ticket specification to predicate - "+searchCriteria.getAssetId());
+        log.debug("Ticket specification to predicate asset id - "+searchCriteria.getAssetId());
 
 //        if(searchCriteria.getFromDate() != null){
 //            if(root.get("createdDate") != null) {
-//                Date checkInDate = searchCriteria.getFromDate();
-//
-//                Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
-//                checkInDateFrom.setTime(checkInDate);
-//
-//                checkInDateFrom.set(Calendar.HOUR_OF_DAY, 0);
-//                checkInDateFrom.set(Calendar.MINUTE,0);
-//                checkInDateFrom.set(Calendar.SECOND,0);
-//                Date fromDt = DateUtil.convertUTCToIST(checkInDateFrom);
-//                //String fromDt = DateUtil.formatUTCToIST(checkInDateFrom);
-//                Calendar checkInDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
-//                if(searchCriteria.getToDate() != null) {
-//                    checkInDateTo.setTime(searchCriteria.getToDate());
-//                }else {
-//                    checkInDateTo.setTime(checkInDate);
+//                Calendar startCal = Calendar.getInstance();
+//                if (searchCriteria.getFromDate() != null) {
+//                    startCal.setTime(searchCriteria.getFromDate());
 //                }
+//                startCal.set(Calendar.HOUR_OF_DAY, 0);
+//                startCal.set(Calendar.MINUTE, 0);
+//                startCal.set(Calendar.SECOND, 0);
+//                Calendar endCal = Calendar.getInstance();
+//                if (searchCriteria.getToDate() != null) {
+//                    endCal.setTime(searchCriteria.getToDate());
+//                }
+//                endCal.set(Calendar.HOUR_OF_DAY, 23);
+//                endCal.set(Calendar.MINUTE, 59);
+//                endCal.set(Calendar.SECOND, 0);
+//                //searchCriteria.setFromDate(startCal.getTime());
+//                //searchCriteria.setToDate(endCal.getTime());
+//                ZonedDateTime startDate = ZonedDateTime.ofInstant(startCal.toInstant(), ZoneId.systemDefault());
+//                ZonedDateTime endDate = ZonedDateTime.ofInstant(endCal.toInstant(), ZoneId.systemDefault());
 //
-//                checkInDateTo.set(Calendar.HOUR_OF_DAY, 23);
-//                checkInDateTo.set(Calendar.MINUTE,59);
-//                checkInDateTo.set(Calendar.SECOND,0);
-//                Date toDt = DateUtil.convertUTCToIST(checkInDateTo);
-//                //String toDt = DateUtil.formatUTCToIST(checkInDateTo);
-//
-//                log.debug("Ticket specification to predicate - "+ fromDt + " , to Date -" + toDt);
-//                predicates.add(cb.between(root.get("createdDate"), fromDt,toDt));
+//                log.debug("Ticket specification to predicate - "+ startDate + " , to Date -" + endDate);
+//                predicates.add(cb.between(root.get("createdDate"), startDate,endDate));
 //            }
 //        }
+
+
 
         predicates.add(cb.equal(root.get("active"),"Y"));
 
@@ -136,7 +141,6 @@ public class TicketSpecification implements Specification<Ticket> {
             }
         }
 
-        //}
         log.debug("Ticket specification toPredicate - searchCriteria subordinateIds -"+ searchCriteria.getSubordinateIds());
         if(searchCriteria.getSiteId() == 0 && CollectionUtils.isNotEmpty(searchCriteria.getSubordinateIds())){
             orPredicates.add(root.get("employee").get("id").in(searchCriteria.getSubordinateIds()));
