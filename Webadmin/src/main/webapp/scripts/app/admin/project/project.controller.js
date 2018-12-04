@@ -313,11 +313,32 @@ angular.module('timeSheetApp')
 
         	$scope.searchCriteria.currPage = currPageVal;
         	$scope.searchCriteria.findAll = false;
-        	if($scope.client.selected && $scope.client.selected.id !=0){
-        		$scope.searchProject = $scope.client.selected;
-        	}else{
-        	   $scope.searchProject = null;
-        	}
+        	
+        	 /* Root scope (search criteria) start*/
+        
+             if($rootScope.searchFilterCriteria.isDashboard){
+            	 
+            	 if($rootScope.searchFilterCriteria.projectId){
+             		$scope.searchProject ={id:$rootScope.searchFilterCriteria.projectId,name:$rootScope.searchFilterCriteria.projectName};
+             		$scope.client.selected =$scope.searchProject;
+             	}else{
+             	   $scope.searchProject = null;
+             	   $scope.client.selected =$scope.allClients;
+             	} 	
+            	 /* Root scope (search criteria) end*/
+             } 
+             else{
+            	 
+            	 if($scope.client.selected && $scope.client.selected.id !=0){
+             		$scope.searchProject = $scope.client.selected;
+             	}else{
+             	   $scope.searchProject = null;
+             	} 
+             }
+             
+            /* Root scope (search criteria) */
+            $rootScope.searchFilterCriteria.isDashboard = false;
+             
         	console.log('Selected  project -' , $scope.searchProject);
 
         	
@@ -440,6 +461,10 @@ angular.module('timeSheetApp')
             $scope.client.selected = $scope.allClients;
             $scope.localStorage = null;
             $rootScope.searchCriteriaProject = null;
+            
+            /* Root scope (search criteria) */
+            $rootScope.searchFilterCriteria.isDashboard = false;
+            
             $scope.pages = {
                 currPage: 1,
                 totalPages: 0

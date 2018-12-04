@@ -577,5 +577,11 @@ angular
 					 * JSON.stringify($scope.sla)); $scope.slaList = [];
 					 * $scope.slaList.push($scope.sla); }
 					 */
+					
+					// Levels orderby function 
+					
+					$scope.sorterFunc = function(esc){
+					    return parseInt(esc.level);
+					};
 
 				});

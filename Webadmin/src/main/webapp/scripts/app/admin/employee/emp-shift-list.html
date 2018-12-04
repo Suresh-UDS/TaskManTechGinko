@@ -1113,7 +1113,7 @@
                               
 		                             <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
 									  <ui-select-match placeholder="Select region..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
-									  <ui-select-choices repeat="regionsListOne in regionsLists | filter: $select.search" ng-click="loadBranchList(client.selected.id)" null-option="allRegions" loose-null>
+									  <ui-select-choices repeat="regionsListOne in regionsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,'');loadBranchList(client.selected.id);" null-option="allRegions" loose-null>
 									    <span ng-bind-html="regionsListOne.name | highlight: $select.search"></span>
 									  </ui-select-choices>
 									</ui-select>
