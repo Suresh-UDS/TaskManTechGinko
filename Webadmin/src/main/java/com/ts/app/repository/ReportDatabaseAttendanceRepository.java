@@ -12,6 +12,8 @@ import java.util.List;
 public interface ReportDatabaseAttendanceRepository extends JpaRepository<Attendance, Long> {
 
     @Query("select new com.ts.app.domain.AttendanceStatusReport(at.createdDate, at.checkInTime, at.checkOutTime, at.site.id, e.id, e.isLeft, " +
-        "e.isReliever, s.project.id, s.region, s.branch) from Attendance as at join at.employee as e join at.site as s where e.id = at.employee.id and s.id = at.site.id")
+        "e.isReliever, s.project.id, s.region, s.branch, count(at.id) as statusCount) " +
+        "from Attendance as at join at.employee as e join at.site as s where e.id = at.employee.id and s.id = at.site.id group by at.createdDate, " +
+        "at.checkInTime, at.checkOutTime, at.site.id, at.employee.id")
     List<AttendanceStatusReport> findAllAttendance();
 }

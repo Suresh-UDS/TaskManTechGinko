@@ -175,6 +175,12 @@ public class ReportResource {
         return new ResponseEntity<>("Successfully created ticket points to influxDb", HttpStatus.CREATED);
     }
 
+    @RequestMapping(value = "/reports/attendance/points", method = RequestMethod.GET)
+    public ResponseEntity<?> addAttnPoints() throws Exception {
+        reportDatabaseUtil.addAttendancePoints();
+        return new ResponseEntity<>("Successfully created attendance points to influxDb", HttpStatus.CREATED);
+    }
+
     @RequestMapping(value = "/reports/jobType/count", method = RequestMethod.GET)
     public ResponseEntity<?> getJobPointsByStatus() {
         List<JobStatusMeasurement> reportCategoryPoints = reportDatabaseUtil.getJobReportCategoryPoints();

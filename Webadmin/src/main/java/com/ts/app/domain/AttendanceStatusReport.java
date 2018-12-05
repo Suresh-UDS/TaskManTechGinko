@@ -2,10 +2,16 @@ package com.ts.app.domain;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
 public class AttendanceStatusReport implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     private ZonedDateTime createdDate;
 
@@ -27,11 +33,21 @@ public class AttendanceStatusReport implements Serializable {
 
     private String branch;
 
+    private Date formattedDate;
+
+    private long statusCount;
+
+    private String date;
+
     public AttendanceStatusReport() {
     }
 
-    public AttendanceStatusReport(ZonedDateTime createdDate, Date checkInTime, Date checkOutTime, long siteId, long employeeId, boolean isLeft, boolean isReliever, long projectId, String region, String branch) {
+    public AttendanceStatusReport(ZonedDateTime createdDate, Date checkInTime, Date checkOutTime, long siteId, long employeeId, boolean isLeft, boolean isReliever, long projectId, String region, String branch, long statusCount) {
         this.createdDate = createdDate;
+        if(this.createdDate != null) {
+            this.formattedDate = Date.from(this.createdDate.toInstant());
+            this.date = dateFormat.format(this.formattedDate);
+        }
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;
         this.siteId = siteId;
@@ -41,6 +57,7 @@ public class AttendanceStatusReport implements Serializable {
         this.projectId = projectId;
         this.region = region;
         this.branch = branch;
+        this.statusCount = statusCount;
     }
 
     public ZonedDateTime getCreatedDate() {
@@ -125,5 +142,21 @@ public class AttendanceStatusReport implements Serializable {
 
     public void setBranch(String branch) {
         this.branch = branch;
+    }
+
+    public Date getFormattedDate() {
+        return formattedDate;
+    }
+
+    public void setFormattedDate(Date formattedDate) {
+        this.formattedDate = formattedDate;
+    }
+
+    public long getStatusCount() {
+        return statusCount;
+    }
+
+    public void setStatusCount(long statusCount) {
+        this.statusCount = statusCount;
     }
 }
