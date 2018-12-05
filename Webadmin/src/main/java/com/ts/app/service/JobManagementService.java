@@ -675,7 +675,7 @@ public class JobManagementService extends AbstractService {
 	        			}else if(searchCriteria.getProjectId() > 0) {
 	        				reportResults.add(reportService.jobCountByProjectAndStatusAndDateRange(searchCriteria.getProjectId(), fromDt, toDt));
 	        			}
-		        		
+
 		        		if(isAdmin) {
 		        			allSites = siteRepository.findAll();
 		        		}else {
@@ -684,7 +684,7 @@ public class JobManagementService extends AbstractService {
 		        			}
 		        		}
 
-		        		
+
 		        		if(CollectionUtils.isEmpty(allSites)) {
 		        			allSites = new ArrayList<Site>();
 		        			if(searchCriteria.getSiteId() > 0) {
@@ -722,7 +722,7 @@ public class JobManagementService extends AbstractService {
 		}
 		return reportResults;
 	}
-	
+
 	public List<JobDTO> generateReport(SearchCriteria searchCriteria, boolean isAdmin) {
 		List<JobDTO> transactions = null;
 		if(searchCriteria != null) {
@@ -775,7 +775,7 @@ public class JobManagementService extends AbstractService {
 		        	checkInDateTo.set(Calendar.MINUTE,59);
 		        	checkInDateTo.set(Calendar.SECOND,0);
 		        	java.sql.Date toDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateTo));
-		  
+
 		        	allJobsList = jobRepository.findByStartDateAndSiteReport(searchCriteria.getSiteId(), fromDt, toDt);
 //		        	allJobsList.addAll(page.getContent());
 		        	if(CollectionUtils.isNotEmpty(allJobsList)) {
@@ -785,12 +785,12 @@ public class JobManagementService extends AbstractService {
 		        		for(Job jobList : allJobsList) {
 		        			transactions.add(mapperUtil.toModel(jobList, JobDTO.class));
 		        		}
-		        	} 	
+		        	}
 	        	}
-        		
+
 			}
 		return transactions;
-		
+
 	}
 
 
@@ -891,7 +891,7 @@ public class JobManagementService extends AbstractService {
 		result.setTransactions(transactions);
 		return;
 	}
-	
+
 	//@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void saveScheduledJob(List<JobDTO> jobDTOs, long parentJobId, Employee emp, Site site) {
 		log.debug("Saving scheduled jobs for parent Id - "+ parentJobId);
@@ -906,11 +906,11 @@ public class JobManagementService extends AbstractService {
 				job.setEmployee(employee);
 				job.setSite(siteTmp);
 				mapToEntity(jobDTO, job);
-	
+
 				if(job.getStatus() == null) {
 					job.setStatus(JobStatus.ASSIGNED);
 				}
-				
+
 				if(jobDTO.getParentJobId()>0){
 				    //parentJob = jobRepository.findOne(jobDTO.getParentJobId());
 				    job.setParentJob(parentJob);
@@ -922,7 +922,7 @@ public class JobManagementService extends AbstractService {
 			jobRepository.save(jobs);
 		}
 	}
-	
+
 	public JobDTO saveScheduledJob(JobDTO jobDTO) {
 		Job job = new Job();
 
@@ -938,13 +938,13 @@ public class JobManagementService extends AbstractService {
 		if(job.getStatus() == null) {
 			job.setStatus(JobStatus.ASSIGNED);
 		}
-		
+
 		if(jobDTO.getParentJobId()>0){
 		    Job parentJob = jobRepository.findOne(jobDTO.getParentJobId());
 		    job.setParentJob(parentJob);
         }
 		Job newScheduledJob = jobRepository.saveAndFlush(job);
-		
+
 		return mapperUtil.toModel(job, JobDTO.class);
 	}
 
@@ -1272,7 +1272,7 @@ public class JobManagementService extends AbstractService {
 		}
 		return dto;
 	}
-	
+
 	private void mapToEntity(JobDTO jobDTO, Job job) {
 		Employee employee = null;
 		if(job.getEmployee() == null) {
@@ -1387,24 +1387,24 @@ public class JobManagementService extends AbstractService {
 			List<JobChecklistDTO> jobclDtoList = jobDTO.getChecklistItems();
 			List<JobChecklist> checklistItems = new ArrayList<JobChecklist>();
 			for(JobChecklistDTO jobclDto : jobclDtoList) {
-				//JobChecklist checklist = mapperUtil.toEntity(jobclDto, JobChecklist.class);
+//				JobChecklist checklist = mapperUtil.toEntity(jobclDto, JobChecklist.class);
 				JobChecklist checklist = mapToChecklistEntity(jobclDto);
 				if(checklist.getImage_1() != null) {
-					long jobId = checklist.getJob().getId();
+					long jobId = job.getId();
 					String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_1(), checklist.getChecklistItemName(), jobId, "image_1");
 					String Imageurl_1 = cloudFrontUrl + bucketEnv + checkListpath + fileName;
 					checklist.setImage_1(fileName);
 					jobclDto.setImageUrl_1(Imageurl_1);
 				}
 				if(checklist.getImage_2() != null) {
-					long jobId = checklist.getJob().getId();
+                    long jobId = job.getId();
 					String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_2(), checklist.getChecklistItemName(), jobId, "image_2");
 					String Imageurl_2 = cloudFrontUrl + bucketEnv + checkListpath + fileName;
 					checklist.setImage_2(fileName);
 					jobclDto.setImageUrl_2(Imageurl_2);
 				}
 				if(checklist.getImage_3() != null) {
-					long jobId = checklist.getJob().getId();
+                    long jobId = job.getId();
 					String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_3(), checklist.getChecklistItemName(), jobId, "image_3");
 					String Imageurl_3 = cloudFrontUrl + bucketEnv + checkListpath + fileName;
 					checklist.setImage_3(fileName);
@@ -1423,7 +1423,7 @@ public class JobManagementService extends AbstractService {
 		}
 
 	}
-	
+
 	private JobChecklist mapToChecklistEntity(JobChecklistDTO checklistDTO) {
 		JobChecklist checklist = new JobChecklist();
 		checklist.setActive(checklistDTO.getActive());
@@ -1700,27 +1700,27 @@ public class JobManagementService extends AbstractService {
 
 	public JobDTO completeJob(Long id, long userId) {
 		Job job = findJob(id);
-		JobDTO jobDTO = new JobDTO(); 
+		JobDTO jobDTO = new JobDTO();
 		Calendar now = Calendar.getInstance();
 		Calendar plannedStartTime = Calendar.getInstance();
 		plannedStartTime.setTime(job.getPlannedStartTime());
-		if(plannedStartTime.before(now)) { //Future jobs cannot be completed. 
+		if(plannedStartTime.before(now)) { //Future jobs cannot be completed.
 			User currUser = userRepository.findOne(userId);
 			Hibernate.initialize(currUser.getEmployee());
 			Employee currUserEmp = currUser.getEmployee();
-			
+
 			job.setActualStartTime(job.getPlannedStartTime());
 			if(job.getStatus() != JobStatus.INPROGRESS){
 				throw new TimesheetException("Job cannot be completed, Current Status : "+job.getStatus());
 			}
-	
+
 			Date endDate = new Date();
 			int totalHours = Hours.hoursBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getHours();
 			int totalMinutes = Minutes.minutesBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getMinutes();
 			if(totalHours > 0) {
 				totalMinutes = totalMinutes % 60;
 			}
-	
+
 			job.setStatus(JobStatus.COMPLETED);
 			job.setActualEndTime(endDate);
 			job.setActualHours(totalHours);
@@ -1733,11 +1733,11 @@ public class JobManagementService extends AbstractService {
 				data.put("url.ticket-view", ticketUrl);
 				String jobUrl = env.getProperty("url.job-view");
 				data.put("url.job-view", jobUrl);
-	
+
 				sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
 			}
 			jobDTO = mapperUtil.toModel(job, JobDTO.class);
-		}else { //if the job is in the future 
+		}else { //if the job is in the future
 			jobDTO = mapperUtil.toModel(job, JobDTO.class);
 			jobDTO.setErrorStatus(true);
 			jobDTO.setErrorMessage("Cannot complete a future job");
@@ -1751,13 +1751,13 @@ public class JobManagementService extends AbstractService {
 		Calendar now = Calendar.getInstance();
 		Calendar plannedStartTime = Calendar.getInstance();
 		plannedStartTime.setTime(job.getPlannedStartTime());
-		if(plannedStartTime.before(now)) { //Future jobs cannot be completed. 
+		if(plannedStartTime.before(now)) { //Future jobs cannot be completed.
 	        mapToEntity(jobDTO, job);
 	        job = jobRepository.save(job);
 			User currUser = userRepository.findOne(userId);
 			Hibernate.initialize(currUser.getEmployee());
 			Employee currUserEmp = currUser.getEmployee();
-	
+
 	        //	send notifications if a ticket is raised
 			if(job.getStatus().equals(JobStatus.COMPLETED) && job.getTicket() != null) {
 				Ticket ticket = job.getTicket();
@@ -1766,7 +1766,7 @@ public class JobManagementService extends AbstractService {
 				data.put("url.ticket-view", ticketUrl);
 				String jobUrl = env.getProperty("url.job-view");
 				data.put("url.job-view", jobUrl);
-	
+
 				sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
 			}
 			jobDTO = mapperUtil.toModel(job, JobDTO.class);
