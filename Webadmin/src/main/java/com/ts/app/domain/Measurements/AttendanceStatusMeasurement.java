@@ -5,8 +5,8 @@ import org.influxdb.annotation.Measurement;
 
 import java.time.Instant;
 
-@Measurement(name="TicketReport")
-public class TicketStatusMeasurement {
+@Measurement(name="AttendanceReport")
+public class AttendanceStatusMeasurement {
 
     @Column(name="time")
     private Instant time;
@@ -14,38 +14,32 @@ public class TicketStatusMeasurement {
     @Column(name="date", tag = true)
     private String date;
 
-    @Column(name="projectId")
+    @Column(name="checkInTime", tag = true)
+    private String checkInTime;
+
+    @Column(name="checkOutTime", tag = true)
+    private String checkOutTime;
+
+    @Column(name="projectId", tag = true)
     private long projectId;
 
-    @Column(name="siteId")
+    @Column(name="siteId", tag = true)
     private long siteId;
 
-    @Column(name="employeeId")
+    @Column(name="employeeId", tag = true)
     private long employeeId;
 
-    @Column(name="category", tag = true)
-    private String category;
+    @Column(name="isLeft", tag = true)
+    private boolean isLeft;
 
-    @Column(name="assignedOn", tag = true)
-    private String assignedOn;
-
-    @Column(name="closedOn", tag = true)
-    private String closedOn;
+    @Column(name="isReliever", tag = true)
+    private boolean isReliever;
 
     @Column(name="region", tag = true)
     private String region;
 
     @Column(name="branch", tag = true)
     private String branch;
-
-    @Column(name="status", tag = true)
-    private String status;
-
-    @Column(name="statusCount")
-    private int statusCount;
-
-    @Column(name="totalCount")
-    private int totalCount;
 
     public Instant getTime() {
         return time;
@@ -61,6 +55,22 @@ public class TicketStatusMeasurement {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getCheckInTime() {
+        return checkInTime;
+    }
+
+    public void setCheckInTime(String checkInTime) {
+        this.checkInTime = checkInTime;
+    }
+
+    public String getCheckOutTime() {
+        return checkOutTime;
+    }
+
+    public void setCheckOutTime(String checkOutTime) {
+        this.checkOutTime = checkOutTime;
     }
 
     public long getProjectId() {
@@ -87,28 +97,20 @@ public class TicketStatusMeasurement {
         this.employeeId = employeeId;
     }
 
-    public String getCategory() {
-        return category;
+    public boolean isLeft() {
+        return isLeft;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setLeft(boolean left) {
+        isLeft = left;
     }
 
-    public String getAssignedOn() {
-        return assignedOn;
+    public boolean isReliever() {
+        return isReliever;
     }
 
-    public void setAssignedOn(String assignedOn) {
-        this.assignedOn = assignedOn;
-    }
-
-    public String getClosedOn() {
-        return closedOn;
-    }
-
-    public void setClosedOn(String closedOn) {
-        this.closedOn = closedOn;
+    public void setReliever(boolean reliever) {
+        isReliever = reliever;
     }
 
     public String getRegion() {
@@ -125,29 +127,5 @@ public class TicketStatusMeasurement {
 
     public void setBranch(String branch) {
         this.branch = branch;
-    }
-
-    public int getStatusCount() {
-        return statusCount;
-    }
-
-    public void setStatusCount(int statusCount) {
-        this.statusCount = statusCount;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public int getTotalCount() {
-        return totalCount;
-    }
-
-    public void setTotalCount(int totalCount) {
-        this.totalCount = totalCount;
     }
 }

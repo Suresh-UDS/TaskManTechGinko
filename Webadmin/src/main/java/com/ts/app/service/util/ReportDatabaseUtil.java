@@ -4,6 +4,7 @@ import com.ts.app.config.ReportDatabaseConfiguration;
 import com.ts.app.domain.*;
 import com.ts.app.domain.Measurements.JobStatusMeasurement;
 import com.ts.app.domain.Measurements.TicketStatusMeasurement;
+import com.ts.app.repository.ReportDatabaseAttendanceRepository;
 import com.ts.app.repository.ReportDatabaseJobRepository;
 import com.ts.app.repository.ReportDatabaseTicketRepository;
 import com.ts.app.service.ReportDatabaseService;
@@ -42,6 +43,9 @@ public class ReportDatabaseUtil {
     private ReportDatabaseTicketRepository reportDatabaseTicketRepository;
 
     @Inject
+    private ReportDatabaseAttendanceRepository reportDatabaseAttendanceRepository;
+
+    @Inject
     private ReportDatabaseService reportDatabaseService;
 
     private InfluxDB connectDatabase() {
@@ -62,6 +66,12 @@ public class ReportDatabaseUtil {
         return ticketStatusReportList;
     }
 
+    public List<AttendanceStatusReport> getPreComputeAttendanceData() {
+        List<AttendanceStatusReport> attendanceStatusReports = reportDatabaseAttendanceRepository.findAllAttendance();
+        log.debug("List of Ticket status list" +attendanceStatusReports.size());
+        return attendanceStatusReports;
+    }
+
     public void addPointsToJob() throws Exception {
         InfluxDB influxDB = connectDatabase();
         List<JobStatusReport> reportLists = this.getPreComputeJobData();
@@ -76,7 +86,7 @@ public class ReportDatabaseUtil {
             cal.set(Calendar.MILLISECOND, 0);
             log.debug("calendar time milliseconds" +cal.getTimeInMillis());
             log.debug("system time milliseconds" + System.currentTimeMillis());
-            Point jobPoint = Point.measurement("jobReportStatus")
+            Point jobPoint = Point.measurement("JobReport")
                 .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                 .addField("date", (float) cal.getTimeInMillis())
                 .tag("date", String.valueOf(cal.getTimeInMillis()))
@@ -134,7 +144,7 @@ public class ReportDatabaseUtil {
                 cal.set(Calendar.MILLISECOND, 0);
             }
 
-            Point ticketPoint = Point.measurement("ticketReportStatus")
+            Point ticketPoint = Point.measurement("TicketReport")
                 .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                 .addField("date", cal.getTimeInMillis())
                 .tag("date", String.valueOf(cal.getTimeInMillis()))
@@ -167,14 +177,14 @@ public class ReportDatabaseUtil {
 
     public List<JobStatusMeasurement> getJobReportCategoryPoints() {
         InfluxDB connection = connectDatabase();
-        String query = "select count(type) as categoryCount from jobReportStatus group by type";
+        String query = "select count(type) as categoryCount from JobReport group by type";
         List<JobStatusMeasurement> jobCategoryReportPoints = reportDatabaseService.getJobPoints(connection, query, dbName);
         return jobCategoryReportPoints;
     }
 
     public List<ChartModelEntity> getJobReportStatusPoints() {
         InfluxDB connection = connectDatabase();
-        String query = "select count(status) as statusCount from jobReportStatus group by type, status";
+        String query = "select count(status) as statusCount from JobReport group by type, status";
         List<JobStatusMeasurement> jobStatusReportPoints = reportDatabaseService.getJobPoints(connection, query, dbName);
         Map<String, Map<String, Integer>> statusPoints = new HashMap<>();
         Map<String, Integer> statusCounts = null;
@@ -261,7 +271,7 @@ public class ReportDatabaseUtil {
 
     public List<ChartModelEntity> getTicketReportStatusPoints() {
         InfluxDB connection = connectDatabase();
-        String query = "select count(status) as statusCount from ticketReportStatus group by category,status";
+        String query = "select count(status) as statusCount from TicketReport group by category,status";
         List<TicketStatusMeasurement> ticketCategoryReportPoints = reportDatabaseService.getTicketPoints(connection, query, dbName);
         Map<String, Map<String, Integer>> statusPoints = new HashMap<>();
         Map<String, Integer> statusCounts = null;
@@ -349,7 +359,7 @@ public class ReportDatabaseUtil {
 
     public List<JobStatusMeasurement> getTodayJobsCount() {
         InfluxDB conn = connectDatabase();
-        Query query = BoundParameterQuery.QueryBuilder.newQuery("SELECT sum(statusCount) as statusCount FROM jobReportStatus WHERE date >= $fromDate " +
+        Query query = BoundParameterQuery.QueryBuilder.newQuery("SELECT sum(statusCount) as statusCount FROM JobReport WHERE date >= $fromDate " +
             "AND date <= $toDate group by date, status")
             .forDatabase(dbName)
             .bind("fromDate", 1531679342592L)
@@ -386,7 +396,7 @@ public class ReportDatabaseUtil {
 //            }
 //        }
 
-        Query query = BoundParameterQuery.QueryBuilder.newQuery("SELECT sum(statusCount) as statusCount, count(date) as totalCount FROM jobReportStatus " +
+        Query query = BoundParameterQuery.QueryBuilder.newQuery("SELECT sum(statusCount) as statusCount, count(date) as totalCount FROM JobReport " +
             "WHERE projectId = $projectId AND region = $region AND branch = $branch AND siteId = $siteId group by status")
             .forDatabase(dbName)
             .bind("fromDate", 1531765800090L)
@@ -425,7 +435,7 @@ public class ReportDatabaseUtil {
     public List<TicketReportCounts> getTotalTicketCount() {
         InfluxDB conn = connectDatabase();
 
-        Query query = BoundParameterQuery.QueryBuilder.newQuery("SELECT sum(statusCount) as statusCount, count(date) as totalCount FROM ticketReportStatus " +
+        Query query = BoundParameterQuery.QueryBuilder.newQuery("SELECT sum(statusCount) as statusCount, count(date) as totalCount FROM TicketReport " +
             "WHERE projectId = $projectId AND region = $region AND branch = $branch AND siteId = $siteId group by status")
             .forDatabase(dbName)
             .bind("fromDate", 1523298600000L )

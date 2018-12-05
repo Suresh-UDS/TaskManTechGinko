@@ -80,7 +80,7 @@ public class ReportDatabaseService {
         cal.set(Calendar.MILLISECOND, 0);
         influxDB.setRetentionPolicy("defaultPolicy");
         influxDB.enableBatch(100, 200, TimeUnit.MILLISECONDS);
-        Point jobNewPoint = Point.measurement("jobReportStatus")
+        Point jobNewPoint = Point.measurement("JobReport")
             .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
             .addField("date", cal.getTimeInMillis())
             .tag("date", String.valueOf(cal.getTimeInMillis()))
@@ -135,7 +135,7 @@ public class ReportDatabaseService {
             cal.set(Calendar.MILLISECOND, 0);
         }
 
-        Point ticketPoint = Point.measurement("ticketReportStatus")
+        Point ticketPoint = Point.measurement("TicketReport")
             .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
             .addField("date", cal.getTimeInMillis())
             .tag("date", String.valueOf(cal.getTimeInMillis()))
@@ -166,7 +166,7 @@ public class ReportDatabaseService {
         InfluxDB influxDB = connectDatabase();
 
         // Query the data from influxDB
-        Query query = BoundParameterQuery.QueryBuilder.newQuery("SELECT * FROM jobReportStatus WHERE date >= $fromDate AND date <= $toDate")
+        Query query = BoundParameterQuery.QueryBuilder.newQuery("SELECT * FROM JobReport WHERE date >= $fromDate AND date <= $toDate")
             .forDatabase(dbName)
             .bind("fromDate", 1531765800090L)
             .bind("toDate", 1531765800092L)

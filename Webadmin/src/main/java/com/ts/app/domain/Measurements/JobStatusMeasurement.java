@@ -5,7 +5,7 @@ import org.influxdb.annotation.Measurement;
 
 import java.time.Instant;
 
-@Measurement(name = "jobReportStatus")
+@Measurement(name = "JobReport")
 public class JobStatusMeasurement {
 
     @Column(name="time")

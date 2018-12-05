@@ -157,16 +157,22 @@ public class ReportResource {
         return new ResponseEntity<>(reportList, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/reports/preCompute/attendance", method = RequestMethod.GET)
+    public ResponseEntity<?> getAttenPrecomputeData() {
+        List<AttendanceStatusReport> reportList = reportDatabaseUtil.getPreComputeAttendanceData();
+        return new ResponseEntity<>(reportList, HttpStatus.OK);
+    }
+
 	@RequestMapping(value = "/reports/job/points", method = RequestMethod.GET)
 	public ResponseEntity<?> addJobPoints() throws Exception {
         reportDatabaseUtil.addPointsToJob();
-	    return new ResponseEntity<>("Successfully created points to influxDb", HttpStatus.CREATED);
+	    return new ResponseEntity<>("Successfully created job points to influxDb", HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/reports/ticket/points", method = RequestMethod.GET)
     public ResponseEntity<?> addTicketPoints() throws Exception {
         reportDatabaseUtil.addTicketPoints();
-        return new ResponseEntity<>("Successfully created points to influxDb", HttpStatus.CREATED);
+        return new ResponseEntity<>("Successfully created ticket points to influxDb", HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/reports/jobType/count", method = RequestMethod.GET)
