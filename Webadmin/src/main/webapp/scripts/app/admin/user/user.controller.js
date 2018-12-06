@@ -76,6 +76,16 @@ angular.module('timeSheetApp')
         $scope.init = function() {
     		$scope.loadUserRoles();
         		$scope.loadUsers();
+   	
+        }
+        
+        $scope.empList = function() {
+        EmployeeComponent.findAll().then(function (data) {
+        	 
+             $scope.employees = data;
+           //console.log("employee",$scope.employees);
+            
+           });
         }
 
         $scope.loadGroups = function () {
@@ -125,8 +135,10 @@ angular.module('timeSheetApp')
 
         $scope.loadEmployee = function () {
             $scope.loading = true;
+            $scope.loadingStart();
+            $scope.employees = '';
             EmployeeComponent.findAll().then(function (data) {
-        		$scope.selectedEmployee = null;
+        		//$scope.selectedEmployee = null;
                 $scope.loadingStop();
                 $scope.employees = data;
                 $scope.loading=false;
@@ -198,20 +210,14 @@ angular.module('timeSheetApp')
     		if($stateParams.checkStatus == 1){
                 $scope.checkStatus = 1;
              }
+    		    $scope.loadingStart();
  	        	//$scope.loadEmployee();
  	        	UserComponent.findOne($stateParams.id).then(function (data) {
  	                $scope.user = data;
  	              //console.log('User Role list',$scope.user);
  	                $scope.selectedRole = {id : $scope.user.userRoleId, name : $scope.user.userRoleName};
- 	                
- 	               EmployeeComponent.findAll().then(function (data) {
- 	            	  $scope.selectedEmployee = {id : $scope.user.employeeId,name : $scope.user.employeeName};
- 	                  $scope.employees = data;
- 	                //console.log("employee",$scope.employees);
- 	                  $scope.loadingStop();
- 	                });
- 	               
- 	               
+ 	               $scope.selectedEmployee = {id : $scope.user.employeeId,name : $scope.user.employeeName};
+ 	                $scope.loadingStop();
  	              //console.log("selected employee",$scope.selectedEmployee);
  	            });
         		
@@ -442,8 +448,8 @@ angular.module('timeSheetApp')
 
 
             UserComponent.search(searchCriteras).then(function (data) {
-	        		$scope.loadEmployee();
-	        		console.log("Employee details---"+JSON.stringify($scope.loadEmployee()));
+	        		//$scope.loadEmployee();
+	        		//console.log("Employee details---"+JSON.stringify($scope.loadEmployee()));
 	                $scope.users = data.transactions;
 	                //for(var i=0;i<$scope.users.length;i++) console.log($scope.users[i].id);
 
