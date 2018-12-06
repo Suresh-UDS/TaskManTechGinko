@@ -492,7 +492,8 @@ angular.module('timeSheetApp')
         }
             
             $scope.rolePermissionLoadingStart = function(){
-
+                
+            	 $('.pageCenter').addClass('pageTopCenter');
                 $('.pageTopCenter').show();
                 $('.overlay').show();
                    $scope.noscroll = true;
@@ -503,8 +504,8 @@ angular.module('timeSheetApp')
             $scope.rolePermissionLoadingStop = function(){
 
               //console.log("Calling loader");
-
                 $('.pageTopCenter').hide();
+                $('.pageCenter').removeClass('pageTopCenter'); 
                 $('.overlay').hide();
                 $scope.noscroll = false;
 
