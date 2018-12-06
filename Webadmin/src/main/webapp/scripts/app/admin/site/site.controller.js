@@ -1337,6 +1337,8 @@ angular.module('timeSheetApp')
             if($scope.regionSelectedProject){
 
                 if($scope.clientRegion){
+                	
+                	$scope.btnDisable = true;
 
                    // //console.log("Region entered");
                    // //console.log($scope.regionDetails);
@@ -1352,9 +1354,22 @@ angular.module('timeSheetApp')
 
                         $scope.designation= null;
                         $scope.showNotifications('top','center','success','Region Added Successfully');
-                        $scope.loadRegions($scope.selectedProject.id);
+                        //$scope.loadRegions($scope.selectedProject.id);
+                        $scope.btnDisable = false;
+                        $('.rModal.in').modal('hide');
 
-                    })
+                    }).catch(function (response) {
+                        if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+                            $scope.errorEmployeeExists = true;
+                            $scope.errorMessage = response.data.description;
+                            $scope.showNotifications('top','center','danger', 'Region already exists!.. Please choose another one');
+                        } else {
+                            $scope.error = 'ERROR';
+                            $scope.showNotifications('top','center','danger', 'Region Not Saved!.. Please try again later.');
+                        }
+                         $scope.btnDisable = false;
+                         $('.rModal.in').modal('hide');
+                    });
                 }else{
 
                    // //console.log("Desgination not entered")
@@ -1374,6 +1389,8 @@ angular.module('timeSheetApp')
             if($scope.branchSelectedProject){
 
                 if($scope.selectedRegionOne){
+                	
+                	$scope.btnDisable = true;
 
                     // //console.log($scope.selectedRegion);
 
@@ -1389,9 +1406,23 @@ angular.module('timeSheetApp')
                         SiteComponent.addBranch(branch).then(function (response) {
                             $scope.branch= null;
                             $scope.showNotifications('top','center','success','Branch Added Successfully');
-                            $scope.loadBranch($scope.selectedProject.id);
+                            //$scope.loadBranch($scope.selectedProject.id);
+                            $scope.btnDisable = false;
+                            $('.bModal.in').modal('hide');
 
-                        })
+                        }).catch(function (response) {
+                           
+                            if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+                                $scope.errorEmployeeExists = true;
+                                $scope.errorMessage = response.data.description;
+                                $scope.showNotifications('top','center','danger', 'Branch already exists!.. Please choose another one');
+                            } else {
+                                $scope.error = 'ERROR';
+                                $scope.showNotifications('top','center','danger', 'Branch Not Saved!.. Please try again later.');
+                            }
+                             $scope.btnDisable = false;
+                             $('.bModal.in').modal('hide');
+                        });
                     }else{
 
                        // //console.log("Branch not entered");

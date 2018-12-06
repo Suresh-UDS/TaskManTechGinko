@@ -705,7 +705,7 @@
 
 <!-- Add region dialog -->
 
-<div id="addRegion" class="add-input-modal modal fade">
+<div id="addRegion" class="add-input-modal modal fade rModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -715,7 +715,7 @@
             </div>
             <div class="modal-body">
 
-                <form name="addRegionForm">
+                <form name="addRegionForm" role="form" ng-submit="addRegion();" novalidate>
                     
                             <div class="row">
 	                              <div class="col-md-12">
@@ -743,7 +743,7 @@
                                 <div class="col-md-12">
 	                                <div class="form-group">
 		                                <label class="control-label">Region<span class="red-star">*</span></label>
-		                                <input class="" id="addRegionInput" ng-model="clientRegion"   name="region" type="text" value="" ng-required="true" ng-maxlength='250'
+		                                <input class="form-control InputTxtCapsAll" id="addRegionInput" ng-model="clientRegion"   name="region" type="text" value="" ng-required="true" ng-maxlength='250'
                                    ng-pattern="/^[A-Za-z0-9\s]*$/" />
 			                            <div ng-show="addRegionForm.$submitted || addRegionForm.region.$touched">
 			                                <div ng-show="addRegionForm.region.$dirty || addRegionForm.region.$invalid">
@@ -766,7 +766,7 @@
                              </div>
                      <div class="row">
                         <div class="col-md-12 txt-align-center">
-                            <input type="submit" ng-click="addRegion();" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addRegionForm.$invalid">
+                            <input type="submit"   class="btn btn-success" name="add" value="Add"  ng-disabled="addRegionForm.$invalid || btnDisable">
                         </div>
                     </div>
                 </form>
@@ -781,7 +781,7 @@
 
 <!-- Add branch dialog -->
 
-<div id="addBranch" class="add-input-modal modal fade">
+<div id="addBranch" class="add-input-modal modal fade bModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -791,7 +791,7 @@
             </div>
             <div class="modal-body">
 
-                <form name="addBranchForm">
+                <form name="addBranchForm" role="form" ng-submit="addBranch()" novalidate>
                     <div class="row">
                       <div class="col-md-12">
                        <div class="form-group">
@@ -840,7 +840,7 @@
                                 <div class="col-md-12">
 	                                <div class="form-group">
 		                                <label class="control-label">Branch<span class="red-star">*</span></label>
-		                                <input class="" id="addBranchInput" ng-model="regionBranch"   name="branch" type="text" value="" ng-required="true" ng-maxlength='250'
+		                                <input class="form-control InputTxtCapsAll" id="addBranchInput" ng-model="regionBranch"   name="branch" type="text" value="" ng-required="true" ng-maxlength='250'
                                    ng-pattern="/^[A-Za-z0-9\s]*$/" />
 			                            <div ng-show="addBranchForm.$submitted || addBranchForm.branch.$touched">
 			                                <div ng-show="addBranchForm.branch.$dirty || addBranchForm.branch.$invalid">
@@ -864,7 +864,7 @@
                     
                      <div class="row">
                         <div class="col-md-12 txt-align-center">
-                            <input type="submit" ng-click="addBranch()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addBranchForm.$invalid">
+                            <input type="submit"   class="btn btn-success"  name="add" value="Add" ng-disabled="addBranchForm.$invalid || btnDisable">
                         </div>
                     </div>
                 </form>
