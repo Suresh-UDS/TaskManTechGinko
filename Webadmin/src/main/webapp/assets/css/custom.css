@@ -262,7 +262,7 @@ ul.checkList li
     color: #000;
     background: none;
     box-shadow: none;
-    font-weight: none;
+    font-weight: normal;
     font-size:14px;
     padding-right: 0;
 }
@@ -2119,3 +2119,25 @@ div.bouncing-container .arrow-down {
                   0 4px 23px 0px rgba(0, 0, 0, 0.12),
                   0 8px 10px -5px rgba(76, 175, 80, 0)!important;
 }
+
+a.clsBtn {
+    height: 22px;
+    right: 0px;
+    color: #000;
+    background: none;
+    box-shadow: none;
+    font-weight: normal;
+    font-size: 14px !important;
+    padding-right: 0 !important;
+    position: absolute;
+    margin-top: -2px;
+    z-index: 100000;
+}
+a.clsBtn:hover , a.clsBtn:active , a.clsBtn:focus {
+    color: #000 !important;
+    background: none !important;
+    box-shadow: none !important;
+   
+}
+
+
