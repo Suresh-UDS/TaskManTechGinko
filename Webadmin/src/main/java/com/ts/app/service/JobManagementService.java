@@ -1431,8 +1431,11 @@ public class JobManagementService extends AbstractService {
 		checklist.setChecklistItemId(checklistDTO.getChecklistItemId());
 		checklist.setChecklistItemName(checklistDTO.getChecklistItemName());
 		checklist.setChecklistName(checklistDTO.getChecklistName());
+		checklist.setCompleted(checklistDTO.isCompleted());
+		checklist.setRemarks(checklistDTO.getRemarks());
 		checklist.setImage_1(checklistDTO.getImage_1());
 		checklist.setImage_2(checklistDTO.getImage_2());
+		checklist.setImage_3(checklistDTO.getImage_3());
 		checklist.setImage_3(checklistDTO.getImage_3());
 		return checklist;
 	}
