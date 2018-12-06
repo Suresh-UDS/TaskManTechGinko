@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.ts.app.domain.JobChecklist;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -43,21 +45,6 @@ import com.ts.app.service.util.CacheUtil;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.ReportUtil;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.CheckInOutDTO;
-import com.ts.app.web.rest.dto.EmployeeDTO;
-import com.ts.app.web.rest.dto.ExportResponse;
-import com.ts.app.web.rest.dto.ExportResult;
-import com.ts.app.web.rest.dto.GraphResponse;
-import com.ts.app.web.rest.dto.ImportResult;
-import com.ts.app.web.rest.dto.JobDTO;
-import com.ts.app.web.rest.dto.LocationDTO;
-import com.ts.app.web.rest.dto.NotificationLogDTO;
-import com.ts.app.web.rest.dto.Paginator;
-import com.ts.app.web.rest.dto.PriceDTO;
-import com.ts.app.web.rest.dto.ReportResult;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
 
 /**
  * REST controller for managing the Site information.
@@ -235,6 +222,17 @@ public class JobManagementResource {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
+    @RequestMapping(path = "/checklist/update",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateChecklist(@RequestBody JobChecklistDTO jobChecklistDTO){
+        long userId = SecurityUtils.getCurrentUserId();
+        JobChecklist response = jobService.updateCheckList(jobChecklistDTO);
+        if(response.getId()<=0){
+            jobChecklistDTO.setErrorStatus(true);
+            jobChecklistDTO.setErrorMessage("Error in saving Checklist..");
+            return new ResponseEntity<Object>(jobChecklistDTO,HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 
 
 	@RequestMapping(value = "/jobs/search",method = RequestMethod.POST)

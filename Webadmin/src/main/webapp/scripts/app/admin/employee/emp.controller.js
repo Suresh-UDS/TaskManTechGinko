@@ -1649,7 +1649,7 @@ angular.module('timeSheetApp')
             $scope.search();
          }
         $scope.closeModal = function () {
-            $('#ViewModal').modal('hide');
+            $('.ViewModal.in').modal('hide');
         }
         $scope.search = function () {
                 $scope.noData = false;

@@ -29,6 +29,9 @@ angular.module('timeSheetApp')
         $scope.btnDisable = false;
         $scope.localStorage = null;
         $scope.sitesList = null;
+        $scope.selectedRegionOne = {};
+        $scope.regionSelectedProject={};
+        $scope.branchSelectedProject={};
 
         /** Ui-select scopes **/
         $scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
@@ -74,7 +77,7 @@ angular.module('timeSheetApp')
         "Dadra and Nagar Haveli","Daman and Diu","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh",
         "Jammu and Kashmir","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra",
         "Manipur","Meghalaya","Mizoram","Nagaland","Orissa","Punjab","Pondicherry","Rajasthan",
-        "Sikkim","Tamil Nadu","Tripura","Uttar Pradesh","Uttarakhand","West Bengal"];
+        "Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal"];
 
 
         $scope.loadProjectsList = function () {
@@ -345,6 +348,8 @@ angular.module('timeSheetApp')
 	                     $scope.selectedSite = null;
 	              }else if(jQuery.isEmptyObject($scope.searchProject) == false){
 	                      var depProj=$scope.searchProject.id;
+	              }else if(jQuery.isEmptyObject($scope.addRegionProject) == false){
+	                      var depProj=$scope.addRegionProject.id;
 	              }else{
 	                      var depProj=0;
 	              }
@@ -592,7 +597,13 @@ angular.module('timeSheetApp')
 
                         $scope.selectedProject = {id:$scope.site.projectId,name:$scope.site.projectName};
                         $scope.SelectClient.selected = $scope.selectedProject;
+                        SiteComponent.getRegionByProject($scope.selectedProject.id).then(function (response) {
+                            
+                             $scope.regionList = response;
+                      
+                         });
                         $scope.selectedRegion= {name:$scope.site.region};
+                        $scope.selectedRegionOne = $scope.selectedRegion;
                         SiteComponent.getBranchByProjectAndRegionName($scope.selectedProject.id,$scope.selectedRegion.name).then(function (data) {
                         	$scope.branchList = data;
                         });
@@ -1145,19 +1156,16 @@ angular.module('timeSheetApp')
         $scope.loadRegions = function (projectId, callback) {
             SiteComponent.getRegionByProject(projectId).then(function (response) {
 
-               // //console.log(response);
-
-                $scope.regionList = response;
-                for(var i=0;i<$scope.regionList.length; i++) {
-	            		$scope.uiRegion.push($scope.regionList[i].name);
-	            }
-
-
-                //console.log('region list : ' + JSON.stringify($scope.regionList));
-                //callback();
+                $scope.regions = response;
+               
+               
 
             })
         };
+        
+        
+        
+        
 
         /*** UI select (Region List) **/
         $scope.loadRegionsList = function (projectId, callback) {
@@ -1191,7 +1199,7 @@ angular.module('timeSheetApp')
             if(projectId){
 
                 if($scope.selectedRegion){
-
+               
                    // //console.log($scope.selectedRegion);
                     SiteComponent.getBranchByProject(projectId,$scope.selectedRegion.id).then(function (response) {
                       //console.log(response);
@@ -1260,13 +1268,7 @@ angular.module('timeSheetApp')
 
                     })
 
-                }else{
-                    $scope.showNotifications('top','center','danger','Please Select Region to continue...');
-
                 }
-
-            }else{
-                $scope.showNotifications('top','center','danger','Please select Project to continue...');
 
             }
         };
@@ -1332,16 +1334,16 @@ angular.module('timeSheetApp')
         }
 
         $scope.addRegion = function () {
-            if($scope.selectedProject){
+            if($scope.regionSelectedProject){
 
-                if($scope.regionDetails && $scope.regionDetails.name){
+                if($scope.clientRegion){
 
                    // //console.log("Region entered");
                    // //console.log($scope.regionDetails);
 
                     var region ={
-                        name:$scope.regionDetails.name,
-                        projectId:$scope.selectedProject.id
+                        name:$scope.clientRegion,
+                        projectId:$scope.regionSelectedProject.id
                     };
                     SiteComponent.addRegion(region).then(function (response) {
 
@@ -1369,20 +1371,20 @@ angular.module('timeSheetApp')
 
 
         $scope.addBranch = function () {
-            if($scope.selectedProject){
+            if($scope.branchSelectedProject){
 
-                if($scope.selectedRegion){
+                if($scope.selectedRegionOne){
 
                     // //console.log($scope.selectedRegion);
 
-                    if($scope.branchDetails && $scope.branchDetails.name){
+                    if($scope.regionBranch){
                        // //console.log("Region entered");
                        // //console.log($scope.branchDetails);
 
                         var branch ={
-                            name:$scope.branchDetails.name,
-                            projectId:$scope.selectedProject.id,
-                            regionId: $scope.selectedRegion.id
+                            name:$scope.regionBranch,
+                            projectId:$scope.branchSelectedProject.id,
+                            regionId: $scope.selectedRegionOne.id
                         };
                         SiteComponent.addBranch(branch).then(function (response) {
                             $scope.branch= null;
@@ -1488,8 +1490,74 @@ angular.module('timeSheetApp')
 	
 	         })
         }
+        
+        /*
+         * Ui select allow-clear modified function start
+         *
+         * */
+        
 
-
-
-
+        $scope.clearProject = function($event) {
+     	   $event.stopPropagation(); 
+     	   $scope.client.selected = undefined;
+     	   $scope.regionsListOne.selected = undefined;
+     	   $scope.branchsListOne.selected = undefined;
+     	   $scope.sitesListOne.selected = undefined;
+     	   $scope.regionFilterDisable = true;
+     	   $scope.branchFilterDisable = true;
+     	   $scope.siteFilterDisable = true;
+     	};
+     	
+     	$scope.clearRegion = function($event) {
+      	   $event.stopPropagation(); 
+      	   $scope.regionsListOne.selected = undefined;
+      	   $scope.branchsListOne.selected = undefined;
+      	   $scope.sitesListOne.selected = undefined;
+      	   $scope.branchFilterDisable = true;
+      	   $scope.siteFilterDisable = true;
+      	};
+      	
+      	$scope.clearBranch = function($event) {
+	   	   $event.stopPropagation();
+	   	   $scope.branchsListOne.selected = undefined;
+	   	   $scope.sitesListOne.selected = undefined;
+	   	   $scope.siteFilterDisable = true;
+	   	};
+         
+   	$scope.clearSite = function($event) {
+    	   $event.stopPropagation(); 
+    	   $scope.sitesListOne.selected = undefined;
+    	   $scope.blocksListOne.selected = undefined;
+    	   $scope.floorsListOne.selected = undefined;
+    	   $scope.zonesListOne.selected = undefined;
+    	   $scope.blockFilterDisable = true;
+    	   $scope.floorFilterDisable = true;
+    	   $scope.zoneFilterDisable = true;
+    	};
+        	
+    	$scope.clearBlock = function($event) {
+     	   $event.stopPropagation(); 
+     	   $scope.blocksListOne.selected = undefined;
+     	   $scope.floorsListOne.selected = undefined;
+     	   $scope.zonesListOne.selected = undefined;
+     	   $scope.floorFilterDisable = true;
+     	   $scope.zoneFilterDisable = true;
+     	};
+         	
+     	$scope.clearFloor = function($event) {
+      	   $event.stopPropagation(); 
+      	   $scope.floorsListOne.selected = undefined;
+      	   $scope.zonesListOne.selected = undefined;
+      	   $scope.zoneFilterDisable = true;
+      	};
+      	
+      	$scope.clearZone = function($event) {
+   	   $event.stopPropagation(); 
+   	   $scope.zonesListOne.selected = undefined;
+   	};
+           	
+   	/*
+        * Ui select allow-clear modified function end
+        *
+        * */
     });
