@@ -29,6 +29,9 @@ angular.module('timeSheetApp')
         $scope.btnDisable = false;
         $scope.localStorage = null;
         $scope.sitesList = null;
+        $scope.selectedRegionOne = {};
+        $scope.regionSelectedProject={};
+        $scope.branchSelectedProject={};
 
         /** Ui-select scopes **/
         $scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
@@ -345,6 +348,8 @@ angular.module('timeSheetApp')
 	                     $scope.selectedSite = null;
 	              }else if(jQuery.isEmptyObject($scope.searchProject) == false){
 	                      var depProj=$scope.searchProject.id;
+	              }else if(jQuery.isEmptyObject($scope.addRegionProject) == false){
+	                      var depProj=$scope.addRegionProject.id;
 	              }else{
 	                      var depProj=0;
 	              }
@@ -592,7 +597,13 @@ angular.module('timeSheetApp')
 
                         $scope.selectedProject = {id:$scope.site.projectId,name:$scope.site.projectName};
                         $scope.SelectClient.selected = $scope.selectedProject;
+                        SiteComponent.getRegionByProject($scope.selectedProject.id).then(function (response) {
+                            
+                             $scope.regionList = response;
+                      
+                         });
                         $scope.selectedRegion= {name:$scope.site.region};
+                        $scope.selectedRegionOne = $scope.selectedRegion;
                         SiteComponent.getBranchByProjectAndRegionName($scope.selectedProject.id,$scope.selectedRegion.name).then(function (data) {
                         	$scope.branchList = data;
                         });
@@ -1145,19 +1156,16 @@ angular.module('timeSheetApp')
         $scope.loadRegions = function (projectId, callback) {
             SiteComponent.getRegionByProject(projectId).then(function (response) {
 
-               // //console.log(response);
-
-                $scope.regionList = response;
-                for(var i=0;i<$scope.regionList.length; i++) {
-	            		$scope.uiRegion.push($scope.regionList[i].name);
-	            }
-
-
-                //console.log('region list : ' + JSON.stringify($scope.regionList));
-                //callback();
+                $scope.regions = response;
+               
+               
 
             })
         };
+        
+        
+        
+        
 
         /*** UI select (Region List) **/
         $scope.loadRegionsList = function (projectId, callback) {
@@ -1191,7 +1199,7 @@ angular.module('timeSheetApp')
             if(projectId){
 
                 if($scope.selectedRegion){
-
+               
                    // //console.log($scope.selectedRegion);
                     SiteComponent.getBranchByProject(projectId,$scope.selectedRegion.id).then(function (response) {
                       //console.log(response);
@@ -1260,13 +1268,7 @@ angular.module('timeSheetApp')
 
                     })
 
-                }else{
-                    $scope.showNotifications('top','center','danger','Please Select Region to continue...');
-
                 }
-
-            }else{
-                $scope.showNotifications('top','center','danger','Please select Project to continue...');
 
             }
         };
@@ -1332,16 +1334,16 @@ angular.module('timeSheetApp')
         }
 
         $scope.addRegion = function () {
-            if($scope.selectedProject){
+            if($scope.regionSelectedProject){
 
-                if($scope.regionDetails && $scope.regionDetails.name){
+                if($scope.clientRegion){
 
                    // //console.log("Region entered");
                    // //console.log($scope.regionDetails);
 
                     var region ={
-                        name:$scope.regionDetails.name,
-                        projectId:$scope.selectedProject.id
+                        name:$scope.clientRegion,
+                        projectId:$scope.regionSelectedProject.id
                     };
                     SiteComponent.addRegion(region).then(function (response) {
 
@@ -1369,20 +1371,20 @@ angular.module('timeSheetApp')
 
 
         $scope.addBranch = function () {
-            if($scope.selectedProject){
+            if($scope.branchSelectedProject){
 
-                if($scope.selectedRegion){
+                if($scope.selectedRegionOne){
 
                     // //console.log($scope.selectedRegion);
 
-                    if($scope.branchDetails && $scope.branchDetails.name){
+                    if($scope.regionBranch){
                        // //console.log("Region entered");
                        // //console.log($scope.branchDetails);
 
                         var branch ={
-                            name:$scope.branchDetails.name,
-                            projectId:$scope.selectedProject.id,
-                            regionId: $scope.selectedRegion.id
+                            name:$scope.regionBranch,
+                            projectId:$scope.branchSelectedProject.id,
+                            regionId: $scope.selectedRegionOne.id
                         };
                         SiteComponent.addBranch(branch).then(function (response) {
                             $scope.branch= null;
