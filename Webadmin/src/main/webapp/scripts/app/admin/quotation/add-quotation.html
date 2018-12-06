@@ -1,5 +1,5 @@
 <div class="crud-form"
-	data-unique-hash="a2ad475d60b22954085c657a73309b8f"  ng-init="initLoad();loadingAuto();" >
+	data-unique-hash="a2ad475d60b22954085c657a73309b8f"  ng-init="loadPageTop();init();loadingAuto();" >
 	<div class="">
 
 		<div class="row">
@@ -94,7 +94,7 @@
 
                                                         <span ng-show="!clientDisable && !SelectClient.selected" class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                               
-		                                                <ui-select ng-model="SelectClient.selected"  name="projectName" ng-disabled="clientDisable" ng-required="true">
+		                                                <ui-select ng-model="SelectClient.selected"  name="projectName" ng-disabled="clientDisable" ng-required="!ticketQuot">
 														  <ui-select-match placeholder="Select clients..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
 														  <ui-select-choices repeat="SelectClient in SelectClients | filter: $select.search"  ng-click="loadDepSitesList(SelectClient.selected)">
 														    <span ng-bind-html="SelectClient.name | highlight: $select.search"></span>
@@ -118,13 +118,13 @@
                                                     <div class="dropdown" >
                                                         <span ng-show="!siteDisable && !SelectSite.selected" class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                               
-		                                               <ui-select ng-model="SelectSite.selected"  name="siteName" ng-disabled="siteDisable || SelectSites.length == 0" ng-required="true">
+		                                               <ui-select ng-model="SelectSite.selected"  name="siteName" ng-disabled="siteDisable || SelectSites.length == 0" ng-required="!ticketQuot">
 														  <ui-select-match placeholder="Select sites..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
 														  <ui-select-choices repeat="SelectSite in SelectSites | filter: $select.search" >
 														    <span ng-bind-html="SelectSite.name | highlight: $select.search"></span>
 														  </ui-select-choices>
 														</ui-select>
-                                                        <span ng-if="SelectSites.length == 0"><p class="error-msg margin0">No sites</p></span>
+                                                        <span ng-if="SelectSites.length == 0 && !ticketQuot"><p class="error-msg margin0">No sites</p></span>
                                                         <div ng-show="form.$submitted || form.siteName.$touched">
                                                             <div ng-show="form.siteName.$dirty || form.siteName.$invalid">
                                                                 <p class="help-block" style="color:maroon"

@@ -160,9 +160,13 @@ angular
                                 $scope.quotation.description = data.description;
                                 $scope.quotation.ticketId = data.id;
                                 $scope.selectedProject = {id:data.projectId, name:data.projectName};
+                                $scope.SelectClient.selected = $scope.selectedProject;
                                 $scope.selectedSite = {id:data.siteId,name:data.siteName};
+                                $scope.SelectSite.selected = $scope.selectedSite;
                                 $scope.status = 1;
                                 $scope.ticketQuot = true;
+                                $scope.clientDisable = true;
+                                $scope.siteDisable = true;
 
                                 /*if(data.siteId){
                                     SiteComponent.findOne(data.siteID).then(function (data) {

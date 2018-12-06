@@ -74,7 +74,7 @@ angular.module('timeSheetApp')
         "Dadra and Nagar Haveli","Daman and Diu","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh",
         "Jammu and Kashmir","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra",
         "Manipur","Meghalaya","Mizoram","Nagaland","Orissa","Punjab","Pondicherry","Rajasthan",
-        "Sikkim","Tamil Nadu","Tripura","Uttar Pradesh","Uttarakhand","West Bengal"];
+        "Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal"];
 
 
         $scope.loadProjectsList = function () {
@@ -1488,8 +1488,74 @@ angular.module('timeSheetApp')
 	
 	         })
         }
+        
+        /*
+         * Ui select allow-clear modified function start
+         *
+         * */
+        
 
-
-
-
+        $scope.clearProject = function($event) {
+     	   $event.stopPropagation(); 
+     	   $scope.client.selected = undefined;
+     	   $scope.regionsListOne.selected = undefined;
+     	   $scope.branchsListOne.selected = undefined;
+     	   $scope.sitesListOne.selected = undefined;
+     	   $scope.regionFilterDisable = true;
+     	   $scope.branchFilterDisable = true;
+     	   $scope.siteFilterDisable = true;
+     	};
+     	
+     	$scope.clearRegion = function($event) {
+      	   $event.stopPropagation(); 
+      	   $scope.regionsListOne.selected = undefined;
+      	   $scope.branchsListOne.selected = undefined;
+      	   $scope.sitesListOne.selected = undefined;
+      	   $scope.branchFilterDisable = true;
+      	   $scope.siteFilterDisable = true;
+      	};
+      	
+      	$scope.clearBranch = function($event) {
+	   	   $event.stopPropagation();
+	   	   $scope.branchsListOne.selected = undefined;
+	   	   $scope.sitesListOne.selected = undefined;
+	   	   $scope.siteFilterDisable = true;
+	   	};
+         
+   	$scope.clearSite = function($event) {
+    	   $event.stopPropagation(); 
+    	   $scope.sitesListOne.selected = undefined;
+    	   $scope.blocksListOne.selected = undefined;
+    	   $scope.floorsListOne.selected = undefined;
+    	   $scope.zonesListOne.selected = undefined;
+    	   $scope.blockFilterDisable = true;
+    	   $scope.floorFilterDisable = true;
+    	   $scope.zoneFilterDisable = true;
+    	};
+        	
+    	$scope.clearBlock = function($event) {
+     	   $event.stopPropagation(); 
+     	   $scope.blocksListOne.selected = undefined;
+     	   $scope.floorsListOne.selected = undefined;
+     	   $scope.zonesListOne.selected = undefined;
+     	   $scope.floorFilterDisable = true;
+     	   $scope.zoneFilterDisable = true;
+     	};
+         	
+     	$scope.clearFloor = function($event) {
+      	   $event.stopPropagation(); 
+      	   $scope.floorsListOne.selected = undefined;
+      	   $scope.zonesListOne.selected = undefined;
+      	   $scope.zoneFilterDisable = true;
+      	};
+      	
+      	$scope.clearZone = function($event) {
+   	   $event.stopPropagation(); 
+   	   $scope.zonesListOne.selected = undefined;
+   	};
+           	
+   	/*
+        * Ui select allow-clear modified function end
+        *
+        * */
     });
