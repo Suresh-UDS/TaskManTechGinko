@@ -65,6 +65,8 @@ liquibase:
 
 server:
     port: 8088
+    compression: on
+    compressableMimeType: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css,image/jpeg
 
 upload:
     file:
