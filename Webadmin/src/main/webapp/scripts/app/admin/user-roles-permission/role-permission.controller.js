@@ -251,6 +251,7 @@ angular.module('timeSheetApp')
         		$scope.searchCriteria.selectedUserRole = 0;
         	}
         	console.log($scope.searchCriteria);
+        	$scope.rolePermissionLoadingStart();
         	RolePermissionComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.permissions = data;
 
@@ -399,10 +400,11 @@ angular.module('timeSheetApp')
                 $scope.pages.endInd = data.totalCount > 100  ? (data.currPage) * 100 : data.totalCount ;
                 $scope.pages.totalCnt = data.totalCount;
             	$scope.hide = true;
+            	$scope.rolePermissionLoadingStop();
+            }).catch(function(){
+            	$scope.rolePermissionLoadingStop();
             });
-        	if($scope.pages.currPage == 1) {
-            	$scope.firstStyle();
-        	}
+        	
         };
 
 
@@ -488,6 +490,28 @@ angular.module('timeSheetApp')
 
                 $scope.refreshPage();
         }
+            
+            $scope.rolePermissionLoadingStart = function(){
+
+                $('.pageTopCenter').show();
+                $('.overlay').show();
+                   $scope.noscroll = true;
+
+
+               }
+
+            $scope.rolePermissionLoadingStop = function(){
+
+              //console.log("Calling loader");
+
+                $('.pageTopCenter').hide();
+                $('.overlay').hide();
+                $scope.noscroll = false;
+
+
+
+            }
+
 
 
     });

@@ -1669,6 +1669,14 @@ a.cal-btn i
       display: none;
       width:4%;
   }
+  .pageTopCenter{
+      top: calc(100% / 8);
+      left: calc(100% / 2.3);
+      z-index: 100000;
+      position: absolute;
+      display: none;
+      width:4%;
+  }
   .white{
       color:#fff;
       line-height: 40px;
