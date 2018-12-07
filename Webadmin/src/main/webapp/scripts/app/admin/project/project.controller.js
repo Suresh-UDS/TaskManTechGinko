@@ -233,13 +233,15 @@ angular.module('timeSheetApp')
                ProjectComponent.createClientGroup($scope.clientGroup).then(function (response) {
                  //console.log(response);
                    if(response.data.status && response.data.status === "400") {
-                   	$scope.loadingStop();
+                   	
                    	$scope.showNotifications('top','center','danger','Client Group already exists.');
                    }else{
                    	  $scope.clientGroup = "";
                          $scope.showNotifications('top','center','success','Client Group has been added Successfully!!');
                          $scope.loadClientGroup();
                    }
+                   $scope.loadingStop();
+                   $scope.clientGroup = {};
 
                }).catch(function(){
                $scope.loadingStop();
