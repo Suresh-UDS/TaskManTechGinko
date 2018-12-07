@@ -589,7 +589,7 @@ public class SiteService extends AbstractService {
     
     public boolean isDuplicate(BranchDTO branchDTO) {
     	
-    	List<Branch> results = branchRepository.findBranchByProjectAndRegionId(branchDTO.getProjectId(), branchDTO.getRegionId());
+    	List<Branch> results = branchRepository.findBranchByProjectAndRegionId(branchDTO.getProjectId(), branchDTO.getRegionId(), branchDTO.getName());
         
         if(!results.isEmpty()) {
             return true;

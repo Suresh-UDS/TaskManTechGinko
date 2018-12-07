@@ -176,8 +176,8 @@ public class SiteResource {
                 log.debug(">>> duplicate <<<");
                 region.setErrorMessage("error.duplicateRecordError");
                 region.setErrorStatus(true);
-                region.setStatus("400");
-                return new ResponseEntity<>(region,HttpStatus.OK);
+//                region.setStatus("400");
+                return new ResponseEntity<>(region,HttpStatus.BAD_REQUEST);
             }
         }catch(Exception e) {
             throw new TimesheetException(e, region);
@@ -196,8 +196,8 @@ public class SiteResource {
         		log.debug(">>> duplicate <<<");
         		branchDTO.setErrorMessage("error.duplicateRecordError");
                 branchDTO.setErrorStatus(true);
-                branchDTO.setStatus("400");
-                return new ResponseEntity<>(branchDTO,HttpStatus.OK);
+//                branchDTO.setStatus("400");
+                return new ResponseEntity<>(branchDTO,HttpStatus.BAD_REQUEST);
         	}
         }catch(Exception e) {
             throw new TimesheetException(e, branchDTO);
