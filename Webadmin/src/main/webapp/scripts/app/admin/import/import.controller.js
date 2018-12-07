@@ -77,6 +77,7 @@ angular.module('timeSheetApp')
 	        	console.log('$rootScope.jobImportStatus import controller -'+JSON.stringify($rootScope.jobImportStatus));
 	            	JobComponent.importStatus($rootScope.jobImportStatus.fileName).then(function(data) {
 	            		if(data) {
+	            			
 	            			$rootScope.jobImportStatus.importStatus = data.status;
 	                		console.log('jobimportStatus - '+ $rootScope.jobImportStatus);
 	                		$rootScope.jobImportStatus.importMsg = data.msg;
@@ -344,6 +345,7 @@ angular.module('timeSheetApp')
 
 		        LocationComponent.importStatus($rootScope.locationImportStatus.fileName).then(function(data) {
 		            		if(data) {
+		            			
 		            			$rootScope.locationImportStatus.importStatus = data.status;
 		                		console.log('*****************importStatus - '+ JSON.stringify($rootScope.locationImportStatus));
 		                		$rootScope.locationImportStatus.importMsg = data.msg;
@@ -473,7 +475,7 @@ angular.module('timeSheetApp')
 	    		console.log('$rootScope.employeeShiftImportStatus -'+JSON.stringify($rootScope.employeeShiftImportStatus));
        		EmployeeComponent.importEmployeeShiftStatus($rootScope.employeeShiftImportStatus.fileName).then(function(data) {
            		if(data) {
-           			alert(JSON.stringify(data));
+           			
            			$rootScope.employeeShiftImportStatus.importStatus = data.status;
                		console.log('*****************importStatus - '+ JSON.stringify($rootScope.employeeShiftImportStatus));
                		$rootScope.employeeShiftImportStatus.importMsg = data.msg;
@@ -538,6 +540,7 @@ angular.module('timeSheetApp')
 	    		console.log('$rootScope.assetImportStatus -'+JSON.stringify($rootScope.assetImportStatus));
       		AssetComponent.importAssetStatus($rootScope.assetImportStatus.fileName).then(function(data) {
           		if(data) {
+          			alert(JSON.stringyfy(data));
           			$rootScope.assetImportStatus.importStatus = data.status;
               		console.log('*****************importStatus - '+ JSON.stringify($rootScope.assetImportStatus));
               		$rootScope.assetImportStatus.importMsg = data.msg;
@@ -692,6 +695,7 @@ angular.module('timeSheetApp')
 	 var promiseEmployee;
 	 var promiseClient;
 	 var promiseSite;
+	 var promiseLocation;
 	 var promiseChecklist;
 	 var promiseEmployeeShift;
 	 var promiseAsset;
@@ -726,6 +730,12 @@ angular.module('timeSheetApp')
 	    		console.log('Import Site Start Method');
 	    		promiseSite = $interval($scope.siteImportStatus, 5000);
 	    		console.log('promise -'+promiseSite);
+	    	}
+	    	if(typeImport == 'location'){
+	    		$rootScope.stop('location');
+	    		console.log('Import location Start Method');
+	    		promiseLocation = $interval($scope.locationImportStatus, 5000);
+	    		console.log('promise -'+promiseLocation);
 	    	}
 	    	if(typeImport == 'checklist'){
 	    		$rootScope.stop('checklist');
@@ -771,6 +781,9 @@ angular.module('timeSheetApp')
 	      }
 	      if(stopInterval == 'site'){
 	    	  $interval.cancel(promiseSite);
+	      }
+	      if(stopInterval == 'location'){
+	    	  $interval.cancel(promiseLocation);
 	      }
 	      if(stopInterval == 'checklist'){
 	    	  $interval.cancel(promiseChecklist);
