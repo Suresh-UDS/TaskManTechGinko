@@ -893,12 +893,18 @@ public class JobManagementService extends AbstractService {
 	}
 
 	//@Transactional(propagation=Propagation.REQUIRES_NEW)
-	public void saveScheduledJob(List<JobDTO> jobDTOs) {
+	public void saveScheduledJob(List<JobDTO> jobDTOs, long parentJobId, Employee emp, Site site) {
+		log.debug("Saving scheduled jobs for parent Id - "+ parentJobId);
+		Job parentJob = jobRepository.findOne(parentJobId);
+		Employee employee = getEmployee(emp.getId());
+		Site siteTmp = getSite(site.getId());
 		if(CollectionUtils.isNotEmpty(jobDTOs)) {
+			log.debug("Job Size - "+ jobDTOs.size());
 			List<Job> jobs = new ArrayList<Job>();
 			for(JobDTO jobDTO : jobDTOs) {
 				Job job = new Job();
-
+				job.setEmployee(employee);
+				job.setSite(siteTmp);
 				mapToEntity(jobDTO, job);
 
 				if(job.getStatus() == null) {
@@ -906,11 +912,13 @@ public class JobManagementService extends AbstractService {
 				}
 
 				if(jobDTO.getParentJobId()>0){
-				    Job parentJob = jobRepository.findOne(jobDTO.getParentJobId());
+				    //parentJob = jobRepository.findOne(jobDTO.getParentJobId());
 				    job.setParentJob(parentJob);
 		        }
 				jobs.add(job);
+				log.debug("Creating job entities");
 			}
+			log.debug("Saving jobs ");
 			jobRepository.save(jobs);
 		}
 	}
@@ -1266,12 +1274,30 @@ public class JobManagementService extends AbstractService {
 	}
 
 	private void mapToEntity(JobDTO jobDTO, Job job) {
-		Employee employee = getEmployee(jobDTO.getEmployeeId());
-		Site site = getSite(jobDTO.getSiteId());
-		Location location = getLocation(jobDTO.getLocationId());
-		Asset asset = assetRepository.findOne(jobDTO.getAssetId());
-
-		Ticket ticket = getTicket(jobDTO.getTicketId());
+		Employee employee = null;
+		if(job.getEmployee() == null) {
+			employee = getEmployee(jobDTO.getEmployeeId());
+		}else {
+			employee = job.getEmployee();
+		}
+		Site site = null;
+		if(job.getSite() == null) {
+			site = getSite(jobDTO.getSiteId());
+		}else {
+			site = job.getSite();
+		}
+		Location location = null;
+		if(jobDTO.getLocationId() > 0) {
+			location = getLocation(jobDTO.getLocationId());
+		}
+		Asset asset = null;
+		if(jobDTO.getAssetId() > 0) {
+			asset = assetRepository.findOne(jobDTO.getAssetId());
+		}
+		Ticket ticket = null;
+		if(jobDTO.getTicketId() > 0) {
+			ticket = getTicket(jobDTO.getTicketId());
+		}
 		//update ticket status
 		if(ticket != null) {
 			ticket.setStatus(TicketStatus.INPROGRESS.toValue());
@@ -1364,21 +1390,21 @@ public class JobManagementService extends AbstractService {
 //				JobChecklist checklist = mapperUtil.toEntity(jobclDto, JobChecklist.class);
 				JobChecklist checklist = mapToChecklistEntity(jobclDto);
 				if(checklist.getImage_1() != null) {
-					long jobId = checklist.getJob().getId();
+					long jobId = job.getId();
 					String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_1(), checklist.getChecklistItemName(), jobId, "image_1");
 					String Imageurl_1 = cloudFrontUrl + bucketEnv + checkListpath + fileName;
 					checklist.setImage_1(fileName);
 					jobclDto.setImageUrl_1(Imageurl_1);
 				}
 				if(checklist.getImage_2() != null) {
-					long jobId = checklist.getJob().getId();
+                    long jobId = job.getId();
 					String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_2(), checklist.getChecklistItemName(), jobId, "image_2");
 					String Imageurl_2 = cloudFrontUrl + bucketEnv + checkListpath + fileName;
 					checklist.setImage_2(fileName);
 					jobclDto.setImageUrl_2(Imageurl_2);
 				}
 				if(checklist.getImage_3() != null) {
-					long jobId = checklist.getJob().getId();
+                    long jobId = job.getId();
 					String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_3(), checklist.getChecklistItemName(), jobId, "image_3");
 					String Imageurl_3 = cloudFrontUrl + bucketEnv + checkListpath + fileName;
 					checklist.setImage_3(fileName);
