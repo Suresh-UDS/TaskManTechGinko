@@ -2378,13 +2378,14 @@ angular.module('timeSheetApp')
                 AssetTypeComponent.create($scope.assetType).then(function (response) {
                     //console.log(response);
                     if(response.data.status && response.data.status === "400") {
-                    	$scope.loadingStop();
+                    	
                     	$scope.showNotifications('top','center','danger','Asset type already exists.');
                     }else{
                     	  $scope.assetType = "";
                           $scope.showNotifications('top','center','success','Asset type has been added Successfully!!');
                           $scope.loadAssetType();
                     }
+                    $scope.loadingStop();
 
                 }).catch(function(){
                  $scope.loadingStop();
@@ -2409,13 +2410,14 @@ angular.module('timeSheetApp')
                 AssetComponent.createAssetGroup($scope.assetGroup).then(function (response) {
                     //console.log(response);
                     if(response.data.status && response.data.status === "400") {
-                    	$scope.loadingStop();
+                    	
                     	$scope.showNotifications('top','center','danger','Asset Group already exists.');
                     }else{
                     	  $scope.assetGroup = "";
                           $scope.showNotifications('top','center','success','Asset Group has been added Successfully!!');
                           $scope.loadAssetGroup();
                     }
+                    $scope.loadingStop();
 
                 }).catch(function(){
                 $scope.loadingStop();
