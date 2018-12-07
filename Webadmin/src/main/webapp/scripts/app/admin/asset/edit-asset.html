@@ -91,7 +91,7 @@
                                                                                        ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
                                                                                        required tabindex="1" />
 
-                                                                                <div ng-show="form.$submitted || form.assetName.$touched">
+                                                                                <div ng-show="form.$submitted || form.assetName.$touched || form.assetName.$dirty">
                                                                                     <div ng-show="form.assetName.$dirty || form.assetName.$invalid">
                                                                                         <p class="help-block" style="color:maroon"
                                                                                            ng-show="form.assetName.$error.required">
@@ -126,7 +126,7 @@
                                                                                         <select class="form-control" ng-model="selectedAssetType" ng-options="assetype as (assetype.name | uppercase) for assetype in assetTypes track by assetype.name" name="assetTypeName" required tabindex="3">
                                                                                          <option value="">Select Asset Type ..</option>
                                                                                         </select>
-                                                                                        <div ng-show="form.$submitted || form.assetTypeName.$touched">
+                                                                                        <div ng-show="form.$submitted || form.assetTypeName.$touched || form.assetTypeName.$dirty">
                                                                                             <div ng-show="form.assetTypeName.$dirty || form.assetTypeName.$invalid">
                                                                                                 <p class="help-block" style="color:maroon"
                                                                                                    ng-show="form.assetTypeName.$error.required">
@@ -195,7 +195,7 @@
                                                                                 <select class="form-control" ng-model="selectedAssetStatus" name="AssetStatus" ng-options="(status | uppercase) for status in statuses track by status" required tabindex="8">
                                                                                     <option value="">Select Status ..</option>
                                                                                 </select>
-                                                                                <div ng-show="form.$submitted || form.AssetStatus.$touched">
+                                                                                <div ng-show="form.$submitted || form.AssetStatus.$touched || form.AssetStatus.$dirty">
                                                                                      <div ng-show="form.AssetStatus.$dirty || form.AssetStatus.$invalid">
                                                                                      <p class="help-block" style="color: maroon"
                                                                                         ng-show="form.AssetStatus.$error.required">Status is
@@ -229,7 +229,7 @@
                                                                                             <option value="">Select Client ...</option>
                                                                                         </select>
 
-                                                                                        <div ng-show="form.$submitted || form.AssetClient.$touched">
+                                                                                        <div ng-show="form.$submitted || form.AssetClient.$touched || form.AssetClient.$dirty">
                                                                                          <div ng-show="form.AssetClient.$dirty || form.AssetClient.$invalid">
                                                                                              <p class="help-block" style="color: maroon"
                                                                                                 ng-show="form.AssetClient.$error.required">Client is
@@ -253,7 +253,7 @@
                                                                                             <option value="">Select Site ...</option>
                                                                                         </select>
 
-                                                                                        <div ng-show="form.$submitted || form.AssetSite.$touched">
+                                                                                        <div ng-show="form.$submitted || form.AssetSite.$touched || form.AssetSite.$dirty">
                                                                                          <div ng-show="form.AssetSite.$dirty || form.AssetSite.$invalid">
                                                                                              <p class="help-block" style="color: maroon"
                                                                                                 ng-show="form.AssetSite.$error.required">Site is
@@ -363,7 +363,7 @@
                                                                                                ng-pattern="/^[A-Za-z0-9\s]*$/"
                                                                                                autofocus
                                                                                                tabindex="10"  />
-                                                                                        <div ng-show="form.$submitted || form.assetModel.$touched">
+                                                                                        <div ng-show="form.$submitted || form.assetModel.$touched || form.assetModel.$dirty">
                                                                                             <div ng-show="form.assetModel.$dirty || form.assetModel.$invalid">
 
                                                                                                 <p class="help-block" style="color:maroon"
@@ -392,7 +392,7 @@
                                                                                            autofocus
                                                                                            tabindex="11" />
                                                                                              <!-- ng-pattern="/^[A-Za-z0-9\s]*$/" -->
-                                                                                   <div ng-show="form.$submitted || form.assetSerial.$touched">
+                                                                                   <div ng-show="form.$submitted || form.assetSerial.$touched || form.assetSerial.$dirty">
                                                                                             <div ng-show="form.assetSerial.$dirty || form.assetSerial.$invalid">
 
                                                                                                 <p class="help-block" style="color:maroon"
@@ -426,7 +426,7 @@
                                                                                        type='text' value=""
                                                                                        autofocus ng-pattern="/^[0-9]/" tabindex="13"
                                                                                         />
-                                                                                   <div ng-show="form.$submitted || form.assetPurchase.$touched">
+                                                                                   <div ng-show="form.$submitted || form.assetPurchase.$touched || form.assetPurchase.$dirty">
                                                                                         <div ng-show="form.assetPurchase.$dirty || form.assetPurchase.$invalid">
 
                                                                                             <p class="help-block" style="color:maroon"
@@ -449,7 +449,7 @@
                                                                                        type='text' value=""
                                                                                        autofocus ng-pattern="/^[0-9]/"
                                                                                        required tabindex="14" />
-                                                                                    <div ng-show="form.$submitted || form.assetCurrent.$touched">
+                                                                                    <div ng-show="form.$submitted || form.assetCurrent.$touched || form.assetCurrent.$dirty">
                                                                                         <div ng-show="form.assetCurrent.$dirty || form.assetCurrent.$invalid">
 
                                                                                             <p class="help-block" style="color:maroon"
@@ -578,7 +578,7 @@
                                                                                            type='text' value=""
                                                                                            autofocus
                                                                                             />
-                                                                                    <div ng-show="form.$submitted || form.assetModel.$touched">
+                                                                                    <div ng-show="form.$submitted || form.assetModel.$touched || form.assetModel.$dirty">
                                                                                         <div ng-show="form.assetModel.$dirty || form.assetModel.$invalid">
                                                                                             <p class="help-block" style="color:maroon"
                                                                                                ng-show="form.assetModel.$error.required">
@@ -737,7 +737,7 @@
 
 
 
-                                                                        <div ng-show="form2.$submitted || form2.assetcode.$touched">
+                                                                        <div ng-show="form2.$submitted || form2.assetcode.$touched || form2.assetcode.$dirty">
                                                                             <div ng-show="form2.assetcode.$dirty || form2.assetcode.$invalid">
                                                                                 <p class="help-block" style="color:maroon"
                                                                                    ng-show="form2.assetcode.$error.required">
@@ -1000,7 +1000,7 @@
                                                                                    ng-maxlength='250'
                                                                                     autofocus
                                                                            ng-required="true" />
-                                                                            <div ng-show="form3.$submitted || form3.ppmTitle.$touched">
+                                                                            <div ng-show="form3.$submitted || form3.ppmTitle.$touched || form3.ppmTitle.$dirty">
                                                                                 <div
                                                                                     ng-show="form3.ppmTitle.$dirty || form3.ppmTitle.$invalid">
                                                                                     <p class="help-block" style="color:maroon"
@@ -1037,7 +1037,7 @@
                                                                             <label class="control-label">From Date<span class="red-star">*</span></label>
                                                                             <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
                                                                             <input  type="text" class="form-control datepicker"  id="dateFilterPpmFrom"  ng-model="ppmFrom" placeholder="{{dateFilterPpmFrom | date:'dd-MMM-yyyy'}}" autocomplete="off"  name="PpmFrom" required />
-                                                                            <div ng-show="form3.$submitted || form3.PpmFrom.$touched">
+                                                                            <div ng-show="form3.$submitted || form3.PpmFrom.$touched || form3.PpmFrom.$dirty">
                                                                                 <div
                                                                                     ng-show="form3.PpmFrom.$dirty || form3.PpmFrom.$invalid">
                                                                                     <p class="help-block" style="width:100%;color:maroon"
@@ -1057,7 +1057,7 @@
                                                                             <label class="control-label">To Date<span class="red-star">*</span></label>
                                                                             <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
                                                                             <input type="text" class="form-control datepicker"  id="dateFilterPpmTo" ng-model="ppmTo"  placeholder="{{dateFilterPpmTo | date:'dd-MMM-yyyy'}}" autocomplete="off"  name ="PpmTo" required />
-                                                                            <div ng-show="form3.$submitted || form3.PpmTo.$touched">
+                                                                            <div ng-show="form3.$submitted || form3.PpmTo.$touched || form3.PpmTo.$dirty">
                                                                                 <div
                                                                                     ng-show="form3.PpmTo.$dirty || form3.PpmTo.$invalid">
                                                                                     <p class="help-block" style="width:100%;color:maroon"
@@ -1086,7 +1086,7 @@
                                                                                     <option value="">Select Employees...</option>
                                                                                 </select>
 
-                                                                                <div ng-show="form3.$submitted || form3.employeeName.$touched">
+                                                                                <div ng-show="form3.$submitted || form3.employeeName.$touched || form3.employeeName.$dirty">
                                                                                     <div
                                                                                         ng-show="form3.employeeName.$dirty || form3.employeeName.$invalid">
                                                                                         <p class="help-block" style="color:maroon"
@@ -1116,7 +1116,7 @@
                                                                                 <select class="form-control" ng-model="selectedFrequency" ng-options="(frequencyPrefix | uppercase) for frequencyPrefix in frequencyPrefixies" name="ppmFreq" required>
                                                                                 <option value="">Select..</option>
                                                                                 </select>
-                                                                                <div ng-show="form3.$submitted || form3.ppmFreq.$touched">
+                                                                                <div ng-show="form3.$submitted || form3.ppmFreq.$touched || form3.ppmFreq.$dirty">
                                                                                 <div
                                                                                     ng-show="form3.ppmFreq.$dirty || form3.ppmFreq.$invalid">
                                                                                     <p class="help-block" style="width:100%;color:maroon"
@@ -1140,7 +1140,7 @@
                                                                             <select class="form-control" ng-model="selectedTimeInterval" ng-options="(frequencyDuration | uppercase) for frequencyDuration in frequencyDurations" name="ppmDur" required>
                                                                                     <option value="">selected..</option>
                                                                             </select>
-                                                                            <div ng-show="form3.$submitted || form3.ppmDur.$touched">
+                                                                            <div ng-show="form3.$submitted || form3.ppmDur.$touched || form3.ppmDur.$dirty">
                                                                                 <div
                                                                                     ng-show="form3.ppmDur.$dirty || form3.ppmDur.$invalid">
                                                                                     <p class="help-block" style="width:100%;color:maroon"
@@ -1163,7 +1163,7 @@
                                                                             <select class="form-control" ng-model="selectedFrequnceyOccurrence" ng-options="(frequency | uppercase) for frequency in frequencies" name="ppmDurPer" required>
                                                                                     <option value="">select..</option>
                                                                             </select>
-                                                                            <div ng-show="form3.$submitted || form3.ppmDurPer.$touched">
+                                                                            <div ng-show="form3.$submitted || form3.ppmDurPer.$touched || form3.ppmDurPer.$dirty">
                                                                                 <div
                                                                                     ng-show="form3.ppmDurPer.$dirty || form3.ppmDurPer.$invalid">
                                                                                     <p class="help-block" style="width:100%;color:maroon"
@@ -1186,7 +1186,7 @@
 
 						                                                    <input type="text" class="form-control timepicker padng-right10"  id="ppmJobStartTime"  ng-model="ppmJobStartTime" autocomplete="off" name="ppmJobStartTime" ng-required="true" placeholder="{{ppmJobStartTime | date:'hh:mm a'}}" />
 
-																		   <div ng-show="form3.$submitted || form3.ppmJobStartTime.$touched">
+																		   <div ng-show="form3.$submitted || form3.ppmJobStartTime.$touched || form3.ppmJobStartTime.$dirty">
                                                                                 <div
                                                                                     ng-show="form3.ppmJobStartTime.$dirty || form3.ppmJobStartTime.$invalid">
                                                                                     <p class="help-block" style="color:maroon"
@@ -1213,7 +1213,7 @@
 						                                                        ng-required="true"
 						                                                    />
 
-						                                                    <div ng-show="form3.$submitted || form3.plannedHours.$touched">
+						                                                    <div ng-show="form3.$submitted || form3.plannedHours.$touched || form3.plannedHours.$dirty">
 						                                                        <div
 						                                                            ng-show="form3.plannedHours.$dirty || form3.plannedHours.$invalid">
 						                                                            <p class="help-block" style="color:maroon"
@@ -1311,7 +1311,7 @@
                                                                             <option value="amc" >AMC</option>
                                                                             <option value="dlp" >DLP</option>
                                                                         </select>
-                                                                        <div ng-show="form4.$submitted || form4.maintenanceType.$touched">
+                                                                        <div ng-show="form4.$submitted || form4.maintenanceType.$touched || form4.maintenanceType.$dirty">
                                                                             <div
                                                                                 ng-show="form4.maintenanceType.$dirty || form4.maintenanceType.$invalid">
                                                                                 <p class="help-block" style="color:maroon"
@@ -1337,7 +1337,7 @@
                                                                                ng-maxlength='250' autofocus
                                                                        required />
 
-                                                                        <div ng-show="form4.$submitted || form4.amcTitle.$touched">
+                                                                        <div ng-show="form4.$submitted || form4.amcTitle.$touched || form4.amcTitle.$dirty">
                                                                             <div ng-show="form4.amcTitle.$dirty || form4.amcTitle.$invalid">
                                                                                 <p class="help-block" style="color:maroon"
                                                                                    ng-show="form4.amcTitle.$error.required">
@@ -1371,7 +1371,7 @@
                                                                         <label class="control-label">From Date<span class="red-star">*</span></label>
                                                                         <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
                                                                         <input type="text" class="form-control datepicker"  id="dateFilterAmcFrom" ng-model="amcFrom" name="AmcFrom" placeholder="{{dateFilterAmcFrom | date:'dd-MMM-yyyy'}}" autocomplete="off"required />
-                                                                        <div ng-show="form4.$submitted || form4.AmcFrom.$touched">
+                                                                        <div ng-show="form4.$submitted || form4.AmcFrom.$touched || form4.AmcFrom.$dirty">
                                                                             <div
                                                                                 ng-show="form4.AmcFrom.$dirty || form4.AmcFrom.$invalid">
                                                                                 <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
@@ -1391,7 +1391,7 @@
                                                                         <label class="control-label">To Date<span class="red-star">*</span></label>
                                                                         <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
                                                                         <input type="text" class="form-control datepicker"  id="dateFilterAmcTo"  ng-model="amcTo" name="AmcTo" placeholder="{{dateFilterAmcTo | date:'dd-MMM-yyyy'}}" autocomplete="off" required />
-                                                                        <div ng-show="form4.$submitted || form4.AmcTo.$touched">
+                                                                        <div ng-show="form4.$submitted || form4.AmcTo.$touched || form4.AmcTo.$dirty">
                                                                             <div
                                                                                 ng-show="form4.AmcTo.$dirty || form4.AmcTo.$invalid">
                                                                                 <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
@@ -1419,7 +1419,7 @@
                                                                                 <option value="">Select Employees...</option>
                                                                             </select>
 
-                                                                            <div ng-show="form4.$submitted || form4.employeeName.$touched">
+                                                                            <div ng-show="form4.$submitted || form4.employeeName.$touched || form4.employeeName.$dirty">
                                                                                 <div
                                                                                     ng-show="form4.employeeName.$dirty || form4.employeeName.$invalid">
                                                                                     <p class="help-block" style="color:maroon"
@@ -1448,7 +1448,7 @@
                                                                             <select class="form-control" ng-model="selectedFrequencyPrefix" ng-options="(frequencyPrefix | uppercase) for frequencyPrefix in frequencyPrefixies" name="amcFreq" required>
                                                                                 <option value="">Select..</option>
                                                                             </select>
-                                                                            <div ng-show="form4.$submitted || form4.amcFreq.$touched">
+                                                                            <div ng-show="form4.$submitted || form4.amcFreq.$touched || form4.amcFreq.$dirty">
                                                                                 <div
                                                                                     ng-show="form4.amcFreq.$dirty || form4.amcFreq.$invalid">
                                                                                     <p class="help-block" style="width:100%;color:maroon"
@@ -1471,7 +1471,7 @@
                                                                         <select class="form-control" ng-model="selectedFreqDuration" ng-options="(frequencyDuration | uppercase) for frequencyDuration in frequencyDurations"  name="amcDur" required>
                                                                             <option value="">selected..</option>
                                                                         </select>
-                                                                        <div ng-show="form4.$submitted || form4.amcDur.$touched">
+                                                                        <div ng-show="form4.$submitted || form4.amcDur.$touched || form4.amcDur.$dirty">
                                                                                 <div
                                                                                     ng-show="form4.amcDur.$dirty || form4.amcDur.$invalid">
                                                                                     <p class="help-block" style="width:100%;color:maroon"
@@ -1493,7 +1493,7 @@
                                                                         <select class="form-control" ng-model="selectedFrequency" ng-options="(frequency | uppercase) for frequency in frequencies" name="amcDurPer" required>
                                                                             <option value="">select..</option>
                                                                         </select>
-                                                                        <div ng-show="form4.$submitted || form4.amcDurPer.$touched">
+                                                                        <div ng-show="form4.$submitted || form4.amcDurPer.$touched || form4.amcDurPer.$dirty">
                                                                                 <div
                                                                                     ng-show="form4.amcDurPer.$dirty || form4.amcDurPer.$invalid">
                                                                                     <p class="help-block" style="width:100%;color:maroon"
@@ -1515,7 +1515,7 @@
 
                                                                         <input type="text" class="form-control timepicker padng-right10"  id="amcJobStartTime"  name="amcJobStartTime" ng-model="amcJobStartTime" placeholder="{{amcJobStartTime | date:'hh:mm a'}}" autocomplete="off" required/>
 
-                                                                        <div ng-show="form4.$submitted || form4.amcJobStartTime.$touched">
+                                                                        <div ng-show="form4.$submitted || form4.amcJobStartTime.$touched || form4.amcJobStartTime.$dirty">
                                                                             <div
                                                                                 ng-show="form4.amcJobStartTime.$dirty || form4.amcJobStartTime.$invalid">
                                                                                 <p class="help-block" style="color:maroon"
@@ -1542,7 +1542,7 @@
                                                                             required
                                                                         />
 
-                                                                        <div ng-show="form3.$submitted || form3.plannedHours.$touched">
+                                                                        <div ng-show="form3.$submitted || form3.plannedHours.$touched || form3.plannedHours.$dirty">
                                                                             <div
                                                                                 ng-show="form3.plannedHours.$dirty || form3.plannedHours.$invalid">
                                                                                 <p class="help-block" style="color:maroon"
@@ -1649,7 +1649,7 @@
                                                                                     <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameter" name="param" ng-options="parameter as (parameter.name | uppercase) for parameter in parameters track by parameter.name"  aria-invalid="false" required>
                                                                                     <option value="" class="" selected="selected">Select Parameter ..</option>
                                                                                     </select>
-                                                                                    <div ng-show="form6.$submitted || form6.param.$touched">
+                                                                                    <div ng-show="form6.$submitted || form6.param.$touched || form6.param.$dirty">
                                                                                         <div ng-show="form6.param.$dirty || form6.param.$invalid">
                                                                                             <p class="help-block" style="color:maroon"
                                                                                                ng-show="form6.param.$error.required">
@@ -1686,7 +1686,7 @@
                                                                                     <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameterUOM" name="paramUOM"  ng-options="parameterUOM as (parameterUOM.uom | uppercase) for parameterUOM in parameterUOMs track by parameterUOM.uom"  aria-invalid="false" required>
                                                                                     <option value="" class="" selected="selected">Select Units ..</option>
                                                                                     </select>
-                                                                                    <div ng-show="form6.$submitted || form6.paramUOM.$touched">
+                                                                                    <div ng-show="form6.$submitted || form6.paramUOM.$touched || form6.paramUOM.$dirty">
                                                                                         <div ng-show="form6.paramUOM.$dirty || form6.paramUOM.$invalid">
                                                                                             <p class="help-block" style="color:maroon"
                                                                                                ng-show="form6.paramUOM.$error.required">
@@ -1998,7 +1998,7 @@
                                                                                        type='text' value=""
                                                                                         autofocus required
                                                                                 />
-                                                                                <div ng-show="importClientForm.$submitted || importClientForm.fileTitle.$touched">
+                                                                                <div ng-show="importClientForm.$submitted || importClientForm.fileTitle.$touched || importClientForm.fileTitle.$dirty">
                                                                                     <div
                                                                                         ng-show="importClientForm.fileTitle.$dirty || importClientForm.fileTitle.$invalid">
                                                                                         <p class="help-block" style="color:maroon"
@@ -2015,7 +2015,7 @@
                                                                             <div class="form-group label-floating is-empty is-fileinput row">
                                                                                 <div class="col-md-6 pdng-top13">
                                                                                     <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile"  aria-invalid="false" required onchange="angular.element(this).scope().uploadfileValidation(this.files)">
-                                                                                    <div ng-show="importClientForm.$submitted || importClientForm.clientFile.$touched">
+                                                                                    <div ng-show="importClientForm.$submitted || importClientForm.clientFile.$touched || importClientForm.clientFile.$dirty">
                                                                                         <div
                                                                                             ng-show="importClientForm.clientFile.$dirty || importClientForm.clientFile.$invalid">
                                                                                             <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
@@ -2071,7 +2071,7 @@
                                                                                        autofocus required
                                                                                />
 
-                                                                                <div ng-show="importClientForm1.$submitted || importClientForm1.photoTitle.$touched">
+                                                                                <div ng-show="importClientForm1.$submitted || importClientForm1.photoTitle.$touched || importClientForm1.photoTitle.$dirty">
                                                                                     <div
                                                                                         ng-show="importClientForm1.photoTitle.$dirty || importClientForm1.photoTitle.$invalid">
                                                                                         <p class="help-block" style="color:maroon"
@@ -2093,7 +2093,7 @@
                                                                            <div class="form-group label-floating is-empty is-fileinput row">
                                                                                <div class="col-md-6 pdng-top13">
                                                                                    <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedPhotoFile" name="clientFile1"  aria-invalid="false" required onchange="angular.element(this).scope().uploadImage(this.files)">
-                                                                                   <div ng-show="importClientForm1.$submitted || importClientForm1.clientFile1.$touched">
+                                                                                   <div ng-show="importClientForm1.$submitted || importClientForm1.clientFile1.$touched || importClientForm1.clientFile1.$dirty">
                                                                                         <div
                                                                                             ng-show="importClientForm1.clientFile1.$dirty || importClientForm1.clientFile1.$invalid">
                                                                                             <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
@@ -2340,11 +2340,11 @@
 
                 <form name="addAssetTypeForm">
                     <div class="row">
-                        <div class="col-md-12 txt-align-center">
+                        <div class="col-md-12">
                             <input class="" id="addAssetTypeInput" ng-model="assetType.name"   name="AssetType" type="text" value="" ng-required="true" ng-maxlength='250'
                             ng-pattern="/^[A-Za-z0-9\s]*$/"
                             />
-                             <div ng-show="addAssetTypeForm.$submitted || addAssetTypeForm.AssetType.$touched">
+                             <div ng-show="addAssetTypeForm.$submitted || addAssetTypeForm.AssetType.$touched || addAssetTypeForm.AssetType.$dirty">
                                 <div ng-show="addAssetTypeForm.AssetType.$dirty || addAssetTypeForm.AssetType.$invalid">
                                     <p class="help-block" style="color:maroon"
                                        ng-show="form.AssetType.$error.required">
@@ -2360,6 +2360,10 @@
                                     </p>
                                 </div>
                             </div>
+                         </div>
+                   </div>
+                   <div class="row">
+                        <div class="col-md-12 txt-align-center">
                             <input type="submit" ng-click="addAssetType()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addAssetTypeForm.$invalid">
                         </div>
                     </div>
@@ -2387,10 +2391,10 @@
 
                 <form name="addGroupForm">
                     <div class="row">
-                        <div class="col-md-12 txt-align-center">
+                        <div class="col-md-12">
                             <input class="" id="assetgroupName" ng-model="assetGroup.assetgroup"   name="assetgroupName" type="text" value="" ng-required="true" ng-maxlength='250'
                             ng-pattern="/^[A-Za-z0-9\s]*$/" />
-                            <div ng-show="addGroupForm.$submitted || addGroupForm.assetgroupName.$touched">
+                            <div ng-show="addGroupForm.$submitted || addGroupForm.assetgroupName.$touched || addGroupForm.assetgroupName.$dirty">
                                 <div ng-show="addGroupForm.assetgroupName.$dirty || addGroupForm.assetgroupName.$invalid">
                                     <p class="help-block" style="color:maroon"
                                        ng-show="addGroupForm.assetgroupName.$error.required">
@@ -2406,6 +2410,10 @@
                                     </p>
                                 </div>
                             </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12 txt-align-center">
                             <input type="submit" ng-click="addAssetGroup()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addGroupForm.$invalid">
                         </div>
                     </div>
@@ -2433,10 +2441,10 @@
 
                 <form name="addManufacturerForm">
                     <div class="row">
-                        <div class="col-md-12 txt-align-center">
+                        <div class="col-md-12">
                             <input class="" id="assetManufacturerName" ng-model="manufacturer.name"   name="assetManufacturerName" type="text" ng-maxlength='250'
                             ng-pattern="/^[A-Za-z0-9\s]*$/" ng-required="true"/>
-                            <div ng-show="addManufacturerForm.$submitted || addManufacturerForm.assetManufacturerName.$touched">
+                            <div ng-show="addManufacturerForm.$submitted || addManufacturerForm.assetManufacturerName.$touched || addManufacturerForm.assetManufacturerName.$dirty">
                                 <div ng-show="addManufacturerForm.assetManufacturerName.$dirty || addManufacturerForm.assetManufacturerName.$invalid">
                                     <p class="help-block" style="color:maroon"
                                        ng-show="addManufacturerForm.assetManufacturerName.$error.required">
@@ -2452,6 +2460,10 @@
                                     </p>
                                 </div>
                             </div>
+                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 txt-align-center">
                             <input type="submit" ng-click="addManufacturer()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addManufacturerForm.$invalid">
                         </div>
                     </div>
@@ -2479,7 +2491,7 @@
                 <div class="row">
                 <div class="col-md-9">
                     <input class="input-desc" id="assetProvider" ng-model="Provider.name"   name="assetProvider" type="text" ng-maxlength='250' ng-pattern="/^[A-Za-z0-9\s]*$/" />
-                    <div ng-show="addProviderForm.$submitted || addProviderForm.assetProvider.$touched">
+                    <div ng-show="addProviderForm.$submitted || addProviderForm.assetProvider.$touched || addProviderForm.assetProvider.$dirty">
                         <div ng-show="addProviderForm.assetProvider.$dirty || addProviderForm.assetProvider.$invalid">
                             <p class="help-block" style="color:maroon"
                                ng-show="addProviderForm.assetProvider.$error.required">
@@ -2521,9 +2533,9 @@
             <div class="modal-body">
                 <form name="addWarrantyForm">
                     <div class="row">
-                        <div class="col-md-12 txt-align-center">
+                        <div class="col-md-12">
                             <input class="" id="assetWarranty" ng-model="Warranty.name"   name="assetWarrantye" type="text"  ng-required="true" ng-maxlength='250' ng-pattern="/^[A-Za-z0-9\s]*$/" />
-                            <div ng-show="addWarrantyForm.$submitted || addWarrantyForm.assetWarrantye.$touched">
+                            <div ng-show="addWarrantyForm.$submitted || addWarrantyForm.assetWarrantye.$touched || addWarrantyForm.assetWarrantye.$dirty">
                                 <div ng-show="addWarrantyForm.assetWarrantye.$dirty || addWarrantyForm.assetWarrantye.$invalid">
                                     <p class="help-block" style="color:maroon"
                                        ng-show="addWarrantyForm.assetWarrantye.$error.required">
@@ -2539,6 +2551,10 @@
                                     </p>
                                 </div>
                             </div>
+                         </div>
+                     </div>
+                      <div class="row">
+                        <div class="col-md-12 txt-align-center">
                             <input type="submit" ng-click="addWarranty()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addWarrantyForm.$invalid">
                         </div>
                     </div>
@@ -2563,9 +2579,9 @@
 
                 <form name="addVendorForm">
                     <div class="row">
-                        <div class="col-md-12 txt-align-center">
+                        <div class="col-md-12">
                             <input class="" id="assetVendorName" ng-model="vendor.name"   name="assetVendorName" type="text" value="" ng-required="true" ng-maxlength='250' ng-pattern="/^[A-Za-z0-9\s]*$/" />
-                            <div ng-show="addVendorForm.$submitted || addVendorForm.assetVendorName.$touched">
+                            <div ng-show="addVendorForm.$submitted || addVendorForm.assetVendorName.$touched || addVendorForm.assetVendorName.$dirty">
                                 <div ng-show="addVendorForm.assetVendorName.$dirty || addVendorForm.assetVendorName.$invalid">
                                     <p class="help-block" style="color:maroon"
                                        ng-show="addVendorForm.assetVendorName.$error.required">
@@ -2581,6 +2597,10 @@
                                     </p>
                                 </div>
                             </div>
+                        </div>
+                     </div>
+                     <div class="row">
+                        <div class="col-md-12 txt-align-center">
                             <input type="submit" ng-click="addVendor()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addVendorForm.$invalid">
                         </div>
                     </div>
@@ -2606,9 +2626,9 @@
 
                 <form name="addParametForm">
                     <div class="row">
-                        <div class="col-md-12 txt-align-center">
+                        <div class="col-md-12">
                             <input class="" id="addParametName" ng-model="parameter.name"   name="addParametName" type="text" value="" ng-required="true" ng-maxlength='250' ng-pattern="/^[A-Za-z0-9\s]*$/" />
-                            <div ng-show="addParametForm.$submitted || addParametForm.addParametName.$touched">
+                            <div ng-show="addParametForm.$submitted || addParametForm.addParametName.$touched || addParametForm.addParametName.$dirty">
                                 <div ng-show="addParametForm.addParametName.$dirty || addParametForm.addParametName.$invalid">
                                     <p class="help-block" style="color:maroon"
                                        ng-show="addVendorForm.addParametName.$error.required">
@@ -2624,6 +2644,10 @@
                                     </p>
                                 </div>
                             </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12 txt-align-center">
                             <input type="submit" ng-click="addParameter()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addParametForm.$invalid">
                         </div>
                     </div>
@@ -2649,9 +2673,9 @@
 
                 <form name="addUnitsForm">
                     <div class="row">
-                        <div class="col-md-12 txt-align-center">
+                        <div class="col-md-12">
                             <input class="" id="addUnitsName" ng-model="parameterUOM.uom"   name="addUnitsName" type="text" value="" ng-required="true" ng-maxlength='250' ng-pattern="/^[A-Za-z0-9\s]*$/" />
-                            <div ng-show="addUnitsForm.$submitted || addUnitsForm.addUnitsName.$touched">
+                            <div ng-show="addUnitsForm.$submitted || addUnitsForm.addUnitsName.$touched || addUnitsForm.addUnitsName.$dirty">
                                 <div ng-show="addUnitsForm.addUnitsName.$dirty || addUnitsForm.addUnitsName.$invalid">
                                     <p class="help-block" style="color:maroon"
                                        ng-show="addUnitsForm.addUnitsName.$error.required">
@@ -2667,6 +2691,10 @@
                                     </p>
                                 </div>
                             </div>
+                        </div>
+                     </div>
+                     <div class="row">
+                        <div class="col-md-12 txt-align-center">
                             <input type="submit" ng-click="addParameterUOM()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addUnitsForm.$invalid">
                         </div>
                     </div>
@@ -2692,9 +2720,9 @@
 
                 <form name="addChecklistForm">
                     <div class="row">
-                        <div class="col-md-12 txt-align-center">
+                        <div class="col-md-12">
                             <input class="" id="addChecklistName" ng-model="addChecklist.name"   name="addChecklistName" type="text" value="" ng-required="true" ng-maxlength='250' ng-pattern="/^[A-Za-z0-9\s]*$/" />
-                            <div ng-show="addChecklistForm.$submitted || addChecklistForm.addChecklistName.$touched">
+                            <div ng-show="addChecklistForm.$submitted || addChecklistForm.addChecklistName.$touched || addChecklistForm.addChecklistName.$dirty">
                                 <div ng-show="addChecklistForm.addChecklistName.$dirty || addChecklistForm.addChecklistName.$invalid">
                                     <p class="help-block" style="color:maroon"
                                        ng-show="addChecklistForm.addChecklistName.$error.required">
@@ -2710,6 +2738,10 @@
                                     </p>
                                 </div>
                             </div>
+                        </div>
+                      </div>
+                     <div class="row">
+                        <div class="col-md-12 txt-align-center">
                             <input type="submit" ng-click="addChecklist()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addChecklist.$invalid">
                         </div>
                     </div>
