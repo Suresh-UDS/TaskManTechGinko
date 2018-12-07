@@ -1218,14 +1218,8 @@ angular.module('timeSheetApp')
 
                     })
 
-                }else{
-                    $scope.showNotifications('top','center','danger','Please Select Region to continue...');
-
                 }
 
-
-            }else{
-                $scope.showNotifications('top','center','danger','Please select Project to continue...');
 
             }
 
@@ -1347,27 +1341,31 @@ angular.module('timeSheetApp')
                         name:$scope.clientRegion,
                         projectId:$scope.regionSelectedProject.id
                     };
-                    SiteComponent.addRegion(region).then(function (response) {
+                    SiteComponent.addRegion(region).then(function () {
 
+                         $scope.region = null;
 
-                       // //console.log(response);
-
-                        $scope.designation= null;
-                        $scope.showNotifications('top','center','success','Region Added Successfully');
-                        //$scope.loadRegions($scope.selectedProject.id);
+                        	$scope.showNotifications('top','center','success','Region Added Successfully');
+                            $scope.loadRegions($scope.regionSelectedProject.id);
+                        
+                        
                         $scope.btnDisable = false;
+                        $scope.clientRegion = null;
+                        $scope.regionSelectedProject = {};
                         $('.rModal.in').modal('hide');
 
                     }).catch(function (response) {
-                        if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
-                            $scope.errorEmployeeExists = true;
-                            $scope.errorMessage = response.data.description;
+                    	
+                        if (response.status === 400 && response.data.errorMessage === 'error.duplicateRecordError') {
+                        
                             $scope.showNotifications('top','center','danger', 'Region already exists!.. Please choose another one');
                         } else {
                             $scope.error = 'ERROR';
                             $scope.showNotifications('top','center','danger', 'Region Not Saved!.. Please try again later.');
                         }
                          $scope.btnDisable = false;
+                         $scope.clientRegion = null;
+                         $scope.regionSelectedProject = {};
                          $('.rModal.in').modal('hide');
                     });
                 }else{
@@ -1403,24 +1401,31 @@ angular.module('timeSheetApp')
                             projectId:$scope.branchSelectedProject.id,
                             regionId: $scope.selectedRegionOne.id
                         };
-                        SiteComponent.addBranch(branch).then(function (response) {
+                        SiteComponent.addBranch(branch).then(function () {
                             $scope.branch= null;
-                            $scope.showNotifications('top','center','success','Branch Added Successfully');
-                            //$scope.loadBranch($scope.selectedProject.id);
+                            
+                            	$scope.showNotifications('top','center','success','Branch Added Successfully');
+                                $scope.loadBranch($scope.branchSelectedProject.id);
+                     
                             $scope.btnDisable = false;
+                            $scope.regionBranch = null;
+                            $scope.selectedRegionOne = {};
+                            $scope.branchSelectedProject = {};
                             $('.bModal.in').modal('hide');
 
                         }).catch(function (response) {
                            
-                            if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
-                                $scope.errorEmployeeExists = true;
-                                $scope.errorMessage = response.data.description;
+                            if (response.status === 400 && response.data.errorMessage === 'error.duplicateRecordError') {
+                               
                                 $scope.showNotifications('top','center','danger', 'Branch already exists!.. Please choose another one');
                             } else {
                                 $scope.error = 'ERROR';
                                 $scope.showNotifications('top','center','danger', 'Branch Not Saved!.. Please try again later.');
                             }
                              $scope.btnDisable = false;
+                             $scope.regionBranch = null;
+                             $scope.selectedRegionOne = {};
+                             $scope.branchSelectedProject = {};
                              $('.bModal.in').modal('hide');
                         });
                     }else{
