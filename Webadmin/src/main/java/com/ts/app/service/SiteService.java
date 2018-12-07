@@ -14,7 +14,9 @@ import com.ts.app.domain.*;
 import com.ts.app.repository.*;
 import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -575,5 +577,24 @@ public class SiteService extends AbstractService {
 
     }
 
+    public boolean isDuplicate(RegionDTO regionDTO) {
+    	
+    	List<Long> results = regionRepository.findByRegion(regionDTO.getName(), regionDTO.getProjectId());
+        
+        if(!results.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean isDuplicate(BranchDTO branchDTO) {
+    	
+    	List<Branch> results = branchRepository.findBranchByProjectAndRegionId(branchDTO.getProjectId(), branchDTO.getRegionId(), branchDTO.getName());
+        
+        if(!results.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
 
 }

@@ -475,7 +475,7 @@ angular.module('timeSheetApp')
                     $scope.siteSpin = false;
                 })
 
-            }else if(projectId >0){
+            }/*else if(projectId >0){
                 $scope.siteFilterDisable = true;
                 $scope.siteSpin = true;
                 ProjectComponent.findSites(projectId).then(function (data) {
@@ -494,7 +494,7 @@ angular.module('timeSheetApp')
                 });
             }else{
 
-            }
+            }*/
         }
 
         $scope.employeeSearch = function () {
@@ -633,7 +633,6 @@ angular.module('timeSheetApp')
 	        	if($scope.searchBranch) {
 		        	$scope.searchCriteria.branchId = $scope.searchBranch.id;
                     $scope.searchCriteria.branch = $scope.searchBranch.name;
-
 	        	}else {
 	        		$scope.searchCriteria.branchId = null;
 	        		$scope.searchCriteria.branch = null;
@@ -1018,6 +1017,83 @@ angular.module('timeSheetApp')
             //alert(page);
             $scope.pages.currPage = page;
             $scope.search();
+        };
+        
+//Search Filter Site Load Function
+        
+        $scope.projectFilterFunction = function (searchProject){
+        	$scope.siteSpin = true;
+        	ProjectComponent.findSites(searchProject.id).then(function (data) {
+                  $scope.selectedSite = null;
+                  $scope.sitesList = data;
+                  $scope.sitesLists = [];
+                  $scope.sitesLists[0] = $scope.allSites;
+
+                  for(var i=0;i<$scope.sitesList.length;i++)
+                  {
+                      $scope.sitesLists[i+1] = $scope.sitesList[i];
+                  }
+                  $scope.siteFilterDisable = false;
+                  $scope.siteSpin = false;
+              });
+        	
+        };
+        
+      //Search Filter Region Load Function
+        
+        $scope.regionFilterFunction = function (searchProject){
+        	$scope.regionSpin = true;
+            SiteComponent.getRegionByProject(searchProject.id).then(function (response) {
+                //console.log(response);
+                $scope.regionList = response;
+                $scope.regionsLists = [];
+                //$scope.regionsListOne.selected = null;
+                $scope.regionsLists[0] = $scope.allRegions;
+
+                for(var i=0;i<$scope.regionList.length;i++)
+                {
+                    $scope.regionsLists[i+1] = $scope.regionList[i];
+                }
+
+                //console.log('region list : ' + JSON.stringify($scope.regionList));
+                $scope.regionSpin = false;
+                $scope.regionFilterDisable = false;
+                //callback();
+            });
+        };
+        
+        //Search Filter Branch Load Function
+        
+        $scope.branchFilterFunction = function (searchProject,searchRegion){
+        	$scope.branchSpin = true;
+            SiteComponent.getBranchByProject(searchProject.id,searchRegion.id).then(function (response) {
+                // //console.log('branch',response);
+                 $scope.branchList = response;
+                 if($scope.branchList) {
+                 	$scope.branchsLists = [];
+                    // $scope.branchsListOne.selected = null;
+                     $scope.branchsLists[0] = $scope.allBranchs;
+
+                     for(var i=0;i<$scope.branchList.length;i++)
+                     {
+                         $scope.branchsLists[i+1] = $scope.branchList[i];
+                     }
+                    /* if($scope.branchList) {
+                     		for(var i = 0; i < $scope.branchList.length; i++) {
+                     			$scope.uiBranch.push($scope.branchList[i].name);
+                     		}*/
+                 		$scope.branchSpin = false;
+                         $scope.branchFilterDisable = false;
+                 }
+                 else{
+                 	//console.log('branch list : ' + JSON.stringify($scope.branchList));
+                     $scope.getSitesBYRegionOrBranch($scope.searchProject.id,$scope.searchRegion.name,null);
+                     $scope.branchSpin = false;
+                     $scope.branchFilterDisable = false;
+                     //callback();
+                 }
+
+             })
         };
 
     });

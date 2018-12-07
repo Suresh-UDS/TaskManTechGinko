@@ -1214,6 +1214,15 @@ public class ExportUtil {
 //			dataRow.getCell(dayStartCell).setCellValue(presentCnt);
 			
 			int sumCount = dayStartCell;
+			if(daysInMonth == 30) {
+                sumCount = dayStartCell + 1;
+            }
+            if(daysInMonth == 29) {
+                sumCount = dayStartCell + 2;
+            }
+			if(daysInMonth == 28) {
+                sumCount = dayStartCell + 3;
+            }
 			int sumOffCount = offRow;
 			int sumTotCount = sumOffCount + 1;	
 			int designationWiseTotal = sumTotCount + 1;
