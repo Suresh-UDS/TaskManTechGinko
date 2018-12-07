@@ -72,22 +72,7 @@ public class TicketManagementResource {
 		TicketDTO response = ticketService.saveTicket(ticketDTO);
 
 		if (response != null) {
-		    try {
-                TicketStatusReport ticketStatusReport = new TicketStatusReport();
-                ticketStatusReport.setAssignedOn(response.getAssignedOn());
-                ticketStatusReport.setBranch(response.getBranch());
-                ticketStatusReport.setCategory(response.getCategory());
-                ticketStatusReport.setClosedOn(response.getClosedOn());
-                ticketStatusReport.setCreatedDate(response.getCreatedDate());
-                ticketStatusReport.setProjectId(response.getProjectId());
-                ticketStatusReport.setSiteId(response.getSiteId());
-                ticketStatusReport.setRegion(response.getRegion());
-                ticketStatusReport.setStatus(response.getStatus());
-                ticketStatusReport.setStatusCount(1);
-                reportDatabaseService.addNewTicketPoints(ticketStatusReport);
-            } catch (Exception e) {
-		        e.printStackTrace();
-            }
+
 		}
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}

@@ -113,23 +113,6 @@ public class JobManagementResource {
 			}
 		}
 		if(response != null && response.getId() > 0) {
-		    try {
-                JobStatusReport jobStatusReport = new JobStatusReport();
-                Date date = DateUtil.convertToSQLDate(response.getPlannedStartTime());
-                jobStatusReport.setJobCreatedDate(date);
-                jobStatusReport.setProjectId(Long.parseLong(response.getSiteProjectId()));
-                jobStatusReport.setSiteId(response.getSiteId());
-                jobStatusReport.setBranch("chennai");
-                jobStatusReport.setRegion("south-region");
-                jobStatusReport.setJobStatus(response.getJobStatus());
-                jobStatusReport.setJobType(response.getJobType());
-                jobStatusReport.setStatusCount(1);
-                log.debug("New Job report point" +jobStatusReport);
-                reportDatabaseService.addNewJobPoints(jobStatusReport);
-            } catch (Exception e) {
-		        e.printStackTrace();
-            }
-
 			return new ResponseEntity<>(response,HttpStatus.CREATED);
 		}else {
 			return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
