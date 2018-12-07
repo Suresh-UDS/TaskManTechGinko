@@ -21,11 +21,11 @@ angular.module('timeSheetApp')
                 });
             },
 
-            loadAttendanceReport: function (siteId,selectedDate,endDate) {
-                return $http.get('api/reports/attendance/site/'+siteId+'/selectedDate/'+selectedDate).then(function (response) {
-                    return response.data;
-                });
-            },
+            // loadAttendanceReport: function (siteId,selectedDate,endDate) {
+            //     return $http.get('api/reports/attendance/site/'+siteId+'/selectedDate/'+selectedDate).then(function (response) {
+            //         return response.data;
+            //     });
+            // },
 
             loadAllProjects: function(){
                 return $http.get('api/project').then(function(response){
@@ -77,6 +77,12 @@ angular.module('timeSheetApp')
                 return $http.get('api/reports/jobStatus/count').then(function (response) {
                     return response.data;
                 })
+            },
+
+            loadAttendanceReport : function (searchCriteria) {
+                return $http.post('api/reports/attendance/todayCount/',searchCriteria).then(function (response) {
+                    return response.data;
+                });
             }
         }
     })

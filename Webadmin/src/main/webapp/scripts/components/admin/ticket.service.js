@@ -107,8 +107,8 @@ angular.module('timeSheetApp')
             });
         },
 
-        getTicketsCountsByStatus : function () {
-            return $http.get('api/reports/tickets/todayCount').then(function (response) {
+        getTicketsCountsByStatus : function (searchCriteria) {
+            return $http.post('api/reports/tickets/todayCount', searchCriteria).then(function (response) {
                return response.data;
             });
         }

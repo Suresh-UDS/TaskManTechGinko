@@ -37,7 +37,7 @@ angular.module('timeSheetApp')
         };
     })
 
-    .controller('DashboardController', function ($timeout,$scope,$rootScope,$filter,DashboardComponent,JobComponent, $state,$http,$stateParams,$location,TicketComponent) {
+    .controller('DashboardController', function ($timeout,$scope,$rootScope,$filter,DashboardComponent,JobComponent, $state,$http,$stateParams,$location,TicketComponent,SiteComponent) {
         $rootScope.loginView = false;
 
         $scope.ready = false;
@@ -76,12 +76,12 @@ angular.module('timeSheetApp')
             $scope.loadAllProjects();
             $scope.loadAllSites();
             $scope.loadQuotationReport();
-            // $scope.loadJobReport();
+            $scope.loadJobReport();
             $scope.loadingStart();
             $scope.loadChartData();
-            $scope.loadJobReportFromInflux();
+            // $scope.loadJobReportFromInflux();
             $scope.loadTicketStatusFromInflux();
-            $scope.loadTicketStatusCounts();
+            // $scope.loadTicketStatusCounts();
 
             DashboardComponent.loadAllJobsByCategoryCnt().then(function (data) {
                 console.log("All jobs by category count " +JSON.stringify(data));
@@ -154,30 +154,34 @@ angular.module('timeSheetApp')
             $scope.startDate = new Date($scope.selectedFromDateSer);
             $scope.endDate =  new Date($scope.selectedToDateSer);
             // var last = new Date(date.getTime() - (days * 24 * 60 * 60 * 1000));
-            $scope.startDate = $scope.startDate.getDate()+'-0'+($scope.startDate.getUTCMonth()+1)+'-'+$scope.startDate.getFullYear();
-            $scope.endDate = $scope.endDate.getDate()+'-0'+($scope.endDate.getMonth()+1)+'-'+$scope.endDate.getFullYear();
-            console.log("Startdate---"+$scope.startDate);
-            console.log("EndDate---"+$scope.endDate);
-            $scope.selectedFromDateSer.setHours(0,0,0,0);
-            $scope.selectedToDateSer.setHours(23,59,59,0);
-            $scope.startDate = $scope.selectedFromDateSer.getDate() + '-' + ($scope.selectedFromDateSer.getMonth() +1) + '-' + $scope.selectedFromDateSer.getFullYear();
-            console.log("Startdate---"+$scope.startDate);
-            $scope.endDate = $scope.selectedToDateSer.getDate() + '-' + ($scope.selectedToDateSer.getMonth() +1) + '-' + $scope.selectedToDateSer.getFullYear();
-            console.log("EndDate---"+$scope.endDate);
+            // $scope.startDate = $scope.startDate.getDate()+'-0'+($scope.startDate.getUTCMonth()+1)+'-'+$scope.startDate.getFullYear();
+            // $scope.endDate = $scope.endDate.getDate()+'-0'+($scope.endDate.getMonth()+1)+'-'+$scope.endDate.getFullYear();
+            // console.log("Startdate---"+$scope.startDate);
+            // console.log("EndDate---"+$scope.endDate);
+            // $scope.selectedFromDateSer.setHours(0,0,0,0);
+            // $scope.selectedToDateSer.setHours(23,59,59,0);
+            // $scope.startDate = $scope.selectedFromDateSer.getDate() + '-' + ($scope.selectedFromDateSer.getMonth() +1) + '-' + $scope.selectedFromDateSer.getFullYear();
+            // console.log("Startdate---"+$scope.startDate);
+            // $scope.endDate = $scope.selectedToDateSer.getDate() + '-' + ($scope.selectedToDateSer.getMonth() +1) + '-' + $scope.selectedToDateSer.getFullYear();
+            // console.log("EndDate---"+$scope.endDate);
+
+            $scope.formatFromDate = $scope.selectedFromDateSer;
+            alert($scope.formatFromDate);
+            $scope.formatToDate =  $scope.selectedToDateSer;
 
             if(siteId){
 
-                $scope.loadChartDataBySiteId($scope.selectedSite.id,$scope.startDate,$scope.endDate);
+                $scope.loadChartDataBySiteId($scope.selectedSite.id,$scope.formatFromDate,$scope.formatToDate);
 
             }else if(region && branch){
-                $scope.loadChartDataByBranch(projectId,region,branch,$scope.startDate,$scope.endDate);
+                $scope.loadChartDataByBranch(projectId,region,branch,$scope.formatFromDate,$scope.formatToDate);
 
             }else if(region){
-                $scope.loadChartDataByRegion(projectId,region,$scope.startDate,$scope.endDate);
+                $scope.loadChartDataByRegion(projectId,region,$scope.formatFromDate,$scope.formatToDate);
 
             }else if(projectId){
 
-                $scope.loadChartDataByProjectId(projectId,$scope.startDate,$scope.endDate);
+                $scope.loadChartDataByProjectId(projectId,$scope.formatFromDate,$scope.formatToDate);
 
             }
 
@@ -185,13 +189,17 @@ angular.module('timeSheetApp')
 
         $scope.loadChartDataByProjectId = function(projectId,startDate,endDate){
         	$scope.loadingStart();
-            DashboardComponent.loadTicketChartDataByProject(projectId,startDate,endDate).then(function(response){
+            var searchCriteria = {};
+            searchCriteria.projectId = projectId;
+            searchCriteria.fromDate = startDate;
+            searchCriteria.toDate = endDate;
+            TicketComponent.getTicketsCountsByStatus(searchCriteria).then(function(response){
                 /*console.log("Dashboard ticket data_________");
                 console.log(response);
                 console.log(response.closedTicketCounts["0-3"]);
                 console.log(response.openTicketCounts);*/
-
-                $scope.constructChartData(response);
+                $scope.loadTicketCounts(response);
+                // $scope.constructChartData(response);
 
 
             });
@@ -199,13 +207,17 @@ angular.module('timeSheetApp')
 
         $scope.loadChartDataBySiteId = function(siteId,startDate,endDate){
         	$scope.loadingStart();
-            DashboardComponent.loadTicketChartData(siteId,startDate,endDate).then(function(response){
+        	var searchCriteria = {};
+            searchCriteria.siteId = siteId;
+            searchCriteria.fromDate = startDate;
+            searchCriteria.toDate = endDate;
+            TicketComponent.getTicketsCountsByStatus(searchCriteria).then(function(response){
                 /*console.log("Dashboard ticket data_________");
                 console.log(response);
                 console.log(response.closedTicketCounts["0-3"]);
                 console.log(response.openTicketCounts);*/
-
-                $scope.constructChartData(response);
+                $scope.loadTicketCounts(response);
+                // $scope.constructChartData(response);
 
 
             });
@@ -213,29 +225,56 @@ angular.module('timeSheetApp')
 
         $scope.loadChartDataByRegion = function(projectId,region,startDate,endDate){
         	$scope.loadingStart();
-            DashboardComponent.loadTicketChartDataByRegion(projectId,region,startDate,endDate).then(function(response){
+            var searchCriteria = {};
+            searchCriteria.projectId = projectId;
+            searchCriteria.region = region;
+            searchCriteria.fromDate = startDate;
+            searchCriteria.toDate = endDate;
+            TicketComponent.getTicketsCountsByStatus(searchCriteria).then(function(response){
                /* console.log("Dashboard ticket data_________");
                 console.log(response);
                 console.log(response.closedTicketCounts["0-3"]);
                 console.log(response.openTicketCounts);*/
-
-                $scope.constructChartData(response);
+                $scope.loadTicketCounts(response);
+                // $scope.constructChartData(response);
 
             });
         };
 
         $scope.loadChartDataByBranch = function(projectId,region,branch,startDate,endDate){
         	$scope.loadingStart();
-            DashboardComponent.loadTicketChartDataByBranch(projectId,region,branch,startDate,endDate).then(function(response){
+            var searchCriteria = {};
+            searchCriteria.projectId = projectId;
+            searchCriteria.region = region;
+            searchCriteria.fromDate = startDate;
+            searchCriteria.toDate = endDate;
+            searchCriteria.branch = branch;
+            TicketComponent.getTicketsCountsByStatus(searchCriteria).then(function(response){
                 /*console.log("Dashboard ticket data_________");
                 console.log(response);
                 console.log(response.closedTicketCounts["0-3"]);
                 console.log(response.openTicketCounts)*/;
-
-                $scope.constructChartData(response);
+                $scope.loadTicketCounts(response);
+                // $scope.constructChartData(response);
 
             });
         };
+
+        $scope.loadTicketCounts = function(data) {
+            console.log("Ticket Status wise counts" +JSON.stringify(data));
+            if(data.length > 0) {
+                $scope.openTicketsTotalCount = data[0].openCounts;
+                $scope.closedTicketsTotalCount = data[0].closedCounts;
+                $scope.overAllTicketsTotalCount = data[0].totalCounts;
+                $scope.assignedTicketTotalCount = data[0].assignedCounts;
+            } else {
+                $scope.openTicketsTotalCount = 0;
+                $scope.closedTicketsTotalCount = 0;
+                $scope.overAllTicketsTotalCount = 0;
+                $scope.assignedTicketTotalCount = 0;
+            }
+
+        }
 
         $scope.constructChartData = function(response){
             $scope.chartsDataResponse = response;
@@ -435,6 +474,7 @@ angular.module('timeSheetApp')
             		return false;
             }else {
                 $scope.selectedFromDateSer = new Date(e.date._d);
+                alert($scope.selectedFromDateSer);
                 $scope.selectedFromDate = $filter('date')(e.date._d, 'dd/MM/yyyy') ;
                 $scope.refreshReport();
             }
@@ -512,12 +552,26 @@ angular.module('timeSheetApp')
              $scope.selectedToDateSer.setHours(23,59,59,0);
             console.log($scope.selectedFromDateSer + ' ' + $scope.selectedToDateSer);
             $scope.loadingStart();
-            DashboardComponent.loadAttendanceReport(0,$scope.selectedFromDateSer,$scope.selectedToDateSer).then(function(data){
+            // DashboardComponent.loadAttendanceReport(0,$scope.selectedFromDateSer,$scope.selectedToDateSer).then(function(data){
+            //     console.log(data);
+            //     $scope.totalEmployeeCount = data.totalEmployeeCount;
+            //     $scope.employeeCount = data.totalEmployeeCount;
+            //     $scope.presentCount = data.presentEmployeeCount;
+            //     $scope.absentCount = data.absentEmployeeCount;
+            //
+            // });
+            var searchCriteria = {};
+            searchCriteria.siteId = 0;
+            searchCriteria.fromDate = $scope.selectedFromDateSer;
+            searchCriteria.toDate = $scope.selectedToDateSer;
+            DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
                 console.log(data);
-                $scope.totalEmployeeCount = data.totalEmployeeCount;
-                $scope.employeeCount = data.totalEmployeeCount;
-                $scope.presentCount = data.presentEmployeeCount;
-                $scope.absentCount = data.absentEmployeeCount;
+                // $scope.totalEmployeeCount = data.totalEmployees;
+                $scope.employeeCount = data.totalEmployees;
+                $scope.presentCount = data.totalPresent;
+                $scope.absentCount = data.totalAbsent;
+                $scope.leftCount = data.totalLeft;
+
 
             })
 
@@ -643,15 +697,20 @@ angular.module('timeSheetApp')
 
 
         $scope.refreshReportByProject = function() {
-             $scope.selectedFromDateSer.setHours(0,0,0,0);
-             $scope.selectedToDateSer.setHours(23,59,59,0);
-             $scope.loadJobReport();
-             $scope.loadingStart();
-             DashboardComponent.loadAttendanceReportByProject($scope.selectedProject.id,$scope.selectedFromDateSer,$scope.selectedToDateSer).then(function(data){
-                console.log(data);
-                $scope.employeeCount = data.totalEmployeeCount;
-                $scope.presentCount = data.presentEmployeeCount;
-                $scope.absentCount = data.absentEmployeeCount;
+            $scope.selectedFromDateSer.setHours(0,0,0,0);
+            $scope.selectedToDateSer.setHours(23,59,59,0);
+            $scope.loadJobReport();
+            $scope.loadingStart();
+            var searchCriteria = {};
+            searchCriteria.projectId = $scope.selectedProject.id;
+            searchCriteria.fromDate = $scope.selectedFromDateSer;
+            searchCriteria.toDate = $scope.selectedToDateSer;
+            DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
+            console.log(data);
+            $scope.employeeCount = data.totalEmployees;
+            $scope.presentCount = data.totalPresent;
+            $scope.absentCount = data.totalAbsent;
+            $scope.leftCount = data.totalLeft;
 
             })
 
@@ -662,11 +721,17 @@ angular.module('timeSheetApp')
             $scope.selectedToDateSer.setHours(23,59,59,0);
             $scope.loadJobReport();
             $scope.loadingStart();
-            DashboardComponent.loadAttendanceReportByRegion($scope.selectedProject.id,$scope.selectedRegion.name,$scope.selectedFromDateSer,$scope.selectedToDateSer).then(function(data){
+            var searchCriteria = {};
+            searchCriteria.projectId = $scope.selectedProject.id;
+            searchCriteria.fromDate = $scope.selectedFromDateSer;
+            searchCriteria.toDate = $scope.selectedToDateSer;
+            searchCriteria.region = $scope.selectedRegion.name;
+            DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
                 console.log(data);
-                $scope.employeeCount = data.totalEmployeeCount;
-                $scope.presentCount = data.presentEmployeeCount;
-                $scope.absentCount = data.absentEmployeeCount;
+                $scope.employeeCount = data.totalEmployees;
+                $scope.presentCount = data.totalPresent;
+                $scope.absentCount = data.totalAbsent;
+                $scope.leftCount = data.totalLeft;
 
             })
 
@@ -677,11 +742,18 @@ angular.module('timeSheetApp')
             $scope.selectedToDateSer.setHours(23,59,59,0);
             $scope.loadJobReport();
             $scope.loadingStart();
-            DashboardComponent.loadAttendanceReportByBranch($scope.selectedProject.id,$scope.selectedRegion.name,$scope.selectedBranch.name,$scope.selectedFromDateSer,$scope.selectedToDateSer).then(function(data){
+            var searchCriteria = {};
+            searchCriteria.projectId = $scope.selectedProject.id;
+            searchCriteria.fromDate = $scope.selectedFromDateSer;
+            searchCriteria.toDate = $scope.selectedToDateSer;
+            searchCriteria.region = $scope.selectedRegion.name;
+            searchCriteria.branch = $scope.selectedBranch.name;
+            DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
                 console.log(data);
-                $scope.employeeCount = data.totalEmployeeCount;
-                $scope.presentCount = data.presentEmployeeCount;
-                $scope.absentCount = data.absentEmployeeCount;
+                $scope.employeeCount = data.totalEmployees;
+                $scope.presentCount = data.totalPresent;
+                $scope.absentCount = data.totalAbsent;
+                $scope.leftCount = data.totalLeft;
 
             })
 
@@ -693,11 +765,16 @@ angular.module('timeSheetApp')
             $scope.loadJobReport();
             $scope.loadingStart();
             if($scope.selectedSite && $scope.selectedSite.id){
-            	DashboardComponent.loadAttendanceReport($scope.selectedSite.id,$scope.selectedFromDateSer,$scope.selectedToDateSer).then(function(data){
+                var searchCriteria = {};
+                searchCriteria.siteId = $scope.selectedSite.id;
+                searchCriteria.fromDate = $scope.selectedFromDateSer;
+                searchCriteria.toDate = $scope.selectedToDateSer;
+            	DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
                     console.log(data);
-                    $scope.employeeCount = data.totalEmployeeCount;
-                    $scope.presentCount = data.presentEmployeeCount;
-                    $scope.absentCount = data.absentEmployeeCount;
+                    $scope.employeeCount = data.totalEmployees;
+                    $scope.presentCount = data.totalPresent;
+                    $scope.absentCount = data.totalAbsent;
+                    $scope.leftCount = data.totalLeft;
 
                 })
             }
@@ -729,7 +806,7 @@ angular.module('timeSheetApp')
 
 	        	if($scope.selectedSite) {
 	        		$scope.searchCriteria.siteId = $scope.selectedSite.id;
-		    }
+		        }
 
 	        	$scope.searchCriteria.consolidated = true;
 
@@ -740,45 +817,64 @@ angular.module('timeSheetApp')
 	        	$scope.searchCriteria.checkInDateTimeTo = $scope.selectedToDateSer;
 
 	        	console.log('job report search criteria -' , JSON.stringify($scope.searchCriteria));
-	        	JobComponent.generateReport($scope.searchCriteria).then(function (data) {
-	        		$scope.result.assignedJobCount = 0;
-	        		$scope.result.completedJobCount = 0;
-	        		$scope.result.overdueJobCount = 0;
-	        		$scope.result.totalJobCount = 0;
-	        		$scope.loadingStart();
 
-	        		for(var i = 0; i < data.length; i++) {
-	        			$scope.loadingStart();
-	        			$scope.result.assignedJobCount += data[i].assignedJobCount;
-	        			$scope.result.completedJobCount += data[i].completedJobCount;
-	        			$scope.result.overdueJobCount += data[i].overdueJobCount;
-	        			$scope.result.totalJobCount += data[i].totalJobCount;
+                JobComponent.getTotalCounts(searchCriteria).then(function (data) {
+                    console.log("Job Total Counts" +JSON.stringify(data));
+                    $scope.loadingStop();
+                    if(data.length > 0) {
+                        $scope.result.totalJobCount = data[0].totalCounts;
+                        $scope.result.assignedJobCount = data[0].assignedCounts;
+                        $scope.result.overdueJobCount = data[0].overdueCounts;
+                        $scope.result.completedJobCount = data[0].completedCounts;
+                    } else {
+                        $scope.result.totalJobCount = 0;
+                        $scope.result.assignedJobCount = 0;
+                        $scope.result.overdueJobCount = 0;
+                        $scope.result.completedJobCount = 0;
+                    }
 
-	        			if((i+1) == (data.length)){
+                    if(!$scope.selectedProject.id && !$scope.selectedSite.id && !$scope.selectedRegion && !$scope.selectedBranch){
+                        $scope.loadingStop();
+                    }
 
-	        				$scope.loadingStop();
-	        		    }
+                });
 
-	        		}
+	        	// JobComponent.generateReport($scope.searchCriteria).then(function (data) {
+	        	// 	$scope.result.assignedJobCount = 0;
+	        	// 	$scope.result.completedJobCount = 0;
+	        	// 	$scope.result.overdueJobCount = 0;
+	        	// 	$scope.result.totalJobCount = 0;
+	        	// 	$scope.loadingStart();
+                //
+	        	// 	for(var i = 0; i < data.length; i++) {
+	        	// 		$scope.loadingStart();
+	        	// 		$scope.result.assignedJobCount += data[i].assignedJobCount;
+	        	// 		$scope.result.completedJobCount += data[i].completedJobCount;
+	        	// 		$scope.result.overdueJobCount += data[i].overdueJobCount;
+	        	// 		$scope.result.totalJobCount += data[i].totalJobCount;
+                //
+	        	// 		if((i+1) == (data.length)){
+                //
+	        	// 			$scope.loadingStop();
+	        	// 	    }
+                //
+	        	// 	}
+                //
 
-	        		if(!$scope.selectedProject.id && !$scope.selectedSite.id && !$scope.selectedRegion && !$scope.selectedBranch){
-
-	        			$scope.loadingStop();
-	        		}
-	        		//$scope.result = data[0];
-	        		console.log('job report - ' , $scope.result.assignedJobCount);
-	        		console.log('job report - ' , $scope.result.completedJobCount);
-	        		console.log('job report - ' , $scope.result.overdueJobCount);
-	        		console.log('job report - ' , $scope.result.totalJobCount);
-
-
-	        	});
+	        	// 	//$scope.result = data[0];
+	        	// 	console.log('job report - ' , $scope.result.assignedJobCount);
+	        	// 	console.log('job report - ' , $scope.result.completedJobCount);
+	        	// 	console.log('job report - ' , $scope.result.overdueJobCount);
+	        	// 	console.log('job report - ' , $scope.result.totalJobCount);
+                //
+                //
+	        	// });
 
         };
 
-        $scope.loadJobReportFromInflux = function() {         // Jobs for get Total status counts
+        $scope.loadJobReportFromInflux = function(searchCriteria) {         // Jobs for get Total status counts
 
-            JobComponent.getTotalCounts().then(function (data) {
+            JobComponent.getTotalCounts(searchCriteria).then(function (data) {
                 console.log("Job Total Counts" +JSON.stringify(data));
                 $scope.loadingStop();
                 if(data.length > 0) {
@@ -797,7 +893,7 @@ angular.module('timeSheetApp')
 
         }
 
-        $scope.loadTicketStatusFromInflux = function() {         // Ticket chart for get category wise status counts
+        $scope.loadTicketStatusFromInflux = function() {          // Ticket chart for get category wise status counts
             TicketComponent.getStatusCountsByCategory().then(function (data) {
                 console.log("Ticket category wise Status counts" +JSON.stringify(data));
                 if(data.length > 0) {
@@ -809,23 +905,31 @@ angular.module('timeSheetApp')
             });
         }
 
-        $scope.loadTicketStatusCounts = function() {             // Ticket for get total status counts
-            TicketComponent.getTicketsCountsByStatus().then(function (data) {
-               console.log("Ticket Status wise counts" +JSON.stringify(data));
-                $scope.loadingStop();
-               if(data.length > 0) {
-                   $scope.openTicketsTotalCount = data[0].openCounts;
-                   $scope.closedTicketsTotalCount = data[0].closedCounts;
-                   $scope.overAllTicketsTotalCount = data[0].totalCounts;
-                   $scope.assignedTicketTotalCount = data[0].assignedCounts;
-               } else {
-                   $scope.openTicketsTotalCount = 0;
-                   $scope.closedTicketsTotalCount = 0;
-                   $scope.overAllTicketsTotalCount = 0;
-                   $scope.assignedTicketTotalCount = 0;
-               }
-
-            });
+        $scope.loadTicketStatusCounts = function() {
+            // Ticket for get total status counts
+            // var searchCriteriaTicket = {};
+            // searchCriteriaTicket.fromDate = ;
+            // searchCriteriaTicket.toDate = ;
+            // searchCriteriaTicket.projectId = ;
+            // searchCriteriaTicket.siteId = ;
+            // searchCriteriaTicket.region = ;
+            // searchCriteriaTicket.branch = ;
+            // TicketComponent.getTicketsCountsByStatus().then(function (data) {
+            //    console.log("Ticket Status wise counts" +JSON.stringify(data));
+            //     $scope.loadingStop();
+            //    if(data.length > 0) {
+            //        $scope.openTicketsTotalCount = data[0].openCounts;
+            //        $scope.closedTicketsTotalCount = data[0].closedCounts;
+            //        $scope.overAllTicketsTotalCount = data[0].totalCounts;
+            //        $scope.assignedTicketTotalCount = data[0].assignedCounts;
+            //    } else {
+            //        $scope.openTicketsTotalCount = 0;
+            //        $scope.closedTicketsTotalCount = 0;
+            //        $scope.overAllTicketsTotalCount = 0;
+            //        $scope.assignedTicketTotalCount = 0;
+            //    }
+            //
+            // });
         }
 
         $scope.initCalender();

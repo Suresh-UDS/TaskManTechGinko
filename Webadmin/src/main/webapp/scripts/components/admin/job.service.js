@@ -180,8 +180,8 @@ angular.module('timeSheetApp')
                 })
             },
 
-            getTotalCounts : function () {
-                return $http.get('api/reports/jobs/todayCount').then(function (response) {
+            getTotalCounts : function (searchCriteria) {
+                return $http.post('api/reports/jobs/todayCount',searchCriteria).then(function (response) {
                     return response.data;
                 });
             }

@@ -2,6 +2,7 @@ package com.ts.app.service;
 
 import com.ts.app.config.ReportDatabaseConfiguration;
 import com.ts.app.domain.JobStatusReport;
+import com.ts.app.domain.Measurements.AttendanceStatusMeasurement;
 import com.ts.app.domain.Measurements.JobStatusMeasurement;
 import com.ts.app.domain.Measurements.TicketStatusMeasurement;
 import com.ts.app.domain.TicketStatusReport;
@@ -54,11 +55,14 @@ public class ReportDatabaseService {
         return resultMapper.toPOJO(queryResult, JobStatusMeasurement.class);
     }
 
-    public List<JobStatusMeasurement> getJobExistingPoints(InfluxDB influxDB, Query query) {
-        QueryResult results = influxDB.query(query);
-        InfluxDBResultMapper mapper = new InfluxDBResultMapper();
-        List<JobStatusMeasurement> jobStatusMeasurementList = mapper.toPOJO(results, JobStatusMeasurement.class);
-        return jobStatusMeasurementList;
+    public List<TicketStatusMeasurement> getTicketPoints(InfluxDB connection, String query, String databaseName) {
+        // Run the query
+        Query queryObject = new Query(query, databaseName);
+        QueryResult queryResult = connection.query(queryObject);
+
+        // Map it
+        InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
+        return resultMapper.toPOJO(queryResult, TicketStatusMeasurement.class);
     }
 
     public List<TicketStatusMeasurement> getTicketExistingPoints(InfluxDB influxDB, Query query) {
@@ -66,6 +70,23 @@ public class ReportDatabaseService {
         InfluxDBResultMapper mapper = new InfluxDBResultMapper();
         List<TicketStatusMeasurement> ticketStatusMeasurementList = mapper.toPOJO(results, TicketStatusMeasurement.class);
         return ticketStatusMeasurementList;
+    }
+
+    public List<AttendanceStatusMeasurement> getAttendanceExistingPoints(InfluxDB influxDB, Query query) {
+        QueryResult results = influxDB.query(query);
+        InfluxDBResultMapper mapper = new InfluxDBResultMapper();
+        List<AttendanceStatusMeasurement> attdStatusMeasurementList = mapper.toPOJO(results, AttendanceStatusMeasurement.class);
+        return attdStatusMeasurementList;
+    }
+
+    public List<AttendanceStatusMeasurement> getAttendancePoints(InfluxDB connection, String query, String databaseName) {
+        // Run the query
+        Query queryObject = new Query(query, databaseName);
+        QueryResult queryResult = connection.query(queryObject);
+
+        // Map it
+        InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
+        return resultMapper.toPOJO(queryResult, AttendanceStatusMeasurement.class);
     }
 
     @Async
@@ -162,29 +183,7 @@ public class ReportDatabaseService {
         influxDB.close();
     }
 
-    public void updateJobPoints(JobStatusReport response) {
-        InfluxDB influxDB = connectDatabase();
 
-        // Query the data from influxDB
-        Query query = BoundParameterQuery.QueryBuilder.newQuery("SELECT * FROM JobReport WHERE date >= $fromDate AND date <= $toDate")
-            .forDatabase(dbName)
-            .bind("fromDate", 1531765800090L)
-            .bind("toDate", 1531765800092L)
-            .create();
-
-        List<JobStatusMeasurement> jobStatusMeasurementList = getJobExistingPoints(influxDB, query);
-        log.debug("Existing points for job ", jobStatusMeasurementList.size());
-    }
-
-    public List<TicketStatusMeasurement> getTicketPoints(InfluxDB connection, String query, String databaseName) {
-        // Run the query
-        Query queryObject = new Query(query, databaseName);
-        QueryResult queryResult = connection.query(queryObject);
-
-        // Map it
-        InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
-        return resultMapper.toPOJO(queryResult, TicketStatusMeasurement.class);
-    }
 
 
 }

@@ -41,6 +41,15 @@ public class AttendanceStatusMeasurement {
     @Column(name="branch", tag = true)
     private String branch;
 
+    @Column(name="empCount")
+    private int empCount;
+
+    @Column(name="presentCount")
+    private int presentCount;
+
+    @Column(name="leftCount")
+    private int leftCount;
+
     public Instant getTime() {
         return time;
     }
@@ -127,5 +136,29 @@ public class AttendanceStatusMeasurement {
 
     public void setBranch(String branch) {
         this.branch = branch;
+    }
+
+    public int getEmpCount() {
+        return empCount;
+    }
+
+    public void setEmpCount(int empCount) {
+        this.empCount = empCount;
+    }
+
+    public int getPresentCount() {
+        return presentCount;
+    }
+
+    public void setPresentCount(int presentCount) {
+        this.presentCount = presentCount;
+    }
+
+    public int getLeftCount() {
+        return leftCount;
+    }
+
+    public void setLeftCount(int leftCount) {
+        this.leftCount = leftCount;
     }
 }

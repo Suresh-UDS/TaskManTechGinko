@@ -1,6 +1,7 @@
 package com.ts.app.web.rest;
 
 import com.ts.app.domain.*;
+import com.ts.app.domain.Measurements.AttendanceStatusMeasurement;
 import com.ts.app.domain.Measurements.JobStatusMeasurement;
 import com.ts.app.domain.Measurements.TicketStatusMeasurement;
 import com.ts.app.security.SecurityUtils;
@@ -200,27 +201,30 @@ public class ReportResource {
     }
 
     @RequestMapping(value = "/reports/query", method = RequestMethod.GET)
-    public ResponseEntity<?> getQueryListByStatus() {
-	    try{
-            JobStatusReport jobStatusReport = new JobStatusReport();
-            reportDatabaseService.updateJobPoints(jobStatusReport);
-        } catch(Exception e) {
-	        e.printStackTrace();
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> getQueryListByStatus(@RequestBody SearchCriteria searchCriteria) {
+        List<JobStatusMeasurement> queryList = reportDatabaseUtil.getTodayJobsCount(searchCriteria);
+        return new ResponseEntity<>(queryList, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/reports/jobs/todayCount", method = RequestMethod.GET)
-    public ResponseEntity<?> getJobsCountByToday() {
-        List<JobReportCounts> reportTodayPoints = reportDatabaseUtil.getTotalJobsCount();
+    @RequestMapping(value = "/reports/jobs/todayCount", method = RequestMethod.POST)
+    public ResponseEntity<?> getJobsCountByToday(@RequestBody SearchCriteria searchCriteria) {
+        List<JobReportCounts> reportTodayPoints = reportDatabaseUtil.getTotalJobsCount(searchCriteria);
         return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/reports/tickets/todayCount", method = RequestMethod.GET)
-    public ResponseEntity<?> getTicketsCountByToday() {
-        List<TicketReportCounts> reportTodayPoints = reportDatabaseUtil.getTotalTicketCount();
+    @RequestMapping(value = "/reports/tickets/todayCount", method = RequestMethod.POST)
+    public ResponseEntity<?> getTicketsCountByToday(@RequestBody SearchCriteria searchCriteria) {
+        List<TicketReportCounts> reportTodayPoints = reportDatabaseUtil.getTotalTicketCount(searchCriteria);
         return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/reports/attendance/todayCount", method = RequestMethod.POST)
+    public ResponseEntity<?> getAttendanceCountByToday(@RequestBody SearchCriteria searchCriteria) {
+        AttendanceReportCounts reportTodayPoints = reportDatabaseUtil.getAttendanceTotalCounts(searchCriteria);
+        return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
+    }
+
+
 
 
 
