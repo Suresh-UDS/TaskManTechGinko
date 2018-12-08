@@ -1119,7 +1119,7 @@ angular.module('timeSheetApp')
         	/* Root scope (search criteria) start*/
             
             if($rootScope.searchFilterCriteria.isDashboard){
-            	
+     
             	 if($rootScope.searchFilterCriteria.projectId){
               		$scope.searchProject ={id:$rootScope.searchFilterCriteria.projectId,name:$rootScope.searchFilterCriteria.projectName};
               		$scope.client.selected =$scope.searchProject;
@@ -1165,6 +1165,7 @@ angular.module('timeSheetApp')
             	if($rootScope.searchFilterCriteria.selectedFromDate) {
 	        		$scope.searchCriteria.fromDate = $rootScope.searchFilterCriteria.selectedFromDate;
 	        		$scope.selectedDateFrom = $filter('date')($rootScope.searchFilterCriteria.selectedFromDate, 'dd/MM/yyyy');
+	        		$scope.selectedDateFromSer = new Date($rootScope.searchFilterCriteria.selectedFromDate);
 	        	}/*else{
 	        	    $scope.searchCriteria.fromDate = null;
 	        	    $scope.selectedDateFrom = null;
@@ -1173,6 +1174,7 @@ angular.module('timeSheetApp')
 	        	if($rootScope.searchFilterCriteria.selectedToDate) {
 	        		$scope.searchCriteria.toDate = $rootScope.searchFilterCriteria.selectedToDate;
 	        		$scope.selectedDateTo = $filter('date')($rootScope.searchFilterCriteria.selectedToDate, 'dd/MM/yyyy');
+	        		$scope.selectedDateToSer =  new Date($rootScope.searchFilterCriteria.selectedToDate);
 	        	}/*else{
 	        	    $scope.searchCriteria.toDate = null;
 	        	    $scope.selectedDateTo = null;
@@ -1180,6 +1182,7 @@ angular.module('timeSheetApp')
              	
             	 /* Root scope (search criteria) end*/
             }else{
+            	
             	if($scope.client.selected && $scope.client.selected.id !=0){
             		$scope.searchProject = $scope.client.selected;
             	}else{

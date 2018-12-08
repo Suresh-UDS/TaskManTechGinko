@@ -39,7 +39,7 @@
 													    <span ng-bind-html="SelectClient.name | highlight: $select.search"></span>
 													  </ui-select-choices>
 													</ui-select>
-													<div ng-show="form.$submitted || form.projectName.$touched">
+													<div ng-show="form.$submitted || form.projectName.$touched || form.projectName.$dirty">
 	                                                   <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
 	                                                       <p class="help-block" style="color:maroon"
 	                                                          ng-show="form.projectName.$error.required">
@@ -66,7 +66,7 @@
 														  </ui-select-choices>
 														</ui-select>
                                                         <span ng-if="SelectSites.length == 0"><p class="error-msg margin0">No sites</p></span>
-	                                                    <div ng-show="form.$submitted || form.siteName.$touched">
+	                                                    <div ng-show="form.$submitted || form.siteName.$touched || form.siteName.$dirty">
 		                                                   <div ng-show="form.siteName.$dirty || form.siteName.$invalid">
 		                                                       <p class="help-block" style="color:maroon"
 		                                                          ng-show="form.siteName.$error.required">
@@ -84,9 +84,9 @@
                                                         <label class="control-label">Block<span class="red-star">*</span> </label>
                                                         <input type="text" class="form-control InputTxtCapsAll"
                                                         ng-model="selectedBlock"
-                                                        name="selectedBlock" ng-minlength="1" ng-maxlength="50" autofocus
+                                                        name="selectedBlock" ng-minlength=1 ng-maxlength=50  autofocus
                                                         required />
-                                                        <div ng-show="form.$submitted || form.selectedBlock.$touched">
+                                                        <div ng-show="form.$submitted || form.selectedBlock.$touched || form.selectedBlock.$dirty">
 			                                                 <div ng-show="form.selectedBlock.$dirty || form.selectedBlock.$invalid">
 			                                                     <p class="help-block" style="color:maroon"
 			                                                        ng-show="form.selectedBlock.$error.required">
@@ -112,19 +112,19 @@
                                                         <label class="control-label">Floor<span class="red-star">*</span> </label>
                                                         <input type="text" class="form-control InputTxtCapsAll"
                                                         ng-model="selectedFloor"
-                                                        name="selectedFloor" ng-minlength="1" ng-maxlength="50" autofocus
+                                                        name="selectedFloor" ng-minlength=1 ng-maxlength=50  autofocus
                                                         required />
-                                                        <div ng-show="form.$submitted || form.selectedFloor.$touched">
+                                                        <div ng-show="form.$submitted || form.selectedFloor.$touched || form.selectedFloor.$dirty">
 			                                                 <div ng-show="form.selectedFloor.$dirty || form.selectedFloor.$invalid">
-			                                                     <p class="help-block" style="color:maroon"
+			                                                     <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
 			                                                        ng-show="form.selectedFloor.$error.required">
 			                                                         Floor name is required.
 			                                                     </p>
-			                                                     <p class="help-block" style="color:maroon"
+			                                                     <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
 			                                                        ng-show="form.selectedFloor.$error.minlength">
 			                                                         Floor name is required to be at least 1 character.
 			                                                     </p>
-			                                                     <p class="help-block" style="color:maroon"
+			                                                     <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
 			                                                        ng-show="form.selectedFloor.$error.maxlength">
 			                                                         Floor name cannot be longer than 50 characters.
 			                                                     </p>
@@ -141,19 +141,19 @@
                                                         <label class="control-label">Zone<span class="red-star">*</span> </label>
                                                         <input type="text" class="form-control InputTxtCapsAll"
                                                         ng-model="selectedZone"
-                                                        name="selectedZone" ng-minlength="1" ng-maxlength="50" autofocus
+                                                        name="selectedZone" ng-minlength=1 ng-maxlength=50  autofocus
                                                         required />
-                                                        <div ng-show="form.$submitted || form.selectedZone.$touched">
+                                                        <div ng-show="form.$submitted || form.selectedZone.$touched || form.selectedZone.$dirty">
 			                                                 <div ng-show="form.selectedZone.$dirty || form.selectedZone.$invalid">
-			                                                     <p class="help-block" style="color:maroon"
+			                                                     <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
 			                                                        ng-show="form.selectedZone.$error.required">
 			                                                         Zone name is required.
 			                                                     </p>
-			                                                     <p class="help-block" style="color:maroon"
+			                                                     <p class="help-block" style="width:100%;z-index:950;background:#fff;color:maroon"
 			                                                        ng-show="form.selectedZone.$error.minlength">
 			                                                         Zone name is required to be at least 1 character.
 			                                                     </p>
-			                                                     <p class="help-block" style="color:maroon"
+			                                                     <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
 			                                                        ng-show="form.selectedZone.$error.maxlength">
 			                                                         Zone name cannot be longer than 50 characters.
 			                                                     </p>
