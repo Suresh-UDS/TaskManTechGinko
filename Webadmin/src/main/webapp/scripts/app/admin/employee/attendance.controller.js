@@ -524,7 +524,7 @@ angular.module('timeSheetApp')
             	if($rootScope.searchFilterCriteria.selectedFromDate) {
 	        		$scope.searchCriteria.checkInDateTimeFrom = $rootScope.searchFilterCriteria.selectedFromDate;
 	        		$scope.selectedDateFrom = $filter('date')($rootScope.searchFilterCriteria.selectedFromDate, 'dd/MM/yyyy');
-	        		$scope.selectedDateFromSer = $rootScope.searchFilterCriteria.selectedFromDate;
+	        		$scope.selectedDateFromSer = new Date($rootScope.searchFilterCriteria.selectedFromDate);
 	        	}/*else{
 	        	    $scope.searchCriteria.checkInDateTimeFrom = null;
 	        	    $scope.selectedDateFrom = null;
@@ -533,7 +533,7 @@ angular.module('timeSheetApp')
 	        	if($rootScope.searchFilterCriteria.selectedToDate) {
 	        		$scope.searchCriteria.checkInDateTimeTo = $rootScope.searchFilterCriteria.selectedToDate;
 	        		$scope.selectedDateTo = $filter('date')($rootScope.searchFilterCriteria.selectedToDate, 'dd/MM/yyyy');
-	        		$scope.selectedDateToSer = $rootScope.searchFilterCriteria.selectedToDate;
+	        		$scope.selectedDateToSer = new Date($rootScope.searchFilterCriteria.selectedToDate);
 	        	}/*else{
 	        	    $scope.searchCriteria.checkInDateTimeTo = null;
 	        	    $scope.selectedDateTo = null;

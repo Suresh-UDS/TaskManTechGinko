@@ -449,7 +449,7 @@ angular.module('timeSheetApp')
         $scope.empLocation = false;
         $scope.addProjectSite = function() {
 
-            if($scope.selectedProject && $scope.selectedSite){
+            if(($scope.selectedProject && $scope.selectedProject.id) && ($scope.selectedSite && $scope.selectedSite.id)){
 
 
                 //console.log('selected project -' , $scope.selectedProject.name);
@@ -484,7 +484,7 @@ angular.module('timeSheetApp')
                 $scope.dupSite = $scope.projectSiteList.find(isSite);
 
                 if(($scope.dupProject && $scope.dupSite)){
-
+                  $scope.showNotifications('top','center','warning','Client and Site already exist!!!');
                    return;
                 }
 
@@ -493,7 +493,21 @@ angular.module('timeSheetApp')
                 if($scope.projectSiteList.length > 0) {
                     $scope.empLocation = false;
                 }
+                
+                $scope.selectedProject = {};
+                $scope.selectedSite= {};
             }else{
+                
+            	if(!$scope.selectedProject && !$scope.selectedSite){
+            		$scope.showNotifications('top','center','warning','Please select Client & Site !!!');
+            		
+            	}else if(!$scope.selectedProject){
+            		$scope.showNotifications('top','center','warning','Please select Client!!!');
+            		
+            	}else if(!$scope.selectedSite){
+            		$scope.showNotifications('top','center','warning','Please select Site!!!');
+            		
+            	}
                 return;
             }
         };
@@ -1159,12 +1173,17 @@ angular.module('timeSheetApp')
        };
 
        $scope.employeeDetails= function(id){
-           EmployeeComponent.findOne(id).then(function (data) {
+    	   if(id > 0){
+    		   
+    		   EmployeeComponent.findOne(id).then(function (data) {
 
-                //console.log(data);
+                   //console.log(data);
 
-                $scope.employee = data;
-           })
+                   $scope.employee = data;
+              });
+    		   
+    	   }
+           
        };
 
        $scope.updateEmployeeLeft= function(employee){
@@ -1256,89 +1275,102 @@ angular.module('timeSheetApp')
 
 
         $scope.getEmployeeSiteDetails = function(id){
-        	$scope.loadingStart();
-        	$scope.empSitesList = null;
-        	EmployeeComponent.findOne(id).then(function (data) {
-                $scope.empSitesList = data.projectSites;
-                $scope.loadingStop();
-            });
+        	if(id>0){
+        		$scope.loadingStart();
+            	$scope.empSitesList = null;
+            	EmployeeComponent.findOne(id).then(function (data) {
+                    $scope.empSitesList = data.projectSites;
+                    $scope.loadingStop();
+                });
+        	}
+        	
 
         }
 
 
 
         $scope.getEmployeeDetails = function(id) {
+        	if(id>0){
+        		
+        		$scope.loadingStart();
+            	$scope.empSitesList = null;
+                EmployeeComponent.findOne(id).then(function (data) {
+                    $scope.employee = data;
+                    $scope.projectSiteList = $scope.employee.projectSites;
+                    $scope.employee.code = pad($scope.employee.code , 4);
+                    $scope.loadSelectedProject($scope.employee.projectId);
+                    $scope.loadSelectedSite($scope.employee.siteId);
+                    $scope.loadSelectedManager($scope.employee.managerId);
+                    $scope.loadSelectedRole($scope.employee.userRoleId);
+                    $scope.empSitesList = $scope.employee.projectSites;
+                    $scope.loadingStop();
+                });
+                EmployeeComponent.getEmployeeCurrentAttendance(id).then(function(data) {
 
-        	$scope.loadingStart();
-        	$scope.empSitesList = null;
-            EmployeeComponent.findOne(id).then(function (data) {
-                $scope.employee = data;
-                $scope.projectSiteList = $scope.employee.projectSites;
-                $scope.employee.code = pad($scope.employee.code , 4);
-                $scope.loadSelectedProject($scope.employee.projectId);
-                $scope.loadSelectedSite($scope.employee.siteId);
-                $scope.loadSelectedManager($scope.employee.managerId);
-                $scope.loadSelectedRole($scope.employee.userRoleId);
-                $scope.empSitesList = $scope.employee.projectSites;
-                $scope.loadingStop();
-            });
-            EmployeeComponent.getEmployeeCurrentAttendance(id).then(function(data) {
+                  //console.log("Attendance Data",data);
 
-              //console.log("Attendance Data",data);
+                  $scope.isCheckedIn = false;
+                  $scope.isCheckedOut = true;
+                  $scope.attendSite= data.siteId;
+                    if(data.checkInTime && data.checkOutTime) {
+                      //console.log("Already checked in");
 
-              $scope.isCheckedIn = false;
-              $scope.isCheckedOut = true;
-              $scope.attendSite= data.siteId;
-                if(data.checkInTime && data.checkOutTime) {
-                  //console.log("Already checked in");
-
-                    $scope.isCheckedIn = true;
-                    $scope.isCheckedOut = true;
-	            }else if(data.checkInTime && !data.checkOutTime) {
-	              //console.log("Already checked in");
-	                $scope.isCheckedIn = true;
-	                $scope.isCheckedOut = false;
-	            }else if (data.checkOutTime && !data.checkInTime) {
-	              //console.log("Already checked out");
-	                $scope.isCheckedOut = true;
-	                $scope.isCheckedIn = false;
-	            }
+                        $scope.isCheckedIn = true;
+                        $scope.isCheckedOut = true;
+    	            }else if(data.checkInTime && !data.checkOutTime) {
+    	              //console.log("Already checked in");
+    	                $scope.isCheckedIn = true;
+    	                $scope.isCheckedOut = false;
+    	            }else if (data.checkOutTime && !data.checkInTime) {
+    	              //console.log("Already checked out");
+    	                $scope.isCheckedOut = true;
+    	                $scope.isCheckedIn = false;
+    	            }
 
 
-            })
+                });
+        		
+        		
+        	}
+        	
         };
 
         $scope.getRelieveEmpDetails = function(id) {
+        	
+        	if(id > 0){
+        		EmployeeComponent.findOne(id).then(function (data) {
+                    $scope.employee = data;
+               /*Employee reliever scope values reset start*/
 
-        EmployeeComponent.findOne(id).then(function (data) {
-             $scope.employee = data;
-        /*Employee reliever scope values reset start*/
+                     $scope.relieverDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
 
-              $scope.relieverDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
+                     $scope.relieverDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
 
-              $scope.relieverDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+                     $scope.relieverDateFromSer = new Date();
 
-              $scope.relieverDateFromSer = new Date();
+                     $scope.relieverDateToSer = new Date();
+                     $scope.relieverOthName= "";
+                     $scope.relieverOthMobile= "";
+                     $scope.selectedReliever= null;
+                     $scope.relieverSite= null;
 
-              $scope.relieverDateToSer = new Date();
-              $scope.relieverOthName= "";
-              $scope.relieverOthMobile= "";
-              $scope.selectedReliever= null;
-              $scope.relieverSite= null;
-
-              /*Employee reliever scope values reset end*/
-
-
-            if(($scope.employee.projectSites).length > 0){
-              $scope.empSites = $scope.employee.projectSites;
-            }else{
-               $scope.empSites = null;
-            }
-
-            //console.log('Emp site',$scope.empSites);
+                     /*Employee reliever scope values reset end*/
 
 
-          });
+                   if(($scope.employee.projectSites).length > 0){
+                     $scope.empSites = $scope.employee.projectSites;
+                   }else{
+                      $scope.empSites = null;
+                   }
+
+                   //console.log('Emp site',$scope.empSites);
+
+
+                 });
+        		
+        	}
+
+        
         }
 
         $scope.getEmployeeByEmpId = function() {
@@ -1380,11 +1412,15 @@ angular.module('timeSheetApp')
         };
 
         $scope.loadSelectedManager = function(managerId) {
+        	if(managerId > 0){
         		//console.log('manager id - ' + managerId);
-        	EmployeeComponent.findOne(managerId).then(function (data) {
-                $scope.selectedManager = data;
-        		//console.log('selectedManager - ' , $scope.selectedManager)
-            });
+            	EmployeeComponent.findOne(managerId).then(function (data) {
+                    $scope.selectedManager = data;
+            		//console.log('selectedManager - ' , $scope.selectedManager)
+                });
+        		
+        	}
+        	
         };
 
 

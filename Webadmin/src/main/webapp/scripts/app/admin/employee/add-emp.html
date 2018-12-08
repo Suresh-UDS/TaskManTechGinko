@@ -46,19 +46,19 @@
                                                            name='employeeEmpId' type='text' value="" ng-minlength=1 ng-maxlength=10 ng-pattern="/^[A-Za-z0-9]*$/" autofocus required ng-blur="getEmployeeByEmpId()" tabindex="1"/>
                                                     <div ng-show="form.$submitted || form.employeeEmpId.$touched || form.employeeEmpId.$dirty">
                                                         <div ng-show="form.employeeEmpId.$dirty || form.employeeEmpId.$invalid">
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
                                                                ng-show="form.employeeEmpId.$error.required">
                                                                 Id is required.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
                                                                ng-show="form.employeeEmpId.$error.minlength">
                                                                 Id is required to be at least 1 character.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
                                                                ng-show="form.employeeEmpId.$error.maxlength">
                                                                 Id cannot be longer than 10 characters.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                ng-show="form.employeeEmpId.$error.pattern">
                                                                 Id can only contain letters and digits.
                                                             </p>
@@ -113,19 +113,19 @@
                                                            ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" required tabindex="4" />
                                                     <div ng-show="form.$submitted || form.employeeName.$touched || form.employeeName.$dirty">
                                                         <div ng-show="form.employeeName.$dirty || form.employeeName.$invalid">
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
                                                                ng-show="form.employeeName.$error.required">
                                                                 Employee name is required.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
                                                                ng-show="form.employeeName.$error.minlength">
                                                                 Employee name is required to be at least 5 character.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
                                                                ng-show="form.employeeName.$error.maxlength">
                                                                 Employee name cannot be longer than 50 characters.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                ng-show="form.employeeName.$error.pattern">
                                                                 Employee name can only contain letters,numbers and space.
                                                             </p>
@@ -141,19 +141,19 @@
                                                            ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" required tabindex="5" />
                                                     <div ng-show="form.$submitted || form.employeeLastName.$touched || form.employeeLastName.$dirty">
                                                         <div ng-show="form.employeeLastName.$dirty || form.employeeLastName.$invalid">
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
                                                                ng-show="form.employeeLastName.$error.required">
                                                                 Employee last name is required.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
                                                                ng-show="form.employeeLastName.$error.minlength">
                                                                 Employee last name is required to be at least 1 character.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
                                                                ng-show="form.employeeLastName.$error.maxlength">
                                                                 Employee last name cannot be longer than 50 characters.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                ng-show="form.employeeLastName.$error.pattern">
                                                                 Employee last name can only contain letters,numbers and space.
                                                             </p>
@@ -199,15 +199,15 @@
                                                             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" ng-maxlength="50"  required tabindex="7" />
                                                     <div ng-show="form.$submitted || form.employeeEmail.$touched || form.employeeEmail.$dirty">
                                                         <div ng-show="form.employeeEmail.$dirty || form.employeeEmail.$invalid">
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
                                                                ng-show="form.employeeEmail.$error.required">
                                                                 Employee email is required.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
                                                                ng-show="form.employeeEmail.$error.pattern">
                                                                 Employee email is invalid.
                                                             </p>
-                                                            <p class="help-block" style="color: maroon"
+                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                               ng-show="form.employeeEmail.$error.maxlength"
                                                               translate-value-max="255">Email cannot be longer than 50
                                                                characters.</p>
