@@ -46,10 +46,10 @@
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Clients
                                     </button>
-                                   		<span ng-hide="!clientImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                   		<span ng-show="clientImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                 </div>
-                                 <!--  <div class="col-md-12" ng-hide="!clientImportMsg()">
-                                  	<span class="card-title">Status - {{clientImportMsg()}}</span>
+                                 <!--  <div class="col-md-12" ng-hide="!clientImportMsg">
+                                  	<span class="card-title">Status - {{clientImportMsg}}</span>
                                   </div> -->
                             </div>
                         </div>
@@ -93,7 +93,7 @@
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Sites
                                     </button>
-                                    <span ng-hide="!siteImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                    <span ng-show="siteImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                 </div>
                             </div>
                         </div>
@@ -125,7 +125,7 @@
                                        		<!--&lt;!&ndash;<i class="material-icons">file_upload</i>&ndash;&gt;-->
                                    		<!--&lt;!&ndash;</span>Import Sites Employees&ndash;&gt;-->
                                     <!--&lt;!&ndash;</button>&ndash;&gt;-->
-                                    <!--&lt;!&ndash;<span ng-hide="!siteImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<span ng-hide="!siteImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>&ndash;&gt;-->
                                 <!--&lt;!&ndash;</div>&ndash;&gt;-->
                             <!--</div>-->
                         <!--</div>-->
@@ -166,7 +166,7 @@
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Locations
                                     </button>
-                                    <span ng-hide="!locationImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                    <span ng-show="locationImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                 </div>
                             </div>
                         </div>
@@ -206,12 +206,12 @@
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Employees
                                    </button>
-                                   <span ng-hide="!empImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                   <span ng-show="empImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                   </div>
                                   <!-- <div class="col-md-2">
                                   </div>
-                                  <div class="col-md-3" ng-hide="!employeeImportMsg()">
-                                  	<span class="card-title">Status - {{employeeImportMsg()}}</span>
+                                  <div class="col-md-3" ng-hide="!employeeImportMsg">
+                                  	<span class="card-title">Status - {{employeeImportMsg}}</span>
                                   </div> -->
                               </div>
 							</div>
@@ -252,10 +252,10 @@
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Jobs
                                     </button>
-                                    <span ng-hide="!jobImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                    <span ng-show="jobImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                 </div>
-                                <!-- <div class="col-md-12" ng-hide="!jobImportMsg()">
-                                    <span class="card-title">Status - {{jobImportMsg()}}</span>
+                                <!-- <div class="col-md-12" ng-hide="!jobImportMsg">
+                                    <span class="card-title">Status - {{jobImportMsg}}</span>
                                 </div> -->
                             </div>
                         </div>
@@ -296,10 +296,10 @@
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Employee Shift
                                     </button>
-                                    <span ng-hide="!employeeShiftImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                    <span ng-show="employeeShiftImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                 </div>
-                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg()">
-                                  	<span class="card-title">Status - {{clientImportMsg()}}</span>
+                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg">
+                                  	<span class="card-title">Status - {{clientImportMsg}}</span>
                                   </div> -->
                             </div>
                         </div>
@@ -337,10 +337,10 @@
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Checklist
                                     </button>
-                                    <span ng-hide="!checklistImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                    <span ng-show="checklistImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                 </div>
-                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg()">
-                                  	<span class="card-title">Status - {{clientImportMsg()}}</span>
+                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg">
+                                  	<span class="card-title">Status - {{clientImportMsg}}</span>
                                   </div> -->
                             </div>
                         </div>
@@ -384,10 +384,10 @@
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Asset
                                     </button>
-                                    <span ng-hide="!assetImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                    <span ng-show="assetImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                 </div>
-                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg()">
-                                  	<span class="card-title">Status - {{clientImportMsg()}}</span>
+                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg">
+                                  	<span class="card-title">Status - {{clientImportMsg}}</span>
                                   </div> -->
                             </div>
                         </div>
@@ -425,10 +425,10 @@
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Asset PPM Schedule
                                     </button>
-                                    <span ng-hide="!assetPPMImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                    <span ng-show="assetPPMImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                 </div>
-                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg()">
-                                  	<span class="card-title">Status - {{clientImportMsg()}}</span>
+                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg">
+                                  	<span class="card-title">Status - {{clientImportMsg}}</span>
                                   </div> -->
                             </div>
                         </div>
@@ -469,10 +469,10 @@
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Asset AMC Schedule
                                     </button>
-                                    <span ng-hide="!assetAMCImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                    <span ng-show="assetAMCImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                 </div>
-                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg()">
-                                  	<span class="card-title">Status - {{clientImportMsg()}}</span>
+                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg">
+                                  	<span class="card-title">Status - {{clientImportMsg}}</span>
                                   </div> -->
                             </div>
                         </div>
