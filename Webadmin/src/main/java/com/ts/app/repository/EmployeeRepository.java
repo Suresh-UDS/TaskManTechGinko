@@ -152,19 +152,29 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("SELECT distinct u FROM Employee e join e.user u where e.id IN :employeeIds")
 	List<User> findUsersByEmployeeIds(@Param("employeeIds") List<Long> employeeIds);
 
-	@Query("SELECT count(distinct e) FROM Employee e join e.projectSites ps  WHERE ps.site.id = :siteId and e.active = 'Y' and e.isLeft = FALSE")
+    //	isLeft is removed from query as count in employee list mismatches with dashboard employees count - 11-12-2018 - Karthick
+    //	@Query("SELECT count(distinct e) FROM Employee e join e.projectSites ps  WHERE ps.site.id = :siteId and e.active = 'Y' and e.isLeft = FALSE")
+	@Query("SELECT count(distinct e) FROM Employee e join e.projectSites ps  WHERE ps.site.id = :siteId and e.active = 'Y'")
 	long findCountBySiteId(@Param("siteId") long siteId);
 
-	@Query("SELECT count(distinct e) FROM Employee e join e.projectSites ps WHERE ps.project.id = :projectId and e.active = 'Y' and e.isLeft = FALSE")
+    //	isLeft is removed from query as count in employee list mismatches with dashboard employees count - 11-12-2018 - Karthick
+    // @Query("SELECT count(distinct e) FROM Employee e join e.projectSites ps WHERE ps.project.id = :projectId and e.active = 'Y' and e.isLeft = FALSE")
+    @Query("SELECT count(distinct e) FROM Employee e join e.projectSites ps WHERE ps.project.id = :projectId and e.active = 'Y' ")
 	long findCountByProjectId(@Param("projectId") long projectId);
 
-	@Query("SELECT count(distinct e) FROM Employee e join e.projectSites ps where ps.project.id IN (:projIds) and e.active = 'Y' and e.isLeft = FALSE")
+    //	isLeft is removed from query as count in employee list mismatches with dashboard employees count - 11-12-2018 - Karthick
+    //    @Query("SELECT count(distinct e) FROM Employee e join e.projectSites ps where ps.project.id IN (:projIds) and e.active = 'Y' and e.isLeft = FALSE")
+    @Query("SELECT count(distinct e) FROM Employee e join e.projectSites ps where ps.project.id IN (:projIds) and e.active = 'Y' ")
 	long findTotalCount(@Param("projIds") List<Long> projectIds);
 
-	@Query("SELECT count(distinct e) FROM Employee e join e.projectSites ps where ps.site.id IN (:siteIds) and e.active = 'Y' and e.isLeft = FALSE")
+    //	isLeft is removed from query as count in employee list mismatches with dashboard employees count - 11-12-2018 - Karthick
+    //    @Query("SELECT count(distinct e) FROM Employee e join e.projectSites ps where ps.site.id IN (:siteIds) and e.active = 'Y' and e.isLeft = FALSE")
+    @Query("SELECT count(distinct e) FROM Employee e join e.projectSites ps where ps.site.id IN (:siteIds) and e.active = 'Y' ")
 	long findTotalCountBySites(@Param("siteIds") List<Long> siteIds);
 
-	@Query("SELECT count(e) FROM Employee e where e.active = 'Y' and e.isLeft = FALSE")
+    //	isLeft is removed from query as count in employee list mismatches with dashboard employees count - 11-12-2018 - Karthick
+    //    @Query("SELECT count(e) FROM Employee e where e.active = 'Y' and e.isLeft = FALSE")
+    @Query("SELECT count(e) FROM Employee e where e.active = 'Y' ")
 	long findTotalCount();
 
 	@Query( "SELECT e FROM Employee e where e.active = 'Y' and e.isLeft = FALSE")
