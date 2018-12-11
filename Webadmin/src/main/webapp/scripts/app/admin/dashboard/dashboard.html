@@ -210,7 +210,7 @@
                                     </div>
                                     <div class="card-content">
                                         <h4>Completed</h4>
-                                        <h3>{{result.completedJobCount}}</h3>
+                                        <h3>{{result.completedJobCount ? result.completedJobCount : 0}}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -221,7 +221,7 @@
                                     </div>
                                     <div class="card-content">
                                         <h4>Overdue</h4>
-                                        <h3>{{result.overdueJobCount}}</h3>
+                                        <h3>{{result.overdueJobCount ? result.overdueJobCount : 0}}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -350,7 +350,7 @@
                                     </div>
                                     <div class="card-content">
                                         <h4>Total tickets</h4>
-                                        <h3>{{overAllTicketsTotalCount}}</h3>
+                                        <h3>{{overAllTicketsTotalCount ? overAllTicketsTotalCount : 0}}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -361,7 +361,7 @@
                                     </div>
                                     <div class="card-content">
                                         <h4>Open</h4>
-                                        <h3>{{openTicketsTotalCount}}</h3>
+                                        <h3>{{openTicketsTotalCount ? openTicketsTotalCount : 0}}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -374,7 +374,7 @@
                                     </div>
                                     <div class="card-content">
                                         <h4>Assigned</h4>
-                                        <h3>{{assignedTicketTotalCount}}</h3>
+                                        <h3>{{assignedTicketTotalCount ? assignedTicketTotalCount : 0 }}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -386,7 +386,7 @@
                                     <div class="card-content">
                                         <h4>Closed</h4>
                                         <h3>
-                                            {{closedTicketsTotalCount}}</h3>
+                                            {{closedTicketsTotalCount ? closedTicketsTotalCount : 0 }}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -442,7 +442,7 @@
                                     </div>
                                     <div class="card-content">
                                         <h4>Total quotations</h4>
-                                        <h3>{{overAllTicketsTotalCount}}</h3>
+                                        <h3>{{overAllTicketsTotalCount ? overAllTicketsTotalCount : 0}}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -453,7 +453,7 @@
                                     </div>
                                     <div class="card-content">
                                         <h4>Waiting for Approval</h4>
-                                        <h3>{{openTicketsTotalCount}}</h3>
+                                        <h3>{{openTicketsTotalCount ? openTicketsTotalCount : 0}}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -467,7 +467,7 @@
                                     <div class="card-content">
                                         <h4>Pending</h4>
                                         <h3>
-                                            {{closedTicketsTotalCount}}</h3>
+                                            {{closedTicketsTotalCount ? closedTicketsTotalCount : 0}}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -479,7 +479,7 @@
                                     <div class="card-content">
                                         <h4>Approved</h4>
                                         <h3>
-                                            {{closedTicketsTotalCount}}</h3>
+                                            {{closedTicketsTotalCount ? closedTicketsTotalCount : 0}}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -491,7 +491,7 @@
                                     <div class="card-content">
                                         <h4>Rejected</h4>
                                         <h3>
-                                            {{closedTicketsTotalCount}}</h3>
+                                            {{closedTicketsTotalCount ? closedTicketsTotalCount : 0}}</h3>
                                     </div>
                                 </div>
                             </div>
