@@ -7,6 +7,7 @@ import com.ts.app.repository.*;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.service.util.ReportDatabaseUtil;
 import com.ts.app.web.rest.dto.*;
 import com.ts.app.web.rest.errors.TimesheetException;
 import org.apache.commons.collections.CollectionUtils;
@@ -103,6 +104,9 @@ public class SchedulerService extends AbstractService {
 
 	@Inject
 	private AssetRepository assetRepository;
+
+	@Inject
+	private ReportDatabaseUtil reportDatabaseUtil;
 
 
 	public SearchResult<SchedulerConfigDTO> getSchedulerConfig() {
@@ -1422,6 +1426,10 @@ public class SchedulerService extends AbstractService {
 		boolean isOnDemand = false;
 		schedulerHelperService.sendDaywiseReportEmail(cal.getTime(), isOnDemand, 0);
 	}
+
+	public void createJobPoints() {
+        reportDatabaseUtil.deleteOrUpdateJobPoints();
+    }
 
 
 

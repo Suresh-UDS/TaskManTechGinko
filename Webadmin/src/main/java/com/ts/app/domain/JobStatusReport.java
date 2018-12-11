@@ -7,6 +7,8 @@ public class JobStatusReport implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private long jobId;
+
     private Date jobCreatedDate;
 
     private JobStatus jobStatus;
@@ -21,12 +23,13 @@ public class JobStatusReport implements Serializable {
 
     private String branch;
 
-    private float statusCount;
+    private long statusCount;
 
     public JobStatusReport() {
     }
 
-    public JobStatusReport(Date jobCreatedDate, JobStatus jobStatus, JobType jobType, long siteId, long projectId, String region, String branch, long statusCount) {
+    public JobStatusReport(long jobId, Date jobCreatedDate, JobStatus jobStatus, JobType jobType, long siteId, long projectId, String region, String branch, long statusCount) {
+        this.jobId = jobId;
         this.jobCreatedDate = jobCreatedDate;
         this.jobStatus = jobStatus;
         this.jobType = jobType;
@@ -34,7 +37,15 @@ public class JobStatusReport implements Serializable {
         this.projectId = projectId;
         this.region = region;
         this.branch = branch;
-        this.statusCount = (float)statusCount;
+        this.statusCount = statusCount;
+    }
+
+    public long getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(long jobId) {
+        this.jobId = jobId;
     }
 
     public Date getJobCreatedDate() {
@@ -61,11 +72,11 @@ public class JobStatusReport implements Serializable {
         this.jobType = jobType;
     }
 
-    public float getStatusCount() {
+    public long getStatusCount() {
         return statusCount;
     }
 
-    public void setStatusCount(float statusCount) {
+    public void setStatusCount(long statusCount) {
         this.statusCount = statusCount;
     }
 

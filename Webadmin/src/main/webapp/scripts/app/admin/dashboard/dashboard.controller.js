@@ -166,7 +166,6 @@ angular.module('timeSheetApp')
             // console.log("EndDate---"+$scope.endDate);
 
             $scope.formatFromDate = $scope.selectedFromDateSer;
-            alert($scope.formatFromDate);
             $scope.formatToDate =  $scope.selectedToDateSer;
 
             if(siteId){
@@ -474,7 +473,6 @@ angular.module('timeSheetApp')
             		return false;
             }else {
                 $scope.selectedFromDateSer = new Date(e.date._d);
-                alert($scope.selectedFromDateSer);
                 $scope.selectedFromDate = $filter('date')(e.date._d, 'dd/MM/yyyy') ;
                 $scope.refreshReport();
             }
@@ -1004,7 +1002,7 @@ angular.module('timeSheetApp')
                 },
                 series: $scope.jobStackYSeries
             });
-        }, 1000);
+        }, 2500);
 
 
         // Sample data for pie chart

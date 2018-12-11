@@ -13,6 +13,8 @@ public class AttendanceStatusReport implements Serializable {
 
     final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+    private long id;
+
     private ZonedDateTime createdDate;
 
     private Date checkInTime;
@@ -42,7 +44,8 @@ public class AttendanceStatusReport implements Serializable {
     public AttendanceStatusReport() {
     }
 
-    public AttendanceStatusReport(ZonedDateTime createdDate, Date checkInTime, Date checkOutTime, long siteId, long employeeId, boolean isLeft, boolean isReliever, long projectId, String region, String branch, long statusCount) {
+    public AttendanceStatusReport(long id, ZonedDateTime createdDate, Date checkInTime, Date checkOutTime, long siteId, long employeeId, boolean isLeft, boolean isReliever, long projectId, String region, String branch, long statusCount) {
+        this.id = id;
         this.createdDate = createdDate;
         if(this.createdDate != null) {
             this.formattedDate = Date.from(this.createdDate.toInstant());
@@ -58,6 +61,14 @@ public class AttendanceStatusReport implements Serializable {
         this.region = region;
         this.branch = branch;
         this.statusCount = statusCount;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public ZonedDateTime getCreatedDate() {

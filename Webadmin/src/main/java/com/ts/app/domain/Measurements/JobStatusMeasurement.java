@@ -14,6 +14,9 @@ public class JobStatusMeasurement {
     @Column(name="date")
     private String date;
 
+    @Column(name="id")
+    private long jobId;
+
     @Column(name="status")
     private String status;
 
@@ -47,6 +50,14 @@ public class JobStatusMeasurement {
 
     public void setTime(Instant time) {
         this.time = time;
+    }
+
+    public long getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(long jobId) {
+        this.jobId = jobId;
     }
 
     public String getDate() {

@@ -1,12 +1,14 @@
 package com.ts.app.service;
 
 import com.ts.app.config.ReportDatabaseConfiguration;
+import com.ts.app.domain.AttendanceStatusReport;
 import com.ts.app.domain.JobStatusReport;
 import com.ts.app.domain.Measurements.AttendanceStatusMeasurement;
 import com.ts.app.domain.Measurements.JobStatusMeasurement;
 import com.ts.app.domain.Measurements.TicketStatusMeasurement;
 import com.ts.app.domain.TicketStatusReport;
 import com.ts.app.web.rest.dto.JobDTO;
+import org.influxdb.BatchOptions;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.BoundParameterQuery;
 import org.influxdb.dto.Point;
@@ -89,45 +91,52 @@ public class ReportDatabaseService {
         return resultMapper.toPOJO(queryResult, AttendanceStatusMeasurement.class);
     }
 
-    @Async
-    public void addNewJobPoints(JobStatusReport response) throws Exception {
+    public void addNewJobPoints(JobStatusReport reportList, int i) throws Exception {
         InfluxDB influxDB = connectDatabase();
-        log.debug("job status measurement" + response.toString());
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(response.getJobCreatedDate());
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
         influxDB.setRetentionPolicy("one_year_policy");
-        influxDB.enableBatch(100, 200, TimeUnit.MILLISECONDS);
-        Point jobNewPoint = Point.measurement("JobReport")
-            .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-            .addField("date", cal.getTimeInMillis())
-            .tag("date", String.valueOf(cal.getTimeInMillis()))
-            .addField("status", response.getJobStatus().toString())
-            .tag("status",response.getJobStatus().toString())
-            .addField("type", (response.getJobType() != null ? response.getJobType().toString() : "CARPENTRY"))
-            .tag("type", (response.getJobType() != null ? response.getJobType().toString() : "CARPENTRY"))
-            .addField("projectId", response.getProjectId())
-            .addField("siteId", response.getSiteId())
-            .addField("region", response.getRegion() != null ? response.getRegion() : "north-region")
-            .tag("region", response.getRegion() != null ? response.getRegion() : "north-region")
-            .addField("branch", response.getBranch() != null ? response.getBranch() : "andhrapradesh")
-            .tag("branch", response.getBranch() != null ? response.getBranch() : "andhrapradesh")
-            .addField("statusCount", response.getStatusCount())
-            .build();
-        influxDB.write(dbName, "one_year_policy", jobNewPoint);
-        Thread.sleep(2);
-        influxDB.disableBatch();
-        influxDB.close();
+        influxDB.enableBatch(BatchOptions.DEFAULTS.actions(100).flushDuration(200));
+        influxDB.setConsistency(InfluxDB.ConsistencyLevel.ALL);
+        if(reportList != null) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(reportList.getJobCreatedDate());
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            log.debug("calendar time milliseconds" +cal.getTimeInMillis());
+            log.debug("system time milliseconds" + System.currentTimeMillis());
+            Point jobPoint = Point.measurement("JobReport")
+                .time(cal.getTimeInMillis() + i, TimeUnit.MILLISECONDS)
+                .addField("id", reportList.getJobId())
+                .tag("id", String.valueOf(reportList.getJobId()))
+                .addField("date", cal.getTimeInMillis())
+                .tag("date", String.valueOf(cal.getTimeInMillis()))
+                .addField("status", reportList.getJobStatus().toString())
+                .tag("status",reportList.getJobStatus().toString())
+                .addField("type", (reportList.getJobType() != null ? reportList.getJobType().toString() : "OTHERS"))
+                .tag("type", (reportList.getJobType() != null ? reportList.getJobType().toString() : "OTHERS"))
+                .addField("projectId", (float) reportList.getProjectId())
+                .addField("siteId", (float) reportList.getSiteId())
+                .tag("siteId", String.valueOf(reportList.getSiteId()))
+                .addField("region", reportList.getRegion() != null ? reportList.getRegion() : "north-region")
+                .tag("region", reportList.getRegion() != null ? reportList.getRegion() : "north-region")
+                .addField("branch", reportList.getBranch() != null ? reportList.getBranch() : "andhrapradesh")
+                .tag("branch", reportList.getBranch() != null ? reportList.getBranch() : "andhrapradesh")
+                .addField("statusCount", reportList.getStatusCount())
+                .build();
+            influxDB.write(dbName, "one_year_policy", jobPoint);
+            Thread.sleep(2);
+            influxDB.disableBatch();
+            influxDB.close();
+        }
     }
 
-    @Async
     public void addNewTicketPoints(TicketStatusReport ticketReportList) throws Exception {
         InfluxDB influxDB = connectDatabase();
         influxDB.setRetentionPolicy("one_year_policy");
         influxDB.enableBatch(100, 200, TimeUnit.MILLISECONDS);
+        influxDB.setConsistency(InfluxDB.ConsistencyLevel.ALL);
+
         if(ticketReportList.getCreatedDate() != null) {
             ticketReportList.setFormattedDate(Date.from(ticketReportList.getCreatedDate().toInstant()));
         }
@@ -158,6 +167,8 @@ public class ReportDatabaseService {
 
         Point ticketPoint = Point.measurement("TicketReport")
             .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+            .addField("id", ticketReportList.getTicketId())
+            .tag("id", String.valueOf(ticketReportList.getTicketId()))
             .addField("date", cal.getTimeInMillis())
             .tag("date", String.valueOf(cal.getTimeInMillis()))
             .addField("siteId", ticketReportList.getSiteId())
@@ -179,6 +190,74 @@ public class ReportDatabaseService {
 
         influxDB.write(dbName, "one_year_policy", ticketPoint);
         Thread.sleep(2);
+        influxDB.disableBatch();
+        influxDB.close();
+    }
+
+    public void addNewAttnPoints(AttendanceStatusReport attendanceReportList) throws Exception {
+        InfluxDB influxDB = connectDatabase();
+        influxDB.setRetentionPolicy("one_year_policy");
+        influxDB.enableBatch(BatchOptions.DEFAULTS.actions(100).flushDuration(200));
+        influxDB.setConsistency(InfluxDB.ConsistencyLevel.ALL);
+
+        int i = 0;
+        log.debug("Total size" + i);
+        Calendar cal = Calendar.getInstance();
+        Calendar checkIn = Calendar.getInstance();
+        Calendar checkOut = Calendar.getInstance();
+        cal.setTime(attendanceReportList.getFormattedDate());
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        log.debug("calendar time milliseconds" +cal.getTimeInMillis());
+        log.debug("system time milliseconds" + System.currentTimeMillis());
+
+        if(attendanceReportList.getCheckInTime() != null) {
+            checkIn.setTime(attendanceReportList.getCheckInTime());
+            checkIn.set(Calendar.HOUR_OF_DAY, 0);
+            checkIn.set(Calendar.MINUTE, 0);
+            checkIn.set(Calendar.SECOND, 0);
+            checkIn.set(Calendar.MILLISECOND, 0);
+            log.debug("calendar time milliseconds" +checkIn.getTimeInMillis());
+        }
+
+        if(attendanceReportList.getCheckOutTime() != null) {
+            checkOut.setTime(attendanceReportList.getCheckOutTime());
+            checkOut.set(Calendar.HOUR_OF_DAY, 0);
+            checkOut.set(Calendar.MINUTE, 0);
+            checkOut.set(Calendar.SECOND, 0);
+            checkOut.set(Calendar.MILLISECOND, 0);
+            log.debug("calendar time milliseconds" +checkOut.getTimeInMillis());
+        }
+
+        Point attendancePoint = Point.measurement("AttendanceReport")
+            .time(cal.getTimeInMillis() + i, TimeUnit.MILLISECONDS)
+            .addField("id", attendanceReportList.getId())
+            .tag("id", String.valueOf(attendanceReportList.getId()))
+            .addField("date", cal.getTimeInMillis())
+            .tag("date", String.valueOf(cal.getTimeInMillis()))
+            .addField("checkInTime", attendanceReportList.getCheckInTime() != null ? checkIn.getTimeInMillis() : 0)
+            .tag("checkInTime",attendanceReportList.getCheckInTime() != null ? String.valueOf(checkIn.getTimeInMillis()) : "")
+            .addField("checkOutTime", attendanceReportList.getCheckOutTime() != null ? checkOut.getTimeInMillis() : 0)
+            .tag("checkOutTime", attendanceReportList.getCheckOutTime() != null ? String.valueOf(checkOut.getTimeInMillis()) : "")
+            .addField("employeeId", (float) attendanceReportList.getEmployeeId())
+            .addField("projectId", (float) attendanceReportList.getProjectId())
+            .addField("siteId", (float) attendanceReportList.getSiteId())
+            .addField("isLeft", attendanceReportList.isLeft())
+            .tag("isLeft", String.valueOf(attendanceReportList.isLeft()))
+            .addField("isReliever", attendanceReportList.isReliever())
+            .tag("isReliever", String.valueOf(attendanceReportList.isReliever()))
+            .addField("region", attendanceReportList.getRegion() != null ? attendanceReportList.getRegion() : "north-region")
+            .tag("region", attendanceReportList.getRegion() != null ? attendanceReportList.getRegion() : "north-region")
+            .addField("branch", attendanceReportList.getBranch() != null ? attendanceReportList.getBranch() : "andhrapradesh")
+            .tag("branch", attendanceReportList.getBranch() != null ? attendanceReportList.getBranch() : "andhrapradesh")
+            .addField("statusCount", attendanceReportList.getStatusCount())
+            .build();
+
+        influxDB.write(dbName, "one_year_policy", attendancePoint);
+        Thread.sleep(2);
+        i++;
         influxDB.disableBatch();
         influxDB.close();
     }

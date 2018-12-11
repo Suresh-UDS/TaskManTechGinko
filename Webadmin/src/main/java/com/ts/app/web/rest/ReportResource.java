@@ -8,6 +8,7 @@ import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.ReportDatabaseService;
 import com.ts.app.service.ReportService;
 import com.ts.app.service.SchedulerHelperService;
+import com.ts.app.service.SchedulerService;
 import com.ts.app.service.util.ReportDatabaseUtil;
 import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
@@ -44,6 +45,9 @@ public class ReportResource {
 
 	@Inject
     private ReportDatabaseService reportDatabaseService;
+
+	@Inject
+    private SchedulerService schedulerService;
 
 
 	@RequestMapping(value = "/reports/attendance/site/{siteId}/selectedDate/{selectedDate}", method = RequestMethod.GET)
@@ -224,7 +228,17 @@ public class ReportResource {
         return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/reports/job/delete", method = RequestMethod.GET)
+    public ResponseEntity<?> deleteCountByToday() {
+        String reportTodayPoints = reportDatabaseUtil.deleteOrUpdateJobPoints();
+        return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
+    }
 
+    @RequestMapping(value = "/callschedule/service", method = RequestMethod.GET)
+    public String callScheduleServ() {
+            schedulerService.createJobPoints();
+	    return "schedule service called...";
+    }
 
 
 

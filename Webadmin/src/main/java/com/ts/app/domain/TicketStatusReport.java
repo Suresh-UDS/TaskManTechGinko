@@ -12,6 +12,8 @@ public class TicketStatusReport implements Serializable {
 
     final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+    private long ticketId;
+
     private ZonedDateTime createdDate;
 
     private long siteId;
@@ -39,7 +41,8 @@ public class TicketStatusReport implements Serializable {
     public TicketStatusReport() {
     }
 
-    public TicketStatusReport(ZonedDateTime createdDate, long siteId, String category, String status, Date assignedOn, Date closedOn, long projectId, String region, String branch, long statusCount) {
+    public TicketStatusReport(long ticketId, ZonedDateTime createdDate, long siteId, String category, String status, Date assignedOn, Date closedOn, long projectId, String region, String branch, long statusCount) {
+        this.ticketId = ticketId;
         this.createdDate = createdDate;
         if(this.createdDate != null) {
             this.formattedDate = Date.from(this.createdDate.toInstant());
@@ -54,6 +57,14 @@ public class TicketStatusReport implements Serializable {
         this.region = region;
         this.branch = branch;
         this.statusCount = statusCount;
+    }
+
+    public long getTicketId() {
+        return ticketId;
+    }
+
+    public void setTicketId(long ticketId) {
+        this.ticketId = ticketId;
     }
 
     public String getDate() {

@@ -26,6 +26,8 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -57,8 +59,9 @@ public class ReportDatabaseUtil {
         return reportDatabaseConfiguration.initializeInduxDbConnection();
     }
 
+    /** Pre-compute a data from database
+     **/
     public List<JobStatusReport> getPreComputeJobData() {
-        // Pre-compute a data from database
         List<JobStatusReport> jobStatusReportList = reportDatabaseJobRepository.findAllJobStatusCountByDate();
         log.debug("List of job status list " +jobStatusReportList.size());
         return jobStatusReportList;
@@ -76,48 +79,88 @@ public class ReportDatabaseUtil {
         return attendanceStatusReports;
     }
 
+    /**
+     * Get last 5 minutes modified results
+    **/
+    public ZonedDateTime getLast5MinZoneTime() {
+        Date formatDate = new Date(System.currentTimeMillis() - 5*60*1000);
+        ZoneId zone = ZoneId.of("Asia/Kolkata");
+        ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(formatDate.toInstant(), zone);
+        return zonedDateTime;
+    }
+
+    public List<JobStatusReport> getLastModifiedJobData() {
+        ZonedDateTime lastModifiedDate = this.getLast5MinZoneTime();
+        List<JobStatusReport> jobStatusReportList = reportDatabaseJobRepository.findAllJobsByDate(lastModifiedDate);
+        log.debug("List of last modified jobs list " +jobStatusReportList.size());
+        return jobStatusReportList;
+    }
+
+    public List<TicketStatusReport> getLastModifiedTicketData() {
+        ZonedDateTime lastModifiedDate = this.getLast5MinZoneTime();
+        List<TicketStatusReport> ticketReportList = reportDatabaseTicketRepository.findAllTicketsByDate(lastModifiedDate);
+        log.debug("List of last modified tickets list " +ticketReportList.size());
+        return ticketReportList;
+    }
+
+    public List<AttendanceStatusReport> getLastModifiedAttendance() {
+        ZonedDateTime lastModifiedDate = this.getLast5MinZoneTime();
+        List<AttendanceStatusReport> attendanceReportList = reportDatabaseAttendanceRepository.findAllAttendanceByDate(lastModifiedDate);
+        log.debug("List of last modified attendance list " +attendanceReportList.size());
+        return attendanceReportList;
+    }
+    /* End Get last 5 minutes modified results */
+
+    /** Add Points to InfluxDB for PreCompute results from transactions **/
+    /* Job points */
     public void addPointsToJob() throws Exception {
         InfluxDB influxDB = connectDatabase();
         List<JobStatusReport> reportLists = this.getPreComputeJobData();
         influxDB.setRetentionPolicy("one_year_policy");
         influxDB.enableBatch(BatchOptions.DEFAULTS.actions(2000).flushDuration(100));
         int i = 0;
-        for(JobStatusReport reportList : reportLists) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(reportList.getJobCreatedDate());
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-            log.debug("calendar time milliseconds" +cal.getTimeInMillis());
-            log.debug("system time milliseconds" + System.currentTimeMillis());
-            Point jobPoint = Point.measurement("JobReport")
-                .time(cal.getTimeInMillis() + i, TimeUnit.MILLISECONDS)
-                .addField("date", (float) cal.getTimeInMillis())
-                .tag("date", String.valueOf(cal.getTimeInMillis()))
-                .addField("status", reportList.getJobStatus().toString())
-                .tag("status",reportList.getJobStatus().toString())
-                .addField("type", (reportList.getJobType() != null ? reportList.getJobType().toString() : "CARPENTRY"))
-                .tag("type", (reportList.getJobType() != null ? reportList.getJobType().toString() : "CARPENTRY"))
-                .addField("projectId", (float) reportList.getProjectId())
-                .addField("siteId", (float) reportList.getSiteId())
-                .tag("siteId", String.valueOf(reportList.getSiteId()))
-                .addField("region", reportList.getRegion() != null ? reportList.getRegion() : "north-region")
-                .tag("region", reportList.getRegion() != null ? reportList.getRegion() : "north-region")
-                .addField("branch", reportList.getBranch() != null ? reportList.getBranch() : "andhrapradesh")
-                .tag("branch", reportList.getBranch() != null ? reportList.getBranch() : "andhrapradesh")
-                .addField("statusCount", reportList.getStatusCount())
-                .build();
+        if(reportLists.size() > 0) {
+            for(JobStatusReport reportList : reportLists) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(reportList.getJobCreatedDate());
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+                log.debug("calendar time milliseconds" +cal.getTimeInMillis());
+                log.debug("system time milliseconds" + System.currentTimeMillis());
+                Point jobPoint = Point.measurement("JobReport")
+                    .time(cal.getTimeInMillis() + i, TimeUnit.MILLISECONDS)
+                    .addField("id", reportList.getJobId())
+                    .tag("id", String.valueOf(reportList.getJobId()))
+                    .addField("date", cal.getTimeInMillis())
+                    .tag("date", String.valueOf(cal.getTimeInMillis()))
+                    .addField("status", reportList.getJobStatus().toString())
+                    .tag("status",reportList.getJobStatus().toString())
+                    .addField("type", (reportList.getJobType() != null ? reportList.getJobType().toString() : "CARPENTRY"))
+                    .tag("type", (reportList.getJobType() != null ? reportList.getJobType().toString() : "CARPENTRY"))
+                    .addField("projectId", (float) reportList.getProjectId())
+                    .addField("siteId", (float) reportList.getSiteId())
+                    .tag("siteId", String.valueOf(reportList.getSiteId()))
+                    .addField("region", reportList.getRegion() != null ? reportList.getRegion() : "north-region")
+                    .tag("region", reportList.getRegion() != null ? reportList.getRegion() : "north-region")
+                    .addField("branch", reportList.getBranch() != null ? reportList.getBranch() : "andhrapradesh")
+                    .tag("branch", reportList.getBranch() != null ? reportList.getBranch() : "andhrapradesh")
+                    .addField("statusCount", reportList.getStatusCount())
+                    .build();
 
-            influxDB.write(dbName, "one_year_policy", jobPoint);
-            Thread.sleep(2);
-            i++;
+                influxDB.write(dbName, "one_year_policy", jobPoint);
+                Thread.sleep(2);
+                i++;
+            }
+            Thread.sleep(10);
+            influxDB.disableBatch();
+            influxDB.close();
         }
-        Thread.sleep(10);
-        influxDB.disableBatch();
-        influxDB.close();
+
     }
 
+    /* Ticket points */
     public void addTicketPoints() throws Exception {
         InfluxDB influxDB = connectDatabase();
         List<TicketStatusReport> ticketStatusReportLists = this.getPreComputeTicketData();
@@ -153,21 +196,23 @@ public class ReportDatabaseUtil {
 
             Point ticketPoint = Point.measurement("TicketReport")
                 .time(cal.getTimeInMillis() + i, TimeUnit.MILLISECONDS)
+                .addField("id", ticketReportList.getTicketId())
+                .tag("id", String.valueOf(ticketReportList.getTicketId()))
                 .addField("date", cal.getTimeInMillis())
                 .tag("date", String.valueOf(cal.getTimeInMillis()))
                 .addField("siteId", ticketReportList.getSiteId())
                 .addField("projectId", ticketReportList.getProjectId())
                 .addField("status", ticketReportList.getStatus())
                 .tag("status", ticketReportList.getStatus())
-                .addField("category", ticketReportList.getCategory() != null ? ticketReportList.getCategory() : "ELECTRICAL")
-                .tag("category", ticketReportList.getCategory() != null ? ticketReportList.getCategory() : "ELECTRICAL")
+                .addField("category", ticketReportList.getCategory() != null ? ticketReportList.getCategory() : "OTHERS")
+                .tag("category", ticketReportList.getCategory() != null ? ticketReportList.getCategory() : "OTHERS")
                 .addField("assignedOn", ticketReportList.getAssignedOn() != null ? assignedOn.getTimeInMillis() : 0)
                 .tag("assignedOn", ticketReportList.getAssignedOn() != null ? String.valueOf(assignedOn.getTimeInMillis()) : "")
                 .addField("closedOn", ticketReportList.getClosedOn() != null ? closedOn.getTimeInMillis() : 0)
                 .tag("closedOn", ticketReportList.getClosedOn() != null ? String.valueOf(closedOn.getTimeInMillis()) : "")
                 .addField("statusCount", ticketReportList.getStatusCount())
-                .addField("region", ticketReportList.getRegion() != null ? ticketReportList.getRegion() : "north-region")
-                .tag("region", ticketReportList.getRegion() != null ? ticketReportList.getRegion() : "north-region")
+                .addField("region", ticketReportList.getRegion() != null ? ticketReportList.getRegion() : "other-region")
+                .tag("region", ticketReportList.getRegion() != null ? ticketReportList.getRegion() : "other-region")
                 .addField("branch", ticketReportList.getBranch() != null ? ticketReportList.getBranch() : "andhrapradesh")
                 .tag("branch", ticketReportList.getBranch() != null ? ticketReportList.getBranch() : "andhrapradesh")
                 .build();
@@ -181,6 +226,7 @@ public class ReportDatabaseUtil {
         influxDB.close();
     }
 
+    /* Attendance Points*/
     public void addAttendancePoints() throws Exception {
         InfluxDB influxDB = connectDatabase();
         List<AttendanceStatusReport> attendanceReportLists = this.getPreComputeAttendanceData();
@@ -220,7 +266,7 @@ public class ReportDatabaseUtil {
 
             Point attendancePoint = Point.measurement("AttendanceReport")
                 .time(cal.getTimeInMillis() + i, TimeUnit.MILLISECONDS)
-                .addField("date", (float) cal.getTimeInMillis())
+                .addField("date", cal.getTimeInMillis())
                 .tag("date", String.valueOf(cal.getTimeInMillis()))
                 .addField("checkInTime", attendanceReportList.getCheckInTime() != null ? checkIn.getTimeInMillis() : 0)
                 .tag("checkInTime",attendanceReportList.getCheckInTime() != null ? String.valueOf(checkIn.getTimeInMillis()) : "")
@@ -248,15 +294,11 @@ public class ReportDatabaseUtil {
         influxDB.disableBatch();
         influxDB.close();
     }
+    /* End Add Points to InfluxDB for PreCompute results */
 
-
-    public List<JobStatusMeasurement> getJobReportCategoryPoints() {
-        InfluxDB connection = connectDatabase();
-        String query = "select count(type) as categoryCount from JobReport group by type";
-        List<JobStatusMeasurement> jobCategoryReportPoints = reportDatabaseService.getJobPoints(connection, query, dbName);
-        return jobCategoryReportPoints;
-    }
-
+    /**
+     * Apply counts to charts
+    **/
     public List<ChartModelEntity> getJobReportStatusPoints() {
         InfluxDB connection = connectDatabase();
         String query = "select count(status) as statusCount from JobReport group by type, status";
@@ -500,6 +542,16 @@ public class ReportDatabaseUtil {
         log.debug("Query string builder" +query);
         List<JobStatusMeasurement> jobTodayCounts = reportDatabaseService.getJobPoints(conn, query, dbName);
         return jobTodayCounts;
+    }
+
+    /**
+     *  Get Total Counts Status based
+     **/
+    public List<JobStatusMeasurement> getJobReportCategoryPoints() {
+        InfluxDB connection = connectDatabase();
+        String query = "select count(type) as categoryCount from JobReport group by type";
+        List<JobStatusMeasurement> jobCategoryReportPoints = reportDatabaseService.getJobPoints(connection, query, dbName);
+        return jobCategoryReportPoints;
     }
 
     public List<JobReportCounts> getTotalJobsCount(SearchCriteria searchCriteria) {
@@ -793,6 +845,42 @@ public class ReportDatabaseUtil {
             reportCounts.setTotalLeft(0);
         }
         return reportCounts;
+    }
+
+    public String deleteOrUpdateJobPoints() {
+        InfluxDB connection = connectDatabase();
+        List<JobStatusReport> lastModResults = this.getLastModifiedJobData();
+        if(lastModResults.size() > 0) {
+            int i=0;
+            for(JobStatusReport lastModResult : lastModResults) {            // 0 // 1
+                StringBuilder sb = new StringBuilder();
+                sb.append("SELECT * FROM JobReport WHERE");
+                sb.append(" ");
+                sb.append("id="+lastModResult.getJobId());
+                String query = sb.toString();
+                List<JobStatusMeasurement> jobCategoryReportPoints = reportDatabaseService.getJobPoints(connection, query, dbName);
+                if(jobCategoryReportPoints.size() > 0) {                     // 1 record // 0 record
+                    for(JobStatusMeasurement jobCat: jobCategoryReportPoints) {   // 0
+                        InfluxDB influxDB = connectDatabase();
+                        Query deleteQuery = BoundParameterQuery.QueryBuilder.newQuery("DELETE FROM JobReport WHERE time=$time")
+                            .forDatabase(dbName)
+                            .bind("time", jobCat.getTime())
+                            .create();
+                        QueryResult results = influxDB.query(deleteQuery);
+                        log.debug("Deleted results" +results);
+                    }
+                }                                                           // empty 1 record
+                /* add new job points */
+                try {                                                       // 1+1+1 add
+                    reportDatabaseService.addNewJobPoints(lastModResult, i);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+                i++;
+            }
+        }
+
+        return "New Points are inserted...";
     }
 
 
