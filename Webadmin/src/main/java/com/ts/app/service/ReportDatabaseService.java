@@ -10,10 +10,7 @@ import com.ts.app.domain.TicketStatusReport;
 import com.ts.app.web.rest.dto.JobDTO;
 import org.influxdb.BatchOptions;
 import org.influxdb.InfluxDB;
-import org.influxdb.dto.BoundParameterQuery;
-import org.influxdb.dto.Point;
-import org.influxdb.dto.Query;
-import org.influxdb.dto.QueryResult;
+import org.influxdb.dto.*;
 import org.influxdb.impl.InfluxDBResultMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,9 +90,15 @@ public class ReportDatabaseService {
 
     public void addNewJobPoints(JobStatusReport reportList, int i) throws Exception {
         InfluxDB influxDB = connectDatabase();
-        influxDB.setRetentionPolicy("one_year_policy");
-        influxDB.enableBatch(BatchOptions.DEFAULTS.actions(100).flushDuration(200));
-        influxDB.setConsistency(InfluxDB.ConsistencyLevel.ALL);
+//        influxDB.setRetentionPolicy("one_year_policy");
+//        influxDB.enableBatch(BatchOptions.DEFAULTS.actions(100).flushDuration(200));
+        BatchPoints batchPoints = BatchPoints
+            .database(dbName)
+            .tag("async", "true")
+            .retentionPolicy("one_year_policy")
+            .consistency(InfluxDB.ConsistencyLevel.ALL)
+            .build();
+
         if(reportList != null) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(reportList.getJobCreatedDate());
@@ -124,18 +127,25 @@ public class ReportDatabaseService {
                 .tag("branch", reportList.getBranch() != null ? reportList.getBranch() : "andhrapradesh")
                 .addField("statusCount", reportList.getStatusCount())
                 .build();
-            influxDB.write(dbName, "one_year_policy", jobPoint);
+            batchPoints.point(jobPoint);
+            influxDB.write(batchPoints);
             Thread.sleep(2);
             influxDB.disableBatch();
             influxDB.close();
         }
     }
 
-    public void addNewTicketPoints(TicketStatusReport ticketReportList) throws Exception {
+    public void addNewTicketPoints(TicketStatusReport ticketReportList, int i) throws Exception {
         InfluxDB influxDB = connectDatabase();
-        influxDB.setRetentionPolicy("one_year_policy");
-        influxDB.enableBatch(100, 200, TimeUnit.MILLISECONDS);
-        influxDB.setConsistency(InfluxDB.ConsistencyLevel.ALL);
+//        influxDB.setRetentionPolicy("one_year_policy");
+//        influxDB.enableBatch(100, 200, TimeUnit.MILLISECONDS);
+//        influxDB.setConsistency(InfluxDB.ConsistencyLevel.ALL);
+        BatchPoints batchPoints = BatchPoints
+            .database(dbName)
+            .tag("async1", "true")
+            .retentionPolicy("one_year_policy")
+            .consistency(InfluxDB.ConsistencyLevel.ALL)
+            .build();
 
         if(ticketReportList.getCreatedDate() != null) {
             ticketReportList.setFormattedDate(Date.from(ticketReportList.getCreatedDate().toInstant()));
@@ -166,7 +176,7 @@ public class ReportDatabaseService {
         }
 
         Point ticketPoint = Point.measurement("TicketReport")
-            .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+            .time(cal.getTimeInMillis() + i, TimeUnit.MILLISECONDS)
             .addField("id", ticketReportList.getTicketId())
             .tag("id", String.valueOf(ticketReportList.getTicketId()))
             .addField("date", cal.getTimeInMillis())
@@ -187,20 +197,25 @@ public class ReportDatabaseService {
             .addField("branch", ticketReportList.getBranch() != null ? ticketReportList.getBranch() : "andhrapradesh")
             .tag("branch", ticketReportList.getBranch() != null ? ticketReportList.getBranch() : "andhrapradesh")
             .build();
-
-        influxDB.write(dbName, "one_year_policy", ticketPoint);
+        batchPoints.point(ticketPoint);
+        influxDB.write(batchPoints);
         Thread.sleep(2);
         influxDB.disableBatch();
         influxDB.close();
     }
 
-    public void addNewAttnPoints(AttendanceStatusReport attendanceReportList) throws Exception {
+    public void addNewAttnPoints(AttendanceStatusReport attendanceReportList, int i) throws Exception {
         InfluxDB influxDB = connectDatabase();
-        influxDB.setRetentionPolicy("one_year_policy");
-        influxDB.enableBatch(BatchOptions.DEFAULTS.actions(100).flushDuration(200));
-        influxDB.setConsistency(InfluxDB.ConsistencyLevel.ALL);
+//        influxDB.setRetentionPolicy("one_year_policy");
+//        influxDB.enableBatch(BatchOptions.DEFAULTS.actions(100).flushDuration(200));
+//        influxDB.setConsistency(InfluxDB.ConsistencyLevel.ALL);
+        BatchPoints batchPoints = BatchPoints
+            .database(dbName)
+            .tag("async2", "true")
+            .retentionPolicy("one_year_policy")
+            .consistency(InfluxDB.ConsistencyLevel.ALL)
+            .build();
 
-        int i = 0;
         log.debug("Total size" + i);
         Calendar cal = Calendar.getInstance();
         Calendar checkIn = Calendar.getInstance();
@@ -254,10 +269,9 @@ public class ReportDatabaseService {
             .tag("branch", attendanceReportList.getBranch() != null ? attendanceReportList.getBranch() : "andhrapradesh")
             .addField("statusCount", attendanceReportList.getStatusCount())
             .build();
-
-        influxDB.write(dbName, "one_year_policy", attendancePoint);
+        batchPoints.point(attendancePoint);
+        influxDB.write(batchPoints);
         Thread.sleep(2);
-        i++;
         influxDB.disableBatch();
         influxDB.close();
     }

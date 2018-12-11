@@ -1427,8 +1427,19 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.sendDaywiseReportEmail(cal.getTime(), isOnDemand, 0);
 	}
 
+    //@Scheduled(cron="0 */5 * * * ?")
 	public void createJobPoints() {
         reportDatabaseUtil.deleteOrUpdateJobPoints();
+    }
+
+    //@Scheduled(cron="0 */5 * * * ?")
+    public void createTicketPoints() {
+        reportDatabaseUtil.deleteOrUpdateTicketPoints();
+    }
+
+    //@Scheduled(cron="0 */5 * * * ?")
+    public void createAttnPoints() {
+        reportDatabaseUtil.deleteOrUpdateAttnPoints();
     }
 
 

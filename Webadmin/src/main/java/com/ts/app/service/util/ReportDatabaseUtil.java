@@ -883,6 +883,78 @@ public class ReportDatabaseUtil {
         return "New Points are inserted...";
     }
 
+    public String deleteOrUpdateTicketPoints() {
+        InfluxDB connection = connectDatabase();
+        List<TicketStatusReport> lastModResults = this.getLastModifiedTicketData();
+        if(lastModResults.size() > 0) {
+            int i=0;
+            for(TicketStatusReport lastModResult : lastModResults) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("SELECT * FROM JobReport WHERE");
+                sb.append(" ");
+                sb.append("id="+lastModResult.getTicketId());
+                String query = sb.toString();
+                List<TicketStatusMeasurement> ticketRepPoints = reportDatabaseService.getTicketPoints(connection, query, dbName);
+                if(ticketRepPoints.size() > 0) {
+                    for(TicketStatusMeasurement ticketCat: ticketRepPoints) {
+                        InfluxDB influxDB = connectDatabase();
+                        Query deleteQuery = BoundParameterQuery.QueryBuilder.newQuery("DELETE FROM JobReport WHERE time=$time")
+                            .forDatabase(dbName)
+                            .bind("time", ticketCat.getTime())
+                            .create();
+                        QueryResult results = influxDB.query(deleteQuery);
+                        log.debug("Deleted results" +results);
+                    }
+                }
+                /* add new ticket points */
+                try {
+                    reportDatabaseService.addNewTicketPoints(lastModResult, i);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+                i++;
+            }
+        }
+
+        return "New Points are inserted...";
+    }
+
+    public String deleteOrUpdateAttnPoints() {
+        InfluxDB connection = connectDatabase();
+        List<AttendanceStatusReport> lastModResults = this.getLastModifiedAttendance();
+        if(lastModResults.size() > 0) {
+            int i=0;
+            for(AttendanceStatusReport lastModResult : lastModResults) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("SELECT * FROM JobReport WHERE");
+                sb.append(" ");
+                sb.append("id="+lastModResult.getId());
+                String query = sb.toString();
+                List<AttendanceStatusMeasurement> attnRepPoints = reportDatabaseService.getAttendancePoints(connection, query, dbName);
+                if(attnRepPoints.size() > 0) {
+                    for(AttendanceStatusMeasurement attn : attnRepPoints) {
+                        InfluxDB influxDB = connectDatabase();
+                        Query deleteQuery = BoundParameterQuery.QueryBuilder.newQuery("DELETE FROM JobReport WHERE time=$time")
+                            .forDatabase(dbName)
+                            .bind("time", attn.getTime())
+                            .create();
+                        QueryResult results = influxDB.query(deleteQuery);
+                        log.debug("Deleted results" +results);
+                    }
+                }
+                /* add new Attendance points */
+                try {
+                    reportDatabaseService.addNewAttnPoints(lastModResult, i);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+                i++;
+            }
+        }
+
+        return "New Points are inserted...";
+    }
+
 
 
 

@@ -19,6 +19,6 @@ public interface ReportDatabaseJobRepository extends JpaRepository<Job, Long> {
     List<JobStatusReport> findAllJobStatusCountByDate();
 
     @Query("select new com.ts.app.domain.JobStatusReport(j.id, cast(j.plannedStartTime as date), j.status, j.type, j.site.id, s.project.id, s.region, s.branch, count(j.id) as statusCount) \n" +
-        " from Job j join j.site  s where s.id = j.site.id and j.lastModifiedDate >= :lastModifiedDate group by j.id, cast(j.plannedStartTime as date), j.status, j.type, j.site.id")
+        " from Job j join j.site  s where s.id = j.site.id and j.lastModifiedDate > :lastModifiedDate group by j.id, cast(j.plannedStartTime as date), j.status, j.type, j.site.id")
     List<JobStatusReport> findAllJobsByDate(@Param("lastModifiedDate") ZonedDateTime lastModifiedDate);
 }
