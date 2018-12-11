@@ -1,5 +1,5 @@
 <div class="crud-form"
-	data-unique-hash="a2ad475d60b22954085c657a73309b8f"  ng-init="initLoad();loadingAuto();" >
+	data-unique-hash="a2ad475d60b22954085c657a73309b8f"  ng-init="loadPageTop();init();loadingAuto();" >
 	<div class="">
 
 		<div class="row">
@@ -92,42 +92,20 @@
                                                     <span class="red-star">*</span>
                                                     <div class="dropdown">
 
-                                                        <!--<input type="text" class="form-control" ng-model="selectedProject" name="projectName" ng-value="selectedProject.name"-->
-                                                               <!--uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"-->
-                                                               <!--ng-blur="loadSites()"-->
-                                                               <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
-
-
-                                                        <!--<span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                        <!--<select class="form-control" ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects track by project.id" required>-->
-                                                            <!--<option value="">Select client...</option>-->
-                                                        <!--</select>-->
-                                                        <span ng-show="clientDisable"  class="form-control-feedback  orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                                        <span ng-show="!clientDisable" class="form-control-feedback  d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <ui-select ng-model="selectedProject" ng-disabled="clientDisable || ticketQuot" >
-                                                            <ui-select-match placeholder="Select clients...">{{ selectedProject.name?selectedProject.name:selectedProject}}</ui-select-match>
-                                                            <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search" ng-click="loadDepSites(selectedProject)">
-                                                                <div ng-bind="client"></div>
-                                                            </ui-select-choices>
-                                                        </ui-select>
+                                                        <span ng-show="!clientDisable && !SelectClient.selected" class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                              
+		                                                <ui-select ng-model="SelectClient.selected"  name="projectName" ng-disabled="clientDisable" ng-required="!ticketQuot">
+														  <ui-select-match placeholder="Select clients..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
+														  <ui-select-choices repeat="SelectClient in SelectClients | filter: $select.search"  ng-click="loadDepSitesList(SelectClient.selected)">
+														    <span ng-bind-html="SelectClient.name | highlight: $select.search"></span>
+														  </ui-select-choices>
+														</ui-select>
                                                         <div ng-show="form.$submitted || form.projectName.$touched">
                                                             <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
                                                                 <p class="help-block" style="color:maroon"
                                                                    ng-show="form.projectName.$error.required">
                                                                     Client name is required.
-                                                                </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.projectName.$error.minlength">
-                                                                    Client name is required to be at least 2 character.
-                                                                </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.projectName.$error.maxlength">
-                                                                    Client name cannot be longer than 50 characters.
-                                                                </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.projectName.$error.pattern">
-                                                                    Client name can only contain letters, digits and space.
-                                                                </p>
+                                                                </p>    
                                                             </div>
                                                         </div>
                                                     </div>
@@ -138,40 +116,21 @@
                                                     <label class="control-label">Site</label>
                                                     <span class="red-star">*</span>
                                                     <div class="dropdown" >
-                                                        <!--<input ng-focus="loadSites()" type="text" class="form-control"  ng-model="selectedSite" name="siteName" ng-value="selectedSite.name"-->
-                                                               <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
-                                                               <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
-                                                        <!--<span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                        <!--<select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites track by site.id" required>-->
-                                                            <!--<option value="">Select site...</option>-->
-                                                        <!--</select>-->
-                                                        <span ng-show="siteSpin"  class="form-control-feedback  orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                                        <span ng-show="!siteSpin" class="form-control-feedback  d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <ui-select ng-model="selectedSite" ng-disabled="(!selectedSite) && (siteFilterDisable || sitesList.length == 0) || ticketQuot"  >
-                                                            <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : selectedSite?selectedSite.name?selectedSite.name:hideSite?'Select site':selectedSite:selectedSite }}</ui-select-match>
-                                                            <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search" ng-click="loadSearchSite(selectedSite)">
-                                                                <div ng-bind="site"></div>
-                                                            </ui-select-choices>
-                                                        </ui-select>
-                                                        <span ng-if="sitesList.length == 0"><p class="help-block">No sites</p></span>
+                                                        <span ng-show="!siteDisable && !SelectSite.selected" class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                              
+		                                               <ui-select ng-model="SelectSite.selected"  name="siteName" ng-disabled="siteDisable || SelectSites.length == 0" ng-required="!ticketQuot">
+														  <ui-select-match placeholder="Select sites..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
+														  <ui-select-choices repeat="SelectSite in SelectSites | filter: $select.search" >
+														    <span ng-bind-html="SelectSite.name | highlight: $select.search"></span>
+														  </ui-select-choices>
+														</ui-select>
+                                                        <span ng-if="SelectSites.length == 0 && !ticketQuot"><p class="error-msg margin0">No sites</p></span>
                                                         <div ng-show="form.$submitted || form.siteName.$touched">
                                                             <div ng-show="form.siteName.$dirty || form.siteName.$invalid">
                                                                 <p class="help-block" style="color:maroon"
                                                                    ng-show="form.siteName.$error.required">
                                                                     Site name is required.
-                                                                </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.siteName.$error.minlength">
-                                                                    Site name is required to be at least 2 character.
-                                                                </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.siteName.$error.maxlength">
-                                                                    Site name cannot be longer than 50 characters.
-                                                                </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.siteName.$error.pattern">
-                                                                    Site name can only contain letters, digits and space.
-                                                                </p>
+                                                                </p> 
                                                             </div>
                                                         </div>
                                                     </div>

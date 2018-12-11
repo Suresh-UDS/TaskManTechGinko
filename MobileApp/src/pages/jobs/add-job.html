@@ -47,6 +47,29 @@
                         <ion-col col-12>
 
                             <div class="form-group label-floating">
+                                <!--<label class="control-label">Category</label>-->
+                                <ion-select  [(ngModel)]="category" class="select-box  padding-left0  popover-con" interface="popover"  placeholder="Choose category">
+                                    <ion-option  class="popover-con" value="HOUSEKEEPING">HOUSEKEEPING</ion-option>
+                                    <ion-option class="popover-con" value="ELECTRICAL">ELECTRICAL</ion-option>
+                                    <ion-option class="popover-con" value="PLUMPING">PLUMPING</ion-option>
+                                    <ion-option class="popover-con" value="HVAC">HVAC</ion-option>
+                                    <ion-option class="popover-con" value="CARPENTRY">CARPENTRY</ion-option>
+                                    <ion-option class="popover-con" value="PESTCONTROL">PESTCONTROL</ion-option>
+                                    <ion-option class="popover-con" value="MAINTENANCE">MAINTENANCE</ion-option>
+                                    <ion-option class="popover-con" value="CIVIL">CIVIL</ion-option>
+                                    <ion-option class="popover-con" value="GENERAL">GENERAL</ion-option>
+                                    <ion-option class="popover-con" value="PANTRYSERVICES">PANTRYSERVICES</ion-option>
+                                    <ion-option class="popover-con" value="ADMIN">ADMIN</ion-option>
+                                </ion-select>
+
+                            </div>
+
+
+                        </ion-col>
+
+                        <ion-col col-12>
+
+                            <div class="form-group label-floating">
                                 <label class="control-label" *ngIf="siteName">Site</label>
                                 <ion-select [(ngModel)]="siteName" class="select-box  padding-left0  popover-con" id="siteName"  interface="popover" placeholder="Choose Site" name="siteName" #site="ngModel" required [ngClass]="{'select-error': eMsg=='siteName'}">
                                     <ion-option *ngFor="let site of sites" [value]="site.id" (ionSelect)="getEmployee(site.id)" class="popover-con">{{site.name}}</ion-option>

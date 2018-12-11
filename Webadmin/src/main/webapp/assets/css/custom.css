@@ -262,10 +262,11 @@ ul.checkList li
     color: #000;
     background: none;
     box-shadow: none;
-    font-weight: none;
+    font-weight: normal;
     font-size:14px;
     padding-right: 0;
 }
+
 .navbar .dropdown-menu li a:hover, .navbar .dropdown-menu li a:focus, .navbar .dropdown-menu li a:active, .navbar.navbar-default .dropdown-menu li a:hover, .navbar.navbar-default .dropdown-menu li a:focus, .navbar.navbar-default .dropdown-menu li a:active
 {
     background-color: #ff9800;
@@ -1668,6 +1669,14 @@ a.cal-btn i
       display: none;
       width:4%;
   }
+  .pageTopCenter{
+      top: calc(100% / 8);
+      left: calc(100% / 2.3);
+      z-index: 100000;
+      position: absolute;
+      display: none;
+      width:4%;
+  }
   .white{
       color:#fff;
       line-height: 40px;
@@ -2118,3 +2127,25 @@ div.bouncing-container .arrow-down {
                   0 4px 23px 0px rgba(0, 0, 0, 0.12),
                   0 8px 10px -5px rgba(76, 175, 80, 0)!important;
 }
+
+a.clsBtn {
+    height: 22px;
+    right: 0px;
+    color: #000;
+    background: none;
+    box-shadow: none;
+    font-weight: normal;
+    font-size: 14px !important;
+    padding-right: 0 !important;
+    position: absolute;
+    margin-top: -2px;
+    z-index: 100000;
+}
+a.clsBtn:hover , a.clsBtn:active , a.clsBtn:focus {
+    color: #000 !important;
+    background: none !important;
+    box-shadow: none !important;
+   
+}
+
+

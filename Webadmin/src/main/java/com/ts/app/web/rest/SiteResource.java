@@ -170,7 +170,15 @@ public class SiteResource {
     public ResponseEntity<?> saveRegion(@RequestBody RegionDTO region){
         long userId = SecurityUtils.getCurrentUserId();
         try {
-            RegionDTO regionDTO= siteService.createRegion(region);
+        	if(!siteService.isDuplicate(region)) {        		
+        		RegionDTO regionDTO= siteService.createRegion(region);
+        	}else {
+                log.debug(">>> duplicate <<<");
+                region.setErrorMessage("error.duplicateRecordError");
+                region.setErrorStatus(true);
+//                region.setStatus("400");
+                return new ResponseEntity<>(region,HttpStatus.BAD_REQUEST);
+            }
         }catch(Exception e) {
             throw new TimesheetException(e, region);
         }
@@ -182,7 +190,15 @@ public class SiteResource {
     public ResponseEntity<?> saveBranch(@RequestBody BranchDTO branchDTO){
         long userId = SecurityUtils.getCurrentUserId();
         try {
-            BranchDTO branchDTO1= siteService.createBranch(branchDTO);
+        	if(!siteService.isDuplicate(branchDTO)) {   
+        		BranchDTO branchDTO1= siteService.createBranch(branchDTO);        		
+        	}else {
+        		log.debug(">>> duplicate <<<");
+        		branchDTO.setErrorMessage("error.duplicateRecordError");
+                branchDTO.setErrorStatus(true);
+//                branchDTO.setStatus("400");
+                return new ResponseEntity<>(branchDTO,HttpStatus.BAD_REQUEST);
+        	}
         }catch(Exception e) {
             throw new TimesheetException(e, branchDTO);
         }
@@ -212,6 +228,11 @@ public class SiteResource {
         return siteService.findBranchByProject(projectId,regionId);
     }
 
+    @RequestMapping(value = "/branch/projectId/{projectId}/regionName/{region}", method = RequestMethod.GET)
+    public List<BranchDTO> findBranchByProjectAndRegionName(@PathVariable("projectId") long projectId, @PathVariable("region") String region){
+        return siteService.findBranchByProjectAndRegionName(projectId,region);
+    }
+    
     @RequestMapping(value = "/project/region/{region}/projectId/{projectId}", method = RequestMethod.POST)
     public List<SiteDTO> findSitesByRegion( @PathVariable("region") String region, @PathVariable("projectId") long projectId){
         log.debug("find by project id and region - "+projectId+" - "+region);

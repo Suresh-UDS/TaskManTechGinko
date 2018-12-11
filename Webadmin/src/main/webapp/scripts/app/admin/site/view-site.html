@@ -48,11 +48,11 @@
                                             </tr>
                                             <tr>
                                                 <td>City</td>
-                                                <td>{{site.city}}</td>
+                                                <td ng-if="site.city">{{site.city | uppercase }}</td>
                                             </tr>
                                             <tr>
                                                 <td>State</td>
-                                                <td>{{site.state}}</td>
+                                                <td ng-if="site.state">{{site.state | uppercase }}</td>
                                             </tr>
                                             <tr>
                                                 <td>Pin Code</td>
@@ -60,7 +60,7 @@
                                             </tr>
                                             <tr>
                                                 <td>Country</td>
-                                                <td>{{site.country}}</td>
+                                                <td ng-if="site.country">{{site.country | uppercase}}</td>
                                             </tr>
                                             </tbody>
                                         </table>

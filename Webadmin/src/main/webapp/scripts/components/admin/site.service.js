@@ -102,13 +102,13 @@ angular.module('timeSheetApp')
 
             addRegion: function (region) {
                 return $http.post('api/region',region).then(function (response) {
-                    return response.data;
+                    return response;
                 })
             },
 
             addBranch: function(branch){
 			    return $http.post('api/branch',branch).then(function (response) {
-                    return response.data;
+                    return response;
                 })
             },
 
@@ -132,6 +132,12 @@ angular.module('timeSheetApp')
 
             getBranchByProject: function (projectId,regionId) {
                 return $http.get('api/branch/projectId/'+projectId+'/region/'+regionId).then(function (response) {
+                    return response.data;
+                })
+            },
+            
+            getBranchByProjectAndRegionName: function (projectId,region) {
+                return $http.get('api/branch/projectId/'+projectId+'/regionName/'+region).then(function (response) {
                     return response.data;
                 })
             },

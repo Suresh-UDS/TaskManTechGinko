@@ -49,7 +49,7 @@ angular.module('timeSheetApp')
 
         $scope.conform = function(text)
         {
-            console.log($scope.selectedProject)
+          //console.log($scope.selectedProject)
             $rootScope.conformText = text;
             $('#conformationModal').modal();
 
@@ -91,7 +91,7 @@ angular.module('timeSheetApp')
             }).catch(function (response) {
                 $scope.saveLoad = false;
                 $scope.success = null;
-                console.log(response.data);
+              //console.log(response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                     $scope.errorChecklistExists = true;
                 } else if(response.status === 400 && response.data.message === 'error.validation'){
@@ -136,7 +136,7 @@ angular.module('timeSheetApp')
             $('.pageCenter').show();$('.overlay').show();
             $scope.loader = function(){
 
-                console.log("Calling loader");
+              //console.log("Calling loader");
                 $('.pageCenter').hide();$('.overlay').hide();
 
             }
@@ -161,7 +161,7 @@ angular.module('timeSheetApp')
             	$location.path('/checklists');
             }).catch(function (response) {
                 $scope.success = null;
-                console.log('Error - '+ response.data);
+              //console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                     $scope.errorChecklistExists = true;
                 } else if(response.status === 400 && response.data.message === 'error.validation'){
@@ -223,7 +223,7 @@ angular.module('timeSheetApp')
         	ChecklistComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.checklists = data.transactions;
                 $scope.checklistsLoader = true;
-                console.log($scope.checklists);
+              //console.log($scope.checklists);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
                 if($scope.checklists == null){
@@ -272,7 +272,7 @@ angular.module('timeSheetApp')
         }
 
         $scope.previous = function() {
-            console.log("Calling previous")
+          //console.log("Calling previous")
 
             if($scope.pages.currPage > 1) {
                 $scope.pages.currPage = $scope.pages.currPage - 1;
@@ -296,7 +296,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.next = function() {
-            console.log("Calling next")
+          //console.log("Calling next")
 
             if($scope.pages.currPage < $scope.pages.totalPages) {
                 $scope.pages.currPage = $scope.pages.currPage + 1;
@@ -320,7 +320,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.last = function() {
-            console.log("Calling last")
+          //console.log("Calling last")
             if($scope.pages.currPage < $scope.pages.totalPages) {
                 $scope.pages.currPage = $scope.pages.totalPages;
                 if($scope.pages.currPage == $scope.pages.totalPages) {
@@ -373,7 +373,7 @@ angular.module('timeSheetApp')
         // Datatable
                         $scope.initDataTables = function(){
 
-                            console.log("Data tables function")
+                          //console.log("Data tables function")
 
                             $('#datatables').DataTable({
                                 "pagingType": "full_numbers",

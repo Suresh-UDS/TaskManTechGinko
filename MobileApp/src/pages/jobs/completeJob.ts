@@ -292,6 +292,8 @@ export class CompleteJobPage {
     }
 
     completeJob(job, takenImages){
+      console.log("getJobs",job);
+      console.log("getImages",takenImages);
         this.component.showLoader('Completing Job');
         this.geolocation.getCurrentPosition().then((response)=>{
             this.component.closeAll();

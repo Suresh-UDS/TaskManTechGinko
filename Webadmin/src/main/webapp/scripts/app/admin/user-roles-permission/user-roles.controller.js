@@ -230,14 +230,14 @@ angular.module('timeSheetApp')
                     $scope.searchCriteria.role = $scope.searchUserRoleName;
 
             }else{
-                 $scope.searchCriteria.name = null;
+                 $scope.searchCriteria.role = null;
             }
 
              if($scope.searchUserRoleLevel) {
                     $scope.searchCriteria.roleLevel= $scope.searchUserRoleLevel;
 
             }else{
-                $scope.searchCriteria.level = null;
+                $scope.searchCriteria.roleLevel = null;
             }
 
         	 //-------
@@ -255,6 +255,8 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.columnName ="id";
                 $scope.searchCriteria.sortByAsc = true;
             }
+            
+            
 
             console.log("search criteria",$scope.searchCriteria);
              $scope.userRoles = '';
@@ -277,21 +279,21 @@ angular.module('timeSheetApp')
 
                 $rootScope.retain = 0;
 
-                var searchCriteras  = $scope.localStorage;
+                $scope.searchCriteras  = $scope.localStorage;
             }else{
 
-                var searchCriteras  = $scope.searchCriteria;
+            	$scope.searchCriteras  = $scope.searchCriteria;
             }
 
             /* Localstorage (Retain old values while edit page to list) end */
 
 
-        	UserRoleComponent.search(searchCriteras).then(function (data) {
+        	UserRoleComponent.search($scope.searchCriteras).then(function (data) {
                 $scope.userRoles = data.transactions;
                 $scope.userRolesLoader = true;
 
                 /** retaining list search value.**/
-                getLocalStorage.updateSearch(searchCriteras);
+                getLocalStorage.updateSearch($scope.searchCriteras);
 
                 /*
                     ** Call pagination  main function **

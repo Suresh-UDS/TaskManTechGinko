@@ -22,9 +22,28 @@ angular.module('timeSheetApp')
         $scope.branchList=null;
         $scope.selectedRegion=null;
         $scope.selectedBranch = null;
+        
+        /** root scope (searchCriteria) **/
+        $rootScope.searchFilterCriteria = {};
 
         $scope.selectedFromDate =  $filter('date')(new Date(), 'dd/MM/yyyy') ;
         $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+         
+        /** root scope (searchCriteria) **/
+        $rootScope.searchFilterCriteria.selectedFromDate = new Date();
+        $rootScope.searchFilterCriteria.selectedToDate = new Date();
+        $rootScope.searchFilterCriteria.projectId = null;
+        $rootScope.searchFilterCriteria.projectName = null;
+        $rootScope.searchFilterCriteria.regionId = null;
+        $rootScope.searchFilterCriteria.regionName = null;
+        $rootScope.searchFilterCriteria.branchId = null;
+        $rootScope.searchFilterCriteria.branchName = null;
+        $rootScope.searchFilterCriteria.siteId = null;
+        $rootScope.searchFilterCriteria.siteName = null;
+        $rootScope.searchFilterCriteria.jobStatus = null;
+        $rootScope.searchFilterCriteria.ticketStatus = null;
+        $rootScope.searchFilterCriteria.isDashboard = false;
+       
         
         $scope.selectedFromDateSer =new Date();
         $scope.selectedToDateSer = new Date();
@@ -373,6 +392,10 @@ angular.module('timeSheetApp')
             }else {
                 $scope.selectedFromDateSer = new Date(e.date._d);
                 $scope.selectedFromDate = $filter('date')(e.date._d, 'dd/MM/yyyy') ;
+                
+                /** root scope (searchCriteria) **/
+                $rootScope.searchFilterCriteria.selectedFromDate = new Date(e.date._d);
+                
                 $scope.refreshReport();
             }
         });
@@ -389,6 +412,10 @@ angular.module('timeSheetApp')
             }else {
             	$scope.selectedToDateSer = new Date(e.date._d);
                 $scope.selectedToDate = $filter('date')(e.date._d, 'dd/MM/yyyy') ;
+                
+                /** root scope (searchCriteria) **/
+                $rootScope.searchFilterCriteria.selectedToDate = new Date(e.date._d);
+                
                 $scope.refreshReport();
             }
 
@@ -535,20 +562,26 @@ angular.module('timeSheetApp')
             // $scope.myChart.update();
         };
         
-        $scope.LoadFilterSites = function(){
-        	if($scope.selectedSite) {
-    			$scope.refreshReportBySite();
-                $scope.loadChartData($scope.selectedProject.id,null,null,$scope.selectedSite.id);
-
-            }
-        };
-        
-        $scope.LoadFilterBranches = function(){
+        $scope.LoadFilterProjects = function(){
+        	$scope.regionList= "";
+        	$scope.branchList= "";
         	$scope.sites= "";
-        	if($scope.selectedBranch){
-                $scope.refreshReportByBranch();
-                $scope.loadSites($scope.selectedProject.id,$scope.selectedRegion.name,$scope.selectedBranch.name);
-                $scope.loadChartData($scope.selectedProject.id,$scope.selectedRegion.name,$scope.selectedBranch.name,null);
+        	if($scope.selectedProject) {
+        		
+        		/** root scope (searchCriteria) **/
+                $rootScope.searchFilterCriteria.projectId = $scope.selectedProject.id;
+                $rootScope.searchFilterCriteria.projectName = $scope.selectedProject.name;
+                $rootScope.searchFilterCriteria.regionId = null;
+                $rootScope.searchFilterCriteria.regionName = null;
+                $rootScope.searchFilterCriteria.branchId = null;
+                $rootScope.searchFilterCriteria.branchName = null;
+                $rootScope.searchFilterCriteria.siteId = null;
+                $rootScope.searchFilterCriteria.siteName = null;
+                
+    			$scope.refreshReportByProject();
+    			$scope.loadRegions($scope.selectedProject.id);
+    			$scope.loadSites($scope.selectedProject.id,null,null);
+                $scope.loadChartData($scope.selectedProject.id,null,null,null);
 
             }
         };
@@ -557,6 +590,15 @@ angular.module('timeSheetApp')
         	$scope.branchList= "";
         	$scope.sites= "";
         	if($scope.selectedRegion){
+        		
+        		/** root scope (searchCriteria) **/
+                $rootScope.searchFilterCriteria.regionId = $scope.selectedRegion.id;
+                $rootScope.searchFilterCriteria.regionName = $scope.selectedRegion.name;
+                $rootScope.searchFilterCriteria.branchId = null;
+                $rootScope.searchFilterCriteria.branchName = null;
+                $rootScope.searchFilterCriteria.siteId = null;
+                $rootScope.searchFilterCriteria.siteName = null;
+                
                 $scope.refreshReportByRegion();
                 $scope.loadBranch($scope.selectedProject.id);
                 $scope.loadSites($scope.selectedProject.id,$scope.selectedRegion.name,null);
@@ -565,20 +607,37 @@ angular.module('timeSheetApp')
             }
         };
         
-        $scope.LoadFilterProjects = function(){
-        	$scope.regionList= "";
-        	$scope.branchList= "";
+        $scope.LoadFilterBranches = function(){
         	$scope.sites= "";
-        	if($scope.selectedProject) {
-    			$scope.refreshReportByProject();
-    			$scope.loadRegions($scope.selectedProject.id);
-    			$scope.loadSites($scope.selectedProject.id,null,null);
-                $scope.loadChartData($scope.selectedProject.id,null,null,null);
+        	if($scope.selectedBranch){
+        		
+        		/** root scope (searchCriteria) **/
+                $rootScope.searchFilterCriteria.branchId = $scope.selectedBranch.id;
+                $rootScope.searchFilterCriteria.branchName = $scope.selectedBranch.name;
+                $rootScope.searchFilterCriteria.siteId = null;
+                $rootScope.searchFilterCriteria.siteName = null;
+                
+                $scope.refreshReportByBranch();
+                $scope.loadSites($scope.selectedProject.id,$scope.selectedRegion.name,$scope.selectedBranch.name);
+                $scope.loadChartData($scope.selectedProject.id,$scope.selectedRegion.name,$scope.selectedBranch.name,null);
 
             }
         };
+        
+        $scope.LoadFilterSites = function(){
+        	if($scope.selectedSite) {
+        		
+        		/** root scope (searchCriteria) **/
+                $rootScope.searchFilterCriteria.siteId = $scope.selectedSite.id;
+                $rootScope.searchFilterCriteria.siteName = $scope.selectedSite.name;
+                
+    			$scope.refreshReportBySite();
+                $scope.loadChartData($scope.selectedProject.id,null,null,$scope.selectedSite.id);
+                console.log('Root search values',$rootScope.searchFilterCriteria);
 
-
+            }
+        };
+   
         $scope.refreshReportByProject = function() {
              $scope.selectedFromDateSer.setHours(0,0,0,0);
              $scope.selectedToDateSer.setHours(23,59,59,0);
@@ -753,6 +812,28 @@ angular.module('timeSheetApp')
         $scope.showNotifications= function(position,alignment,color,msg){
             demo.showNotification(position,alignment,color,msg);
         }
-
+        
+        /* Root scope (search criteria) function */
+        
+        $scope.dbdFilter = function(){
+        	
+         $rootScope.searchFilterCriteria.isDashboard = true;	
+        	
+        }
+        
+        $scope.dbdStatusFilter = function(sType){
+        	
+            $rootScope.searchFilterCriteria.isDashboard = true;	
+            $rootScope.searchFilterCriteria.jobStatus = sType;
+           	
+        }
+        
+        $scope.dbdTStatusFilter = function(tType){
+        	
+            $rootScope.searchFilterCriteria.isDashboard = true;	
+            $rootScope.searchFilterCriteria.ticketStatus = tType;
+           	
+        }
+    
 
     });

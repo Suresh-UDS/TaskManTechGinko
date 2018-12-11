@@ -27,6 +27,7 @@ declare var demo;
 export class CreateTicket {
 
     sites:any;
+    category:any;
     private title: any;
     private description: any;
     private siteName: any;
@@ -143,7 +144,8 @@ export class CreateTicket {
               this.eMsg="";
               this.siteId=window.localStorage.getItem('site')
               console.log( this.siteId);
-              this.userId=localStorage.getItem('employeeUserId')
+              this.userId=localStorage.getItem('employeeUserId');
+              console.log("category" + this.category);
               this.newTicket={
                   "title":this.title,
                   "description":this.description,
@@ -152,6 +154,7 @@ export class CreateTicket {
                   "employeeId":this.employ,
                   "userId":this.userId,
                   "severity":this.severity,
+                  "category":this.category,
 
               };
 
