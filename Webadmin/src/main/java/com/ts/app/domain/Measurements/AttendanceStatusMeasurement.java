@@ -50,6 +50,9 @@ public class AttendanceStatusMeasurement {
     @Column(name="leftCount")
     private int leftCount;
 
+    @Column(name = "absentCount")
+    private int absentCount;
+
     public Instant getTime() {
         return time;
     }
@@ -160,5 +163,13 @@ public class AttendanceStatusMeasurement {
 
     public void setLeftCount(int leftCount) {
         this.leftCount = leftCount;
+    }
+
+    public int getAbsentCount() {
+        return absentCount;
+    }
+
+    public void setAbsentCount(int absentCount) {
+        this.absentCount = absentCount;
     }
 }

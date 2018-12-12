@@ -37,7 +37,7 @@ angular.module('timeSheetApp')
         };
     })
 
-    .controller('DashboardController', function ($timeout,$scope,$rootScope,$filter,DashboardComponent,JobComponent, $state,$http,$stateParams,$location,TicketComponent,SiteComponent) {
+    .controller('DashboardController', function ($timeout,$scope,$rootScope,$filter,DashboardComponent,JobComponent, $state,$http,$stateParams,$location,TicketComponent,SiteComponent,AttendanceComponent) {
         $rootScope.loginView = false;
 
         $scope.ready = false;
@@ -81,7 +81,7 @@ angular.module('timeSheetApp')
             $scope.loadChartData();
             // $scope.loadJobReportFromInflux();
             $scope.loadTicketStatusFromInflux();
-            // $scope.loadTicketStatusCounts();
+            $scope.loadAttendanceStatusCounts();
 
             DashboardComponent.loadAllJobsByCategoryCnt().then(function (data) {
                 console.log("All jobs by category count " +JSON.stringify(data));
@@ -903,6 +903,17 @@ angular.module('timeSheetApp')
             });
         }
 
+        $scope.loadAttendanceStatusCounts = function() {
+            AttendanceComponent.getTotalStatusCounts().then(function (data) {
+               console.log("Total Attendance status counts" + JSON.stringify(data));
+               if(data.length > 0) {
+                   $scope.attnStackChart = data[0];
+                   $scope.attnStackXSeries = $scope.attnStackChart.x;
+                   $scope.attnStackYSeries = $scope.attnStackChart.status;
+               }
+            });
+        }
+
         $scope.loadTicketStatusCounts = function() {
             // Ticket for get total status counts
             // var searchCriteriaTicket = {};
@@ -1025,65 +1036,58 @@ angular.module('timeSheetApp')
             y: 25
         }]
 
-
-        Highcharts.chart('AttendanceStackedCharts', {
-            chart: {
-                type: 'column'
-            },
-            title: {
-                text: 'Attendance Status'
-            },
-            xAxis: {
-                categories: ['15/10/2018', '16/10/2018', '17/10/2018', '18/10/2018', '19/10/2018', '20/10/2018', '21/10/2018', '22/10/2018', '23/10/2018',]
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: 'Total Count'
+        $timeout(function () {
+            Highcharts.chart('AttendanceStackedCharts', {
+                chart: {
+                    type: 'column'
                 },
-                stackLabels: {
-                    enabled: true,
-                    style: {
-                        fontWeight: 'bold',
-                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                    }
-                }
-            },
-            legend: {
-                align: 'right',
-                x: -30,
-                verticalAlign: 'top',
-                y: 25,
-                floating: true,
-                backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-                borderColor: '#CCC',
-                borderWidth: 1,
-                shadow: false
-            },
-            tooltip: {
-                headerFormat: '<b>{point.x}</b><br/>',
-                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-            },
-            plotOptions: {
-                column: {
-                    stacking: 'normal',
-                    dataLabels: {
+                title: {
+                    text: 'Attendance Status'
+                },
+                xAxis: {
+                    categories: $scope.attnStackXSeries
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Total Count'
+                    },
+                    stackLabels: {
                         enabled: true,
-                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                        style: {
+                            fontWeight: 'bold',
+                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                        }
                     }
-                }
-            },
-            series: [{
-                name: 'Left',
-                data: [5, 3, 4, 7, 2,5, 3, 4, 7]
-            }, {
-                name: 'Absent',
-                data: [2, 2, 3, 2, 1,5, 3, 4, 7]
-            }, {
-                name: 'Present',
-                data: [3, 4, 4, 2, 5,5, 3, 4, 7]
-            }]
-        });
+                },
+                legend: {
+                    align: 'right',
+                    x: -30,
+                    verticalAlign: 'top',
+                    y: 25,
+                    floating: true,
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                    borderColor: '#CCC',
+                    borderWidth: 1,
+                    shadow: false
+                },
+                tooltip: {
+                    headerFormat: '<b>{point.x}</b><br/>',
+                    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: true,
+                            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                        }
+                    }
+                },
+                series: $scope.attnStackYSeries
+            });
+        }, 2500)
+
 
         $timeout(function () {
             Highcharts.chart('ticketStackedCharts', {

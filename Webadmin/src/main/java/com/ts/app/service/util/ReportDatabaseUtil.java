@@ -1,5 +1,8 @@
 package com.ts.app.service.util;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ts.app.config.ReportDatabaseConfiguration;
 import com.ts.app.domain.*;
 import com.ts.app.domain.Measurements.AttendanceStatusMeasurement;
@@ -9,8 +12,11 @@ import com.ts.app.domain.util.StringUtil;
 import com.ts.app.repository.ReportDatabaseAttendanceRepository;
 import com.ts.app.repository.ReportDatabaseJobRepository;
 import com.ts.app.repository.ReportDatabaseTicketRepository;
+import com.ts.app.service.RateCardService;
 import com.ts.app.service.ReportDatabaseService;
+import com.ts.app.web.rest.dto.QuotationDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.influxdb.BatchOptions;
 import org.influxdb.InfluxDB;
@@ -24,8 +30,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -53,6 +61,9 @@ public class ReportDatabaseUtil {
 
     @Inject
     private ReportDatabaseService reportDatabaseService;
+
+    @Inject
+    private RateCardService rateCardService;
 
     private InfluxDB connectDatabase() {
         // Connect to database assumed on local host with default credentials.
@@ -266,6 +277,8 @@ public class ReportDatabaseUtil {
 
             Point attendancePoint = Point.measurement("AttendanceReport")
                 .time(cal.getTimeInMillis() + i, TimeUnit.MILLISECONDS)
+                .addField("id", attendanceReportList.getId())
+                .tag("id", String.valueOf(attendanceReportList.getId()))
                 .addField("date", cal.getTimeInMillis())
                 .tag("date", String.valueOf(cal.getTimeInMillis()))
                 .addField("checkInTime", attendanceReportList.getCheckInTime() != null ? checkIn.getTimeInMillis() : 0)
@@ -293,6 +306,71 @@ public class ReportDatabaseUtil {
         Thread.sleep(10);
         influxDB.disableBatch();
         influxDB.close();
+    }
+
+    /* Add Quotation Points */
+    public void addQuotationPoints() throws Exception {
+        InfluxDB influxDB = connectDatabase();
+        Object rateCards = rateCardService.findAll();
+        List<QuotationDTO> quotationResults = new ArrayList<QuotationDTO>();
+        if (rateCards != null) {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.findAndRegisterModules();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            mapper.configure(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE, false);
+            try {
+                quotationResults = mapper.readValue((String) rateCards,
+                    new TypeReference<List<QuotationDTO>>() {
+                    });
+            } catch (IOException e) {
+                log.error("Error while converting quotation results to objects", e);
+            }
+            if(CollectionUtils.isNotEmpty(quotationResults)) {
+                int i=0;
+                for(QuotationDTO quotationResult : quotationResults) {
+                    log.debug("Total size" + i);
+                    Calendar cal = Calendar.getInstance();
+                    Date formatDate = Date.from(quotationResult.getCreatedDate().toInstant());
+                    cal.setTime(formatDate);
+                    cal.set(Calendar.HOUR_OF_DAY, 0);
+                    cal.set(Calendar.MINUTE, 0);
+                    cal.set(Calendar.SECOND, 0);
+                    cal.set(Calendar.MILLISECOND, 0);
+                    log.debug("calendar time milliseconds" +cal.getTimeInMillis());
+                    log.debug("system time milliseconds" + System.currentTimeMillis());
+
+                    Point quotationPoint = Point.measurement("QuotationReport")
+                        .time(cal.getTimeInMillis() + i, TimeUnit.MILLISECONDS)
+                        .addField("id", quotationResult.getSerialId())
+                        .tag("id", String.valueOf(quotationResult.getSerialId()))
+                        .addField("date", cal.getTimeInMillis())
+                        .tag("date", String.valueOf(cal.getTimeInMillis()))
+                        .addField("projectId", (float) quotationResult.getProjectId())
+                        .addField("siteId", (float) quotationResult.getSiteId())
+                        .addField("status", quotationResult.getStatus()!= null ? quotationResult.getStatus() : "")
+                        .tag("status", quotationResult.getStatus())
+                        .addField("isApproved", quotationResult.isApproved())
+                        .tag("isApproved", String.valueOf(quotationResult.isApproved()))
+                        .addField("isArchived", quotationResult.isArchived())
+                        .tag("isArchived", String.valueOf(quotationResult.isArchived()))
+                        .addField("isDrafted", quotationResult.isDrafted())
+                        .tag("isDrafted", String.valueOf(quotationResult.isDrafted()))
+                        .addField("isSubmitted", quotationResult.isSubmitted())
+                        .tag("isSubmitted", String.valueOf(quotationResult.isSubmitted()))
+                        .addField("statusCount", 1)
+                        .build();
+
+                    influxDB.write(dbName, "one_year_policy", quotationPoint);
+                    Thread.sleep(2);
+                    i++;
+                }
+                Thread.sleep(10);
+                influxDB.disableBatch();
+                influxDB.close();
+            }
+
+        }
+
     }
     /* End Add Points to InfluxDB for PreCompute results */
 
@@ -466,6 +544,103 @@ public class ReportDatabaseUtil {
                 chartModelEntities.add(chartModelEntity);
 
                 log.debug("Formatted JSON for ticket" +chartModelEntities.toString());
+            }
+
+        }
+
+        return chartModelEntities;
+    }
+
+//    public List<AttendanceStatusMeasurement> getAttncounts() {
+//        InfluxDB influxDB = connectDatabase();
+//        String query = "select sum(statusCount) as presentCount, count(distinct(employeeId)) as empCount from AttendanceReport where checkInTime != 0 and time > now() - 30d group by time(1d)";
+//        List<AttendanceStatusMeasurement> attnStatusPoints = reportDatabaseService.getAttendancePoints(influxDB, query, dbName);
+//        return attnStatusPoints;
+//    }
+
+    public List<ChartModelEntity> getAttnTotalCounts() {
+        InfluxDB connection = connectDatabase();
+        String query = "select sum(statusCount) as presentCount, count(distinct(employeeId)) as empCount from AttendanceReport where " +
+            "checkInTime != 0 and time > now() - 30d group by time(1d)";
+        List<AttendanceStatusMeasurement> attnStatusPoints = reportDatabaseService.getAttendancePoints(connection, query, dbName);
+        Map<String, Map<String, Integer>> statusPoints = new HashMap<>();
+        Map<String, Integer> statusCounts = null;
+        List<ChartModelEntity> chartModelEntities = new ArrayList<>();
+
+        if(attnStatusPoints.size() > 0) {
+            for(AttendanceStatusMeasurement attnStatusPoint : attnStatusPoints) {
+                Instant instant = attnStatusPoint.getTime();
+                Date myDate = Date.from(instant);
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                String category = formatter.format(myDate);
+                if(statusPoints.containsKey(category)) {
+                    statusCounts = statusPoints.get(category);
+                }else {
+                    statusCounts = new HashMap<String, Integer>();
+                }
+
+                int LeftCnt = statusCounts.containsKey("Left") ? statusCounts.get("Left") : 0;
+                int PresentCnt = statusCounts.containsKey("Present") ? statusCounts.get("Present") : 0;
+                int AbsentCnt = statusCounts.containsKey("Absent") ? statusCounts.get("Absent") : 0;
+
+                LeftCnt +=  attnStatusPoint.getLeftCount() > 0 ? attnStatusPoint.getLeftCount() : 0;
+                PresentCnt += attnStatusPoint.getPresentCount() > 0 ? attnStatusPoint.getPresentCount() : 0;
+                AbsentCnt += attnStatusPoint.getAbsentCount() > 0 ? attnStatusPoint.getAbsentCount() : 0;
+
+                statusCounts.put("Left", LeftCnt);
+                statusCounts.put("Present", PresentCnt);
+                statusCounts.put("Absent", AbsentCnt);
+
+                statusPoints.put(category, statusCounts);
+
+            }
+            log.debug("Attn status points map count" +statusPoints.toString());
+
+            if(!statusPoints.isEmpty()) {
+                Set<Map.Entry<String,Map<String,Integer>>> entrySet = statusPoints.entrySet();
+                List<Map.Entry<String, Map<String,Integer>>> list = new ArrayList<Map.Entry<String, Map<String,Integer>>>(entrySet);
+                ChartModelEntity chartModelEntity = new ChartModelEntity();
+                List<String> categoryList = new ArrayList<>();
+                List<Status> categoryStatusCnts = new ArrayList<>();
+                Status leftstatus = new Status();
+                Status presentstatus = new Status();
+                Status absentstatus = new Status();
+                List<Integer> totalLeftCnts = new ArrayList<>();
+                List<Integer> totalPresentCnts = new ArrayList<>();
+                List<Integer> totalAbsentCnts = new ArrayList<>();
+                for(Map.Entry<String, Map<String, Integer>> ent : list) {
+                    String category = ent.getKey();
+                    categoryList.add(category);
+                    Map<String, Integer> categoryWiseCount = statusPoints.get(category);
+                    if(categoryWiseCount.containsKey("Left")) {
+                        int leftCnt = categoryWiseCount.get("Left");
+                        leftstatus.setName("Left");
+                        totalLeftCnts.add(leftCnt);
+                        leftstatus.setData(totalLeftCnts);
+                    }
+                    if(categoryWiseCount.containsKey("Present")) {
+                        int presentCnt = categoryWiseCount.get("Present");
+                        presentstatus.setName("Present");
+                        totalPresentCnts.add(presentCnt);
+                        presentstatus.setData(totalPresentCnts);
+                    }
+                    if(categoryWiseCount.containsKey("Absent")) {
+                        int absentCnt = categoryWiseCount.get("Absent");
+                        absentstatus.setName("Absent");
+                        totalAbsentCnts.add(absentCnt);
+                        absentstatus.setData(totalAbsentCnts);
+                    }
+
+                }
+
+                chartModelEntity.setX(categoryList);
+                categoryStatusCnts.add(leftstatus);
+                categoryStatusCnts.add(presentstatus);
+                categoryStatusCnts.add(absentstatus);
+                chartModelEntity.setStatus(categoryStatusCnts);
+                chartModelEntities.add(chartModelEntity);
+
+                log.debug("Formatted JSON for Attn" + chartModelEntities.toString());
             }
 
         }
@@ -880,7 +1055,7 @@ public class ReportDatabaseUtil {
             }
         }
 
-        return "New Points are inserted...";
+        return "New Job Points are inserted...";
     }
 
     public String deleteOrUpdateTicketPoints() {
@@ -916,7 +1091,7 @@ public class ReportDatabaseUtil {
             }
         }
 
-        return "New Points are inserted...";
+        return "New Ticket Points are inserted...";
     }
 
     public String deleteOrUpdateAttnPoints() {
@@ -952,8 +1127,9 @@ public class ReportDatabaseUtil {
             }
         }
 
-        return "New Points are inserted...";
+        return "New Attendance Points are inserted...";
     }
+
 
 
 

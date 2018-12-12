@@ -240,6 +240,12 @@ public class ReportResource {
 	    return "schedule service called...";
     }
 
+    @RequestMapping(value = "/reports/attendance", method = RequestMethod.GET)
+    public ResponseEntity<?> getAttnCounts() {
+        List<ChartModelEntity> reportList = reportDatabaseUtil.getAttnTotalCounts();
+        return new ResponseEntity<>(reportList, HttpStatus.OK);
+    }
+
 
 
 	//    @CrossOrigin
