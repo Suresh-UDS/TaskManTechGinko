@@ -60,6 +60,10 @@
         <ion-col col-6>
             <p text-right>{{ticketDetails.createdDate | date:"longDate"}}</p>
         </ion-col>
+        <ion-col col-6 class="label-on-left" *ngIf="ticketDetails.remarks">Remarks</ion-col>
+        <ion-col col-6 *ngIf="ticketDetails.remarks">
+            <p text-right>{{ticketDetails.remarks}}</p>
+        </ion-col>
     </ion-row>
 
     <br>

@@ -1276,18 +1276,22 @@ angular.module('timeSheetApp')
 	              	}
 	            	if($rootScope.searchFilterCriteria.selectedFromDate) {
 		        		$scope.searchCriteria.checkInDateTimeFrom = $rootScope.searchFilterCriteria.selectedFromDate;
-		        		$scope.searchJobDateFrom = $filter('date')($rootScope.searchFilterCriteria.selectedFromDate, 'dd/MM/yyyy');
+		        		$scope.searchJobDate = $filter('date')($rootScope.searchFilterCriteria.selectedFromDate, 'dd/MM/yyyy');
+		        		$scope.searchJobDateSer = new Date($rootScope.searchFilterCriteria.selectedFromDate);
 		        	}else{
 		        	    $scope.searchCriteria.checkInDateTimeFrom = null;
-		        	    $scope.searchJobDateFrom = null;
+		        	    $scope.searchJobDate = null;
+		        	    $scope.searchJobDateSer = null;
 		        	}
 
 		        	if($rootScope.searchFilterCriteria.selectedToDate) {
 		        		$scope.searchCriteria.checkInDateTimeTo = $rootScope.searchFilterCriteria.selectedToDate;
 		        		$scope.searchJobDateTo = $filter('date')($rootScope.searchFilterCriteria.selectedToDate, 'dd/MM/yyyy');
+		        		$scope.searchJobDateToSer = new Date($rootScope.searchFilterCriteria.selectedToDate);
 		        	}else{
 		        	    $scope.searchCriteria.checkInDateTimeTo = null;
 		        	    $scope.searchJobDateTo = null;
+		        	    $scope.searchJobDateToSer = null
 		        	}
 	             	
 	            	 /* Root scope (search criteria) end*/
