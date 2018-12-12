@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
             .state('add-asset', {
                 parent: 'manage',
                 url: '/add-asset',
-                controller: 'AssetController',
+                //controller: 'AssetController',
                 data: {
                     authorities: [],
                     pageTitle: 'Add Asset'
@@ -24,7 +24,7 @@ angular.module('timeSheetApp')
         .state('edit-asset', {
             parent: 'manage',
             url: '/edit-asset/:id',
-            controller: 'AssetController',
+            //controller: 'AssetController',
             data: {
                 authorities: [],
                 pageTitle: 'Edit Asset'
@@ -42,7 +42,7 @@ angular.module('timeSheetApp')
         }).state('view-asset', {
             parent: 'manage',
             url: '/view-asset/:id',
-            controller: 'AssetController',
+            //controller: 'AssetController',
             data: {
                 authorities: [],
                 pageTitle: 'View Asset'
@@ -61,7 +61,7 @@ angular.module('timeSheetApp')
         .state('assets', {
                 parent: 'manage',
                 url: '/assets',
-                controller: 'AssetController',
+                //controller: 'AssetController',
                 data: {
                     authorities: [],
                     pageTitle: 'Assets'
@@ -79,7 +79,7 @@ angular.module('timeSheetApp')
             .state('schedule-list', {
                 parent: 'manage',
                 url: '/schedule-list',
-                controller: 'AssetController',
+                //controller: 'AssetController',
                 data: {
                     authorities: [],
                     pageTitle: 'Schedule List'
@@ -97,7 +97,7 @@ angular.module('timeSheetApp')
             .state('asset-config', {
                 parent: 'manage',
                 url: '/asset-config',
-                controller: 'AssetController',
+                //controller: 'AssetController',
                 data: {
                     authorities: [],
                     pageTitle: 'Configuration'
@@ -114,7 +114,7 @@ angular.module('timeSheetApp')
             }).state('view-calendar', {
             parent: 'manage',
             url: '/view-calendar/:id',
-            controller: 'AssetController',
+            //controller: 'AssetController',
             data: {
                 authorities: [],
                 pageTitle: 'Asset Schedule'
@@ -131,7 +131,7 @@ angular.module('timeSheetApp')
         }).state('qr-code-list', {
             parent: 'manage',
             url: '/qr-code-list/:qrStatus/:ids/:siteId',
-            controller: 'AssetController',
+            //controller: 'AssetController',
             data: {
                 authorities: [],
                 pageTitle: 'Asset Qr Code Details'
@@ -148,7 +148,7 @@ angular.module('timeSheetApp')
         }).state('view-grid', {
             parent: 'manage',
             url: '/view-grid',
-            controller: 'AssetController',
+           // controller: 'AssetController',
             data: {
                 authorities: [],
                 pageTitle: 'Schedule Grid'
