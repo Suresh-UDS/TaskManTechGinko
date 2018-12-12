@@ -189,7 +189,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("SELECT emp FROM Employee emp WHERE emp.enrolled_face is not null")
 	Page<Employee> findByImage(Pageable pageRequest);
 
-    @Query("SELECT distinct e FROM Employee e WHERE e.isFaceIdEnrolled = TRUE and e.active='Y'")
+    @Query("SELECT distinct e FROM Employee e WHERE e.isFaceIdEnrolled = TRUE")
     List<Employee> findEnrolledEmployees();
 
 }
