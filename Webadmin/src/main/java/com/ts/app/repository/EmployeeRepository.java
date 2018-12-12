@@ -186,7 +186,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE ps.site.id = :siteId and e.id NOT IN :empIds and e.active='Y' and e.isLeft = FALSE order by e.designation")
 	List<Employee> findNonMatchingBySiteId(@Param("siteId") long siteId, @Param("empIds") List<Long> empIds);
 
-	@Query("SELECT emp FROM Employee emp WHERE emp.enrolled_face is not null and e.active='Y'")
+	@Query("SELECT emp FROM Employee emp WHERE emp.enrolled_face is not null")
 	Page<Employee> findByImage(Pageable pageRequest);
 
     @Query("SELECT distinct e FROM Employee e WHERE e.isFaceIdEnrolled = TRUE")
