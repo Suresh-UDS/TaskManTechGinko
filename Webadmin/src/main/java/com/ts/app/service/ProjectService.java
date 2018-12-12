@@ -56,7 +56,7 @@ public class ProjectService extends AbstractService {
 
 	@Inject
 	private SiteService siteService;
-	
+
 	@Inject
 	private ClientGroupRepository clientGroupRepository;
 
@@ -85,7 +85,7 @@ public class ProjectService extends AbstractService {
         log.debug("Create user information"+projectDto.getUserId());
 		Project project = mapperUtil.toEntity(projectDto, Project.class);
 		project.setActive(project.ACTIVE_YES);
-		
+
 		//create client group if does not exist
 		if(!StringUtils.isEmpty(project.getClientGroup())) {
 			Clientgroup clientGroup = clientGroupRepository.findByName(project.getClientGroup());
@@ -96,7 +96,7 @@ public class ProjectService extends AbstractService {
 				clientGroupRepository.save(clientGroup);
 			}
 		}
-		
+
 		project = projectRepository.save(project);
 		log.debug("Created Information for Project: {}", project);
 		projectDto = mapperUtil.toModel(project, ProjectDTO.class);
@@ -118,7 +118,7 @@ public class ProjectService extends AbstractService {
 		 */
 
 	}
-	
+
 	private void mapToModel(Project project , ProjectDTO projectDTO) {
 		projectDTO.setId(project.getId());
 		projectDTO.setName(org.apache.commons.lang3.StringUtils.upperCase(project.getName()));
@@ -131,7 +131,7 @@ public class ProjectService extends AbstractService {
 		projectDTO.setStartDate(project.getStartDate());
 		projectDTO.setEndDate(project.getEndDate());
 		projectDTO.setContactFirstName(project.getContactFirstName());
-		projectDTO.setContactLastName(project.getContactLastName());	
+		projectDTO.setContactLastName(project.getContactLastName());
 	}
 
 	private void mapToEntity(ProjectDTO projectDTO, Project project) {
@@ -190,7 +190,7 @@ public class ProjectService extends AbstractService {
 				Hibernate.initialize(employee.getSubOrdinates());
 				int levelCnt = 1;
 				subEmpIds.addAll(siteService.findAllSubordinates(employee, subEmpIds, levelCnt));
-	        		
+
 	        		subEmpList.addAll(subEmpIds);
 
 				log.debug("List of subordinate ids -"+ subEmpList);
@@ -198,7 +198,7 @@ public class ProjectService extends AbstractService {
 			}
 			entities = projectRepository.findAll(subEmpList);
 		}else {
-			entities = projectRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
+			entities = projectRepository.findAll();
 		}
 		List<ProjectDTO> values = new ArrayList<ProjectDTO>();
 		if(CollectionUtils.isNotEmpty(entities)) {
@@ -331,7 +331,7 @@ public class ProjectService extends AbstractService {
 	public ClientgroupDTO createClientGroup(ClientgroupDTO clientGroupDTO) {
 		Clientgroup clientgroup = mapperUtil.toEntity(clientGroupDTO, Clientgroup.class);
 		Clientgroup existingGroup = clientGroupRepository.findByName(clientGroupDTO.getClientgroup());
-		if(existingGroup == null) { 
+		if(existingGroup == null) {
 			clientgroup.setActive(Clientgroup.ACTIVE_YES);
 			clientGroupRepository.save(clientgroup);
 			clientGroupDTO = mapperUtil.toModel(clientgroup, ClientgroupDTO.class);

@@ -21,7 +21,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("SELECT e FROM Employee e WHERE e.code = :code and e.active='Y'")
 	Employee findByCode(@Param("code") long code);
 
-	@Query("SELECT e FROM Employee e WHERE e.empId = :empId")
+	@Query("SELECT e FROM Employee e WHERE e.empId = :empId and e.active='Y'")
 	Employee findByEmpId(@Param("empId") String empId);
 
 	@Query("SELECT e FROM Employee e join e.projectSites s WHERE s.site.id = :siteId and e.active='Y' and e.isLeft = FALSE order by e.designation")
@@ -54,7 +54,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("SELECT distinct e FROM Employee e WHERE e.id IN :empIds and e.active='Y' and e.isLeft = FALSE and (client = :isClient or client = FALSE) order by e.empId ")
 	Page<Employee> findAllByEmpIds(@Param("empIds") List<Long> empIds, @Param("isClient") boolean isClient, Pageable PageRequest);
 
-    @Query("SELECT e FROM Employee e WHERE e.id = :employeeId")
+    @Query("SELECT e FROM Employee e WHERE e.id = :employeeId and e.active='Y'")
     Page<Employee> findByEmployeeId(@Param("employeeId") long employeeId, Pageable pageRequest);
 
     @Query("SELECT e FROM Employee e WHERE e.empId = :employeeId and e.active='Y' and (client = :isClient or client = FALSE)")
@@ -143,13 +143,13 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	Page<Employee> findEmployeesByIdAndSiteIdAndProjectId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, @Param("userGroupId") long userGroupId, Pageable pageRequest);
 	*/
 
-	@Query("SELECT e FROM Employee e where e.user.id = :userId ")
+	@Query("SELECT e FROM Employee e where e.user.id = :userId and e.active='Y' ")
 	Employee findByUserId(@Param("userId") Long userId);
 
-	@Query("SELECT e FROM Employee e where e.user.id = :userId ")
+	@Query("SELECT e FROM Employee e where e.user.id = :userId and e.active='Y' ")
 	List<Employee> findListByUserId(@Param("userId") Long userId);
 
-	@Query("SELECT distinct u FROM Employee e join e.user u where e.id IN :employeeIds")
+	@Query("SELECT distinct u FROM Employee e join e.user u where e.id IN :employeeIds and e.active='Y'")
 	List<User> findUsersByEmployeeIds(@Param("employeeIds") List<Long> employeeIds);
 
     //	isLeft is removed from query as count in employee list mismatches with dashboard employees count - 11-12-2018 - Karthick
@@ -186,7 +186,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE ps.site.id = :siteId and e.id NOT IN :empIds and e.active='Y' and e.isLeft = FALSE order by e.designation")
 	List<Employee> findNonMatchingBySiteId(@Param("siteId") long siteId, @Param("empIds") List<Long> empIds);
 
-	@Query("SELECT emp FROM Employee emp WHERE emp.enrolled_face is not null")
+	@Query("SELECT emp FROM Employee emp WHERE emp.enrolled_face is not null and e.active='Y'")
 	Page<Employee> findByImage(Pageable pageRequest);
 
     @Query("SELECT distinct e FROM Employee e WHERE e.isFaceIdEnrolled = TRUE and e.active='Y'")

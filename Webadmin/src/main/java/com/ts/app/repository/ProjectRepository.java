@@ -32,6 +32,9 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 	@Query("SELECT distinct p FROM Project p join p.employeeProjSites e WHERE e.employee.id in (:empIds) and p.active = 'Y' order by p.name ASC")
 	List<Project> findAll(@Param("empIds") List<Long> empIds);
 
+	@Query("SELECT p FROM Project p where p.active='Y' order by p.name ASC ")
+    List<Project> findAll();
+
 	@Query("SELECT p FROM Project p join p.employeeProjSites e WHERE e.employee.id = :empId and p.active = 'Y'")
 	List<Project> findAllByUserGroupId(@Param("empId") long empId);
 
