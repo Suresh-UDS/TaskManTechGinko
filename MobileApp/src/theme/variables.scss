@@ -186,7 +186,7 @@ button.button-md-primary p.siteName
 
 scanqr
 {
-  ion-content.content-md
+  ion-content.content
   {
     background: transparent !important;
   }
@@ -204,7 +204,7 @@ scanqr
 
 scanQR-Asset{
 
-  ion-content.content-md
+  ion-content.content
   {
     background: transparent !important;
   }
@@ -220,7 +220,7 @@ scanQR-Asset{
 
 }
 
-ion-app.md
+ion-app
 {
   background: transparent !important;
 }
@@ -293,6 +293,10 @@ ion-app.md
 
 .form-group label.control-label{
   color: #000;
+}
+
+.form-group label.control-white-label{
+  color: #fff;
 }
 
 image-viewer ion-header
