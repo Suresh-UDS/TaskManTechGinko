@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
             .state('sla-list', {
                 parent: 'manage',
                 url: '/sla-list',
-                controller: 'SlaController',
+                //controller: 'SlaController',
                 data: {
                     authorities: [],
                     pageTitle: 'SLA Management'

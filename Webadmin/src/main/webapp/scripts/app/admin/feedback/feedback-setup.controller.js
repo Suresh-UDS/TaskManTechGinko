@@ -866,7 +866,7 @@ angular.module('timeSheetApp')
 	  		        	$scope.searchCriteria.regionId = $scope.searchRegion.id;
 	                      $scope.searchCriteria.region = $scope.searchRegion.name;
 	
-	  	        	}else {
+	  	        	}else {    
 	  	        		$scope.searchCriteria.regionId = null;
 	  	        		$scope.searchCriteria.region = null;
 	  	        	}
@@ -1091,7 +1091,6 @@ angular.module('timeSheetApp')
 
             }*/
         };
-
 
     });
 

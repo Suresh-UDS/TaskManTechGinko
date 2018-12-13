@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
             .state('inventory-transaction-list', {
                 parent: 'manage',
                 url: '/inventory-transaction-list',
-                controller: 'InventoryTransactionController',
+                //controller: 'InventoryTransactionController',
                 data: {
                     authorities: [],
                     pageTitle: 'Inventory Transaction List'

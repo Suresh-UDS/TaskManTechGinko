@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
             .state('feedback-setup', {
                 parent: 'manage',
                 url: '/feedback-setup',
-                controller: 'FeedbackSetupController',
+                //controller: 'FeedbackSetupController',
                 data: {
                     authorities: [],
                     pageTitle: 'Feedback Mapping'
@@ -24,7 +24,7 @@ angular.module('timeSheetApp')
             .state('add-feedback-setup', {
                 parent: 'manage',
                 url: '/add-feedback-setup',
-                controller: 'FeedbackSetupController',
+                //controller: 'FeedbackSetupController',
                 data: {
                     authorities: [],
                     pageTitle: 'Add Feedback Mapping'

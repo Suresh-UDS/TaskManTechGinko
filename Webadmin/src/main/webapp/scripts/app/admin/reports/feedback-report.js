@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
             .state('feedbackReports', {
                 parent: 'manage',
                 url: '/feedback-reports',
-                controller: 'FeedbackReportController',
+                //controller: 'FeedbackReportController',
                 data: {
                     authorities: [],
                     pageTitle: 'Feedback Report'
