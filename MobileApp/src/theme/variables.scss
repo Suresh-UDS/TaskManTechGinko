@@ -202,6 +202,9 @@ scanqr
 
 }
 
+
+
+
 scanQR-Asset{
 
   ion-content.content
@@ -224,6 +227,16 @@ ion-app
 {
   background: transparent !important;
 }
+ion-app.ios
+{
+  background: transparent !important;
+  background-color:transparent !important;
+}
+.nav-decor
+{
+  background: transparent !important;
+}
+
 .FeedBackContainer
 {
 
