@@ -136,6 +136,9 @@ public class AssetManagementService extends AbstractService {
 	private ImportUtil importUtil;
 
 	@Inject
+	private ImportService importService;
+
+	@Inject
 	private ReportUtil reportUtil;
 
 	@Inject
@@ -1158,7 +1161,7 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	public ImportResult importFile(MultipartFile file, long dateTime) {
-		return importUtil.importAssetData(file, dateTime, false, false);
+		return importService.importAssetData(file, dateTime, false, false);
 	}
 
 	public ImportResult getImportStatus(String fileId) {
@@ -1173,7 +1176,7 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	public ImportResult importPPMFile(MultipartFile file, long dateTime) {
-		return importUtil.importAssetData(file, dateTime,true, false);
+		return importService.importAssetData(file, dateTime,true, false);
 	}
 
 	public ImportResult getImportPPMStatus(String fileId) {
@@ -1188,7 +1191,7 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	public ImportResult importAMCFile(MultipartFile file, long dateTime) {
-		return importUtil.importAssetData(file, dateTime, false, true);
+		return importService.importAssetData(file, dateTime, false, true);
 	}
  
 	public ImportResult getImportAMCStatus(String fileId) {

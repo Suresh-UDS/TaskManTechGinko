@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import com.ts.app.domain.JobChecklist;
-import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -33,10 +31,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.JobChecklist;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.User;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.AmazonS3Service;
+import com.ts.app.service.ImportService;
 import com.ts.app.service.JobManagementService;
 import com.ts.app.service.PushService;
 import com.ts.app.service.SchedulerService;
@@ -45,6 +45,22 @@ import com.ts.app.service.util.CacheUtil;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.ReportUtil;
+import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.CheckInOutDTO;
+import com.ts.app.web.rest.dto.EmployeeDTO;
+import com.ts.app.web.rest.dto.ExportResponse;
+import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.GraphResponse;
+import com.ts.app.web.rest.dto.ImportResult;
+import com.ts.app.web.rest.dto.JobChecklistDTO;
+import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.LocationDTO;
+import com.ts.app.web.rest.dto.NotificationLogDTO;
+import com.ts.app.web.rest.dto.Paginator;
+import com.ts.app.web.rest.dto.PriceDTO;
+import com.ts.app.web.rest.dto.ReportResult;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
 
 /**
  * REST controller for managing the Site information.
@@ -72,7 +88,7 @@ public class JobManagementResource {
 	private SchedulerService schedulerService;
 
 	@Inject
-	private ImportUtil importUtil;
+	private ImportService importService;
 
 	@Inject
 	private CacheUtil cacheUtil;
@@ -368,7 +384,10 @@ public class JobManagementResource {
 	@RequestMapping(path="/jobs/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ImportResult> importJobData(@RequestParam("jobFile") MultipartFile file){
 		Calendar cal = Calendar.getInstance();
-		ImportResult result = importUtil.importJobData(file, cal.getTimeInMillis());
+		ImportResult result = importService.importJobData(file, cal.getTimeInMillis());
+        if(StringUtils.isNotEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+	    		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+	    }
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
  

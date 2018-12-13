@@ -488,45 +488,46 @@ angular.module('timeSheetApp')
                         $scope.saveLoad = false;
 
 
-                //console.log($scope.selectedRegion!=null?$scope.selectedRegion:" ");
-
-                $scope.btnDisable = true;
-                $scope.site.projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
-                //console.log('shifts - ' + JSON.stringify($scope.shiftItems));
-                $scope.site.shifts = $scope.shiftItems;
-                $scope.site.region = $scope.selectedRegion!=null?$scope.selectedRegion.name:" ";
-                $scope.site.branch = $scope.selectedBranch!=null?$scope.selectedBranch.name:" "
-
-                //console.log('To be save site information -- ' , $scope.site);
-
-                SiteComponent.createSite($scope.site).then(function() {
-                    $scope.success = 'OK';
-                    $scope.saveLoad = false;
-                    $scope.showNotifications('top','center','success','Site has been added successfully!!');
-                    $scope.selectedProject = null;
-                    $scope.loadSites();
-                    $location.path('/sites');
-                }).catch(function (response) {
-                    $scope.success = null;
-                    $scope.saveLoad = false;
-
-                    //console.log('Error - ')
-                    //console.log(response.data);
-                    //console.log('status - '+ response.status + ' , message - ' + response.data.message);
-
-                    if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
-                        $scope.errorSitesExists = 'ERROR';
-                        $scope.showNotifications('top','center','danger','Site already exists');
-
-
-                        //console.log($scope.errorSitesExists);
-
-                    } else {
-                        $scope.showNotifications('top','center','danger','Unable to add site. Please try again later..');
-                        $scope.error = 'ERROR';
-                    }
-                    $scope.btnDisable = false;
-                });
+		                //console.log($scope.selectedRegion!=null?$scope.selectedRegion:" ");
+		
+		                $scope.btnDisable = true;
+		                $scope.site.projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
+		                //console.log('shifts - ' + JSON.stringify($scope.shiftItems));
+		                $scope.site.shifts = $scope.shiftItems;
+		                $scope.site.region = $scope.selectedRegion!=null?$scope.selectedRegion.name:" ";
+		                $scope.site.branch = $scope.selectedBranch!=null?$scope.selectedBranch.name:" "
+		
+		                //console.log('To be save site information -- ' , $scope.site);
+		
+		                SiteComponent.createSite($scope.site).then(function() {
+		                    $scope.success = 'OK';
+		                    $scope.saveLoad = false;
+		                    $scope.showNotifications('top','center','success','Site has been added successfully!!');
+		                    $scope.selectedProject = null;
+		                    $scope.loadSites();
+		                    $location.path('/sites');
+		                }).catch(function (response) {
+		                    $scope.success = null;
+		                    $scope.saveLoad = false;
+		
+		                    //console.log('Error - ')
+		                    //console.log(response.data);
+		                    //console.log('status - '+ response.status + ' , message - ' + response.data.message);
+		
+		                    if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+		                        $scope.errorSitesExists = 'ERROR';
+		                        $scope.showNotifications('top','center','danger','Site already exists');
+		
+		
+		                        //console.log($scope.errorSitesExists);
+		
+		                    } else {
+		                        $scope.showNotifications('top','center','danger','Unable to add site. Please try again later..');
+		                        $scope.error = 'ERROR';
+		                    }
+		                    $scope.btnDisable = false;
+		                });
+	                }
             }
 
         };
