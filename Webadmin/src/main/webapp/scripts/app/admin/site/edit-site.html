@@ -8,7 +8,7 @@
 
     <div>
             <div class="cardsCon editSiteCon" >
-                <form ng-show="!success" name="form" role="form" novalidate
+                <form ng-show="!success" ng-submit="conform('update',form.$invalid)" name="form" role="form" novalidate
                         >
                     <div class="row">
 
@@ -425,7 +425,7 @@
                         <div class="col-md-12">
 
 
-                            <button type="submit" ng-click="conform('back')"
+                            <button type="button" ng-click="conform('back')"
                                     id="cancel-button" ng-disabled="btnDisable" tabindex="15"  class="btn btn-default pull-right">Back</button>
 
                             <!--<button type="submit" type="submit" ng-click="updateSite(form.$invalid)"-->
@@ -433,7 +433,7 @@
                                         <!--<i class="material-icons">check</i>-->
                                     <!--</span>Update site</button>-->
 
-                            <button type="submit" type="submit" ng-click="conform('update',form.$invalid)" id="form-button-save"
+                            <button type="submit" type="submit"  id="form-button-save"
                                     ng-disabled="form.$invalid || btnDisable" tabindex="14" class="btn btn-success ld ld-over-inverse pull-right"
                                     ng-class="{'running':saveLoad}">
                                 <span class="btn-label"><i class="material-icons">check</i></span> Update site
