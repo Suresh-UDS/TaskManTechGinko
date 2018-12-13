@@ -332,6 +332,7 @@ angular.module('timeSheetApp')
 
               $scope.siteSpin = true;
               $scope.searchProject = searchProject;
+              
               if(jQuery.isEmptyObject($scope.searchProject) == true){
             	  SiteComponent.findAll().then(function (data) {
 	                  $scope.selectedSite = null;
@@ -623,11 +624,25 @@ angular.module('timeSheetApp')
                 SiteComponent.findOne(siteId).then(function (data) {
                         $scope.site = data;
                       if($scope.site){
-
+                    	  
+                    	  /** add region and branch scopes **/
+                      	$scope.regionSelectedProject = {};
+                      	$scope.branchSelectedProject = {};
+                      	$scope.selectedRegionOne = {};
+            
                       //console.log('$scope.site.shifts - '+$scope.site.shifts);
 
                         $scope.selectedProject = {id:$scope.site.projectId,name:$scope.site.projectName};
                         $scope.SelectClient.selected = $scope.selectedProject;
+                        
+                        
+                        /** add region and branch scopes **/
+                        $scope.regionSelectedProject = $scope.selectedProject;
+                      	$scope.branchSelectedProject = $scope.selectedProject;
+                      	$scope.regions = null;
+                      	$scope.loadRegions($scope.selectedProject.id);
+                      	$scope.selectedRegionOne= {name:$scope.site.region};
+                      	
                         SiteComponent.getRegionByProject($scope.selectedProject.id).then(function (response) {
                             
                              $scope.regionList = response;
@@ -842,8 +857,8 @@ angular.module('timeSheetApp')
             that.calendar[cmp] = true;
         };
 
-        $scope.isActiveAsc = 'id';
-        $scope.isActiveDesc = '';
+        $scope.isActiveAsc = '';
+        $scope.isActiveDesc = 'id';
 
         $scope.columnAscOrder = function(field){
             $scope.selectedColumn = field;
@@ -1010,7 +1025,7 @@ angular.module('timeSheetApp')
 
             }else{
                 $scope.searchCriteria.columnName ="id";
-                $scope.searchCriteria.sortByAsc = true;
+                $scope.searchCriteria.sortByAsc = false;
             }
 
 
@@ -1211,14 +1226,25 @@ angular.module('timeSheetApp')
         
      
 
-        /*** UI select (Region List) **/
+        /** UI select (Region List) **/
         $scope.loadRegionsList = function (projectId, callback) {
-            $scope.regionSpin = true;
-            $scope.branchsLists = [];
-            $scope.branchsListOne.selected = null;
-            $scope.branchFilterDisable = true;
-            SiteComponent.getRegionByProject(projectId).then(function (response) {
-                // //console.log(response);
+
+	        	/** add region and branch scopes **/
+	        	$scope.regionSelectedProject = {};
+	        	$scope.branchSelectedProject = {};
+	        	$scope.selectedRegionOne = {};
+	        	$scope.regions = null;
+	        	$scope.loadRegions(projectId.id);
+	        	$scope.regionSelectedProject = projectId;
+	        	$scope.branchSelectedProject = projectId;
+	        	
+	        	$scope.regionSpin = true;
+	        	$scope.branchsLists = [];
+	        	$scope.branchsListOne.selected = null;
+	        	$scope.branchFilterDisable = true;
+	        	$scope.selectedBranch = {};
+                SiteComponent.getRegionByProject(projectId.id).then(function (response) {
+               // //console.log(response);
                 $scope.regionList = response;
                 $scope.regionsLists = [];
                 $scope.regionsListOne.selected = null;
@@ -1243,6 +1269,11 @@ angular.module('timeSheetApp')
             if(projectId){
 
                 if($scope.selectedRegion){
+    	
+                	/** add region and branch scopes **/
+                	$scope.selectedRegionOne = {};
+                	$scope.selectedRegionOne = $scope.selectedRegion;
+
                    // //console.log($scope.selectedRegion);
                     SiteComponent.getBranchByProject(projectId,$scope.selectedRegion.id).then(function (response) {
                       //console.log(response);
@@ -1397,7 +1428,8 @@ angular.module('timeSheetApp')
                         
                         $scope.btnDisable = false;
                         $scope.clientRegion = null;
-                        $scope.regionSelectedProject = {};
+                        //$scope.regionSelectedProject = {};
+                        $scope.loadRegionsList($scope.regionSelectedProject);
                         $('.rModal.in').modal('hide');
 
                     }).catch(function (response) {
@@ -1411,7 +1443,7 @@ angular.module('timeSheetApp')
                         }
                          $scope.btnDisable = false;
                          $scope.clientRegion = null;
-                         $scope.regionSelectedProject = {};
+                         //$scope.regionSelectedProject = {};
                          $('.rModal.in').modal('hide');
                     });
                 }else{
@@ -1455,8 +1487,9 @@ angular.module('timeSheetApp')
                      
                             $scope.btnDisable = false;
                             $scope.regionBranch = null;
-                            $scope.selectedRegionOne = {};
-                            $scope.branchSelectedProject = {};
+                            //$scope.selectedRegionOne = {};
+                            //$scope.branchSelectedProject = {};
+                            
                             $('.bModal.in').modal('hide');
 
                         }).catch(function (response) {
@@ -1470,8 +1503,8 @@ angular.module('timeSheetApp')
                             }
                              $scope.btnDisable = false;
                              $scope.regionBranch = null;
-                             $scope.selectedRegionOne = {};
-                             $scope.branchSelectedProject = {};
+                             //$scope.selectedRegionOne = {};
+                             //$scope.branchSelectedProject = {};
                              $('.bModal.in').modal('hide');
                         });
                     }else{

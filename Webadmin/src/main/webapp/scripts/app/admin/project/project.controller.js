@@ -216,6 +216,7 @@ angular.module('timeSheetApp')
 
         $scope.loadClientGroup = function () {
         	$scope.loadingStart();
+        	$scope.clientGroups = '';
            ProjectComponent.loadClientGroup().then(function (data) {
              //console.log("Loading all Client Group -- " , data)
                $scope.clientGroups = data;
@@ -275,8 +276,8 @@ angular.module('timeSheetApp')
             that.calendar[cmp] = true;
         };
 
-        $scope.isActiveAsc = 'id';
-        $scope.isActiveDesc = '';
+        $scope.isActiveAsc = '';
+        $scope.isActiveDesc = 'id';
 
         $scope.columnAscOrder = function(field){
             $scope.selectedColumn = field;
@@ -371,7 +372,7 @@ angular.module('timeSheetApp')
 
             }else{
                 $scope.searchCriteria.columnName ="id";
-                $scope.searchCriteria.sortByAsc = true;
+                $scope.searchCriteria.sortByAsc = false;
             }
 
               

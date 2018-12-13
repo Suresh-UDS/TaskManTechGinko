@@ -243,7 +243,7 @@
 										   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 										   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 								    </ui-select-match>
-									  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)" null-option="allClients" loose-null>
+									  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected);loadRegionsList(client.selected)" null-option="allClients" loose-null>
 
 									    <span ng-bind-html="client.name | highlight: $select.search"></span>
 									  </ui-select-choices>
