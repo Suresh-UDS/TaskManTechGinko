@@ -1065,7 +1065,7 @@ public class ReportDatabaseUtil {
             int i=0;
             for(TicketStatusReport lastModResult : lastModResults) {
                 StringBuilder sb = new StringBuilder();
-                sb.append("SELECT * FROM JobReport WHERE");
+                sb.append("SELECT * FROM TicketReport WHERE");
                 sb.append(" ");
                 sb.append("id="+lastModResult.getTicketId());
                 String query = sb.toString();
@@ -1101,7 +1101,7 @@ public class ReportDatabaseUtil {
             int i=0;
             for(AttendanceStatusReport lastModResult : lastModResults) {
                 StringBuilder sb = new StringBuilder();
-                sb.append("SELECT * FROM JobReport WHERE");
+                sb.append("SELECT * FROM AttendanceReport WHERE");
                 sb.append(" ");
                 sb.append("id="+lastModResult.getId());
                 String query = sb.toString();
