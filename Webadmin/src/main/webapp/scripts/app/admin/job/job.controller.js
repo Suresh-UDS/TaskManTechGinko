@@ -47,6 +47,7 @@ angular.module('timeSheetApp')
         $scope.checkStatus = 0;
         $scope.selectPlannedStartTime;
         $scope.btnDisable = false;
+        $scope.scheduleView = false;
         
         /** Ui-select scopes **/
         $scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
@@ -894,6 +895,7 @@ angular.module('timeSheetApp')
                               //console.log("Ticket details");
                               //console.log(data);
                                 $scope.ticketStatus = data.status;
+                                $scope.scheduleView = true;
                             });
 
                         }
@@ -975,6 +977,7 @@ angular.module('timeSheetApp')
                         $scope.job.title =data.title;
                         $scope.job.description = data.description;
                         $scope.job.ticketId = data.id;
+                        $scope.scheduleView = true;
 
                          /*if(data.siteId){
 
@@ -1180,8 +1183,8 @@ angular.module('timeSheetApp')
         	});
         };
 
-        $scope.isActiveAsc = 'id';
-        $scope.isActiveDesc = '';
+        $scope.isActiveAsc = '';
+        $scope.isActiveDesc = 'id';
 
         $scope.columnAscOrder = function(field){
             $scope.selectedColumn = field;
@@ -1434,7 +1437,7 @@ angular.module('timeSheetApp')
 
             }else{
                 $scope.searchCriteria.columnName ="id";
-                $scope.searchCriteria.sortByAsc = true;
+                $scope.searchCriteria.sortByAsc = false;
             }
 
 

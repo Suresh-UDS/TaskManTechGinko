@@ -14,7 +14,7 @@
             <!--</div>-->
 
            <div class="cardsCon addSiteCon">
-               <form ng-show="!success" name="form" role="form" novalidate
+               <form ng-show="!success" ng-submit="conform('save',form.$invalid)" name="form" role="form" novalidate
                      >
 
                    <div class="row">
@@ -431,7 +431,7 @@
 
                    <div class="row">
                        <div class="col-md-12">
-                           <button type="submit" ng-click="conform('cancel')"
+                           <button type="button" ng-click="conform('cancel')"
                                    id="cancel-button" ng-disabled="btnDisable"  class="btn btn-danger pull-right" tabindex="17">
                                    <i class="material-icons">close</i> Cancel
                            </button>
@@ -443,7 +443,7 @@
                            <!--</button>-->
 
 
-                           <button type="submit"  ng-click="conform('save',form.$invalid)" id="form-button-save"
+                           <button type="submit"   id="form-button-save"
                                    ng-disabled="form.$invalid || btnDisable"  class="btn btn-success ld ld-over-inverse pull-right"
                                    ng-class="{'running':saveLoad}" tabindex="16">
                            <span class="btn-label"><i class="material-icons">check</i></span> Create site
