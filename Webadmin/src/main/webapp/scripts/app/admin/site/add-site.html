@@ -44,7 +44,7 @@
                                                <ui-select ng-model="SelectClient.selected"  name="projectName" ng-disabled="clientDisable" ng-required="true">
 
 												  <ui-select-match placeholder="Select clients..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
-												  <ui-select-choices repeat="SelectClient in SelectClients | filter: $select.search" ng-click="markSelection(SelectClient.selected);loadRegionsList(SelectClient.selected.id);">
+												  <ui-select-choices repeat="SelectClient in SelectClients | filter: $select.search" ng-click="markSelection(SelectClient.selected);loadRegionsList(SelectClient.selected);">
 
 												   <span ng-bind-html="SelectClient.name | highlight: $select.search"></span>
 												  </ui-select-choices>
@@ -227,7 +227,7 @@
                                        <div class="col-md-6">
                                            <div class="form-group">
                                                <label class="control-label">Pin Code<span class="red-star">*</span></label>
-                                               <input type="text" name="pinCode" ng-model="site.pinCode" ng-pattern='/^[0-9]{1,6}$/' class="form-control InputTxtCaps" tabindex="11" required>
+                                               <input type="text" name="pinCode" ng-model="site.pinCode" ng-pattern='/^[0-9]{6}$/' class="form-control InputTxtCaps" tabindex="11" required>
                                                <div ng-show="form.$submitted || form.pinCode.$touched || form.pinCode.$dirty">
                                                    <div ng-show="form.pinCode.$dirty || form.pinCode.$invalid">
                                                        <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
@@ -821,7 +821,7 @@
                                   <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                           <select name='region'
                                                   class="form-control" name="regName" ng-model="selectedRegionOne"   
-                                                  ng-options="region.name for region in regions"    >
+                                                  ng-options="region.name for region in regions track by region.name"    >
                                               <option value="">Select Region...</option>
                                           </select>
                                 <div ng-show="addBranchForm.$submitted || addBranchForm.regName.$touched || addBranchForm.regName.$dirty">
