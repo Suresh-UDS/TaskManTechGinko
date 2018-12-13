@@ -90,6 +90,7 @@ angular.module('timeSheetApp')
         $scope.maxError =false;
         $rootScope.exportStatusObj  ={};
         $scope.searchModule ="";
+       
 
 
         //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
@@ -1157,7 +1158,7 @@ angular.module('timeSheetApp')
 
         /* Sorting functions*/
 
-        $scope.isActiveAsc = 'code';
+        $scope.isActiveAsc = '';
         $scope.isActiveDesc = '';
 
         $scope.columnAscOrder = function(field){
@@ -1372,7 +1373,7 @@ angular.module('timeSheetApp')
                 //console.log('>>> $scope.searchCriteria.sortByAsc <<< '+$scope.searchCriteria.sortByAsc);
             }else{
                 $scope.searchCriteria.columnName ="id";
-                $scope.searchCriteria.sortByAsc = true;
+                $scope.searchCriteria.sortByAsc = false;
             }
 
              //console.log("search criteria",$scope.searchCriteria);
@@ -3628,7 +3629,7 @@ angular.module('timeSheetApp')
 
                 // If any entity is not checked, then uncheck the "allItemsSelected" checkbox
 
-                for (var i = 0; i <= $scope.assets.length; i++) {
+                for (var i = 0; i < $scope.assets.length; i++) {
 
                     if (!$scope.assets[i].isChecked) {
                         $scope.allItemsSelected = false;
@@ -3645,10 +3646,12 @@ angular.module('timeSheetApp')
 
             // This executes when checkbox in table header is checked
             $scope.selectAll = function () {
-
+            	
                 if($scope.assetQrSite){
+                	$scope.allItemsSelected = true;
                     $scope.assetQrSiteVal =$scope.assetQrSite.id;
                 }else{
+                	$scope.allItemsSelected = false;
                     $scope.assetQrSiteVal =0;
                 }
 
@@ -3666,6 +3669,7 @@ angular.module('timeSheetApp')
                 if(!$scope.allItemsSelected){
 
                     $scope.checkboxSel=[];
+                    
 
                 }
 
@@ -3966,11 +3970,20 @@ angular.module('timeSheetApp')
         }
 
       $scope.mulSel = function(){
-
+    	  
         if($scope.allItemsSelected){
-
+        	
             $('#qrModal').modal();
+            $scope.allItemsSelected = false;
 
+        }
+        else{
+        	$scope.allItemsSelected = false;
+        	 // Loop through all the entities and set their isChecked property
+            for (var i = 0; i < $scope.assets.length; i++) {
+                  
+                $scope.assets[i].isChecked = $scope.allItemsSelected;
+            }
         }
 
       }

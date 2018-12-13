@@ -172,7 +172,7 @@ angular.module('timeSheetApp')
                 $location.path('/manufacturer-list');
         };
 
-         $scope.isActiveAsc = 'assetType';
+         $scope.isActiveAsc = '';
         $scope.isActiveDesc = '';
 
         $scope.columnAscOrder = function(field){
@@ -251,8 +251,8 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
               //console.log('>>> $scope.searchCriteria.sortByAsc <<< '+$scope.searchCriteria.sortByAsc);
             }else{
-                $scope.searchCriteria.columnName ="assetType";
-                $scope.searchCriteria.sortByAsc = true;
+                $scope.searchCriteria.columnName ="id";
+                $scope.searchCriteria.sortByAsc = false;
             }
 
 

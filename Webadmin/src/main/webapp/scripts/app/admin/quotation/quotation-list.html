@@ -55,6 +55,10 @@
 	                  ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
 					Site: {{searchCriteras.siteName}}
 			    </span>
+			    
+			    <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.CreatedDate">
+                    CreatedDate: {{searchCriteras.CreatedDate | date:'dd/MM/yyyy'}}
+                </span>
 
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.quotationTitle">
                     Title: {{searchCriteras.quotationTitle}}
@@ -588,6 +592,15 @@
                                             </div>
                                         </div> -->
                                         <div class="col-xs-12 col-md-4">
+                                            <div class="form-group">
+                                                <div class="dropdown">
+                                                    <label class="label-control">Created Date</label>
+                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                    <input type="text" class="form-control datepicker"  id="searchCreatedDate" placeholder="DD/MM/YYYY"  ng-model="searchCreatedDate" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-md-4">
                                             <div class="dropdown">
                                                  <div class="form-group" >
                                                     <input type="text"
@@ -610,22 +623,23 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xs-12 col-md-4">
-                                             <div class="dropdown">
-                                                <div class="form-group" >
-                                                     
-                                                    <input type="text"
-                                                           class="form-control searchable-input floatL border-bottom-input"
-                                                           placeholder="Approved By"
-                                                           ng-model="searchApprovedBy"
-
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
+                                        
 
                                     </div>
                                     <div class="row"> 
+	                                    <div class="col-xs-12 col-md-4">
+	                                             <div class="dropdown">
+	                                                <div class="form-group" >
+	                                                     
+	                                                    <input type="text"
+	                                                           class="form-control searchable-input floatL border-bottom-input"
+	                                                           placeholder="Approved By"
+	                                                           ng-model="searchApprovedBy"
+	
+	                                                    />
+	                                                </div>
+	                                           </div>
+	                                     </div>
                                         <div class="col-xs-12 col-md-4">
                                             <div class="form-group" >
                                                 <div class="dropdown">

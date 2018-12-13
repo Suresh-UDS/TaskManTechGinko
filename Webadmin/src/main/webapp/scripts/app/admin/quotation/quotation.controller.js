@@ -86,6 +86,8 @@ angular
 					$scope.searchStatus = null;
 					$scope.btnDisable = false;
 					$scope.ticketQuot = false;
+					$scope.searchCreatedDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+					$scope.searchCreatedDateSer = new Date();
 					
 					/** Ui-select scopes **/
 			        $scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
@@ -145,6 +147,11 @@ angular
 		                $scope.selectedApprovedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
 
 			        });
+			        
+			        $('input#searchCreatedDate').on('dp.change', function(e){
+		                $scope.searchCreatedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+		                $scope.searchCreatedDateSer = new Date(e.date._d);
+		            });
 
 			        $scope.initCalender();
 
@@ -927,7 +934,9 @@ angular
                         $scope.regionsListOne.selected =  null;
                         $scope.branchsLists =  [];
                         $scope.branchsListOne.selected =  null;
-                    	
+                        
+                        $scope.searchCreatedDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+    					$scope.searchCreatedDateSer = new Date();
 	        		    $scope.selectedProject = null;
 			            $scope.selectedSite = null;
 			            $scope.selectedStatus = null;
@@ -1119,6 +1128,11 @@ angular
 			        }else{
 			        	$scope.searchCriteria.quotationApprovedBy = null;
 			        }
+			        
+			        
+			        if($scope.searchCreatedDateSer) {
+			        	 $scope.searchCriteria.quotationCreatedDate = $scope.searchCreatedDateSer;
+		             }
 
 			        if($scope.searchSubmittedDateSer) {
 			        		$scope.searchCriteria.quotationSubmittedDate = $scope.searchSubmittedDateSer;
@@ -1230,7 +1244,7 @@ angular
 	                	 $scope.searchCriteras  = $scope.searchCriteria;
 	                 }
 
-	                 $scope.searchCriteria.quotationCreatedDate = new Date();
+	                 //$scope.searchCriteria.quotationCreatedDate = new Date();
 	                 $scope.searchCriteria.toDate = new Date();
 	                 /* Localstorage (Retain old values while edit page to list) end */
 
