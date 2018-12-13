@@ -504,28 +504,26 @@
                                     <table class="table table-hover withSortingIcons">
                                         <thead>
                                         <tr>
-                                            <th style="width: 10%">Site Id
-                                                <!--<span class="sortingIcons">
+                                           <!--  <th style="width: 10%">Site Id
+                                                <span class="sortingIcons">
                                                     <span ng-click="columnAscOrder('siteId')" ng-class="isActiveAsc == 'siteId' ? 'active' : ''" >
                                                         <i  class="fa fa-caret-up"></i>
                                                     </span>
                                                     <span ng-click="columnDescOrder('siteId')" ng-class="isActiveDesc == 'siteId' ? 'active' : ''" >
                                                          <i  ng-class="class" class="fa fa-caret-down"></i>
                                                     </span>
-                                                </span>-->
+                                                </span>
                                             </th>
                                             <th style="width: 15%">Site Name
-                                               <!-- <span class="sortingIcons">
+                                               <span class="sortingIcons">
                                                 <span ng-click="columnAscOrder('siteName')" ng-class="isActiveAsc == 'siteName' ? 'active' : ''" >
                                                     <i  class="fa fa-caret-up"></i>
                                                 </span>
                                                 <span ng-click="columnDescOrder('siteName')" ng-class="isActiveDesc == 'siteName' ? 'active' : ''">
                                                      <i  ng-class="class" class="fa fa-caret-down"></i>
                                                 </span>
-                                            </span>-->
-                                            </th>
-
-                                            </th>
+                                            </span>
+                                            </th> -->
 
                                             <th style="width: 15%">Employee
 
@@ -567,8 +565,8 @@
                                         </thead>
                                         <tbody>
                                         <tr ng-repeat="reliever in relieversList">
-                                            <td>{{reliever.siteId}}</td>
-                                            <td>{{reliever.siteName}}</td>
+                                            <!-- <td>{{reliever.siteId}}</td>
+                                            <td>{{reliever.siteName}}</td> -->
                                             <td>
                                                 <span ng-if="reliever.relieverEmployeeFullName">
                                                 {{reliever.relieverEmployeeFullName}}

@@ -197,7 +197,7 @@ angular.module('timeSheetApp')
                       $scope.sitesList = data;
                       $scope.sitesLists = [];
                       $scope.sitesListOne.selected = null;
-                      //$scope.sitesLists[0] = $scope.allSites;
+                      $scope.sitesLists[0] = $scope.allSites;
 
                       for(var i=0;i<$scope.sitesList.length;i++)
                       {
@@ -221,7 +221,7 @@ angular.module('timeSheetApp')
                       $scope.sitesList = data;
                       $scope.sitesLists = [];
                       $scope.sitesListOne.selected = null;
-                      //$scope.sitesLists[0] = $scope.allSites;
+                      $scope.sitesLists[0] = $scope.allSites;
 
                       for(var i=0;i<$scope.sitesList.length;i++)
                       {

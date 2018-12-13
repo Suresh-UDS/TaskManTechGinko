@@ -754,6 +754,7 @@ angular.module('timeSheetApp')
                     $scope.tickets.remarks = $scope.tickets.remarks;
                     $scope.tickets.status = $scope.tickets.status;
                     $scope.loadAssets();
+                    $scope.selectedAsset = {id:data.assetId, title:data.assetTitle};
                     $scope.loadEmployees();
                     if($scope.tickets){
 
@@ -765,7 +766,7 @@ angular.module('timeSheetApp')
                             )
                         }
 
-                        if($scope.tickets.assetId) {
+                        /*if($scope.tickets.assetId) {
                             AssetComponent.findById($scope.tickets.assetId).then(function(data) {
                               //console.log(data);
                                 $scope.selectedAsset = {id: data.id, title: data.title}
@@ -777,7 +778,7 @@ angular.module('timeSheetApp')
                               //console.log(data);
                                 $scope.assets = data.transactions;
                             });
-                        }
+                        }*/
 
                         if($scope.tickets.image){
                           //console.log("image found");
@@ -791,6 +792,7 @@ angular.module('timeSheetApp')
 
 
                     }
+                    console.log("asset selected",$scope.selectedAsset);
 
                 }).catch(function(){
                     $location.path('/tickets');
