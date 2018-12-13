@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
             .state('add-rateCard', {
                 parent: 'manage',
                 url: '/add-rateCard',
-                controller: 'RateCardController',
+                //controller: 'RateCardController',
                 data: {
                     authorities: [],
                     pageTitle: 'Add RateCard'
@@ -24,7 +24,7 @@ angular.module('timeSheetApp')
             .state('edit-rateCard', {
                 parent: 'manage',
                 url: '/edit-rateCard:id',
-                controller: 'RateCardController',
+                //controller: 'RateCardController',
                 data: {
                     authorities: [],
                     pageTitle: 'Edit RateCard'
@@ -42,7 +42,7 @@ angular.module('timeSheetApp')
             }).state('rateCardList', {
                               parent: 'manage',
                               url: '/rateCardList',
-                              controller: 'RateCardController',
+                              //controller: 'RateCardController',
                               data: {
                                   authorities: [],
                                   pageTitle: 'RateCard List'
@@ -60,7 +60,7 @@ angular.module('timeSheetApp')
              }).state('view-rateCard', {
             parent: 'manage',
             url: '/view-rateCard',
-            controller: 'RateCardController',
+            //controller: 'RateCardController',
             data: {
                 authorities: [],
                 pageTitle: 'View RateCard'

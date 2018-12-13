@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
             .state('userGroups', {
                 parent: 'admin',
                 url: '/userGroups',
-                controller: 'UserGroupController',
+                //controller: 'UserGroupController',
                 data: {
                     authorities: [],
                     pageTitle: 'UserGroups'

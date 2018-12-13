@@ -27,8 +27,10 @@ export class ViewTicket {
   ticketDetails:any;
   ticketImage:any;
   remarks:any;
-  constructor(public navCtrl: NavController, public navParams: NavParams,private cs:componentService,
-              private jobService:JobService,private popoverCtrl:PopoverController,private alertCtrl:AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+              private cs:componentService,
+              private jobService:JobService,private popoverCtrl:PopoverController,
+              private alertCtrl:AlertController) {
     // this.ticketDetails = this.navParams.data.ticket;
       console.log("ticket");
       console.log(this.navParams.data.ticket);
@@ -48,7 +50,7 @@ export class ViewTicket {
           response=>{
               if(response.errorStatus){
                   this.cs.closeAll();
-                  demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
+                  demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
               }else{
                   this.cs.closeAll();
                   console.log(response);
@@ -75,7 +77,7 @@ export class ViewTicket {
           response=>{
               if(response.errorStatus){
                   this.cs.closeAll();
-                  demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
+                  demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
               }else{
                   console.log(response);
                   this.cs.closeLoader();
@@ -126,7 +128,7 @@ export class ViewTicket {
                     handler: data => {
                         console.log("Remarks Data");
                         console.log(data);
-                        this.remarks=data;
+                        this.remarks=data.Remarks;
                         this.closeTicket();
                     }
                 }

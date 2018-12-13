@@ -53,6 +53,7 @@ public class ReportResult {
 	long totalTicketCount;
 	long totalNewTicketCount;
     long totalOpenTicketCount;
+    long totalInProgressTicketCount;
     long totalAssignedTicketCount;
     long totalClosedTicketCount;
     long totalPendingTicketCount;
@@ -310,6 +311,14 @@ public class ReportResult {
 
 	public void setTotalOpenTicketCount(long totalOpenTicketCount) {
 		this.totalOpenTicketCount = totalOpenTicketCount;
+	}
+	
+	public long getTotalInProgressTicketCount() {
+		return totalInProgressTicketCount;
+	}
+
+	public void setTotalInProgressTicketCount(long totalInProgressTicketCount) {
+		this.totalInProgressTicketCount = totalInProgressTicketCount;
 	}
 
 	public long getTotalTicketCount() {

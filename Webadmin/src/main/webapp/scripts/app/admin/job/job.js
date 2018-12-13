@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
             .state('add-job', {
                 parent: 'manage',
                 url: '/add-job/:ticketId',
-                controller: 'JobController',
+                //controller: 'JobController',
                 data: {
                     authorities: [],
                     pageTitle: 'Add Job'
@@ -24,7 +24,7 @@ angular.module('timeSheetApp')
         .state('edit-job', {
             parent: 'manage',
             url: '/edit-job/:id',
-            controller: 'JobController',
+            //controller: 'JobController',
             data: {
                 authorities: [],
                 pageTitle: 'Edit Job'
@@ -42,7 +42,7 @@ angular.module('timeSheetApp')
         }).state('view-job', {
             parent: 'manage',
             url: '/view-job/:id',
-            controller: 'JobController',
+            //controller: 'JobController',
             data: {
                 authorities: [],
                 pageTitle: 'View Job'
@@ -61,7 +61,7 @@ angular.module('timeSheetApp')
         .state('jobs', {
                 parent: 'manage',
                 url: '/jobs',
-                controller: 'JobController',
+               // controller: 'JobController',
                 data: {
                     authorities: [],
                     pageTitle: 'Jobs'

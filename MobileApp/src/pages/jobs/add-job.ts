@@ -137,7 +137,6 @@ export class CreateJobPage {
                 "plannedEndTime":this.plannedEndTime,
                 "plannedHours":this.plannedHours,
                 "jobStatus":"ASSIGNED",
-                "comments":"test",
                 "siteId":this.siteId,
                 "employeeId":this.employ,
                 "userId":this.userId,
@@ -156,7 +155,6 @@ export class CreateJobPage {
                     "plannedEndTime":this.plannedEndTime,
                     "plannedHours":this.plannedHours,
                     "jobStatus":"ASSIGNED",
-                    "comments":"test",
                     "siteId":this.siteId,
                     "employeeId":this.employ,
                     "userId":this.userId,
@@ -175,7 +173,6 @@ export class CreateJobPage {
                     "plannedEndTime":this.plannedEndTime,
                     "plannedHours":this.plannedHours,
                     "jobStatus":"ASSIGNED",
-                    "comments":"test",
                     "siteId":this.siteId,
                     "employeeId":this.employ,
                     "userId":this.userId,
@@ -198,6 +195,7 @@ export class CreateJobPage {
                         this.component.closeAll();
                         console.log(response);
                         this.navCtrl.setRoot(JobsPage);
+                        demo.showSwal('success-message-and-ok','Success','Job Created Successfully..');
                     }
 
                 },
