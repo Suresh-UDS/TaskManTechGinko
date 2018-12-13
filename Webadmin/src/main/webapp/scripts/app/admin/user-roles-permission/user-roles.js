@@ -20,7 +20,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		}
 	}).state('edit-user-role', {
 		parent : 'admin',
-		url : '/edit-user-role:id',
+		url : '/edit-user-role/:id',
 		controller : 'UserRolesController',
 		data : {
 			authorities : [],
@@ -37,7 +37,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		}
 	}).state('view-user-role', {
 		parent : 'admin',
-		url : '/view-user-role:id',
+		url : '/view-user-role/:id',
 		controller : 'UserRolesController',
 		data : {
 			authorities : [],

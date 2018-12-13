@@ -58,7 +58,7 @@ angular.module('timeSheetApp')
 
         $scope.init = function() {
         		$scope.loadAllProjects();
-        		$scope.loadAllSites();
+        		//$scope.loadAllSites();
         		$scope.loadQuotationReport();
                 $scope.loadJobReport();
                 $scope.loadingStart();
@@ -431,7 +431,7 @@ angular.module('timeSheetApp')
                 $scope.projects = data;
                 $scope.projectCount = data.length;
                 $scope.initialProject = data[0];
-                $scope.loadSites($scope.initialProject.id);
+                //$scope.loadSites($scope.initialProject.id);
             })
         };
 

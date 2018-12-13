@@ -124,6 +124,15 @@ angular.module('timeSheetApp')
             });
 
         };
+        
+        $scope.loadUserRolesList = function() {
+        	if($stateParams.id){
+        		UserRoleComponent.findOne($stateParams.id).then(function (data) {
+                    $scope.loadingStop();
+                    $scope.userRole = data;
+                });
+        	}
+        };
 
           $scope.showNotifications= function(position,alignment,color,msg){
             demo.showNotification(position,alignment,color,msg);
