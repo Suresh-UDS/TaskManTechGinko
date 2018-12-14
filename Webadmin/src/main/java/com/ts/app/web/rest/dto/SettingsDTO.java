@@ -39,10 +39,6 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     
     private boolean feedbackEmailAlert;
 
-    private long feedbackReportEmailAlertId;
-    
-    private boolean feedbackReportEmailAlert;
-
     private long quotationEmailAlertId;
     
     private boolean quotationEmailAlert;
@@ -78,14 +74,6 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     private long feedbackEmailsId;
     
     private List<String> feedbackEmailIds;
-    
-    private long feedbackReportEmailsId;
-    
-    private List<String> feedbackReportEmailIds;
-
-    private long feedbackReportTimeId;
-    
-    private Date feedbackReportTime;
 
     private long quotationEmailsId;
     
@@ -135,29 +123,13 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     
     private List<String> warrantyEmailIds;
     
-    private long dayWiseReportEmailsId;
+    private long purchaseReqEmailsId;
     
-    private long dayWiseReportEmailAlertId;
+    private long purchaseReqEmailAlertId;
     
-    private long dayWiseReportClientGroupEmailAlertId;
+    private boolean purchaseReqEmailAlert;
     
-    private long dayWiseReportAlertTimeId;
-    
-    private Date dayWiseReportAlertTime;
-    
-    private List<String> dayWiseReportEmailIds;
-    
-    private boolean dayWiseReportEmailAlert;
-    
-    private boolean clientGroupEmailAlert;
-    
-    private long musterRollEmailsId;
-    
-    private long musterRollEmailAlertId;
-    
-    private boolean musterRollEmailAlert;
-    
-    private List<String> musterRollEmailIds;
+    private List<String> purchaseReqEmailIds;
 
     public long getSiteId() {
 		return siteId;
@@ -607,148 +579,36 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 		this.warrantyEmailIds = warrantyEmailIds;
 	}
 
-	public long getFeedbackReportEmailAlertId() {
-		return feedbackReportEmailAlertId;
+	public long getPurchaseReqEmailsId() {
+		return purchaseReqEmailsId;
 	}
 
-	public void setFeedbackReportEmailAlertId(long feedbackReportEmailAlertId) {
-		this.feedbackReportEmailAlertId = feedbackReportEmailAlertId;
+	public void setPurchaseReqEmailsId(long purchaseReqEmailsId) {
+		this.purchaseReqEmailsId = purchaseReqEmailsId;
 	}
 
-	public boolean isFeedbackReportEmailAlert() {
-		return feedbackReportEmailAlert;
+	public long getPurchaseReqEmailAlertId() {
+		return purchaseReqEmailAlertId;
 	}
 
-	public void setFeedbackReportEmailAlert(boolean feedbackReportEmailAlert) {
-		this.feedbackReportEmailAlert = feedbackReportEmailAlert;
+	public void setPurchaseReqEmailAlertId(long purchaseReqEmailAlertId) {
+		this.purchaseReqEmailAlertId = purchaseReqEmailAlertId;
 	}
 
-	public long getFeedbackReportEmailsId() {
-		return feedbackReportEmailsId;
+	public boolean isPurchaseReqEmailAlert() {
+		return purchaseReqEmailAlert;
 	}
 
-	public void setFeedbackReportEmailsId(long feedbackReportEmailsId) {
-		this.feedbackReportEmailsId = feedbackReportEmailsId;
+	public void setPurchaseReqEmailAlert(boolean purchaseReqEmailAlert) {
+		this.purchaseReqEmailAlert = purchaseReqEmailAlert;
 	}
 
-	public List<String> getFeedbackReportEmailIds() {
-		return feedbackReportEmailIds;
+	public List<String> getPurchaseReqEmailIds() {
+		return purchaseReqEmailIds;
 	}
 
-	public void setFeedbackReportEmailIds(List<String> feedbackReportEmailIds) {
-		this.feedbackReportEmailIds = feedbackReportEmailIds;
-	}
-
-	public long getFeedbackReportTimeId() {
-		return feedbackReportTimeId;
-	}
-
-	public void setFeedbackReportTimeId(long feedbackReportTimeId) {
-		this.feedbackReportTimeId = feedbackReportTimeId;
-	}
-
-	public Date getFeedbackReportTime() {
-		return feedbackReportTime;
-	}
-
-	public void setFeedbackReportTime(Date feedbackReportTime) {
-		this.feedbackReportTime = feedbackReportTime;
-	}
-
-	public long getDayWiseReportAlertTimeId() {
-		return dayWiseReportAlertTimeId;
-	}
-
-	public void setDayWiseReportAlertTimeId(long dayWiseReportAlertTimeId) {
-		this.dayWiseReportAlertTimeId = dayWiseReportAlertTimeId;
-	}
-
-	public Date getDayWiseReportAlertTime() {
-		return dayWiseReportAlertTime;
-	}
-
-	public void setDayWiseReportAlertTime(Date dayWiseReportAlertTime) {
-		this.dayWiseReportAlertTime = dayWiseReportAlertTime;
-	}
-
-	public List<String> getDayWiseReportEmailIds() {
-		return dayWiseReportEmailIds;
-	}
-
-	public void setDayWiseReportEmailIds(List<String> dayWiseReportEmailIds) {
-		this.dayWiseReportEmailIds = dayWiseReportEmailIds;
-	}
-
-	public boolean isDayWiseReportEmailAlert() {
-		return dayWiseReportEmailAlert;
-	}
-
-	public void setDayWiseReportEmailAlert(boolean dayWiseReportEmailAlert) {
-		this.dayWiseReportEmailAlert = dayWiseReportEmailAlert;
-	}
-
-	public long getDayWiseReportEmailsId() {
-		return dayWiseReportEmailsId;
-	}
-
-	public void setDayWiseReportEmailsId(long dayWiseReportEmailsId) {
-		this.dayWiseReportEmailsId = dayWiseReportEmailsId;
-	}
-
-	public long getDayWiseReportEmailAlertId() {
-		return dayWiseReportEmailAlertId;
-	}
-
-	public void setDayWiseReportEmailAlertId(long dayWiseReportEmailAlertId) {
-		this.dayWiseReportEmailAlertId = dayWiseReportEmailAlertId;
-	}
-
-	public boolean isClientGroupEmailAlert() {
-		return clientGroupEmailAlert;
-	}
-
-	public void setClientGroupEmailAlert(boolean clientGroupEmailAlert) {
-		this.clientGroupEmailAlert = clientGroupEmailAlert;
-	}
-
-	public long getDayWiseReportClientGroupEmailAlertId() {
-		return dayWiseReportClientGroupEmailAlertId;
-	}
-
-	public void setDayWiseReportClientGroupEmailAlertId(long dayWiseReportClientGroupEmailAlertId) {
-		this.dayWiseReportClientGroupEmailAlertId = dayWiseReportClientGroupEmailAlertId;
-	}
-
-	public long getMusterRollEmailsId() {
-		return musterRollEmailsId;
-	}
-
-	public void setMusterRollEmailsId(long musterRollEmailsId) {
-		this.musterRollEmailsId = musterRollEmailsId;
-	}
-
-	public long getMusterRollEmailAlertId() {
-		return musterRollEmailAlertId;
-	}
-
-	public void setMusterRollEmailAlertId(long musterRollEmailAlertId) {
-		this.musterRollEmailAlertId = musterRollEmailAlertId;
-	}
-
-	public boolean isMusterRollEmailAlert() {
-		return musterRollEmailAlert;
-	}
-
-	public void setMusterRollEmailAlert(boolean musterRollEmailAlert) {
-		this.musterRollEmailAlert = musterRollEmailAlert;
-	}
-
-	public List<String> getMusterRollEmailIds() {
-		return musterRollEmailIds;
-	}
-
-	public void setMusterRollEmailIds(List<String> musterRollEmailIds) {
-		this.musterRollEmailIds = musterRollEmailIds;
+	public void setPurchaseReqEmailIds(List<String> purchaseReqEmailIds) {
+		this.purchaseReqEmailIds = purchaseReqEmailIds;
 	}
 
 	

@@ -1,0 +1,154 @@
+<!--
+  Generated template for the IndentView page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Indent-view</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+    <div *ngIf=" (!details || details.length < 0)">
+        <ion-card>
+            <ion-card-content>
+                <img src="assets/imgs/warning.svg">
+                <span><p text-center>No Data Found</p></span>
+            </ion-card-content>
+        </ion-card>
+    </div>
+
+      <div class="card">
+        <div class="card-content table-responsive margin-btm">
+          <ion-row class="margin0 white-bg border-btm">
+            <ion-col col-12 text-center no-padding>
+              <p>{{details.projectName}}</p>
+            </ion-col>
+            <ion-col col-12 text-center no-padding>
+              <p>{{details.siteName}}</p>
+            </ion-col>
+            <ion-col col-12 text-center no-padding>
+              <p>{{details.purpose}}</p>
+            </ion-col>
+            <ion-col col-3 text-left no-padding>
+              <p class="mrgn-p">Date:</p>
+            </ion-col>
+              <ion-col col-3 text-left no-padding>
+              <p class="mrgn-p">{{details.createdDate|date:'dd/MM/yyyy'}}</p>
+            </ion-col>
+            <ion-col col-3 text-right no-padding>
+              <p class="mrgn-p">Ref no:</p>
+            </ion-col>
+              <ion-col col-3 text-right no-padding>
+                  <p class="mrgn-p">{{details.indentRefNumber}}</p>
+              </ion-col>
+          </ion-row>
+
+            <ion-row class="margin0 margin-top5">
+                <ion-col col-3 no-padding>
+                    <p class="margin0 clr-orange fnt-12" text-center="">Name</p>
+                </ion-col>
+                <ion-col col-2 no-padding>
+                    <div class="">
+                        <p text-center class="margin0 clr-orange fnt-12">Req.qty</p>
+                    </div>
+                </ion-col>
+                <ion-col col-2 no-padding>
+                    <div class="">
+                        <p text-center class="margin0 clr-orange fnt-12">Issued</p>
+                    </div>
+                </ion-col>
+                <ion-col col-2 no-padding>
+                    <div class="">
+                        <p text-center class="margin0 clr-orange fnt-12">Pending</p>
+                    </div>
+                </ion-col>
+                <ion-col col-3 no-padding>
+                    <div class="">
+                        <p text-center class="margin0 clr-orange fnt-12">Uom</p>
+                    </div>
+                </ion-col>
+            </ion-row>
+            <ion-list *ngFor="let item of details.items; let i=index">
+                <ion-row class="margin0">
+                    <ion-col col-3 no-padding>
+                        <p class="margin0" text-center>{{item.materialName}}</p>
+                    </ion-col>
+                    <ion-col col-2 no-padding>
+                        <div class="">
+                            <p text-center class="margin0" text-uppercase>{{item.quantity}}</p>
+                        </div>
+                    </ion-col>
+                    <ion-col col-2 no-padding>
+                        <div class="">
+                            <!--<p text-center class="margin0" text-uppercase>10</p>-->
+                            <p  text-center>{{item.issuedQuantity}}</p>
+                        </div>
+                    </ion-col>
+                    <ion-col col-2 no-padding>
+                        <div class="">
+                            <!--<p text-center class="margin0" text-uppercase>10</p>-->
+                            <p  text-center>{{item.pendingQuantity}}</p>
+                        </div>
+                    </ion-col>
+                    <ion-col col-3 no-padding>
+                        <div class="">
+                            <p text-center class="margin0" text-uppercase>{{item.materialUom}}</p>
+                        </div>
+                    </ion-col>
+                    <!--<ion-col col-2 no-padding>-->
+                        <!--<button ion-fab mini color="dark" (click)="addTransactionMaterial(item)">-->
+                            <!--<ion-icon name="md-add" class="clr-orange"></ion-icon>-->
+                        <!--</button>-->
+                    <!--</ion-col>-->
+                </ion-row>
+                <ion-row no-margin *ngIf="item.pendingQuantity >0">
+                    <ion-col col-8 no-padding="">
+                            <p class="clr-orange bg-gray" text-right no-padding>Current Issued Quantity</p>
+                    </ion-col>
+                    <ion-col col-1 no-padding="">
+                    </ion-col>
+                    <ion-col col-2 no-padding>
+                        <ion-input type="number" text-center (ionChange)="checkQuantity(item,i)" [(ngModel)]="item.currentQuantity" class="brdr" no-padding></ion-input>
+                    </ion-col>
+                    <ion-col col-1 no-padding="">
+                    </ion-col>
+                </ion-row>
+                <ion-row no-margin *ngIf="!item.pendingQuantity >0">
+                    <ion-col col-8 no-padding="">
+                            <p class="clr-orange bg-gray" text-right no-padding>Status:</p>
+                    </ion-col>
+                    <ion-col col-4 no-padding>
+                        <p>{{details.indentStatus}}</p>
+                    </ion-col>
+                </ion-row>
+
+                <!--<ion-row no-margin>-->
+
+                    <!--<ion-col col-6>-->
+                        <!--<button ion-fab mini color="dark" (click)="addTransactionMaterial(item)">-->
+                            <!--<ion-icon name="checkmark" class="clr-orange"></ion-icon>-->
+                        <!--</button>-->
+                    <!--</ion-col>-->
+                <!--</ion-row>-->
+
+            </ion-list>
+
+        </div>
+      </div>
+`
+</ion-content>
+
+<ion-footer>
+    <ion-toolbar text-center=""  *ngIf="details.indentStatus != 'ISSUED' ">
+        <button class="btn btn-warning center width42" (click)="addTransactionMaterial(details)">
+           Issue
+        </button>
+    </ion-toolbar>
+</ion-footer>

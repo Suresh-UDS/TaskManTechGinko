@@ -42,6 +42,14 @@ export class InitFeedbackPage {
     siteProjectId:any;
     selectProjectIndex:any;
     bgClr:any;
+  chooseClient = true;
+  projectActive: any;
+  siteSpinner = false;
+  showSites = false;
+  projectindex: any;
+  index: any;
+  siteActive: any;
+
   constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService, private feedbackService: FeedbackService) {
         // this.loadFeedbackMappings();
 
@@ -79,7 +87,7 @@ export class InitFeedbackPage {
                     console.log(response);
                     this.projects=response;
                     this.selectedProject = this.projects[0];
-                    this.selectSite(this.selectedProject);
+                    // this.selectSite(this.selectedProject);
                     console.log('select default value:');
                     this.component.closeLoader();
                 },
@@ -101,18 +109,25 @@ export class InitFeedbackPage {
 
 
 
-    selectSite(project)
+    selectSite(project,i)
     {
+      this.projectActive=true;
+      this.projectindex = i;
+      this.siteSpinner= true;
+      this.chooseClient= false;
+      this.showSites = false;
         this.selectedProject = project;
         this.selectedProjectId=project.id;
         this.locations=[];
         this.siteService.findSitesByProject(project.id).subscribe(
             response=>{
+              this.siteSpinner=false;
+              this.showSites = true;
                 console.log("====Site By ProjectId======");
                 console.log(response);
                 this.sites=response;
                 console.log(this.sites);
-                this.selectBlockDetail(this.sites[0],this.sites[0]);
+                // this.selectBlockDetail(this.sites[0],this.sites[0]);
             },
             error=>{
                 if(error.type==3)
@@ -211,12 +226,12 @@ export class InitFeedbackPage {
 
     }
 
-    selectBlockDetail(index,site)
+    selectBlockDetail(i,site)
     {
-        console.log("index");
-        console.log(index);
+      this.index = i;
+      this.projectActive = true;
+      this.siteActive = true;
         this.scrollSite=true;
-        this.activeSite=index;
         this.siteProjectId=site.projectId;
         this.selectedSite = site;
         this.loadLocations(site.id);

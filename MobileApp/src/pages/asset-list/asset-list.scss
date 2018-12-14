@@ -35,7 +35,8 @@ page-asset-list {
   }
   ion-card img {
     width: 100% !important;
-    height:80px !important;
+
+    height:100px !important;
   }
   ion-card-content {
     padding: 0px 32px !important;
@@ -48,5 +49,29 @@ page-asset-list {
     text-transform: uppercase;
     font-size: 10px;
   }
+  .card-md
+  {
+    width:100% !important;
+  }
+  .margin-top{
+    margin-top: 8px;
+  }
+
+  .title-font{
+    font-weight: 500 !important;
+    color: #424242;
+  }
+
+  .text-font{
+    color: #424242;
+    font-weight: 400;
+  }
+  .thumbnail {
+        width: 65px !important;
+        height: 65px !important;
+        border-radius: 50px !important;
+        margin-top: 10px !important;
+  }
+
 }
 

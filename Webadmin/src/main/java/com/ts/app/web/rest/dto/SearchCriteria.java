@@ -2,8 +2,12 @@ package com.ts.app.web.rest.dto;
 
 import com.ts.app.domain.AssetStatus;
 import com.ts.app.domain.AssetType;
+import com.ts.app.domain.IndentStatus;
 import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.MaterialTransactionType;
+import com.ts.app.domain.PurchaseRequestStatus;
 
+import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
@@ -126,10 +130,6 @@ public class SearchCriteria extends Paginator {
 
 	private String ticketStatus;
 
-	private String ticketTitle;
-
-	private String ticketDescription;
-
 	private boolean admin;
 
 	private boolean list;
@@ -182,47 +182,55 @@ public class SearchCriteria extends Paginator {
 
 	private Date assetCreatedDate;
 
+	private String materialName;
+
+	private String itemCode;
+
+	private Date materialCreatedDate;
+
+	private Timestamp transactionDate;
+
+	private String itemGroup;
+
+	private MaterialTransactionType transactionType;
+
 	private int roleLevel;
 
-	private String module;
+	private long materialId;
 
-	private String action;
+	private Timestamp transactionFromDate;
 
-	private String branch;
+	private Timestamp transactionToDate;
 
-	private String region;
+	private Timestamp requestedDate;
 
-	private long branchId;
+	private Timestamp issuedDate;
 
-	private long regionId;
+	private String indentRefNumber;
+
+	private String purchaseRefNumber;
+
+	private Timestamp approvedDate;
 
 	private long jobId;
 
-	private boolean quotationIsSubmitted;
+	private PurchaseRequestStatus requestStatus;
 
-	private boolean quotationIsArchived;
+	private IndentStatus indentStatus;
 
-	private boolean quotationIsRejected;
+	private String expenseCategory;
 
-	private boolean quotationIsDrafted;
+	private long expenseId;
 
-	private boolean quotationIsApproved;
+	private String expenseMode;
 
-	public String getModule() {
-		return module;
-	}
+	private Timestamp expenseFromDate;
 
-	public void setModule(String module) {
-		this.module = module;
-	}
+	private Timestamp expenseToDate;
 
-	public String getAction() {
-		return action;
-	}
+	private Timestamp creditedFromDate;
 
-	public void setAction(String action) {
-		this.action = action;
-	}
+	private Timestamp creditedToDate;
 
 	public String getWarrantyTypeName() {
 		return warrantyTypeName;
@@ -497,7 +505,6 @@ public class SearchCriteria extends Paginator {
     public String toString() {
         final StringBuilder sb = new StringBuilder("SearchCriteria{");
         sb.append("id=").append(id);
-        sb.append(", currPage='").append(getCurrPage()).append('\'');
         sb.append(", jobTitle='").append(jobTitle).append('\'');
         sb.append(", assetTitle='").append(assetTitle).append('\'');
         sb.append(", assetType=").append(assetType);
@@ -978,12 +985,124 @@ public class SearchCriteria extends Paginator {
 		this.assetCreatedDate = assetCreatedDate;
 	}
 
+	public String getMaterialName() {
+		return materialName;
+	}
+
+	public void setMaterialName(String materialName) {
+		this.materialName = materialName;
+	}
+
+	public String getItemCode() {
+		return itemCode;
+	}
+
+	public void setItemCode(String itemCode) {
+		this.itemCode = itemCode;
+	}
+
+	public Date getMaterialCreatedDate() {
+		return materialCreatedDate;
+	}
+
+	public void setMaterialCreatedDate(Date materialCreatedDate) {
+		this.materialCreatedDate = materialCreatedDate;
+	}
+
+	public Timestamp getTransactionDate() {
+		return transactionDate;
+	}
+
+	public void setTransactionDate(Timestamp transactionDate) {
+		this.transactionDate = transactionDate;
+	}
+
+	public MaterialTransactionType getTransactionType() {
+		return transactionType;
+	}
+
+	public void setTransactionType(MaterialTransactionType transactionType) {
+		this.transactionType = transactionType;
+	}
+
+	public String getItemGroup() {
+		return itemGroup;
+	}
+
+	public void setItemGroup(String itemGroup) {
+		this.itemGroup = itemGroup;
+	}
+
 	public int getRoleLevel() {
 		return roleLevel;
 	}
 
 	public void setRoleLevel(int roleLevel) {
 		this.roleLevel = roleLevel;
+	}
+
+	public long getMaterialId() {
+		return materialId;
+	}
+
+	public void setMaterialId(long materialId) {
+		this.materialId = materialId;
+	}
+
+	public Timestamp getTransactionFromDate() {
+		return transactionFromDate;
+	}
+
+	public void setTransactionFromDate(Timestamp transactionFromDate) {
+		this.transactionFromDate = transactionFromDate;
+	}
+
+	public Timestamp getTransactionToDate() {
+		return transactionToDate;
+	}
+
+	public void setTransactionToDate(Timestamp transactionToDate) {
+		this.transactionToDate = transactionToDate;
+	}
+
+	public String getIndentRefNumber() {
+		return indentRefNumber;
+	}
+
+	public void setIndentRefNumber(String indentRefNumber) {
+		this.indentRefNumber = indentRefNumber;
+	}
+
+	public Timestamp getRequestedDate() {
+		return requestedDate;
+	}
+
+	public void setRequestedDate(Timestamp requestedDate) {
+		this.requestedDate = requestedDate;
+	}
+
+	public Timestamp getIssuedDate() {
+		return issuedDate;
+	}
+
+	public void setIssuedDate(Timestamp issuedDate) {
+		this.issuedDate = issuedDate;
+	}
+
+	public String getPurchaseRefNumber() {
+		return purchaseRefNumber;
+	}
+
+	public void setPurchaseRefNumber(String purchaseRefNumber) {
+		this.purchaseRefNumber = purchaseRefNumber;
+	}
+
+	public Timestamp getApprovedDate() {
+		return approvedDate;
+	}
+
+	public void setApprovedDate(Timestamp approvedDate) {
+		this.approvedDate = approvedDate;
 	}
 
 	public long getJobId() {
@@ -994,93 +1113,76 @@ public class SearchCriteria extends Paginator {
 		this.jobId = jobId;
 	}
 
-
-    public String getBranch() {
-        return branch;
-    }
-
-    public void setBranch(String branch) {
-        this.branch = branch;
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    public void setRegion(String region) {
-        this.region = region;
-    }
-
-    public long getBranchId() {
-        return branchId;
-    }
-
-    public void setBranchId(long branchId) {
-        this.branchId = branchId;
-    }
-
-    public long getRegionId() {
-        return regionId;
-    }
-
-    public void setRegionId(long regionId) {
-        this.regionId = regionId;
-    }
-
-	public boolean isQuotationIsSubmitted() {
-		return quotationIsSubmitted;
+	public PurchaseRequestStatus getRequestStatus() {
+		return requestStatus;
 	}
 
-	public void setQuotationIsSubmitted(boolean quotationIsSubmitted) {
-		this.quotationIsSubmitted = quotationIsSubmitted;
+	public void setRequestStatus(PurchaseRequestStatus requestStatus) {
+		this.requestStatus = requestStatus;
 	}
 
-	public boolean isQuotationIsArchived() {
-		return quotationIsArchived;
+	public IndentStatus getIndentStatus() {
+		return indentStatus;
 	}
 
-	public void setQuotationIsArchived(boolean quotationIsArchived) {
-		this.quotationIsArchived = quotationIsArchived;
-	}
-
-	public boolean isQuotationIsRejected() {
-		return quotationIsRejected;
-	}
-
-	public void setQuotationIsRejected(boolean quotationIsRejected) {
-		this.quotationIsRejected = quotationIsRejected;
-	}
-
-	public boolean isQuotationIsDrafted() {
-		return quotationIsDrafted;
-	}
-
-	public void setQuotationIsDrafted(boolean quotationIsDrafted) {
-		this.quotationIsDrafted = quotationIsDrafted;
-	}
-
-	public boolean isQuotationIsApproved() {
-		return quotationIsApproved;
-	}
-
-	public void setQuotationIsApproved(boolean quotationIsApproved) {
-		this.quotationIsApproved = quotationIsApproved;
+	public void setIndentStatus(IndentStatus indentStatus) {
+		this.indentStatus = indentStatus;
 	}
 
 
-    public String getTicketTitle() {
-        return ticketTitle;
+    public String getExpenseCategory() {
+        return expenseCategory;
     }
 
-    public void setTicketTitle(String ticketTitle) {
-        this.ticketTitle = ticketTitle;
+    public void setExpenseCategory(String expenseCategory) {
+        this.expenseCategory = expenseCategory;
     }
 
-    public String getTicketDescription() {
-        return ticketDescription;
+    public long getExpenseId() {
+        return expenseId;
     }
 
-    public void setTicketDescription(String ticketDescription) {
-        this.ticketDescription = ticketDescription;
+    public void setExpenseId(long expenseId) {
+        this.expenseId = expenseId;
+    }
+
+    public String getExpenseMode() {
+        return expenseMode;
+    }
+
+    public void setExpenseMode(String expenseMode) {
+        this.expenseMode = expenseMode;
+    }
+
+    public Timestamp getExpenseFromDate() {
+        return expenseFromDate;
+    }
+
+    public void setExpenseFromDate(Timestamp expenseFromDate) {
+        this.expenseFromDate = expenseFromDate;
+    }
+
+    public Timestamp getExpenseToDate() {
+        return expenseToDate;
+    }
+
+    public void setExpenseToDate(Timestamp expenseToDate) {
+        this.expenseToDate = expenseToDate;
+    }
+
+    public Timestamp getCreditedFromDate() {
+        return creditedFromDate;
+    }
+
+    public void setCreditedFromDate(Timestamp creditedFromDate) {
+        this.creditedFromDate = creditedFromDate;
+    }
+
+    public Timestamp getCreditedToDate() {
+        return creditedToDate;
+    }
+
+    public void setCreditedToDate(Timestamp creditedToDate) {
+        this.creditedToDate = creditedToDate;
     }
 }

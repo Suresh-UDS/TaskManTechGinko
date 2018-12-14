@@ -92,6 +92,9 @@ public class JobManagementResource {
 
 	@Inject
 	private ReportUtil reportUtil;
+	
+	@Inject
+	private AmazonS3Service amazonSerivce;
 
 	@Inject
 	private AmazonS3Service amazonService;
@@ -478,6 +481,11 @@ public class JobManagementResource {
     public List<CheckInOutDTO> findCheckInOutByEmployee(@PathVariable("id") Long jobId) {
         log.info("--Invoked findCheckInOut By JobId--"+jobId);
         return jobService.findCheckInOutByJob(jobId);
+    }
+    
+    @RequestMapping(value="/uploadAttendanceCheckIn", method= RequestMethod.GET) 
+    public void uploadAttendance() { 
+    	amazonSerivce.uploadExistingCheckin();
     }
 
     @RequestMapping(value = "/job/uploadExisting/checklistImg", method = RequestMethod.POST)

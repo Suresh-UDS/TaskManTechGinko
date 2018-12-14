@@ -1,3 +1,61 @@
 page-ticket {
+  .fakeTicketList {
+   p, ion-icon,ion-row,ion-item,span {
+      background-color: lightgrey;
+      opacity: 0.5;
+      height: 1em;
+      margin-top: 10px;
+    }
+
+   ion-row,ion-item
+   {
+     width:80% !important;
+   }
+
+    p,span {
+      width: 60%;
+    }
+
+    ion-icon{
+      font-size: 2.8rem !important;
+      width:10% !important;
+    }
+
+  }
+  ion-card img {
+    width: 100% !important;
+    height:100px !important;
+  }
+  ion-card-content {
+    padding: 0px 32px !important;
+    position: relative !important;
+    vertical-align: center !important;
+  }
+  .card
+  {
+    width:100% !important;
+  }
+  .TicketsListCon
+  {
+
+    .list
+    {
+      .item
+      {
+        .item-inner
+        {
+          margin-left: 0 !important;
+          p.TicketPara
+          {
+            font-size: 11px;
+            color: #9e9e9e;
+            font-weight: normal;
+            padding-top: 5px;
+          }
+        }
+      }
+    }
+  }
+
 
 }

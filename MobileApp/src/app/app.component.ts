@@ -40,6 +40,10 @@ import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-fil
 import {authService} from "../pages/service/authService";
 import{ChangePassword} from "../pages/change-password/change-password";
 import{InventoryMaster} from "../pages/inventory-master/inventory-master";
+import {ExpensePage} from "../pages/expense/expense";
+import {Indent} from "../pages/indent/indent";
+import {IndentList} from "../pages/indent-list/indent-list";
+import{ExpenseDetails} from "../pages/expense-details/expense-details";
 
 @Component({
   templateUrl: 'app.html'
@@ -136,20 +140,23 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Dashboard', component: TabsPage,active:true,icon:'dashboard',permission:'DashboardList'},
-      { title: 'Site', component: SitePage,active:false,icon:'dns',permission:'SiteList'},
+      { title: 'Site', component: SitePage,active:false,icon:'device_hub',permission:'SiteList'},
       // { title: 'Client', component: CustomerDetailPage,active:false,icon:'person'},
-      { title: 'Employee', component: EmployeeListPage,active:false,icon:'people',permission:'EmployeeList'},
+      // { title: 'Employee', component: EmployeeListPage,active:false,icon:'people',permission:'EmployeeList'},
       { title: 'Jobs', component: JobsPage,active:false,icon:'description',permission:'JobsList'},
-      { title: 'Assets', component: AssetList,active:false,icon:'build',permission:'AssetsList'},
-      { title: 'Tickets', component: Ticket,active:false,icon:'description',permission:'TicketsList'},
-        { title: 'Attendance', component: SiteListPage,active:false,icon:'content_paste',permission:'AttendanceList'},
-        // { title: 'Rate Card', component: RateCardPage,active:false,icon:'description',permission:'RateCardList'},
+      { title: 'Assets', component: AssetList,active:false,icon:'assessment',permission:'AssetsList'},
+      { title: 'Tickets', component: Ticket,active:false,icon:'tab',permission:'TicketsList'},
+      { title: 'Attendance', component: SiteListPage,active:false,icon:'content_paste',permission:'AttendanceList'},
+      // { title: 'Rate Card', component: RateCardPage,active:false,icon:'description',permission:'RateCardList'},
       { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt',permission:'QuotationList'},
-       { title: 'Feedback', component: InitFeedbackPage,active:false,icon:'feedback',permission:'FeedbackList'},
-       { title: 'ChangePassword', component:ChangePassword,active:false,icon:'feedback',permission:'FeedbackList'},
-        // {title: 'InventoryMaster', component:InventoryMaster,active:false,icon:'feedback',permission:'FeedbackList'}
-        // {title:'Splash page', component:Splash,active:false,icon:'feedback',permission:'DashboardList'},
-        // {title:'Splash logo', component:SplashLogo,active:false,icon:'feedback',permission:'DashboardList'},
+      // { title: 'Expense', component: ExpensePage,active:false,icon:'pie_chart',permission:'AttendanceList'},
+      // { title: 'InventoryMaster', component:InventoryMaster,active:false,icon:'widgets',permission:'FeedbackList'},
+      // {title:'Indent',component:Indent,active:false,icon:'build',permission:'TicketsList'},
+      // { title:'IndentList',component:IndentList,active:false,icon:'shopping_cart',permission:'AttendanceList'},
+      { title: 'Feedback', component: InitFeedbackPage,active:false,icon:'feedback',permission:'FeedbackList'},
+      { title: 'ChangePassword', component:ChangePassword,active:false,icon:'lock',permission:'FeedbackList'}
+      // {title:'Splash page', component:Splash,active:false,icon:'feedback',permission:'DashboardList'},
+      // {title:'Splash logo', component:SplashLogo,active:false,icon:'feedback',permission:'DashboardList'},
       // { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},
       // { title: 'Logout', component: LogoutPage,active:false,icon:'power_settings_new'}
     ];
@@ -173,7 +180,7 @@ export class MyApp {
         console.log(this.appVersion.getPackageName());
         console.log(this.appVersion.getVersionCode());
         console.log(this.appVersion.getVersionNumber());
-      this.statusBar.styleDefault();
+      // this.statusBar.styleDefault();
       this.splashScreen.hide();
 
         this.backgroundMode.enable();
@@ -186,6 +193,8 @@ export class MyApp {
 
      // this.statusBar.overlaysWebView(true);
      // this.statusBar.backgroundColorByHexString("#25312C");
+      this.statusBar.overlaysWebView(false);
+      this.statusBar.backgroundColorByHexString("#e67817");
 
         this.oneSignal.startInit('647127c6-f890-4aad-b4e2-52379805f26c','1015991031299');
         this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);

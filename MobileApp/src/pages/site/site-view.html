@@ -26,51 +26,48 @@
 
 </ion-header>
 
-<ion-content>
+<ion-content class="cardListCon">
 
   <div [ngSwitch]="categories">
     <ion-list *ngSwitchCase="'detail'">
-      <!--
-      <div class="padding10">
-        <ion-row class="margin0 white-bg padding5">
-          <ion-col col-6>
-            <p text-left><ion-icon name="md-map" class="padding-right5 clr-orange"></ion-icon>{{siteDetail.name}}</p>
-          </ion-col>
-          <ion-col col-6>
-            <p text-left><ion-icon name="md-person" class="padding-right5 clr-orange"></ion-icon>{{siteDetail.projectName}}</p>
-          </ion-col>
-          <ion-col col-8>
-            <p text-left><ion-icon name="pin" class="padding-right5 clr-orange fnt-18"></ion-icon>{{siteDetail.address}}</p>
-          </ion-col>
-          <ion-col col-4>
 
-          </ion-col>
-          <ion-col col-12>
-            <div class="map">
+      <ion-card class="new-card-md">
+        <ion-card-header>
+          Site Name
+        </ion-card-header>
+        <ion-card-content>
+          {{siteDetail.name}}
+        </ion-card-content>
+      </ion-card>
 
-            </div>
-          </ion-col>
-        </ion-row>
-      </div>
-      -->
-          <ion-row class="margin0 white-bg padding10">
-            <ion-col col-6 class="label-on-left">Site Name</ion-col>
-            <ion-col col-6>
-              <p text-right>{{siteDetail.name}}</p>
-            </ion-col>
-            <ion-col col-6 class="label-on-left">Client Name</ion-col>
-            <ion-col col-6>
-              <p text-right>{{siteDetail.projectName}}</p>
-            </ion-col>
-            <ion-col col-6 class="label-on-left">Address</ion-col>
-            <ion-col col-6>
-              <p text-right>{{siteDetail.address}}</p>
-            </ion-col>
-            <ion-col col-6 class="label-on-left">Address Co-ordinates</ion-col>
-            <ion-col col-6>
-              <p text-right>{{siteDetail.addressLat}},{{siteDetail.addressLng}}</p>
-            </ion-col>
-          </ion-row>
+      <ion-card class="new-card-md">
+        <ion-card-header>
+          Client Name
+        </ion-card-header>
+        <ion-card-content>
+          {{siteDetail.projectName}}
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="new-card-md">
+        <ion-card-header>
+          Address
+        </ion-card-header>
+        <ion-card-content>
+          {{siteDetail.address}}
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="new-card-md">
+        <ion-card-header>
+          Address Co-ordinates
+        </ion-card-header>
+        <ion-card-content>
+          {{siteDetail.addressLat}},{{siteDetail.addressLng}}
+        </ion-card-content>
+      </ion-card>
+
+
     </ion-list>
     <ion-list *ngSwitchCase="'jobs'" class="align-center">
       <ion-refresher (ionRefresh)="doRefresh($event,job)">

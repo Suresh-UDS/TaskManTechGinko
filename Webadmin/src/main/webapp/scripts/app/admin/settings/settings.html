@@ -6,12 +6,12 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="row">
-            	        <div class="col-md-5 col-md-offset-1">
+            	        <div class="col-md-4 col-md-offset-2">
             	            <div class="form-group">
-
+            	
             	                <!--<label class="control-label">Client</label>-->
             	                <div class="dropdown">
-
+            	
             	                    <!--<input type="text" class="form-control" ng-model="selectedProject" name="projectName" ng-value="selectedProject.name"-->
             	                           <!--uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"-->
             	                           <!--ng-blur="loadSites()"-->
@@ -43,7 +43,7 @@
             	                </div>
             	            </div>
             	        </div>
-            	        <div class="col-md-5">
+            	        <div class="col-md-4">
             	            <div class="form-group label-floating">
             	                <!--<label class="control-label">Site</label>-->
             	                <div class="dropdown" >
@@ -54,7 +54,7 @@
             	                    <select class="form-control " ng-model="selectedSite"  ng-change="loadSettings()" ng-options="site as site.name for site in sites">
             	                        <option value="">Please select Site...</option>
             	                    </select>
-
+            	
             	                    <div ng-show="form.$submitted || form.siteName.$touched">
             	                        <div ng-show="form.siteName.$dirty || form.siteName.$invalid">
             	                            <p class="help-block" style="color:maroon"
@@ -130,7 +130,7 @@
                                     <label class="">Email ids</label>
 
                                     <ul class="listOfActions list-group">
-
+                                    
                                     		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.shiftWiseAttendanceEmailIds" ng-bind-html-unsafe="emailId">
 		                                    {{emailId}}
 		                                    <span class="badge badge-default badge-pill" ng-click="removeShiftWiseAttendanceEmail($index)"><i class="material-icons">remove_circle</i></span>
@@ -139,28 +139,28 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
+                    </div> 
+                    
                     <div class="checkbox">
                         <label>
                             Send DayWise Attendance Email  <input type="checkbox" name="terms" ng-model="settings.dayWiseAttendanceEmailAlert">
                         </label>
                     </div>
-
+					
 					<div class="row">
 
                         <div class="col-md-9">
 
                             <div class="form-group pdng-top15">
                                 <label class="control-label">Attendance DayWise Report Time</label>
-                                <input  type="text" class="form-control timepicker" id="dayWiseAttendanceAlertTime" ng-model="settings.dayWiseAttendanceAlertTime | date:'dd-MMM-yyyy hh:mm a'" />
+                                <input  type="text" class="form-control timepicker" id="dayWiseAttendanceAlterTime" ng-model="settings.dayWiseAttendanceAlterTime | date:'dd-MMM-yyyy hh:mm a'" />
                             </div>
 
                         </div>
+                        
 
-
-                    </div>
-
+                    </div>	
+                    
                     <div class="row">
 
                         <div class="col-md-9">
@@ -171,9 +171,9 @@
                             </div>
 
                         </div>
+                        
 
-
-                    </div>
+                    </div>	
 
 
                     <div class="MailList">
@@ -208,7 +208,7 @@
                                     <label class="">Email ids</label>
 
                                     <ul class="listOfActions list-group">
-
+                                    
                                     		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.dayWiseAttendanceEmailIds" ng-bind-html-unsafe="emailId">
 		                                    {{emailId}}
 		                                    <span class="badge badge-default badge-pill" ng-click="removeDayWiseAttendanceEmail($index)"><i class="material-icons">remove_circle</i></span>
@@ -217,8 +217,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
+                    </div> 
+                    
 
 
                     <div class="checkbox">
@@ -259,7 +259,7 @@
                                     <label class="">EMail ids</label>
 
                                     <ul class="listOfActions list-group">
-
+                                    
                                     		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.overdueEmailIds" ng-bind-html-unsafe="emailId">
 		                                    {{emailId}}
 		                                    <span class="badge badge-default badge-pill" ng-click="removeOverdueEmail($index)"><i class="material-icons">remove_circle</i></span>
@@ -276,7 +276,7 @@
 
 
                         </div>
-                    </div>
+                    </div> 
                     <div class="checkbox">
                         <label>
                             Send EOD Job Reports <input type="checkbox" name="terms" ng-model="settings.eodJobEmailAlert">
@@ -315,7 +315,7 @@
                                     <label class="">EMail ids</label>
 
                                     <ul class="listOfActions list-group">
-
+                                    
                                     		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.eodJobEmailIds" ng-bind-html-unsafe="emailId">
 		                                    {{emailId}}
 		                                    <span class="badge badge-default badge-pill" ng-click="removeEodJobEmail($index)"><i class="material-icons">remove_circle</i></span>
@@ -333,7 +333,7 @@
 
                         </div>
                     </div>
-
+                    
                     <div class="checkbox">
                         <label>
                             Send Negative Feedback Reports <input type="checkbox" name="terms" ng-model="settings.feedbackEmailAlert">
@@ -372,7 +372,7 @@
                                     <label class="">EMail ids</label>
 
                                     <ul class="listOfActions list-group">
-
+                                    
                                     		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.feedbackEmailIds" ng-bind-html-unsafe="emailId">
 		                                    {{emailId}}
 		                                    <span class="badge badge-default badge-pill" ng-click="removeFeedbackEmail($index)"><i class="material-icons">remove_circle</i></span>
@@ -389,73 +389,6 @@
 
 
                         </div>
-                    </div>
-                    
-                    <div class="checkbox">
-                        <label>
-                            Send Daily Feedback Reports <input type="checkbox" name="terms" ng-model="settings.feedbackReportEmailAlert">
-                        </label>
-                    </div>
-
-                    <div class="MailList">
-                        <div class="row">
-
-                            <div class="col-md-9">
-
-                                <div class="form-group pdng-top15">
-                                    <label class="control-label">Daily Feedback Email List</label>
-                                    <input type="text" class="form-control" ng-model="feedbackReportEmail">
-                                </div>
-
-                            </div>
-                            <div class="col-md-3">
-
-                                <button class="btn btn-success margn-top30" ng-click="addFeedbackReportEmail()">
-                                <span class="btn-label">
-                                    <i class="material-icons">add</i>
-                                </span>
-                                    Add
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                        <div class="row addedActionList">
-
-                            <div class="col-md-9">
-                                <div class="form-group">
-
-                                    <label class="">Email ids</label>
-
-                                    <ul class="listOfActions list-group">
-
-                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.feedbackReportEmailIds" ng-bind-html-unsafe="emailId">
-		                                    {{emailId}}
-		                                    <span class="badge badge-default badge-pill" ng-click="removeFeedbackReportEmail($index)"><i class="material-icons">remove_circle</i></span>
-		                                </li>
-
-
-                                    </ul>
-
-                                </div>
-                            </div>
-
-                        </div>
-                        
-                        <div class="row">
-
-	                        <div class="col-md-9">
-	
-	                            <div class="form-group pdng-top15">
-	                                <label class="control-label">Feedback Report Time</label>
-	                                <input  type="text" class="form-control timepicker" id="feedbackReportTime" ng-model="settings.feedbackReportTime | date:'dd-MMM-yyyy hh:mm a'" />
-	                            </div>
-	
-	                        </div>
-	
-	
-	                    </div>
                     </div>
 
 					<div class="checkbox">
@@ -496,7 +429,7 @@
                                     <label class="">Email ids</label>
 
                                     <ul class="listOfActions list-group">
-
+                                    
                                     		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.quotationEmailIds" ng-bind-html-unsafe="emailId">
 		                                    {{emailId}}
 		                                    <span class="badge badge-default badge-pill" ng-click="removeQuotationEmail($index)"><i class="material-icons">remove_circle</i></span>
@@ -539,7 +472,7 @@
                                     <i class="material-icons">add</i>
                                 </span>
                                     Add
-                                </button>
+                                </button>	
 
                             </div>
 
@@ -553,7 +486,7 @@
                                     <label class="">Email ids</label>
 
                                     <ul class="listOfActions list-group">
-
+                                    
                                     		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.ticketEmailIds" ng-bind-html-unsafe="emailId">
 		                                    {{emailId}}
 		                                    <span class="badge badge-default badge-pill" ng-click="removeTicketEmail($index)"><i class="material-icons">remove_circle</i></span>
@@ -568,7 +501,7 @@
 
                         </div>
                     </div>
-
+                    
                     <div class="checkbox">
                         <label>
                             Send Reading Alerts <input type="checkbox" name="terms" ng-model="settings.readingEmailAlert">
@@ -593,7 +526,7 @@
                                     <i class="material-icons">add</i>
                                 </span>
                                     Add
-                                </button>
+                                </button>	
 
                             </div>
 
@@ -607,7 +540,7 @@
                                     <label class="">Email ids</label>
 
                                     <ul class="listOfActions list-group">
-
+                                    
                                     		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.readingEmailIds" ng-bind-html-unsafe="emailId">
 		                                    {{emailId}}
 		                                    <span class="badge badge-default badge-pill" ng-click="removeReadingEmail($index)"><i class="material-icons">remove_circle</i></span>
@@ -621,7 +554,7 @@
 
                         </div>
                     </div>
-
+                    
                     <div class="checkbox">
                         <label>
                             Send Asset Breakdown Alerts <input type="checkbox" name="terms" ng-model="settings.assetEmailAlert">
@@ -646,7 +579,7 @@
                                     <i class="material-icons">add</i>
                                 </span>
                                     Add
-                                </button>
+                                </button>	
 
                             </div>
 
@@ -660,7 +593,7 @@
                                     <label class="">Email ids</label>
 
                                     <ul class="listOfActions list-group">
-
+                                    
                                     		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.assetEmailIds" ng-bind-html-unsafe="emailId">
 		                                    {{emailId}}
 		                                    <span class="badge badge-default badge-pill" ng-click="removeAssetEmail($index)"><i class="material-icons">remove_circle</i></span>
@@ -674,7 +607,7 @@
 
                         </div>
                     </div>
-
+                    
                     <div class="checkbox">
                         <label>
                             Send PPM Job Alerts <input type="checkbox" name="terms" ng-model="settings.ppmEmailAlert">
@@ -699,7 +632,7 @@
                                     <i class="material-icons">add</i>
                                 </span>
                                     Add
-                                </button>
+                                </button>	
 
                             </div>
 
@@ -713,7 +646,7 @@
                                     <label class="">Email ids</label>
 
                                     <ul class="listOfActions list-group">
-
+                                    
                                     		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.ppmEmailIds" ng-bind-html-unsafe="emailId">
 		                                    {{emailId}}
 		                                    <span class="badge badge-default badge-pill" ng-click="removePPMEmail($index)"><i class="material-icons">remove_circle</i></span>
@@ -727,7 +660,7 @@
 
                         </div>
                     </div>
-
+                    
                    <div class="checkbox">
                         <label>
                             Send AMC Job Alerts <input type="checkbox" name="terms" ng-model="settings.amcEmailAlert">
@@ -752,7 +685,7 @@
                                     <i class="material-icons">add</i>
                                 </span>
                                     Add
-                                </button>
+                                </button>	
 
                             </div>
 
@@ -766,7 +699,7 @@
                                     <label class="">Email ids</label>
 
                                     <ul class="listOfActions list-group">
-
+                                    
                                     		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.amcEmailIds" ng-bind-html-unsafe="emailId">
 		                                    {{emailId}}
 		                                    <span class="badge badge-default badge-pill" ng-click="removeAMCEmail($index)"><i class="material-icons">remove_circle</i></span>
@@ -780,7 +713,7 @@
 
                         </div>
                     </div>
-
+                    
                    	<div class="checkbox">
                         <label>
                             Send Warranty Expire Alerts <input type="checkbox" name="terms" ng-model="settings.warrantyEmailAlert">
@@ -805,7 +738,7 @@
                                     <i class="material-icons">add</i>
                                 </span>
                                     Add
-                                </button>
+                                </button>	
 
                             </div>
 
@@ -819,7 +752,7 @@
                                     <label class="">Email ids</label>
 
                                     <ul class="listOfActions list-group">
-
+                                    
                                     		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.warrantyEmailIds" ng-bind-html-unsafe="emailId">
 		                                    {{emailId}}
 		                                    <span class="badge badge-default badge-pill" ng-click="removeWarrantyEmail($index)"><i class="material-icons">remove_circle</i></span>
@@ -834,30 +767,10 @@
                         </div>
                     </div>
                     
-                    
                     <div class="checkbox">
                         <label>
-                            Send DayWise Report Email  <input type="checkbox" name="terms" ng-model="settings.dayWiseReportEmailAlert">
+                            Send Purchase Requisition Alerts <input type="checkbox" name="terms" ng-model="settings.purchaseReqEmailAlert">
                         </label>
-                    </div>
-                    
-                    <div class="checkbox">
-                        <label>
-                            Client Group Email  <input type="checkbox" name="terms" ng-model="settings.clientGroupEmailAlert">
-                        </label>
-                    </div>
-
-					<div class="row">
-
-                        <div class="col-md-9">
-
-                            <div class="form-group pdng-top15">
-                                <label class="control-label">DayWise Report Alert Time</label>
-                                <input  type="text" class="form-control timepicker" id="dayWiseReportAlertTime" ng-model="settings.dayWiseReportAlertTime | date:'dd-MMM-yyyy hh:mm a'" />
-                            </div>
-
-                        </div>
-
                     </div>
 
                     <div class="MailList">
@@ -866,19 +779,19 @@
                             <div class="col-md-9">
 
                                 <div class="form-group pdng-top15">
-                                    <label class="control-label">DayWise Report Email List</label>
-                                    <input type="text" class="form-control" ng-model="dayWiseReportEmail">
+                                    <label class="control-label">Email List</label>
+                                    <input type="text" class="form-control" ng-model="purchaseReqEmail">
                                 </div>
 
                             </div>
                             <div class="col-md-3">
 
-                                <button class="btn btn-success margn-top30" ng-click="addDayWiseReportEmail()">
+                                <button class="btn btn-success margn-top30" ng-click="addPREmail()">
                                 <span class="btn-label">
                                     <i class="material-icons">add</i>
                                 </span>
                                     Add
-                                </button>
+                                </button>	
 
                             </div>
 
@@ -892,59 +805,10 @@
                                     <label class="">Email ids</label>
 
                                     <ul class="listOfActions list-group">
-
-                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.dayWiseReportEmailIds" ng-bind-html-unsafe="emailId">
+                                    
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.purchaseReqEmailIds" ng-bind-html-unsafe="emailId">
 		                                    {{emailId}}
-		                                    <span class="badge badge-default badge-pill" ng-click="removeDayWiseReportEmail($index)"><i class="material-icons">remove_circle</i></span>
-		                                </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="checkbox">
-                        <label>
-                            Send Muster Roll Alerts <input type="checkbox" name="terms" ng-model="settings.musterRollEmailAlert">
-                        </label>
-                    </div>
-
-                    <div class="MailList">
-                        <div class="row">
-
-                            <div class="col-md-9">
-
-                                <div class="form-group pdng-top15">
-                                    <label class="control-label">Muster Report Email List</label>
-                                    <input type="text" class="form-control" ng-model="musterRollEmail">
-                                </div>
-
-                            </div>
-                            <div class="col-md-3">
-
-                                <button class="btn btn-success margn-top30" ng-click="addMusterRollEmail()">
-                                <span class="btn-label">
-                                    <i class="material-icons">add</i>
-                                </span>
-                                    Add
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                        <div class="row addedActionList">
-
-                            <div class="col-md-9">
-                                <div class="form-group">
-
-                                    <label class="">Email ids</label>
-
-                                    <ul class="listOfActions list-group">
-
-                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.musterRollEmailIds" ng-bind-html-unsafe="emailId">
-		                                    {{emailId}}
-		                                    <span class="badge badge-default badge-pill" ng-click="removeMusterEmail($index)"><i class="material-icons">remove_circle</i></span>
+		                                    <span class="badge badge-default badge-pill" ng-click="removePREmail($index)"><i class="material-icons">remove_circle</i></span>
 		                                </li>
 
 

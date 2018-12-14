@@ -1,0 +1,119 @@
+page-indent {
+  .btn, .navbar .navbar-nav>li>a.btn {
+    border: none;
+    border-radius: 3px;
+    position: relative;
+    padding: 12px 24px;
+    margin: 3px 1px !important;
+    font-size: 12px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    will-change: box-shadow, transform;
+    transition: box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1), background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .item-md.item-block .item-inner {
+    padding-right:0px !important;
+    border-bottom:none !important;
+  }
+  .list-md .item-input:last-child {
+    border-bottom:none !important;
+  }
+  .margin-top10
+  {
+    margin-top:10px !important;
+  }
+  .fab[mini] {
+    margin: 8px;
+    width: 35px;
+    height: 35px;
+    line-height: 40px;
+  }
+  .fab ion-icon
+  {
+    font-size:19px !important;
+  }
+  .item-md {
+    padding-left: 0px !important;
+  }
+  .text-input-md {
+    width: calc(100% - 0px - 0px) !important;
+  }
+  ion-select
+  {
+    overflow:inherit !important;
+    max-width:100% !important;
+  }
+  ion-label
+  {
+    overflow:inherit !important;
+  }
+
+  ul
+  {
+    list-style:none !important;
+    -webkit-padding-start: 5px;
+  }
+  li{
+    border-bottom: 1px solid #ccc !important;
+    padding: 12px !important;
+  }
+  .fnt-z{
+    position:absolute !important;
+    z-index:2 !important;
+  }
+  .width90
+  {
+    width:90% !important
+  }
+
+  .txt-input
+  {
+    border: 1px solid #f4f4f4 !important;
+    padding: 9px !important;
+    background-color: white !important;
+  }
+  .bg-gray
+  {
+    background:none !important;
+  }
+
+  .card .card-content {
+    padding: 5px 10px !important;
+    position: relative;
+  }
+  .fab[mini] {
+    margin: 8px;
+    width: 30px;
+    height: 30px;
+    line-height: 40px;
+    margin-top:0px !important;
+  }
+  .mrgn-p {
+    margin: 0 -6px 10px !important;
+  }
+  .brdr{
+    border-bottom:none !important;
+  }
+  ion-card img {
+    width: 100% !important;
+    height:80px !important;
+  }
+  ion-card-content {
+    padding: 0px 32px !important;
+    position: relative !important;
+    vertical-align: center !important;
+  }
+  .card-md
+  {
+    width:100% !important;
+  }
+  .brdr{
+    border:1px solid #CCC !important;
+  }
+  .select-searchable
+  {
+    max-width:100% !important;
+  }
+
+}

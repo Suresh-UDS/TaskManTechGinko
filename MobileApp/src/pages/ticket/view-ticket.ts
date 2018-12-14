@@ -126,7 +126,7 @@ export class ViewTicket {
                     handler: data => {
                         console.log("Remarks Data");
                         console.log(data);
-                        this.remarks=data;
+                        this.remarks=data.Remarks;
                         this.closeTicket();
                     }
                 }

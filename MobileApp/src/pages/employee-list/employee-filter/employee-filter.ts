@@ -31,6 +31,14 @@ export class EmployeeFilter {
     toDate:any;
     viewButton:any;
     clientList:any;
+  chooseClient = true;
+  projectActive: any;
+  siteSpinner = false;
+  showSites = false;
+  projectindex: any;
+  chooseSite = true;
+  empSpinner=false;
+  showEmployees=false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,public siteService:SiteService,public component:componentService,
             public  employeeService:EmployeeService,public datePicker:DatePicker) {
@@ -45,7 +53,7 @@ export class EmployeeFilter {
               console.log(response);
               this.clientList=response;
               this.selectedProject = this.clientList[0];
-              this.selectSite(this.selectedProject);
+              // this.selectSite(this.selectedProject);
               console.log('select default value:');
               this.component.closeLoader();
           },
@@ -66,12 +74,22 @@ export class EmployeeFilter {
       this.viewCtrl.dismiss();
     }
 
-    selectSite(project)
+    selectSite(project,i)
     {
-        this.selectedSite = project;
-        this.scrollSite = true;
+
+      this.projectActive=true;
+      this.projectindex = i;
+      this.siteSpinner= true;
+      this.chooseClient= false;
+      this.showSites = false;
+      this.selectedProject = project;
+      this.scrollSite = true;
+      this.showEmployees = false;
         this.siteService.findSitesByProject(project.id).subscribe(
             response=>{
+              this.siteSpinner=false;
+              this.showSites = true;
+              this.chooseSite = true;
                 this.component.closeLoader();
                 console.log("====Site By ProjectId======");
                 console.log(response);

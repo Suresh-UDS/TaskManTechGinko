@@ -343,7 +343,7 @@ public class AttendanceService extends AbstractService {
 
 				/*
 				if(checkInCal.before(endCalLeadTime)) { // 12:30 PM checkin time < 1 PM (2PM shift ends) - 1 hr lead time
-					if((startCal.before(checkInCal))  // 7 AM shift starts < 12:30 PM check in
+					if((startCal.before(checkInCal) && startCalGraceTime.after(checkInCal))  // 7 AM shift starts < 12:30 PM check in
 							|| startCal.equals(checkInCal)) {
 						dbAttn.setShiftStartTime(startTime);  //7 AM considered as shift starts
 						dbAttn.setShiftEndTime(endTime);

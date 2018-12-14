@@ -14,7 +14,54 @@
 
 <ion-content>
 
-   <div class="InitFeedbackCon">
+  <div class="card scroll-card">
+    <div class="card-content">
+          <ion-row>
+
+            <ion-col col-12>
+              <p text-center>Choose Client</p>
+              <div class="SitesScrollCon">
+                <ion-scroll scrollX="true">
+                  <button class="scroll-item" ion-button round *ngFor="let p of projects;let i of index" (click)="selectSite(p,i)" [color]="projectActive && i==projectindex ? 'primary':'light'">
+                    <p class="siteName">{{p.name}}</p>
+                  </button>
+                </ion-scroll>
+              </div>
+            </ion-col>
+          </ion-row>
+    </div>
+  </div>
+
+  <div class="card scroll-card">
+    <div class="card-content">
+      <ion-row>
+           <ion-col col-12>
+
+              <p text-center>Choose Site</p>
+
+              <div padding text-center *ngIf="siteSpinner">
+                <span><ion-spinner name="bubbles"></ion-spinner> <br> Loading...</span>
+              </div>
+
+              <div padding text-center *ngIf="chooseClient">
+                <strong>Please Select Client</strong>
+              </div>
+
+              <div class="SitesScrollCon" *ngIf="showSites">
+                <ion-scroll scrollX="true">
+                  <button class="scroll-item" ion-button round  *ngFor="let s of sites;let i of index" (click)="selectBlockDetail(i,s)" [color]="siteActive && i==index ? 'primary' : 'light'">
+                    <p class="siteName">{{s.name}}</p>
+                  </button>
+                </ion-scroll>
+              </div>
+
+            </ion-col>
+      </ion-row>
+    </div>
+  </div>
+
+
+   <!--<div class="InitFeedbackCon">
 
         <div class="InputCon">
 
@@ -26,55 +73,55 @@
                     </ion-select>
                 </ion-item>
 
-                <!--<ion-item>-->
-                    <!--<ion-label>Site</ion-label>-->
-                    <!--<ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedSite">-->
-                        <!--<ion-option *ngFor="let s of sites" [value]="s.id" (ionSelect)="selectBlock(s)">{{s.name}}</ion-option>-->
-                    <!--</ion-select>-->
-                <!--</ion-item>-->
-                <!--<ion-item>-->
-                    <!--<ion-label>Block</ion-label>-->
-                    <!--<ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedBlock">-->
-                        <!--<ion-option *ngFor="let b of blocks" [value]="b" (ionSelect)="selectFloor(b)">{{b}}</ion-option>-->
-                    <!--</ion-select>-->
-                <!--</ion-item>-->
-                <!--<ion-item>-->
-                    <!--<ion-label>Floor</ion-label>-->
-                    <!--<ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedFloor">-->
-                        <!--<ion-option *ngFor="let f of floors" [value]="f" (ionSelect)="selectZone(f)" >{{f}}</ion-option>-->
-                    <!--</ion-select>-->
-                <!--</ion-item>-->
-                <!--<ion-item>-->
-                    <!--<ion-label>zone</ion-label>-->
-                    <!--<ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="zone">-->
-                        <!--<ion-option *ngFor="let z of zones" [value]="z">{{z}}</ion-option>-->
-                    <!--</ion-select>-->
-                <!--</ion-item>-->
-                <!--<ion-item>-->
-                    <!--<ion-label>Feedback Name</ion-label>-->
-                    <!--<ion-select [selectOptions]="selectOptions" interface="popover">-->
-                        <!--<ion-option *ngFor="let fb of feedbacks" [value]="fb" (ionSelect)="start(fb)">{{fb.projectName}} - {{fb.siteName}} - {{fb.Zone}}</ion-option>-->
-                    <!--</ion-select>-->
-                <!--</ion-item>-->
+                &lt;!&ndash;<ion-item>&ndash;&gt;
+                    &lt;!&ndash;<ion-label>Site</ion-label>&ndash;&gt;
+                    &lt;!&ndash;<ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedSite">&ndash;&gt;
+                        &lt;!&ndash;<ion-option *ngFor="let s of sites" [value]="s.id" (ionSelect)="selectBlock(s)">{{s.name}}</ion-option>&ndash;&gt;
+                    &lt;!&ndash;</ion-select>&ndash;&gt;
+                &lt;!&ndash;</ion-item>&ndash;&gt;
+                &lt;!&ndash;<ion-item>&ndash;&gt;
+                    &lt;!&ndash;<ion-label>Block</ion-label>&ndash;&gt;
+                    &lt;!&ndash;<ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedBlock">&ndash;&gt;
+                        &lt;!&ndash;<ion-option *ngFor="let b of blocks" [value]="b" (ionSelect)="selectFloor(b)">{{b}}</ion-option>&ndash;&gt;
+                    &lt;!&ndash;</ion-select>&ndash;&gt;
+                &lt;!&ndash;</ion-item>&ndash;&gt;
+                &lt;!&ndash;<ion-item>&ndash;&gt;
+                    &lt;!&ndash;<ion-label>Floor</ion-label>&ndash;&gt;
+                    &lt;!&ndash;<ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedFloor">&ndash;&gt;
+                        &lt;!&ndash;<ion-option *ngFor="let f of floors" [value]="f" (ionSelect)="selectZone(f)" >{{f}}</ion-option>&ndash;&gt;
+                    &lt;!&ndash;</ion-select>&ndash;&gt;
+                &lt;!&ndash;</ion-item>&ndash;&gt;
+                &lt;!&ndash;<ion-item>&ndash;&gt;
+                    &lt;!&ndash;<ion-label>zone</ion-label>&ndash;&gt;
+                    &lt;!&ndash;<ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="zone">&ndash;&gt;
+                        &lt;!&ndash;<ion-option *ngFor="let z of zones" [value]="z">{{z}}</ion-option>&ndash;&gt;
+                    &lt;!&ndash;</ion-select>&ndash;&gt;
+                &lt;!&ndash;</ion-item>&ndash;&gt;
+                &lt;!&ndash;<ion-item>&ndash;&gt;
+                    &lt;!&ndash;<ion-label>Feedback Name</ion-label>&ndash;&gt;
+                    &lt;!&ndash;<ion-select [selectOptions]="selectOptions" interface="popover">&ndash;&gt;
+                        &lt;!&ndash;<ion-option *ngFor="let fb of feedbacks" [value]="fb" (ionSelect)="start(fb)">{{fb.projectName}} - {{fb.siteName}} - {{fb.Zone}}</ion-option>&ndash;&gt;
+                    &lt;!&ndash;</ion-select>&ndash;&gt;
+                &lt;!&ndash;</ion-item>&ndash;&gt;
 
             </ion-list>
 
-            <!--<div class="TailsCon" *ngIf="!scrollSite">-->
+            &lt;!&ndash;<div class="TailsCon" *ngIf="!scrollSite">&ndash;&gt;
 
-                <!--<div *ngIf="sites?.length<0">-->
-                    <!--<h4 text-center>No Data Found</h4>-->
-                <!--</div>-->
+                &lt;!&ndash;<div *ngIf="sites?.length<0">&ndash;&gt;
+                    &lt;!&ndash;<h4 text-center>No Data Found</h4>&ndash;&gt;
+                &lt;!&ndash;</div>&ndash;&gt;
 
-                <!--<ion-grid>-->
-                    <!--<ion-row>-->
-                        <!--<ion-col col-4 *ngFor="let site of sites;let i of index" >-->
-                            <!--<button ion-button clear (click)="selectBlockDetail(i,site)">-->
-                                <!--<p class="siteName SiteListTails">{{site.name}}</p>-->
-                            <!--</button>-->
-                        <!--</ion-col>-->
-                    <!--</ion-row>-->
-                <!--</ion-grid>-->
-            <!--</div>-->
+                &lt;!&ndash;<ion-grid>&ndash;&gt;
+                    &lt;!&ndash;<ion-row>&ndash;&gt;
+                        &lt;!&ndash;<ion-col col-4 *ngFor="let site of sites;let i of index" >&ndash;&gt;
+                            &lt;!&ndash;<button ion-button clear (click)="selectBlockDetail(i,site)">&ndash;&gt;
+                                &lt;!&ndash;<p class="siteName SiteListTails">{{site.name}}</p>&ndash;&gt;
+                            &lt;!&ndash;</button>&ndash;&gt;
+                        &lt;!&ndash;</ion-col>&ndash;&gt;
+                    &lt;!&ndash;</ion-row>&ndash;&gt;
+                &lt;!&ndash;</ion-grid>&ndash;&gt;
+            &lt;!&ndash;</div>&ndash;&gt;
 
             <div class="SiteAndBlockCOn"  *ngIf="scrollSite">
 
@@ -93,8 +140,12 @@
                             </ion-item>
                         </ion-row>
                     </div>
-                </div>
+                </div>-->
 
+
+  <div class="card scroll-card">
+    <div class="card-content">
+      <ion-row>
                 <ion-item no-lines>
                     <ion-icon name="ios-git-merge-outline" item-start></ion-icon>
                     Select Block, Floor, Zone
@@ -135,8 +186,13 @@
                         <!--</ion-row>-->
                     <!--</ion-grid>-->
                 <!--</div>-->
-            </div>
+            <!--</div>
         </div>
-   </div>
+   </div>-->
+
+          </ion-row>
+        </div>
+      </div>
+
 </ion-content>
 

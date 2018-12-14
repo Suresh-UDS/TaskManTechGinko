@@ -192,8 +192,9 @@ export class CreateJobPage {
             this.jobService.createJob(this.newJob).subscribe(
                 response=> {
                     if(response.errorStatus){
-                        this.component.closeAll();
-                        demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
+                        console.log("errorstatus",response.errorMessage);
+                        demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                      this.component.closeAll();
                     }else{
                         this.component.closeAll();
                         console.log(response);

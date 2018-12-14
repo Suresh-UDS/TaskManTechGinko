@@ -1,90 +1,47 @@
-<div ng-init="loadPageTop();loadProjectsList();">
-    <div class="row"
-         ng-init="loadEmployees();loadProjects();loadAllEmployees();loadSites()">
+<div ng-init="loadPageTop()">
+
+
+    <div class="row" ng-init="loadEmployees();loadProjects();loadAllEmployees();loadSites()">
         <div class="col-md-6 txt-align-lft">
-            <!--<button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">-->
-            <!--<i class="material-icons">filter_list</i> Basic Filter-->
-            <!--<div class="ripple-container"></div>-->
-            <!--</button>-->
-            <!--<button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#advancedFilter" tabindex="0">-->
-            <!--<i class="material-icons">filter_list</i> Advanced Filter-->
-            <!--<div class="ripple-container"></div>-->
-            <!--</button>-->
-            <button class="btn btn-success add-btn margn-tb0" data-toggle="modal"
-                    data-target="#Filter" tabindex="0">
-                <i class="material-icons">filter_list</i>Filter
+
+            <button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
+                <i class="material-icons">filter_list</i> Basic Filter
                 <div class="ripple-container"></div>
             </button>
-            <button class="btn btn-warning add-btn margn-tb0"
-                    ng-click="refreshPage()" tabindex="0">
-                <i class="material-icons">refresh</i> Clear Filter
+            <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#advancedFilter" tabindex="0">
+                <i class="material-icons">filter_list</i> Advanced Filter
                 <div class="ripple-container"></div>
             </button>
+
         </div>
         <div class="col-md-6 txt-align-rgt">
 
-
-            <button class="btn btn-success add-btn margn-tb0 "
-                    ui-sref="add-employee" has-permission="Employee:Create"
-                    ng-class="{active: $state.includes('admin')}" tabindex="0">
+            <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-employee" has-permission="Employee:Create" ng-class="{active: $state.includes('admin')}" tabindex="0">
                 <i class="material-icons">add</i> Add
                 <div class="ripple-container"></div>
             </button>
 
-            <button class="btn btn-info add-btn margn-tb0"
-                    ui-sref="employee-location" tabindex="0" has-permission="Employee:View">
+            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i> Reload
+                <div class="ripple-container"></div>
+            </button>
+            <button class="btn btn-info add-btn margn-tb0"  ui-sref="employee-location" tabindex="0">
                 <i class="material-icons">location_on</i> Map
                 <div class="ripple-container"></div>
             </button>
-            <button class="btn btn-success add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':downloader}"
-                    ng-show="employees.length" ng-click="exportAllData();" tabindex="0">
+            <button class="btn btn-success add-btn margn-tb0"  ng-show="employees.length" ng-click="exportAllData();" tabindex="0">
                 <i class="material-icons">file_download</i> Export
-                <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
                 <div class="ripple-container"></div>
             </button>
-            <span ng-if="exportMsg()=='Download'">
-                 <a class="download-btn" href="{{exportFile()}}" download target="_self" ng-click="clsDownload()" ng-hide="downloaded">{{exportMsg()}}</a>
-                 <div class="downloaderMd" ng-show="downloader"></div>
-            </span>
-            <span ng-if="exportMsg()!='Download'">
-                 <a class="download-btn" href="javascript:void(0);">{{exportMsg()}}</a>
-            </span>
+
+            <a class="download-btn" href="{{exportFile()}}">{{exportMsg()}}</a>
             <div class="downloader" ng-show="downloader"></div>
 
         </div>
     </div>
-    <div class="AppliedFilterCon"
-         ng-show="!searchCriteria.findAll || localStorage">
-		<span class="AppliedFilterTxtCon">
-			<span
-	            class="tag label label-info" style="margin-right: 10px"
-	            ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
-					Client: {{searchCriteras.projectName}}
-			</span>
-			 <span class="tag label label-info" style="margin-right: 10px"
-	                  ng-show="searchCriteras.regionId !=0 && searchCriteras.regionId !=null">
-					Region: {{searchCriteras.region}}
-			</span>
-			 <span class="tag label label-info" style="margin-right: 10px"
-	                  ng-show="searchCriteras.branchId !=0 && searchCriteras.branchId !=null">
-					Branch: {{searchCriteras.branch}}
-			</span>
-			 <span class="tag label label-info" style="margin-right: 10px"
-	                  ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
-					Site: {{searchCriteras.siteName}}
-			</span>
-			 <span class="tag label label-info" style="margin-right: 10px"
-	                ng-show="searchCriteras.employeeEmpId">
-					Emp Id: {{searchCriteras.employeeEmpId}}
-			</span>
-			<span class="tag label label-info" style="margin-right: 10px"
-	                      ng-show="searchCriteras.name"> Emp Name:
-					{{searchCriteras.name}}
-			</span>
-		</span>
-    </div>
 
-    <div class="row">
+
+    <div class="row" >
 
         <div class="col-md-12">
             <div class="card TableCard">
@@ -92,144 +49,137 @@
 
                     <!--<div class="SearchTable">-->
 
-                    <!--<form name="searchForm"  ng-submit="searchFilter()" novalidate >-->
+                        <!--<form name="searchForm"  ng-submit="searchFilter()" novalidate >-->
 
-                    <!--<div class="row">-->
+                            <!--<div class="row">-->
 
-                    <!--&lt;!&ndash;                                     <td>-->
-                    <!--<label>Show</label>-->
-                    <!--<select class="siteList margin0" ng-model="sort" ng-change="hasChanged()" ng-options="paging.value for paging in pageSizes" value="{{paging.value}}">-->
-                    <!--</select>-->
-                    <!--</td>-->
-                    <!--&ndash;&gt;								  <div class="col-md-2">-->
-                    <!--<div class="dropdown">-->
-                    <!--<div class="form-group">-->
-                    <!--<label class="control-label">Select Client</label>-->
-                    <!--<span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                    <!--<select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">-->
-                    <!--<option value="">Select Client...</option>-->
-                    <!--</select>-->
+<!--&lt;!&ndash;                                     <td>-->
+                                        <!--<label>Show</label>-->
+                                        <!--<select class="siteList margin0" ng-model="sort" ng-change="hasChanged()" ng-options="paging.value for paging in pageSizes" value="{{paging.value}}">-->
+                                        <!--</select>-->
+                                    <!--</td>-->
+ <!--&ndash;&gt;								  <div class="col-md-2">-->
+								   			<!--<div class="dropdown">-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<label class="control-label">Select Client</label>-->
+                                                     <!--<span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                    <!--<select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">-->
+                                                        <!--<option value="">Select Client...</option>-->
+                                                    <!--</select>-->
 
 
+
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-2">-->
+
+                                            <!--<div class="dropdown">-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<label class="control-label">Select Site</label>-->
+                                                    <!--&lt;!&ndash;<input type="text" class="form-control"&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;ng-model="selectedRole"&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;required >&ndash;&gt;-->
+                                                    <!--<span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                    <!--<select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites">-->
+                                                        <!--<option value="">Select Site...</option>-->
+                                                    <!--</select>-->
+
+
+
+                                                <!--</div>-->
+                                            <!--</div>-->
+
+
+								   <!--</div>-->
+                                    <!--<div class="col-md-2">                                        <div class="form-group" style="padding-top: 20px;" >-->
+                                            <!--<div class="dropdown">-->
+                                                <!--<input type="text"-->
+                                                       <!--class="form-control border-bottom-input"-->
+                                                       <!--placeholder="Employee Id"-->
+                                                       <!--ng-model="selectedEmployeeId"-->
+												<!--/>-->
+
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+
+
+                                    <!--<div class="col-md-2">-->
+                                        <!--<div class="form-group" style="padding-top: 20px;" >-->
+                                            <!--<div class="dropdown">-->
+                                                <!--<input type="text"-->
+                                                       <!--class="form-control border-bottom-input"-->
+                                                       <!--placeholder="Employee Name"-->
+                                                       <!--ng-model="selectedEmployeeName"-->
+                                                       <!--/>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+
+
+                                    <!--<div class="col-md-4">-->
+                                        <!--<div class="form-group pull-right" style="padding-top: 10px;">-->
+
+                                            <!--<button type="submit" class="btn btn-circle blue-clr">-->
+                                                <!--<i class="material-icons">search</i>-->
+                                            <!--</button>-->
+                                            <!--<button ui-sref="add-employee" has-permission="Employee:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">-->
+                                                <!--<i class="material-icons">add</i>-->
+                                            <!--</button>-->
+                                            <!--<button ui-sref="employee-location" class="btn btn-circle orange-clr">-->
+                                                <!--<i class="material-icons">location_on</i>-->
+                                            <!--</button>-->
+                                            <!--<button ng-click="refreshPage()" class="btn btn-circle orange-clr">-->
+                                                <!--<i class="material-icons">refresh</i>-->
+                                            <!--</button>-->
+                                        <!--</div>-->
+                                        <!--<div class="clearfix"></div>-->
+                                    <!--</div>-->
+
+                              <!--</div>-->
+                        <!--</form>-->
 
                     <!--</div>-->
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="col-md-2">-->
-
-                    <!--<div class="dropdown">-->
-                    <!--<div class="form-group">-->
-                    <!--<label class="control-label">Select Site</label>-->
-                    <!--&lt;!&ndash;<input type="text" class="form-control"&ndash;&gt;-->
-                    <!--&lt;!&ndash;ng-model="selectedRole"&ndash;&gt;-->
-                    <!--&lt;!&ndash;uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"&ndash;&gt;-->
-                    <!--&lt;!&ndash;name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus&ndash;&gt;-->
-                    <!--&lt;!&ndash;required >&ndash;&gt;-->
-                    <!--<span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                    <!--<select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites">-->
-                    <!--<option value="">Select Site...</option>-->
-                    <!--</select>-->
 
 
-
-                    <!--</div>-->
-                    <!--</div>-->
-
-
-                    <!--</div>-->
-                    <!--<div class="col-md-2">                                        <div class="form-group" style="padding-top: 20px;" >-->
-                    <!--<div class="dropdown">-->
-                    <!--<input type="text"-->
-                    <!--class="form-control border-bottom-input"-->
-                    <!--placeholder="Employee Id"-->
-                    <!--ng-model="selectedEmployeeId"-->
-                    <!--/>-->
-
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!--</div>-->
-
-
-                    <!--<div class="col-md-2">-->
-                    <!--<div class="form-group" style="padding-top: 20px;" >-->
-                    <!--<div class="dropdown">-->
-                    <!--<input type="text"-->
-                    <!--class="form-control border-bottom-input"-->
-                    <!--placeholder="Employee Name"-->
-                    <!--ng-model="selectedEmployeeName"-->
-                    <!--/>-->
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!--</div>-->
-
-
-                    <!--<div class="col-md-4">-->
-                    <!--<div class="form-group pull-right" style="padding-top: 10px;">-->
-
-                    <!--<button type="submit" class="btn btn-circle blue-clr">-->
-                    <!--<i class="material-icons">search</i>-->
-                    <!--</button>-->
-                    <!--<button ui-sref="add-employee" has-permission="Employee:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">-->
-                    <!--<i class="material-icons">add</i>-->
-                    <!--</button>-->
-                    <!--<button ui-sref="employee-location" class="btn btn-circle orange-clr">-->
-                    <!--<i class="material-icons">location_on</i>-->
-                    <!--</button>-->
-                    <!--<button ng-click="refreshPage()" class="btn btn-circle orange-clr">-->
-                    <!--<i class="material-icons">refresh</i>-->
-                    <!--</button>-->
-                    <!--</div>-->
-                    <!--<div class="clearfix"></div>-->
-                    <!--</div>-->
-
-                    <!--</div>-->
-                    <!--</form>-->
-
-                    <!--</div>-->
                     <div class="table-responsive tablecard">
                         <table id="" class="table table-hover withSortingIcons">
+
                             <thead>
                             <tr>
-                                <th>ID <span class="sortingIcons"> <span
-                                    ng-click="columnAscOrder('empId')"
-                                    ng-class="isActiveAsc == 'empId' ? 'active' : ''"> <i
-                                    class="fa fa-caret-up"></i>
-										</span> <span ng-click="columnDescOrder('empId')"
-                                                      ng-class="isActiveDesc == 'empId' ? 'active' : ''"> <i
-                                    ng-class="class" class="fa fa-caret-down"></i>
-										</span>
-									</span>
-                                </th>
-                                <th>Name <span class="sortingIcons"> <span
-                                    ng-click="columnAscOrder('name')"
-                                    ng-class="isActiveAsc == 'name' ? 'active' : ''"> <i
-                                    class="fa fa-caret-up"></i>
-										</span> <span ng-click="columnDescOrder('name')"
-                                                      ng-class="isActiveDesc == 'name' ? 'active' : ''"> <i
-                                    ng-class="class" class="fa fa-caret-down"></i>
-										</span>
-									</span>
-                                </th>
-                                <th>Client <span class="sortingIcons"> <span
-                                    ng-click="columnAscOrder('projectSites.project.name')"
-                                    ng-class="isActiveAsc == 'projectSites.project.name' ? 'active' : ''">
-												<i class="fa fa-caret-up"></i>
-										</span> <span ng-click="columnDescOrder('projectSites.project.name')"
-                                                      ng-class="isActiveDesc == 'projectSites.project.name' ? 'active' : ''">
-												<i ng-class="class" class="fa fa-caret-down"></i>
-										</span>
-									</span>
+                                <th>ID
 
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('empId')" ng-class="isActiveAsc == 'empId' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('empId')" ng-class="isActiveDesc == 'empId' ? 'active' : ''" >
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
                                 </th>
-                                <th>Site <span class="sortingIcons"> <span
-                                    ng-click="columnAscOrder('projectSites.site.name')"
-                                    ng-class="isActiveAsc == 'projectSites.site.name' ? 'active' : ''">
-												<i class="fa fa-caret-up"></i>
-										</span> <span ng-click="columnDescOrder('projectSites.site.name')"
-                                                      ng-class="isActiveDesc == 'projectSites.site.name' ? 'active' : ''">
-												<i ng-class="class" class="fa fa-caret-down"></i>
-										</span>
-									</span>
+                                <th>Name
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('name')" ng-class="isActiveAsc == 'name' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('name')" ng-class="isActiveDesc == 'name' ? 'active' : ''" >
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th>Client
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('projectSites.project.name')" ng-class="isActiveAsc == 'projectSites.project.name' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('projectSites.project.name')" ng-class="isActiveDesc == 'projectSites.project.name' ? 'active' : ''" >
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
 
                                 </th>
                                 <th>Enrolled Face Id</th>
@@ -238,105 +188,77 @@
                                 <th class="disabled-sorting text-right">Actions</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr ng-repeat="employee in employees"
-                                repeat-done="initDataTables()">
-                                <td>{{employee.empId}}</td>
-                                <td>{{employee.name | uppercase}} {{employee.lastName | uppercase}}</td>
-                                <td>{{employee.projectName | uppercase}}</td>
-                                <td>{{employee.siteName | uppercase}}</td>
-                                <td ng-if="employee.enrolled_face"><a id="images" href="#"
-                                                                      onClick="$('#enrollImageModal').modal()"
-                                                                      data-target="#enrollImageModal"
-                                                                      data-dismiss="#enrollImageModal"
-                                                                      ng-click="loadEnrolledImage(employee.url)"> <img
-                                    ng-src={{employee.url}} width="30px" height="30px" />
-                                </a></td>
-                                <td ng-if="!employee.enrolled_face"><img
-                                    ng-src="assets/img/user.png" width="30px" height="30px" /></td>
 
-                                <td has-permission="Employee:Edit"
-                                    ng-if="!employee.faceAuthorised && employee.faceIdEnrolled">
-                                    <button class="btn btn-success btn-sm"
-                                            has-permission="Employee:Create"
-                                            ng-click="approveImage(employee)">Approve</button>
+                            <tbody>
+                            <tr ng-repeat="employee in employees" repeat-done="initDataTables()">
+                                <td>{{employee.empId}}</td>
+                                <td>{{employee.name}} {{employee.lastName}}</td>
+							   <td>{{employee.projectName}}</td>
+                                <td ng-if="employee.enrolled_face">
+                                    <a id="images" href="#" onClick="$('#enrollImageModal').modal()" data-target="#enrollImageModal" data-dismiss="#enrollImageModal" ng-click="loadEnrolledImage(employee.url)">
+                                        <img src={{employee.url}} width="30px" height="30px"/>
+                                    </a>
                                 </td>
-                                <td has-permission="Employee:Edit"
-                                    ng-if="employee.faceAuthorised && employee.faceIdEnrolled"><p
-                                    style="color: green">Face Id Approved</p></td>
-                                <td has-permission="Employee:Edit"
-                                    ng-if="!employee.faceAuthorised && !employee.faceIdEnrolled"><p
-                                    style="color: red">Face Id not enrolled</p></td>
+                                <td ng-if="!employee.enrolled_face">
+                                    <img src="assets/img/user.png" width="30px" height="30px"/>
+                                </td>
+
+                                <td has-permission="Employee:Edit" ng-if="!employee.faceAuthorised && employee.faceIdEnrolled">
+                                    <button class="btn btn-success btn-sm" has-permission="Employee:Create" ng-click="approveImage(employee)">Approve</button>
+                                </td>
+                                <td has-permission="Employee:Edit" ng-if="employee.faceAuthorised && employee.faceIdEnrolled"><p style="color:green">Face Id Approved</p> </td>
+                                <td has-permission="Employee:Edit" ng-if="!employee.faceAuthorised && !employee.faceIdEnrolled"><p style="color:red">Face Id not enrolled</p> </td>
                                 <td>
-                                    <button class="btn  btn-xs btn-warning"
-                                            ng-show="employee.reliever">Reliever</button>
-                                    <button class="btn  btn-xs btn-warning"
-                                            ng-show="employee.relieved">Relieved</button>
-                                    <button class="btn  btn-xs btn-danger" disabled
-                                            ng-show="employee.left">InActive</button>
-                                    <button class="btn  btn-xs btn-success"
-                                            ng-show="!employee.left">Active</button>
+                                    <button class="btn btn-primary btn-xs btn-warning"  ng-if="employee.reliever">Reliever</button>
+                                    <button class="btn btn-primary btn-xs btn-danger" disabled ng-if="employee.left">InActive</button>
+                                    <button class="btn btn-primary btn-xs btn-success"  ng-if="!employee.left">Active</button>
                                 </td>
-                                <td class="text-right hoverMe"><a title="View More Action"
-                                                                  class="btn btn-simple btn-info btn-icon like Viewmore"><i
-                                    class="material-icons">more_vert</i></a>
+                                <td class="text-right hoverMe">
+
+
+                                    <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
+
+
                                     <div class="HoverBx">
-                                        <button ng-disabled="employee.left" title="View"
-                                                ng-click="getEmployeeDetails(employee.id);getRelieversDetails(employee.id);"
-                                                has-permission="Employee:View" data-toggle="modal"
-                                                data-target="#viewModal"
-                                                class="btn btn-simple btn-info btn-icon like">
-                                            <i class="material-icons">remove_red_eye</i>
-                                        </button>
+
+                                        <button ng-disabled="employee.left" title="View"  ng-click="getEmployeeDetails(employee.id)" has-permission="Employee:Edit" data-toggle="modal" data-target="#ViewModal"    class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></button>
                                         <!--<button ng-disabled="employee.left" title="View"  ng-click="getCheckInDetails(employee.id)" has-permission="Employee:Edit" ui-sref="view-employee({ id: employee.id })"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>-->
-                                        <button ng-disabled="employee.left" title="Mark Attendance "
-                                                 has-permission="Employee:Edit" data-toggle="modal"
-                                                 ng-click="getEmployeeDetails(employee.id);"
-                                                 data-target="#empAtnModal"
-                                                class="btn btn-simple btn-info btn-icon like">
-                                            <i class="material-icons">date_range</i>
-                                        </button>
-                                        <button ng-disabled="employee.left"
-                                                ng-class="{active: $state.includes('admin')}"
-                                                has-permission="Employee:Edit"
-                                                ui-sref="edit-employee({ id: employee.id })" type="button"
-                                                rel="tooltip" title="Edit Profile"
-                                                class="btn btn-success btn-simple btn-xs">
+                                        <button ng-disabled="employee.left" title="Mark Attendance "   data-toggle="modal" has-permission="Employee:Edit" data-target="#noticeModal" ng-click="getEmployeeDetails(employee.id)"  class="btn btn-simple btn-info btn-icon like"><i  class="material-icons">date_range</i></button>
+                                        <button ng-disabled="employee.left" ng-class="{active: $state.includes('admin')}"  has-permission="Employee:Edit"  ui-sref="edit-employee({ id: employee.id })" type="button" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">
                                             <i class="material-icons">edit</i>
                                         </button>
-                                        <button ng-disabled="employee.left" title="Mark Left"
-                                                has-permission="Employee:Edit" data-toggle="modal"
-                                                data-target="#leftModal" data-dismiss="#leftModal"
-                                                ng-click="employeeDetails(employee.id)"
-                                                class="btn btn-simple btn-info btn-icon like">
-                                            <i style="color: #942a25" class="fas fa-user-times"></i>
-                                        </button>
+                                        <button ng-disabled="employee.left" title="Mark Left"   has-permission="Employee:Edit"  data-toggle="modal" data-target="#leftModal" data-dismiss="#leftModal" ng-click="employeeDetails(employee.id)"  class="btn btn-simple btn-info btn-icon like"> <i style="color: #942a25" class="fas fa-user-times"></i></button>
                                         <!--<button ng-disabled="employee.left" title="Site Transfer"   data-toggle="modal" data-target="#siteTransferModal" data-dismiss="#siteTransferModal"   class="btn btn-simple btn-info btn-icon like" ng-click="siteTransferDetails(employee);loadSites()" > <i style="font-size: 20px; color: orangered" class="material-icons">transfer_within_a_station</i></button>-->
-                                        <button ng-if="!employee.reliever"
-                                                ng-disabled="employee.left" title="Relieve Employee"
-                                                has-permission="Employee:Edit" data-toggle="modal"
-                                                data-target="#relieverConfirmation"
-                                                data-dismiss="#relieverConfirmation"
-                                                ng-click="getRelieveEmpDetails(employee.id);"
-                                                class="btn btn-simple btn-info btn-icon like">
-                                            <i class="material-icons">assignment_ind</i>
-                                        </button>
-                                    </div></td>
+                                        <button ng-if="!employee.reliever" ng-disabled="employee.left" title="Relieve Employee"   has-permission="Employee:Edit"  data-toggle="modal" data-target="#relieverConfirmation" data-dismiss="#relieverConfirmation" ng-click="getRelievers(employee)"   class="btn btn-simple btn-info btn-icon like"> <i class="material-icons">assignment_ind</i></button>
+
+                                    </div>
+
+
+                                </td>
+
                             </tr>
+
+
                             </tbody>
                         </table>
+
                     </div>
-                    <div class="txt-align-center LoaderCon" ng-hide="employeesLoader">
+
+                    <div class="txt-align-center LoaderCon"  ng-hide="employeesLoader">
+
                         <div class="pad-TB-30">
                             <div loader-css="ball-pulse"></div>
-                            <h3>Loading, please wait...</h3>
+                            <h3 >Loading, please wait...</h3>
                         </div>
+
                     </div>
+
                     <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
 
                         <h3>No data Found</h3>
 
                     </div>
+
                 </div>
                 <!-- end content-->
             </div>
@@ -345,331 +267,143 @@
         <!-- end col-md-12 -->
     </div>
     <!-- end row -->
+
+
 </div>
 
-<!-- Pagination directive start -->
+    <!-- Pagination directive start -->
 
-<pagination-new></pagination-new>
+    <pagination-new></pagination-new>
 
-<!-- Pagination directive end -->
+    <!-- Pagination directive end -->
+
+
+
 <!-- Modal -->
-
-<div class="modal right  fade ViewModal" id="viewModal" role="dialog"
-
-     aria-labelledby="ViewModal12">
-    <div class="modal-dialogNew" role="document" ng-init="initLoad()">
+<div class="modal right fade" id="ViewModal" tabindex="-1" role="dialog" aria-labelledby="ViewModal12">
+    <div class="modal-dialog" role="document" ng-init="initLoad()">
         <div class="modal-content" ng-init="loadEmployee()">
 
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                        aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="ViewModal12">View Employee Details</h4>
             </div>
 
-            <div class="modal-body ViewContentPageCon">
-
-                <div class="titleCon">
-                    <h3>{{employee.name | uppercase}} {{employee.lastName | uppercase}}</h3>
-                </div>
-
-                <div class="row margn-top30">
-                    <div class="col-md-6">
-
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Employee Details</div>
-                            <div class="panel-body" style="min-height: 320px;">
-
-                                <div class="table-responsive">
-                                    <table class="table">
-
-                                        <tbody>
-                                        <tr>
-
-                                            <td>ID</td>
-                                            <td>{{employee.id}}</td>
-
-                                        </tr>
-                                        <tr>
-
-                                            <td>Employee ID</td>
-                                            <td>{{employee.empId}}</td>
-
-                                        </tr>
-                                        <tr>
-
-                                            <td>Firstname</td>
-                                            <td>{{employee.name | uppercase}}</td>
-
-                                        </tr>
-                                        <tr>
-
-                                            <td>Lastname</td>
-                                            <td>{{employee.lastName | uppercase}}</td>
-
-                                        </tr>
-                                        <tr>
-
-                                            <td>Site</td>
-                                            <td><a data-toggle="modal" ng-click="getEmployeeSiteDetails(employee.id)" data-target="#siteListModal"
-                                                   href="javascript:void(0);">List Of Sites</a></td>
-
-                                        </tr>
-                                        <tr>
-                                            <td>User Account Linked</td>
-                                            <td><span ng-if="employee.userId"><a ui-sref="view-user({id:employee.userId,checkStatus:1})" ng-click="closeModal()" >View
-                                                User Account</a></span><span ng-if="!employee.userId">-</span></td>
-                                        </tr>
-
-                                        </tbody>
-                                    </table>
-                                </div>
-
-
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="col-md-6">
-
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Attendance Enroll Details</div>
-                            <div class="panel-body" style="min-height: 320px;">
-
-                                <div class="EmpProfilePicCon">
-
-                                    <div ng-if="employee.enrolled_face" class="EmpPic">
-                                        <img   ng-src={{employee.url}} class="EmpProfilePic"  class="EmpProfilePic" />
-                                    </div>
-
-                                    <div ng-if="!employee.enrolled_face" class="EmpPic">
-                                        <img  ng-src="assets/img/user.png"  class="EmpProfilePic" />
-                                    </div>
-
-                                </div>
-
-                                <div class="table-responsive">
-                                    <table class="table">
-
-                                        <tbody>
-
-                                        <tr>
-
-                                            <td>Authorize Face Id</td>
-                                            <td has-permission="Employee:Edit"
-                                                ng-if="employee.faceAuthorised && employee.faceIdEnrolled"><p
-                                                style="color: green">Face Id Approved</p></td>
-                                            <td has-permission="Employee:Edit"
-                                                ng-if="!employee.faceAuthorised && !employee.faceIdEnrolled"><p
-                                                style="color: red">Face Id not enrolled</p></td>
-
-                                        </tr>
-                                        <tr>
-
-                                            <td>Status</td>
-                                            <td>
-                                                <button class="btn  btn-xs btn-warning"
-                                                        ng-show="employee.reliever">Reliever</button>
-                                                <button class="btn  btn-xs btn-warning"
-                                                        ng-show="employee.relieved">Relieved</button>
-                                                <button class="btn  btn-xs btn-danger" disabled
-                                                        ng-show="employee.left">InActive</button>
-                                                <button class="btn  btn-xs btn-success"
-                                                        ng-show="!employee.left">Active</button>
-                                            </td>
-
-                                        </tr>
-
-
-                                        </tbody>
-                                    </table>
-                                </div>
-
-
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="row margn-top30">
-
+            <div class="modal-body">
+                <div class="row">
                     <div class="col-md-12">
 
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Reliever Details</div>
-                            <div class="panel-body" style="min-height: 320px;">
+                        <div class="col-md-12 margn-top30">
 
-                                <div class="table-responsive tablecard">
-                                    <table class="table table-hover withSortingIcons">
-                                        <thead>
-                                        <tr>
-                                            <th style="width: 10%">Site Id
-                                                <!--<span class="sortingIcons">
-                                                    <span ng-click="columnAscOrder('siteId')" ng-class="isActiveAsc == 'siteId' ? 'active' : ''" >
-                                                        <i  class="fa fa-caret-up"></i>
-                                                    </span>
-                                                    <span ng-click="columnDescOrder('siteId')" ng-class="isActiveDesc == 'siteId' ? 'active' : ''" >
-                                                         <i  ng-class="class" class="fa fa-caret-down"></i>
-                                                    </span>
-                                                </span>-->
-                                            </th>
-                                            <th style="width: 15%">Site Name
-                                               <!-- <span class="sortingIcons">
-                                                <span ng-click="columnAscOrder('siteName')" ng-class="isActiveAsc == 'siteName' ? 'active' : ''" >
-                                                    <i  class="fa fa-caret-up"></i>
-                                                </span>
-                                                <span ng-click="columnDescOrder('siteName')" ng-class="isActiveDesc == 'siteName' ? 'active' : ''">
-                                                     <i  ng-class="class" class="fa fa-caret-down"></i>
-                                                </span>
-                                            </span>-->
-                                            </th>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Employee Details</div>
+                                <div class="panel-body">
 
-                                            </th>
+                                    <div class="table-responsive">
+                                        <table class="table">
 
-                                            <th style="width: 15%">Employee
+                                            <tbody>
+                                            <tr>
 
-                                                <!--<span class="sortingIcons">
-                                                <span ng-click="columnAscOrder('relieverFullName')" ng-class="isActiveAsc == 'relieverFullName' ? 'active' : ''" >
-                                                    <i  class="fa fa-caret-up"></i>
-                                                </span>
-                                                <span ng-click="columnDescOrder('relieverFullName')" ng-class="isActiveDesc == 'relieverFullName' ? 'active' : ''">
-                                                     <i  ng-class="class" class="fa fa-caret-down"></i>
-                                                </span>
-                                                </span>-->
-                                            </th>
-                                            <th style="width: 15%">Non employee
+                                                <td>ID</td>
+                                                <td>{{employee.id}}</td>
 
-                                                <!--&lt;!&ndash;<span class="sortingIcons">
-                                                <span ng-click="columnAscOrder('relieverName')" ng-class="isActiveAsc == 'relieverName' ? 'active' : ''" >
-                                                    <i  class="fa fa-caret-up"></i>
-                                                </span>
-                                                <span ng-click="columnDescOrder('relieverName')" ng-class="isActiveDesc == 'relieverName' ? 'active' : ''">
-                                                     <i  ng-class="class" class="fa fa-caret-down"></i>
-                                                </span>
-                                                </span>&ndash;&gt;-->
-                                            </th>
-                                            <th style="width: 10%">Mobile
+                                            </tr>
+                                            <tr>
 
-                                                <!--<span class="sortingIcons">
-                                                <span ng-click="columnAscOrder('relieverMobile')" ng-class="isActiveAsc == 'relieverMobile' ? 'active' : ''" >
-                                                    <i  class="fa fa-caret-up"></i>
-                                                </span>
-                                                <span ng-click="columnDescOrder('relieverMobile')" ng-class="isActiveDesc == 'relieverMobile' ? 'active' : ''">
-                                                     <i  ng-class="class" class="fa fa-caret-down"></i>
-                                                </span>
-                                                </span>-->
-                                            </th>
-                                            <th  style="width: 10%">Start Date</th>
-                                            <th  style="width: 10%">End Date</th>
+                                                <td>Employee ID</td>
+                                                <td>{{employee.empId}}</td>
 
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr ng-repeat="reliever in relieversList">
-                                            <td>{{reliever.siteId}}</td>
-                                            <td>{{reliever.siteName}}</td>
-                                            <td>
-                                                <span ng-if="reliever.relieverEmployeeFullName">
-                                                {{reliever.relieverEmployeeFullName}}
-                                                </span>
-                                                <span ng-if="!reliever.relieverEmployeeFullName">
-                                                -
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span ng-if="reliever.relieverName">
-                                                {{reliever.relieverName}}
-                                                </span>
-                                                <span ng-if="!reliever.relieverName">
-                                                -
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span ng-if="reliever.relieverMobile">
-                                                {{reliever.relieverMobile}}
-                                                </span>
-                                                <span ng-if="!reliever.relieverMobile">
-                                                -
-                                                </span>
-                                            </td>
-                                            <td><label ng-bind="reliever.startTime  | date :'dd-MMM-yyyy @ hh:mm a'"/></td>
-                                            <td><label ng-bind="reliever.endTime  | date :'dd-MMM-yyyy @ hh:mm a'"/></td>
-                                        </tr>
-                                        <tr ng-show="noRelData">
-                                            <td colspan="7" class="txt-align-center"><p>No data Found</p></td>
-                                        </tr>
+                                            </tr>
+                                            <tr>
 
-                                        </tbody>
-                                    </table>
+                                                <td>Firstname</td>
+                                                <td>{{employee.name}}</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>Lastname</td>
+                                                <td>{{employee.lastName}}</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>Site</td>
+                                                <td><a data-toggle="modal" data-target="#noticeModal" href="#">List Of Sites</a></td>
+
+                                            </tr>
+                                            <tr>
+                                                <td>User Account Linked</td>
+                                                <td><a href="#/view-user/{{employee.userId}}">View User Account</a></td>
+                                            </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="txt-align-rgt">
+
+                                        <button  data-dismiss="modal"  class="btn btn-default close-button-right b10" type="button"
+                                                 id="close-button-right">
+                                            <!-- <i class="fa fa-warning"></i> --> Back
+                                        </button>
+
+                                    </div>
+
                                 </div>
-
-
                             </div>
 
                         </div>
 
-                    </div>
-                </div>
 
-                <div class="txt-align-rgt">
-                    <button data-dismiss="modal"
-                            class="btn btn-default close-button-right b10" type="button"
-                            id="close-button-right">
-                        Close
-                    </button>
+
+                    </div>
+
                 </div>
             </div>
-        </div>
-        <!-- modal-content -->
-    </div>
-    <!-- modal-dialog -->
-</div>
-<!-- Employee attendance modal -->
-<div class="modal fade" id="empAtnModal"  role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
+
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div><!-- modal -->
+
+
+
+
+<div class="modal fade" id="noticeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-notice">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                        aria-hidden="true">
-                    <i class="material-icons">clear</i>
-                </button>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
                 <h5 class="modal-title" id="myModalLabel">Site List</h5>
             </div>
             <div class="modal-body">
+
                 <div class="col-md-12">
                     <div class="card">
+
                         <div class="card-content">
+
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
                                     <tr>
+
                                         <th>Id</th>
                                         <th>Site Name</th>
-                                        <th>Check In</th>
-                                        <th>Check Out</th>
+                                        <th>Check In/Out</th>
+
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="projSite in empSitesList">
+                                    <tr ng-repeat="projSite in sites">
+
                                         <td>{{projSite.siteId}}</td>
-                                        <td>{{projSite.siteName | uppercase}}</td>
+                                        <td>{{projSite.siteName}}</td>
                                         <td>
-                                            <button ng-disabled="isCheckedIn" ng-hide="attendSite && attendSite !=projSite.siteId"
-                                                    ng-click="checkIn(projSite.siteId,employee.empId,employee.id)"
-                                                    data-dismiss="modal"
-                                                    class="btn btn-success btn-sm btn-round">check-In</button>
-                                         </td>
-                                         <td>
-                                            <button ng-disabled="isCheckedOut" ng-hide="attendSite && attendSite !=projSite.siteId"
-                                                    ng-click="checkOut(projSite.siteId,employee.empId,employee.id)"
-                                                    data-dismiss="modal"
-                                                    class="btn btn-success btn-sm btn-round">check-Out</button>
+                                            <button ng-disabled="isCheckedIn" ng-click="checkIn(projSite.siteId,employee.empId,employee.id)" data-dismiss="modal"  class="btn btn-success btn-sm btn-round">check-In</button>
+                                            <button ng-disabled="!isCheckedIn" ng-click="checkOut(projSite.siteId,employee.empId,employee.id)" data-dismiss="modal"  class="btn btn-success btn-sm btn-round">check-Out</button>
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="4" ng-show="!empSitesList" class="txt-align-center">No sites</td>
 
                                     </tr>
                                     </tbody>
@@ -680,86 +414,30 @@
                 </div>
             </div>
             <div class="modal-footer text-center">
-                <button type="button" class="btn btn-info btn-round"
-                        data-dismiss="modal">close</button>
+                <button type="button" class="btn btn-info btn-round" data-dismiss="modal">close</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Employee site list modal -->
-<div class="modal fade" id="siteListModal"  role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="leftModal" tabindex="-1" role="dialog" aria-labelledby="leftModal" aria-hidden="true">
     <div class="modal-dialog modal-notice">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                        aria-hidden="true">
-                    <i class="material-icons">clear</i>
-                </button>
-                <h5 class="modal-title" id="myModalLabel">Site List</h5>
-            </div>
-            <div class="modal-body">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-content">
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th class="txt-align-center">Id</th>
-                                        <th class="txt-align-center">Site Name</th>
-
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr ng-repeat="projSite in empSitesList">
-                                        <td class="txt-align-center">{{projSite.siteId}}</td>
-                                        <td class="txt-align-center">{{projSite.siteName | uppercase}}</td>
-                                    </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer text-center">
-                <button type="button" class="btn btn-info btn-round"
-                        data-dismiss="modal">close</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="leftModal"  role="dialog"
-     aria-labelledby="leftModal" aria-hidden="true">
-    <div class="modal-dialog modal-notice">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                        aria-hidden="true">
-                    <i class="material-icons">clear</i>
-                </button>
-                <h5 class="modal-title" id="isLeftModal">Mark Employee as Left
-                    ?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+                <h5 class="modal-title" id="isLeftModal">Mark Employee as Left ?</h5>
                 <div>
-                    <input type="radio" data-toggle="collapse" data-parent="#accordian"
-                           data-target="#delete" ng-model="markLeftOptions" value="delete">Delete
-                    Jobs and Mark Left <input type="radio" data-toggle="collapse"
-                                              data-parent="#accordian" data-target="#assign"
-                                              ng-model="markLeftOptions" value="assign">Assign Jobs to
-                    New Employee and Mark Left
+                    <input type="radio" data-toggle="collapse" data-parent="#accordian" data-target="#delete" ng-model="markLeftOptions" value="delete">Delete Jobs and Mark Left
+                    <input type="radio" data-toggle="collapse" data-parent="#accordian" data-target="#assign" ng-model="markLeftOptions" value="assign">Assign Jobs to New Employee and Mark Left
                 </div>
-                <div class="collapse" id="delete"></div>
+                <div class="collapse" id="delete">
+
+                </div>
                 <div class="collapse" id="assign">
-                    <div class="form-group">
+                    <div class="form-group" >
                         <div class="dropdown">
-							<span class="form-control-feedback d-arrow-icon"><i
-                                class="material-icons">keyboard_arrow_down</i></span>
-                            <select
-                                class="siteList" ng-model="transferringEmployee"
-                                ng-options="emp as emp.fullName for emp in allEmployees">
+                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                            <select class="siteList" ng-model="transferringEmployee"  ng-options="emp as emp.fullName for emp in allEmployees">
                                 <option value="">Select..</option>
                             </select>
                         </div>
@@ -767,37 +445,29 @@
                 </div>
             </div>
             <div class="modal-footer ">
-                <button type="button" class="btn btn-info btn-round"
-                        data-dismiss="modal" ng-click="updateEmployeeLeft(employee)">Yes</button>
-                <button type="button" class="btn btn-info btn-round"
-                        data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-info btn-round" data-dismiss="modal" ng-click="updateEmployeeLeft(employee)">Yes</button>
+                <button type="button" class="btn btn-info btn-round" data-dismiss="modal">No</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="siteTransferModal"
-     role="dialog" aria-labelledby="leftModal" aria-hidden="true">
+<div class="modal fade" id="siteTransferModal" tabindex="-1" role="dialog" aria-labelledby="leftModal" aria-hidden="true">
     <div class="modal-dialog modal-notice">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                        aria-hidden="true">
-                    <i class="material-icons">clear</i>
-                </button>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
                 <h5 class="modal-title" id="siteTransfer ">Transfer Employee</h5>
             </div>
             <div class="modal-body">
 
-                <div class="col-md-12 addedActionList pdng-top15"
-                     ng-hide="!(transferEmployeeDetails.projectSites.length > 0)">
+                <div class="col-md-12 addedActionList pdng-top15" ng-hide="!(transferEmployeeDetails.projectSites.length > 0)">
                     <div class="form-group">
                         <label class="">Current Site </label>
                         <ul class="listOfActions list-group">
-                            <li class="list-group-item justify-content-between"
-                                ng-repeat="projSite in transferEmployeeDetails.projectSites"
-                                ng-bind-html-unsafe="projSite.text">
-                                {{projSite.projectName}} - {{projSite.siteName}}</li>
+                            <li class="list-group-item justify-content-between" ng-repeat="projSite in transferEmployeeDetails.projectSites" ng-bind-html-unsafe="projSite.text">
+                                {{projSite.projectName}}  -  {{projSite.siteName}}
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -805,78 +475,63 @@
                 <div class="col-md-12">
                     <div class="form-group selectcon">
                         <div class="dropdown">
-                            <label class="control-label">To Site</label> <span
-                            class="form-control-feedback d-arrow-icon"><i
-                            class="material-icons">keyboard_arrow_down</i></span> <select
-                            class="siteList" ng-model="transferSite"
-                            ng-options="site as site.name for site in sites">
-                        </select>
+                            <label class="control-label">To Site</label>
+                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                            <select class="siteList" ng-model="transferSite" ng-options="site as site.name for site in sites" >
+                            </select>
                         </div>
                     </div>
                 </div>
-                <div class="row"
-                     ng-hide="!(transferEmployeeDetails.projectSites.length > 0)">
-                    <div class="form-group">
-                        <div class="checkbox col-md-12">
-                            <input type="radio" name="terms"
-                                   ng-model="transferEmployeeOptions" value="delete">
-                            Delete All upcoming data and Transfer employee
-                        </div>
-                        <div class="checkbox col-md-12">
-                            <input type="radio" name="terms"
-                                   ng-model="transferEmployeeOptions" value="assign">
-                            Assign another employee to the Jobs
-                        </div>
-
-                        <div ng-switch="transferEmployeeOptions" class="col-md-12">
-                            <div class="form-group selectcon" ng-switch-when="assign">
-                                <div class="dropdown">
-                                    <label class="control-label">Assign Employee</label> <span
-                                    class="form-control-feedback d-arrow-icon"><i
-                                    class="material-icons">keyboard_arrow_down</i></span> <select
-                                    ng-options="employee.id as employee.fullName for employee in allEmployees"
-                                    ng-model="transferringEmployee" required random-directive>
-                                    <option value="">Select...</option>
-                                </select>
-                                </div>
+                <div class="row" ng-hide="!(transferEmployeeDetails.projectSites.length > 0)">
+                        <div class="form-group">
+                            <div class="checkbox col-md-12">
+                                <input type="radio" name="terms"ng-model="transferEmployeeOptions" value="delete"> Delete All upcoming data and Transfer employee
                             </div>
-                        </div>
-                    </div>
+                            <div class="checkbox col-md-12">
+                                <input type="radio" name="terms" ng-model="transferEmployeeOptions" value="assign"> Assign another employee to the Jobs
+                            </div>
+
+                            <div ng-switch="transferEmployeeOptions" class="col-md-12">
+                                    <div class="form-group selectcon" ng-switch-when="assign">
+                                        <div class="dropdown">
+                                            <label class="control-label">Assign Employee</label>
+                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select ng-options="employee.id as employee.fullName for employee in allEmployees" ng-model="transferringEmployee" required random-directive>
+                                                <option value="">Select...</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                            </div>
+                         </div>
                 </div>
             </div>
             <div class="modal-footer ">
-                <button type="button" class="btn btn-info btn-round"
-                        data-dismiss="modal"
-                        ng-click="transferEmployee(transferEmployeeDetails,transferringEmployee)">Transfer
-                    Employee</button>
-                <button type="button" class="btn btn-info btn-round"
-                        data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-info btn-round" data-dismiss="modal" ng-click="transferEmployee(transferEmployeeDetails,transferringEmployee)">Transfer Employee</button>
+                <button type="button" class="btn btn-info btn-round" data-dismiss="modal">No</button>
             </div>
         </div>
     </div>
 </div>
 
-<div id="enrollImageModal" class="modal fade" data-backdrop="false"
-      role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
+<div id="enrollImageModal" class="modal fade" data-backdrop="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" >
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-                <table>
+                <table >
                     <thead>
-                    <tr>
+                    <tr >
                         <th style="text-align: center">Enrolled Image</th>
                     </tr>
 
                     </thead>
                     <tr>
-                        <td><br /></td>
+                        <td><br/></td>
                     </tr>
                     <tr>
                         <td><img id="enrolledImage" width="250" height="250" src="#"
                                  class="img-responsive"></td>
-                        <td>&nbsp; &nbsp; &nbsp; &nbsp;
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 
                     </tr>
                 </table>
@@ -889,804 +544,480 @@
     </div>
 </div>
 
-<div class="relieverConfirmation modal fade" id="relieverConfirmation"
-     role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="relieverConfirmation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-notice">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+                <h5 class="modal-title">Assign Reliever</h5>
+            </div>
 
-    <form name="relieverForm" role="form" ng-submit="assignReliever()" novalidate>
-        <div class="modal-dialog modal-notice">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"
-                            aria-hidden="true">
-                        <i class="material-icons">clear</i>
-                    </button>
-                    <h5 class="modal-title">Assign Reliever</h5>
+            <div class="modal-body">
+                <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group" >
+                                <label class="label-control">From date</label>
+                                <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
+                                <input id="dateFilterFrom" type="text" class="form-control datepicker" ng-model="relieverDateFrom" value={{now}} placeholder="From Date" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group" >
+                                <label class="label-control">To date</label>
+                                <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
+                                <input id="dateFilterTo" type="text" class="form-control datepicker" ng-model="relieverDateTo"  value={{now}} placeholder="To Date" />
+                            </div>
+                        </div>
                 </div>
+                <div class="row">
 
-                <div class="modal-body">
-                    <div class="row">
-
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="label-control">Site<span class="red-star">*</span></label>
+                        <div class="col-md-6">
+                            <div class="form-group" >
                                 <div class="dropdown">
-                                    <span class="form-control-feedback  d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select
-                                        class="form-control" ng-model="relieverSite" name="relieverSite"
-                                        ng-options="site as site.siteName for site in empSites" ng-required="true" ng-click="getRelievers(employee)" autofocus="on"  tabindex="1">
-                                        <option value="">Select Site..</option>
+                                    <input type="text"
+                                           class="form-control "
+                                           placeholder="Search Reliever"
+                                           ng-model="selectedReliever"
+                                           ng-value="selectedReliever.name"
+                                           uib-typeahead="employee as employee.fullName for employee in relievers | filter:$viewValue | limitTo:5" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <select class="form-control" ng-model="selectedReliever"  ng-options="emp as emp.fullName for emp in relievers">
+                                        <option value="">Select..</option>
                                     </select>
-
-                                    <div ng-show="relieverForm.$submitted || relieverForm.relieverSite.$touched">
-                                        <div ng-show="relieverForm.relieverSite.$dirty || relieverForm.relieverSite.$invalid">
-                                            <p class="help-block" style="color:maroon"
-                                               ng-show="relieverForm.relieverSite.$error.required">
-                                                Reliever site is required.
-                                            </p>
-
-                                        </div>
-                                    </div>
                                 </div>
-                            </div>
+                           </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="label-control">From date<span class="red-star">*</span></label>
-                                <span class="form-control-feedback calender-icon"><i
-                                    class="material-icons">date_range</i></span>
-                                <input id="dateFilterFrom" type="text" class="form-control datepicker" ng-model="relieverDateFrom" placeholder="DD/MM/YYYY" autocomplete="off" tabindex="2" ng-required="true"/>
-                            </div>
-                        </div>
+                  </div>
+            </div>
 
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="label-control">To date<span class="red-star">*</span></label>
-                                <span class="form-control-feedback calender-icon"><i
-                                    class="material-icons">date_range</i></span>
-                                <input id="dateFilterTo" type="text" class="form-control datepicker" ng-model="relieverDateTo" placeholder="DD/MM/YYYY" autocomplete="off" tabindex="3" ng-required="true"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Reliever</label>
-                                <div>
-                                    <div class="radio radio-inline" >
-                                        <label>
-                                            <input type="radio" name="relieverEmp" id="relieverEmp" ng-model="relType" ng-click="rType()" value="Employee" ng-checked="true" tabindex="4"> Employee
-                                        </label>
-                                    </div>
-                                    <div class="radio radio-inline" >
-                                        <label>
-                                            <input type="radio" name="relieverOth" id="relieverOth"  ng-model="relType" ng-click="rType()"   value="Other"  tabindex="5"> Non employee
-                                        </label>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-
-                        <div  id="relieverEmpModal" class="collapse in">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="label-control">Employee<span class="red-star">*</span></label>
-                                    <div class="dropdown">
-                                        <!--<input type="text" class="form-control"
-                                            placeholder="Search Reliever" ng-model="selectedReliever"
-                                            ng-value="selectedReliever.name"
-                                            uib-typeahead="employee as employee.fullName for employee in relievers | filter:$viewValue | limitTo:5" />-->
-                                        <span class="form-control-feedback  d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                        <select
-                                            class="form-control" ng-model="selectedReliever" name="relieverEmp"
-                                            ng-options="emp as emp.fullName for emp in relieversEmp" ng-required="reqEmp"   tabindex="6">
-                                            <option value="">Select Reliever..</option>
-                                        </select>
-                                        <div ng-show="!selectedReliever.id || relieverForm.$submitted || relieverForm.relieverEmp.$touched">
-                                            <div ng-show="!selectedReliever.id || relieverForm.relieverEmp.$dirty || relieverForm.relieverEmp.$invalid">
-                                                <p class="help-block" style="color:maroon"
-                                                   ng-show="!selectedReliever.id || relieverForm.relieverEmp.$error.required">
-                                                    Reliever is required.
-                                                </p>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="relieverOthModal" class="collapse">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="label-control">Name<span class="red-star">*</span></label>
-                                    <input id="relieverOthName" type="text" class="form-control" ng-model="relieverOthName"
-                                           name="relieverOthName" autocomplete="off" tabindex="1" ng-required="reqOth"
-                                           ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" tabindex="6"/>
-                                    <div ng-show="relieverForm.$submitted || relieverForm.relieverOthName.$touched || relieverForm.relieverOthName.$dirty">
-                                        <div ng-show="relieverForm.relieverOthName.$dirty || form.relieverOthName.$invalid">
-                                            <p class="help-block" style="color:maroon"
-                                               ng-show="relieverForm.relieverOthName.$error.required">
-                                                Name is required.
-                                            </p>
-                                            <p class="help-block" style="color:maroon"
-                                               ng-show="relieverForm.relieverOthName.$error.minlength">
-                                                Name is required to be at least 5 character.
-                                            </p>
-                                            <p class="help-block" style="color:maroon"
-                                               ng-show="relieverForm.relieverOthName.$error.maxlength">
-                                                Name cannot be longer than 50 characters.
-                                            </p>
-                                            <p class="help-block" style="color:maroon"
-                                               ng-show="relieverForm.relieverOthName.$error.pattern">
-                                                Name can only contain letters,numbers and space.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="label-control">Mobile<span class="red-star">*</span></label>
-                                    <input id="relieverOthMobile" type="text" class="form-control" ng-model="relieverOthMobile"  name="relieverOthMobile"
-                                           autocomplete="off" tabindex="2" ng-required="reqOth" ng-minlength=10 ng-maxlength=13 ng-pattern="/^[0-9\s&-/]*$/" tabindex="7"/>
-                                    <div ng-show="relieverForm.$submitted || relieverForm.relieverOthMobile.$touched || relieverForm.relieverOthMobile.$dirty">
-                                        <div ng-show="relieverForm.relieverOthMobile.$dirty || relieverForm.relieverOthMobile.$invalid">
-                                            <p class="help-block" style="color:maroon"
-                                               ng-show="relieverForm.relieverOthMobile.$error.required">
-                                                Mobile no. is required.
-                                            </p>
-                                            <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
-                                               ng-show="relieverForm.relieverOthMobile.$error.minlength">
-                                                Mobile no. is required to be at least 10 numbers.
-                                            </p>
-                                            <p class="help-block" style="width:100%;z-index:990;background:#fff;color:maroon"
-                                               ng-show="relieverForm.relieverOthMobile.$error.maxlength">
-                                                Mobile no. cannot be longer than 13 numbers.
-                                            </p>
-                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
-                                               ng-show="relieverForm.relieverOthMobile.$error.pattern">
-                                                Mobile no. can only contain + , - ,numbers and space.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="modal-footer ">
-                    <button type="submit" class="btn btn-info btn-round btn-sucess"
-                            ng-disabled="relieverForm.$invalid" tabindex="8">Assign
-                        Reliever</button>
-                    <button type="button" class="btn btn-info btn-round btn-danger"
-                            ng-click="cancelReliever()" tabindex="9">Cancel</button>
-                </div>
+            <div class="modal-footer ">
+                <button type="button" class="btn btn-info btn-round btn-sucess" data-dismiss="modal" ng-click="assignReliever(relievedEmployee)">Assign Reliever</button>
+                <button type="button" class="btn btn-info btn-round btn-danger" data-dismiss="modal">Cancel</button>
             </div>
         </div>
-    </form>
+    </div>
 </div>
 
 <div class="container gc-container">
-    <div class="success-message hidden"></div>
+	<div class="success-message hidden"></div>
 
-    <!--<div class="row">-->
-    <!--<div class="col-md-12 table-section">-->
-
-
-    <!--<div class="table-container" ng-init="loadEmployees()">-->
-
-    <!--<div class="header-tools">-->
-
-    <!--<div class="row">-->
-
-    <!--<div class="col-md-6">-->
-    <!--<div class="titleCon">-->
-    <!--<h3>Employee</h3>-->
-    <!--</div>-->
-    <!--</div>-->
-
-    <!--<div class="col-md-6 txt-right">-->
-    <!--<button  ui-sref="add-employee" ng-class="{active: $state.includes('admin')}" class="btn btn-success"><i class="material-icons padng-right5">add_circle</i><a href="AddCustomer.html">Add</a> </button>-->
-    <!--<button ng-click="refreshPage()" class="btn btn-warning padng-right10"><i class="material-icons padng-right5">autorenew</i>Reload</button>-->
-    <!--<button ng-click="clearFilter()" class="btn btn-danger padng-right10"><i class="material-icons padng-right5">delete</i>Clear</button>-->
-    <!--</div>-->
-
-    <!--</div>-->
+	<!--<div class="row">-->
+		<!--<div class="col-md-12 table-section">-->
 
 
-    <!--<div class="floatM">-->
-    <!--<form name="searchForm"  ng-submit="search()" novalidate >-->
+			<!--<div class="table-container" ng-init="loadEmployees()">-->
 
-    <!--<table class="table" border="0">-->
-    <!--<tr class="filter-row gc-search-row">-->
-    <!--<td>-->
-    <!--<div class="form-group" ng-focus="loadAllEmployees()">-->
-    <!--<div class="dropdown" >-->
-    <!--<input  type="text" class="form-control searchable-input floatL" placeholder="Search ID" ng-value="searchCriteria.id"-->
-    <!--ng-model="selectedEmployee" uib-typeahead="employee as employee.empId for employee in allEmployees | filter:$viewValue | limitTo:5" />-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</td>-->
-    <!--<td>-->
-    <!--<div class="form-group" ng-init="loadAllEmployees()">-->
-    <!--<div class="dropdown">-->
-    <!--<input type="text"-->
-    <!--class="form-control searchable-input floatL"-->
-    <!--placeholder="Search Name"-->
-    <!--ng-model="selectedEmployee"-->
-    <!--ng-value="searchCriteria.name"-->
-    <!--uib-typeahead="employee as employee.name for employee in allEmployees | filter:$viewValue | limitTo:5" />-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</td>-->
-    <!--<td>-->
-    <!--<div class="form-group" ng-init="loadAllEmployees()" >-->
-    <!--<div class="dropdown">-->
-    <!--<input type="text"-->
-    <!--class="form-control searchable-input floatL"-->
-    <!--placeholder="Search Full Name"-->
-    <!--ng-model="selectedEmployee"-->
-    <!--ng-value="searchCriteria.fullName"-->
-    <!--uib-typeahead="employee as employee.fullName for employee in allEmployees | filter:$viewValue | limitTo:5" />-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</td>-->
-    <!--<td>-->
-    <!--<div class="form-group" ng-init="loadProjects()">-->
-    <!--<div class="dropdown">-->
-    <!--<input type="text"-->
-    <!--class="form-control searchable-input floatL"-->
-    <!--placeholder="Search Project"-->
-    <!--ng-model="selectedProject"-->
-    <!--ng-value="searchCriteria.projectName"-->
-    <!--uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5" />-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</td>-->
-    <!--<td>-->
-    <!--<div class="form-group" ng-init="loadSites()">-->
-    <!--<div class="dropdown">-->
-    <!--<input type="text"-->
-    <!--class="form-control searchable-input floatL"-->
-    <!--placeholder="Search Site"-->
-    <!--ng-model="selectedSite"-->
-    <!--ng-value="searchCriteria.siteName"-->
-    <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"/>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</td>-->
-    <!--<td>-->
-    <!--<div class="floatR form-group">-->
-    <!--<button type="submit" class="btn btn-primary search-button t4"  ng-disabled="searchForm.$invalid">-->
-    <!--<i class="fa fa-search"></i>-->
-    <!--</button>-->
-    <!--</div>-->
-    <!--</td>-->
-    <!--</tr>-->
-    <!--</table>-->
-    <!--</div>-->
-    <!--<div class="clear"></div>-->
-    <!--</div>-->
-    <!--<table class="table table-bordered grocery-crud-table table-hover">-->
-    <!--<thead>-->
-    <!--<tr>-->
+				<!--<div class="header-tools">-->
 
-    <!--<th class="column-with-ordering" data-order-by="employeeEmpId">ID</th>-->
-    <!--<th class="column-with-ordering" data-order-by="employeeFullName">Full Name</th>-->
-    <!--<th class="column-with-ordering" data-order-by="employeeName">Name</th>-->
-    <!--<th class="column-with-ordering" data-order-by="projectName">Project</th>-->
-    <!--<th class="column-with-ordering" data-order-by="siteName">Site</th>-->
-    <!--<th class="column-with-ordering" data-order-by="qrCodeImage">QR Code</th>-->
-    <!--<th colspan="1">Actions</th>-->
+                    <!--<div class="row">-->
 
-    <!--&lt;!&ndash; 							<th class="column-with-ordering" data-order-by="city">NA</th>-->
-    <!--<th class="column-with-ordering" data-order-by="country">NA</th>-->
-    <!--&ndash;&gt;-->
-    <!--</tr>-->
+                        <!--<div class="col-md-6">-->
+                            <!--<div class="titleCon">-->
+                                <!--<h3>Employee</h3>-->
+                            <!--</div>-->
+                        <!--</div>-->
 
-    <!--&lt;!&ndash; <tr class="filter-row gc-search-row">-->
-    <!--<td class="no-border-right">-->
-    <!--<div class="floatL t5">-->
-    <!--<input type="checkbox" class="select-all-none" />-->
-    <!--</div>-->
-    <!--</td>-->
-    <!--<td class="no-border-left">-->
-    <!--<div class="floatL">-->
-    <!--<a href="javascript:void(0);" title="Delete"-->
-    <!--class="hidden btn btn-default delete-selected-button"> <i-->
-    <!--class="fa fa-trash-o text-danger"></i> <span-->
-    <!--class="text-danger">Delete</span>-->
-    <!--</a>-->
-    <!--</div>-->
-    <!--<div class="floatR">-->
-    <!--<a href="javascript:void(0);"-->
-    <!--class="btn btn-default gc-refresh"> <i-->
-    <!--class="fa fa-refresh"></i>-->
-    <!--</a>-->
-    <!--</div>-->
-    <!--<div class="clear"></div>-->
-    <!--</td>-->
-    <!--<td><input type="text"-->
-    <!--class="form-control searchable-input floatL"-->
-    <!--placeholder="Search ID" name="employeeEmpId" /></td>-->
-    <!--<td><input type="text"-->
-    <!--class="form-control searchable-input floatL"-->
-    <!--placeholder="Search Full Name" name="employeeFullName" /></td>-->
-    <!--<td><input type="text"-->
-    <!--class="form-control searchable-input floatL"-->
-    <!--placeholder="Search Name" name="employeeName" /></td>-->
-    <!--<td><input type="text"-->
-    <!--class="form-control searchable-input floatL"-->
-    <!--placeholder="Search ProjectName" name="projectName" /></td>-->
-    <!--<td><input type="text"-->
-    <!--class="form-control searchable-input floatL"-->
-    <!--placeholder="Search SiteName" name="siteName" /></td>-->
-    <!--<td><input type="text"-->
-    <!--class="form-control searchable-input floatL"-->
-    <!--placeholder="Search NA" name="city" /></td>-->
-    <!--<td><input type="text"-->
-    <!--class="form-control searchable-input floatL"-->
-    <!--placeholder="Search NA" name="country" /></td>-->
-    <!--</tr> &ndash;&gt;-->
+                        <!--<div class="col-md-6 txt-right">-->
+                            <!--<button  ui-sref="add-employee" ng-class="{active: $state.includes('admin')}" class="btn btn-success"><i class="material-icons padng-right5">add_circle</i><a href="AddCustomer.html">Add</a> </button>-->
+                            <!--<button ng-click="refreshPage()" class="btn btn-warning padng-right10"><i class="material-icons padng-right5">autorenew</i>Reload</button>-->
+                            <!--<button ng-click="clearFilter()" class="btn btn-danger padng-right10"><i class="material-icons padng-right5">delete</i>Clear</button>-->
+                        <!--</div>-->
 
-    <!--</thead>-->
-    <!--<tbody>-->
-
-    <!--<tr ng-repeat="employee in employees">-->
-    <!--&lt;!&ndash; 							<td><input type="checkbox" class="select-row" data-id="103" />-->
-    <!--</td> &ndash;&gt;-->
-    <!--&lt;!&ndash;<td>&ndash;&gt;-->
-    <!--&lt;!&ndash;<div class="only-desktops" style="white-space: nowrap">&ndash;&gt;-->
-    <!--&lt;!&ndash;<a ng-class="{active: $state.includes('admin')}" ui-sref="edit-employee({ id: employee.id })" class="btn btn-default"><i&ndash;&gt;-->
-    <!--&lt;!&ndash;class="fa fa-pencil"></i> Edit</a>&ndash;&gt;-->
-
-    <!--&lt;!&ndash;<div class="btn-group dropdown">&ndash;&gt;-->
-    <!--&lt;!&ndash;<button type="button" class="btn btn-default dropdown-toggle"&ndash;&gt;-->
-    <!--&lt;!&ndash;data-toggle="dropdown">&ndash;&gt;-->
-    <!--&lt;!&ndash;More <span class="caret"></span>&ndash;&gt;-->
-    <!--&lt;!&ndash;</button>&ndash;&gt;-->
-
-    <!--&lt;!&ndash;<ul class="dropdown-menu">&ndash;&gt;-->
-    <!--&lt;!&ndash;<li><a ui-sref="view-employee({ id: employee.id })"><i&ndash;&gt;-->
-    <!--&lt;!&ndash;class="fa fa-eye"></i> View</a></li>&ndash;&gt;-->
-    <!--&lt;!&ndash;<li ng-class="{active: $state.includes('admin')}" ><a ng-click="deleteConfirm(employee)" onClick="$('#deleteModal').modal()" data-target="#myModal" title="Delete"&ndash;&gt;-->
-    <!--&lt;!&ndash;class="delete-row"> <i class="fa fa-trash-o text-danger"></i>&ndash;&gt;-->
-    <!--&lt;!&ndash;<span class="text-danger">Delete</span>&ndash;&gt;-->
-    <!--&lt;!&ndash;</a></li>&ndash;&gt;-->
-    <!--&lt;!&ndash;</ul>&ndash;&gt;-->
-    <!--&lt;!&ndash;<div id="deleteModal" data-backdrop="false" class="modal fade" tabindex="-1" role="dialog"&ndash;&gt;-->
-    <!--&lt;!&ndash;aria-labelledby="myModalLabel" aria-hidden="true" >&ndash;&gt;-->
-    <!--&lt;!&ndash;<div class="delete-dialog">&ndash;&gt;-->
-    <!--&lt;!&ndash;<div class="modal-content">&ndash;&gt;-->
-    <!--&lt;!&ndash;<div class="modal-body">&ndash;&gt;-->
-    <!--&lt;!&ndash;Are you sure to delete the Employee?&ndash;&gt;-->
-    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-    <!--&lt;!&ndash;<div class="delete-footer">&ndash;&gt;-->
-    <!--&lt;!&ndash;<button type="button" ng-click="deleteEmployee()" class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>&ndash;&gt;-->
-    <!--&lt;!&ndash;<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>&ndash;&gt;-->
-
-    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-
-    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-    <!--&lt;!&ndash;<div class="only-mobiles">&ndash;&gt;-->
-    <!--&lt;!&ndash;<div class="btn-group dropdown">&ndash;&gt;-->
-    <!--&lt;!&ndash;<button type="button" class="btn btn-default dropdown-toggle"&ndash;&gt;-->
-    <!--&lt;!&ndash;data-toggle="dropdown">&ndash;&gt;-->
-    <!--&lt;!&ndash;Actions <span class="caret"></span>&ndash;&gt;-->
-    <!--&lt;!&ndash;</button>&ndash;&gt;-->
-    <!--&lt;!&ndash;<ul class="dropdown-menu">&ndash;&gt;-->
-    <!--&lt;!&ndash;<li><a&ndash;&gt;-->
-    <!--&lt;!&ndash;href="http://localhost:81/grocery_crud/index.php/examples/customers_management/edit/103">&ndash;&gt;-->
-    <!--&lt;!&ndash;<i class="fa fa-pencil"></i> Edit&ndash;&gt;-->
-    <!--&lt;!&ndash;</a></li>&ndash;&gt;-->
-    <!--&lt;!&ndash;<li><a&ndash;&gt;-->
-    <!--&lt;!&ndash;href="http://localhost:81/grocery_crud/index.php/examples/customers_management/read/103"><i&ndash;&gt;-->
-    <!--&lt;!&ndash;class="fa fa-eye"></i> View</a></li>&ndash;&gt;-->
-    <!--&lt;!&ndash;<li><a ng-click="deleteEmployee({ id: employee.id })"&ndash;&gt;-->
-    <!--&lt;!&ndash;title="Delete" class="delete-row"> <i&ndash;&gt;-->
-    <!--&lt;!&ndash;class="fa fa-trash-o text-danger"></i> <span&ndash;&gt;-->
-    <!--&lt;!&ndash;class="text-danger">Delete</span>&ndash;&gt;-->
-    <!--&lt;!&ndash;</a></li>&ndash;&gt;-->
-    <!--&lt;!&ndash;</ul>&ndash;&gt;-->
-    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-    <!--&lt;!&ndash;</td>&ndash;&gt;-->
-    <!--<td><a ui-sref="view-employee-hist({ id: employee.id })">{{employee.empId}}</a></td>-->
-    <!--<td><a ui-sref="view-employee-hist({ id: employee.id })">{{employee.fullName}}</a></td>-->
-    <!--<td><a ui-sref="view-employee-hist({ id: employee.id })">{{employee.name}}</a></td>-->
-    <!--<td>{{employee.projectName}}</td>-->
-    <!--<td>{{employee.siteName}}</td>-->
-    <!--<td>-->
-    <!--<a id="qrCodeImage" href="#" onClick="$('#qrModal').modal()" data-target="#qrModal" data-dismiss="#qrModal" ng-click="loadQRCode(employee.id,employee.qrCodeImage)">-->
-    <!--<img src="assets/images/image_placeholder.png" width="30px" height="30px"/>-->
-    <!--</a>-->
-    <!--</td>-->
-    <!--<td>-->
-    <!--<button ui-sref="view-employee({ id: employee.id })" type="button" rel="tooltip" title="View Profile" class="btn btn-info btn-simple btn-xs">-->
-    <!--<i class="material-icons">remove_red_eye</i>-->
-    <!--</button>-->
-    <!--<button ng-class="{active: $state.includes('admin')}" ui-sref="edit-employee({ id: employee.id })" type="button" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">-->
-    <!--<i class="fa fa-edit"></i>-->
-    <!--</button>-->
-    <!--<button ng-class="{active: $state.includes('admin')}" ng-click="deleteConfirm(employee)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">-->
-    <!--<i class="fa fa-times"></i>-->
-    <!--</button>-->
-    <!--</td>-->
-
-    <!--&lt;!&ndash; 							<td>NA</td>-->
-    <!--<td>NA</td> &ndash;&gt;-->
-    <!--</tr>-->
+                    <!--</div>-->
 
 
+					<!--<div class="floatM">-->
+					<!--<form name="searchForm"  ng-submit="search()" novalidate >-->
 
-    <!--</tbody>-->
+					<!--<table class="table" border="0">-->
+						<!--<tr class="filter-row gc-search-row">-->
+							<!--<td>-->
+							<!--<div class="form-group" ng-focus="loadAllEmployees()">-->
+							<!--<div class="dropdown" >-->
+							<!--<input  type="text" class="form-control searchable-input floatL" placeholder="Search ID" ng-value="searchCriteria.id"-->
+							<!--ng-model="selectedEmployee" uib-typeahead="employee as employee.empId for employee in allEmployees | filter:$viewValue | limitTo:5" />-->
+							    <!--</div>-->
+								<!--</div>-->
+								<!--</td>-->
+							<!--<td>-->
+							<!--<div class="form-group" ng-init="loadAllEmployees()">-->
+							<!--<div class="dropdown">-->
+							<!--<input type="text"-->
+								<!--class="form-control searchable-input floatL"-->
+								<!--placeholder="Search Name"-->
+								<!--ng-model="selectedEmployee"-->
+								<!--ng-value="searchCriteria.name"-->
+								<!--uib-typeahead="employee as employee.name for employee in allEmployees | filter:$viewValue | limitTo:5" />-->
+							<!--</div>-->
+							<!--</div>-->
+								<!--</td>-->
+							<!--<td>-->
+							<!--<div class="form-group" ng-init="loadAllEmployees()" >-->
+							<!--<div class="dropdown">-->
+							<!--<input type="text"-->
+								<!--class="form-control searchable-input floatL"-->
+								<!--placeholder="Search Full Name"-->
+								<!--ng-model="selectedEmployee"-->
+								<!--ng-value="searchCriteria.fullName"-->
+								<!--uib-typeahead="employee as employee.fullName for employee in allEmployees | filter:$viewValue | limitTo:5" />-->
+							<!--</div>-->
+							<!--</div>-->
+							<!--</td>-->
+							<!--<td>-->
+							<!--<div class="form-group" ng-init="loadProjects()">-->
+							<!--<div class="dropdown">-->
+							<!--<input type="text"-->
+								<!--class="form-control searchable-input floatL"-->
+								<!--placeholder="Search Project"-->
+								<!--ng-model="selectedProject"-->
+								<!--ng-value="searchCriteria.projectName"-->
+								<!--uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5" />-->
+							<!--</div>-->
+							<!--</div>-->
+							<!--</td>-->
+							<!--<td>-->
+							<!--<div class="form-group" ng-init="loadSites()">-->
+							<!--<div class="dropdown">-->
+							<!--<input type="text"-->
+								<!--class="form-control searchable-input floatL"-->
+								<!--placeholder="Search Site"-->
+								<!--ng-model="selectedSite"-->
+								<!--ng-value="searchCriteria.siteName"-->
+								<!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"/>-->
+							<!--</div>-->
+							<!--</div>-->
+							<!--</td>-->
+							<!--<td>-->
+							<!--<div class="floatR form-group">-->
+	 						<!--<button type="submit" class="btn btn-primary search-button t4"  ng-disabled="searchForm.$invalid">-->
+								<!--<i class="fa fa-search"></i>-->
+							<!--</button>-->
+							<!--</div>-->
+							<!--</td>-->
+						<!--</tr>-->
+						<!--</table>-->
+					<!--</div>-->
+					<!--<div class="clear"></div>-->
+				<!--</div>-->
+				<!--<table class="table table-bordered grocery-crud-table table-hover">-->
+					<!--<thead>-->
+						<!--<tr>-->
 
-    <!--&lt;!&ndash; Table Footer &ndash;&gt;-->
-    <!--<tfoot>-->
-    <!--<tr>-->
-    <!--<td colspan="9">-->
-    <!--&lt;!&ndash; "Show 10/25/50/100 entries" (dropdown per-page) &ndash;&gt;-->
-    <!--&lt;!&ndash;<div class="floatL t20 l5">&ndash;&gt;-->
-    <!--&lt;!&ndash;<div class="floatL t10">Show</div>&ndash;&gt;-->
-    <!--&lt;!&ndash;<div class="floatL r5 l5 t3">&ndash;&gt;-->
-    <!--&lt;!&ndash;<select name="per_page" class="per_page form-control">&ndash;&gt;-->
-    <!--&lt;!&ndash;<option value="10" selected="selected">&ndash;&gt;-->
-    <!--&lt;!&ndash;10&nbsp;&nbsp;</option>&ndash;&gt;-->
-    <!--&lt;!&ndash;&lt;!&ndash;<option value="25">25&nbsp;&nbsp;</option>&ndash;&gt;&ndash;&gt;-->
-    <!--&lt;!&ndash;&lt;!&ndash;<option value="50">50&nbsp;&nbsp;</option>&ndash;&gt;&ndash;&gt;-->
-    <!--&lt;!&ndash;&lt;!&ndash;<option value="100">100&nbsp;&nbsp;</option>&ndash;&gt;&ndash;&gt;-->
-    <!--&lt;!&ndash;</select>&ndash;&gt;-->
-    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-    <!--&lt;!&ndash;<div class="floatL t10">entries</div>&ndash;&gt;-->
-    <!--&lt;!&ndash;<div class="clear"></div>&ndash;&gt;-->
-    <!--&lt;!&ndash;</div> &lt;!&ndash; End of "Show 10/25/50/100 entries" (dropdown per-page) &ndash;&gt;&ndash;&gt;-->
+							<!--<th class="column-with-ordering" data-order-by="employeeEmpId">ID</th>-->
+							<!--<th class="column-with-ordering" data-order-by="employeeFullName">Full Name</th>-->
+							<!--<th class="column-with-ordering" data-order-by="employeeName">Name</th>-->
+							<!--<th class="column-with-ordering" data-order-by="projectName">Project</th>-->
+							<!--<th class="column-with-ordering" data-order-by="siteName">Site</th>-->
+							<!--<th class="column-with-ordering" data-order-by="qrCodeImage">QR Code</th>-->
+                            <!--<th colspan="1">Actions</th>-->
+
+<!--&lt;!&ndash; 							<th class="column-with-ordering" data-order-by="city">NA</th>-->
+							<!--<th class="column-with-ordering" data-order-by="country">NA</th>-->
+ <!--&ndash;&gt;-->
+ 						<!--</tr>-->
+
+						<!--&lt;!&ndash; <tr class="filter-row gc-search-row">-->
+							<!--<td class="no-border-right">-->
+								<!--<div class="floatL t5">-->
+									<!--<input type="checkbox" class="select-all-none" />-->
+								<!--</div>-->
+							<!--</td>-->
+							<!--<td class="no-border-left">-->
+								<!--<div class="floatL">-->
+									<!--<a href="javascript:void(0);" title="Delete"-->
+										<!--class="hidden btn btn-default delete-selected-button"> <i-->
+										<!--class="fa fa-trash-o text-danger"></i> <span-->
+										<!--class="text-danger">Delete</span>-->
+									<!--</a>-->
+								<!--</div>-->
+								<!--<div class="floatR">-->
+									<!--<a href="javascript:void(0);"-->
+										<!--class="btn btn-default gc-refresh"> <i-->
+										<!--class="fa fa-refresh"></i>-->
+									<!--</a>-->
+								<!--</div>-->
+								<!--<div class="clear"></div>-->
+							<!--</td>-->
+							<!--<td><input type="text"-->
+								<!--class="form-control searchable-input floatL"-->
+								<!--placeholder="Search ID" name="employeeEmpId" /></td>-->
+							<!--<td><input type="text"-->
+								<!--class="form-control searchable-input floatL"-->
+								<!--placeholder="Search Full Name" name="employeeFullName" /></td>-->
+							<!--<td><input type="text"-->
+								<!--class="form-control searchable-input floatL"-->
+								<!--placeholder="Search Name" name="employeeName" /></td>-->
+							<!--<td><input type="text"-->
+								<!--class="form-control searchable-input floatL"-->
+								<!--placeholder="Search ProjectName" name="projectName" /></td>-->
+							<!--<td><input type="text"-->
+								<!--class="form-control searchable-input floatL"-->
+								<!--placeholder="Search SiteName" name="siteName" /></td>-->
+							<!--<td><input type="text"-->
+								<!--class="form-control searchable-input floatL"-->
+								<!--placeholder="Search NA" name="city" /></td>-->
+							<!--<td><input type="text"-->
+								<!--class="form-control searchable-input floatL"-->
+								<!--placeholder="Search NA" name="country" /></td>-->
+						<!--</tr> &ndash;&gt;-->
+
+					<!--</thead>-->
+					<!--<tbody>-->
+
+						<!--<tr ng-repeat="employee in employees">-->
+<!--&lt;!&ndash; 							<td><input type="checkbox" class="select-row" data-id="103" />-->
+							<!--</td> &ndash;&gt;-->
+							<!--&lt;!&ndash;<td>&ndash;&gt;-->
+								<!--&lt;!&ndash;<div class="only-desktops" style="white-space: nowrap">&ndash;&gt;-->
+									<!--&lt;!&ndash;<a ng-class="{active: $state.includes('admin')}" ui-sref="edit-employee({ id: employee.id })" class="btn btn-default"><i&ndash;&gt;-->
+										<!--&lt;!&ndash;class="fa fa-pencil"></i> Edit</a>&ndash;&gt;-->
+
+									<!--&lt;!&ndash;<div class="btn-group dropdown">&ndash;&gt;-->
+										<!--&lt;!&ndash;<button type="button" class="btn btn-default dropdown-toggle"&ndash;&gt;-->
+											<!--&lt;!&ndash;data-toggle="dropdown">&ndash;&gt;-->
+											<!--&lt;!&ndash;More <span class="caret"></span>&ndash;&gt;-->
+										<!--&lt;!&ndash;</button>&ndash;&gt;-->
+
+										<!--&lt;!&ndash;<ul class="dropdown-menu">&ndash;&gt;-->
+											<!--&lt;!&ndash;<li><a ui-sref="view-employee({ id: employee.id })"><i&ndash;&gt;-->
+													<!--&lt;!&ndash;class="fa fa-eye"></i> View</a></li>&ndash;&gt;-->
+											<!--&lt;!&ndash;<li ng-class="{active: $state.includes('admin')}" ><a ng-click="deleteConfirm(employee)" onClick="$('#deleteModal').modal()" data-target="#myModal" title="Delete"&ndash;&gt;-->
+												<!--&lt;!&ndash;class="delete-row"> <i class="fa fa-trash-o text-danger"></i>&ndash;&gt;-->
+													<!--&lt;!&ndash;<span class="text-danger">Delete</span>&ndash;&gt;-->
+											<!--&lt;!&ndash;</a></li>&ndash;&gt;-->
+										<!--&lt;!&ndash;</ul>&ndash;&gt;-->
+										<!--&lt;!&ndash;<div id="deleteModal" data-backdrop="false" class="modal fade" tabindex="-1" role="dialog"&ndash;&gt;-->
+										<!--&lt;!&ndash;aria-labelledby="myModalLabel" aria-hidden="true" >&ndash;&gt;-->
+										<!--&lt;!&ndash;<div class="delete-dialog">&ndash;&gt;-->
+									<!--&lt;!&ndash;<div class="modal-content">&ndash;&gt;-->
+										<!--&lt;!&ndash;<div class="modal-body">&ndash;&gt;-->
+												<!--&lt;!&ndash;Are you sure to delete the Employee?&ndash;&gt;-->
+										<!--&lt;!&ndash;</div>&ndash;&gt;-->
+										<!--&lt;!&ndash;<div class="delete-footer">&ndash;&gt;-->
+												<!--&lt;!&ndash;<button type="button" ng-click="deleteEmployee()" class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>&ndash;&gt;-->
+										<!--&lt;!&ndash;<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>&ndash;&gt;-->
+
+										<!--&lt;!&ndash;</div>&ndash;&gt;-->
+									<!--&lt;!&ndash;</div>&ndash;&gt;-->
+								<!--&lt;!&ndash;</div>&ndash;&gt;-->
+									<!--&lt;!&ndash;</div>&ndash;&gt;-->
+									<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+								<!--&lt;!&ndash;</div>&ndash;&gt;-->
+								<!--&lt;!&ndash;<div class="only-mobiles">&ndash;&gt;-->
+									<!--&lt;!&ndash;<div class="btn-group dropdown">&ndash;&gt;-->
+										<!--&lt;!&ndash;<button type="button" class="btn btn-default dropdown-toggle"&ndash;&gt;-->
+											<!--&lt;!&ndash;data-toggle="dropdown">&ndash;&gt;-->
+											<!--&lt;!&ndash;Actions <span class="caret"></span>&ndash;&gt;-->
+										<!--&lt;!&ndash;</button>&ndash;&gt;-->
+										<!--&lt;!&ndash;<ul class="dropdown-menu">&ndash;&gt;-->
+											<!--&lt;!&ndash;<li><a&ndash;&gt;-->
+												<!--&lt;!&ndash;href="http://localhost:81/grocery_crud/index.php/examples/customers_management/edit/103">&ndash;&gt;-->
+													<!--&lt;!&ndash;<i class="fa fa-pencil"></i> Edit&ndash;&gt;-->
+											<!--&lt;!&ndash;</a></li>&ndash;&gt;-->
+											<!--&lt;!&ndash;<li><a&ndash;&gt;-->
+												<!--&lt;!&ndash;href="http://localhost:81/grocery_crud/index.php/examples/customers_management/read/103"><i&ndash;&gt;-->
+													<!--&lt;!&ndash;class="fa fa-eye"></i> View</a></li>&ndash;&gt;-->
+											<!--&lt;!&ndash;<li><a ng-click="deleteEmployee({ id: employee.id })"&ndash;&gt;-->
+												<!--&lt;!&ndash;title="Delete" class="delete-row"> <i&ndash;&gt;-->
+													<!--&lt;!&ndash;class="fa fa-trash-o text-danger"></i> <span&ndash;&gt;-->
+													<!--&lt;!&ndash;class="text-danger">Delete</span>&ndash;&gt;-->
+											<!--&lt;!&ndash;</a></li>&ndash;&gt;-->
+										<!--&lt;!&ndash;</ul>&ndash;&gt;-->
+									<!--&lt;!&ndash;</div>&ndash;&gt;-->
+								<!--&lt;!&ndash;</div>&ndash;&gt;-->
+							<!--&lt;!&ndash;</td>&ndash;&gt;-->
+							<!--<td><a ui-sref="view-employee-hist({ id: employee.id })">{{employee.empId}}</a></td>-->
+							<!--<td><a ui-sref="view-employee-hist({ id: employee.id })">{{employee.fullName}}</a></td>-->
+							<!--<td><a ui-sref="view-employee-hist({ id: employee.id })">{{employee.name}}</a></td>-->
+							<!--<td>{{employee.projectName}}</td>-->
+							<!--<td>{{employee.siteName}}</td>-->
+							<!--<td>-->
+							<!--<a id="qrCodeImage" href="#" onClick="$('#qrModal').modal()" data-target="#qrModal" data-dismiss="#qrModal" ng-click="loadQRCode(employee.id,employee.qrCodeImage)">-->
+								<!--<img src="assets/images/image_placeholder.png" width="30px" height="30px"/>-->
+							<!--</a>-->
+							<!--</td>-->
+                            <!--<td>-->
+                                <!--<button ui-sref="view-employee({ id: employee.id })" type="button" rel="tooltip" title="View Profile" class="btn btn-info btn-simple btn-xs">-->
+                                    <!--<i class="material-icons">remove_red_eye</i>-->
+                                <!--</button>-->
+                                <!--<button ng-class="{active: $state.includes('admin')}" ui-sref="edit-employee({ id: employee.id })" type="button" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">-->
+                                    <!--<i class="fa fa-edit"></i>-->
+                                <!--</button>-->
+                                <!--<button ng-class="{active: $state.includes('admin')}" ng-click="deleteConfirm(employee)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">-->
+                                    <!--<i class="fa fa-times"></i>-->
+                                <!--</button>-->
+                            <!--</td>-->
+
+<!--&lt;!&ndash; 							<td>NA</td>-->
+							<!--<td>NA</td> &ndash;&gt;-->
+						<!--</tr>-->
 
 
-    <!--<div class="floatR r5">-->
 
-    <!--&lt;!&ndash; Buttons - First,Previous,Next,Last Page &ndash;&gt;-->
-    <!--<ul class="pagination">-->
-    <!--<li class="paging-first" id="first"><a href="#" id="first"-->
-    <!--ng-click="first()" ><i id="first"-->
-    <!--class="fa fa-step-backward"></i></a></li>-->
-    <!--<li class="prev paging-previous" id="previous"><a-->
-    <!--id="previous" href="#" ng-click="previous()"-->
-    <!--&gt;<i id="previous"-->
-    <!--class="fa fa-chevron-left"></i></a></li>-->
-    <!--<li><span class="page-number-input-container"> <input-->
-    <!--type="number" ng-model="pages.currPage"-->
-    <!--class="form-control page-number-input" disabled />-->
-    <!--</span></li>-->
-    <!--<li class="next paging-next" id="next"><a id="next"-->
-    <!--href="#" ng-click="next()"><i id="next"-->
-    <!--class="fa fa-chevron-right"></i></a></li>-->
-    <!--<li class="paging-last" id="last"><a id="last" href="#"-->
-    <!--ng-click="last()" ><i id="last"-->
-    <!--class="fa fa-step-forward"></i></a></li>-->
-    <!--</ul>-->
-    <!--&lt;!&ndash; End of Buttons - First,Previous,Next,Last Page &ndash;&gt;-->
+					<!--</tbody>-->
 
-    <!--<input type="hidden" name="page_number"-->
-    <!--class="page-number-hidden" value="1" />-->
+					<!--&lt;!&ndash; Table Footer &ndash;&gt;-->
+					<!--<tfoot>-->
+						<!--<tr>-->
+							<!--<td colspan="9">-->
+								<!--&lt;!&ndash; "Show 10/25/50/100 entries" (dropdown per-page) &ndash;&gt;-->
+								<!--&lt;!&ndash;<div class="floatL t20 l5">&ndash;&gt;-->
+									<!--&lt;!&ndash;<div class="floatL t10">Show</div>&ndash;&gt;-->
+									<!--&lt;!&ndash;<div class="floatL r5 l5 t3">&ndash;&gt;-->
+										<!--&lt;!&ndash;<select name="per_page" class="per_page form-control">&ndash;&gt;-->
+											<!--&lt;!&ndash;<option value="10" selected="selected">&ndash;&gt;-->
+												<!--&lt;!&ndash;10&nbsp;&nbsp;</option>&ndash;&gt;-->
+											<!--&lt;!&ndash;&lt;!&ndash;<option value="25">25&nbsp;&nbsp;</option>&ndash;&gt;&ndash;&gt;-->
+											<!--&lt;!&ndash;&lt;!&ndash;<option value="50">50&nbsp;&nbsp;</option>&ndash;&gt;&ndash;&gt;-->
+											<!--&lt;!&ndash;&lt;!&ndash;<option value="100">100&nbsp;&nbsp;</option>&ndash;&gt;&ndash;&gt;-->
+										<!--&lt;!&ndash;</select>&ndash;&gt;-->
+									<!--&lt;!&ndash;</div>&ndash;&gt;-->
+									<!--&lt;!&ndash;<div class="floatL t10">entries</div>&ndash;&gt;-->
+									<!--&lt;!&ndash;<div class="clear"></div>&ndash;&gt;-->
+								<!--&lt;!&ndash;</div> &lt;!&ndash; End of "Show 10/25/50/100 entries" (dropdown per-page) &ndash;&gt;&ndash;&gt;-->
 
-    <!--&lt;!&ndash; Start of: Settings button &ndash;&gt;-->
-    <!--<div class="btn-group floatR t20 l10 settings-button-container">-->
-    <!--<button type="button"-->
-    <!--class="btn btn-default dropdown-toggle settings-button"-->
-    <!--data-toggle="dropdown">-->
-    <!--<i class="fa fa-cog r5"></i> <span class="caret"></span>-->
-    <!--</button>-->
 
-    <!--<ul class="dropdown-menu dropdown-menu-right">-->
-    <!--<li><a href="#" ng-click="clearFilter()"-->
-    <!--class="clear-filtering"> <i class="fa fa-eraser"></i>-->
-    <!--Clear filtering-->
-    <!--</a></li>-->
-    <!--</ul>-->
-    <!--</div>-->
-    <!--&lt;!&ndash; End of: Settings button &ndash;&gt;-->
+								<!--<div class="floatR r5">-->
 
-    <!--</div>-->
-    <!--<div class="floatR r10 t30">-->
-    <!--Displaying <span class="paging-starts">{{pages.startInd}}</span>-->
-    <!--to <span class="paging-ends">{{pages.endInd}}</span> of <span-->
-    <!--class="current-total-results">{{pages.totalCnt}}</span> items-->
-    <!--<span class="full-total-container hidden"> (filtered-->
-    <!--from <span class='full-total'>{{pages.totalCnt}}</span> total-->
-    <!--entries)-->
-    <!--</span>-->
-    <!--</div>-->
+									<!--&lt;!&ndash; Buttons - First,Previous,Next,Last Page &ndash;&gt;-->
+									<!--<ul class="pagination">-->
+										<!--<li class="paging-first" id="first"><a href="#" id="first"-->
+											<!--ng-click="first()" ><i id="first"-->
+												<!--class="fa fa-step-backward"></i></a></li>-->
+										<!--<li class="prev paging-previous" id="previous"><a-->
+											<!--id="previous" href="#" ng-click="previous()"-->
+											<!--&gt;<i id="previous"-->
+												<!--class="fa fa-chevron-left"></i></a></li>-->
+										<!--<li><span class="page-number-input-container"> <input-->
+												<!--type="number" ng-model="pages.currPage"-->
+												<!--class="form-control page-number-input" disabled />-->
+										<!--</span></li>-->
+										<!--<li class="next paging-next" id="next"><a id="next"-->
+											<!--href="#" ng-click="next()"><i id="next"-->
+												<!--class="fa fa-chevron-right"></i></a></li>-->
+										<!--<li class="paging-last" id="last"><a id="last" href="#"-->
+											<!--ng-click="last()" ><i id="last"-->
+												<!--class="fa fa-step-forward"></i></a></li>-->
+									<!--</ul>-->
+									<!--&lt;!&ndash; End of Buttons - First,Previous,Next,Last Page &ndash;&gt;-->
 
-    <!--<div class="clear"></div>-->
-    <!--</td>-->
-    <!--</tr>-->
-    <!--</tfoot>-->
-    <!--&lt;!&ndash; End of: Table Footer &ndash;&gt;-->
-    <!--</table>-->
-    <!--</div>-->
+									<!--<input type="hidden" name="page_number"-->
+										<!--class="page-number-hidden" value="1" />-->
 
-    <!--</div>-->
+									<!--&lt;!&ndash; Start of: Settings button &ndash;&gt;-->
+									<!--<div class="btn-group floatR t20 l10 settings-button-container">-->
+										<!--<button type="button"-->
+											<!--class="btn btn-default dropdown-toggle settings-button"-->
+											<!--data-toggle="dropdown">-->
+											<!--<i class="fa fa-cog r5"></i> <span class="caret"></span>-->
+										<!--</button>-->
 
-    <!--&lt;!&ndash; Delete confirmation dialog &ndash;&gt;-->
-    <!--<div id="deleteModal" class="delete-confirmation modal fade">-->
-    <!--<div class="modal-dialog">-->
-    <!--<div class="modal-content">-->
-    <!--<div class="modal-header">-->
-    <!--<button type="button" class="close" data-dismiss="modal"-->
-    <!--aria-hidden="true">&times;</button>-->
-    <!--<h4 class="modal-title">Delete</h4>-->
-    <!--</div>-->
-    <!--<div class="modal-body">-->
-    <!--<p>Are you sure that you want to delete this record?</p>-->
-    <!--</div>-->
-    <!--<div class="modal-footer">-->
-    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>-->
-    <!--<button type="button"-->
-    <!--class="btn btn-danger delete-confirmation-button">Delete</button>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--&lt;!&ndash; End of Delete confirmation dialog &ndash;&gt;-->
+										<!--<ul class="dropdown-menu dropdown-menu-right">-->
+                                                <!--<li><a href="#" ng-click="clearFilter()"-->
+                                                    <!--class="clear-filtering"> <i class="fa fa-eraser"></i>-->
+                                                        <!--Clear filtering-->
+                                                <!--</a></li>-->
+										<!--</ul>-->
+									<!--</div>-->
+									<!--&lt;!&ndash; End of: Settings button &ndash;&gt;-->
 
-    <!--&lt;!&ndash; Delete Multiple confirmation dialog &ndash;&gt;-->
-    <!--<div class="delete-multiple-confirmation modal fade">-->
-    <!--<div class="modal-dialog">-->
-    <!--<div class="modal-content">-->
-    <!--<div class="modal-header">-->
-    <!--<button type="button" class="close" data-dismiss="modal"-->
-    <!--aria-hidden="true">&times;</button>-->
-    <!--<h4 class="modal-title">Delete</h4>-->
-    <!--</div>-->
-    <!--<div class="modal-body">-->
-    <!--<p>Are you sure that you want to delete this record?</p>-->
-    <!--</div>-->
-    <!--<div class="modal-footer">-->
-    <!--<button type="button" class="btn btn-default" data-dismiss="modal">-->
-    <!--Cancel</button>-->
-    <!--<button type="button"-->
-    <!--class="btn btn-danger delete-multiple-confirmation-button"-->
-    <!--data-target="http://localhost:81/grocery_crud/index.php/examples/customers_management/delete_multiple">-->
-    <!--Delete</button>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--&lt;!&ndash; End of Delete Multiple confirmation dialog &ndash;&gt;-->
+								<!--</div>-->
+								<!--<div class="floatR r10 t30">-->
+									<!--Displaying <span class="paging-starts">{{pages.startInd}}</span>-->
+									<!--to <span class="paging-ends">{{pages.endInd}}</span> of <span-->
+										<!--class="current-total-results">{{pages.totalCnt}}</span> items-->
+									<!--<span class="full-total-container hidden"> (filtered-->
+										<!--from <span class='full-total'>{{pages.totalCnt}}</span> total-->
+										<!--entries)-->
+									<!--</span>-->
+								<!--</div>-->
 
-    <!--</div>-->
+								<!--<div class="clear"></div>-->
+							<!--</td>-->
+						<!--</tr>-->
+					<!--</tfoot>-->
+					<!--&lt;!&ndash; End of: Table Footer &ndash;&gt;-->
+				<!--</table>-->
+			<!--</div>-->
+
+		<!--</div>-->
+
+		<!--&lt;!&ndash; Delete confirmation dialog &ndash;&gt;-->
+		<!--<div id="deleteModal" class="delete-confirmation modal fade">-->
+			<!--<div class="modal-dialog">-->
+				<!--<div class="modal-content">-->
+					<!--<div class="modal-header">-->
+						<!--<button type="button" class="close" data-dismiss="modal"-->
+							<!--aria-hidden="true">&times;</button>-->
+						<!--<h4 class="modal-title">Delete</h4>-->
+					<!--</div>-->
+					<!--<div class="modal-body">-->
+						<!--<p>Are you sure that you want to delete this record?</p>-->
+					<!--</div>-->
+					<!--<div class="modal-footer">-->
+						<!--<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>-->
+						<!--<button type="button"-->
+							<!--class="btn btn-danger delete-confirmation-button">Delete</button>-->
+					<!--</div>-->
+				<!--</div>-->
+			<!--</div>-->
+		<!--</div>-->
+		<!--&lt;!&ndash; End of Delete confirmation dialog &ndash;&gt;-->
+
+		<!--&lt;!&ndash; Delete Multiple confirmation dialog &ndash;&gt;-->
+		<!--<div class="delete-multiple-confirmation modal fade">-->
+			<!--<div class="modal-dialog">-->
+				<!--<div class="modal-content">-->
+					<!--<div class="modal-header">-->
+						<!--<button type="button" class="close" data-dismiss="modal"-->
+							<!--aria-hidden="true">&times;</button>-->
+						<!--<h4 class="modal-title">Delete</h4>-->
+					<!--</div>-->
+					<!--<div class="modal-body">-->
+						<!--<p>Are you sure that you want to delete this record?</p>-->
+					<!--</div>-->
+					<!--<div class="modal-footer">-->
+						<!--<button type="button" class="btn btn-default" data-dismiss="modal">-->
+							<!--Cancel</button>-->
+						<!--<button type="button"-->
+							<!--class="btn btn-danger delete-multiple-confirmation-button"-->
+							<!--data-target="http://localhost:81/grocery_crud/index.php/examples/customers_management/delete_multiple">-->
+							<!--Delete</button>-->
+					<!--</div>-->
+				<!--</div>-->
+			<!--</div>-->
+		<!--</div>-->
+		<!--&lt;!&ndash; End of Delete Multiple confirmation dialog &ndash;&gt;-->
+
+	<!--</div>-->
 </div>
 
-<!-- new filter -->
-
-<!--&lt;!&ndash; AdvancedFilterModal &ndash;&gt;-->
-<!--<div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">-->
-<!--<div class="modal-dialog">-->
-<!--<div class="modal-content">-->
-<!--<form name="searchForm"   novalidate >-->
-
-<!--<div class="modal-header">-->
-<!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">-->
-<!--<i class="material-icons">clear</i>-->
-<!--</button>-->
-<!--<h4 class="modal-title">Filter</h4>-->
-<!--</div>-->
-<!--<div class="modal-body">-->
 
 
-<!--<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">-->
-
-<!--<div class="panel panel-default">-->
-<!--<div class="panel-heading" role="tab" id="headingOne">-->
-<!--<a role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="collapsed">-->
-<!--<h4 class="panel-title">-->
-<!--Basic Filter-->
-<!--<i class="material-icons">keyboard_arrow_down</i>-->
-<!--</h4>-->
-<!--</a>-->
-<!--</div>-->
-<!--<div id="collapseOne" class="panel-collapse collapse collapseOne in" role="tabpanel" aria-labelledby="headingOne" aria-expanded="true" style="height: 110px;">-->
-<!--<div class="panel-body">-->
-
-<!--<div class="row" ng-init="loadProjectsList();loadSitesList();">-->
-
-<!--<div class="col-xs-12 col-md-4">-->
-<!--<div class="form-group" >-->
-<!--<div class="dropdown">-->
-<!--<label class="label-control">Client</label>-->
-<!--&lt;!&ndash;<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>&ndash;&gt;-->
-<!--&lt;!&ndash;<select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projectsList"  >&ndash;&gt;-->
-<!--&lt;!&ndash;<option value="">Select Client...</option>&ndash;&gt;-->
-<!--&lt;!&ndash;</select>&ndash;&gt;-->
-
-<!--<span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>-->
-<!--<span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>-->
-<!--<ui-select ng-model="searchProject" ng-disabled="clientFilterDisable" ng-change="loadDepSites(searchProject)">-->
-<!--<ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :searchProject}}</ui-select-match>-->
-<!--<ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">-->
-<!--<div ng-bind="client"></div>-->
-<!--</ui-select-choices>-->
-<!--</ui-select>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--<div class="col-xs-12 col-md-4">-->
-<!--<div class="dropdown">-->
-<!--<div class="form-group">-->
-<!--<label class="label-control">Site</label>-->
-<!--&lt;!&ndash;<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>&ndash;&gt;-->
-<!--&lt;!&ndash;<select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sitesList" ng-change="loadDepBlocks();">&ndash;&gt;-->
-<!--&lt;!&ndash;<option value="">Select Site...</option>&ndash;&gt;-->
-<!--&lt;!&ndash;</select>&ndash;&gt;-->
-<!--<span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>-->
-<!--<span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>-->
-<!--<ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sitesList.length == 0" ng-change="loadDepBlocks(searchSite)">-->
-<!--<ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?searchSite :'Select Site' }}</ui-select-match>-->
-<!--<ui-select-choices  repeat="site in getSites($select.search) | filter: $select.search">-->
-<!--<div ng-bind="site"></div>-->
-<!--</ui-select-choices>-->
-<!--</ui-select>-->
-<!--<span ng-if="sitesList.length == 0"><p class="help-block">No sites</p></span>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--<div class="panel panel-default">-->
-<!--<div class="panel-heading" role="tab" id="headingTwo">-->
-<!--<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">-->
-<!--<h4 class="panel-title">-->
-<!--Advanced Filter-->
-<!--<i class="material-icons">keyboard_arrow_down</i>-->
-<!--</h4>-->
-<!--</a>-->
-<!--</div>-->
-<!--<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">-->
-<!--<div class="panel-body">-->
-<!--<div class="row">-->
-<!--<div class="dropdown col-xs-12 col-md-4 col-sm-4">-->
-<!--<div class="form-group">-->
-<!--<label class="control-label">Block </label>-->
-<!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-<!--<select class="form-control " ng-model="searchBlock" ng-change="loadDepFloors()"  ng-options="block as block for  block in  blocksList">-->
-<!--<option value="">Select Block...</option>-->
-<!--</select>-->
-<!--</div>-->
-<!--</div>-->
-<!--<div class="dropdown col-xs-12 col-md-4 col-sm-4">-->
-<!--<div class="form-group">-->
-<!--<label class="control-label">Select Floor</label>-->
-<!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-<!--<select class="form-control " ng-model="searchFloor" ng-change="loadDepZones()"  ng-options="floor as floor for floor in floorsList">-->
-<!--<option value="">Select Floor...</option>-->
-<!--</select>-->
-<!--</div>-->
-<!--</div>-->
-<!--<div class="dropdown col-xs-12 col-md-4 col-sm-4">-->
-<!--<div class="form-group">-->
-<!--<label class="control-label">Select Zone</label>-->
-<!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-<!--<select class="form-control " ng-model="searchZone"  ng-options="zone as zone for zone in zonesList">-->
-<!--<option value="">Select Zone...</option>-->
-<!--</select>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--<div class="modal-footer">-->
-<!--<button type="submit" class="btn btn-danger btn-simple" data-dismiss="modal" >Cancel</button>-->
-<!--<button type="submit" class="btn btn-success btn-simple" ng-click ="searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>-->
-<!--&lt;!&ndash;<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>&ndash;&gt;-->
-<!--</div>-->
-<!--</form>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--&lt;!&ndash;  End Modal &ndash;&gt;-->
-<!-- -->
 <!-- BasicFilterModal -->
-<!--<div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">-->
-<!--<div class="modal-dialog">-->
-<!--<div class="modal-content">-->
-<!--<form name="searchForm"   novalidate>-->
-<!--<div class="modal-header">-->
-<!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">-->
-<!--<i class="material-icons">clear</i>-->
-<!--</button>-->
-<!--<h4 class="modal-title">Basic Filter</h4>-->
-<!--</div>-->
-<!--<div class="modal-body">-->
+<div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="searchForm"   novalidate>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Basic Filter</h4>
+                </div>
+                <div class="modal-body">
 
-<!--<div class="row">-->
+                    <div class="row">
 
-<!--<div class="col-xs-12 col-md-4">-->
-<!--<div class="form-group" >-->
-<!--<div class="dropdown">-->
-<!--<label class="label-control">Client</label>-->
-<!--&lt;!&ndash;<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>&ndash;&gt;-->
-<!--&lt;!&ndash;<select class="form-control " ng-model="searchProject" ng-change="loadDepSites();" ng-options="project as project.name for project in projects"  required>&ndash;&gt;-->
-<!--&lt;!&ndash;<option value="">Select Client...</option>&ndash;&gt;-->
-<!--&lt;!&ndash;</select>&ndash;&gt;-->
-<!--<span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>-->
-<!--<span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>-->
-<!--<ui-select ng-model="searchProject" ng-disabled="clientFilterDisable" ng-change="loadDepSites(searchProject)" ng-click="loadDepSites(searchProject)">-->
-<!--<ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :searchProject}}</ui-select-match>-->
-<!--<ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">-->
-<!--<div ng-bind="client"></div>-->
-<!--</ui-select-choices>-->
-<!--</ui-select>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--<div class="col-xs-12 col-md-4">-->
-<!--<div class="dropdown">-->
-<!--<div class="form-group">-->
-<!--<label class="label-control">Site</label>-->
-<!--&lt;!&ndash;<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>&ndash;&gt;-->
-<!--&lt;!&ndash;<select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites" >&ndash;&gt;-->
-<!--&lt;!&ndash;<option value="">Select Site...</option>&ndash;&gt;-->
-<!--&lt;!&ndash;</select>&ndash;&gt;-->
-<!--<span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>-->
-<!--<span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>-->
-<!--<ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-change="loadSearchSite(searchSite)" ng-click="loadSearchSite(searchSite)">-->
-<!--<ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site0' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site1' : hideSite ?searchSite : 'Select Site2' }}</ui-select-match>-->
-<!--<ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">-->
-<!--<div ng-bind="site"></div>-->
-<!--</ui-select-choices>-->
-<!--</ui-select>-->
-<!--<span ng-if="sites.length == 0"><p class="help-block">No sites</p></span>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-
-
-
-<!--</div>-->
-
-<!--</div>-->
-<!--<div class="modal-footer">-->
-<!--<button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter1()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>-->
-<!--&lt;!&ndash;<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>&ndash;&gt;-->
-<!--</div>-->
-<!--</form>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--&lt;!&ndash;  End Modal &ndash;&gt;-->
-
-<!--&lt;!&ndash; AdvancedFilterModal &ndash;&gt;-->
-<!--<div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">-->
-<!--<div class="modal-dialog">-->
-<!--<div class="modal-content">-->
-<!--<form name="searchForm"   novalidate >-->
-
-<!--<div class="modal-header">-->
-<!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">-->
-<!--<i class="material-icons">clear</i>-->
-<!--</button>-->
-<!--<h4 class="modal-title">Advanced Filter</h4>-->
-<!--</div>-->
-<!--<div class="modal-body">-->
-
-<!-- <div class="col-xs-12 col-md-4">
+                        <div class="col-xs-12 col-md-4">
                             <div class="form-group" >
                                 <div class="dropdown">
                                     <label class="label-control">Client</label>
@@ -1694,14 +1025,6 @@
                                     <select class="form-control " ng-model="searchProject" ng-change="loadDepSites();" ng-options="project as project.name for project in projects"  required>
                                         <option value="">Select Client...</option>
                                     </select>
-                                    <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                    <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable" ng-change="loadDepSites(searchProject)" ng-click="loadDepSites(searchProject)">
-                                        <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :searchProject}}</ui-select-match>
-                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
-                                            <div ng-bind="client"></div>
-                                        </ui-select-choices>
-                                    </ui-select>
                                 </div>
                             </div>
                         </div>
@@ -1713,218 +1036,75 @@
                                     <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites" >
                                         <option value="">Select Site...</option>
                                     </select>
-                                    <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                    <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-change="loadSearchSite(searchSite)" ng-click="loadSearchSite(searchSite)">
-                                        <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site0' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site1' : hideSite ?searchSite : 'Select Site2' }}</ui-select-match>
-                                        <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
-                                            <div ng-bind="site"></div>
-                                        </ui-select-choices>
-                                    </ui-select>
-                                    <span ng-if="sites.length == 0"><p class="error-msg margin0">No sites</p></span>
                                 </div>
                             </div>
                         </div>
- -->
-<!--<div class="row">-->
-
-<!--<div class="col-md-4">-->
-<!--<div class="form-group" style="padding-top: 20px;" >-->
-<!--<div class="dropdown">-->
-<!--<input type="text"-->
-<!--class="form-control border-bottom-input"-->
-<!--placeholder="Employee Id"-->
-<!--ng-model="searchEmployeeId"-->
-<!--/>-->
-
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--<div class="col-md-4">-->
-<!--<div class="form-group" style="padding-top: 20px;" >-->
-<!--<div class="dropdown">-->
-<!--<input type="text"-->
-<!--class="form-control border-bottom-input"-->
-<!--placeholder="Employee Name"-->
-<!--ng-model="searchEmployeeName"-->
-<!--/>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-
-<!--</div>-->
-
-<!--</div>-->
-<!--<div class="modal-footer">-->
-<!--<button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>-->
-<!--&lt;!&ndash;<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>&ndash;&gt;-->
-<!--</div>-->
-<!--</form>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--&lt;!&ndash;  End Modal &ndash;&gt;-->
-<!-- Filter New -->
-<div class="modal fade AdvancedFilterModal FilterModalCon" id="Filter"
-      role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form name="searchForm" role="form" ng-submit="searchFilter()"  novalidate>
-
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"
-                            aria-hidden="true">
-                        <i class="material-icons">clear</i>
-                    </button>
-                    <h4 class="modal-title">Filter</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="panel-group" id="accordion" role="tablist"
-                         aria-multiselectable="true">
-                        <div class="panel panel-default">
-                            <div class="panel-heading" role="tab" id="headingOne">
-                                <a role="button" data-toggle="collapse" data-parent="#accordion"
-                                   data-target="#collapseOne" aria-expanded="true"
-                                   aria-controls="collapseOne" class="collapsed">
-                                    <h4 class="panel-title">
-                                        Basic Filter <i class="material-icons">keyboard_arrow_down</i>
-                                    </h4>
-                                </a>
-                            </div>
-                            <div id="collapseOne"
-                                 class="panel-collapse collapse collapseOne in" role="tabpanel"
-                                 aria-labelledby="headingOne" aria-expanded="true"
-                                 style="height: 210px;">
-                                <div class="panel-body">
-
-                                    <div class="row">
-
-                                        <div class="col-xs-12 col-md-6 col-lg-6" >
-                                            <div class="form-group">
-                                                <div class="dropdown">
-                                                    <label class="label-control">Client</label>
-                                                    <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-				                                    <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-
-				                                    <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
-													  <ui-select-match placeholder="Select clients..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
-													  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)" null-option="allClients" loose-null>
-
-													    <span ng-bind-html="client.name | highlight: $select.search"></span>
-													  </ui-select-choices>
-													</ui-select>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xs-12 col-md-6 col-lg-6">
-				                            <div class="form-group" >
-
-				                                    <div class="dropdown">
-				                                        <label class="label-control">Region</label>
-				                                        <span ng-show="regionSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-				                                        <span ng-show="!regionSpin && !regionsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-
-						                                <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
-														  <ui-select-match placeholder="Select region..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
-														  <ui-select-choices repeat="regionsListOne in regionsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,'');loadBranchList(client.selected.id)" null-option="allRegions" loose-null>
-														    <span ng-bind-html="regionsListOne.name | highlight: $select.search"></span>
-														  </ui-select-choices>
-														</ui-select>
-														<span ng-if="regionsLists.length == 1"><p class="error-msg margin0">No region</p></span>
-				                                    </div>
-				                            </div>
-				                        </div>
-                                   </div>
-
-                                   <div class="row">
-                                   		<div class="col-xs-12 col-md-6 col-lg-6">
-                                   		   <div class="form-group" >
-				                            <div class="dropdown">
-				                                <label class="label-control">Branch</label>
-				                                 <span ng-show="branchSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-				                                 <span ng-show="!branchSpin && !branchsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-
-					                                <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
-													  <ui-select-match placeholder="Select branch..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
-													  <ui-select-choices repeat="branchsListOne in branchsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,branchsListOne.selected.name)" null-option="allRegions" loose-null>
-													    <span ng-bind-html="branchsListOne.name | highlight: $select.search"></span>
-													  </ui-select-choices>
-													</ui-select>
-													<span ng-if="branchsLists.length == 1"><p class="error-msg margin0">No branch</p></span>
-											 </div>
-				                            </div>
-				                        </div>
 
 
-                                        <div class="col-xs-12 col-md-6 col-lg-6">
-                                            <div class="dropdown">
-                                                <div class="form-group">
-                                                    <label class="label-control">Site</label>
-                                                    <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-				                                    <span ng-show="!siteSpin && !sitesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-				                                    <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
-													  <ui-select-match placeholder="Select site..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
-													  <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search" null-option="allSites" loose-null>
-													    <span ng-bind-html="sitesListOne.name | highlight: $select.search"></span>
-													  </ui-select-choices>
-													</ui-select>
-													<span ng-if="sitesLists.length == 1"><p class="error-msg margin0">No sites</p></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading" role="tab" id="headingTwo">
-                                <a class="collapsed" role="button" data-toggle="collapse"
-                                   data-parent="#accordion" data-target="#collapseTwo"
-                                   aria-expanded="false" aria-controls="collapseTwo">
-                                    <h4 class="panel-title">
-                                        Advanced Filter <i class="material-icons">keyboard_arrow_down</i>
-                                    </h4>
-                                </a>
-                            </div>
-                            <div id="collapseTwo" class="panel-collapse collapse"
-                                 role="tabpanel" aria-labelledby="headingTwo"
-                                 aria-expanded="false" style="height: 0px;">
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group" style="padding-top: 20px;">
-                                                <div class="dropdown">
-                                                    <input type="text" class="form-control border-bottom-input"
-                                                           placeholder="Employee Id" ng-model="searchEmployeeId" tabindex="1" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group" style="padding-top: 20px;">
-                                                <div class="dropdown">
-                                                    <input type="text" class="form-control border-bottom-input"
-                                                           placeholder="Employee Name" ng-model="searchEmployeeName" tabindex="2" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
+
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-simple"
-                            data-dismiss="modal" tabindex="3">Cancel</button>
-                    <button type="submit" class="btn btn-success btn-simple"
-                            >Apply Filter</button>
+                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter1()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>
         </div>
     </div>
 </div>
-<!-- -->
+<!--  End Modal -->
+
+<!-- AdvancedFilterModal -->
+<div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="searchForm"   novalidate >
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Advanced Filter</h4>
+                </div>
+                <div class="modal-body">
+
+
+                    <div class="row">
+
+                        <div class="col-md-4">
+                            <div class="form-group" style="padding-top: 20px;" >
+                            <div class="dropdown">
+                                <input type="text"
+                                       class="form-control border-bottom-input"
+                                       placeholder="Employee Id"
+                                       ng-model="searchEmployeeId"
+                                />
+
+                            </div>
+                        </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group" style="padding-top: 20px;" >
+                                <div class="dropdown">
+                                    <input type="text"
+                                           class="form-control border-bottom-input"
+                                           placeholder="Employee Name"
+                                           ng-model="searchEmployeeName"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--  End Modal -->

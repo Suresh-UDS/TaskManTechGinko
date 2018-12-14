@@ -2173,4 +2173,28 @@ public class AssetManagementService extends AbstractService {
         result.setTransactions(transactions);
         return;
     }
+
+	public List<JobDTO> getAssetMaterials(SearchCriteria searchCriteria) {
+       List<Job> allJobsList = new ArrayList<Job>();
+       List<JobDTO> transactions = null;
+       if(searchCriteria.getAssetId() > 0 && searchCriteria.getSiteId() > 0) {
+    	   if(transactions == null) {
+               transactions = new ArrayList<JobDTO>();
+           }
+       		allJobsList = jobRepository.findMaterialsByAssetId(searchCriteria.getSiteId(), searchCriteria.getAssetId());
+       		if(CollectionUtils.isNotEmpty(allJobsList)) {
+       			for(Job allJob : allJobsList) { 
+           			if(allJob.getJobMaterials().size() > 0) {
+           				transactions.add(mapperUtil.toModel(allJob, JobDTO.class));
+           			}
+           		}
+       		}
+       		
+       }
+       
+       return transactions;
+
+	}
+	
+	  
 }

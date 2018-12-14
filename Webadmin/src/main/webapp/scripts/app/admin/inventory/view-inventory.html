@@ -1,159 +1,238 @@
-<div class="crud-form" ng-init="initLoad();loadingStart();">
+<div class="crud-form" ng-init="viewInventory();loadingStart();loadingStop();">
 
 
     <div class="margn-top30">
 
-        <div class="row">
+        <div class="TabsCon">
 
-            <div class="col-md-6 " >
+            <div class="panel panel-default TabsContainer assetsTabs">
+                <!--<div class="panel-heading">Panel Heading</div>-->
+                <div class="panel-body">
 
-                <div class="panel panel-default">
-                    <div class="panel-heading">Location </div>
-                    <div class="panel-body">
-                        <div class="table-responsive">
-                            <table class="table">
+                    <ul class="nav nav-pills nav-pills-warning">
+                        <li class="active">
+                            <a href=".Inventory" data-toggle="tab" > Material Details</a>
+                        </li>
+                        <li>
+                            <a href=".Transaction" data-toggle="tab" ng-click="loadSubModule(loadMaterialTrans)" > Transaction Details</a>
+                        </li>
+                    </ul>
 
-                                <tbody>
-                                    <tr>
-                                        <td>Client</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Site</td>
-                                        <td></td>
+                    <div class="tab-content TabsContent" style="">
 
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="tab-pane fade in active Inventory" id="Inventory">
+
+                            <div class="row">
+
+                                <div class="col-md-6">
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">Location </div>
+                                        <div class="panel-body">
+                                            <div class="table-responsive">
+                                                <table class="table">
+
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>Client</td>
+                                                        <td>{{inventoryViews.projectName}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Site</td>
+                                                        <td>{{inventoryViews.siteName}}</td>
+
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="col-md-6">
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">Inventory Details</div>
+                                        <div class="panel-body">
+
+
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>Name </td>
+                                                        <td>{{inventoryViews.name}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Item Group</td>
+                                                        <td>{{inventoryViews.itemGroup}}</td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Item Code </td>
+                                                        <td>{{inventoryViews.itemCode}}</td>
+
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>Description  </td>
+                                                        <td>{{inventoryViews.description}}</td>
+
+                                                    </tr>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="col-md-6">
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">Stock Information </div>
+                                        <div class="panel-body">
+
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>UOM </td>
+                                                        <td>{{inventoryViews.uom}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Min Stock</td>
+                                                        <td>{{inventoryViews.minimumStock}}</td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Max Stock</td>
+                                                        <td>{{inventoryViews.maximumStock}}</td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Store Stock</td>
+                                                        <td>{{inventoryViews.storeStock}}</td>
+
+                                                    </tr>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="col-md-6">
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">Manufacturer Details </div>
+                                        <div class="panel-body">
+
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <tbody>
+
+                                                    <tr>
+                                                        <td>Manufacturer name</td>
+                                                        <td>{{inventoryViews.manufacturerName}}</td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Cutoff date</td>
+                                                        <td>03/03/2018</td>
+
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+
                         </div>
-                    </div>
-                </div>
+                        <div class="tab-pane fade Transaction" id="Transaction">
+
+                            <div class="row">
+
+                                 <div class="col-md-8 col-md-offset-2">
+                                     <div class="panel panel-default">
+                                         <!--<div class="panel-heading">Transaction Details </div>-->
+                                         <div class="panel-body">
+
+                                             <div class="table-responsive tablecard">
+                                                 <table class="table table-striped">
+                                                     <thead>
+                                                     <tr>
+                                                         <th width="30%"> Transaction Type</th>
+                                                         <th>Store Stock</th>
+                                                         <th>Qty</th>
+                                                         <th>Date</th>
+                                                         <th class="text-right">Actions</th>
+                                                     </tr>
+                                                     </thead>
+                                                     <tbody>
+                                                     <tr ng-repeat="materialTransaction in materialTransactions">
+                                                         <td>{{materialTransaction.transactionType}}</td>
+                                                         <td>{{materialTransaction.storeStock}}</td>
+                                                         <td>{{materialTransaction.issuedQuantity}}</td>
+                                                         <td>{{materialTransaction.transactionDate | date: "dd-MM-yyyy" }}</td>
+                                                         <td class="text-right">
+                                                             <a title="Delete" ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">delete</i></a>
+                                                         </td>
+                                                     </tr>
+                                                       <tr ng-show="!materialTransactions">
+                                                       	<td colspan="5" align="center">No Transactions Found</td>
+                                                       </tr>
+                                                     </tbody>
+                                                 </table>
+
+                                             </div>
+
+                                         </div>
+                                     </div>
+                                 </div>
+
+                            </div>
 
 
-            </div>
-            <div class="col-md-6">
 
-                <div class="panel panel-default">
-                    <div class="panel-heading">Inventory Details</div>
-                    <div class="panel-body">
-
-
-                        <div class="table-responsive">
-                            <table class="table">
-                                <tbody>
-                                <tr>
-                                    <td>Name </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>Item Group</td>
-                                    <td></td>
-
-                                </tr>
-                                <tr>
-                                    <td>Item </td>
-                                    <td>
-
-                                    </td>
-
-                                </tr>
-                                <tr>
-
-                                    <td>Description  </td>
-                                    <td>
-
-                                    </td>
-
-                                </tr>
-
-                                </tbody>
-                            </table>
                         </div>
 
                     </div>
-                </div>
 
 
-            </div>
-            <div class="col-md-6">
 
-                <div class="panel panel-default">
-                    <div class="panel-heading">Stock Information </div>
-                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12 txt-align-rgt">
+                                <div class="form-group">
 
-                        <div class="table-responsive">
-                            <table class="table">
-                                <tbody>
-                                <tr>
-                                    <td>UOM </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>Min Stock</td>
-                                    <td></td>
+                                    <button class="btn" type="button"
+                                            ui-sref="inventory-list" id="cancel-button">
+                                        Back
+                                    </button>
 
-                                </tr>
-                                <tr>
-                                    <td>Max Stock</td>
-                                    <td>
-
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>Store Stock</td>
-                                    <td>
-
-                                    </td>
-
-                                </tr>
-
-                                </tbody>
-                            </table>
+                                </div>
+                            </div>
                         </div>
 
-                    </div>
+
                 </div>
-
-
             </div>
-            <div class="col-md-6">
-
-                <div class="panel panel-default">
-                    <div class="panel-heading">Manufacturer Details </div>
-                    <div class="panel-body">
-
-                        <div class="table-responsive">
-                            <table class="table">
-                                <tbody>
-
-                                <tr>
-                                    <td>Manufacturer name</td>
-                                    <td>
-                                        UDS
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>Cutoff date</td>
-                                    <td>
-                                        03/03/2018
-                                    </td>
-
-                                </tr>
-
-
-                                </tbody>
-                            </table>
-                        </div>
-
-                    </div>
-                </div>
-
-
-            </div>
-
         </div>
+
+
 
 
     </div>

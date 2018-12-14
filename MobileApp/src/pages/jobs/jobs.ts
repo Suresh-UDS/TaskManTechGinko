@@ -30,6 +30,7 @@ export class JobsPage {
     ref=false;
     count=0;
     userType:any;
+    spinner:boolean;
 
     page:1;
     totalPages:0;
@@ -157,16 +158,19 @@ export class JobsPage {
             };
             msg='Unable to fetch today\'s jobs ';
         }
-        this.component.showLoader('Getting Today\'s Jobs');
+        // this.component.showLoader('Getting Today\'s Jobs');
+        this.spinner=true;
         this.jobService.getJobs(searchCriteria).subscribe(response=>{
+            this.spinner=false;
             console.log("Todays jobs of current user");
             console.log(response);
-            this.todaysJobs = response.transactions;
+                this.todaysJobs = response.transactions;
                 this.todaysPage= response.currPage;
                 this.todaysTotalPages = response.totalPages;
-            this.component.closeLoader();
+            // this.component.closeLoader();
         },err=>{
-            this.component.closeLoader();
+            this.spinner=false;
+            // this.component.closeLoader();
             this.component.showToastMessage('Unable to fetch todays jobs','bottom');
         }
         )
@@ -439,8 +443,8 @@ export class JobsPage {
     }
 
     scanQR(){
-        this.navCtrl.push(ScanQR);
-    }
 
+      this.navCtrl.push(ScanQR);
+    }
 
 }

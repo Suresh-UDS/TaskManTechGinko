@@ -242,6 +242,7 @@ export class EmployeeList {
                 console.log("if condition verified");
 
                 if(response.latitude && response.longitude>0){
+                    this.locationProvider.stopTracking();
                     this.attendanceService.checkSiteProximity(siteId,response.latitude,response.longitude).subscribe(
                         response=> {
                             this.component.closeAll();

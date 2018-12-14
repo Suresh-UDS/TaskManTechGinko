@@ -148,7 +148,7 @@ export class QuotationService {
             response=>{
                 console.log("Approve quotation");
                 console.log(response);
-                return response.json();
+                return response;
             }).catch(error=>{
                 console.log("Error in approve quotation");
                 console.log(error);
@@ -183,5 +183,5 @@ export class QuotationService {
     }
 
 
-
+st
 }

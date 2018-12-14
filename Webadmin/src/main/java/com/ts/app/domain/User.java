@@ -95,7 +95,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
 	@Column(name = "admin_flag", length = 1)
 	private String adminFlag;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne()
 	@JoinColumn(name = "employeeId", nullable = true)
 	private Employee employee;
 	

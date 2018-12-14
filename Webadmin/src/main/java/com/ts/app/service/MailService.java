@@ -703,5 +703,17 @@ public class MailService {
     
 	}
 
+	public void sendPurchaseRequest(String email, String code, String siteName, String name) {
+		// TODO Auto-generated method stub
+		Locale locale = Locale.forLanguageTag("en-US");
+		Context context = new Context(locale);
+		context.setVariable("itemCode", code);
+		context.setVariable("siteName", siteName);
+		context.setVariable("item", name);
+		String content = templateEngine.process("purchaseRequisitionAlert", context);
+		String subject = messageSource.getMessage("email.purchaseReqAlert.title", null, locale);
+		sendEmail(email, subject, content, true, true, null);
+	}
+
 	
 }

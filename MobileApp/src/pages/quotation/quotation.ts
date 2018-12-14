@@ -17,6 +17,8 @@ declare var demo;
   templateUrl: 'quotation.html'
 })
 export class QuotationPage {
+  siteActive: boolean;
+  index: any;
 
     quotations:any;
     approvedQuotations:any;
@@ -38,6 +40,14 @@ export class QuotationPage {
     sites:any;
     page:1;
     pageSort:15;
+  projectActive: any;
+  projectindex: any;
+  chooseClient = true;
+  siteSpinner = false;
+  showSites = false;
+  empSpinner=false;
+  chooseSite=true;
+  showEmployees=false;
 
   constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService,
               private quotationService: QuotationService,public events:Events,public siteService:SiteService) {
@@ -87,6 +97,14 @@ export class QuotationPage {
   }
 
   getQuotations(){
+    this.draftedQuotationsCount= 0;
+    this.approvedQuotationsCount=0;
+    this.submittedQuotationsCount=0;
+    this.archivedQuotationsCount=0;
+    this.draftedQuotations=[];
+    this.approvedQuotations=[];
+    this.submittedQuotations=[];
+    this.archivedQuotations=[];
       var searchCriteria={
          currPage:this.page,
           pageSort:this.pageSort
@@ -106,17 +124,23 @@ export class QuotationPage {
                       if(this.quotations[i].status=="pending"){
                           console.log("drafted");
                           console.log(this.quotations[i].status)
+                          this.draftedQuotationsCount =0;
                           this.draftedQuotationsCount++;
+                          this.draftedQuotations = [];
                           this.draftedQuotations.push(this.quotations[i]);
                       }else if(this.quotations[i].status == "approved" || this.quotations[i].status == "rejected"){
                           console.log("approved");
                           console.log(this.quotations[i].isApproved)
+                          this.approvedQuotations = [];
                           this.approvedQuotations.push(this.quotations[i]);
+                          this.approvedQuotationsCount = 0;
                           this.approvedQuotationsCount++;
                       }else if(this.quotations[i].status == "Waiting for approval"){
                           console.log("submitted");
                           console.log(this.quotations[i].status)
+                          this.submittedQuotations = [];
                           this.submittedQuotations.push(this.quotations[i]);
+                          this.submittedQuotationsCount = 0;
                           this.submittedQuotationsCount++;
                       }else{
                           console.log("all false");
@@ -166,19 +190,29 @@ export class QuotationPage {
               }else{
                   this.allProjects = response;
                   this.selectedProject = response[0];
-                  this.getSites(this.selectedProject.id[0]);
+                  // this.getSites(this.selectedProject.id[0]);
               }
 
           }
       )
   }
 
-  getSites(projectId){
-      this.siteService.findSites(projectId).subscribe(
+  getSites(projectId,i){
+    this.projectActive = true;
+    this.projectindex = i;
+    this.siteSpinner=true;
+    this.chooseClient = false;
+    this.showSites = false;
+
+    this.siteService.findSites(projectId).subscribe(
           response=>{
               if(response.errorStatus){
                   demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
               }else{
+                this.siteSpinner=false;
+                this.showSites = true;
+                this.showEmployees=false;
+                this.chooseSite = true;
                   console.log(response);
                   this.sites = response;
                   this.selectedSite = response[1];
@@ -188,7 +222,19 @@ export class QuotationPage {
       )
   }
 
-  searchQuotations(siteId){
+  searchQuotations(siteId,i){
+    this.draftedQuotationsCount= 0;
+    this.approvedQuotationsCount=0;
+    this.submittedQuotationsCount=0;
+    this.archivedQuotationsCount=0;
+    this.draftedQuotations=[];
+    this.approvedQuotations=[];
+    this.submittedQuotations=[];
+    this.archivedQuotations=[];
+    this.index = i;
+    this.projectActive = true;
+    this.siteActive = true;
+    console.log("siteId",siteId);
       this.quotationService.searchQuotations({siteId:siteId}).subscribe(
           response=>{
               if(response.errorStatus){

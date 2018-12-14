@@ -82,21 +82,70 @@
 
 
 <ion-header>
-    <ion-toolbar>
+    <ion-navbar>
         <ion-title text-center>Asset Filter</ion-title>
         <ion-buttons right="">
             <button ion-button color="fnt-black" icon-only (click)="dismiss()" class="padding-right10">
                 <ion-icon ios="ios-close" md="md-close" class="fnt-24"></ion-icon>
             </button>
         </ion-buttons>
-    </ion-toolbar>
+    </ion-navbar>
 </ion-header>
 
 <ion-content class="bg-white">
     <!--<div class="bg-orange">-->
         <!--<h5 text-center="" class="clr-white" no-margin="">Asset Filter</h5>-->
     <!--</div>-->
-    <div class="InitFeedbackCon">
+
+  <div class="card scroll-card">
+    <div class="card-content">
+      <ion-row>
+
+            <ion-col col-12>
+              <p text-center>Choose Client</p>
+              <div class="SitesScrollCon">
+                <ion-scroll scrollX="true">
+                  <button effect="fade" class="scroll-item" ion-button round *ngFor="let p of clientList; let i of index" (click)="selectSite(p,i)" [color]="projectActive && i==projectindex ? 'primary':'light'">
+                    <p class="siteName">{{p.name}}</p>
+                  </button>
+                </ion-scroll>
+              </div>
+            </ion-col>
+      </ion-row>
+    </div>
+  </div>
+
+        <div class="card scroll-card">
+          <div class="card-content">
+            <ion-row>
+
+            <ion-col col-12>
+
+              <p text-center>Choose Site</p>
+
+              <div padding text-center *ngIf="siteSpinner">
+                <span><ion-spinner name="bubbles"></ion-spinner> <br> Loading...</span>
+              </div>
+
+              <div padding text-center *ngIf="chooseClient">
+                <strong>Please Select Client</strong>
+              </div>
+
+              <div class="SitesScrollCon" *ngIf="showSites">
+                <ion-scroll scrollX="true">
+                  <button class="scroll-item" ion-button round  *ngFor="let site of siteList;let i of index" (click)="highLightSite(i,site)" [color]="siteActive && i==index ? 'primary' : 'light'">
+                    <p class="siteName">{{site.name}}</p>
+                  </button>
+                </ion-scroll>
+              </div>
+
+            </ion-col>
+            </ion-row>
+          </div>
+        </div>
+
+
+    <!--<div class="InitFeedbackCon">
         <div class="InputCon">
 
                 <ion-item>
@@ -123,32 +172,47 @@
                             </ion-row>
                         </div>
                     </div>
+                </div>-->
+
+              <div class="card scroll-card">
+                <div class="card-content">
+                  <ion-row>
+
+                    <ion-col col-12>
+                        <div padding="" class="height30">
+                            <ion-list >
+                              <p text-center>Asset Type</p>
+                                <!--<h5 class="clr-orange" text-center>Asset Type</h5>-->
+                                <!--<ion-scroll scrollY="true" style="width: 100%; height: 100%;">-->
+                                    <ion-item *ngFor="let type of assetType;let i = index" class="check-style">
+                                        <ion-label>{{ type.name }}</ion-label>
+                                        <ion-checkbox [(ngModel)]="type.selected"  class="margin-right0" value="type.name" (ionChange)="typeChange(type)"></ion-checkbox>
+                                    </ion-item>
+                            </ion-list>
+                        </div>
+                    </ion-col>
+                  </ion-row>
                 </div>
+              </div>
 
-
-                <div padding="" class="height30">
-                    <ion-list >
-                        <h5 class="clr-orange" text-center>Asset Type</h5>
-                        <!--<ion-scroll scrollY="true" style="width: 100%; height: 100%;">-->
-                            <ion-item *ngFor="let type of assetType;let i = index" class="check-style">
-                                <ion-label>{{ type.name }}</ion-label>
-                                <ion-checkbox [(ngModel)]="type.selected"  class="margin-right0" value="type.name" (ionChange)="typeChange(type)"></ion-checkbox>
+              <div class="card scroll-card">
+                <div class="card-content">
+                  <ion-row>
+                    <ion-col col-12>
+                    <div margin-top  padding>
+                        <ion-list>
+                          <p text-center>Asset Group</p>
+                            <!--<h5 class="clr-orange" text-center>Asset Group</h5>-->
+                            <ion-item *ngFor=" let group of assetGroup;let j = index " class="check-style">
+                                <ion-label>{{ group.assetgroup }}</ion-label>
+                                <ion-checkbox [(ngModel)]="group.selected" class="margin-right0" value="group.assetgroup" (ionChange)=" groupChange(group)"></ion-checkbox>
                             </ion-item>
-                    </ion-list>
-                </div>
-
-                <div margin-top  padding>
-                    <ion-list>
-                        <h5 class="clr-orange" text-center>Asset Group</h5>
-                        <ion-item *ngFor=" let group of assetGroup;let j = index " class="check-style">
-                            <ion-label>{{ group.assetgroup }}</ion-label>
-                            <ion-checkbox [(ngModel)]="group.selected" class="margin-right0" value="group.assetgroup" (ionChange)=" groupChange(group)"></ion-checkbox>
-                        </ion-item>
-                    </ion-list>
-                </div>
-
-        </div>
-    </div>
+                        </ion-list>
+                    </div>
+                </ion-col>
+              </ion-row>
+            </div>
+          </div>
 </ion-content>
 <ion-footer>
     <ion-toolbar class="align-center">

@@ -47,18 +47,20 @@ var _ = require('underscore');
             quotation.createdDate = date;
         }else{
             quotation.isDrafted = false;
-	    quotation.createdDate = date;
+            quotation.createdDate = date;
+
         }
 
         if(req.body.isSubmitted){
             quotation.isSubmitted = true;
+            quotation.createdDate = date;
             quotation.submittedDate = date;
-	    quotation.createdDate = date;
             quotation.processHistory.isSubmitted = date;
             quotation.status = 'Waiting for approval';
         }else{
             quotation.isSubmitted = false;
             quotation.createdDate = date;
+
         }
 
         if(req.body.isApproved){
@@ -589,7 +591,7 @@ module.exports = {
 
           })
       }else if(req.body.siteIds) {
-          Quotation.find({siteId:{$in:req.body.siteIds}}).sort({'createdDate':-1}).exec(function(err,quotations){
+          Quotation.find({siteId:{$in:req.body.siteIds}},function(err,quotations){
 
               if(err){
                   console.log("Error in finding quotations");
@@ -704,142 +706,8 @@ module.exports = {
                 }
             }
         })
-    },
-
-    getSummary: function(req, res, next) {
-        var quotationSummary = {};
-        console.log(new Date(req.body.createdDate))
-        Quotation.find({siteId: { $in:req.body.siteIds }, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }}).exec(function(err, result){ 
-            console.log(result);
-            console.log(err);
-            if(result && result.length > 0) {
-                quotationSummary.totalCount = result.length;
-            }else{
-                quotationSummary.totalCount = 0;
-            }
-            Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isDrafted: true}).exec(function(err, result){ 
-                if(result && result.length > 0) {
-                    quotationSummary.totalPending = result.length;
-                }else{
-                    quotationSummary.totalPending = 0;
-                }
-                Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isApproved: true}).exec(function(err, result){ 
-                    if(result && result.length > 0) {
-                        quotationSummary.totalApproved = result.length;
-                    }else{
-                        quotationSummary.totalApproved = 0;
-                    }
-                    Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isSubmitted: true}).exec(function(err, result){ 
-                        if(result && result.length > 0) {
-                            quotationSummary.totalSubmitted = result.length;
-                        }else{
-                            quotationSummary.totalSubmitted = 0;
-                        }
-                        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isArchived: true}).exec(function(err, result){ 
-                            if(result && result.length > 0) {
-                                quotationSummary.totalArchived = result.length;
-                            }else{
-                                quotationSummary.totalArchived = 0;
-                            }
-
-                            res.send(200, quotationSummary);
-                        });
-                    });
-                });
-            });
-        });
+    }
 
 
-    },
-
-    /*newSearchQuotation: function(req,res,next){
-      if(req.body.siteId && req.body.siteId>0 && req.body.title && req.body.status && req.body.createdBy && req.body.approvedBy && req.body.createdDate){
-
-      }else if(req.body.siteId && req.body.siteId>0 && req.body.title && req.body.status && req.body.createdBy && req.body.approvedBy){
-
-      }else if(req.body.siteId && req.body.siteId>0 && req.body.title && req.body.status && req.body.createdDate && req.body.approvedBy){
-
-      }else if(req.body.siteId && req.body.siteId>0 && req.body.title && req.body.status && req.body.created){
-
-      }
-    }*/
-
-    newSearchQuotation: function(req,res,next){
-
-        console.log("Search criteria");
-        console.log(req.body);
-
-        var quotCriterias = {};
-
-      if(req.body.siteId && req.body.siteId>0){
-        quotCriterias.siteId=req.body.siteId;
-      }
-      if(req.body.title){
-        quotCriterias.title={$regex:'^'+req.body.title,$options:"si"};
-      }
-      if(req.body.status){
-        //quotCriterias.status={$regex:'^'+req.body.status,$options:"si"};
-      }
-      if(req.body.createdBy){
-        quotCriterias.createdByUserName={$regex:'^'+req.body.createdBy,$options:"si"};
-      }
-      if(req.body.approvedBy){
-        quotCriterias.approvedByUserName={$regex:'^'+req.body.approvedBy,$options:"si"};
-      }
-      if(req.body.isSubmitted){
-        quotCriterias.isSubmitted=req.body.isSubmitted;
-      }
-      if(req.body.isArchived){
-        quotCriterias.isArchived=req.body.isArchived;
-      }
-      if(req.body.isRejected){
-        quotCriterias.isRejected=req.body.isRejected;
-      }
-      if(req.body.isDrafted){
-        quotCriterias.isDrafted=req.body.isDrafted;
-      }
-      if(req.body.isApproved){
-        quotCriterias.isApproved=req.body.isApproved;
-      }
-      if(req.body.createdDate){
-          var startDate = new Date(req.body.createdDate);
-          startDate.setHours(0,0,0);
-          quotCriterias.lastModifiedDate = { $gt: startDate, $lt: endDate };
-            if(req.body.toDate){
-                var endDate = new Date(req.body.toDate);
-                endDate.setHours(23,59,59);
-                quotCriterias.lastModifiedDate = { $gt: startDate, $lt: endDate };
-            }else{
-                var endDate = new Date();
-                endDate.setHours(23,59,59);
-                quotCriterias.lastModifiedDate = { $gt: startDate, $lt: endDate };
-            }
-       }
-   
-      console.log("currPage",req.body.currPage-1 +"sort"+ req.body.sort);
-      var quotQuery = Quotation.find(quotCriterias).sort({'createdDate':-1}).skip((req.body.currPage-1)*10).limit(req.body.sort);
-      //var quotQueryCount = Quotation.find(quotCriterias).count();
-      //var quotQueryCountVal = 0; 
-      console.log("Search criteria",quotCriterias);
-      quotQuery.exec(function(err,quotations){
-          if(err){
-              //console.log("Error in finding quotations");
-              res.send(400,"No quotation found");
-          }else{
-              /*quotQueryCount.exec(function(err,quotationsCount){
-                  if(err){
-                    quotQueryCountVal = 0;
-                  }else{
-                     quotQueryCountVal = quotationsCount;
-                  }
-                });     
-                //console.log("result",quotations);
-             quotations.totalCount = quotQueryCountVal;*/
-             res.send(200,quotations); 
-          }
-          
-    });     
-
-   }
+    
 };
-

@@ -14,12 +14,13 @@
 </ion-header>
 
 <ion-content>
-    <ion-list class="emp-list" *ngIf="siteList">
-        <ion-item *ngFor="let site of siteList;let i of index" class="bottom-border emp">
-            <ion-icon name="podium" item-start class="icon-color"></ion-icon>
-            <p (click)="gotoEmployeeList(site)" text-left class="fnt-wt" text-capitalize>{{site.name}}</p>
-        </ion-item>
-    </ion-list>
+  <ion-list class="emp-list" *ngIf="siteList">
+    <ion-item *ngFor="let site of siteList;let i of index" class="border-btm-dotted emp">
+        <ion-icon name="ios-podium-outline" item-start class="icon-color CircleIcon"></ion-icon>
+      <p (click)="gotoEmployeeList(site)" text-left class="fnt-wt" text-capitalize>{{site.name}}</p>
+        <ion-icon class="grey" item-end name="ios-arrow-forward-outline"></ion-icon>
+    </ion-item>
+  </ion-list>
 
     <ion-list *ngIf="!siteList && isLoading">
         <ion-item *ngFor="let fake of fakeSiteList" class="fakeList">
@@ -35,7 +36,7 @@
         </ion-card-content>
     </ion-card>
 
-    <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="doInfinite($event)">
-        <ion-infinite-scroll-content></ion-infinite-scroll-content>
-    </ion-infinite-scroll>
+  <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
