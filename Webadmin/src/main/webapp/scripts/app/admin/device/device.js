@@ -4,7 +4,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	$stateProvider.state('add-device', {
 		parent : 'admin',
 		url : '/add-device',
-		controller : 'DeviceController',
+		//controller : 'DeviceController',
 		data : {
 			authorities : [],
 			pageTitle : 'Add Device'
@@ -21,7 +21,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	}).state('edit-device', {
 		parent : 'admin',
 		url : '/edit-device:id',
-		controller : 'DeviceController',
+		//controller : 'DeviceController',
 		data : {
 			authorities : [],
 			pageTitle : 'Edit Device'
@@ -38,7 +38,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	}).state('view-device', {
 		parent : 'admin',
 		url : '/view-device:id',
-		controller : 'DeviceController',
+		//controller : 'DeviceController',
 		data : {
 			authorities : [],
 			pageTitle : 'View Device'

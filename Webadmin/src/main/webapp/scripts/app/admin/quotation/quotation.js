@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
             .state('add-quotation', {
                 parent: 'manage',
                 url: '/add-quotation/:ticketId',
-                controller: 'QuotationController',
+                //controller: 'QuotationController',
                 data: {
                     authorities: [],
                     pageTitle: 'Add Quotation'
@@ -24,7 +24,7 @@ angular.module('timeSheetApp')
             .state('edit-quotation', {
                 parent: 'manage',
                 url: '/edit-quotation/:id',
-                controller: 'QuotationController',
+                //controller: 'QuotationController',
                 data: {
                     authorities: [],
                     pageTitle: 'Edit Quotation'
@@ -42,7 +42,7 @@ angular.module('timeSheetApp')
             }).state('view-quotation', {
             parent: 'manage',
             url: '/view-quotation/:id',
-            controller: 'QuotationController',
+            //controller: 'QuotationController',
             data: {
                 authorities: [],
                 pageTitle: 'View Quotation'
@@ -61,22 +61,22 @@ angular.module('timeSheetApp')
 
             }
         }).state('quotation-list', {
-                          parent: 'manage',
-                          url: '/quotation-list',
-                          controller: 'QuotationController',
-                          data: {
-                              authorities: [],
-                              pageTitle: 'Quotation'
-                          },
-                          views: {
-                              'content@': {
-                                  templateUrl: 'scripts/app/admin/quotation/quotation-list.html',
-                                  controller: 'QuotationController'
-                              }
-                          },
-                          resolve: {
-
-
-                          }
-                      });
+	          parent: 'manage',
+	          url: '/quotation-list',
+	          //controller: 'QuotationController',
+	          data: {
+	              authorities: [],
+	              pageTitle: 'Quotation'
+	          },
+	          views: {
+	              'content@': {
+	                  templateUrl: 'scripts/app/admin/quotation/quotation-list.html',
+	                  controller: 'QuotationController'
+	              }
+	          },
+	          resolve: {
+	
+	
+	          }
+	      });
     });

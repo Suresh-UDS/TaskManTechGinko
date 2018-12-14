@@ -1565,6 +1565,7 @@ angular.module('timeSheetApp')
         $scope.noRelData = false;
         $scope.getRelieversDetails = function(employee){
         var searchCriteria = {employeeId:employee};
+        $scope.relieversList = "";
           EmployeeComponent.getRelievers(searchCriteria).then(function(response){
 
               //console.log("Response from relievers List");
@@ -1649,8 +1650,8 @@ angular.module('timeSheetApp')
 
         }
 
-        $scope.isActiveAsc = 'empId';
-        $scope.isActiveDesc = '';
+        $scope.isActiveAsc = '';
+        $scope.isActiveDesc = 'id';
 
         $scope.columnAscOrder = function(field){
             $scope.selectedColumn = field;
@@ -1841,7 +1842,7 @@ angular.module('timeSheetApp')
 	            }
 	            else{
 	                $scope.searchCriteria.columnName ="id";
-	                $scope.searchCriteria.sortByAsc = true;
+	                $scope.searchCriteria.sortByAsc = false;
 	            }
 
 
@@ -2147,7 +2148,7 @@ angular.module('timeSheetApp')
 	            }
 	            else{
 	                $scope.searchCriteria.columnName ="id";
-	                $scope.searchCriteria.sortByAsc = true;
+	                $scope.searchCriteria.sortByAsc = false;
 	            }
               //console.log("search criteria",$scope.searchCriteria);
 
@@ -2623,6 +2624,11 @@ angular.module('timeSheetApp')
 
         $scope.reqEmp = true;
         $scope.reqOth = false;
+        $scope.relieverOthName = null;
+        $scope.relieverOthMobile = null;
+        $scope.selectedReliever = {};
+        $scope.selectedReliever.id = null;
+        $scope.selectedReliever.empId = null;
 
         $scope.rType = function(){
 
@@ -2635,8 +2641,8 @@ angular.module('timeSheetApp')
                 $("#relieverOthModal").removeClass("in", 2000);
                 $scope.reqEmp = true;
                 $scope.reqOth = false;
-                $scope.relieverOthName = null;
-                $scope.relieverOthMobile = null;
+                //$scope.relieverOthName = null;
+                //$scope.relieverOthMobile = null;
 
             }else if(relieverType2 == 'Other'){
 
@@ -2644,9 +2650,9 @@ angular.module('timeSheetApp')
                 $("#relieverOthModal").addClass("in");
                 $scope.reqEmp = false;
                 $scope.reqOth = true;
-                $scope.selectedReliever = {};
-                $scope.selectedReliever.id = null;
-                $scope.selectedReliever.empId = null;
+                //$scope.selectedReliever = {};
+                //$scope.selectedReliever.id = null;
+                //$scope.selectedReliever.empId = null;
 
             }
 

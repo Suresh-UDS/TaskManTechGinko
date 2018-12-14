@@ -142,6 +142,7 @@ export class JobsPage {
                 floor:this.scannedFloor,
                 zone:this.scannedZone,
                 currPage:1,
+                jobTypeName:"MAINTENANCE",
                 columnName:"plannedStartTime",
                 sortByAsc:true,
                 sort:10

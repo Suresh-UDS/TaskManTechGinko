@@ -162,8 +162,8 @@ angular.module('timeSheetApp')
         		$scope.search();
         };
 
-        $scope.isActiveAsc = 'name';
-        $scope.isActiveDesc = '';
+        $scope.isActiveAsc = '';
+        $scope.isActiveDesc = 'id';
 
         $scope.columnAscOrder = function(field){
             $scope.selectedColumn = field;
@@ -231,8 +231,8 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
               //console.log('>>> $scope.searchCriteria.sortByAsc <<< '+$scope.searchCriteria.sortByAsc);
             }else{
-                $scope.searchCriteria.columnName ="name";
-                $scope.searchCriteria.sortByAsc = true;
+                $scope.searchCriteria.columnName ="id";
+                $scope.searchCriteria.sortByAsc = false;
             }
 
           //console.log("search criteria",$scope.searchCriteria);

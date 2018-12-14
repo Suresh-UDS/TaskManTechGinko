@@ -1,4 +1,4 @@
-<div class="gc-container" ng-init="init()">
+<div class="gc-container" ng-init="init();loadDepSitesList();">
 	<div class="success-message hidden"></div>
 
 
@@ -26,12 +26,12 @@
                 <div class="ripple-container"></div>
             </button>
 
-            <button class="btn btn-info add-btn margn-tb0" ng-click="load52WeekSchedule()" tabindex="0">
+            <button class="btn btn-info add-btn margn-tb0" ng-click="load52WeekSchedule()"  tabindex="0">
                 <i class="material-icons">assignment</i> 52 Week Schedule
                 <div class="ripple-container"></div>
             </button>
             <!-- ui-sref="qr-code-list" -->
-            <button class="btn btn-info add-btn margn-tb0"  ui-sref="qr-code-list({qrStatus : qrAll, ids: checkboxSel , siteId:assetQrSiteVal })" tabindex="0">
+            <button class="btn btn-info add-btn margn-tb0"   ui-sref="qr-code-list({qrStatus : qrAll, ids: checkboxSel , siteId:assetQrSiteVal })" tabindex="0">
                 <i class="material-icons">dashboard</i> Print Asset Code
                 <div class="ripple-container"></div>
             </button>
@@ -153,9 +153,9 @@
 
                             <tr>
                                 <th>
-                                    <div class="checkbox form-horizontal-checkbox">
+                                    <div class="checkbox form-horizontal-checkbox"> 
                                         <label>
-                                            <input type="checkbox" name="optionsCheckboxes" ng-model="allItemsSelected" ng-click="mulSel();"   data-target="#myModal">
+                                            <input type="checkbox" name="optionsCheckboxes" ng-model="allItemsSelected" ng-click="mulSel();"    data-target="#myModal">
                                         </label>
                                     </div>
                                 </th>
@@ -727,14 +727,14 @@
             </div>
             <div class="modal-body">
 
-                <form name="assetQrSiteFrom" >
+                <form name="assetQrSiteFrom"  >
                     <div class="row">
                         <div class="col-md-12 txt-align-center">
                             <div class="dropdown">
                                 <div class="form-group">
                                     <!-- <label class="label-control">Site</label> -->
                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="assetQrSite"  ng-options="site as site.name for site in sites" >
+                                    <select class="form-control " ng-model="assetQrSite"  ng-options="site as site.name for site in sitesList" >
                                         <option value="">Select Site...</option>
                                     </select>
                                     <div ng-show="assetQrSiteFrom.$submitted || assetQrSiteFrom.assetQrSite.$touched">
@@ -745,7 +745,7 @@
                                             </p>
                                         </div>
                                     </div>
-                                    <input type="button" ng-click="selectAll();" data-dismiss="modal" class="btn btn-success" name="submit" value="Submit" ng-disabled="assetQrSiteFrom.$invalid">
+                                    <input type="submit"  class="btn btn-success" name="submit" value="Submit" ng-click="selectAll();" data-dismiss="modal" ng-disabled="assetQrSiteFrom.$invalid">
                                 </div>
                             </div>
                         </div>

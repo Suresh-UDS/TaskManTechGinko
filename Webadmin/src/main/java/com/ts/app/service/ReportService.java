@@ -609,6 +609,7 @@ public class ReportService extends AbstractService {
         
         long totalNewTicketCount = 0;
         long totalOpenTicketCount = 0;
+        long totalInProgressTicketCount = 0;
         long totalAssignedTicketCount = 0;
         long totalClosedTicketCount = 0;
         long totalPendingTicketCount = 0;
@@ -619,6 +620,8 @@ public class ReportService extends AbstractService {
         totalNewTicketCount = ticketRepository.findCountBySiteIdAndDateRange(siteIds, startZDate, endZDate);
         
         totalOpenTicketCount = ticketRepository.findOpenTicketsBySiteIdAndDateRange(siteIds, startZDate, endZDate);
+        
+        totalInProgressTicketCount = ticketRepository.findInProgressTicketsBySiteIdAndDateRange(siteIds, startZDate, endZDate);
 
         totalPendingTicketCount = ticketRepository.findOpenCountBySiteIdAndDateRange(siteIds, startZDate, endZDate);
         
@@ -682,10 +685,11 @@ public class ReportService extends AbstractService {
 
         ReportResult reportResult = new ReportResult();
         //reportResult.setSiteId(siteId);
-        reportResult.setTotalTicketCount(totalOpenTicketCount + totalAssignedTicketCount + totalClosedTicketCount);
+        reportResult.setTotalTicketCount(totalOpenTicketCount + totalInProgressTicketCount + totalAssignedTicketCount + totalClosedTicketCount);
         reportResult.setTotalNewTicketCount(totalNewTicketCount);
         reportResult.setTotalOpenTicketCount(totalOpenTicketCount);
-        reportResult.setTotalAssignedTicketCount(totalAssignedTicketCount);
+        reportResult.setTotalInProgressTicketCount(totalInProgressTicketCount);
+        reportResult.setTotalAssignedTicketCount(totalAssignedTicketCount + totalInProgressTicketCount);
         reportResult.setTotalPendingTicketCount(totalPendingTicketCount);
         reportResult.setTotalClosedTicketCount(totalClosedTicketCount);
         reportResult.setTotalPendingDueToClientTicketCount(totalPendingDueToClientTicketCount);
