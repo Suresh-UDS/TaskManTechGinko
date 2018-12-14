@@ -4,7 +4,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	$stateProvider.state('add-inventory-transaction', {
 		parent : 'manage',
 		url : '/add-inventory-transaction',
-		controller : 'InventoryTransactionController',
+		//controller : 'InventoryTransactionController',
 		data : {
 			authorities : [],
 			pageTitle : 'Add inventory Transaction'
@@ -21,7 +21,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	}).state('edit-inventory-transaction', {
 		parent : 'manage',
 		url : '/edit-inventory-transaction',
-		controller : 'InventoryTransactionController',
+		//controller : 'InventoryTransactionController',
 		data : {
 			authorities : [],
 			pageTitle : 'Edit inventory Transaction'
@@ -38,7 +38,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	}).state('view-inventory-transaction', {
 		parent : 'manage',
 		url : '/view-inventory-transaction',
-		controller : 'InventoryTransactionController',
+		//controller : 'InventoryTransactionController',
 		data : {
 			authorities : [],
 			pageTitle : 'View inventory Transaction'

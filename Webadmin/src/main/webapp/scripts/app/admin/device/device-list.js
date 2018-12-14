@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
             .state('devices', {
                 parent: 'admin',
                 url: '/devices',
-                controller: 'DeviceController',
+                //controller: 'DeviceController',
                 data: {
                     authorities: [],
                     pageTitle: 'Devices'

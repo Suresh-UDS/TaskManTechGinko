@@ -87,9 +87,6 @@ public class AssetResource {
 	private ServletContext servletContext;
 
 	@Inject
-	private ImportUtil importUtil;
-
-	@Inject
 	private Environment env;
 
 	// Asset
@@ -588,6 +585,9 @@ public class AssetResource {
 	public ResponseEntity<ImportResult> importAssetData(@RequestParam("assetFile") MultipartFile file){
 		Calendar cal = Calendar.getInstance();
 		ImportResult result = assetService.importFile(file, cal.getTimeInMillis());
+        if(!StringUtils.isEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+	    		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+	    }
 		return new ResponseEntity<ImportResult>(result, HttpStatus.OK);
 	}
 
@@ -618,6 +618,9 @@ public class AssetResource {
 	public ResponseEntity<ImportResult> importAssetPPMData(@RequestParam("assetPPMFile") MultipartFile file) {
 		Calendar cal = Calendar.getInstance();
 		ImportResult result = assetService.importPPMFile(file, cal.getTimeInMillis());
+        if(!StringUtils.isEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+	    		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+	    }
 		return new ResponseEntity<ImportResult>(result, HttpStatus.OK);
 	}
 
@@ -648,6 +651,9 @@ public class AssetResource {
 	public ResponseEntity<ImportResult> importAssetAMCData(@RequestParam("assetAMCFile") MultipartFile file) {
 		Calendar cal = Calendar.getInstance();
 		ImportResult result = assetService.importAMCFile(file, cal.getTimeInMillis());
+        if(!StringUtils.isEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+	    		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+	    }
 		return new ResponseEntity<ImportResult>(result, HttpStatus.OK);
 	}
 

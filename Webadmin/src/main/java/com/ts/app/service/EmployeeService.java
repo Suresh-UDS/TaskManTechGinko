@@ -1305,6 +1305,8 @@ public class    EmployeeService extends AbstractService {
 		                    			transactions.add(mapToModel(emp));
 		                    		}
                     			}
+                    		}else {
+                    			transactions.add(mapToModel(emp));
                     		}
                     }
                 }

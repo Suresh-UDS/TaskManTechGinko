@@ -286,7 +286,9 @@ export class CompleteJobPage {
                 console.log("Error in saving response");
                 console.log(err);
                 this.component.closeLoader();
-                this.component.showToastMessage('Error in saving job, please try again...','bottom');
+                // this.component.showToastMessage('Error in saving job, please try again...','bottom');
+                demo.showSwal('warning-message-and-confirmation-ok','Error in Completing Job',err.errorMessage);
+
             }
         )
     }

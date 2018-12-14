@@ -19,24 +19,25 @@ angular.module('timeSheetApp')
         $scope.selectedEmployeeShiftFile;
         //client file
         $scope.selectedClientFile;
-        $rootScope.clientImportStatus = {};
-        $rootScope.checklistImportStatus = {};
-        $rootScope.employeeShiftImportStatus = {};
-        $rootScope.siteImportStatus = {};
-        $rootScope.jobImportStatus = {};
-        $rootScope.jobImportStatusLoad = false;
-        $rootScope.empImportStatusLoad = false;
-        $rootScope.checklistImportStatusLoad = false;
-        $rootScope.clientImportStatusLoad = false;
-        $rootScope.siteImportStatusLoad = false;
-        $rootScope.employeeImportStatus = {};
-        $rootScope.employeeShiftImportStatusLoad = false;
-        $rootScope.assetImportStatus = {};
-        $rootScope.assetImportStatusLoad = false;
-        $rootScope.assetPPMImportStatus = {};
-        $rootScope.assetPPMImportStatusLoad = false;
-        $rootScope.assetAMCImportStatus = {};
-        $rootScope.assetAMCImportStatusLoad = false;
+        $scope.clientImportStatus = {};
+        $scope.checklistImportStatus = {};
+        $scope.employeeShiftImportStatus = {};
+        $scope.siteImportStatus = {};
+        $scope.jobImportStatus = {};
+        $scope.jobImportStatusLoad = false;
+        $scope.empImportStatusLoad = false;
+        $scope.checklistImportStatusLoad = false;
+        $scope.clientImportStatusLoad = false;
+        $scope.siteImportStatusLoad = false;
+        $scope.locationImportStatusLoad = false;
+        $scope.employeeImportStatus = {};
+        $scope.employeeShiftImportStatusLoad = false;
+        $scope.assetImportStatus = {};
+        $scope.assetImportStatusLoad = false;
+        $scope.assetPPMImportStatus = {};
+        $scope.assetPPMImportStatusLoad = false;
+        $scope.assetAMCImportStatus = {};
+        $scope.assetAMCImportStatusLoad = false;
         $scope.importStatus;
         $scope.importEmployeeStatus;
         $scope.pager = {};
@@ -50,8 +51,8 @@ angular.module('timeSheetApp')
         $scope.uploadJobFile = function() {
         	console.log('selected job file - ' + $scope.selectedJobFile);
         	if($scope.selectedJobFile){
-        	$rootScope.jobImportStatusLoad = true;
-        	console.log('$rootScope.jobImportStatus msg - '+$rootScope.jobImportStatus);
+        		$scope.jobImportStatusLoad = true;
+        		console.log('$rootScope.jobImportStatus msg - '+$rootScope.jobImportStatus);
 
         		JobComponent.importFile($scope.selectedJobFile).then(function(data){
         			console.log(data);
@@ -61,11 +62,22 @@ angular.module('timeSheetApp')
 	        				fileName : result.file,
 	        				importMsg : result.msg
 	        		};
-	        		$rootScope.jobImportStatus = importStatus;
-	        		$rootScope.start('job');
+	        		$scope.jobImportStatus = importStatus;
+	        		if(result.status == 'COMPLETED') {
+	        			$scope.showNotification('top','center','success','Job data imported successfuly');
+	        			$scope.jobImportStatusLoad = false;
+	        		}else if(result.status == 'PROCESSING') {
+	        			$rootScope.start('job');
+	        		}
 	         },function(err){
-	            	  console.log('Import error')
+	            	  console.log('Import error');
+	            	  if(err && err.data && err.data.msg) {
+			           	  $scope.showNotification('top','center','danger',err.data.msg);
+		           	  }else {
+		           		  $scope.showNotification('top','center','danger','Error importing Job data, Please check the data and try again');
+		           	  }
 	            	  console.log(err);
+	            	  $scope.jobImportStatusLoad = false;
 	         });
         	}else {
         		console.log('Choose a file!!!');
@@ -74,50 +86,53 @@ angular.module('timeSheetApp')
         }
 	    // Job Import Status
 	    $scope.jobImportStatus = function() {
-	        	console.log('$rootScope.jobImportStatus import controller -'+JSON.stringify($rootScope.jobImportStatus));
-	            	JobComponent.importStatus($rootScope.jobImportStatus.fileName).then(function(data) {
+	        	console.log('$scope.jobImportStatus import controller -'+JSON.stringify($scope.jobImportStatus));
+	            	JobComponent.importStatus($scope.jobImportStatus.fileName).then(function(data) {
 	            		if(data) {
 	            			
-	            			$rootScope.jobImportStatus.importStatus = data.status;
-	                		console.log('jobimportStatus - '+ $rootScope.jobImportStatus);
-	                		$rootScope.jobImportStatus.importMsg = data.msg;
-	                		console.log('jobimportMsg - '+ $rootScope.jobImportStatus.importMsg);
-	                		if($rootScope.jobImportStatus.importStatus == 'COMPLETED'){
+	            			$scope.jobImportStatus.importStatus = data.status;
+	                		console.log('jobimportStatus - '+ $scope.jobImportStatus);
+	                		$scope.jobImportStatus.importMsg = data.msg;
+	                		console.log('jobimportMsg - '+ $scope.jobImportStatus.importMsg);
+	                		if($scope.jobImportStatus.importStatus == 'COMPLETED'){
 	                			$scope.showNotification('top','center','success','Job data imported successfully');
-	                			$rootScope.jobImportStatus.fileName = data.file;
-	                    		console.log('jobimportFile - '+ $rootScope.jobImportStatus.fileName);
+	                			$scope.jobImportStatus.fileName = data.file;
+	                    		console.log('jobimportFile - '+ $scope.jobImportStatus.fileName);
 	                    		$rootScope.stop('job');
-	                    		$rootScope.jobImportStatusLoad = false;
+	                    		$scope.jobImportStatusLoad = false;
 	                    		$timeout(function() {
-	                    			$rootScope.jobImportStatus = {};
+	                    			$scope.jobImportStatus = {};
 	                    	      }, 3000);
-	                		}else if($rootScope.jobImportStatus.importStatus == 'FAILED'){
-	                    		$scope.showNotification('top','center','danger',$rootScope.jobImportStatus.importMsg);
+	                		}else if($scope.jobImportStatus.importStatus == 'FAILED'){
+	                    		$scope.showNotification('top','center','danger',$scope.jobImportStatus.importMsg);
 	                    		$rootScope.stop('job');
-	                    		$rootScope.jobImportStatusLoad = false;
+	                    		$scope.jobImportStatusLoad = false;
 	                    		$timeout(function() {
-	                    			$rootScope.jobImportStatus = {};
+	                    			$scope.jobImportStatus = {};
 	                    	      }, 3000);
 //	                		}else if(!$rootScope.jobImportStatus.importStatus){
 //	                			$rootScope.stop('job');
 //	                    		$scope.showNotifications('top','center','danger',$rootScope.jobImportStatus.importMsg);
+	                		}else if($scope.employeeImportStatus.importStatus == 'PROCESSING'){
+	                			//do nothing
 	                		}else {
-	                		
-	                			$rootScope.jobImportStatus.fileName = '#';
+	                			$scope.jobImportStatus.fileName = '#';
 	                		}
+	                		
 	            		}
+	            		$scope.jobImportStatusLoad = false;
 
 	            	});
 
 	    }
 	    $scope.jobImportMsg = function() {
-	    	console.log('$rootScope.jobImportStatus message - '+ JSON.stringify($rootScope.jobImportStatus));
-		return (' Job msg - '+$rootScope.jobImportStatus ? $rootScope.jobImportStatus.importMsg : '');
+	    	console.log('$scope.jobImportStatus message - '+ JSON.stringify($scope.jobImportStatus));
+		return (' Job msg - '+$scope.jobImportStatus ? $scope.jobImportStatus.importMsg : '');
 	    };
-	    $scope.jobImportStatusLoad = function(){
+	   /* $scope.jobImportStatusLoad = function(){
 	    	console.log('$rootScope.jobImportStatusLoad message '+ $rootScope.jobImportStatusLoad);
 	    	return ($rootScope.jobImportStatusLoad ? $rootScope.jobImportStatusLoad : '');
-	    };
+	    };*/
 	    // Job end
 
 
@@ -125,7 +140,7 @@ angular.module('timeSheetApp')
 	    // upload Employee File  start
         $scope.uploadEmployeeFile = function(){
         	if($scope.selectedEmployeeFile){
-        	$rootScope.empImportStatusLoad = true;
+        		$scope.empImportStatusLoad = true;
         	console.log('selected employee file - ' + $scope.selectedEmployeeFile);
         	EmployeeComponent.importEmployeeFile($scope.selectedEmployeeFile).then(function(data){
         		console.log(data);
@@ -135,11 +150,22 @@ angular.module('timeSheetApp')
         			fileName : result.file,
         			importMsg : result.msg
         		};
-        		$rootScope.employeeImportStatus = importStatus;
-        		$rootScope.start('employee');
+        		$scope.employeeImportStatus = importStatus;
+        		if(result.status == 'COMPLETED') {
+        			$scope.showNotification('top','center','success','Employee data imported successfuly');
+        			$scope.empImportStatusLoad = false;
+        		}else if(result.status == 'PROCESSING') {
+        			$rootScope.start('employee');
+        		}
         	},function(err){
         		console.log('Import error');
+        		if(err && err.data && err.data.msg) {
+		           	  $scope.showNotification('top','center','danger',err.data.msg);
+	           	  }else {
+	           		  $scope.showNotification('top','center','danger','Error importing Employee data, Please check the data and try again');
+	           	  }
         		console.log(err);
+        		$scope.empImportStatusLoad = false;
         	});
         	}else{
         		console.log('select a file');
@@ -147,47 +173,57 @@ angular.module('timeSheetApp')
         }
 
 	    $scope.employeeImportStatus = function() {
-        	EmployeeComponent.importEmployeeStatus($rootScope.employeeImportStatus.fileName).then(function(data) {
+        	EmployeeComponent.importEmployeeStatus($scope.employeeImportStatus.fileName).then(function(data) {
             		if(data) {
-            			$rootScope.employeeImportStatus.importStatus = data.status;
-                		console.log('employeeimportStatus - '+ $rootScope.employeeImportStatus);
-                		$rootScope.employeeImportStatus.importMsg = data.msg;
-                		console.log('employeeimportMsg - '+ $rootScope.employeeImportStatus.importMsg);
-                		if($rootScope.employeeImportStatus.importStatus == 'COMPLETED'){
-                			$rootScope.employeeImportStatus.fileName = data.file;
+            			$scope.employeeImportStatus.importStatus = data.status;
+                		console.log('employeeimportStatus - '+ $scope.employeeImportStatus);
+                		$scope.employeeImportStatus.importMsg = data.msg;
+                		console.log('employeeimportMsg - '+ $scope.employeeImportStatus.importMsg);
+                		if($scope.employeeImportStatus.importStatus == 'COMPLETED'){
+                			$scope.employeeImportStatus.fileName = data.file;
                     		console.log('importEmployeeFile - '+ $rootScope.employeeImportStatus.fileName);
+                    		$scope.empImportStatusLoad = false;
+                    		$scope.showNotification('top','center','success','Employee data imported successfully');
                     		$rootScope.stop('employee');
-                    		$rootScope.empImportStatusLoad = false;
                     		$timeout(function() {
-                    			$rootScope.employeeImportStatus = {};
+                    			$scope.employeeImportStatus = {};
                     	      }, 3000);
-                		}else if($rootScope.employeeImportStatus.importStatus == 'FAILED'){
-                			$scope.showNotification('top','center','danger',$rootScope.employeeImportStatus.importMsg);
+                		}else if($scope.employeeImportStatus.importStatus == 'FAILED'){
+                			$scope.showNotification('top','center','danger',$scope.employeeImportStatus.importMsg);
 	                		$rootScope.stop('employee');
-	                		$rootScope.employeeImportStatusLoad = false;
+	                		$scope.empImportStatusLoad = false;
 	                		$timeout(function() {
-	                			$rootScope.employeeImportStatus = {};
+	                			$scope.employeeImportStatus = {};
 	                	      }, 3000);
+                		}else if($scope.employeeImportStatus.importStatus == 'PROCESSING'){
+                			//do nothing
                 		}else {
-                			$rootScope.employeeImportStatus.fileName = '#';
+                			$rootScope.stop('employee');
+                			$scope.showNotification('top','center','danger',$scope.employeeImportStatus.importMsg);
+                			$scope.employeeImportStatus.fileName = '#';
+                			$scope.empImportStatusLoad = false;
+	                		$timeout(function() {
+	                			$scope.employeeImportStatus = {};
+	                	      }, 3000);                			
                 		}
             		}
+            		$scope.empImportStatusLoad = false;
             	});
 	    }
 
 	  $scope.employeeImportMsg = function() {
-        return ('employeeMsg - '+$rootScope.employeeImportStatus ? $rootScope.employeeImportStatus.importMsg : '');
+        return ('employeeMsg - '+$scope.employeeImportStatus ? $scope.employeeImportStatus.importMsg : '');
 	  };
-	  $scope.empImportStatusLoad = function(){
-	    	console.log('$scope.empImportStatusLoad message '+ $rootScope.empImportStatusLoad);
-	    	return ($rootScope.empImportStatusLoad ? $rootScope.empImportStatusLoad : '');
-	   };
+	  /*$scope.empImportStatusLoad = function(){
+	    	console.log('$scope.empImportStatusLoad message '+ $scope.empImportStatusLoad);
+	    	return ($scope.empImportStatusLoad ? $scope.empImportStatusLoad : '');
+	   };*/
 	  //Employee end
 
       //client upload file start
 	    $scope.uploadClients = function() {
 	    	if($scope.selectedClientFile){
-	    		$rootScope.clientImportStatusLoad = true;
+	    		$scope.clientImportStatusLoad = true;
     		console.log('************************selected Client file - ' + $scope.selectedClientFile);
     		ProjectComponent.importFile($scope.selectedClientFile).then(function(data){
     			console.log(data);
@@ -197,61 +233,79 @@ angular.module('timeSheetApp')
         				fileName : result.file,
         				importMsg : result.msg
         		};
-        		$rootScope.clientImportStatus = importStatus;
-        		$rootScope.start('client');
+        		$scope.clientImportStatus = importStatus;
+        		if(result.status == 'COMPLETED') {
+        			$scope.showNotification('top','center','success','Client data imported successfuly');
+        			$scope.clientImportStatusLoad = false;
+        		}else if(result.status == 'PROCESSING') {
+        			$rootScope.start('client');
+        		}
+
          },function(err){
-            	  console.log('Client Import error')
+            	  console.log('Client Import error');
+            	  if(err && err.data && err.data.msg) {
+		           	  $scope.showNotification('top','center','danger',err.data.msg);
+	           	  }else {
+	           		  $scope.showNotification('top','center','danger','Error importing Client data, Please check the data and try again');
+	           	  }
             	  console.log(err);
+            	  $scope.clientImportStatusLoad = false;
          });
 	    }
 
     }
 
 	    $scope.clientImportStatus = function() {
-	        	console.log('$rootScope.clientImportStatus -'+JSON.stringify($rootScope.clientImportStatus));
+	        	console.log('$scope.clientImportStatus -'+JSON.stringify($scope.clientImportStatus));
 
-	            	ProjectComponent.importStatus($rootScope.clientImportStatus.fileName).then(function(data) {
+	            	ProjectComponent.importStatus($scope.clientImportStatus.fileName).then(function(data) {
 	            		if(data) {
-	            			$rootScope.clientImportStatus.importStatus = data.status;
-	                		console.log('*****************importStatus - '+ JSON.stringify($rootScope.clientImportStatus));
-	                		$rootScope.clientImportStatus.importMsg = data.msg;
-	                		console.log('**************importMsg - '+ $rootScope.clientImportStatus.importMsg);
-	                		if($rootScope.clientImportStatus.importStatus == 'COMPLETED'){
-	                			$rootScope.clientImportStatus.fileName = data.file;
-	                    		console.log('importFile - '+ $rootScope.clientImportStatus.fileName);
+	            			$scope.clientImportStatus.importStatus = data.status;
+	                		console.log('*****************importStatus - '+ JSON.stringify($scope.clientImportStatus));
+	                		$scope.clientImportStatus.importMsg = data.msg;
+	                		console.log('**************importMsg - '+ $scope.clientImportStatus.importMsg);
+	                		if($scope.clientImportStatus.importStatus == 'COMPLETED'){
+	                			$scope.clientImportStatus.fileName = data.file;
+	                    		console.log('importFile - '+ $scope.clientImportStatus.fileName);
 	                    		$rootScope.stop('client');
-	                    		$rootScope.clientImportStatusLoad = false;
+	                    		$scope.clientImportStatusLoad = false;
+	                    		$scope.showNotification('top','center','success','Client data imported successfully');
 	                    		$timeout(function() {
-	                    			$rootScope.clientImportStatus = {};
+	                    			$scope.clientImportStatus = {};
 	                    	    }, 3000);
-	                		}else if($rootScope.clientImportStatus.importStatus == 'FAILED'){
-	                			$scope.showNotification('top','center','danger',$rootScope.clientImportStatus.importMsg);
+	                		}else if($scope.clientImportStatus.importStatus == 'FAILED'){
+	                			$scope.showNotification('top','center','danger',$scope.clientImportStatus.importMsg);
 		                		$rootScope.stop('client');
-		                		$rootScope.clientImportStatusLoad = false;
+		                		$scope.clientImportStatusLoad = false;
 		                		$timeout(function() {
-		                			$rootScope.clientImportStatus = {};
+		                			$scope.clientImportStatus = {};
 		                	      }, 3000);
+	                		}else if($scope.employeeImportStatus.importStatus == 'PROCESSING'){
+	                			//do nothing
 	                		}else {
-	                			$rootScope.clientImportStatus.fileName = '#';
+	                			$scope.showNotification('top','center','danger',$scope.clientImportStatus.importMsg);
+	                			$scope.clientImportStatus.fileName = '#';
+	                			$scope.clientImportStatusLoad = false;
 	                		}
 	            		}
+	            		$scope.clientImportStatusLoad = false;
 
 	            	});
 
 	    }
 	    $scope.clientImportMsg = function() {
-		   return ($rootScope.clientImportStatus ? $rootScope.clientImportStatus.importMsg : '');
+		   return ($scope.clientImportStatus ? $scope.clientImportStatus.importMsg : '');
 		};
-		$scope.clientImportStatusLoad = function(){
-		    	console.log('$scope.clientImportStatusLoad message '+ $rootScope.clientImportStatusLoad);
-		    	return ($rootScope.clientImportStatusLoad ? $rootScope.clientImportStatusLoad : '');
-		};
+		/*$scope.clientImportStatusLoad = function(){
+		    	console.log('$scope.clientImportStatusLoad message '+ $scope.clientImportStatusLoad);
+		    	return ($scope.clientImportStatusLoad ? $scope.clientImportStatusLoad : '');
+		};*/
 	   // client upload end
 
 		 // upload Site File start
 	     $scope.uploadSitesFile = function(){
 	    	 if($scope.selectedSiteFile){
-	    		 $rootScope.siteImportStatusLoad = true;
+	    		 $scope.siteImportStatusLoad = true;
 	        	console.log('selected site file -'+ $scope.selectedSiteFile);
 	        	SiteComponent.importSiteFile($scope.selectedSiteFile).then(function(data){
 	        		console.log(data);
@@ -261,52 +315,69 @@ angular.module('timeSheetApp')
 	        				fileName : result.file,
 	        				importMsg : result.msg
 	        		};
-	        		$rootScope.siteImportStatus = importStatus;
-	        		$rootScope.start('site');
+	        		$scope.siteImportStatus = importStatus;
+	        		if(result.status == 'COMPLETED') {
+	        			$scope.showNotification('top','center','success','Site data imported successfuly');
+	        			$scope.siteImportStatusLoad = false;
+	        		}else if(result.status == 'PROCESSING') {
+	        			$rootScope.start('site');
+	        		}
 	        	},function(err){
 	        		console.log();
+	        		if(err && err.data && err.data.msg) {
+		           	  $scope.showNotification('top','center','danger',err.data.msg);
+	           	  }else {
+	           		  $scope.showNotification('top','center','danger','Error importing Site data, Please check the data and try again');
+	           	  }
+	        		$scope.siteImportStatusLoad = false;
 	        	});
 	    	 }
 	     }
 
 	     $scope.siteImportStatus = function() {
-	        	console.log('$rootScope.siteImportStatus -'+JSON.stringify($rootScope.siteImportStatus));
+	        	console.log('$scope.siteImportStatus -'+JSON.stringify($scope.siteImportStatus));
 
-	        	SiteComponent.importStatus($rootScope.siteImportStatus.fileName).then(function(data) {
+	        	SiteComponent.importStatus($scope.siteImportStatus.fileName).then(function(data) {
 	            		if(data) {
-	            			$rootScope.siteImportStatus.importStatus = data.status;
-	                		console.log('*****************importStatus - '+ JSON.stringify($rootScope.siteImportStatus));
-	                		$rootScope.siteImportStatus.importMsg = data.msg;
-	                		console.log('**************importMsg - '+ $rootScope.siteImportStatus.importMsg);
-	                		if($rootScope.siteImportStatus.importStatus == 'COMPLETED'){
-	                			$rootScope.siteImportStatus.fileName = data.file;
-	                    		console.log('importFile - '+ $rootScope.siteImportStatus.fileName);
+	            			$scope.siteImportStatus.importStatus = data.status;
+	                		console.log('*****************importStatus - '+ JSON.stringify($scope.siteImportStatus));
+	                		$scope.siteImportStatus.importMsg = data.msg;
+	                		console.log('**************importMsg - '+ $scope.siteImportStatus.importMsg);
+	                		if($scope.siteImportStatus.importStatus == 'COMPLETED'){
+	                			$scope.siteImportStatus.fileName = data.file;
+	                    		console.log('importFile - '+ $scope.siteImportStatus.fileName);
 	                    		$rootScope.stop('site');
-	                    		$rootScope.siteImportStatusLoad = false;
+	                    		$scope.siteImportStatusLoad = false;
+	                    		$scope.showNotification('top','center','Success','Site data imported successfully');
 	                    		$timeout(function() {
-	                    			$rootScope.siteImportStatus = {};
+	                    			$scope.siteImportStatus = {};
 	                    	    }, 3000);
-	                		}else if($rootScope.siteImportStatus.importStatus == 'FAILED'){
-	                			$scope.showNotification('top','center','danger',$rootScope.siteImportStatus.importMsg);
+	                		}else if($scope.siteImportStatus.importStatus == 'FAILED'){
+	                			$scope.showNotification('top','center','danger',$scope.siteImportStatus.importMsg);
 		                		$rootScope.stop('site');
-		                		$rootScope.siteImportStatusLoad = false;
+		                		$scope.siteImportStatusLoad = false;
 		                		$timeout(function() {
-		                			$rootScope.siteImportStatus = {};
+		                			$scope.siteImportStatus = {};
 		                	      }, 3000);
+	                		}else if($scope.employeeImportStatus.importStatus == 'PROCESSING'){
+	                			//do nothing
 	                		}else {
-	                			$rootScope.siteImportStatus.fileName = '#';
+	                			$scope.showNotification('top','center','danger',$scope.clientImportStatus.importMsg);
+	                			$scope.siteImportStatus.fileName = '#';
+	                			$scope.siteImportStatusLoad = false;
 	                		}
 	            		}
+	            		$scope.siteImportStatusLoad = false;
 	            	});
 	    }
 
 	     /*$scope.siteImportMsg = function() {
-			   return ($rootScope.siteImportStatus ? $rootScope.siteImportStatus.importMsg : '');
+			   return ($scope.siteImportStatus ? $scope.siteImportStatus.importMsg : '');
 			};  */
-			$scope.siteImportStatusLoad = function(){
-			    	console.log('$scope.siteImportStatusLoad message '+ $rootScope.siteImportStatusLoad);
-			    	return ($rootScope.siteImportStatusLoad ? $rootScope.siteImportStatusLoad : '');
-			};
+			/*$scope.siteImportStatusLoad = function(){
+			    	console.log('$scope.siteImportStatusLoad message '+ $scope.siteImportStatusLoad);
+			    	return ($scope.siteImportStatusLoad ? $scope.siteImportStatusLoad : '');
+			};*/
 
 			$scope.uploadSiteEmployeeFile = function(){
 			    if($scope.selectedSiteEmployeeFile){
@@ -322,7 +393,7 @@ angular.module('timeSheetApp')
 			 // upload Location File start
 		     $scope.uploadLocationsFile = function(){
 		    	 if($scope.selectedLocationFile){
-		    		 $rootScope.locationImportStatusLoad = true;
+		    		 $scope.locationImportStatusLoad = true;
 		        	console.log('selected location file -'+ $scope.selectedLocationFile);
 		        	LocationComponent.importLocationFile($scope.selectedLocationFile).then(function(data){
 		        		console.log(data);
@@ -332,53 +403,72 @@ angular.module('timeSheetApp')
 		        				fileName : result.file,
 		        				importMsg : result.msg
 		        		};
-		        		$rootScope.locationImportStatus = importStatus;
-		        		$rootScope.start('location');
+		        		$scope.locationImportStatus = importStatus;
+		        		if(result.status == 'COMPLETED') {
+		        			$scope.showNotification('top','center','success','Location data imported successfuly');
+		        			$scope.locationImportStatusLoad = false;
+		        		}else if(result.status == 'PROCESSING') {
+		        			$rootScope.start('location');
+		        		}
 		        	},function(err){
 		        		console.log();
+		        		if(err && err.data && err.data.msg) {
+		        			$scope.showNotification('top','center','danger',err.data.msg);
+		           	}else {
+		           		$scope.showNotification('top','center','danger','Error importing Location data, Please check the data and try again');
+		           	}
+		        		$scope.locationImportStatusLoad = false;
+			        	
 		        	});
 		    	 }
 		     }
 
 		     $scope.locationImportStatus = function() {
-		        	console.log('$rootScope.locationImportStatus -'+JSON.stringify($rootScope.locationImportStatus));
+		        	console.log('$scope.locationImportStatus -'+JSON.stringify($scope.locationImportStatus));
 
-		        LocationComponent.importStatus($rootScope.locationImportStatus.fileName).then(function(data) {
+		        LocationComponent.importStatus($scope.locationImportStatus.fileName).then(function(data) {
 		            		if(data) {
 		            			
-		            			$rootScope.locationImportStatus.importStatus = data.status;
-		                		console.log('*****************importStatus - '+ JSON.stringify($rootScope.locationImportStatus));
-		                		$rootScope.locationImportStatus.importMsg = data.msg;
-		                		console.log('**************importMsg - '+ $rootScope.locationImportStatus.importMsg);
-		                		if($rootScope.locationImportStatus.importStatus == 'COMPLETED'){
-		                			$rootScope.locationImportStatus.fileName = data.file;
-		                    		console.log('importFile - '+ $rootScope.locationImportStatus.fileName);
+		            			$scope.locationImportStatus.importStatus = data.status;
+		                		console.log('*****************importStatus - '+ JSON.stringify($scope.locationImportStatus));
+		                		$scope.locationImportStatus.importMsg = data.msg;
+		                		console.log('**************importMsg - '+ $scope.locationImportStatus.importMsg);
+		                		if($scope.locationImportStatus.importStatus == 'COMPLETED'){
+		                			$scope.locationImportStatus.fileName = data.file;
+		                    		console.log('importFile - '+ $scope.locationImportStatus.fileName);
 		                    		$rootScope.stop('location');
-		                    		$rootScope.locationImportStatusLoad = false;
+		                    		$scope.locationImportStatusLoad = false;
+		                    		$scope.showNotification('top','center','success','Location data imported successfully');
 		                    		$timeout(function() {
-		                    			$rootScope.locationImportStatus = {};
+		                    			$scope.locationImportStatus = {};
 		                    	    }, 3000);
-		                		}else if($rootScope.locationImportStatus.importStatus == 'FAILED'){
-		                			$scope.showNotification('top','center','danger',$rootScope.locationImportStatus.importMsg);
+		                		}else if($scope.locationImportStatus.importStatus == 'FAILED'){
+		                			$scope.showNotification('top','center','danger',$scope.locationImportStatus.importMsg);
 			                		$rootScope.stop('location');
-			                		$rootScope.locationImportStatusLoad = false;
+			                		$scope.locationImportStatusLoad = false;
 			                		$timeout(function() {
-			                			$rootScope.locationImportStatus = {};
+			                			$scope.locationImportStatus = {};
 			                	      }, 3000);
+		                		}else if($scope.employeeImportStatus.importStatus == 'PROCESSING'){
+		                			//do nothing
 		                		}else {
-		                			$rootScope.locationImportStatus.fileName = '#';
+		                			$scope.showNotification('top','center','danger',$scope.locationImportStatus.importMsg);
+		                			$scope.locationImportStatus.fileName = '#';
+		                			$scope.locationImportStatusLoad = false;
 		                		}
 		            		}
+		            		
+		            		$scope.locationImportStatusLoad = false;
 		            	});
 		    }
 
 		     /*$scope.locationImportMsg = function() {
-				   return ($rootScope.locationImportStatus ? $rootScope.locationImportStatus.importMsg : '');
+				   return ($scope.locationImportStatus ? $scope.locationImportStatus.importMsg : '');
 				};  */
-				$scope.locationImportStatusLoad = function(){
-				    	console.log('$scope.locationImportStatusLoad message '+ $rootScope.locationImportStatusLoad);
-				    	return ($rootScope.locationImportStatusLoad ? $rootScope.locationImportStatusLoad : '');
-				};
+				/*$scope.locationImportStatusLoad = function(){
+				    	console.log('$scope.locationImportStatusLoad message '+ $scope.locationImportStatusLoad);
+				    	return ($scope.locationImportStatusLoad ? $scope.locationImportStatusLoad : '');
+				};*/
 
 
 
@@ -390,7 +480,7 @@ angular.module('timeSheetApp')
 	    	//alert(extn);
 	    	//return false;
 	    	if($scope.selectedChecklistFile){
-	    		$rootScope.checklistImportStatusLoad = true;
+	    		$scope.checklistImportStatusLoad = true;
     		console.log('************************selected checklist file - ' + $scope.selectedChecklistFile);
     		ChecklistComponent.importChecklistFile($scope.selectedChecklistFile).then(function(data){
     			console.log(data);
@@ -400,58 +490,74 @@ angular.module('timeSheetApp')
         				fileName : result.file,
         				importMsg : result.msg
         		};
-        		$rootScope.checklistImportStatus = importStatus;
-        		$rootScope.start('checklist');
+        		$scope.checklistImportStatus = importStatus;
+        		if(result.status == 'COMPLETED') {
+        			$scope.showNotification('top','center','success','Checklist data imported successfuly');
+        			$scope.checklistImportStatusLoad = false;
+        		}else if(result.status == 'PROCESSING') {
+        			$rootScope.start('checklist');
+        		}
          },function(err){
-            	  console.log('Client Import error')
+            	  console.log('Checklist Import error');
+            	  if(err && err.data && err.data.msg) {
+	           	  $scope.showNotification('top','center','danger',err.data.msg);
+           	  }else {
+           		  $scope.showNotification('top','center','danger','Error importing Checklist data, Please check the data and try again');
+           	  }
             	  console.log(err);
+            	  $scope.checklistImportStatusLoad = false;
          });
 
 	  }
     }
 
 	    $scope.checklistImportStatus = function() {
-        	console.log('$rootScope.checklistImportStatus -'+JSON.stringify($rootScope.checklistImportStatus));
-        	ChecklistComponent.importStatus($rootScope.checklistImportStatus.fileName).then(function(data) {
+        	console.log('$scope.checklistImportStatus -'+JSON.stringify($scope.checklistImportStatus));
+        	ChecklistComponent.importStatus($scope.checklistImportStatus.fileName).then(function(data) {
             		if(data) {
-            			$rootScope.checklistImportStatus.importStatus = data.status;
-                		console.log('*****************importStatus - '+ JSON.stringify($rootScope.checklistImportStatus));
-                		$rootScope.checklistImportStatus.importMsg = data.msg;
-                		console.log('**************importMsg - '+ $rootScope.checklistImportStatus.importMsg);
-                		if($rootScope.checklistImportStatus.importStatus == 'COMPLETED'){
-                			$rootScope.checklistImportStatus.fileName = data.file;
-                    		console.log('importFile - '+ $rootScope.checklistImportStatus.fileName);
+            			$scope.checklistImportStatus.importStatus = data.status;
+                		console.log('*****************importStatus - '+ JSON.stringify($scope.checklistImportStatus));
+                		$scope.checklistImportStatus.importMsg = data.msg;
+                		console.log('**************importMsg - '+ $scope.checklistImportStatus.importMsg);
+                		if($scope.checklistImportStatus.importStatus == 'COMPLETED'){
+                			$scope.checklistImportStatus.fileName = data.file;
+                    		console.log('importFile - '+ $scope.checklistImportStatus.fileName);
                     		$rootScope.stop('checklist');
-                    		$rootScope.checklistImportStatusLoad = false;
+                    		$scope.checklistImportStatusLoad = false;
+                    		$scope.showNotification('top','center','success','Checklist data imported successfully');
                     		$timeout(function() {
-                    			$rootScope.checklistImportStatus = {};
+                    			$scope.checklistImportStatus = {};
                     	    }, 3000);
-                		}else if($rootScope.checklistImportStatus.importStatus == 'FAILED'){
-                			$scope.showNotification('top','center','danger',$rootScope.checklistImportStatus.importMsg);
+                		}else if($scope.checklistImportStatus.importStatus == 'FAILED'){
+                			$scope.showNotification('top','center','danger',$scope.checklistImportStatus.importMsg);
 	                		$rootScope.stop('checklist');
-	                		$rootScope.checklistImportStatusLoad = false;
+	                		$scope.checklistImportStatusLoad = false;
 	                		$timeout(function() {
-	                			$rootScope.checklistImportStatus = {};
+	                			$scope.checklistImportStatus = {};
 	                	      }, 3000);
+                		}else if($scope.employeeImportStatus.importStatus == 'PROCESSING'){
+                			//do nothing
                 		}else {
-                			$rootScope.checklistImportStatus.fileName = '#';
+                			$scope.showNotification('top','center','danger',$scope.checklistImportStatus.importMsg);
+                			$scope.checklistImportStatus.fileName = '#';
                 		}
             		}
+            		$scope.checklistImportStatusLoad = false;
 
             	});
 
     }
 
 
-	   $scope.checklistImportStatusLoad = function(){
+	   /*$scope.checklistImportStatusLoad = function(){
 		   	console.log('$scope.checklistImportStatusLoad message '+ $rootScope.checklistImportStatusLoad);
 		   	return ($rootScope.checklistImportStatusLoad ? $rootScope.checklistImportStatusLoad : '');
-	   };
+	   };*/
 
 	   //Employee shift upload file start
 	    $scope.uploadEmployeeShift = function() {
 		    	if($scope.selectedEmployeeShiftFile){
-		    		$rootScope.employeeShiftImportStatusLoad = true;
+		    		$scope.employeeShiftImportStatusLoad = true;
 	   		console.log('************************selected employee shift file - ' + $scope.selectedEmployeeShiftFile);
 	   		EmployeeComponent.importEmployeeShiftFile($scope.selectedEmployeeShiftFile).then(function(data){
 	   			console.log(data);
@@ -461,62 +567,79 @@ angular.module('timeSheetApp')
 	       				fileName : result.file,
 	       				importMsg : result.msg
 	       		};
-	       		$rootScope.employeeShiftImportStatus = importStatus;
-	       		$rootScope.start('employeeShift');
+	       		$scope.employeeShiftImportStatus = importStatus;
+	       		if(result.status == 'COMPLETED') {
+	        			$scope.showNotification('top','center','success','Employee Shift data imported successfuly');
+	        			$scope.employeeShiftImportStatusLoad = false;
+	        		}else if(result.status == 'PROCESSING') {
+	        			$rootScope.start('employeeShift');
+	        		}
 	        },function(err){
-	           	  console.log('Client Import error')
+	           	  console.log('Employee shift Import error');
+	           	  if(err && err.data && err.data.msg) {
+		           	  $scope.showNotification('top','center','danger',err.data.msg);
+	           	  }else {
+	           		  $scope.showNotification('top','center','danger','Error importing Employee Shift data, Please check the data and try again');
+	           	  }
 	           	  console.log(err);
+	           	  $scope.employeeShiftImportStatusLoad = false;
 	        });
 
 		  }
 	   }
 
 	    $scope.employeeShiftImportStatus = function() {
-	    		console.log('$rootScope.employeeShiftImportStatus -'+JSON.stringify($rootScope.employeeShiftImportStatus));
-       		EmployeeComponent.importEmployeeShiftStatus($rootScope.employeeShiftImportStatus.fileName).then(function(data) {
+	    		console.log('$scope.employeeShiftImportStatus -'+JSON.stringify($scope.employeeShiftImportStatus));
+       		EmployeeComponent.importEmployeeShiftStatus($scope.employeeShiftImportStatus.fileName).then(function(data) {
            		if(data) {
-           			
-           			$rootScope.employeeShiftImportStatus.importStatus = data.status;
-               		console.log('*****************importStatus - '+ JSON.stringify($rootScope.employeeShiftImportStatus));
-               		$rootScope.employeeShiftImportStatus.importMsg = data.msg;
-               		console.log('**************importMsg - '+ $rootScope.employeeShiftImportStatus.importMsg);
-               		if($rootScope.employeeShiftImportStatus.importStatus == 'COMPLETED'){
-               			$rootScope.employeeShiftImportStatus.fileName = data.file;
-                   		console.log('importFile - '+ $rootScope.employeeShiftImportStatus.fileName);
+           			$scope.employeeShiftImportStatus.importStatus = data.status;
+               		console.log('*****************importStatus - '+ JSON.stringify($scope.employeeShiftImportStatus));
+               		$scope.employeeShiftImportStatus.importMsg = data.msg;
+               		console.log('**************importMsg - '+ $scope.employeeShiftImportStatus.importMsg);
+               		if($scope.employeeShiftImportStatus.importStatus == 'COMPLETED'){
+               			$scope.employeeShiftImportStatus.fileName = data.file;
+                   		console.log('importFile - '+ $scope.employeeShiftImportStatus.fileName);
                    		$rootScope.stop('employeeShift');
-                   		$rootScope.employeeShiftImportStatusLoad = false;
+                   		$scope.employeeShiftImportStatusLoad = false;
+                   		$scope.showNotification('top','center','success','Employee Shift data imported successfully');
                    		$timeout(function() {
-                   			$rootScope.employeeShiftImportStatus = {};
+                   			$scope.employeeShiftImportStatus = {};
                    	    }, 3000);
-               		}else if($rootScope.employeeShiftImportStatus.importStatus == 'FAILED'){
-	                		$scope.showNotification('top','center','danger',$rootScope.employeeShiftImportStatus.importMsg);
+               		}else if($scope.employeeShiftImportStatus.importStatus == 'FAILED'){
+	                		$scope.showNotification('top','center','danger',$scope.employeeShiftImportStatus.importMsg);
 	                		$rootScope.stop('employeeShift');
-	                		$rootScope.employeeShiftImportStatusLoad = false;
+	                		$scope.employeeShiftImportStatusLoad = false;
 	                		$timeout(function() {
-	                			$rootScope.employeeShiftImportStatus = {};
+	                			$scope.employeeShiftImportStatus = {};
 	                	      }, 3000);
                    		
-               		}else {
-               			$rootScope.employeeShiftImportStatus.fileName = '#';
+               		}else if($scope.employeeImportStatus.importStatus == 'PROCESSING'){
+            			//do nothing
+            		}else {
+               			$scope.showNotification('top','center','danger',$scope.employeeShiftImportStatus.importMsg);
+               			$scope.employeeShiftImportStatus.fileName = '#';
                		}
            		}
+           		$scope.employeeShiftImportStatusLoad = false;
 
            	});
 
 	    }
 
 
-	   $scope.employeeShiftImportStatusLoad = function(){
-		   	console.log('$scope.employeeShiftImportStatusLoad message '+ $rootScope.employeeShiftImportStatusLoad);
-		   	return ($rootScope.employeeShiftImportStatusLoad ? $rootScope.employeeShiftImportStatusLoad : '');
-	   };
+	  /* $scope.employeeShiftImportStatusLoad = function(){
+		   	console.log('$scope.employeeShiftImportStatusLoad message '+ $scope.employeeShiftImportStatusLoad);
+		   	return ($scope.employeeShiftImportStatusLoad ? $scope.employeeShiftImportStatusLoad : '');
+	   };*/
 
 
 
 	   //Asset upload file start
 	    $scope.uploadAsset = function() {
+	  
 		    	if($scope.selectedAssetFile){
-		    		$rootScope.assetImportStatusLoad = true;
+		    	
+		    		$scope.assetImportStatusLoad = true;
 	   		console.log('************************selected asset file - ' + $scope.selectedAssetFile);
 	   		AssetComponent.importAssetFile($scope.selectedAssetFile).then(function(data){
 	   			console.log(data);
@@ -526,57 +649,73 @@ angular.module('timeSheetApp')
 	       				fileName : result.file,
 	       				importMsg : result.msg
 	       		};
-	       		$rootScope.assetImportStatus = importStatus;
-	       		$rootScope.start('asset');
+	       		$scope.assetImportStatus = importStatus;
+	       		if(result.status == 'COMPLETED') {
+	        			$scope.showNotification('top','center','success','Asset data imported successfuly');
+	        			$scope.assetImportStatusLoad = false;
+	        		}else if(result.status == 'PROCESSING') {
+	        			$rootScope.start('asset');
+	        		}
 	        },function(err){
-	           	  console.log('Asset Import error')
+	           	  console.log('Asset Import error');
+	           	  if(err && err.data && err.data.msg) {
+		           	  $scope.showNotification('top','center','danger',err.data.msg);
+	           	  }else {
+	           		  $scope.showNotification('top','center','danger','Error importing Asset data, Please check the data and try again');
+	           	  }
 	           	  console.log(err);
+	              $scope.assetImportStatusLoad = false;
 	        });
 
 		  }
 	   }
 
 	    $scope.assetImportStatus = function() {
-	    		console.log('$rootScope.assetImportStatus -'+JSON.stringify($rootScope.assetImportStatus));
-      		AssetComponent.importAssetStatus($rootScope.assetImportStatus.fileName).then(function(data) {
+	    	
+	    		console.log('$scope.assetImportStatus -'+JSON.stringify($scope.assetImportStatus));
+      		AssetComponent.importAssetStatus($scope.assetImportStatus.fileName).then(function(data) {
           		if(data) {
-          			alert(JSON.stringyfy(data));
-          			$rootScope.assetImportStatus.importStatus = data.status;
-              		console.log('*****************importStatus - '+ JSON.stringify($rootScope.assetImportStatus));
-              		$rootScope.assetImportStatus.importMsg = data.msg;
-              		console.log('**************importMsg - '+ $rootScope.assetImportStatus.importMsg);
-              		if($rootScope.assetImportStatus.importStatus == 'COMPLETED'){
-              			$rootScope.assetImportStatus.fileName = data.file;
-                  		console.log('importFile - '+ $rootScope.assetImportStatus.fileName);
+          			$scope.assetImportStatus.importStatus = data.status;
+              		console.log('*****************importStatus - '+ JSON.stringify($scope.assetImportStatus));
+              		$scope.assetImportStatus.importMsg = data.msg;
+              		console.log('**************importMsg - '+ $scope.assetImportStatus.importMsg);
+              		if($scope.assetImportStatus.importStatus == 'COMPLETED'){
+              			$scope.assetImportStatus.fileName = data.file;
+                  		console.log('importFile - '+ $scope.assetImportStatus.fileName);
                   		$rootScope.stop('asset');
-                  		$rootScope.assetImportStatusLoad = false;
+                  		$scope.assetImportStatusLoad = false;
+                  		$scope.showNotification('top','center','success','Asset data imported successfully');
                   		$timeout(function() {
-                  			$rootScope.assetImportStatus = {};
+                  			$scope.assetImportStatus = {};
                   	    }, 3000);
-              		}else if($rootScope.assetImportStatus.importStatus == 'FAILED'){
+              		}else if($scope.assetImportStatus.importStatus == 'FAILED'){
                   		$rootScope.stop('asset');
-              		}else if(!$rootScope.assetImportStatus.importStatus){
-              			$rootScope.stop('asset');
-              		}else {
-              			$rootScope.assetImportStatus.fileName = '#';
+              			$scope.showNotification('top','center','danger',$scope.assetImportStatus.importMsg);
+                  		$scope.assetImportStatusLoad = false;
+              		}else if($scope.employeeImportStatus.importStatus == 'PROCESSING'){
+            			//do nothing
+            		}else {
+              			$scope.showNotification('top','center','danger',$scope.assetImportStatus.importMsg);
+              			$scope.assetImportStatus.fileName = '#';
               		}
           		}
+          		$scope.assetImportStatusLoad = false;
 
           	});
 
 	    }
 
 
-	   $scope.assetImportStatusLoad = function(){
-		   	console.log('$scope.assetImportStatusLoad message '+ $rootScope.assetImportStatusLoad);
-		   	return ($rootScope.assetImportStatusLoad ? $rootScope.assetImportStatusLoad : '');
-	   };
+	 /*  $scope.assetImportStatusLoad = function(){
+		   	console.log('$scope.assetImportStatusLoad message '+ $scope.assetImportStatusLoad);
+		   	return ($scope.assetImportStatusLoad ? $scope.assetImportStatusLoad : '');
+	   };*/
 
 
 	   //Asset PPM upload file start
 	    $scope.uploadAssetPPM = function() {
 		    	if($scope.selectedAssetPPMFile){
-		    		$rootScope.assetImportPPMStatusLoad = true;
+		    		$scope.assetPPMImportStatusLoad = true;
 	   		console.log('************************selected asset PPM file - ' + $scope.selectedAssetPPMFile);
 	   		AssetComponent.importAssetPPMFile($scope.selectedAssetPPMFile).then(function(data){
 	   			console.log(data);
@@ -586,55 +725,71 @@ angular.module('timeSheetApp')
 	       				fileName : result.file,
 	       				importMsg : result.msg
 	       		};
-	       		$rootScope.assetPPMImportStatus = importStatus;
-	       		$rootScope.start('assetPPM');
+	       		$scope.assetPPMImportStatus = importStatus;
+	       		if(result.status == 'COMPLETED') {
+	        			$scope.showNotification('top','center','success','Asset PPM data imported successfuly');
+	        			$scope.assetPPMImportStatusLoad = false;
+	        		}else if(result.status == 'PROCESSING') {
+	        			$rootScope.start('assetPPM');
+	        		}
 	        },function(err){
-	           	  console.log('Asset PPM Import error')
+	           	  console.log('Asset PPM Import error');
+	           	  if(err && err.data && err.data.msg) {
+		           	  $scope.showNotification('top','center','danger',err.data.msg);
+	           	  }else {
+	           		  $scope.showNotification('top','center','danger','Error importing Asset PPM data, Please check the data and try again');
+	           	  }
 	           	  console.log(err);
+	           	  $scope.assetPPMImportStatusLoad = false;
 	        });
 
 		  }
 	   }
 
 	    $scope.assetPPMImportStatus = function() {
-	    		console.log('$rootScope.assetPPMImportStatus -'+JSON.stringify($rootScope.assetPPMImportStatus));
-     		AssetComponent.importAssetPPMStatus($rootScope.assetPPMImportStatus.fileName).then(function(data) {
+	    		console.log('$scope.assetPPMImportStatus -'+JSON.stringify($scope.assetPPMImportStatus));
+     		AssetComponent.importAssetPPMStatus($scope.assetPPMImportStatus.fileName).then(function(data) {
          		if(data) {
-         			$rootScope.assetPPMImportStatus.importStatus = data.status;
-             		console.log('*****************importStatus - '+ JSON.stringify($rootScope.assetPPMImportStatus));
-             		$rootScope.assetPPMImportStatus.importMsg = data.msg;
-             		console.log('**************importMsg - '+ $rootScope.assetPPMImportStatus.importMsg);
-             		if($rootScope.assetPPMImportStatus.importStatus == 'COMPLETED'){
-             			$rootScope.assetPPMImportStatus.fileName = data.file;
-                 		console.log('importFile - '+ $rootScope.assetPPMImportStatus.fileName);
+         			$scope.assetPPMImportStatus.importStatus = data.status;
+             		console.log('*****************importStatus - '+ JSON.stringify($scope.assetPPMImportStatus));
+             		$scope.assetPPMImportStatus.importMsg = data.msg;
+             		console.log('**************importMsg - '+ $scope.assetPPMImportStatus.importMsg);
+             		if($scope.assetPPMImportStatus.importStatus == 'COMPLETED'){
+             			$scope.assetPPMImportStatus.fileName = data.file;
+                 		console.log('importFile - '+ $scope.assetPPMImportStatus.fileName);
                  		$rootScope.stop('assetPPM');
-                 		$rootScope.assetPPMImportStatusLoad = false;
+                 		$scope.assetPPMImportStatusLoad = false;
+                 		$scope.showNotification('top','center','success','Asset PPM data imported successfully');
                  		$timeout(function() {
-                 			$rootScope.assetPPMImportStatus = {};
+                 			$scope.assetPPMImportStatus = {};
                  	    }, 3000);
-             		}else if($rootScope.assetPPMImportStatus.importStatus == 'FAILED'){
+             		}else if($scope.assetPPMImportStatus.importStatus == 'FAILED'){
+             			$scope.showNotification('top','center','danger',$scope.assetPPMImportStatus.importMsg);
                  		$rootScope.stop('assetPPM');
-             		}else if(!$rootScope.assetPPMImportStatus.importStatus){
-             			$rootScope.stop('assetPPM');
-             		}else {
-             			$rootScope.assetPPMImportStatus.fileName = '#';
+                 		$scope.assetPPMImportStatusLoad = false;
+             		}else if($scope.employeeImportStatus.importStatus == 'PROCESSING'){
+	            			//do nothing
+	            		}else {
+             			$scope.showNotification('top','center','danger',$scope.assetPPMImportStatus.importMsg);
+             			$scope.assetPPMImportStatus.fileName = '#';
              		}
          		}
+         		$scope.assetPPMImportStatusLoad = false;
 
          	});
 
 	    }
 
 
-	   $scope.assetPPMImportStatusLoad = function(){
-		   	console.log('$scope.assetPPMImportStatusLoad message '+ $rootScope.assetPPMImportStatusLoad);
-		   	return ($rootScope.assetPPMImportStatusLoad ? $rootScope.assetPPMImportStatusLoad : '');
-	   };
+	  /* $scope.assetPPMImportStatusLoad = function(){
+		   	console.log('$scope.assetPPMImportStatusLoad message '+ $scope.assetPPMImportStatusLoad);
+		   	return ($scope.assetPPMImportStatusLoad ? $scope.assetPPMImportStatusLoad : '');
+	   };*/
 
 	 //Asset AMC upload file start
 	    $scope.uploadAssetAMC = function() {
 		    	if($scope.selectedAssetAMCFile){
-		    		$rootScope.assetImportAMCStatusLoad = true;
+		    		$scope.assetAMCImportStatusLoad = true;
 	   		console.log('************************selected asset AMC file - ' + $scope.selectedAssetAMCFile);
 	   		AssetComponent.importAssetAMCFile($scope.selectedAssetAMCFile).then(function(data){
 	   			console.log(data);
@@ -644,50 +799,66 @@ angular.module('timeSheetApp')
 	       				fileName : result.file,
 	       				importMsg : result.msg
 	       		};
-	       		$rootScope.assetAMCImportStatus = importStatus;
-	       		$rootScope.start('assetAMC');
+	       		$scope.assetAMCImportStatus = importStatus;
+	       		if(result.status == 'COMPLETED') {
+	        			$scope.showNotification('top','center','success','Asset AMC data imported successfuly');
+	        			$scope.assetAMCImportStatusLoad = false;
+	        		}else if(result.status == 'PROCESSING') {
+	        			$rootScope.start('assetAMC');
+	        		}
 	        },function(err){
 	           	  console.log('Asset AMC Import error')
 	           	  console.log(err);
+	           	  if(err && err.data && err.data.msg) {
+		           	  $scope.showNotification('top','center','danger',err.data.msg);
+	           	  }else {
+	           		$scope.showNotification('top','center','danger','Error importing Asset AMC data, Please check the data and try again');
+	           	  }
+	           	  $scope.assetAMCImportStatusLoad = false;
 	        });
 
 		  }
 	   }
 
 	    $scope.assetAMCImportStatus = function() {
-	    		console.log('$rootScope.assetAMCImportStatus -'+JSON.stringify($rootScope.assetAMCImportStatus));
-	    		AssetComponent.importAssetAMCStatus($rootScope.assetAMCImportStatus.fileName).then(function(data) {
+	    		console.log('$scope.assetAMCImportStatus -'+JSON.stringify($scope.assetAMCImportStatus));
+	    		AssetComponent.importAssetAMCStatus($scope.assetAMCImportStatus.fileName).then(function(data) {
 	        		if(data) {
-	        			$rootScope.assetAMCImportStatus.importStatus = data.status;
-	            		console.log('*****************importStatus - '+ JSON.stringify($rootScope.assetAMCImportStatus));
-	            		$rootScope.assetAMCImportStatus.importMsg = data.msg;
-	            		console.log('**************importMsg - '+ $rootScope.assetAMCImportStatus.importMsg);
-	            		if($rootScope.assetAMCImportStatus.importStatus == 'COMPLETED'){
-	            			$rootScope.assetAMCImportStatus.fileName = data.file;
-	                		console.log('importFile - '+ $rootScope.assetAMCImportStatus.fileName);
+	        			$scope.assetAMCImportStatus.importStatus = data.status;
+	            		console.log('*****************importStatus - '+ JSON.stringify($scope.assetAMCImportStatus));
+	            		$scope.assetAMCImportStatus.importMsg = data.msg;
+	            		console.log('**************importMsg - '+ $scope.assetAMCImportStatus.importMsg);
+	            		if($scope.assetAMCImportStatus.importStatus == 'COMPLETED'){
+	            			$scope.assetAMCImportStatus.fileName = data.file;
+	                		console.log('importFile - '+ $scope.assetAMCImportStatus.fileName);
 	                		$rootScope.stop('assetAMC');
-	                		$rootScope.assetAMCImportStatusLoad = false;
+	                		$scope.assetAMCImportStatusLoad = false;
+	                		$scope.showNotification('top','center','success','Asset AMC data imported successfully');
 	                		$timeout(function() {
-	                			$rootScope.assetAMCImportStatus = {};
+	                			$scope.assetAMCImportStatus = {};
 	                	    }, 3000);
-	            		}else if($rootScope.assetAMCImportStatus.importStatus == 'FAILED'){
+	            		}else if($scope.assetAMCImportStatus.importStatus == 'FAILED'){
+	            			$scope.showNotification('top','center','danger',$scope.assetAMCImportStatus.importMsg);
 	                		$rootScope.stop('assetAMC');
-	            		}else if(!$rootScope.assetAMCImportStatus.importStatus){
-	            			$rootScope.stop('assetAMC');
-	            		}else {
-	            			$rootScope.assetAMCImportStatus.fileName = '#';
+	                		$scope.assetAMCImportStatusLoad = false;
+	            		}else if($scope.employeeImportStatus.importStatus == 'PROCESSING'){
+                			//do nothing
+                		}else {
+	            			$scope.showNotification('top','center','danger',$scope.assetAMCImportStatus.importMsg);
+	            			$scope.assetAMCImportStatus.fileName = '#';
 	            		}
 	        		}
+	        		$scope.assetAMCImportStatusLoad = false;
 
 	        	});
 
 	    }
 
 
-	   $scope.assetAMCImportStatusLoad = function(){
-		   	console.log('$scope.assetAMCImportStatusLoad message '+ $rootScope.assetAMCImportStatusLoad);
-		   	return ($rootScope.assetAMCImportStatusLoad ? $rootScope.assetAMCImportStatusLoad : '');
-	   };
+	  /* $scope.assetAMCImportStatusLoad = function(){
+		   	console.log('$scope.assetAMCImportStatusLoad message '+ $scope.assetAMCImportStatusLoad);
+		   	return ($scope.assetAMCImportStatusLoad ? $scope.assetAMCImportStatusLoad : '');
+	   };*/
 
 
 	 // store the interval promise in this variable
@@ -809,6 +980,10 @@ angular.module('timeSheetApp')
              //$scope.initPage();
 
          }
+        
+        $scope.showNotification= function(position,alignment,color,msg){
+            demo.showNotification(position,alignment,color,msg);
+        }
 
         $scope.showNotification = function(position,alignment,color,msg){
             demo.showNotificationLonger(position,alignment,color,msg);

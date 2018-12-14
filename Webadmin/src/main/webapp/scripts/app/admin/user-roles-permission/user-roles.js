@@ -4,7 +4,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	$stateProvider.state('add-user-role', {
 		parent : 'admin',
 		url : '/add-user-role',
-		controller : 'UserRolesController',
+		//controller : 'UserRolesController',
 		data : {
 			authorities : [],
 			pageTitle : 'Add User Role'
@@ -20,8 +20,8 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		}
 	}).state('edit-user-role', {
 		parent : 'admin',
-		url : '/edit-user-role/:id',
-		controller : 'UserRolesController',
+		url : '/edit-user-role:id',
+		//controller : 'UserRolesController',
 		data : {
 			authorities : [],
 			pageTitle : 'Edit User Role'
@@ -37,8 +37,8 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		}
 	}).state('view-user-role', {
 		parent : 'admin',
-		url : '/view-user-role/:id',
-		controller : 'UserRolesController',
+		url : '/view-user-role:id',
+		//controller : 'UserRolesController',
 		data : {
 			authorities : [],
 			pageTitle : 'View User Role'
@@ -55,7 +55,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	}).state('role-permission', {
       		parent : 'admin',
       		url : '/role-permission',
-      		controller : 'UserRolesController',
+      		//controller : 'UserRolesController',
       		data : {
       			authorities : [],
       			pageTitle : 'Role Permission'
@@ -72,7 +72,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
       	}).state('app-module-actions', {
                 		parent : 'admin',
                 		url : '/app-module-actions',
-                		controller : 'UserRolesController',
+                		//controller : 'UserRolesController',
                 		data : {
                 			authorities : [],
                 			pageTitle : 'App Module Actions'
