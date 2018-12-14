@@ -3,7 +3,7 @@
 angular.module('timeSheetApp')
     .controller('FeedbackController', function ($rootScope, $scope, $state, $timeout,
      ProjectComponent, SiteComponent, LocationComponent,FeedbackComponent,
-      $http,$stateParams,$location,$interval,$filter) {
+      $http,$stateParams,$location,$interval,$filter,PaginationComponent) {
         $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.averageRating ='0';
@@ -14,6 +14,10 @@ angular.module('timeSheetApp')
         $scope.series = ['Series A'];
 
         $scope.pager = {};
+        $scope.pages = { currPage : 1};
+        $scope.feedbackListData = false;
+        $scope.noData = false;
+        $scope.pageSort = 10;
 
         /** Ui-select scopes **/
         $scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
@@ -122,6 +126,7 @@ angular.module('timeSheetApp')
             //$scope.loadProjects();
             $scope.loadProjectsList();
             $scope.search();
+            $scope.setPage(1);
         };
 
 
@@ -441,9 +446,16 @@ angular.module('timeSheetApp')
         };
 
         $scope.feedbackListLoader = true;
+        
+        $scope.searchFilter = function () {
+            $('.AdvancedFilterModal.in').modal('hide');
+            $scope.setPage(1);
+            $scope.search();
+         }
+
 
         $scope.search = function () {
-            $('.AdvancedFilterModal.in').modal('hide');
+           
             var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
             //if(!$scope.searchCriteria) {
                 var searchCriteria = {
@@ -507,10 +519,6 @@ angular.module('timeSheetApp')
                $scope.selectedToDateSer = new Date();
                $scope.searchCriteria.checkInDateTimeTo = $scope.selectedToDateSer;
             }
-
-
-
-
 
 
             if(!$scope.selectedProject && !$scope.selectedSite && !$stateParams.pid && !$stateParams.sid) {
@@ -611,7 +619,7 @@ angular.module('timeSheetApp')
               $scope.searchCriteras = $scope.searchCriteria;
               $scope.feedbackReport = "";
               $scope.feedbackListLoader = false;
-              $scope.feedbackListData = false;
+              $scope.feedbackListData = true;
               $rootScope.loadingStart();
           //console.log('Search Criteria : ', $scope.searchCriteria);
             FeedbackComponent.reports($scope.searchCriteria).then(function (data) {
@@ -623,7 +631,7 @@ angular.module('timeSheetApp')
                         var qLength = ($scope.feedbackReport.questionRatings).length;
                         if(qLength > 0){
 
-                            $scope.feedbackListData = true;
+                            $scope.feedbackListData = false;
                         }
                     }
                       //console.log('feedback report - ' + JSON.stringify($scope.feedbackReport));
@@ -721,190 +729,58 @@ angular.module('timeSheetApp')
 
             }).catch(function(res){
                 $rootScope.loadingStop();
-                $scope.feedbackListLoader = true;
+                $scope.feedbackListLoader = false;
                 //$scope.showNotifications('top','center','danger','Cannot Load Feedback');
             });
-
-        };
-
-        $scope.getFeedbackDetails = function () {
-            $('.AdvancedFilterModal.in').modal('hide');
-            var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
-            //if(!$scope.searchCriteria) {
-            var searchCriteria = {
-                currPage : currPageVal
+            
+            if($scope.pageSort){
+                $scope.searchCriteria.sort = $scope.pageSort;
             }
-            $scope.searchCriteria = searchCriteria;
-            // }
-
-
-            if($scope.client.selected && $scope.client.selected.id !=0){
-                $scope.selectedProject = $scope.client.selected;
-            }else{
-                $scope.selectedProject = null;
-            }
-            if($scope.regionsListOne.selected && $scope.regionsListOne.selected.id !=0){
-                $scope.searchRegion = $scope.regionsListOne.selected;
-            }else{
-                $scope.searchRegion = null;
-            }
-            if($scope.branchsListOne.selected && $scope.branchsListOne.selected.id !=0){
-                $scope.searchBranch = $scope.branchsListOne.selected;
-            }else{
-                $scope.searchBranch = null;
-            }
-            if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
-                $scope.selectedSite = $scope.sitesListOne.selected;
-            }else{
-                $scope.selectedSite = null;
-            }
-
-            $scope.searchCriteria.isReport = false;
-
-            $scope.searchCriteria.currPage = currPageVal;
-            //console.log('Selected feedback' + $scope.selectedLocation);
-
-            if($scope.selectedFromDateSer){
-                $scope.searchCriteria.checkInDateTimeFrom = $scope.selectedFromDateSer;
-                //console.log("From date found");
-                //console.log($scope.searchCriteria.checkInDateTimeFrom);
-            }else if($stateParams.date){
-                $scope.selectedFromDateSer = new Date($stateParams.date);
-                $scope.selectedFromDate = $filter('date')($scope.selectedFromDateSer, 'dd/MM/yyyy');
-                $scope.searchCriteria.checkInDateTimeFrom = $scope.selectedFromDateSer;
-            }else{
-                $scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
-                $scope.selectedFromDateSer = new Date();
-                $scope.searchCriteria.checkInDateTimeFrom = $scope.selectedFromDateSer;
-
-            }
-
-            if($scope.selectedToDateSer){
-                $scope.searchCriteria.checkInDateTimeTo = $scope.selectedToDateSer;
-                //console.log("To date found");
-                //console.log($scope.searchCriteria.checkInDateTimeTo);
-            }else if($stateParams.date){
-                $scope.selectedToDateSer = new Date($stateParams.date);
-                $scope.selectedToDate = $filter('date')($scope.selectedToDateSer, 'dd/MM/yyyy');
-                $scope.searchCriteria.checkInDateTimeTo = $scope.selectedToDateSer;
-            }else{
-                $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
-                $scope.selectedToDateSer = new Date();
-                $scope.searchCriteria.checkInDateTimeTo = $scope.selectedToDateSer;
-            }
-
-            if(!$scope.selectedProject && !$scope.selectedSite && !$stateParams.pid && !$stateParams.sid) {
-                /*if($rootScope.searchCriteriaFeedback) {
-                    $scope.searchCriteria = $rootScope.searchCriteriaFeedback;
-                }else {*/
-                $scope.searchCriteria.findAll = true;
-                /*}*/
-
-            }else {
-                $scope.searchCriteria.findAll = false;
-
-                if($scope.selectedProject && $scope.selectedProject.id) {
-                    $scope.searchCriteria.projectId = $scope.selectedProject.id;
-                    $scope.searchCriteria.projectName = $scope.selectedProject.name;
-                } else if($scope.clientId){
-                    $scope.searchCriteria.projectId = $scope.clientId;
-                }else if($stateParams.pid){
-                    $scope.selectedProject = {id:parseInt($stateParams.pid),name:$stateParams.pName};
-                    $scope.searchCriteria.projectId = parseInt($stateParams.pid);
-                    $scope.searchCriteria.projectName = $stateParams.pName;
-                    $scope.client.selected = $scope.selectedProject;
-                    ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
-                        $scope.selectedSite = null;
-                        $scope.sitesList = data;
-                        $scope.sitesLists = [];
-                        $scope.sitesLists[0] = $scope.allSites;
-
-                        for(var i=0;i<$scope.sitesList.length;i++)
-                        {
-                            $scope.sitesLists[i+1] = $scope.sitesList[i];
-                        }
-                        $scope.siteFilterDisable = false;
-                        $scope.siteSpin = false;
-                    });
-                }else {
-                    $scope.searchCriteria.projectId = 0;
-                }
-                if($scope.searchRegion) {
-                    $scope.searchCriteria.regionId = $scope.searchRegion.id;
-                    $scope.searchCriteria.region = $scope.searchRegion.name;
-
-                }else {
-                    $scope.searchCriteria.regionId = null;
-                    $scope.searchCriteria.region = null;
-                }
-
-                if($scope.searchBranch) {
-                    $scope.searchCriteria.branchId = $scope.searchBranch.id;
-                    $scope.searchCriteria.branch = $scope.searchBranch.name;
-
-                }else {
-                    $scope.searchCriteria.branchId = null;
-                    $scope.searchCriteria.branch = null;
-                }
-                if($scope.selectedSite && $scope.selectedSite.id) {
-                    $scope.searchCriteria.siteId = $scope.selectedSite.id;
-                    $scope.searchCriteria.siteName = $scope.selectedSite.name;
-                }
-                else if($scope.siteId){
-                    $scope.searchCriteria.siteId = $scope.siteId ;
-                }else if($stateParams.sid){
-                    $scope.selectedSite = {id:parseInt($stateParams.sid),name:$stateParams.sName};
-                    $scope.searchCriteria.siteId = parseInt($stateParams.sid);
-                    $scope.searchCriteria.siteName = $stateParams.sName;
-                    $scope.sitesListOne.selected = $scope.selectedSite;
-                    $scope.searchLocations();
-                }else {
-                    $scope.searchCriteria.siteId = 0;
-                }
-                if($scope.selectedBlock) {
-                    $scope.searchCriteria.block = $scope.selectedBlock;
-                }else if($stateParams.block) {
-                    $scope.selectedBlock = $stateParams.block;
-                    $scope.searchCriteria.block = $stateParams.block;
-                }else {
-                    $scope.searchCriteria.block = "";
-                }
-                if($scope.selectedFloor) {
-                    $scope.searchCriteria.floor = $scope.selectedFloor;
-                }else if($stateParams.floor) {
-                    $scope.selectedFloor = $stateParams.floor;
-                    $scope.searchCriteria.floor = $stateParams.floor;
-                }else {
-                    $scope.searchCriteria.floor = "";
-                }
-                if($scope.selectedZone) {
-                    $scope.searchCriteria.zone = $scope.selectedZone;
-                }else if($stateParams.zone) {
-                    $scope.selectedZone = $stateParams.zone;
-                    $scope.searchCriteria.zone = $stateParams.zone;
-                }else {
-                    $scope.searchCriteria.zone = "";
-                }
-
-            }
-
-            $scope.searchCriteras = $scope.searchCriteria;
-            $scope.feedbackReport = "";
-            $scope.feedbackListLoader = false;
-            $scope.feedbackListData = false;
-            $rootScope.loadingStart();
+            
+            $scope.feedbackReportDetail = "";
+            $scope.feedbackListDetailLoader = false;
+            $scope.noData = false;
             //console.log('Search Criteria : ', $scope.searchCriteria);
             FeedbackComponent.search($scope.searchCriteria).then(function (data) {
                console.log("Feedback details call result - ");
                console.log(data);
-                $rootScope.loadingStop();
+               $scope.feedbackReportDetail = data.transactions;
+               $scope.feedbackListDetailLoader = true;
+                
+                
+                /*
+                 ** Call pagination  main function **
+             */
+              $scope.pager = {};
+              $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+              $scope.totalCountPages = data.totalCount;
+
+             // //console.log("Pagination",$scope.pager);
+             // //console.log($scope.sites);
+
+
+             $scope.pages.currPage = data.currPage;
+             $scope.pages.totalPages = data.totalPages;
+
+             if($scope.feedbackReportDetail && $scope.feedbackReportDetail.length > 0 ){
+                 $scope.showCurrPage = data.currPage;
+                 $scope.pageEntries = $scope.feedbackReportDetail.length;
+                 $scope.totalCountPages = data.totalCount;
+                 $scope.pageSort = 10;
+                 $scope.noData = false;
+
+             }else{
+            	 $scope.noData = true;
+             }
             }).catch(function(res){
-                $rootScope.loadingStop();
-                $scope.feedbackListLoader = true;
+                $scope.feedbackListDetailLoader = false;
+                $scope.noData = true;
                 //$scope.showNotifications('top','center','danger','Cannot Load Feedback');
             });
 
         };
+
+       
 
         $scope.showNotifications= function(position,alignment,color,msg){
                     demo.showNotification(position,alignment,color,msg);
@@ -994,8 +870,7 @@ angular.module('timeSheetApp')
           //console.log("***************************")
              $scope.loadPageTop();
              $scope.init();
-
-
+         
          }
 
 
@@ -1151,6 +1026,26 @@ angular.module('timeSheetApp')
             }else{
 
             }*/
+        };
+        
+
+        /*
+         ** Pagination init function **
+         @Param:integer
+
+        */
+        
+        $scope.setPage = function (page) {
+
+            if (page < 1 || page > $scope.pager.totalPages) {
+                return;
+            }
+
+            //alert(page);
+
+               $scope.pages.currPage = page;
+               $scope.search();
+
         };
 
 
