@@ -246,6 +246,24 @@ public class ReportResource {
         return new ResponseEntity<>(reportList, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/reports/quotation", method = RequestMethod.GET)
+    public ResponseEntity<?> addQuotationPoint() {
+	    try {
+            reportDatabaseUtil.addQuotationPoints();
+        }catch (Exception e) {
+	        e.printStackTrace();
+        }
+        return new ResponseEntity<>("Successfully created Quotation points to influxDb", HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reports/quotation/todayCount", method = RequestMethod.POST)
+    public ResponseEntity<?> getQuotationCountByToday(@RequestBody SearchCriteria searchCriteria) {
+        QuotationReportCounts reportTodayPoints = reportDatabaseUtil.getQuotationCounts(searchCriteria);
+        return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
+    }
+
+
+
 
 
 	//    @CrossOrigin

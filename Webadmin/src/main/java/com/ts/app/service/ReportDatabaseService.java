@@ -5,9 +5,11 @@ import com.ts.app.domain.AttendanceStatusReport;
 import com.ts.app.domain.JobStatusReport;
 import com.ts.app.domain.Measurements.AttendanceStatusMeasurement;
 import com.ts.app.domain.Measurements.JobStatusMeasurement;
+import com.ts.app.domain.Measurements.QuotationStatusMeasurement;
 import com.ts.app.domain.Measurements.TicketStatusMeasurement;
 import com.ts.app.domain.TicketStatusReport;
 import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.QuotationDTO;
 import org.influxdb.BatchOptions;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.*;
@@ -71,13 +73,6 @@ public class ReportDatabaseService {
         return ticketStatusMeasurementList;
     }
 
-    public List<AttendanceStatusMeasurement> getAttendanceExistingPoints(InfluxDB influxDB, Query query) {
-        QueryResult results = influxDB.query(query);
-        InfluxDBResultMapper mapper = new InfluxDBResultMapper();
-        List<AttendanceStatusMeasurement> attdStatusMeasurementList = mapper.toPOJO(results, AttendanceStatusMeasurement.class);
-        return attdStatusMeasurementList;
-    }
-
     public List<AttendanceStatusMeasurement> getAttendancePoints(InfluxDB connection, String query, String databaseName) {
         // Run the query
         Query queryObject = new Query(query, databaseName);
@@ -86,6 +81,16 @@ public class ReportDatabaseService {
         // Map it
         InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
         return resultMapper.toPOJO(queryResult, AttendanceStatusMeasurement.class);
+    }
+
+    public List<QuotationStatusMeasurement> getQuotationPoints(InfluxDB connection, String query, String databaseName) {
+        // Run the query
+        Query queryObject = new Query(query, databaseName);
+        QueryResult queryResult = connection.query(queryObject);
+
+        // Map it
+        InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
+        return resultMapper.toPOJO(queryResult, QuotationStatusMeasurement.class);
     }
 
     public void addNewJobPoints(JobStatusReport reportList, int i) throws Exception {
@@ -277,6 +282,63 @@ public class ReportDatabaseService {
     }
 
 
+    public void addNewQuotePoints(QuotationDTO quotationResult, int i) throws Exception {
+        InfluxDB influxDB = connectDatabase();
+        BatchPoints batchPoints = BatchPoints
+            .database(dbName)
+            .tag("async3", "true")
+            .retentionPolicy("one_year_policy")
+            .consistency(InfluxDB.ConsistencyLevel.ALL)
+            .build();
+
+        log.debug("Total size" + i);
+        Calendar cal = Calendar.getInstance();
+        if(quotationResult.getCreatedDate() != null) {
+            Date formatDate = Date.from(quotationResult.getCreatedDate().toInstant());
+            cal.setTime(formatDate);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+        } else {
+            Date currentDate = new Date();
+            cal.setTime(currentDate);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+        }
+        log.debug("calendar time milliseconds" +cal.getTimeInMillis());
+        log.debug("system time milliseconds" + System.currentTimeMillis());
+
+        Point quotationPoint = Point.measurement("QuotationReport")
+            .time(cal.getTimeInMillis() + i, TimeUnit.MILLISECONDS)
+            .addField("id", quotationResult.getSerialId())
+            .tag("id", String.valueOf(quotationResult.getSerialId()))
+            .addField("date", cal.getTimeInMillis())
+            .tag("date", String.valueOf(cal.getTimeInMillis()))
+            .addField("projectId", (float) quotationResult.getProjectId())
+            .addField("siteId", (float) quotationResult.getSiteId())
+            .addField("status", quotationResult.getStatus()!= null ? quotationResult.getStatus() : "")
+            .tag("status", quotationResult.getStatus())
+            .addField("isApproved", quotationResult.isApproved())
+            .tag("isApproved", String.valueOf(quotationResult.isApproved()))
+            .addField("isArchived", quotationResult.isArchived())
+            .tag("isArchived", String.valueOf(quotationResult.isArchived()))
+            .addField("isDrafted", quotationResult.isDrafted())
+            .tag("isDrafted", String.valueOf(quotationResult.isDrafted()))
+            .addField("isSubmitted", quotationResult.isSubmitted())
+            .tag("isSubmitted", String.valueOf(quotationResult.isSubmitted()))
+            .addField("isRejected", quotationResult.isRejected())
+            .tag("isRejected", String.valueOf(quotationResult.isRejected()))
+            .addField("statusCount", 1)
+            .build();
+        batchPoints.point(quotationPoint);
+        influxDB.write(batchPoints);
+        Thread.sleep(2);
+        influxDB.disableBatch();
+        influxDB.close();
+    }
 
 
 }

@@ -80,6 +80,8 @@ public class QuotationDTO extends BaseDTO implements Serializable {
     
     private String url;
 
+    private boolean rejected;
+
 	public String getQuotationFileName() {
 		return quotationFileName;
 	}
@@ -360,6 +362,12 @@ public class QuotationDTO extends BaseDTO implements Serializable {
 	public void setTotalCount(long totalCount) {
 		this.totalCount = totalCount;
 	}
-	
-	
+
+    public boolean isRejected() {
+        return rejected;
+    }
+
+    public void setRejected(boolean rejected) {
+        this.rejected = rejected;
+    }
 }

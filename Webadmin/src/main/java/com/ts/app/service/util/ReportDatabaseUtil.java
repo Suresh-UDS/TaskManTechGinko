@@ -7,6 +7,7 @@ import com.ts.app.config.ReportDatabaseConfiguration;
 import com.ts.app.domain.*;
 import com.ts.app.domain.Measurements.AttendanceStatusMeasurement;
 import com.ts.app.domain.Measurements.JobStatusMeasurement;
+import com.ts.app.domain.Measurements.QuotationStatusMeasurement;
 import com.ts.app.domain.Measurements.TicketStatusMeasurement;
 import com.ts.app.domain.util.StringUtil;
 import com.ts.app.repository.ReportDatabaseAttendanceRepository;
@@ -311,7 +312,7 @@ public class ReportDatabaseUtil {
     /* Add Quotation Points */
     public void addQuotationPoints() throws Exception {
         InfluxDB influxDB = connectDatabase();
-        Object rateCards = rateCardService.findAll();
+        Object rateCards = rateCardService.getAllQuotations();
         List<QuotationDTO> quotationResults = new ArrayList<QuotationDTO>();
         if (rateCards != null) {
             ObjectMapper mapper = new ObjectMapper();
@@ -325,17 +326,27 @@ public class ReportDatabaseUtil {
             } catch (IOException e) {
                 log.error("Error while converting quotation results to objects", e);
             }
+
             if(CollectionUtils.isNotEmpty(quotationResults)) {
                 int i=0;
                 for(QuotationDTO quotationResult : quotationResults) {
                     log.debug("Total size" + i);
                     Calendar cal = Calendar.getInstance();
-                    Date formatDate = Date.from(quotationResult.getCreatedDate().toInstant());
-                    cal.setTime(formatDate);
-                    cal.set(Calendar.HOUR_OF_DAY, 0);
-                    cal.set(Calendar.MINUTE, 0);
-                    cal.set(Calendar.SECOND, 0);
-                    cal.set(Calendar.MILLISECOND, 0);
+                    if(quotationResult.getCreatedDate() != null) {
+                        Date formatDate = Date.from(quotationResult.getCreatedDate().toInstant());
+                        cal.setTime(formatDate);
+                        cal.set(Calendar.HOUR_OF_DAY, 0);
+                        cal.set(Calendar.MINUTE, 0);
+                        cal.set(Calendar.SECOND, 0);
+                        cal.set(Calendar.MILLISECOND, 0);
+                    } else {
+                        Date currentDate = new Date();
+                        cal.setTime(currentDate);
+                        cal.set(Calendar.HOUR_OF_DAY, 0);
+                        cal.set(Calendar.MINUTE, 0);
+                        cal.set(Calendar.SECOND, 0);
+                        cal.set(Calendar.MILLISECOND, 0);
+                    }
                     log.debug("calendar time milliseconds" +cal.getTimeInMillis());
                     log.debug("system time milliseconds" + System.currentTimeMillis());
 
@@ -357,6 +368,8 @@ public class ReportDatabaseUtil {
                         .tag("isDrafted", String.valueOf(quotationResult.isDrafted()))
                         .addField("isSubmitted", quotationResult.isSubmitted())
                         .tag("isSubmitted", String.valueOf(quotationResult.isSubmitted()))
+                        .addField("isRejected", quotationResult.isRejected())
+                        .tag("isRejected", String.valueOf(quotationResult.isRejected()))
                         .addField("statusCount", 1)
                         .build();
 
@@ -1022,6 +1035,104 @@ public class ReportDatabaseUtil {
         return reportCounts;
     }
 
+    public QuotationReportCounts getQuotationCounts(SearchCriteria searchCriteria) {
+        InfluxDB connection = connectDatabase();
+
+        StringBuilder sb = new StringBuilder();
+        long fromDate;
+        long toDate;
+        if(searchCriteria != null) {
+            sb.append("SELECT sum(statusCount) as statusCount, count(date) as totalCount FROM QuotationReport WHERE");
+            if(searchCriteria.getFromDate() != null) {
+
+                Calendar fromCal = Calendar.getInstance();
+                fromCal.setTime(searchCriteria.getFromDate());
+                fromCal.set(Calendar.HOUR_OF_DAY, 0);
+                fromCal.set(Calendar.MINUTE, 0);
+                fromCal.set(Calendar.SECOND, 0);
+                fromCal.set(Calendar.MILLISECOND, 0);
+                fromDate = fromCal.getTimeInMillis();
+                sb.append(" ");
+                sb.append("date>="+fromDate);
+            }
+
+            if(searchCriteria.getToDate() != null) {
+                sb.append(" ");
+                sb.append("AND");
+                sb.append(" ");
+                Calendar toCal = Calendar.getInstance();
+                toCal.setTime(searchCriteria.getToDate());
+                toCal.set(Calendar.HOUR_OF_DAY, 0);
+                toCal.set(Calendar.MINUTE, 0);
+                toCal.set(Calendar.SECOND, 0);
+                toCal.set(Calendar.MILLISECOND, 0);
+                toDate = toCal.getTimeInMillis();
+                sb.append("date<=" +toDate);
+                sb.append(" ");
+            }
+
+            if(searchCriteria.getProjectId() > 0) {
+                sb.append("AND");
+                sb.append(" ");
+                sb.append("projectId="+searchCriteria.getProjectId());
+            }
+
+            if(searchCriteria.getSiteId() > 0) {
+                sb.append(" ");
+                sb.append("AND");
+                sb.append(" ");
+                sb.append("siteId="+searchCriteria.getSiteId());
+            }
+
+            if(StringUtils.isNotEmpty(searchCriteria.getRegion())) {
+                sb.append(" ");
+                sb.append("AND");
+                sb.append(" ");
+                sb.append("region='"+searchCriteria.getRegion()+"'");
+            }
+
+            if(StringUtils.isNotEmpty(searchCriteria.getBranch())) {
+                sb.append(" ");
+                sb.append("AND");
+                sb.append(" ");
+                sb.append("branch='"+searchCriteria.getBranch()+"'");
+            }
+
+            sb.append(" group by status");
+        }
+
+        String query = sb.toString();
+        log.debug("Query string builder" +query);
+
+        List<QuotationStatusMeasurement> quotationPoints = reportDatabaseService.getQuotationPoints(connection, query, dbName);
+        QuotationReportCounts quotationReportCount = new QuotationReportCounts();
+        if(quotationPoints.size() > 0) {
+            int totalCounts = 0;
+            for(QuotationStatusMeasurement quotationPoint : quotationPoints) {
+                if(quotationPoint.getStatus().equalsIgnoreCase("WAITING FOR APPROVAL")) {
+                    quotationReportCount.setWaitingForApproveCnts(quotationPoint.getStatusCount());
+                    totalCounts += quotationPoint.getTotalCount();
+                }
+                if(quotationPoint.getStatus().equalsIgnoreCase("PENDING")) {
+                    quotationReportCount.setPendingCounts(quotationPoint.getStatusCount());
+                    totalCounts += quotationPoint.getTotalCount();
+                }
+                if(quotationPoint.getStatus().equalsIgnoreCase("APPROVED")) {
+                    quotationReportCount.setApprovedCounts(quotationPoint.getStatusCount());
+                    totalCounts += quotationPoint.getTotalCount();
+                }
+                if(quotationPoint.getStatus().equalsIgnoreCase("REJECTED")) {
+                    quotationReportCount.setRejectedCounts(quotationPoint.getStatusCount());
+                    totalCounts += quotationPoint.getTotalCount();
+                }
+            }
+            quotationReportCount.setTotalQuotations(totalCounts);
+        }
+        return quotationReportCount;
+    }
+    /* End Get Total Counts Status based */
+
+    /* Overwrite a result to Influx Db */
     public String deleteOrUpdateJobPoints() {
         InfluxDB connection = connectDatabase();
         List<JobStatusReport> lastModResults = this.getLastModifiedJobData();
@@ -1128,6 +1239,57 @@ public class ReportDatabaseUtil {
         }
 
         return "New Attendance Points are inserted...";
+    }
+
+    public String deleteOrUpdateQuotePoints() {
+        InfluxDB connection = connectDatabase();
+        Object quotations = rateCardService.getLastmodifiedResult();
+        List<QuotationDTO> quotationResults = new ArrayList<QuotationDTO>();
+        if (quotations != null) {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.findAndRegisterModules();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            mapper.configure(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE, false);
+            try {
+                quotationResults = mapper.readValue((String) quotations,
+                    new TypeReference<List<QuotationDTO>>() {
+                    });
+            } catch (IOException e) {
+                log.error("Error while converting quotation results to objects", e);
+            }
+            if (quotationResults.size() > 0) {
+                int i = 0;
+                for (QuotationDTO lastModResult : quotationResults) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("SELECT * FROM QuotationReport WHERE");
+                    sb.append(" ");
+                    sb.append("id=" + lastModResult.getSerialId());
+                    String query = sb.toString();
+                    List<QuotationStatusMeasurement> quoteRepPoints = reportDatabaseService.getQuotationPoints(connection, query, dbName);
+                    if (quoteRepPoints.size() > 0) {
+                        for (QuotationStatusMeasurement attn : quoteRepPoints) {
+                            InfluxDB influxDB = connectDatabase();
+                            Query deleteQuery = BoundParameterQuery.QueryBuilder.newQuery("DELETE FROM QuotationReport WHERE time=$time")
+                                .forDatabase(dbName)
+                                .bind("time", attn.getTime())
+                                .create();
+                            QueryResult results = influxDB.query(deleteQuery);
+                            log.debug("Deleted results" + results);
+                        }
+                    }
+                    /* add new Quotations points */
+                    try {
+                        reportDatabaseService.addNewQuotePoints(lastModResult, i);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    i++;
+                }
+            }
+
+        }
+
+        return "New Quotation Points are inserted...";
     }
 
 

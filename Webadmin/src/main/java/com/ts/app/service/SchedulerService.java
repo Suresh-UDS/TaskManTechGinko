@@ -1442,6 +1442,11 @@ public class SchedulerService extends AbstractService {
         reportDatabaseUtil.deleteOrUpdateAttnPoints();
     }
 
+    //@Scheduled(cron="0 */5 * * * ?")
+    public void createQuotePoints() {
+        reportDatabaseUtil.deleteOrUpdateQuotePoints();
+    }
+
 
 
 }

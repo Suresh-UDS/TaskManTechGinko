@@ -176,4 +176,9 @@ public class RateCardResource {
 	    return result;
     }
 
+    @RequestMapping(value = "/quotation/find/all", method = RequestMethod.GET)
+    public Object getAllQuotes() {
+	    return rateCardService.getAllQuotations();
+    }
+
 }

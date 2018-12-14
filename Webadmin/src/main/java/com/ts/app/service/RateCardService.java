@@ -580,6 +580,55 @@ public class RateCardService extends AbstractService {
         return  quotationList;
     }
 
+    public Object getAllQuotations() {
+	    Object quotations = "";
+	    try{
+	        RestTemplate restTemplate = new RestTemplate();
+	        MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
+	        jackson2HttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+	        restTemplate.getMessageConverters().add(jackson2HttpMessageConverter);
+
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+            headers.setAll(map);
+
+            HttpEntity<?> requestEntity = new HttpEntity<>(headers);
+            log.debug("Rate card service end point"+quotationSvcEndPoint);
+            ResponseEntity<?> response = restTemplate.getForEntity(quotationSvcEndPoint+"/quotations/findAll", String.class);
+            log.debug("Response from quotation srv status "+response.getStatusCode()+ " response " +response.getBody());
+            quotations = response.getBody();
+        } catch (Exception e) {
+            log.error("Error while calling Quotations service ", e);
+            e.printStackTrace();
+        }
+	    return quotations;
+    }
+
+    public Object getLastmodifiedResult() {
+        Object lastModResults = "";
+        try{
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jackson2HttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            restTemplate.getMessageConverters().add(jackson2HttpMessageConverter);
+
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+            headers.setAll(map);
+
+            log.debug("Quotation service end point"+quotationSvcEndPoint);
+            ResponseEntity<?> response = restTemplate.getForEntity(quotationSvcEndPoint+"/lastmodified/quotations", String.class);
+            log.debug("Response from quotation srv status "+response.getStatusCode()+ " response " +response.getBody());
+            lastModResults = response.getBody();
+        } catch (Exception e) {
+            log.error("Error while calling Quotations service ", e);
+            e.printStackTrace();
+        }
+        return lastModResults;
+    }
+
 	public Object getQuotationSummary(SearchCriteria searchCriteria, List<Long> siteIds) {
 
         log.debug("get Quotations");
