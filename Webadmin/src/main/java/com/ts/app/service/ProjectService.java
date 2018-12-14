@@ -68,12 +68,13 @@ public class ProjectService extends AbstractService {
 
 	public boolean isDuplicate(ProjectDTO projectDto) {
 	    log.debug("Project duplicate get"+projectDto.getUserId());
+	    List<Project> projects = projectRepository.findNames(projectDto.getName());
 		SearchCriteria criteria = new SearchCriteria();
 		criteria.setProjectName(projectDto.getName());
 		criteria.setUserId(projectDto.getUserId());
 		SearchResult<ProjectDTO> searchResults = findBySearchCrieria(criteria);
 		criteria.setUserId(projectDto.getUserId());
-		if(searchResults != null && CollectionUtils.isNotEmpty(searchResults.getTransactions())) {
+		if(projects !=null && CollectionUtils.isNotEmpty(projects)) {
 			return true;
 		}
 		return false;

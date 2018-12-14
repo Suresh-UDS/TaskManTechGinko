@@ -102,11 +102,12 @@ module.exports = {
           return res.json(500, err);
         }
         console.log(locations);
-        if(locations[0]){
-          var nearbySite = locations[0];
-          if(nearbySite.siteId == siteId) {
-            res.json(200, '{status: true}')
-          }
+        if(locations && locations.length>0){
+          locations.forEach(function (location) {
+              if(location.siteId == siteId){
+                  res.json(200,'{status : true}')
+              }
+          })
         }
         res.json(500, '{status: false}');
       });
