@@ -120,7 +120,7 @@
               Type
             </ion-col>
             <ion-col col-6 no-padding="">
-              <p text-right>{{assetDetails.assetType}}</p>
+              <p text-right>{{assetDetails.assettype}}</p>
             </ion-col>
           </ion-row>
         </div>
@@ -214,26 +214,26 @@
           </ion-row>
         </div>
       </div>
-      <div class="card">
+      <div class="card" *ngIf="assetDetails.warrantyType">
         <div class="panel-heading card-header-md-clr-orange">AMC Vendor Details</div>
         <div class="card-content table-responsive padding-top0">
           <ion-row class="margin0 white-bg">
-            <ion-col col-6 class="label-on-left" no-padding="jk">
+            <ion-col col-6 class="label-on-left" no-padding="jk" *ngIf="assetDetails.warrantyType">
               Vendor
             </ion-col>
-            <ion-col col-6 no-padding="">
+            <ion-col col-6 no-padding="" *ngIf="assetDetails.warrantyType">
               <p text-right>{{assetDetails.warrantyType}}</p>
             </ion-col>
-            <ion-col col-6 class="label-on-left" no-padding="jk">
+            <ion-col col-6 class="label-on-left" no-padding="jk" *ngIf="assetDetails.warrantyType">
               Warranty Type
             </ion-col>
-            <ion-col col-6 no-padding="">
+            <ion-col col-6 no-padding="" *ngIf="assetDetails.warrantyType">
               <p text-right>{{assetDetails.warrantyType}}</p>
             </ion-col>
-            <ion-col col-5 class="label-on-left" no-padding="">
+            <ion-col col-5 class="label-on-left" no-padding="" *ngIf="assetDetails.warrantyExpiryDate">
               Warranty End Date
             </ion-col>
-            <ion-col col-7 no-padding="">
+            <ion-col col-7 no-padding="" *ngIf="assetDetails.warrantyExpiryDate">
               <p text-right>{{assetDetails.warrantyExpiryDate | date:'MMM d, y, h:mm a' }}</p>
             </ion-col>
           </ion-row>

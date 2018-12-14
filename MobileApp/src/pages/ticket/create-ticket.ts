@@ -168,6 +168,7 @@ export class CreateTicket {
                       if(response.errorStatus){
                           demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
                       }else{
+                          demo.showSwal('success-message-and-ok','Success','Ticket Created Successfully..');
                           console.log(response);
 
                           //Ticket image upload on successfully creating ticket.

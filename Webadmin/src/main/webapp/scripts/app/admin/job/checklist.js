@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
             .state('checklists', {
                 parent: 'manage',
                 url: '/checklists',
-                controller: 'ChecklistController',
+                //controller: 'ChecklistController',
                 data: {
                     authorities: [],
                     pageTitle: 'Checklist'

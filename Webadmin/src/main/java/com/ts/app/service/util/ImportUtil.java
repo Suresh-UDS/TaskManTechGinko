@@ -181,6 +181,8 @@ public class ImportUtil {
 			response = importNewFiles("job",filePath, fileName, targetFilePath);
 		}catch (Exception e ) {
 			log.error("Error while importing job data", e);
+			result.setStatus("FAILED");
+			result.setMsg(e.getMessage());			
 		}
 		//result.setMsg(response);
 		return result;
@@ -206,9 +208,10 @@ public class ImportUtil {
 			importNewFiles("client",filePath, fileName, targetFilePath);
 			result.setFile(fileKey);
 			//result.setStatus(getImportStatus(fileKey));
-			result.setStatus("PROCESSING");
 		}catch (Exception e) {
 			log.error("Error while importing client data",e);
+			result.setStatus("FAILED");
+			result.setMsg(e.getMessage());			
 		}
 		return result;
 	}
@@ -232,9 +235,10 @@ public class ImportUtil {
 		try {
 			importNewFiles("site",filePath, fileName, targetFilePath);
 			result.setFile(fileKey);
-			result.setStatus("PROCESSING");
 		}catch (Exception e) {
 			log.error("Error while importing site data",e);
+			result.setStatus("FAILED");
+			result.setMsg(e.getMessage());			
 		}
 		return result;
 	}
@@ -286,9 +290,10 @@ public class ImportUtil {
 		try {
 			importNewFiles("location",filePath, fileName, targetFilePath);
 			result.setFile(fileKey);
-			result.setStatus("PROCESSING");
 		}catch (Exception e) {
 			log.error("Error while importing location data",e);
+			result.setStatus("FAILED");
+			result.setMsg(e.getMessage());			
 		}
 		return result;
 	}
@@ -312,9 +317,11 @@ public class ImportUtil {
 		try {
 			importNewFiles("employee",filePath, fileName, targetFilePath);
 			result.setFile(fileKey);
-			result.setStatus("PROCESSING");
 		}catch (Exception e) {
 			log.error("Error while importing employee data",e);
+			result.setStatus("FAILED");
+			result.setMsg(e.getMessage());
+			statusMap.put(fileKey, result);
 		}
 		return result;
 
@@ -345,9 +352,10 @@ public class ImportUtil {
 				importNewFiles("asset",filePath, fileName, targetFilePath);
 			}
 			result.setFile(fileKey);
-			result.setStatus("PROCESSING");
 		}catch (Exception e) {
 			log.error("Error while importing asset data",e);
+			result.setStatus("FAILED");
+			result.setMsg(e.getMessage());			
 		}
 		return result;
 	}
@@ -372,9 +380,10 @@ public class ImportUtil {
 		try {
 			importNewFiles("checklist",filePath, fileName, targetFilePath);
 			result.setFile(fileKey);
-			result.setStatus("PROCESSING");
 		}catch (Exception e) {
 			log.error("Error while importing checklist data",e );
+			result.setStatus("FAILED");
+			result.setMsg(e.getMessage());			
 		}
 		return result;
 
@@ -400,6 +409,8 @@ public class ImportUtil {
 			importNewFiles("employeeshift",filePath, fileName, targetFilePath);
 		}catch (Exception e) {
 			log.error("Eror while importing employee shift data",e);
+			result.setStatus("FAILED");
+			result.setMsg(e.getMessage());
 		}
 		return result;
 
@@ -496,7 +507,7 @@ public class ImportUtil {
 			importResult.setStatus(FAILED);
 			importResult.setMsg(statusMsg.toString());
 			statusMap.put(fileKey, importResult);
-			throw ex;
+			throw new Exception(statusMsg.toString());
 		}
 		//}
 		//result.setEmpId(empId);
@@ -734,7 +745,7 @@ public class ImportUtil {
 					importResult.setStatus(FAILED);
 					importResult.setMsg(response.toString());
 					statusMap.put(fileKey, importResult);
-					throw e;
+					throw new Exception(response.toString());
 				}
 			}
 
@@ -747,7 +758,7 @@ public class ImportUtil {
 			importResult.setStatus(FAILED);
 			importResult.setMsg(response.toString());
 			statusMap.put(fileKey, importResult);
-			throw e;
+			throw new Exception(response.toString());
 		} catch (IllegalStateException | NumberFormatException formatEx) {
 			String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
 			log.error(msg, formatEx);
@@ -760,7 +771,7 @@ public class ImportUtil {
 			importResult.setStatus(FAILED);
 			importResult.setMsg(response.toString());
 			statusMap.put(fileKey, importResult);
-			throw formatEx;
+			throw new Exception(response.toString());
 		}
 		if(response.length() == 0) {
 			response.append(SUCCESS_MESSAGE);
@@ -818,7 +829,7 @@ public class ImportUtil {
 					importResult.setStatus(FAILED);
 					importResult.setMsg(response.toString());
 					statusMap.put(fileKey, importResult);
-					throw e;
+					throw new Exception(response.toString());
 				}
 			}
 
@@ -831,7 +842,7 @@ public class ImportUtil {
 			importResult.setStatus(FAILED);
 			importResult.setMsg(response.toString());
 			statusMap.put(fileKey, importResult);
-			throw e;
+			throw new Exception(response.toString());
 		} catch (IllegalStateException | NumberFormatException formatEx) {
 			String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
 			log.error(msg, formatEx);
@@ -844,7 +855,7 @@ public class ImportUtil {
 			importResult.setStatus(FAILED);
 			importResult.setMsg(response.toString());
 			statusMap.put(fileKey, importResult);
-			throw formatEx;
+			throw new Exception(response.toString());
 		}
 		if(response.length() == 0) {
 			response.append(SUCCESS_MESSAGE);
@@ -927,7 +938,7 @@ public class ImportUtil {
 					importResult.setStatus(FAILED);
 					importResult.setMsg(response.toString());
 					statusMap.put(fileKey, importResult);
-					throw e;
+					throw new Exception(response.toString());
 				}
 			}
 
@@ -940,7 +951,7 @@ public class ImportUtil {
 			importResult.setStatus(FAILED);
 			importResult.setMsg(response.toString());
 			statusMap.put(fileKey, importResult);
-			throw e;
+			throw new Exception(response.toString());
 		} catch (IllegalStateException | NumberFormatException formatEx) {
 			String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
 			log.error(msg, formatEx);
@@ -953,7 +964,7 @@ public class ImportUtil {
 			importResult.setStatus(FAILED);
 			importResult.setMsg(response.toString());
 			statusMap.put(fileKey, importResult);
-			throw formatEx;
+			throw new Exception(response.toString());
 		}
 		if(response.length() == 0) {
 			response.append(SUCCESS_MESSAGE);
@@ -1007,7 +1018,7 @@ public class ImportUtil {
 					importResult.setStatus(FAILED);
 					importResult.setMsg(response.toString());
 					statusMap.put(fileKey, importResult);
-					throw e;
+					throw new Exception(response.toString());
 				}
 			}
 
@@ -1020,7 +1031,7 @@ public class ImportUtil {
 			importResult.setStatus(FAILED);
 			importResult.setMsg(response.toString());
 			statusMap.put(fileKey, importResult);
-			throw e;
+			throw new Exception(response.toString());
 		} catch (IllegalStateException | NumberFormatException formatEx) {
 			String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
 			log.error(msg, formatEx);
@@ -1033,7 +1044,7 @@ public class ImportUtil {
 			importResult.setStatus(FAILED);
 			importResult.setMsg(response.toString());
 			statusMap.put(fileKey, importResult);
-			throw formatEx;
+			throw new Exception(response.toString());
 		}
 		if(response.length() == 0) {
 			response.append(SUCCESS_MESSAGE);
@@ -1088,7 +1099,7 @@ public class ImportUtil {
 					importResult.setStatus(FAILED);
 					importResult.setMsg(response.toString());
 					statusMap.put(fileKey, importResult);
-					throw e;
+					throw new Exception(response.toString());
 				}	
 					
 
@@ -1103,7 +1114,7 @@ public class ImportUtil {
 			importResult.setStatus(FAILED);
 			importResult.setMsg(response.toString());
 			statusMap.put(fileKey, importResult);
-			throw e;
+			throw new Exception(response.toString());
 		} catch (IllegalStateException | NumberFormatException formatEx) {
 			String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
 			log.error(msg, formatEx);
@@ -1116,7 +1127,7 @@ public class ImportUtil {
 			importResult.setStatus(FAILED);
 			importResult.setMsg(response.toString());
 			statusMap.put(fileKey, importResult);
-			throw formatEx;
+			throw new Exception(response.toString());
 		}
 		if(response.length() == 0) {
 			response.append(SUCCESS_MESSAGE);
@@ -1209,7 +1220,7 @@ public class ImportUtil {
 					importResult.setStatus(FAILED);
 					importResult.setMsg(response.toString());
 					statusMap.put(fileKey, importResult);
-					throw e;
+					throw new Exception(response.toString());
 				}
 
 			}
@@ -1223,7 +1234,7 @@ public class ImportUtil {
 			importResult.setStatus(FAILED);
 			importResult.setMsg(response.toString());
 			statusMap.put(fileKey, importResult);
-			throw e;
+			throw new Exception(response.toString());
 		} catch (IllegalStateException | NumberFormatException formatEx) {
 			String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
 			log.error(msg, formatEx);
@@ -1236,7 +1247,7 @@ public class ImportUtil {
 			importResult.setStatus(FAILED);
 			importResult.setMsg(response.toString());
 			statusMap.put(fileKey, importResult);
-			throw formatEx;
+			throw new Exception(response.toString());
 		}
 		if(response.length() == 0) {
 			response.append(SUCCESS_MESSAGE);
@@ -1322,7 +1333,7 @@ public class ImportUtil {
 					importResult.setStatus(FAILED);
 					importResult.setMsg(response.toString());
 					statusMap.put(fileKey, importResult);
-					throw e;
+					throw new Exception(response.toString());
 				}
 
 			}
@@ -1336,7 +1347,7 @@ public class ImportUtil {
 			importResult.setStatus(FAILED);
 			importResult.setMsg(response.toString());
 			statusMap.put(fileKey, importResult);
-			throw e;
+			throw new Exception(response.toString());
 		} catch (IllegalStateException | NumberFormatException formatEx) {
 			String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
 			log.error(msg, formatEx);
@@ -1349,7 +1360,7 @@ public class ImportUtil {
 			importResult.setStatus(FAILED);
 			importResult.setMsg(response.toString());
 			statusMap.put(fileKey, importResult);
-			throw formatEx;
+			throw new Exception(response.toString());
 		}
 		if(response.length() == 0) {
 			response.append(SUCCESS_MESSAGE);
@@ -1438,7 +1449,7 @@ public class ImportUtil {
 					importResult.setStatus(FAILED);
 					importResult.setMsg(response.toString());
 					statusMap.put(fileKey, importResult);
-					throw e;
+					throw new Exception(response.toString());
 				}
 
 			}
@@ -1452,7 +1463,7 @@ public class ImportUtil {
 			importResult.setStatus(FAILED);
 			importResult.setMsg(response.toString());
 			statusMap.put(fileKey, importResult);
-			throw e;
+			throw new Exception(response.toString());
 		} catch (IllegalStateException | NumberFormatException formatEx) {
 			String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
 			log.error(msg, formatEx);
@@ -1465,7 +1476,7 @@ public class ImportUtil {
 			importResult.setStatus(FAILED);
 			importResult.setMsg(response.toString());
 			statusMap.put(fileKey, importResult);
-			throw formatEx;
+			throw new Exception(response.toString());
 		}
 		if(response.length() == 0) {
 			response.append(SUCCESS_MESSAGE);
@@ -1617,7 +1628,7 @@ public class ImportUtil {
 					importResult.setStatus(FAILED);
 					importResult.setMsg(response.toString());
 					statusMap.put(fileKey, importResult);
-					throw e;
+					throw new Exception(response.toString());
 				}
 
 
@@ -1634,7 +1645,7 @@ public class ImportUtil {
 			importResult.setStatus(FAILED);
 			importResult.setMsg(response.toString());
 			statusMap.put(fileKey, importResult);
-			throw e;
+			throw new Exception(response.toString());
 		}  catch (IllegalStateException | NumberFormatException formatEx) {
 			String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
 			log.error(msg, formatEx);
@@ -1647,7 +1658,7 @@ public class ImportUtil {
 			importResult.setStatus(FAILED);
 			importResult.setMsg(response.toString());
 			statusMap.put(fileKey, importResult);
-			throw formatEx;
+			throw new Exception(response.toString());
 		}
 		if(response.length() == 0) {
 			response.append(SUCCESS_MESSAGE);
@@ -1795,7 +1806,7 @@ public class ImportUtil {
 					importResult.setStatus(FAILED);
 					importResult.setMsg(response.toString());
 					statusMap.put(fileKey, importResult);
-					throw e;
+					throw new Exception(response.toString());
 				}
 
 			/*}*/
@@ -1812,7 +1823,7 @@ public class ImportUtil {
 			importResult.setStatus(FAILED);
 			importResult.setMsg(response.toString());
 			statusMap.put(fileKey, importResult);
-			throw e;
+			throw new Exception(response.toString());
 		} catch (IllegalStateException | NumberFormatException formatEx) {
 			String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
 			log.error(msg, formatEx);
@@ -1825,7 +1836,7 @@ public class ImportUtil {
 			importResult.setStatus(FAILED);
 			importResult.setMsg(response.toString());
 			statusMap.put(fileKey, importResult);
-			throw formatEx;
+			throw new Exception(response.toString());
 		}
 		if(response.length() == 0) {
 			response.append(SUCCESS_MESSAGE);
