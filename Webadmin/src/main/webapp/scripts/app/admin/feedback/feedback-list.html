@@ -32,31 +32,42 @@
         </div>
 
     </div>
-    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
+    <div class="AppliedFilterCon" >
             <span class="AppliedFilterTxtCon">
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.checkInDateTimeFrom || localStorage.checkInDateTimeFrom">
-                    From: {{searchCriteria.checkInDateTimeFrom || localStorage.checkInDateTimeFrom | date:'dd/MM/yyyy'}}
-                </span>
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.checkInDateTimeTo || localStorage.checkInDateTimeTo">
-                    To: {{searchCriteria.checkInDateTimeTo || localStorage.checkInDateTimeTo | date:'dd/MM/yyyy'}}
-                </span>
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.projectName || localStorage.projectName">
-                    Client: {{searchCriteria.projectName || localStorage.projectName}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.checkInDateTimeFrom">
+                    From: {{searchCriteras.checkInDateTimeFrom | date:'dd/MM/yyyy'}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.siteName || localStorage.siteName">
-                    Site: {{searchCriteria.siteName || localStorage.siteName}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.checkInDateTimeTo">
+                    To: {{searchCriteras.checkInDateTimeTo | date:'dd/MM/yyyy'}}
                 </span>
-                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteria.block || localStorage.block">
-                    Block: {{searchCriteria.block || localStorage.block}}
+                <span
+	            class="tag label label-info" style="margin-right: 10px"
+	            ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
+					Client: {{searchCriteras.projectName}}
+				</span>
+                <span
+		            class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.regionId !=0 && searchCriteras.regionId !=null">
+					Region: {{searchCriteras.region}}
+				</span>
+				 <span class="tag label label-info" style="margin-right: 10px"
+		                  ng-show="searchCriteras.branchId !=0 && searchCriteras.branchId !=null">
+				    Branch: {{searchCriteras.branch}}
+				</span>
+                <span class="tag label label-info" style="margin-right: 10px"
+		                  ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
+						Site: {{searchCriteras.siteName}}
+				</span>
+                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.block">
+                    Block: {{searchCriteras.block}}
                 </span>
 
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.floor || localStorage.floor">
-                    Floor: {{searchCriteria.floor || localStorage.floor}}
+                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.floor">
+                    Floor: {{searchCriteras.floor}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px"ng-show="searchCriteria.zone || localStorage.zone">
-                    Zone: {{searchCriteria.zone || localStorage.zone}}
+                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.zone">
+                    Zone: {{searchCriteras.zone}}
                 </span>
 
             </span>
@@ -269,57 +280,149 @@
                     </div>
 
                 </div>
+                <!-- Feedbacks tab view start -->
+                <div class="panel panel-default TabsContainer">
+					<!--<div class="panel-heading">Panel Heading</div>-->
+					<div class="panel-body">
+						<ul class="nav nav-pills nav-pills-warning">
+							<li class="active"><a href=".pill2" data-toggle="tab">Feedbacks</a></li>
+							<li class=""><a href=".pill3" data-toggle="tab" ng-click="getFeedbackDetails()">Feedbacks Details</a></li>
+						</ul>
+						<div class="tab-content TabsContent" style="">
+
+							<div class="tab-pane fade in active pill2" id="pill2">
+
+								<div class="table-responsive tablecard">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Location</th>
+			                                    <th>Question</th>
+			                                    <th>Yes</th>
+			                                    <th>No</th>
+			                                    <th>Rating</th>
+
+											</tr>
+										</thead>
+										<tbody>
+										    <tr ng-repeat="questionRating in feedbackReport.questionRatings">
+			                                    <td>{{questionRating.location}}</td>
+			                                    <td>{{questionRating.question}}</td>
+			                                    <td><span ng-if="!questionRating.rating">{{questionRating.yesCount}}</span>
+			                                        <span ng-if="questionRating.rating">NA</span></td>
+			                                    <td><span ng-if="!questionRating.rating">{{questionRating.noCount}}</span>
+			                                        <span ng-if="questionRating.rating">NA</span></td>
+			                                    <td>
+			                                        <div  ng-if="questionRating.rating" ng-repeat ="(key, value) in questionRating.rating">
+			                                            ({{value}}) <jk-rating-stars max-rating="5" rating="key" read-only="readOnly" ></jk-rating-stars>
+			                                        </div>
+			                                        <span ng-if="!questionRating.rating">NA</span>
+			                                    </td>
+			                                    <td class="text-right"><a
+													ng-class="{active: $state.includes('admin')}"
+
+													ng-click="removeService($index)"
+													onClick="$('#deleteModal').modal()"
+													data-target="#myModal"
+													class="btn btn-simple btn-danger"><i
+														class="material-icons">close</i></a></td>
+			                                </tr>
 
 
-                <div class="card margin-TB-5 TableCard">
+										</tbody>
+										<tfoot>
+											<tr>
+												<td colspan="6">
+													<div class="txt-align-center" ng-hide="feedbackListData">
 
-                    <!--<div class="card-header card-header-icon" data-background-color="purple">-->
-                    <!--<i class="material-icons">assignment</i>-->
-                    <!--</div>-->
-                    <div class="card-content">
-                        <!--<h4 class="card-title">DataTables.net</h4>-->
+												        <div class="card-content">
 
+												            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="feedbackListLoader">
+												                <div loader-css="ball-pulse"></div>
+												            </div>
 
-                        <div class="table-responsive tablecard">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-								   <th>Location</th>
-                                    <th>Question</th>
-                                    <th>Yes</th>
-                                    <th>No</th>
-                                    <th>Rating</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="questionRating in feedbackReport.questionRatings">
-                                    <td>{{questionRating.location}}</td>
-                                    <td>{{questionRating.question}}</td>
-                                    <td><span ng-if="!questionRating.rating">{{questionRating.yesCount}}</span>
-                                        <span ng-if="questionRating.rating">NA</span></td>
-                                    <td><span ng-if="!questionRating.rating">{{questionRating.noCount}}</span>
-                                        <span ng-if="questionRating.rating">NA</span></td>
-                                    <td>
-                                        <div  ng-if="questionRating.rating" ng-repeat ="(key, value) in questionRating.rating">
-                                            ({{value}}) <jk-rating-stars max-rating="5" rating="key" read-only="readOnly" ></jk-rating-stars>
-                                        </div>
-                                        <span ng-if="!questionRating.rating">NA</span>
-                                    </td>
-                                </tr>
-                                </thead>
-                                <tbody>
+												            <h3>No feedbacks</h3>
 
-                                </tbody>
-                            </table>
+												        </div>
 
+												    </div>
+											    </td>
+											</tr>
+										</tfoot>
+									</table>
+								</div>
+							</div>
+							<div class="tab-pane fade pill3" id="pill3">
 
+								<div class="table-responsive tablecard">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th width="25%">Client</th>
+												<th width="25%">Site</th>
+												<th width="25%">Title</th>
+												<th width="25%">Questions</th>
 
-                        </div>
+											</tr>
+										</thead>
+										<tbody>
+											<!-- <tr ng-repeat="feedbackMaster in feedbackMasterList">
+											</tr>-->
+											<tr>
+												<td>test</td>
+					                            <td>test</td>
+					                            <td>test</td>
+					                            <td>
+						                            <a class="accordion-toggle collapsed" data-toggle="collapse"
+											        data-parent="#accordion2" href=".collapseThree{{$index}}">
+											         View Questions
+											         </a>
 
-                    </div>
-                    <!-- end content-->
-                </div>
-                <!--  end card  -->
+											    </td>
+											</tr>
+											<tr>
+											    <td colspan="4">
+											         <div class="row">
+											            <div class="col-md-10 col-md-offset-1">
+												           <div id="collapseThree" class="accordion-body collapseThree{{$index}} collapse">
+														        <div class="table-responsive tablecard">
+																	<table class="table table-striped table-bordered">
+																		<thead>
+																			<tr>
+																				<th width="50%">Questions</th>
+																				<th width="10%">Yes/No</th>
+																				<th width="15%">Rating</th>
+																				<th width="25%">Attended By</th>
+
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<!-- <tr ng-repeat="feedbackMaster in feedbackMasterList"> -->
+																			<tr>
+																				<td>test</td>
+													                            <td>test</td>
+													                            <td>test</td>
+													                            <td>test</td>
+																			</tr>
+
+																		</tbody>
+
+																	</table>
+																</div>
+													       </div>
+											           </div>
+											       </div>
+											    </td>
+											</tr>
+										</tbody>
+
+									</table>
+								</div>
+							</div>
+						</div>
+					 </div>
+				</div>
+              <!-- Feedbacks tab view end -->
             </div>
             <!-- end col-md-12 -->
         </div>
@@ -328,19 +431,7 @@
   </form>
 
 
-    <div class="card margin-TB-5 txt-align-center" ng-hide="feedbackListData">
 
-        <div class="card-content">
-
-            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="feedbackListLoader">
-                <div loader-css="ball-pulse"></div>
-            </div>
-
-            <h3>No feedbacks</h3>
-
-        </div>
-
-    </div>
 
 
     <!-- Pagination directive start -->
@@ -369,75 +460,105 @@
                 </div>
                 <div class="modal-body">
 
-                    <div class="row">
-
+                   <div class="row dateFilterCon">
                         <div class="col-xs-12 col-md-3">
-                            <div class="form-group pdng-top20" >
-                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                <input ng-model="selectedFromDate" id="dateFilterFrom" type="text" class="form-control datepicker border-bottom-input"  autocomplete="off" tabindex="1"/>
+                            <div class="dropdown" >
+
+                                <div class="form-group">
+                                    <label class="label-control">From date</label>
+                                    <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
+                                    <input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedFromDate" autocomplete="off" tabindex="1" />
+
+                                </div>
                             </div>
+
                         </div>
                         <div class="col-xs-12 col-md-3">
-                            <div class="form-group pdng-top20"  >
-                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                <input ng-model="selectedToDate" id="dateFilterTo" type="text" class="form-control datepicker border-bottom-input"  autocomplete="off" tabindex="2"/>
+                            <div class="dropdown" >
+
+                                <div class="form-group">
+                                    <label class="label-control">To date</label>
+                                    <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
+                                    <input type="text" class="form-control datepicker"  id="dateFilterTo"   ng-model="selectedToDate" autocomplete="off" tabindex="2" />
+
+                                </div>
+
                             </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                          <div class="form-group">
+                              <div class="dropdown">
+                                     <label class="label-control">Client</label>
+                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                     <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+				                     <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
+									  <ui-select-match placeholder="Select clients..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
+									  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)" null-option="allClients" loose-null>
+
+									    <span ng-bind-html="client.name | highlight: $select.search"></span>
+									  </ui-select-choices>
+									</ui-select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row dateFilterCon">
+
+                        <div class="col-xs-12 col-md-3">
+                            <div class="form-group" >
+			                    <div class="dropdown">
+                                       <label class="label-control">Region</label>
+                                       <span ng-show="regionSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                       <span ng-show="!regionSpin && !regionsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+	                                <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
+									  <ui-select-match placeholder="Select region..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
+									  <ui-select-choices repeat="regionsListOne in regionsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,'');loadBranchList(client.selected.id)" null-option="allRegions" loose-null>
+									    <span ng-bind-html="regionsListOne.name | highlight: $select.search"></span>
+									  </ui-select-choices>
+									</ui-select>
+									<span ng-if="regionsLists.length == 1"><p class="error-msg margin0">No region</p></span>
+                                </div>
+                           </div>
                         </div>
                         <div class="col-xs-12 col-md-3">
                             <div class="form-group" >
-                                <div class="dropdown">
-                                    <label class="label-control">Client</label>
-                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                    <!--<select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projectsList track by project.id" ng-pattern="Select Client" ng-required>-->
-                                    <!--<option value="">Select Client...</option>-->
-                                    <!--</select>-->
-                                    <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                    <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <!--<ui-select ng-model="selectedProject" ng-disabled="clientFilterDisable"  >
-                                        <ui-select-match placeholder="Select client...">{{filter ? selectedProject.name?selectedProject.name:'Select client' :clearField?'Select Client':selectedProject}}</ui-select-match>
-                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search" ng-click="loadSearchProject(selectedProject);loadSites()">
-                                            <div ng-bind="client" ></div>
-                                        </ui-select-choices>
-                                    </ui-select>-->
-                                    <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
-                                        <ui-select-match placeholder="Select clients..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
-                                        <ui-select-choices repeat="client in clients | filter: $select.search"  ng-click="loadDepSitesList(client.selected)" null-option="allClients" loose-null>
-                                            <span ng-bind-html="client.name | highlight: $select.search"></span>
-                                        </ui-select-choices>
-                                    </ui-select>
-                                </div>
-                            </div>
+                               <div class="dropdown">
+		                              <label class="label-control">Branch</label>
+		                               <span ng-show="branchSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+		                               <span ng-show="!branchSpin && !branchsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+		                               <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
+									  <ui-select-match placeholder="Select branch..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
+									  <ui-select-choices repeat="branchsListOne in branchsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,branchsListOne.selected.name)" null-option="allRegions" loose-null>
+									    <span ng-bind-html="branchsListOne.name | highlight: $select.search"></span>
+									  </ui-select-choices>
+									</ui-select>
+									<span ng-if="branchsLists.length == 1"><p class="error-msg margin0">No branch</p></span>
+					           </div>
+                          </div>
                         </div>
-                        <div class="col-xs-12 col-md-3">
+
+                        <div class="col-xs-12 col-md-6">
                             <div class="dropdown">
-                                <div class="form-group">
-                                    <label class="label-control">Site</label>
-                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                    <!--<select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sitesList track by site.id" ng-pattern="Select Site">-->
-                                    <!--<option value="">Select Site...</option>-->
-                                    <!--</select>-->
-                                    <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                    <span ng-show="!siteSpin && !sitesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <!--<span class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                    <!--<ui-select ng-model="selectedSite" ng-disabled="siteFilterDisable || sites.length == 0" >
-                                        <ui-select-match placeholder="Select site...">{{sites.length == 0 ? 'Select site' : selectedSite.searchStatus ? selectedSite.name?selectedSite.name:'Select Site' : hideSite ?clearField?'Select site':selectedSite : 'Select Site' }}</ui-select-match>
-                                        <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search"  ng-click="loadSearchSite(selectedSite);searchLocations();loadFeedbackMasters();">
-                                            <div ng-bind="site"></div>
-                                        </ui-select-choices>
-                                    </ui-select>
-                                    <span ng-if="sites.length == 0"><p class="error-msg margin0">No sites</p></span>-->
-                                    <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 0">
-                                        <ui-select-match placeholder="Select site..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
-                                        <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search" null-option="allSites" loose-null ng-click="searchLocations();loadFeedbackMasters();">
-                                            <span ng-bind-html="sitesListOne.name | highlight: $select.search"></span>
-                                        </ui-select-choices>
-                                    </ui-select>
-                                    <span ng-if="sitesLists.length == 0"><p class="error-msg margin0">No sites</p></span>
-                                </div>
-                            </div>
+                              <div class="form-group">
+                                   <label class="label-control">Site</label>
+                                   <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+	                               <span ng-show="!siteSpin && !sitesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+	                               <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
+									  <ui-select-match placeholder="Select site..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
+									  <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search" null-option="allSites" ng-click="searchLocations();loadFeedbackMasters();" loose-null>
+									    <span ng-bind-html="sitesListOne.name | highlight: $select.search"></span>
+									  </ui-select-choices>
+									</ui-select>
+									<span ng-if="sitesLists.length == 1"><p class="error-msg margin0">No sites</p></span>
+                             </div>
+                           </div>
                         </div>
-
-
                     </div>
 
                     <div class="TailsCon">
