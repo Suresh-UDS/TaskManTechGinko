@@ -141,7 +141,26 @@ ul.checkList li
     background: #ffffff;
     z-index: 1000;
 }
+.CheckListNewBx {
+    display: none;
+    position: absolute;
+    width: 150px;
+    top: -29px;
+    right: 37px;
+    border: 1px solid #ccc;
+    min-height: 50px;
+    background: #ffffff;
+    z-index: 10000000000000;
+}
+.CheckListNewBx div span {
+	 border-radius: 0px !important;
+}
 .infoIcon:hover .CheckListBx
+{
+    display: block;
+}
+
+.infoIcon:hover .CheckListNewBx
 {
     display: block;
 }

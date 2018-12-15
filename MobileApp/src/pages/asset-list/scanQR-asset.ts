@@ -43,9 +43,11 @@ export class ScanQRAsset {
                     scanSub.unsubscribe();
                     if(this.offline)
                     {
+                        this.navCtrl.pop();
                         this.navCtrl.setRoot(OfflineAssetList,{text:text})
                     }
                     else {
+                        this.navCtrl.pop();
                         this.navCtrl.setRoot(AssetList,{text:text})
                     }
 
@@ -69,7 +71,15 @@ export class ScanQRAsset {
                 }else {
                     this.qrScanner.hide();
                     scanSub.unsubscribe();
-                    this.navCtrl.pop();
+                    if(this.offline)
+                    {
+                        this.navCtrl.pop();
+                        this.navCtrl.setRoot(OfflineAssetList,{text:text})
+                    }
+                    else {
+                        this.navCtrl.pop();
+                        this.navCtrl.setRoot(AssetList,{text:text})
+                    }
                     window.document.querySelector('ion-app').classList.add('transparentBody')
                     this.cs.showToastMessage('Asset not found, please try again','bottom')
                 }

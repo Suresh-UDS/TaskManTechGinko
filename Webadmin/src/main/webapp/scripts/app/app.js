@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('timeSheetApp', ['LocalStorageModule','storageService',
+angular.module('timeSheetApp', ['LocalStorageModule','storageService','angular.filter',
                'ui.bootstrap', 'ui.bootstrap.datetimepicker', // for modal dialogs
     'ngResource', 'ui.router', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload',
      'infinite-scroll', 'App.filters','uiGmapgoogle-maps','checklist-model','ui.select', 'ngSanitize' ,

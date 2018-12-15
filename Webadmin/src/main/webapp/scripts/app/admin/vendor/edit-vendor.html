@@ -112,11 +112,11 @@
                                                 tabindex="7" />
                                                  <div ng-show="formEdit.$submitted || formEdit.email.$touched">
                                                      <div ng-show="formEdit.email.$dirty || formEdit.email.$invalid">
-                                                          <p class="help-block" style="color:maroon"
+                                                          <p class="help-block" style="width:100%;z-index:990;background:#fff;color:maroon"
                                                              ng-show="formEdit.email.$error.pattern">
                                                               email is invalid.
                                                           </p>
-                                                          <p class="help-block" style="color: maroon"
+                                                          <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                             ng-show="formEdit.email.$error.maxlength"
                                                             translate-value-max="255">Email cannot be longer than 50
                                                              characters.</p>

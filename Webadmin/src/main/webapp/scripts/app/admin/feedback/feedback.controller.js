@@ -3,7 +3,7 @@
 angular.module('timeSheetApp')
     .controller('FeedbackController', function ($rootScope, $scope, $state, $timeout,
      ProjectComponent, SiteComponent, LocationComponent,FeedbackComponent,
-      $http,$stateParams,$location,$interval,$filter) {
+      $http,$stateParams,$location,$interval,$filter,PaginationComponent) {
         $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.averageRating ='0';
@@ -14,6 +14,10 @@ angular.module('timeSheetApp')
         $scope.series = ['Series A'];
 
         $scope.pager = {};
+        $scope.pages = { currPage : 1};
+        $scope.feedbackListData = false;
+        $scope.noData = false;
+        $scope.pageSort = 10;
 
         /** Ui-select scopes **/
         $scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
@@ -122,6 +126,7 @@ angular.module('timeSheetApp')
             //$scope.loadProjects();
             $scope.loadProjectsList();
             $scope.search();
+            $scope.setPage(1);
         };
 
 
@@ -217,7 +222,7 @@ angular.module('timeSheetApp')
                   }
 
                   ProjectComponent.findSites(depProj).then(function (data) {
-                      
+
                       $scope.sitesList = data;
                       $scope.sitesLists = [];
                       $scope.sitesListOne.selected = null;
@@ -233,10 +238,10 @@ angular.module('timeSheetApp')
               }
 
             };
-            
+
             $scope.regionFilterDisable = true;
             $scope.branchFilterDisable = true;
-            
+
             /*** UI select (Region List) **/
             $scope.loadRegionsList = function (projectId, callback) {
             	$scope.regionSpin = true;
@@ -262,7 +267,7 @@ angular.module('timeSheetApp')
                     //callback();
                 })
             };
-            
+
             /*** UI select (Branch List) **/
             $scope.loadBranchList = function (projectId, callback) {
 
@@ -441,9 +446,16 @@ angular.module('timeSheetApp')
         };
 
         $scope.feedbackListLoader = true;
+        
+        $scope.searchFilter = function () {
+            $('.AdvancedFilterModal.in').modal('hide');
+            $scope.setPage(1);
+            $scope.search();
+         }
+
 
         $scope.search = function () {
-            $('.AdvancedFilterModal.in').modal('hide');
+           
             var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
             //if(!$scope.searchCriteria) {
                 var searchCriteria = {
@@ -507,10 +519,6 @@ angular.module('timeSheetApp')
                $scope.selectedToDateSer = new Date();
                $scope.searchCriteria.checkInDateTimeTo = $scope.selectedToDateSer;
             }
-
-
-
-
 
 
             if(!$scope.selectedProject && !$scope.selectedSite && !$stateParams.pid && !$stateParams.sid) {
@@ -611,7 +619,7 @@ angular.module('timeSheetApp')
               $scope.searchCriteras = $scope.searchCriteria;
               $scope.feedbackReport = "";
               $scope.feedbackListLoader = false;
-              $scope.feedbackListData = false;
+              $scope.feedbackListData = true;
               $rootScope.loadingStart();
           //console.log('Search Criteria : ', $scope.searchCriteria);
             FeedbackComponent.reports($scope.searchCriteria).then(function (data) {
@@ -623,7 +631,7 @@ angular.module('timeSheetApp')
                         var qLength = ($scope.feedbackReport.questionRatings).length;
                         if(qLength > 0){
 
-                            $scope.feedbackListData = true;
+                            $scope.feedbackListData = false;
                         }
                     }
                       //console.log('feedback report - ' + JSON.stringify($scope.feedbackReport));
@@ -721,11 +729,58 @@ angular.module('timeSheetApp')
 
             }).catch(function(res){
                 $rootScope.loadingStop();
-                $scope.feedbackListLoader = true;
+                $scope.feedbackListLoader = false;
+                //$scope.showNotifications('top','center','danger','Cannot Load Feedback');
+            });
+            
+            if($scope.pageSort){
+                $scope.searchCriteria.sort = $scope.pageSort;
+            }
+            
+            $scope.feedbackReportDetail = "";
+            $scope.feedbackListDetailLoader = false;
+            $scope.noData = false;
+            //console.log('Search Criteria : ', $scope.searchCriteria);
+            FeedbackComponent.search($scope.searchCriteria).then(function (data) {
+               console.log("Feedback details call result - ");
+               console.log(data);
+               $scope.feedbackReportDetail = data.transactions;
+               $scope.feedbackListDetailLoader = true;
+                
+                
+                /*
+                 ** Call pagination  main function **
+             */
+              $scope.pager = {};
+              $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+              $scope.totalCountPages = data.totalCount;
+
+             // //console.log("Pagination",$scope.pager);
+             // //console.log($scope.sites);
+
+
+             $scope.pages.currPage = data.currPage;
+             $scope.pages.totalPages = data.totalPages;
+
+             if($scope.feedbackReportDetail && $scope.feedbackReportDetail.length > 0 ){
+                 $scope.showCurrPage = data.currPage;
+                 $scope.pageEntries = $scope.feedbackReportDetail.length;
+                 $scope.totalCountPages = data.totalCount;
+                 $scope.pageSort = 10;
+                 $scope.noData = false;
+
+             }else{
+            	 $scope.noData = true;
+             }
+            }).catch(function(res){
+                $scope.feedbackListDetailLoader = false;
+                $scope.noData = true;
                 //$scope.showNotifications('top','center','danger','Cannot Load Feedback');
             });
 
         };
+
+       
 
         $scope.showNotifications= function(position,alignment,color,msg){
                     demo.showNotification(position,alignment,color,msg);
@@ -815,8 +870,7 @@ angular.module('timeSheetApp')
           //console.log("***************************")
              $scope.loadPageTop();
              $scope.init();
-
-
+         
          }
 
 
@@ -913,7 +967,7 @@ angular.module('timeSheetApp')
           $scope.downloaded = true;
           $rootScope.exportStatusObj = {};
 	    }
-	    
+
 	    $scope.getSitesBYRegionOrBranch = function (projectId, region, branch) {
             if(branch){
                 $scope.siteFilterDisable = true;
@@ -972,6 +1026,26 @@ angular.module('timeSheetApp')
             }else{
 
             }*/
+        };
+        
+
+        /*
+         ** Pagination init function **
+         @Param:integer
+
+        */
+        
+        $scope.setPage = function (page) {
+
+            if (page < 1 || page > $scope.pager.totalPages) {
+                return;
+            }
+
+            //alert(page);
+
+               $scope.pages.currPage = page;
+               $scope.search();
+
         };
 
 
