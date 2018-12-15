@@ -149,9 +149,11 @@ ul.checkList li
     right: 37px;
     border: 1px solid #ccc;
     min-height: 50px;
-    border-radius: 5px;
     background: #ffffff;
     z-index: 10000000000000;
+}
+.CheckListNewBx div span {
+	 border-radius: 0px !important;
 }
 .infoIcon:hover .CheckListBx
 {
