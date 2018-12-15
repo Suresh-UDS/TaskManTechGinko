@@ -283,6 +283,7 @@ public class ReportDatabaseService {
 
 
     public void addNewQuotePoints(QuotationDTO quotationResult, int i) throws Exception {
+        log.debug("Quotation request -" +quotationResult.toString());
         InfluxDB influxDB = connectDatabase();
         BatchPoints batchPoints = BatchPoints
             .database(dbName)

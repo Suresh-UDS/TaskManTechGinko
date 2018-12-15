@@ -83,6 +83,12 @@ angular.module('timeSheetApp')
                 return $http.post('api/reports/attendance/todayCount/',searchCriteria).then(function (response) {
                     return response.data;
                 });
+            },
+
+            loadQuotationReport : function () {
+                return $http.get('api/reports/quotations/chart').then(function (response) {
+                    return response.data;
+                });
             }
         }
     })

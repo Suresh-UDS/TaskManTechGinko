@@ -3,6 +3,7 @@ package com.ts.app.web.rest;
 import com.ts.app.domain.*;
 import com.ts.app.domain.Measurements.AttendanceStatusMeasurement;
 import com.ts.app.domain.Measurements.JobStatusMeasurement;
+import com.ts.app.domain.Measurements.QuotationStatusMeasurement;
 import com.ts.app.domain.Measurements.TicketStatusMeasurement;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.ReportDatabaseService;
@@ -260,6 +261,12 @@ public class ReportResource {
     public ResponseEntity<?> getQuotationCountByToday(@RequestBody SearchCriteria searchCriteria) {
         QuotationReportCounts reportTodayPoints = reportDatabaseUtil.getQuotationCounts(searchCriteria);
         return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reports/quotations/chart", method = RequestMethod.GET)
+    public ResponseEntity<?> getChartQuote() {
+	    List<ChartModelEntity> response = reportDatabaseUtil.getChartzCounts();
+	    return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 

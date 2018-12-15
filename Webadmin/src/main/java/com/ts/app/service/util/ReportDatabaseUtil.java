@@ -1243,7 +1243,7 @@ public class ReportDatabaseUtil {
 
     public String deleteOrUpdateQuotePoints() {
         InfluxDB connection = connectDatabase();
-        Object quotations = rateCardService.getLastmodifiedResult();
+        Object quotations = rateCardService.getLastModifiedResult();
         List<QuotationDTO> quotationResults = new ArrayList<QuotationDTO>();
         if (quotations != null) {
             ObjectMapper mapper = new ObjectMapper();
@@ -1290,6 +1290,107 @@ public class ReportDatabaseUtil {
         }
 
         return "New Quotation Points are inserted...";
+    }
+
+    public List<ChartModelEntity> getChartzCounts() {
+        InfluxDB connection = connectDatabase();
+        String query = "select sum(statusCount) as statusCount from QuotationReport where time > now() - 7d group by status,time(1d) fill(0)";
+        List<QuotationStatusMeasurement> quoteReportPoints = reportDatabaseService.getQuotationPoints(connection, query, dbName);
+        Map<String, Map<String, Integer>> statusPoints = new HashMap<>();
+        Map<String, Integer> statusCounts = null;
+        List<ChartModelEntity> chartModelEntities = new ArrayList<>();
+        if(quoteReportPoints.size() > 0) {
+            for(QuotationStatusMeasurement quoteReportPoint : quoteReportPoints) {
+                Instant instant = quoteReportPoint.getTime();
+                Date myDate = Date.from(instant);
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                String category = formatter.format(myDate);
+                if(statusPoints.containsKey(category)) {
+                    statusCounts = statusPoints.get(category);
+                }else {
+                    statusCounts = new HashMap<String, Integer>();
+                }
+
+                int pendingCnt = statusCounts.containsKey("Pending") ? statusCounts.get("Pending") : 0;
+                int WaitingCnt = statusCounts.containsKey("Waiting for approval") ? statusCounts.get("Waiting for approval") : 0;
+                int ApprovedCnt = statusCounts.containsKey("Approved") ? statusCounts.get("Approved") : 0;
+                int rejectedCnt = statusCounts.containsKey("Rejected") ? statusCounts.get("Rejected") : 0;
+
+                pendingCnt +=  quoteReportPoint.getStatus().equalsIgnoreCase("Pending") ? quoteReportPoint.getStatusCount() : 0;
+                WaitingCnt += quoteReportPoint.getStatus().equalsIgnoreCase("Waiting for approval") ? quoteReportPoint.getStatusCount() : 0;
+                ApprovedCnt += quoteReportPoint.getStatus().equalsIgnoreCase("Approved") ? quoteReportPoint.getStatusCount() : 0;
+                rejectedCnt += quoteReportPoint.getStatus().equalsIgnoreCase("Rejected") ? quoteReportPoint.getStatusCount() : 0;
+
+                statusCounts.put("Pending", pendingCnt);
+                statusCounts.put("Waiting for approval", WaitingCnt);
+                statusCounts.put("Approved", ApprovedCnt);
+                statusCounts.put("Rejected", rejectedCnt);
+
+                statusPoints.put(category, statusCounts);
+
+            }
+            log.debug("Quote status points map count" +statusPoints.toString());
+
+            if(!statusPoints.isEmpty()) {
+                Set<Map.Entry<String,Map<String,Integer>>> entrySet = statusPoints.entrySet();
+                List<Map.Entry<String, Map<String,Integer>>> list = new ArrayList<Map.Entry<String, Map<String,Integer>>>(entrySet);
+                ChartModelEntity chartModelEntity = new ChartModelEntity();
+                List<String> categoryList = new ArrayList<>();
+                List<Status> categoryStatusCnts = new ArrayList<>();
+                Status pendingstatus = new Status();
+                Status waitingstatus = new Status();
+                Status apprstatus = new Status();
+                Status rejstatus = new Status();
+                List<Integer> totalPendingCnts = new ArrayList<>();
+                List<Integer> totalWaitingCnts = new ArrayList<>();
+                List<Integer> totalApprovedCnts = new ArrayList<>();
+                List<Integer> totalRejectedCnts = new ArrayList<>();
+                for(Map.Entry<String, Map<String, Integer>> ent : list) {
+                    String category = ent.getKey();
+                    categoryList.add(category);
+                    Map<String, Integer> categoryWiseCount = statusPoints.get(category);
+                    if(categoryWiseCount.containsKey("Pending")) {
+                        int leftCnt = categoryWiseCount.get("Pending");
+                        pendingstatus.setName("Pending");
+                        totalPendingCnts.add(leftCnt);
+                        pendingstatus.setData(totalPendingCnts);
+                    }
+                    if(categoryWiseCount.containsKey("Waiting for approval")) {
+                        int presentCnt = categoryWiseCount.get("Waiting for approval");
+                        waitingstatus.setName("Waiting for approval");
+                        totalWaitingCnts.add(presentCnt);
+                        waitingstatus.setData(totalWaitingCnts);
+                    }
+                    if(categoryWiseCount.containsKey("Approved")) {
+                        int absentCnt = categoryWiseCount.get("Approved");
+                        apprstatus.setName("Approved");
+                        totalApprovedCnts.add(absentCnt);
+                        apprstatus.setData(totalApprovedCnts);
+                    }
+                    if(categoryWiseCount.containsKey("Rejected")) {
+                        int absentCnt = categoryWiseCount.get("Rejected");
+                        rejstatus.setName("Rejected");
+                        totalRejectedCnts.add(absentCnt);
+                        rejstatus.setData(totalRejectedCnts);
+                    }
+
+                }
+
+                chartModelEntity.setX(categoryList);
+                categoryStatusCnts.add(pendingstatus);
+                categoryStatusCnts.add(waitingstatus);
+                categoryStatusCnts.add(apprstatus);
+                categoryStatusCnts.add(rejstatus);
+                chartModelEntity.setStatus(categoryStatusCnts);
+                chartModelEntities.add(chartModelEntity);
+
+                log.debug("Formatted JSON for Quotation" + chartModelEntities.toString());
+            }
+
+        }
+
+        return chartModelEntities;
+
     }
 
 

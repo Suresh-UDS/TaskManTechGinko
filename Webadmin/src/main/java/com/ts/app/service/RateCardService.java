@@ -605,7 +605,7 @@ public class RateCardService extends AbstractService {
 	    return quotations;
     }
 
-    public Object getLastmodifiedResult() {
+    public Object getLastModifiedResult() {
         Object lastModResults = "";
         try{
             RestTemplate restTemplate = new RestTemplate();

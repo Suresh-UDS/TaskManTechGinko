@@ -75,11 +75,10 @@ angular.module('timeSheetApp')
         $scope.init = function() {
             $scope.loadAllProjects();
             $scope.loadAllSites();
-            $scope.loadQuotationReport();
+            $scope.loadQuotationReportChart();
             $scope.loadJobReport();
             $scope.loadingStart();
             $scope.loadChartData();
-            // $scope.loadJobReportFromInflux();
             $scope.loadTicketStatusFromInflux();
             $scope.loadAttendanceStatusCounts();
 
@@ -575,8 +574,18 @@ angular.module('timeSheetApp')
 
         };
 
-        $scope.loadQuotationReport = function() {
-        		$scope.quotationCount = 0;
+        $scope.loadQuotationReportChart = function() {
+            $scope.quotationCount = 0;
+            DashboardComponent.loadQuotationReport().then(function (data) {
+                console.log("All quotations by status counts" +JSON.stringify(data));
+                if(data.length > 0) {
+                    $scope.quoteStackChart = data[0];
+                    $scope.quoteStackXSeries = $scope.quoteStackChart.x;
+                    $scope.quoteStackYSeries = $scope.quoteStackChart.status;
+                    console.log($scope.quoteStackChart.status);
+                }
+
+            });
         };
 
         $scope.changeProject = function() {
@@ -1514,69 +1523,60 @@ angular.module('timeSheetApp')
             }
         });
 
-        var quotationxdata = ['15/10/2018', '16/10/2018', '17/10/2018', '18/10/2018', '19/10/2018', '20/10/2018', '21/10/2018', '22/10/2018', '23/10/2018',]
+        // var quotationxdata = ['15/10/2018', '16/10/2018', '17/10/2018', '18/10/2018', '19/10/2018', '20/10/2018', '21/10/2018', '22/10/2018', '23/10/2018',]
 
-        Highcharts.chart('quotationStackedCharts', {
-            chart: {
-                type: 'column'
-            },
-            title: {
-                text: 'Quotation Status'
-            },
-            xAxis: {
-                categories: quotationxdata
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: 'Quotation Count'
+        $timeout(function () {
+            Highcharts.chart('quotationStackedCharts', {
+                chart: {
+                    type: 'column'
                 },
-                stackLabels: {
-                    enabled: true,
-                    style: {
-                        fontWeight: 'bold',
-                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                    }
-                }
-            },
-            legend: {
-                align: 'right',
-                x: -30,
-                verticalAlign: 'top',
-                y: 25,
-                floating: true,
-                backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-                borderColor: '#CCC',
-                borderWidth: 1,
-                shadow: false
-            },
-            tooltip: {
-                headerFormat: '<b>{point.x}</b><br/>',
-                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-            },
-            plotOptions: {
-                column: {
-                    stacking: 'normal',
-                    dataLabels: {
+                title: {
+                    text: 'Quotation Status'
+                },
+                xAxis: {
+                    categories: $scope.quoteStackXSeries
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Quotation Count'
+                    },
+                    stackLabels: {
                         enabled: true,
-                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                        style: {
+                            fontWeight: 'bold',
+                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                        }
                     }
-                }
-            },
-            series: [{
-                name: 'Waiting for Approval',
-                data: [8, 3, 4, 7, 2,5, 3, 7, 2]
-            }, {
-                name: 'Rejected',
-                data: [7, 2, 3, 2, 1,7, 5, 3, 8]
-            }, {
-                name: 'Approved',
-                data: [6, 2, 3, 2, 1,2, 2, 8, 9]
-            }, {
-                name: 'Pending',
-                data: [8, 4, 4, 2, 5,9, 9, 6, 5]
-            }]
-        });
+                },
+                legend: {
+                    align: 'right',
+                    x: -30,
+                    verticalAlign: 'top',
+                    y: 25,
+                    floating: true,
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                    borderColor: '#CCC',
+                    borderWidth: 1,
+                    shadow: false
+                },
+                tooltip: {
+                    headerFormat: '<b>{point.x}</b><br/>',
+                    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: true,
+                            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                        }
+                    }
+                },
+                series: $scope.quoteStackYSeries
+            });
+
+        },1500);
 
 
 
