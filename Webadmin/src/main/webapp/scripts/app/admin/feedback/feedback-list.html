@@ -280,57 +280,149 @@
                     </div>
 
                 </div>
-
-
-                <div class="card margin-TB-5 TableCard">
-
-                    <!--<div class="card-header card-header-icon" data-background-color="purple">-->
-                    <!--<i class="material-icons">assignment</i>-->
-                    <!--</div>-->
-                    <div class="card-content">
-                        <!--<h4 class="card-title">DataTables.net</h4>-->
-
-
-                        <div class="table-responsive tablecard">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-								   <th>Location</th>
-                                    <th>Question</th>
-                                    <th>Yes</th>
-                                    <th>No</th>
-                                    <th>Rating</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="questionRating in feedbackReport.questionRatings">
-                                    <td>{{questionRating.location}}</td>
-                                    <td>{{questionRating.question}}</td>
-                                    <td><span ng-if="!questionRating.rating">{{questionRating.yesCount}}</span>
-                                        <span ng-if="questionRating.rating">NA</span></td>
-                                    <td><span ng-if="!questionRating.rating">{{questionRating.noCount}}</span>
-                                        <span ng-if="questionRating.rating">NA</span></td>
-                                    <td>
-                                        <div  ng-if="questionRating.rating" ng-repeat ="(key, value) in questionRating.rating">
-                                            ({{value}}) <jk-rating-stars max-rating="5" rating="key" read-only="readOnly" ></jk-rating-stars>
-                                        </div>
-                                        <span ng-if="!questionRating.rating">NA</span>
-                                    </td>
-                                </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
-
-
-
-                        </div>
-
-                    </div>
-                    <!-- end content-->
-                </div>
-                <!--  end card  -->
+                <!-- Feedbacks tab view start -->
+                <div class="panel panel-default TabsContainer">
+					<!--<div class="panel-heading">Panel Heading</div>-->
+					<div class="panel-body">
+						<ul class="nav nav-pills nav-pills-warning">
+							<li class="active"><a href=".pill2" data-toggle="tab">Feedbacks</a></li>
+							<li class=""><a href=".pill3" data-toggle="tab">Feedbacks Details</a></li>
+						</ul>
+						<div class="tab-content TabsContent" style="">
+			
+							<div class="tab-pane fade in active pill2" id="pill2">
+								
+								<div class="table-responsive tablecard">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Location</th>
+			                                    <th>Question</th>
+			                                    <th>Yes</th>
+			                                    <th>No</th>
+			                                    <th>Rating</th>
+												
+											</tr>
+										</thead>
+										<tbody>
+										    <tr ng-repeat="questionRating in feedbackReport.questionRatings">
+			                                    <td>{{questionRating.location}}</td>
+			                                    <td>{{questionRating.question}}</td>
+			                                    <td><span ng-if="!questionRating.rating">{{questionRating.yesCount}}</span>
+			                                        <span ng-if="questionRating.rating">NA</span></td>
+			                                    <td><span ng-if="!questionRating.rating">{{questionRating.noCount}}</span>
+			                                        <span ng-if="questionRating.rating">NA</span></td>
+			                                    <td>
+			                                        <div  ng-if="questionRating.rating" ng-repeat ="(key, value) in questionRating.rating">
+			                                            ({{value}}) <jk-rating-stars max-rating="5" rating="key" read-only="readOnly" ></jk-rating-stars>
+			                                        </div>
+			                                        <span ng-if="!questionRating.rating">NA</span>
+			                                    </td>
+			                                    <td class="text-right"><a
+													ng-class="{active: $state.includes('admin')}"
+			
+													ng-click="removeService($index)"
+													onClick="$('#deleteModal').modal()"
+													data-target="#myModal"
+													class="btn btn-simple btn-danger"><i
+														class="material-icons">close</i></a></td>
+			                                </tr>
+											
+			
+										</tbody>
+										<tfoot>
+											<tr>	
+												<td colspan="6">
+													<div class="txt-align-center" ng-hide="feedbackListData">
+				
+												        <div class="card-content">
+												
+												            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="feedbackListLoader">
+												                <div loader-css="ball-pulse"></div>
+												            </div>
+												
+												            <h3>No feedbacks</h3>
+												
+												        </div>
+												
+												    </div>
+											    </td>
+											</tr>
+										</tfoot>
+									</table>
+								</div>
+							</div>
+							<div class="tab-pane fade pill3" id="pill3">
+							
+								<div class="table-responsive tablecard">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th width="25%">Client</th>
+												<th width="25%">Site</th>
+												<th width="25%">Title</th>
+												<th width="25%">Questions</th>
+												
+											</tr>
+										</thead>
+										<tbody>
+											<!-- <tr ng-repeat="feedbackMaster in feedbackMasterList"> 
+											</tr>-->
+											<tr>
+												<td>test</td>
+					                            <td>test</td>
+					                            <td>test</td>
+					                            <td>
+						                            <a class="accordion-toggle collapsed" data-toggle="collapse"
+											        data-parent="#accordion2" href=".collapseThree{{$index}}">
+											         View Questions
+											         </a>
+										
+											    </td>
+											</tr>
+											<tr>
+											    <td colspan="4">
+											         <div class="row">
+											            <div class="col-md-10 col-md-offset-1">
+												           <div id="collapseThree" class="accordion-body collapseThree{{$index}} collapse">
+														        <div class="table-responsive tablecard">
+																	<table class="table table-striped table-bordered">
+																		<thead>
+																			<tr>
+																				<th width="50%">Questions</th>
+																				<th width="10%">Yes/No</th>
+																				<th width="15%">Rating</th>
+																				<th width="25%">Attended By</th>
+																				
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<!-- <tr ng-repeat="feedbackMaster in feedbackMasterList"> -->
+																			<tr>
+																				<td>test</td>
+													                            <td>test</td>
+													                            <td>test</td>
+													                            <td>test</td>
+																			</tr>
+																			
+																		</tbody>
+																		
+																	</table>
+																</div>
+													       </div>
+											           </div>
+											       </div>
+											    </td>
+											</tr>
+										</tbody>
+										
+									</table>
+								</div>
+							</div>
+						</div>
+					 </div>
+				</div>
+              <!-- Feedbacks tab view end -->
             </div>
             <!-- end col-md-12 -->
         </div>
@@ -339,19 +431,7 @@
   </form>
 
 
-    <div class="card margin-TB-5 txt-align-center" ng-hide="feedbackListData">
-
-        <div class="card-content">
-
-            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="feedbackListLoader">
-                <div loader-css="ball-pulse"></div>
-            </div>
-
-            <h3>No feedbacks</h3>
-
-        </div>
-
-    </div>
+    
 
 
     <!-- Pagination directive start -->
@@ -359,9 +439,9 @@
    <!--  <pagination-new></pagination-new> -->
 
     <!-- Pagination directive end -->
-
-
-
+    
+    
+    
 </div>
 
 

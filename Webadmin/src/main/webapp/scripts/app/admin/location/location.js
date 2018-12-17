@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
             .state('locations', {
                 parent: 'manage',
                 url: '/locations',
-                controller: 'LocationController',
+                //controller: 'LocationController',
                 data: {
                     authorities: [],
                     pageTitle: 'Location'
@@ -24,7 +24,7 @@ angular.module('timeSheetApp')
             .state('add-location', {
                 parent: 'manage',
                 url: '/add-location',
-                controller: 'LocationController',
+                //controller: 'LocationController',
                 data: {
                     authorities: [],
                     pageTitle: 'Add Location'
@@ -41,7 +41,7 @@ angular.module('timeSheetApp')
             }).state('location-qr-print', {
             parent: 'manage',
             url: '/location-qr-print/:location',
-            controller: 'LocationController',
+            //controller: 'LocationController',
             data: {
                 authorities: [],
                 pageTitle: 'Print QrCode'

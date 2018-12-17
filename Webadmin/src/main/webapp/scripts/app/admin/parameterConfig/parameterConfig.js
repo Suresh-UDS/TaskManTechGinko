@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
             .state('parameter-config', {
                 parent: 'manage',
                 url: '/parameter-config',
-                controller: 'ParameterConfigController',
+                //controller: 'ParameterConfigController',
                 data: {
                     authorities: [],
                     pageTitle: 'ParameterConfig'

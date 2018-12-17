@@ -4,7 +4,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	$stateProvider.state('add-sla', {
 		parent : 'manage',
 		url : '/add-sla',
-		controller : 'SlaController',
+		//controller : 'SlaController',
 		data : {
 			authorities : [],
 			pageTitle : 'Add SLA'
@@ -21,7 +21,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	}).state('edit-sla', {
 		parent : 'manage',
 		url : '/edit-sla:id',
-		controller : 'SlaController',
+		//controller : 'SlaController',
 		data : {
 			authorities : [],
 			pageTitle : 'Edit Sla'
@@ -38,7 +38,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	}).state('view-sla', {
 		parent : 'manage',
 		url : '/view-sla:id',
-		controller : 'SlaController',
+		//controller : 'SlaController',
 		data : {
 			authorities : [],
 			pageTitle : 'View Sla'

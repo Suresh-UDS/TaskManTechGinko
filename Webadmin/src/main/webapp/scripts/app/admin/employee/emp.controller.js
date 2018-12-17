@@ -494,8 +494,8 @@ angular.module('timeSheetApp')
                     $scope.empLocation = false;
                 }
                 
-                $scope.selectedProject = {};
-                $scope.selectedSite= {};
+                //$scope.selectedProject = {};
+                //$scope.selectedSite= {};
             }else{
                 
             	if(!$scope.selectedProject && !$scope.selectedSite){
