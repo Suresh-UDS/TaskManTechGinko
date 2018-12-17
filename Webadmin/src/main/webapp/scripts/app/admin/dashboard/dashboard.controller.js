@@ -981,6 +981,21 @@ angular.module('timeSheetApp')
                    $scope.attnStackChart = data[0];
                    $scope.attnStackXSeries = $scope.attnStackChart.x;
                    $scope.attnStackYSeries = $scope.attnStackChart.status;
+               }else{
+                   $scope.attnStackXSeries = "";
+                   $scope.attnStackYSeries = [
+                       {
+                            name: "Left",
+                            data: [0]
+                       },
+                       {
+                           name: "Present",
+                           data: [0]
+                       },
+                       {
+                           name: "Absent",
+                           data: [0]
+                       }];
                }
             });
         }

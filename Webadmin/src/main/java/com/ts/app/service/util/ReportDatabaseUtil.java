@@ -574,7 +574,7 @@ public class ReportDatabaseUtil {
     public List<ChartModelEntity> getAttnTotalCounts() {
         InfluxDB connection = connectDatabase();
         String query = "select sum(statusCount) as presentCount, count(distinct(employeeId)) as empCount from AttendanceReport where " +
-            "checkInTime != 0 and time > now() - 30d group by time(1d)";
+            "checkInTime != 0 and time > now() - 30d group by time(1d) fill(0)";
         List<AttendanceStatusMeasurement> attnStatusPoints = reportDatabaseService.getAttendancePoints(connection, query, dbName);
         Map<String, Map<String, Integer>> statusPoints = new HashMap<>();
         Map<String, Integer> statusCounts = null;
