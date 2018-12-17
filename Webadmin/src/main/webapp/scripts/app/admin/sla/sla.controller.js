@@ -84,7 +84,7 @@ angular
 						$scope.searchProject = null;
 						$scope.searchSite = null;
 						$scope.searchCriteria = {};
-						
+
 						// $scope.localStorage = null;
 						// $rootScope.searchCriteriaSite = null;
 						$scope.pages = {
@@ -577,9 +577,9 @@ angular
 					 * JSON.stringify($scope.sla)); $scope.slaList = [];
 					 * $scope.slaList.push($scope.sla); }
 					 */
-					
-					// Levels orderby function 
-					
+
+					// Levels orderby function
+
 					$scope.sorterFunc = function(esc){
 					    return parseInt(esc.level);
 					};
