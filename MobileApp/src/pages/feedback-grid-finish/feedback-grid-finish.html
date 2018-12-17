@@ -1,0 +1,82 @@
+
+
+<ion-content class="FeedbackQuesCon">
+
+  <div class="FeedbackCon" style="width: 60% !important;" >
+
+    <div class="InputCon" style="padding-top: 10px;">
+
+      <div class="input-group width-full" margin-top="">
+        <img src="img/logo.png"  alt="feedback image" width="25%">
+
+          <div >
+            <ion-list radio-group [(ngModel)]="overallFeedback" class="margin-auto width-full q-type2 padding-left10">
+              <ion-item class="inline-block width18" align-center no-lines >
+                <ion-radio  value="1" class="true a" (ionSelect)=" q.remarksRequired? '' : questions?.length-1!=i?next():submitFeedback()">1</ion-radio>
+              </ion-item>
+              <ion-item class="inline-block width18" align-center no-lines>
+                <ion-radio value="2" class="true b" (ionSelect)=" q.remarksRequired? '' : questions?.length-1!=i?next():submitFeedback()">2</ion-radio>
+              </ion-item>
+              <ion-item class="inline-block width18 " align-center no-lines>
+                <ion-radio  value="3" class="true c" (ionSelect)=" q.remarksRequired? '' : questions?.length-1!=i?next():submitFeedback()">3</ion-radio>
+              </ion-item>
+              <ion-item class="inline-block width18" align-center no-lines>
+                <ion-radio value="4" class="true d" (ionSelect)=" q.remarksRequired? '' : questions?.length-1!=i?next():submitFeedback()">4</ion-radio>
+              </ion-item>
+              <ion-item class="inline-block width18" align-center no-lines>
+                <ion-radio value="5" class="true e" (ionSelect)=" q.remarksRequired? '' : questions?.length-1!=i?next():submitFeedback()">5</ion-radio>
+              </ion-item>
+            </ion-list>
+
+          </div>
+
+      <div class="row" style="margin-right: -5px !important;">
+        <div class="input-group" col-4 margin-top="">
+                    <span class="input-group-addon"  style="color: #fff !important;" >
+                        <i class="material-icons">face</i>
+                    </span>
+          <div class="form-group label-floating" >
+            <label class="control-label" style="color: #fff !important;" >User Name</label>
+            <input class="form-control" style="color: #fff !important;" type="text" [(ngModel)]="userName" name="username">
+          </div>
+        </div>
+        <div class="input-group" col-4 margin-top="">
+                    <span class="input-group-addon" style="color: #fff !important;">
+                        <i class="material-icons">person</i>
+                    </span>
+          <div class="form-group label-floating">
+            <label class="control-label" style="color: #fff !important;">Code</label>
+            <input class="form-control" style="color: #fff !important;" [(ngModel)]="userCode" type="text" name="">
+          </div>
+        </div>
+        <div class="input-group" col-4 margin-top="">
+                    <span class="input-group-addon"  style="color: #fff !important;">
+                        <i class="material-icons">feedback</i>
+                    </span>
+          <div class="form-group label-floating" >
+            <label class="control-label" style="color: #fff !important;">Remarks</label>
+            <input class="form-control" style="color: #fff !important;" [(ngModel)]="remarks" type="text" name="">
+          </div>
+        </div>
+      </div>
+      </div>
+
+      <button type="button" class="bg-none" style="color: #ff9800" text-center (click)="start(userName,userCode)">
+        Skip & Submit</button><br>
+      <button class="btn btn-warning btn-wd btn-lg" text-center (click)="start(userName,userCode)" style="margin-top: 10px; !important;">
+        Submit
+      </button>
+
+
+
+
+    </div>
+
+
+
+
+  </div>
+
+
+
+</ion-content>

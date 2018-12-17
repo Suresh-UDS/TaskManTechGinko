@@ -7,6 +7,7 @@ import {FeedbackService} from "../service/feedbackService";
 import { NativeAudio } from '@ionic-native/native-audio';
 import {FeedbackPage} from "./feedback";
 import {DomSanitizer} from "@angular/platform-browser";
+import {FeedbackGridFinish} from "../feedback-grid-finish/feedback-grid-finish";
 @Component({
   selector: 'page-feedback-grid',
   templateUrl: 'feedback-grid.html'
@@ -114,7 +115,7 @@ export class FeedbackGridPage {
             console.log(results)
         }
 
-        this.navCtrl.push(FeedbackPage,{feedback:this.navParams.data.feedback,fb:this.navParams.data.fb,question:this.questions,remarks:this.remarks,overallFeedback:this.navParams.data.overallFeedback,project:this.navParams.data.project,site:this.navParams.data.site,location:this.navParams.data.location});
+        this.navCtrl.push(FeedbackGridFinish,{feedback:this.navParams.data.feedback,fb:this.navParams.data.fb,question:this.questions,remarks:this.remarks,overallFeedback:this.navParams.data.overallFeedback,project:this.navParams.data.project,site:this.navParams.data.site,location:this.navParams.data.location});
 
 
     }
