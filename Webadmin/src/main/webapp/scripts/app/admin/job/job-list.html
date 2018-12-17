@@ -241,14 +241,18 @@
 								<td class="hiddenCheckList" >
 								 <span ng-repeat="(key, value) in job.checklistItems | groupBy: 'checklistName'">
 								   <span class="leftTxt">{{ key }}  </span>
-									 <!--<span class="infoIcon" ng-if="key"><i class="material-icons">info</i>-->
-	                                   <!--<div class="CheckListNewBx" ng-if="key">-->
-	                                           <!--<div class="bootstrap-tagsinput"ng-repeat="checkListItem in value">-->
-	                                               <!--<span class="label label-default">{{checkListItem.checklistItemName}}</span>-->
+									 <span class="infoIcon" ng-if="key" data-toggle="modal"
+                                           data-target="#checkListViewModal" ng-click="selectJobShowChecklist(job)"><i class="material-icons">info</i>
+	                                   <div class="CheckListNewBx" ng-if="key">
+	                                           <div class="bootstrap-tagsinput"ng-repeat="checkListItem in value">
+	                                               <span style="color: red;" ng-if="!checkListItem.completed" class="">{{checkListItem.checklistItemName}}</span>
 
-	                                           <!--</div>-->
-	                                       <!--</div>-->
-	                                  <!--</span>-->
+	                                           </div>
+                                               <!--<ul  ng-repeat="checkListItem in value" class="txt-align-left">
+                                                   <li ng-if="!checkListItem.completed">{{checkListItem.checklistItemName}}</li>
+                                               </ul>-->
+	                                       </div>
+	                                  </span>
 								   </span>
                                   </td>
 								 <td>{{job.schedule}}</td>
@@ -266,8 +270,8 @@
 
                                         <a ng-class="{active: $state.includes('admin')}" title="Delete" has-permission="Jobs:Delete" ng-click="deleteConfirm(job)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
 
-                                        <a title="Checklist Details" ng-if="job.checklistItems" data-toggle="modal"
-                                           data-target="#checkListViewModal" ng-click="selectJobShowChecklist(job)"> <i class="material-icons">info</i></a>
+                                        <!--<a title="Checklist Details" ng-if="job.checklistItems" data-toggle="modal"-->
+                                           <!--data-target="#checkListViewModal" ng-click="selectJobShowChecklist(job)"> <i class="material-icons">info</i></a>-->
 
                                     </div>
 
