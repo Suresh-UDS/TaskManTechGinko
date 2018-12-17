@@ -223,8 +223,8 @@
                                     </span>
                                 </th> -->
                                 <th class="disabled-sorting">Category</th>
-                                <!--<th class="disabled-sorting">Checklist</th>-->
-                                <!-- <th class="disabled-sorting">Schedule</th> -->
+                                <th class="disabled-sorting">Checklist</th>
+                                 <th class="disabled-sorting">Schedule</th>
                                 <th class="disabled-sorting">Actions</th>
                             </tr>
                             </thead>
@@ -238,9 +238,9 @@
                                 <td><label ng-bind="job.actualEndTime | date :'dd-MMM-yyyy @ hh:mm a'"/></td>
                                 <td>{{job.status}}</td>
                                 <td>{{job.jobType}}</td>
-								<!--<td class="hiddenCheckList" >-->
-								 <!--<span ng-repeat="(key, value) in job.checklistItems | groupBy: 'checklistName'">-->
-								   <!--<span class="leftTxt">{{ key }}  </span>-->
+								<td class="hiddenCheckList" >
+								 <span ng-repeat="(key, value) in job.checklistItems | groupBy: 'checklistName'">
+								   <span class="leftTxt">{{ key }}  </span>
 									 <!--<span class="infoIcon" ng-if="key"><i class="material-icons">info</i>-->
 	                                   <!--<div class="CheckListNewBx" ng-if="key">-->
 	                                           <!--<div class="bootstrap-tagsinput"ng-repeat="checkListItem in value">-->
@@ -249,9 +249,9 @@
 	                                           <!--</div>-->
 	                                       <!--</div>-->
 	                                  <!--</span>-->
-								   <!--</span>-->
-                                  <!--</td>-->
-								<!-- <td>{{job.schedule}}</td> -->
+								   </span>
+                                  </td>
+								 <td>{{job.schedule}}</td>
                                 <td class="text-right">
 
                                 <td class="text-right hoverMe">
@@ -746,18 +746,17 @@
                                             <th>Images</th>
                                         </tr>
                                         <tr ng-repeat="checklist in selectedJob.checklistItems">
-                                            <td><span ng-if="!checklist.completed" style="color:red">{{checklist.checklistItemName}}</span>
-                                                <span ng-if="checklist.completed" style="color:green">{{checklist.checklistItemName}}</span>
+                                            <td ng-if="!checklist.completed"><span  style="color:red">{{checklist.checklistItemName}}</span>
                                             </td>
-                                            <td>
+                                            <td ng-if="!checklist.completed">
                                                 <span ng-if="checklist.remarks">{{checklist.remarks}}</span>
                                                 <span ng-if="!checklist.remarks">No remarks</span>
                                             </td>
-                                            <td>
+                                            <td ng-if="!checklist.completed">
                                                 <span class="label label-success" ng-if="checklist.completed">Completed</span>
                                                 <span class="label label-warning" ng-if="!checklist.completed">Not Completed</span>
                                             </td>
-                                            <td>
+                                            <td ng-if="!checklist.completed">
                                                 <span ng-if="!checklist.imageUrl_1">No image</span>
                                                 <a ng-if="checklist.imageUrl_1" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.imageUrl_1)" >
                                                     <img ng-src="{{checklist.imageUrl_1}}" width="80px" height="80px">
