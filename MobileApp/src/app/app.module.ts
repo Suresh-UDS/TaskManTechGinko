@@ -140,6 +140,10 @@ import{IndentList} from "../pages/indent-list/indent-list";
 import{IndentIssue} from "../pages/indent-issue/indent-issue";
 import{AddMaterial} from "../pages/add-material/add-material";
 import{SelectSearchableModule} from "ionic-select-searchable";
+import {FeedbackGridFinish} from "../pages/feedback-grid-finish/feedback-grid-finish";
+// import { PhotoViewer } from '@ionic-native/photo-viewer';
+
+// import{IonicImageViewerModule} from "ionic-img-viewer";
 
 @NgModule({
   declarations: [
@@ -226,6 +230,10 @@ import{SelectSearchableModule} from "ionic-select-searchable";
       ForgotPassword,
     OfflineCompleteJob,
     OfflineJobs,
+<<<<<<< HEAD
+=======
+    FeedbackGridFinish
+>>>>>>> 5eeecce51... feedback grid finish in mobile app
       // PhotoViewer
       InventoryFilter,
       AddInventoryTransaction,
@@ -341,6 +349,7 @@ import{SelectSearchableModule} from "ionic-select-searchable";
       ForgotPassword,
     OfflineCompleteJob,
     OfflineJobs,
+<<<<<<< HEAD
       InventoryFilter,
       AddInventoryTransaction,
     ExpensePage,
@@ -355,6 +364,9 @@ import{SelectSearchableModule} from "ionic-select-searchable";
     AddMaterial
 
     // WheelSelector
+=======
+    FeedbackGridFinish
+>>>>>>> 5eeecce51... feedback grid finish in mobile app
 
 
   ],
