@@ -1251,8 +1251,8 @@ angular
 
                         //RateCardComponent.search($scope.searchCriteria).then(function (data) {
 		        	RateCardComponent.getAllQuotations($scope.searchCriteras).then(function (data) {
-		        	    $scope.quotations = data;
-		                //$scope.quotations = data.transactions;
+		        	    $scope.quotations = data.transactions; 
+		        	    console.log('quotation',$scope.quotations);
 		                $scope.quotationsLoader = true;
 
 		                 /** retaining list search value.**/
