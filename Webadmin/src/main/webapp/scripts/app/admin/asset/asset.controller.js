@@ -90,6 +90,7 @@ angular.module('timeSheetApp')
         $scope.maxError =false;
         $rootScope.exportStatusObj  ={};
         $scope.searchModule ="";
+        $scope.assetQrSite =null;
        
 
 
@@ -1502,6 +1503,40 @@ angular.module('timeSheetApp')
                     $scope.pageSort = 10;
 
                 $scope.noData = false;
+                
+                // Select multiple asset check box start
+                if($scope.assetQrSite){
+                	
+                	if($scope.assetQrSite){
+                    	$scope.allItemsSelected = true;
+                        $scope.assetQrSiteVal =$scope.assetQrSite.id;
+                    }else{
+                    	$scope.allItemsSelected = false;
+                        $scope.assetQrSiteVal =0;
+                    }
+
+                    $scope.qrAll= "All";
+                    $scope.checkboxSel=[];
+
+                    // Loop through all the entities and set their isChecked property
+                    for (var i = 0; i < $scope.assets.length; i++) {
+
+                        $scope.checkboxSel.push($scope.assets[i].id);
+
+                        $scope.assets[i].isChecked = $scope.allItemsSelected;
+                    }
+
+                    if(!$scope.allItemsSelected){
+
+                        $scope.checkboxSel=[];
+                        
+
+                    }
+                	
+                }
+                
+                // Select multiple asset check box end
+                
 
                 }else{
                      $scope.noData = true;
@@ -2024,17 +2059,32 @@ angular.module('timeSheetApp')
                 //console.log("add asset")
             }
         }
+        
+        $scope.loadWeekSchAssets = function() {
+            if($scope.weekSchSite){
+            	$scope.weekSchAssets = '';
+               $scope.searchCriteria.siteId = $scope.weekSchSite.id;
+                AssetComponent.search($scope.searchCriteria).then(function(data) {
+                  //console.log('Asset based tickets -- ',data);
+                    $scope.weekSchAssets = data.transactions;
+                });
+            }
+
+        };
 
         $scope.load52WeekSchedule = function() {
         		//console.log('site selection - ' + JSON.stringify($scope.searchSite));
-        		if(jQuery.isEmptyObject($scope.searchSite) == false && $scope.searchCriteria.siteId != 0) {
-            		$scope.searchCriteria.siteId = $scope.searchSite.id;
-            		AssetComponent.exportAsset52WeekSchedule($scope.searchCriteria).then(function(data){
+        		if(jQuery.isEmptyObject($scope.weekSchSite) == false) {
+            		$scope.weekSchLoad = true;
+            		AssetComponent.exportAsset52WeekSchedule({siteId:$scope.weekSchSite.id,assetId:$scope.weekSchAsset.id}).then(function(data){
+            			$scope.weekSchLoad = false;
             			//console.log("response for 52week schedule - "+ JSON.stringify(data));
             			if(data) {
             				if(data.results) {
             					$rootScope.scheduleWebLink = data.results[0].webLink;
             					$rootScope.scheduleWebContentLink = data.results[0].webContentLink;
+            					$scope.weekSchSite = null;
+            					$scope.weekSchAsset = null;
             					$location.path('/schedule-list');
             				}else {
             					$scope.showNotifications('top','center','error','Unable to get 52 week schedule for the site');
@@ -2042,6 +2092,8 @@ angular.module('timeSheetApp')
             			}else {
             				$scope.showNotifications('top','center','error','Unable to get 52 week schedule for the site');
             			}
+            		}).catch(function(){
+            			$scope.weekSchLoad = false;
             		});
         		}else {
         			$scope.showNotifications('top','center','danger','Please select a site to view 52 week schedule');
@@ -2134,6 +2186,7 @@ angular.module('timeSheetApp')
             $scope.regionFilterDisable = true;
             $scope.branchFilterDisable = true;
             $scope.sites = null;
+            $scope.assetQrSite =null;
             
             /** Ui-select scopes **/
         	$scope.client.selected = null;
@@ -3623,10 +3676,11 @@ angular.module('timeSheetApp')
 
                    $scope.checkboxSel.splice(remId, 1);
                 }
-
-
-
-
+                
+                if($scope.checkboxSel.length == 0){
+                	$scope.assetQrSiteVal ='';
+                	$scope.qrAll='';
+                }
                 // If any entity is not checked, then uncheck the "allItemsSelected" checkbox
 
                 for (var i = 0; i < $scope.assets.length; i++) {
@@ -3646,8 +3700,11 @@ angular.module('timeSheetApp')
 
             // This executes when checkbox in table header is checked
             $scope.selectAll = function () {
-            	
-                if($scope.assetQrSite){
+            	$scope.searchSite = $scope.assetQrSite;
+            	$scope.sitesListOne.selected = $scope.searchSite;
+            	$scope.setPage(1);
+                $scope.search();
+                /*if($scope.assetQrSite){
                 	$scope.allItemsSelected = true;
                     $scope.assetQrSiteVal =$scope.assetQrSite.id;
                 }else{
@@ -3671,7 +3728,7 @@ angular.module('timeSheetApp')
                     $scope.checkboxSel=[];
                     
 
-                }
+                }*/
 
 
                  //alert($scope.checkboxSel);
@@ -3972,18 +4029,22 @@ angular.module('timeSheetApp')
       $scope.mulSel = function(){
     	  
         if($scope.allItemsSelected){
-        	
-            $('#qrModal').modal();
+        	$("#qrModal").modal();
             $scope.allItemsSelected = false;
-
+            
         }
         else{
         	$scope.allItemsSelected = false;
+        	$scope.checkboxSel=[];
+        	$scope.assetQrSiteVal ='';
+        	$scope.qrAll='';
         	 // Loop through all the entities and set their isChecked property
             for (var i = 0; i < $scope.assets.length; i++) {
                   
                 $scope.assets[i].isChecked = $scope.allItemsSelected;
+          
             }
+            
         }
 
       }
