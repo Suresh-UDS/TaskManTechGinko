@@ -244,8 +244,8 @@
 									 <span class="infoIcon" ng-if="key" data-toggle="modal"
                                            data-target="#checkListViewModal" ng-click="selectJobShowChecklist(job)"><i class="material-icons">info</i>
 	                                   <div class="CheckListNewBx" ng-if="key">
-	                                           <div class="bootstrap-tagsinput"ng-repeat="checkListItem in value">
-	                                               <span style="color: red;" ng-if="!checkListItem.completed" class=""><i style="font-size: 16px" class="material-icons">error</i> {{checkListItem.checklistItemName}}</span>
+	                                           <div class=""ng-repeat="checkListItem in value">
+	                                               <span style="color: red;font-size: 14px" ng-if="!checkListItem.completed" class=""><i style="font-size: 16px" class="material-icons">error</i> {{checkListItem.checklistItemName}}</span>
 
 	                                           </div>
                                                <!--<ul  ng-repeat="checkListItem in value" class="txt-align-left">
