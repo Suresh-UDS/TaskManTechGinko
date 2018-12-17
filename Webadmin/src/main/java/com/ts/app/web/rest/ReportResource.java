@@ -211,19 +211,19 @@ public class ReportResource {
         return new ResponseEntity<>(queryList, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/reports/jobs/todayCount", method = RequestMethod.POST)
+    @RequestMapping(value = "/reports/jobs/count", method = RequestMethod.POST)
     public ResponseEntity<?> getJobsCountByToday(@RequestBody SearchCriteria searchCriteria) {
         List<JobReportCounts> reportTodayPoints = reportDatabaseUtil.getTotalJobsCount(searchCriteria);
         return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/reports/tickets/todayCount", method = RequestMethod.POST)
+    @RequestMapping(value = "/reports/tickets/count", method = RequestMethod.POST)
     public ResponseEntity<?> getTicketsCountByToday(@RequestBody SearchCriteria searchCriteria) {
         List<TicketReportCounts> reportTodayPoints = reportDatabaseUtil.getTotalTicketCount(searchCriteria);
         return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/reports/attendance/todayCount", method = RequestMethod.POST)
+    @RequestMapping(value = "/reports/attendance/count", method = RequestMethod.POST)
     public ResponseEntity<?> getAttendanceCountByToday(@RequestBody SearchCriteria searchCriteria) {
         AttendanceReportCounts reportTodayPoints = reportDatabaseUtil.getAttendanceTotalCounts(searchCriteria);
         return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
@@ -257,9 +257,9 @@ public class ReportResource {
         return new ResponseEntity<>("Successfully created Quotation points to influxDb", HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/reports/quotation/todayCount", method = RequestMethod.POST)
+    @RequestMapping(value = "/reports/quotations/count", method = RequestMethod.POST)
     public ResponseEntity<?> getQuotationCountByToday(@RequestBody SearchCriteria searchCriteria) {
-        QuotationReportCounts reportTodayPoints = reportDatabaseUtil.getQuotationCounts(searchCriteria);
+        List<QuotationReportCounts> reportTodayPoints = reportDatabaseUtil.getQuotationCounts(searchCriteria);
         return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
     }
 

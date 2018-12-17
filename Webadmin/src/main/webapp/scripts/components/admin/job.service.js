@@ -181,7 +181,7 @@ angular.module('timeSheetApp')
             },
 
             getTotalCounts : function (searchCriteria) {
-                return $http.post('api/reports/jobs/todayCount',searchCriteria).then(function (response) {
+                return $http.post('api/reports/jobs/count',searchCriteria).then(function (response) {
                     return response.data;
                 });
             }

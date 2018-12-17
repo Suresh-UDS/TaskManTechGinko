@@ -108,7 +108,7 @@ angular.module('timeSheetApp')
         },
 
         getTicketsCountsByStatus : function (searchCriteria) {
-            return $http.post('api/reports/tickets/todayCount', searchCriteria).then(function (response) {
+            return $http.post('api/reports/tickets/count', searchCriteria).then(function (response) {
                return response.data;
             });
         }

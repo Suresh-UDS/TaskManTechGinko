@@ -76,6 +76,7 @@ angular.module('timeSheetApp')
             $scope.loadAllProjects();
             $scope.loadAllSites();
             $scope.loadQuotationReportChart();
+            $scope.loadQuotationReportCounts();
             $scope.loadJobReport();
             $scope.loadingStart();
             $scope.loadChartData();
@@ -707,6 +708,7 @@ angular.module('timeSheetApp')
             $scope.selectedFromDateSer.setHours(0,0,0,0);
             $scope.selectedToDateSer.setHours(23,59,59,0);
             $scope.loadJobReport();
+            $scope.loadQuotationReportCounts();
             $scope.loadingStart();
             var searchCriteria = {};
             searchCriteria.projectId = $scope.selectedProject.id;
@@ -727,6 +729,7 @@ angular.module('timeSheetApp')
             $scope.selectedFromDateSer.setHours(0,0,0,0);
             $scope.selectedToDateSer.setHours(23,59,59,0);
             $scope.loadJobReport();
+            $scope.loadQuotationReportCounts();
             $scope.loadingStart();
             var searchCriteria = {};
             searchCriteria.projectId = $scope.selectedProject.id;
@@ -748,6 +751,7 @@ angular.module('timeSheetApp')
             $scope.selectedFromDateSer.setHours(0,0,0,0);
             $scope.selectedToDateSer.setHours(23,59,59,0);
             $scope.loadJobReport();
+            $scope.loadQuotationReportCounts();
             $scope.loadingStart();
             var searchCriteria = {};
             searchCriteria.projectId = $scope.selectedProject.id;
@@ -770,6 +774,7 @@ angular.module('timeSheetApp')
             $scope.selectedFromDateSer.setHours(0,0,0,0);
             $scope.selectedToDateSer.setHours(23,59,59,0);
             $scope.loadJobReport();
+            $scope.loadQuotationReportCounts();
             $scope.loadingStart();
             if($scope.selectedSite && $scope.selectedSite.id){
                 var searchCriteria = {};
@@ -878,6 +883,63 @@ angular.module('timeSheetApp')
 	        	// });
 
         };
+
+        $scope.loadQuotationReportCounts = function () {
+            var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+            var searchCriteria = {
+                currPage : currPageVal
+            }
+            $scope.searchCriteria = searchCriteria;
+            //}
+
+            $scope.searchCriteria.currPage = currPageVal;
+            console.log('Selected  project -' , $scope.selectedProject);
+            console.log('search criteria - ',JSON.stringify($scope.searchCriteriaProject));
+
+            if($scope.selectedProject) {
+                $scope.searchCriteria.projectId = $scope.selectedProject.id;
+            }
+
+            $scope.searchCriteria.region = $scope.selectedRegion!=null?$scope.selectedRegion.name:"";
+            $scope.searchCriteria.branch = $scope.selectedBranch!=null?$scope.selectedBranch.name:"";
+
+            if($scope.selectedSite) {
+                $scope.searchCriteria.siteId = $scope.selectedSite.id;
+            }
+
+            $scope.searchCriteria.consolidated = true;
+
+
+            $scope.searchCriteria.fromDate = $scope.selectedFromDateSer;
+            $scope.searchCriteria.toDate = $scope.selectedToDateSer;
+
+            console.log('quotation report search criteria -' , JSON.stringify($scope.searchCriteria));
+
+            DashboardComponent.getTotalQuoteCounts(searchCriteria).then(function (data) {
+                console.log("Quotations Total Counts" +JSON.stringify(data));
+                $scope.loadingStop();
+                if(data.length > 0) {
+                    $scope.overAllQuotationCount = data[0].totalQuotations;
+                    $scope.waitingQuotationCount = data[0].waitingForApproveCnts;
+                    $scope.pendingQuotationCount = data[0].pendingCounts;
+                    $scope.approvedQuotationCount = data[0].approvedCounts;
+                    $scope.rejectedQuotationCount = data[0].rejectedCounts;
+                } else {
+                    $scope.overAllQuotationCount = 0;
+                    $scope.waitingQuotationCount = 0;
+                    $scope.pendingQuotationCount = 0;
+                    $scope.approvedQuotationCount = 0;
+                    $scope.rejectedQuotationCount = 0;
+                }
+
+                if(!$scope.selectedProject.id && !$scope.selectedSite.id && !$scope.selectedRegion && !$scope.selectedBranch){
+                    $scope.loadingStop();
+                }
+
+            });
+
+        };
+
 
         $scope.loadJobReportFromInflux = function(searchCriteria) {         // Jobs for get Total status counts
 

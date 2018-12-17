@@ -1035,7 +1035,7 @@ public class ReportDatabaseUtil {
         return reportCounts;
     }
 
-    public QuotationReportCounts getQuotationCounts(SearchCriteria searchCriteria) {
+    public List<QuotationReportCounts> getQuotationCounts(SearchCriteria searchCriteria) {
         InfluxDB connection = connectDatabase();
 
         StringBuilder sb = new StringBuilder();
@@ -1105,6 +1105,7 @@ public class ReportDatabaseUtil {
         log.debug("Query string builder" +query);
 
         List<QuotationStatusMeasurement> quotationPoints = reportDatabaseService.getQuotationPoints(connection, query, dbName);
+        List<QuotationReportCounts> quotationReportCounts = new ArrayList<>();
         QuotationReportCounts quotationReportCount = new QuotationReportCounts();
         if(quotationPoints.size() > 0) {
             int totalCounts = 0;
@@ -1127,8 +1128,9 @@ public class ReportDatabaseUtil {
                 }
             }
             quotationReportCount.setTotalQuotations(totalCounts);
+            quotationReportCounts.add(quotationReportCount);
         }
-        return quotationReportCount;
+        return quotationReportCounts;
     }
     /* End Get Total Counts Status based */
 
