@@ -239,7 +239,7 @@ public class SiteService extends AbstractService {
 			}
 			entities = siteRepository.findAll(subEmpIds);
 		}else {
-			entities = siteRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
+			entities = siteRepository.findAll();
 		}
 		List<SiteDTO> values = new ArrayList<SiteDTO>();
 		if(CollectionUtils.isNotEmpty(entities)) {
@@ -526,7 +526,7 @@ public class SiteService extends AbstractService {
         return mapperUtil.toModelList(branches, BranchDTO.class);
     }
 
-    
+
     public List<SiteDTO> findSitesByRegion(long projectId, String region){
         List<Site> sites = siteRepository.findSitesByRegion(projectId,region);
 
@@ -579,19 +579,19 @@ public class SiteService extends AbstractService {
     }
 
     public boolean isDuplicate(RegionDTO regionDTO) {
-    	
+
     	List<Long> results = regionRepository.findByRegion(regionDTO.getName(), regionDTO.getProjectId());
-        
+
         if(!results.isEmpty()) {
             return true;
         }
         return false;
     }
-    
+
     public boolean isDuplicate(BranchDTO branchDTO) {
-    	
+
     	List<Branch> results = branchRepository.findBranchByProjectAndRegionId(branchDTO.getProjectId(), branchDTO.getRegionId(), branchDTO.getName());
-        
+
         if(!results.isEmpty()) {
             return true;
         }

@@ -18,7 +18,7 @@ public interface SiteRepository extends JpaRepository<Site, Long> {
 	@Override
 	void delete(Site t);
 
-	@Query("SELECT s FROM Site s WHERE s.active='Y' order by s.name")
+	@Query("SELECT s FROM Site s WHERE s.active='Y' order by s.name ASC ")
 	List<Site> findAll();
 
 	@Query("SELECT s FROM Site s join s.employeeProjSites e WHERE e.employee.id = :empId and s.active='Y' order by s.name")

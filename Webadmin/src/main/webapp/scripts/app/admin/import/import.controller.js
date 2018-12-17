@@ -592,7 +592,6 @@ angular.module('timeSheetApp')
 	    		console.log('$scope.employeeShiftImportStatus -'+JSON.stringify($scope.employeeShiftImportStatus));
        		EmployeeComponent.importEmployeeShiftStatus($scope.employeeShiftImportStatus.fileName).then(function(data) {
            		if(data) {
-           			alert(JSON.stringify(data));
            			$scope.employeeShiftImportStatus.importStatus = data.status;
                		console.log('*****************importStatus - '+ JSON.stringify($scope.employeeShiftImportStatus));
                		$scope.employeeShiftImportStatus.importMsg = data.msg;
@@ -676,7 +675,6 @@ angular.module('timeSheetApp')
 	    		console.log('$scope.assetImportStatus -'+JSON.stringify($scope.assetImportStatus));
       		AssetComponent.importAssetStatus($scope.assetImportStatus.fileName).then(function(data) {
           		if(data) {
-          			alert(JSON.stringyfy(data));
           			$scope.assetImportStatus.importStatus = data.status;
               		console.log('*****************importStatus - '+ JSON.stringify($scope.assetImportStatus));
               		$scope.assetImportStatus.importMsg = data.msg;
