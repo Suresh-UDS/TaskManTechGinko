@@ -402,9 +402,9 @@
 																		<thead>
 																			<tr>
 																				<th width="40%">Questions</th>
-																				<th width="10%">Yes</th>
-																				<th width="10%">No</th>
-																				<th width="15%">Rating</th>
+																				<th width="5%">Yes</th>
+																				<th width="5%">No</th>
+																				<th width="25%">Rating</th>
 																				<th width="25%">Comments</th>
 
 																			</tr>
@@ -413,17 +413,24 @@
 																		   <tr ng-repeat="feedbackDetailResult in feedbackDetail.results"> 
 																			
 																				<td>{{feedbackDetailResult.question}}</td>
-																				<td><span ng-if="feedbackDetailResult.answerType =='YESNO' && feedbackDetailResult.answer == 'true'">{{feedbackDetailResult.answer}}</span>
-											                                        <span ng-if="feedbackDetailResult.answerType !='YESNO' && feedbackDetailResult.answer != 'true'">-</span></td>
-											                                    <td><span ng-if="feedbackDetailResult.answerType =='YESNO' && feedbackDetailResult.answer == 'false'">{{feedbackDetailResult.answer}}</span>
-											                                        <span ng-if="feedbackDetailResult.answerType !='YESNO' && feedbackDetailResult.answer != 'false'">-</span></td>
+																				<td><span ng-if="feedbackDetailResult.answerType =='YESNO' && feedbackDetailResult.answer == 'true'"><i class="material-icons">done</i></span>
+											                                        <span ng-if="feedbackDetailResult.answerType =='YESNO' && feedbackDetailResult.answer != 'true'"><i class="material-icons">close</i></span>
+											                                        <span ng-if="feedbackDetailResult.answerType !='YESNO'">-</span>
+											                                    </td>
+											                                    <td><span ng-if="feedbackDetailResult.answerType =='YESNO' && feedbackDetailResult.answer == 'false'"><i class="material-icons">done</i></span>
+											                                        <span ng-if="feedbackDetailResult.answerType =='YESNO' && feedbackDetailResult.answer != 'false'"><i class="material-icons">close</i></span>
+											                                        <span ng-if="feedbackDetailResult.answerType !='YESNO'">-</span>
 											                                    <td> 
-											                                        <span ng-if="feedbackDetailResult.answerType =='RATING'">{{feedbackDetailResult.answer}}</span>
+											                                        <!-- <span ng-if="feedbackDetailResult.answerType =='RATING'">{{feedbackDetailResult.answer}}</span>
+											                                        <span ng-if="feedbackDetailResult.answerType !='RATING'">-</span> -->
+											                                         <div  ng-if="feedbackDetailResult.answerType =='RATING'" >
+											                                            <jk-rating-stars max-rating="5" rating="feedbackDetailResult.answer" read-only="readOnly" ></jk-rating-stars>
+											                                        </div>
 											                                        <span ng-if="feedbackDetailResult.answerType !='RATING'">-</span>
 											                                    </td>
 													                            
 													                            <td><span ng-if="feedbackDetailResult.remarks">{{feedbackDetailResult.remarks}}</span>
-													                                <span ng-if="!feedbackDetailResult.remarks">-</span>
+													                                <span ng-if="!feedbackDetailResult.remarks">-</span> 
 													                            </td>
 																			</tr>
 
