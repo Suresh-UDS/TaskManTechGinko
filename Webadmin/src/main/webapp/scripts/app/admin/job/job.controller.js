@@ -49,7 +49,7 @@ angular.module('timeSheetApp')
         $scope.checkStatus = 0;
         $scope.selectPlannedStartTime;
         $scope.btnDisable = false;
-        $scope.scheduleView = false;
+        $scope.scheduleView = true;
 
         /** Ui-select scopes **/
         $scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
@@ -897,7 +897,7 @@ angular.module('timeSheetApp')
                               //console.log("Ticket details");
                               //console.log(data);
                                 $scope.ticketStatus = data.status;
-                                $scope.scheduleView = true;
+                                $scope.scheduleView = false;
                             });
 
                         }
@@ -979,7 +979,7 @@ angular.module('timeSheetApp')
                         $scope.job.title =data.title;
                         $scope.job.description = data.description;
                         $scope.job.ticketId = data.id;
-                        $scope.scheduleView = true;
+                        $scope.scheduleView = false;
 
                          /*if(data.siteId){
 
