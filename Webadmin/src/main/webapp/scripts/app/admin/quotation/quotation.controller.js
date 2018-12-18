@@ -88,6 +88,8 @@ angular
 					$scope.ticketQuot = false;
 					$scope.searchCreatedDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
 					$scope.searchCreatedDateSer = new Date();
+					$scope.searchToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+	                $scope.searchToDateSer = new Date();
 					
 					/** Ui-select scopes **/
 			        $scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
@@ -151,6 +153,18 @@ angular
 			        $('input#searchCreatedDate').on('dp.change', function(e){
 		                $scope.searchCreatedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
 		                $scope.searchCreatedDateSer = new Date(e.date._d);
+		                /*if($scope.searchToDate < $scope.searchCreatedDate){
+		                	$scope.searchToDate = "";
+			                $scope.searchToDateSer = "";
+		                }
+		                $('input#searchToDate').datetimepicker().on('dp.show', function () {
+		                return $(this).data('DateTimePicker').minDate(e.date);
+		                });*/
+		            });
+			        
+			        $('input#searchToDate').on('dp.change', function(e){
+		                $scope.searchToDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+		                $scope.searchToDateSer = new Date(e.date._d);
 		            });
 
 			        $scope.initCalender();
@@ -919,6 +933,8 @@ angular
 			        };
 
 			        $scope.clearFilter = function() {
+			        	//$('input#searchCreatedDate').data('DateTimePicker').clear();
+			            //$('input#searchToDate').data('DateTimePicker').clear();
 			            $scope.noData = false;
 			        	$scope.clearField = true;
 			        	$scope.siteFilterDisable = true;
@@ -937,6 +953,8 @@ angular
                         
                         $scope.searchCreatedDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
     					$scope.searchCreatedDateSer = new Date();
+    					$scope.searchToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+    	                $scope.searchToDateSer = new Date();
 	        		    $scope.selectedProject = null;
 			            $scope.selectedSite = null;
 			            $scope.selectedStatus = null;
@@ -1049,7 +1067,8 @@ angular
 		        	 $scope.searchCriteria.findAll = false;
 
 			        	if(!$scope.searchId && !$scope.searchTitle  && !$scope.searchProject && !$scope.searchSite
-			        		&& !$scope.searchCreatedBy && !$scope.searchSentBy && !$scope.searchApprovedBy && !$scope.searchStatus){
+			        		&& !$scope.searchCreatedBy && !$scope.searchSentBy && !$scope.searchApprovedBy && !$scope.searchStatus
+			        		&& !$scope.searchCreatedDate && !$scope.searchToDate){
 			        		$scope.searchCriteria.findAll = true;
 			        	}
 
@@ -1136,19 +1155,27 @@ angular
 			        	$scope.searchCriteria.quotationApprovedBy = null;
 			        }
 			        
-			        
+			  
 			        if($scope.searchCreatedDateSer) {
 			        	 $scope.searchCriteria.quotationCreatedDate = $scope.searchCreatedDateSer;
+			        	
+		             }
+			        
+			        if($scope.searchToDateSer) {
+			        	 $scope.searchCriteria.toDate = $scope.searchToDateSer;
+			        	
 		             }
 
 			        if($scope.searchSubmittedDateSer) {
 			        		$scope.searchCriteria.quotationSubmittedDate = $scope.searchSubmittedDateSer;
-			        }/*else{
+			        }
+			        /*else{
 			        	$scope.searchCriteria.quotationSubmittedDate = null;
 			        }*/
 			        if($scope.searchApprovedDateSer) {
 			        		$scope.searchCriteria.quotationApprovedDate = $scope.searchApprovedDateSer;
-			        }/*else{
+			        }
+			        /*else{
 			        	$scope.searchCriteria.quotationApprovedDate = null;
 			        }*/
 
@@ -1229,6 +1256,15 @@ angular
 	                            }else{
 	                            	 $scope.searchCreatedBy = "";
 	                            }
+	                             
+	                             if($scope.localStorage.quotationCreatedDate){
+	                            	 $scope.searchCreatedDate=$filter('date')($scope.localStorage.quotationCreatedDate, 'dd/MM/yyyy');  
+	                            	 $scope.searchCreatedDateSer= $scope.localStorage.quotationCreatedDate;
+	                            }
+	                             if($scope.localStorage.toDate){
+	                            	 $scope.searchToDate=$filter('date')($scope.localStorage.toDate, 'dd/MM/yyyy');  
+	                            	 $scope.searchToDateSer= $scope.localStorage.toDate;
+	                            }
 	                             if($scope.localStorage.quotationApprovedBy){
 	                            	 $scope.searchApprovedBy = $scope.localStorage.quotationApprovedBy;
 	                            }else{
@@ -1252,7 +1288,7 @@ angular
 	                 }
 
 	                 //$scope.searchCriteria.quotationCreatedDate = new Date();
-	                 $scope.searchCriteria.toDate = new Date();
+	                 //$scope.searchCriteria.toDate = new Date();
 	                 /* Localstorage (Retain old values while edit page to list) end */
 
 
@@ -1495,6 +1531,58 @@ angular
 
 					            }*/
 					        };
+					        
+					        
+					        /*
+					         * Ui select allow-clear modified function start
+					         *
+					         * */
+					        
+
+					        $scope.clearProject = function($event) {
+					     	   $event.stopPropagation(); 
+					     	   $scope.client.selected = undefined;
+					     	   $scope.regionsListOne.selected = undefined;
+					     	   $scope.branchsListOne.selected = undefined;
+					     	   $scope.sitesListOne.selected = undefined;
+					     	   $scope.regionFilterDisable = true;
+					     	   $scope.branchFilterDisable = true;
+					     	   $scope.siteFilterDisable = true;
+					     	};
+					     	
+					     	$scope.clearRegion = function($event) {
+					      	   $event.stopPropagation(); 
+					      	   $scope.regionsListOne.selected = undefined;
+					      	   $scope.branchsListOne.selected = undefined;
+					      	   $scope.sitesListOne.selected = undefined;
+					      	   $scope.branchFilterDisable = true;
+					      	   $scope.siteFilterDisable = true;
+					      	};
+					      	
+					      	$scope.clearBranch = function($event) {
+						   	   $event.stopPropagation();
+						   	   $scope.branchsListOne.selected = undefined;
+						   	   $scope.sitesListOne.selected = undefined;
+						   	   $scope.siteFilterDisable = true;
+						   	};
+					         
+					   	$scope.clearSite = function($event) {
+					    	   $event.stopPropagation(); 
+					    	   $scope.sitesListOne.selected = undefined;
+					    	   $scope.blocksListOne.selected = undefined;
+					    	   $scope.floorsListOne.selected = undefined;
+					    	   $scope.zonesListOne.selected = undefined;
+					    	   $scope.blockFilterDisable = true;
+					    	   $scope.floorFilterDisable = true;
+					    	   $scope.zoneFilterDisable = true;
+					    	};
+					        	
+					    
+					           	
+					   	/*
+					        * Ui select allow-clear modified function end
+					        *
+					        * */
 
 
 
