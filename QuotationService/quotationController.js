@@ -815,10 +815,32 @@ module.exports = {
                 quotCriterias.lastModifiedDate = { $gt: startDate, $lt: endDate };
             }
        }
-       
-      console.log("currPage",req.body.currPage-1 +"sort"+ req.body.sort);
 
-      var quotQuery = Quotation.find(quotCriterias).sort({'createdDate':-1}).skip((req.body.currPage-1)*10).limit(req.body.sort);
+     //Order by column asc/desc
+
+      var sortVal = {};
+ 
+      if(req.body.columnName && req.body.sortByAsc){
+
+        sortVal[ req.body.columnName ]= 'asc';
+
+        //var sortVal =  { req.body.columnName : 1 };
+
+      }else if(req.body.columnName && !req.body.sortByAsc){
+
+        sortVal[ req.body.columnName ]= 'desc';
+
+        //var sortVal =  { req.body.columnName : -1 };
+
+      }else{
+        sortVal = {createdDate : 'desc'};
+      }
+
+      
+
+      console.log("currPage",req.body.currPage +"coloumn:order" + JSON.stringify(sortVal));
+
+      var quotQuery = Quotation.find(quotCriterias).skip((req.body.currPage-1)*10).limit(req.body.sortNum).sort(sortVal);
 
       console.log("Search criteria",quotCriterias);
       quotQuery.exec(function(err,quotations){
@@ -838,7 +860,7 @@ module.exports = {
                      quotQueryCountVal = quotationsCount;
                      var tPage = 0;
                      if(quotQueryCountVal > 10){
-                        tPage = quotQueryCountVal * 10;
+                        tPage = Math.ceil(quotQueryCountVal / 10);
                      }else{
                         tPage = 1;
                      }

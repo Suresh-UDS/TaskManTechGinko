@@ -960,8 +960,8 @@ angular
 			            }
 			        }
 
-			        $scope.isActiveAsc = 'id';
-			        $scope.isActiveDesc = '';
+			        $scope.isActiveAsc = '';
+			        $scope.isActiveDesc = 'createdDate';
 
 			        $scope.columnAscOrder = function(field){
 			            $scope.selectedColumn = field;
@@ -969,7 +969,8 @@ angular
 			            $scope.isActiveDesc = '';
 			            $scope.isAscOrder = true;
 			            $scope.search();
-			            //$scope.loadTickets();
+			            $scope.setPage(1);
+			           //$scope.loadQuotations();
 			        }
 
 			        $scope.columnDescOrder = function(field){
@@ -978,8 +979,14 @@ angular
 			            $scope.isActiveAsc = '';
 			            $scope.isAscOrder = false;
 			            $scope.search();
-			            //$scope.loadTickets();
+			            $scope.setPage(1);
+			            //$scope.loadQuotations();
 			        }
+			        
+			        $scope.loadQuotations = function () {
+			        	$scope.clearFilter();
+			        	$scope.search();
+		            };
 
 			        
 			        $scope.searchFilter = function () {
@@ -1146,20 +1153,20 @@ angular
 			        }*/
 
 
-		            if($scope.pageSort){
+		           if($scope.pageSort){
 		                $scope.searchCriteria.sort = $scope.pageSort;
 		            }
 
 
-		            /*if($scope.selectedColumn){
+		            if($scope.selectedColumn){
 
 		                $scope.searchCriteria.columnName = $scope.selectedColumn;
 		                $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
 
 		            }else{
-		                $scope.searchCriteria.columnName ="id";
-		                $scope.searchCriteria.sortByAsc = true;
-		            }*/
+		                $scope.searchCriteria.columnName ="createdDate";
+		                $scope.searchCriteria.sortByAsc = false;
+		            }
 
                    //console.log("search criteria", JSON.stringify($scope.searchCriteria));
                      $scope.quotations = '';
