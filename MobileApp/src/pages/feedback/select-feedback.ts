@@ -8,6 +8,7 @@ import {FeedbackPage} from "./feedback";
 import {FeedbackQuestionsForm} from "./feedback-questions-form";
 import {FeedbackGridPage} from "./feedback-grid";
 import {InitFeedbackZone} from "./init-feedback-zone";
+import {FeedbackGridFinish} from "../feedback-grid-finish/feedback-grid-finish";
 
 @Component({
   selector: 'page-select-feedback',
@@ -53,7 +54,12 @@ export class SelectFeedbackPage {
   }
   happy()
   {
+    if(this.feedback.displayType=='form'){
       this.navCtrl.push(FeedbackPage,{feedback:this.feedback,fb:this.fb,question:[],overallFeedback:true,project:this.navParams.data.project,site:this.navParams.data.site,location:this.navParams.data.location});
+    }
+    else if(this.feedback.displayType=='grid'){
+      this.navCtrl.push(FeedbackGridFinish,{feedback:this.feedback,fb:this.fb,question:[],overallFeedback:true,project:this.navParams.data.project,site:this.navParams.data.site,location:this.navParams.data.location});
+    }
   }
 
   goBack()
