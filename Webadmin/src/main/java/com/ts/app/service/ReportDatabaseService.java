@@ -33,8 +33,6 @@ public class ReportDatabaseService {
 
     private final Logger log = LoggerFactory.getLogger(ReportDatabaseService.class);
 
-    final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
     @Value("${influxdb.dbname}")
     private String dbName;
 
@@ -43,7 +41,7 @@ public class ReportDatabaseService {
 
     private InfluxDB connectDatabase() {
         // Connect to database assumed on local host with default credentials.
-        return reportDatabaseConfiguration.initializeInduxDbConnection();
+        return reportDatabaseConfiguration.initializeInfluxDbConnection();
     }
 
     public List<JobStatusMeasurement> getJobPoints(InfluxDB connection, String query, String databaseName) {
@@ -64,13 +62,6 @@ public class ReportDatabaseService {
         // Map it
         InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
         return resultMapper.toPOJO(queryResult, TicketStatusMeasurement.class);
-    }
-
-    public List<TicketStatusMeasurement> getTicketExistingPoints(InfluxDB influxDB, Query query) {
-        QueryResult results = influxDB.query(query);
-        InfluxDBResultMapper mapper = new InfluxDBResultMapper();
-        List<TicketStatusMeasurement> ticketStatusMeasurementList = mapper.toPOJO(results, TicketStatusMeasurement.class);
-        return ticketStatusMeasurementList;
     }
 
     public List<AttendanceStatusMeasurement> getAttendancePoints(InfluxDB connection, String query, String databaseName) {

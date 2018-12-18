@@ -26,9 +26,12 @@ public class ReportDatabaseConfiguration {
 	
 	@Value("${influxdb.dbname}")
 	private String databaseName;
+
+	@Value("${influxdb.retention-policy}")
+	private String retentionPolicy;
 	
 	@Bean
-	public InfluxDB initializeInduxDbConnection() {
+	public InfluxDB initializeInfluxDbConnection() {
 		
 		InfluxDB influxDb = InfluxDBFactory.connect(url, username, password);
 		
@@ -46,10 +49,12 @@ public class ReportDatabaseConfiguration {
         if(!isExists) {
             log.info("Influx DB to create database....");
             influxDb.createDatabase(dbName);
-            influxDb.createRetentionPolicy("one_year_policy", dbName, "17520h0m0s", 1, true);
+            influxDb.createRetentionPolicy(retentionPolicy, dbName, "17520h0m0s", 1, true);
+            influxDb.enableGzip();
         }else {
             log.info("Already database Exists." +isExists);
-            influxDb.createRetentionPolicy("one_year_policy", dbName, "17520h0m0s", 1, true);
+            log.info("Is GZIP enabled or not. " +influxDb.isGzipEnabled());
+            influxDb.createRetentionPolicy(retentionPolicy, dbName, "17520h0m0s", 1, true);
         }
 
         influxDb.setLogLevel(InfluxDB.LogLevel.BASIC);

@@ -68,7 +68,7 @@ public class ReportDatabaseUtil {
 
     private InfluxDB connectDatabase() {
         // Connect to database assumed on local host with default credentials.
-        return reportDatabaseConfiguration.initializeInduxDbConnection();
+        return reportDatabaseConfiguration.initializeInfluxDbConnection();
     }
 
     /** Pre-compute a data from database
