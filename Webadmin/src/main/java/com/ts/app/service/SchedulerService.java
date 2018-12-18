@@ -271,7 +271,7 @@ public class SchedulerService extends AbstractService {
 				}
 				*/
 			}
-			
+
 			for(Future future : futures) {
 				try {
 					future.get();
@@ -280,7 +280,7 @@ public class SchedulerService extends AbstractService {
 				}
 			}
 			executorService.shutdown();
-			
+
 		}
 		schedulerConfigRepository.save(dailyTasks);
 	}
@@ -330,7 +330,7 @@ public class SchedulerService extends AbstractService {
 				logger.debug("Job Creation Thread Completed for, parentJobId -" + parentJobId + ", startTimeCal - " + startTimeCal + ", endTimeCal-" + endTimeCal);
 			}
 		}
-		
+
 		@Override
 		public void run() {
 			execute();
@@ -773,7 +773,7 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.autoCheckOutAttendance();
 	}
 
-	@Scheduled(cron="0 0 9 * * ?")
+//	@Scheduled(cron="0 0 9 * * ?")
 	public void warrantyExpireAlert() {
 		schedulerHelperService.sendWarrantyExpireAlert();
 		schedulerHelperService.sendSchedulePPMJobsAlert();
@@ -855,12 +855,12 @@ public class SchedulerService extends AbstractService {
 			} else if (creationPolicy.equalsIgnoreCase("daily")) {
 
 				DateTime currDate = DateTime.now();
-				
+
 				DateTime lastDate = DateTime.now();
 
 				lastDate = lastDate.plusDays(2);
 
-				
+
 				if(CollectionUtils.isNotEmpty(prevJobs)) {
 					Job prevJob = prevJobs.get(0);
 					//currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
