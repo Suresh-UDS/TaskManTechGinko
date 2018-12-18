@@ -91,10 +91,10 @@
                         <tr>
                             <th>Id
                                 <span class="sortingIcons">
-                                    <span ng-click="columnAscOrder('id')" ng-class="isActiveAsc == 'id' ? 'active' : ''" >
+                                    <span ng-click="columnAscOrder('serialId')" ng-class="isActiveAsc == 'serialId' ? 'active' : ''" >
                                         <i  class="fa fa-caret-up"></i>
                                     </span>
-                                    <span ng-click="columnDescOrder('id')" ng-class="isActiveDesc == 'id' ? 'active' : ''">
+                                    <span ng-click="columnDescOrder('serialId')" ng-class="isActiveDesc == 'serialId' ? 'active' : ''">
                                          <i  ng-class="class" class="fa fa-caret-down"></i>
                                     </span>
                                 </span>
@@ -110,43 +110,43 @@
                                 </span>
                             </th>
                             <th>Client
-                               <span class="sortingIcons">
-                                    <span ng-click="columnAscOrder('client')" ng-class="isActiveAsc == 'client' ? 'active' : ''" >
+                                <span class="sortingIcons">
+                                    <span ng-click="columnAscOrder('projectName')" ng-class="isActiveAsc == 'projectName' ? 'active' : ''" >
                                         <i  class="fa fa-caret-up"></i>
                                     </span>
-                                    <span ng-click="columnDescOrder('client')" ng-class="isActiveDesc == 'client' ? 'active' : ''">
+                                    <span ng-click="columnDescOrder('projectName')" ng-class="isActiveDesc == 'projectName' ? 'active' : ''">
                                          <i  ng-class="class" class="fa fa-caret-down"></i>
                                     </span>
-                                </span>
+                                </span> 
                             </th>
                             <th>Site
                                  <span class="sortingIcons">
-                                    <span ng-click="columnAscOrder('site')" ng-class="isActiveAsc == 'site' ? 'active' : ''" >
+                                    <span ng-click="columnAscOrder('siteName')" ng-class="isActiveAsc == 'siteName' ? 'active' : ''" >
                                         <i  class="fa fa-caret-up"></i>
                                     </span>
-                                    <span ng-click="columnDescOrder('site')" ng-class="isActiveDesc == 'site' ? 'active' : ''">
+                                    <span ng-click="columnDescOrder('siteName')" ng-class="isActiveDesc == 'siteName' ? 'active' : ''">
                                          <i  ng-class="class" class="fa fa-caret-down"></i>
                                     </span>
-                                </span>
+                                </span> 
                             </th>
                             <th>Created By
                                 <span class="sortingIcons">
-                                    <span ng-click="columnAscOrder('createdBy')" ng-class="isActiveAsc == 'createdBy' ? 'active' : ''" >
+                                    <span ng-click="columnAscOrder('createdByUserName')" ng-class="isActiveAsc == 'createdByUserName' ? 'active' : ''" >
                                         <i  class="fa fa-caret-up"></i>
                                     </span>
-                                    <span ng-click="columnDescOrder('createdBy')" ng-class="isActiveDesc == 'createdBy' ? 'active' : ''">
+                                    <span ng-click="columnDescOrder('createdByUserName')" ng-class="isActiveDesc == 'createdByUserName' ? 'active' : ''">
                                          <i  ng-class="class" class="fa fa-caret-down"></i>
                                     </span>
                                 </span>
                             </th>
                             <!-- <th>Submitted By</th>
                             <th>Approved By</th> -->
-                            <th>Created On
+                            <th>Created Date
                               <span class="sortingIcons">
-                                    <span ng-click="columnAscOrder('createdOn')" ng-class="isActiveAsc == 'createdOn' ? 'active' : ''" >
+                                    <span ng-click="columnAscOrder('createdDate')" ng-class="isActiveAsc == 'createdDate' ? 'active' : ''" >
                                         <i  class="fa fa-caret-up"></i>
                                     </span>
-                                    <span ng-click="columnDescOrder('createdOn')" ng-class="isActiveDesc == 'createdOn' ? 'active' : ''">
+                                    <span ng-click="columnDescOrder('createdDate')" ng-class="isActiveDesc == 'createdDate' ? 'active' : ''">
                                          <i  ng-class="class" class="fa fa-caret-down"></i>
                                     </span>
                                 </span>

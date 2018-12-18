@@ -815,27 +815,62 @@ module.exports = {
                 quotCriterias.lastModifiedDate = { $gt: startDate, $lt: endDate };
             }
        }
-   
-      console.log("currPage",req.body.currPage-1 +"sort"+ req.body.sort);
-      var quotQuery = Quotation.find(quotCriterias).sort({'createdDate':-1}).skip((req.body.currPage-1)*10).limit(req.body.sort);
-      //var quotQueryCount = Quotation.find(quotCriterias).count();
-      //var quotQueryCountVal = 0; 
+
+     //Order by column asc/desc
+
+      var sortVal = {};
+ 
+      if(req.body.columnName && req.body.sortByAsc){
+
+        sortVal[ req.body.columnName ]= 'asc';
+
+        //var sortVal =  { req.body.columnName : 1 };
+
+      }else if(req.body.columnName && !req.body.sortByAsc){
+
+        sortVal[ req.body.columnName ]= 'desc';
+
+        //var sortVal =  { req.body.columnName : -1 };
+
+      }else{
+        sortVal = {createdDate : 'desc'};
+      }
+
+      
+
+      console.log("currPage",req.body.currPage +"coloumn:order" + JSON.stringify(sortVal));
+
+      var quotQuery = Quotation.find(quotCriterias).skip((req.body.currPage-1)*10).limit(req.body.sortNum).sort(sortVal);
+
       console.log("Search criteria",quotCriterias);
       quotQuery.exec(function(err,quotations){
           if(err){
               //console.log("Error in finding quotations");
               res.send(400,"No quotation found");
           }else{
-              /*quotQueryCount.exec(function(err,quotationsCount){
+            var quotQueryCount = Quotation.find(quotCriterias).count();
+            var quotQueryCountVal = 0; 
+            var data={};
+              quotQueryCount.exec(function(err,quotationsCount){
                   if(err){
-                    quotQueryCountVal = 0;
+                    //quotQueryCountVal = 0;
+                    data={totalCount:quotQueryCountVal,totalPages:0,currPage:1,transactions:[]};
+                    res.send(200,data); 
                   }else{
                      quotQueryCountVal = quotationsCount;
+                     var tPage = 0;
+                     if(quotQueryCountVal > 10){
+                        tPage = Math.ceil(quotQueryCountVal / 10);
+                     }else{
+                        tPage = 1;
+                     }
+                     data={totalCount:quotQueryCountVal,totalPages:tPage,currPage:req.body.currPage,transactions:quotations};
+                     console.log("result",data);
+                      res.send(200,data); 
                   }
+                   
                 });     
-                //console.log("result",quotations);
-             quotations.totalCount = quotQueryCountVal;*/
-             res.send(200,quotations); 
+           
           }
           
     });     
