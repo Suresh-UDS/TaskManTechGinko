@@ -56,8 +56,11 @@
 					Site: {{searchCriteras.siteName}}
 			    </span>
 			    
-			    <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.CreatedDate">
-                    CreatedDate: {{searchCriteras.CreatedDate | date:'dd/MM/yyyy'}}
+			    <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.quotationCreatedDate">
+                    Created From Date: {{searchCriteras.quotationCreatedDate | date:'dd/MM/yyyy'}}
+                </span>
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.toDate">
+                    Created To Date: {{searchCriteras.toDate | date:'dd/MM/yyyy'}}
                 </span>
 
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.quotationTitle">
@@ -480,7 +483,11 @@
 				                                    <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
 				                                    <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
-													  <ui-select-match placeholder="Select clients..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
+													  <ui-select-match placeholder="Select clients..."  >{{$select.selected.name}}
+															<a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+													  </ui-select-match>
 													  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)" null-option="allClients" loose-null>
 
 													    <span ng-bind-html="client.name | highlight: $select.search"></span>
@@ -499,7 +506,11 @@
 				                                        <span ng-show="!regionSpin && !regionsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
 						                                <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
-														  <ui-select-match placeholder="Select region..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
+														  <ui-select-match placeholder="Select region..." >{{$select.selected.name}}
+														       <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+															   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+															   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+														  </ui-select-match>
 														  <ui-select-choices repeat="regionsListOne in regionsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,'');loadBranchList(client.selected.id)" null-option="allRegions" loose-null>
 														    <span ng-bind-html="regionsListOne.name | highlight: $select.search"></span>
 														  </ui-select-choices>
@@ -519,7 +530,11 @@
 				                                 <span ng-show="!branchSpin && !branchsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
 					                                <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
-													  <ui-select-match placeholder="Select branch..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
+													  <ui-select-match placeholder="Select branch...">{{$select.selected.name}}
+													           <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+															   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+															   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+													  </ui-select-match>
 													  <ui-select-choices repeat="branchsListOne in branchsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,branchsListOne.selected.name)" null-option="allRegions" loose-null>
 													    <span ng-bind-html="branchsListOne.name | highlight: $select.search"></span>
 													  </ui-select-choices>
@@ -538,7 +553,11 @@
 				                                    <span ng-show="!siteSpin && !sitesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
 				                                    <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
-													  <ui-select-match placeholder="Select site..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
+													  <ui-select-match placeholder="Select site..." >{{$select.selected.name}}
+													      <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+													  </ui-select-match>
 													  <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search"  null-option="allSites" loose-null>
 													    <span ng-bind-html="sitesListOne.name | highlight: $select.search"></span>
 													  </ui-select-choices>
@@ -594,9 +613,18 @@
                                         <div class="col-xs-12 col-md-4">
                                             <div class="form-group">
                                                 <div class="dropdown">
-                                                    <label class="label-control">Created Date</label>
+                                                    <label class="label-control">Created From Date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
                                                     <input type="text" class="form-control datepicker"  id="searchCreatedDate" placeholder="DD/MM/YYYY"  ng-model="searchCreatedDate" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-md-4">
+                                            <div class="form-group">
+                                                <div class="dropdown">
+                                                    <label class="label-control">Created To Date</label>
+                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                    <input type="text" class="form-control datepicker"  id="searchToDate" placeholder="DD/MM/YYYY"  ng-model="searchToDate" autocomplete="off" />
                                                 </div>
                                             </div>
                                         </div>
@@ -612,7 +640,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xs-12 col-md-4">
+                                       
+                                    </div>
+                                    <div class="row"> 
+                                     <div class="col-xs-12 col-md-4">
                                              <div class="dropdown">
                                                  <div class="form-group" >
                                                    <input type="text"
@@ -623,10 +654,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
-
-                                    </div>
-                                    <div class="row"> 
 	                                    <div class="col-xs-12 col-md-4">
 	                                             <div class="dropdown">
 	                                                <div class="form-group" >

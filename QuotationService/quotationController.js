@@ -804,8 +804,11 @@ module.exports = {
       if(req.body.createdDate){
           var startDate = new Date(req.body.createdDate);
           startDate.setHours(0,0,0);
-          quotCriterias.lastModifiedDate = { $gt: startDate, $lt: endDate };
-            if(req.body.toDate){
+          var endDate = new Date(req.body.toDate);
+          endDate.setHours(23,59,59);
+          //quotCriterias.lastModifiedDate = { $gt: startDate, $lt: endDate };
+          quotCriterias.createdDate = { $gt: startDate, $lt: endDate };
+           /* if(req.body.toDate){
                 var endDate = new Date(req.body.toDate);
                 endDate.setHours(23,59,59);
                 quotCriterias.lastModifiedDate = { $gt: startDate, $lt: endDate };
@@ -813,7 +816,7 @@ module.exports = {
                 var endDate = new Date();
                 endDate.setHours(23,59,59);
                 quotCriterias.lastModifiedDate = { $gt: startDate, $lt: endDate };
-            }
+            }*/
        }
 
      //Order by column asc/desc
