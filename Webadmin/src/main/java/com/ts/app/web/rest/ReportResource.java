@@ -187,6 +187,16 @@ public class ReportResource {
         return new ResponseEntity<>("Successfully created attendance points to influxDb", HttpStatus.CREATED);
     }
 
+    @RequestMapping(value = "/reports/quotation/points", method = RequestMethod.GET)
+    public ResponseEntity<?> addQuotationPoint() {
+        try {
+            reportDatabaseUtil.addQuotationPoints();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>("Successfully created Quotation points to influxDb", HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/reports/jobType/count", method = RequestMethod.GET)
     public ResponseEntity<?> getJobPointsByStatus() {
         List<JobStatusMeasurement> reportCategoryPoints = reportDatabaseUtil.getJobReportCategoryPoints();
@@ -229,6 +239,24 @@ public class ReportResource {
         return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/reports/quotations/count", method = RequestMethod.POST)
+    public ResponseEntity<?> getQuotationCountByToday(@RequestBody SearchCriteria searchCriteria) {
+        List<QuotationReportCounts> reportTodayPoints = reportDatabaseUtil.getQuotationCounts(searchCriteria);
+        return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reports/attendance", method = RequestMethod.GET)
+    public ResponseEntity<?> getAttnCounts() {
+        List<ChartModelEntity> reportList = reportDatabaseUtil.getAttnTotalCounts();
+        return new ResponseEntity<>(reportList, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reports/quotations/chart", method = RequestMethod.GET)
+    public ResponseEntity<?> getChartQuote() {
+        List<ChartModelEntity> response = reportDatabaseUtil.getChartzCounts();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/reports/job/delete", method = RequestMethod.GET)
     public ResponseEntity<?> deleteCountByToday() {
         String reportTodayPoints = reportDatabaseUtil.deleteOrUpdateJobPoints();
@@ -240,36 +268,6 @@ public class ReportResource {
             schedulerService.createJobPoints();
 	    return "schedule service called...";
     }
-
-    @RequestMapping(value = "/reports/attendance", method = RequestMethod.GET)
-    public ResponseEntity<?> getAttnCounts() {
-        List<ChartModelEntity> reportList = reportDatabaseUtil.getAttnTotalCounts();
-        return new ResponseEntity<>(reportList, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/reports/quotation", method = RequestMethod.GET)
-    public ResponseEntity<?> addQuotationPoint() {
-	    try {
-            reportDatabaseUtil.addQuotationPoints();
-        }catch (Exception e) {
-	        e.printStackTrace();
-        }
-        return new ResponseEntity<>("Successfully created Quotation points to influxDb", HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/reports/quotations/count", method = RequestMethod.POST)
-    public ResponseEntity<?> getQuotationCountByToday(@RequestBody SearchCriteria searchCriteria) {
-        List<QuotationReportCounts> reportTodayPoints = reportDatabaseUtil.getQuotationCounts(searchCriteria);
-        return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/reports/quotations/chart", method = RequestMethod.GET)
-    public ResponseEntity<?> getChartQuote() {
-	    List<ChartModelEntity> response = reportDatabaseUtil.getChartzCounts();
-	    return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-
 
 
 
