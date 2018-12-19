@@ -93,6 +93,7 @@ angular.module('timeSheetApp')
         $scope.init = function() {
             $scope.loadAllProjects();
             // $scope.loadAllSites();
+            $scope.loadAllAttendanceCounts();
             $scope.loadQuotationReportChart();
             $scope.loadQuotationReportCounts();
             $scope.loadJobReport();
@@ -566,13 +567,13 @@ angular.module('timeSheetApp')
 
         };
 
-        $scope.loadAllSites = function () {
-            DashboardComponent.loadAllSites().then(function (data) {
-                console.log(data);
-
-                $scope.sites = data;
-                $scope.siteCount = data.length;
-            });
+        $scope.loadAllAttendanceCounts = function () {
+            // DashboardComponent.loadAllSites().then(function (data) {
+            //     console.log(data);
+            //
+            //     $scope.sites = data;
+            //     $scope.siteCount = data.length;
+            // });
             console.log($scope.selectedFromDateSer);
              $scope.selectedFromDateSer.setHours(0,0,0,0);
              $scope.selectedToDateSer.setHours(23,59,59,0);
@@ -597,6 +598,7 @@ angular.module('timeSheetApp')
                 $scope.presentCount = data.totalPresent;
                 $scope.absentCount = data.totalAbsent;
                 $scope.leftCount = data.totalLeft;
+                $scope.loadingStop();
 
 
             })
@@ -656,17 +658,17 @@ angular.module('timeSheetApp')
         };
 
         $scope.refreshReport = function() {
-        		if($scope.selectedSite) {
+        		if($scope.selectedSite && $scope.selectedSite.id) {
         			$scope.refreshReportBySite();
                     $scope.loadChartData($scope.selectedProject.id,null,null,$scope.selectedSite.id);
 
-                }else if($scope.selectedBranch){
+                }else if($scope.selectedBranch && $scope.selectedBranch.id){
                 	$scope.sites= "";
                     $scope.refreshReportByBranch();
                     $scope.loadSites($scope.selectedProject.id,$scope.selectedRegion.name,$scope.selectedBranch.name);
                     $scope.loadChartData($scope.selectedProject.id,$scope.selectedRegion.name,$scope.selectedBranch.name,null);
 
-                }else if($scope.selectedRegion){
+                }else if($scope.selectedRegion && $scope.selectedRegion.id){
                 	$scope.branchList= "";
                 	$scope.sites= "";
                     $scope.refreshReportByRegion();
@@ -674,7 +676,7 @@ angular.module('timeSheetApp')
                     $scope.loadSites($scope.selectedProject.id,$scope.selectedRegion.name,null);
                     $scope.loadChartData($scope.selectedProject.id,$scope.selectedRegion.name,null,null);
 
-                }else if($scope.selectedProject) {
+                }else if($scope.selectedProject && $scope.selectedProject.id) {
                 	$scope.regionList= "";
                 	$scope.branchList= "";
                 	$scope.sites= "";
@@ -683,7 +685,13 @@ angular.module('timeSheetApp')
         			$scope.loadSites($scope.selectedProject.id,null,null);
                     $scope.loadChartData($scope.selectedProject.id,null,null,null);
 
+                }else{
+        		    $scope.loadJobReport();
+                    $scope.loadAllAttendanceCounts();
+                    $scope.loadTicketStatusCounts();
+                    $scope.loadQuotationReportCounts();
                 }
+            // $scope.loadAllAttendanceCounts();
         		// $scope.loadJobReport();
             // $scope.myChart.update();
         };
@@ -1062,29 +1070,29 @@ angular.module('timeSheetApp')
 
         $scope.loadTicketStatusCounts = function() {
             // Ticket for get total status counts
-            // var searchCriteriaTicket = {};
-            // searchCriteriaTicket.fromDate = ;
-            // searchCriteriaTicket.toDate = ;
-            // searchCriteriaTicket.projectId = ;
-            // searchCriteriaTicket.siteId = ;
-            // searchCriteriaTicket.region = ;
-            // searchCriteriaTicket.branch = ;
-            // TicketComponent.getTicketsCountsByStatus().then(function (data) {
-            //    console.log("Ticket Status wise counts" +JSON.stringify(data));
-            //     $scope.loadingStop();
-            //    if(data.length > 0) {
-            //        $scope.openTicketsTotalCount = data[0].openCounts;
-            //        $scope.closedTicketsTotalCount = data[0].closedCounts;
-            //        $scope.overAllTicketsTotalCount = data[0].totalCounts;
-            //        $scope.assignedTicketTotalCount = data[0].assignedCounts;
-            //    } else {
-            //        $scope.openTicketsTotalCount = 0;
-            //        $scope.closedTicketsTotalCount = 0;
-            //        $scope.overAllTicketsTotalCount = 0;
-            //        $scope.assignedTicketTotalCount = 0;
-            //    }
-            //
-            // });
+            var searchCriteriaTicket = {};
+            searchCriteriaTicket.fromDate = $scope.selectedFromDateSer;
+            searchCriteriaTicket.toDate = $scope.selectedToDateSer;
+            searchCriteriaTicket.projectId = null;
+            searchCriteriaTicket.siteId = null;
+            searchCriteriaTicket.region = null;
+            searchCriteriaTicket.branch = null;
+            TicketComponent.getTicketsCountsByStatus(searchCriteriaTicket).then(function (data) {
+               console.log("Ticket Status wise counts" +JSON.stringify(data));
+                $scope.loadingStop();
+               if(data.length > 0) {
+                   $scope.openTicketsTotalCount = data[0].openCounts;
+                   $scope.closedTicketsTotalCount = data[0].closedCounts;
+                   $scope.overAllTicketsTotalCount = data[0].totalCounts;
+                   $scope.assignedTicketTotalCount = data[0].assignedCounts;
+               } else {
+                   $scope.openTicketsTotalCount = 0;
+                   $scope.closedTicketsTotalCount = 0;
+                   $scope.overAllTicketsTotalCount = 0;
+                   $scope.assignedTicketTotalCount = 0;
+               }
+
+            });
         }
 
         $scope.initCalender();
