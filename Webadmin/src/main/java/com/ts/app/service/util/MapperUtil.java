@@ -1,16 +1,13 @@
 package com.ts.app.service.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.web.rest.dto.BaseDTO;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
-import org.modelmapper.convention.NameTokenizers;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.web.rest.dto.BaseDTO;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Util class to convert Entity to Model and Model to Entity

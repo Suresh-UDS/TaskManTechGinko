@@ -1,9 +1,8 @@
 package com.ts.app.security;
 
+import com.ts.app.config.Constants;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
-
-import com.ts.app.config.Constants;
 
 /**
  * Implementation of AuditorAware based on Spring Security.

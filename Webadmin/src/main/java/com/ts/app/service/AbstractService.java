@@ -1,12 +1,9 @@
 package com.ts.app.service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.inject.Inject;
-
+import com.ts.app.config.Constants;
+import com.ts.app.domain.*;
+import com.ts.app.repository.SettingsRepository;
+import com.ts.app.service.util.PagingUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
@@ -16,16 +13,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import com.ts.app.config.Constants;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.Job;
-import com.ts.app.domain.JobStatus;
-import com.ts.app.domain.Setting;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.Ticket;
-import com.ts.app.domain.User;
-import com.ts.app.repository.SettingsRepository;
-import com.ts.app.service.util.PagingUtil;
+import javax.inject.Inject;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 public abstract class AbstractService {
 	

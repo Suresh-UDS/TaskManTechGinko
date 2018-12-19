@@ -1,7 +1,6 @@
 package com.ts.app.web.rest.dto;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
 import java.util.Date;
 
 public class ShiftDTO extends BaseDTO implements Serializable {

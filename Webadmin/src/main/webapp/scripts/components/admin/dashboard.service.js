@@ -21,11 +21,11 @@ angular.module('timeSheetApp')
                 });
             },
 
-            loadAttendanceReport: function (siteId,selectedDate,endDate) {
-                return $http.get('api/reports/attendance/site/'+siteId+'/selectedDate/'+selectedDate).then(function (response) {
-                    return response.data;
-                });
-            },
+            // loadAttendanceReport: function (siteId,selectedDate,endDate) {
+            //     return $http.get('api/reports/attendance/site/'+siteId+'/selectedDate/'+selectedDate).then(function (response) {
+            //         return response.data;
+            //     });
+            // },
 
             loadAllProjects: function(){
                 return $http.get('api/project').then(function(response){
@@ -65,6 +65,36 @@ angular.module('timeSheetApp')
                 return $http.get('api/reports/ticket/branch/'+branch+'/region/'+region+'/project/'+projectId+'/fromDate/'+fromDate+'/toDate/'+toDate).then(function (response) {
                     return response.data;
                 })
+            },
+
+            loadAllJobsByCategoryCnt: function () {
+                return $http.get('api/reports/jobType/count').then(function (response) {
+                    return response.data;
+                })
+            },
+
+            loadAllJobsByStatusCnt: function () {
+                return $http.get('api/reports/jobStatus/count').then(function (response) {
+                    return response.data;
+                })
+            },
+
+            loadAttendanceReport : function (searchCriteria) {
+                return $http.post('api/reports/attendance/count/',searchCriteria).then(function (response) {
+                    return response.data;
+                });
+            },
+
+            loadQuotationReport : function () {
+                return $http.get('api/reports/quotations/chart').then(function (response) {
+                    return response.data;
+                });
+            },
+
+            getTotalQuoteCounts : function (searchCriteria) {
+                return $http.post('api/reports/quotations/count', searchCriteria).then(function (response) {
+                    return response.data;
+                });
             }
         }
     })

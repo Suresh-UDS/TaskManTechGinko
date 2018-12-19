@@ -1,29 +1,28 @@
 package com.ts.app.web.rest;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.inject.Inject;
-
+import com.ts.app.domain.*;
+import com.ts.app.domain.Measurements.AttendanceStatusMeasurement;
+import com.ts.app.domain.Measurements.JobStatusMeasurement;
+import com.ts.app.domain.Measurements.QuotationStatusMeasurement;
+import com.ts.app.domain.Measurements.TicketStatusMeasurement;
+import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.ReportDatabaseService;
+import com.ts.app.service.ReportService;
+import com.ts.app.service.SchedulerHelperService;
+import com.ts.app.service.SchedulerService;
+import com.ts.app.service.util.ReportDatabaseUtil;
+import com.ts.app.web.rest.dto.ReportResult;
+import com.ts.app.web.rest.dto.SearchCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.ts.app.security.SecurityUtils;
-import com.ts.app.service.ReportService;
-import com.ts.app.service.SchedulerHelperService;
-import com.ts.app.web.rest.dto.ReportResult;
+import javax.inject.Inject;
+import java.util.*;
 
 
 /**
@@ -33,7 +32,7 @@ import com.ts.app.web.rest.dto.ReportResult;
 @RequestMapping("/api")
 public class ReportResource {
 
-	private final Logger log = LoggerFactory.getLogger(ProjectResource.class);
+	private final Logger log = LoggerFactory.getLogger(ReportResource.class);
 
 	@Inject
 	private ReportService reportService;
@@ -41,6 +40,15 @@ public class ReportResource {
 	@Inject
 	@Lazy
 	private SchedulerHelperService schedulerHelperService;
+
+	@Inject
+    private ReportDatabaseUtil reportDatabaseUtil;
+
+	@Inject
+    private ReportDatabaseService reportDatabaseService;
+
+	@Inject
+    private SchedulerService schedulerService;
 
 
 	@RequestMapping(value = "/reports/attendance/site/{siteId}/selectedDate/{selectedDate}", method = RequestMethod.GET)
@@ -142,6 +150,125 @@ public class ReportResource {
 		schedulerHelperService.sendDaywiseReportEmail(reportDate, true, projectId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+
+    @RequestMapping(value = "/reports/preCompute/jobs", method = RequestMethod.GET)
+    public ResponseEntity<?> getJobPrecomputeData() {
+        List<JobStatusReport> reportList = reportDatabaseUtil.getPreComputeJobData();
+        return new ResponseEntity<>(reportList, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reports/preCompute/tickets", method = RequestMethod.GET)
+    public ResponseEntity<?> getTicketPrecomputeData() {
+        List<TicketStatusReport> reportList = reportDatabaseUtil.getPreComputeTicketData();
+        return new ResponseEntity<>(reportList, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reports/preCompute/attendance", method = RequestMethod.GET)
+    public ResponseEntity<?> getAttenPrecomputeData() {
+        List<AttendanceStatusReport> reportList = reportDatabaseUtil.getPreComputeAttendanceData();
+        return new ResponseEntity<>(reportList, HttpStatus.OK);
+    }
+
+	@RequestMapping(value = "/reports/job/points", method = RequestMethod.GET)
+	public ResponseEntity<?> addJobPoints() throws Exception {
+        reportDatabaseUtil.addPointsToJob();
+	    return new ResponseEntity<>("Successfully created job points to influxDb", HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/reports/ticket/points", method = RequestMethod.GET)
+    public ResponseEntity<?> addTicketPoints() throws Exception {
+        reportDatabaseUtil.addTicketPoints();
+        return new ResponseEntity<>("Successfully created ticket points to influxDb", HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/reports/attendance/points", method = RequestMethod.GET)
+    public ResponseEntity<?> addAttnPoints() throws Exception {
+        reportDatabaseUtil.addAttendancePoints();
+        return new ResponseEntity<>("Successfully created attendance points to influxDb", HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/reports/quotation/points", method = RequestMethod.GET)
+    public ResponseEntity<?> addQuotationPoint() {
+        try {
+            reportDatabaseUtil.addQuotationPoints();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>("Successfully created Quotation points to influxDb", HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reports/jobType/count", method = RequestMethod.GET)
+    public ResponseEntity<?> getJobPointsByStatus() {
+        List<JobStatusMeasurement> reportCategoryPoints = reportDatabaseUtil.getJobReportCategoryPoints();
+        return new ResponseEntity<>(reportCategoryPoints, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reports/jobStatus/count", method = RequestMethod.GET)
+    public ResponseEntity<?> getJobListByStatus() {
+        List<ChartModelEntity> reportStatusPoints = reportDatabaseUtil.getJobReportStatusPoints();
+        return new ResponseEntity<>(reportStatusPoints, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reports/ticketStatus/count", method = RequestMethod.GET)
+    public ResponseEntity<?> getTicketListByStatus() {
+        List<ChartModelEntity> reportStatusPoints = reportDatabaseUtil.getTicketReportStatusPoints();
+        return new ResponseEntity<>(reportStatusPoints, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reports/query", method = RequestMethod.GET)
+    public ResponseEntity<?> getQueryListByStatus(@RequestBody SearchCriteria searchCriteria) {
+        List<JobStatusMeasurement> queryList = reportDatabaseUtil.getTodayJobsCount(searchCriteria);
+        return new ResponseEntity<>(queryList, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reports/jobs/count", method = RequestMethod.POST)
+    public ResponseEntity<?> getJobsCountByToday(@RequestBody SearchCriteria searchCriteria) {
+        List<JobReportCounts> reportTodayPoints = reportDatabaseUtil.getTotalJobsCount(searchCriteria);
+        return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reports/tickets/count", method = RequestMethod.POST)
+    public ResponseEntity<?> getTicketsCountByToday(@RequestBody SearchCriteria searchCriteria) {
+        List<TicketReportCounts> reportTodayPoints = reportDatabaseUtil.getTotalTicketCount(searchCriteria);
+        return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reports/attendance/count", method = RequestMethod.POST)
+    public ResponseEntity<?> getAttendanceCountByToday(@RequestBody SearchCriteria searchCriteria) {
+        AttendanceReportCounts reportTodayPoints = reportDatabaseUtil.getAttendanceTotalCounts(searchCriteria);
+        return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reports/quotations/count", method = RequestMethod.POST)
+    public ResponseEntity<?> getQuotationCountByToday(@RequestBody SearchCriteria searchCriteria) {
+        List<QuotationReportCounts> reportTodayPoints = reportDatabaseUtil.getQuotationCounts(searchCriteria);
+        return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reports/attendance", method = RequestMethod.GET)
+    public ResponseEntity<?> getAttnCounts() {
+        List<ChartModelEntity> reportList = reportDatabaseUtil.getAttnTotalCounts();
+        return new ResponseEntity<>(reportList, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reports/quotations/chart", method = RequestMethod.GET)
+    public ResponseEntity<?> getChartQuote() {
+        List<ChartModelEntity> response = reportDatabaseUtil.getChartzCounts();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reports/job/delete", method = RequestMethod.GET)
+    public ResponseEntity<?> deleteCountByToday() {
+        String reportTodayPoints = reportDatabaseUtil.deleteOrUpdateJobPoints();
+        return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/callschedule/service", method = RequestMethod.GET)
+    public String callScheduleServ() {
+            schedulerService.createJobPoints();
+	    return "schedule service called...";
+    }
+
 
 
 	//    @CrossOrigin

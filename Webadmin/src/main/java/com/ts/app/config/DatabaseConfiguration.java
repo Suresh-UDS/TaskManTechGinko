@@ -1,12 +1,8 @@
 package com.ts.app.config;
 
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Properties;
-
-import javax.inject.Inject;
-import javax.sql.DataSource;
-
+import com.codahale.metrics.MetricRegistry;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.h2.tools.Server;
 import org.hibernate.ejb.HibernatePersistence;
 import org.slf4j.Logger;
@@ -24,9 +20,11 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.codahale.metrics.MetricRegistry;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import javax.inject.Inject;
+import javax.sql.DataSource;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Properties;
 
 @Configuration
 @EnableJpaRepositories("com.ts.app.repository")

@@ -1,7 +1,5 @@
 package com.ts.app.web.rest.dto;
 
-import java.util.List;
-
 public class Paginator<T> {
 
 	private int currPage;

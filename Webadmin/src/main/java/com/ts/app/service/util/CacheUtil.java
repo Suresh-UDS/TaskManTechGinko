@@ -1,11 +1,10 @@
 package com.ts.app.service.util;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
+import com.ts.app.web.rest.dto.SearchCriteria;
 import org.springframework.stereotype.Component;
 
-import com.ts.app.web.rest.dto.SearchCriteria;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class CacheUtil {

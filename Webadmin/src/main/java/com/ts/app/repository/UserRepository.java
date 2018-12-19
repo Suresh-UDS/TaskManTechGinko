@@ -1,16 +1,15 @@
 package com.ts.app.repository;
 
-import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.Optional;
-
+import com.ts.app.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ts.app.domain.User;
+import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Data JPA repository for the User entity.

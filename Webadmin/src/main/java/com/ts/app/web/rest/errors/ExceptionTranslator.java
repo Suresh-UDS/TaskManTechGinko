@@ -1,10 +1,5 @@
 package com.ts.app.web.rest.errors;
 
-import java.sql.SQLException;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +16,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.ts.app.web.rest.dto.EmployeeDTO;
-import com.ts.app.web.rest.dto.ProjectDTO;
-import com.ts.app.web.rest.dto.SiteDTO;
-import com.ts.app.web.rest.dto.UserDTO;
-import com.ts.app.web.rest.dto.UserGroupDTO;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Controller advice to translate the server side exceptions to client-friendly json structures.

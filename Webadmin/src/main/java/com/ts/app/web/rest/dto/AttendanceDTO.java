@@ -1,13 +1,12 @@
 package com.ts.app.web.rest.dto;
 
-import java.io.Serializable;
-import java.util.Date;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import org.springframework.web.multipart.MultipartFile;
+import java.io.Serializable;
+import java.util.Date;
 
 public class AttendanceDTO extends BaseDTO implements Serializable{
 

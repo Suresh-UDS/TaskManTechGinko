@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{email.feedback.alert.title}">Feedback Alert</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	
+<p th:text="#{email.feedback.alert.text1(${feedbackName},${feedbackLocation},${feedbackDate})}">
+</p>
+ 
+<br/> 
+<p th:text="#{email.feedback.alert.givenBy(${givenBy})}">
+</p>
+
+<br/>	
+<p th:text="#{email.feedback.alert.remarks(${remarks})}">
+</p>
+
+	<table>
+      <tr>
+      	<th>Feedback List</th>
+      </tr>
+      <tr th:each="feedback,iterationStatus  : ${feedbacks}">
+      	<td th:text="${iterationStatus.count}">1</td>
+        <td th:text="${feedback}"></td>
+      </tr>
+    </table>
+    <br/>
+	<span th:text="#{email.feedback.alert.text2(${feedbackReport})}"></span>
+
+<p>
+</p>
+<p>
+    <span th:text="#{email.feedback.alert.text3}">Thanks, </span>
+    <br/>
+    <em th:text="#{email.signature}">TaskMan Feedback.</em>
+</p>
+</body>
+</html>

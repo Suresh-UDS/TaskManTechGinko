@@ -1,16 +1,7 @@
 package com.ts.app.ext.api;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.inject.Inject;
-import javax.swing.text.html.parser.Entity;
-
-import com.ts.app.domain.Employee;
+import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.FaceProfileRepository;
 import com.ts.app.web.rest.dto.EmployeeDTO;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -19,9 +10,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,25 +19,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.ts.app.domain.FaceProfile;
-import com.ts.app.ext.api.model.KairosResponse;
-import com.ts.app.ext.api.model.KairosVerifyResponse;
-import com.ts.app.repository.EmployeeRepository;
-import com.ts.app.repository.FaceProfileRepository;
-import com.ts.app.web.rest.dto.FaceRecognitionRequest;
-import com.ts.app.web.rest.dto.FaceRecognitionResponse;
+import javax.inject.Inject;
+import java.net.URI;
 
 @Component
 public class FaceRecognitionService {

@@ -1,24 +1,12 @@
 package com.ts.app.service;
 
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TimeZone;
-
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-
+import com.ts.app.domain.*;
+import com.ts.app.repository.*;
+import com.ts.app.service.util.DateUtil;
+import com.ts.app.service.util.ExportUtil;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.service.util.ReportUtil;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -29,38 +17,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.FeedbackAnswerType;
-import com.ts.app.domain.FeedbackMapping;
-import com.ts.app.domain.FeedbackTransaction;
-import com.ts.app.domain.FeedbackTransactionResult;
-import com.ts.app.domain.Location;
-import com.ts.app.domain.Project;
-import com.ts.app.domain.Setting;
-import com.ts.app.domain.User;
-import com.ts.app.repository.FeedbackMappingRepository;
-import com.ts.app.repository.FeedbackTransactionRepository;
-import com.ts.app.repository.LocationRepository;
-import com.ts.app.repository.ManufacturerRepository;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.SettingsRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.service.util.DateUtil;
-import com.ts.app.service.util.ExportUtil;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.service.util.ReportUtil;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.ExportResult;
-import com.ts.app.web.rest.dto.FeedbackQuestionRating;
-import com.ts.app.web.rest.dto.FeedbackReportResult;
-import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
-import com.ts.app.web.rest.dto.FeedbackTransactionResultDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
-import com.ts.app.web.rest.dto.TicketDTO;
-import com.ts.app.web.rest.dto.WeeklySite;
-import com.ts.app.web.rest.dto.WeeklyZone;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 
 /**

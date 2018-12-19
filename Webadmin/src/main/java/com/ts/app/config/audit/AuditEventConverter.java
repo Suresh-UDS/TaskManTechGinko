@@ -1,10 +1,9 @@
 package com.ts.app.config.audit;
 
+import com.ts.app.domain.PersistentAuditEvent;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
-
-import com.ts.app.domain.PersistentAuditEvent;
 
 import java.time.Instant;
 import java.time.ZoneId;

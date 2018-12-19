@@ -1,10 +1,9 @@
 package com.ts.app.repository;
 
-import java.time.LocalDateTime;
+import com.ts.app.domain.PersistentAuditEvent;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.ts.app.domain.PersistentAuditEvent;
-
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**

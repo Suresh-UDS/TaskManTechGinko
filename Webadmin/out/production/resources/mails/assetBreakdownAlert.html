@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{email.assetBreakdown.title}">Asset Breakdown Alert</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="#{email.assetBreakdown.greeting}">
+</p>
+
+
+<p th:text="#{email.assetBreakdown.content(${assetName}, ${assetCode}, ${siteName}, ${date}, ${userName})}">
+
+</p>
+
+<p>
+    <span th:text="#{email.assetBreakdown.text}">Regards, </span>
+    <br/>
+    <em th:text="#{email.signature}">.</em>
+</p>
+</body>
+</html>

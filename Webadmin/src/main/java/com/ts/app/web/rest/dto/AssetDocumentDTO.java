@@ -3,8 +3,6 @@ package com.ts.app.web.rest.dto;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.springframework.web.multipart.MultipartFile;
-
 public class AssetDocumentDTO extends BaseDTO implements Serializable {
 
 	 private static final long serialVersionUID = 1L;

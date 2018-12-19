@@ -1,7 +1,8 @@
 package com.ts.app.config;
 
-import javax.inject.Inject;
-
+import com.ts.app.security.*;
+import com.ts.app.web.filter.AuthenticationTokenProcessingFilter;
+import com.ts.app.web.filter.CORSFilter;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,17 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.ts.app.security.AjaxAuthenticationFailureHandler;
-import com.ts.app.security.AjaxAuthenticationSuccessHandler;
-import com.ts.app.security.AjaxLogoutSuccessHandler;
-import com.ts.app.security.AuthoritiesConstants;
-import com.ts.app.security.Http401UnauthorizedEntryPoint;
-import com.ts.app.web.filter.AuthenticationTokenProcessingFilter;
-import com.ts.app.web.filter.CORSFilter;
+import javax.inject.Inject;
 
 @Configuration
 @EnableWebSecurity

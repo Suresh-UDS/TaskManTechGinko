@@ -1,15 +1,13 @@
 package com.ts.app.web.rest.dto;
 
 
-import java.util.List;
-
-import javax.validation.constraints.Size;
-
-import org.apache.commons.collections.CollectionUtils;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.ts.app.domain.Site;
+import org.apache.commons.collections.CollectionUtils;
+
+import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * A DTO representing a Employee

@@ -20,8 +20,8 @@ spring:
             enabled: false # we use Grunt + BrowserSync for livereload
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-#        url: jdbc:mysql://54.255.148.73:3306/Taskman?useUnicode=true&characterEncoding=utf8
-        url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
+        #url: jdbc:mysql://ec2-54.255.148.73.ap-southeast-1.compute.amazonaws.com:3306/TaskMan?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://localhost:3306/taskman?useUnicode=true&characterEncoding=utf8
         name:
         username: root
         password: tgadmin123#
@@ -186,7 +186,8 @@ locationService:
 quotationService:
 #   url: http://locahost:8000/api/site/location
 #   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
-   url: http://localhost:8001/api
+    url: http://localhost:8001/api
+#   url: http://52.221.57.9:8001/api
 
 pushService:
    url: http://localhost:9000/
@@ -264,6 +265,15 @@ google:
           callback:
               host: ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com
               port: 8080
+
+influxdb:
+   url: http://127.0.0.1:8086
+   username: root
+   password: root
+   dbname: dashboard
+   retention-policy: one_year_policy
+   gzip: true
+
 # ===================================================================
 # JHipster specific properties
 # ===================================================================

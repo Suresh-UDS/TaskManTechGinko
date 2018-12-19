@@ -1,24 +1,18 @@
 package com.ts.app.repository;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
+import com.ts.app.domain.Manufacturer;
+import com.ts.app.web.rest.dto.SearchCriteria;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.ts.app.domain.Manufacturer;
-import com.ts.app.service.util.DateUtil;
-import com.ts.app.web.rest.dto.SearchCriteria;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ManufacturerSpecification implements Specification<Manufacturer> {
 	SearchCriteria searchCriteria;

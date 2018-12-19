@@ -878,6 +878,36 @@ module.exports = {
           
     });     
 
-   }
+   },
+
+   findAllQuotations: function(req,res,next) {
+    console.log("Find All Quotations");
+    Quotation.find({}, function(err,quotations){
+        if(err){
+            console.log("unable to get All Quotations")
+            res.json(200,err);
+        }else{
+            res.json(200,quotations);
+        }
+    });
+   },
+
+   findLastModified: function(req,res,nex) {
+        console.log("Find lastmodified quotations");
+        var currentDate = new Date();
+        currentDate.getTime() - 1000*60*5;
+        console.log(currentDate);
+        Quotation.find({lastModifiedDate: {$gt: currentDate}}, function(err, quotation){
+            if(err) {
+                console.log("Unable to get lastmodified quotations");
+                res.json(400, err);
+            }else{
+                res.json(200, quotation);
+            }
+        });
+    }
+
+    
+
 };
 

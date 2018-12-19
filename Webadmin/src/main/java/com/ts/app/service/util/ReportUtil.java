@@ -1,26 +1,17 @@
 package com.ts.app.service.util;
 
-import java.util.List;
-import java.util.UUID;
-
-import javax.inject.Inject;
-
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.User;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.User;
-import com.ts.app.web.rest.dto.AssetDTO;
-import com.ts.app.web.rest.dto.AttendanceDTO;
-import com.ts.app.web.rest.dto.ExportResult;
-import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
-import com.ts.app.web.rest.dto.JobDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.TicketDTO;
-import com.ts.app.web.rest.dto.VendorDTO;
+import javax.inject.Inject;
+import java.util.List;
+import java.util.UUID;
 
 @Component
 public class ReportUtil {

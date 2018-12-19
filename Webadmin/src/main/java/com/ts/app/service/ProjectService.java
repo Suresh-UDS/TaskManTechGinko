@@ -1,12 +1,12 @@
 package com.ts.app.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.inject.Inject;
-
+import com.ts.app.domain.*;
+import com.ts.app.repository.ClientGroupRepository;
+import com.ts.app.repository.ProjectRepository;
+import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.ImportUtil;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
@@ -19,25 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.AssetGroup;
-import com.ts.app.domain.Clientgroup;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.Project;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.User;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.repository.ClientGroupRepository;
-import com.ts.app.service.util.ImportUtil;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.AssetgroupDTO;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.ClientgroupDTO;
-import com.ts.app.web.rest.dto.ImportResult;
-import com.ts.app.web.rest.dto.ProjectDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Service class for managing users.

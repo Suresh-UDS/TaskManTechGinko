@@ -1,21 +1,17 @@
 package com.ts.app.domain;
 
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Set;
-
-
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.UserNew;
-import com.ts.app.domain.Site;
 import java.time.ZonedDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.Size;
 
 //@Entity
 //@Table(name = "user_login")
