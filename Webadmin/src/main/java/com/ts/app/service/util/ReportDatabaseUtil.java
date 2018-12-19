@@ -612,6 +612,22 @@ public class ReportDatabaseUtil {
             if(!statusPoints.isEmpty()) {
                 Set<Map.Entry<String,Map<String,Integer>>> entrySet = statusPoints.entrySet();
                 List<Map.Entry<String, Map<String,Integer>>> list = new ArrayList<Map.Entry<String, Map<String,Integer>>>(entrySet);
+                Collections.sort( list, new Comparator<Map.Entry<String, Map<String,Integer>>>()
+                {
+                    @Override
+                    public int compare(Map.Entry<String, Map<String, Integer>> o1,
+                                       Map.Entry<String, Map<String, Integer>> o2) {
+                        // TODO Auto-generated method stub
+                        String ekey1 = null;
+                        String ekey2 = null;
+                        if(o1.getKey() != null && o2.getKey() != null) {
+                            ekey1 = o1.getKey();
+                            ekey2 = o2.getKey();
+                        };
+                        return ekey1.compareTo(ekey2);
+
+                    }
+                });
                 ChartModelEntity chartModelEntity = new ChartModelEntity();
                 List<String> categoryList = new ArrayList<>();
                 List<Status> categoryStatusCnts = new ArrayList<>();
@@ -1336,6 +1352,22 @@ public class ReportDatabaseUtil {
             if(!statusPoints.isEmpty()) {
                 Set<Map.Entry<String,Map<String,Integer>>> entrySet = statusPoints.entrySet();
                 List<Map.Entry<String, Map<String,Integer>>> list = new ArrayList<Map.Entry<String, Map<String,Integer>>>(entrySet);
+                Collections.sort( list, new Comparator<Map.Entry<String, Map<String,Integer>>>()
+                {
+                    @Override
+                    public int compare(Map.Entry<String, Map<String, Integer>> o1,
+                                       Map.Entry<String, Map<String, Integer>> o2) {
+                        // TODO Auto-generated method stub
+                        String ekey1 = null;
+                        String ekey2 = null;
+                        if(o1.getKey() != null && o2.getKey() != null) {
+                            ekey1 = o1.getKey();
+                            ekey2 = o2.getKey();
+                        };
+                        return ekey1.compareTo(ekey2);
+
+                    }
+                });
                 ChartModelEntity chartModelEntity = new ChartModelEntity();
                 List<String> categoryList = new ArrayList<>();
                 List<Status> categoryStatusCnts = new ArrayList<>();
