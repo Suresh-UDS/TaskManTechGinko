@@ -265,6 +265,8 @@ influxdb:
    username: root
    password: root
    dbname: dashboard
+   retention-policy: one_year_policy
+   gzip: true
               
 # ===================================================================
 # JHipster specific properties
