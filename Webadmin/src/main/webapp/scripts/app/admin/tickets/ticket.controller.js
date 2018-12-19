@@ -35,6 +35,7 @@ angular.module('timeSheetApp')
         $scope.searchStatus = null;
         $scope.selectedAsset = {};
         $scope.btnDisable = false;
+        $scope.siteAssetList = false;
 
         //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -691,11 +692,16 @@ angular.module('timeSheetApp')
 
         $scope.loadAssets = function() {
             if($scope.selectedSite){
+            	
+            	$scope.siteAssetList = true;
+            	
                $scope.searchCriteria.siteId = $scope.selectedSite.id;
                 AssetComponent.search($scope.searchCriteria).then(function(data) {
                   //console.log('Asset based tickets -- ',data);
                     $scope.assets = data.transactions;
+                    $scope.siteAssetList = false;
                 });
+                
             }
 
         };
@@ -753,8 +759,6 @@ angular.module('timeSheetApp')
                     $scope.tickets.comments = $scope.tickets.comments;
                     $scope.tickets.remarks = $scope.tickets.remarks;
                     $scope.tickets.status = $scope.tickets.status;
-                    $scope.loadAssets();
-                    $scope.selectedAsset = {id:data.assetId, title:data.assetTitle};
                     $scope.loadEmployees();
                     if($scope.tickets){
 
@@ -765,6 +769,18 @@ angular.module('timeSheetApp')
                                 }
                             )
                         }
+                         
+                        if($scope.tickets.siteId){
+                        	$scope.siteAssetList = true;
+                             var astObjt = {siteId:$scope.tickets.siteId, list:true};
+                              AssetComponent.search(astObjt).then(function(data) {
+                                console.log('Asset based tickets -- ',data);
+                                  $scope.assets = data.transactions;
+                                  $scope.siteAssetList = false;
+                              });
+                          }
+                        
+                        $scope.selectedAsset = {id:data.assetId, title:data.assetTitle};
 
                         /*if($scope.tickets.assetId) {
                             AssetComponent.findById($scope.tickets.assetId).then(function(data) {
