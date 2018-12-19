@@ -48,8 +48,8 @@ export class FeedbackGridFinish {
     console.log("feedback details");
 
     this.questions=this.questions;
-    console.log("questions",this.questions)
-    console.log("overallfeedback",this.overallFeedback)
+    console.log("questions",this.questions);
+    console.log("overallfeedback",this.overallFeedback);
 
     this.feedbackTransaction = {
       results:this.questions,
@@ -65,7 +65,8 @@ export class FeedbackGridFinish {
       floor:this.navParams.data.fb.floor,
       zone:this.navParams.data.fb.zone,
       remarks:this.remarks,
-      overallFeedback:this.overallFeedback
+      overallFeedback:false,
+      // overallFeedbackValue:this.overallFeedback
     };
 
     console.log(this.feedbackTransaction);

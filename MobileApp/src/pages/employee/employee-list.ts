@@ -247,7 +247,7 @@ export class EmployeeList {
                     var verificationResponse = response;
                     console.log(verificationResponse);
                     // this.component.showToastMessage('Face Enrolled successfully..','bottom');
-                    demo.showSwal('success-message-and-ok','Success','Face Enrolled Successfully...');
+                    demo.showSwal('feedback-success','Success','Face Enrolled Successfully...');
 
                 }
 
@@ -283,7 +283,7 @@ export class EmployeeList {
                 var msg='Face Verified and Attendance marked Successfully';
                 demo.showSwal('warning-message-and-confirmation-ok','Error in Marking Attendance',response.errorMessage);
             }else{
-                demo.showSwal('success-message-and-ok','Success','Face Verified and Attendance marked Successfully...');
+                demo.showSwal('feedback-success','Success','Face Verified and Attendance marked Successfully...');
 
             }
         },error=>{
@@ -304,7 +304,7 @@ export class EmployeeList {
                 var msg='Face Verified and Attendance marked Successfully';
                 demo.showSwal('warning-message-and-confirmation-ok','Error in Marking Attendance',response.errorMessage);
             }else{
-                demo.showSwal('success-message-and-ok','Success','Face Verified and Attendance marked Successfully...');
+                demo.showSwal('feedback-success','Success','Face Verified and Attendance marked Successfully...');
 
             }
         },error=>{
