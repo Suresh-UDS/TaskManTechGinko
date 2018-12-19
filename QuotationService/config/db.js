@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
 
 module.exports.init = function(config){
 	console.log('Initializing Database')
-	var schemaFolder = __dirname+config.schema
+	// var schemaFolder = __dirname+config.schema
 	mongoose.connect(config.url, {server:{auto_reconnect:true}, user:config.user,pass:config.password});
 	var db = mongoose.connection;
 
@@ -23,11 +23,11 @@ module.exports.init = function(config){
 	    console.info('MongoDB reconnected!');
 	});
 
-	fs.readdirSync(schemaFolder).forEach(function (file) {
-		if (~file.indexOf('.js')){
-			console.log('resigtering schema : '+file)
-			require(schemaFolder + '/' + file);
-
-		}
-	});
+	// fs.readdirSync(schemaFolder).forEach(function (file) {
+	// 	if (~file.indexOf('.js')){
+	// 		console.log('resigtering schema : '+file)
+	// 		require(schemaFolder + '/' + file);
+    //
+	// 	}
+	// });
 }

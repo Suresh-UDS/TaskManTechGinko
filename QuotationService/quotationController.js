@@ -836,7 +836,7 @@ module.exports = {
         //var sortVal =  { req.body.columnName : -1 };
 
       }else{
-        sortVal = {createdDate : 'desc'};
+        sortVal = {'createdDate' : 'desc'};
       }
 
       
