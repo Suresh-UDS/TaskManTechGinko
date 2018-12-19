@@ -91,6 +91,7 @@ angular.module('timeSheetApp')
         $rootScope.exportStatusObj  ={};
         $scope.searchModule ="";
         $scope.assetQrSite =null;
+        $('#dPlayNone').hide();
        
 
 
@@ -1826,6 +1827,8 @@ angular.module('timeSheetApp')
                         $scope.showNotifications('top','center','success','Asset has been added Successfully!!');
                         $scope.loadEmployees();
                         $scope.btnDisabled= false;
+                        $('#dPlayNone').show();
+                        $('#nxtBtn').removeClass('disabled');
                         //$scope.loadAssets();
                         //$location.path('/assets');
 
