@@ -65,7 +65,7 @@
 	            ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
 					Client: {{searchCriteras.projectName}}
 			    </span>
-			    
+
 			    <span class="tag label label-info" style="margin-right: 10px"
 	                  ng-show="searchCriteras.regionId !=0 && searchCriteras.regionId !=null">
 					Region: {{searchCriteras.region}}
@@ -84,7 +84,7 @@
                     From: {{searchCriteras.checkInDateTimeFrom | date:'dd/MM/yyyy'}}
                 </span>
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.checkInDateTimeTo">
-                    To: {{searchCriteras.checkInDateTimeTo | date:'dd/MM/yyyy'}} 
+                    To: {{searchCriteras.checkInDateTimeTo | date:'dd/MM/yyyy'}}
                 </span>
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.employeeId !=0 && searchCriteras.employeeId !=null">
                     Employee: {{searchCriteras.employeeName}}
@@ -224,7 +224,7 @@
                                 </th> -->
                                 <th class="disabled-sorting">Category</th>
                                 <th class="disabled-sorting">Checklist</th>
-                                <!-- <th class="disabled-sorting">Schedule</th> -->
+                                 <th class="disabled-sorting">Schedule</th>
                                 <th class="disabled-sorting">Actions</th>
                             </tr>
                             </thead>
@@ -240,18 +240,22 @@
                                 <td>{{job.jobType}}</td>
 								<td class="hiddenCheckList" >
 								 <span ng-repeat="(key, value) in job.checklistItems | groupBy: 'checklistName'">
-								   <span class="leftTxt">{{ key }}  </span> 
-									 <span class="infoIcon" ng-if="key"><i class="material-icons">info</i>
+								   <span class="leftTxt">{{ key }}  </span>
+									 <span class="infoIcon" ng-if="key" data-toggle="modal"
+                                           data-target="#checkListViewModal" ng-click="selectJobShowChecklist(job)"><i class="material-icons">info</i>
 	                                   <div class="CheckListNewBx" ng-if="key">
-	                                           <div class="bootstrap-tagsinput"ng-repeat="checkListItem in value">
-	                                               <span class="label label-default">{{checkListItem.checklistItemName}}</span>
-	
+	                                           <div class=""ng-repeat="checkListItem in value">
+	                                               <span style="color: red;font-size: 14px" ng-if="!checkListItem.completed" class=""><i style="font-size: 16px" class="material-icons">error</i> {{checkListItem.checklistItemName}}</span>
+
 	                                           </div>
+                                               <!--<ul  ng-repeat="checkListItem in value" class="txt-align-left">
+                                                   <li ng-if="!checkListItem.completed">{{checkListItem.checklistItemName}}</li>
+                                               </ul>-->
 	                                       </div>
 	                                  </span>
-								   </span> 	
+								   </span>
                                   </td>
-								<!-- <td>{{job.schedule}}</td> -->
+								 <td>{{job.schedule}}</td>
                                 <td class="text-right">
 
                                 <td class="text-right hoverMe">
@@ -261,10 +265,13 @@
                                     <div class="HoverBx">
 
                                         <a ng-click="getCheckInDetails(employee.id)" title="View" has-permission="Jobs:View" ui-sref="view-job({ id: job.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
-                             
+
                                         <a ng-if="job.status !='COMPLETED'" ng-class="{active: $state.includes('admin')}" title="Edit" has-permission="Jobs:Edit" ui-sref="edit-job({ id: job.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
                                         <a ng-class="{active: $state.includes('admin')}" title="Delete" has-permission="Jobs:Delete" ng-click="deleteConfirm(job)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+
+                                        <!--<a title="Checklist Details" ng-if="job.checklistItems" data-toggle="modal"-->
+                                           <!--data-target="#checkListViewModal" ng-click="selectJobShowChecklist(job)"> <i class="material-icons">info</i></a>-->
 
                                     </div>
 
@@ -273,7 +280,11 @@
 
                                 </td>
 
+
+
                             </tr>
+
+
 
 
 
@@ -509,8 +520,12 @@
                                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 				                                    <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-				                                    <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
-													  <ui-select-match placeholder="Select clients..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
+				                                    <ui-select ng-model="client.selected" ng-disabled="clientFilterDisable">
+													  <ui-select-match placeholder="Select clients..." >{{$select.selected.name}}
+													     <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+													  </ui-select-match>
 													  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)" null-option="allClients" loose-null>
 
 													    <span ng-bind-html="client.name | highlight: $select.search"></span>
@@ -529,7 +544,11 @@
 				                                        <span ng-show="!regionSpin && !regionsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
 						                                <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
-														  <ui-select-match placeholder="Select region..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
+														  <ui-select-match placeholder="Select region...">{{$select.selected.name}}
+															  <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+															   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+															   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+														  </ui-select-match>
 														  <ui-select-choices repeat="regionsListOne in regionsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,'');loadBranchList(client.selected.id)" null-option="allRegions" loose-null>
 														    <span ng-bind-html="regionsListOne.name | highlight: $select.search"></span>
 														  </ui-select-choices>
@@ -549,7 +568,11 @@
 				                                 <span ng-show="!branchSpin && !branchsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
 					                                <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
-													  <ui-select-match placeholder="Select branch..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
+													  <ui-select-match placeholder="Select branch..." >{{$select.selected.name}}
+													     <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+													  </ui-select-match>
 													  <ui-select-choices repeat="branchsListOne in branchsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,branchsListOne.selected.name)" null-option="allRegions" loose-null>
 													    <span ng-bind-html="branchsListOne.name | highlight: $select.search"></span>
 													  </ui-select-choices>
@@ -568,7 +591,11 @@
 				                                    <span ng-show="!siteSpin && !sitesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
 				                                    <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
-													  <ui-select-match placeholder="Select site..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
+													  <ui-select-match placeholder="Select site...">{{$select.selected.name}}
+													      <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+													  </ui-select-match>
 													  <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search" ng-click="loadDepEmployees()" null-option="allSites" loose-null>
 													    <span ng-bind-html="sitesListOne.name | highlight: $select.search"></span>
 													  </ui-select-choices>
@@ -603,6 +630,11 @@
                                                     <label class="label-control">From date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
                                                     <input type="text" class="form-control datepicker" placeholder="DD/MM/YYYY"  id="searchJobDate"  ng-model="searchJobDate" autocomplete="off" tabindex="1" />
+                                                   
+	                                                 <p class="help-block" style="color:maroon"
+	                                                   ng-show="searchForm.employee.$error.required">
+	                                                    Required
+			                                          
                                                 </div>
                                             </div>
                                         </div>
@@ -621,10 +653,10 @@
                                             <div class="dropdown" >
                                                 <div class="form-group">
                                                     <label class="label-control">Select Employee</label>
-                                                    
+
                                                     <span ng-show="empSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!empSpin && !empListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    
+
                                                     <ui-select ng-model="empListOne.selected"  ng-disabled="empLists.length == 1 || empLists == null || employeeFilterDisable">
 													  <ui-select-match placeholder="Select Employee..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
 													  <ui-select-choices repeat="empListOne in empLists | filter: $select.search" null-option="allEmp" loose-null>
@@ -641,10 +673,10 @@
                                             <div class="dropdown">
                                                 <div class="form-group">
                                                     <label class="label-control">Select Status</label>
-                                                    
+
                                                     <span ng-show="statusSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!statusSpin && !statusListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                   
+
                                                     <ui-select ng-model="statusListOne.selected" >
 													  <ui-select-match placeholder="Select Status..." allow-clear="true">{{$select.selected}}</ui-select-match>
 													  <ui-select-choices repeat="statusListOne in statusLists | filter: $select.search" null-option="allStatus" loose-null>
@@ -702,6 +734,102 @@
         </div>
     </div>
 </div>
+
+
+
+<div class="modal right  fade ViewModal" id="checkListViewModal" role="dialog"
+
+     aria-labelledby="ViewModal12" ng-if="selectedJob.checklistItems">
+    <div class="modal-dialogNew" role="document" ng-init="">
+        <div class="modal-content" ng-init="">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="ViewModal12">View Check List Details</h4>
+                <h3> {{selectedJob.block}} - {{selectedJob.floor}} - {{selectedJob.zone}}</h3>
+            </div>
+
+            <div class="modal-body ViewContentPageCon">
+
+                <div class="row margn-top30">
+                    <div class="col-md-12">
+
+                        <div class="panel panel-default">
+                            <div class="panel-body" style="min-height: 320px;">
+
+                                <div class="table-responsive">
+
+                                    <table class="table">
+                                        <tbody>
+                                        <tr>
+                                            <th>Checklist Item </th>
+                                            <th>Remarks</th>
+                                            <th>Status</th>
+                                            <th>Images</th>
+                                        </tr>
+                                        <tr ng-repeat="checklist in selectedJob.checklistItems">
+                                            <td ng-if="!checklist.completed"><span  style="color:red">{{checklist.checklistItemName}}</span>
+                                            </td>
+                                            <td ng-if="!checklist.completed">
+                                                <span ng-if="checklist.remarks">{{checklist.remarks}}</span>
+                                                <span ng-if="!checklist.remarks">No remarks</span>
+                                            </td>
+                                            <td ng-if="!checklist.completed">
+                                                <span class="label label-success" ng-if="checklist.completed">Completed</span>
+                                                <span class="label label-warning" ng-if="!checklist.completed">Not Completed</span>
+                                            </td>
+                                            <td ng-if="!checklist.completed">
+                                                <span ng-if="!checklist.imageUrl_1">No image</span>
+                                                <a ng-if="checklist.imageUrl_1" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.imageUrl_1)" >
+                                                    <img ng-src="{{checklist.imageUrl_1}}" width="80px" height="80px">
+                                                </a>
+                                                <a ng-if="checklist.imageUrl_2" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.imageUrl_2)" >
+                                                    <img ng-src="{{checklist.imageUrl_2}}" width="80px" height="80px">
+                                                </a>
+                                                <a ng-if="checklist.imageUrl_3" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.imageUrl_3)" >
+                                                    <img ng-src="{{checklist.imageUrl_3}}" width="80px" height="80px">
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-notice" style="width: 400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+                <h5 class="modal-title" id="myModalLabel">Job Photo</h5>
+            </div>
+            <div class="modal-body">
+
+                <div class="txt-align-center">
+                    <img id="photoStart" style="width:300px;height:300px" />
+                </div>
+
+
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-danger btn-round" data-dismiss="modal">close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 <!-- -->

@@ -26,12 +26,13 @@
                 <div class="ripple-container"></div>
             </button>
 
-            <button class="btn btn-info add-btn margn-tb0" ng-click="load52WeekSchedule()"  tabindex="0">
+            <button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#weekSchModal" tabindex="0">
                 <i class="material-icons">assignment</i> 52 Week Schedule
+                <i class="ld ld-ring ld-spin" ng-show="weekSchLoad"></i>
                 <div class="ripple-container"></div>
             </button>
             <!-- ui-sref="qr-code-list" -->
-            <button class="btn btn-info add-btn margn-tb0"   ui-sref="qr-code-list({qrStatus : qrAll, ids: checkboxSel , siteId:assetQrSiteVal })" tabindex="0">
+            <button class="btn btn-info add-btn margn-tb0"  ui-sref="qr-code-list({qrStatus : qrAll, ids: checkboxSel , siteId:assetQrSiteVal })" tabindex="0">
                 <i class="material-icons">dashboard</i> Print Asset Code
                 <div class="ripple-container"></div>
             </button>
@@ -155,7 +156,7 @@
                                 <th>
                                     <div class="checkbox form-horizontal-checkbox"> 
                                         <label>
-                                            <input type="checkbox" name="optionsCheckboxes" ng-model="allItemsSelected" ng-click="mulSel();"    data-target="#myModal">
+                                            <input type="checkbox" name="optionsCheckboxes" ng-model="allItemsSelected" ng-click="mulSel();" >
                                         </label>
                                     </div>
                                 </th>
@@ -523,8 +524,12 @@
                                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 				                                    <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-				                                    <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
-													  <ui-select-match placeholder="Select clients..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
+				                                    <ui-select ng-model="client.selected">
+													  <ui-select-match placeholder="Select clients..."  allow-clear="true">{{$select.selected.name}}
+													    <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+													  </ui-select-match>
 													  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)" null-option="allClients" loose-null>
 
 													    <span ng-bind-html="client.name | highlight: $select.search"></span>
@@ -543,7 +548,11 @@
 				                                        <span ng-show="!regionSpin && !regionsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
 						                                <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
-														  <ui-select-match placeholder="Select region..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
+														  <ui-select-match placeholder="Select region...">{{$select.selected.name}}
+														      <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+															   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+															   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+														  </ui-select-match>
 														  <ui-select-choices repeat="regionsListOne in regionsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,'');loadBranchList(client.selected.id)" null-option="allRegions" loose-null>
 														    <span ng-bind-html="regionsListOne.name | highlight: $select.search"></span>
 														  </ui-select-choices>
@@ -563,7 +572,11 @@
 				                                 <span ng-show="!branchSpin && !branchsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
 					                                <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
-													  <ui-select-match placeholder="Select branch..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
+													  <ui-select-match placeholder="Select branch..." >{{$select.selected.name}}
+													    <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+													  </ui-select-match>
 													  <ui-select-choices repeat="branchsListOne in branchsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,branchsListOne.selected.name)" null-option="allRegions" loose-null>
 													    <span ng-bind-html="branchsListOne.name | highlight: $select.search"></span>
 													  </ui-select-choices>
@@ -582,7 +595,11 @@
 				                                    <span ng-show="!siteSpin && !sitesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
 				                                    <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
-													  <ui-select-match placeholder="Select site..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
+													  <ui-select-match placeholder="Select site..." >{{$select.selected.name}}
+													     <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+													  </ui-select-match>
 													  <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search" null-option="allSites" loose-null>
 													    <span ng-bind-html="sitesListOne.name | highlight: $select.search"></span>
 													  </ui-select-choices>
@@ -723,31 +740,31 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"
                         aria-hidden="true"  >&times;</button>
-                <h4 class="modal-title">Select site</h4>
+                <h4 class="modal-title">Asset Qr code site</h4>
             </div>
             <div class="modal-body">
 
-                <form name="assetQrSiteFrom"  >
+                <form name="assetQrSiteFrom" role="form"  novalidate>
                     <div class="row">
                         <div class="col-md-12 txt-align-center">
                             <div class="dropdown">
                                 <div class="form-group">
                                     <!-- <label class="label-control">Site</label> -->
                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="assetQrSite"  ng-options="site as site.name for site in sitesList" >
+                                    <select class="form-control" name="assetQrSite" ng-model="assetQrSite"   ng-options="site as site.name for site in sitesList" required>
                                         <option value="">Select Site...</option>
                                     </select>
                                     <div ng-show="assetQrSiteFrom.$submitted || assetQrSiteFrom.assetQrSite.$touched">
                                         <div ng-show="assetQrSiteFrom.assetQrSite.$dirty || assetQrSiteFrom.assetQrSite.$invalid">
                                             <p class="help-block" style="color:maroon"
                                                ng-show="assetQrSiteFrom.assetQrSite.$error.required">
-                                               site is required.
+                                               Site is required.
                                             </p>
                                         </div>
-                                    </div>
-                                    <input type="submit"  class="btn btn-success" name="submit" value="Submit" ng-click="selectAll();" data-dismiss="modal" ng-disabled="assetQrSiteFrom.$invalid">
+                                    </div> 
                                 </div>
                             </div>
+                            <input type="submit"  class="btn btn-success" name="submit" value="Submit" ng-click="selectAll();" data-dismiss="modal" ng-disabled="assetQrSiteFrom.$invalid">
                         </div>
                     </div>
                 </form>
@@ -758,3 +775,72 @@
     </div>
 </div>
 <!--  Asset qr print based site dialog -->
+
+<!-- Asset  52WeekSchedule site dialog -->
+
+<div id="weekSchModal" class="add-input-modal modal fade" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true"  >&times;</button>
+                <h4 class="modal-title">52 Week Schedule</h4>
+            </div>
+            <div class="modal-body">
+                <form name="weekSchSiteFrom" role="form" novalidate>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="dropdown">
+                                <div class="form-group">
+                                    <label class="control-label">Select Site</label>
+                                    <span  class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <select class="form-control" name="weekSchSite" ng-model="weekSchSite"  ng-options="site as site.name for site in sitesList" ng-click="loadWeekSchAssets();" required>
+                                        <option value="">Select Site...</option>
+                                    </select>
+                                    <div ng-show="weekSchSiteFrom.$submitted || weekSchSiteFrom.weekSchSite.$touched">
+                                        <div ng-show="weekSchSiteFrom.weekSchSite.$dirty || weekSchSiteFrom.weekSchSite.$invalid">
+                                            <p class="help-block" style="color:maroon"
+                                               ng-show="weekSchSiteFrom.weekSchSite.$error.required">
+                                               Site is required.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                             </div>
+                           </div>
+                       </div>
+                       <div class="row">
+                          <div class="col-md-12">
+                             <div class="dropdown">
+                                <div class="form-group">
+                                    <label class="control-label">Select Asset</label>
+                                     <span  class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                     <select name="weekSchAsset" ng-model="weekSchAsset" 
+                                         class="form-control searchable-input floatL" ng-options="weekSchAssetList as weekSchAssetList.title  for weekSchAssetList in weekSchAssets | orderBy:'title'" required>
+                                         <option value="">Select Asset</option>
+                                     </select>
+                                     <div ng-show="weekSchSiteFrom.$submitted || weekSchSiteFrom.weekSchAsset.$touched">
+                                        <div ng-show="weekSchSiteFrom.weekSchAsset.$dirty || weekSchSiteFrom.weekSchAsset.$invalid">
+                                            <p class="help-block" style="color:maroon"
+                                               ng-show="weekSchSiteFrom.weekSchAsset.$error.required">
+                                               Asset is required.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 txt-align-center">
+                             <input type="submit"  class="btn btn-success" name="submit" value="Submit" ng-click="load52WeekSchedule();" data-dismiss="modal" ng-disabled="weekSchSiteFrom.$invalid">
+                           </div>
+                        </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--  Asset 52WeekSchedule site dialog -->

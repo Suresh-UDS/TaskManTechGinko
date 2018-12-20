@@ -126,6 +126,7 @@ import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 import {LocationProvider} from "../providers/location-provider";
 import {OfflineCompleteJob} from "../pages/offline-complete-job/offline-complete-job";
 import {OfflineJobs} from "../pages/offline-jobs/offline-jobs";
+import {FeedbackGridFinish} from "../pages/feedback-grid-finish/feedback-grid-finish";
 // import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 // import{IonicImageViewerModule} from "ionic-img-viewer";
@@ -214,7 +215,8 @@ import {OfflineJobs} from "../pages/offline-jobs/offline-jobs";
       UpdateApp,
       ForgotPassword,
     OfflineCompleteJob,
-    OfflineJobs
+    OfflineJobs,
+    FeedbackGridFinish
       // PhotoViewer
   ],
   imports: [
@@ -313,7 +315,8 @@ import {OfflineJobs} from "../pages/offline-jobs/offline-jobs";
       UpdateApp,
       ForgotPassword,
     OfflineCompleteJob,
-    OfflineJobs
+    OfflineJobs,
+    FeedbackGridFinish
 
 
   ],

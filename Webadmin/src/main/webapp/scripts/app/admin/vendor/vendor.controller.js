@@ -23,7 +23,7 @@ angular.module('timeSheetApp')
         $rootScope.exportStatusObj  ={};
         $scope.searchName = null;
         $scope.btnDisable = false;
-        
+
         /** Ui-select scopes **/
         $scope.allVendors = {id:0 , name: '-- ALL VENDORS --'};
         $scope.vendorsListOne = {};
@@ -116,7 +116,7 @@ angular.module('timeSheetApp')
                VendorComponent.findAll().then(function (data) {
                     // console.log("Loading all Vendor -- " , data)
                     $scope.vendorsList = data;
-                    
+
                     /** Ui-select scope **/
                     $scope.vendorsLists[0] = $scope.allVendors;
                    //Filter
@@ -200,13 +200,13 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.isReport = true;
 
             $scope.searchCriteria.currPage = currPageVal;
-            
+
             if($scope.vendorsListOne.selected && $scope.vendorsListOne.selected.id !=0){
         		$scope.searchName = $scope.vendorsListOne.selected;
         	}else{
         	   $scope.searchName = null;
         	}
-            
+
             $scope.searchCriteria.findAll = false;
 
              if(!$scope.searchName) {

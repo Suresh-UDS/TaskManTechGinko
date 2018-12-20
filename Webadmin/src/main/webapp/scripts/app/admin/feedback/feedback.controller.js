@@ -38,6 +38,10 @@ angular.module('timeSheetApp')
         $scope.branchsListOne = {};
         $scope.branchsLists = [];
         $scope.branchsListOne.selected =  null;
+        $scope.selectedFromDateSer =  new Date();
+        $scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+        $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+        $scope.selectedToDateSer =  new Date();
 
 
         $scope.onClick = function (points, evt) {
@@ -112,11 +116,54 @@ angular.module('timeSheetApp')
         $('#dateFilterFrom').on('dp.change', function(e){
             $scope.selectedFromDateSer =new Date(e.date._d);
             $scope.selectedFromDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.selectedFromDateSer.setHours(0,0,0,0);
+            if($scope.selectedToDateSer){
+            	$scope.selectedToDateSer.setHours(0,0,0,0);
+            }
+            
+
+            if($scope.selectedFromDateSer > $scope.selectedToDateSer && $scope.selectedFromDateSer != $scope.selectedToDateSer){
+            	$scope.fromErrMsg = 'From date cannot be greater than To date';
+            	
+            	    alert($scope.fromErrMsg);
+            	
+            		 $('input#dateFilterFrom').data('DateTimePicker').clear();
+                     $('input#dateFilterTo').data('DateTimePicker').clear();
+            		 $scope.selectedFromDateSer = new Date();
+                     $scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+                     $scope.selectedToDateSer = new Date();
+                     $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+                     $('input#dateFilterFrom').val($scope.selectedFromDate);
+                     $('input#dateFilterTo').val($scope.selectedToDate);
+            	
+            	return false;
+            }
 
         });
         $('#dateFilterTo').on('dp.change', function(e){
             $scope.selectedToDateSer =new Date(e.date._d);
             $scope.selectedToDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.selectedToDateSer.setHours(0,0,0,0);
+            if($scope.selectedFromDateSer){
+            	$scope.selectedFromDateSer.setHours(0,0,0,0);
+            }
+
+            if($scope.selectedFromDateSer > $scope.selectedToDateSer && $scope.selectedFromDateSer != $scope.selectedToDateSer){
+            	$scope.toErrMsg = 'To date cannot be lesser than From date';
+            	
+            	     alert($scope.toErrMsg);
+            	
+            		 $('input#dateFilterFrom').data('DateTimePicker').clear();
+                     $('input#dateFilterTo').data('DateTimePicker').clear();
+            		 $scope.selectedFromDateSer = new Date();
+                     $scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+                     $scope.selectedToDateSer = new Date();
+                     $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+                     $('input#dateFilterFrom').val($scope.selectedFromDate);
+                     $('input#dateFilterTo').val($scope.selectedToDate);
+            	  
+            	return false;
+            }
 
         });
 
@@ -372,7 +419,7 @@ angular.module('timeSheetApp')
                      $scope.searchCriteria.siteId = $scope.sitesListOne.selected.id;
                      $scope.searchCriteria.findAll = false;
                 }else{
-                    $scope.searchCriteria.siteId = 0;
+                    $scope.searchCriteria.siteId = null;
                     $scope.searchCriteria.findAll = false;
                 }
 
@@ -555,7 +602,7 @@ angular.module('timeSheetApp')
                       $scope.siteSpin = false;
                   });
                 }else {
-                    $scope.searchCriteria.projectId = 0;
+                    $scope.searchCriteria.projectId = null;
                 }
                 if($scope.searchRegion) {
 		        	$scope.searchCriteria.regionId = $scope.searchRegion.id;
@@ -587,7 +634,7 @@ angular.module('timeSheetApp')
                 	  $scope.sitesListOne.selected = $scope.selectedSite;
                 	  $scope.searchLocations();
                 }else {
-                    $scope.searchCriteria.siteId = 0;
+                    $scope.searchCriteria.siteId = null;
                 }
                 if($scope.selectedBlock) {
                      $scope.searchCriteria.block = $scope.selectedBlock;
@@ -733,6 +780,8 @@ angular.module('timeSheetApp')
                 //$scope.showNotifications('top','center','danger','Cannot Load Feedback');
             });
             
+            
+            /* Feedback Details List Start */
             if($scope.pageSort){
                 $scope.searchCriteria.sort = $scope.pageSort;
             }
@@ -777,6 +826,8 @@ angular.module('timeSheetApp')
                 $scope.noData = true;
                 //$scope.showNotifications('top','center','danger','Cannot Load Feedback');
             });
+            
+            /* Feedback Details List End */
 
         };
 
@@ -811,6 +862,8 @@ angular.module('timeSheetApp')
 
 
         $scope.clearFilter = function() {
+        	$('input#dateFilterFrom').data('DateTimePicker').clear();
+            $('input#dateFilterTo').data('DateTimePicker').clear();
             $rootScope.exportStatusObj = {};
             $scope.downloaded = true;
             $scope.clearField = true;
@@ -838,6 +891,8 @@ angular.module('timeSheetApp')
             $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedFromDateSer = new Date();
             $scope.selectedToDateSer = new Date();
+            $('input#dateFilterFrom').val($scope.selectedFromDate);
+            $('input#dateFilterTo').val($scope.selectedToDate);
             //$rootScope.searchCriteriaSite = null;
             $scope.averageRating = '0';
             $scope.feedbackCount = '0';
@@ -1047,6 +1102,74 @@ angular.module('timeSheetApp')
                $scope.search();
 
         };
+        
+        
+        
+        /*
+         * Ui select allow-clear modified function start
+         *
+         * */
+        
+
+        $scope.clearProject = function($event) {
+     	   $event.stopPropagation(); 
+     	   $scope.client.selected = undefined;
+     	   $scope.regionsListOne.selected = undefined;
+     	   $scope.branchsListOne.selected = undefined;
+     	   $scope.sitesListOne.selected = undefined;
+     	   $scope.regionFilterDisable = true;
+     	   $scope.branchFilterDisable = true;
+     	   $scope.siteFilterDisable = true;
+     	   $scope.clientId = null;
+     	   $scope.filteredLocations ="";
+           $scope.siteId = null;
+  	       $scope.selectedBlock = null;
+  	       $scope.selectedFloor = null;
+  	       $scope.selectedZone = null;
+     	};
+     	
+     	$scope.clearRegion = function($event) {
+      	   $event.stopPropagation(); 
+      	   $scope.regionsListOne.selected = undefined;
+      	   $scope.branchsListOne.selected = undefined;
+      	   $scope.sitesListOne.selected = undefined;
+      	   $scope.branchFilterDisable = true;
+      	   $scope.siteFilterDisable = true;
+      	   $scope.filteredLocations ="";
+           $scope.siteId = null;
+  	       $scope.selectedBlock = null;
+  	       $scope.selectedFloor = null;
+  	       $scope.selectedZone = null;
+      	};
+      	
+      	$scope.clearBranch = function($event) {
+	   	   $event.stopPropagation();
+	   	   $scope.branchsListOne.selected = undefined;
+	   	   $scope.sitesListOne.selected = undefined;
+	   	   $scope.siteFilterDisable = true;
+	   	   $scope.filteredLocations ="";
+           $scope.siteId = null;
+ 	       $scope.selectedBlock = null;
+ 	       $scope.selectedFloor = null;
+ 	       $scope.selectedZone = null;
+	   	};
+         
+   	  $scope.clearSite = function($event) {
+    	   $event.stopPropagation(); 
+    	   $scope.sitesListOne.selected = null;
+    	   $scope.filteredLocations ="";
+           $scope.siteId = null;
+    	   $scope.selectedBlock = null;
+    	   $scope.selectedFloor = null;
+    	   $scope.selectedZone = null;
+    	};
+        	
+    
+           	
+   	/*
+        * Ui select allow-clear modified function end
+        *
+        * */
 
 
     });

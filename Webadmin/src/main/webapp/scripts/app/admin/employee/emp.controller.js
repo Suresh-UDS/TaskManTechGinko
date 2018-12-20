@@ -2191,6 +2191,7 @@ angular.module('timeSheetApp')
                     }else{
                          $scope.noData = true;
                     }
+	                $scope.loadSites();
 
 	            });
 	             if($scope.searchCriteria.siteId && $scope.searchCriteria.fromDate){
@@ -2738,6 +2739,52 @@ angular.module('timeSheetApp')
 	
 	         })
         }
+        
+        /*
+         * Ui select allow-clear modified function start
+         *
+         * */
+        
+
+        $scope.clearProject = function($event) {
+     	   $event.stopPropagation(); 
+     	   $scope.client.selected = undefined;
+     	   $scope.regionsListOne.selected = undefined;
+     	   $scope.branchsListOne.selected = undefined;
+     	   $scope.sitesListOne.selected = undefined;
+     	   $scope.regionFilterDisable = true;
+     	   $scope.branchFilterDisable = true;
+     	   $scope.siteFilterDisable = true;
+     	};
+     	
+     	$scope.clearRegion = function($event) {
+      	   $event.stopPropagation(); 
+      	   $scope.regionsListOne.selected = undefined;
+      	   $scope.branchsListOne.selected = undefined;
+      	   $scope.sitesListOne.selected = undefined;
+      	   $scope.branchFilterDisable = true;
+      	   $scope.siteFilterDisable = true;
+      	};
+      	
+      	$scope.clearBranch = function($event) {
+	   	   $event.stopPropagation();
+	   	   $scope.branchsListOne.selected = undefined;
+	   	   $scope.sitesListOne.selected = undefined;
+	   	   $scope.siteFilterDisable = true;
+	   	};
+         
+   	    $scope.clearSite = function($event) {
+    	   $event.stopPropagation(); 
+    	   $scope.sitesListOne.selected = undefined;
+    	
+    	};
+        	
+    
+           	
+   	/*
+        * Ui select allow-clear modified function end
+        *
+        * */
 
 
     });

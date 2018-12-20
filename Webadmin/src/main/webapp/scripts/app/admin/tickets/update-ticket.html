@@ -220,11 +220,12 @@
                            <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="control-label">Name of Asset</label>
-                                        <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                        <span class="form-control-feedback d-md-arrow-icon" ng-hide="siteAssetList"><i class="material-icons">keyboard_arrow_down</i></span>
+                                        <span  class="form-control-feedback d-md-arrow-icon orange-color" ng-show="siteAssetList"><i class="ld ld-ring ld-spin" ></i></span>
                                         <select
                                             required
                                             name="asset"
-                                            ng-model="selectedAsset"
+                                            ng-model="selectedAsset" ng-disabled="siteAssetList"
                                             class="form-control searchable-input floatL" ng-options="asset as asset.title for asset in assets | orderBy:'title' track by asset.id" tabindex="9">
                                             <option value="">Select Asset</option>
                                         </select>
@@ -265,7 +266,7 @@
                      <div class="col-md-6">
                         <div class="panel panel-default">
 
-                          <div class="panel-heading">Upload Image</div>
+                          <div class="panel-heading">Upload Document/Image</div>
                           <div class="panel-body">
                             <div class="row">
 

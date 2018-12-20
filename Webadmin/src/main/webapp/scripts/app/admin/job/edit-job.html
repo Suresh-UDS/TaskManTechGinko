@@ -61,27 +61,27 @@
                                                            name='jobName'
                                                            type='text' value=""
                                                            ng-minlength='5'
-                                                           ng-maxlength='250'
+                                                           ng-maxlength='100'
                                                            ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
                                                            required tabindex="1" />
 
-                                                    <div ng-show="form.$submitted || form.jobName.$touched">
+                                                    <div ng-show="form.$submitted || form.jobName.$touched || form.jobName.$dirty">
                                                         <div ng-show="form.jobName.$dirty || form.jobName.$invalid">
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
                                                                ng-show="form.jobName.$error.required">
-                                                                Job Title is required.
+                                                                Job title is required.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
                                                                ng-show="form.jobName.$error.minlength">
-                                                                Job Title is required to be at least 5 character.
+                                                                Job title is required to be at least 5 character.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
                                                                ng-show="form.jobName.$error.maxlength">
-                                                                Job Title cannot be longer than 250 characters.
+                                                                Job title cannot be longer than 100 characters.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                ng-show="form.jobName.$error.pattern">
-                                                                job Title can only contain letters, digits and space.
+                                                                job title can only contain letters, digits and space.
                                                             </p>
                                                         </div>
                                                     </div>
@@ -102,15 +102,15 @@
                                                 required tabindex="3"
                                             ></textarea>
 
-                                                    <div ng-show="form.$submitted || form.jobDesc.$touched">
+                                                    <div ng-show="form.$submitted || form.jobDesc.$touched || form.jobDesc.$dirty">
                                                         <div ng-show="form.jobDesc.$dirty || form.jobDesc.$invalid">
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
                                                                ng-show="form.jobDesc.$error.maxlength">
-                                                                Job name cannot be longer than 2500 characters.
+                                                                Job description cannot be longer than 2500 characters.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                ng-show="form.jobDesc.$error.pattern">
-                                                                Job name can only contain letters, digits, few special characters and space.
+                                                                Job description can only contain letters, digits, few special characters and space.
                                                             </p>
                                                         </div>
                                                     </div>
@@ -156,7 +156,7 @@
                                                             <option value="">Select Employees...</option>
                                                         </select>
 
-                                                        <div ng-show="form.$submitted || form.employeeName.$touched">
+                                                        <div ng-show="form.$submitted || form.employeeName.$touched || form.employeeName.$dirty">
                                                             <div
                                                                 ng-show="form.employeeName.$dirty || form.employeeName.$invalid">
 
@@ -238,7 +238,7 @@
                                                         tabindex="2">
                                                             <option value="">Select Site...</option>
                                                         </select>
-                                                        <div ng-show="form.$submitted || form.siteName.$touched">
+                                                        <div ng-show="form.$submitted || form.siteName.$touched || form.siteName.$dirty">
                                                             <div
                                                                 ng-show="form.siteName.$dirty || form.siteName.$invalid">
                                                                 <p class="help-block" style="color: maroon"
@@ -261,7 +261,7 @@
                                                        <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="(block | uppercase) for  block in blocks track by block" tabindex="4">
                                                         	<option value="">Select Block...</option>
                                                     	  </select>
-                                                        <div ng-show="form.$submitted || form.block.$touched">
+                                                        <div ng-show="form.$submitted || form.block.$touched || form.block.$dirty">
                                                             <div
                                                                 ng-show="form.block.$dirty || form.block.$invalid">
                                                                 <p class="help-block" style="color: maroon"
@@ -281,7 +281,7 @@
 													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="(floor | uppercase) for floor in floors track by floor" tabindex="5">
                                                         <option value="">Select Floor...</option>
                                                     	</select>
-                                                   	 <div ng-show="form.$submitted || form.floor.$touched">
+                                                   	 <div ng-show="form.$submitted || form.floor.$touched || form.floor.$dirty">
                                                             <div
                                                                 ng-show="form.floor.$dirty || form.floor.$invalid">
                                                                 <p class="help-block" style="color: maroon"
@@ -301,7 +301,7 @@
 													<select class="form-control " ng-model="selectedZone"  ng-options="zone as (zone | uppercase) for zone in zones track by zone" tabindex="6">
                                                         <option value="">Select Zone...</option>
                                                     </select>
-                                                   	 <div ng-show="form.$submitted || form.floor.$touched">
+                                                   	 <div ng-show="form.$submitted || form.floor.$touched || form.zone.$dirty">
                                                             <div
                                                                 ng-show="form.zone.$dirty || form.zone.$invalid">
                                                                 <p class="help-block" style="color: maroon"
@@ -360,7 +360,7 @@
                                                         required tabindex="16"
                                                     >
 
-                                                    <div ng-show="form.$submitted || form.plannedHours.$touched">
+                                                    <div ng-show="form.$submitted || form.plannedHours.$touched || form.plannedHours.$dirty">
                                                         <div
                                                             ng-show="form.plannedHours.$dirty || form.plannedHours.$invalid">
                                                             <p class="help-block" style="color:maroon"
@@ -393,7 +393,7 @@
                                                         <option>OVERDUE</option>
                                                     </select>
 
-                                                    <div ng-show="form.$submitted || form.jobStatus.$touched">
+                                                    <div ng-show="form.$submitted || form.jobStatus.$touched || form.jobStatus.$dirty">
                                                         <div
                                                             ng-show="form.jobStatus.$dirty || form.jobStatus.$invalid">
 
@@ -434,7 +434,7 @@
                                                                     ng-model="selectedStatus"
                                                                     uib-typeahead="stat as stat.name for stat in status | filter:$viewValue | limitTo:5" />
                      -->
-                                                    <div ng-show="form.$submitted || form.jobType.$touched">
+                                                    <div ng-show="form.$submitted || form.jobType.$touched || form.jobType.$dirty">
                                                         <div
                                                             ng-show="form.jobType.$dirty || form.jobType.$invalid">
 
@@ -456,7 +456,7 @@
                                                 ng-maxlength='2500' tabindex="28"
                                             ></textarea>
 
-                                                    <div ng-show="form.$submitted || form.jobComments.$touched">
+                                                    <div ng-show="form.$submitted || form.jobComments.$touched || form.jobComments.$dirty">
                                                         <div ng-show="form.jobComments.$dirty || form.jobComments.$invalid">
 
                                                             <p class="help-block" style="color:maroon"
@@ -512,7 +512,7 @@
                                                                 <input type="radio" id="sheduleMonth" name="sheduleMonth" ng-model="job.schedule" value="MONTH" required tabindex="15"> Monthly
                                                             </label>
                                                         </div>
-                                                        <div ng-show="form.$submitted || form.schedule.$touched">
+                                                        <div ng-show="form.$submitted || form.schedule.$touched || form.schedule.$dirty">
                                                             <div ng-show="form.schedule.$dirty || form.schedule.$invalid">
                                                                 <p class="help-block" style="color:maroon"
                                                                    ng-show="form.schedule.$error.required">
@@ -621,7 +621,7 @@
                                                      <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
                                                     <input type="text" class="form-control datetimepicker" ng-model="selectScheduleEndDate" name='scheduleEndDate' autocomplete="off" id="scheduleEndDate" ng-disabled="job.schedule == 'ONCE'" tabindex="30" />
 
-                                                    <div ng-show="form.$submitted || form.scheduleEndDate.$touched">
+                                                    <div ng-show="form.$submitted || form.scheduleEndDate.$touched || form.scheduleEndDate.$dirty">
                                                         <div ng-show="form.scheduleEndDate.$dirty || form.scheduleEndDate.$invalid">
                                                             <p class="help-block" style="color: maroon"
                                                                ng-show="form.scheduleEndDate.$error.required">Required.</p>
