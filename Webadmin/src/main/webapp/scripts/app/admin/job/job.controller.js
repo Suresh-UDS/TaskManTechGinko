@@ -20,8 +20,11 @@ angular.module('timeSheetApp')
         $scope.selectedLocation = null;
         $scope.selectedJobDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.selectedJobDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-        $scope.searchJobDate = null;
-        $scope.searchJobDateTo = null;
+        $scope.selectedJobDateToSer = new Date();
+        $scope.searchJobDateSer =  new Date();
+        $scope.searchJobDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+        $scope.searchJobDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+        $scope.searchJobDateToSer =  new Date();
 
         $scope.selectedJob = null;
 
@@ -221,28 +224,60 @@ angular.module('timeSheetApp')
         */
 
         $('input#searchJobDate').on('dp.change', function(e){
-
+        
             $scope.searchJobDateSer = new Date(e.date._d);
             $scope.searchJobDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.searchJobDateSer.setHours(0,0,0,0);
+            if($scope.searchJobDateToSer){
+            	$scope.searchJobDateToSer.setHours(0,0,0,0);
+            }
+            
 
-            if($scope.searchJobDate > $scope.searchJobDateTo){
-               $scope.searchJobDateTo = null;
-               $scope.searchJobDateToSer = null;
+            if($scope.searchJobDateSer > $scope.searchJobDateToSer && $scope.searchJobDateSer != $scope.searchJobDateToSer){
+            	$scope.fromErrMsg = 'From date cannot be greater than To date';
+            	
+            	    alert($scope.fromErrMsg);
+            	
+            		 $('input#searchJobDate').data('DateTimePicker').clear();
+                     $('input#searchJobDateTo').data('DateTimePicker').clear();
+            		 $scope.searchJobDateSer = new Date();
+                     $scope.searchJobDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+                     $scope.searchJobDateToSer = new Date();
+                     $scope.searchJobDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+                     $('input#searchJobDate').val($scope.searchJobDate);
+                     $('input#searchJobDateTo').val($scope.searchJobDateTo);
+            	
+            	return false;
             }
 
-             /*$('#searchJobDateTo').datetimepicker().on('dp.show', function () {
-                return $(this).data('DateTimePicker').minDate(e.date);
-            });*/
         });
 
         $('input#searchJobDateTo').on('dp.change', function(e){
+        	
+        	$scope.toErrMsg = '';
 
             $scope.searchJobDateToSer = new Date(e.date._d);
             $scope.searchJobDateTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.searchJobDateToSer.setHours(0,0,0,0);
+            if($scope.searchJobDateSer){
+            	$scope.searchJobDateSer.setHours(0,0,0,0);
+            }
 
-            if($scope.searchJobDate > $scope.searchJobDateTo){
-              $scope.searchJobDate = null;
-              $scope.searchJobDateSer = null;
+            if($scope.searchJobDateSer > $scope.searchJobDateToSer && $scope.searchJobDateSer != $scope.searchJobDateToSer){
+            	$scope.toErrMsg = 'To date cannot be lesser than From date';
+            	
+            	     alert($scope.toErrMsg);
+            	
+            		 $('input#searchJobDate').data('DateTimePicker').clear();
+                     $('input#searchJobDateTo').data('DateTimePicker').clear();
+            		 $scope.searchJobDateSer = new Date();
+                     $scope.searchJobDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+                     $scope.searchJobDateToSer = new Date();
+                     $scope.searchJobDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+                     $('input#searchJobDate').val($scope.searchJobDate);
+                     $('input#searchJobDateTo').val($scope.searchJobDateTo);
+            	  
+            	return false;
             }
 
         });
@@ -1522,8 +1557,8 @@ angular.module('timeSheetApp')
 
                     $scope.searchJobDate = $filter('date')($scope.localStorage.checkInDateTimeFrom, 'dd/MM/yyyy');
                     $scope.searchJobDateTo = $filter('date')($scope.localStorage.checkInDateTimeTo, 'dd/MM/yyyy');
-                    $scope.searchJobDateSer = $scope.localStorage.checkInDateTimeFrom;
-                    $scope.searchJobDateToSer = $scope.localStorage.checkInDateTimeTo;
+                    $scope.searchJobDateSer = new Date($scope.localStorage.checkInDateTimeFrom);
+                    $scope.searchJobDateToSer = new Date($scope.localStorage.checkInDateTimeTo);
 
                 }
 
@@ -1608,11 +1643,13 @@ angular.module('timeSheetApp')
             $scope.selectedJobDateSer = new Date();
             $scope.selectedJobDate = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedJobDateToSer = new Date();
-            $scope.searchJobDateSer = null;
-            $scope.searchJobDate = null;
-            $scope.searchJobDateTo = null;
-            $scope.searchJobDateToSer = null;
+            $scope.searchJobDateSer =  new Date();
+            $scope.searchJobDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+            $scope.searchJobDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+            $scope.searchJobDateToSer =  new Date();
             $scope.selectedJobDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+            $('input#searchJobDate').val($scope.searchJobDate);
+            $('input#searchJobDateTo').val($scope.searchJobDateTo);
             $scope.searchJobId = null;
             $scope.searchJobTitle = null;
             $scope.searchCriteria = {};
@@ -2006,6 +2043,57 @@ angular.module('timeSheetApp')
             $scope.selectedJob = job;
 
         }
+        
+        /*
+         * Ui select allow-clear modified function start
+         *
+         * */
+        
+
+       $scope.clearProject = function($event) {
+     	   $event.stopPropagation(); 
+     	   $scope.client.selected = undefined;
+     	   $scope.regionsListOne.selected = undefined;
+     	   $scope.branchsListOne.selected = undefined;
+     	   $scope.sitesListOne.selected = undefined;
+     	   $scope.regionFilterDisable = true;
+     	   $scope.branchFilterDisable = true;
+     	   $scope.siteFilterDisable = true;
+     	};
+     	
+       $scope.clearRegion = function($event) {
+      	   $event.stopPropagation(); 
+      	   $scope.regionsListOne.selected = undefined;
+      	   $scope.branchsListOne.selected = undefined;
+      	   $scope.sitesListOne.selected = undefined;
+      	   $scope.branchFilterDisable = true;
+      	   $scope.siteFilterDisable = true;
+      	};
+      	
+       $scope.clearBranch = function($event) {
+	   	   $event.stopPropagation();
+	   	   $scope.branchsListOne.selected = undefined;
+	   	   $scope.sitesListOne.selected = undefined;
+	   	   $scope.siteFilterDisable = true;
+	   	};
+         
+   	   $scope.clearSite = function($event) {
+    	   $event.stopPropagation(); 
+    	   $scope.sitesListOne.selected = undefined;
+    	   $scope.blocksListOne.selected = undefined;
+    	   $scope.floorsListOne.selected = undefined;
+    	   $scope.zonesListOne.selected = undefined;
+    	   $scope.blockFilterDisable = true;
+    	   $scope.floorFilterDisable = true;
+    	   $scope.zoneFilterDisable = true;
+    	};
+        	
+    
+           	
+   	/*
+        * Ui select allow-clear modified function end
+        *
+        * */
 
 
 
