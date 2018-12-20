@@ -153,18 +153,54 @@ angular
 			        $('input#searchCreatedDate').on('dp.change', function(e){
 		                $scope.searchCreatedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
 		                $scope.searchCreatedDateSer = new Date(e.date._d);
-		                /*if($scope.searchToDate < $scope.searchCreatedDate){
-		                	$scope.searchToDate = "";
-			                $scope.searchToDateSer = "";
+		                $scope.searchCreatedDateSer.setHours(0,0,0,0);
+		                if($scope.searchToDateSer){
+		                	$scope.searchToDateSer.setHours(0,0,0,0);
 		                }
-		                $('input#searchToDate').datetimepicker().on('dp.show', function () {
-		                return $(this).data('DateTimePicker').minDate(e.date);
-		                });*/
+		                
+
+		                if($scope.searchCreatedDateSer > $scope.searchToDateSer && $scope.searchCreatedDateSer != $scope.searchToDateSer){
+		                	$scope.fromErrMsg = 'From date cannot be greater than To date';
+		                	
+		                	    alert($scope.fromErrMsg);
+		                	
+		                		 $('input#searchCreatedDate').data('DateTimePicker').clear();
+		                         $('input#searchToDate').data('DateTimePicker').clear();
+		                		 $scope.searchCreatedDateSer = new Date();
+		                         $scope.searchCreatedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+		                         $scope.searchToDateSer = new Date();
+		                         $scope.searchToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+		                         $('input#searchCreatedDate').val($scope.searchCreatedDate);
+		                         $('input#searchToDate').val($scope.searchToDate);
+		                	
+		                	return false;
+		                }
 		            });
 			        
 			        $('input#searchToDate').on('dp.change', function(e){
 		                $scope.searchToDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
 		                $scope.searchToDateSer = new Date(e.date._d);
+		                $scope.searchToDateSer.setHours(0,0,0,0);
+		                if($scope.searchCreatedDateSer){
+		                	$scope.searchCreatedDateSer.setHours(0,0,0,0);
+		                }
+
+		                if($scope.searchCreatedDateSer > $scope.searchToDateSer && $scope.searchCreatedDateSer != $scope.searchToDateSer){
+		                	$scope.toErrMsg = 'To date cannot be lesser than From date';
+		                	
+		                	     alert($scope.toErrMsg);
+		                	
+		                		 $('input#searchCreatedDate').data('DateTimePicker').clear();
+		                         $('input#searchToDate').data('DateTimePicker').clear();
+		                		 $scope.searchCreatedDateSer = new Date();
+		                         $scope.searchCreatedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+		                         $scope.searchToDateSer = new Date();
+		                         $scope.searchToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+		                         $('input#searchCreatedDate').val($scope.searchCreatedDate);
+		                         $('input#searchToDate').val($scope.searchToDate);
+		                	  
+		                	return false;
+		                }
 		            });
 
 			        $scope.initCalender();
@@ -933,8 +969,8 @@ angular
 			        };
 
 			        $scope.clearFilter = function() {
-			        	//$('input#searchCreatedDate').data('DateTimePicker').clear();
-			            //$('input#searchToDate').data('DateTimePicker').clear();
+			        	$('input#searchCreatedDate').data('DateTimePicker').clear();
+			            $('input#searchToDate').data('DateTimePicker').clear();
 			            $scope.noData = false;
 			        	$scope.clearField = true;
 			        	$scope.siteFilterDisable = true;
@@ -955,6 +991,8 @@ angular
     					$scope.searchCreatedDateSer = new Date();
     					$scope.searchToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
     	                $scope.searchToDateSer = new Date();
+    	                $('input#searchCreatedDate').val($scope.searchCreatedDate);
+                        $('input#searchToDate').val($scope.searchToDate);
 	        		    $scope.selectedProject = null;
 			            $scope.selectedSite = null;
 			            $scope.selectedStatus = null;
@@ -1569,12 +1607,7 @@ angular
 					   	$scope.clearSite = function($event) {
 					    	   $event.stopPropagation(); 
 					    	   $scope.sitesListOne.selected = undefined;
-					    	   $scope.blocksListOne.selected = undefined;
-					    	   $scope.floorsListOne.selected = undefined;
-					    	   $scope.zonesListOne.selected = undefined;
-					    	   $scope.blockFilterDisable = true;
-					    	   $scope.floorFilterDisable = true;
-					    	   $scope.zoneFilterDisable = true;
+					    	  
 					    	};
 					        	
 					    
