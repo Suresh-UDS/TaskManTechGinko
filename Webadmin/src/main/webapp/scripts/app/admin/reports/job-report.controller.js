@@ -818,6 +818,8 @@ angular.module('timeSheetApp')
 
 
         $scope.clearFilter = function() {
+        	$('input#dateFilterFrom').data('DateTimePicker').clear();
+            $('input#dateFilterTo').data('DateTimePicker').clear();
             $rootScope.exportStatusObj = {};
             $scope.downloader=false;
             $scope.downloaded = true;
