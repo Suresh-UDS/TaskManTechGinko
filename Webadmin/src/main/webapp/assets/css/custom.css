@@ -141,7 +141,28 @@ ul.checkList li
     background: #ffffff;
     z-index: 1000;
 }
+.CheckListNewBx {
+    display: none;
+    position: absolute;
+    width: 300px;
+    top: -29px;
+    right: 37px;
+    border: 1px solid #ccc;
+    min-height: 50px;
+    background: #ffffff;
+    z-index: 1000;
+    padding: 10px;
+    border-radius: 5px;
+}
+.CheckListNewBx div span {
+	 border-radius: 0px !important;
+}
 .infoIcon:hover .CheckListBx
+{
+    display: block;
+}
+
+.infoIcon:hover .CheckListNewBx
 {
     display: block;
 }
@@ -152,7 +173,7 @@ ul.checkList li
 }
 .hiddenCheckList .infoIcon
 {
-    float: left;
+    float: right;
     padding-left: 5px;
     color: #00bcd4;
 }
@@ -262,10 +283,11 @@ ul.checkList li
     color: #000;
     background: none;
     box-shadow: none;
-    font-weight: none;
+    font-weight: normal;
     font-size:14px;
     padding-right: 0;
 }
+
 .navbar .dropdown-menu li a:hover, .navbar .dropdown-menu li a:focus, .navbar .dropdown-menu li a:active, .navbar.navbar-default .dropdown-menu li a:hover, .navbar.navbar-default .dropdown-menu li a:focus, .navbar.navbar-default .dropdown-menu li a:active
 {
     background-color: #ff9800;
@@ -1668,6 +1690,14 @@ a.cal-btn i
       display: none;
       width:4%;
   }
+  .pageTopCenter{
+      top: calc(100% / 8);
+      left: calc(100% / 2.3);
+      z-index: 100000;
+      position: absolute;
+      display: none;
+      width:4%;
+  }
   .white{
       color:#fff;
       line-height: 40px;
@@ -1967,7 +1997,7 @@ a.sort-by:after {
   margin-top: 1px;
 }
 .form-group {
-    padding-bottom: 18px !important;
+    padding-bottom: 21px !important;
 }
 p.help-block{
   line-height: 15px;
@@ -2118,3 +2148,25 @@ div.bouncing-container .arrow-down {
                   0 4px 23px 0px rgba(0, 0, 0, 0.12),
                   0 8px 10px -5px rgba(76, 175, 80, 0)!important;
 }
+
+a.clsBtn {
+    height: 22px;
+    right: 0px;
+    color: #000;
+    background: none;
+    box-shadow: none;
+    font-weight: normal;
+    font-size: 14px !important;
+    padding-right: 0 !important;
+    position: absolute;
+    margin-top: -2px;
+    z-index: 100000;
+}
+a.clsBtn:hover , a.clsBtn:active , a.clsBtn:focus {
+    color: #000 !important;
+    background: none !important;
+    box-shadow: none !important;
+
+}
+
+
