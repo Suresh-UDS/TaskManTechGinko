@@ -1,7 +1,6 @@
 package com.ts.app.service;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
@@ -29,9 +28,12 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import com.ts.app.config.JHipsterProperties;
+import com.ts.app.domain.Setting;
 import com.ts.app.domain.User;
+import com.ts.app.repository.SettingsRepository;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.Sendgrid;
+import com.ts.app.web.rest.dto.SettingsDTO;
 import com.ts.app.web.rest.dto.UserDTO;
 
 /**
@@ -65,6 +67,9 @@ public class MailService {
 
     @Value("${export.file.path}")
     private String exportPath;
+    
+    @Inject
+    private SettingsRepository settingsRepository;
 
     @Async
     public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml,String fileName) {
@@ -443,7 +448,18 @@ public class MailService {
         sendEmail(emailIds, subject, content, true, true,fileName);
     }
 
-
+    @Async
+    public void sendJobCreationErrorEmail(long siteId) {
+    		Setting setting = settingsRepository.findSettingByKey(SettingsService.JOB_SCHEDULER_ERROR_EMAILS);
+        log.debug("Sending job creation error alert e-mail to '{}'", setting.getSettingValue());
+        Locale locale = Locale.forLanguageTag("en-US");
+        Context context = new Context(locale);
+        context.setVariable("site", siteId);
+        String content = templateEngine.process("jobCreationErrorEmail", context);
+        String subject = messageSource.getMessage("email.job.scheduler.title", null, locale);
+        sendEmail(setting.getSettingValue(), subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
+    }
+    
     @Async
     public void sendJobReportEmail(User user,  String baseUrl) {
         log.debug("Sending job report e-mail to '{}'", user.getEmail());

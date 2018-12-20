@@ -61,7 +61,6 @@
 </head>
 
 <body  ng-switch="isLoggedIn" class="sidebar-mini">
-
     <div ng-show="loginView" class="LoginPageView">
         <!-- Login start -->
         <div  ui-view="login" ng-cloak="" class="LoginPageView" ></div>
@@ -171,6 +170,9 @@
     <!-- <script src="bower_components/angular1-star-rating/dist/index.js"></script> -->
     <script src="bower_components/slick-carousel/slick/slick.js"></script>
     <!-- <script src="bower_components/angular-slick/dist/slick.js"></script> -->
+
+	<!--  CSRF -->
+	<script src="bower_components/spring-security-csrf-token-interceptor/dist/spring-security-csrf-token-interceptor.min.js"></script>
 
     <script src="scripts/app/app.js"></script>
     <script src="scripts/app/app.constants.js"></script>

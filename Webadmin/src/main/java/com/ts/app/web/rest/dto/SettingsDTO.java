@@ -158,6 +158,10 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     private boolean musterRollEmailAlert;
     
     private List<String> musterRollEmailIds;
+    
+    private String key;
+    
+    private String value;
 
     public long getSiteId() {
 		return siteId;
@@ -749,6 +753,22 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 
 	public void setMusterRollEmailIds(List<String> musterRollEmailIds) {
 		this.musterRollEmailIds = musterRollEmailIds;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 	
