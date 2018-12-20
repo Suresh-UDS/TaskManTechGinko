@@ -1592,7 +1592,7 @@ angular.module('timeSheetApp')
 	   	   $scope.siteFilterDisable = true;
 	   	};
          
-   	$scope.clearSite = function($event) {
+   	    $scope.clearSite = function($event) {
     	   $event.stopPropagation(); 
     	   $scope.sitesListOne.selected = undefined;
     	   $scope.blocksListOne.selected = undefined;
@@ -1603,29 +1603,11 @@ angular.module('timeSheetApp')
     	   $scope.zoneFilterDisable = true;
     	};
         	
-    	$scope.clearBlock = function($event) {
-     	   $event.stopPropagation(); 
-     	   $scope.blocksListOne.selected = undefined;
-     	   $scope.floorsListOne.selected = undefined;
-     	   $scope.zonesListOne.selected = undefined;
-     	   $scope.floorFilterDisable = true;
-     	   $scope.zoneFilterDisable = true;
-     	};
-         	
-     	$scope.clearFloor = function($event) {
-      	   $event.stopPropagation(); 
-      	   $scope.floorsListOne.selected = undefined;
-      	   $scope.zonesListOne.selected = undefined;
-      	   $scope.zoneFilterDisable = true;
-      	};
-      	
-      	$scope.clearZone = function($event) {
-   	   $event.stopPropagation(); 
-   	   $scope.zonesListOne.selected = undefined;
-   	};
            	
    	/*
         * Ui select allow-clear modified function end
         *
         * */
+    	
+    	
     });
