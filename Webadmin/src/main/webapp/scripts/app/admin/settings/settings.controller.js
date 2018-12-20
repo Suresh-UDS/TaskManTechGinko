@@ -2,12 +2,20 @@
 
 angular.module('timeSheetApp')
     .controller('SettingsController', function ($rootScope, $scope, $state, $timeout, $http, $stateParams,
-     $location, ProjectComponent, SettingsComponent,$filter) {
+     $location, ProjectComponent,SiteComponent,SettingsComponent,$filter) {
             $rootScope.loadingStop();
             $rootScope.loginView = false;
     		$scope.selectedProject =null;
-        $scope.selectedDayWiseAttnEmailTime =  new Date();
-
+    	$scope.selectedDayWiseAttnEmailTimeSer =  new Date();
+        $scope.selectedDayWiseAttnEmailTime= $filter('date')(new Date(), 'dd/MM/yyyy HH:mm a');
+        
+        $scope.selectedDayWiseReportEmailTimeSer = new Date();
+        $scope.selectedDayWiseReportEmailTime= $filter('date')(new Date(), 'dd/MM/yyyy HH:mm a');
+        
+        $scope.selectedFeedbackReportTimeSer = new Date();
+        $scope.selectedFeedbackReportTime= $filter('date')(new Date(), 'dd/MM/yyyy HH:mm a');
+        
+       
     		$scope.selectedSite =null;
             $scope.pager = {};
     		
@@ -46,10 +54,10 @@ angular.module('timeSheetApp')
             console.log(e.date._d);
             
             $.notifyClose();
-             
-            //$scope.selectedDayWiseAttnEmailTime= $filter('date')(e.date._d, 'yyyy-MM-dd HH:mm:ss');
-            $scope.selectedDayWiseAttnEmailTime = e.date._d;
-            $scope.settings.dayWiseAttendanceAlertTime = $scope.selectedDayWiseAttnEmailTime;
+   
+            $scope.selectedDayWiseAttnEmailTime = $filter('date')(e.date._d, 'dd/MM/yyyy HH:mm a');
+            $scope.selectedDayWiseAttnEmailTimeSer = new Date(e.date._d);
+            $scope.settings.dayWiseAttendanceAlertTime = $scope.selectedDayWiseAttnEmailTimeSer;
 
         });
         
@@ -59,9 +67,9 @@ angular.module('timeSheetApp')
             
             $.notifyClose();
              
-            //$scope.selectedDayWiseAttnEmailTime= $filter('date')(e.date._d, 'yyyy-MM-dd HH:mm:ss');
-            $scope.selectedDayWiseReportEmailTime = e.date._d;
-            $scope.settings.dayWiseReportAlertTime = $scope.selectedDayWiseReportEmailTime;
+            $scope.selectedDayWiseReportEmailTime= $filter('date')(e.date._d, 'dd/MM/yyyy HH:mm a');
+            $scope.selectedDayWiseReportEmailTimeSer = new Date(e.date._d);
+            $scope.settings.dayWiseReportAlertTime = $scope.selectedDayWiseReportEmailTimeSer;
 
         });
         
@@ -71,9 +79,9 @@ angular.module('timeSheetApp')
             
             $.notifyClose();
              
-            //$scope.selectedDayWiseAttnEmailTime= $filter('date')(e.date._d, 'yyyy-MM-dd HH:mm:ss');
-            $scope.selectedFeedbackReportTime = e.date._d;
-            $scope.settings.feedbackReportTime = $scope.selectedFeedbackReportTime;
+            $scope.selectedFeedbackReportTime= $filter('date')(e.date._d, 'dd/MM/yyyy HH:mm a');
+            $scope.selectedFeedbackReportTimeSer = new Date(e.date._d);
+            $scope.settings.feedbackReportTime = $scope.selectedFeedbackReportTimeSer;
 
         });
         

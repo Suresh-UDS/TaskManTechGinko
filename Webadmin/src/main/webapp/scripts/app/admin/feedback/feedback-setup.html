@@ -363,7 +363,11 @@
 				                                    <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
 				                                    <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
-													  <ui-select-match placeholder="Select clients..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
+													  <ui-select-match placeholder="Select clients...">{{$select.selected.name}}
+													     <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+													  </ui-select-match>
 													  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)" null-option="allClients" loose-null>
 
 													    <span ng-bind-html="client.name | highlight: $select.search"></span>
@@ -382,7 +386,11 @@
 				                                        <span ng-show="!regionSpin && !regionsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
 						                                <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
-														  <ui-select-match placeholder="Select region..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
+														  <ui-select-match placeholder="Select region..." >{{$select.selected.name}}
+														    <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+															   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+															   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+														  </ui-select-match>
 														  <ui-select-choices repeat="regionsListOne in regionsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,'');loadBranchList(client.selected.id)" null-option="allRegions" loose-null>
 														    <span ng-bind-html="regionsListOne.name | highlight: $select.search"></span>
 														  </ui-select-choices>
@@ -402,7 +410,11 @@
 				                                 <span ng-show="!branchSpin && !branchsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
 					                                <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
-													  <ui-select-match placeholder="Select branch..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
+													  <ui-select-match placeholder="Select branch..."  >{{$select.selected.name}}
+													     <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+													  </ui-select-match>
 													  <ui-select-choices repeat="branchsListOne in branchsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,branchsListOne.selected.name)" null-option="allRegions" loose-null>
 													    <span ng-bind-html="branchsListOne.name | highlight: $select.search"></span>
 													  </ui-select-choices>
@@ -421,7 +433,11 @@
 				                                    <span ng-show="!siteSpin && !sitesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
 				                                    <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
-													  <ui-select-match placeholder="Select site..."  allow-clear="true">{{$select.selected.name}}</ui-select-match>
+													  <ui-select-match placeholder="Select site...">{{$select.selected.name}}
+													    <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+													   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+													   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+													  </ui-select-match>
 													  <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search" ng-click="loadDepBlocksList(sitesListOne.selected)" null-option="allSites" loose-null>
 													    <span ng-bind-html="sitesListOne.name | highlight: $select.search"></span>
 													  </ui-select-choices>
@@ -467,7 +483,11 @@
 
 
                                                 <ui-select ng-model="blocksListOne.selected"  ng-disabled="blockFilterDisable || blocksLists.length == 0">
-												  <ui-select-match placeholder="Select Block..." allow-clear="true">{{$select.selected}}</ui-select-match>
+												  <ui-select-match placeholder="Select Block...">{{$select.selected}}
+												     <a   ng-click="clearBlock($event)" ng-show="$select.selected" ng-class="{'ui-select-allow-clear': $select.selected}" aria-label="Select box clear" style="margin-right: 10px"  
+												   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+												   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+												  </ui-select-match>
 												  <ui-select-choices repeat="blocksListOne in blocksLists | filter: $select.search" ng-click="loadDepFloorsList(blocksListOne.selected)">
 												    <span ng-bind-html="blocksListOne | highlight: $select.search"></span>
 												  </ui-select-choices>
@@ -483,7 +503,11 @@
                                                 <span ng-show="!floorSpin && !floorsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
                                                 <ui-select ng-model="floorsListOne.selected"  ng-disabled="floorFilterDisable || floorLists.length == 0">
-												  <ui-select-match placeholder="Select Floor..." allow-clear="true">{{$select.selected}}</ui-select-match>
+												  <ui-select-match placeholder="Select Floor...">{{$select.selected}}
+												     <a   ng-click="clearFloor($event)" ng-show="$select.selected" ng-class="{'ui-select-allow-clear': $select.selected}" aria-label="Select box clear" style="margin-right: 10px"  
+												   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+												   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+												  </ui-select-match>
 												  <ui-select-choices repeat="floorsListOne in floorsLists | filter: $select.search" ng-click="loadDepZonesList(floorsListOne.selected)">
 												    <span ng-bind-html="floorsListOne | highlight: $select.search"></span>
 												  </ui-select-choices>
@@ -499,7 +523,11 @@
                                                 <span ng-show="!zoneSpin && !zonesListOne.selected " class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
                                                 <ui-select ng-model="zonesListOne.selected"  ng-disabled="zoneFilterDisable || zoneLists.length == 0">
-												  <ui-select-match placeholder="Select Zone..." allow-clear="true">{{$select.selected}}</ui-select-match>
+												  <ui-select-match placeholder="Select Zone...">{{$select.selected}}
+												    <a   ng-click="clearZone($event)" ng-show="$select.selected" ng-class="{'ui-select-allow-clear': $select.selected}" aria-label="Select box clear" style="margin-right: 10px"  
+												   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+												   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+												  </ui-select-match>
 												  <ui-select-choices repeat="zonesListOne in zonesLists | filter: $select.search" >
 												    <span ng-bind-html="zonesListOne | highlight: $select.search"></span>
 												  </ui-select-choices>

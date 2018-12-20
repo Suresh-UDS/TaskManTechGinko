@@ -1,23 +1,16 @@
 <div class="content" ng-init="init();initLoad();">
 
-
+  <form  name="form" role="form" novalidate>
 	<div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="row">
-            	        <div class="col-md-5 col-md-offset-1">
-            	            <div class="form-group">
-
-            	                <!--<label class="control-label">Client</label>-->
-            	                <div class="dropdown">
-
-            	                    <!--<input type="text" class="form-control" ng-model="selectedProject" name="projectName" ng-value="selectedProject.name"-->
-            	                           <!--uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"-->
-            	                           <!--ng-blur="loadSites()"-->
-            	                           <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
-                                    <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-            	                    <select class=" form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects" >
+                         <div class="col-md-6">
+                              <div class="form-group selectcon is-empty">
+                                  <label class="control-label">Client<span class="red-star">*</span></label>
+                                  <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                  <select class=" form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects"  required>
             	                        <option value="">Please select Client...</option>
             	                    </select>
             	                    <div ng-show="form.$submitted || form.projectName.$touched">
@@ -40,18 +33,14 @@
             	                            </p>
             	                        </div>
             	                    </div>
-            	                </div>
-            	            </div>
-            	        </div>
-            	        <div class="col-md-5">
-            	            <div class="form-group label-floating">
-            	                <!--<label class="control-label">Site</label>-->
-            	                <div class="dropdown" >
-            	                    <!--<input ng-focus="loadSites()" type="text" class="form-control"  ng-model="selectedSite" name="siteName" ng-value="selectedSite.name"-->
-            	                           <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
-            	                           <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
-            	                    <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-            	                    <select class="form-control " ng-model="selectedSite"  ng-change="loadSettings()" ng-options="site as site.name for site in sites">
+                              </div>
+
+                          </div>
+                          <div class="col-md-6">
+                              <div class="form-group selectcon is-empty">
+                                  <label class="control-label">Site<span class="red-star">*</span></label>
+                                  <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                  <select class="form-control " ng-model="selectedSite"  ng-change="loadSettings()" ng-options="site as site.name for site in sites" required>
             	                        <option value="">Please select Site...</option>
             	                    </select>
 
@@ -75,9 +64,10 @@
             	                            </p>
             	                        </div>
             	                    </div>
-            	                </div>
-            	            </div>
-            	        </div>
+                              </div>
+
+                          </div>
+            	       
                     </div>
                 </div>
             </div>
@@ -153,7 +143,7 @@
 
                             <div class="form-group pdng-top15">
                                 <label class="control-label">Attendance DayWise Report Time</label>
-                                <input  type="text" class="form-control timepicker" id="dayWiseAttendanceAlertTime" ng-model="settings.dayWiseAttendanceAlertTime | date:'dd-MMM-yyyy hh:mm a'" />
+                                <input  type="text" class="form-control datetimepicker" id="dayWiseAttendanceAlertTime" ng-model="selectedDayWiseAttnEmailTime" />
                             </div>
 
                         </div>
@@ -449,7 +439,7 @@
 	
 	                            <div class="form-group pdng-top15">
 	                                <label class="control-label">Feedback Report Time</label>
-	                                <input  type="text" class="form-control timepicker" id="feedbackReportTime" ng-model="settings.feedbackReportTime | date:'dd-MMM-yyyy hh:mm a'" />
+	                                <input  type="text" class="form-control datetimepicker" id="feedbackReportTime" ng-model="selectedFeedbackReportTime" />
 	                            </div>
 	
 	                        </div>
@@ -853,7 +843,7 @@
 
                             <div class="form-group pdng-top15">
                                 <label class="control-label">DayWise Report Alert Time</label>
-                                <input  type="text" class="form-control timepicker" id="dayWiseReportAlertTime" ng-model="settings.dayWiseReportAlertTime | date:'dd-MMM-yyyy hh:mm a'" />
+                                <input  type="text" class="form-control datetimepicker" id="dayWiseReportAlertTime" ng-model="selectedDayWiseAttnEmailTime" />
                             </div>
 
                         </div>
@@ -985,6 +975,7 @@
         </div>
 
     </div>
+  </form>
 
 
 </div>
