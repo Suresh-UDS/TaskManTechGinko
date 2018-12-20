@@ -239,10 +239,10 @@ angular.module('timeSheetApp')
 
             /*** UI select (Region List) **/
             $scope.loadRegionsList = function (projectId, callback) {
-            	$scope.regionSpin = true;
-            	$scope.branchsLists = [];
-            	$scope.branchsListOne.selected = null;
-            	$scope.branchFilterDisable = true;
+                $scope.regionSpin = true;
+                $scope.branchsLists = [];
+                $scope.branchsListOne.selected = null;
+                $scope.branchFilterDisable = true;
                 SiteComponent.getRegionByProject(projectId).then(function (response) {
                    // //console.log(response);
                     $scope.regionList = response;
@@ -275,7 +275,7 @@ angular.module('timeSheetApp')
                           //console.log(response);
                             $scope.branchList = response;
                             if($scope.branchList) {
-                            	$scope.branchsLists = [];
+                                $scope.branchsLists = [];
                                 $scope.branchsListOne.selected = null;
                                 $scope.branchsLists[0] = $scope.allBranchs;
 
@@ -284,14 +284,14 @@ angular.module('timeSheetApp')
                                     $scope.branchsLists[i+1] = $scope.branchList[i];
                                 }
                                /* if($scope.branchList) {
-                                		for(var i = 0; i < $scope.branchList.length; i++) {
-                                			$scope.uiBranch.push($scope.branchList[i].name);
-                                		}*/
-                            		$scope.branchSpin = false;
+                                        for(var i = 0; i < $scope.branchList.length; i++) {
+                                            $scope.uiBranch.push($scope.branchList[i].name);
+                                        }*/
+                                    $scope.branchSpin = false;
                                     $scope.branchFilterDisable = false;
                             }
                             else{
-                            	//console.log('branch list : ' + JSON.stringify($scope.branchList));
+                                //console.log('branch list : ' + JSON.stringify($scope.branchList));
                                 $scope.getSitesBYRegionOrBranch(projectId,$scope.regionsListOne.selected.name,null);
                                 $scope.branchSpin = false;
                                 $scope.branchFilterDisable = false;
@@ -459,15 +459,15 @@ angular.module('timeSheetApp')
                $scope.selectedProject = null;
             }
             if($scope.regionsListOne.selected && $scope.regionsListOne.selected.id !=0){
-       		$scope.searchRegion = $scope.regionsListOne.selected;
-	       	}else{
-	       	   $scope.searchRegion = null;
-	       	}
-	       	if($scope.branchsListOne.selected && $scope.branchsListOne.selected.id !=0){
-	       		$scope.searchBranch = $scope.branchsListOne.selected;
-	       	}else{
-	       	   $scope.searchBranch = null;
-	       	}
+            $scope.searchRegion = $scope.regionsListOne.selected;
+            }else{
+               $scope.searchRegion = null;
+            }
+            if($scope.branchsListOne.selected && $scope.branchsListOne.selected.id !=0){
+                $scope.searchBranch = $scope.branchsListOne.selected;
+            }else{
+               $scope.searchBranch = null;
+            }
             if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
                 $scope.selectedSite = $scope.sitesListOne.selected;
             }else{
@@ -530,10 +530,10 @@ angular.module('timeSheetApp')
                   $scope.searchCriteria.projectId = $scope.clientId;
                 }else if($stateParams.pid){
                      $scope.selectedProject = {id:parseInt($stateParams.pid),name:$stateParams.pName};
-                	 $scope.searchCriteria.projectId = parseInt($stateParams.pid);
-                	 $scope.searchCriteria.projectName = $stateParams.pName;
-                	 $scope.client.selected = $scope.selectedProject;
-                	 ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
+                     $scope.searchCriteria.projectId = parseInt($stateParams.pid);
+                     $scope.searchCriteria.projectName = $stateParams.pName;
+                     $scope.client.selected = $scope.selectedProject;
+                     ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
                       $scope.selectedSite = null;
                       $scope.sitesList = data;
                       $scope.sitesLists = [];
@@ -550,22 +550,22 @@ angular.module('timeSheetApp')
                     $scope.searchCriteria.projectId = 0;
                 }
                 if($scope.searchRegion) {
-		        	$scope.searchCriteria.regionId = $scope.searchRegion.id;
+                    $scope.searchCriteria.regionId = $scope.searchRegion.id;
                     $scope.searchCriteria.region = $scope.searchRegion.name;
 
-	        	}else {
-	        		$scope.searchCriteria.regionId = null;
-	        		$scope.searchCriteria.region = null;
-	        	}
+                }else {
+                    $scope.searchCriteria.regionId = null;
+                    $scope.searchCriteria.region = null;
+                }
 
-	        	if($scope.searchBranch) {
-		        	$scope.searchCriteria.branchId = $scope.searchBranch.id;
+                if($scope.searchBranch) {
+                    $scope.searchCriteria.branchId = $scope.searchBranch.id;
                     $scope.searchCriteria.branch = $scope.searchBranch.name;
 
-	        	}else {
-	        		$scope.searchCriteria.branchId = null;
-	        		$scope.searchCriteria.branch = null;
-	        	}
+                }else {
+                    $scope.searchCriteria.branchId = null;
+                    $scope.searchCriteria.branch = null;
+                }
                 if($scope.selectedSite && $scope.selectedSite.id) {
                      $scope.searchCriteria.siteId = $scope.selectedSite.id;
                     $scope.searchCriteria.siteName = $scope.selectedSite.name;
@@ -574,10 +574,10 @@ angular.module('timeSheetApp')
                      $scope.searchCriteria.siteId = $scope.siteId ;
                 }else if($stateParams.sid){
                      $scope.selectedSite = {id:parseInt($stateParams.sid),name:$stateParams.sName};
-                	 $scope.searchCriteria.siteId = parseInt($stateParams.sid);
-                	 $scope.searchCriteria.siteName = $stateParams.sName;
-                	  $scope.sitesListOne.selected = $scope.selectedSite;
-                	  $scope.searchLocations();
+                     $scope.searchCriteria.siteId = parseInt($stateParams.sid);
+                     $scope.searchCriteria.siteName = $stateParams.sName;
+                      $scope.sitesListOne.selected = $scope.selectedSite;
+                      $scope.searchLocations();
                 }else {
                     $scope.searchCriteria.siteId = 0;
                 }
@@ -1025,75 +1025,75 @@ angular.module('timeSheetApp')
                   //console.log(err);
                   $scope.start();
               });
-	    };
+        };
 
-	 // store the interval promise in this variable
-	    var promise;
+     // store the interval promise in this variable
+        var promise;
 
-	 // starts the interval
-	    $scope.start = function() {
-	      // stops any running interval to avoid two intervals running at the same time
-	      $scope.stop();
+     // starts the interval
+        $scope.start = function() {
+          // stops any running interval to avoid two intervals running at the same time
+          $scope.stop();
 
-	      // store the interval promise
-	      promise = $interval($scope.exportStatus, 5000);
-	    //console.log('promise -'+promise);
-	    };
+          // store the interval promise
+          promise = $interval($scope.exportStatus, 5000);
+        //console.log('promise -'+promise);
+        };
 
-	    // stops the interval
-	    $scope.stop = function() {
-	      $interval.cancel(promise);
-	    };
+        // stops the interval
+        $scope.stop = function() {
+          $interval.cancel(promise);
+        };
 
 
 
-	    $scope.exportStatus = function() {
-	          //console.log('$rootScope.exportStatusObj -' , $rootScope.exportStatusObj);
+        $scope.exportStatus = function() {
+              //console.log('$rootScope.exportStatusObj -' , $rootScope.exportStatusObj);
 
-	            FeedbackComponent.exportStatus($rootScope.exportStatusObj.fileName).then(function(data) {
-	                  //console.log('feedback export status - data -' + JSON.stringify(data));
-	                    if(data) {
-	                        $rootScope.exportStatusObj.exportStatus = data.status;
-	                      //console.log('exportStatus - '+ JSON.stringify($rootScope.exportStatusObj));
-	                        $rootScope.exportStatusObj.exportMsg = data.msg;
-	                        $scope.downloader=false;
-	                      //console.log('exportMsg - '+ $rootScope.exportStatusObj.exportMsg);
-	                        if($rootScope.exportStatusObj.exportStatus == 'COMPLETED'){
-	                            if($rootScope.exportStatusObj.url) {
-	                                $rootScope.exportStatusObj.exportFile = $rootScope.exportStatusObj.url;
-	                            }else {
-	                                $rootScope.exportStatusObj.exportFile = data.file;
-	                            }
-	                          //console.log('exportFile - '+ $rootScope.exportStatusObj.exportFile);
-	                            $scope.stop();
-	                        }else if($rootScope.exportStatusObj.exportStatus == 'FAILED'){
-	                            $scope.stop();
-	                        }else if(!$rootScope.exportStatusObj.exportStatus){
-	                            $scope.stop();
-	                        }else {
-	                            $rootScope.exportStatusObj.exportFile = '#';
-	                        }
-	                    }
+                FeedbackComponent.exportStatus($rootScope.exportStatusObj.fileName).then(function(data) {
+                      //console.log('feedback export status - data -' + JSON.stringify(data));
+                        if(data) {
+                            $rootScope.exportStatusObj.exportStatus = data.status;
+                          //console.log('exportStatus - '+ JSON.stringify($rootScope.exportStatusObj));
+                            $rootScope.exportStatusObj.exportMsg = data.msg;
+                            $scope.downloader=false;
+                          //console.log('exportMsg - '+ $rootScope.exportStatusObj.exportMsg);
+                            if($rootScope.exportStatusObj.exportStatus == 'COMPLETED'){
+                                if($rootScope.exportStatusObj.url) {
+                                    $rootScope.exportStatusObj.exportFile = $rootScope.exportStatusObj.url;
+                                }else {
+                                    $rootScope.exportStatusObj.exportFile = data.file;
+                                }
+                              //console.log('exportFile - '+ $rootScope.exportStatusObj.exportFile);
+                                $scope.stop();
+                            }else if($rootScope.exportStatusObj.exportStatus == 'FAILED'){
+                                $scope.stop();
+                            }else if(!$rootScope.exportStatusObj.exportStatus){
+                                $scope.stop();
+                            }else {
+                                $rootScope.exportStatusObj.exportFile = '#';
+                            }
+                        }
 
-	                    $scope.exportFile = ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportFile : '#');
+                        $scope.exportFile = ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportFile : '#');
 
                         $scope.exportMsg = ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportMsg : '');
 
-	                });
+                    });
 
 
 
-	    }
+        }
 
 
 
 
-	    $scope.clsDownload = function(){
+        $scope.clsDownload = function(){
           $scope.downloaded = true;
           $rootScope.exportStatusObj = {};
-	    }
+        }
 
-	    $scope.getSitesBYRegionOrBranch = function (projectId, region, branch) {
+        $scope.getSitesBYRegionOrBranch = function (projectId, region, branch) {
             if(branch){
                 $scope.siteFilterDisable = true;
                 $scope.siteSpin = true;
