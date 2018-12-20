@@ -846,6 +846,8 @@ angular.module('timeSheetApp')
             //$scope.selectedDateFromSer = d;
             $scope.selectedDateFromSer = new Date();
             $scope.selectedDateToSer = new Date();
+            $('input#dateFilterFrom').val($scope.selectedDateFrom);
+            $('input#dateFilterTo').val($scope.selectedDateTo);
             $scope.selectedProject = null;
             $scope.searchCriteria = {};
             $scope.selectedSite = null;
