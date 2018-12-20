@@ -78,40 +78,56 @@ angular.module('timeSheetApp')
 
         };
 
-        $('input#dateFilterFrom').on('dp.change', function(e){
-          //console.log(e.date);
-          //console.log(e.date._d);
-            $scope.selectedDateFromSer= e.date._d;
+        $('#dateFilterFrom').on('dp.change', function(e){
+            $scope.selectedDateFromSer =new Date(e.date._d);
+            $scope.selectedDateFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.selectedDateFromSer.setHours(0,0,0,0);
+            if($scope.selectedDateToSer){
+            	$scope.selectedDateToSer.setHours(0,0,0,0);
+            }
+            
 
-            $.notifyClose();
-
-            if($scope.selectedDateFromSer > $scope.selectedDateToSer) {
-
-                    $scope.showNotifications('top','center','danger','From date cannot be greater than To date');
-                    $scope.selectedDateFrom =$filter('date')(new Date(), 'dd/MM/yyyy');
-                    return false;
-            }else {
-               $scope.selectedDateFrom= $filter('date')(e.date._d, 'dd/MM/yyyy');
-               // $scope.refreshReport();
+            if($scope.selectedDateFromSer > $scope.selectedDateToSer && $scope.selectedDateFromSer != $scope.selectedDateToSer){
+            	$scope.fromErrMsg = 'From date cannot be greater than To date';
+            	
+            	    alert($scope.fromErrMsg);
+            	
+            		 $('input#dateFilterFrom').data('DateTimePicker').clear();
+                     $('input#dateFilterTo').data('DateTimePicker').clear();
+            		 $scope.selectedDateFromSer = new Date();
+                     $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
+                     $scope.selectedDateToSer = new Date();
+                     $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+                     $('input#dateFilterFrom').val($scope.selectedDateFrom);
+                     $('input#dateFilterTo').val($scope.selectedDateTo);
+            	
+            	return false;
             }
 
-
-
         });
-        $('input#dateFilterTo').on('dp.change', function(e){
-          //console.log(e.date);
-          //console.log(e.date._d);
-            $scope.selectedDateToSer= e.date._d;
+        $('#dateFilterTo').on('dp.change', function(e){
+            $scope.selectedDateToSer =new Date(e.date._d);
+            $scope.selectedDateTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.selectedDateToSer.setHours(0,0,0,0);
+            if($scope.selectedDateFromSer){
+            	$scope.selectedDateFromSer.setHours(0,0,0,0);
+            }
 
-            $.notifyClose();
-
-            if($scope.selectedDateFromSer > $scope.selectedDateToSer) {
-                    $scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
-                    $scope.selectedDateTo=$filter('date')(new Date(), 'dd/MM/yyyy');
-                    return false;
-            }else {
-                $scope.selectedDateTo= $filter('date')(e.date._d, 'dd/MM/yyyy');
-                //$scope.refreshReport();
+            if($scope.selectedDateFromSer > $scope.selectedDateToSer && $scope.selectedDateFromSer != $scope.selectedDateToSer){
+            	$scope.toErrMsg = 'To date cannot be lesser than From date';
+            	
+            	     alert($scope.toErrMsg);
+            	
+            		 $('input#dateFilterFrom').data('DateTimePicker').clear();
+                     $('input#dateFilterTo').data('DateTimePicker').clear();
+            		 $scope.selectedDateFromSer = new Date();
+                     $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
+                     $scope.selectedDateToSer = new Date();
+                     $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+                     $('input#dateFilterFrom').val($scope.selectedDateFrom);
+                     $('input#dateFilterTo').val($scope.selectedDateTo);
+            	  
+            	return false;
             }
 
         });
@@ -915,8 +931,8 @@ angular.module('timeSheetApp')
         }
 
         $scope.clearFilter = function() {
-        	/*$('input#dateFilterFrom').data('DateTimePicker').clear();
-            $('input#dateFilterTo').data('DateTimePicker').clear();*/
+        	$('input#dateFilterFrom').data('DateTimePicker').clear();
+            $('input#dateFilterTo').data('DateTimePicker').clear();
             $scope.noData = false;
             $scope.clearField = true;
             $rootScope.exportStatusObj = {};
@@ -941,6 +957,8 @@ angular.module('timeSheetApp')
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedDateFromSer =  new Date();
             $scope.selectedDateToSer =  new Date();
+            $('input#dateFilterFrom').val($scope.selectedDateFrom);
+            $('input#dateFilterTo').val($scope.selectedDateTo);
             $scope.selectedEmployee = null;
             $scope.selectedProject = null;
             $scope.selectedSite = null;
@@ -1338,7 +1356,7 @@ angular.module('timeSheetApp')
                     $scope.sitesList = data;
                     $scope.sitesLists = [];
                     $scope.sitesListOne.selected = null;
-                    $scope.sitesLists[0] = $scope.allSites;
+                    $scope.sitesLists[0] = $scope.allSitesVal;
 
                     for(var i=0;i<$scope.sitesList.length;i++)
                     {
@@ -1388,5 +1406,50 @@ angular.module('timeSheetApp')
 
             }*/
         };
+        
+        /*
+         * Ui select allow-clear modified function start
+         *
+         * */
+        
+
+        $scope.clearProject = function($event) {
+     	   $event.stopPropagation(); 
+     	   $scope.client.selected = undefined;
+     	   $scope.regionsListOne.selected = undefined;
+     	   $scope.branchsListOne.selected = undefined;
+     	   $scope.sitesListOne.selected = undefined;
+     	   $scope.regionFilterDisable = true;
+     	   $scope.branchFilterDisable = true;
+     	   $scope.siteFilterDisable = true;
+     	};
+     	
+     	$scope.clearRegion = function($event) {
+      	   $event.stopPropagation(); 
+      	   $scope.regionsListOne.selected = undefined;
+      	   $scope.branchsListOne.selected = undefined;
+      	   $scope.sitesListOne.selected = undefined;
+      	   $scope.branchFilterDisable = true;
+      	   $scope.siteFilterDisable = true;
+      	};
+      	
+      	$scope.clearBranch = function($event) {
+	   	   $event.stopPropagation();
+	   	   $scope.branchsListOne.selected = undefined;
+	   	   $scope.sitesListOne.selected = undefined;
+	   	   $scope.siteFilterDisable = true;
+	   	};
+         
+   	    $scope.clearSite = function($event) {
+    	   $event.stopPropagation(); 
+    	   $scope.sitesListOne.selected = undefined;
+    
+    	};
+        	
+           	
+   	/*
+        * Ui select allow-clear modified function end
+        *
+        * */
 
     });

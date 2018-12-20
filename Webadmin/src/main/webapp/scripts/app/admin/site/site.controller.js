@@ -1595,12 +1595,7 @@ angular.module('timeSheetApp')
    	    $scope.clearSite = function($event) {
     	   $event.stopPropagation(); 
     	   $scope.sitesListOne.selected = undefined;
-    	   $scope.blocksListOne.selected = undefined;
-    	   $scope.floorsListOne.selected = undefined;
-    	   $scope.zonesListOne.selected = undefined;
-    	   $scope.blockFilterDisable = true;
-    	   $scope.floorFilterDisable = true;
-    	   $scope.zoneFilterDisable = true;
+    	  
     	};
         	
            	
