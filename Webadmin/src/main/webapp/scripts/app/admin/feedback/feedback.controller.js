@@ -38,6 +38,10 @@ angular.module('timeSheetApp')
         $scope.branchsListOne = {};
         $scope.branchsLists = [];
         $scope.branchsListOne.selected =  null;
+        $scope.selectedFromDateSer =  new Date();
+        $scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+        $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+        $scope.selectedToDateSer =  new Date();
 
 
         $scope.onClick = function (points, evt) {
@@ -112,11 +116,54 @@ angular.module('timeSheetApp')
         $('#dateFilterFrom').on('dp.change', function(e){
             $scope.selectedFromDateSer =new Date(e.date._d);
             $scope.selectedFromDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.selectedFromDateSer.setHours(0,0,0,0);
+            if($scope.selectedToDateSer){
+            	$scope.selectedToDateSer.setHours(0,0,0,0);
+            }
+            
+
+            if($scope.selectedFromDateSer > $scope.selectedToDateSer && $scope.selectedFromDateSer != $scope.selectedToDateSer){
+            	$scope.fromErrMsg = 'From date cannot be greater than To date';
+            	
+            	    alert($scope.fromErrMsg);
+            	
+            		 $('input#dateFilterFrom').data('DateTimePicker').clear();
+                     $('input#dateFilterTo').data('DateTimePicker').clear();
+            		 $scope.selectedFromDateSer = new Date();
+                     $scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+                     $scope.selectedToDateSer = new Date();
+                     $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+                     $('input#dateFilterFrom').val($scope.selectedFromDate);
+                     $('input#dateFilterTo').val($scope.selectedToDate);
+            	
+            	return false;
+            }
 
         });
         $('#dateFilterTo').on('dp.change', function(e){
             $scope.selectedToDateSer =new Date(e.date._d);
             $scope.selectedToDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.selectedToDateSer.setHours(0,0,0,0);
+            if($scope.selectedFromDateSer){
+            	$scope.selectedFromDateSer.setHours(0,0,0,0);
+            }
+
+            if($scope.selectedFromDateSer > $scope.selectedToDateSer && $scope.selectedFromDateSer != $scope.selectedToDateSer){
+            	$scope.toErrMsg = 'To date cannot be lesser than From date';
+            	
+            	     alert($scope.toErrMsg);
+            	
+            		 $('input#dateFilterFrom').data('DateTimePicker').clear();
+                     $('input#dateFilterTo').data('DateTimePicker').clear();
+            		 $scope.selectedFromDateSer = new Date();
+                     $scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+                     $scope.selectedToDateSer = new Date();
+                     $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+                     $('input#dateFilterFrom').val($scope.selectedFromDate);
+                     $('input#dateFilterTo').val($scope.selectedToDate);
+            	  
+            	return false;
+            }
 
         });
 
@@ -733,6 +780,8 @@ angular.module('timeSheetApp')
                 //$scope.showNotifications('top','center','danger','Cannot Load Feedback');
             });
             
+            
+            /* Feedback Details List Start */
             if($scope.pageSort){
                 $scope.searchCriteria.sort = $scope.pageSort;
             }
@@ -777,6 +826,8 @@ angular.module('timeSheetApp')
                 $scope.noData = true;
                 //$scope.showNotifications('top','center','danger','Cannot Load Feedback');
             });
+            
+            /* Feedback Details List End */
 
         };
 
@@ -811,6 +862,8 @@ angular.module('timeSheetApp')
 
 
         $scope.clearFilter = function() {
+        	$('input#dateFilterFrom').data('DateTimePicker').clear();
+            $('input#dateFilterTo').data('DateTimePicker').clear();
             $rootScope.exportStatusObj = {};
             $scope.downloaded = true;
             $scope.clearField = true;
@@ -838,6 +891,8 @@ angular.module('timeSheetApp')
             $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedFromDateSer = new Date();
             $scope.selectedToDateSer = new Date();
+            $('input#dateFilterFrom').val($scope.selectedFromDate);
+            $('input#dateFilterTo').val($scope.selectedToDate);
             //$rootScope.searchCriteriaSite = null;
             $scope.averageRating = '0';
             $scope.feedbackCount = '0';
