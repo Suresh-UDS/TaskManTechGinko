@@ -161,7 +161,11 @@ public class FeedbackTransactionService extends AbstractService {
 				item.setFeedbackTransaction(feedbackTrans);
 				items.add(item);
 			}
-			rating = (cumRating / items.size()); //calculate the overall rating.
+			if(items.size()>0){
+                rating = (cumRating / items.size()); //calculate the overall rating.
+            }else{
+			    rating = 5;
+            }
 			
 
 		}else {
