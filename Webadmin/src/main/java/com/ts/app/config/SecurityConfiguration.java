@@ -18,7 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.ts.app.security.AjaxAuthenticationFailureHandler;
 import com.ts.app.security.AjaxAuthenticationSuccessHandler;
@@ -27,7 +29,6 @@ import com.ts.app.security.AuthoritiesConstants;
 import com.ts.app.security.Http401UnauthorizedEntryPoint;
 import com.ts.app.web.filter.AuthenticationTokenProcessingFilter;
 import com.ts.app.web.filter.CORSFilter;
-import com.ts.app.web.filter.CsrfCookieGeneratorFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -76,13 +77,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-        //.csrf()
+        .csrf()
         //.ignoringAntMatchers("/websocket/**")
         //.ignoringAntMatchers("/api/auth")
-        //.disable()
-        .addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)
-		.csrf()
-    .and()
+        .disable()
+        //.addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)
         .addFilterAfter(new AuthenticationTokenProcessingFilter(userDetailsService), UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(new CORSFilter(), UsernamePasswordAuthenticationFilter.class)
         .exceptionHandling()
@@ -108,13 +107,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .permitAll()
     .and()
         .headers()
-        		.frameOptions()
-        			.sameOrigin()
+        .frameOptions()
+        .disable()
     .and()
         .authorizeRequests()
         .antMatchers("/api/auth").permitAll()
         .antMatchers("/api/register").permitAll()
-        .antMatchers("/api/activate").permitAll()           
+        .antMatchers("/api/activate").permitAll()
         .antMatchers("/api/authenticate").permitAll()
         .antMatchers("/api/account/reset_password/init").permitAll()
         .antMatchers("/api/account/reset_password/finish").permitAll()
