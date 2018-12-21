@@ -36,9 +36,9 @@
                                                <!---->
                                              <!--</div>-->
                                                 <div class="wizard-navigation" >
-                                                    <div  ng-class="!assetVal.id ? 'OverlayBx' : ''" ></div>
+                                                    <div  ng-class="!assetVal.id ? 'OverlayBx' : ''" ></div> 
                                                     <ul class="arrow-steps" >
-                                                        <li class="step active">
+                                                        <li class="step">
                                                             <a href=".general" data-toggle="tab" >General</a>
                                                         </li>
                                                         <li class="step">
@@ -2116,13 +2116,13 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="wizard-footer"  ng-if="assetVal.id">
+                                                <div class="wizard-footer" id="dPlayNone">
                                                     <div class="pull-right">
-                                                        <input type='button' class='btn btn-next btn-fill btn-default btn-wd' name='next' value='Next'  />
+                                                        <input type='button' class='btn btn-next btn-fill btn-default btn-wd' id="nxtBtn"   name='next' value='Next'  />
                                                         <!-- <input type='button' class='btn btn-finish btn-fill btn-success btn-wd' name='finish' value='Finish' /> -->
                                                     </div>
                                                     <div class="pull-left">
-                                                        <input type='button' class='btn btn-previous btn-fill btn-default btn-wd' name='previous' value='Previous' />
+                                                        <input type='button' class='btn btn-previous btn-fill btn-default btn-wd'   name='previous' value='Previous' />
                                                     </div>
                                                     <div class="clearfix"></div>
                                                 </div>

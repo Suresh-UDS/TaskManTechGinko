@@ -92,6 +92,10 @@ angular.module('timeSheetApp')
             $scope.loadProjects()
 	        $scope.loadFeedbackMappings();
         };
+        
+        $scope.showNotifications= function(position,alignment,color,msg){
+            demo.showNotification(position,alignment,color,msg);
+        }
 
 
         //Filter
@@ -1091,6 +1095,95 @@ angular.module('timeSheetApp')
 
             }*/
         };
+        
+        /*
+         * Ui select allow-clear modified function start
+         *
+         * */
+        
+
+        $scope.clearProject = function($event) {
+     	   $event.stopPropagation(); 
+     	   $scope.client.selected = undefined;
+     	   $scope.regionsListOne.selected = undefined;
+     	   $scope.branchsListOne.selected = undefined;
+     	   $scope.sitesListOne.selected = undefined;
+     	   $scope.regionFilterDisable = true;
+     	   $scope.branchFilterDisable = true;
+     	   $scope.siteFilterDisable = true;
+     	   $scope.blocksListOne.selected = undefined;
+	   	   $scope.floorsListOne.selected = undefined;
+	   	   $scope.zonesListOne.selected = undefined;
+	   	   $scope.blockFilterDisable = true;
+	   	   $scope.floorFilterDisable = true;
+	   	   $scope.zoneFilterDisable = true;
+     	};
+     	
+     	$scope.clearRegion = function($event) {
+      	   $event.stopPropagation(); 
+      	   $scope.regionsListOne.selected = undefined;
+      	   $scope.branchsListOne.selected = undefined;
+      	   $scope.sitesListOne.selected = undefined;
+      	   $scope.branchFilterDisable = true;
+      	   $scope.siteFilterDisable = true;
+      	   $scope.blocksListOne.selected = undefined;
+	  	   $scope.floorsListOne.selected = undefined;
+	  	   $scope.zonesListOne.selected = undefined;
+	  	   $scope.blockFilterDisable = true;
+	  	   $scope.floorFilterDisable = true;
+	  	   $scope.zoneFilterDisable = true;
+      	};
+      	
+      	$scope.clearBranch = function($event) {
+	   	   $event.stopPropagation();
+	   	   $scope.branchsListOne.selected = undefined;
+	   	   $scope.sitesListOne.selected = undefined;
+	   	   $scope.siteFilterDisable = true;
+		   $scope.blocksListOne.selected = undefined;
+	 	   $scope.floorsListOne.selected = undefined;
+	 	   $scope.zonesListOne.selected = undefined;
+	 	   $scope.blockFilterDisable = true;
+	 	   $scope.floorFilterDisable = true;
+	 	   $scope.zoneFilterDisable = true;
+	   	};
+         
+   	   $scope.clearSite = function($event) {
+    	   $event.stopPropagation(); 
+    	   $scope.sitesListOne.selected = undefined;
+    	   $scope.blocksListOne.selected = undefined;
+    	   $scope.floorsListOne.selected = undefined;
+    	   $scope.zonesListOne.selected = undefined;
+    	   $scope.blockFilterDisable = true;
+    	   $scope.floorFilterDisable = true;
+    	   $scope.zoneFilterDisable = true;
+    	   
+    	};
+        	
+    	$scope.clearBlock = function($event) {
+     	   $event.stopPropagation(); 
+     	   $scope.blocksListOne.selected = undefined;
+     	   $scope.floorsListOne.selected = undefined;
+     	   $scope.zonesListOne.selected = undefined;
+     	   $scope.floorFilterDisable = true;
+     	   $scope.zoneFilterDisable = true;
+     	};
+         	
+     	$scope.clearFloor = function($event) {
+      	   $event.stopPropagation(); 
+      	   $scope.floorsListOne.selected = undefined;
+      	   $scope.zonesListOne.selected = undefined;
+      	   $scope.zoneFilterDisable = true;
+      	};
+      	
+      	$scope.clearZone = function($event) {
+   	       $event.stopPropagation(); 
+   	       $scope.zonesListOne.selected = undefined;
+    	};
+           	
+   	/*
+        * Ui select allow-clear modified function end
+        *
+        * */
 
     });
 

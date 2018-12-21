@@ -415,18 +415,18 @@
 																				<td>{{feedbackDetailResult.question}}</td>
 																				<td><span ng-if="feedbackDetailResult.answerType =='YESNO' && feedbackDetailResult.answer == 'true'"><i class="material-icons">done</i></span>
 											                                        <span ng-if="feedbackDetailResult.answerType =='YESNO' && feedbackDetailResult.answer != 'true'"><i class="material-icons">close</i></span>
-											                                        <span ng-if="feedbackDetailResult.answerType !='YESNO'">-</span>
+											                                        <span ng-if="feedbackDetailResult.answerType !='YESNO'">NA</span>
 											                                    </td>
 											                                    <td><span ng-if="feedbackDetailResult.answerType =='YESNO' && feedbackDetailResult.answer == 'false'"><i class="material-icons">done</i></span>
 											                                        <span ng-if="feedbackDetailResult.answerType =='YESNO' && feedbackDetailResult.answer != 'false'"><i class="material-icons">close</i></span>
-											                                        <span ng-if="feedbackDetailResult.answerType !='YESNO'">-</span>
+											                                        <span ng-if="feedbackDetailResult.answerType !='YESNO'">NA</span>
 											                                    <td> 
 											                                        <!-- <span ng-if="feedbackDetailResult.answerType =='RATING'">{{feedbackDetailResult.answer}}</span>
 											                                        <span ng-if="feedbackDetailResult.answerType !='RATING'">-</span> -->
 											                                         <div  ng-if="feedbackDetailResult.answerType =='RATING'" >
 											                                            <jk-rating-stars max-rating="5" rating="feedbackDetailResult.answer" read-only="readOnly" ></jk-rating-stars>
 											                                        </div>
-											                                        <span ng-if="feedbackDetailResult.answerType !='RATING'">-</span>
+											                                        <span ng-if="feedbackDetailResult.answerType !='RATING'">NA</span>
 											                                    </td>
 													                            
 													                            <td><span ng-if="feedbackDetailResult.remarks">{{feedbackDetailResult.remarks}}</span>
