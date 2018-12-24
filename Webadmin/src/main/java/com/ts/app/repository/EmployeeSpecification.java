@@ -1,6 +1,5 @@
 package com.ts.app.repository;
 
-import com.ts.app.domain.Asset;
 import com.ts.app.domain.Employee;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.web.rest.dto.SearchCriteria;
@@ -42,7 +41,7 @@ public class EmployeeSpecification implements Specification<Employee> {
         if (searchCriteria.getSiteId() != 0) {
             predicates.add(builder.equal(root.join("projectSites").get("site").get("id"), searchCriteria.getSiteId()));
         }
-        log.debug("EmpSpecification toPredicate - searchCriteria emp Name -" + searchCriteria.getAssetTitle());
+        log.debug("EmpSpecification toPredicate - searchCriteria emp Name -" + searchCriteria.getName());
         if (searchCriteria.getName() != null && searchCriteria.getName() != "") {
             predicates.add(builder.like(builder.lower(root.get("name")),
                 "%" + searchCriteria.getName().toLowerCase() + "%"));
@@ -67,6 +66,14 @@ public class EmployeeSpecification implements Specification<Employee> {
         log.debug("EmpSpecification toPredicate - searchCriteria siteName -" + searchCriteria.getSiteName());
         if(searchCriteria.getSiteName() != null && searchCriteria.getSiteName() != "") {
             predicates.add(builder.equal(root.join("projectSites").get("site").get("name"), searchCriteria.getSiteName()));
+        }
+        log.debug("EmpSpecification toPredicate - searchCriteria region -" + searchCriteria.getRegion());
+        if(searchCriteria.getRegion() != null && searchCriteria.getRegion() != "") {
+        	predicates.add(builder.equal(root.join("projectSites").get("site").get("region"), searchCriteria.getRegion()));
+        }
+        log.debug("EmpSpecification toPredicate - searchCriteria branch -" + searchCriteria.getBranch());
+        if(searchCriteria.getBranch() != null && searchCriteria.getBranch() != "") {
+        	predicates.add(builder.equal(root.join("projectSites").get("site").get("branch"), searchCriteria.getBranch()));
         }
 
         if(searchCriteria.getFromDate() != null) {

@@ -384,19 +384,19 @@ public class EmployeeResource {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    @RequestMapping(value = "/employee/search",method = RequestMethod.POST)
-    public SearchResult<EmployeeDTO> searchEmployees(@RequestBody SearchCriteria searchCriteria) {
-        if(searchCriteria != null) {
-            log.debug("search criteria - " + searchCriteria.getEmployeeEmpId() + " , " + searchCriteria.getProjectId() + " , " + searchCriteria.getSiteId());
-            searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
-        }
-        SearchResult<EmployeeDTO> result = null;
-        if(searchCriteria != null) {
-            result = employeeService.findBySearchCrieria(searchCriteria);
-        }
-        return result;
-    }
+//
+//    @RequestMapping(value = "/employee/search",method = RequestMethod.POST)
+//    public SearchResult<EmployeeDTO> searchEmployees(@RequestBody SearchCriteria searchCriteria) {
+//        if(searchCriteria != null) {
+//            log.debug("search criteria - " + searchCriteria.getEmployeeEmpId() + " , " + searchCriteria.getProjectId() + " , " + searchCriteria.getSiteId());
+//            searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+//        }
+//        SearchResult<EmployeeDTO> result = null;
+//        if(searchCriteria != null) {
+//            result = employeeService.findBySearchCrieria(searchCriteria);
+//        }
+//        return result;
+//    }
 
     @RequestMapping(value = "/employee/shift/search",method = RequestMethod.POST)
     public SearchResult<EmployeeShiftDTO> searchEmployeesShift(@RequestBody SearchCriteria searchCriteria) {
@@ -648,6 +648,15 @@ public class EmployeeResource {
             throw new TimesheetException("Error while upload existing enroll image" + e);
         }
         return new ResponseEntity<>(result, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value="/employee/search", method = RequestMethod.POST)
+    public ResponseEntity<?> getEmployeeAttendance(@RequestBody SearchCriteria searchCriteria) {
+        if(searchCriteria != null) {
+            searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+        }
+        SearchResult<EmployeeDTO> response = employeeService.getEmpAttendanceCount(searchCriteria);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
