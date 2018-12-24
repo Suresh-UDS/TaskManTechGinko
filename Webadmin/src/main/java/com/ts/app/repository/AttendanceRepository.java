@@ -127,4 +127,7 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long>,Jp
     @Query("SELECT at FROM Attendance at WHERE at.checkOutImage is not null")
 	Page<Attendance> findByImage(Pageable pageRequest);
 
+    @Query("SELECT at FROM Attendance at WHERE at.checkInTime is not null order by at.checkInTime desc")
+	List<Attendance> findByEmployeeList();
+
 }
