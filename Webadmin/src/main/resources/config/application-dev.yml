@@ -24,7 +24,7 @@ spring:
         url: jdbc:mysql://localhost:3306/taskman?useUnicode=true&characterEncoding=utf8
         name:
         username: root
-        password: tgadmin123#
+        password: root
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
@@ -267,9 +267,9 @@ google:
               port: 8080
 
 influxdb:
-   url: http://127.0.0.1:8086
-   username: root
-   password: root
+   url: http://3.0.29.145:8086
+   username: superadmin
+   password: "*BehindWheel7"
    dbname: dashboard
    retention-policy: one_year_policy
    gzip: true
