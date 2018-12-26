@@ -368,25 +368,32 @@ public class AmazonS3Service {
 		 return prefixUrl;
 	}
 
-	public String uploadEmployeeFileToS3bucket(String fileName, File multipartFile) {
+	public String uploadEmployeeFileToS3bucket(String fileName, byte[] file) {
 		log.debug("upload employee checkInOut image to S3 bucket");
     	String prefixUrl = "";
     	try {
 
-    		String folder = bucketEnv + checkInOutPath + fileName;
+    		String key = bucketEnv + checkInOutPath + fileName;
     		String ext = FilenameUtils.getExtension(fileName);
+
+            InputStream fis = new ByteArrayInputStream(file);
 
     		ObjectMetadata metadata = new ObjectMetadata();
     		metadata.setContentType("application/"+ ext);
 
-    		PutObjectResult result = s3client.putObject(new PutObjectRequest(bucketName, folder, multipartFile)
-    				.withMetadata(metadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
-    		log.info("===================== Upload File - Done! =====================");
-    		URL url = s3client.getUrl(bucketName, folder);
-    		log.debug("S3 uploaded url" +url);
-    		prefixUrl = cloudFrontUrl + folder;
-    		log.debug("Result from S3 -" +result);
+//    		PutObjectResult result = s3client.putObject(new PutObjectRequest(bucketName, folder, multipartFile)
+//    				.withMetadata(metadata)
+//                    .withCannedAcl(CannedAccessControlList.PublicRead));
+//    		log.info("===================== Upload File - Done! =====================");
+//    		URL url = s3client.getUrl(bucketName, folder);
+//    		log.debug("S3 uploaded url" +url);
+//    		prefixUrl = cloudFrontUrl + folder;
+//    		log.debug("Result from S3 -" +result);
+
+            PutObjectResult result = s3client.putObject(bucketName, key, fis, metadata);
+            s3client.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
+            log.debug("result of object request -" + result);
+            prefixUrl = cloudFrontUrl + key;
 
     	}catch(AmazonS3Exception e) {
     		log.debug("Error while upload employee checkInOut to S3 bucket " + e.getMessage());
@@ -401,11 +408,11 @@ public class AmazonS3Service {
 		String key = bucketEnv + checkListPath + filename;
 		String prefixUrl = "";
 		try {
-			
+
 			log.debug(checkListImg);
 			byte[] bI = org.apache.commons.codec.binary.Base64.decodeBase64((checkListImg.substring(checkListImg.indexOf(",")+1)).getBytes());
 			log.debug("Image Strings -" +bI);
-			
+
 			InputStream fis = new ByteArrayInputStream(bI);
 
 			ObjectMetadata metadata = new ObjectMetadata();
