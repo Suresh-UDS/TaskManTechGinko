@@ -58,6 +58,8 @@ public class EmployeeSpecification implements Specification<Employee> {
         log.debug("EmpSpecification toPredicate - searchCriteria isLeft -" + searchCriteria.isLeft());
         if (searchCriteria.isLeft()) {
             predicates.add(builder.equal(root.get("isLeft"), true));
+        }else {
+        	predicates.add(builder.equal(root.get("isLeft"), false));
         }
         log.debug("EmpSpecification toPredicate - searchCriteria projectName -" + searchCriteria.getProjectName());
         if(searchCriteria.getProjectName() != null && searchCriteria.getProjectName() != "") {
