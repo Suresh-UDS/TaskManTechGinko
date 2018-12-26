@@ -61,7 +61,6 @@
 </head>
 
 <body  ng-switch="isLoggedIn" class="sidebar-mini">
-
     <div ng-show="loginView" class="LoginPageView">
         <!-- Login start -->
         <div  ui-view="login" ng-cloak="" class="LoginPageView" ></div>
@@ -171,6 +170,9 @@
     <!-- <script src="bower_components/angular1-star-rating/dist/index.js"></script> -->
     <script src="bower_components/slick-carousel/slick/slick.js"></script>
     <!-- <script src="bower_components/angular-slick/dist/slick.js"></script> -->
+
+	<!--  CSRF -->
+	<script src="bower_components/spring-security-csrf-token-interceptor/dist/spring-security-csrf-token-interceptor.min.js"></script>
 
     <script src="scripts/app/app.js"></script>
     <script src="scripts/app/app.constants.js"></script>
@@ -544,6 +546,7 @@
     </div>
 <!--confirmation-->
 <div id="conformationModal" class="delete-confirmation modal fade">
+  <form name="form" role="form" novalidations>
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -556,10 +559,11 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{{conformText == 'cancel' ? "No" : "Cancel" }}</button>
-                <button type="button" class="btn btn-success delete-confirmation-button" data-dismiss="modal" ng-click="back(conformText)">{{conformText == 'cancel' ? "Yes" : "Confirm" }}</button>
+                <button type="submit" class="btn btn-success delete-confirmation-button" data-dismiss="modal" ng-click="back(conformText)">{{conformText == 'cancel' ? "Yes" : "Confirm" }}</button>
             </div>
         </div>
     </div>
+    </form>
 </div>
 
 

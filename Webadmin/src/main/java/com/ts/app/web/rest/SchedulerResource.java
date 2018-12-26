@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ts.app.domain.Frequency;
+import com.ts.app.service.SchedulerHelperService;
 import com.ts.app.service.SchedulerService;
 
 /**
@@ -30,6 +31,9 @@ public class SchedulerResource {
 
 	@Inject
 	private SchedulerService schedulerService;
+	
+	@Inject
+	private SchedulerHelperService schedulerHelperService;
 
 	
 	@RequestMapping(value = "/scheduler/attendance/consolidated", method = RequestMethod.GET)
@@ -94,7 +98,7 @@ public class SchedulerResource {
 		if(jobDate == null) {
 			jobDate = new Date();
 		}
-		schedulerService.createDailyTask(jobDate, siteIds);
+		schedulerHelperService.createDailyTask(jobDate, siteIds);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	

@@ -775,7 +775,8 @@ module.exports = {
         quotCriterias.siteId=req.body.siteId;
       }
       if(req.body.title){
-        quotCriterias.title={$regex:'^'+req.body.title,$options:"si"};
+        quotCriterias.title={$regex:req.body.title,$options:"i"};
+       
       }
       if(req.body.status){
         //quotCriterias.status={$regex:'^'+req.body.status,$options:"si"};
@@ -825,18 +826,18 @@ module.exports = {
  
       if(req.body.columnName && req.body.sortByAsc){
 
-        sortVal[ req.body.columnName ]= 'asc';
+        sortVal[ req.body.columnName ]= 1;
 
         //var sortVal =  { req.body.columnName : 1 };
 
       }else if(req.body.columnName && !req.body.sortByAsc){
 
-        sortVal[ req.body.columnName ]= 'desc';
+        sortVal[ req.body.columnName ]= -1;
 
         //var sortVal =  { req.body.columnName : -1 };
 
       }else{
-        sortVal = {'createdDate' : 'desc'};
+        sortVal = {'createdDate' : -1};
       }
 
       

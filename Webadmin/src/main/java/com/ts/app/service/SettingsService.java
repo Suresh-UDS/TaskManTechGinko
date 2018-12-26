@@ -100,6 +100,8 @@ public class SettingsService extends AbstractService {
 	
 	public static final String EMAIL_NOTIFICATION_MUSTER_ROLL_EMAILS = "email.notification.attendance.musterRoll.emails";
 
+	public static final String JOB_SCHEDULER_ERROR_EMAILS = "JOB_SCHEDULER_ERROR_EMAILS";
+	
 	@Inject
 	private SettingsRepository settingsRepository;
 
@@ -890,6 +892,17 @@ public class SettingsService extends AbstractService {
     public List<ApplicationVersionControl>  findApplicationVersionCode() {
         List<ApplicationVersionControl> applicationVersionControl = applicationVersionControlRepository.findAll();
         return applicationVersionControl;
+    }
+    
+    public SettingsDTO findSetting(String key) {
+    		SettingsDTO settingDto = null;
+    		if(StringUtils.isNotEmpty(key)) {
+	    		Setting setting = settingsRepository.findSettingByKey(key);
+	    		settingDto = new SettingsDTO();
+	    		settingDto.setKey(key);
+	    		settingDto.setValue(setting.getSettingValue());
+    		}
+    		return settingDto;
     }
 
 }
