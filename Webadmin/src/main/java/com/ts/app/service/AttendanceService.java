@@ -736,82 +736,78 @@ public class AttendanceService extends AbstractService {
             if (searchCriteria.isReport()) {
                 pageRequest = null;
             }
-            if (!searchCriteria.isFindAll()) {
-                Employee employee = employeeRepository.findByUserId(searchCriteria.getUserId());
-                Set<Long> subEmpIds = new TreeSet<Long>();
-                if (employee != null) {
-                    Hibernate.initialize(employee.getSubOrdinates());
-                    int levelCnt = 1;
-                    findAllSubordinates(employee, subEmpIds, levelCnt);
-                    log.debug("List of subordinate ids -" + subEmpIds);
-                    List<Long> subEmpList = new ArrayList<Long>();
-                    subEmpList.addAll(subEmpIds);
-                    searchCriteria.setSubordinateIds(subEmpList);
-                }
-
+//            if (!searchCriteria.isFindAll()) {
+//                Employee employee = employeeRepository.findByUserId(searchCriteria.getUserId());
+//                Set<Long> subEmpIds = new TreeSet<Long>();
+//                if (employee != null) {
+//                    Hibernate.initialize(employee.getSubOrdinates());
+//                    int levelCnt = 1;
+//                    findAllSubordinates(employee, subEmpIds, levelCnt);
+//                    log.debug("List of subordinate ids -" + subEmpIds);
+//                    List<Long> subEmpList = new ArrayList<Long>();
+//                    subEmpList.addAll(subEmpIds);
+//                    searchCriteria.setSubordinateIds(subEmpList);
+//                }
 
                 if (searchCriteria.getCheckInDateTimeFrom() != null) {
-                    log.debug("check date and time from available -  " + searchCriteria.getCheckInDateTimeFrom());
-                    java.sql.Date startDate = new java.sql.Date(searchCriteria.getCheckInDateTimeFrom().getTime());
-                    java.sql.Date toDate = new java.sql.Date(searchCriteria.getCheckInDateTimeTo().getTime());
+//                    log.debug("check date and time from available -  " + searchCriteria.getCheckInDateTimeFrom());
+//                    java.sql.Date startDate = new java.sql.Date(searchCriteria.getCheckInDateTimeFrom().getTime());
+//                    java.sql.Date toDate = new java.sql.Date(searchCriteria.getCheckInDateTimeTo().getTime());
 
-                    if (!StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
-                        log.debug("find by  employee id only - " + searchCriteria.getEmployeeEmpId());
-                        page = attendanceRepository.findByEmpIdAndCheckInTime(searchCriteria.getEmployeeEmpId(), startDate, toDate, pageRequest);
-                    } else if (!StringUtils.isEmpty(searchCriteria.getName())) {
-                        if (searchCriteria.getSiteId() != 0) {
-                            page = attendanceRepository.findBySiteIdEmpNameAndDate(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getName(), startDate,
-                                toDate, pageRequest);
-                        }
-                    }
+//                    if (!StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
+//                        log.debug("find by  employee id only - " + searchCriteria.getEmployeeEmpId());
+//                        page = attendanceRepository.findByEmpIdAndCheckInTime(searchCriteria.getEmployeeEmpId(), startDate, toDate, pageRequest);
+//                    } else if (!StringUtils.isEmpty(searchCriteria.getName())) {
+//                        if (searchCriteria.getSiteId() != 0) {
+//                            page = attendanceRepository.findBySiteIdEmpNameAndDate(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getName(), startDate,
+//                                toDate, pageRequest);
+//                        }
+//                    }
+//
+//                    if (searchCriteria.getSiteId() != 0 && searchCriteria.getProjectId() != 0 && StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
+//                        page = attendanceRepository.findBySiteIdAndCheckInTime(searchCriteria.getSiteId(), startDate, toDate, pageRequest);
+//                    } else if (searchCriteria.getSiteId() != 0 && StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
+//                        log.debug("find by site id and check in  date and time - " + searchCriteria.getSiteId());
+//                        page = attendanceRepository.findBySiteIdAndCheckInTime(searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
+//                    } else if (searchCriteria.getSiteId() != 0) {
+//                        log.debug("find by site id and employee id date and time - " + searchCriteria.getSiteId() + " - " + searchCriteria.getEmployeeEmpId());
+//                        page = attendanceRepository.findBySiteIdEmpIdAndDate(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getEmployeeEmpId(),
+//                            startDate, toDate, pageRequest);
+//                    } else if (searchCriteria.getProjectId() > 0) {
+//
+//                        if(StringUtils.isEmpty(searchCriteria.getRegion())){
+//                            if (StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
+//                                page = attendanceRepository.findByProjectIdAndDate(searchCriteria.getProjectId(), startDate, toDate, pageRequest);
+//                            } else {
+//                                log.debug("find by  employee id only - " + searchCriteria.getEmployeeEmpId());
+//                                page = attendanceRepository.findBySiteIdEmpIdAndDate(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getEmployeeEmpId(),
+//                                    startDate, toDate, pageRequest);
+//                                if (CollectionUtils.isEmpty(page.getContent())) {
+//                                    page = attendanceRepository.findByEmpIdsAndDateRange(searchCriteria.getSubordinateIds(), startDate, toDate, pageRequest);
+//                                }
+//                            }
+//                        }else{
+//
+//                            if(StringUtils.isEmpty(searchCriteria.getBranch())){
+//                                log.debug("Project Id - "+searchCriteria.getProjectId());
+//                                log.debug("Region  - "+searchCriteria.getRegion());
+//
+//                                List<Long> siteIds = siteRepository.findByRegion(searchCriteria.getProjectId(),searchCriteria.getRegion());
+//                                page = attendanceRepository.findByMultipleSitesAndCheckInTime(siteIds, startDate, toDate, pageRequest);
+//
+//                            }else{
+//                                List<Long> siteIds = siteRepository.findByRegionAndBranch(searchCriteria.getProjectId(),searchCriteria.getRegion(),searchCriteria.getBranch());
+//                                page = attendanceRepository.findByMultipleSitesAndCheckInTime(siteIds, startDate, toDate, pageRequest);
+//
+//                            }
+//
+//                        }
+//
+//                    }
 
-                    if (searchCriteria.getSiteId() != 0 && searchCriteria.getProjectId() != 0 && StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
-                        page = attendanceRepository.findBySiteIdAndCheckInTime(searchCriteria.getSiteId(), startDate, toDate, pageRequest);
-                    } else if (searchCriteria.getSiteId() != 0 && StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
-                        log.debug("find by site id and check in  date and time - " + searchCriteria.getSiteId());
-                        page = attendanceRepository.findBySiteIdAndCheckInTime(searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
-                    } else if (searchCriteria.getSiteId() != 0) {
-                        log.debug("find by site id and employee id date and time - " + searchCriteria.getSiteId() + " - " + searchCriteria.getEmployeeEmpId());
-                        page = attendanceRepository.findBySiteIdEmpIdAndDate(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getEmployeeEmpId(),
-                            startDate, toDate, pageRequest);
-                    } else if (searchCriteria.getProjectId() > 0) {
-
-                        if(StringUtils.isEmpty(searchCriteria.getRegion())){
-                            if (StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
-                                page = attendanceRepository.findByProjectIdAndDate(searchCriteria.getProjectId(), startDate, toDate, pageRequest);
-                            } else {
-                                log.debug("find by  employee id only - " + searchCriteria.getEmployeeEmpId());
-                                page = attendanceRepository.findBySiteIdEmpIdAndDate(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getEmployeeEmpId(),
-                                    startDate, toDate, pageRequest);
-                                if (CollectionUtils.isEmpty(page.getContent())) {
-                                    page = attendanceRepository.findByEmpIdsAndDateRange(searchCriteria.getSubordinateIds(), startDate, toDate, pageRequest);
-                                }
-                            }
-                        }else{
-
-                            if(StringUtils.isEmpty(searchCriteria.getBranch())){
-                                log.debug("Project Id - "+searchCriteria.getProjectId());
-                                log.debug("Region  - "+searchCriteria.getRegion());
-
-                                List<Long> siteIds = siteRepository.findByRegion(searchCriteria.getProjectId(),searchCriteria.getRegion());
-                                page = attendanceRepository.findByMultipleSitesAndCheckInTime(siteIds, startDate, toDate, pageRequest);
-
-                            }else{
-                                List<Long> siteIds = siteRepository.findByRegionAndBranch(searchCriteria.getProjectId(),searchCriteria.getRegion(),searchCriteria.getBranch());
-                                page = attendanceRepository.findByMultipleSitesAndCheckInTime(siteIds, startDate, toDate, pageRequest);
-
-                            }
-
-
-
-                        }
-
-
-                    }
-
-                }
-
-            } else {
+//                }
+//
+//            } else {
                 java.sql.Date startDate = new java.sql.Date(searchCriteria.getCheckInDateTimeFrom().getTime());
                 java.sql.Date toDate = new java.sql.Date(searchCriteria.getCheckInDateTimeTo().getTime());
                 long userId = searchCriteria.getUserId();
@@ -819,10 +815,17 @@ public class AttendanceService extends AbstractService {
                     User user = userRepository.findOne(userId);
                     Hibernate.initialize(user.getUserRole());
                     UserRole userRole = user.getUserRole();
+                    Employee employee = employeeRepository.findByUserId(userId);
+                    Set<Long> subEmpIds = new TreeSet<Long>();
                     if (userRole != null) {
                         if (userRole.getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
-                            page = attendanceRepository.findByCheckInTime(startDate, toDate, pageRequest);
+                        	boolean isAdmin = true;
+                        	searchCriteria.setAdmin(isAdmin);
+//                            page = attendanceRepository.findByCheckInTime(startDate, toDate, pageRequest);
+                            page = attendanceRepository.findAll(new AttendanceSpecification(searchCriteria, isAdmin, startDate, toDate), pageRequest);
                         } else {
+                        	boolean isAdmin = false;
+                        	searchCriteria.setAdmin(isAdmin);
                             Employee emp = user.getEmployee();
                             List<EmployeeProjectSite> sites = emp.getProjectSites();
                             if (CollectionUtils.isNotEmpty(sites)) {
@@ -830,10 +833,22 @@ public class AttendanceService extends AbstractService {
                                 for (EmployeeProjectSite site : sites) {
                                     siteIds.add(site.getSite().getId());
                                 }
-                                page = attendanceRepository.findByMultipleSitesAndCheckInTime(siteIds, startDate, toDate, pageRequest);
-                            } else {
-
+                                searchCriteria.setSiteIds(siteIds);
+//                                page = attendanceRepository.findByMultipleSitesAndCheckInTime(siteIds, startDate, toDate, pageRequest);
                             }
+                            
+                            if (employee != null) {
+                                Hibernate.initialize(employee.getSubOrdinates());
+                                int levelCnt = 1;
+                                findAllSubordinates(employee, subEmpIds, levelCnt);
+                                log.debug("List of subordinate ids -" + subEmpIds);
+                                List<Long> subEmpList = new ArrayList<Long>();
+                                subEmpList.addAll(subEmpIds);
+                                searchCriteria.setSubordinateIds(subEmpList);
+                            }
+                            
+                            page = attendanceRepository.findAll(new AttendanceSpecification(searchCriteria, isAdmin, startDate, toDate), pageRequest);
+
                         }
                     }
                 }
