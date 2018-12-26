@@ -9,6 +9,10 @@
 
 <ion-content class="FeedbackQuesCon" id="scrollDiv">
 
+    <div class="TopImageCon" style="padding-top: 16px !important;" text-center>
+        <img src="img/logo.png"  alt="feedback image" class="logo-img" >
+    </div>
+
     <ion-slides #slides class="slide-height">
         <ion-slide *ngFor="let q of questions;let i=index">
             <h2 text-center="" class="clr-white">{{q.question}}</h2>
