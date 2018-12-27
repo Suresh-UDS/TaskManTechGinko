@@ -53,6 +53,7 @@ public class ReportDatabaseConfiguration {
             influxDb.enableGzip();
         }else {
             log.info("Already database Exists." +isExists);
+            influxDb.enableGzip();
             log.info("Is GZIP enabled or not. " +influxDb.isGzipEnabled());
             influxDb.createRetentionPolicy(retentionPolicy, dbName, "17520h0m0s", 1, true);
         }
