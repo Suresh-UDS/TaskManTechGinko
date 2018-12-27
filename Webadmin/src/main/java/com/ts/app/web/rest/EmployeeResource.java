@@ -652,10 +652,11 @@ public class EmployeeResource {
 
     @RequestMapping(value="/employee/search/list", method = RequestMethod.POST)
     public ResponseEntity<?> getEmployeeAttendance(@RequestBody SearchCriteria searchCriteria) {
-        if(searchCriteria != null) {
-            searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
-        }
-        ResponseEntity<?> response = employeeService.getEmpAttendanceList(searchCriteria);
+    	List<EmployeeDTO> response = null;
+    	if(searchCriteria!=null) {
+    		searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+        	response = employeeService.getEmpAttendanceList(searchCriteria);
+    	}
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

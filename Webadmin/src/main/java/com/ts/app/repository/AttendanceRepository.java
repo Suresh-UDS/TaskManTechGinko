@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Set;
 
 public interface AttendanceRepository extends JpaRepository<Attendance, Long>,JpaSpecificationExecutor<Attendance> {
 
@@ -127,7 +128,10 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long>,Jp
     @Query("SELECT at FROM Attendance at WHERE at.checkOutImage is not null")
 	Page<Attendance> findByImage(Pageable pageRequest);
 
-    @Query("SELECT at FROM Attendance at WHERE at.checkInTime is not null order by at.checkInTime desc")
+    @Query("SELECT at FROM Attendance at WHERE at.checkInTime is not null")
 	List<Attendance> findByEmployeeList();
+
+    @Query("SELECT at FROM Attendance at where at.employee.id NOT IN (:empIds) order by at.checkInTime desc")
+	List<Attendance> findNonEmpIds(@Param("empIds") List<Long> empIds);
 
 }

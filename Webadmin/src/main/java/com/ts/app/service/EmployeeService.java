@@ -1231,7 +1231,7 @@ public class    EmployeeService extends AbstractService {
                 if(role.getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
 //                    page = employeeRepository.findAll(pageRequest);
                     page = employeeRepository.findAll(new EmployeeSpecification(searchCriteria, isClient),pageRequest);
-                    allEmpsList.addAll(page.getContent());
+                	allEmpsList.addAll(page.getContent());
                 }else {
 //                    if(CollectionUtils.isNotEmpty(siteIds)) {
 //                        page = employeeRepository.findBySiteIds(siteIds, isClient, pageRequest);
@@ -1497,12 +1497,38 @@ public class    EmployeeService extends AbstractService {
         return empShiftDto;
     }
 
-    public ResponseEntity<?> getEmpAttendanceList(SearchCriteria searchCriteria) {
-    	ResponseEntity<?> response = null;
-    	if(searchCriteria.getLinkType() == "Absent") { 
-    		attendanceRepository.findByEmployeeList();
-    	}
-    	return new ResponseEntity<>(response, HttpStatus.OK);
+    public List<EmployeeDTO> getEmpAttendanceList(SearchCriteria searchCriteria) {
+    	List<EmployeeDTO> resp = new ArrayList<>();
+    	Set<Long> empIds = new TreeSet<Long>();
+    	List<Long> subEmpList = new ArrayList<Long>();
+    	SearchResult<AttendanceDTO> attnLists = attendanceService.findBySearchCrieria(searchCriteria);
+		if(CollectionUtils.isNotEmpty(attnLists.getTransactions())) {
+			for(AttendanceDTO attnList : attnLists.getTransactions()) {
+    			if(attnList.getEmployeeId() > 0) {
+    				empIds.add(attnList.getEmployeeId());
+    			}
+    		}
+    		subEmpList.addAll(empIds);
+    		if(CollectionUtils.isNotEmpty(subEmpList)) {
+    			List<Attendance> attnList2 = attendanceRepository.findNonEmpIds(subEmpList);
+            	Set<Long> empIds1 = new TreeSet<Long>();
+        		List<Long> subEmpList1 = new ArrayList<Long>();
+            	if(CollectionUtils.isNotEmpty(attnList2)) {
+            		for(Attendance attnLis : attnList2) {
+            			if(attnLis.getEmployee() != null) {
+            				empIds1.add(attnLis.getEmployee().getId());
+            			}
+            		}
+            		subEmpList1.addAll(empIds1);
+            		if(CollectionUtils.isNotEmpty(subEmpList1)) {
+                		List<Employee> employee = employeeRepository.findAllByIds(subEmpList1);
+                		resp = mapperUtil.toModelList(employee, EmployeeDTO.class);
+                	}
+            	}
+    		}	
+		}
+
+    	return resp;
     }
 
 }
