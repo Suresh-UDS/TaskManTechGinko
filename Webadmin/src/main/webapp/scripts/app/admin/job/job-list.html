@@ -122,7 +122,6 @@
         <div class="col-md-12">
             <div class="card TableCard">
                 <div class="card-content">
-
                     <div class="panel panel-default TabsContainer mar10px jobType">
                         <div class="panel-body pad0px">
                             <ul class="nav nav-pills nav-pills-warning mar0px">
@@ -133,9 +132,19 @@
                                 <li class=""><a href="" data-toggle="tab"
                                     data-target="#pill3" aria-expanded="false" ng-click="jobType('HOUSEKEEPING')">House Keeping</a></li>
                             </ul>
+                            <div class="pull-right">
+                                <!-- Material switch -->
+                                <div class="switch">
+                                    <span>Show Job Schedules</span>
+                                    <label>
+                                        <input type="checkbox" ng-model="showJobSchCheck" ng-click="searchFilter();">
+                                        <span class="lever"></span>
+                                    </label>
+                                </div>
+                            </div>
                        </div>
-                    </div>
 
+                    </div>
                     <div class="table-responsive tablecard">
                         <table class="table table-hover withSortingIcons">
                             <thead>
@@ -522,7 +531,7 @@
 
 				                                    <ui-select ng-model="client.selected" ng-disabled="clientFilterDisable">
 													  <ui-select-match placeholder="Select clients..." >{{$select.selected.name}}
-													     <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+													     <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
@@ -545,7 +554,7 @@
 
 						                                <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
 														  <ui-select-match placeholder="Select region...">{{$select.selected.name}}
-															  <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+															  <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 															   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 															   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 														  </ui-select-match>
@@ -569,7 +578,7 @@
 
 					                                <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
 													  <ui-select-match placeholder="Select branch..." >{{$select.selected.name}}
-													     <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+													     <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
@@ -592,7 +601,7 @@
 
 				                                    <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
 													  <ui-select-match placeholder="Select site...">{{$select.selected.name}}
-													      <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+													      <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
@@ -630,11 +639,11 @@
                                                     <label class="label-control">From date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
                                                     <input type="text" class="form-control datepicker" placeholder="DD/MM/YYYY"  id="searchJobDate"  ng-model="searchJobDate" autocomplete="off" tabindex="1" />
-                                                   
+
 	                                                 <p class="help-block" style="color:maroon"
 	                                                   ng-show="searchForm.employee.$error.required">
 	                                                    Required
-			                                          
+
                                                 </div>
                                             </div>
                                         </div>

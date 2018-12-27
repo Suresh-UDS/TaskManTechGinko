@@ -1377,6 +1377,12 @@ angular.module('timeSheetApp')
 
 				}
 
+				if($scope.showJobSchCheck){
+				   $scope.searchCriteria.showJobSchedules = true;
+				}else{
+				   $scope.searchCriteria.showJobSchedules = false;
+				}
+
 				/* Root scope (search criteria) */
 				$rootScope.searchFilterCriteria.isDashboard = false;
 
@@ -2051,7 +2057,7 @@ angular.module('timeSheetApp')
 
 
 			$scope.clearProject = function($event) {
-				$event.stopPropagation(); 
+				$event.stopPropagation();
 				$scope.client.selected = undefined;
 				$scope.regionsListOne.selected = undefined;
 				$scope.branchsListOne.selected = undefined;
@@ -2062,7 +2068,7 @@ angular.module('timeSheetApp')
 			};
 
 			$scope.clearRegion = function($event) {
-				$event.stopPropagation(); 
+				$event.stopPropagation();
 				$scope.regionsListOne.selected = undefined;
 				$scope.branchsListOne.selected = undefined;
 				$scope.sitesListOne.selected = undefined;
@@ -2078,7 +2084,7 @@ angular.module('timeSheetApp')
 			};
 
 			$scope.clearSite = function($event) {
-				$event.stopPropagation(); 
+				$event.stopPropagation();
 				$scope.sitesListOne.selected = undefined;
 				$scope.blocksListOne.selected = undefined;
 				$scope.floorsListOne.selected = undefined;

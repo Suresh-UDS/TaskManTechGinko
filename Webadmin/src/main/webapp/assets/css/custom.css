@@ -2184,7 +2184,73 @@ ul.ckLstDot li:before {
 	bottom:0;
 	top:11px;
 	left:8px;
-	
+
 }
+
+ /* Material Switch css start */
+
+.switch label input[type=checkbox]:checked+.lever {
+    background-color: #dccfe2;
+}
+.switch label .lever {
+    content: "";
+    display: inline-block;
+    position: relative;
+    background-color: #818181;
+    -webkit-border-radius: .9375rem;
+    border-radius: .9375rem;
+    margin-right: .625rem;
+    vertical-align: middle;
+    margin: 0 1rem;
+    width: 2.5rem;
+    height: .9375rem;
+    -webkit-transition: background .3s ease;
+    -o-transition: background .3s ease;
+    transition: background .3s ease;
+}
+.switch label {
+    cursor: pointer;
+}
+.switch label input[type=checkbox] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.switch label input[type=checkbox]:checked, [type=checkbox]:not(:checked) {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+.switch label input[type=checkbox], input[type=radio] {
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.switch label input[type=checkbox]:checked+.lever:after {
+    background-color: #a6c;
+    left: 1.5rem;
+}
+
+.switch label .lever:after {
+    content: "";
+    position: absolute;
+    display: inline-block;
+    background-color: #f1f1f1;
+    -webkit-border-radius: 1.3125rem;
+    border-radius: 1.3125rem;
+    left: -.3125rem;
+    top: -.1875rem;
+    -webkit-box-shadow: 0 0.0625rem 0.1875rem 0.0625rem rgba(0,0,0,.4);
+    box-shadow: 0 0.0625rem 0.1875rem 0.0625rem rgba(0,0,0,.4);
+    width: 1.3125rem;
+    height: 1.3125rem;
+    -webkit-transition: left .3s ease,background .3s ease,-webkit-box-shadow 1s ease;
+    transition: left .3s ease,background .3s ease,-webkit-box-shadow 1s ease;
+    -o-transition: left .3s ease,background .3s ease,box-shadow 1s ease;
+    transition: left .3s ease,background .3s ease,box-shadow 1s ease;
+    transition: left .3s ease,background .3s ease,box-shadow 1s ease,-webkit-box-shadow 1s ease;
+}
+
+ /* Material Switch css end */
 
 
