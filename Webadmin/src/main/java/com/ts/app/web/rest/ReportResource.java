@@ -268,6 +268,12 @@ public class ReportResource {
             schedulerService.createJobPoints();
 	    return "schedule service called...";
     }
+    
+    @RequestMapping(value = "/getAvgTicket", method = RequestMethod.GET)
+    public ResponseEntity<?> getAveticket() {
+    	Map<String, Map<String,Integer>> response = reportDatabaseUtil.getAverageTicketAge();
+    	return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 
 
