@@ -28,6 +28,8 @@ import org.influxdb.dto.QueryResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -38,8 +40,13 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author clss
+ *
+ */
 @Component
 public class ReportDatabaseUtil {
 
@@ -1150,7 +1157,7 @@ public class ReportDatabaseUtil {
     }
     /* End Get Total Counts Status based */
 
-    /* Overwrite a result to Influx Db */
+    /* Overwrite a result to InfluxDb */
     public String deleteOrUpdateJobPoints() {
         InfluxDB connection = connectDatabase();
         List<JobStatusReport> lastModResults = this.getLastModifiedJobData();
@@ -1178,6 +1185,7 @@ public class ReportDatabaseUtil {
                 try {                                                       // 1+1+1 add
                     reportDatabaseService.addNewJobPoints(lastModResult, i);
                 }catch (Exception e) {
+                	log.debug("Error while add new job points when update" +e);
                     e.printStackTrace();
                 }
                 i++;
@@ -1214,6 +1222,7 @@ public class ReportDatabaseUtil {
                 try {
                     reportDatabaseService.addNewTicketPoints(lastModResult, i);
                 }catch (Exception e) {
+                	log.debug("Error while add new ticket points when update" +e);
                     e.printStackTrace();
                 }
                 i++;
@@ -1250,6 +1259,7 @@ public class ReportDatabaseUtil {
                 try {
                     reportDatabaseService.addNewAttnPoints(lastModResult, i);
                 }catch (Exception e) {
+                	log.debug("Error while add new attendance points when update" +e);
                     e.printStackTrace();
                 }
                 i++;
@@ -1299,6 +1309,7 @@ public class ReportDatabaseUtil {
                     try {
                         reportDatabaseService.addNewQuotePoints(lastModResult, i);
                     } catch (Exception e) {
+                    	log.debug("Error while add new quotation points when update" +e);
                         e.printStackTrace();
                     }
                     i++;
@@ -1310,6 +1321,7 @@ public class ReportDatabaseUtil {
         return "New Quotation Points are inserted...";
     }
 
+    /* Get quotation status charts */
     public List<ChartModelEntity> getChartzCounts() {
         InfluxDB connection = connectDatabase();
         String query = "select sum(statusCount) as statusCount from QuotationReport where time > now() - 7d group by status,time(1d) fill(0)";
@@ -1425,6 +1437,84 @@ public class ReportDatabaseUtil {
 
         return chartModelEntities;
 
+    }
+    
+    
+    public Map<String, Map<String, Integer>> getAverageTicketAge() {
+    	 InfluxDB connection = connectDatabase();
+    	 Calendar cal = Calendar.getInstance();
+         String query1 = "select mean(age) as statusCount from (select (closedOn - date) / (1000 * 60 * 60 * 24) as age from TicketReport where closedOn != 0) group by category";
+         String query2 = "select mean(age) as statusCount from (select ( "+cal.getTimeInMillis()+" - date) / (1000 * 60 * 60 * 24) as age from TicketReport where closedOn = 0) group by category";
+         List<TicketStatusMeasurement> ticketAvgPoints = reportDatabaseService.getTicketPoints(connection, query1, dbName);
+         List<TicketStatusMeasurement> ticketAvgRepPoints = reportDatabaseService.getTicketPoints(connection, query2, dbName);
+
+         Map<String, Map<String, Integer>> statusPoints = new HashMap<>();
+         Map<String, Map<String, Integer>> avgPoints = new HashMap<>();
+         Map<String, Integer> statusCounts = null;
+         Map<String, Integer> avgCounts = null;
+//         List<ChartModelEntity> chartModelEntities = new ArrayList<>();
+
+         if(CollectionUtils.isNotEmpty(ticketAvgRepPoints)) {
+             for(TicketStatusMeasurement ticketAvgRepPoint : ticketAvgRepPoints) {
+                 String category = ticketAvgRepPoint.getCategory();
+
+                 if(statusPoints.containsKey(category)) {
+                     statusCounts = statusPoints.get(category);
+                 }else {
+                     statusCounts = new HashMap<String, Integer>();
+                 }
+
+                 statusCounts.put(category, ticketAvgRepPoint.getCategory().equalsIgnoreCase(category) ? ticketAvgRepPoint.getStatusCount() : 0);
+                
+                 statusPoints.put(category, statusCounts);
+
+             }
+             log.debug("Ticket status points map count" +statusPoints.toString());
+             
+             if(CollectionUtils.isNotEmpty(ticketAvgPoints)) {
+            	 for(TicketStatusMeasurement ticketAvgPoint : ticketAvgPoints) {
+            		  String category = ticketAvgPoint.getCategory();
+
+                      if(avgPoints.containsKey(category)) {
+                    	  avgCounts = avgPoints.get(category);
+                      }else {
+                    	  avgCounts = new HashMap<String, Integer>();
+                      }
+
+                      avgCounts.put(category, ticketAvgPoint.getCategory().equalsIgnoreCase(category) ? ticketAvgPoint.getStatusCount() : 0);
+                     
+                      avgPoints.put(category, avgCounts);
+            	 }
+            	 
+            	 log.debug("Ticket status points map average" +avgPoints.toString());
+            	          		
+         		for(Map.Entry<String, Map<String, Integer>> entryLists : statusPoints.entrySet()) {
+         			String key = entryLists.getKey();
+         			Map<String, Integer> avgCnts1 = entryLists.getValue();
+         			if(avgCnts1.containsKey(key)) {
+         				int cnt1 = avgCnts1.get(key);
+         				if(avgPoints.containsKey(key)) {
+             				Map<String, Integer> avgCnts2 = avgPoints.get(key);
+                 			
+                 			if(avgCnts2.containsKey(key)) {
+                 				int cnt2 = avgCnts2.get(key);
+                 				avgCnts1.put(key, cnt1 + cnt2);
+                 			}
+                 			
+             			} else {
+             				avgCnts1.put(key, cnt1);
+             			}
+         				
+         			}
+         		
+         		}
+
+             }
+             
+         }
+
+         return statusPoints;
+    
     }
 
 

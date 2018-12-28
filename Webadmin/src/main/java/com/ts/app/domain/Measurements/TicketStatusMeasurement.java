@@ -150,4 +150,7 @@ public class TicketStatusMeasurement {
     public void setTotalCount(int totalCount) {
         this.totalCount = totalCount;
     }
+
+
+	
 }
