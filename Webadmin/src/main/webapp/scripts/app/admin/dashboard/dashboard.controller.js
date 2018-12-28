@@ -70,13 +70,14 @@ angular.module('timeSheetApp')
         $rootScope.searchFilterCriteria.projectId = null;
         $rootScope.searchFilterCriteria.projectName = null;
         $rootScope.searchFilterCriteria.regionId = null;
-        $rootScope.searchFilterCriteria.regionName = null;
+        $rootScope.searchFilterCriteria.region = null;
         $rootScope.searchFilterCriteria.branchId = null;
-        $rootScope.searchFilterCriteria.branchName = null;
+        $rootScope.searchFilterCriteria.branch = null;
         $rootScope.searchFilterCriteria.siteId = null;
         $rootScope.searchFilterCriteria.siteName = null;
         $rootScope.searchFilterCriteria.jobStatus = null;
         $rootScope.searchFilterCriteria.ticketStatus = null;
+        $rootScope.searchFilterCriteria.quotStatus = null;
         $rootScope.searchFilterCriteria.isDashboard = false;
 
         $scope.selectedFromDateSer =new Date();
@@ -706,9 +707,9 @@ angular.module('timeSheetApp')
                 $rootScope.searchFilterCriteria.projectId = $scope.selectedProject.id;
                 $rootScope.searchFilterCriteria.projectName = $scope.selectedProject.name;
                 $rootScope.searchFilterCriteria.regionId = null;
-                $rootScope.searchFilterCriteria.regionName = null;
+                $rootScope.searchFilterCriteria.region = null;
                 $rootScope.searchFilterCriteria.branchId = null;
-                $rootScope.searchFilterCriteria.branchName = null;
+                $rootScope.searchFilterCriteria.branch = null;
                 $rootScope.searchFilterCriteria.siteId = null;
                 $rootScope.searchFilterCriteria.siteName = null;
 
@@ -727,9 +728,9 @@ angular.module('timeSheetApp')
 
         		/** root scope (searchCriteria) **/
                 $rootScope.searchFilterCriteria.regionId = $scope.selectedRegion.id;
-                $rootScope.searchFilterCriteria.regionName = $scope.selectedRegion.name;
+                $rootScope.searchFilterCriteria.region = $scope.selectedRegion.name;
                 $rootScope.searchFilterCriteria.branchId = null;
-                $rootScope.searchFilterCriteria.branchName = null;
+                $rootScope.searchFilterCriteria.branch = null;
                 $rootScope.searchFilterCriteria.siteId = null;
                 $rootScope.searchFilterCriteria.siteName = null;
 
@@ -747,7 +748,7 @@ angular.module('timeSheetApp')
 
         		/** root scope (searchCriteria) **/
                 $rootScope.searchFilterCriteria.branchId = $scope.selectedBranch.id;
-                $rootScope.searchFilterCriteria.branchName = $scope.selectedBranch.name;
+                $rootScope.searchFilterCriteria.branch = $scope.selectedBranch.name;
                 $rootScope.searchFilterCriteria.siteId = null;
                 $rootScope.searchFilterCriteria.siteName = null;
 
@@ -1780,17 +1781,23 @@ angular.module('timeSheetApp')
 
         }
 
-        $scope.dbdStatusFilter = function(sType){
+        $scope.dbdStatusFilter = function(jobStatus){
 
             $rootScope.searchFilterCriteria.isDashboard = true;
-            $rootScope.searchFilterCriteria.jobStatus = sType;
+            $rootScope.searchFilterCriteria.jobStatus = jobStatus;
 
         }
 
-        $scope.dbdTStatusFilter = function(tType){
+        $scope.dbdTStatusFilter = function(ticketStatus){
 
             $rootScope.searchFilterCriteria.isDashboard = true;
-            $rootScope.searchFilterCriteria.ticketStatus = tType;
+            $rootScope.searchFilterCriteria.ticketStatus = ticketStatus;
+
+        }
+        $scope.dbdQuotStatusFilter = function(quotStatus){
+
+            $rootScope.searchFilterCriteria.isDashboard = true;
+            $rootScope.searchFilterCriteria.quotStatus = quotStatus;
 
         }
 

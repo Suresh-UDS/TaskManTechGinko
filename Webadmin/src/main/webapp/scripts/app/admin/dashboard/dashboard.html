@@ -25,7 +25,7 @@
                             <label class="label-control">From date</label>
                             <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
 
-                            <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+                            <input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedFromDate" autocomplete="off"/>
 
                         </div>
 
@@ -477,7 +477,7 @@
                         <div class="row">
 
                             <div class="col-md-3 col-lg-3 col-sm-4">
-                               <a ui-sref="quotations" ng-click="dbdFilter();" >
+                               <a ui-sref="quotation-list" ng-click="dbdQuotStatusFilter('');" >
                                    <div class="card blueBg cardWithbg">
                                        <div class="card-header">
                                            <i class="material-icons">list</i>
@@ -491,7 +491,7 @@
 
                             </div>
                             <div class="col-md-3 col-lg-3 col-sm-4">
-                                <a ui-sref="quotations" ng-click="dbdFilter();" >
+                                <a ui-sref="quotation-list" ng-click="dbdQuotStatusFilter('Waiting for approval');" >
                                     <div class="card skyblueBg cardWithbg">
                                         <div class="card-header">
                                             <i class="material-icons">open_in_browser</i>
@@ -504,7 +504,7 @@
                                 </a>
                             </div>
                             <div class="col-md-2 col-lg-2 col-sm-4">
-                                <a ui-sref="quotations" ng-click="dbdFilter();" >
+                                <a ui-sref="quotation-list" ng-click="dbdQuotStatusFilter('Pending');" >
                                     <div class="card yellowBg cardWithbg">
                                         <div class="card-header">
                                             <i class="material-icons">
@@ -520,7 +520,7 @@
                                 </a>
                             </div>
                             <div class="col-md-2 col-lg-2 col-sm-4">
-                                <a ui-sref="quotations" ng-click="dbdFilter();" >
+                                <a ui-sref="quotation-list" ng-click="dbdQuotStatusFilter('Approved');" >
                                     <div class="card greenBg cardWithbg">
                                         <div class="card-header">
                                             <i class="material-icons">check_circle_outline</i>
@@ -534,7 +534,7 @@
                                 </a>
                             </div>
                             <div class="col-md-2 col-lg-2 col-sm-4">
-                                <a ui-sref="quotations" ng-click="dbdFilter();" >
+                                <a ui-sref="quotation-list" ng-click="dbdQuotStatusFilter('Rejected');" >
                                     <div class="card lightRedBg cardWithbg">
                                         <div class="card-header">
                                             <i class="material-icons">highlight_off</i>

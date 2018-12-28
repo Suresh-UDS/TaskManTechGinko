@@ -41,7 +41,7 @@
 	            ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
 					Client: {{searchCriteras.projectName}}
 			    </span>
-			    
+
 			    <span class="tag label label-info" style="margin-right: 10px"
 	                  ng-show="searchCriteras.regionId !=0 && searchCriteras.regionId !=null">
 					Region: {{searchCriteras.region}}
@@ -55,7 +55,7 @@
 	                  ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
 					Site: {{searchCriteras.siteName}}
 			    </span>
-			    
+
 			    <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.quotationCreatedDate">
                     Created From Date: {{searchCriteras.quotationCreatedDate | date:'dd/MM/yyyy'}}
                 </span>
@@ -120,7 +120,7 @@
                                     <span ng-click="columnDescOrder('projectName')" ng-class="isActiveDesc == 'projectName' ? 'active' : ''">
                                          <i  ng-class="class" class="fa fa-caret-down"></i>
                                     </span>
-                                </span> 
+                                </span>
                             </th>
                             <th>Site
                                  <span class="sortingIcons">
@@ -130,7 +130,7 @@
                                     <span ng-click="columnDescOrder('siteName')" ng-class="isActiveDesc == 'siteName' ? 'active' : ''">
                                          <i  ng-class="class" class="fa fa-caret-down"></i>
                                     </span>
-                                </span> 
+                                </span>
                             </th>
                             <th>Created By
                                 <span class="sortingIcons">
@@ -484,7 +484,7 @@
 
 				                                    <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
 													  <ui-select-match placeholder="Select clients..."  >{{$select.selected.name}}
-															<a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+															<a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
@@ -507,7 +507,7 @@
 
 						                                <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
 														  <ui-select-match placeholder="Select region..." >{{$select.selected.name}}
-														       <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+														       <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 															   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 															   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 														  </ui-select-match>
@@ -531,7 +531,7 @@
 
 					                                <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
 													  <ui-select-match placeholder="Select branch...">{{$select.selected.name}}
-													           <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+													           <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 															   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 															   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
@@ -554,7 +554,7 @@
 
 				                                    <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
 													  <ui-select-match placeholder="Select site..." >{{$select.selected.name}}
-													      <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+													      <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
@@ -640,9 +640,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                       
+
                                     </div>
-                                    <div class="row"> 
+                                    <div class="row">
                                      <div class="col-xs-12 col-md-4">
                                              <div class="dropdown">
                                                  <div class="form-group" >
@@ -657,12 +657,12 @@
 	                                    <div class="col-xs-12 col-md-4">
 	                                             <div class="dropdown">
 	                                                <div class="form-group" >
-	                                                     
+
 	                                                    <input type="text"
 	                                                           class="form-control searchable-input floatL border-bottom-input"
 	                                                           placeholder="Approved By"
 	                                                           ng-model="searchApprovedBy"
-	
+
 	                                                    />
 	                                                </div>
 	                                           </div>
