@@ -6,6 +6,7 @@ public class ChartModelEntity {
 
     private List<String> x;
     private List<Status> status;
+    private List<AverageStatus> avgStatus;
 
     public List<String> getX() {
         return x;
@@ -22,4 +23,12 @@ public class ChartModelEntity {
     public void setStatus(List<Status> status) {
         this.status = status;
     }
+
+	public List<AverageStatus> getAvgStatus() {
+		return avgStatus;
+	}
+
+	public void setAvgStatus(List<AverageStatus> avgStatus) {
+		this.avgStatus = avgStatus;
+	}
 }

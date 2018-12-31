@@ -6,6 +6,7 @@ import com.ts.app.domain.JobStatusReport;
 import com.ts.app.domain.Measurements.AttendanceStatusMeasurement;
 import com.ts.app.domain.Measurements.JobStatusMeasurement;
 import com.ts.app.domain.Measurements.QuotationStatusMeasurement;
+import com.ts.app.domain.Measurements.TicketAvgStatus;
 import com.ts.app.domain.Measurements.TicketStatusMeasurement;
 import com.ts.app.domain.TicketStatusReport;
 import com.ts.app.web.rest.dto.JobDTO;
@@ -21,6 +22,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -331,6 +334,46 @@ public class ReportDatabaseService {
         influxDB.disableBatch();
         influxDB.close();
     }
+    
+    public void addTicketAvg(List<TicketStatusMeasurement> ticketStats) throws Exception {
+    	InfluxDB influxDB = connectDatabase();
+    	BatchPoints batchPoints = BatchPoints
+                .database(dbName)
+                .tag("async4", "true")
+                .retentionPolicy("one_year_policy")
+                .consistency(InfluxDB.ConsistencyLevel.ALL)
+                .build();
+    	for(TicketStatusMeasurement ticketStat : ticketStats) {
+    		Point point = Point.measurement("TicketAvgStatus")
+        			.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+        			.addField("category", ticketStat.getCategory())
+        			.tag("category", ticketStat.getCategory())
+        			.addField("counts", ticketStat.getStatusCount())
+        			.tag("counts", String.valueOf(ticketStat.getStatusCount()))
+        			.build();
+        	batchPoints.point(point);
+    	}
+    	influxDB.write(batchPoints);
+    	Thread.sleep(2);
+    	influxDB.disableBatch();
+    	influxDB.close();
+    }
+
+	public List<TicketAvgStatus> getTicketAvgPoints(InfluxDB connection, String query, String dbName) {
+		// TODO Auto-generated method stub
+		// Run the query
+        Query queryObject = new Query(query, dbName);
+        QueryResult queryResult = connection.query(queryObject);
+        // Map it
+        InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
+        return resultMapper.toPOJO(queryResult, TicketAvgStatus.class);
+	}
+	
+	public void deleteQuery(InfluxDB connection, String query, String dbName) {
+		 Query queryObject = new Query(query, dbName);
+	     QueryResult queryResult = connection.query(queryObject);
+	     log.debug("Deleted true" +queryResult);
+	}
 
 
 }

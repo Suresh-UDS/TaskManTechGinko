@@ -4,6 +4,7 @@ import com.ts.app.domain.*;
 import com.ts.app.domain.Measurements.AttendanceStatusMeasurement;
 import com.ts.app.domain.Measurements.JobStatusMeasurement;
 import com.ts.app.domain.Measurements.QuotationStatusMeasurement;
+import com.ts.app.domain.Measurements.TicketAvgStatus;
 import com.ts.app.domain.Measurements.TicketStatusMeasurement;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.ReportDatabaseService;
@@ -271,7 +272,7 @@ public class ReportResource {
     
     @RequestMapping(value = "/getAvgTicket", method = RequestMethod.GET)
     public ResponseEntity<?> getAveticket() {
-    	Map<String, Map<String,Integer>> response = reportDatabaseUtil.getAverageTicketAge();
+    	List<ChartModelEntity> response = reportDatabaseUtil.getAverageTicketAge();
     	return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

@@ -8,6 +8,7 @@ import com.ts.app.domain.*;
 import com.ts.app.domain.Measurements.AttendanceStatusMeasurement;
 import com.ts.app.domain.Measurements.JobStatusMeasurement;
 import com.ts.app.domain.Measurements.QuotationStatusMeasurement;
+import com.ts.app.domain.Measurements.TicketAvgStatus;
 import com.ts.app.domain.Measurements.TicketStatusMeasurement;
 import com.ts.app.domain.util.StringUtil;
 import com.ts.app.repository.ReportDatabaseAttendanceRepository;
@@ -18,6 +19,7 @@ import com.ts.app.service.ReportDatabaseService;
 import com.ts.app.web.rest.dto.QuotationDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.influxdb.BatchOptions;
 import org.influxdb.InfluxDB;
@@ -1439,82 +1441,56 @@ public class ReportDatabaseUtil {
 
     }
     
-    
-    public Map<String, Map<String, Integer>> getAverageTicketAge() {
-    	 InfluxDB connection = connectDatabase();
-    	 Calendar cal = Calendar.getInstance();
-         String query1 = "select mean(age) as statusCount from (select (closedOn - date) / (1000 * 60 * 60 * 24) as age from TicketReport where closedOn != 0) group by category";
-         String query2 = "select mean(age) as statusCount from (select ( "+cal.getTimeInMillis()+" - date) / (1000 * 60 * 60 * 24) as age from TicketReport where closedOn = 0) group by category";
-         List<TicketStatusMeasurement> ticketAvgPoints = reportDatabaseService.getTicketPoints(connection, query1, dbName);
-         List<TicketStatusMeasurement> ticketAvgRepPoints = reportDatabaseService.getTicketPoints(connection, query2, dbName);
+    public List<ChartModelEntity> getAverageTicketAge() {
+    	InfluxDB connection = connectDatabase();
+    	Calendar cal = Calendar.getInstance();
+    	String query1 = "select mean(age) as statusCount from (select (closedOn - date) / (1000 * 60 * 60 * 24) as age from TicketReport where closedOn != 0) group by category";
+    	String query2 = "select mean(age) as statusCount from (select ( "+cal.getTimeInMillis()+" - date) / (1000 * 60 * 60 * 24) as age from TicketReport where closedOn = 0) group by category";
+    	List<TicketStatusMeasurement> ticketAvgPoints = reportDatabaseService.getTicketPoints(connection, query1, dbName);
+    	if(CollectionUtils.isNotEmpty(ticketAvgPoints)) {
+    		try {
+    			reportDatabaseService.addTicketAvg(ticketAvgPoints);
+    		} catch(Exception e) {
+    			e.printStackTrace();
+    		}
+    	}
+        List<TicketStatusMeasurement> ticketAvgRepPoints = reportDatabaseService.getTicketPoints(connection, query2, dbName);
+        if(CollectionUtils.isNotEmpty(ticketAvgRepPoints)) {
+    		try {
+    			reportDatabaseService.addTicketAvg(ticketAvgRepPoints);
+    		} catch(Exception e) {
+    			e.printStackTrace();
+    		}
+    	}
+        String query3 = "select mean(counts) as avgCount from TicketAvgStatus group by category";
+        List<TicketAvgStatus> list = new ArrayList<>();
+        try {
+        	list = reportDatabaseService.getTicketAvgPoints(connection, query3, dbName);  
+        } catch(Exception e) {
+        	e.printStackTrace();
+        }
+        
+        String delQuery = "drop measurement TicketAvgStatus";
+        reportDatabaseService.deleteQuery(connection, delQuery, dbName);
+        
+        List<ChartModelEntity> chartModelEntities = new ArrayList<>();
+        ChartModelEntity chartModelEntity = new ChartModelEntity();
+        List<String> categoryList = new ArrayList<>();
+        List<AverageStatus> categoryStatusCnts = new ArrayList<>();
+  
+        for(TicketAvgStatus ent : list) {
+          AverageStatus status = new AverageStatus();
+          String category = ent.getCategory();
+          categoryList.add(category);
+          status.setName(category);
+          status.setY(ent.getAvgCount());
+          categoryStatusCnts.add(status);
+        }
 
-         Map<String, Map<String, Integer>> statusPoints = new HashMap<>();
-         Map<String, Map<String, Integer>> avgPoints = new HashMap<>();
-         Map<String, Integer> statusCounts = null;
-         Map<String, Integer> avgCounts = null;
-//         List<ChartModelEntity> chartModelEntities = new ArrayList<>();
-
-         if(CollectionUtils.isNotEmpty(ticketAvgRepPoints)) {
-             for(TicketStatusMeasurement ticketAvgRepPoint : ticketAvgRepPoints) {
-                 String category = ticketAvgRepPoint.getCategory();
-
-                 if(statusPoints.containsKey(category)) {
-                     statusCounts = statusPoints.get(category);
-                 }else {
-                     statusCounts = new HashMap<String, Integer>();
-                 }
-
-                 statusCounts.put(category, ticketAvgRepPoint.getCategory().equalsIgnoreCase(category) ? ticketAvgRepPoint.getStatusCount() : 0);
-                
-                 statusPoints.put(category, statusCounts);
-
-             }
-             log.debug("Ticket status points map count" +statusPoints.toString());
-             
-             if(CollectionUtils.isNotEmpty(ticketAvgPoints)) {
-            	 for(TicketStatusMeasurement ticketAvgPoint : ticketAvgPoints) {
-            		  String category = ticketAvgPoint.getCategory();
-
-                      if(avgPoints.containsKey(category)) {
-                    	  avgCounts = avgPoints.get(category);
-                      }else {
-                    	  avgCounts = new HashMap<String, Integer>();
-                      }
-
-                      avgCounts.put(category, ticketAvgPoint.getCategory().equalsIgnoreCase(category) ? ticketAvgPoint.getStatusCount() : 0);
-                     
-                      avgPoints.put(category, avgCounts);
-            	 }
-            	 
-            	 log.debug("Ticket status points map average" +avgPoints.toString());
-            	          		
-         		for(Map.Entry<String, Map<String, Integer>> entryLists : statusPoints.entrySet()) {
-         			String key = entryLists.getKey();
-         			Map<String, Integer> avgCnts1 = entryLists.getValue();
-         			if(avgCnts1.containsKey(key)) {
-         				int cnt1 = avgCnts1.get(key);
-         				if(avgPoints.containsKey(key)) {
-             				Map<String, Integer> avgCnts2 = avgPoints.get(key);
-                 			
-                 			if(avgCnts2.containsKey(key)) {
-                 				int cnt2 = avgCnts2.get(key);
-                 				avgCnts1.put(key, cnt1 + cnt2);
-                 			}
-                 			
-             			} else {
-             				avgCnts1.put(key, cnt1);
-             			}
-         				
-         			}
-         		
-         		}
-
-             }
-             
-         }
-
-         return statusPoints;
-    
+        chartModelEntity.setX(categoryList);
+        chartModelEntity.setAvgStatus(categoryStatusCnts);
+        chartModelEntities.add(chartModelEntity);
+    	return chartModelEntities;
     }
 
 
