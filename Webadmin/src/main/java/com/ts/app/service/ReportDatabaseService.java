@@ -369,6 +369,7 @@ public class ReportDatabaseService {
         return resultMapper.toPOJO(queryResult, TicketAvgStatus.class);
 	}
 	
+	@Async
 	public void deleteQuery(InfluxDB connection, String query, String dbName) {
 		 Query queryObject = new Query(query, dbName);
 	     QueryResult queryResult = connection.query(queryObject);

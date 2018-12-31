@@ -111,6 +111,12 @@ angular.module('timeSheetApp')
             return $http.post('api/reports/tickets/count', searchCriteria).then(function (response) {
                return response.data;
             });
+        },
+        
+        getAverageAge : function() {
+        	return $http.get('api/getAvgTicket').then(function(response) {
+        		return response.data;
+        	});
         }
     };
 });
