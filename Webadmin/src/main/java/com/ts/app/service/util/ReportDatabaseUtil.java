@@ -189,6 +189,8 @@ public class ReportDatabaseUtil {
         influxDB.setRetentionPolicy("one_year_policy");
         influxDB.enableBatch(BatchOptions.DEFAULTS.actions(2000).flushDuration(100));
         int i = 0;
+        SimpleDateFormat monthFmt = new SimpleDateFormat("MMM");
+        SimpleDateFormat yearFmt = new SimpleDateFormat("YYYY");
         for(TicketStatusReport ticketReportList : ticketStatusReportLists) {
             Calendar cal = Calendar.getInstance();
             Calendar assignedOn = Calendar.getInstance();
@@ -198,7 +200,10 @@ public class ReportDatabaseUtil {
             cal.set(Calendar.MINUTE, 0);
             cal.set(Calendar.SECOND, 0);
             cal.set(Calendar.MILLISECOND, 0);
-
+            
+            String month = monthFmt.format(ticketReportList.getFormattedDate()).toUpperCase();
+            String year  = yearFmt.format(ticketReportList.getFormattedDate()).toUpperCase();
+            
             if(ticketReportList.getAssignedOn() != null) {
                 assignedOn.setTime(ticketReportList.getAssignedOn());
                 cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -221,6 +226,10 @@ public class ReportDatabaseUtil {
                 .tag("id", String.valueOf(ticketReportList.getTicketId()))
                 .addField("date", cal.getTimeInMillis())
                 .tag("date", String.valueOf(cal.getTimeInMillis()))
+                .addField("month", month)
+            	.tag("month", month)
+            	.addField("year", year)
+            	.tag("year", year)
                 .addField("siteId", ticketReportList.getSiteId())
                 .addField("projectId", ticketReportList.getProjectId())
                 .addField("status", ticketReportList.getStatus())
@@ -1492,6 +1501,14 @@ public class ReportDatabaseUtil {
         chartModelEntities.add(chartModelEntity);
     	return chartModelEntities;
     }
+
+	public List<TicketStatusMeasurement> getAverageTicketAgeMonthly() {
+		// TODO Auto-generated method stub
+		InfluxDB influxdb = connectDatabase();
+		String query = "select mean(age) as statusCount from (select (closedOn - date) / (1000 * 60 * 60 * 24) as age from TicketReport where closedOn != 0) where time > now() - 365d group by time(30d), category";
+		List<TicketStatusMeasurement> list = reportDatabaseService.getTicketPoints(influxdb, query, dbName);
+		return list;
+	}
 
 
 
