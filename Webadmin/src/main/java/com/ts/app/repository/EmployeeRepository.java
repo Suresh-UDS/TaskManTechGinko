@@ -192,4 +192,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSp
     @Query("SELECT distinct e FROM Employee e WHERE e.isFaceIdEnrolled = TRUE")
     List<Employee> findEnrolledEmployees();
 
+    @Query("SELECT distinct e FROM Employee e WHERE e.id NOT IN (:subEmpList) and e.active='Y' and e.isLeft = FALSE order by e.name")
+	List<Employee> findAllByNonIds(@Param("subEmpList") List<Long> subEmpList);
+
 }

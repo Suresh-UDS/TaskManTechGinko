@@ -1510,21 +1510,8 @@ public class    EmployeeService extends AbstractService {
     		}
     		subEmpList.addAll(empIds);
     		if(CollectionUtils.isNotEmpty(subEmpList)) {
-    			List<Attendance> attnList2 = attendanceRepository.findNonEmpIds(subEmpList);
-            	Set<Long> empIds1 = new TreeSet<Long>();
-        		List<Long> subEmpList1 = new ArrayList<Long>();
-            	if(CollectionUtils.isNotEmpty(attnList2)) {
-            		for(Attendance attnLis : attnList2) {
-            			if(attnLis.getEmployee() != null) {
-            				empIds1.add(attnLis.getEmployee().getId());
-            			}
-            		}
-            		subEmpList1.addAll(empIds1);
-            		if(CollectionUtils.isNotEmpty(subEmpList1)) {
-                		List<Employee> employee = employeeRepository.findAllByIds(subEmpList1);
-                		resp = mapperUtil.toModelList(employee, EmployeeDTO.class);
-                	}
-            	}
+        		List<Employee> employee = employeeRepository.findAllByNonIds(subEmpList);
+        		resp = mapperUtil.toModelList(employee, EmployeeDTO.class);
     		}	
 		}
 
